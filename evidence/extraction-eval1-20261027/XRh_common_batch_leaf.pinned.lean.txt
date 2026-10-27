@@ -1,0 +1,47 @@
+/-- [aspis_r1_cost_probe::verifier::candidate::batch_leaf]:
+    Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 117:0-132:1 -/
+def verifier.candidate.batch_leaf
+  {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
+  (hash : H) (tree : Std.Usize) (q : Slice Std.U8) :
+  Result (Array Std.U8 32#usize)
+  := do
+  match tree.val with
+  | 0 =>
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice
+        Std.U8) q { start := 608#usize, «end» := 640#usize }
+    let r ←
+      core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let s1 ←
+      core.slice.index.Slice.index
+        (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) q
+        { «end» := 480#usize }
+    let i ← aspis_core.r0.merkle.C1_TAG
+    aspis_core.state_only_private_merkle.private_leaf_hash_with_digest
+      aspis_coredigestDigest32Inst hash i s1 salt
+  | 1 =>
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice
+        Std.U8) q { start := 640#usize, «end» := 672#usize }
+    let r ←
+      core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice
+        Std.U8) q { start := 480#usize, «end» := 608#usize }
+    let i ← aspis_core.r0.merkle.C2_TAG
+    aspis_core.state_only_private_merkle.private_leaf_hash_with_digest
+      aspis_coredigestDigest32Inst hash i s1 salt
+  | _ =>
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice
+        Std.U8) q { start := 800#usize, «end» := 832#usize }
+    let r ←
+      core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+    let salt ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+    let s1 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice
+        Std.U8) q { start := 672#usize, «end» := 800#usize }
+    aspis_core.state_only_private_merkle.private_leaf_hash_with_digest
+      aspis_coredigestDigest32Inst hash 114#u8 s1 salt

@@ -1,0 +1,2679 @@
+CHARON_COMMAND ["/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_charon_target/release/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::result::_::map_err", "--include", "core::cmp::PartialEq::ne", "--duplicate-defaulted-methods", "--start-from", "crate::compact::expand_values", "--start-from", "crate::verifier::candidate::wide_view", "--start-from", "crate::fast_pairing::canonical::_::push", "--start-from", "crate::sampler::circle_sample", "--dest-file", "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_borrow.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-r1-cost-probe/Cargo.toml", "--locked", "--offline", "--release", "--lib", "--no-default-features", "--features", "private-leaf-salts", "--jobs", "1"]
+warning: unused workspace dependency `aspis-prover`
+  --> Cargo.toml:34:1
+   |
+34 | aspis-prover = { path = "crates/aspis-prover" }
+   | ^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_workspace_dependencies` is set to `warn` by default
+help: consider removing the workspace dependency `aspis-prover`
+warning: unused workspace dependency `aspis-verifier`
+  --> Cargo.toml:36:1
+   |
+36 | aspis-verifier = { path = "programs/aspis-verifier", default-features = false, features = ["no-entrypoint"] }
+   | ^^^^^^^^^^^^^^
+   |
+help: consider removing the workspace dependency `aspis-verifier`
+warning: unused workspace dependency `chacha20poly1305`
+  --> Cargo.toml:42:1
+   |
+42 | chacha20poly1305 = { version = "=0.11.0", default-features = false, features = ["zeroize"] }
+   | ^^^^^^^^^^^^^^^^
+   |
+help: consider removing the workspace dependency `chacha20poly1305`
+warning: unused workspace dependency `hkdf`
+  --> Cargo.toml:31:1
+   |
+31 | hkdf = "0.12.4"
+   | ^^^^
+   |
+help: consider removing the workspace dependency `hkdf`
+warning: unused workspace dependency `hpke`
+  --> Cargo.toml:32:1
+   |
+32 | hpke = { version = "=0.14.0", default-features = false, features = ["alloc", "chacha", "x25519"] }
+   | ^^^^
+   |
+help: consider removing the workspace dependency `hpke`
+warning: unused workspace dependency `solana-system-interface`
+  --> Cargo.toml:51:1
+   |
+51 | solana-system-interface = { version = "1.0.0", features = ["bincode"] }
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: consider removing the workspace dependency `solana-system-interface`
+warning: unused workspace dependency `x25519-dalek`
+  --> Cargo.toml:53:1
+   |
+53 | x25519-dalek = { version = "=3.0.0", default-features = false, features = ["zeroize"] }
+   | ^^^^^^^^^^^^
+   |
+help: consider removing the workspace dependency `x25519-dalek`
+warning: workspace (manifest) generated 7 warnings
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:594:11
+    |
+594 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:638:11
+    |
+638 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/field/wide_exact.rs:129:48
+    |
+129 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/field/wide_exact.rs:115:52
+    |
+115 |         #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                    ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-core/src/r0/mod.rs:16:47
+   |
+16 | #[cfg(all(feature = "r0-hoist-reference", not(target_os = "solana")))]
+   |                                               ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-core/src/r0/mod.rs:65:44
+   |
+65 | #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+   |                                            ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-core/src/r0/mod.rs:68:81
+   |
+68 | #[cfg(all(any(feature = "r0-e4-reference", feature = "r0-hoist-reference"), not(target_os = "solana")))]
+   |                                                                                 ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-core/src/r0/mod.rs:71:44
+   |
+71 | #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+   |                                            ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unused import: `vec::Vec`
+  --> crates/aspis-core/src/r0/onchain.rs:19:25
+   |
+19 | use alloc::{boxed::Box, vec::Vec};
+   |                         ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:113:48
+    |
+113 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:216:48
+    |
+216 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:227:51
+    |
+227 |     #[cfg(all(feature = "r0-hoist-reference", not(target_os = "solana")))]
+    |                                                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:232:48
+    |
+232 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:314:48
+    |
+314 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: function `verify_circle_layer0_opening_from_proof_deferred_canonical_for_depth_and_c2_leaf_bytes` is never used
+   --> crates/aspis-core/src/circle_merkle.rs:419:15
+    |
+419 | pub(crate) fn verify_circle_layer0_opening_from_proof_deferred_canonical_for_depth_and_c2_leaf_bytes<
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `verify_circle_openings_deferred_canonical` is never used
+    --> crates/aspis-core/src/circle_openings.rs:1006:15
+     |
+1006 | pub(crate) fn verify_circle_openings_deferred_canonical<'a>(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_radix4_minimal_subtree_prevalidated_in_place` is never used
+   --> crates/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `aspis-core` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-core` to apply 1 suggestion)
+   Compiling aspis-r0-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/docs/research/v8-r0-zk-20261009/refine/writers)
+   Compiling aspis-r0-poseidon-copy v0.0.0 (/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/docs/research/v8-r0-zk-20261009/refine/poseidon)
+   Compiling aspis-r0-block-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/docs/research/v8-r0-zk-20261009/refine/blockwriters)
+   Compiling aspis-statement v0.1.0 (/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-statement)
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/lib.rs:14:11
+   |
+14 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/lib.rs:17:11
+   |
+17 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/lib.rs:24:15
+   |
+24 | #[cfg(any(not(target_os = "solana"), feature = "pool-v1-kernel"))]
+   |               ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/lib.rs:28:11
+   |
+28 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/lib.rs:31:11
+   |
+31 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/lib.rs:35:11
+   |
+35 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/lib.rs:67:11
+   |
+67 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/lib.rs:117:11
+    |
+117 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/lib.rs:119:11
+    |
+119 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/lib.rs:129:11
+    |
+129 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/lib.rs:153:11
+    |
+153 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/constraints_v4.rs:723:11
+    |
+723 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/constraints_v4.rs:734:11
+    |
+734 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/constraints_v4.rs:749:11
+    |
+749 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+    --> crates/aspis-statement/src/constraints_v4.rs:2602:11
+     |
+2602 | #[cfg(not(target_os = "solana"))]
+     |           ^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+    --> crates/aspis-statement/src/constraints_v4.rs:2766:11
+     |
+2766 | #[cfg(not(target_os = "solana"))]
+     |           ^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+    --> crates/aspis-statement/src/constraints_v4.rs:2776:11
+     |
+2776 | #[cfg(not(target_os = "solana"))]
+     |           ^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+    --> crates/aspis-statement/src/constraints_v4.rs:2790:11
+     |
+2790 | #[cfg(not(target_os = "solana"))]
+     |           ^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unused imports: `visit_copy_exceptional_terminal_links` and `visit_copy_terminal_links`
+  --> crates/aspis-statement/src/constraints_v4.rs:32:5
+   |
+32 |     visit_copy_exceptional_terminal_links, visit_copy_links, visit_copy_terminal_links,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:16:11
+   |
+16 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:19:11
+   |
+19 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:21:11
+   |
+21 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:24:11
+   |
+24 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:26:11
+   |
+26 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:30:11
+   |
+30 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:33:11
+   |
+33 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:35:11
+   |
+35 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:38:11
+   |
+38 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:40:11
+   |
+40 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:43:11
+   |
+43 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:45:11
+   |
+45 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-statement/src/pool_v1/mod.rs:48:11
+   |
+48 | #[cfg(not(target_os = "solana"))]
+   |           ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/mod.rs:125:11
+    |
+125 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/mod.rs:175:11
+    |
+175 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/mod.rs:192:11
+    |
+192 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/mod.rs:233:11
+    |
+233 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/mod.rs:237:11
+    |
+237 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/mod.rs:260:11
+    |
+260 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/mod.rs:303:11
+    |
+303 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/mod.rs:315:11
+    |
+315 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/mod.rs:361:11
+    |
+361 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-statement/src/pool_v1/incremental_merkle.rs:764:11
+    |
+764 | #[cfg(any(kani, aeneas_ref))]
+    |           ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 34 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+   --> crates/aspis-statement/src/pool_v1/incremental_merkle.rs:764:17
+    |
+764 | #[cfg(any(kani, aeneas_ref))]
+    |                 ^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs:376:7
+    |
+376 | #[cfg(kani)]
+    |       ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs:381:11
+    |
+381 | #[cfg(any(kani, aeneas_ref))]
+    |           ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+   --> crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs:381:17
+    |
+381 | #[cfg(any(kani, aeneas_ref))]
+    |                 ^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unused import: `vec`
+ --> crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs:8:25
+  |
+8 | use alloc::{boxed::Box, vec};
+  |                         ^^^
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:640:11
+    |
+640 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:817:11
+    |
+817 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1447:17
+     |
+1447 | #[cfg(any(test, kani, aeneas_ref))]
+     |                 ^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1447:23
+     |
+1447 | #[cfg(any(test, kani, aeneas_ref))]
+     |                       ^^^^^^^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1453:17
+     |
+1453 | #[cfg(any(test, kani, aeneas_ref))]
+     |                 ^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1453:23
+     |
+1453 | #[cfg(any(test, kani, aeneas_ref))]
+     |                       ^^^^^^^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1479:17
+     |
+1479 | #[cfg(any(test, kani, aeneas_ref))]
+     |                 ^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1479:23
+     |
+1479 | #[cfg(any(test, kani, aeneas_ref))]
+     |                       ^^^^^^^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1496:7
+     |
+1496 | #[cfg(kani)]
+     |       ^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1502:17
+     |
+1502 | #[cfg(any(test, kani, aeneas_ref))]
+     |                 ^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1502:23
+     |
+1502 | #[cfg(any(test, kani, aeneas_ref))]
+     |                       ^^^^^^^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1558:17
+     |
+1558 | #[cfg(any(test, kani, aeneas_ref))]
+     |                 ^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+    --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:1558:23
+     |
+1558 | #[cfg(any(test, kani, aeneas_ref))]
+     |                       ^^^^^^^^^^
+     |
+     = help: consider using a Cargo feature instead
+     = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+              [lints.rust]
+              unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+     = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+     = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unused import: `decode_pool_v1_pair_late_public_statement_v1`
+  --> crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:15:5
+   |
+15 |     decode_pool_v1_pair_late_public_statement_v1, decode_pool_v1_pair_verified_afterstate_v1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `M31`
+  --> crates/aspis-statement/src/pool_v1/pair_terminal.rs:13:13
+   |
+13 |     field::{M31, P},
+   |             ^^^
+
+warning: unused import: `pool_v1_note_commitment`
+  --> crates/aspis-statement/src/pool_v1/pair_trace.rs:50:5
+   |
+50 |     pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/root_history.rs:297:15
+    |
+297 |     #[cfg(not(target_os = "solana"))]
+    |               ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/root_history.rs:312:15
+    |
+312 |     #[cfg(not(target_os = "solana"))]
+    |               ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/root_history.rs:407:15
+    |
+407 |     #[cfg(not(target_os = "solana"))]
+    |               ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/pool_v1/root_history.rs:421:15
+    |
+421 |     #[cfg(not(target_os = "solana"))]
+    |               ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-statement/src/poseidon2.rs:908:11
+    |
+908 | #[cfg(any(kani, aeneas_ref))]
+    |           ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+   --> crates/aspis-statement/src/poseidon2.rs:908:17
+    |
+908 | #[cfg(any(kani, aeneas_ref))]
+    |                 ^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-statement/src/spend.rs:654:11
+    |
+654 | #[cfg(any(kani, aeneas_ref))]
+    |           ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+   --> crates/aspis-statement/src/spend.rs:654:17
+    |
+654 | #[cfg(any(kani, aeneas_ref))]
+    |                 ^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/state_only_poseidon.rs:639:11
+    |
+639 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unused imports: `trace_round_constant` and `trace_round_descriptor`
+  --> crates/aspis-statement/src/state_only_poseidon.rs:18:5
+   |
+18 |     trace_round_constant, trace_round_descriptor, EXTERNAL_FINAL, EXTERNAL_INITIAL, INTERNAL,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/r0.rs:185:47
+    |
+185 | #[cfg(all(feature = "r0-hoist-reference", not(target_os = "solana")))]
+    |                                               ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-statement/src/r0.rs:251:44
+    |
+251 | #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                            ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: type `state_only_terminal::CompiledCopyLink` is more private than the item `state_only_terminal::constants::COMPILED_COPY_LINKS`
+   --> crates/aspis-statement/src/state_only_terminal_constants.rs:850:1
+    |
+850 | pub(crate) const COMPILED_COPY_LINKS: [CompiledCopyLink; 102] = [
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ constant `state_only_terminal::constants::COMPILED_COPY_LINKS` is reachable at visibility `pub(crate)`
+    |
+note: but type `state_only_terminal::CompiledCopyLink` is only usable at visibility `pub(self)`
+   --> crates/aspis-statement/src/state_only_terminal.rs:88:1
+    |
+ 88 | struct CompiledCopyLink {
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: fields `kinds`, `columns`, and `scales` are never read
+  --> crates/aspis-statement/src/atomic_state_only_terminal.rs:59:5
+   |
+57 | struct CompiledAtomicPattern {
+   |        --------------------- fields in this struct
+58 |     /// 0 = zero, 1 = constant, 2 = affine local cell.
+59 |     kinds: [u8; 16],
+   |     ^^^^^
+60 |     columns: [u8; 16],
+   |     ^^^^^^^
+61 |     scales: [u32; 16],
+   |     ^^^^^^
+   |
+   = note: `CompiledAtomicPattern` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `row`, `slot`, and `pattern` are never read
+  --> crates/aspis-statement/src/atomic_state_only_terminal.rs:67:5
+   |
+66 | struct CompiledAtomicCopyEndpoint {
+   |        -------------------------- fields in this struct
+67 |     row: u16,
+   |     ^^^
+68 |     slot: u8,
+   |     ^^^^
+69 |     pattern: u8,
+   |     ^^^^^^^
+   |
+   = note: `CompiledAtomicCopyEndpoint` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: fields `tag`, `producer`, and `consumer` are never read
+  --> crates/aspis-statement/src/atomic_state_only_terminal.rs:74:5
+   |
+73 | struct CompiledAtomicCopyLink {
+   |        ---------------------- fields in this struct
+74 |     tag: u32,
+   |     ^^^
+75 |     producer: CompiledAtomicCopyEndpoint,
+   |     ^^^^^^^^
+76 |     consumer: CompiledAtomicCopyEndpoint,
+   |     ^^^^^^^^
+   |
+   = note: `CompiledAtomicCopyLink` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: struct `AtomicSemanticSelectors` is never constructed
+   --> crates/aspis-statement/src/atomic_state_only_terminal.rs:297:8
+    |
+297 | struct AtomicSemanticSelectors {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `at_point`, `row`, and `poseidon` are never used
+   --> crates/aspis-statement/src/atomic_state_only_terminal.rs:305:8
+    |
+304 | impl AtomicSemanticSelectors {
+    | ---------------------------- associated items in this implementation
+305 |     fn at_point(point: &[QM31; 10]) -> Self {
+    |        ^^^^^^^^
+...
+327 |     fn row(&self, row: usize) -> QM31 {
+    |        ^^^
+...
+331 |     fn poseidon(&self) -> StateOnlyPoseidonSelectors {
+    |        ^^^^^^^^
+
+warning: constant `COMPILED_ATOMIC_COPY_ACTIVE_ROWS` is never used
+ --> crates/aspis-statement/src/atomic_state_only_terminal_constants_legacy_partition.rs:6:18
+  |
+6 | pub(crate) const COMPILED_ATOMIC_COPY_ACTIVE_ROWS: [u16; 210] = [11, 12, 27, 28, 32, 43, 44, 48, 59, 60, 64, 75, 76, 80, 91, 92, 96, ...
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `COMPILED_ATOMIC_COPY_ACTIVE_ROWS_FINGERPRINT` is never used
+ --> crates/aspis-statement/src/atomic_state_only_terminal_constants_legacy_partition.rs:7:18
+  |
+7 | pub(crate) const COMPILED_ATOMIC_COPY_ACTIVE_ROWS_FINGERPRINT: u64 = 0xfc90f89be110b6f5;
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `ATOMIC_COPY_PATTERNS` is never used
+  --> crates/aspis-statement/src/atomic_state_only_terminal_constants_legacy_partition.rs:16:18
+   |
+16 | pub(crate) const ATOMIC_COPY_PATTERNS: [CompiledAtomicPattern; 15] = [
+   |                  ^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `COMPILED_ATOMIC_COPY_LINKS` is never used
+  --> crates/aspis-statement/src/atomic_state_only_terminal_constants_legacy_partition.rs:40:18
+   |
+40 | pub(crate) const COMPILED_ATOMIC_COPY_LINKS: [CompiledAtomicCopyLink; 183] = [
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `compose_direct_range_terminal_packed_residuals` is never used
+   --> crates/aspis-statement/src/constraints_v4.rs:371:4
+    |
+371 | fn compose_direct_range_terminal_packed_residuals(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `eq_row` is never used
+   --> crates/aspis-statement/src/constraints_v4.rs:588:4
+    |
+588 | fn eq_row(point: &[QM31; 10], row: usize) -> QM31 {
+    |    ^^^^^^
+
+warning: function `compress_opened_tuple` is never used
+    --> crates/aspis-statement/src/constraints_v4.rs:1184:4
+     |
+1184 | fn compress_opened_tuple(
+     |    ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `COPY_ROUTING_EXPANDED_FACTOR_SUPPORT` is never used
+    --> crates/aspis-statement/src/constraints_v4.rs:1203:7
+     |
+1203 | const COPY_ROUTING_EXPANDED_FACTOR_SUPPORT: usize = 674;
+     |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `evaluate_exceptional_copy_routing_direct` is never used
+    --> crates/aspis-statement/src/constraints_v4.rs:1717:4
+     |
+1717 | fn evaluate_exceptional_copy_routing_direct(
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `lift` is never used
+  --> crates/aspis-statement/src/direct_range_hiding_v4.rs:67:4
+   |
+67 | fn lift(value: M31) -> QM31 {
+   |    ^^^^
+
+warning: field `pair_first` is never read
+  --> crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs:55:5
+   |
+47 | struct RW {
+   |        -- field in this struct
+...
+55 |     pair_first: [u32; 8],
+   |     ^^^^^^^^^^
+   |
+   = note: `RW` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: function `merkle_node_sponge_v2` is never used
+   --> crates/aspis-statement/src/poseidon2.rs:480:15
+    |
+480 | pub(crate) fn merkle_node_sponge_v2(left: &Digest, right: &Digest) -> Digest {
+    |               ^^^^^^^^^^^^^^^^^^^^^
+
+warning: fields `row`, `slot`, `present`, and `columns` are never read
+  --> crates/aspis-statement/src/state_only_terminal.rs:81:5
+   |
+80 | struct CompiledCopyEndpoint {
+   |        -------------------- fields in this struct
+81 |     row: u16,
+   |     ^^^
+82 |     slot: u8,
+   |     ^^^^
+83 |     present: u16,
+   |     ^^^^^^^
+84 |     columns: u64,
+   |     ^^^^^^^
+   |
+   = note: `CompiledCopyEndpoint` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: fields `tag`, `producer`, and `consumer` are never read
+  --> crates/aspis-statement/src/state_only_terminal.rs:89:5
+   |
+88 | struct CompiledCopyLink {
+   |        ---------------- fields in this struct
+89 |     tag: u32,
+   |     ^^^
+90 |     producer: CompiledCopyEndpoint,
+   |     ^^^^^^^^
+91 |     consumer: CompiledCopyEndpoint,
+   |     ^^^^^^^^
+   |
+   = note: `CompiledCopyLink` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: function `append_link` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1017:4
+     |
+1017 | fn append_link(
+     |    ^^^^^^^^^^^
+
+warning: function `append_intra_permutation_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1048:4
+     |
+1048 | fn append_intra_permutation_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_sponge_continuation_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1067:4
+     |
+1067 | fn append_sponge_continuation_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_merkle_level_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1090:4
+     |
+1090 | fn append_merkle_level_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_semantic_ingress_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1107:4
+     |
+1107 | fn append_semantic_ingress_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_absorption_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1163:4
+     |
+1163 | fn append_absorption_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_value_reconstruction_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1190:4
+     |
+1190 | fn append_value_reconstruction_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `aspis-statement` (lib) generated 102 warnings (run `cargo fix --lib -p aspis-statement` to apply 6 suggestions)
+   Compiling aspis-r1-cost-probe v0.1.0 (/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-r1-cost-probe)
+warning: unexpected `cfg` condition value: `solana`
+  --> crates/aspis-r1-cost-probe/src/lib.rs:45:41
+   |
+45 | #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+   |                                         ^^^^^^^^^^^^^^^^^^
+   |
+   = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `ps3`, `psp`, `psx`, `qnx`, `qurt`, `redox`, and `rtems` and 16 more
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-r1-cost-probe/src/r1_wire.rs:776:11
+    |
+776 | #[cfg(any(kani,aeneas_ref))]
+    |           ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 34 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+   --> crates/aspis-r1-cost-probe/src/r1_wire.rs:776:16
+    |
+776 | #[cfg(any(kani,aeneas_ref))]
+    |                ^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-r1-cost-probe/src/r1_wire.rs:793:11
+    |
+793 | #[cfg(any(kani,aeneas_ref))]
+    |           ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+   --> crates/aspis-r1-cost-probe/src/r1_wire.rs:793:16
+    |
+793 | #[cfg(any(kani,aeneas_ref))]
+    |                ^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> crates/aspis-r1-cost-probe/src/r1_wire.rs:836:11
+    |
+836 | #[cfg(any(kani,aeneas_ref))]
+    |           ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `aeneas_ref`
+   --> crates/aspis-r1-cost-probe/src/r1_wire.rs:836:16
+    |
+836 | #[cfg(any(kani,aeneas_ref))]
+    |                ^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(aeneas_ref)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(aeneas_ref)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: variable does not need to be mutable
+  --> crates/aspis-r1-cost-probe/src/fast_dots.rs:46:13
+   |
+46 |         let mut value = WideExact::from_limbs([
+   |             ----^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/r1_semantic.rs:232:71
+    |
+232 | fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges...
+    |                                                                       ----^^^^^^^^^^
+    |                                                                       |
+    |                                                                       help: remove this `mut`
+
+warning: value assigned to `state` is never read
+  --> crates/aspis-r1-cost-probe/src/transcript.rs:53:54
+   |
+53 |         advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:239:43
+    |
+239 | fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Batche...
+    |                                           ----^
+    |                                           |
+    |                                           help: remove this `mut`
+
+warning: constant `MASK` is never used
+ --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:6:11
+  |
+6 |     const MASK:u64=0x7fff_ffff_7fff_ffff;
+  |           ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ONES` is never used
+ --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:7:11
+  |
+7 |     const ONES:u64=0x0000_0001_0000_0001;
+  |           ^^^^
+
+warning: function `add` is never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:15:37
+   |
+15 |     #[inline(always)] pub(crate) fn add(a:u32,b:u32)->u32 {
+   |                                     ^^^
+
+warning: function `pair` is never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:18:26
+   |
+18 |     #[inline(always)] fn pair(a:u32,b:u32)->u64 {u64::from(a)|(u64::from(b)<<32)}
+   |                          ^^^^
+
+warning: function `reduce_pair` is never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:19:26
+   |
+19 |     #[inline(always)] fn reduce_pair(s:u64)->u64 {
+   |                          ^^^^^^^^^^^
+
+warning: multiple associated items are never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:23:19
+   |
+22 |     impl Q {
+   |     ------ associated items in this implementation
+23 |         pub const ZERO:Self=Self([0;4]);pub const ONE:Self=Self([1,0,0,0]);
+   |                   ^^^^                            ^^^
+...
+28 |         pub fn from_m31(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
+   |                ^^^^^^^^
+...
+37 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+42 |         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+47 |         #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 14s
+AENEAS_COMMAND ["/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_aeneas/src/_build/default/main.exe", "-log", "Translate", "-sequential", "-no-progress-bar", "-backend", "lean", "-namespace", "XRh_Eval", "-dest", "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow", "-subdir", "XRh_Eval", "-split-files", "-emit-json", "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_borrow.llbc"]
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_borrow.llbc
+[[36mTrace[39m] Aeneas__Translate.translate_crate, line 2207:
+- filename: /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_borrow.llbc
+- dest_dir: /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow
+- subdir: Some (XRh_Eval)
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure, line 318
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::array::{[T; N]}::as_slice
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::array::repeat
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::array::{impl core::ops::index::Index<I, Clause0_Output> for [T; N]}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::ops::index::Index<I, Clause0_Output> for [T]}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::array::{impl core::ops::index::IndexMut<I, Clause0_Clause0_Output> for [T; N]}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::ops::index::IndexMut<I, Clause0_Output> for [T]}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::expand_values
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::verifier::candidate::wide_view
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::sampler::circle_sample
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get_unchecked
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get_unchecked_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get_unchecked
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get_unchecked_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::{[T]}::len
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::{[T]}::chunks_exact
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::{[T]}::chunks_exact_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::iter::traits::iterator::Iterator::zip
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator<Clause0_Item, I> for I}::into_iter
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::iter::adapters::zip::{impl core::iter::traits::iterator::Iterator<(Clause0_Item, Clause1_Item)> for core::iter::adapters::zip::Zip<A, B>}::next
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::{[T]}::copy_from_slice
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::{[T]}::fill
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_core::field::wide_exact::{aspis_core::field::wide_exact::WideExact}::from_le_bytes
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::option::{core::option::Option<T>}::ok_or
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::result::{impl core::ops::try_trait::Try for core::result::Result<T, E>}::branch
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::result::{impl core::ops::try_trait::FromResidual<core::result::Result<!, E>> for core::result::Result<T, F>}::from_residual
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::result::{core::result::Result<T, E>}::unwrap
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}::next
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::convert::num::{impl core::convert::From<u32> for u64}::from
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::num::{u64}::wrapping_add
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::sampler::circle_sample::{impl core::ops::function::FnOnce<(aspis_core::circle::CirclePointError,), aspis_core::circle::SecureCirclePoint> for aspis_r1_cost_probe::sampler::circle_sample::{closure}<'_0>}::call_once
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::sampler::qm31_sample
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_core::circle::secure_ood_circle_point_from_parameter
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::result::{core::result::Result<T, E>}::unwrap_or_else
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a [T]> for core::slice::iter::ChunksExact<'a, T>}::next
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::next
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get_unchecked
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get_unchecked_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get_unchecked
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get_unchecked_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::clone::impls::{impl core::clone::Clone for u8}::clone
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::OFF_INACTIVE
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::OFF_ROUND0
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::OFF_FOLDED_ROOT
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::OFF_ROUND1
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::convert::{impl core::convert::From<T> for T}::from
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::array::{impl core::convert::TryFrom<&'a [T], core::array::TryFromSliceError> for &'a [T; N]}::try_from
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::array::{impl core::fmt::Debug for core::array::TryFromSliceError}::fmt
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::OFF_FINAL
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::OFF_OPENINGS
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{closure}}::call
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::num::{u64}::wrapping_sub
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::iter::range::{impl core::iter::range::Step for usize}::steps_between
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::iter::range::{impl core::iter::range::Step for usize}::forward_checked
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::iter::range::{impl core::iter::range::Step for usize}::forward_overflowing
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::iter::range::{impl core::iter::range::Step for usize}::backward_checked
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::iter::range::{impl core::iter::range::Step for usize}::backward_overflowing
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::fast_pairing::canonical::P
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_core::transcript::circle_fallback_point
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_core::field::{aspis_core::field::CM31}::new
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::PP
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::clone::impls::{impl core::clone::Clone for usize}::clone
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::cmp::impls::{impl core::cmp::PartialOrd<usize> for usize}::partial_cmp
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::sampler::qm31_div_pass
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::num::{u32}::from_le_bytes
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::OFF_Y1
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::COMPACT_Y1
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::FINAL_LEN
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::cmp::impls::{impl core::cmp::PartialEq<usize> for usize}::eq
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::clone::impls::{impl core::clone::Clone for u32}::clone
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_core::field::P
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::OFF_SEMANTIC
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::COMPACT_SEMANTIC
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::HEADER
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::SEMANTIC_COMPACT_VALUES
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::compact::LOGICAL_SEMANTIC
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: aspis_r1_cost_probe::verifier::SEMANTIC_BYTES
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a [T]> for core::slice::iter::ChunksExact<'a, T>}::zip
+
+[[36mTrace[39m] Aeneas__Translate.translate_crate_to_pure.(fun), line 375:
+Translating the signature of: core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::zip
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::array::{[T; N]}::as_slice:
+fn<'_0, T, const N : usize>(&'_0 [T; N]) -> &'_0 [T]
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::array::{[T; N]}::as_slice
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::array::repeat:
+fn<T, const N : usize>(T) -> [T; N]
+where
+  TraitClause0: (T: core::clone::Clone),
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::array::repeat
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::array::{impl core::ops::index::Index<I, Clause0_Output> for [T; N]}::index:
+fn<'_0, T, I, Clause0_Output, const N : usize>(&'_0 [T; N], I) -> &'_0 Clause0_Output
+where
+  TraitClause0: ([T]: core::ops::index::Index<I, Clause0_Output>),
+  TypeOutlives0: T: '_0,
+  TypeOutlives1: Clause0_Output: '_0,
+  TypeOutlives2: I: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::array::{impl core::ops::index::Index<I, Clause0_Output> for [T; N]}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::ops::index::Index<I, Clause0_Output> for [T]}::index:
+fn<'_0, T, I, Clause0_Output>(&'_0 [T], I) -> &'_0 Clause0_Output
+where
+  TraitClause0: (I: core::slice::index::SliceIndex<[T], Clause0_Output>),
+  TypeOutlives0: T: '_0,
+  TypeOutlives1: Clause0_Output: '_0,
+  TypeOutlives2: I: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::ops::index::Index<I, Clause0_Output> for [T]}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::array::{impl core::ops::index::IndexMut<I, Clause0_Clause0_Output> for [T; N]}::index_mut:
+fn<'_0, T, I, Clause0_Clause0_Output, const N : usize>(&'_0 mut [T; N], I) -> &'_0 mut Clause0_Clause0_Output
+where
+  TraitClause0: ([T]: core::ops::index::IndexMut<I, Clause0_Clause0_Output>),
+  TypeOutlives0: T: '_0,
+  TypeOutlives1: Clause0_Clause0_Output: '_0,
+  TypeOutlives2: I: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::array::{impl core::ops::index::IndexMut<I, Clause0_Clause0_Output> for [T; N]}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::ops::index::IndexMut<I, Clause0_Output> for [T]}::index_mut:
+fn<'_0, T, I, Clause0_Output>(&'_0 mut [T], I) -> &'_0 mut Clause0_Output
+where
+  TraitClause0: (I: core::slice::index::SliceIndex<[T], Clause0_Output>),
+  TypeOutlives0: T: '_0,
+  TypeOutlives1: Clause0_Output: '_0,
+  TypeOutlives2: I: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::ops::index::IndexMut<I, Clause0_Output> for [T]}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::index:
+fn<'_0, T>(usize, &'_0 [T]) -> &'_0 T
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::index_mut:
+fn<'_0, T>(usize, &'_0 mut [T]) -> &'_0 mut T
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::index:
+fn<'_0, T>(core::ops::range::Range<usize>, &'_0 [T]) -> &'_0 [T]
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::index_mut:
+fn<'_0, T>(core::ops::range::Range<usize>, &'_0 mut [T]) -> &'_0 mut [T]
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get:
+fn<'_0, T>(usize, &'_0 [T]) -> core::option::Option<&'_0 T>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get_mut:
+fn<'_0, T>(usize, &'_0 mut [T]) -> core::option::Option<&'_0 mut T>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get_unchecked:
+unsafe fn<T>(usize, *const [T]) -> *const T
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get_unchecked
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get_unchecked_mut:
+unsafe fn<T>(usize, *mut [T]) -> *mut T
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], T> for usize}::get_unchecked_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get:
+fn<'_0, T>(core::ops::range::Range<usize>, &'_0 [T]) -> core::option::Option<&'_0 [T]>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get_mut:
+fn<'_0, T>(core::ops::range::Range<usize>, &'_0 mut [T]) -> core::option::Option<&'_0 mut [T]>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get_unchecked:
+unsafe fn<T>(core::ops::range::Range<usize>, *const [T]) -> *const [T]
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get_unchecked
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get_unchecked_mut:
+unsafe fn<T>(core::ops::range::Range<usize>, *mut [T]) -> *mut [T]
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::Range<usize>}::get_unchecked_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::{[T]}::len:
+fn<'_0, T>(&'_0 [T]) -> usize
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::{[T]}::len
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::{[T]}::chunks_exact:
+fn<'_0, T>(&'_0 [T], usize) -> core::slice::iter::ChunksExact<'_0, T>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::{[T]}::chunks_exact
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::{[T]}::chunks_exact_mut:
+fn<'_0, T>(&'_0 mut [T], usize) -> core::slice::iter::ChunksExactMut<'_0, T>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::{[T]}::chunks_exact_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::iter::traits::iterator::Iterator::zip:
+fn<Self, U, Clause0_Item, Clause1_Item, Clause1_IntoIter>(Self, U) -> core::iter::adapters::zip::Zip<Self, Clause1_IntoIter>
+where
+  TraitClause0: (Self: core::iter::traits::iterator::Iterator<Clause0_Item>),
+  TraitClause1: (U: core::iter::traits::collect::IntoIterator<Clause1_Item, Clause1_IntoIter>),
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::iter::traits::iterator::Iterator::zip
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator<Clause0_Item, I> for I}::into_iter:
+fn<I, Clause0_Item>(I) -> I
+where
+  TraitClause0: (I: core::iter::traits::iterator::Iterator<Clause0_Item>),
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator<Clause0_Item, I> for I}::into_iter
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::iter::adapters::zip::{impl core::iter::traits::iterator::Iterator<(Clause0_Item, Clause1_Item)> for core::iter::adapters::zip::Zip<A, B>}::next:
+fn<'_0, A, B, Clause0_Item, Clause1_Item>(&'_0 mut core::iter::adapters::zip::Zip<A, B>) -> core::option::Option<(Clause0_Item, Clause1_Item)>
+where
+  TraitClause0: (A: core::iter::traits::iterator::Iterator<Clause0_Item>),
+  TraitClause1: (B: core::iter::traits::iterator::Iterator<Clause1_Item>),
+  TypeOutlives0: A: '_0,
+  TypeOutlives1: B: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::iter::adapters::zip::{impl core::iter::traits::iterator::Iterator<(Clause0_Item, Clause1_Item)> for core::iter::adapters::zip::Zip<A, B>}::next
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::{[T]}::copy_from_slice:
+fn<'_0, '_1, T>(&'_0 mut [T], &'_1 [T])
+where
+  TraitClause0: (T: core::marker::Copy),
+  TypeOutlives0: T: '_0,
+  TypeOutlives1: T: '_1,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::{[T]}::copy_from_slice
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::{[T]}::fill:
+fn<'_0, T>(&'_0 mut [T], T)
+where
+  TraitClause0: (T: core::clone::Clone),
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::{[T]}::fill
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_core::field::wide_exact::{aspis_core::field::wide_exact::WideExact}::from_le_bytes:
+fn<'_0>(&'_0 [u8]) -> core::option::Option<aspis_core::field::wide_exact::WideExact>
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_core::field::wide_exact::{aspis_core::field::wide_exact::WideExact}::from_le_bytes
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::option::{core::option::Option<T>}::ok_or:
+fn<T, E>(core::option::Option<T>, E) -> core::result::Result<T, E>
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::option::{core::option::Option<T>}::ok_or
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::result::{impl core::ops::try_trait::Try for core::result::Result<T, E>}::branch:
+fn<T, E>(core::result::Result<T, E>) -> core::ops::control_flow::ControlFlow<core::result::Result<!, E>, T>
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::result::{impl core::ops::try_trait::Try for core::result::Result<T, E>}::branch
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::result::{impl core::ops::try_trait::FromResidual<core::result::Result<!, E>> for core::result::Result<T, F>}::from_residual:
+fn<T, E, F>(core::result::Result<!, E>) -> core::result::Result<T, F>
+where
+  TraitClause0: (F: core::convert::From<E>),
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::result::{impl core::ops::try_trait::FromResidual<core::result::Result<!, E>> for core::result::Result<T, F>}::from_residual
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::result::{core::result::Result<T, E>}::unwrap:
+fn<T, E>(core::result::Result<T, E>) -> T
+where
+  TraitClause0: (E: core::fmt::Debug),
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::result::{core::result::Result<T, E>}::unwrap
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}::next:
+fn<'_0, A>(&'_0 mut core::ops::range::Range<A>) -> core::option::Option<A>
+where
+  TraitClause0: (A: core::iter::range::Step),
+  TypeOutlives0: A: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}::next
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::convert::num::{impl core::convert::From<u32> for u64}::from:
+fn(u32) -> u64
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::convert::num::{impl core::convert::From<u32> for u64}::from
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::num::{u64}::wrapping_add:
+fn(u64, u64) -> u64
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::num::{u64}::wrapping_add
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_core::circle::secure_ood_circle_point_from_parameter:
+fn(aspis_core::field::QM31) -> core::result::Result<aspis_core::circle::SecureCirclePoint, aspis_core::circle::CirclePointError>
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_core::circle::secure_ood_circle_point_from_parameter
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::result::{core::result::Result<T, E>}::unwrap_or_else:
+fn<T, E, F>(core::result::Result<T, E>, F) -> T
+where
+  TraitClause0: (F: core::ops::function::FnOnce<(E,), T>),
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::result::{core::result::Result<T, E>}::unwrap_or_else
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a [T]> for core::slice::iter::ChunksExact<'a, T>}::next:
+fn<'a, '_1, T>(&'_1 mut core::slice::iter::ChunksExact<'a, T>) -> core::option::Option<&'a [T]>
+where
+  TypeOutlives0: T: 'a,
+  TypeOutlives1: T: '_1,
+  RegionOutlives0: 'a: '_1,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a [T]> for core::slice::iter::ChunksExact<'a, T>}::next
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::next:
+fn<'a, '_1, T>(&'_1 mut core::slice::iter::ChunksExactMut<'a, T>) -> core::option::Option<&'a mut [T]>
+where
+  TypeOutlives0: T: 'a,
+  TypeOutlives1: T: '_1,
+  RegionOutlives0: 'a: '_1,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::next
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get:
+fn<'_0, T>(core::ops::range::RangeTo<usize>, &'_0 [T]) -> core::option::Option<&'_0 [T]>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get_mut:
+fn<'_0, T>(core::ops::range::RangeTo<usize>, &'_0 mut [T]) -> core::option::Option<&'_0 mut [T]>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get_unchecked:
+unsafe fn<T>(core::ops::range::RangeTo<usize>, *const [T]) -> *const [T]
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get_unchecked
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get_unchecked_mut:
+unsafe fn<T>(core::ops::range::RangeTo<usize>, *mut [T]) -> *mut [T]
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::get_unchecked_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::index:
+fn<'_0, T>(core::ops::range::RangeTo<usize>, &'_0 [T]) -> &'_0 [T]
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::index_mut:
+fn<'_0, T>(core::ops::range::RangeTo<usize>, &'_0 mut [T]) -> &'_0 mut [T]
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeTo<usize>}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get:
+fn<'_0, T>(core::ops::range::RangeFrom<usize>, &'_0 [T]) -> core::option::Option<&'_0 [T]>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get_mut:
+fn<'_0, T>(core::ops::range::RangeFrom<usize>, &'_0 mut [T]) -> core::option::Option<&'_0 mut [T]>
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get_unchecked:
+unsafe fn<T>(core::ops::range::RangeFrom<usize>, *const [T]) -> *const [T]
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get_unchecked
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get_unchecked_mut:
+unsafe fn<T>(core::ops::range::RangeFrom<usize>, *mut [T]) -> *mut [T]
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::get_unchecked_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::index:
+fn<'_0, T>(core::ops::range::RangeFrom<usize>, &'_0 [T]) -> &'_0 [T]
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::index
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::index_mut:
+fn<'_0, T>(core::ops::range::RangeFrom<usize>, &'_0 mut [T]) -> &'_0 mut [T]
+where
+  TypeOutlives0: T: '_0,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::index::{impl core::slice::index::SliceIndex<[T], [T]> for core::ops::range::RangeFrom<usize>}::index_mut
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::clone::impls::{impl core::clone::Clone for u8}::clone:
+fn<'_0>(&'_0 u8) -> u8
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::clone::impls::{impl core::clone::Clone for u8}::clone
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::convert::{impl core::convert::From<T> for T}::from:
+fn<T>(T) -> T
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::convert::{impl core::convert::From<T> for T}::from
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::array::{impl core::convert::TryFrom<&'a [T], core::array::TryFromSliceError> for &'a [T; N]}::try_from:
+fn<'a, T, const N : usize>(&'a [T]) -> core::result::Result<&'a [T; N], core::array::TryFromSliceError>
+where
+  TypeOutlives0: T: 'a,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::array::{impl core::convert::TryFrom<&'a [T], core::array::TryFromSliceError> for &'a [T; N]}::try_from
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::array::{impl core::fmt::Debug for core::array::TryFromSliceError}::fmt:
+fn<'_0, '_1, '_2>(&'_0 core::array::TryFromSliceError, &'_1 mut core::fmt::Formatter<'_2>) -> core::result::Result<(), core::fmt::Error>
+where
+  RegionOutlives0: '_2: '_1,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::array::{impl core::fmt::Debug for core::array::TryFromSliceError}::fmt
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::num::{u64}::wrapping_sub:
+fn(u64, u64) -> u64
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::num::{u64}::wrapping_sub
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::iter::range::{impl core::iter::range::Step for usize}::steps_between:
+fn<'_0, '_1>(&'_0 usize, &'_1 usize) -> (usize, core::option::Option<usize>)
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::iter::range::{impl core::iter::range::Step for usize}::steps_between
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::iter::range::{impl core::iter::range::Step for usize}::forward_checked:
+fn(usize, usize) -> core::option::Option<usize>
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::iter::range::{impl core::iter::range::Step for usize}::forward_checked
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::iter::range::{impl core::iter::range::Step for usize}::forward_overflowing:
+fn(usize, usize) -> (usize, bool)
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::iter::range::{impl core::iter::range::Step for usize}::forward_overflowing
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::iter::range::{impl core::iter::range::Step for usize}::backward_checked:
+fn(usize, usize) -> core::option::Option<usize>
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::iter::range::{impl core::iter::range::Step for usize}::backward_checked
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::iter::range::{impl core::iter::range::Step for usize}::backward_overflowing:
+fn(usize, usize) -> (usize, bool)
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::iter::range::{impl core::iter::range::Step for usize}::backward_overflowing
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_core::transcript::circle_fallback_point:
+fn(usize) -> aspis_core::circle::SecureCirclePoint
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_core::transcript::circle_fallback_point
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_core::field::{aspis_core::field::CM31}::new:
+fn(aspis_core::field::M31, aspis_core::field::M31) -> aspis_core::field::CM31
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_core::field::{aspis_core::field::CM31}::new
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::clone::impls::{impl core::clone::Clone for usize}::clone:
+fn<'_0>(&'_0 usize) -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::clone::impls::{impl core::clone::Clone for usize}::clone
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::cmp::impls::{impl core::cmp::PartialOrd<usize> for usize}::partial_cmp:
+fn<'_0, '_1>(&'_0 usize, &'_1 usize) -> core::option::Option<core::cmp::Ordering>
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::cmp::impls::{impl core::cmp::PartialOrd<usize> for usize}::partial_cmp
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::num::{u32}::from_le_bytes:
+fn([u8; 4usize]) -> u32
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::num::{u32}::from_le_bytes
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::cmp::impls::{impl core::cmp::PartialEq<usize> for usize}::eq:
+fn<'_0, '_1>(&'_0 usize, &'_1 usize) -> bool
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::cmp::impls::{impl core::cmp::PartialEq<usize> for usize}::eq
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::clone::impls::{impl core::clone::Clone for u32}::clone:
+fn<'_0>(&'_0 u32) -> u32
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::clone::impls::{impl core::clone::Clone for u32}::clone
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_core::field::P:
+fn() -> u32
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_core::field::P
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a [T]> for core::slice::iter::ChunksExact<'a, T>}::zip:
+fn<'a, T, U, Clause0_Item, Clause0_IntoIter>(core::slice::iter::ChunksExact<'a, T>, U) -> core::iter::adapters::zip::Zip<core::slice::iter::ChunksExact<'a, T>, Clause0_IntoIter>
+where
+  TraitClause0: (U: core::iter::traits::collect::IntoIterator<Clause0_Item, Clause0_IntoIter>),
+  TypeOutlives0: T: 'a,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a [T]> for core::slice::iter::ChunksExact<'a, T>}::zip
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::zip:
+fn<'a, T, U, Clause0_Item, Clause0_IntoIter>(core::slice::iter::ChunksExactMut<'a, T>, U) -> core::iter::adapters::zip::Zip<core::slice::iter::ChunksExactMut<'a, T>, Clause0_IntoIter>
+where
+  TraitClause0: (U: core::iter::traits::collect::IntoIterator<Clause0_Item, Clause0_IntoIter>),
+  TypeOutlives0: T: 'a,
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::zip
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::expand_values:
+fn<'_0, '_1>(&'_0 [u8], &'_1 mut [u8]) -> core::result::Result<(), aspis_r1_cost_probe::compact::CodecError>
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::expand_values
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::verifier::candidate::wide_view:
+fn<'a>(&'a [u8], &'a [u8], &'a [u8]) -> core::result::Result<aspis_r1_cost_probe::verifier::View<'a>, aspis_r1_cost_probe::verifier::Error>
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::verifier::candidate::wide_view
+
+[[91mError[39m] There should be no bottoms in the value
+Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 76:0-88:1
+[[93mWarn[39m ] Could not translate the body of function 'aspis_r1_cost_probe::verifier::candidate::wide_view because of previous error
+Name pattern: 'aspis_r1_cost_probe::verifier::candidate::wide_view'
+Definition span: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 76:0-88:1
+Source: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 76:0-88:1
+Compiler source: interp/Interp.ml, line 682
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push:
+fn<'_0>(&'_0 mut aspis_r1_cost_probe::fast_pairing::canonical::Dot, aspis_r1_cost_probe::fast_pairing::canonical::Q, aspis_r1_cost_probe::fast_pairing::canonical::Q)
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::sampler::circle_sample:
+fn<'_0>(&'_0 [u8; 32usize], aspis_core::r0_transcript::CircleRow) -> aspis_core::circle::SecureCirclePoint
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::sampler::circle_sample
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw:
+fn(aspis_r1_cost_probe::fast_pairing::canonical::Q, aspis_r1_cost_probe::fast_pairing::canonical::Q) -> [u64; 4usize]
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::sampler::circle_sample::{impl core::ops::function::FnOnce<(aspis_core::circle::CirclePointError,), aspis_core::circle::SecureCirclePoint> for aspis_r1_cost_probe::sampler::circle_sample::{closure}<'_0>}::call_once:
+extern "rust-call" fn<'_0>(aspis_r1_cost_probe::sampler::circle_sample::{closure}<'_0>, (aspis_core::circle::CirclePointError,)) -> aspis_core::circle::SecureCirclePoint
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::sampler::circle_sample::{impl core::ops::function::FnOnce<(aspis_core::circle::CirclePointError,), aspis_core::circle::SecureCirclePoint> for aspis_r1_cost_probe::sampler::circle_sample::{closure}<'_0>}::call_once
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::sampler::qm31_sample:
+fn<'_0>(&'_0 [u8; 32usize]) -> aspis_core::field::QM31
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::sampler::qm31_sample
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::OFF_INACTIVE:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::OFF_INACTIVE
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::OFF_ROUND0:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::OFF_ROUND0
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::OFF_FOLDED_ROOT:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::OFF_FOLDED_ROOT
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::OFF_ROUND1:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::OFF_ROUND1
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::OFF_FINAL:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::OFF_FINAL
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::OFF_OPENINGS:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::OFF_OPENINGS
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{closure}}::call:
+extern "rust-call" fn<'_0>(&'_0 aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{closure}, (u64,)) -> u64
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{closure}}::call
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::fast_pairing::canonical::P:
+fn() -> u32
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::fast_pairing::canonical::P
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::sampler::qm31_digits:
+fn<'_0>(&'_0 [u8; 32usize]) -> [u32; 4usize]
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::PP:
+fn() -> u64
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::PP
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::sampler::qm31_div_pass:
+fn([u32; 8usize]) -> ([u32; 8usize], u32)
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::sampler::qm31_div_pass
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::OFF_Y1:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::OFF_Y1
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::COMPACT_Y1:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::COMPACT_Y1
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::FINAL_LEN:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::FINAL_LEN
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::OFF_SEMANTIC:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::OFF_SEMANTIC
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::COMPACT_SEMANTIC:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::COMPACT_SEMANTIC
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::HEADER:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::HEADER
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::SEMANTIC_COMPACT_VALUES:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::SEMANTIC_COMPACT_VALUES
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::compact::LOGICAL_SEMANTIC:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::compact::LOGICAL_SEMANTIC
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_pure_aux, line 112:
+aspis_r1_cost_probe::verifier::SEMANTIC_BYTES:
+fn() -> usize
+
+[[36mTrace[39m] Aeneas__Translate.translate_function_to_symbolics, line 26:
+aspis_r1_cost_probe::verifier::SEMANTIC_BYTES
+
+[[93mWarn[39m ] When retrieving the builtin information for trait decl 'core::iter::traits::iterator::Iterator', could not find the information for item 'zip'. The model defined in the Lean library seems to be missing the corresponding field.
+Source: '/rustc/library/core/src/iter/traits/iterator.rs', lines 42:0-42:24
+Compiler source: extract/Extract.ml, line 2866
+
+[[93mWarn[39m ] When retrieving the builtin information for trait decl 'core::iter::range::Step', could not find the information for item 'forward_overflowing'. The model defined in the Lean library seems to be missing the corresponding field.
+Source: '/rustc/library/core/src/iter/range.rs', lines 35:0-35:64
+Compiler source: extract/Extract.ml, line 2866
+
+[[93mWarn[39m ] When retrieving the builtin information for trait decl 'core::iter::range::Step', could not find the information for item 'backward_overflowing'. The model defined in the Lean library seems to be missing the corresponding field.
+Source: '/rustc/library/core/src/iter/range.rs', lines 35:0-35:64
+Compiler source: extract/Extract.ml, line 2866
+
+[[36mTrace[39m] Aeneas__Translate.extract_translated_crate, line 1773:
+namespace: XRh_Eval
+- crate_name: XRhBorrow
+- full_dest_dir: /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval
+- extract_filebasename: /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval/
+
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval
+[[36mTrace[39m] Aeneas__Translate.extract_translated_crate, line 1843:
+import_prefix: XRh_Eval.
+
+[[92mInfo[39m ] Generated the partial file (because of 1 errors, including 1 unique errors): /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval/TypesExternal_Template.lean
+[[92mInfo[39m ] Generated the partial file (because of 1 errors, including 1 unique errors): /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval/Types.lean
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::result::{core::result::Result<T, E>}::unwrap_or_else
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a [T]> for core::slice::iter::ChunksExact<'a, T>}::zip
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::next
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::zip
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::slice::{[T]}::chunks_exact_mut
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_core::circle::secure_ood_circle_point_from_parameter
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_core::field::wide_exact::{aspis_core::field::wide_exact::WideExact}::from_le_bytes
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_core::field::{aspis_core::field::CM31}::new
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_core::transcript::circle_fallback_point
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::verifier::candidate::wide_view
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::compact::expand_values
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::compact::expand_values
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::compact::expand_values
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{closure}}::call
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_div_pass
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_div_pass
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_div_pass
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_sample
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::circle_sample::{impl core::ops::function::FnOnce<(aspis_core::circle::CirclePointError,), aspis_core::circle::SecureCirclePoint> for aspis_r1_cost_probe::sampler::circle_sample::{closure}<'_0>}::call_once
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::circle_sample
+
+[[92mInfo[39m ] Generated the partial file (because of 1 errors, including 1 unique errors): /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval/FunsExternal_Template.lean
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::result::{core::result::Result<T, E>}::unwrap_or_else
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a [T]> for core::slice::iter::ChunksExact<'a, T>}::zip
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::next
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut [T]> for core::slice::iter::ChunksExactMut<'a, T>}::zip
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+core::slice::{[T]}::chunks_exact_mut
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_core::circle::secure_ood_circle_point_from_parameter
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_core::field::wide_exact::{aspis_core::field::wide_exact::WideExact}::from_le_bytes
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_core::field::{aspis_core::field::CM31}::new
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_core::transcript::circle_fallback_point
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::verifier::candidate::wide_view
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::compact::expand_values
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::compact::expand_values
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::compact::expand_values
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{impl core::ops::function::Fn<(u64,), u64> for aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw::{closure}}::call
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Q}::raw
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::fast_pairing::canonical::{aspis_r1_cost_probe::fast_pairing::canonical::Dot}::push
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_div_pass
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_div_pass
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_div_pass
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_digits
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::qm31_sample
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::circle_sample::{impl core::ops::function::FnOnce<(aspis_core::circle::CirclePointError,), aspis_core::circle::SecureCirclePoint> for aspis_r1_cost_probe::sampler::circle_sample::{closure}<'_0>}::call_once
+
+[[36mTrace[39m] Aeneas__Translate.export_functions_group_scc.(fun), line 851:
+aspis_r1_cost_probe::sampler::circle_sample
+
+[[92mInfo[39m ] Generated the partial file (because of 1 errors, including 1 unique errors): /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval/Funs.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/translation.json
+[[92mInfo[39m ] Total execution time: 0.828798 seconds
+RESULT {"case": "borrow", "roots": ["crate::compact::expand_values", "crate::verifier::candidate::wide_view", "crate::fast_pairing::canonical::_::push", "crate::sampler::circle_sample"], "release_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387", "release_files_checked": 7978, "changed_release_files": [], "charon_sha256": "21fe5b0d7c839f328fb934d004d5e7c5397740d8a3255d05598d6b4ec30878c3", "aeneas_sha256": "1ead6274a06d957c188144701c127a90d54b851fb7dce40b1479cc305f6fad00", "charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_charon_target/release/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::result::_::map_err", "--include", "core::cmp::PartialEq::ne", "--duplicate-defaulted-methods", "--start-from", "crate::compact::expand_values", "--start-from", "crate::verifier::candidate::wide_view", "--start-from", "crate::fast_pairing::canonical::_::push", "--start-from", "crate::sampler::circle_sample", "--dest-file", "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_borrow.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-r1-cost-probe/Cargo.toml", "--locked", "--offline", "--release", "--lib", "--no-default-features", "--features", "private-leaf-salts", "--jobs", "1"], "opaque_selectors": [], "experimental_only": true, "charon_exit": 0, "charon_wall": 74.26698129501892, "llbc_sha256": "f9e9cba5f8d576ddeafa2704e0395d4b1975e0a89e21f087ed5450def89c61f6", "llbc_bytes": 1255243, "has_errors": false, "aeneas_command": ["/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_aeneas/src/_build/default/main.exe", "-log", "Translate", "-sequential", "-no-progress-bar", "-backend", "lean", "-namespace", "XRh_Eval", "-dest", "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow", "-subdir", "XRh_Eval", "-split-files", "-emit-json", "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_borrow.llbc"], "aeneas_exit": 1, "aeneas_wall": 0.9775823300005868, "outputs": [{"path": "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval/Funs.lean", "sha256": "ec003166304d374b344721fa3cef586d46781a0738a00ea47d74f933d2a94504", "bytes": 24958}, {"path": "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval/FunsExternal_Template.lean", "sha256": "328daeb4f81c4e8e4bd88f3548742064d2c72868d39c7c63faab900c8a884cfc", "bytes": 6670}, {"path": "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval/Types.lean", "sha256": "52c23530cea356ec3b1f0ae54f370df2c517548d1628dcb78269ce7b3046c32e", "bytes": 5222}, {"path": "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/XRh_Eval/TypesExternal_Template.lean", "sha256": "b8a15aa448e1350085d3d9497315217ed2158a6466113c78506c8e5b6185e787", "bytes": 1416}, {"path": "/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_new_generated_borrow/translation.json", "sha256": "29c8fcf41e1247ade7e3af94dfc2af0ac45da3caf673e80e553867c5deefb9f3", "bytes": 30827}]}
