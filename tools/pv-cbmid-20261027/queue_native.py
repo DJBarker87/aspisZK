@@ -15,7 +15,9 @@ while refused<10:
   old=json.loads((out/name/'receipt.json').read_text());assert old.get('compiler_started') is False
   refused+=1;continue
  result=subprocess.run([sys.executable,str(root/'tools/pv-cbmid-20261027/run.py'),mode,name,*args],cwd=root)
- if result.returncode!=78:sys.exit(result.returncode)
+ receipt=out/name/'receipt.json'
+ denied=receipt.exists() and json.loads(receipt.read_text()).get('compiler_started') is False
+ if result.returncode!=78 and not denied:sys.exit(result.returncode)
  refused+=1
 print('TEN ADMISSION REFUSALS: perform compile-free preparation before resuming',flush=True)
 sys.exit(78)

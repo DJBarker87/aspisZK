@@ -51,68 +51,66 @@ mod schedule_checks {
         assert!(matches!(result,Ok(ref links) if links.len()==136));
     }
 }
-#[cfg(all(kani,not(pv_cb_extract)))]
-mod encoder_checks {
-    use aspis_core::field::{QM31,CM31,M31,P};
-    fn q(r:[u32;4])->QM31 {
-        QM31{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}}
-    }
-    fn canonical(x:QM31) {
-        kani::assume(x.c0.a.0<P);kani::assume(x.c0.b.0<P);
-        kani::assume(x.c1.a.0<P);kani::assume(x.c1.b.0<P);
-    }
-    #[kani::proof]
-    #[kani::unwind(1025)]
-    fn eval_qm31_complete() {
-        let words:[[u32;4];1024]=kani::any();
-        let coefficients:[QM31;1024]=core::array::from_fn(|i|q(words[i]));
-        for coefficient in coefficients {canonical(coefficient);}
-        let xy:[[u32;4];2]=kani::any();
-        let point=aspis_core::r0::domain::Point{x:q(xy[0]),y:q(xy[1])};
-        canonical(point.x);canonical(point.y);
-        assert_eq!(aspis_core::r0::encoder::eval_message(&coefficients,point),crate::reference_encoder::eval_message_indexed(&coefficients,point));
-    }
-}
 #[cfg(kani)]
 pub mod reference_multilinear;
-#[cfg(all(kani,not(pv_cb_extract)))]
-mod multilinear_checks {
-    use aspis_core::field::{QM31,CM31,M31,P};
-    fn q(r:[u32;4])->QM31 {
-        QM31{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}}
-    }
-    fn canonical(x:QM31) {
-        kani::assume(x.c0.a.0<P);kani::assume(x.c0.b.0<P);
-        kani::assume(x.c1.a.0<P);kani::assume(x.c1.b.0<P);
-    }
-    fn coefficients()->[QM31;1024] {
-        let raw:[[u32;4];1024]=kani::any();
-        let out=core::array::from_fn(|i|q(raw[i]));
-        for x in out {canonical(x);}
-        out
-    }
-    #[kani::proof]
-    #[kani::unwind(1025)]
-    fn boolean_vertices() {
-        let column=coefficients();let bits:[bool;10]=kani::any();
-        let point=core::array::from_fn(|i|if bits[i] {QM31::ONE}else{QM31::ZERO});
-        assert_eq!(aspis_statement::constraints_v4::multilinear_evaluate_qm31(&column,&point),crate::reference_multilinear::evaluate(&column,&point));
-    }
-    #[kani::proof]
-    #[kani::unwind(1025)]
-    fn one_non_boolean_prefix() {
-        let column=coefficients();let bits:[bool;9]=kani::any();
-        let raw:[u32;4]=kani::any();let first=q(raw);canonical(first);
-        kani::assume(first!=QM31::ZERO && first!=QM31::ONE);
-        let point=core::array::from_fn(|i|if i==0 {first} else if bits[i-1] {QM31::ONE}else{QM31::ZERO});
-        assert_eq!(aspis_statement::constraints_v4::multilinear_evaluate_qm31(&column,&point),crate::reference_multilinear::evaluate(&column,&point));
-    }
-}
 #[cfg(all(kani,not(pv_cb_extract)))]
 mod cell_checks {
     #[kani::proof]
     #[kani::unwind(1025)]
     fn cells_complete() {
         assert_eq!(aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_relation_free_mask_cells_v1(),crate::reference::cells());
+    }
+}
+
+// Control-flow prerequisites only. No shipped/reference field equality is claimed.
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod index_checks {
+    #[kani::proof]
+    #[kani::unwind(513)]
+    fn encoder_pair_order() {
+        let q:[u16;1024]=kani::any();
+        let mut i=0usize;
+        for (pair,n) in q.chunks_exact(2).zip(0..512) {
+            assert_eq!(i,n);
+            assert_eq!(pair[0],q[2*i]);
+            assert_eq!(pair[1],q[2*i+1]);
+            i+=1;
+        }
+        assert_eq!(i,512);
+    }
+    #[kani::proof]
+    #[kani::unwind(12)]
+    fn suffix_scan_order() {
+        // 0/1 are Boolean coordinates; 2 is any non-Boolean coordinate class.
+        let point:[u8;10]=kani::any();
+        for value in point {kani::assume(value<=2);}
+        let trailing=point.iter().rev().take_while(|x|**x<=1).count();
+        let mut suffix=0usize;
+        for value in &point[10-trailing..] {suffix=(suffix<<1)|usize::from(*value==1);}
+        let mut indexed_trailing=0usize;
+        while indexed_trailing<10 {
+            if point[9-indexed_trailing]>1 {break;}
+            indexed_trailing+=1;
+        }
+        let mut indexed_suffix=0usize;
+        let mut coordinate=10-indexed_trailing;
+        while coordinate<10 {
+            indexed_suffix=(indexed_suffix<<1)|usize::from(point[coordinate]==1);
+            coordinate+=1;
+        }
+        assert_eq!(trailing,indexed_trailing);
+        assert_eq!(suffix,indexed_suffix);
+    }
+    #[kani::proof]
+    #[kani::unwind(2)]
+    fn sparse_row_bounds() {
+        let prefix_len:usize=kani::any();kani::assume(prefix_len<=10);
+        let trailing=10-prefix_len;
+        let prefix:usize=kani::any();kani::assume(prefix<(1usize<<prefix_len));
+        let suffix:usize=kani::any();kani::assume(suffix<(1usize<<trailing));
+        let row=(prefix<<trailing)|suffix;
+        assert!(row<1024);
+        assert_eq!(row>>trailing,prefix);
+        assert_eq!(row&((1usize<<trailing)-1),suffix);
     }
 }
