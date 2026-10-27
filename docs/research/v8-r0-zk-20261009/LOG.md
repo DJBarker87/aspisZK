@@ -12763,3 +12763,18 @@ no crates/ change; no forbidden tokens; pushed) and fast-forwarded the runjoin b
 runjoin24 (IDs 38100-38199) first decides whether Admission follows from w : source.Instance, which
 would prove V152 outright, then the admission audit, V153's universal compiler-return success and
 V154's transport. Rows removed outright: 0. Privacy target not yet established.
+
+## D330 (Stream B) 2026-10-27 22:27 UTC: pv-reach9 feasibility stop; prerequisite cohort authorized as a chunked dependency build; pv-reach10 launched
+
+pv-reach9 did as D327 asked: before spending budget it listed all ~200 prerequisite modules of the
+installed-op84 lemma, found none that passes every (h6) reuse check, and estimated at least 201
+one-module attempts (134 even if 67 candidates were accepted), more than its 100. It stopped with 0
+Lean, 0 Kani and no IDs consumed (all 5,673 external hashes verified). V404/V405 stay OPEN.
+
+Lead decision: those modules are unchanged committed sources resolved under (h5)/(h5'); building
+them is a dependency build, not proof work. pv-reach10 (IDs 40200-40299) builds them in topological
+chunks of about 20-40 modules, one capped 6G/8G/swap0/tasks64 scope and one ID per chunk, recording
+module lists, source and object hashes and resources per chunk; a failing chunk is isolated to its
+module, reported as a finding about that source and not rerun unchanged. It then compiles the
+installed-op84 lemma and continues the exclusions, conditional native witnesses and minimal reached
+sets. Rows removed outright: 0. Privacy target not yet established.
