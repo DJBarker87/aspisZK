@@ -1,0 +1,40 @@
+import FJl_QMParser
+import FJl_QMCodec
+import FJf_EbyKCodec
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.FJl_QMArrayValue
+open Aeneas Aeneas.Std Result AspisR1CurrentWide.Proof
+open FIo_FieldBridge (NQ qm)
+/-- Four-limb interpretation is identical across the two strict parser carriers. -/
+theorem decoded (q : NQ) : FJl_QMCodec.candidate (FJl_QMParser.toCandidate q)=decodeQM (qm q) := rfl
+
+theorem bytes (a : Array U8 16#usize) :
+    List.ofFn (CandidateParserByteOrder.arrayBytes16 a)=MultiproofConeCanonical.bytesOf a.val := by
+  have len : a.val.length=16 := a.property
+  apply List.ext_getElem
+  · simp only [List.length_ofFn,MultiproofConeCanonical.bytesOf,List.length_map,len]
+  · intro i hi hj
+    simp only [List.getElem_ofFn,MultiproofConeCanonical.bytesOf,List.getElem_map,
+      CandidateParserByteOrder.arrayBytes16]
+/-- Literal strict QM31 VALUE of the SAME native parser return. -/
+theorem value (a : Array U8 16#usize) (q : NQ)
+    (run : FIp_DotDecode.field.QM31.from_le_bytes (Array.to_slice a)=ok (some q)) :
+    ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf a.val)=some (decodeQM (qm q)) := by
+  have source := FJl_QMParser.source (Array.to_slice a) q run
+  rw [CandidateStrictQM31Parser.source_refines] at source
+  have equality := Result.ok.inj source
+  cases hd : RetainedFieldByteCodec.decodeQM31LE (CandidateParserByteOrder.arrayBytes16 a) with
+  | none => simp only [hd,Option.map_none,reduceCtorEq] at equality
+  | some limbs =>
+    simp only [hd,Option.map_some,Option.some.injEq] at equality
+    have numeric := congrArg FJl_QMCodec.candidate equality
+    rw [FJl_QMCodec.limbs,decoded] at numeric
+    rw [←bytes]
+    simp only [ExactLeafFieldCodec.decodeQM31,RetainedFieldByteCodec.decodeQM31Bytes,
+      ListFieldCodec.fixedBytes?_ofFn,Option.bind_some,hd,Option.map_some,numeric]
+#print axioms decoded
+#print axioms bytes
+#print axioms value
+end AspisR1.FJl_QMArrayValue
+end
