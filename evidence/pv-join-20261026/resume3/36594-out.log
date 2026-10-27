@@ -1,0 +1,1144 @@
+theorem R1Z.PV_Join_CodecCaller.refinement_of_data : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns) {S : Type}
+  (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (pub : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (v : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (binding digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),
+  store.reserve s digest attempt.mask_nonce = Aeneas.Std.Result.ok (accepted, after) →
+    ∀
+      (model :
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwFull.prover.MaskedFixtureAudit)
+            ProverRwFull.verifier.Error)),
+      R1Z.ProverRwBodyDataCriterion.data
+            (R1Z.ProverRwBodyNativeWideInstall.execute (R1Z.PV_Join_CodecDictionary.selected ops) store pub compiled v
+              hash binding digest attempt s) =
+          model →
+        R1Z.ProverRwBodyNativeWideInstall.execute (R1Z.PV_Join_CodecDictionary.selected ops) store pub compiled v hash
+            binding digest attempt s =
+          R1Z.ProverRwBodyCandidateData.withState after model :=
+fun [ProverRwFull.ExternalTypes] ops {S} store pub compiled v hash binding digest attempt s after accepted reservation
+    model =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          R1Z.ProverRwBodyDataCriterion.data
+                (R1Z.ProverRwBodyNativeWideInstall.execute _a store pub compiled v hash binding digest attempt s) =
+              model →
+            R1Z.ProverRwBodyNativeWideInstall.execute _a store pub compiled v hash binding digest attempt s =
+              R1Z.ProverRwBodyCandidateData.withState after model)
+        (R1Z.PV_Join_CodecDictionary.dictionary ops)))
+    (R1Z.ProverRwP6BodyData.refinement_of_data ops store pub compiled v hash binding digest attempt s after accepted
+      reservation model)
+'R1Z.PV_Join_CodecCaller.refinement_of_data' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_CodecDictionary.dictionary : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns), R1Z.PV_Join_CodecDictionary.selected ops = R1Z.ProverRwP6BodyStore.selected ops :=
+fun [inst : ProverRwFull.ExternalTypes] ops =>
+  have parse :=
+    funext fun bytes =>
+      Eq.trans (R1Z.PV_CB_Op71Source.op71_source ops bytes) (Eq.symm (R1Z.PV_Join_Codecs.op71_source ops bytes));
+  have write :=
+    funext fun x =>
+      funext fun bytes =>
+        Eq.trans (R1Z.PV_CB_Op72Source.op72_source ops x bytes) (Eq.symm (R1Z.PV_Join_Codecs.op72_source ops x bytes));
+  have phi :=
+    funext fun E =>
+      funext fun inst_1 =>
+        funext fun x =>
+          funext fun y =>
+            funext fun h =>
+              Eq.trans (R1Z.PV_CB_Op80Source.op80_source ops inst_1 x y h)
+                (Eq.symm (R1Z.PV_Join_Codecs.op80_source ops inst_1 x y h));
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (have __src := R1Z.ProverRwP6BodyStore.selected ops;
+              { op0 := @ProverRwFull.ExternalFuns.op0 inst __src, op1 := @ProverRwFull.ExternalFuns.op1 inst __src,
+                op2 := ProverRwFull.ExternalFuns.op2, op3 := @ProverRwFull.ExternalFuns.op3 inst __src,
+                op4 := @ProverRwFull.ExternalFuns.op4 inst __src, op5 := @ProverRwFull.ExternalFuns.op5 inst __src,
+                op6 := @ProverRwFull.ExternalFuns.op6 inst __src, op7 := @ProverRwFull.ExternalFuns.op7 inst __src,
+                op8 := @ProverRwFull.ExternalFuns.op8 inst __src, op9 := @ProverRwFull.ExternalFuns.op9 inst __src,
+                op10 := ProverRwFull.ExternalFuns.op10, op11 := @ProverRwFull.ExternalFuns.op11 inst __src,
+                op12 := @ProverRwFull.ExternalFuns.op12 inst __src, op13 := ProverRwFull.ExternalFuns.op13,
+                op14 := @ProverRwFull.ExternalFuns.op14 inst __src, op15 := ProverRwFull.ExternalFuns.op15,
+                op16 := @ProverRwFull.ExternalFuns.op16 inst __src, op17 := ProverRwFull.ExternalFuns.op17,
+                op18 := ProverRwFull.ExternalFuns.op18, op19 := ProverRwFull.ExternalFuns.op19,
+                op20 := ProverRwFull.ExternalFuns.op20, op21 := ProverRwFull.ExternalFuns.op21,
+                op22 := @ProverRwFull.ExternalFuns.op22 inst __src, op23 := ProverRwFull.ExternalFuns.op23,
+                op24 := ProverRwFull.ExternalFuns.op24, op25 := ProverRwFull.ExternalFuns.op25,
+                op26 := @ProverRwFull.ExternalFuns.op26 inst __src, op27 := ProverRwFull.ExternalFuns.op27,
+                op28 := ProverRwFull.ExternalFuns.op28, op29 := ProverRwFull.ExternalFuns.op29,
+                op30 := ProverRwFull.ExternalFuns.op30, op31 := ProverRwFull.ExternalFuns.op31,
+                op32 := @ProverRwFull.ExternalFuns.op32 inst __src, op33 := @ProverRwFull.ExternalFuns.op33 inst __src,
+                op34 := @ProverRwFull.ExternalFuns.op34 inst __src, op35 := ProverRwFull.ExternalFuns.op35,
+                op36 := @ProverRwFull.ExternalFuns.op36 inst __src, op37 := ProverRwFull.ExternalFuns.op37,
+                op38 := ProverRwFull.ExternalFuns.op38, op39 := ProverRwFull.ExternalFuns.op39,
+                op40 := ProverRwFull.ExternalFuns.op40, op41 := ProverRwFull.ExternalFuns.op41,
+                op42 := ProverRwFull.ExternalFuns.op42, op43 := ProverRwFull.ExternalFuns.op43,
+                op44 := ProverRwFull.ExternalFuns.op44, op45 := ProverRwFull.ExternalFuns.op45,
+                op46 := ProverRwFull.ExternalFuns.op46, op47 := ProverRwFull.ExternalFuns.op47,
+                op48 := ProverRwFull.ExternalFuns.op48, op49 := ProverRwFull.ExternalFuns.op49,
+                op50 := ProverRwFull.ExternalFuns.op50, op51 := ProverRwFull.ExternalFuns.op51,
+                op52 := ProverRwFull.ExternalFuns.op52, op53 := ProverRwFull.ExternalFuns.op53,
+                op54 := ProverRwFull.ExternalFuns.op54, op55 := ProverRwFull.ExternalFuns.op55,
+                op56 := ProverRwFull.ExternalFuns.op56, op57 := ProverRwFull.ExternalFuns.op57,
+                op58 := ProverRwFull.ExternalFuns.op58, op59 := ProverRwFull.ExternalFuns.op59,
+                op60 := ProverRwFull.ExternalFuns.op60, op61 := ProverRwFull.ExternalFuns.op61,
+                op62 := ProverRwFull.ExternalFuns.op62, op63 := ProverRwFull.ExternalFuns.op63,
+                op64 := ProverRwFull.ExternalFuns.op64, op65 := ProverRwFull.ExternalFuns.op65,
+                op66 := ProverRwFull.ExternalFuns.op66, op67 := ProverRwFull.ExternalFuns.op67,
+                op68 := ProverRwFull.ExternalFuns.op68, op69 := ProverRwFull.ExternalFuns.op69,
+                op70 := ProverRwFull.ExternalFuns.op70, op71 := _a, op72 := ProverRwFull.ExternalFuns.op72,
+                op73 := ProverRwFull.ExternalFuns.op73, op74 := ProverRwFull.ExternalFuns.op74,
+                op75 := ProverRwFull.ExternalFuns.op75, op76 := ProverRwFull.ExternalFuns.op76,
+                op77 := @ProverRwFull.ExternalFuns.op77 inst __src, op78 := @ProverRwFull.ExternalFuns.op78 inst __src,
+                op79 := @ProverRwFull.ExternalFuns.op79 inst __src, op80 := fun {E} => ProverRwFull.ExternalFuns.op80,
+                op81 := @ProverRwFull.ExternalFuns.op81 inst __src, op82 := ProverRwFull.ExternalFuns.op82,
+                op83 := ProverRwFull.ExternalFuns.op83, op84 := ProverRwFull.ExternalFuns.op84,
+                op85 := ProverRwFull.ExternalFuns.op85, op86 := ProverRwFull.ExternalFuns.op86,
+                op87 := ProverRwFull.ExternalFuns.op87, op88 := ProverRwFull.ExternalFuns.op88,
+                op89 := ProverRwFull.ExternalFuns.op89, op90 := ProverRwFull.ExternalFuns.op90,
+                op91 := ProverRwFull.ExternalFuns.op91, op92 := ProverRwFull.ExternalFuns.op92,
+                op93 := ProverRwFull.ExternalFuns.op93, op94 := ProverRwFull.ExternalFuns.op94,
+                op95 := ProverRwFull.ExternalFuns.op95, op96 := ProverRwFull.ExternalFuns.op96,
+                op97 := ProverRwFull.ExternalFuns.op97, op98 := ProverRwFull.ExternalFuns.op98,
+                op99 := ProverRwFull.ExternalFuns.op99, op100 := ProverRwFull.ExternalFuns.op100,
+                op101 := ProverRwFull.ExternalFuns.op101, op102 := ProverRwFull.ExternalFuns.op102,
+                op103 := ProverRwFull.ExternalFuns.op103, op104 := ProverRwFull.ExternalFuns.op104,
+                op105 := ProverRwFull.ExternalFuns.op105, op106 := ProverRwFull.ExternalFuns.op106,
+                op107 := ProverRwFull.ExternalFuns.op107, op108 := ProverRwFull.ExternalFuns.op108,
+                op109 := ProverRwFull.ExternalFuns.op109, op110 := ProverRwFull.ExternalFuns.op110,
+                op111 := ProverRwFull.ExternalFuns.op111, op112 := ProverRwFull.ExternalFuns.op112,
+                op113 := ProverRwFull.ExternalFuns.op113, op114 := ProverRwFull.ExternalFuns.op114,
+                op115 := ProverRwFull.ExternalFuns.op115, op116 := ProverRwFull.ExternalFuns.op116,
+                op117 := ProverRwFull.ExternalFuns.op117, op118 := ProverRwFull.ExternalFuns.op118,
+                op119 := ProverRwFull.ExternalFuns.op119, op120 := ProverRwFull.ExternalFuns.op120,
+                op121 := ProverRwFull.ExternalFuns.op121, op122 := @ProverRwFull.ExternalFuns.op122 inst __src,
+                op123 := @ProverRwFull.ExternalFuns.op123 inst __src,
+                op124 := @ProverRwFull.ExternalFuns.op124 inst __src,
+                op125 := @ProverRwFull.ExternalFuns.op125 inst __src,
+                op126 := @ProverRwFull.ExternalFuns.op126 inst __src,
+                op127 := @ProverRwFull.ExternalFuns.op127 inst __src,
+                op128 := @ProverRwFull.ExternalFuns.op128 inst __src, op129 := ProverRwFull.ExternalFuns.op129,
+                op130 := @ProverRwFull.ExternalFuns.op130 inst __src,
+                op131 := @ProverRwFull.ExternalFuns.op131 inst __src, op132 := ProverRwFull.ExternalFuns.op132,
+                op133 := ProverRwFull.ExternalFuns.op133, op134 := ProverRwFull.ExternalFuns.op134,
+                op135 := @ProverRwFull.ExternalFuns.op135 inst __src,
+                op136 := @ProverRwFull.ExternalFuns.op136 inst __src,
+                op137 := @ProverRwFull.ExternalFuns.op137 inst __src,
+                op138 := @ProverRwFull.ExternalFuns.op138 inst __src,
+                op139 := @ProverRwFull.ExternalFuns.op139 inst __src,
+                op140 := @ProverRwFull.ExternalFuns.op140 inst __src,
+                op141 := @ProverRwFull.ExternalFuns.op141 inst __src,
+                op142 := @ProverRwFull.ExternalFuns.op142 inst __src,
+                op143 := @ProverRwFull.ExternalFuns.op143 inst __src,
+                op144 := @ProverRwFull.ExternalFuns.op144 inst __src,
+                op145 := @ProverRwFull.ExternalFuns.op145 inst __src,
+                op146 := @ProverRwFull.ExternalFuns.op146 inst __src,
+                op147 := @ProverRwFull.ExternalFuns.op147 inst __src,
+                op148 := @ProverRwFull.ExternalFuns.op148 inst __src,
+                op149 := @ProverRwFull.ExternalFuns.op149 inst __src,
+                op150 := @ProverRwFull.ExternalFuns.op150 inst __src,
+                op151 := @ProverRwFull.ExternalFuns.op151 inst __src,
+                op152 := @ProverRwFull.ExternalFuns.op152 inst __src,
+                op153 := @ProverRwFull.ExternalFuns.op153 inst __src,
+                op154 := @ProverRwFull.ExternalFuns.op154 inst __src,
+                op155 := @ProverRwFull.ExternalFuns.op155 inst __src,
+                op156 := @ProverRwFull.ExternalFuns.op156 inst __src,
+                op157 := @ProverRwFull.ExternalFuns.op157 inst __src,
+                op158 := @ProverRwFull.ExternalFuns.op158 inst __src,
+                op159 := @ProverRwFull.ExternalFuns.op159 inst __src,
+                op160 := @ProverRwFull.ExternalFuns.op160 inst __src,
+                op161 := @ProverRwFull.ExternalFuns.op161 inst __src,
+                op162 := @ProverRwFull.ExternalFuns.op162 inst __src, op163 := ProverRwFull.ExternalFuns.op163,
+                op164 := ProverRwFull.ExternalFuns.op164, op165 := ProverRwFull.ExternalFuns.op165,
+                op166 := ProverRwFull.ExternalFuns.op166, op167 := ProverRwFull.ExternalFuns.op167,
+                op168 := ProverRwFull.ExternalFuns.op168, op169 := ProverRwFull.ExternalFuns.op169,
+                op170 := ProverRwFull.ExternalFuns.op170, op171 := ProverRwFull.ExternalFuns.op171,
+                op172 := ProverRwFull.ExternalFuns.op172, op173 := ProverRwFull.ExternalFuns.op173,
+                op174 := ProverRwFull.ExternalFuns.op174, op175 := ProverRwFull.ExternalFuns.op175,
+                op176 := ProverRwFull.ExternalFuns.op176, op177 := ProverRwFull.ExternalFuns.op177,
+                op178 := ProverRwFull.ExternalFuns.op178, op179 := ProverRwFull.ExternalFuns.op179,
+                op180 := ProverRwFull.ExternalFuns.op180, op181 := ProverRwFull.ExternalFuns.op181,
+                op182 := ProverRwFull.ExternalFuns.op182, op183 := ProverRwFull.ExternalFuns.op183,
+                op184 := ProverRwFull.ExternalFuns.op184, op185 := @ProverRwFull.ExternalFuns.op185 inst __src,
+                op186 := @ProverRwFull.ExternalFuns.op186 inst __src,
+                op187 := @ProverRwFull.ExternalFuns.op187 inst __src, op188 := ProverRwFull.ExternalFuns.op188,
+                op189 := ProverRwFull.ExternalFuns.op189, op190 := ProverRwFull.ExternalFuns.op190,
+                op191 := ProverRwFull.ExternalFuns.op191, op192 := ProverRwFull.ExternalFuns.op192,
+                op193 := ProverRwFull.ExternalFuns.op193, op194 := ProverRwFull.ExternalFuns.op194,
+                op195 := @ProverRwFull.ExternalFuns.op195 inst __src, op196 := ProverRwFull.ExternalFuns.op196,
+                op197 := ProverRwFull.ExternalFuns.op197, op198 := ProverRwFull.ExternalFuns.op198,
+                op199 := ProverRwFull.ExternalFuns.op199, op200 := ProverRwFull.ExternalFuns.op200,
+                op201 := ProverRwFull.ExternalFuns.op201, op202 := ProverRwFull.ExternalFuns.op202,
+                op203 := ProverRwFull.ExternalFuns.op203, op204 := ProverRwFull.ExternalFuns.op204,
+                op205 := ProverRwFull.ExternalFuns.op205, op206 := ProverRwFull.ExternalFuns.op206,
+                op207 := ProverRwFull.ExternalFuns.op207, op208 := ProverRwFull.ExternalFuns.op208,
+                op209 := @ProverRwFull.ExternalFuns.op209 inst __src, op210 := ProverRwFull.ExternalFuns.op210,
+                op211 := @ProverRwFull.ExternalFuns.op211 inst __src,
+                op212 := @ProverRwFull.ExternalFuns.op212 inst __src,
+                op213 := @ProverRwFull.ExternalFuns.op213 inst __src,
+                op214 := @ProverRwFull.ExternalFuns.op214 inst __src,
+                op215 := @ProverRwFull.ExternalFuns.op215 inst __src,
+                op216 := @ProverRwFull.ExternalFuns.op216 inst __src,
+                op217 := @ProverRwFull.ExternalFuns.op217 inst __src,
+                op218 := @ProverRwFull.ExternalFuns.op218 inst __src,
+                op219 := @ProverRwFull.ExternalFuns.op219 inst __src,
+                op220 := @ProverRwFull.ExternalFuns.op220 inst __src, op221 := ProverRwFull.ExternalFuns.op221,
+                op222 := ProverRwFull.ExternalFuns.op222, op223 := ProverRwFull.ExternalFuns.op223,
+                op224 := ProverRwFull.ExternalFuns.op224, op225 := ProverRwFull.ExternalFuns.op225,
+                op226 := ProverRwFull.ExternalFuns.op226, op227 := ProverRwFull.ExternalFuns.op227,
+                op228 := ProverRwFull.ExternalFuns.op228, op229 := ProverRwFull.ExternalFuns.op229,
+                op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+                op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+                op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+                op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+                op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+                op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+                op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+                op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+                op246 := @ProverRwFull.ExternalFuns.op246 inst __src, op247 := ProverRwFull.ExternalFuns.op247,
+                op248 := ProverRwFull.ExternalFuns.op248, op249 := ProverRwFull.ExternalFuns.op249,
+                op250 := ProverRwFull.ExternalFuns.op250, op251 := ProverRwFull.ExternalFuns.op251,
+                op252 := ProverRwFull.ExternalFuns.op252, op253 := ProverRwFull.ExternalFuns.op253,
+                op254 := ProverRwFull.ExternalFuns.op254, op255 := @ProverRwFull.ExternalFuns.op255 inst __src,
+                op256 := ProverRwFull.ExternalFuns.op256, op257 := @ProverRwFull.ExternalFuns.op257 inst __src,
+                op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+                op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 }) =
+              R1Z.ProverRwP6BodyStore.selected ops)
+          parse))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (have __src := R1Z.ProverRwP6BodyStore.selected ops;
+                { op0 := @ProverRwFull.ExternalFuns.op0 inst __src, op1 := @ProverRwFull.ExternalFuns.op1 inst __src,
+                  op2 := ProverRwFull.ExternalFuns.op2, op3 := @ProverRwFull.ExternalFuns.op3 inst __src,
+                  op4 := @ProverRwFull.ExternalFuns.op4 inst __src, op5 := @ProverRwFull.ExternalFuns.op5 inst __src,
+                  op6 := @ProverRwFull.ExternalFuns.op6 inst __src, op7 := @ProverRwFull.ExternalFuns.op7 inst __src,
+                  op8 := @ProverRwFull.ExternalFuns.op8 inst __src, op9 := @ProverRwFull.ExternalFuns.op9 inst __src,
+                  op10 := ProverRwFull.ExternalFuns.op10, op11 := @ProverRwFull.ExternalFuns.op11 inst __src,
+                  op12 := @ProverRwFull.ExternalFuns.op12 inst __src, op13 := ProverRwFull.ExternalFuns.op13,
+                  op14 := @ProverRwFull.ExternalFuns.op14 inst __src, op15 := ProverRwFull.ExternalFuns.op15,
+                  op16 := @ProverRwFull.ExternalFuns.op16 inst __src, op17 := ProverRwFull.ExternalFuns.op17,
+                  op18 := ProverRwFull.ExternalFuns.op18, op19 := ProverRwFull.ExternalFuns.op19,
+                  op20 := ProverRwFull.ExternalFuns.op20, op21 := ProverRwFull.ExternalFuns.op21,
+                  op22 := @ProverRwFull.ExternalFuns.op22 inst __src, op23 := ProverRwFull.ExternalFuns.op23,
+                  op24 := ProverRwFull.ExternalFuns.op24, op25 := ProverRwFull.ExternalFuns.op25,
+                  op26 := @ProverRwFull.ExternalFuns.op26 inst __src, op27 := ProverRwFull.ExternalFuns.op27,
+                  op28 := ProverRwFull.ExternalFuns.op28, op29 := ProverRwFull.ExternalFuns.op29,
+                  op30 := ProverRwFull.ExternalFuns.op30, op31 := ProverRwFull.ExternalFuns.op31,
+                  op32 := @ProverRwFull.ExternalFuns.op32 inst __src,
+                  op33 := @ProverRwFull.ExternalFuns.op33 inst __src,
+                  op34 := @ProverRwFull.ExternalFuns.op34 inst __src, op35 := ProverRwFull.ExternalFuns.op35,
+                  op36 := @ProverRwFull.ExternalFuns.op36 inst __src, op37 := ProverRwFull.ExternalFuns.op37,
+                  op38 := ProverRwFull.ExternalFuns.op38, op39 := ProverRwFull.ExternalFuns.op39,
+                  op40 := ProverRwFull.ExternalFuns.op40, op41 := ProverRwFull.ExternalFuns.op41,
+                  op42 := ProverRwFull.ExternalFuns.op42, op43 := ProverRwFull.ExternalFuns.op43,
+                  op44 := ProverRwFull.ExternalFuns.op44, op45 := ProverRwFull.ExternalFuns.op45,
+                  op46 := ProverRwFull.ExternalFuns.op46, op47 := ProverRwFull.ExternalFuns.op47,
+                  op48 := ProverRwFull.ExternalFuns.op48, op49 := ProverRwFull.ExternalFuns.op49,
+                  op50 := ProverRwFull.ExternalFuns.op50, op51 := ProverRwFull.ExternalFuns.op51,
+                  op52 := ProverRwFull.ExternalFuns.op52, op53 := ProverRwFull.ExternalFuns.op53,
+                  op54 := ProverRwFull.ExternalFuns.op54, op55 := ProverRwFull.ExternalFuns.op55,
+                  op56 := ProverRwFull.ExternalFuns.op56, op57 := ProverRwFull.ExternalFuns.op57,
+                  op58 := ProverRwFull.ExternalFuns.op58, op59 := ProverRwFull.ExternalFuns.op59,
+                  op60 := ProverRwFull.ExternalFuns.op60, op61 := ProverRwFull.ExternalFuns.op61,
+                  op62 := ProverRwFull.ExternalFuns.op62, op63 := ProverRwFull.ExternalFuns.op63,
+                  op64 := ProverRwFull.ExternalFuns.op64, op65 := ProverRwFull.ExternalFuns.op65,
+                  op66 := ProverRwFull.ExternalFuns.op66, op67 := ProverRwFull.ExternalFuns.op67,
+                  op68 := ProverRwFull.ExternalFuns.op68, op69 := ProverRwFull.ExternalFuns.op69,
+                  op70 := ProverRwFull.ExternalFuns.op70, op71 := ProverRwFull.ExternalFuns.op71, op72 := _a,
+                  op73 := ProverRwFull.ExternalFuns.op73, op74 := ProverRwFull.ExternalFuns.op74,
+                  op75 := ProverRwFull.ExternalFuns.op75, op76 := ProverRwFull.ExternalFuns.op76,
+                  op77 := @ProverRwFull.ExternalFuns.op77 inst __src,
+                  op78 := @ProverRwFull.ExternalFuns.op78 inst __src,
+                  op79 := @ProverRwFull.ExternalFuns.op79 inst __src, op80 := fun {E} => ProverRwFull.ExternalFuns.op80,
+                  op81 := @ProverRwFull.ExternalFuns.op81 inst __src, op82 := ProverRwFull.ExternalFuns.op82,
+                  op83 := ProverRwFull.ExternalFuns.op83, op84 := ProverRwFull.ExternalFuns.op84,
+                  op85 := ProverRwFull.ExternalFuns.op85, op86 := ProverRwFull.ExternalFuns.op86,
+                  op87 := ProverRwFull.ExternalFuns.op87, op88 := ProverRwFull.ExternalFuns.op88,
+                  op89 := ProverRwFull.ExternalFuns.op89, op90 := ProverRwFull.ExternalFuns.op90,
+                  op91 := ProverRwFull.ExternalFuns.op91, op92 := ProverRwFull.ExternalFuns.op92,
+                  op93 := ProverRwFull.ExternalFuns.op93, op94 := ProverRwFull.ExternalFuns.op94,
+                  op95 := ProverRwFull.ExternalFuns.op95, op96 := ProverRwFull.ExternalFuns.op96,
+                  op97 := ProverRwFull.ExternalFuns.op97, op98 := ProverRwFull.ExternalFuns.op98,
+                  op99 := ProverRwFull.ExternalFuns.op99, op100 := ProverRwFull.ExternalFuns.op100,
+                  op101 := ProverRwFull.ExternalFuns.op101, op102 := ProverRwFull.ExternalFuns.op102,
+                  op103 := ProverRwFull.ExternalFuns.op103, op104 := ProverRwFull.ExternalFuns.op104,
+                  op105 := ProverRwFull.ExternalFuns.op105, op106 := ProverRwFull.ExternalFuns.op106,
+                  op107 := ProverRwFull.ExternalFuns.op107, op108 := ProverRwFull.ExternalFuns.op108,
+                  op109 := ProverRwFull.ExternalFuns.op109, op110 := ProverRwFull.ExternalFuns.op110,
+                  op111 := ProverRwFull.ExternalFuns.op111, op112 := ProverRwFull.ExternalFuns.op112,
+                  op113 := ProverRwFull.ExternalFuns.op113, op114 := ProverRwFull.ExternalFuns.op114,
+                  op115 := ProverRwFull.ExternalFuns.op115, op116 := ProverRwFull.ExternalFuns.op116,
+                  op117 := ProverRwFull.ExternalFuns.op117, op118 := ProverRwFull.ExternalFuns.op118,
+                  op119 := ProverRwFull.ExternalFuns.op119, op120 := ProverRwFull.ExternalFuns.op120,
+                  op121 := ProverRwFull.ExternalFuns.op121, op122 := @ProverRwFull.ExternalFuns.op122 inst __src,
+                  op123 := @ProverRwFull.ExternalFuns.op123 inst __src,
+                  op124 := @ProverRwFull.ExternalFuns.op124 inst __src,
+                  op125 := @ProverRwFull.ExternalFuns.op125 inst __src,
+                  op126 := @ProverRwFull.ExternalFuns.op126 inst __src,
+                  op127 := @ProverRwFull.ExternalFuns.op127 inst __src,
+                  op128 := @ProverRwFull.ExternalFuns.op128 inst __src, op129 := ProverRwFull.ExternalFuns.op129,
+                  op130 := @ProverRwFull.ExternalFuns.op130 inst __src,
+                  op131 := @ProverRwFull.ExternalFuns.op131 inst __src, op132 := ProverRwFull.ExternalFuns.op132,
+                  op133 := ProverRwFull.ExternalFuns.op133, op134 := ProverRwFull.ExternalFuns.op134,
+                  op135 := @ProverRwFull.ExternalFuns.op135 inst __src,
+                  op136 := @ProverRwFull.ExternalFuns.op136 inst __src,
+                  op137 := @ProverRwFull.ExternalFuns.op137 inst __src,
+                  op138 := @ProverRwFull.ExternalFuns.op138 inst __src,
+                  op139 := @ProverRwFull.ExternalFuns.op139 inst __src,
+                  op140 := @ProverRwFull.ExternalFuns.op140 inst __src,
+                  op141 := @ProverRwFull.ExternalFuns.op141 inst __src,
+                  op142 := @ProverRwFull.ExternalFuns.op142 inst __src,
+                  op143 := @ProverRwFull.ExternalFuns.op143 inst __src,
+                  op144 := @ProverRwFull.ExternalFuns.op144 inst __src,
+                  op145 := @ProverRwFull.ExternalFuns.op145 inst __src,
+                  op146 := @ProverRwFull.ExternalFuns.op146 inst __src,
+                  op147 := @ProverRwFull.ExternalFuns.op147 inst __src,
+                  op148 := @ProverRwFull.ExternalFuns.op148 inst __src,
+                  op149 := @ProverRwFull.ExternalFuns.op149 inst __src,
+                  op150 := @ProverRwFull.ExternalFuns.op150 inst __src,
+                  op151 := @ProverRwFull.ExternalFuns.op151 inst __src,
+                  op152 := @ProverRwFull.ExternalFuns.op152 inst __src,
+                  op153 := @ProverRwFull.ExternalFuns.op153 inst __src,
+                  op154 := @ProverRwFull.ExternalFuns.op154 inst __src,
+                  op155 := @ProverRwFull.ExternalFuns.op155 inst __src,
+                  op156 := @ProverRwFull.ExternalFuns.op156 inst __src,
+                  op157 := @ProverRwFull.ExternalFuns.op157 inst __src,
+                  op158 := @ProverRwFull.ExternalFuns.op158 inst __src,
+                  op159 := @ProverRwFull.ExternalFuns.op159 inst __src,
+                  op160 := @ProverRwFull.ExternalFuns.op160 inst __src,
+                  op161 := @ProverRwFull.ExternalFuns.op161 inst __src,
+                  op162 := @ProverRwFull.ExternalFuns.op162 inst __src, op163 := ProverRwFull.ExternalFuns.op163,
+                  op164 := ProverRwFull.ExternalFuns.op164, op165 := ProverRwFull.ExternalFuns.op165,
+                  op166 := ProverRwFull.ExternalFuns.op166, op167 := ProverRwFull.ExternalFuns.op167,
+                  op168 := ProverRwFull.ExternalFuns.op168, op169 := ProverRwFull.ExternalFuns.op169,
+                  op170 := ProverRwFull.ExternalFuns.op170, op171 := ProverRwFull.ExternalFuns.op171,
+                  op172 := ProverRwFull.ExternalFuns.op172, op173 := ProverRwFull.ExternalFuns.op173,
+                  op174 := ProverRwFull.ExternalFuns.op174, op175 := ProverRwFull.ExternalFuns.op175,
+                  op176 := ProverRwFull.ExternalFuns.op176, op177 := ProverRwFull.ExternalFuns.op177,
+                  op178 := ProverRwFull.ExternalFuns.op178, op179 := ProverRwFull.ExternalFuns.op179,
+                  op180 := ProverRwFull.ExternalFuns.op180, op181 := ProverRwFull.ExternalFuns.op181,
+                  op182 := ProverRwFull.ExternalFuns.op182, op183 := ProverRwFull.ExternalFuns.op183,
+                  op184 := ProverRwFull.ExternalFuns.op184, op185 := @ProverRwFull.ExternalFuns.op185 inst __src,
+                  op186 := @ProverRwFull.ExternalFuns.op186 inst __src,
+                  op187 := @ProverRwFull.ExternalFuns.op187 inst __src, op188 := ProverRwFull.ExternalFuns.op188,
+                  op189 := ProverRwFull.ExternalFuns.op189, op190 := ProverRwFull.ExternalFuns.op190,
+                  op191 := ProverRwFull.ExternalFuns.op191, op192 := ProverRwFull.ExternalFuns.op192,
+                  op193 := ProverRwFull.ExternalFuns.op193, op194 := ProverRwFull.ExternalFuns.op194,
+                  op195 := @ProverRwFull.ExternalFuns.op195 inst __src, op196 := ProverRwFull.ExternalFuns.op196,
+                  op197 := ProverRwFull.ExternalFuns.op197, op198 := ProverRwFull.ExternalFuns.op198,
+                  op199 := ProverRwFull.ExternalFuns.op199, op200 := ProverRwFull.ExternalFuns.op200,
+                  op201 := ProverRwFull.ExternalFuns.op201, op202 := ProverRwFull.ExternalFuns.op202,
+                  op203 := ProverRwFull.ExternalFuns.op203, op204 := ProverRwFull.ExternalFuns.op204,
+                  op205 := ProverRwFull.ExternalFuns.op205, op206 := ProverRwFull.ExternalFuns.op206,
+                  op207 := ProverRwFull.ExternalFuns.op207, op208 := ProverRwFull.ExternalFuns.op208,
+                  op209 := @ProverRwFull.ExternalFuns.op209 inst __src, op210 := ProverRwFull.ExternalFuns.op210,
+                  op211 := @ProverRwFull.ExternalFuns.op211 inst __src,
+                  op212 := @ProverRwFull.ExternalFuns.op212 inst __src,
+                  op213 := @ProverRwFull.ExternalFuns.op213 inst __src,
+                  op214 := @ProverRwFull.ExternalFuns.op214 inst __src,
+                  op215 := @ProverRwFull.ExternalFuns.op215 inst __src,
+                  op216 := @ProverRwFull.ExternalFuns.op216 inst __src,
+                  op217 := @ProverRwFull.ExternalFuns.op217 inst __src,
+                  op218 := @ProverRwFull.ExternalFuns.op218 inst __src,
+                  op219 := @ProverRwFull.ExternalFuns.op219 inst __src,
+                  op220 := @ProverRwFull.ExternalFuns.op220 inst __src, op221 := ProverRwFull.ExternalFuns.op221,
+                  op222 := ProverRwFull.ExternalFuns.op222, op223 := ProverRwFull.ExternalFuns.op223,
+                  op224 := ProverRwFull.ExternalFuns.op224, op225 := ProverRwFull.ExternalFuns.op225,
+                  op226 := ProverRwFull.ExternalFuns.op226, op227 := ProverRwFull.ExternalFuns.op227,
+                  op228 := ProverRwFull.ExternalFuns.op228, op229 := ProverRwFull.ExternalFuns.op229,
+                  op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+                  op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+                  op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+                  op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+                  op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+                  op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+                  op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+                  op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+                  op246 := @ProverRwFull.ExternalFuns.op246 inst __src, op247 := ProverRwFull.ExternalFuns.op247,
+                  op248 := ProverRwFull.ExternalFuns.op248, op249 := ProverRwFull.ExternalFuns.op249,
+                  op250 := ProverRwFull.ExternalFuns.op250, op251 := ProverRwFull.ExternalFuns.op251,
+                  op252 := ProverRwFull.ExternalFuns.op252, op253 := ProverRwFull.ExternalFuns.op253,
+                  op254 := ProverRwFull.ExternalFuns.op254, op255 := @ProverRwFull.ExternalFuns.op255 inst __src,
+                  op256 := ProverRwFull.ExternalFuns.op256, op257 := @ProverRwFull.ExternalFuns.op257 inst __src,
+                  op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+                  op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 }) =
+                R1Z.ProverRwP6BodyStore.selected ops)
+            write))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (have __src := R1Z.ProverRwP6BodyStore.selected ops;
+                  { op0 := @ProverRwFull.ExternalFuns.op0 inst __src, op1 := @ProverRwFull.ExternalFuns.op1 inst __src,
+                    op2 := ProverRwFull.ExternalFuns.op2, op3 := @ProverRwFull.ExternalFuns.op3 inst __src,
+                    op4 := @ProverRwFull.ExternalFuns.op4 inst __src, op5 := @ProverRwFull.ExternalFuns.op5 inst __src,
+                    op6 := @ProverRwFull.ExternalFuns.op6 inst __src, op7 := @ProverRwFull.ExternalFuns.op7 inst __src,
+                    op8 := @ProverRwFull.ExternalFuns.op8 inst __src, op9 := @ProverRwFull.ExternalFuns.op9 inst __src,
+                    op10 := ProverRwFull.ExternalFuns.op10, op11 := @ProverRwFull.ExternalFuns.op11 inst __src,
+                    op12 := @ProverRwFull.ExternalFuns.op12 inst __src, op13 := ProverRwFull.ExternalFuns.op13,
+                    op14 := @ProverRwFull.ExternalFuns.op14 inst __src, op15 := ProverRwFull.ExternalFuns.op15,
+                    op16 := @ProverRwFull.ExternalFuns.op16 inst __src, op17 := ProverRwFull.ExternalFuns.op17,
+                    op18 := ProverRwFull.ExternalFuns.op18, op19 := ProverRwFull.ExternalFuns.op19,
+                    op20 := ProverRwFull.ExternalFuns.op20, op21 := ProverRwFull.ExternalFuns.op21,
+                    op22 := @ProverRwFull.ExternalFuns.op22 inst __src, op23 := ProverRwFull.ExternalFuns.op23,
+                    op24 := ProverRwFull.ExternalFuns.op24, op25 := ProverRwFull.ExternalFuns.op25,
+                    op26 := @ProverRwFull.ExternalFuns.op26 inst __src, op27 := ProverRwFull.ExternalFuns.op27,
+                    op28 := ProverRwFull.ExternalFuns.op28, op29 := ProverRwFull.ExternalFuns.op29,
+                    op30 := ProverRwFull.ExternalFuns.op30, op31 := ProverRwFull.ExternalFuns.op31,
+                    op32 := @ProverRwFull.ExternalFuns.op32 inst __src,
+                    op33 := @ProverRwFull.ExternalFuns.op33 inst __src,
+                    op34 := @ProverRwFull.ExternalFuns.op34 inst __src, op35 := ProverRwFull.ExternalFuns.op35,
+                    op36 := @ProverRwFull.ExternalFuns.op36 inst __src, op37 := ProverRwFull.ExternalFuns.op37,
+                    op38 := ProverRwFull.ExternalFuns.op38, op39 := ProverRwFull.ExternalFuns.op39,
+                    op40 := ProverRwFull.ExternalFuns.op40, op41 := ProverRwFull.ExternalFuns.op41,
+                    op42 := ProverRwFull.ExternalFuns.op42, op43 := ProverRwFull.ExternalFuns.op43,
+                    op44 := ProverRwFull.ExternalFuns.op44, op45 := ProverRwFull.ExternalFuns.op45,
+                    op46 := ProverRwFull.ExternalFuns.op46, op47 := ProverRwFull.ExternalFuns.op47,
+                    op48 := ProverRwFull.ExternalFuns.op48, op49 := ProverRwFull.ExternalFuns.op49,
+                    op50 := ProverRwFull.ExternalFuns.op50, op51 := ProverRwFull.ExternalFuns.op51,
+                    op52 := ProverRwFull.ExternalFuns.op52, op53 := ProverRwFull.ExternalFuns.op53,
+                    op54 := ProverRwFull.ExternalFuns.op54, op55 := ProverRwFull.ExternalFuns.op55,
+                    op56 := ProverRwFull.ExternalFuns.op56, op57 := ProverRwFull.ExternalFuns.op57,
+                    op58 := ProverRwFull.ExternalFuns.op58, op59 := ProverRwFull.ExternalFuns.op59,
+                    op60 := ProverRwFull.ExternalFuns.op60, op61 := ProverRwFull.ExternalFuns.op61,
+                    op62 := ProverRwFull.ExternalFuns.op62, op63 := ProverRwFull.ExternalFuns.op63,
+                    op64 := ProverRwFull.ExternalFuns.op64, op65 := ProverRwFull.ExternalFuns.op65,
+                    op66 := ProverRwFull.ExternalFuns.op66, op67 := ProverRwFull.ExternalFuns.op67,
+                    op68 := ProverRwFull.ExternalFuns.op68, op69 := ProverRwFull.ExternalFuns.op69,
+                    op70 := ProverRwFull.ExternalFuns.op70, op71 := ProverRwFull.ExternalFuns.op71,
+                    op72 := ProverRwFull.ExternalFuns.op72, op73 := ProverRwFull.ExternalFuns.op73,
+                    op74 := ProverRwFull.ExternalFuns.op74, op75 := ProverRwFull.ExternalFuns.op75,
+                    op76 := ProverRwFull.ExternalFuns.op76, op77 := @ProverRwFull.ExternalFuns.op77 inst __src,
+                    op78 := @ProverRwFull.ExternalFuns.op78 inst __src,
+                    op79 := @ProverRwFull.ExternalFuns.op79 inst __src, op80 := fun {E} => _a,
+                    op81 := @ProverRwFull.ExternalFuns.op81 inst __src, op82 := ProverRwFull.ExternalFuns.op82,
+                    op83 := ProverRwFull.ExternalFuns.op83, op84 := ProverRwFull.ExternalFuns.op84,
+                    op85 := ProverRwFull.ExternalFuns.op85, op86 := ProverRwFull.ExternalFuns.op86,
+                    op87 := ProverRwFull.ExternalFuns.op87, op88 := ProverRwFull.ExternalFuns.op88,
+                    op89 := ProverRwFull.ExternalFuns.op89, op90 := ProverRwFull.ExternalFuns.op90,
+                    op91 := ProverRwFull.ExternalFuns.op91, op92 := ProverRwFull.ExternalFuns.op92,
+                    op93 := ProverRwFull.ExternalFuns.op93, op94 := ProverRwFull.ExternalFuns.op94,
+                    op95 := ProverRwFull.ExternalFuns.op95, op96 := ProverRwFull.ExternalFuns.op96,
+                    op97 := ProverRwFull.ExternalFuns.op97, op98 := ProverRwFull.ExternalFuns.op98,
+                    op99 := ProverRwFull.ExternalFuns.op99, op100 := ProverRwFull.ExternalFuns.op100,
+                    op101 := ProverRwFull.ExternalFuns.op101, op102 := ProverRwFull.ExternalFuns.op102,
+                    op103 := ProverRwFull.ExternalFuns.op103, op104 := ProverRwFull.ExternalFuns.op104,
+                    op105 := ProverRwFull.ExternalFuns.op105, op106 := ProverRwFull.ExternalFuns.op106,
+                    op107 := ProverRwFull.ExternalFuns.op107, op108 := ProverRwFull.ExternalFuns.op108,
+                    op109 := ProverRwFull.ExternalFuns.op109, op110 := ProverRwFull.ExternalFuns.op110,
+                    op111 := ProverRwFull.ExternalFuns.op111, op112 := ProverRwFull.ExternalFuns.op112,
+                    op113 := ProverRwFull.ExternalFuns.op113, op114 := ProverRwFull.ExternalFuns.op114,
+                    op115 := ProverRwFull.ExternalFuns.op115, op116 := ProverRwFull.ExternalFuns.op116,
+                    op117 := ProverRwFull.ExternalFuns.op117, op118 := ProverRwFull.ExternalFuns.op118,
+                    op119 := ProverRwFull.ExternalFuns.op119, op120 := ProverRwFull.ExternalFuns.op120,
+                    op121 := ProverRwFull.ExternalFuns.op121, op122 := @ProverRwFull.ExternalFuns.op122 inst __src,
+                    op123 := @ProverRwFull.ExternalFuns.op123 inst __src,
+                    op124 := @ProverRwFull.ExternalFuns.op124 inst __src,
+                    op125 := @ProverRwFull.ExternalFuns.op125 inst __src,
+                    op126 := @ProverRwFull.ExternalFuns.op126 inst __src,
+                    op127 := @ProverRwFull.ExternalFuns.op127 inst __src,
+                    op128 := @ProverRwFull.ExternalFuns.op128 inst __src, op129 := ProverRwFull.ExternalFuns.op129,
+                    op130 := @ProverRwFull.ExternalFuns.op130 inst __src,
+                    op131 := @ProverRwFull.ExternalFuns.op131 inst __src, op132 := ProverRwFull.ExternalFuns.op132,
+                    op133 := ProverRwFull.ExternalFuns.op133, op134 := ProverRwFull.ExternalFuns.op134,
+                    op135 := @ProverRwFull.ExternalFuns.op135 inst __src,
+                    op136 := @ProverRwFull.ExternalFuns.op136 inst __src,
+                    op137 := @ProverRwFull.ExternalFuns.op137 inst __src,
+                    op138 := @ProverRwFull.ExternalFuns.op138 inst __src,
+                    op139 := @ProverRwFull.ExternalFuns.op139 inst __src,
+                    op140 := @ProverRwFull.ExternalFuns.op140 inst __src,
+                    op141 := @ProverRwFull.ExternalFuns.op141 inst __src,
+                    op142 := @ProverRwFull.ExternalFuns.op142 inst __src,
+                    op143 := @ProverRwFull.ExternalFuns.op143 inst __src,
+                    op144 := @ProverRwFull.ExternalFuns.op144 inst __src,
+                    op145 := @ProverRwFull.ExternalFuns.op145 inst __src,
+                    op146 := @ProverRwFull.ExternalFuns.op146 inst __src,
+                    op147 := @ProverRwFull.ExternalFuns.op147 inst __src,
+                    op148 := @ProverRwFull.ExternalFuns.op148 inst __src,
+                    op149 := @ProverRwFull.ExternalFuns.op149 inst __src,
+                    op150 := @ProverRwFull.ExternalFuns.op150 inst __src,
+                    op151 := @ProverRwFull.ExternalFuns.op151 inst __src,
+                    op152 := @ProverRwFull.ExternalFuns.op152 inst __src,
+                    op153 := @ProverRwFull.ExternalFuns.op153 inst __src,
+                    op154 := @ProverRwFull.ExternalFuns.op154 inst __src,
+                    op155 := @ProverRwFull.ExternalFuns.op155 inst __src,
+                    op156 := @ProverRwFull.ExternalFuns.op156 inst __src,
+                    op157 := @ProverRwFull.ExternalFuns.op157 inst __src,
+                    op158 := @ProverRwFull.ExternalFuns.op158 inst __src,
+                    op159 := @ProverRwFull.ExternalFuns.op159 inst __src,
+                    op160 := @ProverRwFull.ExternalFuns.op160 inst __src,
+                    op161 := @ProverRwFull.ExternalFuns.op161 inst __src,
+                    op162 := @ProverRwFull.ExternalFuns.op162 inst __src, op163 := ProverRwFull.ExternalFuns.op163,
+                    op164 := ProverRwFull.ExternalFuns.op164, op165 := ProverRwFull.ExternalFuns.op165,
+                    op166 := ProverRwFull.ExternalFuns.op166, op167 := ProverRwFull.ExternalFuns.op167,
+                    op168 := ProverRwFull.ExternalFuns.op168, op169 := ProverRwFull.ExternalFuns.op169,
+                    op170 := ProverRwFull.ExternalFuns.op170, op171 := ProverRwFull.ExternalFuns.op171,
+                    op172 := ProverRwFull.ExternalFuns.op172, op173 := ProverRwFull.ExternalFuns.op173,
+                    op174 := ProverRwFull.ExternalFuns.op174, op175 := ProverRwFull.ExternalFuns.op175,
+                    op176 := ProverRwFull.ExternalFuns.op176, op177 := ProverRwFull.ExternalFuns.op177,
+                    op178 := ProverRwFull.ExternalFuns.op178, op179 := ProverRwFull.ExternalFuns.op179,
+                    op180 := ProverRwFull.ExternalFuns.op180, op181 := ProverRwFull.ExternalFuns.op181,
+                    op182 := ProverRwFull.ExternalFuns.op182, op183 := ProverRwFull.ExternalFuns.op183,
+                    op184 := ProverRwFull.ExternalFuns.op184, op185 := @ProverRwFull.ExternalFuns.op185 inst __src,
+                    op186 := @ProverRwFull.ExternalFuns.op186 inst __src,
+                    op187 := @ProverRwFull.ExternalFuns.op187 inst __src, op188 := ProverRwFull.ExternalFuns.op188,
+                    op189 := ProverRwFull.ExternalFuns.op189, op190 := ProverRwFull.ExternalFuns.op190,
+                    op191 := ProverRwFull.ExternalFuns.op191, op192 := ProverRwFull.ExternalFuns.op192,
+                    op193 := ProverRwFull.ExternalFuns.op193, op194 := ProverRwFull.ExternalFuns.op194,
+                    op195 := @ProverRwFull.ExternalFuns.op195 inst __src, op196 := ProverRwFull.ExternalFuns.op196,
+                    op197 := ProverRwFull.ExternalFuns.op197, op198 := ProverRwFull.ExternalFuns.op198,
+                    op199 := ProverRwFull.ExternalFuns.op199, op200 := ProverRwFull.ExternalFuns.op200,
+                    op201 := ProverRwFull.ExternalFuns.op201, op202 := ProverRwFull.ExternalFuns.op202,
+                    op203 := ProverRwFull.ExternalFuns.op203, op204 := ProverRwFull.ExternalFuns.op204,
+                    op205 := ProverRwFull.ExternalFuns.op205, op206 := ProverRwFull.ExternalFuns.op206,
+                    op207 := ProverRwFull.ExternalFuns.op207, op208 := ProverRwFull.ExternalFuns.op208,
+                    op209 := @ProverRwFull.ExternalFuns.op209 inst __src, op210 := ProverRwFull.ExternalFuns.op210,
+                    op211 := @ProverRwFull.ExternalFuns.op211 inst __src,
+                    op212 := @ProverRwFull.ExternalFuns.op212 inst __src,
+                    op213 := @ProverRwFull.ExternalFuns.op213 inst __src,
+                    op214 := @ProverRwFull.ExternalFuns.op214 inst __src,
+                    op215 := @ProverRwFull.ExternalFuns.op215 inst __src,
+                    op216 := @ProverRwFull.ExternalFuns.op216 inst __src,
+                    op217 := @ProverRwFull.ExternalFuns.op217 inst __src,
+                    op218 := @ProverRwFull.ExternalFuns.op218 inst __src,
+                    op219 := @ProverRwFull.ExternalFuns.op219 inst __src,
+                    op220 := @ProverRwFull.ExternalFuns.op220 inst __src, op221 := ProverRwFull.ExternalFuns.op221,
+                    op222 := ProverRwFull.ExternalFuns.op222, op223 := ProverRwFull.ExternalFuns.op223,
+                    op224 := ProverRwFull.ExternalFuns.op224, op225 := ProverRwFull.ExternalFuns.op225,
+                    op226 := ProverRwFull.ExternalFuns.op226, op227 := ProverRwFull.ExternalFuns.op227,
+                    op228 := ProverRwFull.ExternalFuns.op228, op229 := ProverRwFull.ExternalFuns.op229,
+                    op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+                    op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+                    op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+                    op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+                    op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+                    op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+                    op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+                    op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+                    op246 := @ProverRwFull.ExternalFuns.op246 inst __src, op247 := ProverRwFull.ExternalFuns.op247,
+                    op248 := ProverRwFull.ExternalFuns.op248, op249 := ProverRwFull.ExternalFuns.op249,
+                    op250 := ProverRwFull.ExternalFuns.op250, op251 := ProverRwFull.ExternalFuns.op251,
+                    op252 := ProverRwFull.ExternalFuns.op252, op253 := ProverRwFull.ExternalFuns.op253,
+                    op254 := ProverRwFull.ExternalFuns.op254, op255 := @ProverRwFull.ExternalFuns.op255 inst __src,
+                    op256 := ProverRwFull.ExternalFuns.op256, op257 := @ProverRwFull.ExternalFuns.op257 inst __src,
+                    op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+                    op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 }) =
+                  R1Z.ProverRwP6BodyStore.selected ops)
+              phi))
+          (Eq.refl
+            (have __src := R1Z.ProverRwP6BodyStore.selected ops;
+            { op0 := @ProverRwFull.ExternalFuns.op0 inst __src, op1 := @ProverRwFull.ExternalFuns.op1 inst __src,
+              op2 := ProverRwFull.ExternalFuns.op2, op3 := @ProverRwFull.ExternalFuns.op3 inst __src,
+              op4 := @ProverRwFull.ExternalFuns.op4 inst __src, op5 := @ProverRwFull.ExternalFuns.op5 inst __src,
+              op6 := @ProverRwFull.ExternalFuns.op6 inst __src, op7 := @ProverRwFull.ExternalFuns.op7 inst __src,
+              op8 := @ProverRwFull.ExternalFuns.op8 inst __src, op9 := @ProverRwFull.ExternalFuns.op9 inst __src,
+              op10 := ProverRwFull.ExternalFuns.op10, op11 := @ProverRwFull.ExternalFuns.op11 inst __src,
+              op12 := @ProverRwFull.ExternalFuns.op12 inst __src, op13 := ProverRwFull.ExternalFuns.op13,
+              op14 := @ProverRwFull.ExternalFuns.op14 inst __src, op15 := ProverRwFull.ExternalFuns.op15,
+              op16 := @ProverRwFull.ExternalFuns.op16 inst __src, op17 := ProverRwFull.ExternalFuns.op17,
+              op18 := ProverRwFull.ExternalFuns.op18, op19 := ProverRwFull.ExternalFuns.op19,
+              op20 := ProverRwFull.ExternalFuns.op20, op21 := ProverRwFull.ExternalFuns.op21,
+              op22 := @ProverRwFull.ExternalFuns.op22 inst __src, op23 := ProverRwFull.ExternalFuns.op23,
+              op24 := ProverRwFull.ExternalFuns.op24, op25 := ProverRwFull.ExternalFuns.op25,
+              op26 := @ProverRwFull.ExternalFuns.op26 inst __src, op27 := ProverRwFull.ExternalFuns.op27,
+              op28 := ProverRwFull.ExternalFuns.op28, op29 := ProverRwFull.ExternalFuns.op29,
+              op30 := ProverRwFull.ExternalFuns.op30, op31 := ProverRwFull.ExternalFuns.op31,
+              op32 := @ProverRwFull.ExternalFuns.op32 inst __src, op33 := @ProverRwFull.ExternalFuns.op33 inst __src,
+              op34 := @ProverRwFull.ExternalFuns.op34 inst __src, op35 := ProverRwFull.ExternalFuns.op35,
+              op36 := @ProverRwFull.ExternalFuns.op36 inst __src, op37 := ProverRwFull.ExternalFuns.op37,
+              op38 := ProverRwFull.ExternalFuns.op38, op39 := ProverRwFull.ExternalFuns.op39,
+              op40 := ProverRwFull.ExternalFuns.op40, op41 := ProverRwFull.ExternalFuns.op41,
+              op42 := ProverRwFull.ExternalFuns.op42, op43 := ProverRwFull.ExternalFuns.op43,
+              op44 := ProverRwFull.ExternalFuns.op44, op45 := ProverRwFull.ExternalFuns.op45,
+              op46 := ProverRwFull.ExternalFuns.op46, op47 := ProverRwFull.ExternalFuns.op47,
+              op48 := ProverRwFull.ExternalFuns.op48, op49 := ProverRwFull.ExternalFuns.op49,
+              op50 := ProverRwFull.ExternalFuns.op50, op51 := ProverRwFull.ExternalFuns.op51,
+              op52 := ProverRwFull.ExternalFuns.op52, op53 := ProverRwFull.ExternalFuns.op53,
+              op54 := ProverRwFull.ExternalFuns.op54, op55 := ProverRwFull.ExternalFuns.op55,
+              op56 := ProverRwFull.ExternalFuns.op56, op57 := ProverRwFull.ExternalFuns.op57,
+              op58 := ProverRwFull.ExternalFuns.op58, op59 := ProverRwFull.ExternalFuns.op59,
+              op60 := ProverRwFull.ExternalFuns.op60, op61 := ProverRwFull.ExternalFuns.op61,
+              op62 := ProverRwFull.ExternalFuns.op62, op63 := ProverRwFull.ExternalFuns.op63,
+              op64 := ProverRwFull.ExternalFuns.op64, op65 := ProverRwFull.ExternalFuns.op65,
+              op66 := ProverRwFull.ExternalFuns.op66, op67 := ProverRwFull.ExternalFuns.op67,
+              op68 := ProverRwFull.ExternalFuns.op68, op69 := ProverRwFull.ExternalFuns.op69,
+              op70 := ProverRwFull.ExternalFuns.op70, op71 := ProverRwFull.ExternalFuns.op71,
+              op72 := ProverRwFull.ExternalFuns.op72, op73 := ProverRwFull.ExternalFuns.op73,
+              op74 := ProverRwFull.ExternalFuns.op74, op75 := ProverRwFull.ExternalFuns.op75,
+              op76 := ProverRwFull.ExternalFuns.op76, op77 := @ProverRwFull.ExternalFuns.op77 inst __src,
+              op78 := @ProverRwFull.ExternalFuns.op78 inst __src, op79 := @ProverRwFull.ExternalFuns.op79 inst __src,
+              op80 := fun {E} => ProverRwFull.ExternalFuns.op80, op81 := @ProverRwFull.ExternalFuns.op81 inst __src,
+              op82 := ProverRwFull.ExternalFuns.op82, op83 := ProverRwFull.ExternalFuns.op83,
+              op84 := ProverRwFull.ExternalFuns.op84, op85 := ProverRwFull.ExternalFuns.op85,
+              op86 := ProverRwFull.ExternalFuns.op86, op87 := ProverRwFull.ExternalFuns.op87,
+              op88 := ProverRwFull.ExternalFuns.op88, op89 := ProverRwFull.ExternalFuns.op89,
+              op90 := ProverRwFull.ExternalFuns.op90, op91 := ProverRwFull.ExternalFuns.op91,
+              op92 := ProverRwFull.ExternalFuns.op92, op93 := ProverRwFull.ExternalFuns.op93,
+              op94 := ProverRwFull.ExternalFuns.op94, op95 := ProverRwFull.ExternalFuns.op95,
+              op96 := ProverRwFull.ExternalFuns.op96, op97 := ProverRwFull.ExternalFuns.op97,
+              op98 := ProverRwFull.ExternalFuns.op98, op99 := ProverRwFull.ExternalFuns.op99,
+              op100 := ProverRwFull.ExternalFuns.op100, op101 := ProverRwFull.ExternalFuns.op101,
+              op102 := ProverRwFull.ExternalFuns.op102, op103 := ProverRwFull.ExternalFuns.op103,
+              op104 := ProverRwFull.ExternalFuns.op104, op105 := ProverRwFull.ExternalFuns.op105,
+              op106 := ProverRwFull.ExternalFuns.op106, op107 := ProverRwFull.ExternalFuns.op107,
+              op108 := ProverRwFull.ExternalFuns.op108, op109 := ProverRwFull.ExternalFuns.op109,
+              op110 := ProverRwFull.ExternalFuns.op110, op111 := ProverRwFull.ExternalFuns.op111,
+              op112 := ProverRwFull.ExternalFuns.op112, op113 := ProverRwFull.ExternalFuns.op113,
+              op114 := ProverRwFull.ExternalFuns.op114, op115 := ProverRwFull.ExternalFuns.op115,
+              op116 := ProverRwFull.ExternalFuns.op116, op117 := ProverRwFull.ExternalFuns.op117,
+              op118 := ProverRwFull.ExternalFuns.op118, op119 := ProverRwFull.ExternalFuns.op119,
+              op120 := ProverRwFull.ExternalFuns.op120, op121 := ProverRwFull.ExternalFuns.op121,
+              op122 := @ProverRwFull.ExternalFuns.op122 inst __src,
+              op123 := @ProverRwFull.ExternalFuns.op123 inst __src,
+              op124 := @ProverRwFull.ExternalFuns.op124 inst __src,
+              op125 := @ProverRwFull.ExternalFuns.op125 inst __src,
+              op126 := @ProverRwFull.ExternalFuns.op126 inst __src,
+              op127 := @ProverRwFull.ExternalFuns.op127 inst __src,
+              op128 := @ProverRwFull.ExternalFuns.op128 inst __src, op129 := ProverRwFull.ExternalFuns.op129,
+              op130 := @ProverRwFull.ExternalFuns.op130 inst __src,
+              op131 := @ProverRwFull.ExternalFuns.op131 inst __src, op132 := ProverRwFull.ExternalFuns.op132,
+              op133 := ProverRwFull.ExternalFuns.op133, op134 := ProverRwFull.ExternalFuns.op134,
+              op135 := @ProverRwFull.ExternalFuns.op135 inst __src,
+              op136 := @ProverRwFull.ExternalFuns.op136 inst __src,
+              op137 := @ProverRwFull.ExternalFuns.op137 inst __src,
+              op138 := @ProverRwFull.ExternalFuns.op138 inst __src,
+              op139 := @ProverRwFull.ExternalFuns.op139 inst __src,
+              op140 := @ProverRwFull.ExternalFuns.op140 inst __src,
+              op141 := @ProverRwFull.ExternalFuns.op141 inst __src,
+              op142 := @ProverRwFull.ExternalFuns.op142 inst __src,
+              op143 := @ProverRwFull.ExternalFuns.op143 inst __src,
+              op144 := @ProverRwFull.ExternalFuns.op144 inst __src,
+              op145 := @ProverRwFull.ExternalFuns.op145 inst __src,
+              op146 := @ProverRwFull.ExternalFuns.op146 inst __src,
+              op147 := @ProverRwFull.ExternalFuns.op147 inst __src,
+              op148 := @ProverRwFull.ExternalFuns.op148 inst __src,
+              op149 := @ProverRwFull.ExternalFuns.op149 inst __src,
+              op150 := @ProverRwFull.ExternalFuns.op150 inst __src,
+              op151 := @ProverRwFull.ExternalFuns.op151 inst __src,
+              op152 := @ProverRwFull.ExternalFuns.op152 inst __src,
+              op153 := @ProverRwFull.ExternalFuns.op153 inst __src,
+              op154 := @ProverRwFull.ExternalFuns.op154 inst __src,
+              op155 := @ProverRwFull.ExternalFuns.op155 inst __src,
+              op156 := @ProverRwFull.ExternalFuns.op156 inst __src,
+              op157 := @ProverRwFull.ExternalFuns.op157 inst __src,
+              op158 := @ProverRwFull.ExternalFuns.op158 inst __src,
+              op159 := @ProverRwFull.ExternalFuns.op159 inst __src,
+              op160 := @ProverRwFull.ExternalFuns.op160 inst __src,
+              op161 := @ProverRwFull.ExternalFuns.op161 inst __src,
+              op162 := @ProverRwFull.ExternalFuns.op162 inst __src, op163 := ProverRwFull.ExternalFuns.op163,
+              op164 := ProverRwFull.ExternalFuns.op164, op165 := ProverRwFull.ExternalFuns.op165,
+              op166 := ProverRwFull.ExternalFuns.op166, op167 := ProverRwFull.ExternalFuns.op167,
+              op168 := ProverRwFull.ExternalFuns.op168, op169 := ProverRwFull.ExternalFuns.op169,
+              op170 := ProverRwFull.ExternalFuns.op170, op171 := ProverRwFull.ExternalFuns.op171,
+              op172 := ProverRwFull.ExternalFuns.op172, op173 := ProverRwFull.ExternalFuns.op173,
+              op174 := ProverRwFull.ExternalFuns.op174, op175 := ProverRwFull.ExternalFuns.op175,
+              op176 := ProverRwFull.ExternalFuns.op176, op177 := ProverRwFull.ExternalFuns.op177,
+              op178 := ProverRwFull.ExternalFuns.op178, op179 := ProverRwFull.ExternalFuns.op179,
+              op180 := ProverRwFull.ExternalFuns.op180, op181 := ProverRwFull.ExternalFuns.op181,
+              op182 := ProverRwFull.ExternalFuns.op182, op183 := ProverRwFull.ExternalFuns.op183,
+              op184 := ProverRwFull.ExternalFuns.op184, op185 := @ProverRwFull.ExternalFuns.op185 inst __src,
+              op186 := @ProverRwFull.ExternalFuns.op186 inst __src,
+              op187 := @ProverRwFull.ExternalFuns.op187 inst __src, op188 := ProverRwFull.ExternalFuns.op188,
+              op189 := ProverRwFull.ExternalFuns.op189, op190 := ProverRwFull.ExternalFuns.op190,
+              op191 := ProverRwFull.ExternalFuns.op191, op192 := ProverRwFull.ExternalFuns.op192,
+              op193 := ProverRwFull.ExternalFuns.op193, op194 := ProverRwFull.ExternalFuns.op194,
+              op195 := @ProverRwFull.ExternalFuns.op195 inst __src, op196 := ProverRwFull.ExternalFuns.op196,
+              op197 := ProverRwFull.ExternalFuns.op197, op198 := ProverRwFull.ExternalFuns.op198,
+              op199 := ProverRwFull.ExternalFuns.op199, op200 := ProverRwFull.ExternalFuns.op200,
+              op201 := ProverRwFull.ExternalFuns.op201, op202 := ProverRwFull.ExternalFuns.op202,
+              op203 := ProverRwFull.ExternalFuns.op203, op204 := ProverRwFull.ExternalFuns.op204,
+              op205 := ProverRwFull.ExternalFuns.op205, op206 := ProverRwFull.ExternalFuns.op206,
+              op207 := ProverRwFull.ExternalFuns.op207, op208 := ProverRwFull.ExternalFuns.op208,
+              op209 := @ProverRwFull.ExternalFuns.op209 inst __src, op210 := ProverRwFull.ExternalFuns.op210,
+              op211 := @ProverRwFull.ExternalFuns.op211 inst __src,
+              op212 := @ProverRwFull.ExternalFuns.op212 inst __src,
+              op213 := @ProverRwFull.ExternalFuns.op213 inst __src,
+              op214 := @ProverRwFull.ExternalFuns.op214 inst __src,
+              op215 := @ProverRwFull.ExternalFuns.op215 inst __src,
+              op216 := @ProverRwFull.ExternalFuns.op216 inst __src,
+              op217 := @ProverRwFull.ExternalFuns.op217 inst __src,
+              op218 := @ProverRwFull.ExternalFuns.op218 inst __src,
+              op219 := @ProverRwFull.ExternalFuns.op219 inst __src,
+              op220 := @ProverRwFull.ExternalFuns.op220 inst __src, op221 := ProverRwFull.ExternalFuns.op221,
+              op222 := ProverRwFull.ExternalFuns.op222, op223 := ProverRwFull.ExternalFuns.op223,
+              op224 := ProverRwFull.ExternalFuns.op224, op225 := ProverRwFull.ExternalFuns.op225,
+              op226 := ProverRwFull.ExternalFuns.op226, op227 := ProverRwFull.ExternalFuns.op227,
+              op228 := ProverRwFull.ExternalFuns.op228, op229 := ProverRwFull.ExternalFuns.op229,
+              op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+              op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+              op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+              op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+              op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+              op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+              op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+              op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+              op246 := @ProverRwFull.ExternalFuns.op246 inst __src, op247 := ProverRwFull.ExternalFuns.op247,
+              op248 := ProverRwFull.ExternalFuns.op248, op249 := ProverRwFull.ExternalFuns.op249,
+              op250 := ProverRwFull.ExternalFuns.op250, op251 := ProverRwFull.ExternalFuns.op251,
+              op252 := ProverRwFull.ExternalFuns.op252, op253 := ProverRwFull.ExternalFuns.op253,
+              op254 := ProverRwFull.ExternalFuns.op254, op255 := @ProverRwFull.ExternalFuns.op255 inst __src,
+              op256 := ProverRwFull.ExternalFuns.op256, op257 := @ProverRwFull.ExternalFuns.op257 inst __src,
+              op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+              op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 })))))
+'R1Z.PV_Join_CodecDictionary.dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Codecs.op71_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (s : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op71 s = R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes s :=
+fun [ProverRwFull.ExternalTypes] ops s => R1Z.PV_CB_Op71Source.op71_source ops s
+'R1Z.PV_Join_Codecs.op71_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Codecs.op72_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.QM31) (s : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op72 x s = R1Z.ProverRwDictionaryBytesSource.aspis_core.field.QM31.write_le_bytes x s :=
+fun [ProverRwFull.ExternalTypes] ops x s => R1Z.PV_CB_Op72Source.op72_source ops x s
+'R1Z.PV_Join_Codecs.op72_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Codecs.op80_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  {E : Type} (inst_1 : ProverRwFull.aspis_core.r0.scalar.CodeField E) (x y : E) (h : Aeneas.Std.Array E 4#usize),
+  ProverRwFull.ExternalFuns.op80 inst_1 x y h = R1Z.ProverRwSuccessPhiSource.generic54.phi_inverse inst_1 x y h :=
+fun [ProverRwFull.ExternalTypes] ops {E} inst_1 x y h => R1Z.PV_CB_Op80Source.op80_source ops inst_1 x y h
+'R1Z.PV_Join_Codecs.op80_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current100.scalar : ∀ (x : Aeneas.Std.U32),
+  PV_CB_ShippedOp100.aspis_core.field.M31.neg x = AspisR1ProducerRelease47.field.M31.neg x :=
+fun x => R1Z.PV_Join_NegTransport.scalar100 x
+'R1Z.PV_Join_Current100.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current100.complex : ∀ (x : R1Z.PV_CB_Op100Transport.RC),
+  (do
+      let y ← PV_CB_ShippedOp100.aspis_core.field.CM31.neg x
+      Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decodeC y)) =
+    R1Z.ProverRwSuccessInverseSource.field.CM31.neg (R1Z.PV_CB_Op100Transport.decodeC x) :=
+fun x =>
+  have transport :=
+    congrArg
+      (fun result => do
+        let value ← result
+        Aeneas.Std.Result.ok (R1Z.ProverRwDictionaryTower.fromC value))
+      (R1Z.PV_Join_NegTransport.complex100 x);
+  Eq.mpr
+    (id
+      (congrArg
+        (Eq do
+          let y ← PV_CB_ShippedOp100.aspis_core.field.CM31.neg x
+          Aeneas.Std.Result.ok { a := y.a, b := y.b })
+        (R1Z.ProverRwDictionaryTower.mapResult_bind R1Z.ProverRwDictionaryTower.fromC { a := x.a, b := x.b }.neg)))
+    (Eq.mp
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (Aeneas.Std.bind_assoc_eq (PV_CB_ShippedOp100.aspis_core.field.CM31.neg x)
+              (fun y => Aeneas.Std.Result.ok { a := y.a, b := y.b }) fun value =>
+              Aeneas.Std.Result.ok { a := value.a, b := value.b })
+            (congrArg (bind (PV_CB_ShippedOp100.aspis_core.field.CM31.neg x))
+              (funext fun x =>
+                Aeneas.Std.bind_tc_ok { a := x.a, b := x.b } fun y => Aeneas.Std.Result.ok { a := y.a, b := y.b }))))
+        do
+        let value ← { a := x.a, b := x.b }.neg
+        Aeneas.Std.Result.ok { a := value.a, b := value.b })
+      transport)
+'R1Z.PV_Join_Current100.complex' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current100.quartic : ∀ (x : R1Z.PV_CB_Op100Transport.R),
+  (do
+      let y ← PV_CB_ShippedOp100.aspis_core.field.QM31.neg x
+      Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decode y)) =
+    R1Z.ProverRwSuccessInverseSource.field.QM31.neg (R1Z.PV_CB_Op100Transport.decode x) :=
+fun x =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (Eq do
+            let y ←
+              do
+                let c ← x.c0.neg
+                let c1 ← x.c1.neg
+                Aeneas.Std.Result.ok { c0 := c, c1 := c1 }
+            Aeneas.Std.Result.ok
+                { c0 := R1Z.PV_CB_Op100Transport.decodeC y.c0, c1 := R1Z.PV_CB_Op100Transport.decodeC y.c1 })
+          (congr (congrArg bind (R1Z.PV_Join_Current100.quartic._simp_3 x.c0))
+            (funext fun c =>
+              congrFun' (congrArg bind (R1Z.PV_Join_Current100.quartic._simp_3 x.c1)) fun c1 =>
+                Aeneas.Std.Result.ok { c0 := c, c1 := c1 }))))
+      (of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (Eq.trans
+                (Aeneas.Std.bind_assoc_eq x.c0.neg
+                  (fun c => do
+                    let c1 ← x.c1.neg
+                    Aeneas.Std.Result.ok { c0 := c, c1 := c1 })
+                  fun y =>
+                  Aeneas.Std.Result.ok
+                    { c0 := R1Z.PV_CB_Op100Transport.decodeC y.c0, c1 := R1Z.PV_CB_Op100Transport.decodeC y.c1 })
+                (congrArg (bind x.c0.neg)
+                  (funext fun x_1 =>
+                    Eq.trans
+                      (Aeneas.Std.bind_assoc_eq x.c1.neg (fun c1 => Aeneas.Std.Result.ok { c0 := x_1, c1 := c1 })
+                        fun y =>
+                        Aeneas.Std.Result.ok
+                          { c0 := R1Z.PV_CB_Op100Transport.decodeC y.c0, c1 := R1Z.PV_CB_Op100Transport.decodeC y.c1 })
+                      (congrArg (bind x.c1.neg)
+                        (funext fun x =>
+                          Aeneas.Std.bind_tc_ok { c0 := x_1, c1 := x } fun y =>
+                            Aeneas.Std.Result.ok
+                              { c0 := R1Z.PV_CB_Op100Transport.decodeC y.c0,
+                                c1 := R1Z.PV_CB_Op100Transport.decodeC y.c1 }))))))
+            (Eq.trans
+              (Eq.trans
+                (congrArg
+                  (bind do
+                    let y ← x.c0.neg
+                    Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decodeC y))
+                  (funext fun c =>
+                    Eq.trans
+                      (Aeneas.Std.bind_assoc_eq x.c1.neg
+                        (fun y => Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decodeC y)) fun c1 =>
+                        Aeneas.Std.Result.ok { c0 := c, c1 := c1 })
+                      (congrArg (bind x.c1.neg)
+                        (funext fun x =>
+                          Aeneas.Std.bind_tc_ok (R1Z.PV_CB_Op100Transport.decodeC x) fun y =>
+                            Aeneas.Std.Result.ok { c0 := c, c1 := y }))))
+                (Aeneas.Std.bind_assoc_eq x.c0.neg (fun y => Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decodeC y))
+                  fun c => do
+                  let x ← x.c1.neg
+                  Aeneas.Std.Result.ok { c0 := c, c1 := R1Z.PV_CB_Op100Transport.decodeC x }))
+              (congrArg (bind x.c0.neg)
+                (funext fun x_1 =>
+                  Aeneas.Std.bind_tc_ok (R1Z.PV_CB_Op100Transport.decodeC x_1) fun y => do
+                    let x ← x.c1.neg
+                    Aeneas.Std.Result.ok { c0 := y, c1 := R1Z.PV_CB_Op100Transport.decodeC x }))))
+          (eq_self do
+            let x_1 ← x.c0.neg
+            let x ← x.c1.neg
+            Aeneas.Std.Result.ok
+                { c0 := R1Z.PV_CB_Op100Transport.decodeC x_1, c1 := R1Z.PV_CB_Op100Transport.decodeC x }))))
+'R1Z.PV_Join_Current100.quartic' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current100.wide : ∀ [ProverRwFull.ExternalTypes] (x : R1Z.PV_CB_Op100Transport.RW),
+  (do
+      let y ← PV_CB_ShippedOp100.aspis_core.field.wide_exact.WideExact.neg x
+      Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decodeW y)) =
+    R1Z.ProverRwSuccessNativePorts.aspis_core.field.wide_exact.WideExact.neg (R1Z.PV_CB_Op100Transport.decodeW x) :=
+fun [ProverRwFull.ExternalTypes] x =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (Eq do
+            let y ←
+              do
+                let q ← x.c0.neg
+                let q1 ← x.c1.neg
+                Aeneas.Std.Result.ok { c0 := q, c1 := q1 }
+            Aeneas.Std.Result.ok
+                { c0 := R1Z.PV_CB_Op100Transport.decode y.c0, c1 := R1Z.PV_CB_Op100Transport.decode y.c1 })
+          (congr (congrArg bind (R1Z.PV_Join_Current100.wide._simp_4 x.c0))
+            (funext fun q =>
+              congrFun' (congrArg bind (R1Z.PV_Join_Current100.wide._simp_4 x.c1)) fun q1 =>
+                Aeneas.Std.Result.ok { c0 := q, c1 := q1 }))))
+      (of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (Eq.trans
+                (Aeneas.Std.bind_assoc_eq x.c0.neg
+                  (fun q => do
+                    let q1 ← x.c1.neg
+                    Aeneas.Std.Result.ok { c0 := q, c1 := q1 })
+                  fun y =>
+                  Aeneas.Std.Result.ok
+                    { c0 := R1Z.PV_CB_Op100Transport.decode y.c0, c1 := R1Z.PV_CB_Op100Transport.decode y.c1 })
+                (congrArg (bind x.c0.neg)
+                  (funext fun x_1 =>
+                    Eq.trans
+                      (Aeneas.Std.bind_assoc_eq x.c1.neg (fun q1 => Aeneas.Std.Result.ok { c0 := x_1, c1 := q1 })
+                        fun y =>
+                        Aeneas.Std.Result.ok
+                          { c0 := R1Z.PV_CB_Op100Transport.decode y.c0, c1 := R1Z.PV_CB_Op100Transport.decode y.c1 })
+                      (congrArg (bind x.c1.neg)
+                        (funext fun x =>
+                          Aeneas.Std.bind_tc_ok { c0 := x_1, c1 := x } fun y =>
+                            Aeneas.Std.Result.ok
+                              { c0 := R1Z.PV_CB_Op100Transport.decode y.c0,
+                                c1 := R1Z.PV_CB_Op100Transport.decode y.c1 }))))))
+            (Eq.trans
+              (Eq.trans
+                (congrArg
+                  (bind do
+                    let y ← x.c0.neg
+                    Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decode y))
+                  (funext fun q =>
+                    Eq.trans
+                      (Aeneas.Std.bind_assoc_eq x.c1.neg
+                        (fun y => Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decode y)) fun q1 =>
+                        Aeneas.Std.Result.ok { c0 := q, c1 := q1 })
+                      (congrArg (bind x.c1.neg)
+                        (funext fun x =>
+                          Aeneas.Std.bind_tc_ok (R1Z.PV_CB_Op100Transport.decode x) fun y =>
+                            Aeneas.Std.Result.ok { c0 := q, c1 := y }))))
+                (Aeneas.Std.bind_assoc_eq x.c0.neg (fun y => Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decode y))
+                  fun q => do
+                  let x ← x.c1.neg
+                  Aeneas.Std.Result.ok { c0 := q, c1 := R1Z.PV_CB_Op100Transport.decode x }))
+              (congrArg (bind x.c0.neg)
+                (funext fun x_1 =>
+                  Aeneas.Std.bind_tc_ok (R1Z.PV_CB_Op100Transport.decode x_1) fun y => do
+                    let x ← x.c1.neg
+                    Aeneas.Std.Result.ok { c0 := y, c1 := R1Z.PV_CB_Op100Transport.decode x }))))
+          (eq_self do
+            let x_1 ← x.c0.neg
+            let x ← x.c1.neg
+            Aeneas.Std.Result.ok
+                { c0 := R1Z.PV_CB_Op100Transport.decode x_1, c1 := R1Z.PV_CB_Op100Transport.decode x }))))
+'R1Z.PV_Join_Current100.wide' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current100.selected_bridge : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.wide_exact.WideExact),
+  ProverRwFull.ExternalFuns.op100 x = ProverRwFull.ExternalFuns.op100 x :=
+fun [ProverRwFull.ExternalTypes] ops x =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => R1Z.ProverRwSuccessNativePorts.aspis_core.field.wide_exact.WideExact.neg x = _a)
+          (R1Z.PV_CB_Op100Exact.op100_source ops x)))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => R1Z.ProverRwSuccessNativePorts.aspis_core.field.wide_exact.WideExact.neg x = _a)
+              (R1Z.PV_Join_Current100.wide (R1Z.PV_CB_Op100Transport.encodeW x))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  R1Z.ProverRwSuccessNativePorts.aspis_core.field.wide_exact.WideExact.neg x =
+                    R1Z.ProverRwSuccessNativePorts.aspis_core.field.wide_exact.WideExact.neg _a)
+                (R1Z.PV_CB_Op100Transport.native_wide_roundtrip x)))
+            (Eq.refl (R1Z.ProverRwSuccessNativePorts.aspis_core.field.wide_exact.WideExact.neg x))))))
+'R1Z.PV_Join_Current100.selected_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current100.op100_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.wide_exact.WideExact),
+  ProverRwFull.ExternalFuns.op100 x = do
+    let y ←
+      PV_CB_ShippedOp100.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.neg
+          (R1Z.PV_CB_Op100Transport.encodeW x)
+    Aeneas.Std.Result.ok (R1Z.PV_CB_Op100Transport.decodeW y) :=
+fun [ProverRwFull.ExternalTypes] ops x =>
+  Eq.trans (R1Z.PV_Join_Current100.selected_bridge ops x) (R1Z.PV_CB_Op100Exact.op100_source ops x)
+'R1Z.PV_Join_Current100.op100_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current101.scalar : ∀ (x : Aeneas.Std.U32),
+  PV_CB_ShippedOp101.aspis_core.field.M31.neg x = AspisR1ProducerRelease47.field.M31.neg x :=
+fun x => R1Z.PV_Join_NegTransport.scalar101 x
+'R1Z.PV_Join_Current101.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current101.complex : ∀ (x : R1Z.PV_CB_Op101Transport.RC),
+  (do
+      let y ← PV_CB_ShippedOp101.aspis_core.field.CM31.neg x
+      Aeneas.Std.Result.ok (R1Z.PV_CB_Op101Transport.decodeC y)) =
+    R1Z.ProverRwSuccessInverseSource.field.CM31.neg (R1Z.PV_CB_Op101Transport.decodeC x) :=
+fun x =>
+  have transport :=
+    congrArg
+      (fun result => do
+        let value ← result
+        Aeneas.Std.Result.ok (R1Z.ProverRwDictionaryTower.fromC value))
+      (R1Z.PV_Join_NegTransport.complex101 x);
+  Eq.mpr
+    (id
+      (congrArg
+        (Eq do
+          let y ← PV_CB_ShippedOp101.aspis_core.field.CM31.neg x
+          Aeneas.Std.Result.ok { a := y.a, b := y.b })
+        (R1Z.ProverRwDictionaryTower.mapResult_bind R1Z.ProverRwDictionaryTower.fromC { a := x.a, b := x.b }.neg)))
+    (Eq.mp
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (Aeneas.Std.bind_assoc_eq (PV_CB_ShippedOp101.aspis_core.field.CM31.neg x)
+              (fun y => Aeneas.Std.Result.ok { a := y.a, b := y.b }) fun value =>
+              Aeneas.Std.Result.ok { a := value.a, b := value.b })
+            (congrArg (bind (PV_CB_ShippedOp101.aspis_core.field.CM31.neg x))
+              (funext fun x =>
+                Aeneas.Std.bind_tc_ok { a := x.a, b := x.b } fun y => Aeneas.Std.Result.ok { a := y.a, b := y.b }))))
+        do
+        let value ← { a := x.a, b := x.b }.neg
+        Aeneas.Std.Result.ok { a := value.a, b := value.b })
+      transport)
+'R1Z.PV_Join_Current101.complex' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current101.quartic : ∀ (x : R1Z.PV_CB_Op101Transport.R),
+  (do
+      let y ← PV_CB_ShippedOp101.aspis_core.field.QM31.neg x
+      Aeneas.Std.Result.ok (R1Z.PV_CB_Op101Transport.decode y)) =
+    R1Z.ProverRwSuccessInverseSource.field.QM31.neg (R1Z.PV_CB_Op101Transport.decode x) :=
+fun x =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (Eq do
+            let y ←
+              do
+                let c ← x.c0.neg
+                let c1 ← x.c1.neg
+                Aeneas.Std.Result.ok { c0 := c, c1 := c1 }
+            Aeneas.Std.Result.ok
+                { c0 := R1Z.PV_CB_Op101Transport.decodeC y.c0, c1 := R1Z.PV_CB_Op101Transport.decodeC y.c1 })
+          (congr (congrArg bind (R1Z.PV_Join_Current101.quartic._simp_3 x.c0))
+            (funext fun c =>
+              congrFun' (congrArg bind (R1Z.PV_Join_Current101.quartic._simp_3 x.c1)) fun c1 =>
+                Aeneas.Std.Result.ok { c0 := c, c1 := c1 }))))
+      (of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (Eq.trans
+                (Aeneas.Std.bind_assoc_eq x.c0.neg
+                  (fun c => do
+                    let c1 ← x.c1.neg
+                    Aeneas.Std.Result.ok { c0 := c, c1 := c1 })
+                  fun y =>
+                  Aeneas.Std.Result.ok
+                    { c0 := R1Z.PV_CB_Op101Transport.decodeC y.c0, c1 := R1Z.PV_CB_Op101Transport.decodeC y.c1 })
+                (congrArg (bind x.c0.neg)
+                  (funext fun x_1 =>
+                    Eq.trans
+                      (Aeneas.Std.bind_assoc_eq x.c1.neg (fun c1 => Aeneas.Std.Result.ok { c0 := x_1, c1 := c1 })
+                        fun y =>
+                        Aeneas.Std.Result.ok
+                          { c0 := R1Z.PV_CB_Op101Transport.decodeC y.c0, c1 := R1Z.PV_CB_Op101Transport.decodeC y.c1 })
+                      (congrArg (bind x.c1.neg)
+                        (funext fun x =>
+                          Aeneas.Std.bind_tc_ok { c0 := x_1, c1 := x } fun y =>
+                            Aeneas.Std.Result.ok
+                              { c0 := R1Z.PV_CB_Op101Transport.decodeC y.c0,
+                                c1 := R1Z.PV_CB_Op101Transport.decodeC y.c1 }))))))
+            (Eq.trans
+              (Eq.trans
+                (congrArg
+                  (bind do
+                    let y ← x.c0.neg
+                    Aeneas.Std.Result.ok (R1Z.PV_CB_Op101Transport.decodeC y))
+                  (funext fun c =>
+                    Eq.trans
+                      (Aeneas.Std.bind_assoc_eq x.c1.neg
+                        (fun y => Aeneas.Std.Result.ok (R1Z.PV_CB_Op101Transport.decodeC y)) fun c1 =>
+                        Aeneas.Std.Result.ok { c0 := c, c1 := c1 })
+                      (congrArg (bind x.c1.neg)
+                        (funext fun x =>
+                          Aeneas.Std.bind_tc_ok (R1Z.PV_CB_Op101Transport.decodeC x) fun y =>
+                            Aeneas.Std.Result.ok { c0 := c, c1 := y }))))
+                (Aeneas.Std.bind_assoc_eq x.c0.neg (fun y => Aeneas.Std.Result.ok (R1Z.PV_CB_Op101Transport.decodeC y))
+                  fun c => do
+                  let x ← x.c1.neg
+                  Aeneas.Std.Result.ok { c0 := c, c1 := R1Z.PV_CB_Op101Transport.decodeC x }))
+              (congrArg (bind x.c0.neg)
+                (funext fun x_1 =>
+                  Aeneas.Std.bind_tc_ok (R1Z.PV_CB_Op101Transport.decodeC x_1) fun y => do
+                    let x ← x.c1.neg
+                    Aeneas.Std.Result.ok { c0 := y, c1 := R1Z.PV_CB_Op101Transport.decodeC x }))))
+          (eq_self do
+            let x_1 ← x.c0.neg
+            let x ← x.c1.neg
+            Aeneas.Std.Result.ok
+                { c0 := R1Z.PV_CB_Op101Transport.decodeC x_1, c1 := R1Z.PV_CB_Op101Transport.decodeC x }))))
+'R1Z.PV_Join_Current101.quartic' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current101.selected_bridge : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.QM31), ProverRwFull.ExternalFuns.op101 x = ProverRwFull.ExternalFuns.op101 x :=
+fun [ProverRwFull.ExternalTypes] ops x =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => R1Z.ProverRwSuccessInverseSource.field.QM31.neg x = _a)
+          (R1Z.PV_CB_Op101Exact.op101_source ops x)))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => R1Z.ProverRwSuccessInverseSource.field.QM31.neg x = _a)
+              (R1Z.PV_Join_Current101.quartic (R1Z.PV_CB_Op101Transport.encode x))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  R1Z.ProverRwSuccessInverseSource.field.QM31.neg x =
+                    R1Z.ProverRwSuccessInverseSource.field.QM31.neg _a)
+                (R1Z.PV_CB_Op101Transport.native_roundtrip x)))
+            (Eq.refl (R1Z.ProverRwSuccessInverseSource.field.QM31.neg x))))))
+'R1Z.PV_Join_Current101.selected_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current101.op101_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.QM31),
+  ProverRwFull.ExternalFuns.op101 x = do
+    let y ←
+      PV_CB_ShippedOp101.aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField.neg (R1Z.PV_CB_Op101Transport.encode x)
+    Aeneas.Std.Result.ok (R1Z.PV_CB_Op101Transport.decode y) :=
+fun [ProverRwFull.ExternalTypes] ops x =>
+  Eq.trans (R1Z.PV_Join_Current101.selected_bridge ops x) (R1Z.PV_CB_Op101Exact.op101_source ops x)
+'R1Z.PV_Join_Current101.op101_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current105.selected_bridge : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.M31), ProverRwFull.ExternalFuns.op105 x = ProverRwFull.ExternalFuns.op105 x :=
+fun [ProverRwFull.ExternalTypes] ops x =>
+  Trans.trans (Trans.trans (R1Z.PV_Join_Field.op105_source ops x) (Eq.symm (R1Z.PV_Join_InvSource.inverse x)))
+    (Eq.symm (R1Z.PV_CB_Op105Exact.op105_source ops x))
+'R1Z.PV_Join_Current105.selected_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current105.op105_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.M31),
+  ProverRwFull.ExternalFuns.op105 x =
+    PV_CB_ShippedOp105.aspis_core.field.M31.Insts.Aspis_coreR0ScalarCodeField.try_inv x :=
+fun [ProverRwFull.ExternalTypes] ops x =>
+  Eq.trans (R1Z.PV_Join_Current105.selected_bridge ops x) (R1Z.PV_CB_Op105Exact.op105_source ops x)
+'R1Z.PV_Join_Current105.op105_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.scalar : ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  PV_CB_ShippedOp71.aspis_core.field.M31.from_le_bytes bytes =
+    R1Z.ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes bytes :=
+fun bytes => R1Z.PV_Join_ParserTransport.scalar bytes
+'R1Z.PV_Join_Current71.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.complex : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (do
+      let value ← PV_CB_ShippedOp71.aspis_core.field.CM31.from_le_bytes bytes
+      Aeneas.Std.Result.ok (Option.map R1Z.PV_CB_Op71Transport.decodeC value)) =
+    R1Z.ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes bytes :=
+fun bytes => R1Z.PV_Join_ParserTransport.complex bytes
+'R1Z.PV_Join_Current71.complex' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.quartic : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (do
+      let value ← PV_CB_ShippedOp71.aspis_core.field.QM31.from_le_bytes bytes
+      Aeneas.Std.Result.ok (Option.map R1Z.PV_CB_Op71Transport.decode value)) =
+    R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes :=
+fun bytes => R1Z.PV_Join_ParserTransport.quartic bytes
+'R1Z.PV_Join_Current71.quartic' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.selected_bridge : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op71 bytes = ProverRwFull.ExternalFuns.op71 bytes :=
+fun [ProverRwFull.ExternalTypes] ops bytes =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = _a)
+          (R1Z.PV_CB_Op71Exact.op71_source ops bytes)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = _a)
+            (R1Z.PV_Join_Current71.quartic bytes)))
+        (Eq.refl (R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes))))
+'R1Z.PV_Join_Current71.selected_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.op71_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op71 bytes = do
+    let value ← PV_CB_ShippedOp71.aspis_core.field.QM31.from_le_bytes bytes
+    Aeneas.Std.Result.ok (Option.map R1Z.PV_CB_Op71Transport.decode value) :=
+fun [ProverRwFull.ExternalTypes] ops bytes =>
+  Eq.trans (R1Z.PV_Join_Current71.selected_bridge ops bytes) (R1Z.PV_CB_Op71Exact.op71_source ops bytes)
+'R1Z.PV_Join_Current71.op71_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current72.op72_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.QM31) (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op72 x bytes =
+    PV_CB_ShippedOp72.aspis_core.field.QM31.write_le_bytes (R1Z.PV_CB_Op72Transport.encode x) bytes :=
+fun [ProverRwFull.ExternalTypes] ops x bytes => R1Z.PV_CB_Op72Exact.op72_source ops x bytes
+'R1Z.PV_Join_Current72.op72_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
