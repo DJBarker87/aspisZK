@@ -35,6 +35,6 @@ for f,text in files.items():
  else:draft.write_text(text)
 files={R/'lean/JGh_TX2_SiblingBindings.lean':combined}
 for f,s in files.items():
- if '--check' in sys.argv:assert f.read_text()==s,f
+ if '--check' in sys.argv:assert (f if f.exists() else P/'JGh_UNCHECKED'/(f.name+'.txt')).read_text()==s,f
  else:f.write_text(s)
 print('native sibling binding generator: one thin module with three lookup laws; exactly467 visited cells')

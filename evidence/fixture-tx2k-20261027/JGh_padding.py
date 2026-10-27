@@ -24,6 +24,6 @@ for kind,start,count,cap in [(0,41799,163,172),(1,47303,163,172),(2,52807,141,15
  s+=f'#print axioms source\nend AspisR1.{name}\n'
  files[R/'lean'/(name+'.lean')]=s
 for f,s in files.items():
- if '--check' in sys.argv:assert f.read_text()==s,f
+ if '--check' in sys.argv:assert (f if f.exists() else P/'JGh_UNCHECKED'/(f.name+'.txt')).read_text()==s,f
  else:f.write_text(s)
 print('padding generator: three modules, nine32-byte windows each')

@@ -9,3 +9,5 @@ NativeRoots, Partial, NativeLeaves aggregate, LeafIteration, SiblingBinding2, An
 Source semantics still OPEN: actual owned leaf-loop scratch prefix, actual owned-verifier returns/parent writes/control, BatchGoal, installed finish, accepted2 and accepted pair. No desired success is added as a premise. Old JGe joined partial is read-only (source matches092), and its packed-pair returns/canonicalities and terminal identification, TX1 acceptance and SAME retained checkpoint equality remain. Actual top Rc10 unchanged;0 premise delta.
 
 Use GIT_OPTIONAL_LOCKS=0 when starting the existing local orchestration to avoid racing its read-only git status with stage commits. No host infrastructure was changed. Only new task orchestration/evidence and JGh_ Lean sources are owned.
+
+FINAL:100/100 spent. All18 heights passed;097–099 stream equalities rejected.100 passed with symbolic cardinality joins and reader/model-root composition. All unused assemblies are unchecked text; stop proof work.

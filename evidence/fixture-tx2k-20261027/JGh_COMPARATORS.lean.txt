@@ -1,0 +1,20 @@
+set_option autoImplicit false
+namespace AspisR1.JGh_TX2_Comparators
+
+def coordinate (a b : Nat×Nat) : Bool := decide (a.1<b.1 ∨ a.1=b.1 ∧ a.2≤b.2)
+def position (q : Fin 22 → Fin 262144) (kind a b : Nat) : Bool := decide
+  (OraclePortSelectedDraft.index q kind a < OraclePortSelectedDraft.index q kind b ∨
+   OraclePortSelectedDraft.index q kind a = OraclePortSelectedDraft.index q kind b ∧ a≤b)
+
+theorem coordinate_eq (a b : Nat×Nat) :
+    @decide (a.1<b.1 ∨ a.1=b.1 ∧ a.2≤b.2) (Classical.propDecidable _)=coordinate a b := by
+  exact decide_eq_decide.mpr Iff.rfl
+#print axioms coordinate_eq
+
+theorem position_eq (q : Fin 22 → Fin 262144) (kind a b : Nat) :
+    @decide (OraclePortSelectedDraft.index q kind a < OraclePortSelectedDraft.index q kind b ∨
+      OraclePortSelectedDraft.index q kind a = OraclePortSelectedDraft.index q kind b ∧ a≤b)
+      (Classical.propDecidable _)=position q kind a b := by
+  exact decide_eq_decide.mpr Iff.rfl
+#print axioms position_eq
+end AspisR1.JGh_TX2_Comparators

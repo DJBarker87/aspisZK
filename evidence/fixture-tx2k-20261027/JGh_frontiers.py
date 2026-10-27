@@ -33,16 +33,21 @@ for h in range(18):
  sib=(P/'JGh_UNCHECKED'/f'JGh_TX2_Siblings{h:02}.lean.txt').read_text()
  files[R/'lean'/(name+'.lean')]=f'import {last}\n'+sib[sib.index('set_option'):]+s[len(f'import {last}\n'):]+end
 component=(P/'JGh_UNCHECKED/JGh_TX2_FrontierOrder.lean.txt').read_text()
-s='import JGh_TX2_FrontierHeight17\n'+''.join(line+'\n' for line in component.splitlines() if line.startswith('import '))+component[component.index('set_option'):]+head
+s='import JGh_TX2_FrontierHeight17\n'+''.join(line+'\n' for line in component.splitlines() if line.startswith('import '))+(P/'JGh_COMPARATORS.lean.txt').read_text()+component[component.index('set_option'):]+head
 for k in [0,2]:
  ro='JGf_TX2_M0Roots' if k==0 else 'JGc_TX2_M2Roots';last=prev[k][0]
  stream=sorted(streams[k]);literal='['+','.join(f'({h},{b})' for h,b in stream)+']'
- s+=f'def stream{k} : List (Nat×Nat) := {literal}\n'
- s+=f'theorem ordered{k} : orderedFrontier {ro}.indices=stream{k} := by\n  rw [orderedFrontier,front{k}_{last:03}]\n  rfl\n#print axioms ordered{k}\n'
- s+=f'theorem count{k} : MultiproofConeCountLevels.sourceCount 18 JGf_TX2_Count{k}.indices00=(orderedFrontier {ro}.indices).length := by\n  rw [JGf_TX2_Count{k}.total00,ordered{k}]\n  rfl\n#print axioms count{k}\n'
- s+=f'theorem length{k} : stream{k}.length={len(stream)} := rfl\n#print axioms length{k}\n'
+ groups=[];lens=[]
+ for h in range(18):
+  cs=[(hh,b) for hh,b in stream if hh==h];g=f'group{k}_{h:02}';groups.append(g);lens.append(g+'_length')
+  gl='['+','.join(f'({hh},{b})' for hh,b in cs)+']'
+  s+=f'def {g} : List (Nat×Nat) := {gl}\ntheorem {g}_length : {g}.length={len(cs)} := rfl\n#print axioms {g}_length\n'
+ s+=f'def stream{k} : List (Nat×Nat) := '+'++'.join(groups)+'\n'
+ s+=f'theorem length{k} : stream{k}.length={len(stream)} := by\n  simp only [stream{k},List.length_append,'+','.join(lens)+f',Nat.reduceAdd]\n#print axioms length{k}\n'
+ s+=f'theorem ordered{k} : orderedFrontier {ro}.indices=stream{k} := by\n  rw [orderedFrontier,front{k}_{last:03}]\n  trans coords{k}_{last:03}.mergeSort JGh_TX2_Comparators.coordinate\n  · apply congrArg (fun cmp => coords{k}_{last:03}.mergeSort cmp)\n    funext a b\n    exact decide_eq_decide.mpr Iff.rfl\n  · rfl\n#print axioms ordered{k}\n'
+ s+=f'theorem count{k} : MultiproofConeCountLevels.sourceCount 18 JGf_TX2_Count{k}.indices00=(orderedFrontier {ro}.indices).length := by\n  rw [JGf_TX2_Count{k}.total00,ordered{k},length{k}]\n#print axioms count{k}\n'
 files[R/'lean/JGh_TX2_FrontierStream.lean']=s+end
 for f,s in files.items():
- if '--check' in sys.argv:assert f.read_text()==s,f
+ if '--check' in sys.argv:assert (f if f.exists() else P/'JGh_UNCHECKED'/(f.name+'.txt')).read_text()==s,f
  else:f.write_text(s)
 print('frontier generator:',len(files),'modules; named sparse nodes then sorted163/141 sibling streams')

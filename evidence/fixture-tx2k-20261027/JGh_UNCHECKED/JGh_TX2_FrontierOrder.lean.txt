@@ -9,15 +9,36 @@ open Aeneas Aeneas.Std Result
 def q := Port4B_KeyInstall.queries JFo_Prepared.value.queries
 
 theorem tree0 : (OraclePortFrozenOrder.sortedPositions q 1 0).map
-    (OraclePortSelectedDraft.index q 0)=JGf_TX2_Count0.indices00 := by rfl
+    (OraclePortSelectedDraft.index q 0)=JGf_TX2_Count0.indices00 := by
+  unfold OraclePortFrozenOrder.sortedPositions
+  trans ((OraclePortSelectedDraft.batchPositions 1).mergeSort (JGh_TX2_Comparators.position q 0)).map (OraclePortSelectedDraft.index q 0)
+  · apply congrArg (List.map (OraclePortSelectedDraft.index q 0))
+    apply congrArg (fun cmp => (OraclePortSelectedDraft.batchPositions 1).mergeSort cmp)
+    funext a b
+    exact decide_eq_decide.mpr Iff.rfl
+  · rfl
 #print axioms tree0
 
 theorem tree1 : (OraclePortFrozenOrder.sortedPositions q 1 1).map
-    (OraclePortSelectedDraft.index q 1)=JGf_TX2_Count0.indices00 := by rfl
+    (OraclePortSelectedDraft.index q 1)=JGf_TX2_Count0.indices00 := by
+  unfold OraclePortFrozenOrder.sortedPositions
+  trans ((OraclePortSelectedDraft.batchPositions 1).mergeSort (JGh_TX2_Comparators.position q 1)).map (OraclePortSelectedDraft.index q 1)
+  · apply congrArg (List.map (OraclePortSelectedDraft.index q 1))
+    apply congrArg (fun cmp => (OraclePortSelectedDraft.batchPositions 1).mergeSort cmp)
+    funext a b
+    exact decide_eq_decide.mpr Iff.rfl
+  · rfl
 #print axioms tree1
 
 theorem tree2 : (OraclePortFrozenOrder.sortedPositions q 1 2).map
-    (OraclePortSelectedDraft.index q 2)=JGf_TX2_Count2.indices00 := by rfl
+    (OraclePortSelectedDraft.index q 2)=JGf_TX2_Count2.indices00 := by
+  unfold OraclePortFrozenOrder.sortedPositions
+  trans ((OraclePortSelectedDraft.batchPositions 1).mergeSort (JGh_TX2_Comparators.position q 2)).map (OraclePortSelectedDraft.index q 2)
+  · apply congrArg (List.map (OraclePortSelectedDraft.index q 2))
+    apply congrArg (fun cmp => (OraclePortSelectedDraft.batchPositions 1).mergeSort cmp)
+    funext a b
+    exact decide_eq_decide.mpr Iff.rfl
+  · rfl
 #print axioms tree2
 
 theorem source (kind : Nat) : ∃ out : Array U64 16#usize,
