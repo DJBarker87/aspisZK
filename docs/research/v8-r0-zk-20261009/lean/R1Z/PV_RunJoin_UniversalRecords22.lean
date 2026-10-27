@@ -1,4 +1,5 @@
-import R1Z.PV_RunJoin_GeneralIdentification16
+import R1Z.PV_RunJoin_UniversalDictionary22
+import R1Z.PV_Src_CanonicalRoots
 import R1Z.PV_Src_PublicParts
 set_option autoImplicit false
 noncomputable section
@@ -13,7 +14,7 @@ theorem dictionary : shipped = PV_Src_RecordReference.withRoots PV_Src_Canonical
   change Records.mk _ = Records.mk _
   congr 1
   funext i out rec chg snap asset
-  exact PV_RunJoin_GeneralIdentification16.with_roots _ i out rec chg snap asset
+  exact PV_RunJoin_UniversalDictionary22.with_roots _ i out rec chg snap asset
 #print axioms dictionary
 
 theorem newRecords (i : Input) :
