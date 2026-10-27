@@ -233,19 +233,52 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
     let mut sibs = [[0u32; 8]; 24];
     bits[0] = u32::from(pair.selected_second);
     sibs[0] = raw(&other);
-    let mut level = 1;
-    while level < 21 {
-        bits[level] = ((pair.membership.index >> (level - 1)) & 1) as u32;
-        let sib = pair.membership.siblings[level - 1];
-        sibs[level] = raw(&sib);
-        level += 1;
-    }
-    while level < 24 {
-        bits[level] = u32::from(input.super_root_directions[level - 21]);
-        let sib = input.super_root_siblings[level - 21];
-        sibs[level] = raw(&sib);
-        level += 1;
-    }
+    bits[1] = ((pair.membership.index >> 0) & 1) as u32;
+    sibs[1] = raw(&pair.membership.siblings[0]);
+    bits[2] = ((pair.membership.index >> 1) & 1) as u32;
+    sibs[2] = raw(&pair.membership.siblings[1]);
+    bits[3] = ((pair.membership.index >> 2) & 1) as u32;
+    sibs[3] = raw(&pair.membership.siblings[2]);
+    bits[4] = ((pair.membership.index >> 3) & 1) as u32;
+    sibs[4] = raw(&pair.membership.siblings[3]);
+    bits[5] = ((pair.membership.index >> 4) & 1) as u32;
+    sibs[5] = raw(&pair.membership.siblings[4]);
+    bits[6] = ((pair.membership.index >> 5) & 1) as u32;
+    sibs[6] = raw(&pair.membership.siblings[5]);
+    bits[7] = ((pair.membership.index >> 6) & 1) as u32;
+    sibs[7] = raw(&pair.membership.siblings[6]);
+    bits[8] = ((pair.membership.index >> 7) & 1) as u32;
+    sibs[8] = raw(&pair.membership.siblings[7]);
+    bits[9] = ((pair.membership.index >> 8) & 1) as u32;
+    sibs[9] = raw(&pair.membership.siblings[8]);
+    bits[10] = ((pair.membership.index >> 9) & 1) as u32;
+    sibs[10] = raw(&pair.membership.siblings[9]);
+    bits[11] = ((pair.membership.index >> 10) & 1) as u32;
+    sibs[11] = raw(&pair.membership.siblings[10]);
+    bits[12] = ((pair.membership.index >> 11) & 1) as u32;
+    sibs[12] = raw(&pair.membership.siblings[11]);
+    bits[13] = ((pair.membership.index >> 12) & 1) as u32;
+    sibs[13] = raw(&pair.membership.siblings[12]);
+    bits[14] = ((pair.membership.index >> 13) & 1) as u32;
+    sibs[14] = raw(&pair.membership.siblings[13]);
+    bits[15] = ((pair.membership.index >> 14) & 1) as u32;
+    sibs[15] = raw(&pair.membership.siblings[14]);
+    bits[16] = ((pair.membership.index >> 15) & 1) as u32;
+    sibs[16] = raw(&pair.membership.siblings[15]);
+    bits[17] = ((pair.membership.index >> 16) & 1) as u32;
+    sibs[17] = raw(&pair.membership.siblings[16]);
+    bits[18] = ((pair.membership.index >> 17) & 1) as u32;
+    sibs[18] = raw(&pair.membership.siblings[17]);
+    bits[19] = ((pair.membership.index >> 18) & 1) as u32;
+    sibs[19] = raw(&pair.membership.siblings[18]);
+    bits[20] = ((pair.membership.index >> 19) & 1) as u32;
+    sibs[20] = raw(&pair.membership.siblings[19]);
+    bits[21] = u32::from(input.super_root_directions[0]);
+    sibs[21] = raw(&input.super_root_siblings[0]);
+    bits[22] = u32::from(input.super_root_directions[1]);
+    sibs[22] = raw(&input.super_root_siblings[1]);
+    bits[23] = u32::from(input.super_root_directions[2]);
+    sibs[23] = raw(&input.super_root_siblings[2]);
     let empty = pair_empty_roots();
     let w = RW {
         input_value: pair.value,
@@ -268,24 +301,50 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
         transfer: rec.is_some(),
         asset: asset.0,
         next_pair_index: snapshot.next_pair_index,
-        frontier: {
-            let mut frontier = [[0u32; 8]; 20];
-            let mut l = 0;
-            while l < 20 {
-                frontier[l] = raw(&snapshot.frontier[l]);
-                l += 1;
-            }
-            frontier
-        },
-        empty: {
-            let mut roots = [[0u32; 8]; 20];
-            let mut l = 0;
-            while l < 20 {
-                roots[l] = raw(&empty[l]);
-                l += 1;
-            }
-            roots
-        },
+        frontier: [
+            raw(&snapshot.frontier[0]),
+            raw(&snapshot.frontier[1]),
+            raw(&snapshot.frontier[2]),
+            raw(&snapshot.frontier[3]),
+            raw(&snapshot.frontier[4]),
+            raw(&snapshot.frontier[5]),
+            raw(&snapshot.frontier[6]),
+            raw(&snapshot.frontier[7]),
+            raw(&snapshot.frontier[8]),
+            raw(&snapshot.frontier[9]),
+            raw(&snapshot.frontier[10]),
+            raw(&snapshot.frontier[11]),
+            raw(&snapshot.frontier[12]),
+            raw(&snapshot.frontier[13]),
+            raw(&snapshot.frontier[14]),
+            raw(&snapshot.frontier[15]),
+            raw(&snapshot.frontier[16]),
+            raw(&snapshot.frontier[17]),
+            raw(&snapshot.frontier[18]),
+            raw(&snapshot.frontier[19]),
+        ],
+        empty: [
+            raw(&empty[0]),
+            raw(&empty[1]),
+            raw(&empty[2]),
+            raw(&empty[3]),
+            raw(&empty[4]),
+            raw(&empty[5]),
+            raw(&empty[6]),
+            raw(&empty[7]),
+            raw(&empty[8]),
+            raw(&empty[9]),
+            raw(&empty[10]),
+            raw(&empty[11]),
+            raw(&empty[12]),
+            raw(&empty[13]),
+            raw(&empty[14]),
+            raw(&empty[15]),
+            raw(&empty[16]),
+            raw(&empty[17]),
+            raw(&empty[18]),
+            raw(&empty[19]),
+        ],
     };
     (w, p)
 }
