@@ -29,3 +29,23 @@ new theorems use only propext/Classical.choice/Quot.sound. Host scopes use
 SInt2 objects reused, d18 v5 before aspis-joint. No package replay or ELF build.
 No shipped source changed, so inherited ELF pins are not freshly reproduced.
 Top ARX_Root.deployed remains unchanged: no top-premise removal claimed.
+
+## Stage 2: retained terminal and diagnostic equality
+
+JGl_TerminalSuccess.source adds FJh_Native07RawValue.value on the SAME actual
+evaluator returned by stage1. JGl_RetainedTerminal.source constructs actual
+FIq_Terminal.terminal success/canonicality at the original retained inputs.
+No transcript seed, oracle dictionary or original terminal guard is replaced.
+
+JGl_NumericProbe (013) executes that actual terminal and reports
+some (1711374173, 2026192144, 428817833, 318295749), matching neededTerminal.
+This is explicitly diagnostic execution evidence ONLY, not a kernel proof,
+accepted-wrapper result, source-to-ELF binding or cryptographic security claim.
+The kernel proof of JGe_TerminalCondition.Identified remains open.
+
+JGl_SelectedCells.value and JGl_ConcreteSelected.value identify every actual
+selected Claims cell and the complete selected array without normalizing the
+84-step constructor recurrence. Native width28 and claim-row width29 are
+preserved (the final claim per source row is intentionally outside this gather).
+Accepted receipts: 007,009,012,013,014. Earlier failed elaborations remain in
+005/006/008/010/011 and earn no closure credit.

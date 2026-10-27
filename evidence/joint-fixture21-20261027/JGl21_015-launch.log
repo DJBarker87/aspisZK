@@ -1,0 +1,77 @@
+{"attempt": "JGl21_015", "exit_status": 1, "wall_seconds": 2.7992900109966286, "peak_rss_kib": "5874280", "swaps": "0", "print_axioms": ["'AspisR1.JGl_GatherValue.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGl_GatherValue.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGl_GatherValue.lean:23:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+a : JGl_SelectedCells.Selected
+row : ℕ
+i : Usize
+hr : row < 3
+hi : ↑i < 16
+i1 : Usize
+_✝¹ : [> let i1 ← Usize.ofNatCore row ⋯ * 28#usize <]
+i1_post : ↑i1 = ↑(Usize.ofNatCore row ⋯) * 28
+i2 : Usize
+_✝ : [> let i2 ← i1 + i <]
+i2_post : ↑i2 = ↑i1 + ↑i
+out : field.QM31
+_ : [> let out ← Array.index_usize a i2 <]
+out_post : out = (↑a)[↑i2]
+⊢ out = cells a ⟨row * 28 + ↑i, ⋯⟩
+'AspisR1.JGl_GatherValue.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGl_GatherValue.lean:37:6: error: Tactic `rewrite` failed: Did
+...
+Gl_SelectedCells.Selected
+row : ℕ
+i : Usize
+hr : row < 3
+hi : ↑i < 16
+i1 : Usize
+_✝¹ : [> let i1 ← Usize.ofNatCore row ⋯ * 28#usize <]
+i1_post : ↑i1 = ↑(Usize.ofNatCore row ⋯) * 28
+i2 : Usize
+_✝ : [> let i2 ← i1 + i <]
+i2_post : ↑i2 = ↑i1 + ↑i
+out : field.QM31
+_ : [> let out ← Array.index_usize a i2 <]
+out_post : out = (↑a)[↑i2]
+⊢ out = cells a ⟨row * 28 + ↑i, ⋯⟩
+'AspisR1.JGl_GatherValue.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGl_GatherValue.lean:37:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  selected_claim a (Usize.ofNatCore 0 ⋯) u
+in the target expression
+  (do
+      let q ← selected_claim a 0#usize u
+      ok (q, a)) =
+    ok (cells out i, a)
+
+a : JGl_SelectedCells.Selected
+out : State
+ha : canonical a
+run : array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy f0 field.QM31.ZERO a = ok out
+i : Fin ↑16#usize
+u : Usize := Usize.ofNatCore ↑i ⋯
+hi : ↑u < 16
+r : selected_claim a (Usize.ofNatCore 0 ⋯) u = ok (cells a ⟨0 * 28 + ↑u, ⋯⟩)
+h :
+  (do
+      let q ← selected_claim a 0#usize u
+      ok (q, a)) =
+    ok (cells out i, a)
+⊢ cells out i = cells a ⟨↑i, ⋯⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGl_GatherValue.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re34de95866504649af5ea02ff601204e.scope; invocation ID: 2e13fd761f1f4be2a73be4b990335bdf
