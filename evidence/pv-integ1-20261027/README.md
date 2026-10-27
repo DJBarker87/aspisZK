@@ -44,9 +44,20 @@ cargo build --manifest-path tools/r1-cost-probe/Cargo.toml --release --offline -
 
 ## Stage 3: fixed-coin fixtures
 
-Pending against `c57a344726`; transfer and withdrawal, deterministic coin 0.
-Proof and public bytes, result records and durable reservation records must be
-compared. Runtime measurements are evidence metadata, not quiet-window timing.
+PASS against `c57a344726`; transfer and withdrawal, deterministic coin 0.
+`baseline-reuse.json` establishes unchanged implementation/harness/lockfile
+inputs since the control artifact build. `fixture-control-pin-check.json`
+checks control proof/public pins and complete control result records against
+the evidence actually committed at c57. Both proof files are 57,607 bytes and
+verify through tx1/tx2. See `fixture-comparison.json` and capped receipts.
+All public/proof bytes, deterministic result record bytes (canonical JSON)
+and durable ledger file bytes are identical. The raw measurement `result.json`
+files differ **only** in elapsed `seconds`; both raw hashes, values and all
+differing fields are retained. Those measurement files are not claimed to be
+byte-identical. This uses the prior fixture gate definition, excluding only
+elapsed-time metadata.
+Proof/public bytes, every deterministic result field and durable reservation
+records were compared. Runtime measurements are evidence metadata, not quiet-window timing.
 
 ## Stage 4: Lean import audit and focused re-check
 
@@ -55,6 +66,26 @@ compile. This includes the canonical P6 source and ten imported files newly
 present at their canonical paths. Objects are inspected read-only. No shared
 env-J source is installed or overwritten. Assigned IDs 53900–54199, budget
 30 Lean attempts, zero Kani. Focused target re-checks pending.
+
+Changed/new imported files (listed before compiling):
+
+- `R1Z.PV_RW_DataPartsIff` — `docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_DataPartsIff.lean`
+- `R1Z.PV_RW_DataProduct` — `docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_DataProduct.lean`
+- `R1Z.ProverRw19AuditCaller` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19AuditCaller.lean`
+- `R1Z.ProverRw19AuditData` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19AuditData.lean`
+- `R1Z.ProverRw19AuditValue` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19AuditValue.lean`
+- `R1Z.ProverRw19AuditSource` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19AuditSource.lean`
+- `R1Z.ProverRw19P6Caller` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19P6Caller.lean`
+- `R1Z.ProverRw19P6Join` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19P6Join.lean`
+- `R1Z.ProverRw19P6ContextIdentity` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19P6ContextIdentity.lean`
+- `R1Z.ProverRw19CanonicalAuditRefinement` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw19CanonicalAuditRefinement.lean`
+- `R1Z.ProverRwP6CompressSource` — `docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRwP6CompressSource.lean`
+
+The ten additions are new canonical paths relative to the op223 branch;
+the read-only object source bytes match the integrated files. P6 source bytes
+also match the integrated version. Aeneas library objects are unchanged
+external-toolchain inputs, recorded by object hash.
+
 
 ## Stage 5: combined next-cycle gates — PLAN ONLY
 
