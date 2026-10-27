@@ -65,6 +65,22 @@ index 5f65899f50..d32ce66232 100644
      if !h1_total_balanced { return Err(Error::Semantic); }
      let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
      let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?;
+diff --git a/crates/aspis-r1-cost-probe/src/prover_helper_sum.rs b/crates/aspis-r1-cost-probe/src/prover_helper_sum.rs
+new file mode 100644
+index 0000000000..5d0cfaad17
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/prover_helper_sum.rs
+@@ -0,0 +1,10 @@
++use aspis_core::field::QM31;
++const TRACE_ROWS:usize=1024;
++pub fn state_only_copy_helper_sum(h1: &[QM31]) -> Option<QM31> {
++    if h1.len() == TRACE_ROWS {
++        let mut sum = QM31::ZERO;
++        let mut i = 0usize;
++        while i < h1.len() { sum = sum.add(h1[i]); i += 1; }
++        Some(sum)
++    } else { None }
++}
 diff --git a/crates/aspis-r1-cost-probe/src/sim.rs b/crates/aspis-r1-cost-probe/src/sim.rs
 index b3a9565717..9e0100d2bc 100644
 --- a/crates/aspis-r1-cost-probe/src/sim.rs
