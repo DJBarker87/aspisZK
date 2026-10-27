@@ -10,7 +10,7 @@ for r in rs:
  if r['exit_status']==0:
   for a in r['print_axioms']:
    assert 'sorryAx' not in a
-   if '[' in a:assert set(re.search(r'\[([^]]*)\]',a)[1].split(', ')) <= {'propext','Classical.choice','Quot.sound'}
+   if '[' in a:assert {x.strip() for x in re.search(r'\[([^]]*)\]',a)[1].split(',')} <= {'propext','Classical.choice','Quot.sound'}
   for n,h in r['source_hashes'].items():green[n]={'source_hash':h,'attempt':r['attempt'],'axioms':r['print_axioms']}
  else:failed.append({'attempt':r['attempt'],'source_hashes':r['source_hashes'],'exit':r['exit_status'],'diagnostics':str(P/r['attempt']/'stdout.log')})
 validated=[];pending=[]

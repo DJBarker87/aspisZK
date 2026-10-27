@@ -1,7 +1,7 @@
 # Joint fixture19 progress
 
 S2 OPEN; target not yet established. Work is limited to JGi-prefixed new
-modules and this receipt directory, on codex/cx-joint-fixture19-20261026.
+modules and this receipt directory, on codex/cx-joint-fixture19-20261027 (the existing branch was retained; the request named a 20261026 suffix).
 No shipped file, other worker's candidate, key or artifact has changed.
 
 The inherited JGg_FinalAudit loaded at attempt001, including the composed audit
@@ -30,3 +30,16 @@ at the reservation barrier before launching. No caps increased.
 
 Next: real Y1 field returns and complete concrete prepared-claim return, then
 split preparation constructor, TX1, SAME1768-byte checkpoint and joint fixture.
+
+## Prepared-claim stage (attempts 23–68)
+
+All29 physical Y1 field cells are selected from JGe_Payload27's SAME928 bytes
+and return canonical values through the actual installed parser. Eight bounded
+four-byte word equalities per cell replace whole-payload kernel evaluation.
+JGi_ClaimTotal.source constructs the actual six29-term dots and seven-term
+weighted sum. JGi_PreparedClaim.source instantiates it with the actual semantic
+return, real Y1, installed inactive field and SAME gamma powers/kappa.
+JGi_ClaimFixture.inhabited (068) joins expansion/parser/View/powers and the
+actual claim return; its ONLY conditional conjunct is guarded by the EXACT
+JGe_TerminalCondition.Identified. The guard is not asserted inhabited.
+Full preparation and accepted1/checkpoint identity remain open at this stage.

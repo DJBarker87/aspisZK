@@ -27,7 +27,7 @@ theorem selected : (JGe_Payload27.value.val.drop (32*{i})).take 32=arr.val := by
   intro j
   fin_cases j
 '''
- for j in range(8):s+=f'  · rw [word{j}];scalar_tac\n'
+ for j in range(8):s+=f'  · change (wordLE arr {j}).val<2147483647\n    rw [word{j}];scalar_tac\n'
  s+=f'''#print axioms bounds
 theorem source : ∃ out,ClaimParser.field JGe_Payload27.value {i}#usize=ok out ∧ Concrete.Canonical out := by
   exact JGi_FieldCell.source _ _ arr (by rw [JGe_Payload27.length];decide)
