@@ -1,0 +1,51 @@
+def R1Z.PV_RunJoin_PaddingCounterexample24.bad : R1Z.PV_Src_NativeInput.Input :=
+have __src := R1Z.PV_RunJoin_AdmittedCarrier23.transfer;
+{ request := __src.request, witness := __src.witness, change := __src.change, laneAnchor := __src.laneAnchor,
+  snapshot := __src.snapshot,
+  compiled :=
+    have __src := R1Z.PV_RunJoin_AdmittedCarrier23.transfer.compiled;
+    { trace := __src.trace, semantic_c1 := { c1 := R1Z.PV_RunJoin_PaddingCounterexample24.columns },
+      public_statement := __src.public_statement } }
+theorem R1Z.PV_RunJoin_PaddingCounterexample24.build_eq_false : ∀ {K : Type} [inst : Field K] [Fintype K]
+  [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647]
+  (w : R1Z.BuilderCanonical.Instance),
+  R1Z.PV_RunJoin_PremiseTruth24.raw.build R1Z.PV_RunJoin_PaddingCounterexample24.bad ≠
+    R1Z.BuilderSource.prover.build w :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] w h =>
+  have cell := congrFun (congrFun h 0) 13;
+  one_ne_zero
+    (Eq.mp (congrArg (fun _a => 1 = _a) (R1Z.PV_RunJoin_PaddingCounterexample24.canonical_padding w))
+      (Eq.mp
+        (congrArg (fun _a => _a = R1Z.BuilderSource.prover.build w 0 13)
+          R1Z.PV_RunJoin_PaddingCounterexample24.bad_cell)
+        cell))
+theorem R1Z.PV_RunJoin_PaddingCounterexample24.identification_unsatisfiable : ∀ {K : Type} [inst : Field K] [Fintype K]
+  [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647]
+  (f : R1Z.PV_Src_NativeInput.Input → R1Z.BuilderCanonical.Instance),
+  ¬R1Z.BuilderSource.SourceIdentification R1Z.PV_RunJoin_PremiseTruth24.raw f :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] f h =>
+  R1Z.PV_RunJoin_PaddingCounterexample24.universal_build_eq_false f h.build_eq
+theorem R1Z.PV_RunJoin_PaddingCounterexample24.admitted_identification_unsatisfiable : ∀ {K : Type} [inst : Field K]
+  [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647]
+  (f : R1Z.PV_RunJoin_AdmittedCarrier23.Admitted → R1Z.BuilderCanonical.Instance),
+  ¬R1Z.BuilderSource.SourceIdentification
+      (R1Z.PV_Src_NativeIdentification.prover (fun i => ↑i) R1Z.PV_Src_Transport.transport) f :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] f h =>
+  R1Z.PV_RunJoin_PaddingCounterexample24.build_eq_false
+    (f ⟨R1Z.PV_RunJoin_PaddingCounterexample24.bad, R1Z.PV_RunJoin_PaddingCounterexample24.admitted⟩)
+    (h.build_eq ⟨R1Z.PV_RunJoin_PaddingCounterexample24.bad, R1Z.PV_RunJoin_PaddingCounterexample24.admitted⟩)
+'R1Z.PV_RunJoin_PaddingCounterexample24.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.model_padding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.canonical_padding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.bad_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.build_eq_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.universal_build_eq_false' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.identification_unsatisfiable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.admitted_identification_unsatisfiable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

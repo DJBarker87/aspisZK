@@ -1,0 +1,79 @@
+'R1Z.PV_RunJoin_PremiseTruth24.bad_public_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PremiseTruth24.bad_public_eq_false_of_witness' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_PremiseTruth24.lean:42:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_PremiseTruth24.variant_build_preserved`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'R1Z.PV_RunJoin_PremiseTruth24.variant_build_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_PremiseTruth24.lean:47:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_PremiseTruth24.variant_public_preserved`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'R1Z.PV_RunJoin_PremiseTruth24.variant_public_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PremiseTruth24.variant_build_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_PremiseTruth24.lean:74:2: error: Type mismatch
+  PV_RunJoin_UniversalBuild22.public_eq ?m.38 ?m.39 ?m.40 ()
+has type
+  (PV_Src_NativeIdentification.prover ?m.38 ?m.39).public () =
+    BuilderSource.prover.public (PV_RunJoin_UniversalBuild22.toInstance ?m.38 ?m.40 ())
+but is expected to have type
+  raw.public PV_RunJoin_AdmittedReturnCounterexample23.counterexample =
+    BuilderSource.prover.public
+      (PV_RunJoin_UniversalBuild22.toInstance (fun x => PV_RunJoin_AdmittedReturnCounterexample23.counterexample) ⋯ ())
+'R1Z.PV_RunJoin_PremiseTruth24.variant_public_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PremiseTruth24.raw_transport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure R1Z.BuilderSource.SourceIdentification {K : Type} [Field K] [CharP K 2147483647]
+  (source : R0Z.ZkStatement.HonestProver K) (toInstance : source.Instance → BuilderCanonical.Instance) : Prop
+number of parameters: 5
+fields:
+  R1Z.BuilderSource.SourceIdentification.public_eq : ∀ (w : source.Instance),
+      source.public w = BuilderSource.prover.public (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.build_eq : ∀ (w : source.Instance),
+      source.build w = BuilderSource.prover.build (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.transport_eq : source.transport = BuilderSource.π
+constructor:
+  R1Z.BuilderSource.SourceIdentification.mk {K : Type} [Field K] [CharP K 2147483647]
+    {source : R0Z.ZkStatement.HonestProver K} {toInstance : source.Instance → BuilderCanonical.Instance}
+    (public_eq : ∀ (w : source.Instance), source.public w = BuilderSource.prover.public (toInstance w))
+    (build_eq : ∀ (w : source.Instance), source.build w = BuilderSource.prover.build (toInstance w))
+    (transport_eq : source.transport = BuilderSource.π) : BuilderSource.SourceIdentification source toInstance
+def R1Z.PV_Src_NativeIdentification.prover : {K : Type} →
+  [inst : Field K] →
+    [CharP K 2147483647] → {I : Type} → (I → Input) → Fin 1024 ≃ Fin 1024 → R0Z.ZkStatement.HonestProver K :=
+fun {K} [Field K] [CharP K 2147483647] {I} inputs transport =>
+  { Instance := I, transport := transport,
+    «public» := fun i =>
+      mapPub (BuilderPublicProjection.semanticPublic (PV_Src_Public.output (publicInput (inputs i)))),
+    build := fun i => columns PV_Src_Forest_Columns.read (inputs i).compiled.semantic_c1.c1 }
+def R1Z.BuilderCanonical.Instance : {K : Type} → [inst : Field K] → [CharP K 2147483647] → Type :=
+fun {K} [Field K] [CharP K 2147483647] =>
+  { p // BuilderSpendRelation.RspendPlus (mapPub p.1) (BuilderCanonical.liftWitness p.2) }
+def R1Z.BuilderCanonical.prover : {K : Type} →
+  [inst : Field K] → [CharP K 2147483647] → Fin 1024 ≃ Fin 1024 → R0Z.ZkStatement.HonestProver K :=
+fun {K} [Field K] [CharP K 2147483647] π =>
+  { Instance := BuilderCanonical.Instance, transport := π, «public» := fun p => mapPub (↑p).1,
+    build := fun p =>
+      BuilderRefinement.mergedTrace (BuilderCanonical.rustWitness (↑p).2) (BuilderCanonical.rustPublic (↑p).1) }
+def R1Z.BuilderSource.prover : {K : Type} → [inst : Field K] → [CharP K 2147483647] → R0Z.ZkStatement.HonestProver K :=
+fun {K} [Field K] [CharP K 2147483647] => BuilderCanonical.prover BuilderSource.π
+def R1Z.PV_RunJoin_UniversalBuild22.toInstance : {K : Type} →
+  [inst : Field K] →
+    [inst_1 : CharP K 2147483647] →
+      {I : Type} →
+        (inputs : I → Input) →
+          (∀ (i : I), PV_RunJoin_UniversalBuild22.Admission (inputs i)) → I → BuilderCanonical.Instance :=
+fun {K} [Field K] [CharP K 2147483647] {I} inputs admitted i =>
+  ⟨(PV_Src_Public.canonicalPublic (publicInput (inputs i)),
+      BuilderRecordCanonical.witness
+        (PV_Src_Forest_PrimitiveArguments.wordWitness (PV_RunJoin_UniversalBuild22.records (inputs i)).w)),
+    ⋯⟩
