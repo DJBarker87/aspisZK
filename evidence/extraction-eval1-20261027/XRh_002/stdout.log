@@ -1,0 +1,60 @@
+opam-version: "2.0"
+opam-root-version: "2.1"
+repositories: "default"
+installed-switches: "5.2"
+switch: "5.2"
+download-jobs: 3
+archive-mirrors: "https://opam.ocaml.org/cache"
+eval-variables: [
+  [
+    sys-ocaml-version
+    ["ocamlc" "-vnum"]
+    "OCaml version present on your system independently of opam, if any"
+  ]
+  [
+    sys-ocaml-arch
+    [
+      "sh"
+      "-c"
+      "ocamlc -config 2>/dev/null | tr -d '\\r' | grep '^architecture: ' | sed -e 's/.*: //' -e 's/i386/i686/' -e 's/amd64/x86_64/'"
+    ]
+    "Target architecture of the OCaml compiler present on your system"
+  ]
+  [
+    sys-ocaml-cc
+    [
+      "sh"
+      "-c"
+      "ocamlc -config 2>/dev/null | tr -d '\\r' | grep '^ccomp_type: ' | sed -e 's/.*: //'"
+    ]
+    "Host C Compiler type of the OCaml compiler present on your system"
+  ]
+  [
+    sys-ocaml-libc
+    [
+      "sh"
+      "-c"
+      "ocamlc -config 2>/dev/null | tr -d '\\r' | grep '^os_type: ' | sed -e 's/.*: //' -e 's/Win32/msvc/' -e '/^msvc$/!s/.*/libc/'"
+    ]
+    "Host C Runtime Library type of the OCaml compiler present on your system"
+  ]
+]
+default-compiler: ["ocaml-system" "ocaml-base-compiler"]
+default-invariant: [
+  "ocaml" {>= "4.05.0"}
+]
+depext: true
+depext-run-installs: true
+depext-cannot-install: false
+
+f5489b2e66135e4e5f2aa197a391ffd3d58827248441b8ca2338ff8b7c4d0910
+SOURCE_MANIFEST [('XRh_new_aeneas', '472b3d560cf236db50f38ad421eb0a88b57a1580', '00759c4ce88dc2f315c0306d50bb2987dcbcf953', 868), ('XRh_new_charon', '40ca4ab6c10ecb7629320d6eccc0f41423fbe889', 'ac6242433c669bb50c1ed59ab35b5a164de21ae1', 1434)]
+rust toolchains stable-x86_64-unknown-linux-gnu (active, default)
+nightly-x86_64-unknown-linux-gnu
+nightly-2025-11-21-x86_64-unknown-linux-gnu
+nightly-2026-06-01-x86_64-unknown-linux-gnu
+1.79.0-x86_64-unknown-linux-gnu
+1.89.0-sbpf-solana-v1.52
+1.89.0-x86_64-unknown-linux-gnu
+solana
+
