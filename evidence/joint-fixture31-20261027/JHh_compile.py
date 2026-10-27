@@ -12,6 +12,8 @@ def ssh(cmd,**kw):
   if tr<9:time.sleep(60)
  raise SystemExit(255)
 n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100
+if n==80 and mod=='JHh_C_Tree1C':
+ print('Local proof-stage boundary before tree1C: split continuation before admission; no Lean launched.');sys.exit(80)
 if n==70 and mod!='JHh_Review70':
  print('Attempt70 is reserved for the required current-root/obstruction audit; no Lean launched.');sys.exit(70)
 relative_source=mod.replace('.','/')+'.lean'

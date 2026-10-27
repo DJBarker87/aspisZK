@@ -27,3 +27,5 @@ accepted1, and the joint pair remain OPEN at this checkpoint. No top premise
 has been removed; no caps/timeouts increased or unchanged killed job rerun.
 
 071-073 pass split levels06-08,09-11,12-17 and the terminal/native tree0 join under the inherited SHA class. Memory066 replacement is checked; Source73 exports JHh_C_Gw_Tree0.tree. Tree1/tree2 and the candidate/SDK consumer remain pending.
+
+074-079 pass the tree1 root, numeric/parent, leaf/scratch and levels00-05. A local queue boundary stopped before admission at80. Attempt080 on the six-level half then reached -M7000; replacement081-083 split06-08,09-11 and the remaining joins and all pass. Complete tree1 is checked, no cap increase. 084 passes tree2 mathematical root construction.
