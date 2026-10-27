@@ -27,10 +27,29 @@ assert m.returncode==0,m.stderr
 d=json.loads(m.stdout);pins={(p['name'],p['version'],p.get('source')) for p in tomllib.loads(lock.read_text())['package']}
 for p in d['packages']:assert (p['name'],p['version'],p.get('source')) in pins,p['name']
 assert d['resolve'] is not None
-(B/'KSC2_graph.json').write_text(json.dumps(dict(metadata_sha256=hashlib.sha256(m.stdout.encode()).hexdigest(),packages=[(p['name'],p['version'],p.get('source')) for p in d['packages']],nodes=len(d['resolve']['nodes']),lock_sha256=pre,manifests=manifest,rustc=version),indent=2)+'\n')
+# Validate every resolved dependency edge, not merely package membership.
+lockrows=tomllib.loads(lock.read_text())['package']
+lockmap={(p['name'],p['version'],p.get('source')):p for p in lockrows}
+idmap={p['id']:(p['name'],p['version'],p.get('source')) for p in d['packages']}
+edges=[]
+for node in d['resolve']['nodes']:
+ owner=idmap[node['id']]; allowed=set()
+ for dep in lockmap[owner].get('dependencies',[]):
+  words=dep.split(); name=words[0]
+  candidates=[k for k in pins if k[0]==name and (len(words)<2 or k[1]==words[1])]
+  if len(words)>2:candidates=[k for k in candidates if k[2]==words[2].strip('()')]
+  assert len(candidates)==1,(owner,dep,candidates)
+  allowed.add(candidates[0])
+ for target in node['dependencies']:
+  key=idmap[target];assert key in allowed,(owner,key)
+  edges.append([owner,key])
+(B/'KSC2_graph.json').write_text(json.dumps(dict(metadata_sha256=hashlib.sha256(m.stdout.encode()).hexdigest(),packages=[(p['name'],p['version'],p.get('source')) for p in d['packages']],nodes=len(d['resolve']['nodes']),lock_sha256=pre,manifests=manifest,rustc=version,validated_edges=edges),indent=2)+'\n')
 cmd=[rustc,'--edition=2021','--test','-C','opt-level=3','-C','overflow-checks=yes',str(B/'KSC2_native_test.rs'),'-o',str(B/'KSC2_std_tests')]
 print('OPTIMIZED STD-ONLY DIFFERENTIAL',cmd,flush=True)
 r=subprocess.run(cmd,env=env)
-if r.returncode==0:r=subprocess.run([str(B/'KSC2_std_tests'),'--nocapture','--test-threads=1'],env=env)
+if r.returncode==0:r=subprocess.run([str(B/'KSC2_std_tests'),'KSC2::finite_small_domain','--nocapture','--test-threads=1'],env=env)
 post=h(lock);(B/'KSC2_lock.json').write_text(json.dumps(dict(before=pre,after=post,unchanged=pre==post,compilation='rustc --test -C opt-level=3 -C overflow-checks=yes; no Cargo compilation or release source linkage'))+'\n');assert pre==post
+receipt_dir=B/'KSC2_R004'
+for name in ['KSC2_graph.json','KSC2_lock.json','KSC2_metadata_stderr.log']:
+ shutil.copyfile(B/name,receipt_dir/name)
 raise SystemExit(r.returncode)

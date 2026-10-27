@@ -1,0 +1,58 @@
+{"attempt": "KSC2_L010", "exit_status": 1, "wall_seconds": 2.1626901690033264, "peak_rss_kib": "2632264", "swaps": "0", "print_axioms": ["'KSC2.fold_step0' depends on axioms: [propext, Quot.sound]", "'KSC2.fold_step1' depends on axioms: [propext, Quot.sound]", "'KSC2.fold_step2' depends on axioms: [propext, Quot.sound]", "'KSC2.fold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]", "'KSC2.mutable_fold_loses_writeback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+KSC2_generated/KSC2_MutFold.lean:33:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ←
+        do
+          let result ← loop foldStep (0, { slice := two }, ())
+          ok (result.1, result.2.1)
+      match __x with
+        | (n, s) => ok (n, ↑s.slice)) =
+    ?m.34
+is not definitionally equal to target
+  (do
+      let (n, s) ←
+        do
+          let result ←
+            loop
+                (fun x =>
+                  match x with
+                  | (acc, state, closureState) => do
+                    let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+                    match item with
+                      | none => ok (done (acc, stateNext, closureStat
+...
+KSC2_generated/KSC2_MutFold.lean:33:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ←
+        do
+          let result ← loop foldStep (0, { slice := two }, ())
+          ok (result.1, result.2.1)
+      match __x with
+        | (n, s) => ok (n, ↑s.slice)) =
+    ?m.34
+is not definitionally equal to target
+  (do
+      let (n, s) ←
+        do
+          let result ←
+            loop
+                (fun x =>
+                  match x with
+                  | (acc, state, closureState) => do
+                    let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+                    match item with
+                      | none => ok (done (acc, stateNext, closureState))
+                      | some value => do
+                        let (accNext, closureNext) ← mutatingFoldValue.call_mut closureState (acc, value)
+                        ok (cont (accNext, stateNext, closureNext)))
+                (0, { slice := two }, ())
+          ok (result.1, result.2.1)
+      ok (n, ↑s.slice)) =
+    ok (23, [1, 2])
+'KSC2.fold_step0' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step1' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step2' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KSC2.mutable_fold_loses_writeback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9c0c77cf1a1b47859bacbf68479b5b31.scope; invocation ID: ed5c3bf85e794dbd81505dc7203da615

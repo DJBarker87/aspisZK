@@ -1,0 +1,125 @@
+KSC2_generated/KSC2_MutCounterexamples.lean:62:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  loop ?body ?x
+in the target expression
+  (do
+      let (n, s) ←
+        do
+          let result ←
+            match do
+                let (item, stateNext, _) ←
+                  if h : 0 < ↑(Usize.ofNatCore 2 ⋯) then
+                      ok
+                        (some ⟨[1, 2], two._proof_1⟩[0], { slice := ⟨[1, 2], two._proof_1⟩, i := 1 }, fun it' x =>
+                          match x with
+                          | none => it'
+                          | some x => { slice := it'.slice.setAtNat 0 x, i := it'.i })
+                    else ok (none, { slice := ⟨[1, 2], two._proof_1⟩ }, fun it x => it)
+                match item with
+                  | none => ok (done (0, stateNext, ()))
+                  | some value =>
+                    let (accNext, closureNext) := (0 + value + 10, ())
+                    ok (cont (accNext, stateNext, closureNext)) with
+              | ok r =>
+                match r with
+                | cont x =>
+                  loop
+                    (fun x => do
+                      let (item, stateNext, _) ←
+                        if h : x.2.1.i < ↑(Usize.ofNatCore (↑x.2.1.slice).length ⋯) then
+                            ok
+                              (some x.2.1.slice[x.2.1.i], { slice := x.2.1.slice, i := x.2.1.i + 1 }, fun it' x_1 =>
+                                match x_1 with
+                                | none => it'
+                                | some x_2 => { slice := it'.slice.setAtNat x.2.1.i x_2, i := it'.i })
+                          else ok (none, x.2.1, fun it x => it)
+                      match item with
+                        | none => ok (done (x.1, stateNext, x.2.2))
+                        | some value =>
+                          let (accNext, closureNext) := (x.1 + value + 10, ())
+                          ok (cont (accNext, stateNext, closureNext)))
+                    x
+                | done x => ok x
+              | fail e => fail e
+              | div => div
+          ok (result.1, result.2.1)
+      ok (n, ↑s.slice)) =
+    ok (23, [1, 2])
+
+⊢ (do
+      let (n, s) ←
+        do
+          let result ←
+            match do
+                let (item, stateNext, _) ←
+                  if h : 0 < ↑(Usize.ofNatCore 2 ⋯) then
+                      ok
+                        (some ⟨[1, 2], two._proof_1⟩[0], { slice := ⟨[1, 2], two._proof_1⟩, i := 1 }, fun it' x =>
+                          match x with
+                          | none => it'
+                          | some x => { slice := it'.slice.setAtNat 0 x, i := it'.i })
+                    else ok (none, { slice := ⟨[1, 2], two._proof_1⟩ }, fun it x => it)
+                match item with
+                  | none => ok (done (0, stateNext, ()))
+                  | some value =>
+                    let (accNext, closureNext) := (0 + value + 10, ())
+                    ok (cont (accNext, stateNext, closureNext)) with
+              | ok r =>
+                match r with
+                | cont x =>
+                  loop
+                    (fun x => do
+                      let (item, stateNext, _) ←
+                        if h : x.2.1.i < ↑(Usize.ofNatCore (↑x.2.1.slice).length ⋯) then
+                            ok
+                              (some x.2.1.slice[x.2.1.i], { slice := x.2.1.slice, i := x.2.1.i + 1 }, fun it' x_1 =>
+                                match x_1 with
+                                | none => it'
+                                | some x_2 => { slice := it'.slice.setAtNat x.2.1.i x_2, i := it'.i })
+                          else ok (none, x.2.1, fun it x => it)
+                      match item with
+                        | none => ok (done (x.1, stateNext, x.2.2))
+                        | some value =>
+                          let (accNext, closureNext) := (x.1 + value + 10, ())
+                          ok (cont (accNext, stateNext, closureNext)))
+                    x
+                | done x => ok x
+              | fail e => fail e
+              | div => div
+          ok (result.1, result.2.1)
+      ok (n, ↑s.slice)) =
+    ok (23, [1, 2])
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    { slice := two }.slice
+  has type
+    Slice ℕ
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑{ slice := two }.slice
+KSC2_generated/KSC2_MutCounterexamples.lean:60:36: warning: This simp argument is unused:
+  Nat.reduceLT
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.iter.IteratorIterMut.next, two, Slice.len, List.length_cons,
+      List.length_nil, Nat.reduceAdd, N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵L̵T̵,̵ ̵↓reduceDIte, bind_tc_ok,
+  ̵  ̵ ̵ ̵mutatingFoldValue]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+KSC2_generated/KSC2_MutCounterexamples.lean:60:50: warning: This simp argument is unused:
+  ↓reduceDIte
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.iter.IteratorIterMut.next, two, Slice.len, List.length_cons,
+      List.length_nil, Nat.reduceAdd, Nat.reduceLT, ↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵,̵ ̵bind_tc_ok,
+  ̵  ̵ ̵ ̵mutatingFoldValue]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'KSC2.mutable_fold_loses_writeback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'KSC2.mutable_back_repeats_consumed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KSC2.exhausted_has_no_remaining' depends on axioms: [propext, Quot.sound]
+'KSC2.mutable_any_loses_writeback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KSC2.mutable_all_loses_writeback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KSC2.mutable_back_disagrees_with_empty_spec' depends on axioms: [propext, Classical.choice, Quot.sound]

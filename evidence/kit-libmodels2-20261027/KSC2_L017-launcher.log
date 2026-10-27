@@ -1,0 +1,59 @@
+{"attempt": "KSC2_L017", "exit_status": 1, "wall_seconds": 2.7149891680455767, "peak_rss_kib": "2633680", "swaps": "0", "print_axioms": ["'KSC2.fold_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'KSC2.mutable_fold_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'KSC2.fold_body_eq' depends on axioms: [propext, Quot.sound]", "'KSC2.fold_step0' depends on axioms: [propext, Quot.sound]", "'KSC2.fold_step1' depends on axioms: [propext, Quot.sound]", "'KSC2.fold_step2' depends on axioms: [propext, Quot.sound]", "'KSC2.fold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]", "'KSC2.mutable_fold_loses_writeback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+KSC2_generated/KSC2_MutFold.lean:50:2: error: Tactic `rfl` failed: The left-hand side
+  match (acc, state, c) with
+  | (acc, state, closureState) => do
+    let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+    match item with
+      | none => ok (done (acc, stateNext, closureState))
+      | some value => do
+        let (accNext, closureNext) ← mutatingFoldValue.call_mut closureState (acc, value)
+        ok (cont (accNext, stateNext, closureNext))
+is not definitionally equal to the right-hand side
+  foldStep (acc, state, c)
+
+case e_body
+a : ℕ
+s : core.slice.iter.IterMut ℕ
+acc : ℕ
+state : core.slice.iter.IterMut ℕ
+c : Unit
+⊢ (match (acc, state, c) with
+    | (acc, state, clo
+...
+KSC2_generated/KSC2_MutFold.lean:50:2: error: Tactic `rfl` failed: The left-hand side
+  match (acc, state, c) with
+  | (acc, state, closureState) => do
+    let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+    match item with
+      | none => ok (done (acc, stateNext, closureState))
+      | some value => do
+        let (accNext, closureNext) ← mutatingFoldValue.call_mut closureState (acc, value)
+        ok (cont (accNext, stateNext, closureNext))
+is not definitionally equal to the right-hand side
+  foldStep (acc, state, c)
+
+case e_body
+a : ℕ
+s : core.slice.iter.IterMut ℕ
+acc : ℕ
+state : core.slice.iter.IterMut ℕ
+c : Unit
+⊢ (match (acc, state, c) with
+    | (acc, state, closureState) => do
+      let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+      match item with
+        | none => ok (done (acc, stateNext, closureState))
+        | some value => do
+          let (accNext, closureNext) ← mutatingFoldValue.call_mut closureState (acc, value)
+          ok (cont (accNext, stateNext, closureNext))) =
+    foldStep (acc, state, c)
+'KSC2.fold_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'KSC2.mutable_fold_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'KSC2.fold_body_eq' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step0' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step1' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step2' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KSC2.mutable_fold_loses_writeback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rbdf06a15d265459280b2596be5627d62.scope; invocation ID: c61af2bad254476c99744381aa9c2e7c

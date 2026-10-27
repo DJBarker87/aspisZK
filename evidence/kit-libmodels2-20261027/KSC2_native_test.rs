@@ -72,4 +72,67 @@ use std::panic::{catch_unwind, AssertUnwindSafe};
  let mut s=[1,2];let r:&mut [i32;2]=s.as_mut_slice().try_into().unwrap();r[1]=9;assert_eq!(s,[1,9]);
  println!("from_fn ascending state/empty/panic; slice-array length match/mismatch/empty/mut restore (cross-split controls)");
 }
+#[test] fn additional_branches() {
+ let mut a:[i32;0]=[];
+ assert!(!a.iter_mut().any(|_|panic!("empty any")));
+ assert!(a.iter_mut().all(|_|panic!("empty all")));
+ assert_eq!(a.iter_mut().fold(17,|_,_|panic!("empty fold")),17);
+ let mut a=[1,2]; assert!(!a.iter_mut().any(|x|{*x+=10;false})); assert_eq!(a,[11,12]);
+ let mut a=[1,2]; assert!(a.iter_mut().all(|x|{*x+=10;true})); assert_eq!(a,[11,12]);
+ let mut i=[1,2,3].iter();assert!(!i.all(|x|*x!=2));assert_eq!(i.copied().collect::<Vec<_>>(),[3]);
+ let mut i=[1,2,3].iter();assert!(!i.any(|x|*x>10));assert!(i.next().is_none());
+ assert!(catch_unwind(||{[1,2].iter().all(|_|panic!("expected all panic"));}).is_err());
+ assert!(catch_unwind(||{[1,2].windows(1).all(|_|panic!("expected windows panic"));}).is_err());
+ assert!(catch_unwind(||{[1,2].chunks_exact(1).any(|_|panic!("expected chunks panic"));}).is_err());
+ for which in 0..3 {
+  let mut a=[1,2];
+  assert!(catch_unwind(AssertUnwindSafe(|| {
+   match which {
+    0=>{a.iter_mut().any(|x|{*x=9;panic!("expected mut any panic")});},
+    1=>{a.iter_mut().all(|x|{*x=9;panic!("expected mut all panic")});},
+    _=>{a.iter_mut().fold(0,|_,x|{*x=9;panic!("expected mut fold panic")});}
+   }
+  })).is_err());assert_eq!(a,[9,2]);
+ }
+ let mut consumed=Vec::new();
+ let result=(0..4).map(|x|{consumed.push(x);if x==2 {Err(x)} else {Ok(x)}}).collect::<Result<Vec<_>,_>>();
+ assert_eq!(result,Err(2));assert_eq!(consumed,[0,1,2]);
+ assert!(catch_unwind(||{let _=(0..3).map(|_|panic!("expected map collect panic")).collect::<Vec<i32>>();}).is_err());
+ println!("additional branches: empty/exhaustive mutable any/all/fold; shared early stop; callback panic retains prefix writes; Result collect stops on Err");
+}
+
+#[test] fn finite_small_domain() {
+ let mut cases=0;
+ for n in 0..=4u32 {
+  for code in 0..3u32.pow(n) {
+   let mut q=code;
+   let original=(0..n).map(|_|{let x=(q%3) as i32;q/=3;x}).collect::<Vec<_>>();
+   for stop in 0..=3i32 {
+    let mut a=original.clone();let b=a.iter_mut().any(|x|{let old=*x;*x+=10;old==stop});
+    let mut expected=original.clone();let mut eb=false;
+    for x in &mut expected {let old=*x;*x+=10;if old==stop {eb=true;break;}}
+    assert_eq!((b,a),(eb,expected));
+    let mut a=original.clone();let b=a.iter_mut().all(|x|{let old=*x;*x+=10;old!=stop});
+    let mut expected=original.clone();let mut eb=true;
+    for x in &mut expected {let old=*x;*x+=10;if old==stop {eb=false;break;}}
+    assert_eq!((b,a),(eb,expected));
+   }
+   let mut a=original.clone();let total=a.iter_mut().fold(0,|sum,x|{*x+=10;sum+*x});
+   let expected=original.iter().map(|x|x+10).collect::<Vec<_>>();
+   assert_eq!(total,expected.iter().sum::<i32>());assert_eq!(a,expected);
+   for front in 0..=n {
+    let mut a=original.clone();let mut it=a.iter_mut();
+    for _ in 0..front {let _=it.next();}
+    for expected in original[front as usize..].iter().rev() {
+     assert_eq!(it.next_back().map(|x|*x),Some(*expected));
+    }
+    assert_eq!(it.next_back().map(|x|*x),None);
+   }
+   cases+=1;
+  }
+ }
+ assert_eq!(cases,121);
+ println!("121 finite list fixtures, all 4 stop values, mutable any/all/fold poststate, every front-cursor/back-exhaustion combination; fixture coverage only");
+}
+
 }

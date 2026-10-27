@@ -1,0 +1,49 @@
+KSC2_generated/KSC2_MutFold.lean:23:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  loop ?body ?x
+in the target expression
+  (match ok (cont (11, { slice := two, i := 1 }, ())) with
+    | ok r =>
+      match r with
+      | cont x => loop foldStep x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (23, { slice := two, i := 2 }, ())
+
+⊢ (match ok (cont (11, { slice := two, i := 1 }, ())) with
+    | ok r =>
+      match r with
+      | cont x => loop foldStep x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (23, { slice := two, i := 2 }, ())
+KSC2_generated/KSC2_MutFold.lean:30:2: error: 'change' tactic failed, pattern
+  (do
+      let r ← loop foldStep (0, { slice := two }, ())
+      ok (r.1, ↑r.2.1.slice)) =
+    ?m.34
+is not definitionally equal to target
+  (do
+      let (n, s) ←
+        do
+          let result ←
+            loop
+                (fun x =>
+                  match x with
+                  | (acc, state, closureState) => do
+                    let (item, stateNext, _) ← core.slice.iter.IteratorIterMut.next state
+                    match item with
+                      | none => ok (done (acc, stateNext, closureState))
+                      | some value => do
+                        let (accNext, closureNext) ← mutatingFoldValue.call_mut closureState (acc, value)
+                        ok (cont (accNext, stateNext, closureNext)))
+                (0, { slice := two }, ())
+          ok (result.1, result.2.1)
+      ok (n, ↑s.slice)) =
+    ok (23, [1, 2])
+'KSC2.fold_step0' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step1' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_step2' depends on axioms: [propext, Quot.sound]
+'KSC2.fold_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'KSC2.mutable_fold_loses_writeback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
