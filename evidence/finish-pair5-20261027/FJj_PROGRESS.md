@@ -28,3 +28,12 @@ replaced by proof-aware simplification in 005). HighReference008: exit0,
 10.201602693s,5490064KiB peakRSS,swap0; standard axioms only.
 FJj_ScaleModel.value now composes the inherited ScaleSum with LowSum on each
 actual constructor digit and powers array. No top-level premise removed.
+
+Stage 3: FJj_Part1Meaning.value compiled in attempt010 (exit0,
+3.901994721s,5509736KiB RSS,swap0; standard axioms only). The checked native
+part1 on the actual final parts array equals the literal tensorPoint model
+with SAME semantic alpha, parsed message and actual alpha0/alpha1 reads.
+Inherited final part0 arithmetic remains on THAT array. This is the requested
+local part1 meaning, conditional on the explicitly stated enclosing inputs;
+no deployed L142 premise removal is claimed. No obstruction70 is due because
+part1 compiled at10. Next deliverable: successor part2 stages1–6.
