@@ -10853,3 +10853,22 @@ extracted third-party source at the pinned dependency revision, published throug
 Housekeeping: the merged pv-l2-sim worktree and branch were removed; pv-l1 and pv-l3 are candidate
 siblings and stay. Six slots: rw21, cb6, cb7, runjoin10, cblib, srcid7. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D242 (Stream B) 2026-10-27 02:45 UTC: runjoin10 exhausted; the shared obstruction named (no concrete selected record of the deployed caller yet); runjoin11 launched on it alone
+
+pv-runjoin10 (`codex/pv-runjoin-20261026`, head 623a1d3be6; 100/100 Lean = 99 accepted / 1 corrected
+rejection, 6/6 Kani passed, root cells 19/21; three focused trust audits standard axioms, swap 0; no
+forbidden tokens; crates/ change = 24 more cfg(kani)-only lines in the existing child module). Proved:
+packed-record public preservation, conditional admission bridges, compiler-payload uniqueness; the 25
+originally missing F5/multiproof objects restored (0 left; 11 further L2 objects missing). Constructed
+P stays {source public binding, trace}; deployed P OPEN; T unchanged; record 2 → 2 / 8 → 8 / 6 → 6; P ∧ T
+non-vacuity OPEN. Endpoint premises removed: 0. Lead assessment (AGENTS.md §7): runjoin8-10, srcid5-6 and
+the join rounds all stop at the same missing interface: nobody has exhibited the ACTUAL selected record
+of the deployed proof-account caller (D162) as a concrete Lean term together with its compiler-return
+equation and public-transition association; everything downstream (deployed public binding, runtime
+installation, non-vacuity, V163's model instance, srcid's admission/row_call) is conditional on it.
+Launched pv-runjoin11 (same branch, IDs 40300-40599, 100 Lean / 4 Kani) with that single deliverable per
+fixture (transfer, then withdrawal), from the pinned fixture bytes and PV_Src_CanonicalTransferRecord; any
+genuine missing fact is to be stated as one exact proposition with its shipped location rather than
+bridged around. Six slots: rw21, cb6, cb7, cblib, srcid7, runjoin11. Rows removed outright: 0. Privacy
+target not yet established.
