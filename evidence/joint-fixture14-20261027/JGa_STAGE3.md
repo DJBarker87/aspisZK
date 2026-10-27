@@ -1,0 +1,7 @@
+# Stage 3: actual semantic and copy calls joined on one real-byte witness
+
+JGa_CopyFixture.inhabited (099) preserves the complete JGa_Fixture existential tuple and appends native selected h1 read at point0/column26, evaluate_with_selectors success on THAT a/h1/selectors and the retained native lambda/chi and append index, plus canonical residual/activity. JGa_Copy.source (096) derives all actual 14-pattern,136-link,64-block activity and residual calls, without a source-success premise. JGa_Equality.source (097) derives actual equality_value success/canonicality and the existing exact value interpretation.
+
+099 exit0;wall10.35106120799901s;reported peakRSS6371648KiB;swap0;revision e48cdd6933 (dirty source, exact hash in receipt);axioms [propext,Classical.choice,Quot.sound]. 098 rejected only for an extra tactic after step closed its goal; the changed final terminal-arithmetic candidate is reserved for100 along with the final audits. It is conditional on an explicit SAME composition return; it does not claim actual terminal acceptance.
+
+Actual deployed Rc7/Rc10 statements and all counts remain unchanged (zero removed/added/changed). No vacuity finding. No accepted wrapper or complete preparation/deployment fixture is established. FJa source facts inspected from immutable research blobs and matched coherent-host sources; FJb_LeadingOnRun is still absent from research and is not imported from its live worker. No shipped source, model, trust item, key or ELF change.

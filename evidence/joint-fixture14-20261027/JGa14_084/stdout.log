@@ -1,0 +1,35 @@
+'AspisR1.JGa_LinkWeightBits.keep' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGa_LinkWeightBits.lean:30:2: error: 'change' tactic failed, pattern
+  (do
+      let i ← index >>> l.weight_level
+      1#u32 - JGa_WeightShift.bit i) =
+    ok w
+is not definitionally equal to target
+  (match 3#u8 with
+    | 0#8#uscalar => ok field.M31.ONE
+    | 1#8#uscalar => do
+      let b ←
+        PoolV1PairForestCompiledVariantV1.Insts.CoreCmpPartialEqPoolV1PairForestCompiledVariantV1.eq v
+            PoolV1PairForestCompiledVariantV1.PrivateTransfer
+      let i ← lift (core.convert.num.FromU32Bool.from b)
+      ok i
+    | 2#8#uscalar => do
+      let b ←
+        PoolV1PairForestCompiledVariantV1.Insts.CoreCmpPartialEqPoolV1PairForestCompiledVariantV1.eq v
+            PoolV1PairForestCompiledVariantV1.Withdrawal
+      let i ← lift (core.convert.num.FromU32Bool.from b)
+      ok i
+    | 3#8#uscalar => do
+      let i ← index >>> l.weight_level
+      let i1 ← lift (i &&& 1#u64)
+      let i2 ← lift (UScalar.cast UScalarTy.U32 i1)
+      let i3 ← 1#u32 - i2
+      ok i3
+    | 4#8#uscalar => do
+      let i ← index >>> l.weight_level
+      let i1 ← lift (i &&& 1#u64)
+      let i2 ← lift (UScalar.cast UScalarTy.U32 i1)
+      ok i2
+    | x => fail Error.panic) =
+    ok w
+'AspisR1.JGa_LinkWeightBits.complement' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
