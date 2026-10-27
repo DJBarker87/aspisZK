@@ -21,3 +21,7 @@ The op117 LLBC locates the remaining precise Drop blocks in the call_once wrappe
 ## Separate-traversal successor cb48c33fce
 
 The external-root117 emission omitted the root, and including the actual source file locally exposed Not_found in pinned loop collapse. Three original traversals are now explicit owned-array helper functions: selected coefficient scatter, mask-only scatter, and descending prepared Horner. No scalar operation, order, bound, input or panic condition changes. Native fixture/shape equality passes. All three mask-split-elf-01 pins match. mask-split-projection.json replaces only changed117 measurements;121 is unchanged. Cumulative transfer1.6427621%, withdrawal1.6466711%, below2%. Source/copy/row equality is still open.
+
+## Fixed-domain expansion successor26ce27b295
+
+The helper split still fails pinned loop collapse. The same16 selected scatter writes,10 mask-only writes and26 descending Horner steps are now explicitly expanded at their fixed declared dimensions; all inputs remain arbitrary. No arithmetic operation is regrouped, skipped or normalized. All mask-expanded-elf-01 pins match. Native fixture/point-shape comparisons and the D234 noncanonical original/copy comparison pass; mask-expanded-projection.json replaces only117 deltas and retains unchanged121 evidence. Transfer1.6365500%, withdrawal1.6420333%, below2%.

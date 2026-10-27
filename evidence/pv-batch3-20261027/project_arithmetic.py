@@ -17,5 +17,5 @@ for r in old['projections']:
  r['percent']=100*r['cumulative_delta_us']/14380000;r['within_two_percent']=r['percent']<=2
  rows.append(r)
 report=dict(source_revision=(D/'revision').read_text().strip(),measurements=measurements,fixtures=rows,all_pass=all(r['within_two_percent'] for r in rows),unchanged_measurements='retain prior per-op measurements, including121')
-(D/'mask-split-projection.json').write_text(json.dumps(report,indent=2)+'\n')
+(D/(sys.argv[2] if len(sys.argv)>2 else 'mask-split-projection.json')).write_text(json.dumps(report,indent=2)+'\n')
 print([(r['fixture'],r['percent']) for r in rows]);sys.exit(0 if report['all_pass'] else 2)
