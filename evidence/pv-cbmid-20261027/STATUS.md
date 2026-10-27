@@ -24,4 +24,21 @@ all inspected source/manifests in the three reused crates. No sibling directory
 is edited. The own wrapper is cfg(kani); it imports hash-checked source read-only.
 
 Next: independent P6 inventory references and exact equality harnesses; focused
-op79 extraction with a narrower dependency graph. Lean budget 0/100, Kani 0/10.
+op79 extraction with a narrower dependency graph. Lean budget 1/100, Kani 1/10.
+
+40600 compiled InventoryShape: three prerequisite classification theorems,
+all axioms [propext]. This is a model prerequisite, not a callback/source law.
+The complete mask native gate timed out at 180s, exit124; no verdict or
+counterexample. No unchanged retry or raised cap is authorized.
+Op79 built MIR also extracted but Aeneas rejected the same explicit graph
+features (aeneas-op79-001).
+
+The owned mask reference extraction succeeded (aeneas-op134ref-001), including
+the concrete error carrier and all 64 values. Its selected-reference theorem
+is explicitly named `op134_reference`; it is not `op134_source`, and is not
+credited as V230 closure. Bundle stable name: PV_CBM_CallbackBundle.
+
+Admission ID40601 refused (projected 60,532,195,328 bytes > 55 GiB limit);
+zero compiler charge. Wait 180 seconds, then use the next unused ID. Earlier
+op79 upload admission hit a vanished unrelated session cgroup, retained in
+admission-state.json; special transient wait was 30 seconds and retry succeeded.

@@ -1,0 +1,21 @@
+import R1Z.PV_CBM_MasksReference
+import R1Z.ProverRwFullExternalFuns
+open Aeneas Aeneas.Std Result ProverRwFull
+namespace R1Z.PV_CBM_MasksSelection
+set_option autoImplicit false
+
+/-- Concrete error carrier produced by the owned reference extraction. -/
+@[reducible] def Types (base : ExternalTypes) : ExternalTypes :=
+  {base with op8 := PV_CBM_ReferenceRaw.aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1}
+
+/-- Reference selection only. Shipped/reference P6 equality is still open. -/
+@[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
+    @ExternalFuns (Types base) :=
+  {ops with op134 := PV_CBM_ReferenceRaw.reference.masks}
+
+theorem op134_reference (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
+    @ExternalFuns.op134 (Types base) (selected base ops) =
+      PV_CBM_ReferenceRaw.reference.masks := rfl
+
+#print axioms op134_reference
+end R1Z.PV_CBM_MasksSelection

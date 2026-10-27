@@ -19,9 +19,12 @@ assert len(links)==136
 rows=sorted({r for a,b in links for r in [a,b]});assert len(rows)==214
 masks=[0]*64
 for r in rows:masks[r//16] |= 1<<(r%16)
-s='//! Fixed owned P6 reference. Independent native comparison required.\n'
-s+='pub fn masks()->Result<[u16;64],aspis_statement::pool_v1::pair_tree_hiding::PoolV1PairHidingLayoutErrorV1>{\n Ok(['+','.join(map(str,masks))+'])\n}\n'
-p=root/'tools/pv-cb3-20261026/resume6_mask_reference.rs';p.write_text(s)
-e=root/'evidence/pv-cb3-20261026/RESUME6_MASK_CANDIDATE.json'
-e.write_text(json.dumps(dict(status='candidate only; native association required',links=links,active_rows=rows,masks=masks,reference_sha256=hashlib.sha256(s.encode()).hexdigest()),indent=2)+'\n')
-print('mask candidate',len(links),len(rows),masks)
+# These literals are candidates until the complete Kani equations pass.
+s='//! Owned P6 candidates. No shipped/reference association asserted here.\n'
+s+='use aspis_statement::pool_v1::pair_tree_hiding::PoolV1PairHidingLayoutErrorV1 as Error;\n'
+s+='pub fn masks()->Result<[u16;64],Error>{Ok(['+','.join(map(str,masks))+'])}\n'
+s+='pub fn rows()->Result<alloc::vec::Vec<u16>,Error>{\nlet data=['+','.join(map(str,rows))+'];\nlet mut out=alloc::vec::Vec::new();let mut i=0;while i<214 {out.push(data[i]);i+=1;}Ok(out)\n}\n'
+p=root/'tools/pv-cbmid-20261027/reference.rs';p.write_text(s)
+e=root/'evidence/pv-cbmid-20261027/REFERENCE-CANDIDATE.json'
+e.write_text(json.dumps(dict(status='candidate only; independent complete native association required',links=links,active_rows=rows,masks=masks,reference_sha256=hashlib.sha256(s.encode()).hexdigest()),indent=2)+'\n')
+print('candidate',len(links),len(rows))

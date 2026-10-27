@@ -1,0 +1,70 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_PROFILE_DEV_DEBUG_ASSERTIONS=false",
+    "CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false",
+    "RUSTFLAGS=--cfg kani",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cbmid-20261027/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cbmid-20261027/source-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "checks::masks_complete",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "e1dd399a78a6fb35c28e512a1058681018cf4a55",
+  "expected_phase": "Aeneas translation",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A extraction; no Lean theorem yet",
+  "exit": 124,
+  "wall": [
+    "3:00.00"
+  ],
+  "peak_rss_kib": [
+    "15464"
+  ],
+  "swap": [
+    "0"
+  ],
+  "source_snapshots": {
+    "lib.rs": {
+      "sha256": "f1d66048ad70bc4f35b2b959aebe9fc16f8af05335d489579d67d4ecc87b45c0",
+      "size": 1221
+    },
+    "Cargo.toml": {
+      "sha256": "96c2794125981b277beadf023ac45f540d270c51801ea35b6f474c8e946939a2",
+      "size": 383
+    },
+    "reference.rs": {
+      "sha256": "d6c1b2517934815e26e2fe2e1055c3aa446e3107398e8cc60073fc2cc830d7d1",
+      "size": 1540
+    }
+  },
+  "snapshot_timing": "Captured after run, before next upload; same host source files retained through these three runs."
+}
