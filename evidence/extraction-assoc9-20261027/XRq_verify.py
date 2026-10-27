@@ -8,11 +8,15 @@ for p in sorted(E.glob('XRq_L*/receipt.json')):
  # The barrier log and launch receipt retain exit0 + allowed:true admission.
  if not r['sources'] or '-M7000' not in r['command']:errors.append(a+' scope command')
  if str(r['swaps'])!='0':errors.append(a+' swaps')
+ if r['limits'] != {'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}:errors.append(a+' limits')
  for src,sha in r['source_hashes'].items():
   f=p.parent/'sources'/src
   if not f.exists() or hashlib.sha256(f.read_bytes()).hexdigest()!=sha:errors.append(a+' source snapshot')
  if r['exit_status']==0:
-  if any('sorryAx' in line for line in r['print_axioms']):errors.append(a+' nonstandard axioms')
+  for line in r['print_axioms']:
+   for group in re.findall(r'\[(.*?)\]',line,re.S):
+    names={n.strip() for n in group.split(',') if n.strip()}
+    if not names <= {'propext','Classical.choice','Quot.sound'}:errors.append(a+' nonstandard axioms '+str(names))
   latest[r['module']]=(a,r)
  rows.append(r)
 assert len(rows)<=100
