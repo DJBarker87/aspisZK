@@ -253,3 +253,12 @@ Rust. No shipped-Rust defect is claimed; the deployed code computes the
 documented digits. What is missing is the correspondence D188 was meant to
 supply for this function. The release target and contract are unchanged. The
 repair route is an owner decision (D188-FIDELITY-DECISION-20261027.md).
+
+D188-P3 suspension scope, widened 2026-10-27 15:40 UTC, aligned with Stream B
+ruling (n): D188 credit is suspended for ANY translated body that writes
+through a mutable borrow obtained from an iterator or element accessor. It
+returns only when that body passes both a static scan for the
+dropped-restoration pattern and a native differential on inputs where the
+write matters. Audits: Stream A SDY_ (the four named functions plus a
+whole-Funs pattern grep) and Stream B pv-d188 (every Stream B emission). A body
+flagged by either audit is suspended for both streams.
