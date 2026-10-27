@@ -1,0 +1,36 @@
+FJm_LibraBodyCanonical.lean:20:68: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ↑cursorOut.start = ↑iter.start + 1 ∧ ↑iter.start
+FJm_LibraBodyCanonical.lean:20:84: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+FJm_LibraBodyCanonical.lean:22:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+ap0 ap1 : Weights
+extra : Std.Array NQ 2#usize
+iter cursorOut : FIo_RangeNext.Range
+weights out : Weights
+he : ↑iter.end = 2
+cp0 : FIo_ArrayCanon.Holds ap0
+cp1 : FIo_ArrayCanon.Holds ap1
+ce : ∀ q ∈ ↑extra, FIo_QMValues.Canon q
+cw : FIo_ArrayCanon.Holds weights
+run : FIo_Native.weights.factored_s2_libra_weights_loop.body ap0 ap1 extra iter weights = ok (cont (cursorOut, out))
+x✝ :
+  ∃ side cursor base high q4 q16 low i0 i1 i2 i3 t0 t1 t2 t3 first2 first3 all,
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some side, cursor) ∧
+      FJm_LibraStages.powers extra side = ok (base, high, q4, q16) ∧
+        FIo_Native.weights.Weights.scalar_factor base ap0 = ok low ∧
+          FJm_LibraStages.term ap1 high 0#usize = ok (i0, t0) ∧
+            FJm_LibraStages.term ap1 high 1#usize = ok (i1, t1) ∧
+              FJm_LibraStages.term ap1 high 2#usize = ok (i2, t2) ∧
+                FJm_LibraStages.term ap1 high 3#usize = ok (i3, t3) ∧
+                  FJm_LibraStages.totals (Array.make 4#usize [t0, t1, t2, t3] ⋯) = ok (first2, first3, all) ∧
+                    FJm_LibraStages.finish side low i3 first2 first3 all q4 q16 ap1 weights cursor =
+                      ok (cont (cursorOut, out))
+⊢ PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+FJm_LibraBodyCanonical.lean:57:14: error(lean.unknownIdentifier): Unknown constant `value`

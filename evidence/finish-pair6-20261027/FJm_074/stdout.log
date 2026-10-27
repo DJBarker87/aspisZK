@@ -1,0 +1,552 @@
+FJm_LibraPowerValues.lean:62:39: error: Tactic `assumption` failed
+
+case refl.refine_1.inr.inl
+extra : Std.Array NQ 2#usize
+side : Usize
+hc : ∀ q ∈ ↑extra, FIo_QMValues.Canon q
+q4 q16 q : NQ
+hq : extra.index_usize side = ok q
+q2 q3 : FIo_Native.aspis_core.field.QM31
+hq3 : q2.mul q = ok q3
+ignored : FIo_Native.aspis_core.field.QM31
+hignored : q3.mul q = ok ignored
+read2 eight twelve : FIo_Native.aspis_core.field.QM31
+sameRead : read2 = q2
+cq : FIo_QMValues.Canon q
+one : FIo_Native.aspis_core.field.QM31.ONE = FIo_Install.toQ FIn_WeightsExtract.field.QM31.ONE
+cOne : FIo_QMValues.Canon FIo_Native.aspis_core.field.QM31.ONE
+vOne : decodeQM (qm FIo_Native.aspis_core.field.QM31.ONE) = 1
+v3 : FIo_QMValues.Canon q3 ∧ decodeQM (qm q3) = decodeQM (qm q2) * decodeQM (qm q)
+p2 : decodeQM (qm q2) = decodeQM (qm q) ^ 2
+p3 : decodeQM (qm q3) = decodeQM (qm q) ^ 3
+p8 : decodeQM (qm eight) = decodeQM (qm q) ^ 8
+p12 : decodeQM (qm twelve) = decodeQM (qm q) ^ 12
+hfour : q2.square = ok q4
+height : FIo_Native.aspis_core.field.QM31.square q4 = ok eight
+htwelve : eight.mul q4 = ok twelve
+v4 : FIo_QMValues.Canon q4 ∧ decodeQM (qm q4) = decodeQM (qm q2) * decodeQM (qm q2)
+v8 : FIo_QMValues.Canon eight ∧ decodeQM (qm eight) = decodeQM (qm q4) * decodeQM (qm q4)
+v12 : FIo_QMValues.Canon twelve ∧ decodeQM (qm twelve) = decodeQM (qm eight) * decodeQM (qm q4)
+p4 : decodeQM (qm q4) = decodeQM (qm q) ^ 4
+hsixteen : eight.square = ok q16
+v16 : FIo_QMValues.Canon q16 ∧ decodeQM (qm q16) = decodeQM (qm eight) * decodeQM (qm eight)
+p16 : decodeQM (qm q16) = decodeQM (qm q) ^ 16
+x : NQ
+hq1 : FIo_Native.aspis_core.field.QM31.ONE.mul q = ok x
+hq2 : FIo_Native.aspis_core.field.QM31.mul x q = ok q2
+hread2 : (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯).index_usize 2#usize = ok read2
+v1 : FIo_QMValues.Canon x ∧ decodeQM (qm x) = decodeQM (qm FIo_Native.aspis_core.field.QM31.ONE) * decodeQM (qm q)
+v2 : FIo_QMValues.Canon q2 ∧ decodeQM (qm q2) = decodeQM (qm x) * decodeQM (qm q)
+p1 : decodeQM (qm x) = decodeQM (qm q)
+run✝⁹ :
+  (do
+      let q ← extra.index_usize side
+      let q1 ← FIo_Native.aspis_core.field.QM31.ONE.mul q
+      let q2 ← q1.mul q
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁸ :
+  (do
+      let q1 ← FIo_Native.aspis_core.field.QM31.ONE.mul q
+      let q2 ← q1.mul q
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁷ :
+  (do
+      let q2 ← FIo_Native.aspis_core.field.QM31.mul x q
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁶ :
+  (do
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁵ :
+  (do
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁴ :
+  (do
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝³ :
+  (do
+      let q41 ← read2.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝² :
+  (do
+      let q8 ← FIo_Native.aspis_core.field.QM31.square q4
+      let q12 ← q8.mul q4
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, q8, q12] ⋯, q4, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝¹ :
+  (do
+      let q12 ← eight.mul q4
+      let q16 ← eight.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, q12] ⋯, q4, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝ :
+  (do
+      let q16 ← eight.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run :
+  ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, x, q2, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+⊢ FIo_QMValues.Canon x
+FJm_LibraPowerValues.lean:62:39: error: Tactic `assumption` failed
+
+case refl.refine_1.inr.inr.inl
+extra : Std.Array NQ 2#usize
+side : Usize
+hc : ∀ q ∈ ↑extra, FIo_QMValues.Canon q
+q4 q16 q : NQ
+hq : extra.index_usize side = ok q
+q1 : FIo_Native.aspis_core.field.QM31
+hq1 : FIo_Native.aspis_core.field.QM31.ONE.mul q = ok q1
+q3 ignored : FIo_Native.aspis_core.field.QM31
+hignored : q3.mul q = ok ignored
+read2 eight twelve : FIo_Native.aspis_core.field.QM31
+cq : FIo_QMValues.Canon q
+one : FIo_Native.aspis_core.field.QM31.ONE = FIo_Install.toQ FIn_WeightsExtract.field.QM31.ONE
+cOne : FIo_QMValues.Canon FIo_Native.aspis_core.field.QM31.ONE
+vOne : decodeQM (qm FIo_Native.aspis_core.field.QM31.ONE) = 1
+v1 : FIo_QMValues.Canon q1 ∧ decodeQM (qm q1) = decodeQM (qm FIo_Native.aspis_core.field.QM31.ONE) * decodeQM (qm q)
+p1 : decodeQM (qm q1) = decodeQM (qm q)
+p3 : decodeQM (qm q3) = decodeQM (qm q) ^ 3
+p8 : decodeQM (qm eight) = decodeQM (qm q) ^ 8
+p12 : decodeQM (qm twelve) = decodeQM (qm q) ^ 12
+height : FIo_Native.aspis_core.field.QM31.square q4 = ok eight
+htwelve : eight.mul q4 = ok twelve
+v8 : FIo_QMValues.Canon eight ∧ decodeQM (qm eight) = decodeQM (qm q4) * decodeQM (qm q4)
+v12 : FIo_QMValues.Canon twelve ∧ decodeQM (qm twelve) = decodeQM (qm eight) * decodeQM (qm q4)
+p4 : decodeQM (qm q4) = decodeQM (qm q) ^ 4
+hsixteen : eight.square = ok q16
+v16 : FIo_QMValues.Canon q16 ∧ decodeQM (qm q16) = decodeQM (qm eight) * decodeQM (qm eight)
+p16 : decodeQM (qm q16) = decodeQM (qm q) ^ 16
+x : NQ
+hq2 : q1.mul q = ok x
+hq3 : FIo_Native.aspis_core.field.QM31.mul x q = ok q3
+hread2 : (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯).index_usize 2#usize = ok read2
+sameRead : read2 = x
+v2 : FIo_QMValues.Canon x ∧ decodeQM (qm x) = decodeQM (qm q1) * decodeQM (qm q)
+v3 : FIo_QMValues.Canon q3 ∧ decodeQM (qm q3) = decodeQM (qm x) * decodeQM (qm q)
+p2 : decodeQM (qm x) = decodeQM (qm q) ^ 2
+hfour : FIo_Native.aspis_core.field.QM31.square x = ok q4
+v4 : FIo_QMValues.Canon q4 ∧ decodeQM (qm q4) = decodeQM (qm x) * decodeQM (qm x)
+run✝⁹ :
+  (do
+      let q ← extra.index_usize side
+      let q1 ← FIo_Native.aspis_core.field.QM31.ONE.mul q
+      let q2 ← q1.mul q
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁸ :
+  (do
+      let q1 ← FIo_Native.aspis_core.field.QM31.ONE.mul q
+      let q2 ← q1.mul q
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁷ :
+  (do
+      let q2 ← q1.mul q
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁶ :
+  (do
+      let q3 ← FIo_Native.aspis_core.field.QM31.mul x q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁵ :
+  (do
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁴ :
+  (do
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝³ :
+  (do
+      let q41 ← read2.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝² :
+  (do
+      let q8 ← FIo_Native.aspis_core.field.QM31.square q4
+      let q12 ← q8.mul q4
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, q8, q12] ⋯, q4, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝¹ :
+  (do
+      let q12 ← eight.mul q4
+      let q16 ← eight.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, q12] ⋯, q4, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝ :
+  (do
+      let q16 ← eight.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run :
+  ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, x, q3] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+⊢ FIo_QMValues.Canon x
+FJm_LibraPowerValues.lean:62:39: error: Tactic `assumption` failed
+
+case refl.refine_1.inr.inr.inr
+extra : Std.Array NQ 2#usize
+side : Usize
+hc : ∀ q ∈ ↑extra, FIo_QMValues.Canon q
+q4 q16 q : NQ
+hq : extra.index_usize side = ok q
+q1 : FIo_Native.aspis_core.field.QM31
+hq1 : FIo_Native.aspis_core.field.QM31.ONE.mul q = ok q1
+q2 : FIo_Native.aspis_core.field.QM31
+hq2 : q1.mul q = ok q2
+ignored read2 eight twelve : FIo_Native.aspis_core.field.QM31
+sameRead : read2 = q2
+cq : FIo_QMValues.Canon q
+one : FIo_Native.aspis_core.field.QM31.ONE = FIo_Install.toQ FIn_WeightsExtract.field.QM31.ONE
+cOne : FIo_QMValues.Canon FIo_Native.aspis_core.field.QM31.ONE
+vOne : decodeQM (qm FIo_Native.aspis_core.field.QM31.ONE) = 1
+v1 : FIo_QMValues.Canon q1 ∧ decodeQM (qm q1) = decodeQM (qm FIo_Native.aspis_core.field.QM31.ONE) * decodeQM (qm q)
+v2 : FIo_QMValues.Canon q2 ∧ decodeQM (qm q2) = decodeQM (qm q1) * decodeQM (qm q)
+p1 : decodeQM (qm q1) = decodeQM (qm q)
+p2 : decodeQM (qm q2) = decodeQM (qm q) ^ 2
+p8 : decodeQM (qm eight) = decodeQM (qm q) ^ 8
+p12 : decodeQM (qm twelve) = decodeQM (qm q) ^ 12
+hfour : q2.square = ok q4
+height : FIo_Native.aspis_core.field.QM31.square q4 = ok eight
+htwelve : eight.mul q4 = ok twelve
+v4 : FIo_QMValues.Canon q4 ∧ decodeQM (qm q4) = decodeQM (qm q2) * decodeQM (qm q2)
+v8 : FIo_QMValues.Canon eight ∧ decodeQM (qm eight) = decodeQM (qm q4) * decodeQM (qm q4)
+v12 : FIo_QMValues.Canon twelve ∧ decodeQM (qm twelve) = decodeQM (qm eight) * decodeQM (qm q4)
+p4 : decodeQM (qm q4) = decodeQM (qm q) ^ 4
+hsixteen : eight.square = ok q16
+v16 : FIo_QMValues.Canon q16 ∧ decodeQM (qm q16) = decodeQM (qm eight) * decodeQM (qm eight)
+p16 : decodeQM (qm q16) = decodeQM (qm q) ^ 16
+x : NQ
+hq3 : q2.mul q = ok x
+hignored : FIo_Native.aspis_core.field.QM31.mul x q = ok ignored
+hread2 : (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯).index_usize 2#usize = ok read2
+v3 : FIo_QMValues.Canon x ∧ decodeQM (qm x) = decodeQM (qm q2) * decodeQM (qm q)
+p3 : decodeQM (qm x) = decodeQM (qm q) ^ 3
+run✝⁹ :
+  (do
+      let q ← extra.index_usize side
+      let q1 ← FIo_Native.aspis_core.field.QM31.ONE.mul q
+      let q2 ← q1.mul q
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁸ :
+  (do
+      let q1 ← FIo_Native.aspis_core.field.QM31.ONE.mul q
+      let q2 ← q1.mul q
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁷ :
+  (do
+      let q2 ← q1.mul q
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁶ :
+  (do
+      let q3 ← q2.mul q
+      let _ ← q3.mul q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁵ :
+  (do
+      let _ ← FIo_Native.aspis_core.field.QM31.mul x q
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝⁴ :
+  (do
+      let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯).index_usize 2#usize
+      let q41 ← q4.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝³ :
+  (do
+      let q41 ← read2.square
+      let q8 ← q41.square
+      let q12 ← q8.mul q41
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q41, q8, q12] ⋯, q41, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝² :
+  (do
+      let q8 ← FIo_Native.aspis_core.field.QM31.square q4
+      let q12 ← q8.mul q4
+      let q16 ← q8.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, q8, q12] ⋯, q4, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝¹ :
+  (do
+      let q12 ← eight.mul q4
+      let q16 ← eight.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, q12] ⋯, q4, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run✝ :
+  (do
+      let q16 ← eight.square
+      ok
+          (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+            Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+run :
+  ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16) =
+    ok
+      (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, x] ⋯,
+        Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q4, eight, twelve] ⋯, q4, q16)
+⊢ FIo_QMValues.Canon x
+FJm_LibraPowerValues.lean:64:51: error(lean.unknownIdentifier): Unknown identifier `four`
+FJm_LibraPowerValues.lean:81:26: error(lean.unknownIdentifier): Unknown identifier `four`
+'AspisR1.FJm_LibraPowerValues.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
