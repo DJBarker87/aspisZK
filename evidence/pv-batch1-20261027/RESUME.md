@@ -13,3 +13,8 @@ No Lean attempt or env-J ID consumed. Shared env-J sources remain untouched.
 The existing extraction draft now selects prover_powers.rs for op254.
 Extraction and proof work are dependent on all three ELF pins passing.
 Target not yet established; all callback/endpoint obligations remain open.
+
+The first retry was sent at12:31:35 UTC, four seconds before the required
+12:31:39 deadline. It also refused before a scope started. This was a wait
+policy deviation; next retry is no earlier than12:34:35 UTC (three minutes
+after the fresh refusal). No compile ran and no cap was bypassed.
