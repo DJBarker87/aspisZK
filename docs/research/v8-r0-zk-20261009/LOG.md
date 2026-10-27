@@ -11683,3 +11683,26 @@ variants of at least four representative Drop refusals are ACCEPTED by the uncha
 the seven unmeasured ops, and to update the batch estimates with size and timing risk; no patch applied.
 Six slots: op223, cblib4, runjoin16, l2b, replay, route2b. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D281 (Stream B) 2026-10-27 12:20 UTC: private dry replay of the headline closure is coherent (672 modules, standard axioms); route (ii) batch 1 launched; a stale staged copy of Stream A's file removed from a worktree index
+
+pv-replay (`codex/pv-replay-20261027`, merged into research 0a77510ce6, branch deleted; no source change, no
+shared env-J writes; 179/600 private compiles including 41 retained loader failures and 2 diagnostic-helper
+failures; peak 4.31 GB, swap 0). The transitive closure of R1Z.PrivacyR1HeadlineDeployedReal on research
+(b90540e01c): 672 project modules, 537 reused and 135 compiled, NO project proof failure; the final audit
+covered 3,905 R1Z/PV theorems with axiom union {propext, Classical.choice, Quot.sound}. This is a dry
+coherence check: zero premises removed; RustRealRefinement, the V2 builder/caller/join premises and the
+deployment, side-channel, entropy and client-binding obligations remain. Incident (no harm): the reused
+pv-cb3 worktree's INDEX held an older revision of Stream A's design/C3-BIN-20261021.md (the staged diff
+deleted Stream A's 18-line 2026-10-27 addendum, which research contains), carried across `git switch`;
+the replay job left it untouched and it was never committed; the lead restored that path to HEAD in the
+worktree (no content lost). A batch-1 launch made seconds earlier, while the worktree was still on the
+replay branch, was stopped before any work and relaunched on the right branch. Rule for Stream B:
+before reusing a worktree, `git status --porcelain` must be empty, including staged paths. Launched
+pv-batch1 (`codex/pv-batch1-20261027` from the rebased candidate c57a344726, IDs 53600-53899, 100 Lean):
+route (ii) batch 1 for ops 230 (prover-local), 254 and 258 (in place in aspis-r1-cost-probe) from the
+measured patches, gate (a) ELF pins, extraction with the unchanged tool and the source laws, proofs that
+the backend shift ports cannot fail, op258's CT scan equal to the original verdict for every input, and
+the fixture-byte gate; op223 stays with pv-op223; differential and timing gates combined later. Six
+slots: op223, cblib4, runjoin16, l2b, route2b, batch1. Rows removed outright: 0. Privacy target not yet
+established.
