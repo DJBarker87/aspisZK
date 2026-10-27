@@ -2,12 +2,8 @@ from pathlib import Path
 P=Path(__file__).resolve().parent;R=P.parents[1]
 for t in range(3):
  ns=f'JGu_LeafIteration{t}'
- s=f'''import JGu_M{t}LeafSources00
-import JGu_M{t}LeafSources02
-import JGu_M{t}LeafSources04
-import JGu_M{t}LeafSources06
-import JGu_M{t}LeafSources08
-import JGu_Keys
+ imports=''.join(f'import JGu_M{t}LeafSources{j:02}\n' for j in (range(0,10,2) if t==0 else [0]))
+ s=imports+f'''import JGu_Keys
 import Port4B_KeyDecode
 set_option autoImplicit false
 noncomputable section

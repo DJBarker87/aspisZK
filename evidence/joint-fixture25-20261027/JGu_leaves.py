@@ -66,8 +66,8 @@ end
   files[R/'lean'/(name+'.lean')]=s
 paired={}
 for kind in range(3):
- for pos in range(0,10,2):
-  texts=[files[R/'lean'/f'JGu_M{kind}Leaf{k:02}.lean'] for k in range(pos,pos+2)]
+ for pos in range(0,10,2 if kind==0 else 10):
+  texts=[files[R/'lean'/f'JGu_M{kind}Leaf{k:02}.lean'] for k in range(pos,pos+(2 if kind==0 else 10))]
   imports=sorted({line for text in texts for line in text.splitlines() if line.startswith('import ')})
   paired[R/'lean'/f'JGu_M{kind}LeafSources{pos:02}.lean']='\n'.join(imports)+'\n'+''.join(text[text.index('set_option'):] for text in texts)
 files=paired
