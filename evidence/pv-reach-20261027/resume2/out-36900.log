@@ -1,0 +1,139 @@
+TYPE [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 →
+        ProverRwFull.transport.Variant →
+          (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+              Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+            ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets →
+              ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result
+                      (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwFull.prover.MaskedFixtureAudit)
+                      ProverRwFull.verifier.Error ×
+                    ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+VALUE fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] public1 compiled variant hash attempt nonce_store =>
+  do
+  let r ← public1.public_bytes
+  let r1 ←
+    ProverRwFull.core.result.Result.map_err
+        ProverRwFull.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+      let s := val.deref;
+      do
+      let s1 ← Aeneas.Std.lift (Aeneas.Std.Array.make 1#usize [s] ⋯).to_slice
+      let a ← hash s1
+      let a1 ← ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.impl.mask_nonce attempt
+      let context ← ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1 a a1
+      let s2 ←
+        Aeneas.Std.lift
+            (Aeneas.Std.Array.make 30#usize
+                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8, 51#u8,
+                  58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 65#u8, 84#u8, 84#u8, 69#u8, 77#u8,
+                  80#u8, 84#u8]
+                ProverRwFull.prover.prove_masked_attempt._proof_3).to_slice
+      let s3 : Aeneas.Std.Slice Aeneas.Std.U8 := val.deref
+      let i ← variant.tag
+      let s4 ← Aeneas.Std.lift (Aeneas.Std.Array.make 1#usize [i] ⋯).to_slice
+      let a2 ← context.encode
+      let s5 ← Aeneas.Std.lift a2.to_slice
+      let s6 ← Aeneas.Std.lift (Aeneas.Std.Array.make 4#usize [s2, s3, s4, s5] ⋯).to_slice
+      let binding ← hash s6
+      ProverRwFull.prover.prove_masked_with_attempt
+          ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+          public1 compiled variant hash context binding attempt nonce_store
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwFull.prover.MaskedFixtureAudit)
+            (Aeneas.Std.core.convert.FromSame ProverRwFull.verifier.Error) residual
+      Aeneas.Std.Result.ok (r2, nonce_store)
+TYPE [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    {T0 : Type} →
+      Aeneas.Std.core.ops.function.FnMut T0 Aeneas.Std.Usize
+          (Aeneas.Std.core.result.Result ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+            ProverRwFull.verifier.Error) →
+        ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 →
+            ProverRwFull.transport.Variant →
+              (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+                  Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+                ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore →
+                  T0 →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result ProverRwFull.prover.RetriedProof ProverRwFull.verifier.Error ×
+                          ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+VALUE fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {T0}
+    coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash =>
+  Order.fix
+    (fun f nonce_store next_attempt k =>
+      if k ≥ ProverRwFull.prover.ATTEMPT_CAP then
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.AttemptsExhausted, nonce_store)
+      else do
+        let (r, next_attempt1) ←
+          coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k
+        let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+            let (r1, nonce_store1) ←
+              ProverRwFull.prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+            match r1 with
+              | Aeneas.Std.core.result.Result.Ok p =>
+                let (proof, audit) := p
+                do
+                let i ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)
+              | Aeneas.Std.core.result.Result.Err e =>
+                match e with
+                | ProverRwFull.verifier.Error.Parse =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Parse, nonce_store1)
+                | ProverRwFull.verifier.Error.Semantic =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, nonce_store1)
+                | ProverRwFull.verifier.Error.Transcript =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Transcript, nonce_store1)
+                | ProverRwFull.verifier.Error.Relation =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Relation, nonce_store1)
+                | ProverRwFull.verifier.Error.Merkle =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Merkle, nonce_store1)
+                | ProverRwFull.verifier.Error.Query =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Query, nonce_store1)
+                | ProverRwFull.verifier.Error.Checkpoint =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Checkpoint, nonce_store1)
+                | ProverRwFull.verifier.Error.Allocation =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Allocation, nonce_store1)
+                | ProverRwFull.verifier.Error.Rejected => do
+                  let i ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                  f nonce_store1 next_attempt1 i
+                | ProverRwFull.verifier.Error.AttemptsExhausted =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.AttemptsExhausted, nonce_store1)
+                | ProverRwFull.verifier.Error.Entropy =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Entropy, nonce_store1)
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  ProverRwFull.prover.RetriedProof (Aeneas.Std.core.convert.FromSame ProverRwFull.verifier.Error)
+                  residual
+            Aeneas.Std.Result.ok (r1, nonce_store))
+    ⋯
+TYPE [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize →
+      Aeneas.Std.Usize → Aeneas.Std.Result (Option (Aeneas.Std.core.result.Result Unit ProverRwFull.r1_wire.Error))
+VALUE fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] column row =>
+  Aeneas.Std.loop (fun row1 => ProverRwFull.host_semantic.check_secure_column_loop.body column row1) row

@@ -1,0 +1,85 @@
+import R1Z.ProverRwFullFuns
+import Lean
+open Lean Meta Elab Command Term
+namespace R1Z.PV_RE_DictGenerator
+/-- Generated names refer to symbolic function congruences, never evaluated runs. -/
+def theoremName (n : Name) : Name := `R1Z.PV_RE_DictCore ++ n
+
+def dictionaryParam (n : Name) : MetaM Bool := do
+  let c ← getConstInfo n
+  match c.type with
+  | .forallE _ (.const `ProverRwFull.ExternalTypes _) b _ =>
+    match b with
+    | .forallE _ t _ _ => return t.getAppFn.constName? == some `ProverRwFull.ExternalFuns
+    | _ => return false
+  | _ => return false
+
+partial def supportFromType (t : Expr) : Array Name :=
+  match t with
+  | .forallE n _ b _ =>
+    let rest := supportFromType b
+    if n.toString.startsWith "op" then #[n] ++ rest else rest
+  | _ => #[]
+
+partial def withAgreements (ops : Array Name) (ty d1 d2 : Expr) (i : Nat)
+    (hs : Array Expr) (k : Array Expr → TermElabM Expr) : TermElabM Expr := do
+  if i < ops.size then
+    let op := Lean.mkConst (`ProverRwFull.ExternalFuns ++ ops[i]!)
+    let t ← mkEq (mkApp2 op ty d1) (mkApp2 op ty d2)
+    withLocalDeclD ops[i]! t fun h => withAgreements ops ty d1 d2 (i+1) (hs.push h) k
+  else k hs
+
+/-- Each step unfolds one named function and rewrites only its immediate
+callee congruences and callback equalities. Fixed points remain symbolic. -/
+partial def build (n : Name) : TermElabM (Array Name) := do
+  let tn := theoremName n
+  if (← getEnv).contains tn then
+    return supportFromType (← getConstInfo tn).type
+  let ci ← getConstInfo n
+  if n.getPrefix == `ProverRwFull.ExternalFuns then
+    return #[n.getString! |> Name.mkSimple]
+  let some value := ci.value? | throwError "opaque dictionary consumer {n}"
+  let mut children : Array (Name × Array Name) := #[]
+  let mut support : Array Name := #[]
+  for dep in value.getUsedConstants do
+    if dep != n && (← dictionaryParam dep) then
+      let ops ← build dep
+      children := children.push (dep, ops)
+      for op in ops do
+        if !support.contains op then support := support.push op
+  support := support.qsort (fun a b => a.toString < b.toString)
+  discard <| withLocalDeclD `types (Lean.mkConst `ProverRwFull.ExternalTypes) fun ty => do
+    let dt := mkApp (Lean.mkConst `ProverRwFull.ExternalFuns) ty
+    withLocalDeclD `D1 dt fun d1 => withLocalDeclD `D2 dt fun d2 => do
+      withAgreements support ty d1 d2 0 #[] fun hs => do
+        let mut terms : Array (TSyntax `term) := #[]
+        for (child, ops) in children do
+          if child.getPrefix == `ProverRwFull.ExternalFuns then
+            let idx := support.idxOf child.getString!.toName
+            terms := terms.push (← exprToSyntax hs[idx]!)
+          else
+            let args := #[ty,d1,d2] ++ ops.map (fun op => hs[support.idxOf op]!)
+            terms := terms.push (← exprToSyntax (mkAppN (Lean.mkConst (theoremName child)) args))
+        let lhs := mkApp2 (Lean.mkConst n) ty d1
+        let rhs := mkApp2 (Lean.mkConst n) ty d2
+        let goal ← mkEq lhs rhs
+        -- Delta of exactly this declaration; no recursive equation unfolding.
+        let lv := value.beta #[ty,d1]
+        let rv := value.beta #[ty,d2]
+        let expanded ← mkEq lv rv
+        let stx ← `(by simp only [$[$terms],*])
+        let proof ← elabTermEnsuringType stx expanded
+        synthesizeSyntheticMVarsNoPostponing
+        let proof ← instantiateMVars proof
+        let params := #[ty,d1,d2] ++ hs
+        let typ ← mkForallFVars params goal
+        let val ← mkLambdaFVars params proof
+        addDecl (Declaration.thmDecl ⟨⟨tn, ci.levelParams, typ⟩, val⟩)
+        logInfo m!"DICT_CONGR {n}: {support.toList}"
+        return Lean.mkConst ``True.intro
+  return support
+
+elab "pv_dict_congr " n:ident : command => do
+  liftTermElabM do
+    discard <| build n.getId
+end R1Z.PV_RE_DictGenerator
