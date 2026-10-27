@@ -549,6 +549,27 @@ mod pv_cblib_library_checks {
             _ => unreachable!(),
         }
     }
+
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn op33_single_word() {
+        let present:bool=kani::any();let good:bool=kani::any();
+        let seed:[u32;4]=kani::any();let secure:bool=kani::any();let filled:bool=kani::any();
+        let tag:u8=kani::any();kani::assume(tag<=16);
+        let mut v=Vec::new();let mut w=Vec::new();
+        if present {
+            v.push(if good {Ok(word(seed,secure,filled))} else {Err(error(tag))});
+            w.push(if good {Ok(word(seed,secure,filled))} else {Err(error(tag))});
+        }
+        let (b,w)=pop_owned_reference(&w);
+        let a=v.pop();let lane:usize=kani::any();
+        match (a,b) {
+            (None,None)=>(),
+            (Some(x),Some(y))=>same_result_at(&x,&y,lane),
+            _=>unreachable!(),
+        }
+        assert_eq!(v.len(),0);assert_eq!(w.len(),0);
+    }
 }
 
 #[cfg(kani)]
@@ -575,5 +596,28 @@ mod pv_cblib_resume_checks {
             _=>unreachable!(),
         }
         assert_eq!(v.len(),0);
+    }
+}
+
+#[cfg(kani)]
+mod pv_cblib_array_reject_checks {
+    use super::*;
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn op36_reject_small() {
+        let n:usize=kani::any();kani::assume(n<=2);
+        let mut v=Vec::new();
+        let mut w=Vec::new();
+        for _ in 0..n {
+            let limbs:[u32;4]=kani::any();
+            let q=QM31 {c0:aspis_core::field::CM31{a:M31(limbs[0]),b:M31(limbs[1])},
+                        c1:aspis_core::field::CM31{a:M31(limbs[2]),b:M31(limbs[3])}};
+            v.push(q);w.push(q);
+        }
+        let result:Result<[QM31;1024],Vec<QM31>>=v.try_into();
+        match result {
+            Ok(_)=>unreachable!(),
+            Err(x)=>{let i:usize=kani::any();assert_eq!(x.len(),w.len());assert_eq!(x.get(i),w.get(i));}
+        }
     }
 }

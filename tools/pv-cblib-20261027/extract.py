@@ -5,6 +5,7 @@ root=Path(__file__).resolve().parents[2];stage=sys.argv[1]; variant=sys.argv[2] 
 assert stage in ('charon','aeneas')
 base='/home/dombarker/project-offloads/codex-pv-cblib-20261027';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';pinned='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
 entries={
+'fallback-four-opt':('pv_cblib_source::sha_fallback_reference::extracted_round4','pv_cblib_source::sha_fallback_reference::_','PV_CBL_FallbackFour'),
 'op217-mono':('pv_cblib_source::sha_default','pv_cblib_source::sha_default+digest::core_api::wrapper::_::default+digest::core_api::ct_variable::_::default+sha2::core_api::_::new+block_buffer::_::default+generic_array::_::default','PV_CBL_Op217Mono'),
 'fallback-block-opt':('pv_cblib_source::sha_fallback_reference::extracted_block','pv_cblib_source::sha_fallback_reference::_+pv_cblib_source::sha_fallback_consts::_','PV_CBL_FallbackBlock'),
 'op36-retain-opt':('pv_cblib_source::array_retained_reference','pv_cblib_source::array_retained_reference+pv_cblib_source::array_reference','PV_CBL_ArrayRetainedReference'),

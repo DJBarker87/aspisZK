@@ -13,7 +13,7 @@ set_option linter.unusedVariables false
 namespace PV_CBL_FallbackSchedule
 
 /-- [pv_cblib_source::sha_fallback_reference::shl]:
-    Source: 'lib.rs', lines 123:0-125:1 -/
+    Source: 'lib.rs', lines 157:0-159:1 -/
 def sha_fallback_reference.shl
   (v : Array Std.U32 4#usize) (o : Std.U32) :
   Result (Array Std.U32 4#usize)
@@ -29,7 +29,7 @@ def sha_fallback_reference.shl
   ok (Array.make 4#usize [ i1, i3, i5, i7 ])
 
 /-- [pv_cblib_source::sha_fallback_reference::shr]:
-    Source: 'lib.rs', lines 128:0-130:1 -/
+    Source: 'lib.rs', lines 162:0-164:1 -/
 def sha_fallback_reference.shr
   (v : Array Std.U32 4#usize) (o : Std.U32) :
   Result (Array Std.U32 4#usize)
@@ -45,7 +45,7 @@ def sha_fallback_reference.shr
   ok (Array.make 4#usize [ i1, i3, i5, i7 ])
 
 /-- [pv_cblib_source::sha_fallback_reference::or]:
-    Source: 'lib.rs', lines 133:0-135:1 -/
+    Source: 'lib.rs', lines 167:0-169:1 -/
 def sha_fallback_reference.or
   (a : Array Std.U32 4#usize) (b : Array Std.U32 4#usize) :
   Result (Array Std.U32 4#usize)
@@ -65,7 +65,7 @@ def sha_fallback_reference.or
   ok (Array.make 4#usize [ i2, i5, i8, i11 ])
 
 /-- [pv_cblib_source::sha_fallback_reference::xor]:
-    Source: 'lib.rs', lines 138:0-140:1 -/
+    Source: 'lib.rs', lines 172:0-174:1 -/
 def sha_fallback_reference.xor
   (a : Array Std.U32 4#usize) (b : Array Std.U32 4#usize) :
   Result (Array Std.U32 4#usize)
@@ -85,7 +85,7 @@ def sha_fallback_reference.xor
   ok (Array.make 4#usize [ i2, i5, i8, i11 ])
 
 /-- [pv_cblib_source::sha_fallback_reference::add]:
-    Source: 'lib.rs', lines 143:0-150:1 -/
+    Source: 'lib.rs', lines 177:0-184:1 -/
 def sha_fallback_reference.add
   (a : Array Std.U32 4#usize) (b : Array Std.U32 4#usize) :
   Result (Array Std.U32 4#usize)
@@ -105,7 +105,7 @@ def sha_fallback_reference.add
   ok (Array.make 4#usize [ i2, i5, i8, i11 ])
 
 /-- [pv_cblib_source::sha_fallback_reference::sha256load]:
-    Source: 'lib.rs', lines 152:0-154:1 -/
+    Source: 'lib.rs', lines 186:0-188:1 -/
 def sha_fallback_reference.sha256load
   (v2 : Array Std.U32 4#usize) (v3 : Array Std.U32 4#usize) :
   Result (Array Std.U32 4#usize)
@@ -117,7 +117,7 @@ def sha_fallback_reference.sha256load
   ok (Array.make 4#usize [ i, i1, i2, i3 ])
 
 /-- [pv_cblib_source::sha_fallback_reference::sha256msg1::sigma0x4]:
-    Source: 'lib.rs', lines 163:4-168:5 -/
+    Source: 'lib.rs', lines 197:4-202:5 -/
 def sha_fallback_reference.sha256msg1.sigma0x4
   (x : Array Std.U32 4#usize) : Result (Array Std.U32 4#usize) := do
   let a ← sha_fallback_reference.shl x 7#u32
@@ -131,7 +131,7 @@ def sha_fallback_reference.sha256msg1.sigma0x4
   sha_fallback_reference.xor a4 t3
 
 /-- [pv_cblib_source::sha_fallback_reference::sha256msg1]:
-    Source: 'lib.rs', lines 160:0-171:1 -/
+    Source: 'lib.rs', lines 194:0-205:1 -/
 def sha_fallback_reference.sha256msg1
   (v0 : Array Std.U32 4#usize) (v1 : Array Std.U32 4#usize) :
   Result (Array Std.U32 4#usize)
@@ -141,7 +141,7 @@ def sha_fallback_reference.sha256msg1
   sha_fallback_reference.add v0 a1
 
 /-- [pv_cblib_source::sha_fallback_reference::sha256msg2]:
-    Source: 'lib.rs', lines 173:0-189:1 -/
+    Source: 'lib.rs', lines 207:0-223:1 -/
 def sha_fallback_reference.sha256msg2
   (v4 : Array Std.U32 4#usize) (v3 : Array Std.U32 4#usize) :
   Result (Array Std.U32 4#usize)
@@ -155,31 +155,31 @@ def sha_fallback_reference.sha256msg2
   let i ← lift (core.num.U32.rotate_right w14 17#u32)
   let i1 ← lift (core.num.U32.rotate_right w14 19#u32)
   let i2 ← lift (i ^^^ i1)
-  let i3 ← lift (Std.U32.wrapping_shr w14 10#i32)
+  let i3 ← lift (Std.U32.wrapping_shr w14 10#u32)
   let i4 ← lift (i2 ^^^ i3)
   let w16 ← lift (core.num.U32.wrapping_add x0 i4)
   let i5 ← lift (core.num.U32.rotate_right w15 17#u32)
   let i6 ← lift (core.num.U32.rotate_right w15 19#u32)
   let i7 ← lift (i5 ^^^ i6)
-  let i8 ← lift (Std.U32.wrapping_shr w15 10#i32)
+  let i8 ← lift (Std.U32.wrapping_shr w15 10#u32)
   let i9 ← lift (i7 ^^^ i8)
   let w17 ← lift (core.num.U32.wrapping_add x1 i9)
   let i10 ← lift (core.num.U32.rotate_right w16 17#u32)
   let i11 ← lift (core.num.U32.rotate_right w16 19#u32)
   let i12 ← lift (i10 ^^^ i11)
-  let i13 ← lift (Std.U32.wrapping_shr w16 10#i32)
+  let i13 ← lift (Std.U32.wrapping_shr w16 10#u32)
   let i14 ← lift (i12 ^^^ i13)
   let w18 ← lift (core.num.U32.wrapping_add x2 i14)
   let i15 ← lift (core.num.U32.rotate_right w17 17#u32)
   let i16 ← lift (core.num.U32.rotate_right w17 19#u32)
   let i17 ← lift (i15 ^^^ i16)
-  let i18 ← lift (Std.U32.wrapping_shr w17 10#i32)
+  let i18 ← lift (Std.U32.wrapping_shr w17 10#u32)
   let i19 ← lift (i17 ^^^ i18)
   let w19 ← lift (core.num.U32.wrapping_add x3 i19)
   ok (Array.make 4#usize [ w19, w18, w17, w16 ])
 
 /-- [pv_cblib_source::sha_fallback_reference::schedule]:
-    Source: 'lib.rs', lines 254:0-259:1 -/
+    Source: 'lib.rs', lines 288:0-293:1 -/
 def sha_fallback_reference.schedule
   (v0 : Array Std.U32 4#usize) (v1 : Array Std.U32 4#usize)
   (v2 : Array Std.U32 4#usize) (v3 : Array Std.U32 4#usize) :
@@ -191,7 +191,7 @@ def sha_fallback_reference.schedule
   sha_fallback_reference.sha256msg2 t3 v3
 
 /-- [pv_cblib_source::sha_fallback_reference::extracted_schedule]:
-    Source: 'lib.rs', lines 262:0-262:95
+    Source: 'lib.rs', lines 358:0-358:95
     Visibility: public -/
 def sha_fallback_reference.extracted_schedule
   (a : Array Std.U32 4#usize) (b : Array Std.U32 4#usize)

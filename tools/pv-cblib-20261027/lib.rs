@@ -356,6 +356,13 @@ fn sha256_digest_block_u32(state: &mut [u32; 8], block: &[u32; 16]) {
 
 pub fn extracted_round(a:[u32;4], b:[u32;4], w:[u32;4])->[u32;4] {sha256_digest_round_x2(a,b,w)}
 pub fn extracted_schedule(a:[u32;4],b:[u32;4],c:[u32;4],d:[u32;4])->[u32;4] {schedule(a,b,c,d)}
+pub fn extracted_round4(mut abef:[u32;4],mut cdgh:[u32;4],rest:[u32;4],k:[u32;4])->([u32;4],[u32;4]) {
+    let t1=add(rest,k);
+    cdgh=sha256_digest_round_x2(cdgh,abef,t1);
+    let t2=sha256swap(t1);
+    abef=sha256_digest_round_x2(abef,cdgh,t2);
+    (abef,cdgh)
+}
 pub fn extracted_block(mut s:[u32;8], b:[u32;16])->[u32;8] {sha256_digest_block_u32(&mut s,&b);s}
 }
 
