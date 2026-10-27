@@ -1,0 +1,14 @@
+{"attempt": "LPn_L053", "exit_status": 1, "wall_seconds": 1.1855525620048866, "peak_rss_kib": "2626608", "swaps": "0", "cgroup_memory_peak_bytes": "297943040", "print_axioms": ["'LPn.Decode.word_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'LPn.Decode.step_good' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+LPn_generated/LPn_DecodeBytes.lean:18:10: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+payload : List U8
+start i j : ℕ
+⊢ ((fun x => decide (x < 2147483647#u32)) ∘ fun j =>
+        LPn_Kit_word (List.take 4 (List.drop (4 * j) (List.take 16 (List.drop (start + 32 * i) payload)))))
+      j =
+    decide
+      (LPl.Echeck.word (List.take 4 (List.drop (4 * j) (List.take 16 (List.drop (start + 32 * i) payload)))) <
+        2147483647)
+'LPn.Decode.word_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPn.Decode.step_good' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

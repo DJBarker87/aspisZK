@@ -1,0 +1,24 @@
+import LPn_DecodeLaws
+import LPn_Word
+import LPl_Check
+open Aeneas Aeneas.Std Result LPl_Kit_Release LPl_Kit_FieldExternal
+set_option autoImplicit false
+namespace LPn.Decode
+
+theorem word_value (bs : List U8) : (LPn_Kit_word bs).val = LPl.Echeck.word bs :=
+  (LPn.Bytes.word_val bs).trans (LPl.Echeck.word_eq_le32 bs).symm
+
+/-- The K004 four-limb predicate equals the model predicate on the SAME bytes. -/
+theorem step_good (payload : List U8) (start i : Nat) :
+    (LPn.DecodeModel.step payload start i).1 =
+      LPl.Check.chunk ((payload.drop (start+32*i)).take 16) := by
+  unfold LPn.DecodeModel.step LPl.Check.chunk
+  simp only [List.all_map]
+  apply List.all_congr rfl
+  intro j hj
+  change decide ((LPn_Kit_word _).val < 2147483647) = _
+  rw [word_value]
+
+#print axioms word_value
+#print axioms step_good
+end LPn.Decode
