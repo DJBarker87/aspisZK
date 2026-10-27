@@ -1,0 +1,30 @@
+JFy_Preweighted.lean:13:48: error: Application type mismatch: The argument
+  UScalar.div_spec start ?m.33
+has type
+  ∃ z, start / 4#usize = ok z ∧ ↑z = ↑start / ↑4#usize
+but is expected to have type
+  ?m.27 ⦃ ?m.28 ⦄
+in the application
+  spec_imp_exists (UScalar.div_spec start ?m.33)
+JFy_Preweighted.lean:17:46: error: Application type mismatch: The argument
+  UScalar.div_spec last1 ?m.197
+has type
+  ∃ z, last1 / 4#usize = ok z ∧ ↑z = ↑last1 / ↑4#usize
+but is expected to have type
+  ?m.191 ⦃ ?m.192 ⦄
+in the application
+  spec_imp_exists (UScalar.div_spec last1 ?m.197)
+JFy_Preweighted.lean:24:8: error: Invalid rewrite argument: The pattern to be substituted is a metavariable (`?m.27`) in this equality
+  ?m.27 = ok first
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (24 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JFy_Preweighted.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
