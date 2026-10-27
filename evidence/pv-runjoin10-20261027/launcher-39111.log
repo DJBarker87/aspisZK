@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0229); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+            (R1Z.PV_Src_Public.canonicalPublic
+              (R1Z.PV_Src_NativeInput.publicInput
+                ((fun w => R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w))))
+          (R1Z.BuilderCanonical.liftWitness
+            (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w)))
+constructor:
+  R1Z.PV_RunJoin_SelectedAdmission.Remainder.mk [R1Z.BuilderForestAdmissionPort.ExternalLinear]
+    [R1Z.BuilderForestAdmissionPort.Records] {CommitHandle : Type} {d : R1Z.PV_RunJoin_SourceSelectionContract.Data}
+    {x : R0Z.ZkStatement.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle}
+    (compile_call :
+      ∀ (w : R1Z.PV_RunJoin_SourceSelectionContract.endpointHonest.Instance),
+        R1Z.PV_Src_NativeInput.run ((fun w => R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) =
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Ok
+              ((fun w => R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w).compiled))
+    (words :
+      ∀ (w : R1Z.PV_RunJoin_SourceSelectionContract.endpointHonest.Instance)
+        (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords ((fun w => R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) =
+            Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w))
+    (publicCorr :
+      ∀ (w : R1Z.PV_RunJoin_SourceSelectionContract.endpointHonest.Instance)
+        (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords ((fun w => R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) =
+            Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic records.p)
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic
+                (R1Z.PV_Src_NativeInput.publicInput
+                  ((fun w => R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w)))))
+    (admission :
+      ∀ (w : R1Z.PV_RunJoin_SourceSelectionContract.endpointHonest.Instance)
+        (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords ((fun w => R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) =
+            Aeneas.Std.Result.ok records →
+          R1Z.BuilderSpendRelation.RspendPlus
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic
+                (R1Z.PV_Src_NativeInput.publicInput
+                  ((fun w => R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w))))
+            (R1Z.BuilderCanonical.liftWitness
+              (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w)))) :
+    R1Z.PV_RunJoin_SelectedAdmission.Remainder d x
+'R1Z.PV_RunJoin_PackedPublic.canonical_public' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedPublic.packed_public' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedRecords.private_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedRecords.checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedRecords.admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedRecords.returned_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedBinding.projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedBinding.semantic_public' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedBinding.admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CompilerPayload.run_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CompilerPayload.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_DeployedFixtures.fibres' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedDynamic.admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PackedDynamic.installed_admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.62
+	Maximum resident set size (kbytes): 4357764
+	Swaps: 0
+	Exit status: 0

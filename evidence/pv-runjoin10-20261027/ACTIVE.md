@@ -1,4 +1,4 @@
-# Active allocation checkpoint (not final)
+# Historical allocation checkpoint — allocation now exhausted
 
 User explicitly requires all 100 Lean / 6 Kani. Do not end while budget remains because of reservation contention. Final 3 charged Lean attempts reserved for TrustAudit10Records/Joins/Trace. No ROW counterexample found. Target not yet established.
 
@@ -19,3 +19,5 @@ New audit sources are untracked until the pre-audit source commit. Existing comm
 Update 2026-10-27 02:23:50 UTC: ordinary replay progressing in batch again; 75 charged (74 accepted), latest accepted39087 F6NullEntry. The live tally/used files remain authoritative.
 
 Update: ordinary driver session76008 completed. Charged97 (96 accepted); next unused39111. Final audit preflight has exactly three audit sources missing, no missing import. 11 L2 further source objects remain (l2-final-cache.json). Pre-audit source commit is next, followed by final-audit-plan.json.
+
+Final: allocation exhausted at100 Lean (99 accepted,1 rejected) and6/6 Kani. Audits39111–39113 passed. Next unused ID39114, but no compile budget remains. See REPORT.md and summary.json. No driver is running.
