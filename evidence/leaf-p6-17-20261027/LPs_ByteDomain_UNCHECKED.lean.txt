@@ -1,0 +1,20 @@
+import LPs_ExpandDomain
+import LPq_CarrierFacts
+import LPr_SelectedWords
+set_option autoImplicit false
+namespace AspisR1.LPs_ByteDomain
+open Aeneas Aeneas.Std Result LPq_ExpandedWords
+
+theorem checked_expanded (compact before y1 : Slice U8)
+    (len : compact.val.length=464) (size : before.val.length=928)
+    (checked : _root_.compact.check_values compact=ok (.Ok ()))
+    (trace : LPn.Expand.NativeTrace compact.val before.val 29 y1.val) :
+    LPq_SelectedDomain.ByteDomain y1 := by
+  obtain ⟨length,expanded,_⟩ := LPs_ExpandDomain.expanded compact before y1 len size trace
+  have canonical := LPs_CheckDomain.checked compact len checked
+  apply LPr_SelectedWords.selected_words y1 length
+  intro row j hr hj
+  exact LPq_ExpandedWords.canonical compact.val y1.val expanded canonical row j hr hj
+
+#print axioms checked_expanded
+end AspisR1.LPs_ByteDomain

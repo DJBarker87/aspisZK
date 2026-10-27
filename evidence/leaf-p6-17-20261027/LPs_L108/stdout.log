@@ -1,0 +1,115 @@
+LPs_generated/LPs_ClaimsDomain.lean:68:130: error: Application type mismatch: The argument
+  success
+has type
+  (toMainStatus do
+      let record ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8
+      match record with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok vr =>
+          AspisR1ClaimsUnrolledParent.decodeRows (external (NP6_StdModel.calls (core.result.Result.Ok ()))) vr) =
+    ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => ?m.36 a) =
+    ok (core.result.Result.Ok out)
+in the application
+  step_success ((external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8) ?m.36
+    out success
+LPs_generated/LPs_ClaimsDomain.lean:72:80: error: Application type mismatch: The argument
+  success
+has type
+  (toMainStatus do
+      let r0 ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).decode 29#usize r 0#usize
+      match r0 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok row0 => do
+          let r1 ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).decode 29#usize r 29#usize
+          match r1 with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok row1 => do
+              let r2 ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).decode 29#usize r 58#usize
+              match r2 with
+                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                | core.result.Result.Ok row2 => ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)) =
+    ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r ← sourceDecode 29#usize r 0#usize
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => ?m.72 a) =
+    ok (core.result.Result.Ok out)
+in the application
+  step_success (sourceDecode 29#usize r 0#usize) ?m.72 out success
+LPs_generated/LPs_ClaimsDomain.lean:75:56: error: Application type mismatch: The argument
+  success
+has type
+  toMainStatus (?m.131 a b c) = ok (core.result.Result.Ok out)
+but is expected to have type
+  ok (core.result.Result.Ok ?m.149) = ok (core.result.Result.Ok ?m.150)
+in the application
+  ok.inj success
+LPs_generated/LPs_ClaimsDomain.lean:62:41: error: unsolved goals
+pre : MainPrefix
+out : MainClaims
+success✝³ :
+  (toMainStatus do
+      let record ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8
+      match record with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok vr =>
+          AspisR1ClaimsUnrolledParent.decodeRows (external (NP6_StdModel.calls (core.result.Result.Ok ()))) vr) =
+    ok (core.result.Result.Ok out)
+r : AspisR1ClaimsUnrolledParent.r1_wire.ValidatedRecord
+record :
+  (external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8 =
+    ok (core.result.Result.Ok r)
+success✝² :
+  (toMainStatus do
+      let r0 ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).decode 29#usize r 0#usize
+      match r0 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok row0 => do
+          let r1 ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).decode 29#usize r 29#usize
+          match r1 with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok row1 => do
+              let r2 ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).decode 29#usize r 58#usize
+              match r2 with
+                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                | core.result.Result.Ok row2 => ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)) =
+    ok (core.result.Result.Ok out)
+a : Std.Array ParentQM 29#usize
+da : sourceDecode 29#usize r 0#usize = ok (core.result.Result.Ok a)
+success✝¹ :
+  (toMainStatus do
+      let r_1 ← sourceDecode 29#usize r 29#usize
+      match r_1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a_1 => do
+          let r ← sourceDecode 29#usize r 58#usize
+          match r with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok a_2 => ?m.131 a a_1 a_2) =
+    ok (core.result.Result.Ok out)
+b : Std.Array ParentQM 29#usize
+db : sourceDecode 29#usize r 29#usize = ok (core.result.Result.Ok b)
+success✝ :
+  (toMainStatus do
+      let r ← sourceDecode 29#usize r 58#usize
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a_1 => ?m.131 a b a_1) =
+    ok (core.result.Result.Ok out)
+c : Std.Array ParentQM 29#usize
+dc : sourceDecode 29#usize r 58#usize = ok (core.result.Result.Ok c)
+success : toMainStatus (?m.131 a b c) = ok (core.result.Result.Ok out)
+⊢ ∀ row ∈ ↑out, RowCanonical row
+'_private.LPs_ClaimsDomain.0.AspisR1.LPs_ClaimsDomain.step_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LPs_ClaimsDomain.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPs_ClaimsDomain.claims' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

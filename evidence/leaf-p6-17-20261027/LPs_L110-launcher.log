@@ -1,0 +1,57 @@
+{"attempt": "LPs_L110", "exit_status": 1, "wall_seconds": 2.511164014984388, "peak_rss_kib": "5251712", "swaps": "0", "print_axioms": ["'_private.LPs_ClaimsDomain.0.AspisR1.LPs_ClaimsDomain.step_success' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'AspisR1.LPs_ClaimsDomain.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.LPs_ClaimsDomain.claims' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+LPs_generated/LPs_ClaimsDomain.lean:90:18: error: Type mismatch: After simplification, term
+  success
+ has type
+  (toMainStatus do
+      let record ← sourceRecord (fromMainPrefix pre) 25#u8
+      match record with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok vr =>
+          AspisR1ClaimsUnrolledParent.decodeRows
+            { reserve := fun {T} => (NP6_StdModel.calls (core.result.Result.Ok ())).reserve,
+              intoBox := fun {T} => (NP6_StdModel.calls (core.result.Result.Ok ())).intoBox, validated := sourceRecord,
+              decode := sourceDecode }
+            vr) =
+    ok (core.result.Result.Ok out)
+but is expected to have ty
+...
+.result.Result.Ok b => do
+          let c ← sourceDecode 29#usize r 58#usize
+          match c with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok c => ok (core.result.Result.Ok ⟨[a, b, c], ⋯⟩)) =
+    ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r_1 ← sourceDecode 29#usize r 29#usize
+      match r_1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a_1 => do
+          let c ← sourceDecode 29#usize r 58#usize
+          match c with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok c => ok (core.result.Result.Ok ⟨[a, a_1, c], ⋯⟩)) =
+    ok (core.result.Result.Ok out)
+LPs_generated/LPs_ClaimsDomain.lean:95:50: error: Type mismatch: After simplification, term
+  success
+ has type
+  (toMainStatus do
+      let c ← sourceDecode 29#usize r 58#usize
+      match c with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok c => ok (core.result.Result.Ok ⟨[a, b, c], ⋯⟩)) =
+    ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r ← sourceDecode 29#usize r 58#usize
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a_1 => ok (core.result.Result.Ok ⟨[a, b, a_1], ⋯⟩)) =
+    ok (core.result.Result.Ok out)
+'_private.LPs_ClaimsDomain.0.AspisR1.LPs_ClaimsDomain.step_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LPs_ClaimsDomain.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPs_ClaimsDomain.claims' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1a7d0b1a005444eda4bb9e580923d9f9.scope; invocation ID: 162a52cb2fb5427e83faeb7cb8b8025d

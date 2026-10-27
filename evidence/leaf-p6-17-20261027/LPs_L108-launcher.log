@@ -1,0 +1,56 @@
+{"attempt": "LPs_L108", "exit_status": 1, "wall_seconds": 2.562241616018582, "peak_rss_kib": "5239352", "swaps": "0", "print_axioms": ["'_private.LPs_ClaimsDomain.0.AspisR1.LPs_ClaimsDomain.step_success' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'AspisR1.LPs_ClaimsDomain.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.LPs_ClaimsDomain.claims' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+LPs_generated/LPs_ClaimsDomain.lean:68:130: error: Application type mismatch: The argument
+  success
+has type
+  (toMainStatus do
+      let record ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8
+      match record with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok vr =>
+          AspisR1ClaimsUnrolledParent.decodeRows (external (NP6_StdModel.calls (core.result.Result.Ok ()))) vr) =
+    ok (core.result.Result.Ok out)
+but is expected to have type
+  (toMainStatus do
+      let r ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).validated (fromMainPrefix pre) 25#u8
+      match r with
+
+...
+1 => do
+              let r2 ← (external (NP6_StdModel.calls (core.result.Result.Ok ()))).decode 29#usize r 58#usize
+              match r2 with
+                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                | core.result.Result.Ok row2 => ok (core.result.Result.Ok ⟨[row0, row1, row2], ⋯⟩)) =
+    ok (core.result.Result.Ok out)
+a : Std.Array ParentQM 29#usize
+da : sourceDecode 29#usize r 0#usize = ok (core.result.Result.Ok a)
+success✝¹ :
+  (toMainStatus do
+      let r_1 ← sourceDecode 29#usize r 29#usize
+      match r_1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a_1 => do
+          let r ← sourceDecode 29#usize r 58#usize
+          match r with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok a_2 => ?m.131 a a_1 a_2) =
+    ok (core.result.Result.Ok out)
+b : Std.Array ParentQM 29#usize
+db : sourceDecode 29#usize r 29#usize = ok (core.result.Result.Ok b)
+success✝ :
+  (toMainStatus do
+      let r ← sourceDecode 29#usize r 58#usize
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a_1 => ?m.131 a b a_1) =
+    ok (core.result.Result.Ok out)
+c : Std.Array ParentQM 29#usize
+dc : sourceDecode 29#usize r 58#usize = ok (core.result.Result.Ok c)
+success : toMainStatus (?m.131 a b c) = ok (core.result.Result.Ok out)
+⊢ ∀ row ∈ ↑out, RowCanonical row
+'_private.LPs_ClaimsDomain.0.AspisR1.LPs_ClaimsDomain.step_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LPs_ClaimsDomain.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPs_ClaimsDomain.claims' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4410ad99d1f84b8393076dfeae5a17fd.scope; invocation ID: 3542dcbcbce94565b33a9c662f7bb65f
