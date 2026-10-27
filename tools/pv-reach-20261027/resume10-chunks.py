@@ -35,6 +35,7 @@ def trans(m,s):
   path='docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean'
   data=subprocess.check_output(['git','show',rev+':'+path]);blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip()
   mapping[m]=dict(module=m,authority='h5',path=path,revision=rev,blob=blob,sha256=hashlib.sha256(data).hexdigest(),imports=re.findall(r'^import\s+(\S+)',data.decode(),re.M))
+ assert not any(p.startswith('XR') for p in m.split('.')),m
  for d in mapping.get(m,{}).get('imports',[]):
   if d not in s:s.add(d);trans(d,s)
 for row in selected:
