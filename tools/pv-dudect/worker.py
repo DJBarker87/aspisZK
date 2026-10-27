@@ -7,12 +7,12 @@ limits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memor
 pins=json.loads((B/'source-manifest.json').read_text());assert all(hashlib.sha256((R/p).read_bytes()).hexdigest()==h for p,h in pins.items())
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',RUSTFLAGS='-C link-arg=-Wl,--threads=4',CARGO_BUILD_JOBS='4',CARGO_TARGET_DIR=str(B/('harness-target' if stage=='build-harness' else 'candidate-target')))
 cargo='/home/dombarker/.cargo/bin/cargo'
-if stage=='build-harness':cmd=[cargo,'build','--manifest-path','tools/pv-dudect/Cargo.toml','--release','--offline','--locked','-j','4']
+if stage=='build-harness':cmd=[cargo,'build','--manifest-path','tools/pv-dudect/Cargo.toml','--release','--offline','--locked','-j','4','--bin','pv-dudect']
 elif stage=='build-candidate':cmd=[cargo,'build','--manifest-path','tools/r1-cost-probe/Cargo.toml','--release','--offline','--locked','-j','4','--features','r1p-check,aspis-r1-cost-probe/ct-host-prover','--bin','devnet_spend']
 elif stage=='dry':cmd=['taskset','-c','2',str(B/'bin/pv-dudect'),'--dry-run','1000']
 elif stage=='compare':cmd=['python3','tools/pv-dudect/compare.py',str(B/'bin/pv-dudect'),str(B/'bin/devnet_spend'),str(O)]
 else:cmd=['python3','tools/pv-dudect/metadata.py',str(O)]
-rec=dict(stage=stage,target=cmd,source_revision='73070ddd512bc4e79edfc0db714fb64dc74e87b8',harness_manifest_sha256=hashlib.sha256((B/'source-manifest.json').read_bytes()).hexdigest(),limits=limits,print_axioms='N/A: no Lean',expected_work='optimized compilation/linking' if stage.startswith('build') else ('tiny dry run; not a measurement' if stage=='dry' else 'static inspection'),rustc=subprocess.check_output(['/home/dombarker/.cargo/bin/rustc','-Vv'],text=True),environment={k:env[k] for k in ['RUSTFLAGS','CARGO_TARGET_DIR','CARGO_BUILD_JOBS']})
+rec=dict(stage=stage,target=cmd,source_revision='b3d109c8ffa47e452b57c5e4a7fe71cfb98e7146 plus D299 tools-only preparation',harness_manifest_sha256=hashlib.sha256((B/'source-manifest.json').read_bytes()).hexdigest(),limits=limits,print_axioms='N/A: no Lean',expected_work='optimized compilation/linking' if stage.startswith('build') else ('tiny dry run; not a measurement' if stage=='dry' else 'static inspection'),rustc=subprocess.check_output(['/home/dombarker/.cargo/bin/rustc','-Vv'],text=True),environment={k:env[k] for k in ['RUSTFLAGS','CARGO_TARGET_DIR','CARGO_BUILD_JOBS']})
 t=time.monotonic()
 with (O/'stdout.log').open('w') as so,(O/'stderr.log').open('w') as se:r=subprocess.run(['/usr/bin/time','-v','-o',str(O/'time.log'),*cmd],cwd=R,env=env,stdout=so,stderr=se)
 rec.update(exit_status=r.returncode,wall_seconds=time.monotonic()-t,peak_rss_scope_bytes=int((cg/'memory.peak').read_text()),swap_peak_bytes=int((cg/'memory.swap.peak').read_text()))

@@ -56,3 +56,11 @@ normal admitted caps. `diagnose.py build|controls|analysis|trace` launches
 sequential task-local scopes and requires both exit 0 and `allowed:true` from
 admission. It never requests or writes a quiet marker. This does not change
 the original `--measure` preregistration. See `dudect/DIAGNOSIS.md` in the evidence.
+
+D299 / v2.2: `pv-dudect` always pregenerates both classes through the same
+record path and copies fresh buffers before every call in all twelve experiments.
+Four built-in sampler controls (M31 and QM31 fixed A/fixed B, random/random)
+run first. Dry mode covers all sixteen at 1,000/class and logs fresh preparation
+counts, labelled **not a measurement**. See `dual/V374-PLAN-v2.2.md` and
+`dudect/D299.md` under `evidence/pv-l3-20261027/`. Future execution retains
+v2.1 CPU-only thermal monitoring; the original window worker is historical.
