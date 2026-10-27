@@ -11556,3 +11556,19 @@ change stops that route with the exact blocker reported. The combined gates (b) 
 IDs 50600-50899 unused so far): the repairs, gate (a), extraction, R_shipped, identification per fixture
 and generally, compiler-return, transition, deployed public binding, non-vacuity. Six slots: op223,
 op134, l3dis4, route2, cblib4, runjoin14. Rows removed outright: 0. Privacy target not yet established.
+
+## D275 (Stream B) 2026-10-27 10:55 UTC: records Copy repair passes the ELF gate; next blocker is a range loop; authorization widened to the enumerated mechanical repairs; runjoin15 launched
+
+pv-runjoin14 (`codex/pv-runjoin-20261026`, head 503344e60f; 0/100 Lean, 0/2 Kani: stopped on a blocker
+outside its authorization, not exhausted). 05cb63a2ea replaces `let pair = &input.pair` with
+`let pair = input.pair` (PoolV1PairInputNoteWitnessV1 derives Copy, pair_trace.rs:71); gate (a) after the
+final change: all three ELF pins MATCH. Extraction clears the borrow and stops at the unsupported
+`ub_checks<bool>` of the inlined range iterator of `for level in 0..24` (core/iter/range.rs:984-986,
+InterpExpressions.ml:1512); the worker proposed an index `while` loop and stopped. Lead decision: one
+blocker per job cycle is waste (AGENTS.md §7), so the authorization (still confined to the function
+`records`) now covers three enumerated mechanical, semantics-preserving repair kinds, as many as
+extraction needs: (i) borrow-to-copy on Copy values, (ii) closure/combinator removal, (iii) `for i in
+a..b` → index `while` loop with identical body, bounds and order; each recorded; the three ELFs re-gated
+once after the last change; a blocker of another kind or in another function stops the route.
+Launched pv-runjoin15 (same branch, IDs 50600-50899 still unused). Six slots: op223, op134, l3dis4,
+route2, cblib4, runjoin15. Rows removed outright: 0. Privacy target not yet established.
