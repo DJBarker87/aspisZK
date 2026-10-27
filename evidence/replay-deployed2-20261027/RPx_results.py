@@ -28,10 +28,15 @@ while pending:
 old=read(R/'evidence/replay-tops3-20261027/RPv_plan.json');mapping=old['mapping'].copy()
 for r in plan['rows']:mapping[r['original']]=r['module']
 expected={mapping.get(n,n) for n in old['closures']['FJv_Deployed']}
+historical_planned_contexts=len(expected)
+# The pinned Phase transport support module has no original repository vertex.
+# It is the sole additional selected context; its retained object/source pins
+# were checked in the inherited cohort, and no source replacement is allowed.
+expected.add('RPz7_PhaseIso')
 missing=sorted(expected-seen)
 selected_prefixes=('RPx_','RPv_','RPu_','RPt_','RPz8_','RPz7_')
 extra=sorted(n for n in seen if n.startswith(selected_prefixes) and n not in expected)
-closure=dict(root='RPx_Deployed',planned_contexts=len(expected),actual_root_header_modules_including_libraries=len(seen),missing=missing,extra_replay_contexts=extra,all_37_fresh_contexts_reached=all(r['module'] in seen for r in plan['rows']),scope='Actual root dependency header traversal; independent audit imports excluded')
+closure=dict(root='RPx_Deployed',historical_planned_contexts=historical_planned_contexts,planned_contexts_including_transport=len(expected),explicit_retained_transport_support=['RPz7_PhaseIso'],actual_root_header_modules_including_libraries=len(seen),missing=missing,extra_replay_contexts=extra,all_37_fresh_contexts_reached=all(r['module'] in seen for r in plan['rows']),scope='Actual root dependency header traversal; independent audit imports excluded')
 write('RPx_import-closure-check.json',closure);assert not missing and not extra and closure['all_37_fresh_contexts_reached'],closure
 if 'RPx_DeclarationAudit' in by:
  d=by['RPx_DeclarationAudit'];assert d['exit_status']==0;s=(E/d['attempt']/'stdout.log').read_text()
@@ -40,6 +45,8 @@ if 'RPx_DeclarationAudit' in by:
  bad=[r for r in decls if not set(r['axioms'])<={'propext','Classical.choice','Quot.sound'}]
  raw=re.findall(r"^'([^']+)' (?:depends on axioms: \[([^\]]*)\]|does not depend on any axioms)",s,re.M)
  raw_names={n for n,_ in raw}
- audit=dict(attempt=d['attempt'],selected_contexts=len(expected),covered_contexts=len(covered),declarations=len(decls),missing_contexts=sorted(expected-covered),nonstandard_declarations=bad,raw_axiom_report_count=len(raw),missing_raw_axiom_reports=[r['name'] for r in decls if r['name'] not in raw_names],records=decls)
- write('RPx_declaration-audit.json',audit);assert not audit['missing_contexts'] and not bad and not audit['missing_raw_axiom_reports'],{k:v for k,v in audit.items() if k!='records'}
+ raw_lists={n:sorted(a.strip() for a in xs.split(',') if a.strip()) for n,xs in raw}
+ raw_match=all(sorted(r['axioms'])==raw_lists.get(r['name']) for r in decls)
+ audit=dict(attempt=d['attempt'],selected_contexts=len(expected),covered_contexts=len(covered),declarations=len(decls),missing_contexts=sorted(expected-covered),nonstandard_declarations=bad,raw_axiom_report_count=len(raw),raw_axiom_lists_match_structured_records=raw_match,missing_raw_axiom_reports=[r['name'] for r in decls if r['name'] not in raw_names],records=decls)
+ write('RPx_declaration-audit.json',audit);assert not audit['missing_contexts'] and not bad and not audit['missing_raw_axiom_reports'] and raw_match,{k:v for k,v in audit.items() if k!='records'}
 print(summary)
