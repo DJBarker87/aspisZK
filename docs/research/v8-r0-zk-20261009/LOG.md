@@ -10664,3 +10664,20 @@ resume the installation closure through the PDict_ objects, discharge identity/c
 installed proof-account inputs using PV_Src_*/PV_Join_*, construct the fixture Runtime/Boundary for
 deployed non-vacuity, then `trace` via PV_L2_*. Six slots: cb4, rw20, cb5, join4, srcid6, runjoin9. Rows
 removed outright: 0. Privacy target not yet established.
+
+## D233 (Stream B) 2026-10-27 00:30 UTC: rw20 exhausted: V164's context identity discharged, one hypothesis left; V163 model construction still open; rw21 launched
+
+pv-rw20 (`codex/cx-prover-rw-20261023`, head 0242bd9221; 100/100 Lean = 96 passed, Kani 1/20 charged
+then queue stopped on the required first configuration failure, no counterexample; no crates/programs
+change; no forbidden tokens; combined component manifest audit 230 declarations, standard axioms, zero
+swap, cached-component replay not a clean-source rebuild). V164: the concrete P6 context identity
+(`context_identity`) is DISCHARGED in the checked consumer; V164 now rests on the single hypothesis
+`P_source_p6` (the op223 source law `ops.op223 = extracted`), which neither pv-cb4 nor pv-cb5 has yet
+proved. V163: the canonical audit invariant, complete observation transport, mathematical data transport
+and the independent guarded assembly adapter are checked; OPEN are the deployed caller's whole-model
+construction and the proof-byte equations (fixtures and general). Endpoint premises removed: 0. Launched
+pv-rw21 (same branch, IDs 37700-37999, 100 Lean / 10 Kani): consume or prove the op223 law and close V164;
+publish the concrete mathematical model instance early under a stable name for join4 to consume; prove
+the transfer then withdrawal proof-byte equations, then the general criterion; re-freeze the manifest.
+Six slots: cb4, cb5, join4, srcid6, runjoin9, rw21. Rows removed outright: 0. Privacy target not yet
+established.
