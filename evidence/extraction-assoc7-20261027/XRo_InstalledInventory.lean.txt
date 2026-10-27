@@ -1,0 +1,8 @@
+import XRo_Join_Installed
+#print XRo_Join_Installed.actual
+#print AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling
+#print AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries
+#print AspisR1ClaimPreparedBridge.powersPublic
+#print AspisR1ClaimPreparedBridge.claimPublic
+#print AspisR1ClaimPreparedBridge.OriginalPayloadClaimMeaning
+#print axioms XRo_Join_Installed.actual
