@@ -1,22 +1,18 @@
 # MERGE GATE v2: BLOCKED
 
-D241; research `8d24f3b9aea9a28803cfc7f571e92b908c8d92af`. PROJECT gaps: **48 → 3**; 879 project objects. EXTERNAL objects: 5640; manifest gaps: 0.
+D241; research `34380a4dc62deb796fe3e3e29a56feddb141dd06`. PROJECT gaps: **3 → 3**; 925 project objects. EXTERNAL objects: 5640; manifest gaps: 0.
 
-Every external object below is linked individually to the env-J toolchain and manifest package revision. Repository copies already selected by the source manifest remain PROJECT; R1FirstFold is also PROJECT (its repository filename is FirstFold.lean). Branch additions remain separately identified in each JSON source_kind field; their hash links bind the proposed branch bytes, and are not described as already present at research HEAD.
+Authoritative module paths are resolved through import-source-pins.json (ruling h). All three initially stopped shared sources remain different from research HEAD. No differing shared source was overwritten. Both hashes for each module are in resume8-shared-check.json and the stage-boundary resume8-shared-recheck.json. Their source/object associations and changed-input dependent replay remain blocked. No CLEAN gate is claimed.
 
-Lead ruling (h) corrects the projection association: `lean/NaturalProjection.lean` is authoritative. Its source/object receipt 30200 matches current HEAD and current object; ProjectionHEAD is CLOSED without changing its source or object. The earlier two-goal failure concerned the wrong historical variant. Its dependency cone (170 modules) is retained as historical inventory, not a live exception. Four other shared source paths differ from the authoritative pin table; all are stopped for replacement. R0P.LogUpAssembly has a matching exact historical source/cache pin, closing its object association without a new compile. The remaining three object associations are blocked. Both hashes and all four path mismatches are recorded in resume7-source-resolution-correction.json.
+The inventory retains the three prior audit objects alongside the final kernel closure. Every external object is individually linked to the env-J toolchain or manifest package revision. Proposed branch sources remain identified separately from research HEAD. Exact per-attempt imported-object hashes, source snapshots, status and standard-axiom checks are retained in resume8-attempts.jsonl. resume8-revision-links.json distinguishes recorded worktree HEADs from exact snapshot/commit byte links. Historical changed-input replay flags are retained as history, not claimed as completed dependent replay.
 
-Recompilation receipts retain exact import hashes. Historical changed-input replay flags are retained in JSON; a source hash link alone is not a claim of replaying every dependent.
+ProjectionHEAD remains closed under ruling h using the authoritative lean/NaturalProjection.lean pin; its historical cone is not a current exception. R0P.LogUpAssembly retains the exact historical source/cache association.
 
 ## Remaining project gaps
 
 - `AspisFormal.V6PublishedTheoremInterfaces`: No accepted receipt binds current object SHA to expected source SHA; expected `904f5e5b9b6b38b7b3009cbe755ae90c692cb88c2aa303f1abf3c212a152a37c`.
 - `R0P.LogUpChain`: No accepted receipt binds current object SHA to expected source SHA; expected `a9b0e52dd73026f356c16237d4b29527a70a479fc14cb0d59c178e1d94ff1fb6`.
 - `R0P.SemRounds`: No accepted receipt binds current object SHA to expected source SHA; expected `564b9026233a36736f524407f357b44e173173139e52b9c4c6effbd88335bfd4`.
-
-## Resume 8 source check
-
-Research HEAD `9c04df450b311567731dcde8d43be7da558b70db`. All three authoritative sources still differ from shared sources. Ruling (h) STOP applies to each; no shared bytes or objects were overwritten, and no compile was charged. Exact authoritative/shared SHA-256 pairs: [resume8-shared-check.json](resume8-shared-check.json). Project gaps remain **3 → 3**. Changed-input dependent replay and a CLEAN gate cannot be claimed.
 
 ## Every imported object
 
@@ -5718,6 +5714,7 @@ Research HEAD `9c04df450b311567731dcde8d43be7da558b70db`. All three authoritativ
 | `R1Z.PV_Src_CacheInventory` | PROJECT | `9373b70e5131d9af63eedd60ceb9c0d19010b1f597ce78b32f7679f678ab7020` | 6d9861fa5fe3ab5dd4e952cddc17ad10b0f33e371b78ad5e8a1076209d9b0c39 |
 | `R1Z.PV_Src_Canonical` | PROJECT | `9ca5a4f07537abd104028e3d6d66a392cb39848b9eb988345281c833205a08b8` | fe810650b5bfb221292c3f5ccc16cd71b408a067da35f2e970209dd5b95b3261 |
 | `R1Z.PV_Src_CanonicalDecode` | PROJECT | `6fea852b733cf5b7cfff589f20cb723006c7efa6db0118d116c9bbf7252141b1` | 715bb995ff6e1bf0ef752f26cc9dfe0182915ea86173eae970c233281a987803 |
+| `R1Z.PV_Src_CanonicalFieldEquality` | PROJECT | `c20a0c58c7d1a733be402623c94726e90031f10160a74358e0ef0f8516dc9e06` | 467ce731bc51013d85223b006381be69f2a55307c1016e3b3b3baa10c958b2ef |
 | `R1Z.PV_Src_CanonicalNormalize` | PROJECT | `995bc1118097c4a959017599d27d65f4e81c1d487df2b988970d131e696c94f6` | 6c0c51e0ee441d550100751553b70d77a9c6f3646434ac6b099115610b246c52 |
 | `R1Z.PV_Src_CanonicalPrivateRecord` | PROJECT | `3782031fc401e592846c4c817369b59449efe3371490b26e50e0940484c5bffc` | a95b7ba3969f17120756493b06f9379fa374a355879137ee889c440f94904638 |
 | `R1Z.PV_Src_CanonicalRequest` | PROJECT | `75dfd0c42fcac595c0e41905852ddd9f5bb2fbaca7fe3b52763e6360927076c0` | 9944f7a898552c190b55ea45bf8f570ec9c6523a008e0a40f83be1bbfb34f60a |
@@ -5737,14 +5734,34 @@ Research HEAD `9c04df450b311567731dcde8d43be7da558b70db`. All three authoritativ
 | `R1Z.PV_Src_DynamicAdmission` | PROJECT | `ad5c840a8777b31caca45a52dd927a2fc44ef452b1c1bcc63fd893bbb723af57` | 0a0280646e182e2175ec974f92d38095a4a36a5744fb52e56b4c5b12b319fd69 |
 | `R1Z.PV_Src_DynamicCallEquation` | PROJECT | `ae78dc409029ee53e32df7ed71377a1fc604098aa16097c36bf28d616946233a` | 6048c535fc2d35a46ba47e407ab3d4af049e395628a283d2041f22d05d4679cc |
 | `R1Z.PV_Src_DynamicPublic` | PROJECT | `4d46922e5b73c725fb73ce45207c090665066db59ae104012f82d327d43c2be3` | 014e34e3b40019487867cfcc99d5a496f36e296a60089d60d0e068724bdd9136 |
+| `R1Z.PV_Src_ExternalBlockStep` | PROJECT | `8e16f9657ba1b48da809d34bdec13f2b2fa734853766cdfe7f72142b148f6140` | e4a8e0537051a26a7a056f32fba4b9623063f5840092bf67beedc66dd49dd820 |
+| `R1Z.PV_Src_ExternalBlockWrite` | PROJECT | `866ff02794b846a740e3c0494fe9d6595db03aba76e61feac8514cacdb3d4635` | a3d2a5e2000e779fa12ffffb564c21f618ca255f56c3f76027d214736a71d519 |
 | `R1Z.PV_Src_ExternalBlocks` | PROJECT | `72eb689320bf774e5c611441acaa451a3263974696077484b6c5ee4b531724fc` | 73f746a1b26527497f04b2eefcdd89ce650c33ed0c58570bca0ecf4b655223cd |
+| `R1Z.PV_Src_ExternalBlocksCopy` | PROJECT | `c2f3346231c7720bac9b7251c708ddc52e5c8654fd01067915030d0087973935` | ee9d894b831c22e2fcbf5369a5895356edc6bdb13a770bfc1773632773cf6386 |
 | `R1Z.PV_Src_ExternalCanonical` | PROJECT | `516dd3a28e8669056a2799bdc23445586d36ddea559b011d2d6a0dbc1967d321` | c6b9bd33fabc3aafe1c8294e9f722eff18c724e65a838ff014dd3852ff281b02 |
+| `R1Z.PV_Src_ExternalCopy` | PROJECT | `57f957341c58cdd6dca8362a323287dcde4abab48777e9c56d0428cfe1105768` | f8760a39d480747439a28fe65e2e6db83455a9c55f11c9c36f01d4445573a54d |
+| `R1Z.PV_Src_ExternalCopyBlockStep` | PROJECT | `77be5f719a33ea95959d168676bc99b038dadd7621749eac5658468243f826e1` | 1211e3181aef9dd9c5ad4f8a6b5f037569fb8a3bd9cf13255d5aea68084c8862 |
+| `R1Z.PV_Src_ExternalCopyPrefix` | PROJECT | `7432ebdd64e554a7a872a9ade87c44e358a7ed248e258eb4211457e38d69eb45` | 919a803f058ce2f96a6622ad610b72c57b5dd1bc962b5f258819012dbd478786 |
+| `R1Z.PV_Src_ExternalGroupsCopy` | PROJECT | `ae2a640c1711e6eaee58b649ddb092ddd0831f6c6a98eea4f7966d2d2a02a748` | 9a1dbeb543808762e02316dae40228c9c45e7d145e7e0ff258084bdd491869ac |
+| `R1Z.PV_Src_ExternalGroupsModel` | PROJECT | `1be6109c4da0122a8ec306a654afc674df21112596ace8c204bc843e3c071f7a` | a340887941283e29e1a31714d383eade84d076b806ba0a3a8a199926d7493a82 |
+| `R1Z.PV_Src_ExternalLaneCells` | PROJECT | `32e3d1de5bf45fb8ab7298252934cb421b9f8043ab89dd16585d750dbd07ec5d` | 480dcca8cfdfb56a73e84d0c2be63694589634ac411321dbfbdc9db5658ddca9 |
+| `R1Z.PV_Src_ExternalLaneLoop` | PROJECT | `28735291270bf2702d6f40bd6d39464df4f7e149f5f149345113fd6df286abc6` | 161939e2fba4a24f21d4820dfd41bfbb00d3ee12710a3eb4723821fd6e5aede5 |
+| `R1Z.PV_Src_ExternalLaneModel` | PROJECT | `8b36e158a89182294a841a31a61948af98fcc97a71eab3f08c3f9f868b20689c` | ee9992d32cc1a913e4c04a432555d3a2e7c4d8940d577d5171d06d9f3518ee77 |
+| `R1Z.PV_Src_ExternalLaneStep` | PROJECT | `01d1870e8571525f1272271787125496a3205ed6ebac4f959e665abd8e3d3031` | af2d588929fc270f226f29c330866a72aead98b61c2940cca4d88f0dedeadab9 |
+| `R1Z.PV_Src_ExternalLaneValue` | PROJECT | `78f652900984ec9279024ce97c829fa4927521e22e3e68bfad536a32847d8008` | 2f4534e0d4ce501fa1b02812ee906439d590cad7cf6591b87d0a10a7bdd2efc8 |
 | `R1Z.PV_Src_ExternalLanes` | PROJECT | `873650c091c575c81cd3fc24285a617d6ed1a4d2a78c3acfaedaae60d3887dce` | bce2d2b11649503650147e150f448b88f83da68246792e415155501396fe0233 |
 | `R1Z.PV_Src_ExternalMat4Copy` | PROJECT | `21e538c46d8b198bc9f75849b178746c0ac10f59fb549784b70b319569a65cdd` | 5b4c913e67cea7920a02d405c3e136a4c7f7b3642918387a71ed25b0a44c7c44 |
+| `R1Z.PV_Src_ExternalModel` | PROJECT | `83b0bc42cbc4cdad8db75e28eb706559ad1f38377c00e62a416afd7c8aba7534` | 0b7ced56b48a42df33efa0ef8fed4a4b62b0cd0c9e9b523364cac1808c734640 |
 | `R1Z.PV_Src_ExternalReduce` | PROJECT | `5d80cf4ceb42c7313d8d2e29599ace95cb8e9bc281e13b5c0ef01f673ee516e1` | 9f546d11aed80abb82c5152595ff1ec2eb7c5d8ed4eaed2d40827dce095b93c5 |
 | `R1Z.PV_Src_ExternalReference` | PROJECT | `52d0ce204872fef254ab1f1a31c3695ab0c783b44c9582b9aac4512111efa58f` | 5a0299952e59debf5fffbff523e3ab0aa30fce9d156faadd08a8d58a808a31c3 |
+| `R1Z.PV_Src_ExternalSumCells` | PROJECT | `e25d99a2427a2ecb67aa0737b281a4626028d1127dabc273fdb01c3e72eeee83` | 0f278519fd942beb49fa716b508f0a460b43b5e1923ff605e2fdccf89269f8e4 |
+| `R1Z.PV_Src_ExternalSumLoop` | PROJECT | `f966901fb26366b141576d86b18a0a0df2a0ac919594b0cf7e49f5611386273b` | fa6413cef20c207963861360ad2251282c653f812a22a30dda4ab4eaa03ab4f9 |
+| `R1Z.PV_Src_ExternalSumModel` | PROJECT | `849ced0182b46a9ef2faab120435598ccea0b07beba34b4cb44aef00cba0a58d` | c01c1c52c7ad6727eb0cba779cf4f48429369e8f68ef969d1cbb9471fb474146 |
+| `R1Z.PV_Src_ExternalSumStep` | PROJECT | `21adc0f2c3d0bf47a592767ad16156b36825f7aa47ea9f22345f1f761acb9147` | 63d200dfd41c6c12e0ca2e740e8313377a00b69fe9904b4f89265d70cfb74e2d |
+| `R1Z.PV_Src_ExternalSumValue` | PROJECT | `c08ea4f118945cd6197988aaa427ef3ef37050b50c402711998fc8ec85a82ec9` | 0da89771016f39316ad02696a9d0f164b8ef2d63f7049a985b34aef7938889f4 |
 | `R1Z.PV_Src_ExternalSums` | PROJECT | `24cb3557f9fd6446503488399ff89bf3dc8e855bc44154a0d1b355c03cc9b2d1` | f18dc68ab20b384c6a0ef649e7cfce742dbe1df3676c70dd6841d3929d948b33 |
 | `R1Z.PV_Src_ExternalTotal` | PROJECT | `3ab9c6e05230203d40d5100374b35186cba72bb9f9318d26e93db7b13b42bfe3` | 1430548f51bf4f8691bc9d297d11607ce8b0aee0da1040dac06921c42a23e4b1 |
+| `R1Z.PV_Src_ExternalWritePrefix` | PROJECT | `aab09cff97f7a75f66e2e60deb57ebbe6f3406e1098685ef72037044d2088ba5` | 6cf6c580b9b8621871ab579813ef19358a95b48c71c623552fc341c7cd914883 |
 | `R1Z.PV_Src_FinalAudit` | PROJECT | `cf7d5e18cec9f94e420e443ac745a8e017ee361f462d1e2e28d58798abee518e` | 5d48ff076a5c173c8a0c6bab12c063350b2bc1b5be2d85d22514267f1992dd36 |
 | `R1Z.PV_Src_FinalAudit6A` | PROJECT | `a017d0f097dafb6cbce8488995fb5b16e4af7ae120ecbcd58d5819fae3b18c89` | 69f0fd4aa1e199084e0e7c0273dbaff1f086b11785f844d2cef04af54cd11b65 |
 | `R1Z.PV_Src_FinalAudit6B` | PROJECT | `a8f255344244b6e67721a1cc7afd9c40951d7e9b3acfb950a0738f790a9d5aef` | 900d4b38724efface201d67239757ca3f36986f99ab3a2b2d3d187797529e1bb |
@@ -5752,6 +5769,9 @@ Research HEAD `9c04df450b311567731dcde8d43be7da558b70db`. All three authoritativ
 | `R1Z.PV_Src_FinalAudit7A` | PROJECT | `34e6178b63a5491279009ac9c25d6b7b7bb4c0c033ab643c020388e33197ec5e` | a48ca626f07387e4a26f3f1bbb27c5e87f85f25cb2e0e8927990e0923a0bea12 |
 | `R1Z.PV_Src_FinalAudit7B` | PROJECT | `edf6385cef63403996e4969ba8e3b9cb4a2b100487953ba2acb3a57bf3da154d` | 8b69635e2f7c989302a987c96659785b3172c3119847e2a06af29bbef714a041 |
 | `R1Z.PV_Src_FinalAudit7C` | PROJECT | `6e6b37ab777322507983d71d0a9b9583fdec3442be871db58dc32a0fde877f1c` | b5e88f9de738f00db34fd65ca1a91b3336d2a272eeb9d2d5f2928b9c4276b9ce |
+| `R1Z.PV_Src_FinalAudit8A` | PROJECT | `af9f2278a29643e6b68b2f7881f4d45a5097050e3a4b30a0c2beb46300d50539` | f0a131e4a1a31a759dec09ade6f4348765d2357c4f9175b10340c8a6b531f516 |
+| `R1Z.PV_Src_FinalAudit8B` | PROJECT | `735c384ade75d35a5e88079929a055cee4fed2a2463b68c8558d999d1d8fd3b3` | 06f46ce2a09eed8a2e60008f3c2a6468ce5f51a22f5d93cb4876831dbe5c8f9e |
+| `R1Z.PV_Src_FinalAudit8C` | PROJECT | `81e277726d4f77c23986cad82711de9d1e3954ff33ab435a02533c34b5cf7f61` | aeeecb1602b316c33170be7f20f6d707675f4eef54a7ff0d4b638eab8f14baf9 |
 | `R1Z.PV_Src_FixtureCheckedSource` | PROJECT | `e30f0dfe1337e6ec20b7c499cdc2ff37765525446e03a5aac31a3623b4898e84` | e8ee6e94e55760cdd233c0712a0a502da21dc74e0817f3388e4a7c1184bb787c |
 | `R1Z.PV_Src_FixtureCommonValidation` | PROJECT | `03e83c713a1f9df9e4b7b04b41e0b7c5e2d5c1cebc0b6b999a32e04707b8895a` | 32dba6b7777d6f82a403c6b234d8e0094681d03f0f06a972fb918767aaa6aa7d |
 | `R1Z.PV_Src_FixturePairValidation` | PROJECT | `27a9fa4c0f93d67a0771ddc46e055367106631ab67e3c2ca984b9354362d5d0f` | 74afd6083a12c0007b554f5ff82978e44851fca9717ee0f1de7a51d1ae978351 |
@@ -5826,28 +5846,50 @@ Research HEAD `9c04df450b311567731dcde8d43be7da558b70db`. All three authoritativ
 | `R1Z.PV_Src_PathIndex` | PROJECT | `154f2b439305e0e5667918fd64bc2703ef25f2a102759a1b9dac2ed32ee0a394` | 2d8f48fdf3e2704593ea89137ad8738fc5470e85d6eb975710b1ef2ede9c97b0 |
 | `R1Z.PV_Src_PathPacking` | PROJECT | `6d53c84ea0318b1123d8f486e315b490864401367318122724bc0d2d59e5d49a` | db16e11ab6d8c5d1cc3e2689aacdc3b7ecf69094cda25687db454767e65b0e82 |
 | `R1Z.PV_Src_PathSiblings` | PROJECT | `eb577f6b5795914179931e2af28b1a0ee4ea4b23fd22a0b36eb7342a5eb4553d` | 2d4c30efa8a4de3c5951bf2e4fe9b95dfbb092a2d6bce14e237737beea7e8783 |
+| `R1Z.PV_Src_PortAddCopy` | PROJECT | `93f51232ce1ff4f06b8588f1ec1732aba8540f60572626ba68333af45736428a` | bb4cd4856c3f0448667dff4434dbb431b4918a570a92ad3fb732df77b531687d |
 | `R1Z.PV_Src_PortAddition` | PROJECT | `30187011a770da5b9c02d8fd96aa01152b1fa85c610d1ef8713d545e589c671b` | cef27e68bcc58707f0bd1ca18165607384c18636114f4bf38b5ad14bcc62056b |
+| `R1Z.PV_Src_PortArrayTrace` | PROJECT | `5cc6718863dfb4a6b93999bc482506edb663de39c291e9026c90b32eb91bbf4f` | 52e4b851d51b10fb340b4939e14d6747b1e6f3f5e5bf37917f1424bdc1a66552 |
+| `R1Z.PV_Src_PortConstantInstance` | PROJECT | `1351508565218b1685928dfc06c77225067cd65cdb889c529ae0ecf6824f47ff` | 08dc08c258c8dc292589a73630c9812f7c01c0cbdddd828d1e031ddcccb6d2ce |
+| `R1Z.PV_Src_PortConstantTraces` | PROJECT | `338a072b51103184e36086435fe731e8785291a59d3e9ea50692de8dd6b4e5fa` | 654485cc150b9ad12f301a1c5ca1dd1c95dccb1e3eafebd7c8b2b964b1165e53 |
+| `R1Z.PV_Src_PortEnumerateTrace` | PROJECT | `90e7c5862931d37f0220a51a39582adfe96429a358378e7c4f013c6bb86bd97d` | fe8df81c6ba3365801b22d9eacb8fe00b67c08b05a121a75ce326c2d37c55545 |
+| `R1Z.PV_Src_PortEnumerateValues` | PROJECT | `bb0042a9cd06743ab23af46de2d6cb152c5cf1c7057d772e699476f3bc61b474` | c8de8b1b69e5757277e4affeddeeed019fe22ad5beb9133e007e825f0d584eec |
 | `R1Z.PV_Src_PortField` | PROJECT | `fa74712cc9d52124c38c2f30870b20af4022da03c5c6e4ddd26df7755936c4dc` | 52e5056c65b1c70865e70827e54c0ed33950b0c749ccbb05e79a4cd746e2539f |
+| `R1Z.PV_Src_PortFinalConstants` | PROJECT | `3b6fc842e477f2e8d28e629d74a28f3c53c58e5c972959d3ef6aef199f4aaa8d` | edac7528b964c46caa0daa4a55045cbb7a0a7159aaf3736e1b874c0058eede9f |
+| `R1Z.PV_Src_PortFinalRoundStep` | PROJECT | `cb5f6100eedbd3b7994ea03e76debf0254860f52300206b59cab957f4ee99a5e` | 121868aa995b5b1be4567f5918fbccc93184a75af88eb166e16419c9c2df8fbf |
+| `R1Z.PV_Src_PortFinalRounds` | PROJECT | `2f370c2789d13c0cd574e3810a56a695422db9e2a798317e4b075be3095f7fb8` | 2e96fdca605194fa31b7d77fe07426581b31dc40e443512e9b1fb1d29a15de92 |
+| `R1Z.PV_Src_PortFullRoundCopy` | PROJECT | `377193a20e8249bf48fc3e70df708428c5ed74be00a8445080b82561a88665f6` | f6e23b69995f7a8e04ec28fdd1647c6c28c6891991dd96a2aaa770bc9a81aeb5 |
+| `R1Z.PV_Src_PortFullRoundModel` | PROJECT | `eb595f93704b0ebe2846506e4ef116555c62ad56c07976c89db65bfd32c1d479` | 1b915733760b5fbeb659ddde0f60879c4c384e295bc84fd7a084609301f11a9f |
+| `R1Z.PV_Src_PortInitialConstants` | PROJECT | `76ccdb56b5b32d5496b37697c7c9602aeda1b982f5117b74b21a47db1826f1da` | b134f81e11944f99b2f00d73cd1f5926661ff6b3c94c1ddf3cb32cc1c5ea22fb |
+| `R1Z.PV_Src_PortInitialRoundStep` | PROJECT | `6857a56bd674a770fbc5b3b2552d96b906e532c49e1ad8796a4f4fe214fb18e1` | 3ede86ada870d0fee2fdcf13ec0697f2e50c60901d4bf6931c021d029dcf36a2 |
+| `R1Z.PV_Src_PortInitialRounds` | PROJECT | `7226e236486d2334460888b45d3f53a960571921b773b925d018c2aae217073e` | fab14b8a10ff1eceacb23ea839fe8b8c9cf6335468495e25801144ac589526c8 |
 | `R1Z.PV_Src_PortInternalBody` | PROJECT | `6c77002ee2541f910aaf6c4ad163404e91ef5458f043f6d49fe14ca254aa4dc8` | feba41f5374b6c52a75daa6640df6836575ddf61bfab2f1e7e508721517a08a0 |
 | `R1Z.PV_Src_PortInternalCanonical` | PROJECT | `6f3e31c53330345d420b0b816029332ea354a6f80eeaf54031d5506a98fe1ad1` | 4dddef554e9f2aef0fc2955f81b9880db1d418d45d86dcd9c0afad2f28e7547a |
 | `R1Z.PV_Src_PortInternalCells` | PROJECT | `fff3d12e44ecbd852757be94c3d98c6f77065dfec09f8a9ea171725c8e030b05` | 35fccccc58334a44b76faa54f04868fdc814cba6bdca14f75cd2be6c8f5161c3 |
+| `R1Z.PV_Src_PortInternalConstants` | PROJECT | `456ee0d84e474a3af3f3220005f0833ee40e019ef516ca874c529c2eba3719de` | 96cb7cdad65973798e1df21fbf393eb67b8e1800cbd22dbbbbb0f76b2826625b |
 | `R1Z.PV_Src_PortInternalCopy` | PROJECT | `bd382e5892f64b4d3f9a7cee81120ac7417dd925a9beec82d6970c5f3e80a2b5` | cb1e2a0d0e62b7d744f848a7fffe15d88e6a6b7f1344502fe3916147fe3f4e36 |
 | `R1Z.PV_Src_PortInternalField` | PROJECT | `2532262ded1d3a96272d7517f5498bdcab1dd3fc57f2a75171cc8c70db0a542b` | bb0c1ff2400ca57b59b2712f1212a699e6f21d085c5c5de3a4999e700d2a056e |
 | `R1Z.PV_Src_PortInternalFullBound` | PROJECT | `28cea3bf322337c5a314e26b33a2369c20f59e8d583a3e0ed79f65ad367e24ac` | d994c538534df13609589a463f01d1b83bdbe19608dfa18202558458f50034f0 |
 | `R1Z.PV_Src_PortInternalLoop` | PROJECT | `b895655f8613c8d3329b2ae80853de71051949215eb4022416363fe304590ca0` | 80d5e932c737a818300906f7bbbc0d31fa9181a01ff0d91043c7538fa0f96768 |
 | `R1Z.PV_Src_PortInternalModel` | PROJECT | `200ba6e115813b8b2117282f1ac34baa06985dabb561dc5dd00b33d08a33eb10` | 188056ac36aae216ea606035038fbf1266439c8bb266d2c07ac51763326745d0 |
+| `R1Z.PV_Src_PortInternalRoundCopy` | PROJECT | `fc47e2e1497e6286059fe5f1cc1fecb6c2728ca6fe8dd1791842b34428f45249` | 97431eab30011690ae3cd7fd1770ac27bdffed0c2335dd5eaf9f2e50427ca351 |
+| `R1Z.PV_Src_PortInternalRoundStep` | PROJECT | `24ddf3e1bd2aac3399023cf18c7edac4b1516d53daf2dd9d12fe7dece07f9d1c` | f10010dc735588639611bed5927b16ea306d902b70f0ba96e582c861fa6cc033 |
+| `R1Z.PV_Src_PortInternalRounds` | PROJECT | `acc61d5e9f88dfb25544c3122a6b68d70fddbd5094c76421f03e9da5d36b21d3` | 79617f7701b80d9edb7f9acd0c511cd0387a0c24592b966378e1da2763fce8e8 |
 | `R1Z.PV_Src_PortInternalStep` | PROJECT | `a476e4d5f76cd263c2fee913cd33d9abf9ae317d0fdd0a59a354570b30492568` | 8ebda28e12488c21d2010ac7356bc536671862cc258ac5ba6135a70814030503 |
 | `R1Z.PV_Src_PortInternalSumField` | PROJECT | `1166cb2e2a0889185f701aa6a8efdeac0c14ad313cb3d3bf80fe856007bd42f7` | 49fc6f8dff6ce1be8a43be9bbddc795111e878853a092291e6f8952318b28c88 |
 | `R1Z.PV_Src_PortInternalTotal` | PROJECT | `06bcf54a43c2285181e98c2c2a9f98b1e07968ff03b6d12740dc98b9309d1e87` | c9d271495e3cc5d3a6cee8dbf673f5984713e35867ac1ac2fe6e39ada3f0cb83 |
 | `R1Z.PV_Src_PortInternalZero` | PROJECT | `d2c4063fcf7c35c7ae42ede868e1b22985dfefadd9cb9a41d110a1f01e536194` | 7652fc09f99f63cba530d3c4c306d456e9cdde0f7300828ff723a7cd38d635c8 |
 | `R1Z.PV_Src_PortMultiply` | PROJECT | `78e9bee10faccb4d5a7d62c02c71dfddf0796613c66783c589483d5bf707583a` | beb9f4d52f899582ad52c26e748d9f8a288e89e58a9c550d7b6270a3ae499fc5 |
 | `R1Z.PV_Src_PortReduce` | PROJECT | `3727900fd4e4388b60b0efeac594aa565dde29cee5a56ccb0606dec128158cd8` | 0bceaea912ac1de78e286e4985183ab3c42ba42636357bd320ad6b51f22bbf65 |
+| `R1Z.PV_Src_PortSboxAgreement` | PROJECT | `70c74e12d3cefc60c4dd3526ea7296b9f670bd05a3adb38f6ef761a85e6dfdab` | 83d9aa4c1d0c27612acb354bf0b338a7ca0a604758f78f4a7aef9b862b3042c5 |
 | `R1Z.PV_Src_PortSboxLoop` | PROJECT | `04f2e4d65ec714ab39daac14d6bdb4d8a4f390f6a693807244e4141e958ee7fa` | 1d64553c7908f75d674bd33704314637b3b760577483fc06e8fa43e410a01cff |
+| `R1Z.PV_Src_PortSboxModel` | PROJECT | `0e0f0770ae7bf39272cb2e7e4dee21adb3764e693fa101baf4e6701a364bcbef` | 09a5475050900940b57af41bfeb5ddb573b00ec5354f6bfc12f4f7a5376bd150 |
 | `R1Z.PV_Src_PortSboxStep` | PROJECT | `af4dbb4708cea54aca7b9a581bc87aa3a28da84f4d5b0682df76ee762c6949fc` | 4aebdd32c9307ae9832d6199fa2bd42819d395d0497978e8e06ae9c6fdfafaf4 |
 | `R1Z.PV_Src_PortSumAdapter` | PROJECT | `34e124407f2e04a861455e044c6137e167f97e9ff92aa25aa5578e7c5cca0859` | 104576ef63c6e3052711fd2be5a21a00bb76d5298fea0c5799829dad65b96af3 |
 | `R1Z.PV_Src_PortSumTotal` | PROJECT | `748fe0873d8bcf2807a5a131a7aea52ec4721e043bc5892892635dc05383ac57` | 6013e7dad9b27279a292a618a49e5e28be956533e74e3679e932c180f1621bb0 |
 | `R1Z.PV_Src_PortSumTrace` | PROJECT | `9547dcc61be771a64b18b27a17418f86c2df2d92331024e590e579852030cc68` | cbce4a36c5fe4ff1605a3d3f56a6921ec435414903700221b6d3a98aaf990582 |
 | `R1Z.PV_Src_PortTables` | PROJECT | `b0aa0f50036c6ce1c42e2c29a0821663a6101d63c658850802ee434ef91bbdca` | 89c92575e77811a6e45821a1968a6f20a459c2ae5a438fd2f89d80e5c01b6459 |
+| `R1Z.PV_Src_PortTraceCanonical` | PROJECT | `35e614877322054709cdcb583c3e614a880e630508e17261160a17dbe3246dea` | 94324a7a5235f9c6859f27be0aa5f4122ab946c86b4c5b1f25c16847399ba12d |
+| `R1Z.PV_Src_PortTraceRounds` | PROJECT | `ec79cae0f4477f0483ea9f4021047133cd8b936266003203d44996bbf5003209` | 0b7d4a240dd4e48c47de283692d9dec4e1c269f6ab45d135cb4c469727e5664a |
 | `R1Z.PV_Src_ProjectionProofs` | PROJECT | `9deb7c7e83eb869b11d1a63e3dc0ae77845d366fd756c4fc69524e673400a197` | 5808b45624ce3e28f0d9030e0b5114da2d294880373cf40130b357055af934ef |
 | `R1Z.PV_Src_Public` | PROJECT | `1ced78a65e8f8403b5560eae120885dffe41d7fb2440ff4210b19f31ee8cfdb5` | 1000d72620820e70c5958343c099fa9442b2c724b1660a04dc2011317d0efeb9 |
 | `R1Z.PV_Src_PublicHeader` | PROJECT | `c3b363d503a46f6f0fa40802628dfb58699eb7a7e6ae5cf068e438c86b64e73d` | 3217578432efaf90ec3e0c17adecae360c65fac5102eeebed7db65d8aaefaa42 |

@@ -22,7 +22,8 @@ instantiate all three actual frozen constant groups, using accepted finite
 iterator traces and literal constant-canonicality checks. No iterator or
 constant-canonicality premise remains in these three equations. Every callback
 Result and callback-state change is retained.
-The complete hash_fields/sponge-to-parent correspondence and initial plus twenty
+The complete merkle_node_compress_v3/format.pool_v1_tree_parent-to-nodeCompress
+correspondence and initial plus twenty
 adjacent parent equations remain open. Lean parent cells remain 0 -> 0/21.
 PV_Src_RootCertificate.source_eq is unchanged and still requires all 21 parent
 cells at the same explicit dictionary. No literal root table replaces the helper.
@@ -42,3 +43,12 @@ selected compilation, public/snapshot binding and non-vacuity remain missing.
 The deployed five fields remain 5 -> 5. L1/L2/L3, E1/E2, actual RunJoin,
 proof-account client association, simE and the complete observer are unchanged.
 Target not yet established.
+
+Final read-only RunJoin pin:414d6fb38c publishes all21 mathematical nodeCompress
+parent cells and PV_RunJoin_RootModel.{frozen_literal,initial,parents}; every
+cell and table source matches its accepted standard-axiom receipt. See
+resume8-runjoin-all-model-cell-pins.json. These are mathematical cells21/21,
+not the source-parent cells required by PV_Src_RootCertificate.source_eq. The
+new ParentNoopRounds source is a further predecessor; no R_shipped/Records or
+installed compiler association is published. No new imports or compiles were
+performed after the60-attempt allocation was exhausted.

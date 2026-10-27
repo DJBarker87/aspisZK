@@ -61,8 +61,11 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 41581 | R1Z/PV_Src_PortConstantTraces | 0 | standard | 0:01.76 | 4148308 | 0 | d2db8202e4 | 3/3 |
 | 41582 | R1Z/PV_Src_PortEnumerateValues | 0 | standard | 0:01.73 | 4093376 | 0 | cf5cd692b9 | 1/1 |
 | 41584 | R1Z/PV_Src_PortConstantInstance | 0 | standard | 0:01.80 | 4149780 | 0 | cf5cd692b9 | 6/6 |
+| 41585 | R1Z/PV_Src_FinalAudit8A | 0 | standard | 0:01.84 | 4241288 | 0 | a1e46397a5 | 243/243 |
+| 41586 | R1Z/PV_Src_FinalAudit8B | 0 | standard | 0:01.78 | 4241144 | 0 | a1e46397a5 | 242/242 |
+| 41587 | R1Z/PV_Src_FinalAudit8C | 0 | standard | 0:01.95 | 4275280 | 0 | a1e46397a5 | 242/242 |
 
-Charged Lean attempts: 57/60. Reservation refusals: 27, uncharged. Next unused ID: 41585.
+Charged Lean attempts: 60/60. Reservation refusals: 27, uncharged. Next unused ID: 41588.
 
 ## Shared replacements
 
