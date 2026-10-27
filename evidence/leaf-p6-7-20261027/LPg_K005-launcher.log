@@ -1,0 +1,52 @@
+{"attempt": "LPg_K005", "exit_status": 1, "wall_seconds": 2.6854769790079445, "peak_rss_kib": "244932", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ni::unwind(8)] fn LPg_check_step(){
+  |                                      ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpg_check_step`
+
+warning: function `LPg_expand_low` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPg_compact.rs:14:39
+   |
+14 | #[kani::proof] #[kani::unwind(18)] fn LPg_expand_low(){expansion::<0,16>()}
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpg_expand_low`
+
+warning: function `LPg_expand_high` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPg_compact.rs:15:39
+   |
+15 | #[kani::proof] #[kani::unwind(18)] fn LPg_expand_high(){expansion::<16,32>()}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpg_expand_high`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.89s
+Checking harness fast_pairing::canonical::LPg_dot::LPg_qadd_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 294 failed (293 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "<builtin-library-memcmp>", line 25, in memcmp
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 1.0271369s
+
+Manual Harness Summary:
+Verification failed for - fast_pairing::canonical::LPg_dot::LPg_qadd_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r538b2293294f475585402492412799d6.scope; invocation ID: 47b72adda7404aa1a1b670b585d7ace8
