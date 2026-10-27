@@ -11508,3 +11508,30 @@ plus the Python orchestration that writes the request. Launched pv-l3dis4 (same 
 build B with the recommended recipe (r1p-check + ct-host-prover), audit B side by side with A (N1 removed
 by the CT path? N7 extent; N2-N6 constancy obligations), and the V374 dudect plan for B. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D273 (Stream B) 2026-10-27 10:45 UTC: cblib3 (library rows 5 → 7; soft SHA block composition proved; SHA-NI escalated) and cb9 (every remaining direct-extraction target refused); route (ii) feasibility job launched
+
+pv-cblib3 (`codex/pv-cblib-20261027`, head 4aaa5ae9a2; 100/100 Lean, 6/6 Kani; audits 41797-41799, 243
+imports / 735 axiom queries standard; crates/ changes only inside existing cfg(kani) modules; no
+forbidden tokens). New rows by the P6 route: V181 op30 String::with_capacity, V182 op31 String::push_str
+(library list 5 → 7; native bounds explicit). Proved: the complete extracted SOFT SHA-256 word-block value
+composition (schedule, 64 rounds, feed-forward), padding-reference totality, retained-buffer/reset shape.
+V231-V238 open; op26/33/36 open; op32 deferred (allocator effect). Dispatcher packet
+(design/PV-SHA-DISPATCH-20261027.md): the measured host selects runtime SHA-NI; 3,149,033 SHA callbacks per
+proof; weighted soft/native ratio 7.91×; forcing the soft backend projects +5.93 s (≈ 19.6-19.9 s per
+proof against historical baselines), which FAILS the 15 s / +10% prover gate; worker recommends keeping
+SHA-NI and proving its refinement, which needs the SHA-NI instruction semantics as a trust item.
+OWNER ESCALATION (lead recommendation below in the owner report). pv-cb9 (`codex/pv-cb9-20261027`, 0/100
+Lean, 0/4 Kani, no theorem added) found every remaining independent direct-extraction target refused by
+the unchanged extractor: escaping-reference and structured-Drop refusals for ops 226, 227, 228, 250, 251;
+escaping reference for op230; a concrete path-module Drop root for op252; nested-loop return / Option
+language item for op254; op259 already proved on pv-cb (SKIP). The shared extraction obstruction (D251,
+D257) therefore blocks about 25 callback rows, most of what remains. Launched pv-route2
+(`codex/pv-route2-20261027` from the extraction branch, reusing the pv-canon worktree; IDs 52100-52399, 60
+Lean): an extractable variant per blocked function as a patch (in-place where the crate or function is
+absent from the programs, else prover-local with the caller chain), each run through the UNCHANGED
+extractor and type-checked, and design/PV-ROUTE2-20261027.md with the total change size, the ELFs each
+change could touch, and at most three gated batches with the rows each unblocks; no patch applied.
+Launched pv-cblib4 (same cblib branch, IDs 52400-52699): soft-backend SHA-2 rows (padding, byte
+compression, digest wrappers) and op26/33/36, no SHA-NI work pending the owner. Six slots: op223, op134,
+runjoin13, l3dis4, route2, cblib4. Rows removed outright: 0. Privacy target not yet established.
