@@ -62,3 +62,32 @@ fn withdrawal_path() {compare(false,2);}
 #[kani::proof]
 #[kani::unwind(33)]
 fn withdrawal_public() {compare(false,3);}
+
+// Independently frozen source table, already covered by the 21 source-parent
+// cells. Compare the actual shipped root computation with a fixed input to
+// the owned reference; neither callee is stubbed.
+mod fixed_roots {
+ include!("../../crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal_constants.rs");
+}
+fn compare_fixed_roots(transfer: bool) {
+ let (input,out,rec,chg,snap)=inputs(transfer);
+ let (w,p)=records(&input,out,rec.as_ref(),&chg,&snap,M31(77));
+ let empty=fixed_roots::POOL_V1_PAIR_EMPTY_ROOTS_V1.map(|row| row.map(M31));
+ let (v,q)=super::super::records_reference::records_reference_with_roots(input,out,rec,chg,snap,M31(77),empty);
+ let part=0;
+    if part == 0 || part == 1 {
+        assert_eq!(w.input_value,v.input_value);assert_eq!(w.output_value,v.output_value);assert_eq!(w.change_value,v.change_value);
+        assert_eq!(w.sk,v.sk);assert_eq!(w.salt,v.salt);assert_eq!(w.pair_first,v.pair_first);assert_eq!(w.pair_second,v.pair_second);
+        assert_eq!(w.pair_occupied,v.pair_occupied);assert_eq!(w.pair_inverse,v.pair_inverse);
+        assert_eq!(w.recipient_owner,v.recipient_owner);assert_eq!(w.recipient_salt,v.recipient_salt);
+        assert_eq!(w.change_owner,v.change_owner);assert_eq!(w.change_salt,v.change_salt);
+    }
+    if part == 0 || part == 2 {assert_eq!(w.bits,v.bits);assert_eq!(w.sibs,v.sibs);}
+    if part == 0 || part == 3 {assert_eq!(p.transfer,q.transfer);assert_eq!(p.asset,q.asset);assert_eq!(p.next_pair_index,q.next_pair_index);assert_eq!(p.frontier,q.frontier);assert_eq!(p.empty,q.empty);}
+}
+#[kani::proof]
+#[kani::unwind(33)]
+fn transfer_fixed_roots() {compare_fixed_roots(true);}
+#[kani::proof]
+#[kani::unwind(33)]
+fn withdrawal_fixed_roots() {compare_fixed_roots(false);}
