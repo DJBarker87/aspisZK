@@ -1,3 +1,5 @@
+> Superseded by JGm_TX2_HANDOFF.md. The following is a historical working snapshot.
+
 # TX2 m working handoff (not final)
 
 S2 OPEN; target not yet established. The adopted top is
