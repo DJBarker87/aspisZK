@@ -1,0 +1,13 @@
+JHe_Natives.lean:19:41: error: Tactic `decide` failed for proposition
+  [3#u8, 10#u8].length ≤ Usize.max
+because its `Decidable` instance
+  [3#u8, 10#u8].length.decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match [3#u8, 10#u8].length.ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'AspisR1.JHe_Natives.extraction' depends on axioms: [propext, Classical.choice, Quot.sound]
