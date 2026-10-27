@@ -1,0 +1,48 @@
+{"attempt": "XRj_K007", "exit_status": 1, "wall_seconds": 90.32018623902695, "peak_rss_kib": "405272", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+ase: `xrj_scalar_5`
+
+warning: function `XRj_power_step` should have a snake case name
+  --> XRj_harnesses.rs:30:39
+   |
+30 | #[kani::proof] #[kani::unwind(10)] fn XRj_power_step(){
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrj_power_step`
+
+warning: function `XRj_dot_zero` should have a snake case name
+  --> XRj_harnesses.rs:36:39
+   |
+36 | #[kani::proof] #[kani::unwind(10)] fn XRj_dot_zero(){let e=base_e();let mut d=fast_pairing::EbyKDot::new();assert!(d.push(e,K::ZERO)...
+   |                                       ^^^^^^^^^^^^ help: convert the identifier to snake case: `xrj_dot_zero`
+
+warning: function `XRj_dot_one` should have a snake case name
+  --> XRj_harnesses.rs:37:39
+   |
+37 | #[kani::proof] #[kani::unwind(10)] fn XRj_dot_one(){let k=any_k();let mut d=fast_pairing::EbyKDot::new();assert!(d.push(E::ONE,k).is...
+   |                                       ^^^^^^^^^^^ help: convert the identifier to snake case: `xrj_dot_one`
+
+warning: function `XRj_fold_step` should have a snake case name
+  --> XRj_harnesses.rs:39:39
+   |
+39 | #[kani::proof] #[kani::unwind(10)] fn XRj_fold_step(){let old=base_e();let part=base_e();let coefficient=E::ZERO;let next=old.add(co...
+   |                                       ^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrj_fold_step`
+
+    Finished `dev` profile [optimized] target(s) in 0.08s
+Checking harness XRj_harnesses::XRj_power_step...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - XRj_harnesses::XRj_power_step
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rb41f39e3375646c98bafeaf563978a3f.scope; invocation ID: 8b6ea3c31e914d56ae90eee9bd39adf8

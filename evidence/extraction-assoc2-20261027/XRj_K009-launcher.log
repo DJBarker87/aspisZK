@@ -1,0 +1,50 @@
+{"attempt": "XRj_K009", "exit_status": 0, "wall_seconds": 1.4064771229750477, "peak_rss_kib": "165192", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+                                     ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrj_power_step`
+
+warning: function `XRj_dot_zero` should have a snake case name
+  --> XRj_harnesses.rs:36:39
+   |
+36 | #[kani::proof] #[kani::unwind(10)] fn XRj_dot_zero(){let e=base_e();let mut d=fast_pairing::EbyKDot::new();assert!(d.push(e,K::ZERO)...
+   |                                       ^^^^^^^^^^^^ help: convert the identifier to snake case: `xrj_dot_zero`
+
+warning: function `XRj_dot_one` should have a snake case name
+  --> XRj_harnesses.rs:37:39
+   |
+37 | #[kani::proof] #[kani::unwind(10)] fn XRj_dot_one(){let k=any_k();let mut d=fast_pairing::EbyKDot::new();assert!(d.push(E::ONE,k).is...
+   |                                       ^^^^^^^^^^^ help: convert the identifier to snake case: `xrj_dot_one`
+
+warning: function `XRj_fold_step` should have a snake case name
+  --> XRj_harnesses.rs:39:39
+   |
+39 | #[kani::proof] #[kani::unwind(10)] fn XRj_fold_step(){let old=base_e();let part=base_e();let coefficient=E::ZERO;let next=old.add(co...
+   |                                       ^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrj_fold_step`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.11s
+Checking harness XRj_harnesses::XRj_dot_one...
+
+VERIFICATION RESULT:
+ ** 0 of 178 failed (1 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.98920304s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r9f52669272bc4b98b5021300e39437b0.scope; invocation ID: 6521ec705201428591f29177973b8237

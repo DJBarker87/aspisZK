@@ -34,3 +34,8 @@ adapter. This worker has zero extraction allowance and no authority to edit
 generated files. A library change by itself cannot repair the namespace
 shadowing and source-generated closure ABI errors without changing the frozen
 input context. No source failure is hidden by substituting another module.
+
+XRj_L015 independently isolates the raw line56 Iterator expression using only
+Aeneas (no release Types/externals/leaf models): exit1, wall1.052044599025976s,
+peak2621140KiB, swaps0. It reproduces the pair/triple mismatch exactly. This
+failed diagnostic has no accepted theorem or object; no full-source rerun.
