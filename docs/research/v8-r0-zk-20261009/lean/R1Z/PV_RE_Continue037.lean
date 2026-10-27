@@ -30,9 +30,9 @@ theorem success (e : r1_wire.Error) (out : Payload (r1_wire.Error.Insts.CoreCmpP
   rfl
 
 /-- Exact failure truncation, without reducing the suffix. -/
-theorem failure (e : r1_wire.Error) (e : Error)
-    (h : (r1_wire.Error.Insts.CoreCmpPartialEqError.eq e r1_wire.Error.ActivePole) = .fail e) :
-    prover.semantic_error (e := e) = .fail e := by
+theorem failure (e : r1_wire.Error) (pvFailure : Error)
+    (h : (r1_wire.Error.Insts.CoreCmpPartialEqError.eq e r1_wire.Error.ActivePole) = .fail pvFailure) :
+    prover.semantic_error (e := e) = .fail pvFailure := by
   rw [equation, h]
   rfl
 

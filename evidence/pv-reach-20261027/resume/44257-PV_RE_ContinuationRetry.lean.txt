@@ -1,0 +1,148 @@
+import R1Z.PV_RE_ClientFinite
+import R1Z.PV_RE_Continue035
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RE_ContinuationRetry
+open Aeneas Aeneas.Std Result ControlFlow Error ProverRwFull PV_RE_RetryStep
+variable [ExternalTypes] [ExternalFuns]
+
+def stepWithBody
+  {T0 : Type}
+  (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Std.Usize (core.result.Result
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error))
+  (attemptBody : Secrets → Store →
+    Result ((core.result.Result ((alloc.vec.Vec U8) × prover.MaskedFixtureAudit) verifier.Error) × Store))
+  (next : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore → T0 → Std.Usize →
+    Result ((core.result.Result prover.RetriedProof verifier.Error) ×
+      aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore))
+  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled :
+  aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : transport.Variant)
+  (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
+  (nonce_store :
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  (next_attempt : T0) (k : Std.Usize) :
+  Result ((core.result.Result prover.RetriedProof verifier.Error) ×
+    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  := do
+  if k >= prover.ATTEMPT_CAP
+  then
+    ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store)
+  else
+    let (r, next_attempt1) ←
+      coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut
+        next_attempt k
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+    | core.ops.control_flow.ControlFlow.Continue val =>
+      let (r1, nonce_store1) ←
+        attemptBody val nonce_store
+      match r1 with
+      | core.result.Result.Ok p =>
+        let (proof, audit) := p
+        let i ← Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)
+        ok (core.result.Result.Ok { proof, audit, attempts := i },
+          nonce_store1)
+      | core.result.Result.Err e =>
+        match e with
+        | verifier.Error.Parse =>
+          ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+        | verifier.Error.Semantic =>
+          ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+        | verifier.Error.Transcript =>
+          ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+        | verifier.Error.Relation =>
+          ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+        | verifier.Error.Merkle =>
+          ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+        | verifier.Error.Query =>
+          ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+        | verifier.Error.Checkpoint =>
+          ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+        | verifier.Error.Allocation =>
+          ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+        | verifier.Error.Rejected =>
+          let i ← Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)
+          next nonce_store1 next_attempt1 i
+        | verifier.Error.AttemptsExhausted =>
+          ok (core.result.Result.Err verifier.Error.AttemptsExhausted,
+            nonce_store1)
+        | verifier.Error.Entropy =>
+          ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      let r1 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          prover.RetriedProof (core.convert.FromSame verifier.Error) residual
+      ok (r1, nonce_store)
+
+
+/-- Actual op226 followed by the named, complete attempt continuation. -/
+def attemptCPS (pub : Public) (compiled : Compiled) (v : transport.Variant)
+    (hash : Hash) (secret : Secrets) (store : Store) :=
+  ExternalFuns.op226 pub >>= fun out => PV_RE_Continue035.continueAfter
+    pub compiled v hash secret store out
+
+theorem attempt_eq (pub : Public) (compiled : Compiled) (v : transport.Variant)
+    (hash : Hash) (secret : Secrets) (store : Store) :
+    prover.prove_masked_attempt pub compiled v hash secret store =
+      attemptCPS pub compiled v hash secret store := by
+  exact PV_RE_Continue035.equation pub compiled v hash secret store
+
+theorem step_eq {C : Type} (entropy : Entropy C) (pub : Public)
+    (compiled : Compiled) (v : transport.Variant) (hash : Hash)
+    (next : Store → C → Usize → Reply) (store : Store) (state : C) (k : Usize) :
+    step entropy next pub compiled v hash store state k =
+      stepWithBody entropy (attemptCPS pub compiled v hash) next
+        pub compiled v hash store state k := by
+  unfold step stepWithBody
+  simp only [attempt_eq]
+  rfl
+
+/-- Finite retry with the actual source suffix substituted at every attempt. -/
+def runCPS {C : Type} (entropy : Entropy C) (pub : Public)
+    (compiled : Compiled) (v : transport.Variant) (hash : Hash) :
+    Nat → Store → C → Usize → Reply
+  | 0 => fun store _ _ => .ok (.Err .AttemptsExhausted,store)
+  | n+1 => stepWithBody entropy (attemptCPS pub compiled v hash)
+      (runCPS entropy pub compiled v hash n) pub compiled v hash
+
+theorem run_eq {C : Type} (entropy : Entropy C) (pub : Public)
+    (compiled : Compiled) (v : transport.Variant) (hash : Hash)
+    (n : Nat) (store : Store) (state : C) (k : Usize) :
+    PV_RE_FiniteRetry.runN entropy pub compiled v hash n store state k =
+      runCPS entropy pub compiled v hash n store state k := by
+  induction n generalizing store state k with
+  | zero => rfl
+  | succ n ih =>
+    change step entropy (PV_RE_FiniteRetry.runN entropy pub compiled v hash n)
+      pub compiled v hash store state k = _
+    rw [step_eq]
+    have hnext : PV_RE_FiniteRetry.runN entropy pub compiled v hash n =
+        runCPS entropy pub compiled v hash n := by
+      funext s c i
+      exact ih s c i
+    rw [hnext]
+    rfl
+
+theorem whole_client {C : Type}
+    (entropy : core.ops.function.FnMut C Usize (Array U8 32#usize))
+    (pub : Public) (compiled : Compiled) (hash : Hash) (store : Store) (state : C) :
+    RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+      (ExternalFuns.op233 .S2 .S2 >>= fun equal =>
+        if !equal then .ok (.Err .Semantic,store)
+        else runCPS
+          (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError entropy)
+          pub compiled .S2 hash 8 store state 0#usize) := by
+  rw [PV_RE_ClientFinite.equation]
+  simp only [run_eq]
+
+#print axioms stepWithBody
+#print axioms attemptCPS
+#print axioms attempt_eq
+#print axioms step_eq
+#print axioms runCPS
+#print axioms run_eq
+#print axioms whole_client
+end R1Z.PV_RE_ContinuationRetry

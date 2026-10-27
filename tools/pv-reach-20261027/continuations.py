@@ -28,6 +28,7 @@ for ix,row in enumerate(old):
    pos+=1
   binder=header[start:pos];names+=binder[1:-1].split(':',1)[0].split();binders.append(binder)
  args=' '.join('('+v+' := '+v+')' for v in names)
+ errName='pvFailure' if 'e' in names else 'e'
  mod=f'PV_RE_Continue{ix:03}';rtype=header[pos+1:].strip();bs=' '.join(binders)
  text=f'''import R1Z.ProverRwFullFuns
 set_option autoImplicit false
@@ -59,9 +60,9 @@ theorem success {bs} (out : Payload ({expr}))
   rfl
 
 /-- Exact failure truncation, without reducing the suffix. -/
-theorem failure {bs} (e : Error)
-    (h : ({expr}) = .fail e) :
-    {n} {args} = .fail e := by
+theorem failure {bs} ({errName} : Error)
+    (h : ({expr}) = .fail {errName}) :
+    {n} {args} = .fail {errName} := by
   rw [equation, h]
   rfl
 
