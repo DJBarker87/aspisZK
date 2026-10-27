@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_BankCertificate19.lean:33:2: error: unsolved goals
+case initial_reads
+data : ℕ → ℕ → State
+c : Certificate
+b : Usize
+hb : ↑b < 57
+layout : ∀ row < 16, data (↑b) row = c.row row
+columns : Columns :=
+  PV_RunJoin_BankAggregate18.columns (PV_RunJoin_BankTable19.banks (PV_RunJoin_BankTable19.cells data)) b
+lane : Usize
+hl : ↑lane < 16
+⊢ ok
+      (↑(if True then c.absorbed 0
+          else
+            if 0 < 12 then c.states 0
+            else if 0 = 12 then c.absorption else Array.repeat 16#usize aspis_core.field.M31.ZERO))[↑lane]! =
+    ok (↑(c.absorbed 0))[↑lane]!
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_BankCertificate19.lean:54:6: error: Type mismatch: After simplification, term
+  hs
+ has type
+  @Eq (Std.Array U32 16#usize) (Std.Array.set (c.absorbed ↑j) (Usize.ofNatCore ↑j ⋯) sum) (c.absorbed (↑j + 1))
+but is expected to have type
+  @Eq (Std.Array U32 16#usize) (Std.Array.set (c.absorbed ↑(Usize.ofNatCore ↑j ⋯)) (Usize.ofNatCore ↑j ⋯) sum)
+    (c.absorbed (↑(Usize.ofNatCore ↑j ⋯) + 1))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_BankCertificate19.lean:59:4: error: Type mismatch: After simplification, term
+  c.pair j
+ has type
+  ∃ first,
+    poseidon2.evaluate_trace_round_pair (c.states ↑j) (Usize.ofNatCore ↑j ⋯) = ok (some (first, c.states (↑j + 1)))
+but is expected to have type
+  ∃ first,
+    poseidon2.evaluate_trace_round_pair (c.states ↑(Usize.ofNatCore ↑j ⋯)) (Usize.ofNatCore ↑j ⋯) =
+      ok (some (first, c.states (↑(Usize.ofNatCore ↑j ⋯) + 1)))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_BankCertificate19.lean:42:31: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵e̵r̵t̵i̵f̵i̵c̵a̵t̵e̵.̵r̵o̵w̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵←̵[̲C̲e̲r̲t̲i̲f̲i̲c̲a̲t̲e̲.̲r̲o̲w̲,̲ ̲←̲ c.before]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_BankCertificate19.block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

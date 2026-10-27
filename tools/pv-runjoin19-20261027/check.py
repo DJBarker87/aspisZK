@@ -15,6 +15,22 @@ if prior_refusals:
 rows=[json.loads(p.read_text()) for p in E.glob('receipt-[0-9]*.json')];charged=sum(r.get('exit') is not None for r in rows)
 assert charged<100
 assert not (E/f'used-{A}.json').exists()
+# Read-only cross-job collision check before consuming each subsequent ID.
+id_code = r"""import pathlib,re,json
+root=pathlib.Path('/home/dombarker/project-offloads');hits=[]
+pat=re.compile(r'(^|[-_])ATTEMPT([-_.]|$)')
+for job in root.glob('codex-pv-*'):
+ if job.name=='codex-pv-runjoin-20261026':continue
+ for p in job.glob('evidence/**/*'):
+  if len(p.relative_to(job).parts)<=5 and p.is_file() and pat.search(p.name):hits.append(str(p))
+sent=root/'r1-privacy-build-integration-20261019/evidence/sent.txt'
+lines=[l for l in sent.read_text().splitlines() if re.search(r'\bATTEMPT\b',l)]
+print(json.dumps(dict(attempt=ATTEMPT,other_receipt_hits=hits,sent_hits=lines)))
+""".replace('ATTEMPT',str(A))
+id_result=subprocess.run(['ssh',host,'python3 -c '+shlex.quote(id_code)],capture_output=True,text=True)
+assert id_result.returncode==0,id_result.stderr
+id_audit=json.loads(id_result.stdout);(E/f'id-audit-{A}.json').write_text(json.dumps(id_audit,indent=2)+'\n')
+assert not id_audit['other_receipt_hits'] and not id_audit['sent_hits'],id_audit
 S=R/'docs/research/v8-r0-zk-20261009/lean'/(M+'.lean')
 if len(sys.argv)>3:S=R/sys.argv[3]
 assert S.is_file();sha=hashlib.sha256(S.read_bytes()).hexdigest()

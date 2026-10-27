@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_BankCertificate19.lean:39:77: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  data (↑b) 0
+in the target expression
+  ok (↑(data ↑b ↑0#usize))[↑lane]! = ok (↑(c.absorbed 0))[↑lane]!
+
+case initial_reads
+data : ℕ → ℕ → State
+c : Certificate
+b : Usize
+hb : ↑b < 57
+layout : ∀ row < 16, data (↑b) row = c.row row
+columns : Columns :=
+  PV_RunJoin_BankAggregate18.columns (PV_RunJoin_BankTable19.banks (PV_RunJoin_BankTable19.cells data)) b
+lane : Usize
+hl : ↑lane < 16
+⊢ ok (↑(data ↑b ↑0#usize))[↑lane]! = ok (↑(c.absorbed 0))[↑lane]!
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_BankCertificate19.lean:48:88: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  data (↑b) 12
+in the target expression
+  ok (↑(data ↑b ↑12#usize))[↑lane]! = ok (↑c.absorption)[↑lane]!
+
+case absorb_step.refine_1
+data : ℕ → ℕ → State
+c : Certificate
+b : Usize
+hb : ↑b < 57
+layout : ∀ row < 16, data (↑b) row = c.row row
+columns : Columns :=
+  PV_RunJoin_BankAggregate18.columns (PV_RunJoin_BankTable19.banks (PV_RunJoin_BankTable19.cells data)) b
+lane : Usize
+hl : ↑lane < 8
+j : Fin 8 := ⟨↑lane, hl⟩
+hi : lane = Usize.ofNatCore ↑j ⋯
+sum : aspis_core.field.M31
+ha : aspis_core.field.M31.add (↑(c.absorbed ↑j))[↑j]! (↑c.absorption)[↑j]! = ok sum
+hs : Std.Array.set (c.absorbed ↑j) (Usize.ofNatCore ↑j ⋯) sum = c.absorbed (↑j + 1)
+⊢ ok (↑(data ↑b ↑12#usize))[↑lane]! = ok (↑c.absorption)[↑lane]!
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (12 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_BankCertificate19.lean:50:6: error: Type mismatch: After simplification, term
+  hs
+ has type
+  @Eq (Std.Array U32 16#usize) (Std.Array.set (c.absorbed ↑j) (Usize.ofNatCore ↑j ⋯) sum) (c.absorbed (↑j + 1))
+but is expected to have type
+  @Eq (Std.Array U32 16#usize) (Std.Array.set (c.absorbed ↑(Usize.ofNatCore ↑j ⋯)) (Usize.ofNatCore ↑j ⋯) sum)
+    (c.absorbed (↑(Usize.ofNatCore ↑j ⋯) + 1))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_BankCertificate19.lean:55:4: error: Type mismatch: After simplification, term
+  c.pair j
+ has type
+  ∃ first,
+    poseidon2.evaluate_trace_round_pair (c.states ↑j) (Usize.ofNatCore ↑j ⋯) = ok (some (first, c.states (↑j + 1)))
+but is expected to have type
+  ∃ first,
+    poseidon2.evaluate_trace_round_pair (c.states ↑(Usize.ofNatCore ↑j ⋯)) (Usize.ofNatCore ↑j ⋯) =
+      ok (some (first, c.states (↑(Usize.ofNatCore ↑j ⋯) + 1)))
+'R1Z.PV_RunJoin_BankCertificate19.block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

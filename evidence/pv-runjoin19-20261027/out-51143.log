@@ -1,0 +1,95 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedPair19.lean:23:78: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if n = 0#usize then poseidon2.external_linear_lazy s else ok s
+in the target expression
+  (if n = 0#usize then do
+      let state1 ← poseidon2.external_linear_lazy s
+      let first_round ← lift (Usize.wrapping_mul 2#usize n)
+      let __x ← poseidon2.apply_round_by_index state1 first_round
+      let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch __x.1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i1 ← lift (first_round.wrapping_add 1#usize)
+          let __x_1 ← poseidon2.apply_round_by_index __x.2 i1
+          let cf1 ← core.option.Option.Insts.CoreOpsTry_traitTry.branch __x_1.1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (some (__x.2, __x_1.2))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual
+    else do
+      let first_round ← lift (Usize.wrapping_mul 2#usize n)
+      let __x ← poseidon2.apply_round_by_index s first_round
+      let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch __x.1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i1 ← lift (first_round.wrapping_add 1#usize)
+          let __x_1 ← poseidon2.apply_round_by_index __x.2 i1
+          let cf1 ← core.option.Option.Insts.CoreOpsTry_traitTry.branch __x_1.1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (some (__x.2, __x_1.2))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual) =
+    ok (some (first, second))
+
+s pre first second : State
+n : Usize
+hn : ↑n < 11
+hp : (if n = 0#usize then poseidon2.external_linear_lazy s else ok s) = ok pre
+hf : poseidon2.apply_round_by_index pre (Usize.wrapping_mul 2#usize n) = ok (some (), first)
+hs : poseidon2.apply_round_by_index first ((Usize.wrapping_mul 2#usize n).wrapping_add 1#usize) = ok (some (), second)
+hd : poseidon2.POSEIDON2_ROUNDS / 2#usize = ok 11#usize
+⊢ (if n = 0#usize then do
+      let state1 ← poseidon2.external_linear_lazy s
+      let first_round ← lift (Usize.wrapping_mul 2#usize n)
+      let __x ← poseidon2.apply_round_by_index state1 first_round
+      let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch __x.1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i1 ← lift (first_round.wrapping_add 1#usize)
+          let __x_1 ← poseidon2.apply_round_by_index __x.2 i1
+          let cf1 ← core.option.Option.Insts.CoreOpsTry_traitTry.branch __x_1.1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (some (__x.2, __x_1.2))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual
+    else do
+      let first_round ← lift (Usize.wrapping_mul 2#usize n)
+      let __x ← poseidon2.apply_round_by_index s first_round
+      let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch __x.1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let i1 ← lift (first_round.wrapping_add 1#usize)
+          let __x_1 ← poseidon2.apply_round_by_index __x.2 i1
+          let cf1 ← core.option.Option.Insts.CoreOpsTry_traitTry.branch __x_1.1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (some (__x.2, __x_1.2))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual) =
+    ok (some (first, second))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_IndexedPair19.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
