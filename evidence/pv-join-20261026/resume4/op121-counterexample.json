@@ -1,0 +1,62 @@
+{
+  "op": 121,
+  "status": "checked source counterexample to proposed unrestricted op121 P6 Horner-reference ROW",
+  "source": "aspis_core::state_only_sumcheck::evaluate_state_only_polynomial",
+  "reference": "aspis_core::state_only_sumcheck::evaluate_state_only_polynomial_horner",
+  "statement": "For every polynomial: [QM31; 28] and challenge: QM31, source(polynomial, challenge) = reference(polynomial, challenge)",
+  "input": {
+    "coefficients": {
+      "2": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    "other_coefficients": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "challenge": [
+      0,
+      2147483648,
+      0,
+      0
+    ]
+  },
+  "source_output": [
+    3,
+    0,
+    0,
+    0
+  ],
+  "reference_output": [
+    2147483646,
+    0,
+    0,
+    0
+  ],
+  "native_receipt": "poly-row-preflight4/receipt.json",
+  "kani_harness": "row_counterexample::poly_raw_exact",
+  "kani_receipt": "poly-row-counterexample4/receipt.json",
+  "core_all_rs_match_worktree": true,
+  "source_revision": "2238957931516f7f9e79cc4d6c2743b163fb3844",
+  "not_claimed": [
+    "fixture admitted input counterexample",
+    "privacy attack",
+    "direct self-equality of source with its own extraction is false"
+  ],
+  "reason_relevant": "The requested row has arbitrary inputs and no desired-output premise. This reference cannot discharge that unrestricted row. The counterexample uses a noncanonical M31 raw limb; it must not be repaired by silently adding a canonical-input restriction.",
+  "endpoint_premises_removed": 0,
+  "kani_default_checks_receipt": "poly-row-counterexample4/receipt.json",
+  "kani_default_checks_result": "failed on CM31.square unsigned subtraction overflow for this noncanonical raw input; equality and exact-value assertions did not fail",
+  "kani_release_wrap_receipt": "poly-row-release-counterexample4/receipt.json",
+  "release_semantics": "Cargo profile release overflow-checks=false; release-wrap Kani disables only overflow checks to match native release, retaining memory/undefined-function/unwind checks",
+  "kani_reference_receipt": "poly-reference-checked4/receipt.json",
+  "kani_reference_result": "exit 0, all 134 checks pass (2 unreachable); exact reference output and absence of source-overflow failure checked",
+  "kani_release_wrap_result": "exit 1; Kani --no-overflow-checks still retains the MIR subtraction assertion; no successful wrapping Kani proof claimed",
+  "stop_authorized": "User: stop only on exhaustion or a checked counterexample to a ROW statement (report it; do not fix). This counterexample stops this run before exhausting Lean.",
+  "lean_counterexample_theorem": false
+}

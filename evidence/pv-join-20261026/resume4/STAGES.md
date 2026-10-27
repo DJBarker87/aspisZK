@@ -27,3 +27,27 @@ prefix facts. Native effect rows 4 (generic Drop), 32 (fallible allocation),
 122/123 (zeroization plus compiler fence), 232 (public checker timing), 257
 (parallel/native host work and effects) are retained for pv-runjoin; none is
 silently interpreted as a pure successful callback.
+
+Stage 2: P6 preflight and checked counterexample.
+- Kani names were listed before use. equal_raw and keep_clear_raw passed.
+- scan_1024_raw timed out at 240 s; it is not rerun. No op258 source-law
+  credit, and no generated reference extraction/Lean closure is claimed.
+- Proposed op121 P6 ROW: for every raw [QM31;28] polynomial and QM31
+  challenge, shipped radix-four source equals existing Horner reference.
+  The optimized native preflight refutes it: only coefficient 2 = (1,0,0,0),
+  challenge = (0,2147483648,0,0), source = (3,0,0,0), reference = (P-1,0,0,0).
+- Kani default checks confirm source CM31.square subtraction overflow on that
+  input. --no-overflow-checks does not suppress that MIR assertion; it also
+  fails, and is not claimed as wrapping-semantics verification. A separate
+  reference-only harness passes all 134 checks with exact output P-1.
+- Every host aspis-core Rust source matches the worktree SHA256. No source
+  was fixed, no canonicality premise was added, and this is not claimed as a
+  counterexample to either admitted fixture or the privacy endpoint.
+- Per the user's checked-ROW-counterexample stop condition, stop substantive
+  proof work now. The remaining three Lean invocations are final audits.
+  Kani budget used: 6/6 (3 passed, 2 arithmetic-failure reports, 1 timeout).
+- rw20 checked again at c5c41653d7: only ProverRw19 modules, explicit missing
+  concrete input-to-model map. Fixture byte equations stay exact/open.
+- Inventory remains 30; zero new source laws, zero rows universally excluded
+  from both fixtures. Six native-effect entries explicitly deferred in
+  inventory.json; deferral earns no premise-removal credit.

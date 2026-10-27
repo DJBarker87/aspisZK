@@ -67,7 +67,7 @@ for line in src.read_text().splitlines():
  if line.startswith('import '):
   for mod in line[7:].split():visit(mod)
 fp=hashlib.sha256(json.dumps(ds,sort_keys=True).encode()).hexdigest();(O/'receipts'/f'{{a}}-fp.txt').write_text(fp)
-x=dict(attempt=a,module=m,source_sha256=expected,source_revision={rev!r},source_origin={origin!r},deps=ds,deps_fingerprint=fp,old_source_sha256=old,fingerprint_kind='transitive project import context',command=[str(H/'tools/run-joint.sh'),str(a),m,'J','7000','8',fp],caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,lean_M=7000))
+x=dict(attempt=a,module=m,source_sha256=expected,source_revision={rev!r},source_origin={origin!r},deps=ds,deps_fingerprint=fp,old_source_sha256=old,fingerprint_kind='transitive project import context',command=[str(H/'tools/run-joint.sh'),str(a),m,'J','7000','8',fp],caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=128,lean_M=7000))
 (O/'receipts'/f'{{a}}-input.json').write_text(json.dumps(x,indent=2)+'\\n');print(json.dumps(x))
 '''
 p=py(code)

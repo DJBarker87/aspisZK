@@ -1,0 +1,94 @@
+{
+  "before": 30,
+  "after": 30,
+  "all_entries": [
+    4,
+    32,
+    33,
+    34,
+    35,
+    36,
+    79,
+    117,
+    121,
+    122,
+    123,
+    132,
+    133,
+    134,
+    222,
+    223,
+    224,
+    226,
+    227,
+    228,
+    230,
+    232,
+    249,
+    250,
+    251,
+    252,
+    253,
+    257,
+    258,
+    259
+  ],
+  "source_laws_closed": [],
+  "unreachable_on_both_fixtures": [],
+  "deferred_to_pv_runjoin": [
+    {
+      "op": 4,
+      "reason": "Generic Drop can execute destructors, panic, and change live native authority/resource state; a pure Result Unit loses those effects."
+    },
+    {
+      "op": 32,
+      "reason": "try_reserve_exact exposes capacity/allocation failure and allocator effects; value preservation is not the complete native operation."
+    },
+    {
+      "op": 122,
+      "reason": "Array Zeroize invokes arbitrary element zeroizers and must retain volatile-write/fence and memory-erasure effects."
+    },
+    {
+      "op": 123,
+      "reason": "Blanket Zeroize invokes arbitrary DefaultIsZeroes behavior and volatile replacement/fence; a pure returned value is insufficient."
+    },
+    {
+      "op": 232,
+      "reason": "Public checker returns native timing data R1CheckTimes; check verdict and native L1/L2/L3 timing/effects remain with pv-runjoin."
+    },
+    {
+      "op": 257,
+      "reason": "host_work.map may schedule parallel workers and invoke arbitrary callbacks; native scheduling, allocation and effects cannot be replaced by pure output equality."
+    }
+  ],
+  "unresolved_pure_entries": [
+    33,
+    34,
+    35,
+    36,
+    79,
+    117,
+    121,
+    132,
+    133,
+    134,
+    222,
+    223,
+    224,
+    226,
+    227,
+    228,
+    230,
+    249,
+    250,
+    251,
+    252,
+    253,
+    258,
+    259
+  ],
+  "checked_false_P6_candidate": [
+    121
+  ],
+  "native_deferral_removes_no_endpoint_premise": true
+}
