@@ -1,0 +1,58 @@
+{"attempt": "NBB_K002", "exit_status": 0, "wall_seconds": 5.605660944012925, "peak_rss_kib": "340380", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ert the identifier to snake case: `nbb_fold`
+
+warning: function `NBB_fold_reply` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBB_harness.rs:72:4
+   |
+72 | fn NBB_fold_reply(value:u64)->u64 {
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbb_fold_reply`
+
+warning: function `NBB_fold_frame` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBB_harness.rs:78:4
+   |
+78 | fn NBB_fold_frame() {
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbb_fold_frame`
+
+warning: creating a shared reference to mutable static
+  --> crates/aspis-r1-cost-probe/src/NBB_harness.rs:85:24
+   |
+85 |     unsafe {assert_eq!(NBB_RAW,before[j]);assert_eq!(row[k],if j==k {NBB_REPLY} else {before[k]});}
+   |                        ^^^^^^^ shared reference to mutable static
+   |
+   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.75s
+Checking harness verifier::NBB_harness::NBB_add_frame...
+
+VERIFICATION RESULT:
+ ** 0 of 109 failed
+
+ ** 3 of 3 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.0105867s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-red92192ce37c47e681037ba1c5447d63.scope; invocation ID: 2270f13d3644427cafcb4858b419f24a

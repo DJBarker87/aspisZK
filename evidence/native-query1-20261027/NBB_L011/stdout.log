@@ -1,0 +1,385 @@
+NBB_generated/NBB_QueryTrace.lean:41:12: error: Tactic `rfl` failed: The left-hand side
+  match r✝ with
+  | ControlFlow.cont x =>
+    loop
+      (fun state1 =>
+        match state1 with
+        | core.result.Result.Ok p1 =>
+          let (a, pending) := p1
+          if a.next ≥ end1 then ok (ControlFlow.done state1)
+          else do
+            let state1 ← call proof p a g obs geo pending
+            ok (ControlFlow.cont state1)
+        | core.result.Result.Err a => ok (ControlFlow.done state1))
+      x
+  | ControlFlow.done x => ok x
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok (a, b) with
+  | core.result.Result.Err e => ok (core.result.Result.Err e)
+  | core.result.Result.Ok (a, b) =>
+    if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+    else do
+      let reply ← call proof p a g obs geo b
+      loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if a.next ≥ end1 then ok (ControlFlow.done state1)
+              else do
+                let state1 ← call proof p a g obs geo pending
+                ok (ControlFlow.cont state1)
+            | core.result.Result.Err a => ok (ControlFlow.done state1))
+          reply
+
+case h_1
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+a : Acc
+b : BW
+x✝ :
+  Result
+    (ControlFlow (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+      (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error))
+r✝ :
+  ControlFlow (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+    (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+heq✝ :
+  (match core.result.Result.Ok (a, b) with
+    | core.result.Result.Ok p1 =>
+      let (a, pending) := p1
+      if a.next ≥ end1 then ok (ControlFlow.done (core.result.Result.Ok (a, b)))
+      else do
+        let state1 ← call proof p a g obs geo pending
+        ok (ControlFlow.cont state1)
+    | core.result.Result.Err a_1 => ok (ControlFlow.done (core.result.Result.Ok (a, b)))) =
+    ok r✝
+⊢ (match r✝ with
+    | ControlFlow.cont x =>
+      loop
+        (fun state1 =>
+          match state1 with
+          | core.result.Result.Ok p1 =>
+            let (a, pending) := p1
+            if a.next ≥ end1 then ok (ControlFlow.done state1)
+            else do
+              let state1 ← call proof p a g obs geo pending
+              ok (ControlFlow.cont state1)
+          | core.result.Result.Err a => ok (ControlFlow.done state1))
+        x
+    | ControlFlow.done x => ok x) =
+    match core.result.Result.Ok (a, b) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        loop
+            (fun state1 =>
+              match state1 with
+              | core.result.Result.Ok p1 =>
+                let (a, pending) := p1
+                if a.next ≥ end1 then ok (ControlFlow.done state1)
+                else do
+                  let state1 ← call proof p a g obs geo pending
+                  ok (ControlFlow.cont state1)
+              | core.result.Result.Err a => ok (ControlFlow.done state1))
+            reply
+NBB_generated/NBB_QueryTrace.lean:41:12: error: Tactic `rfl` failed: The left-hand side
+  fail e✝
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok (a, b) with
+  | core.result.Result.Err e => ok (core.result.Result.Err e)
+  | core.result.Result.Ok (a, b) =>
+    if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+    else do
+      let reply ← call proof p a g obs geo b
+      loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if a.next ≥ end1 then ok (ControlFlow.done state1)
+              else do
+                let state1 ← call proof p a g obs geo pending
+                ok (ControlFlow.cont state1)
+            | core.result.Result.Err a => ok (ControlFlow.done state1))
+          reply
+
+case h_2
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+a : Acc
+b : BW
+x✝ :
+  Result
+    (ControlFlow (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+      (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error))
+e✝ : Error
+heq✝ :
+  (match core.result.Result.Ok (a, b) with
+    | core.result.Result.Ok p1 =>
+      let (a, pending) := p1
+      if a.next ≥ end1 then ok (ControlFlow.done (core.result.Result.Ok (a, b)))
+      else do
+        let state1 ← call proof p a g obs geo pending
+        ok (ControlFlow.cont state1)
+    | core.result.Result.Err a_1 => ok (ControlFlow.done (core.result.Result.Ok (a, b)))) =
+    fail e✝
+⊢ fail e✝ =
+    match core.result.Result.Ok (a, b) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        loop
+            (fun state1 =>
+              match state1 with
+              | core.result.Result.Ok p1 =>
+                let (a, pending) := p1
+                if a.next ≥ end1 then ok (ControlFlow.done state1)
+                else do
+                  let state1 ← call proof p a g obs geo pending
+                  ok (ControlFlow.cont state1)
+              | core.result.Result.Err a => ok (ControlFlow.done state1))
+            reply
+NBB_generated/NBB_QueryTrace.lean:41:12: error: Tactic `rfl` failed: The left-hand side
+  div
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok (a, b) with
+  | core.result.Result.Err e => ok (core.result.Result.Err e)
+  | core.result.Result.Ok (a, b) =>
+    if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+    else do
+      let reply ← call proof p a g obs geo b
+      loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if a.next ≥ end1 then ok (ControlFlow.done state1)
+              else do
+                let state1 ← call proof p a g obs geo pending
+                ok (ControlFlow.cont state1)
+            | core.result.Result.Err a => ok (ControlFlow.done state1))
+          reply
+
+case h_3
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+a : Acc
+b : BW
+x✝ :
+  Result
+    (ControlFlow (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+      (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error))
+heq✝ :
+  (match core.result.Result.Ok (a, b) with
+    | core.result.Result.Ok p1 =>
+      let (a, pending) := p1
+      if a.next ≥ end1 then ok (ControlFlow.done (core.result.Result.Ok (a, b)))
+      else do
+        let state1 ← call proof p a g obs geo pending
+        ok (ControlFlow.cont state1)
+    | core.result.Result.Err a_1 => ok (ControlFlow.done (core.result.Result.Ok (a, b)))) =
+    div
+⊢ div =
+    match core.result.Result.Ok (a, b) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        loop
+            (fun state1 =>
+              match state1 with
+              | core.result.Result.Ok p1 =>
+                let (a, pending) := p1
+                if a.next ≥ end1 then ok (ControlFlow.done state1)
+                else do
+                  let state1 ← call proof p a g obs geo pending
+                  ok (ControlFlow.cont state1)
+              | core.result.Result.Err a => ok (ControlFlow.done state1))
+            reply
+NBB_generated/NBB_QueryTrace.lean:53:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑end1 ≤ ↑a.next then ?m.54 else ?m.55
+in the target expression
+  (match core.result.Result.Ok (a, b) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        verifier.candidate.query_loop_loop call reply proof p g obs geo end1) =
+    ok (core.result.Result.Ok (a, b))
+
+case stop
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+state : State
+out : Result State
+a : Acc
+b : BW
+done : ↑end1 ≤ ↑a.next
+⊢ (match core.result.Result.Ok (a, b) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        verifier.candidate.query_loop_loop call reply proof p g obs geo end1) =
+    ok (core.result.Result.Ok (a, b))
+NBB_generated/NBB_QueryTrace.lean:54:42: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.68 then ?m.72 else ?m.73
+in the target expression
+  (match core.result.Result.Ok (a✝, b✝) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        verifier.candidate.query_loop_loop call reply proof p g obs geo end1) =
+    out✝
+
+case step
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+state : State
+out : Result State
+a✝ : Acc
+b✝ : BW
+reply✝ : State
+out✝ : Result State
+active : ↑a✝.next < ↑end1
+head : call proof p a✝ g obs geo b✝ = ok reply✝
+tail : Trace (fun a b => call proof p a g obs geo b) (↑end1) reply✝ out✝
+ih : verifier.candidate.query_loop_loop call reply✝ proof p g obs geo end1 = out✝
+⊢ (match core.result.Result.Ok (a✝, b✝) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        verifier.candidate.query_loop_loop call reply proof p g obs geo end1) =
+    out✝
+NBB_generated/NBB_QueryTrace.lean:55:36: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.86 then ?m.90 else ?m.91
+in the target expression
+  (match core.result.Result.Ok (a✝, b✝) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        verifier.candidate.query_loop_loop call reply proof p g obs geo end1) =
+    fail e
+
+case fail
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+state : State
+out : Result State
+a✝ : Acc
+b✝ : BW
+active : ↑a✝.next < ↑end1
+e : Error
+head : call proof p a✝ g obs geo b✝ = fail e
+⊢ (match core.result.Result.Ok (a✝, b✝) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        verifier.candidate.query_loop_loop call reply proof p g obs geo end1) =
+    fail e
+NBB_generated/NBB_QueryTrace.lean:56:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.104 then ?m.108 else ?m.109
+in the target expression
+  (match core.result.Result.Ok (a✝, b✝) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        verifier.candidate.query_loop_loop call reply proof p g obs geo end1) =
+    div
+
+case div
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+state : State
+out : Result State
+a✝ : Acc
+b✝ : BW
+active : ↑a✝.next < ↑end1
+head : call proof p a✝ g obs geo b✝ = div
+⊢ (match core.result.Result.Ok (a✝, b✝) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (a, b) =>
+      if ↑end1 ≤ ↑a.next then ok (core.result.Result.Ok (a, b))
+      else do
+        let reply ← call proof p a g obs geo b
+        verifier.candidate.query_loop_loop call reply proof p g obs geo end1) =
+    div
+NBB_generated/NBB_QueryTrace.lean:54:53: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑↑end1
+ b := ↑↑a✝¹.next
+NBB_generated/NBB_QueryTrace.lean:55:47: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑↑end1
+ b := ↑↑a✝¹.next
+NBB_generated/NBB_QueryTrace.lean:56:44: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑↑end1
+ b := ↑↑a✝¹.next
+'NBB_QueryTrace.unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBB_QueryTrace.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
