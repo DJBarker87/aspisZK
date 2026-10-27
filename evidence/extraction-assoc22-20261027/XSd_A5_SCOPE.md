@@ -29,3 +29,17 @@ using SAME sums and XRn_JoinedDot.cohort. No canonicality, count, success or
 arithmetic-output hypothesis is added. This closes that local finish equation.
 It does not connect the installed historical count/field/history consumer;
 A5 remains OPEN and actual-top premise delta remains0.
+
+L099 accepts XSd_NativeFinish.source/total: SAME raw-array finish equals the
+installed FIo native endpoint, and succeeds for EVERY source Dot. Exit0,
+2.017861298s,4463376KiB,swap0, standard axioms only. L098 was rejected solely
+for a redundant rfl after simp had closed the goal; its exit1 is excluded.
+L096 was a missing-dependency precompiler refusal, not a Lean failure.
+
+Final L102: XSd_FinalValue.source derives complete finish success and exact
+canonical residues of all four SAME arbitrary U64 cells. It is stronger than
+a conditional output projection, but still does not establish installed
+historical count/no-wrap/history provenance. The final audit prints every
+new theorem with standard axioms only. L100 separately confirms that the
+closed LPn endpoint requires canonical type-owner isolation before co-import
+with XRn; see XSd_A0.md.

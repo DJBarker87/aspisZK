@@ -66,3 +66,19 @@ D188-P2 release credit remains unavailable until ALL A0–A8 close. No source-to
 claim, new trust, changed cohort or security target is introduced.
 
 Latest read-only research inspection0a32311d73ce1d37e5f3c35f7a03b8b9cbd78ffd includes LPq. Its whole-leaf status remains OPEN; the stronger conditional join is reused in the updated missing endpoint above. XSd_LPq_inspection.json pins both read-only source snapshots. No LPq source is edited or compiled here.
+
+## Fresh concrete co-import obstruction
+
+L100 reaches Lean and exits1 (1.377337787s,4184160KiB,swap0), before any
+theorem audit, with exactly:
+
+`import LPl_Kit_TypesExternal failed, environment already contains 'core.slice.iter.Windows.noConfusion' from XRn_Join_TypesExternal`
+
+L095's unchanged LPn_DotClosed replay itself passed; the native certificate
+is NOT refuted. Its LPl carrier context cannot yet be co-imported with the
+selected XRn context. Missing concrete deliverable: a prefix-isolated closed
+leaf endpoint using one canonical library type owner, then explicit nominal
+carrier/operation transport into the actual selected caller. No existing
+proved kit, global type, candidate or shared object is edited to hide this
+conflict. L100 is an ordinary module-import failure, not infrastructure or
+resource failure. The failed diagnostic is excluded from proof credit.
