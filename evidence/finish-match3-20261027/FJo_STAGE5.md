@@ -19,3 +19,7 @@ L143 was not checked by that boundary. Work continues through the remaining
 budget. Both native/global L143 identities remain retained; no top or recount
 credit is taken for the local results. Passing receipts contain all required
 resource, source, dependency and standard-axiom fields.
+
+At the boundary, the checked per-query theorem is QueryBatched070; the
+all22 original-owner packaging was still under test. This distinction is
+retained until the latter has a passing exact-source receipt.
