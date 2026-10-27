@@ -24,3 +24,11 @@ no native allocator/SBF refinement or accepted1 is asserted.
 Stage 2a: JGp_TX1Initial.inhabited (024) constructs one actual prepare,
 the installed accumulator/pending calls, and the exact afterPrepare continuation
 identity on the SAME p/scratch. It asserts no batch/query/flush/writer success.
+
+Stage 2b: JGp_Geometry.stage/source/meaning (059) proves complete installed
+range 0..10 geometry on the retained query array, including all 30 source fibre
+points, all line/node arithmetic, 50 nonzero canonical denominator words and
+the actual inverse/collection loops. The array is JFo_Prepared.value.queries;
+linking it to THIS enclosing prepare return remains a separate obligation.
+The 30 numeric inputs come from the pinned 512-entry source tables; all three
+generators check their exact output. No dense elimination was run.
