@@ -16,6 +16,8 @@ for d in rs:
  if '-M7000' not in d['command']:errors.append({'lean_cap_mismatch':d['attempt']})
 for line in (E/'RPz8_overlay-additions.jsonl').read_text().splitlines():
  for x in json.loads(line)['artifacts'].values():pins[x['target']]={'path':x['target'],'sha256':x['sha256'],'bytes':x['bytes']}
+if (E/'RPz8_cleanup.json').exists():
+ for row in json.loads((E/'RPz8_cleanup.json').read_text())['removed_query_only_objects']:pins.pop(row['path'],None)
 nums=[int(d['attempt'].split('_')[1]) for d in rs]
 if nums!=list(range(1,len(rs)+1)):errors.append({'noncontiguous_attempt_numbers':nums})
 if len(rs)>1500:errors.append({'budget_exceeded':len(rs)})

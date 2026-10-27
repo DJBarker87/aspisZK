@@ -64,7 +64,7 @@ for d in rs:
    if x is None:errors.append({'missing_formatter_result':oldr['name'],'root':name});continue
    assert isinstance(x['reachable'],bool)
    records.append({**{k:v for k,v in oldr.items() if k!='fresh_Rc10_reachable'},**({'fresh_Rc10_reachable':x['reachable']} if name=='Rc10_Top' else {}),'fresh_root':name,'reachable':x['reachable'],'present_in_fresh_environment':x['present'],'constant_path':x['constant_path'],'constant_owner_path':x['owner_path'],'import_path':importpath(oldr['module']) if x['reachable'] else [],'status':'reachable' if x['reachable'] else 'not reachable','evidence_attempt':d['attempt']})
-  result={'root':name,'attempt':d['attempt'],'kernel_statement_sha256':hashlib.sha256(raw).hexdigest(),'kernel_statement_bytes':len(raw),'print_axioms':d['print_axioms'],'reachable_constants':len(reachable),'formatter_count':len(records),'reachable_formatters':sum(r['reachable'] for r in records),'records':records,'complete':len(records)==180}
+  result={'root':name,'attempt':d['attempt'],'kernel_statement_sha256':hashlib.sha256(raw).hexdigest(),'kernel_statement_bytes':len(raw),'print_axioms':d['print_axioms'],'reachable_constants':len(reachable),'formatter_count':len(records),'axiom_name_metadata_basis':'Inherited cached name lists; actual kernel classification is RPz8_formatter-axiom-reachability.json', 'reachable_formatters':sum(r['reachable'] for r in records),'records':records,'complete':len(records)==180}
   (E/('RPz8_'+name+'-formatter-records.json')).write_text(json.dumps(result,indent=2)+'\n');rootaudits[name]={k:v for k,v in result.items() if k!='records'}
   (E/('RPz8_'+name+'-reachable-constants.json')).write_text(json.dumps(reachable,indent=2)+'\n')
  if d['module'].startswith('RPz8_AuditBatch'):
