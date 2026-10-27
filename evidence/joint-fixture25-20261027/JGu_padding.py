@@ -22,7 +22,8 @@ def padding : Slice U8 := Slice.drop JGp_Slot{t}.value {count}#usize
   s+=selected(start+count+32*j,32,'List.replicate 32 0#u8')
   s+=f'#print axioms window{j}\n'
  s+=f'''theorem size : padding.val.length=256 := by
-  change JGp_Slot{t}.value.val.length-{count}=256
+  change (JGp_Slot{t}.value.val.drop {count}).length=256
+  rw [List.length_drop]
   have len : JGp_Slot{t}.value.val.length={cap} := JGp_Slot{t}.length
   rw [len]
 #print axioms size

@@ -52,7 +52,8 @@ end
 '''
  sec=old[old.index(f'namespace AspisR1.JGm_TX2_Verify{t}'):]
  sec=sec[:sec.index(f'end AspisR1.JGm_TX2_Verify{t}')]+f'end AspisR1.JGm_TX2_Verify{t}\nend\n'
- for i,prefix,last in [(0,'JGf',185),(1,'JGh',185),(2,'JGc',164)]:
+ sec=sec.replace('4512','3840')
+ for i,prefix,last in [(0,'JGf',185),(1,'JGh',185),(2,'JGc',163)]:
   sec=sec.replace(f'{prefix}_TX2_M{i}Root',f'JGr_M{i}Root')
   if t==i:sec=sec.replace(f'value{last:03}',f'value{156 if t<2 else 138:03}')
  sec=sec.replace('JGm_TX2_Verify','JGu_Verify').replace('JGm_TX2_Levels','JGu_Levels').replace('JGm_TX2_Valid','JGu_Valid').replace('JGm_TX2_Supplied','JGu_Supplied').replace('JGk_TX2_Scratch','JGu_Scratch').replace('s12','s10').replace('12#usize','10#usize').replace('5216','4416').replace('4512','3840')
