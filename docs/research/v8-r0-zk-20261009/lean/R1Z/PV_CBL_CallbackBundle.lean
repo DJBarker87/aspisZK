@@ -1,3 +1,4 @@
+import R1Z.PV_CBL_StringViewSource
 import R1Z.PV_CBL_Op35Source
 import R1Z.PV_CBL_PathBorrowSource
 open Aeneas Aeneas.Std Result
@@ -54,4 +55,17 @@ theorem op35_source_all (base : ExternalTypes) (ops : @ExternalFuns (Types base)
 #print axioms op29_source
 #print axioms op34_source_all
 #print axioms op35_source_all
+/-- Additional concrete string/path carrier; original publication names persist. -/
+abbrev StringTypes (base : ExternalTypes) := PV_CBL_StringViewTypes.Types base
+omit [ExternalTypes] in
+@[reducible] def selectedString (base : ExternalTypes)
+    (ops : @ExternalFuns (StringTypes base)) : @ExternalFuns (StringTypes base) :=
+  PV_CBL_StringViewSource.selected base
+    (selectedAll (PV_CBL_StringViewTypes.base base) ops)
+omit [ExternalTypes] in
+theorem op28_source (base : ExternalTypes) (ops : @ExternalFuns (StringTypes base))
+    (s : String) :
+    @ExternalFuns.op28 (StringTypes base) (selectedString base ops) s =
+      PV_CBL_StringOwnedReference.string_owned_reference s := rfl
+#print axioms op28_source
 end R1Z.PV_CBL_CallbackBundle

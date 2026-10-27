@@ -6,19 +6,19 @@ out=root/'evidence/pv-cblib-20261027';p=out/'TALLY.json'
 module=sys.argv[1];assert module.startswith('R1Z/PV_CBL_')
 r=json.loads(p.read_text());assert len(r['lean_charged'])<100
 if len(r['lean_charged'])>=97:assert 'Audit' in module or 'Manifest' in module
-attempt=r['next_id'];assert 39600<=attempt<=39899 and attempt not in r['used_ids']
+attempt=r['next_id'];assert 43000<=attempt<=43299 and attempt not in r['used_ids']
 r['used_ids'].append(attempt);r['next_id']=attempt+1;p.write_text(json.dumps(r,indent=2)+'\n')
 source=root/'docs/research/v8-r0-zk-20261009/lean'/f'{module}.lean';assert source.exists()
 (out/f'{attempt}-source.lean.txt').write_text(source.read_text())
 host='dombarker@100.108.41.90';base='/home/dombarker/project-offloads/codex-pv-cblib-20261027';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 def ssh(c):return subprocess.run(['ssh',host,c],text=True,capture_output=True)
-a=ssh(f'python3 {gate}/reservation.py {base}/resume6-{attempt}-admission.json > {base}/resume6-{attempt}-reservation.log 2>&1; cat {base}/resume6-{attempt}-reservation.log')
+a=ssh(f'python3 {gate}/reservation.py {base}/resume7-{attempt}-admission.json > {base}/resume7-{attempt}-reservation.log 2>&1; cat {base}/resume7-{attempt}-reservation.log')
 (out/f'{attempt}-upload-admission.log').write_text(a.stdout+a.stderr)
 if a.returncode or not json.loads(a.stdout)['allowed']:
  (out/f'{attempt}-refusal.json').write_text(json.dumps(dict(attempt=attempt,charged=False,phase='before upload',output=a.stdout+a.stderr),indent=2)+'\n');sys.exit(78)
 # Snapshot previously published shared source and object before own-prefix update.
 shared='/home/dombarker/project-offloads/aspis-joint-20261019'
-b=ssh(f'mkdir -p {base}/resume6-snapshots/{attempt}; for f in {shared}/sources/{module}.lean {shared}/objects/{module}.olean; do if test -f "$f"; then cp "$f" {base}/resume6-snapshots/{attempt}/; fi; done')
+b=ssh(f'mkdir -p {base}/resume7-snapshots/{attempt}; for f in {shared}/sources/{module}.lean {shared}/objects/{module}.olean; do if test -f "$f"; then cp "$f" {base}/resume7-snapshots/{attempt}/; fi; done')
 assert b.returncode==0,b.stderr
 subprocess.run(['scp',str(source),f'{host}:{shared}/sources/{module}.lean'],check=True)
 c=subprocess.run([sys.executable,str(root/'tools/pv-cblib-20261027/resume_lean.py'),str(attempt),module])

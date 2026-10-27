@@ -5,7 +5,7 @@ root=Path(__file__).resolve().parents[2];name,harness=sys.argv[1:3];project=sys.
 assert project in ('probe','standalone','sha2','block-buffer')
 if project=='probe':assert harness.startswith('host_commitment::'), 'probe harnesses require the actual containing module'
 base='/home/dombarker/project-offloads/codex-pv-cblib-20261027';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';out=root/'evidence/pv-cblib-20261027'/name;out.mkdir(exist_ok=True)
-tally=root/'evidence/pv-cblib-20261027/TALLY.json';t=json.loads(tally.read_text());assert len(t['kani_charged'])<10 and name not in t['kani_charged']
+tally=root/'evidence/pv-cblib-20261027/TALLY.json';t=json.loads(tally.read_text());assert len(t['kani_charged'])<8 and name not in t['kani_charged']
 def ssh(c):return subprocess.run(['ssh','dombarker@100.108.41.90',c],text=True,capture_output=True)
 p=ssh(f'mkdir -p {base}/{name}; python3 {gate}/reservation.py {base}/{name}/admission-before.json > {base}/{name}/reservation.log 2>&1; cat {base}/{name}/reservation.log');(out/'admission-transport.log').write_text(p.stdout+p.stderr)
 if p.returncode or not json.loads(p.stdout)['allowed']:sys.exit(78)

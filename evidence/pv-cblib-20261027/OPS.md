@@ -1,6 +1,6 @@
 # Library row table
 
-Candidate source callback laws supplied: **0 → 4** (V177/V180/V185/V186), through `PV_CBL_CallbackBundle`. Native P6 bounds and the distinct extraction/Kani toolchains remain explicit. The canonical recount and endpoint are not edited here; RunJoin/deployment integration remains open. Target not yet established.
+Candidate source callback laws supplied: **0 → 5** (V177/V179/V180/V185/V186), through `PV_CBL_CallbackBundle`. Native P6 bounds and the distinct extraction/Kani toolchains remain explicit. The canonical recount and endpoint are not edited here; RunJoin/deployment integration remains open. Target not yet established.
 
 | op | row | status | theorem | crate/version; source hash | receipt |
 |---|---|---|---|---|---|
@@ -13,10 +13,10 @@ Candidate source callback laws supplied: **0 → 4** (V177/V180/V185/V186), thro
 | 217 | V237 | OPEN; escaping reference output requires loan validation; structured Drop requires destructor semantics | — | `digest-0.10.7/src/core_api/wrapper.rs` sha256 `033777bed7d140b158e15d50fda8a6e06557ce89bd0738fcca692be2c39e8b8a` | aeneas-source-op217-opt-frontier-01 |
 | 219 | V238 | OPEN; escaping reference output requires loan validation; structured Drop requires destructor semantics | — | `digest-0.10.7/src/core_api/ct_variable.rs` sha256 `703bd62fb693a437e319d1192988bd674f9127a6b76f73b4c58c71afc79bc013` | aeneas-source-op219-opt-frontier-01 |
 | 25 | V177 | SOURCE LAW SUPPLIED; P6 bounded native check | R1Z.PV_CBL_CallbackBundle.op25_source | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | 39647/39648/39650; kani-pathbuf-borrows-r01 |
-| 26 | V178 | OPEN; bounded native join/String harness timed out | — | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | — |
-| 28 | V179 | OPEN; joint bounded native harness timed out | — | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | — |
+| 26 | V178 | OPEN; split no-stub P6 passes lengths 0–1; reference Drop frontier retained | — | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | — |
+| 28 | V179 | SOURCE LAW SUPPLIED; P6 valid UTF-8 length 2, arbitrary byte index | R1Z.PV_CBL_CallbackBundle.op28_source | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | 43000/43001/43004/43005; resume-string-path-01; route P6 |
 | 29 | V180 | SOURCE LAW SUPPLIED; P6 bounded native check | R1Z.PV_CBL_CallbackBundle.op29_source | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | 39647/39648/39650; kani-pathbuf-borrows-r01 |
-| 30 | V181 | OPEN; joint bounded native harness timed out | — | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | — |
+| 30 | V181 | OPEN; split capacity gate passes n≤4; direct extraction Z.Overflow, reference String.new external remains | — | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | — |
 | 31 | V182 | OPEN; joint bounded native harness timed out | — | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | — |
 | 32 | V183 | DEFER(pv-runjoin): recoverable native allocation effects | NATIVE-EFFECTS.md | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | — |
 | 33 | V184 | OPEN; exact private-Word owned reference prepared; two bounded native checks timed out | — | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | — |

@@ -103,3 +103,63 @@ mod path_checks {
         }
     }
 }
+
+// Resume: separate gates isolate pure views and allocation-free content laws.
+#[cfg(kani)]
+mod split_checks {
+    use std::os::unix::ffi::OsStrExt;
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn string_path() {
+        let raw: [u8;2] = kani::any();
+        if let Ok(s) = String::from_utf8(raw.to_vec()) {
+            let path: &std::path::Path = s.as_ref();
+            let i: usize = kani::any();
+            assert_eq!(path.as_os_str().as_bytes().len(), s.as_bytes().len());
+            assert_eq!(path.as_os_str().as_bytes().get(i), s.as_bytes().get(i));
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn string_capacity() {
+        let n: usize = kani::any(); kani::assume(n<=4);
+        let s=String::with_capacity(n);
+        assert_eq!(s.len(),0);
+        assert!(s.capacity()>=n);
+    }
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn string_push() {
+        let raw: [u8;2] = kani::any();
+        if let Ok(mut s)=String::from_utf8(raw.to_vec()) {
+            let tail: [u8;1]=kani::any();
+            if let Ok(t)=std::str::from_utf8(&tail) {
+                s.push_str(t);
+                let i:usize=kani::any();
+                assert_eq!(s.len(),3);
+                let expected=if i<2 {raw.get(i).copied()} else {tail.get(i-2).copied()};
+                assert_eq!(s.as_bytes().get(i).copied(),expected);
+            }
+        }
+    }
+}
+
+#[cfg(kani)]
+mod join_split {
+    use super::*;
+    use std::os::unix::ffi::OsStrExt;
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn join_one_byte() {
+        let a:[u8;1]=kani::any(); let b:[u8;1]=kani::any();
+        let n:usize=kani::any();let m:usize=kani::any();
+        kani::assume(n<=1 && m<=1);
+        let p=std::path::Path::new(std::ffi::OsStr::from_bytes(&a[..n]));
+        let q=std::path::Path::new(std::ffi::OsStr::from_bytes(&b[..m]));
+        let native=p.join(q);
+        let reference=join_bytes_reference(&a[..n],&b[..m]);
+        let i:usize=kani::any();
+        assert_eq!(native.as_os_str().as_bytes().len(),reference.len());
+        assert_eq!(native.as_os_str().as_bytes().get(i),reference.get(i));
+    }
+}

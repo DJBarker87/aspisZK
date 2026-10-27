@@ -5,6 +5,12 @@ root=Path(__file__).resolve().parents[2];stage=sys.argv[1]; variant=sys.argv[2] 
 assert stage in ('charon','aeneas')
 base='/home/dombarker/project-offloads/codex-pv-cblib-20261027';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';pinned='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
 entries={
+'op30-ref-new-opt':('pv_cblib_source::string_capacity_reference','pv_cblib_source::string_capacity_reference+alloc::string::_::new','PV_CBL_StringNewReference'),
+'join-mut-opt':('pv_cblib_source::join_mut_reference','pv_cblib_source::join_mut_reference','PV_CBL_JoinMutReference'),
+'sha-dispatch-opt':('pv_cblib_source::sha_update_blocks','sha2::sha256::compress256+sha2::sha256::x86::compress+sha2::sha256::x86::digest_blocks+sha2::sha256::soft::_','PV_CBL_ShaDispatch'),
+'sha-fallback-opt':('pv_cblib_source::sha_update_blocks','sha2::sha256::soft::_+sha2::consts::K32X4+sha2::consts::BLOCK_LEN','PV_CBL_ShaFallback'),
+'op30-ref-opt':('pv_cblib_source::string_capacity_reference','pv_cblib_source::string_capacity_reference','PV_CBL_StringCapacityReference'),
+'string-owned-opt':('pv_cblib_source::string_owned_reference','pv_cblib_source::string_owned_reference','PV_CBL_StringOwnedReference'),
 'join-ref-opt':('pv_cblib_source::join_bytes_reference','pv_cblib_source::join_bytes_reference','PV_CBL_JoinBytesReferenceOpt'),
 'op30-opt':('pv_cblib_source::string_capacity','alloc::string::_::with_capacity','PV_CBL_Op30Opt'),
 'op31-opt':('pv_cblib_source::string_push','alloc::string::_::push_str','PV_CBL_Op31Opt'),

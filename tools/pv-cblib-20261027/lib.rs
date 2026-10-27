@@ -100,3 +100,17 @@ pub fn array_result_reference(v: Vec<aspis_core::field::QM31>) -> Result<[aspis_
 pub fn sha_core_new(n: usize) -> Result<sha2::Sha256VarCore,digest::InvalidOutputSize> {
     <sha2::Sha256VarCore as digest::core_api::VariableOutputCore>::new(n)
 }
+
+// Owned String view preserves all valid UTF-8 without a loan escaping.
+pub fn string_owned_reference(s: String) -> String { s }
+
+// Pure String contents of with_capacity; allocation/capacity association remains explicit.
+pub fn string_capacity_reference(_n: usize) -> String { String::new() }
+
+// Borrowed update keeps the owned Vec with its caller on every path.
+pub fn join_mut_reference(base: &mut Vec<u8>, path: &[u8]) {
+    if path.len()>0 && path[0]==b'/' {base.clear();}
+    else if base.len()>0 && base[base.len()-1]!=b'/' {base.push(b'/');}
+    let mut i=0;
+    while i<path.len() {base.push(path[i]);i+=1;}
+}
