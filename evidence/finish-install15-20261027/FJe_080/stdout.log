@@ -1,0 +1,49 @@
+FJe_Sum3ChannelStep.lean:46:156: error: unsolved goals
+iter : Range
+a : Left
+s : Sums
+i : Usize
+r : Components
+c : Usize
+⊢ (do
+      let __x ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match __x.1 with
+        | none => ok s
+        | some channel => do
+          let x ← Array.index_usize a i
+          let a_1 ← x.components.index_usize c
+          let m ← a_1.index_usize channel
+          let i_1 ← lift (UScalar.cast UScalarTy.U64 m)
+          let a1 ← Array.index_usize r c
+          let m1 ← a1.index_usize channel
+          let i1 ← lift (UScalar.cast UScalarTy.U64 m1)
+          let i2 ← i_1 * i1
+          let a2 ← Array.index_usize s c
+          let i3 ← a2.index_usize channel
+          let i4 ← i3 + i2
+          let __x_1 ← Array.index_mut_usize s c
+          let a4 ← __x_1.1.update channel i4
+          AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0 __x.2
+              (FJb_ArrayTransport.array prepared a) (__x_1.2 a4) i r c) =
+    do
+    let z ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match z.1 with
+      | none => ok s
+      | some ch => do
+        let p ← Array.index_usize a i
+        let row ← p.components.index_usize c
+        let x ← row.index_usize ch
+        let x64 ← lift (UScalar.cast UScalarTy.U64 x)
+        let rr ← Array.index_usize r c
+        let y ← rr.index_usize ch
+        let y64 ← lift (UScalar.cast UScalarTy.U64 y)
+        let prod ← x64 * y64
+        let sr ← Array.index_usize s c
+        let old ← sr.index_usize ch
+        let new ← old + prod
+        let (row, back) ← Array.index_mut_usize s c
+        let next ← row.update ch new
+        AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared_loop0_loop0_loop0 z.2
+            (FJb_ArrayTransport.array prepared a) (back next) i r c
+'AspisR1.FJe_Sum3ChannelStep.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ChannelStep.old' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

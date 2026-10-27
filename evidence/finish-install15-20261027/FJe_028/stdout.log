@@ -1,0 +1,22 @@
+FJe_ThreeColumns.lean:25:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if 0 ≤ ?m.64 then ?m.66 else ?m.67
+in the target expression
+  decoded out j = if ↑0#usize ≤ ↑j then model w c0 c1 c2 j else decoded (Array.repeat 16#usize field.QM31.ZERO) j
+
+w : Weights
+c0 c1 c2 : Constants
+out : State
+hw : canonical w
+h0 : Bounded c0
+h1 : Bounded c1
+h2 : Bounded c2
+run : state_only_poseidon.interpolate_three_constant_columns w c0 c1 c2 = ok out
+zero : canonical (Array.repeat 16#usize field.QM31.ZERO)
+v :
+  canonical out ∧
+    ∀ (j : Fin ↑16#usize),
+      decoded out j = if ↑0#usize ≤ ↑j then model w c0 c1 c2 j else decoded (Array.repeat 16#usize field.QM31.ZERO) j
+j : Fin ↑16#usize
+hv : decoded out j = if ↑0#usize ≤ ↑j then model w c0 c1 c2 j else decoded (Array.repeat 16#usize field.QM31.ZERO) j
+⊢ decoded out j = model w c0 c1 c2 j
+'AspisR1.FJe_ThreeColumns.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

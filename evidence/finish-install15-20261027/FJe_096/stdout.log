@@ -1,0 +1,103 @@
+'AspisR1.FJe_Sum3Value.mappedCell' depends on axioms: [propext, Classical.choice, Quot.sound]
+FJe_Sum3Value.lean:42:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(FJb_ArrayTransport.array ?f ?a))[↑(uFin ?i)]
+in the target expression
+  PreparedFor (↑(left a))[↑(uFin i)] (qm (cell w i))
+
+a : Left
+b w : Right
+out : NQ
+cw : FIw_ArrayValue.canonical w
+cb : FIw_ArrayValue.canonical b
+hp : ∀ (i : Fin 3), PreparedFor (prepared (cell a i)) (qm (cell w i))
+run : FIq_Native.field.qm31_sum_products3_prepared a b = ok out
+cmem : ∀ (i : Fin 3), Canon (cell w i)
+bmem : ∀ (i : Fin 3), Canon (cell b i)
+i : Fin 3
+⊢ PreparedFor (↑(left a))[↑(uFin i)] (qm (cell w i))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    left a
+  has type
+    Std.Array FIv_PreparedNew.PP 3#usize
+  but is expected to have type
+    { l // l.length = ↑3#usize }
+  in the application
+    ↑(left a)
+FJe_Sum3Value.lean:47:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(FJb_ArrayTransport.array ?f ?a))[↑(uFin ?i)]
+in the target expression
+  ExtractedMaskQM31Exact.CurrentCanonicalQM (↑(right b))[↑(uFin i)]
+
+a : Left
+b w : Right
+out : NQ
+cw : FIw_ArrayValue.canonical w
+cb : FIw_ArrayValue.canonical b
+hp : ∀ (i : Fin 3), PreparedFor (prepared (cell a i)) (qm (cell w i))
+run : FIq_Native.field.qm31_sum_products3_prepared a b = ok out
+cmem : ∀ (i : Fin 3), Canon (cell w i)
+bmem : ∀ (i : Fin 3), Canon (cell b i)
+i : Fin 3
+⊢ ExtractedMaskQM31Exact.CurrentCanonicalQM (↑(right b))[↑(uFin i)]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    right b
+  has type
+    Std.Array FIv_NativeArithmetic.PQ 3#usize
+  but is expected to have type
+    { l // l.length = ↑3#usize }
+  in the application
+    ↑(right b)
+FJe_Sum3Value.lean:56:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(FJb_ArrayTransport.array ?f ?a))[↑(uFin ?i)]
+in the target expression
+  PreparedFor (↑(left a))[↑(uFin ⟨0, ⋯⟩)] x0
+
+a : Left
+b w : Right
+out : NQ
+cw : FIw_ArrayValue.canonical w
+cb : FIw_ArrayValue.canonical b
+hp : ∀ (i : Fin 3), PreparedFor (prepared (cell a i)) (qm (cell w i))
+run : FIq_Native.field.qm31_sum_products3_prepared a b = ok out
+cmem : ∀ (i : Fin 3), Canon (cell w i)
+bmem : ∀ (i : Fin 3), Canon (cell b i)
+x0 x1 x2 : PoseidonPreparedSum3ActualValue.QM
+rv : AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared (left a) (right b) = ok (qm out)
+cv : PoseidonPreparedSum3ActualValue.CanonicalQM (qm out)
+vv :
+  AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ (qm out) =
+    AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x0 *
+          AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+            (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (right b) AspisR1.PoseidonPreparedSum3ActualValue.i0✝) +
+        AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x1 *
+          AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+            (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (right b) AspisR1.PoseidonPreparedSum3ActualValue.i1✝) +
+      AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x2 *
+        AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+          (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (right b) AspisR1.PoseidonPreparedSum3ActualValue.i2✝)
+same : ok (qm out) = ok (qm out)
+p0 : PreparedFor (↑(left a))[↑(uFin ⟨0, ⋯⟩)] x0
+p1 : PreparedFor (↑(left a))[↑(uFin ⟨1, ⋯⟩)] x1
+p2 : PreparedFor (↑(left a))[↑(uFin ⟨2, ⋯⟩)] x2
+⊢ Canon out ∧
+    decode out =
+      decode (cell w ⟨0, ⋯⟩) * decode (cell b ⟨0, ⋯⟩) + decode (cell w ⟨1, ⋯⟩) * decode (cell b ⟨1, ⋯⟩) +
+        decode (cell w ⟨2, ⋯⟩) * decode (cell b ⟨2, ⋯⟩)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    left a
+  has type
+    Std.Array FIv_PreparedNew.PP 3#usize
+  but is expected to have type
+    { l // l.length = ↑3#usize }
+  in the application
+    ↑(left a)
+'AspisR1.FJe_Sum3Value.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

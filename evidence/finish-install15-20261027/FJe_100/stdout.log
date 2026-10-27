@@ -1,0 +1,1059 @@
+theorem AspisR1.Rc10_Top.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration indexError c reservation)) native1
+                    native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_ByteCarrier.ByteProver)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q0 + Q1) →
+                                        ∀ (runtime : AspisR1.F3T_Runtime.Runtime),
+                                          AspisR1.FIp_GlobalOwners.Owners
+                                              (AspisR1.FIp_Install.configuration indexError c reservation)
+                                              (AspisR1.Rc2_Install.configuration
+                                                  (AspisR1.Rc5_Install.seed indexError
+                                                    (AspisR1.FIp_Install.select reservation c))
+                                                  reservation).boundaries →
+                                            AspisR1.F3T_Runtime.StoredCarrierBinding
+                                                (AspisR1.FIp_Install.configuration indexError c reservation) D
+                                                (AspisR1.F3T_Installed.source
+                                                  (AspisR1.FIp_Install.configuration indexError c reservation) hashv)
+                                                P runtime →
+                                              have select := fun x =>
+                                                AspisR1.P2P_NativeSelection.pair
+                                                  (AspisR1.DrvC_Installation.sdk
+                                                    (AspisR1.FIp_Install.configuration indexError c reservation))
+                                                  AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                              AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                                  (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                                  AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                                  AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                                AspisR1.DrvC_Implementation.driver
+                                                      (AspisR1.FIp_Install.configuration indexError c reservation) =
+                                                    AspisR1.DrvC_SourceEntry.source
+                                                      (AspisR1.FIp_Install.configuration indexError c reservation)
+                                                      hashv ∧
+                                                  AspisR1.DrvC_Installation.sdk
+                                                        (AspisR1.FIp_Install.configuration indexError c reservation) =
+                                                      AspisR1.SdkD_PairBatches.dictionary
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).adapter
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).currentBase
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).stageBase
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).finish
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).reserved
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).query
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).geometry
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).boundaries
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).std ∧
+                                                    AspisR1.FIs_Result.Outcome L e1 e2 w1 w2
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).adapter
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).currentBase
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).reserved
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).query
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).geometry
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).stageBase
+                                                        (AspisR1.FIp_Install.configuration indexError c
+                                                            reservation).finish
+                                                        (AspisR1.FIp_Install.boundaries c.boundaries) reservation
+                                                        AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2
+                                                        H
+                                                        (AspisR1.DrvC_Implementation.driver
+                                                          (AspisR1.FIp_Install.configuration indexError c reservation))
+                                                        prior (p.physicalEvents t) hashv
+                                                        (AspisR1.BinRawByteCollisionTargets.event
+                                                          AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.Hiq_RecordedJoint.program
+                                                              (AspisR1.F3X_Account.program
+                                                                (AspisR1.FIp_Install.configuration indexError c
+                                                                  reservation)
+                                                                hashv P)
+                                                              AspisR1.F3X_Projection.project select))) ∧
+                                                      (AspisR1.F3X_ModelClaims.Claims
+                                                            (AspisR1.FIp_Install.configuration indexError c reservation)
+                                                            D P (Q0 + Q1) ∧
+                                                          AspisR1.F3Y_SourceClaims.Claims
+                                                              (AspisR1.FIp_Install.configuration indexError c
+                                                                reservation)
+                                                              D hashv P (Q0 + Q1) select ∧
+                                                            ⋯) ∧
+                                                        (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                            ⋯) ∧
+                                                          ⋯ ∧ ⋯ :=
+fun {W A CoreError Tx} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation native1
+    native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D P Q0 Q1 queries runtime
+    finishOwners binding =>
+  let ⟨p6, right✝⟩ :=
+    AspisR1.FIs_Top.deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation native1
+      native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2
+      accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D P Q0 Q1 queries runtime
+      finishOwners binding
+  let ⟨driver, right✝¹⟩ := right✝
+  let ⟨sdkEq, right✝²⟩ := right✝¹
+  let ⟨result, right✝³⟩ := right✝²
+  let ⟨security, right✝⁴⟩ := right✝³
+  let ⟨copyFacts, right✝⁵⟩ := right✝⁴
+  let ⟨events, right✝⁶⟩ := right✝⁵
+  let ⟨protection, right✝⁷⟩ := right✝⁶
+  let ⟨trace, right✝⁸⟩ := right✝⁷
+  let ⟨recorder, s6⟩ := right✝⁸
+  ⟨p6, ⟨driver, ⟨sdkEq, ⟨result, ⟨security, ⟨copyFacts, ⟨events, ⟨protection, ⟨trace, ⟨recorder, s6⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩
+'AspisR1.Rc10_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.FIr_Top.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk (AspisR1.FIq_Install.configuration indexError c reservation)) native1
+                    native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_ByteCarrier.ByteProver)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q0 + Q1) →
+                                        ∀ (runtime : AspisR1.F3T_Runtime.Runtime),
+                                          AspisR1.FIr_GlobalOwners2.Owners
+                                              (AspisR1.FIq_Install.configuration indexError c reservation)
+                                              (AspisR1.Rc2_Install.configuration
+                                                  (AspisR1.Rc5_Install.seed indexError
+                                                    (AspisR1.FIq_Install.select reservation c))
+                                                  reservation).boundaries →
+                                            AspisR1.F3T_Runtime.StoredCarrierBinding
+                                                (AspisR1.FIq_Install.configuration indexError c reservation) D
+                                                (AspisR1.F3T_Installed.source
+                                                  (AspisR1.FIq_Install.configuration indexError c reservation) hashv)
+                                                P runtime →
+                                              have select := fun x =>
+                                                AspisR1.P2P_NativeSelection.pair
+                                                  (AspisR1.DrvC_Installation.sdk
+                                                    (AspisR1.FIq_Install.configuration indexError c reservation))
+                                                  AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                              AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                                  (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                                  AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                                  AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                                AspisR1.DrvC_Implementation.driver
+                                                      (AspisR1.FIq_Install.configuration indexError c reservation) =
+                                                    AspisR1.DrvC_SourceEntry.source
+                                                      (AspisR1.FIq_Install.configuration indexError c reservation)
+                                                      hashv ∧
+                                                  AspisR1.DrvC_Installation.sdk
+                                                        (AspisR1.FIq_Install.configuration indexError c reservation) =
+                                                      AspisR1.SdkD_PairBatches.dictionary
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).adapter
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).currentBase
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).stageBase
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).finish
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).reserved
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).query
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).geometry
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).boundaries
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).std ∧
+                                                    AspisR1.P2P_Result.Outcome L e1 e2 w1 w2
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).adapter
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).currentBase
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).reserved
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).query
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).geometry
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).stageBase
+                                                        (AspisR1.FIq_Install.configuration indexError c
+                                                            reservation).finish
+                                                        (AspisR1.FIq_Install.boundaries c.boundaries) reservation
+                                                        AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2
+                                                        H
+                                                        (AspisR1.DrvC_Implementation.driver
+                                                          (AspisR1.FIq_Install.configuration indexError c reservation))
+                                                        prior (p.physicalEvents t) hashv
+                                                        (AspisR1.BinRawByteCollisionTargets.event
+                                                          AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.Hiq_RecordedJoint.program
+                                                              (AspisR1.F3X_Account.program
+                                                                (AspisR1.FIq_Install.configuration indexError c
+                                                                  reservation)
+                                                                hashv P)
+                                                              AspisR1.F3X_Projection.project select))) ∧
+                                                      (AspisR1.F3X_ModelClaims.Claims
+                                                            (AspisR1.FIq_Install.configuration indexError c reservation)
+                                                            D P (Q0 + Q1) ∧
+                                                          AspisR1.F3Y_SourceClaims.Claims
+                                                              (AspisR1.FIq_Install.configuration indexError c
+                                                                reservation)
+                                                              D hashv P (Q0 + Q1) select ∧
+                                                            ⋯) ∧
+                                                        (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                            ⋯) ∧
+                                                          ⋯ ∧ ⋯ :=
+fun {W A CoreError Tx} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation native1
+    native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D P Q0 Q1 queries runtime
+    finishOwners binding =>
+  AspisR1.FIq_Top.deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation native1
+    native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D P Q0 Q1 queries runtime
+    (AspisR1.FIr_GlobalOwners.complete (AspisR1.FIq_Install.configuration indexError c reservation)
+      (AspisR1.Rc2_Install.configuration
+          (AspisR1.Rc5_Install.seed indexError (AspisR1.FIq_Install.select reservation c)) reservation).boundaries
+      (AspisR1.FIr_GlobalOwners2.complete (AspisR1.FIq_Install.configuration indexError c reservation)
+        (AspisR1.Rc2_Install.configuration
+            (AspisR1.Rc5_Install.seed indexError (AspisR1.FIq_Install.select reservation c)) reservation).boundaries
+        finishOwners))
+    binding
+'AspisR1.FIr_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Rc10_Nonvacuity.composed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration indexError c reservation)) native1
+                    native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+                                      (submission : AspisR1.F3T_ByteCarrier.Submission),
+                                      AspisR1.FIp_GlobalOwners.Owners
+                                          (AspisR1.FIp_Install.configuration indexError c reservation)
+                                          (AspisR1.Rc2_Install.configuration
+                                              (AspisR1.Rc5_Install.seed indexError
+                                                (AspisR1.FIp_Install.select reservation c))
+                                              reservation).boundaries →
+                                        (∀ (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+                                            (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+                                            AspisR1.S2W_NativeConsolidation.SourceCuts
+                                                (AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError c reservation))
+                                                e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s →
+                                              AspisR1.MultiproofConeCanonical.bytesOf ↑s.proof =
+                                                  AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof ∧
+                                                AspisR1.MultiproofConeCanonical.bytesOf ↑s.pub =
+                                                    AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub ∧
+                                                  AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub =
+                                                      submission.publicBytes ∧
+                                                    AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof =
+                                                      submission.stored) →
+                                          have r := AspisR1.FIp_Install.configuration indexError c reservation;
+                                          have runtime :=
+                                            AspisR1.F3X_FixtureRuntime.runtime r D hashv
+                                              (AspisV8R19.MemoizedProgramLaw.Program.done submission);
+                                          AspisR1.F3T_Runtime.StoredCarrierBinding r D
+                                              (AspisR1.F3T_Installed.source r hashv)
+                                              (AspisV8R19.MemoizedProgramLaw.Program.done submission) runtime ∧
+                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                    (AspisR1.F3T_Installed.source r hashv
+                                                      (AspisR1.F3T_ByteCarrier.input r submission))).2 =
+                                                true ∧
+                                              (∃ run,
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = some run ∧
+                                                    run.2.2 = true) ∧
+                                                AspisR1.F3U_Numeric.margin ≤
+                                                    1 / 2 ^ 100 - AspisR1.F3T_RuntimeBound.failureModel runtime ∧
+                                                  AspisR1.F3T_RuntimeBound.failureModel runtime < 1 / 2 ^ 100 :=
+fun {W A CoreError Tx} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation native1
+    native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D submission finishOwners
+    snapshots =>
+  id
+    (let r := AspisR1.FIp_Install.configuration indexError c reservation;
+    let runtime := AspisR1.F3X_FixtureRuntime.runtime r D hashv (AspisV8R19.MemoizedProgramLaw.Program.done submission);
+    have binding :=
+      AspisR1.F3X_FixtureRuntime.binding r D hashv (AspisV8R19.MemoizedProgramLaw.Program.done submission);
+    let ⟨p6, right✝⟩ :=
+      AspisR1.Rc10_Top.deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation
+        native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1
+        post2 accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D
+        (AspisV8R19.MemoizedProgramLaw.Program.done submission) 0 0 (fun x => Nat.le_refl 0) runtime finishOwners
+        binding
+    let ⟨driverEq, right✝¹⟩ := right✝
+    let ⟨sdkEq, right✝²⟩ := right✝¹
+    let ⟨result, right✝³⟩ := right✝²
+    let ⟨security, right✝⁴⟩ := right✝³
+    let ⟨copyFacts, right✝⁵⟩ := right✝⁴
+    let ⟨eventFacts, right✝⁶⟩ := right✝⁵
+    let ⟨protection, right✝⁷⟩ := right✝⁶
+    let ⟨trace, right✝⁸⟩ := right✝⁷
+    let ⟨recorder, publicFacts⟩ := right✝⁸
+    let ⟨f, h✝⟩ := result
+    let ⟨s, h✝¹⟩ := h✝
+    let ⟨outer, h✝²⟩ := h✝¹
+    let ⟨pre, h✝³⟩ := h✝²
+    let ⟨middle, h✝⁴⟩ := h✝³
+    let ⟨fs, h✝⁵⟩ := h✝⁴
+    let ⟨ss, h✝⁶⟩ := h✝⁵
+    let ⟨run, h✝⁷⟩ := h✝⁶
+    let ⟨tx2, h✝⁸⟩ := h✝⁷
+    let ⟨origin, right✝⁹⟩ := h✝⁸
+    let ⟨calls, right✝¹⁰⟩ := right✝⁹
+    let ⟨encoding, right✝¹¹⟩ := right✝¹⁰
+    let ⟨base, right✝¹²⟩ := right✝¹¹
+    let ⟨contents, right✝¹³⟩ := right✝¹²
+    let ⟨semantic, right✝¹⁴⟩ := right✝¹³
+    let ⟨physical, right✝¹⁵⟩ := right✝¹⁴
+    let ⟨parser, right✝¹⁶⟩ := right✝¹⁵
+    let ⟨version, h✝⁹⟩ := right✝¹⁶
+    let ⟨key1, right✝¹⁷⟩ := h✝⁹
+    let ⟨key2, right✝¹⁸⟩ := right✝¹⁷
+    let ⟨events, right✝¹⁹⟩ := right✝¹⁸
+    let ⟨persisted, right✝²⁰⟩ := right✝¹⁹
+    let ⟨packet, right✝²¹⟩ := right✝²⁰
+    let ⟨safe, right✝²²⟩ := right✝²¹
+    let ⟨whole, branch⟩ := right✝²²
+    have cuts := base.left;
+    let ⟨sameProof, right✝²³⟩ := snapshots f s cuts
+    let ⟨samePublic, right✝²⁴⟩ := right✝²³
+    let ⟨pubBytes, proofBytes⟩ := right✝²⁴
+    have checkpoint := Eq.trans persisted copyFacts.right.right.left;
+    have accepted :=
+      AspisR1.F3X_FixtureSource.accepted r native1 native2 hashv extraction sha256 H p1 syscall
+        AspisR1.CPH_Program.verifier e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data1 saved
+        copyFacts.left f s cuts sameProof samePublic checkpoint;
+    have same :=
+      let ⟨publicBytes✝, stored✝, h✝¹⁰⟩ := submission
+      Eq.ndrec (motive := fun submission => ⋯ → ⋯)
+        (fun snapshots =>
+          let runtime :=
+            AspisR1.F3X_FixtureRuntime.runtime r D hashv
+              (AspisV8R19.MemoizedProgramLaw.Program.done { publicBytes := publicBytes✝, stored := stored✝ });
+          ⋯)
+        (Eq.symm h✝¹⁰) snapshots binding security branch pubBytes proofBytes;
+    ⟨binding,
+      ⟨Eq.mp
+          (congrArg
+            (fun _a =>
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.F3T_Installed.source r hashv (AspisR1.F3T_ByteCarrier.input r _a))).2 =
+                true)
+            same)
+          accepted,
+        ⟨AspisR1.F3X_FixtureRuntime.accepted r D hashv submission H ⋯, ⋯.right rfl⟩⟩⟩)
+'AspisR1.Rc10_Nonvacuity.composed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.FIr_Nonvacuity.composed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk (AspisR1.FIq_Install.configuration indexError c reservation)) native1
+                    native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+                                      (submission : AspisR1.F3T_ByteCarrier.Submission),
+                                      AspisR1.FIr_GlobalOwners2.Owners
+                                          (AspisR1.FIq_Install.configuration indexError c reservation)
+                                          (AspisR1.Rc2_Install.configuration
+                                              (AspisR1.Rc5_Install.seed indexError
+                                                (AspisR1.FIq_Install.select reservation c))
+                                              reservation).boundaries →
+                                        (∀ (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+                                            (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+                                            AspisR1.S2W_NativeConsolidation.SourceCuts
+                                                (AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIq_Install.configuration indexError c reservation))
+                                                e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s →
+                                              AspisR1.MultiproofConeCanonical.bytesOf ↑s.proof =
+                                                  AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof ∧
+                                                AspisR1.MultiproofConeCanonical.bytesOf ↑s.pub =
+                                                    AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub ∧
+                                                  AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub =
+                                                      submission.publicBytes ∧
+                                                    AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof =
+                                                      submission.stored) →
+                                          have r := AspisR1.FIq_Install.configuration indexError c reservation;
+                                          have runtime :=
+                                            AspisR1.F3X_FixtureRuntime.runtime r D hashv
+                                              (AspisV8R19.MemoizedProgramLaw.Program.done submission);
+                                          AspisR1.F3T_Runtime.StoredCarrierBinding r D
+                                              (AspisR1.F3T_Installed.source r hashv)
+                                              (AspisV8R19.MemoizedProgramLaw.Program.done submission) runtime ∧
+                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                    (AspisR1.F3T_Installed.source r hashv
+                                                      (AspisR1.F3T_ByteCarrier.input r submission))).2 =
+                                                true ∧
+                                              (∃ run,
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = some run ∧
+                                                    run.2.2 = true) ∧
+                                                AspisR1.F3U_Numeric.margin ≤
+                                                    1 / 2 ^ 100 - AspisR1.F3T_RuntimeBound.failureModel runtime ∧
+                                                  AspisR1.F3T_RuntimeBound.failureModel runtime < 1 / 2 ^ 100 :=
+fun {W A CoreError Tx} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation native1
+    native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D submission finishOwners
+    snapshots =>
+  AspisR1.FIq_Nonvacuity.composed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation
+    native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D submission
+    (AspisR1.FIr_GlobalOwners.complete (AspisR1.FIq_Install.configuration indexError c reservation)
+      (AspisR1.Rc2_Install.configuration
+          (AspisR1.Rc5_Install.seed indexError (AspisR1.FIq_Install.select reservation c)) reservation).boundaries
+      (AspisR1.FIr_GlobalOwners2.complete (AspisR1.FIq_Install.configuration indexError c reservation)
+        (AspisR1.Rc2_Install.configuration
+            (AspisR1.Rc5_Install.seed indexError (AspisR1.FIq_Install.select reservation c)) reservation).boundaries
+        finishOwners))
+    snapshots
+'AspisR1.FIr_Nonvacuity.composed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def AspisR1.FJe_PackedValues.external : ∀ (s : AspisR1.FJb_MatrixGroupStep.State)
+  (out : AspisR1.FJe_ExternalCalls.Packed),
+  AspisR1.FIw_ArrayValue.canonical s →
+    FIq_Native.state_only_poseidon.external_linear_packed s = Aeneas.Std.Result.ok out →
+      AspisR1.FIw_ArrayValue.canonical out ∧
+        AspisR1.FIw_ArrayValue.decoded out = fun g =>
+          R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+            AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+            R0P.poseidonExternalLinear (AspisR1.FIw_ArrayValue.decoded s) (AspisR1.FJe_ExternalAdjoint.lane g j) :=
+AspisR1.FJe_ExternalPackedValue.value
+@[reducible] def AspisR1.FJe_PackedValues.leading : ∀ (o : AspisR1.FJa_PoseidonOrigins.Openings)
+  (out : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize),
+  AspisR1.FIw_ArrayValue.canonical o.z →
+    AspisR1.FIw_ArrayValue.canonical o.xor12_z →
+      FIq_Native.state_only_poseidon.leading_pair_packed o = Aeneas.Std.Result.ok out →
+        AspisR1.FIw_ArrayValue.canonical out ∧
+          AspisR1.FIw_ArrayValue.decoded out = fun g =>
+            R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+              AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+              R0P.poseidonLeadingPair (AspisR1.FIw_ArrayValue.decoded o.z) (AspisR1.FIw_ArrayValue.decoded o.xor12_z)
+                (AspisR1.FJe_ExternalAdjoint.lane g j) :=
+AspisR1.FJe_LeadingPackedValue.value
+@[reducible] def AspisR1.FJe_PackedValues.full : ∀ (s l : AspisR1.FJb_MatrixGroupStep.State)
+  (out : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize),
+  AspisR1.FIw_ArrayValue.canonical s →
+    AspisR1.FIw_ArrayValue.canonical l →
+      FIq_Native.state_only_poseidon.interpolated_full_pair_packed s l = Aeneas.Std.Result.ok out →
+        AspisR1.FIw_ArrayValue.canonical out ∧
+          AspisR1.FIw_ArrayValue.decoded out = fun g =>
+            R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+              AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+              R0P.poseidonInterpolatedFullPair (AspisR1.FIw_ArrayValue.decoded s) (AspisR1.FIw_ArrayValue.decoded l)
+                (AspisR1.FJe_ExternalAdjoint.lane g j) :=
+AspisR1.FJe_FullPackedValue.value
+theorem AspisR1.FJe_Sum3Value.value : ∀ (a : AspisR1.FJe_Sum3BridgeBase.Left) (b w : AspisR1.FJe_Sum3BridgeBase.Right)
+  (out : AspisR1.FIv_NativeArithmetic.NQ),
+  AspisR1.FIw_ArrayValue.canonical w →
+    AspisR1.FIw_ArrayValue.canonical b →
+      (∀ (i : Fin 3),
+          AspisR1.ExtractedMaskPreparedState.PreparedFor
+            (AspisR1.FIv_PreparedNew.prepared (AspisR1.FJe_Sum3Value.cell a i))
+            (AspisR1.FIv_NativeArithmetic.qm (AspisR1.FJe_Sum3Value.cell w i))) →
+        FIq_Native.field.qm31_sum_products3_prepared a b = Aeneas.Std.Result.ok out →
+          AspisR1.FIv_NativeValue.Canon out ∧
+            AspisR1.FIv_NativeValue.decode out =
+              AspisR1.FIv_NativeValue.decode (AspisR1.FJe_Sum3Value.cell w ⟨0, ⋯⟩) *
+                    AspisR1.FIv_NativeValue.decode (AspisR1.FJe_Sum3Value.cell b ⟨0, ⋯⟩) +
+                  AspisR1.FIv_NativeValue.decode (AspisR1.FJe_Sum3Value.cell w ⟨1, ⋯⟩) *
+                    AspisR1.FIv_NativeValue.decode (AspisR1.FJe_Sum3Value.cell b ⟨1, ⋯⟩) +
+                AspisR1.FIv_NativeValue.decode (AspisR1.FJe_Sum3Value.cell w ⟨2, ⋯⟩) *
+                  AspisR1.FIv_NativeValue.decode (AspisR1.FJe_Sum3Value.cell b ⟨2, ⋯⟩) :=
+fun a b w out cw cb hp run =>
+  have cmem := fun i =>
+    cw (AspisR1.FJe_Sum3Value.cell w i) (List.getElem_mem (AspisR1.FJe_Sum3Value.cell._proof_2 w i));
+  have bmem := fun i =>
+    cb (AspisR1.FJe_Sum3Value.cell b i) (List.getElem_mem (AspisR1.FJe_Sum3Value.cell._proof_2 b i));
+  let ⟨v, h✝⟩ :=
+    AspisR1.PoseidonPreparedSum3ActualValue.actual_sum3_value (AspisR1.FJe_Sum3BridgeBase.left a)
+      (AspisR1.FJe_Sum3BridgeBase.right b)
+      (fun i =>
+        Exists.intro (AspisR1.FIv_NativeArithmetic.qm (AspisR1.FJe_Sum3Value.cell w i))
+          ⟨cmem i,
+            id
+              (Eq.mpr
+                (congrArg
+                  (fun p =>
+                    AspisR1.ExtractedMaskPreparedState.PreparedFor p
+                      (AspisR1.FIv_NativeArithmetic.qm (AspisR1.FJe_Sum3Value.cell w i)))
+                  (AspisR1.FJe_Sum3Value.mappedCell AspisR1.FIv_PreparedNew.prepared a i))
+                (hp i))⟩)
+      fun i =>
+      id
+        (Eq.mpr
+          (congrArg AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM
+            (AspisR1.FJe_Sum3Value.mappedCell AspisR1.FIv_NativeArithmetic.qm b i))
+          (bmem i))
+  let ⟨x0, h✝¹⟩ := h✝
+  let ⟨x1, h✝²⟩ := h✝¹
+  let ⟨x2, h✝³⟩ := h✝²
+  let ⟨rv, right✝⟩ := h✝³
+  let ⟨cv, right✝¹⟩ := right✝
+  let ⟨p0, right✝²⟩ := right✝¹
+  let ⟨p1, right✝³⟩ := right✝²
+  let ⟨p2, vv⟩ := right✝³
+  have same := AspisR1.FJe_Sum3WrapperBridge.same a b;
+  have e :=
+    Aeneas.Std.Result.ok.inj
+      (Eq.mp (congrArg (fun _a => Aeneas.Std.Result.ok (AspisR1.FIv_NativeArithmetic.qm out) = _a) rv)
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              _a =
+                AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared (AspisR1.FJe_Sum3BridgeBase.left a)
+                  (AspisR1.FJe_Sum3BridgeBase.right b))
+            (AspisR1.FIv_Map.map_ok AspisR1.FIv_NativeArithmetic.qm out))
+          (Eq.mp
+            (congrArg
+              (fun _a =>
+                AspisR1.FIv_Map.map AspisR1.FIv_NativeArithmetic.qm _a =
+                  AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared
+                    (AspisR1.FJe_Sum3BridgeBase.left a) (AspisR1.FJe_Sum3BridgeBase.right b))
+              run)
+            same)));
+  Eq.ndrec (motive := fun v =>
+    AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared (AspisR1.FJe_Sum3BridgeBase.left a)
+          (AspisR1.FJe_Sum3BridgeBase.right b) =
+        Aeneas.Std.Result.ok v →
+      AspisR1.PoseidonPreparedSum3ActualValue.CanonicalQM v →
+        AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ v =
+            AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x0 *
+                  AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                    (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (AspisR1.FJe_Sum3BridgeBase.right b)
+                      AspisR1.PoseidonPreparedSum3ActualValue.i0✝) +
+                AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x1 *
+                  AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                    (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (AspisR1.FJe_Sum3BridgeBase.right b)
+                      AspisR1.PoseidonPreparedSum3ActualValue.i1✝) +
+              AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x2 *
+                AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                  (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (AspisR1.FJe_Sum3BridgeBase.right b)
+                    AspisR1.PoseidonPreparedSum3ActualValue.i2✝) →
+          Aeneas.Std.Result.ok (AspisR1.FIv_NativeArithmetic.qm out) = Aeneas.Std.Result.ok v →
+            AspisR1.FIv_NativeValue.Canon out ∧
+              AspisR1.FIv_NativeValue.decode out =
+                AspisR1.FIv_NativeValue.decode
+                        (AspisR1.FJe_Sum3Value.cell w ⟨0, of_decide_eq_true (id (Eq.refl true))⟩) *
+                      AspisR1.FIv_NativeValue.decode
+                        (AspisR1.FJe_Sum3Value.cell b ⟨0, of_decide_eq_true (id (Eq.refl true))⟩) +
+                    AspisR1.FIv_NativeValue.decode
+                        (AspisR1.FJe_Sum3Value.cell w ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) *
+                      AspisR1.FIv_NativeValue.decode
+                        (AspisR1.FJe_Sum3Value.cell b ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) +
+                  AspisR1.FIv_NativeValue.decode
+                      (AspisR1.FJe_Sum3Value.cell w ⟨2, of_decide_eq_true (id (Eq.refl true))⟩) *
+                    AspisR1.FIv_NativeValue.decode
+                      (AspisR1.FJe_Sum3Value.cell b ⟨2, of_decide_eq_true (id (Eq.refl true))⟩))
+    (fun rv cv vv same =>
+      id
+        (fun p0 =>
+          id
+            (fun p1 =>
+              id
+                (fun p2 =>
+                  have p0' :=
+                    Eq.mp
+                      (congrArg (fun p => AspisR1.ExtractedMaskPreparedState.PreparedFor p x0)
+                        (AspisR1.FJe_Sum3Value.mappedCell AspisR1.FIv_PreparedNew.prepared a
+                          ⟨0, of_decide_eq_true (id (Eq.refl true))⟩))
+                      p0;
+                  have p1' :=
+                    Eq.mp
+                      (congrArg (fun p => AspisR1.ExtractedMaskPreparedState.PreparedFor p x1)
+                        (AspisR1.FJe_Sum3Value.mappedCell AspisR1.FIv_PreparedNew.prepared a
+                          ⟨1, of_decide_eq_true (id (Eq.refl true))⟩))
+                      p1;
+                  have p2' :=
+                    Eq.mp
+                      (congrArg (fun p => AspisR1.ExtractedMaskPreparedState.PreparedFor p x2)
+                        (AspisR1.FJe_Sum3Value.mappedCell AspisR1.FIv_PreparedNew.prepared a
+                          ⟨2, of_decide_eq_true (id (Eq.refl true))⟩))
+                      p2;
+                  have e0 :=
+                    AspisR1.FJe_PreparedInjective.prepared
+                      (AspisR1.FIv_PreparedNew.prepared
+                        (AspisR1.FJe_Sum3Value.cell a ⟨0, of_decide_eq_true (id (Eq.refl true))⟩))
+                      x0
+                      (AspisR1.FIv_NativeArithmetic.qm
+                        (AspisR1.FJe_Sum3Value.cell w ⟨0, of_decide_eq_true (id (Eq.refl true))⟩))
+                      p0' (hp ⟨0, of_decide_eq_true (id (Eq.refl true))⟩);
+                  have e1 :=
+                    AspisR1.FJe_PreparedInjective.prepared
+                      (AspisR1.FIv_PreparedNew.prepared
+                        (AspisR1.FJe_Sum3Value.cell a ⟨1, of_decide_eq_true (id (Eq.refl true))⟩))
+                      x1
+                      (AspisR1.FIv_NativeArithmetic.qm
+                        (AspisR1.FJe_Sum3Value.cell w ⟨1, of_decide_eq_true (id (Eq.refl true))⟩))
+                      p1' (hp ⟨1, of_decide_eq_true (id (Eq.refl true))⟩);
+                  have e2 :=
+                    AspisR1.FJe_PreparedInjective.prepared
+                      (AspisR1.FIv_PreparedNew.prepared
+                        (AspisR1.FJe_Sum3Value.cell a ⟨2, of_decide_eq_true (id (Eq.refl true))⟩))
+                      x2
+                      (AspisR1.FIv_NativeArithmetic.qm
+                        (AspisR1.FJe_Sum3Value.cell w ⟨2, of_decide_eq_true (id (Eq.refl true))⟩))
+                      p2' (hp ⟨2, of_decide_eq_true (id (Eq.refl true))⟩);
+                  Eq.ndrec (motive := fun x0 =>
+                    AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ (AspisR1.FIv_NativeArithmetic.qm out) =
+                        AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x0 *
+                              AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (AspisR1.FJe_Sum3BridgeBase.right b)
+                                  AspisR1.PoseidonPreparedSum3ActualValue.i0✝) +
+                            AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x1 *
+                              AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (AspisR1.FJe_Sum3BridgeBase.right b)
+                                  AspisR1.PoseidonPreparedSum3ActualValue.i1✝) +
+                          AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x2 *
+                            AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                              (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝ (AspisR1.FJe_Sum3BridgeBase.right b)
+                                AspisR1.PoseidonPreparedSum3ActualValue.i2✝) →
+                      AspisR1.ExtractedMaskPreparedState.PreparedFor
+                          (↑(AspisR1.FJe_Sum3BridgeBase.left
+                                a))[↑(AspisR1PoseidonPreparedIndexProductBounds.uFin
+                                ⟨0, of_decide_eq_true (id (Eq.refl true))⟩)]
+                          x0 →
+                        AspisR1.ExtractedMaskPreparedState.PreparedFor
+                            (AspisR1.FIv_PreparedNew.prepared
+                              (AspisR1.FJe_Sum3Value.cell a ⟨0, of_decide_eq_true (id (Eq.refl true))⟩))
+                            x0 →
+                          AspisR1.FIv_NativeValue.Canon out ∧
+                            AspisR1.FIv_NativeValue.decode out =
+                              AspisR1.FIv_NativeValue.decode
+                                      (AspisR1.FJe_Sum3Value.cell w ⟨0, of_decide_eq_true (id (Eq.refl true))⟩) *
+                                    AspisR1.FIv_NativeValue.decode
+                                      (AspisR1.FJe_Sum3Value.cell b ⟨0, of_decide_eq_true (id (Eq.refl true))⟩) +
+                                  AspisR1.FIv_NativeValue.decode
+                                      (AspisR1.FJe_Sum3Value.cell w ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) *
+                                    AspisR1.FIv_NativeValue.decode
+                                      (AspisR1.FJe_Sum3Value.cell b ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) +
+                                AspisR1.FIv_NativeValue.decode
+                                    (AspisR1.FJe_Sum3Value.cell w ⟨2, of_decide_eq_true (id (Eq.refl true))⟩) *
+                                  AspisR1.FIv_NativeValue.decode
+                                    (AspisR1.FJe_Sum3Value.cell b ⟨2, of_decide_eq_true (id (Eq.refl true))⟩))
+                    (fun vv p0 p0' =>
+                      Eq.ndrec (motive := fun x1 =>
+                        AspisR1.ExtractedMaskPreparedState.PreparedFor
+                            (↑(AspisR1.FJe_Sum3BridgeBase.left
+                                  a))[↑(AspisR1PoseidonPreparedIndexProductBounds.uFin
+                                  ⟨1, of_decide_eq_true (id (Eq.refl true))⟩)]
+                            x1 →
+                          AspisR1.ExtractedMaskPreparedState.PreparedFor
+                              (AspisR1.FIv_PreparedNew.prepared
+                                (AspisR1.FJe_Sum3Value.cell a ⟨1, of_decide_eq_true (id (Eq.refl true))⟩))
+                              x1 →
+                            AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ (AspisR1.FIv_NativeArithmetic.qm out) =
+                                AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                        (AspisR1.FIv_NativeArithmetic.qm
+                                          (AspisR1.FJe_Sum3Value.cell w ⟨0, of_decide_eq_true (id (Eq.refl true))⟩)) *
+                                      AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                        (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝
+                                          (AspisR1.FJe_Sum3BridgeBase.right b)
+                                          AspisR1.PoseidonPreparedSum3ActualValue.i0✝) +
+                                    AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x1 *
+                                      AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                        (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝
+                                          (AspisR1.FJe_Sum3BridgeBase.right b)
+                                          AspisR1.PoseidonPreparedSum3ActualValue.i1✝) +
+                                  AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x2 *
+                                    AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                      (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝
+                                        (AspisR1.FJe_Sum3BridgeBase.right b)
+                                        AspisR1.PoseidonPreparedSum3ActualValue.i2✝) →
+                              AspisR1.FIv_NativeValue.Canon out ∧
+                                AspisR1.FIv_NativeValue.decode out =
+                                  AspisR1.FIv_NativeValue.decode
+                                          (AspisR1.FJe_Sum3Value.cell w ⟨0, of_decide_eq_true (id (Eq.refl true))⟩) *
+                                        AspisR1.FIv_NativeValue.decode
+                                          (AspisR1.FJe_Sum3Value.cell b ⟨0, of_decide_eq_true (id (Eq.refl true))⟩) +
+                                      AspisR1.FIv_NativeValue.decode
+                                          (AspisR1.FJe_Sum3Value.cell w ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) *
+                                        AspisR1.FIv_NativeValue.decode
+                                          (AspisR1.FJe_Sum3Value.cell b ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) +
+                                    AspisR1.FIv_NativeValue.decode
+                                        (AspisR1.FJe_Sum3Value.cell w ⟨2, of_decide_eq_true (id (Eq.refl true))⟩) *
+                                      AspisR1.FIv_NativeValue.decode
+                                        (AspisR1.FJe_Sum3Value.cell b ⟨2, of_decide_eq_true (id (Eq.refl true))⟩))
+                        (fun p1 p1' vv =>
+                          Eq.ndrec (motive := fun x2 =>
+                            AspisR1.ExtractedMaskPreparedState.PreparedFor
+                                (↑(AspisR1.FJe_Sum3BridgeBase.left
+                                      a))[↑(AspisR1PoseidonPreparedIndexProductBounds.uFin
+                                      ⟨2, of_decide_eq_true (id (Eq.refl true))⟩)]
+                                x2 →
+                              AspisR1.ExtractedMaskPreparedState.PreparedFor
+                                  (AspisR1.FIv_PreparedNew.prepared
+                                    (AspisR1.FJe_Sum3Value.cell a ⟨2, of_decide_eq_true (id (Eq.refl true))⟩))
+                                  x2 →
+                                AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                      (AspisR1.FIv_NativeArithmetic.qm out) =
+                                    AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                            (AspisR1.FIv_NativeArithmetic.qm
+                                              (AspisR1.FJe_Sum3Value.cell w
+                                                ⟨0, of_decide_eq_true (id (Eq.refl true))⟩)) *
+                                          AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                            (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝
+                                              (AspisR1.FJe_Sum3BridgeBase.right b)
+                                              AspisR1.PoseidonPreparedSum3ActualValue.i0✝) +
+                                        AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                            (AspisR1.FIv_NativeArithmetic.qm
+                                              (AspisR1.FJe_Sum3Value.cell w
+                                                ⟨1, of_decide_eq_true (id (Eq.refl true))⟩)) *
+                                          AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                            (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝
+                                              (AspisR1.FJe_Sum3BridgeBase.right b)
+                                              AspisR1.PoseidonPreparedSum3ActualValue.i1✝) +
+                                      AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝ x2 *
+                                        AspisR1.PoseidonPreparedSum3ActualValue.decodeQM✝
+                                          (AspisR1.PoseidonPreparedSum3ActualValue.rightAt✝
+                                            (AspisR1.FJe_Sum3BridgeBase.right b)
+                                            AspisR1.PoseidonPreparedSum3ActualValue.i2✝) →
+                                  AspisR1.FIv_NativeValue.Canon out ∧
+                                    AspisR1.FIv_NativeValue.decode out =
+                                      AspisR1.FIv_NativeValue.decode
+                                              (AspisR1.FJe_Sum3Value.cell w
+                                                ⟨0, of_decide_eq_true (id (Eq.refl true))⟩) *
+                                            AspisR1.FIv_NativeValue.decode
+                                              (AspisR1.FJe_Sum3Value.cell b
+                                                ⟨0, of_decide_eq_true (id (Eq.refl true))⟩) +
+                                          AspisR1.FIv_NativeValue.decode
+                                              (AspisR1.FJe_Sum3Value.cell w
+                                                ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) *
+                                            AspisR1.FIv_NativeValue.decode
+                                              (AspisR1.FJe_Sum3Value.cell b
+                                                ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) +
+                                        AspisR1.FIv_NativeValue.decode
+                                            (AspisR1.FJe_Sum3Value.cell w ⟨2, of_decide_eq_true (id (Eq.refl true))⟩) *
+                                          AspisR1.FIv_NativeValue.decode
+                                            (AspisR1.FJe_Sum3Value.cell b ⟨2, of_decide_eq_true (id (Eq.refl true))⟩))
+                            (fun p2 p2' vv =>
+                              id
+                                (fun vv =>
+                                  have term := fun i =>
+                                    congrArg
+                                      (fun x =>
+                                        AspisR1.FIv_NativeValue.decode (AspisR1.FJe_Sum3Value.cell w i) *
+                                          AspisR1.ExtractedMaskQM31Exact.decode x)
+                                      (AspisR1.FJe_Sum3Value.mappedCell AspisR1.FIv_NativeArithmetic.qm b i);
+                                  ⟨cv,
+                                    Eq.trans vv
+                                      (congrArg₂ (fun x y => x + y)
+                                        (congrArg₂ (fun x y => x + y) (term ⟨0, of_decide_eq_true (id (Eq.refl true))⟩)
+                                          (term ⟨1, of_decide_eq_true (id (Eq.refl true))⟩))
+                                        (term ⟨2, of_decide_eq_true (id (Eq.refl true))⟩))⟩)
+                                vv)
+                            (Eq.symm e2) p2 p2' vv)
+                        (Eq.symm e1) p1 p1' vv)
+                    (Eq.symm e0) vv p0 p0')
+                p2)
+            p1)
+        p0)
+    e rv cv vv
+    (Eq.mp (congrArg (fun _a => Aeneas.Std.Result.ok (AspisR1.FIv_NativeArithmetic.qm out) = _a) rv)
+      (Eq.mp
+        (congrArg
+          (fun _a =>
+            _a =
+              AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared (AspisR1.FJe_Sum3BridgeBase.left a)
+                (AspisR1.FJe_Sum3BridgeBase.right b))
+          (AspisR1.FIv_Map.map_ok AspisR1.FIv_NativeArithmetic.qm out))
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              AspisR1.FIv_Map.map AspisR1.FIv_NativeArithmetic.qm _a =
+                AspisR1PoseidonPreparedSum3Source.field.qm31_sum_products3_prepared (AspisR1.FJe_Sum3BridgeBase.left a)
+                  (AspisR1.FJe_Sum3BridgeBase.right b))
+            run)
+          same)))
+theorem AspisR1.FJe_PackedOnRun.value : ∀ (o : AspisR1.FJa_PoseidonOrigins.Openings)
+  (s : AspisR1.FJa_PoseidonOrigins.Selectors) (out : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize),
+  AspisR1.FIw_ArrayValue.canonical o.z →
+    AspisR1.FIw_ArrayValue.canonical o.xor12_z →
+      AspisR1.FIw_ArrayValue.canonical s.local →
+        FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected o s = Aeneas.Std.Result.ok out →
+          ∃ leading full,
+            FIq_Native.state_only_poseidon.leading_pair_packed o = Aeneas.Std.Result.ok leading ∧
+              FIq_Native.state_only_poseidon.interpolated_full_pair_packed o.z s.local = Aeneas.Std.Result.ok full ∧
+                AspisR1.FIw_ArrayValue.canonical leading ∧
+                  AspisR1.FIw_ArrayValue.canonical full ∧
+                    (AspisR1.FIw_ArrayValue.decoded leading = fun g =>
+                        R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+                          AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                          R0P.poseidonLeadingPair (AspisR1.FIw_ArrayValue.decoded o.z)
+                            (AspisR1.FIw_ArrayValue.decoded o.xor12_z) (AspisR1.FJe_ExternalAdjoint.lane g j)) ∧
+                      AspisR1.FIw_ArrayValue.decoded full = fun g =>
+                        R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+                          AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                          R0P.poseidonInterpolatedFullPair (AspisR1.FIw_ArrayValue.decoded o.z)
+                            (AspisR1.FIw_ArrayValue.decoded s.local) (AspisR1.FJe_ExternalAdjoint.lane g j) :=
+fun o s out hz hx hs run =>
+  let ⟨w✝, h✝⟩ := AspisR1.FJa_PoseidonOrigins.reached o s out run
+  let ⟨w✝¹, h✝¹⟩ := h✝
+  let ⟨w✝², h✝²⟩ := h✝¹
+  let ⟨l, h✝³⟩ := h✝²
+  let ⟨f, h✝⁴⟩ := h✝³
+  let ⟨w✝³, h✝⁵⟩ := h✝⁴
+  let ⟨w✝⁴, h✝⁶⟩ := h✝⁵
+  let ⟨w✝⁵, h✝⁷⟩ := h✝⁶
+  let ⟨left✝, right✝⟩ := h✝⁷
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨left✝², right✝²⟩ := right✝¹
+  let ⟨rl, right✝³⟩ := right✝²
+  let ⟨rf, right✝⁴⟩ := right✝³
+  have vl := AspisR1.FJe_PackedValues.leading o l hz hx rl;
+  have vf := AspisR1.FJe_PackedValues.full o.z s.local f hz hs rf;
+  Exists.intro l (Exists.intro f ⟨rl, ⟨rf, ⟨vl.left, ⟨vf.left, ⟨vl.right, vf.right⟩⟩⟩⟩⟩)
+'AspisR1.FJe_Component0.component0Ops_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Component1.component1Ops_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Component2.component2Ops_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Component3.component3Ops_success' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJe_ExternalAdjoint.value' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJe_ExternalCalls.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ExternalCalls.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ExternalMap.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ExternalPackedValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ExternalSum.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FinalConstants.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FinalConstants.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FinalConstants.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FullCalls.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FullConstants.even_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FullConstants.odd_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FullNonlinear.literal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FullNonlinear.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FullPackedValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_FullWeights.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_LeadingNonlinear.literal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_LeadingNonlinear.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_LeadingPackedValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_LeadingPrefix.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_LocalPackedValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_M31PackedNonlinear.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedBound.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedGroupModel.input_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedGroupModel.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedGroupStep.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedGroupStep.unfold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedGroupStep.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedInputWords.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedInputWords.decoded_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedLoopCanonical.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedLoopValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedOnRun.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawAfter.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawAfterValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawCallbacks.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawCallbacks.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawOrigins.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawRow.callback_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawRow.callback_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawRow.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawRow.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawRowValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawTable.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawTable.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedRawValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedTableRead.read0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedTableRead.read1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedTableRead.read2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedTableRead.read3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedValues.external' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedValues.full' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackedValues.leading' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PackingLinear.add' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJe_PackingLinear.ordered_sum' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJe_PreparedInjective.component' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_PreparedInjective.prepared' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_QmPackedNonlinear.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawConversionValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawLocalCanon.converted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawLocalCanon.local_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawReference.output_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawReference.row_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawReference.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawSafety0.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawSafety1.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawSafety2.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_RawSafety3.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3BridgeBase.converter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3BridgeBase.row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ChannelBridge.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ChannelEdges.native_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ChannelEdges.native_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ChannelEdges.old_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ChannelEdges.old_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ChannelStep.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ChannelStep.old' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3ComponentBridge.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3IndexBridge.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3Value.mappedCell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3Value.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_Sum3WrapperBridge.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeCell.source_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeColumnLoop.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeColumnStep.unfold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeColumnStep.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeColumns.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeLimb.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeLimb.reducer_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeLimb.reducer_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeLimb.source_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJe_ThreeLimb.wide_value' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJe_ThreeLimbTotal.value' depends on axioms: [propext, Classical.choice, Quot.sound]

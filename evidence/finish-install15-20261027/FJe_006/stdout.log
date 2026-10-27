@@ -1,0 +1,43 @@
+FJe_LeadingPrefix.lean:39:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun j => ↑↑(FJb_TailCell.cell (FJb_InitialConstants.row 0) j)
+in the target expression
+  (R0P.poseidonFullRound (R0P.poseidonExternalLinear (absorbed o)) fun j =>
+      ↑↑(FJb_TailCell.cell (FJb_InitialConstants.row 0) j)) =
+    R0P.poseidonFullRound (R0P.poseidonExternalLinear (absorbed o)) (R0P.poseidonExternalInitial 0)
+
+o : Openings
+out : Std.Array NQ 4#usize
+hz : canonical o.z
+hx : canonical o.xor12_z
+run : state_only_poseidon.leading_pair_packed o = ok out
+a initial middle : Std.Array NQ 16#usize
+left✝ : state_only_poseidon.leading_pair_packed_loop { start := 0#usize, «end» := poseidon2.RATE } o.xor12_z o.z = ok a
+ca : canonical a
+va : ∀ (j : Fin ↑16#usize), decoded a j = if ↑j < 8 then decoded o.z j + decoded o.xor12_z j else decoded o.z j
+hi : state_only_poseidon.external_linear_lazy a = ok initial
+hc0 : poseidon2.EXTERNAL_INITIAL.index_usize 0#usize = ok (FJb_InitialConstants.row 0)
+hm : state_only_poseidon.full_round_m31_constants initial (FJb_InitialConstants.row 0) = ok middle
+hc1 : poseidon2.EXTERNAL_INITIAL.index_usize 1#usize = ok (FJb_InitialConstants.row 1)
+tail : state_only_poseidon.full_round_m31_constants_packed middle (FJb_InitialConstants.row 1) = ok out
+vi : canonical initial ∧ decoded initial = R0P.poseidonExternalLinear (decoded a)
+vm :
+  canonical middle ∧
+    decoded middle =
+      R0P.poseidonFullRound (decoded initial) fun j => ↑↑(FJb_TailCell.cell (FJb_InitialConstants.row 0) j)
+ea : decoded a = absorbed o
+ec : (fun j => ↑↑(FJb_TailCell.cell (FJb_InitialConstants.row 0) j)) = R0P.poseidonExternalInitial 0
+⊢ (R0P.poseidonFullRound (R0P.poseidonExternalLinear (absorbed o)) fun j =>
+      ↑↑(FJb_TailCell.cell (FJb_InitialConstants.row 0) j)) =
+    R0P.poseidonFullRound (R0P.poseidonExternalLinear (absorbed o)) (R0P.poseidonExternalInitial 0)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJe_LeadingPrefix.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
