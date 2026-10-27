@@ -1,0 +1,360 @@
+theorem R1Z.PV_RE_NoCatchCore.bind_noCatch : ∀ {α β : Type} (k : α → Aeneas.Std.Result β),
+  R1Z.PV_RE_NoCatchCore.NoCatch fun r => r >>= k :=
+fun {α β} k =>
+  ⟨fun e => Eq.refl ((fun r => r >>= k) (Aeneas.Std.Result.fail e)), Eq.refl ((fun r => r >>= k) Aeneas.Std.Result.div)⟩
+'R1Z.PV_RE_NoCatchCore.bind_noCatch' does not depend on any axioms
+theorem R1Z.PV_RE_NoCatchCore.compose : ∀ {α β γ : Type} {f : Aeneas.Std.Result α → Aeneas.Std.Result β}
+  {g : Aeneas.Std.Result β → Aeneas.Std.Result γ},
+  R1Z.PV_RE_NoCatchCore.NoCatch f → R1Z.PV_RE_NoCatchCore.NoCatch g → R1Z.PV_RE_NoCatchCore.NoCatch (g ∘ f) :=
+fun {α β γ} {f} {g} hf hg =>
+  ⟨fun e =>
+    id
+      (Eq.mpr (id (congrArg (fun _a => g _a = Aeneas.Std.Result.fail e) (hf.left e)))
+        (Eq.mpr (id (congrArg (fun _a => _a = Aeneas.Std.Result.fail e) (hg.left e)))
+          (Eq.refl (Aeneas.Std.Result.fail e)))),
+    id
+      (Eq.mpr (id (congrArg (fun _a => g _a = Aeneas.Std.Result.div) hf.right))
+        (Eq.mpr (id (congrArg (fun _a => _a = Aeneas.Std.Result.div) hg.right)) (Eq.refl Aeneas.Std.Result.div)))⟩
+'R1Z.PV_RE_NoCatchCore.compose' does not depend on any axioms
+theorem R1Z.PV_RE_NoCatchCore.exclusion_by_poisoning : ∀ {I O : Type} (admitted : I → Prop)
+  (run poisoned : I → Aeneas.Std.Result O) (invoked : I → Prop),
+  (∀ (i : I), admitted i → poisoned i = run i) →
+    (∀ (i : I), admitted i → invoked i → ∃ e, poisoned i = Aeneas.Std.Result.fail e) →
+      ∀ (i : I), admitted i → (∃ v, run i = Aeneas.Std.Result.ok v) → ¬invoked i :=
+fun {I O} admitted run poisoned invoked congruent noCatch i hi hs hr =>
+  let ⟨e, he⟩ := noCatch i hi hr
+  let ⟨v, hv⟩ := hs
+  let ⟨⟩ := Aeneas.Std.Result.fail e
+  Eq.mp (congrArg (fun _a => _a = Aeneas.Std.Result.fail e) hv)
+    (Eq.mp (congrArg (fun _a => _a = Aeneas.Std.Result.fail e) (congruent i hi)) he)
+'R1Z.PV_RE_NoCatchCore.exclusion_by_poisoning' does not depend on any axioms
+theorem R1Z.PV_RE_ShapePoison.entry : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type} (D : ProverRwFull.ExternalFuns)
+  (entropy : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (pub : R1Z.PV_RE_ShapePoison.Public) (compiled : R1Z.PV_RE_ShapePoison.Compiled) (hash : R1Z.PV_RE_ShapePoison.Hash)
+  (store : R1Z.PV_RE_ShapePoison.Store) (state : C),
+  ∃ next,
+    ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+      ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 >>= next :=
+fun [ProverRwFull.ExternalTypes] {C} D entropy pub compiled hash store state =>
+  id
+    (id
+      (id
+        (id
+          (id
+            (Eq.mpr
+              (id
+                (congrArg Exists
+                  (funext fun next =>
+                    congrFun'
+                      (congrArg Eq
+                        (Eq.trans
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg bind
+                                (R1Z.PV_RE_ShapePoison.bind_assoc
+                                  (ProverRwFull.transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+                                    ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2)
+                                  (fun __do_lift => Aeneas.Std.Result.ok (decide ¬__do_lift = true)) fun b =>
+                                  if b = true then
+                                    Aeneas.Std.Result.ok
+                                      (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store)
+                                  else
+                                    ProverRwFull.prover.retry_attempt
+                                      (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                                        entropy)
+                                      pub compiled ProverRwFull.transport.Variant.S2 hash store state 0#usize))
+                              (Aeneas.Std.uncurry fun r nonce_store1 => Aeneas.Std.Result.ok (r, nonce_store1)))
+                            (R1Z.PV_RE_ShapePoison.bind_assoc
+                              (ProverRwFull.transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+                                ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2)
+                              (fun a => do
+                                let b ← Aeneas.Std.Result.ok (decide ¬a = true)
+                                if b = true then
+                                    Aeneas.Std.Result.ok
+                                      (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store)
+                                  else
+                                    ProverRwFull.prover.retry_attempt
+                                      (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                                        entropy)
+                                      pub compiled ProverRwFull.transport.Variant.S2 hash store state 0#usize)
+                              (Aeneas.Std.uncurry fun r nonce_store1 => Aeneas.Std.Result.ok (r, nonce_store1))))
+                          (congrArg
+                            (bind
+                              (ProverRwFull.transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+                                ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2))
+                            (funext fun a =>
+                              R1Z.PV_RE_ShapePoison.bind_assoc (Aeneas.Std.Result.ok (decide ¬a = true))
+                                (fun b =>
+                                  if b = true then
+                                    Aeneas.Std.Result.ok
+                                      (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store)
+                                  else
+                                    ProverRwFull.prover.retry_attempt
+                                      (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                                        entropy)
+                                      pub compiled ProverRwFull.transport.Variant.S2 hash store state 0#usize)
+                                (Aeneas.Std.uncurry fun r nonce_store1 => Aeneas.Std.Result.ok (r, nonce_store1))))))
+                      (ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2
+                          ProverRwFull.transport.Variant.S2 >>=
+                        next))))
+              (Exists.intro
+                (fun a => do
+                  let a ← Aeneas.Std.Result.ok (decide ¬a = true)
+                  let (r, nonce_store1) ←
+                    if a = true then
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store)
+                      else
+                        ProverRwFull.prover.retry_attempt
+                          (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                            entropy)
+                          pub compiled ProverRwFull.transport.Variant.S2 hash store state 0#usize
+                  Aeneas.Std.Result.ok (r, nonce_store1))
+                rfl))))))
+'R1Z.PV_RE_ShapePoison.entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_ShapePoison.poisoned_entry : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns) (e : Aeneas.Std.Error)
+  (entropy : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (pub : R1Z.PV_RE_ShapePoison.Public) (compiled : R1Z.PV_RE_ShapePoison.Compiled) (hash : R1Z.PV_RE_ShapePoison.Hash)
+  (store : R1Z.PV_RE_ShapePoison.Store) (state : C),
+  ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+    Aeneas.Std.Result.fail e :=
+fun [ProverRwFull.ExternalTypes] {C} D e entropy pub compiled hash store state =>
+  let ⟨next, h⟩ :=
+    R1Z.PV_RE_ShapePoison.entry (R1Z.PV_RE_ShapePoison.poison233 D e) entropy pub compiled hash store state
+  Eq.mpr (id (congrArg (fun _a => _a = Aeneas.Std.Result.fail e) h))
+    (Eq.refl
+      (ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 >>= next))
+'R1Z.PV_RE_ShapePoison.poisoned_entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_ShapePoison.success_distinguishes : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns) (e : Aeneas.Std.Error)
+  (entropy : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (pub : R1Z.PV_RE_ShapePoison.Public) (compiled : R1Z.PV_RE_ShapePoison.Compiled) (hash : R1Z.PV_RE_ShapePoison.Hash)
+  (store : R1Z.PV_RE_ShapePoison.Store) (state : C)
+  (v :
+    Aeneas.Std.core.result.Result ProverRwFull.prover.RetriedProof ProverRwFull.verifier.Error ×
+      R1Z.PV_RE_ShapePoison.Store),
+  ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state = Aeneas.Std.Result.ok v →
+    ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state ≠
+      ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state :=
+fun [ProverRwFull.ExternalTypes] {C} D e entropy pub compiled hash store state v h =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => _a ≠ ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state)
+        (R1Z.PV_RE_ShapePoison.poisoned_entry D e entropy pub compiled hash store state)))
+    (Eq.mpr (id (congrArg (fun _a => Aeneas.Std.Result.fail e ≠ _a) h)) fun impossible =>
+      let ⟨⟩ := Aeneas.Std.Result.ok v
+      impossible)
+'R1Z.PV_RE_ShapePoison.success_distinguishes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_ExcludedPoison.unchanged : ∀ [inst : ProverRwFull.ExternalTypes] (D : ProverRwFull.ExternalFuns)
+  (entry : R1Z.PV_RE_ExcludedPoison.ExcludedField) (e : Aeneas.Std.Error),
+  @ProverRwFull.RealR1_client.prove_for_proof_accounts inst (R1Z.PV_RE_ExcludedPoison.poison D entry e) =
+    @ProverRwFull.RealR1_client.prove_for_proof_accounts inst D :=
+fun [inst : ProverRwFull.ExternalTypes] D entry e =>
+  R1Z.PV_RE_ExcludedPoison.ExcludedField.casesOn (motive := fun t =>
+    entry = t →
+      @ProverRwFull.RealR1_client.prove_for_proof_accounts inst (R1Z.PV_RE_ExcludedPoison.poison D entry e) =
+        @ProverRwFull.RealR1_client.prove_for_proof_accounts inst D)
+    entry (fun h => Eq.symm h ▸ R1Z.PV_RE_ExcludedPoison.unchanged13 D e)
+    (fun h => Eq.symm h ▸ R1Z.PV_RE_ExcludedPoison.unchanged16 D e)
+    (fun h => Eq.symm h ▸ R1Z.PV_RE_ExcludedPoison.unchanged17 D e)
+    (fun h => Eq.symm h ▸ R1Z.PV_RE_ExcludedPoison.unchanged18 D e)
+    (fun h => Eq.symm h ▸ R1Z.PV_RE_ExcludedPoison.unchanged85 D e)
+    (fun h => Eq.symm h ▸ R1Z.PV_RE_ExcludedPoison.unchanged124 D e)
+    (fun h => Eq.symm h ▸ R1Z.PV_RE_ExcludedPoison.unchanged238 D e) (Eq.refl entry)
+'R1Z.PV_RE_ExcludedPoison.unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_ShapeExclusions.transfer : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns) (entry : R1Z.PV_RE_ExcludedPoison.ExcludedField) (e : Aeneas.Std.Error)
+  (entropy : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (p : ProverRwFull.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
+  (transition : ProverRwFull.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1)
+  (compiled : R1Z.PV_RE_ShapePoison.Compiled) (hash : R1Z.PV_RE_ShapePoison.Hash) (store : R1Z.PV_RE_ShapePoison.Store)
+  (state : C),
+  ProverRwFull.RealR1_client.prove_for_proof_accounts entropy
+      (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer p transition) compiled hash
+      store state =
+    ProverRwFull.RealR1_client.prove_for_proof_accounts entropy
+      (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer p transition) compiled hash
+      store state :=
+fun [ProverRwFull.ExternalTypes] {C} D entry e entropy p transition compiled hash store state =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a entropy
+              (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer p transition)
+              compiled hash store state =
+            ProverRwFull.RealR1_client.prove_for_proof_accounts entropy
+              (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer p transition)
+              compiled hash store state)
+        (R1Z.PV_RE_ExcludedPoison.unchanged D entry e)))
+    (Eq.refl
+      (ProverRwFull.RealR1_client.prove_for_proof_accounts entropy
+        (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer p transition) compiled
+        hash store state))
+'R1Z.PV_RE_ShapeExclusions.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_ShapeExclusions.withdrawal : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns) (entry : R1Z.PV_RE_ExcludedPoison.ExcludedField) (e : Aeneas.Std.Error)
+  (entropy : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (p : ProverRwFull.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1)
+  (transition : ProverRwFull.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1)
+  (compiled : R1Z.PV_RE_ShapePoison.Compiled) (hash : R1Z.PV_RE_ShapePoison.Hash) (store : R1Z.PV_RE_ShapePoison.Store)
+  (state : C),
+  ProverRwFull.RealR1_client.prove_for_proof_accounts entropy
+      (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal p transition) compiled
+      hash store state =
+    ProverRwFull.RealR1_client.prove_for_proof_accounts entropy
+      (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal p transition) compiled
+      hash store state :=
+fun [ProverRwFull.ExternalTypes] {C} D entry e entropy p transition compiled hash store state =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a entropy
+              (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal p transition)
+              compiled hash store state =
+            ProverRwFull.RealR1_client.prove_for_proof_accounts entropy
+              (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal p transition)
+              compiled hash store state)
+        (R1Z.PV_RE_ExcludedPoison.unchanged D entry e)))
+    (Eq.refl
+      (ProverRwFull.RealR1_client.prove_for_proof_accounts entropy
+        (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal p transition) compiled
+        hash store state))
+'R1Z.PV_RE_ShapeExclusions.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_PoisonOutcomes.exclusion : ∀ {I O : Type} (admitted : I → Prop)
+  (run poisoned : I → Aeneas.Std.Result O) (invoked : I → Prop) (poison : Aeneas.Std.Error),
+  (∀ (i : I), admitted i → poisoned i = run i) →
+    (∀ (i : I), admitted i → invoked i → poisoned i = Aeneas.Std.Result.fail poison) →
+      ∀ (i : I), admitted i → run i ≠ Aeneas.Std.Result.fail poison → ¬invoked i :=
+fun {I O} admitted run poisoned invoked poison congruent absorption i hi hn hr =>
+  hn
+    (Eq.mpr (id (congrArg (fun _a => _a = Aeneas.Std.Result.fail poison) (Eq.symm (congruent i hi))))
+      (absorption i hi hr))
+'R1Z.PV_RE_PoisonOutcomes.exclusion' does not depend on any axioms
+theorem R1Z.PV_RE_PoisonOutcomes.outer_ok_not_poison : ∀ {O : Type} (v : O) (e : Aeneas.Std.Error),
+  Aeneas.Std.Result.ok v ≠ Aeneas.Std.Result.fail e :=
+fun {O} v e h =>
+  let ⟨⟩ := Aeneas.Std.Result.fail e
+  h
+'R1Z.PV_RE_PoisonOutcomes.outer_ok_not_poison' does not depend on any axioms
+theorem R1Z.PV_RE_PoisonOutcomes.different_error : ∀ {O : Type} (original poison : Aeneas.Std.Error),
+  original ≠ poison → Aeneas.Std.Result.fail original ≠ Aeneas.Std.Result.fail poison :=
+fun {O} original poison h he => h (Aeneas.Std.Result.fail.inj he)
+'R1Z.PV_RE_PoisonOutcomes.different_error' does not depend on any axioms
+theorem R1Z.PV_RE_ShapeRejection.equality_rejected : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns)
+  (entropy : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (pub : R1Z.PV_RE_ShapePoison.Public) (compiled : R1Z.PV_RE_ShapePoison.Compiled) (hash : R1Z.PV_RE_ShapePoison.Hash)
+  (store : R1Z.PV_RE_ShapePoison.Store) (state : C),
+  ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.ok false →
+    ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store) :=
+fun [ProverRwFull.ExternalTypes] {C} D entropy pub compiled hash store state h =>
+  id
+    (id
+      (id
+        (id
+          (id
+            (Eq.mpr
+              (id
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg bind
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg bind
+                                  (congrFun' (congrArg bind h) fun __do_lift =>
+                                    Aeneas.Std.Result.ok (decide ¬__do_lift = true)))
+                                fun b =>
+                                if b = true then
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store)
+                                else
+                                  ProverRwFull.prover.retry_attempt
+                                    (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                                      entropy)
+                                    pub compiled ProverRwFull.transport.Variant.S2 hash store state 0#usize)
+                              (R1Z.PV_RE_ShapePoison.bind_assoc (Aeneas.Std.Result.ok false)
+                                (fun __do_lift => Aeneas.Std.Result.ok (decide ¬__do_lift = true)) fun b =>
+                                if b = true then
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store)
+                                else
+                                  ProverRwFull.prover.retry_attempt
+                                    (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                                      entropy)
+                                    pub compiled ProverRwFull.transport.Variant.S2 hash store state 0#usize)))
+                          (Aeneas.Std.uncurry fun r nonce_store1 => Aeneas.Std.Result.ok (r, nonce_store1)))
+                        (R1Z.PV_RE_ShapePoison.bind_assoc (Aeneas.Std.Result.ok false)
+                          (fun a => do
+                            let b ← Aeneas.Std.Result.ok (decide ¬a = true)
+                            if b = true then
+                                Aeneas.Std.Result.ok
+                                  (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store)
+                              else
+                                ProverRwFull.prover.retry_attempt
+                                  (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                                    entropy)
+                                  pub compiled ProverRwFull.transport.Variant.S2 hash store state 0#usize)
+                          (Aeneas.Std.uncurry fun r nonce_store1 => Aeneas.Std.Result.ok (r, nonce_store1))))
+                      (congrArg (bind (Aeneas.Std.Result.ok false))
+                        (funext fun a =>
+                          R1Z.PV_RE_ShapePoison.bind_assoc (Aeneas.Std.Result.ok (decide ¬a = true))
+                            (fun b =>
+                              if b = true then
+                                Aeneas.Std.Result.ok
+                                  (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store)
+                              else
+                                ProverRwFull.prover.retry_attempt
+                                  (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                                    entropy)
+                                  pub compiled ProverRwFull.transport.Variant.S2 hash store state 0#usize)
+                            (Aeneas.Std.uncurry fun r nonce_store1 => Aeneas.Std.Result.ok (r, nonce_store1))))))
+                  (Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store))))
+              (Eq.refl do
+                let a ← Aeneas.Std.Result.ok false
+                let a ← Aeneas.Std.Result.ok (decide ¬a = true)
+                let (r, nonce_store1) ←
+                  if a = true then
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, store)
+                    else
+                      ProverRwFull.prover.retry_attempt
+                        (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                          entropy)
+                        pub compiled ProverRwFull.transport.Variant.S2 hash store state 0#usize
+                Aeneas.Std.Result.ok (r, nonce_store1)))))))
+'R1Z.PV_RE_ShapeRejection.equality_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_ShapeRejection.entry_diverges : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns)
+  (entropy : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (pub : R1Z.PV_RE_ShapePoison.Public) (compiled : R1Z.PV_RE_ShapePoison.Compiled) (hash : R1Z.PV_RE_ShapePoison.Hash)
+  (store : R1Z.PV_RE_ShapePoison.Store) (state : C),
+  ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.div →
+    ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state = Aeneas.Std.Result.div :=
+fun [ProverRwFull.ExternalTypes] {C} D entropy pub compiled hash store state h =>
+  let ⟨next, hn⟩ := R1Z.PV_RE_ShapePoison.entry D entropy pub compiled hash store state
+  Eq.mpr (id (congrArg (fun _a => _a = Aeneas.Std.Result.div) hn))
+    (Eq.mpr (id (congrArg (fun _a => _a >>= next = Aeneas.Std.Result.div) h))
+      (Eq.refl (Aeneas.Std.Result.div >>= next)))
+'R1Z.PV_RE_ShapeRejection.entry_diverges' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_NoCatchBoundary.local_certificates_insufficient : (∀ (k : Unit → Aeneas.Std.Result Unit),
+    R1Z.PV_RE_NoCatchCore.NoCatch fun r => r >>= k) ∧
+  ¬R1Z.PV_RE_NoCatchCore.NoCatch R1Z.PV_RE_NoCatchBoundary.ignored :=
+⟨fun k => R1Z.PV_RE_NoCatchCore.bind_noCatch k, fun h =>
+  have bad := h.left Aeneas.Std.Error.panic;
+  id
+    (fun bad =>
+      let ⟨⟩ := Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+      bad)
+    bad⟩
+'R1Z.PV_RE_NoCatchBoundary.local_certificates_insufficient' does not depend on any axioms

@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,re,hashlib,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-reach-20261027/resume3';L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
-rows=[json.loads(p.read_text()) for p in E.glob('receipt-*.json')];names=[]
+rows=[json.loads(p.read_text()) for p in E.glob('receipt-[0-9]*.json')];names=[]
 for r in rows:
  if r['accepted'] and 'NoCatchChunk' in r['target']:
   out=(E/f'out-{r["attempt"]}.log').read_text()
@@ -17,7 +17,7 @@ for n,s in a:
  p=L/(n+'.lean')
  if '--check' in sys.argv:assert p.read_text()==s
  else:p.write_text(s)
-manifest=dict(bind_certificate_count=len(names),support_helper_count=len(helpers),bind_certificates=names,support_helpers=helpers,targets=[dict(module='R1Z/'+n,sha256=hashlib.sha256(s.encode()).hexdigest()) for n,s in a],frozen_new_proof_modules=sorted({r['target'] for r in rows if r['accepted']}),prior_33_checks_reused_not_recompiled=True,release_closure_replay=False)
+manifest=dict(bind_certificate_count=len(names),support_helper_count=len(helpers),bind_certificates=names,support_helpers=helpers,targets=[dict(module='R1Z/'+n,sha256=hashlib.sha256(s.encode()).hexdigest()) for n,s in a],frozen_new_proof_modules=sorted({r['target'] for r in rows if r['accepted'] and 'FinalAudit3' not in r['target']}),prior_33_checks_reused_not_recompiled=True,release_closure_replay=False)
 p=E/'audit-manifest.json'
 if '--check' in sys.argv:assert json.loads(p.read_text())==manifest
 else:p.write_text(json.dumps(manifest,indent=2)+'\n')
