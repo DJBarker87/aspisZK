@@ -43,7 +43,7 @@ s+='''theorem source (a b : Q) (ha : QC a) (hb : QC b) :
     exact Nat.not_le.mpr hb.2.2
   unfold aspis_core.field.wide_exact.WideExact.from_limbs
   simp only ['''+','.join(f'read{i}' for i in range(8))+',bind_tc_ok,'+','.join(f'n{i}' for i in range(8))+''',if_neg,if_false]
-  rfl
+
 #print axioms source
 end PV_B2_D_FromLimbs
 '''

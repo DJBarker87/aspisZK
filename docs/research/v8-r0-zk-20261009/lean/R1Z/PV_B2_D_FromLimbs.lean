@@ -50,6 +50,6 @@ theorem source (a b : Q) (ha : QC a) (hb : QC b) :
     exact Nat.not_le.mpr hb.2.2
   unfold aspis_core.field.wide_exact.WideExact.from_limbs
   simp only [read0,read1,read2,read3,read4,read5,read6,read7,bind_tc_ok,n0,n1,n2,n3,n4,n5,n6,n7,if_neg,if_false]
-  rfl
+
 #print axioms source
 end PV_B2_D_FromLimbs
