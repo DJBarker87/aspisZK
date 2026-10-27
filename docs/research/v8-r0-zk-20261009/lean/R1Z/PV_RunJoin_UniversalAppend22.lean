@@ -32,7 +32,9 @@ theorem append_next [ExternalLinear]
     | Ok pair =>
       rcases pair with ⟨ownedNext,rec⟩
       have fields := append owned ownedNext leaf rec ha
-      change ok (.Ok (ownedNext.inner,rec)) = ok (.Ok (next,receipt)) at h
+      change (ok (.Ok (ownedNext.inner,rec)) : Result (core.result.Result
+        (incremental_merkle.IncrementalMerkleTreeV1 × incremental_merkle.AppendOneV1)
+        incremental_merkle.PoolV1TreeError)) = ok (.Ok (next,receipt)) at h
       have same := core.result.Result.Ok.inj (Result.ok.inj h)
       cases same
       rw [frame.1] at fields
