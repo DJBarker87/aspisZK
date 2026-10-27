@@ -1,0 +1,61 @@
+{"attempt": "XRr_L023", "exit_status": 1, "wall_seconds": 1.2925993609824218, "peak_rss_kib": "2649864", "swaps": "0", "print_axioms": ["'XRr_QueryFrame.accumulate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'_private.XRr_QueryFrame.0.XRr_QueryFrame.guard' does not depend on any axioms", "'XRr_QueryFrame.query' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRr_generated/XRr_QueryFrame.lean:19:51: error: Application type mismatch: The argument
+  a.next
+has type
+  Usize
+of sort `Type` but is expected to have type
+  ↑?m.336 + ↑?m.337 ≤ UScalar.max ?m.335
+of sort `Prop` in the application
+  UScalar.add_spec a.next
+XRr_generated/XRr_QueryFrame.lean:11:54: error: unsolved goals
+case refl
+p : verifier.Prepared
+a : verifier.Accumulator
+node : aspis_core.field.M31
+value : aspis_core.field.wide_exact.WideExact
+b : verifier.BatchedWeights
+bound : ↑a.next < 22
+x✝⁸ : aspis_core.field.M31
+left✝⁹ : aspis_core.field.M31.ZERO = ok x✝⁸
+x✝⁷ : aspis_core.field.M31
+left✝⁸ : aspis_core.field.M31.ONE = ok x✝⁷
+x✝⁶ : Std.Array aspis_core.field.M31 256#usize
+left✝⁷ : (
+...
+rhs := x✝¹, power := x, next := i1 }, { raw := x✝⁴.raw, terms := x✝³ })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h :
+  ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ }) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+⊢ ↑{ weights := a.weights, rhs := x✝¹, power := x, next := next }.next = ↑a.next + 1
+XRr_generated/XRr_QueryFrame.lean:38:49: error: Application type mismatch: The argument
+  h
+has type
+  (if x = true then ok (core.result.Result.Err verifier.Error.Query)
+    else do
+      let we6 ← p.alpha.index_usize 1#usize
+      let folded1 ← verifier.line_fold_with_inverses we6 x✝² x✝⁷
+      let i7 ← x✝⁴ + 1#usize
+      trace.value 10#u16 i7 folded1
+      let i8 ← a.next - geo.start
+      let z ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) geo.line_z i8
+      let m ← aspis_core.field.M31.mul z z
+      let m1 ← aspis_core.field.M31.double m
+      let m2 ← aspis_core.field.M31.ONE
+      let node ← aspis_core.field.M31.sub m1 m2
+      let (a1, pending1) ← verifier.accumulate_batched_with_node p a node folded1 b
+      verifier.mark obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok (a1, pending1))) =
+    ok (core.result.Result.Ok (out, bout))
+but is expected to have type
+  (do
+      let x ← ?m.583
+      ?m.584 x) =
+    ok ?m.585
+in the application
+  bind_success ?m.583 ?m.584 ?m.585 h
+'XRr_QueryFrame.accumulate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'_private.XRr_QueryFrame.0.XRr_QueryFrame.guard' does not depend on any axioms
+'XRr_QueryFrame.query' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc2293d9adfc5421c81e367997c37f418.scope; invocation ID: d75d7c20536f4d1d8f2671ed2e921043

@@ -1,0 +1,198 @@
+XRr_generated/XRr_QueryFrame.lean:19:51: error: Application type mismatch: The argument
+  a.next
+has type
+  Usize
+of sort `Type` but is expected to have type
+  ↑?m.336 + ↑?m.337 ≤ UScalar.max ?m.335
+of sort `Prop` in the application
+  UScalar.add_spec a.next
+XRr_generated/XRr_QueryFrame.lean:11:54: error: unsolved goals
+case refl
+p : verifier.Prepared
+a : verifier.Accumulator
+node : aspis_core.field.M31
+value : aspis_core.field.wide_exact.WideExact
+b : verifier.BatchedWeights
+bound : ↑a.next < 22
+x✝⁸ : aspis_core.field.M31
+left✝⁹ : aspis_core.field.M31.ZERO = ok x✝⁸
+x✝⁷ : aspis_core.field.M31
+left✝⁸ : aspis_core.field.M31.ONE = ok x✝⁷
+x✝⁶ : Std.Array aspis_core.field.M31 256#usize
+left✝⁷ : (Array.repeat 256#usize x✝⁸).update 0#usize x✝⁷ = ok x✝⁶
+x✝⁵ : Std.Array aspis_core.field.M31 256#usize
+left✝⁶ : verifier.accumulate_batched_with_node_loop0 x✝⁷ node a.weights.len x✝⁶ 1#usize = ok x✝⁵
+x✝⁴ : verifier.BatchedWeights
+left✝⁵ :
+  verifier.accumulate_batched_with_node_loop1 { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next b
+      a.weights.len x✝⁵ =
+    ok x✝⁴
+x✝³ : UScalar UScalarTy.Usize
+left✝⁴ : x✝⁴.terms + 1#usize = ok x✝³
+x✝² : XRn_Join_Wide
+left✝³ : value.mul_qm31 a.power = ok x✝²
+x✝¹ : XRn_Join_Wide
+left✝² : a.rhs.add x✝² = ok x✝¹
+x✝ : Unit
+left✝¹ : trace.value 11#u16 a.next x✝¹ = ok x✝
+x : XRn_Join_Field.field.QM31
+left✝ : aspis_core.field.QM31.mul a.power p.rho = ok x
+next : UScalar UScalarTy.Usize
+hn : a.next + 1#usize = ok next
+hw : { weights := a.weights, rhs := x✝¹, power := x, next := next }.weights = a.weights
+h✝¹⁰ :
+  (have width := a.weights.len;
+    do
+    let m ← aspis_core.field.M31.ZERO
+    have basis : Std.Array aspis_core.field.M31 256#usize := Array.repeat 256#usize m
+    let m1 ← aspis_core.field.M31.ONE
+    let basis1 ← basis.update 0#usize m1
+    let basis2 ← verifier.accumulate_batched_with_node_loop0 m1 node width basis1 1#usize
+    let weights1 ←
+      verifier.accumulate_batched_with_node_loop1 { start := 0#usize, «end» := width } a.weights a.power a.next b width
+          basis2
+    let i ← weights1.terms + 1#usize
+    let we ← value.mul_qm31 a.power
+    let we1 ← a.rhs.add we
+    trace.value 11#u16 a.next we1
+    let q ← aspis_core.field.QM31.mul a.power p.rho
+    let i1 ← a.next + 1#usize
+    ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝⁹ :
+  (have basis := Array.repeat 256#usize x✝⁸;
+    do
+    let m1 ← aspis_core.field.M31.ONE
+    let basis1 ← basis.update 0#usize m1
+    let basis2 ← verifier.accumulate_batched_with_node_loop0 m1 node a.weights.len basis1 1#usize
+    let weights1 ←
+      verifier.accumulate_batched_with_node_loop1 { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next
+          b a.weights.len basis2
+    let i ← weights1.terms + 1#usize
+    let we ← value.mul_qm31 a.power
+    let we1 ← a.rhs.add we
+    trace.value 11#u16 a.next we1
+    let q ← aspis_core.field.QM31.mul a.power p.rho
+    let i1 ← a.next + 1#usize
+    ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝⁸ :
+  (do
+      let basis1 ← (Array.repeat 256#usize x✝⁸).update 0#usize x✝⁷
+      let basis2 ← verifier.accumulate_batched_with_node_loop0 x✝⁷ node a.weights.len basis1 1#usize
+      let weights1 ←
+        verifier.accumulate_batched_with_node_loop1 { start := 0#usize, «end» := a.weights.len } a.weights a.power
+            a.next b a.weights.len basis2
+      let i ← weights1.terms + 1#usize
+      let we ← value.mul_qm31 a.power
+      let we1 ← a.rhs.add we
+      trace.value 11#u16 a.next we1
+      let q ← aspis_core.field.QM31.mul a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝⁷ :
+  (do
+      let basis2 ← verifier.accumulate_batched_with_node_loop0 x✝⁷ node a.weights.len x✝⁶ 1#usize
+      let weights1 ←
+        verifier.accumulate_batched_with_node_loop1 { start := 0#usize, «end» := a.weights.len } a.weights a.power
+            a.next b a.weights.len basis2
+      let i ← weights1.terms + 1#usize
+      let we ← value.mul_qm31 a.power
+      let we1 ← a.rhs.add we
+      trace.value 11#u16 a.next we1
+      let q ← aspis_core.field.QM31.mul a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝⁶ :
+  (do
+      let weights1 ←
+        verifier.accumulate_batched_with_node_loop1 { start := 0#usize, «end» := a.weights.len } a.weights a.power
+            a.next b a.weights.len x✝⁵
+      let i ← weights1.terms + 1#usize
+      let we ← value.mul_qm31 a.power
+      let we1 ← a.rhs.add we
+      trace.value 11#u16 a.next we1
+      let q ← aspis_core.field.QM31.mul a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝⁵ :
+  (do
+      let i ← x✝⁴.terms + 1#usize
+      let we ← value.mul_qm31 a.power
+      let we1 ← a.rhs.add we
+      trace.value 11#u16 a.next we1
+      let q ← aspis_core.field.QM31.mul a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := x✝⁴.raw, terms := i })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝⁴ :
+  (do
+      let we ← value.mul_qm31 a.power
+      let we1 ← a.rhs.add we
+      trace.value 11#u16 a.next we1
+      let q ← aspis_core.field.QM31.mul a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := x✝⁴.raw, terms := x✝³ })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝³ :
+  (do
+      let we1 ← a.rhs.add x✝²
+      trace.value 11#u16 a.next we1
+      let q ← aspis_core.field.QM31.mul a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := x✝⁴.raw, terms := x✝³ })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝² :
+  (do
+      trace.value 11#u16 a.next x✝¹
+      let q ← aspis_core.field.QM31.mul a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := x✝¹, power := q, next := i1 }, { raw := x✝⁴.raw, terms := x✝³ })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝¹ :
+  (do
+      let q ← aspis_core.field.QM31.mul a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := x✝¹, power := q, next := i1 }, { raw := x✝⁴.raw, terms := x✝³ })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h✝ :
+  (do
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := x✝¹, power := x, next := i1 }, { raw := x✝⁴.raw, terms := x✝³ })) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+h :
+  ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ }) =
+    ok ({ weights := a.weights, rhs := x✝¹, power := x, next := next }, { raw := x✝⁴.raw, terms := x✝³ })
+⊢ ↑{ weights := a.weights, rhs := x✝¹, power := x, next := next }.next = ↑a.next + 1
+XRr_generated/XRr_QueryFrame.lean:38:49: error: Application type mismatch: The argument
+  h
+has type
+  (if x = true then ok (core.result.Result.Err verifier.Error.Query)
+    else do
+      let we6 ← p.alpha.index_usize 1#usize
+      let folded1 ← verifier.line_fold_with_inverses we6 x✝² x✝⁷
+      let i7 ← x✝⁴ + 1#usize
+      trace.value 10#u16 i7 folded1
+      let i8 ← a.next - geo.start
+      let z ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) geo.line_z i8
+      let m ← aspis_core.field.M31.mul z z
+      let m1 ← aspis_core.field.M31.double m
+      let m2 ← aspis_core.field.M31.ONE
+      let node ← aspis_core.field.M31.sub m1 m2
+      let (a1, pending1) ← verifier.accumulate_batched_with_node p a node folded1 b
+      verifier.mark obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok (a1, pending1))) =
+    ok (core.result.Result.Ok (out, bout))
+but is expected to have type
+  (do
+      let x ← ?m.583
+      ?m.584 x) =
+    ok ?m.585
+in the application
+  bind_success ?m.583 ?m.584 ?m.585 h
+'XRr_QueryFrame.accumulate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'_private.XRr_QueryFrame.0.XRr_QueryFrame.guard' does not depend on any axioms
+'XRr_QueryFrame.query' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

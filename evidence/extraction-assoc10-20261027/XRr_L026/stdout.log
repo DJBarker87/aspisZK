@@ -1,0 +1,58 @@
+XRr_generated/XRr_QueryCalls.lean:31:15: error(lean.unknownIdentifier): Unknown identifier `a`
+XRr_generated/XRr_QueryCalls.lean:31:17: error(lean.unknownIdentifier): Unknown identifier `b`
+XRr_generated/XRr_QueryCalls.lean:45:13: error: unsolved goals
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+out : Acc
+bout : BW
+n : ℕ
+ih :
+  ∀ (a : Acc) (b : BW),
+    ↑a.next ≤ ↑end1 →
+      verifier.candidate.query_loop_loop (core.result.Result.Ok (a, b)) proof p g obs geo end1 =
+          ok (core.result.Result.Ok (out, bout)) →
+        ↑end1 - ↑a.next = n →
+          Calls (fun a b => verifier.candidate.query_values proof p a g obs geo b) (↑end1) a b out bout n
+a : Acc
+b : BW
+bound : ↑a.next ≤ ↑end1
+success :
+  (match
+      let (a, pending) := (a, b)
+      if a.next ≥ end1 then ok (ControlFlow.done (core.result.Result.Ok (a, b)))
+      else do
+        let state1 ← verifier.candidate.query_values proof p a g obs geo pending
+        ok (ControlFlow.cont state1) with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if a.next ≥ end1 then ok (ControlFlow.done state1)
+              else do
+                let state1 ← verifier.candidate.query_values proof p a g obs geo pending
+                ok (ControlFlow.cont state1)
+            | core.result.Result.Err a => ok (ControlFlow.done state1))
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (out, bout))
+fuel : ↑end1 - ↑a.next = n + 1
+active : ↑a.next < ↑end1
+inactive : ¬↑end1 ≤ ↑a.next
+e : verifier.Error
+hc : verifier.candidate.query_values proof p a g obs geo b = ok (core.result.Result.Err e)
+tail :
+  verifier.candidate.query_loop_loop (core.result.Result.Err e) proof p g obs geo end1 =
+    ok (core.result.Result.Ok (out, bout))
+⊢ Type
+'XRr_QueryCalls.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRr_QueryCalls.weights' depends on axioms: [propext, Classical.choice, Quot.sound]

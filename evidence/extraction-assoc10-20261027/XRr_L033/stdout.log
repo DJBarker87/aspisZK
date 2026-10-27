@@ -1,0 +1,35 @@
+XRr_generated/XRr_PushExact.lean:21:1: error: Tactic `rfl` failed: The left-hand side
+  let (a, index_mut_back) := ((↑b.raw)[↑i], b.raw.set i)
+  do
+  let a1 ← verifier.update_residue_row a power basis (decide (b.terms &&& 3#usize = 3#usize))
+  ok { raw := index_mut_back a1, terms := b.terms }
+is not definitionally equal to the right-hand side
+  ok { raw := b.raw.set i row, terms := b.terms }
+
+b : verifier.BatchedWeights
+i : Usize
+power : aspis_core.field.QM31
+basis : aspis_core.field.M31
+bound : ↑i < b.raw.length
+row : Std.Array U64 4#usize
+hrow : verifier.update_residue_row (↑b.raw)[↑i] power basis (decide (b.terms &&& 3#usize = 3#usize)) = ok row
+old : Std.Array U64 4#usize
+back : Std.Array U64 4#usize → alloc.vec.Vec (Std.Array U64 4#usize)
+hm : b.raw.index_mut_usize i = ok (old, back)
+ho : old = (↑b.raw)[↑i]
+hback : back = b.raw.set i
+hmut : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) b.raw i = ok (old, back)
+same : old = (↑b.raw)[↑i]
+⊢ (let (a, index_mut_back) := ((↑b.raw)[↑i], b.raw.set i)
+    do
+    let a1 ← verifier.update_residue_row a power basis (decide (b.terms &&& 3#usize = 3#usize))
+    ok { raw := index_mut_back a1, terms := b.terms }) =
+    ok { raw := b.raw.set i row, terms := b.terms }
+XRr_generated/XRr_PushExact.lean:20:67: warning: This simp argument is unused:
+  hrow
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.BatchedWeights.push, ̲lift, ̲bind_tc_ok, ̲hmut, ̲same, ̲hr̵o̵w̵,̵h̵back]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRr_PushExact.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

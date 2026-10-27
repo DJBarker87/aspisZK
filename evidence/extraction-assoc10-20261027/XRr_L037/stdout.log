@@ -1,0 +1,24 @@
+def Aeneas.Std.UScalar.mul : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x * ↑y)
+def Aeneas.Std.UScalar.tryMk : (ty : UScalarTy) → ℕ → Result (UScalar ty) :=
+fun ty x => ofOption (UScalar.tryMkOpt ty x) Error.integerOverflow
+def Aeneas.Std.UScalar.shiftRight : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.ushiftRight s#uscalar) else fail Error.integerOverflow
+def Aeneas.Std.UScalar.shiftRight_UScalar : {ty tys : UScalarTy} → UScalar ty → UScalar tys → Result (UScalar ty) :=
+fun {ty tys} x s => x.shiftRight ↑s
+def Aeneas.Std.UScalar.cMax : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => UScalar.rMax UScalarTy.U32
+  | x => UScalar.rMax ty
+@[reducible] def Aeneas.Std.UScalar.ofNat : {ty : UScalarTy} →
+  (x : ℕ) → autoParam (x ≤ UScalar.cMax ty) UScalar.ofNat._auto_1 → UScalar ty :=
+fun {ty} x hInBounds => UScalar.ofNatCore x ⋯
+def Aeneas.Std.UScalar.ofNatCore : {ty : UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+def XRn_Join_Release.transport.Variant.read_discriminant : transport.Variant → Isize :=
+fun x =>
+  match x with
+  | transport.Variant.S1 => 0#isize
+  | transport.Variant.S2 => 1#isize
+  | transport.Variant.D => 2#isize

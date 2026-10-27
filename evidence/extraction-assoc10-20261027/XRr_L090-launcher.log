@@ -1,0 +1,68 @@
+{"attempt": "XRr_L090", "exit_status": 1, "wall_seconds": 1.103174827992916, "peak_rss_kib": "2646360", "swaps": "0", "print_axioms": ["'XRr_Materialized64.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRr_generated/XRr_Materialized64.lean:24:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  finished.length
+in the target expression
+  (↑finished).length = 64
+
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+physical proof : Slice U8
+split : Usize
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+saved : alloc.vec.Vec U8
+run : verifier.candidate.tx1 D pub physical proof split hash obs = ok (core.result.Result.Ok saved)
+splitEq : split = compact.SPLIT
+p : verifier.Prepared
+a : verifier.Accumulator
+pending : verifier.BatchedWeights
+slice : Slice aspis_core.field.QM31
+restore : Slice aspis_core.field
+...
+.length
+in the target expression
+  (↑finished).length = 64
+
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+physical proof : Slice U8
+split : Usize
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+saved : alloc.vec.Vec U8
+run : verifier.candidate.tx1 D pub physical proof split hash obs = ok (core.result.Result.Ok saved)
+splitEq : split = compact.SPLIT
+p : verifier.Prepared
+a : verifier.Accumulator
+pending : verifier.BatchedWeights
+slice : Slice aspis_core.field.QM31
+restore : Slice aspis_core.field.QM31 → alloc.vec.Vec aspis_core.field.QM31
+finished : Slice aspis_core.field.QM31
+length : (↑a.weights).length = 64
+next : ↑a.next = ↑split
+hrestore : lift a.weights.deref_mut = ok (slice, restore)
+hfinish : pending.finish slice = ok finished
+hcheckpoint :
+  verifier.checkpoint D p { weights := restore finished, rhs := a.rhs, power := a.power, next := a.next } proof physical
+      hash =
+    ok saved
+restored : ↑slice = ↑a.weights ∧ ∀ (next : Slice aspis_core.field.QM31), ↑(restore next) = ↑next
+finishedLength : finished.length = slice.length
+hlist : ↑(restore finished) = ↑finished
+⊢ (↑finished).length = 64
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    finished
+  has type
+    Slice aspis_core.field.QM31
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑finished
+'XRr_Materialized64.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd40d861655a944c6b84a6833d931a8af.scope; invocation ID: 8a47361af4cb425ebc75d16c7fb1121b

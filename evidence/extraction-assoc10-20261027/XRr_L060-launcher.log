@@ -1,0 +1,52 @@
+{"attempt": "XRr_L060", "exit_status": 1, "wall_seconds": 1.131739154981915, "peak_rss_kib": "2646288", "swaps": "0", "print_axioms": ["'XRr_ObservedEarlierReject.public_error' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRr_ObservedEarlierReject.begin_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRr_ObservedEarlierReject.begin_fail' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+XRr_generated/XRr_ObservedEarlierReject.lean:24:65: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+p : r1_wire.Prefix
+initial after : r1_wire.SemanticTranscript H
+e : r1_wire.Error
+hp : r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok p)
+hi : r1_semantic.public_transcript D pub hash p.c1_root = ok (core.result.Result.Ok initial)
+hb : r1_wire.begin D p initial = ok (core.result.Result.Err e, after)
+⊢ (let (r2, val1) := (core.result.Result.Err e, after)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok 
+...
+XRr_generated/XRr_ObservedEarlierReject.lean:24:65: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+p : r1_wire.Prefix
+initial after : r1_wire.SemanticTranscript H
+e : r1_wire.Error
+hp : r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok p)
+hi : r1_semantic.public_transcript D pub hash p.c1_root = ok (core.result.Result.Ok initial)
+hb : r1_wire.begin D p initial = ok (core.result.Result.Err e, after)
+⊢ (let (r2, val1) := (core.result.Result.Err e, after)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val2 => r1_semantic.verify_finish D pub p val1 val2 obs
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        match residual with
+        | core.result.Result.Ok x =>
+          core.convert.Infallible.rec (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+        | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err e)
+'XRr_ObservedEarlierReject.public_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRr_ObservedEarlierReject.begin_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRr_ObservedEarlierReject.begin_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-raa7b54f66e8a411188d643fe3b8157a4.scope; invocation ID: ccf9d49312194e88ae45c09500ef9b05

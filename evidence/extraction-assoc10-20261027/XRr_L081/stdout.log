@@ -1,0 +1,26 @@
+XRr_generated/XRr_FinishLength.lean:12:50: error: Application type mismatch: The argument
+  source b
+has type
+  ∀ (s : State) (r : ControlFlow State Back),
+    XRr_FinishStep.Inv s →
+      ∀ (run : verifier.BatchedWeights.finish_loop.body b s.1 s.2 = ok r),
+        match r, run with
+        | ControlFlow.done back, run => ∀ (target : It), (back target).iter.slice.length = target.iter.slice.length
+        | ControlFlow.cont next, run => XRr_FinishStep.Inv next ∧ XRr_FinishStep.measure next < XRr_FinishStep.measure s
+but is expected to have type
+  ∀ (s : State) (r : ControlFlow State Back),
+    XRr_FinishStep.Inv s →
+      (match s with
+          | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1) =
+          ok r →
+        match r with
+        | ControlFlow.done v => ?m.18 v
+        | ControlFlow.cont next => XRr_FinishStep.Inv next ∧ XRr_FinishStep.measure next < XRr_FinishStep.measure s
+in the application
+  XRl_LoopInvariant.preserve
+    (fun x =>
+      match x with
+      | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1)
+    XRr_FinishStep.Inv ?m.18 XRr_FinishStep.measure (source b)
+'XRr_FinishLength.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRr_FinishLength.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

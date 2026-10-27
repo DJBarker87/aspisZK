@@ -1,0 +1,23 @@
+import XRr_EmptySemantic
+import XRr_CandidateReject
+import ExtractedVerifyPrefixModel
+open Aeneas Aeneas.Std Result XRn_Join_Release
+set_option autoImplicit false
+namespace XRr_Nonvacuity
+theorem emitted_observed {H : Type} (D : aspis_core.digest.Digest32 H)
+ (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (hash : H) :
+ r1_semantic.verify_observed D pub XRr_EmptySemantic.empty hash none=ok (.Err (.Length 0#u8)) :=
+ XRr_ObservedReject.parse_error D pub _ hash none _ XRr_EmptySemantic.emitted
+/-- The actual cohort observed-prefix function also rejects before its finish
+callback. This is rejection non-vacuity, not accepted deployed inhabitation. -/
+theorem cohort_observed (F : AspisR1PublicPreparation.VerifyPrefix.Finish)
+ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+ (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public) (hash : H) :
+ AspisR1PublicPreparation.VerifyPrefix.verify F D pub XRr_EmptySemantic.empty hash none=
+ ok (.Err (.Length 0#u8)) := by
+ unfold AspisR1PublicPreparation.VerifyPrefix.verify
+ rw [XRr_EmptySemantic.cohort,bind_tc_ok]
+ rfl
+#print axioms emitted_observed
+#print axioms cohort_observed
+end XRr_Nonvacuity

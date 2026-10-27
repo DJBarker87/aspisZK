@@ -1,0 +1,54 @@
+XRr_generated/XRr_SemanticSample.lean:28:7: error: 'change' tactic failed, pattern
+  mapR (fun (q : aspis_core.field.QM31) => (core.result.Result.Ok (cq q), cst after)) (sampler.qm31_sample block) = do
+    let q ← AspisR1PublicPreparation.sampler.qm31_sample block
+    ok (core.result.Result.Ok q, cst after)
+is not definitionally equal to target
+  (mapR
+      (fun (p : core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H) =>
+        (inner cq wire p.1, cst p.2))
+      do
+      let (r, self1) ← ok (core.result.Result.Ok block, after)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let q ← sampler.qm31_sample val
+          ok (core.result.Result.Ok q, self1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+                (core.convert.FromSame r1_wire.Error) residual
+          ok (r1, self1)) =
+    do
+    let (r, self1) ← mapR (fun r => (inner id wire r.1, cst r.2)) (ok (core.result.Result.Ok block, after))
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+        ok (core.result.Result.Ok q, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              AspisR1PublicPreparation.aspis_core.field.QM31
+              (core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+        ok (r1, self1)
+XRr_generated/XRr_SemanticSample.lean:16:28: warning: This simp argument is unused:
+  mapR_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.ValidatedRecord.impl.row, ̲r1_wire.ValidatedRecord.impl.framed,
+     AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.row,
+     AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.framed,
+  ̵  ̵ ̵emittedRecord, ̲bind_tc_ok, ̲mapR̵_b̵i̵n̵d̵,̵m̵a̵p̵_̵ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRr_generated/XRr_SemanticSample.lean:16:38: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵1̵_̵w̵i̵r̵e̵.̵V̵a̵l̵i̵d̵a̵t̵e̵d̵R̵e̵c̵o̵r̵d̵.̵i̵m̵p̵l̵.̵r̵o̵w̵,̵r̵1̵_̵w̵i̵r̵e̵.̵V̵a̵l̵i̵d̵a̵t̵e̵d̵R̵e̵c̵o̵r̵d̵.̵i̵m̵p̵l̵.̵f̵r̵a̵m̵e̵d̵,̵[̲r̲1̲_̲w̲i̲r̲e̲.̲V̲a̲l̲i̲d̲a̲t̲e̲d̲R̲e̲c̲o̲r̲d̲.̲i̲m̲p̲l̲.̲r̲o̲w̲,̲ ̲r̲1̲_̲w̲i̲r̲e̲.̲V̲a̲l̲i̲d̲a̲t̲e̲d̲R̲e̲c̲o̲r̲d̲.̲i̲m̲p̲l̲.̲f̲r̲a̲m̲e̲d̲,̲
+     AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.row,
+     AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.framed, e̵m̵i̵t̵t̵e̵d̵R̵e̵c̵o̵r̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵a̵p̵R̵_̵b̵i̵n̵d̵,̵m̵a̵p̵_̵o̵k̵]̵e̲m̲i̲t̲t̲e̲d̲R̲e̲c̲o̲r̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲m̲a̲p̲R̲_̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRr_SemanticSample.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

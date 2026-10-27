@@ -1,0 +1,9 @@
+import XRn_Join_Funs
+open Lean
+run_cmd do
+ let env ← getEnv
+ for entry in env.constants.toList do
+  let n := entry.1
+  if n.toString.startsWith "Aeneas.Std.UScalar" &&
+     (n.toString.splitOn "shiftRight").length > 1 then
+   logInfo m!"{n}"

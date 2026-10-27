@@ -1,0 +1,11 @@
+# Mutable-borrow gate for A6, A8, A7
+
+The SDY whole-Funs scan is inherited: only low_base_p_digits drops a restoration callback. That sampler is excluded and no retired law is repaired here.
+SDY native differentials clear update_residue_row, BatchedWeights.finish, add_small_base_p and multiproof.verify_in_place on the recorded fixtures.
+
+Flag to lead: A6 also reaches BatchedWeights.new/new_loop.body (XRn Funs 6435), which writes through Vec.index_mut, and BatchedWeights.push (2016), which writes through Vec.index_mut before the cleared update_residue_row. Neither whole wrapper is among SDY's four differentials. Their static callback retention is visible, but universal association and the owner's native differential gate are not inferred from it. New proofs of these kit bodies are model facts only until those gates are met. Any further mutable-borrow body discovered below will be listed explicitly.
+
+A8 flags: the enclosing r1_wire.begin uses Array.index_mut_usize for zc (XRn Funs 4132 onward). Whole begin is not among SDY's four native differentials. Record/validated-record and sample_block_validated have no mutable-element/iterator write; their local Result transports need no new mutable-borrow exception. semantic_validated calls the existing indexed qm31 sampler (not the excluded low_base_p_digits body); no dropped restoration is repaired here. No full A8 D188 credit is inferred from these local equations.
+A7 flags: candidate preparation reaches weights.powers_loop.body (2964 Array.index_mut_usize); transcript.queries (3085 Array.index_mut_usize); and the already flagged begin/new/push callers. Whole wrapper differentials are not supplied by SDY and are not inferred. Multiproof verify_in_place and BatchedWeights.finish keep their recorded SDY cleared status; checkpoint remains an opaque leaf.
+
+XRr_MUTABLE_INVENTORY.json is a whole-kit superset inventory of every declaration using index_mut / mutable-iterator accessors. EVERY declaration outside the four SDY-cleared parent functions is flagged to the lead as having no native differential supplied here (the low sampler is explicitly EXCLUDED). The inventory is intentionally a superset, not a claim that every declaration is reached. It avoids silently crediting an unlisted transitive mutable body when considering these local model proofs.
