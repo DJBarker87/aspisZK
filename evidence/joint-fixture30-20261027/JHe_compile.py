@@ -3,7 +3,14 @@ from pathlib import Path
 import json,subprocess,sys,time,shlex
 P=Path(__file__).resolve().parent; R=P.parents[1]
 B='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'; HOST='dombarker@100.108.41.90'
-def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
+def ssh(cmd,**kw):
+ for tr in range(10):
+  result=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',HOST,cmd],**kw)
+  if result.returncode!=255 or 'systemd-run' in cmd:return result
+  with (P/'JHe_TRANSPORT.jsonl').open('a') as log:
+   log.write(json.dumps(dict(step=cmd,retry=tr,exit_status=255,wait_seconds=60 if tr<9 else 0))+'\n')
+  if tr<9:time.sleep(60)
+ raise SystemExit(255)
 n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100
 if n==70 and mod!='JHe_Review70':
  print('Attempt70 is reserved for the required current-root/obstruction audit; no Lean launched.');sys.exit(70)
@@ -45,11 +52,11 @@ for retry in range(11):
  if (not exists or 'FileNotFoundError' in sshout.stdout) and retry==0:
   retries.append(dict(wait_seconds=30,reason='transient missing receipt/vanished cgroup'));time.sleep(30);continue
  print(sshout.stdout+sshout.stderr);sys.exit(r.returncode or 1)
-subprocess.run(['scp','-q',str(source_file),HOST+':'+B+'/'+relative_source],check=True)
-subprocess.run(['scp','-q',str(P/(a+'.json')),HOST+':'+B+'/'],check=True)
+subprocess.run(['scp','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2','-q',str(source_file),HOST+':'+B+'/'+relative_source],check=True)
+subprocess.run(['scp','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2','-q',str(P/(a+'.json')),HOST+':'+B+'/'],check=True)
 r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py {a}.json',capture_output=True,text=True)
 (P/(a+'-launch.log')).write_text(r.stdout+r.stderr); print((r.stdout+r.stderr)[-2200:])
-subprocess.run(['scp','-qr',HOST+':'+B+'/'+a,str(P)],check=True)
-subprocess.run(['scp','-q',HOST+':'+B+'/'+a+'-reservation.json',str(P)],check=True)
+subprocess.run(['scp','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2','-qr',HOST+':'+B+'/'+a,str(P)],check=True)
+subprocess.run(['scp','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2','-q',HOST+':'+B+'/'+a+'-reservation.json',str(P)],check=True)
 (P/(a+'-retries.json')).write_text(json.dumps(retries,indent=2)+'\n')
 sys.exit(r.returncode)
