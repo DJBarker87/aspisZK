@@ -1,0 +1,148 @@
+XRl_generated/XRl_GeometryStep.lean:35:56: error: Application type mismatch: The argument
+  hempty
+has type
+  (match none with
+    | none => do
+      let b ← alloc.vec.Vec.is_empty Global flat
+      if b = true then
+          ok
+            (done
+              (core.result.Result.Ok
+                { start := start, inverses := alloc.vec.Vec.new (Std.Array aspis_core.field.M31 5#usize),
+                  line_z := lines }))
+        else
+          have s := flat.deref;
+          do
+          let (prefixes, product) ← verifier.batch_prefix_products s
+          let suffix_inverse ← aspis_core.field.M31.inv product
+          have i : Usize := flat.len
+          have flat_inverse : alloc.vec.Vec aspis_core.field.M31 := alloc.vec.Vec.with_capacity aspis_core.field.M31 i
+          have i1 : Usize := flat.len
+          let m ← aspis_core.field.M31.ZERO
+          let flat_inverse1 ← alloc.vec.Vec.resize aspis_core.field.M31.Insts.CoreCloneClone flat_inverse i1 m
+          have i2 : Usize := flat.len
+          let iter2 ←
+            core.ops.range.Range.Insts.CoreIterTraitsIteratorIterator.rev core.iter.range.StepUsize
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := i2 }
+          let flat_inverse2 ←
+            verifier.QueryGeometry.for_range_loop0_loop0 iter2 flat prefixes suffix_inverse flat_inverse1
+          have i3 : Usize := lines.len
+          let m1 ←
+            core.ops.range.Range.Insts.CoreIterTraitsIteratorIterator.map core.iter.range.StepUsize
+                verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                { start := 0#usize, «end» := i3 } flat_inverse2
+          let inverses ←
+            core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.collect
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+          ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := lines }))
+    | some query => do
+      let u ← lift (UScalar.cast UScalarTy.Usize query)
+      let r ← aspis_core.r0.domain.FibreIndex.new u
+      let r1 ←
+        core.result.Result.map_err verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r
+            ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let p ← fast_domain.fibre_point val
+          let i ← u / 4#usize
+          let i1 ← i * 4#usize
+          let r2 ← aspis_core.r0.domain.FibreIndex.new i1
+          let r3 ←
+            core.result.Result.map_err
+                verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← fast_domain.line_node val1
+              let i2 ← i * 4#usize
+              let i3 ← i2 + 3#usize
+              let r4 ← aspis_core.r0.domain.FibreIndex.new i3
+              let r5 ←
+                core.result.Result.map_err
+                    verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← fast_domain.line_node val2
+                  let m ← aspis_core.field.M31.mul line_x line_x
+                  let m1 ← aspis_core.field.M31.double m
+                  let m2 ← aspis_core.field.M31.ONE
+                  let line_z ← aspis_core.field.M31.sub m1 m2
+                  let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                        verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool i4 ()
+                  if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                    else do
+                      let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice aspis_core.field.M31.Insts.CoreCloneClone flat s1
+                      let line_z_values1 ← lines.push line_z
+                      ok (cont (next, line_z_values1, flat1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r4)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    ok
+      (done
+        (core.result.Result.Ok
+          { start := start, inverses := alloc.vec.Vec.new (Std.Array aspis_core.field.M31 5#usize), line_z := lines }))
+but is expected to have type
+  (↑flat).isEmpty = true
+in the application
+  List.isEmpty_iff.mp hempty
+XRl_generated/XRl_GeometryStep.lean:39:22: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 1
+where
+ a := ↑[].length
+XRl_generated/XRl_GeometryStep.lean:78:19: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵.̵f̵r̵o̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲F̲r̲o̲m̲S̲a̲m̲e̲.̲f̲r̲o̲m̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRl_generated/XRl_GeometryStep.lean:85:19: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRl_generated/XRl_GeometryStep.lean:93:21: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵.̵f̵r̵o̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲F̲r̲o̲m̲S̲a̲m̲e̲.̲f̲r̲o̲m̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRl_generated/XRl_GeometryStep.lean:100:21: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRl_GeometryStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

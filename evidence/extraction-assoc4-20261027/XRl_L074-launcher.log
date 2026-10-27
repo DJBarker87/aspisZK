@@ -1,0 +1,35 @@
+{"attempt": "XRl_L074", "exit_status": 1, "wall_seconds": 2.7957741690333933, "peak_rss_kib": "2634012", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.array.Array.index : {T I Output : Type} →
+  {N : Usize} → core.ops.index.Index (Slice T) I Output → Std.Array T N → I → Result Output :=
+fun {T I Output} {N} inst a i => inst.index a.to_slice i
+def Aeneas.Std.core.ops.index.IndexSlice : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → core.ops.index.Index (Slice T) I Output :=
+fun {T I Output} inst => { index := core.slice.index.Slice.index inst }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.Range Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeUsize,
+    g
+...
+def Aeneas.Std.core.array.Array.index : {T I Output : Type} →
+  {N : Usize} → core.ops.index.Index (Slice T) I Output → Std.Array T N → I → Result Output :=
+fun {T I Output} {N} inst a i => inst.index a.to_slice i
+def Aeneas.Std.core.ops.index.IndexSlice : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → core.ops.index.Index (Slice T) I Output :=
+fun {T I Output} inst => { index := core.slice.index.Slice.index inst }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.Range Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeUsize,
+    get := core.slice.index.SliceIndexRangeUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeUsizeSlice.index_mut }
+def Aeneas.Std.SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter : {T : Type} →
+  Slice T → Result (core.slice.iter.Iter T) :=
+fun {T} s => ok { slice := s, i := 0 }
+XRl_generated/XRl_GeometryInput.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Slice.index_range`
+
+Running as unit: run-re0cee5ab1df9407a81c8bc063ac71fd3.scope; invocation ID: bcbd595488254aa4b0724bb3a7c5d714
