@@ -12148,3 +12148,28 @@ Not covered by the approval and still open in the owner packet: the release reci
 (ct-host-prover on, insecure-spend-fixture off) and constant-time private-input decoding (D272), the
 N7 custody patch, the SHA-NI trust item versus the soft backend, DOITM, and the client's scope (a devnet
 fixture harness, not a wallet). Rows removed outright: 0. Privacy target not yet established.
+
+## D302 (Stream B) 2026-10-27 16:40 UTC: Stream A's SDY fidelity list adopted; runjoin17 merged into the candidate; runjoin18 launched
+
+Stream A's per-function fidelity check (evidence/fidelity-check1-20261027/SDY_FINDING.md) scans the
+twelve-leaf release Funs and finds exactly one dropped mutable restoration, in
+sampler::low_base_p_digits, which Stream A is bridging natively. verify_in_place,
+update_residue_row, add_small_base_p and BatchedWeights::finish match frozen native outputs on
+fixtures, so their D188 credit is restored under the owner's narrowing. Stream B adopts this list for
+that scope (lead ruling (o)). pv-d188 still covers the Stream B emissions outside it. Batch 2's
+prover-local copy of low_base_p_digits writes by index in while loops and takes no mutable iterator
+borrow, so the pattern cannot arise there; batch 2 still waits for pv-d188's zero-hit confirmation.
+Ruling (o) also returns IDs 28000-29999 to the final-replay reserve after pv-d188 used 28100.
+
+runjoin17 spent its 100-attempt budget (66 passed, 34 failed) with all three ELF pins matching. It
+proves the general identification of the extracted shipped `records` with PV_Src_RecordDynamic, the
+records/CopyRecords return, the root-table binding, the record nullifier and commitments, and 24 node
+certificates. The compiler-return equation at the selected index, the selected-index transition, the
+deployed public binding and P-and-hypothetical-T non-vacuity remain open, and the endpoint axiom
+audit failed at import on a missing AspisR1ProducerRelease47 object. Endpoint premises removed 0; row
+counts unchanged; T unchanged. The branch was merged into the prover candidate (1758e9fad5; the two
+tools/r1-builder-reference conflicts were independent Kani harnesses and were kept on both sides).
+The merged candidate's three-ELF gate is re-run in the combined gate. runjoin18 resumes in the same
+worktree: restore the missing producer object through the env-J rebuild record, then the production
+nullifier loop, output-pair/append/bank validation, and the compiler-return equation. No shipped-code
+change is allowed in it. Rows removed outright: 0. Privacy target not yet established.
