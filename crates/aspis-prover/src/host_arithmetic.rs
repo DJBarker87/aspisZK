@@ -66,14 +66,10 @@ fn mask_power_26(value: QM31) -> QM31 {
     let x16 = x8.square();
     x16.mul(x8).mul(x2)
 }
-#[inline(never)]
-pub fn state_only_selected_mask_value(
-    c1: &[QM31; STATE_ONLY_HIDING_C1_COLUMNS],
-    mask_only_c1: &[QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
-    explicit_g: QM31,
-    point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS],
-) -> QM31 {
-    let (linear, explicit_linear) = selected_mask_linears(point);
+// Separate owned-array traversals prevent loop-local loans from crossing
+// a subsequent loop in the frozen symbolic extractor. Operation order is exact.
+#[inline(always)]
+fn selected_coefficients(c1: &[QM31; STATE_ONLY_HIDING_C1_COLUMNS]) -> [QM31; STATE_ONLY_HIDING_FACTOR_DEGREE + 1] {
     let mut coefficients = [QM31::ZERO; STATE_ONLY_HIDING_FACTOR_DEGREE + 1];
     let mut column = 0usize;
     while column < STATE_ONLY_HIDING_C1_COLUMNS {
@@ -81,12 +77,20 @@ pub fn state_only_selected_mask_value(
             mul_tower_basis(c1[column], column & 3);
         column += 1;
     }
+    coefficients
+}
+#[inline(always)]
+fn mask_only_coefficients(mut coefficients: [QM31; STATE_ONLY_HIDING_FACTOR_DEGREE + 1], mask_only_c1: &[QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS]) -> [QM31; STATE_ONLY_HIDING_FACTOR_DEGREE + 1] {
     let mut column = 0usize;
     while column < STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
         coefficients[usize::from(MASK_ONLY_FACTOR_EXPONENTS[column])] =
             mul_tower_basis(mask_only_c1[column], column & 3);
         column += 1;
     }
+    coefficients
+}
+#[inline(always)]
+fn selected_horner(coefficients: [QM31; STATE_ONLY_HIDING_FACTOR_DEGREE + 1], linear: QM31) -> QM31 {
 
     let prepared_linear = PreparedQm31Multiplier::new(linear);
     let mut shared = coefficients[STATE_ONLY_HIDING_FACTOR_DEGREE];
@@ -95,6 +99,20 @@ pub fn state_only_selected_mask_value(
         exponent -= 1;
         shared = prepared_linear.mul(shared).add(coefficients[exponent]);
     }
+
+    shared
+}
+#[inline(never)]
+pub fn state_only_selected_mask_value(
+    c1: &[QM31; STATE_ONLY_HIDING_C1_COLUMNS],
+    mask_only_c1: &[QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
+    explicit_g: QM31,
+    point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS],
+) -> QM31 {
+    let (linear, explicit_linear) = selected_mask_linears(point);
+    let coefficients = selected_coefficients(c1);
+    let coefficients = mask_only_coefficients(coefficients, mask_only_c1);
+    let shared = selected_horner(coefficients, linear);
 
     shared.add(
         QM31::ONE
