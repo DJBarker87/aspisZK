@@ -1,0 +1,62 @@
+{
+  "attempt": "LPc_K001",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "7a4e684a94d2ca7bea972c9902fd77d82f3831f6",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "LPc_src/Cargo.toml",
+    "LPc_src/Cargo.lock",
+    "LPc_src/crates/aspis-r1-cost-probe/src/LPa_semantic.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/LPa_compact.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/LPa_candidate.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/LPa_wire.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/LPa_verifier.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/LPa_sampler.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/compact.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/r1_wire.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/sampler.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/LPa_dot.rs",
+    "LPc_src/crates/aspis-r1-cost-probe/src/LPc_dot.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-3-20261027/LPc_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-3-20261027/LPc_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "fast_pairing::canonical::LPc_dot::LPc_dot_cell0",
+    "--output-format",
+    "terse"
+  ],
+  "deps_fingerprint": {
+    "release_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_manifest": "LPc_source-provenance.json",
+    "boundary": "scratch frozen source plus LPa and LPc cfg-only harness patches"
+  },
+  "expected_time": "optimized Kani compilation then bounded native stage fast_pairing::canonical::LPc_dot::LPc_dot_cell0",
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  }
+}

@@ -1,0 +1,1 @@
+K004 failed compilation before verification: E0753, inner doc comment in include!-included LPc_candidate.rs. Changed that harness-only comment from //! to //. K005 runs the as-yet-unverified cell3 on the repaired harness tree. K004 is charged to the 20-run budget. No shipped token changes.
