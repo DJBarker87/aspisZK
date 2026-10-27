@@ -49,3 +49,11 @@ No Rust/Kani/shipped/cfg(kani) source changed. No Cargo graph/lock gate or three
 - Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548
 
 Next deliverables are the exact three transport equations in XRr_OBLIGATIONS.md; rows remain OPEN, with no D188-P2 frozen-release credit and no100-bit release conclusion. Stage commits are local on codex/cx-extraction-assoc10-20261027; no push or merge.
+
+## Final read-only LPi merge update
+
+After L103 and the budget stop, research advanced to 5900cd89a57d27551a454be7199b372159a5852f and the LPi_ leaf-p6-9 packet was found merged. Its own handoff, per-stage leaf agenda and zero-error verification are retained read-only alongside this packet. Both prepared_claim and checkpoint remain explicitly OPEN; no whole native P6 certificate was supplied. LPl_ still has no merged packet at this inspection.
+
+LPi supplies accepted helper field/writer/powers/raw/Dot laws, an ordered64-weight list induction, arbitrary-prefix native put_k/put cuts, and ONE native proof→public→labelled1736-body three-digest joined-cut execution. These retain their explicit domains. The concrete missing checkpoint law is still association of the actual enclosing64-weight serialization loop and SAME complete prepared/accumulator body state with that arbitrary middle joined-cut state, followed by the whole leaf/runtime/ELF port. An independently successful joined cut is not a whole checkpoint run.
+
+These results are cited by read-only reference, not newly compiled or instantiated into XRr after its100-compile stop. A7/LPi checkpoint remain OPEN; actual-headline premise delta remains zero. Earlier statements that no LPi packet was present describe the earlier pinned inspection and are superseded by this update; the final whole-leaf status is unchanged.
