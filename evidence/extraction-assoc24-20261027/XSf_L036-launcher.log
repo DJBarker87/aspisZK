@@ -1,0 +1,55 @@
+{"attempt": "XSf_L036", "exit_status": 0, "wall_seconds": 2.8756610099808313, "peak_rss_kib": "5105700", "swaps": "0", "print_axioms": ["'AspisR1.LPm_UpdatePort.word' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.LPm_UpdatePort.sums' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1DotPushLocal.Proof.updateWord : U64 → U64 → U64 :=
+fun old raw => core.num.U64.wrapping_add old (AspisR1EbyKDotPushActualFoldV2.actualWrappingFold raw)
+def AspisR1EbyKPushDotBackend.dotViaRaw : AspisR1EbyKPushDotBackend.RawFn →
+  AspisR1EbyKPushDotBackend.PushDot →
+    AspisR1EbyKPushDotBackend.PushQ → AspisR1EbyKPushDotBackend.PushQ → Result AspisR1EbyKPushDotBackend.PushDot :=
+fun rawFn self a b => do
+  let out ← AspisR1DotPushLocal.canonical.Dot.push rawFn { sums := self.sums } a b
+  ok { sums := out.sums }
+AspisR1DotPushLocal.Proof.updatedSums._proof_2
+AspisR1DotPushLocal.Proof.updatedSums
+AspisR1DotPushLocal.Proof.updateWord.eq_1
+AspisR1DotPushLocal.Proof.emittedWord._proof_1
+...
+AspisR1DotPushLocal.canonical.Dot →
+    AspisR1DotPushLocal.canonical.Q → AspisR1DotPushLocal.canonical.Q → Result AspisR1DotPushLocal.canonical.Dot :=
+fun rawFn self a b => do
+  let raw1 ← rawFn a b
+  let i ← self.sums.index_usize 0#usize
+  let i1 ← raw1.index_usize 0#usize
+  let i2 ← lift (core.convert.num.FromU64U32.from AspisR1DotPushLocal.canonical.P)
+  let i3 ← lift (i1 &&& i2)
+  let i4 ← i1 >>> 31#i32
+  let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+  let i6 ← lift (core.num.U64.wrapping_add i i5)
+  let a1 ← self.sums.update 0#usize i6
+  let i7 ← a1.index_usize 1#usize
+  let i8 ← raw1.index_usize 1#usize
+  let i9 ← lift (core.convert.num.FromU64U32.from AspisR1DotPushLocal.canonical.P)
+  let i10 ← lift (i8 &&& i9)
+  let i11 ← i8 >>> 31#i32
+  let i12 ← lift (core.num.U64.wrapping_add i10 i11)
+  let i13 ← lift (core.num.U64.wrapping_add i7 i12)
+  let a2 ← a1.update 1#usize i13
+  let i14 ← a2.index_usize 2#usize
+  let i15 ← raw1.index_usize 2#usize
+  let i16 ← lift (core.convert.num.FromU64U32.from AspisR1DotPushLocal.canonical.P)
+  let i17 ← lift (i15 &&& i16)
+  let i18 ← i15 >>> 31#i32
+  let i19 ← lift (core.num.U64.wrapping_add i17 i18)
+  let i20 ← lift (core.num.U64.wrapping_add i14 i19)
+  let a3 ← a2.update 2#usize i20
+  let i21 ← a3.index_usize 3#usize
+  let i22 ← raw1.index_usize 3#usize
+  let i23 ← lift (core.convert.num.FromU64U32.from AspisR1DotPushLocal.canonical.P)
+  let i24 ← lift (i22 &&& i23)
+  let i25 ← i22 >>> 31#i32
+  let i26 ← lift (core.num.U64.wrapping_add i24 i25)
+  let i27 ← lift (core.num.U64.wrapping_add i21 i26)
+  let a4 ← a3.update 3#usize i27
+  ok { sums := a4 }
+'AspisR1.LPm_UpdatePort.word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPm_UpdatePort.sums' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r27566e20d79c4d938b45b05b619fba58.scope; invocation ID: 199c7d1e88fb4a7c976cc6414f766ca8
