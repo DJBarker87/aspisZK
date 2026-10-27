@@ -1,0 +1,27 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 1005); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : core.clone.Clone U8 :=
+{ clone := liftFun1 core.clone.impls.CloneU8.clone }
+def Aeneas.Std.Slice.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Usize.max }
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Usize.max }
+def String.fromUTF8? : ByteArray → Option String :=
+fun a => if h : a.IsValidUTF8 then some (String.fromUTF8 a h) else none
+@[reducible] def String.toByteArray : String → ByteArray :=
+fun self => self.1
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.16
+	Maximum resident set size (kbytes): 2616840
+	Swaps: 0
+	Exit status: 0
