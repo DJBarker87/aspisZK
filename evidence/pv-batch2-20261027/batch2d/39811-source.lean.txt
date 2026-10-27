@@ -1,0 +1,20 @@
+import R1Z.PV_B2_C_251FieldTotal
+import Std.Tactic.BVDecide
+set_option autoImplicit false
+namespace PV_B2_D_ScalarCanonical
+open Aeneas Aeneas.Std
+abbrev F := PV_B2_C_251FieldValue.aspis_core.field.P
+abbrev reduce := PV_B2_C_251FieldValue.aspis_core.field.ct.reduce64
+-- Only the fixed-width two-fold reducer is bit-blasted; no field multiplication
+-- chain, recurrence or concrete generated table is evaluated.
+theorem reduce_bound (x : U64) : reduce x < F := by
+  unfold reduce PV_B2_C_251FieldValue.aspis_core.field.ct.reduce64
+    PV_B2_C_251FieldValue.aspis_core.field.ct.subtract_p F
+    PV_B2_C_251FieldValue.aspis_core.field.P
+  change (let y := (x.bv &&& 2147483647#64) + (x.bv >>> 31)
+          let z := (y &&& 2147483647#64) + (y >>> 31)
+          let w := z.setWidth 32
+          w - (2147483647#32 &&& (0#32 - (if w ≥ 2147483647#32 then 1#32 else 0#32)))).toNat < 2147483647
+  bv_decide
+#print axioms reduce_bound
+end PV_B2_D_ScalarCanonical
