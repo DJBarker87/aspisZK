@@ -1,0 +1,33 @@
+JGw_Tree1.lean:35:2: error: 'change' tactic failed, pattern
+  (do
+      let a ←
+        (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries 0#usize
+            (Usize.wrapping_sub 10#usize 0#usize) 1#usize
+      let keys ← (Port3_BatchStd.install Port4B_Install.leaves).op5 a (Usize.wrapping_sub 10#usize 0#usize)
+      let __x ←
+        Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install Port4B_Install.leaves)
+            (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGr_M1Root.retainedRoot) 1#usize s.idx
+            s.val hash 0#usize (Usize.wrapping_sub 10#usize 0#usize) 1#usize keys 0#usize 0#usize
+      match __x with
+        | (idx, val, pending) =>
+          match pending with
+          | none => fail Error.panic
+          | some r => ok (r, idx, val)) =
+    ?m.129
+is not definitionally equal to target
+  (do
+      let (lo, hi) ← ok (0#usize, 10#usize)
+      let n ← lift (Usize.wrapping_sub hi lo)
+      let i ← lift (Usize.wrapping_mul 3#usize 0#usize)
+      let s_1 ← lift (i.wrapping_add 1#usize)
+      let a ← (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries lo n 1#usize
+      let keys ← (Port3_BatchStd.install Port4B_Install.leaves).op5 a n
+      let (idx1, val1, pending_return) ←
+        Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install Port4B_Install.leaves)
+            (JGc_TX2_RealLeaves.dictionary D) JFx_NativeBytes.proof (encodeState JGr_M1Root.retainedRoot) 1#usize s.idx
+            s.val hash lo n s_1 keys 0#usize 0#usize
+      match pending_return with
+        | none => fail Error.panic
+        | some r => ok (r, idx1, val1)) =
+    ok (core.result.Result.Ok (), (JGu_Verify1.output D hash s).idx, (JGu_Verify1.output D hash s).val)
+'AspisR1.JGw_Tree1.tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
