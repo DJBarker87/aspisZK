@@ -55,6 +55,10 @@ assert not any(r.get('source_sha256')==sha and r.get('deps_fingerprint')==fp and
 snapshot=f'{A}-{S.name}.txt';(E/snapshot).write_bytes(S.read_bytes());rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 cmd=['systemd-run','--user','--scope','--quiet','--unit=pvre-lean-'+str(A),'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/pvre-time-{A}.log','timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',P+'/J.json',P+'/objects',P+'/sources',P+'/objects/'+M+'.olean',P+'/sources/'+M+'.lean','7000']
 authority_row=next((x for x in json.loads((E/'project-closure.json').read_text()) if x['module']==M.replace('/','.')),None)
+if authority_row is None:
+ current=subprocess.run(['git','rev-parse',rev+':'+str(S.relative_to(R))],capture_output=True,text=True)
+ if current.returncode==0 and subprocess.check_output(['git','show',current.stdout.strip()])==S.read_bytes():
+  authority_row=dict(module=M.replace('/','.'),authority='h5-own-branch',path=str(S.relative_to(R)),revision=rev,blob=current.stdout.strip(),sha256=sha)
 record=dict(attempt=A,target=M,project_source_authority=authority_row,source_revision=rev,source_differs_from_revision=(subprocess.run(['git','show',rev+':'+str(S.relative_to(R))],capture_output=True).stdout != S.read_bytes()),source_sha256=sha,source_snapshot=snapshot,dependencies=deps,deps_fingerprint=fp,command=cmd,reservation=admission,shared_sources_written=False)
 with (E/'launches.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
 print('LAUNCH',A,M,flush=True);start=time.monotonic();r=ssh(shlex.join(cmd)+f' > {H}/evidence/pvre-out-{A}.log 2>&1',submitted=True);record.update(launcher_exit=r.returncode,wall_seconds=time.monotonic()-start)
