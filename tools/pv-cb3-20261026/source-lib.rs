@@ -144,3 +144,11 @@ mod resume6_weight_checks {
     }
 
 }
+
+#[cfg(kani)]
+#[path="resume6_digest.rs"]
+pub mod resume6_digest;
+
+#[cfg(kani)]
+#[path="resume6_owned_weights.rs"]
+pub mod resume6_owned_weights;

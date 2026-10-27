@@ -37,6 +37,7 @@ theorem body (values : Slice Row) (masks : Array U16 64#usize)
         chi a b c d,Usize.wrapping_add row 1#usize)) := by
   simp only [PV_CB3_Op258Ref.reference.all_slots_clear_loop.body,if_pos hrow,lift,
     bind_tc_ok,hm,hr,hl,hri,ha,hb,hc,hd,PV_CB3_Op258Equal.source]
+  simp only [decide_not,Bool.decide_eq_true]
   change ok (cont (PV_CB3_PoleBoolean.row clear _ _ _ _ _,_)) = _
   rw [PV_CB3_PoleBoolean.row_value]
   rfl

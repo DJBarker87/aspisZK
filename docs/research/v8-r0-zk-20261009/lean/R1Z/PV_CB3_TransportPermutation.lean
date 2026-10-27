@@ -8,7 +8,7 @@ theorem perm (pivot : Nat) (pads : List Nat) (hn : pads.Nodup)
   apply List.perm_iff_count.mpr
   intro a
   rw [(PV_CB3_TransportNodup.order_nodup pivot pads hn hp).count,List.nodup_range.count]
-  rw [PV_CB3_TransportMembership.range_membership pivot pads hp a]
+  simp only [PV_CB3_TransportMembership.range_membership pivot pads hp a]
 
 theorem length (pivot : Nat) (pads : List Nat) (hn : pads.Nodup)
     (hp : ∀ r, r ∈ pads → r < pivot) : (order pivot pads).length = pivot+1 := by

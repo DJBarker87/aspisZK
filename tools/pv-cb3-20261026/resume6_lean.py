@@ -38,6 +38,7 @@ a=ssh(f'python3 {gate}/reservation.py {base}/resume6-{attempt}-admission.json > 
 (out/f'{attempt}-upload-admission.log').write_text(a.stdout+a.stderr)
 if a.returncode or not json.loads(a.stdout)['allowed']:
  (out/'RESUME6_ADMISSION_STATE.json').write_text(json.dumps(dict(json.loads(a.stdout),origin=f'Env-J {attempt} upload'))+'\n')
+ r=json.loads(p.read_text());r.setdefault('reservation_refusals',[]).append(attempt);p.write_text(json.dumps(r,indent=2)+'\n')
  (out/f'{attempt}-refusal.json').write_text(json.dumps(dict(attempt=attempt,charged=False,phase='before upload',output=a.stdout+a.stderr),indent=2)+'\n');sys.exit(78)
 # Snapshot previously published shared source and object before own-prefix update.
 shared='/home/dombarker/project-offloads/aspis-joint-20261019'

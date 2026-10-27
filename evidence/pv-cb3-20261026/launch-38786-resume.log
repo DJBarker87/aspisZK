@@ -1,0 +1,45 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0441); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_PoleEqualBridge.lean:35:4: error: Tactic `tauto` failed
+
+case mk.mk
+c0✝¹ c1✝¹ c0✝ c1✝ : aspis_core.field.CM31
+⊢ c0✝¹.a = c0✝.a ∧ c0✝¹.b = c0✝.b ∧ c1✝¹.a = c1✝.a ∧ c1✝¹.b = c1✝.b ↔ c0✝¹ = c0✝ ∧ c1✝¹ = c1✝
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_PoleEqualBridge.lean:37:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ok (decide _a) = ok (decide (a = b))
+Error: Application type mismatch: The argument
+  instDecidableEqUScalar_1 UScalarTy.U32
+    (a.c0.a ^^^ b.c0.a ||| a.c0.b ^^^ b.c0.b ||| a.c1.a ^^^ b.c1.a ||| a.c1.b ^^^ b.c1.b) 0#u32
+has type
+  Decidable (a.c0.a ^^^ b.c0.a ||| a.c0.b ^^^ b.c0.b ||| a.c1.a ^^^ b.c1.a ||| a.c1.b ^^^ b.c1.b = 0#u32)
+but is expected to have type
+  Decidable _a
+in the application
+  @decide _a
+    (instDecidableEqUScalar_1 UScalarTy.U32
+      (a.c0.a ^^^ b.c0.a ||| a.c0.b ^^^ b.c0.b ||| a.c1.a ^^^ b.c1.a ||| a.c1.b ^^^ b.c1.b) 0#u32)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+a b : aspis_core.field.QM31
+hp : a.c0.a ^^^ b.c0.a ||| a.c0.b ^^^ b.c0.b ||| a.c1.a ^^^ b.c1.a ||| a.c1.b ^^^ b.c1.b = 0#u32 ↔ a = b
+⊢ ok (decide (a.c0.a ^^^ b.c0.a ||| a.c0.b ^^^ b.c0.b ||| a.c1.a ^^^ b.c1.a ||| a.c1.b ^^^ b.c1.b = 0#u32)) =
+    ok (decide (a = b))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_PoleEqualBridge.lean:34:46: warning: This simp argument is unused:
+  aspis_core.field.CM31.mk.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_core.field.QM31.mk.injEq,̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵C̵M̵3̵1̵.̵m̵k̵.̵i̵n̵j̵E̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB3_PoleEqualBridge.scalar_eq_iff' does not depend on any axioms
+'R1Z.PV_CB3_PoleEqualBridge.scalar_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_PoleEqualBridge.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.22
+	Maximum resident set size (kbytes): 2624996
+	Swaps: 0
+	Exit status: 1

@@ -38,8 +38,10 @@ theorem loop_scan (values : Rows) (masks : Array U16 64#usize) (chi : aspis_core
       change ¬ row.val < (Slice.len values).val
       rw [PV_CB3_PoleIndex.slice_length]
       omega
-    simpa only [scan,Bool.and_true] using PV_CB3_LoopEquations.done_step _ (clear,row) _
-      (PV_CB3_Op258End.body_done values masks chi clear row hr)
+    have hd : PV_CB3_Op258Ref.reference.all_slots_clear_loop values masks chi clear row = ok clear :=
+      PV_CB3_LoopEquations.done_step _ (clear,row) _
+        (PV_CB3_Op258End.body_done values masks chi clear row hr)
+    simpa only [scan,Bool.and_true] using hd
   | succ n ih =>
     have hr : row < Slice.len values := by
       change row.val < (Slice.len values).val
@@ -48,9 +50,13 @@ theorem loop_scan (values : Rows) (masks : Array U16 64#usize) (chi : aspis_core
     have hm : row.val < 1024 := by omega
     have hi := PV_CB3_PoleIndex.increment row hm
     have hstep := body_frame values masks chi row hr hm clear
-    rw [PV_CB3_LoopEquations.continue_step _ (clear,row) _ hstep]
-    rw [ih _ _ (by omega)]
-    simp only [scan,Bool.and_assoc]
+    calc
+      _ = PV_CB3_Op258Ref.reference.all_slots_clear_loop values masks chi
+          (clear && keep values masks chi row) (Usize.wrapping_add row 1#usize) :=
+        PV_CB3_LoopEquations.continue_step _ (clear,row) _ hstep
+      _ = ok ((clear && keep values masks chi row) &&
+          scan values masks chi n (Usize.wrapping_add row 1#usize)) := ih _ _ (by omega)
+      _ = _ := by simp only [scan,Bool.and_assoc]
 
 theorem source_scan (values : Rows) (masks : Array U16 64#usize) (chi : aspis_core.field.QM31)
     (bound : values.val.length ≤ 1024) :

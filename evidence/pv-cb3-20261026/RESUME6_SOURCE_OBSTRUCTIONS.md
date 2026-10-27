@@ -11,11 +11,14 @@ baseline receipts remain failures/obstructions, not counterexamples.
   source semantics. Staged owned reference remains the supported P6 route.
 * op258/V264: nested source iterators failed Aeneas context joins. Indexed
   owned reference extracted without external holes. Canonical1024 native
-  gate timed out. For length>1024 the native source and reference can panic
+  gate timed out. The concrete shipped XOR comparator is now extracted and proved equal to
+  the reference comparator (38787), for arbitrary limbs. Full source-loop
+  correspondence remains open. For length>1024 the native source and reference can panic
   on masks[row>>4]; a full Result law must preserve this path rather than
   return false early. Two-row Kani success is insufficient.
-* op253/V260: source Range::fold generic Drop guard remains. Indexed owned
-  reference is prepared. Source domain includes bad kind and j values and
+* op253/V260: source Range::fold generic Drop guard remains. Borrowed indexed reference fails context collapse; the fully owned successor
+  fails internal shared-loan cleanup at its conditional point read. Both failures
+  are retained; a further split would need fresh native correspondence. Source domain includes bad kind and j values and
   possible index failures; a restricted P6 gate needs a proved call-site
   domain, not an assumed desired output.
 * op252/V259,251/V258: constructor/materialization graphs retain extraction
@@ -32,7 +35,10 @@ baseline receipts remain failures/obstructions, not counterexamples.
 * op222/V239: sparse_eq_weights allocates, skips trailing Boolean coordinates,
   and folds only selected rows. A dense replacement needs arithmetic/order
   correspondence and preservation of noncanonical QM31 representatives.
-* op219/V238,217/V237,216/V236,215/V235,212/V234: digest default/finalization
+* op219/V238: direct transitive-path extraction returned an empty Aeneas
+  translation (zero functions). Exit0 is not source coverage. New cfg(kani)
+  generic wrappers are prepared to force concrete impl bodies into the graph.
+* op217/V237,216/V236,215/V235,212/V234: digest default/finalization
   and generic-array/buffer representation boundaries. Generic trait methods
   are legitimate input dictionaries; opaque missing concrete defaults are
   not discharged by giving them a new name.
