@@ -5,9 +5,21 @@ H='/home/dombarker/project-offloads/codex-pv-runjoin-20261026'; host='dombarker@
 name=sys.argv[1];phase=sys.argv[2];assert phase in ['charon','aeneas']
 if phase=='aeneas' and len(sys.argv)>3:
  preflight=E/(sys.argv[3]+'.llbc')
- if preflight.exists():
+ assert preflight.exists(), 'preflight requires exact LLBC input'
+ digest=hashlib.sha256()
+ with preflight.open('rb') as stream:
+  while block:=stream.read(1048576): digest.update(block)
+ pin=digest.hexdigest(); cached=E/(sys.argv[3]+'-preflight.json')
+ result=json.loads(cached.read_text()) if cached.exists() else None
+ if not result or result['llbc_sha256']!=pin:
   data=json.loads(preflight.read_text());assert not data['has_errors'], 'reject LLBC with translation errors'
-  assert isinstance(data['translated']['fun_decls'][0]['body'],dict), 'reject opaque root before extraction: no implementation body'
+  root=data['translated']['fun_decls'][0]
+  assert root['item_meta']['name'][-1]=={'Ident':['records',0]}, 'reject missing records root'
+  assert isinstance(root['body'],dict), 'reject opaque root before extraction: no implementation body'
+  result=dict(llbc_sha256=pin,has_errors=False,records_body_present=True,root_name=root['item_meta']['name'],source_text_sha256=hashlib.sha256(root['item_meta']['source_text'].encode()).hexdigest(),functions=len(data['translated']['fun_decls']))
+  cached.write_text(json.dumps(result,indent=2)+'\n')
+  del data,root
+ assert result['has_errors']==False and result['records_body_present']==True
 
 assert not (E/(name+'.json')).exists()
 def ssh(s):return subprocess.run(['ssh',host,s],capture_output=True,text=True)
@@ -44,11 +56,29 @@ if phase=='charon':
  if len(sys.argv)>4:
   old='crate::pool_v1::pair_forest_copy_builder::records_reference::pv_runjoin12_shipped::records_owned'
   cmd[cmd.index(old)]=old.removesuffix('records_owned')+sys.argv[4]
- if len(sys.argv)>3 and sys.argv[3] in ['precise-real-raw-opaque','mono-raw-opaque']:
+ if len(sys.argv)>3 and sys.argv[3] in ['precise-real-raw-opaque','mono-raw-opaque','optimized-no-storage']:
   cmd[cmd.index('built')]='optimized'
   start=cmd.index('--opaque');end=cmd.index('--start-from');cmd[start:end]=['--opaque','crate::pool_v1::pair_trace::pair_empty_roots','--opaque','crate::pool_v1::pair_forest_copy_builder::raw','--include','aspis_core::field::*']
   cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods','--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp,+DataflowConstProp,+SimplifyLocals-final,+SimplifyCfg-final','--rustc-arg=-Zinline-mir=yes']
  if len(sys.argv)>3 and sys.argv[3]=='mono-raw-opaque':cmd[2:2]=['--monomorphize']
+ if len(sys.argv)>3 and sys.argv[3]=='optimized-no-storage':
+  flag='--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp,+DataflowConstProp,+SimplifyLocals-final,+SimplifyCfg-final'
+  cmd[cmd.index(flag)]=flag+',+RemoveStorageMarkers'
+
+ if len(sys.argv)>3 and sys.argv[3]=='built-light':
+  start=cmd.index('--opaque');end=cmd.index('--start-from')
+  cmd[start:end]=['--opaque','crate::pool_v1::pair_trace::pair_empty_roots','--include','aspis_core::field::*']
+ if len(sys.argv)>3 and sys.argv[3]=='built-transparent':
+  start=cmd.index('--opaque');end=cmd.index('--start-from')
+  cmd[start:end]=['--opaque','crate::pool_v1::pair_trace::pair_empty_roots','--include','aspis_core::field::*']
+  cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods']
+ if len(sys.argv)>3 and sys.argv[3]=='built-records-only':
+  # Preserve built MIR to avoid optimized-MIR expansion of fixed array patterns.
+  # No raw inclusion: records has no raw call after D277 repair 10.
+  idx=cmd.index('crate::pool_v1::pair_forest_copy_builder::raw')
+  del cmd[idx-1:idx+1]
+  cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods']
+
 else:
  cmd=[aeneas,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','PV_RunJoin_Records','-dest',H+'/evidence/'+name+'-generated','-split-files','-emit-json',llbc]
 if phase=='aeneas' and len(sys.argv)>4:
