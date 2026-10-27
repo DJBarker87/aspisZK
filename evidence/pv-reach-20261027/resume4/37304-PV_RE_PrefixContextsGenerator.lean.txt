@@ -1,0 +1,75 @@
+import R1Z.ProverRwFullFuns
+import R1Z.PV_RE_SourceContexts
+import Lean
+open Lean Meta Elab Command Term
+namespace R1Z.PV_RE_PrefixContextsGenerator
+
+/-- Remove administrative lets only. Do not unfold callees or fixed points. -/
+partial def admin (e : Expr) : Expr :=
+  match e with
+  | .letE _ _ v b _ => admin (b.instantiate1 v)
+  | .mdata _ b => admin b
+  | _ => e
+
+/-- Emit a theorem tied to the original function application. All earlier
+success equations and values remain in the theorem's telescope. -/
+def save (owner : Name) (index : Nat) (kind : String) (params : Array Expr)
+    (typ proof : Expr) : TermElabM Name := do
+  let n := `R1Z.PV_RE_PrefixContext ++ owner ++ Name.mkSimple (kind ++ toString index)
+  let ty ← mkForallFVars params typ
+  let val ← mkLambdaFVars params proof
+  if val.hasSorry || val.hasMVar || ty.hasMVar then throwError "incomplete context {n}"
+  addDecl (Declaration.thmDecl ⟨⟨n, [], ty⟩, val, [n]⟩)
+  return n
+
+partial def spine (owner : Name) (root e eqRoot : Expr) (params : Array Expr)
+    (index : Nat) : TermElabM (Array Name) := do
+  let e := admin e
+  let args := e.getAppArgs
+  if (e.getAppFn.isConstOf ``Bind.bind || e.getAppFn.isConstOf ``Aeneas.Std.bind) && args.size ≥ 2 then
+    let x := args[args.size-2]!
+    let k := args[args.size-1]!
+    let xt ← whnf (← inferType x)
+    if !xt.getAppFn.isConstOf ``Aeneas.Std.Result then
+      throwError "non Result bind in {owner}"
+    let α := xt.getAppArgs[0]!
+    let mut names := #[]
+    let failName ← withLocalDeclD `err (mkConst ``Aeneas.Std.Error) fun err => do
+      let fail := mkApp2 (mkConst ``Aeneas.Std.Result.fail) α err
+      -- Resolve the payload type from the actual source callee.
+      discard <| isDefEq (← inferType fail) xt
+      withLocalDeclD `callee_failure (← mkEq x fail) fun h => do
+        let p ← mkAppM ``R1Z.PV_RE_SourceContexts.bind_fail #[x,k,err,h]
+        let p ← mkEqTrans eqRoot p
+        save owner index "failure" (params ++ #[err,h]) (← inferType p) p
+    names := names.push failName
+    let divName ← withLocalDeclD `callee_divergence (← mkEq x (mkApp (mkConst ``Aeneas.Std.Result.div) α)) fun h => do
+      let p ← mkAppM ``R1Z.PV_RE_SourceContexts.bind_div #[x,k,h]
+      let p ← mkEqTrans eqRoot p
+      save owner index "divergence" (params.push h) (← inferType p) p
+    names := names.push divName
+    let more ← withLocalDeclD (Name.mkSimple ("value" ++ toString index)) α fun v => do
+      let ok ← mkAppM ``Aeneas.Std.Result.ok #[v]
+      withLocalDeclD (Name.mkSimple ("prefix" ++ toString index)) (← mkEq x ok) fun h => do
+        let p ← mkAppM ``R1Z.PV_RE_SourceContexts.bind_ok #[x,v,k,h]
+        let p ← mkEqTrans eqRoot p
+        let n ← save owner index "advance" (params ++ #[v,h]) (← inferType p) p
+        let rest ← spine owner root (k.beta #[v]) p (params ++ #[v,h]) (index+1)
+        return #[n] ++ rest
+    return names ++ more
+  else
+    logInfo m!"PREFIX_CONTEXT_STOP {owner} after {index}: {e.getAppFn}"
+    return #[]
+
+elab "pv_reached_prefix_contexts " n:ident : command => do
+  let names ← liftTermElabM do
+    let ci ← getConstInfo n.getId
+    let some value := ci.value? | throwError "opaque source {n.getId}"
+    lambdaTelescope value fun params body => do
+      let root := mkAppN (mkConst n.getId) params
+      let eqRoot ← mkEqRefl root
+      spine n.getId root body eqRoot params 0
+  logInfo m!"PREFIX_CONTEXT_COUNT {n.getId}: {names.size}"
+  for n in names do
+    elabCommand (← `(command| #print axioms $(mkIdent n)))
+end R1Z.PV_RE_PrefixContextsGenerator

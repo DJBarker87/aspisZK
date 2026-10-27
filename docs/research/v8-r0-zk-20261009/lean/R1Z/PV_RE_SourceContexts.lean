@@ -2,6 +2,9 @@ import R1Z.PV_RE_NoCatchCore
 set_option autoImplicit false
 namespace R1Z.PV_RE_SourceContexts
 open Aeneas.Std PV_RE_NoCatchCore
+theorem identity_noCatch {α : Type} : NoCatch (fun r : Result α => r) :=
+  ⟨fun _ => rfl, rfl⟩
+
 /-- A reached prefix equation; its left side is the actual source expression.
 The generator supplies every prefix equation, rather than discarding it. -/
 theorem bind_ok {α β : Type} (x : Result α) (v : α) (k : α → Result β)
@@ -32,6 +35,7 @@ theorem context_divergence {α β : Type} (whole : Result β) (call : Result α)
     (poison : call = .div) : whole = .div := by
   rw [context, poison, forward.2]
 
+#print axioms identity_noCatch
 #print axioms bind_ok
 #print axioms bind_fail
 #print axioms bind_div

@@ -25,6 +25,9 @@ def save (owner : Name) (index : Nat) (kind : String) (params : Array Expr)
 partial def spine (owner : Name) (root e eqRoot : Expr) (params : Array Expr)
     (index : Nat) : TermElabM (Array Name) := do
   let e := admin e
+  if e.getAppFn.isConstOf ``Aeneas.Std.uncurry then
+    let next ← withTransparency .reducible <| whnf e
+    return ← spine owner root next eqRoot params index
   let args := e.getAppArgs
   if (e.getAppFn.isConstOf ``Bind.bind || e.getAppFn.isConstOf ``Aeneas.Std.bind) && args.size ≥ 2 then
     let x := args[args.size-2]!
@@ -35,7 +38,7 @@ partial def spine (owner : Name) (root e eqRoot : Expr) (params : Array Expr)
     let α := xt.getAppArgs[0]!
     let mut names := #[]
     let failName ← withLocalDeclD `err (mkConst ``Aeneas.Std.Error) fun err => do
-      let fail ← mkAppM ``Aeneas.Std.Result.fail #[err]
+      let fail ← mkAppOptM ``Aeneas.Std.Result.fail #[some α, some err]
       -- Resolve the payload type from the actual source callee.
       discard <| isDefEq (← inferType fail) xt
       withLocalDeclD `callee_failure (← mkEq x fail) fun h => do
@@ -43,7 +46,8 @@ partial def spine (owner : Name) (root e eqRoot : Expr) (params : Array Expr)
         let p ← mkEqTrans eqRoot p
         save owner index "failure" (params ++ #[err,h]) (← inferType p) p
     names := names.push failName
-    let divName ← withLocalDeclD `callee_divergence (← mkEq x (mkApp (mkConst ``Aeneas.Std.Result.div) α)) fun h => do
+    let div ← mkAppOptM ``Aeneas.Std.Result.div #[some α]
+    let divName ← withLocalDeclD `callee_divergence (← mkEq x div) fun h => do
       let p ← mkAppM ``R1Z.PV_RE_SourceContexts.bind_div #[x,k,h]
       let p ← mkEqTrans eqRoot p
       save owner index "divergence" (params.push h) (← inferType p) p
@@ -57,9 +61,53 @@ partial def spine (owner : Name) (root e eqRoot : Expr) (params : Array Expr)
         let rest ← spine owner root (k.beta #[v]) p (params ++ #[v,h]) (index+1)
         return #[n] ++ rest
     return names ++ more
+  else if (e.getAppFn.isConstOf ``ite || e.getAppFn.isConstOf ``dite) && args.size == 5 then
+    let α := args[0]!
+    let c := args[1]!
+    let inst := args[2]!
+    let yes := args[3]!
+    let no := args[4]!
+    let dep := e.getAppFn.isConstOf ``dite
+    let left ← withLocalDeclD `branch_true c fun h => do
+      let p ← mkAppOptM (if dep then ``dif_pos else ``if_pos)
+        #[some c, some inst, some h, some α, some yes, some no]
+      let p ← mkEqTrans eqRoot p
+      spine (owner ++ `yes) root (if dep then yes.beta #[h] else yes) p (params.push h) index
+    let right ← withLocalDeclD `branch_false (mkApp (mkConst ``Not) c) fun h => do
+      let p ← mkAppOptM (if dep then ``dif_neg else ``if_neg)
+        #[some c, some inst, some h, some α, some yes, some no]
+      let p ← mkEqTrans eqRoot p
+      spine (owner ++ `no) root (if dep then no.beta #[h] else no) p (params.push h) index
+    return left ++ right
+  else if let some matcher ← matchMatcherApp? e (alsoCasesOn := true) then
+    if matcher.discrs.size != 1 then
+      logInfo m!"PREFIX_CONTEXT_STOP_MULTI_MATCH {owner} after {index}"
+      return #[]
+    let discr := matcher.discrs[0]!
+    let dt ← whnf (← inferType discr)
+    let .const dn levels := dt.getAppFn | throwError "non inductive match {dt}"
+    let .inductInfo ind ← getConstInfo dn | throwError "non inductive match {dn}"
+    if ind.numIndices != 0 then
+      logInfo m!"PREFIX_CONTEXT_STOP_INDEXED_MATCH {owner} after {index}"
+      return #[]
+    let mut names := #[]
+    for ctor in ind.ctors do
+      let cv := mkAppN (mkConst ctor levels) (dt.getAppArgs.extract 0 ind.numParams)
+      let more ← forallTelescope (← inferType cv) fun fields _ => do
+        let value := mkAppN cv fields
+        withLocalDeclD `branch_constructor (← mkEq discr value) fun h => do
+          let g ← withLocalDeclD `discriminant dt fun z =>
+            mkLambdaFVars #[z] (e.replace fun a => if a == discr then some z else none)
+          let p ← mkCongrArg g h
+          let p ← mkEqTrans eqRoot p
+          let selected ← withTransparency .reducible <| whnf (g.beta #[value])
+          spine (owner ++ ctor) root selected p (params ++ fields ++ #[h]) index
+      names := names ++ more
+    return names
   else
+    let n ← save owner index "exit" params (← inferType eqRoot) eqRoot
     logInfo m!"PREFIX_CONTEXT_STOP {owner} after {index}: {e.getAppFn}"
-    return #[]
+    return #[n]
 
 elab "pv_reached_prefix_contexts " n:ident : command => do
   let names ← liftTermElabM do
