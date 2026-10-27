@@ -102,7 +102,7 @@ theorem ordered_bounds : good PV_Op134_RowSpec.rows 11 1024 := by
   have h2 := append b2 h3 (by decide) (by decide)
   have h1 := append b1 h2 (by decide) (by decide)
   have h0 := append b0 h1 (by decide) (by decide)
-  exact h0
+  simpa only [PV_Op134_RowSpec.rows,List.append_assoc] using h0
 
 theorem sorted : PV_Op134_RowSpec.rows.Pairwise (fun a b => a.val < b.val) := ordered_bounds.1
 

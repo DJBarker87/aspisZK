@@ -18,7 +18,7 @@ for i in range(60):
 for i in range(58,-1,-1):
  rhs=f'b{i+1}' if i==58 else f'h{i+1}'
  s+=f'  have h{i} := append_bounds b{i} (by decide) (by decide) {rhs}\n'
-s+='  exact h0\n\ntheorem nodup : PV_CBM_CellsSpec.literals.Nodup := PV_Op134_Order.nodup ordered_bounds.1\n'
+s+='  simpa only [PV_CBM_CellsSpec.literals,List.append_assoc] using h0\n\ntheorem nodup : PV_CBM_CellsSpec.literals.Nodup := PV_Op134_Order.nodup ordered_bounds.1\n'
 s+='''theorem complete (row column : Nat) (hr : row < 1024) (hc : column < 16)
     (hf : PV_CBM_InventoryShape.free row column) :
     ∃ c ∈ PV_CBM_CellsSpec.literals, c.row.val = row ∧ c.column.val = column := by

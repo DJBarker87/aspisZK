@@ -33,7 +33,7 @@ for i in range(14):
 for i in range(12,-1,-1):
  rhs=f'b{i+1}' if i==12 else f'h{i+1}'
  s+=f'  have h{i} := append b{i} {rhs} (by decide) (by decide)\n'
-s+='''  exact h0
+s+='''  simpa only [PV_Op134_RowSpec.rows,List.append_assoc] using h0
 
 theorem sorted : PV_Op134_RowSpec.rows.Pairwise (fun a b => a.val < b.val) := ordered_bounds.1
 

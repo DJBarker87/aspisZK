@@ -425,7 +425,7 @@ theorem ordered_bounds : increasing PV_CBM_CellsSpec.literals ∧
   have h2 := append_bounds b2 (by decide) (by decide) h3
   have h1 := append_bounds b1 (by decide) (by decide) h2
   have h0 := append_bounds b0 (by decide) (by decide) h1
-  exact h0
+  simpa only [PV_CBM_CellsSpec.literals,List.append_assoc] using h0
 
 theorem nodup : PV_CBM_CellsSpec.literals.Nodup := PV_Op134_Order.nodup ordered_bounds.1
 theorem complete (row column : Nat) (hr : row < 1024) (hc : column < 16)
