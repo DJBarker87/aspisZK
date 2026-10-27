@@ -79,3 +79,12 @@ flattening of the eight big-endian words. Forty identical extracted helpers
 were reused and four new definitions checked (52450), with no external leaf.
 Actual borrowed generic wrappers/Drop/dispatcher and deployed association
 remain OPEN: no V231–V238 row credit or endpoint removal is inferred.
+
+Fourth pass buffer checkpoint: **7 → 7**. The extracted complete fixed driver
+is kernel checked (52471), as are its exact default/constructor state (52474),
+mutable-array loan leaf (52473), byte transition including full-block counter
+increment and reset (52479), eager invariant (52482), loop unfolding (52483),
+and arbitrary sized-Slice update totality (52484). The content-fold and
+whole-digest composition checks remain pending admission. This is no credit
+for borrowed digest Update/default/finalize wrappers V231–V238. No native
+wrapper/dispatcher/Drop or deployment premise is hidden in the dictionary.

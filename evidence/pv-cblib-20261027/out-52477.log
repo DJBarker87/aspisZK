@@ -1,0 +1,91 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateStep.lean:36:4: error: Tactic `rfl` failed: The left-hand side
+  let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+  ok
+    (cont
+      (PV_CBL_SoftByteSource.value state (index_mut_back (↑data)[↑i]), core.num.U64.wrapping_add blocks 1#u64,
+        index_mut_back (↑data)[↑i], 0#usize, i.wrapping_add 1#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ((next state blocks buffer pos (↑data)[↑i]).1, (next state blocks buffer pos (↑data)[↑i]).2.1,
+        (next state blocks buffer pos (↑data)[↑i]).2.2.1, (next state blocks buffer pos (↑data)[↑i]).2.2.2,
+        i.wrapping_add 1#usize))
+
+case pos
+data : Slice U8
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos i : Usize
+hp : ↑pos < 64
+hi : ↑i < (↑data).length
+hl : i < data.len
+hc : pos.wrapping_add 1#usize = 64#usize
+hv :
+  next state blocks buffer pos (↑data)[↑i] =
+    (PV_CBL_SoftByteSource.value state (buffer.set pos (↑data)[↑i]), blocks.wrapping_add 1#u64,
+      buffer.set pos (↑data)[↑i], 0#usize)
+⊢ (let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+    ok
+      (cont
+        (PV_CBL_SoftByteSource.value state (index_mut_back (↑data)[↑i]), core.num.U64.wrapping_add blocks 1#u64,
+          index_mut_back (↑data)[↑i], 0#usize, i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        ((next state blocks buffer pos (↑data)[↑i]).1, (next state blocks buffer pos (↑data)[↑i]).2.1,
+          (next state blocks buffer pos (↑data)[↑i]).2.2.1, (next state blocks buffer pos (↑data)[↑i]).2.2.2,
+          i.wrapping_add 1#usize))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateStep.lean:42:4: error: Tactic `rfl` failed: The left-hand side
+  let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+  ok (cont (state, blocks, index_mut_back (↑data)[↑i], pos.wrapping_add 1#usize, i.wrapping_add 1#usize))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      ((next state blocks buffer pos (↑data)[↑i]).1, (next state blocks buffer pos (↑data)[↑i]).2.1,
+        (next state blocks buffer pos (↑data)[↑i]).2.2.1, (next state blocks buffer pos (↑data)[↑i]).2.2.2,
+        i.wrapping_add 1#usize))
+
+case neg
+data : Slice U8
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos i : Usize
+hp : ↑pos < 64
+hi : ↑i < (↑data).length
+hl : i < data.len
+hc : ¬pos.wrapping_add 1#usize = 64#usize
+hv : next state blocks buffer pos (↑data)[↑i] = (state, blocks, buffer.set pos (↑data)[↑i], pos.wrapping_add 1#usize)
+⊢ (let (_, index_mut_back) := ((↑buffer)[↑pos]!, fun x => buffer.set pos x)
+    ok (cont (state, blocks, index_mut_back (↑data)[↑i], pos.wrapping_add 1#usize, i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        ((next state blocks buffer pos (↑data)[↑i]).1, (next state blocks buffer pos (↑data)[↑i]).2.1,
+          (next state blocks buffer pos (↑data)[↑i]).2.2.1, (next state blocks buffer pos (↑data)[↑i]).2.2.2,
+          i.wrapping_add 1#usize))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateStep.lean:35:15: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵v̵,̵if_pos h̵c̵,̵h̲c̲,̲ ̲PV_CBL_SoftByteExtracted.source, ̲lift, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateStep.lean:35:60: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [hv, ̲if_pos h̵c̵,̵h̲c̲,̲ ̲PV_CBL_SoftByteExtracted.source,l̵i̵f̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateStep.lean:41:15: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵v̵,̵if_neg hc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CBL_DigestUpdateStep.Snapshot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_DigestUpdateStep.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_DigestUpdateStep.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

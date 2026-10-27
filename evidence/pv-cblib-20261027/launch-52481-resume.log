@@ -1,0 +1,26 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 1149); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_DigestUpdateInvariant.lean:10:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos : Usize
+byte : U8
+hp : ↑pos < 64
+inc : ↑(pos.wrapping_add 1#usize) = ↑pos + 1
+⊢ ↑(have buffer := buffer.set pos byte;
+            have pos1 := pos.wrapping_add 1#usize;
+            if pos1 = 64#usize then
+              (PV_CBL_SoftByteSource.value state buffer, blocks.wrapping_add 1#u64, buffer, 0#usize)
+            else (state, blocks, buffer, pos1)).2.2.2 <
+    64
+'R1Z.PV_CBL_DigestUpdateInvariant.eager' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.75
+	Maximum resident set size (kbytes): 2621408
+	Swaps: 0
+	Exit status: 1
