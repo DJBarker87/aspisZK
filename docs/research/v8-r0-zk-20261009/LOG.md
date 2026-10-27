@@ -11834,3 +11834,25 @@ binaries built outside the window; marker written only after running scopes drai
 own scopes; trap-deleted marker; paired alternating samples vs control c57a344726; verdict on median < 15 s
 and ratio ≤ 1.10. Six slots: runjoin16, route2b, batch1b, integ2, quiet (five live). Rows removed outright:
 0. Privacy target not yet established.
+
+## D287 (Stream B) 2026-10-27 13:25 UTC: `records` itself no longer blocks extraction; the remaining blocker is the empty-root hashing it calls; hoist authorized; runjoin17 launched
+
+pv-runjoin16 (`codex/pv-runjoin-20261026`, head f44d7c5a42; 0/100 Lean, 0/2 Kani; 37 capped scopes, swap 0).
+Twelve further behaviour-preserving repairs confined to `records` (sinking path stores into branches,
+splitting the level loop into disjoint ranges, fixed array patterns, owned optional recipient, digest
+destructuring; each with a verbatim diff and equivalence argument in REPAIRS.md); in total the function
+now differs from the shipped original by +124/−45 lines in one file; gate (a) after the final change:
+all three ELF pins MATCH. The extraction no longer fails in `records`: it stops in the Poseidon helpers
+reached through the call `pair_empty_roots()` (`permute_optimized_with_trace`, `external_linear_lazy`,
+`internal_linear_lazy`: five unsupported pointer constants in the preflight), which were left unchanged
+as instructed. R_shipped not yet defined; identification, compiler-return, transition, deployed binding,
+non-vacuity OPEN; constructed P unchanged, record 2/8/6, T unchanged. LEAD DECISION: `records` does not
+need to compute the empty-root table, whose 21 cells are already proved in Lean on research (source-
+parent cells, D260). Authorized ONE structural change outside `records`: hoist the `pair_empty_roots()`
+call into the single caller `CopyRecords::new` and pass the value into `records` as a parameter (same
+value, computed once; nothing else in the caller; the Poseidon helpers untouched). R_shipped then takes
+the table as an input, instantiated with the shipped pair_empty_roots() value bound to the frozen table by
+the merged source-parent theorem. The +124/−45 rewrite of a shipped function is behaviour-checked by the
+ELF gate now and by the combined fixture/differential/timing gates before adoption. Launched pv-runjoin17
+(same branch, IDs 50600-50899 still unused). Five live slots: route2b, batch1b, integ2, quiet, runjoin17.
+Rows removed outright: 0. Privacy target not yet established.
