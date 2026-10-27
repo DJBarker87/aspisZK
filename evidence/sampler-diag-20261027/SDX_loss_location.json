@@ -1,0 +1,23 @@
+{
+  "raw": {
+    "file": "evidence/extraction-assoc2-20261027/XRj_L013/sources/XRj_generated/XRh_Release/Funs.lean",
+    "sha256": "f4b2d17c061ce7062d64146531788b6448328e656fb6dbd6192f2d61db31a3b5",
+    "declaration_line": 3598,
+    "discarded_division_line": 3624,
+    "body_sha256": "58e09a0f57fcbbe9967614e5d186fb2c27ce18c12685734ec438d4ca885cbdbc"
+  },
+  "kit": {
+    "file": "evidence/extraction-assoc6-20261027/XRn_Join_Funs.lean",
+    "sha256": "16c90d850002f705d0f48799368d60f08c4dab9994dfeb891c9f25162d99612b",
+    "declaration_line": 3597,
+    "discarded_division_line": 3623
+  },
+  "comparison": "Raw body equals kit body after replacing only XRn_Join_reverseNext with raw callee name",
+  "raw_body": "def\n  sampler.low_base_p_digits.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut_loop.body\n  (iter : core.iter.adapters.rev.Rev (core.slice.iter.IterMut Std.U32))\n  (back : core.iter.adapters.rev.Rev (core.slice.iter.IterMut Std.U32) \u2192\n  core.iter.adapters.rev.Rev (core.slice.iter.IterMut Std.U32))\n  (remainder : Std.U64) :\n  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.slice.iter.IterMut\n    Std.U32)) \u00d7 (core.iter.adapters.rev.Rev (core.slice.iter.IterMut Std.U32)\n    \u2192 core.iter.adapters.rev.Rev (core.slice.iter.IterMut Std.U32)) \u00d7\n    Std.U64) (Std.U64 \u00d7 (core.iter.adapters.rev.Rev (core.slice.iter.IterMut\n    Std.U32) \u2192 core.iter.adapters.rev.Rev (core.slice.iter.IterMut\n    Std.U32))))\n  := do\n  let (o, iter1, next_back, _) \u2190\n    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next\n      (core.slice.iter.IterMut.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorMutT\n      Std.U32) iter\n  match o with\n  | none => ok (done (remainder, fun r => let r1 := next_back r\n                                          back r1))\n  | some limb =>\n    let i \u2190 remainder <<< 32#i32\n    let i1 \u2190 lift (core.convert.num.FromU64U32.from limb)\n    let dividend \u2190 lift (i ||| i1)\n    let i2 \u2190 aspis_core.field.P\n    let i3 \u2190 lift (core.convert.num.FromU64U32.from i2)\n    let _ \u2190 dividend / i3\n    let i4 \u2190 lift (core.convert.num.FromU64U32.from i2)\n    let remainder1 \u2190 dividend % i4\n    ok (cont (iter1, fun r => let r1 := next_back r\n                              back r1, remainder1))\n",
+  "array_from_slice_source": {
+    "file": "evidence/pv-srcid3-20261026/sources/research-Aeneas.Std.Array.ArraySlice.lean",
+    "sha256": "8baf9750f4ac40780e6ab0b7d4da7cb010d05a52aaff5cab8636551562a799c1",
+    "line": 23
+  },
+  "frozen_sampler_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0"
+}
