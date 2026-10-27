@@ -1,0 +1,11 @@
+# Attempt085 resource replacement
+
+085 (JGs_LibraNative0) was rejected: exit1,wall20.32024537801044s,peakRSS7168556KiB,swap0; source revision1faa5dc49d104be61298339d1f4031d2fc9ad103, source SHA2563a33f6847875e6d16254cff4e33f0bfacf04c3b60481b0c4edaf22c217f4ae14. Full command, dependency fingerprints, cgroup and raw diagnostics are retained in its receipt. It reached the kernel's excessive-memory-consumption exception; no proof credit is given, including its rejected recovery print containing a self-named axiom.
+
+The ordinary errors preceding that exception were a native ONE/literal read and an ambiguous unqualified `a` in a concrete array-write statement. They left the old final `with_unfolding_all rfl` attempting the unreduced parent. This is not a counterexample to the native Libra arithmetic. All preceding per-operation primitives have independent passing receipts.
+
+Replacement: JGs_LibraWrites splits the two ONE identities and five tiny native Array4 updates into named theorems (086,passed). The replacement Native0/Native1 consume these writes and the already computed arithmetic with explicit theorem rewrites; their whole-parent normalization tails are removed. The ambiguous values are fully qualified in the write lemmas. Parent scope/statement and numerical values are unchanged. Their subsequent attempt outcomes remain authoritative in the numbered receipts.
+
+No unchanged retry, cap increase, heartbeat/depth override or package replay. Every replacement stays in one scope, -M7000,MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64. Canonical checked helper objects remain available to downstream workers; no Cargo/solver scratch was created.
+
+087 still exceeded the kernel limit after the write split;088 also exceeded it while attempting one global monadic association proof. Both exact rejected sources and diagnostics are retained. Neither is retried unchanged. The next replacement splits powers/term/totals association into separate higher-order theorems with an opaque continuation, then uses a definitional source CPS cut; its outcomes are recorded separately. Numeric FJm_LibraStages powers, all eight terms, both totals and both finishes have now passed independently (089/090), without importing a failed Program/Native module. No actual Libra parent return is credited yet.

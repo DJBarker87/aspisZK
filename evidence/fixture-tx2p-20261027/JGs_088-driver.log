@@ -1,0 +1,57 @@
+{"attempt": "JGs_TX2_088", "exit_status": 1, "wall_seconds": 17.732203390973154, "peak_rss_kib": "7168576", "swaps": "0", "print_axioms": ["'AspisR1.JGs_LibraProgram.source' depends on axioms: [propext, Classical.choice, Quot.sound, source]"]}
+JGs_LibraProgram.lean:26:41: error: unsolved goals
+ap0 ap1 : Weights
+extra : Std.Array NQ 2#usize
+iter : FIo_RangeNext.Range
+weights : Weights
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done weights)
+        | some side => do
+          let q ← extra.index_usize side
+          let q1 ← FIo_Native.aspis_core.field.QM31.ONE.mul q
+          let q2 ← q1.mul q
+          let q3 ← q2.mul q
+          let _ ← q3.mul q
+          let q4 ← (Array.make 4#usize [FIo_Native.aspis_core.field.QM31.ONE, q1, q2, q3] ⋯).index_usize 2#usize
+          let q41 ← q4.square
+          let q8 ← q41.square
+          let q12 ← q8
+...
+ideExact.mul_qm31 x_23 x_24
+        let x_26 ← x_25.mul_m31 FIo_Native.weights.QUARTER
+        let x_27 ← (Array.make 4#usize [x_11, x_16, x_21, x_26] ⋯).index_usize 0#usize
+        let x_28 ← (Array.make 4#usize [x_11, x_16, x_21, x_26] ⋯).index_usize 1#usize
+        let x_29 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add x_27 x_28
+        let x_30 ← (Array.make 4#usize [x_11, x_16, x_21, x_26] ⋯).index_usize 2#usize
+        let x_31 ← x_29.add x_30
+        let x_32 ← (Array.make 4#usize [x_11, x_16, x_21, x_26] ⋯).index_usize 3#usize
+        let x_33 ← x_31.add x_32
+        if side = 0#usize then do
+            let we12 ← low.mul x_33
+            let weights1 ← Array.update weights 0#usize we12
+            let we13 ← low.mul x_31
+            let we14 ← we13.mul_qm31 x_6
+            let a ← weights1.update 1#usize we14
+            ok (cont (cursor, a))
+          else do
+            let we12 ← Array.index_usize weights 1#usize
+            let we13 ← Array.index_usize ap1 x_22
+            let we14 ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 we13 FIo_Native.weights.QUARTER
+            let we15 ← low.mul we14
+            let we16 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add we12 we15
+            let weights1 ← Array.update weights 1#usize we16
+            let we17 ← low.mul x_33
+            let we18 ← we17.mul_qm31 x
+            let weights2 ← weights1.update 2#usize we18
+            let we19 ← low.mul x_29
+            let q10 ← x_6.mul x
+            let we20 ← we19.mul_qm31 q10
+            let a ← weights2.update 3#usize we20
+            ok (cont (cursor, a))
+JGs_LibraProgram.lean:23:8: error: (kernel) excessive memory consumption detected
+'AspisR1.JGs_LibraProgram.source' depends on axioms: [propext, Classical.choice, Quot.sound, source]
+
+Running as unit: run-r42ff0076e46b40659aded745a5b1e9d8.scope; invocation ID: 75603ede093045c38a7c8cd9f0123d4e
+
