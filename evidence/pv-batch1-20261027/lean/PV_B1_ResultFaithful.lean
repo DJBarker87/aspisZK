@@ -9,9 +9,9 @@ theorem injective {A B : Type} (f : A → B) (g : B → A) (inv : ∀ a, g (f a)
   simpa only [result_roundtrip f g inv] using h1
 
 theorem failure_iff {A B : Type} (f : A → B) (r : Result A) (e : Error) :
-    resultMap f r=fail e ↔ r=fail e := by cases r <;> simp only [resultMap,Result.noConfusion,Result.fail.injEq]
+    resultMap f r=fail e ↔ r=fail e := by cases r <;> constructor <;> intro h <;> cases h <;> rfl
 theorem divergence_iff {A B : Type} (f : A → B) (r : Result A) :
-    resultMap f r=div ↔ r=div := by cases r <;> simp only [resultMap,Result.noConfusion]
+    resultMap f r=div ↔ r=div := by cases r <;> constructor <;> intro h <;> cases h <;> rfl
 #print axioms injective
 #print axioms failure_iff
 #print axioms divergence_iff
