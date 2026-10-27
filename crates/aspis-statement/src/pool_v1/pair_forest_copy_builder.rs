@@ -230,143 +230,147 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
         [d[0].0, d[1].0, d[2].0, d[3].0, d[4].0, d[5].0, d[6].0, d[7].0]
     }
 
-    let input = *input;
-    let chg = *chg;
-    let snapshot = *snapshot;
-    let pair = input.pair;
-    let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
-    let [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20] = pair.membership.siblings;
-    let [s21, s22, s23] = input.super_root_siblings;
-    let [d0, d1, d2] = input.super_root_directions;
-    let bits = [
-        u32::from(pair.selected_second),
-        ((pair.membership.index >> 0) & 1) as u32,
-        ((pair.membership.index >> 1) & 1) as u32,
-        ((pair.membership.index >> 2) & 1) as u32,
-        ((pair.membership.index >> 3) & 1) as u32,
-        ((pair.membership.index >> 4) & 1) as u32,
-        ((pair.membership.index >> 5) & 1) as u32,
-        ((pair.membership.index >> 6) & 1) as u32,
-        ((pair.membership.index >> 7) & 1) as u32,
-        ((pair.membership.index >> 8) & 1) as u32,
-        ((pair.membership.index >> 9) & 1) as u32,
-        ((pair.membership.index >> 10) & 1) as u32,
-        ((pair.membership.index >> 11) & 1) as u32,
-        ((pair.membership.index >> 12) & 1) as u32,
-        ((pair.membership.index >> 13) & 1) as u32,
-        ((pair.membership.index >> 14) & 1) as u32,
-        ((pair.membership.index >> 15) & 1) as u32,
-        ((pair.membership.index >> 16) & 1) as u32,
-        ((pair.membership.index >> 17) & 1) as u32,
-        ((pair.membership.index >> 18) & 1) as u32,
-        ((pair.membership.index >> 19) & 1) as u32,
-        u32::from(d0),
-        u32::from(d1),
-        u32::from(d2),
-    ];
-    let sibs = [
-        raw_owned(other),
-        raw_owned(s1),
-        raw_owned(s2),
-        raw_owned(s3),
-        raw_owned(s4),
-        raw_owned(s5),
-        raw_owned(s6),
-        raw_owned(s7),
-        raw_owned(s8),
-        raw_owned(s9),
-        raw_owned(s10),
-        raw_owned(s11),
-        raw_owned(s12),
-        raw_owned(s13),
-        raw_owned(s14),
-        raw_owned(s15),
-        raw_owned(s16),
-        raw_owned(s17),
-        raw_owned(s18),
-        raw_owned(s19),
-        raw_owned(s20),
-        raw_owned(s21),
-        raw_owned(s22),
-        raw_owned(s23),
-    ];
-    let [f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19] = snapshot.frontier;
-    let [e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, _] = empty;
-    let mut w = RW {
-        input_value: pair.value,
-        output_value: out,
-        change_value: chg.value,
-        sk: raw_owned(pair.nullifier_key),
-        salt: raw_owned(pair.salt),
-        bits,
-        sibs,
-        pair_first: raw_owned(pair.pair_leaf.first_commitment),
-        pair_occupied: pair.pair_leaf.second_occupied.0,
-        pair_second: raw_owned(pair.pair_leaf.second_commitment),
-        pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
-        recipient_owner: ZERO8,
-        recipient_salt: ZERO8,
-        change_owner: raw_owned(chg.owner_key),
-        change_salt: raw_owned(chg.salt),
-    };
-    let mut p = RP {
-        transfer: false,
-        asset: asset.0,
-        next_pair_index: snapshot.next_pair_index,
-        frontier: [
-            raw_owned(f0),
-            raw_owned(f1),
-            raw_owned(f2),
-            raw_owned(f3),
-            raw_owned(f4),
-            raw_owned(f5),
-            raw_owned(f6),
-            raw_owned(f7),
-            raw_owned(f8),
-            raw_owned(f9),
-            raw_owned(f10),
-            raw_owned(f11),
-            raw_owned(f12),
-            raw_owned(f13),
-            raw_owned(f14),
-            raw_owned(f15),
-            raw_owned(f16),
-            raw_owned(f17),
-            raw_owned(f18),
-            raw_owned(f19),
-        ],
-        empty: [
-            raw_owned(e0),
-            raw_owned(e1),
-            raw_owned(e2),
-            raw_owned(e3),
-            raw_owned(e4),
-            raw_owned(e5),
-            raw_owned(e6),
-            raw_owned(e7),
-            raw_owned(e8),
-            raw_owned(e9),
-            raw_owned(e10),
-            raw_owned(e11),
-            raw_owned(e12),
-            raw_owned(e13),
-            raw_owned(e14),
-            raw_owned(e15),
-            raw_owned(e16),
-            raw_owned(e17),
-            raw_owned(e18),
-            raw_owned(e19),
-        ],
-    };
+    fn owned(input: PoolV1PairForestInputNoteWitnessV1, out: u32,
+        rec: Option<PoolV1OutputNoteWitnessV1>, chg: PoolV1OutputNoteWitnessV1,
+        snapshot: PoolV1PairLiveSnapshotV1, asset: M31, empty: [Digest; 21]) -> (RW, RP) {
+        let pair = input.pair;
+        let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
+        let [s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20] = pair.membership.siblings;
+        let [s21, s22, s23] = input.super_root_siblings;
+        let [d0, d1, d2] = input.super_root_directions;
+        let bits = [
+            u32::from(pair.selected_second),
+            ((pair.membership.index >> 0) & 1) as u32,
+            ((pair.membership.index >> 1) & 1) as u32,
+            ((pair.membership.index >> 2) & 1) as u32,
+            ((pair.membership.index >> 3) & 1) as u32,
+            ((pair.membership.index >> 4) & 1) as u32,
+            ((pair.membership.index >> 5) & 1) as u32,
+            ((pair.membership.index >> 6) & 1) as u32,
+            ((pair.membership.index >> 7) & 1) as u32,
+            ((pair.membership.index >> 8) & 1) as u32,
+            ((pair.membership.index >> 9) & 1) as u32,
+            ((pair.membership.index >> 10) & 1) as u32,
+            ((pair.membership.index >> 11) & 1) as u32,
+            ((pair.membership.index >> 12) & 1) as u32,
+            ((pair.membership.index >> 13) & 1) as u32,
+            ((pair.membership.index >> 14) & 1) as u32,
+            ((pair.membership.index >> 15) & 1) as u32,
+            ((pair.membership.index >> 16) & 1) as u32,
+            ((pair.membership.index >> 17) & 1) as u32,
+            ((pair.membership.index >> 18) & 1) as u32,
+            ((pair.membership.index >> 19) & 1) as u32,
+            u32::from(d0),
+            u32::from(d1),
+            u32::from(d2),
+        ];
+        let sibs = [
+            raw_owned(other),
+            raw_owned(s1),
+            raw_owned(s2),
+            raw_owned(s3),
+            raw_owned(s4),
+            raw_owned(s5),
+            raw_owned(s6),
+            raw_owned(s7),
+            raw_owned(s8),
+            raw_owned(s9),
+            raw_owned(s10),
+            raw_owned(s11),
+            raw_owned(s12),
+            raw_owned(s13),
+            raw_owned(s14),
+            raw_owned(s15),
+            raw_owned(s16),
+            raw_owned(s17),
+            raw_owned(s18),
+            raw_owned(s19),
+            raw_owned(s20),
+            raw_owned(s21),
+            raw_owned(s22),
+            raw_owned(s23),
+        ];
+        let [f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19] = snapshot.frontier;
+        let [e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, _] = empty;
+        let mut w = RW {
+            input_value: pair.value,
+            output_value: out,
+            change_value: chg.value,
+            sk: raw_owned(pair.nullifier_key),
+            salt: raw_owned(pair.salt),
+            bits,
+            sibs,
+            pair_first: raw_owned(pair.pair_leaf.first_commitment),
+            pair_occupied: pair.pair_leaf.second_occupied.0,
+            pair_second: raw_owned(pair.pair_leaf.second_commitment),
+            pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
+            recipient_owner: ZERO8,
+            recipient_salt: ZERO8,
+            change_owner: raw_owned(chg.owner_key),
+            change_salt: raw_owned(chg.salt),
+        };
+        let mut p = RP {
+            transfer: false,
+            asset: asset.0,
+            next_pair_index: snapshot.next_pair_index,
+            frontier: [
+                raw_owned(f0),
+                raw_owned(f1),
+                raw_owned(f2),
+                raw_owned(f3),
+                raw_owned(f4),
+                raw_owned(f5),
+                raw_owned(f6),
+                raw_owned(f7),
+                raw_owned(f8),
+                raw_owned(f9),
+                raw_owned(f10),
+                raw_owned(f11),
+                raw_owned(f12),
+                raw_owned(f13),
+                raw_owned(f14),
+                raw_owned(f15),
+                raw_owned(f16),
+                raw_owned(f17),
+                raw_owned(f18),
+                raw_owned(f19),
+            ],
+            empty: [
+                raw_owned(e0),
+                raw_owned(e1),
+                raw_owned(e2),
+                raw_owned(e3),
+                raw_owned(e4),
+                raw_owned(e5),
+                raw_owned(e6),
+                raw_owned(e7),
+                raw_owned(e8),
+                raw_owned(e9),
+                raw_owned(e10),
+                raw_owned(e11),
+                raw_owned(e12),
+                raw_owned(e13),
+                raw_owned(e14),
+                raw_owned(e15),
+                raw_owned(e16),
+                raw_owned(e17),
+                raw_owned(e18),
+                raw_owned(e19),
+            ],
+        };
+        match rec {
+            Some(r) => {
+                w.recipient_owner = raw_owned(r.owner_key);
+                w.recipient_salt = raw_owned(r.salt);
+                p.transfer = true;
+                (w, p)
+            },
+            None => (w, p),
+        }
+    }
     match rec {
-        Some(r) => {
-            let r = *r;
-            w.recipient_owner = raw_owned(r.owner_key);
-            w.recipient_salt = raw_owned(r.salt);
-            p.transfer = true;
-            (w, p)
-        },
-        None => (w, p),
+        Some(r) => owned(*input, out, Some(*r), *chg, *snapshot, asset, empty),
+        None => owned(*input, out, None, *chg, *snapshot, asset, empty),
     }
 }
 
