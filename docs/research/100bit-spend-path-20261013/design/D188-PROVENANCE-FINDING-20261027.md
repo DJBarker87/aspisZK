@@ -173,3 +173,17 @@ restoration to fit the pinned library's fixed trait signatures. Ruling:
 each adapter needs its own proved Result-and-state equivalence to the
 emitted original semantics before any association through it is credited
 (extraction-assoc4, XRl_). No D188-P2 row is closed yet.
+
+## Update 2026-10-27 (XRl_): adapter proofs caught a non-faithful adapter
+
+extraction-assoc4: state laws proved for six adapters (enumerateNext,
+intoIter, fromFnState, revRestored, enumerateRestored, closure_1 FnMut) and
+the FnOnce/dropped-callback projections. The reverse adapter (reverseNext/
+next_back) is NOT universally faithful: on an exhausted singleton iterator
+the original returns None and the adapted model returns Some true. It is
+faithful on the cursor-zero domain that a fresh iter_mut supplies. This is
+exactly why adapters were required to carry proofs. extraction-assoc5
+(XRm_) must show every call site of that adapter receives a cursor-zero
+iterator, or report the site (the adapter would then be replaced, not
+trusted). Also open: the native producer invariant that Dot operands are
+canonical. Geometry cardinalities and Dot-history laws proved.
