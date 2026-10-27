@@ -1,7 +1,15 @@
 from pathlib import Path
-import hashlib,json,re,shlex,subprocess,sys
+import hashlib,json,re,shlex,subprocess,sys,time,datetime
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-batch2-20261027/batch2d';D='/home/dombarker/project-offloads/codex-pv-batch2-20261027';H='dombarker@100.108.41.90'
 n=int(sys.argv[1]);module=sys.argv[2];assert 39800<=n<=39899
+# Refuse locally before consuming an ID if the most recent host hold is young.
+for hold in E.glob('*-reservation.log'):
+ try:
+  hr=json.loads(hold.read_text())
+  if hr.get('allowed') is False:
+   until=datetime.datetime.fromisoformat(hr['utc']).timestamp()+180
+   assert time.time()>=until, 'cooldown active until '+str(until)
+ except (ValueError,KeyError):pass
 h5=json.loads((E/'H5-SOURCE-PINS.json').read_text()).get(module)
 if h5:
  p=R/h5['path'];assert hashlib.sha256(subprocess.check_output(['git','show','HEAD:'+h5['path']])).hexdigest()==h5['sha256'];assert hashlib.sha256(p.read_bytes()).hexdigest()==h5['sha256']
@@ -48,6 +56,9 @@ print(json.dumps(r,sort_keys=True))
 r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True)
 if r.returncode:(E/f'{n}-preflight-error.txt').write_text(r.stderr+r.stdout);raise SystemExit(r.stderr+r.stdout)
 deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();meta=dict(attempt=n,module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),worktree_source_dirty=bool(subprocess.check_output(['git','status','--porcelain','--',str(p)],text=True).strip()),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_objects=deps)
+blob=subprocess.run(['git','rev-parse','HEAD:'+str(p.relative_to(R))],text=True,capture_output=True)
+meta['source_git_blob_at_head']=blob.stdout.strip() if blob.returncode==0 else None
+meta['source_worktree_git_blob']=subprocess.check_output(['git','hash-object',str(p)],text=True).strip()
 if h5:meta['h5_source_pin']=h5
 # Refuse every previously charged identical source/dependency pair, including failures.
 charged_ids={a['id'] for a in t['attempts'] if a.get('charged')}
