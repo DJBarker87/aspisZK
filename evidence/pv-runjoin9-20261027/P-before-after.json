@@ -1,0 +1,71 @@
+{
+  "kind": "Exact candidate signatures and deployed P accounting; no change of T",
+  "entry_revision": "e896c811331a5fc3d953bdf641c75b22580ff8c0",
+  "before": {
+    "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_CausalHeadline.lean",
+    "P": [
+      "identity",
+      "common_public",
+      "trace"
+    ],
+    "statement": "theorem proofs\n    (identity : ∀ hh xx ww ss, PV_RunJoin_MapErrInstalled.Identity ((inputs hh xx ww).ops ss))\n    (common_public : ∀ (w : (h).Instance), (h).public w = x.1 → ∀ s : State,\n      (inputs h x w).ops s = (common x).ops s ∧\n      (inputs h x w).pub s = (common x).pub s ∧\n      (inputs h x w).hash s = (common x).hash s)\n    (trace : ∀ (adv : R1Adv K CommitHandle Aux) (w : (h).Instance), (h).public w = x.1 →\n      ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →\n        extracted r.coins adv w =\n          (source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1) :\n    PV_RunJoin_TrustEndpoint.ProofObligations template outputs x runtime boundary extracted :=\n  PV_RunJoin_TrustLedger.candidate_proofs template outputs x schedule unix address world policy inputs\n    disclosed oracle ideal common causalData extracted identity common_public\n    (PV_RunJoin_CausalTrustLedger.initial_and_causal\n      (template := template) (outputs := outputs) (x := x) (schedule := schedule) (unix := unix) (address := address)\n      (coordinates := coordinates) (replies := replies) (initialPolicy := initialPolicy)\n      (initialLedger := initialLedger) (initialBody := initialBody) (policy := policy)\n      (disclosed := disclosed) (oracle := oracle) (ideal := ideal) (inputs := inputs) (common := common)\n      (boundaryData := boundaryData) (produce := produce) (extracted := extracted) trace)\n\nvariable {E File Reply Time Worker : Type} [DecidableEq File]\nvariable (nativeEvents extractedEvents : ModelCoins template outputs x →\n  PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Unit)\n\n/-- Exact headline at the candidate ledger construction. The constructor discharges initial-ledger independence and causal contexts.\nIdentity, public binding, and complete trace remain explicit. Actual deployment\nassociation is not established. -/\ntheorem privacy_headline_deployed_candidate\n    (identity : ∀ hh xx ww ss, PV_RunJoin_MapErrInstalled.Identity ((inputs hh xx ww).ops ss))\n    (common_public : ∀ (w : (h).Instance), (h).public w = x.1 → ∀ s : State,\n      (inputs h x w).ops s = (common x).ops s ∧\n      (inputs h x w).pub s = (common x).pub s ∧\n      (inputs h x w).hash s = (common x).hash s)\n    (trace : ∀ (adv : R1Adv K CommitHandle Aux) (w : (h).Instance), (h).public w = x.1 →\n      ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →\n        extracted r.coins adv w =\n          (source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1)\n    (T : PV_RunJoin_TrustItems\n      (PV_RunJoin_TrustEndpoint.trustData template outputs x runtime boundary nativeEvents extractedEvents extracted))\n :\n    (∀ (adv : R1Adv K CommitHandle Aux) (w : (h).Instance), (h).public w = x.1 →\n      |mean (realTest h B outputs rust adv x w) -\n        mean (idealTestS source (RomObserverBin.observerMap rust observer_program adv) x\n          (simE (h).transport B outputs x))| ≤\n      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge)) ∧\n    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤\n      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧\n    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100"
+  },
+  "after": {
+    "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_JoinedCausalHeadline.lean",
+    "P": [
+      "fixed-endpoint source public binding",
+      "trace"
+    ],
+    "statement": "theorem proofs\n    (binding : ∀ (w : (h).Instance), (h).public w = x.1 →\n      PV_Src_NativeInput.publicInput (selected.selected h x w) =\n        PV_Src_NativeInput.publicInput (selected.publicRecord x))\n    (trace : ∀ (adv : R1Adv K CommitHandle Aux) (w : (h).Instance), (h).public w = x.1 →\n      ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →\n        extracted r.coins adv w =\n          (source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1) :\n    (@PV_RunJoin_TrustEndpoint.ProofObligations _ _ template outputs x (PV_Join_PublicCaller.native baseTypes)) runtime boundary extracted",
+    "receipt": 37475
+  },
+  "constructor_change": "Specialization to PV_Join_FixtureInputs / PV_Join_PublicCaller.native. Same endpoint, bad event, simulator, observer and conclusion. Not a proof of actual deployment association.",
+  "identity": {
+    "statement": "@PV_RunJoin_MapErrInstalled.Identity (PV_Join_PublicCaller.native base) (PV_Join_PublicCaller.selected base ops)",
+    "receipt": 37473
+  },
+  "common_public": {
+    "status": "source public binding remains P",
+    "criterion": "PV_Join_FixtureInputs.publicInput base a = PV_Join_FixtureInputs.publicInput base b ↔ PV_Src_NativeInput.publicInput a = PV_Src_NativeInput.publicInput b",
+    "receipt": 37473
+  },
+  "inherited_derived_P": [
+    "initial-ledger independence",
+    "strict-prefix causal frames"
+  ],
+  "deployed_P_before": [
+    "actual selected input / returned compilation and compiler success",
+    "admission at same selected record",
+    "native runtime/carrier/initializer/account callback/complete observer installation",
+    "complete extracted trace outside unchanged bad event",
+    "release identity and coherent source/artifact closure"
+  ],
+  "deployed_P_after": [
+    "actual selected input / returned compilation and compiler success",
+    "admission at same selected record",
+    "native runtime/carrier/initializer/account callback/complete observer installation",
+    "complete extracted trace outside unchanged bad event",
+    "release identity and coherent source/artifact closure"
+  ],
+  "whole_deployed_rows_removed": 0,
+  "T_fields_before": 3,
+  "T_fields_after": 3,
+  "counts": {
+    "runtime_boundary": [
+      2,
+      2
+    ],
+    "fields": [
+      8,
+      8
+    ],
+    "native_residuals": [
+      6,
+      6
+    ]
+  },
+  "fixtures": {
+    "transfer": "P ∧ T non-vacuity OPEN; T hypothetical",
+    "withdrawal": "P ∧ T non-vacuity OPEN; T hypothetical"
+  }
+}

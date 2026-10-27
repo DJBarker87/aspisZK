@@ -25,3 +25,13 @@ InstalledTrustLedger 37452 failed (24.16s, 4,501,102,592B, swap 0): local instan
 ## Installed constructor check
 
 InstalledTrustLedger accepted at 37461 (18.24s, 4,536,266,752B peak RSS, swap 0, standard axioms), after seven rejected draft elaborations (37452, 37453, 37455, 37456, 37457, 37458, 37460) and the successful interface probe 37454. The fixes explicitly select the native dictionary and its LedgerWorld carrier, inline derived input/common macros, and use explicit applications for anonymous class binders. No caps, heartbeats, or assumptions were raised. A temporary quotation-precheck option did not fix the problem and was removed. Rejected recovery sorryAx output was never accepted or retained as a proof object.
+
+InstalledCausalHeadline accepted at 37464 (19.85s, 4,558,815,232B RSS, swap 0, standard axioms). Rejections 37462/37463 exposed constructor carrier inference and unsupported quotation prechecking for a record update. Replacement uses a native term-local instance and changes only boundary frame/coordinates; quotPrecheck false is a syntax setting, not a proof/kernel/resource override.
+
+EndpointSelection accepted at 37466 after its 37465 small-if simplification rejection. SelectedSourceReduction 37467 stopped at named-argument parsing under local notation K; replacement escapes the existing K argument name. 37468 is an uncharged reservation refusal. No failed draft or recovery sorryAx is counted as established.
+
+## Stage 2 joined installation
+
+JoinedInstallation accepted 37473 after inverse-adapter carrier correction (37472 rejected). JoinedFamily 37474 and JoinedCausalHeadline 37475 accepted. Identity is unconditional for the published joined selector. Public binding is transported at the SAME selected record and is proved equivalent to equality of its full source public projection. The candidate's remaining explicit hypotheses are fixed-endpoint source binding and trace. Actual selection/returned compilation, compiler/admission success, runtime/carrier/observer and release association remain open; zero whole deployed rows removed. Exact statements and constructor distinction: P-before-after.json.
+
+Both original candidate and joined candidate use the unchanged T record; no A/B choice or availability assumption. New installed PDict headline retains PublicBinding inside selected data, so its trace-only explicit theorem argument list is NOT counted as unconditional public-binding discharge.

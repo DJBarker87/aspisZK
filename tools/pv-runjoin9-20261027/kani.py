@@ -23,7 +23,7 @@ if not admission.get('allowed'):
 for ext in ['json','log']:subprocess.run(['scp','-q',f'{host}:{res}.{ext}',str(e/f'{name}-reservation-{suffix}.{ext}')],check=True)
 paths=['crates/aspis-statement/src/pool_v1/pair_trace.rs','crates/aspis-statement/src/pool_v1/pair_trace_pv_runjoin8_roots.rs']
 for p in paths:subprocess.run(['scp','-q',str(root/p),f'{host}:{frozen}/{p}'],check=True)
-subprocess.run(['scp','-q',str(root/'tools/pv-runjoin8-20261026/kani-receipt.py'),f'{host}:{job}/evidence/pv8-kani-receipt.py'],check=True)
+subprocess.run(['scp','-q',str(root/'tools/pv-runjoin9-20261027/kani-receipt.py'),f'{host}:{job}/evidence/pv8-kani-receipt.py'],check=True)
 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
 command=['systemd-run','--user','--scope','--quiet','--unit='+name,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','env','PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_TARGET_DIR='+job+'/target','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3','RUSTFLAGS=-C opt-level=3 -Z mir-opt-level=4 -Z inline-mir=yes -C link-arg=-Wl,--threads=4','PV8_SOURCE_DIR='+frozen,'python3',job+'/evidence/pv8-kani-receipt.py',out,'timeout','180','cargo','kani','--no-assertion-reach-checks','-Z','stubbing','-Z','function-contracts','-Z','unstable-options','-p','aspis-statement','--lib','-j','4','--exact','--harness',harness,'--output-format','terse','--cbmc-args','--unwinding-assertions','--slice-formula']
 record=dict(number=number,harness=harness,source_revision=revision,command=command,source_sha256={p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths},stubs=[],expected_time=plan['expected_time'])
