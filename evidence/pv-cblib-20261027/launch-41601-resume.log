@@ -1,0 +1,24 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0936); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+String.toUTF8_eq_toByteArray : ∀ {s : String}, s.toUTF8 = s.toByteArray
+String.toByteArray : String → ByteArray
+String.fromUTF8? : ByteArray → Option String
+Aeneas.Std.U8.ofNatCore : (x : ℕ) → x < 2 ^ Aeneas.Std.UScalarTy.U8.numBits → Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U8
+Aeneas.Std.UScalar.ofNat : {ty : Aeneas.Std.UScalarTy} →
+  (x : ℕ) → autoParam (x ≤ Aeneas.Std.UScalar.cMax ty) Aeneas.Std.UScalar.ofNat._auto_1 → Aeneas.Std.UScalar ty
+String.toUTF8 : String → ByteArray
+Aeneas.Std.UScalar.ofNatCore : {ty : Aeneas.Std.UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → Aeneas.Std.UScalar ty
+Aeneas.Std.U8.ofNat : (x : ℕ) →
+  autoParam (x ≤ Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8) Aeneas.Std.UScalar.ofNat._auto_1 →
+    Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U8
+String.size_toByteArray : ∀ {s : String}, s.toByteArray.size = s.utf8ByteSize
+@[reducible] def Aeneas.Std.U8 : Type :=
+Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U8
+theorem UInt8.toNat_lt : ∀ (n : UInt8), n.toNat < 2 ^ 8 :=
+fun n => n.toFin.isLt
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.57
+	Maximum resident set size (kbytes): 2647188
+	Swaps: 0
+	Exit status: 0

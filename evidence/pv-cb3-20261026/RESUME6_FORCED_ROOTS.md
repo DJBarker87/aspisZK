@@ -1,0 +1,7 @@
+# Concrete generic roots, not empty-success credit
+
+The transitive digest op219 root yielded exit0 with zero Aeneas functions. It is retained as a coverage obstruction. The new resume6_digest cfg(kani) module calls the actual blanket/derived impls with their real Rust bounds. It adds no Copy restriction and preserves the updated owners for mutable wrappers. In particular ct_finalize returns the updated wrapper, buffer, and output; core_update returns the entire wrapper. Finalizers that consume their owner retain that source behavior.
+
+The first source crate check failed because core_default omitted T::BufferKind: Default, a requirement of the real derived Default impl. The fixed wrapper adds that real dictionary bound, which is already represented by ExternalFuns.op217's coredefaultDefaultInst2. This is not a new desired-output/canonicality premise in any published theorem. The failed compiler output is retained. The first fix upload was refused; the dependent queue was stopped in cooldown without launching another compiler.
+
+Owned weight source chronology is retained in RESUME6_NATIVE_INPUTS, RESUME6_PRE_DIGEST_INPUTS, and RESUME6_PRE_SPLIT_INPUTS. The additive split reference inherits no native proof credit from earlier borrowed/raw references. Its mask/extra/dense/tensor branches retain bounded loops and all index/panic paths. No shared extractor, source implementation, or launcher is modified.

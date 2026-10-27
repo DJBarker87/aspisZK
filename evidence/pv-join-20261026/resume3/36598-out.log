@@ -1,0 +1,2262 @@
+theorem R1Z.PV_Join_PublicCarrierBridge.roundtrip : ∀ (base : ProverRwFull.ExternalTypes)
+  (x : R1Z.PV_Join_PublicCarrierBridge.Late base),
+  R1Z.PV_Join_PublicCarrierBridge.decode base (R1Z.PV_Join_PublicCarrierBridge.encode base x) = x :=
+fun base x =>
+  let ⟨live, after, h✝⟩ := x
+  Eq.symm h✝ ▸
+    let ⟨next_pair_index✝, next_root✝, next_frontier✝, h✝¹⟩ := after
+    Eq.symm h✝¹ ▸
+      Eq.refl
+        (R1Z.PV_Join_PublicCarrierBridge.decode base
+          (R1Z.PV_Join_PublicCarrierBridge.encode base
+            { live_snapshot := live,
+              candidate_afterstate :=
+                { next_pair_index := next_pair_index✝, next_root := next_root✝, next_frontier := next_frontier✝ } }))
+'R1Z.PV_Join_PublicCarrierBridge.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicCarrierBridge.source_roundtrip : ∀ (base : ProverRwFull.ExternalTypes)
+  (x : R1Z.PV_Join_PublicCarrierBridge.CB3Late base),
+  R1Z.PV_Join_PublicCarrierBridge.encode base (R1Z.PV_Join_PublicCarrierBridge.decode base x) = x :=
+fun base x =>
+  let ⟨live, after, h✝⟩ := x
+  Eq.symm h✝ ▸
+    let ⟨next_pair_index✝, next_root✝, next_frontier✝, h✝¹⟩ := after
+    Eq.symm h✝¹ ▸
+      Eq.refl
+        (R1Z.PV_Join_PublicCarrierBridge.encode base
+          (R1Z.PV_Join_PublicCarrierBridge.decode base
+            { live_snapshot := live,
+              candidate_afterstate :=
+                { next_pair_index := next_pair_index✝, next_root := next_root✝, next_frontier := next_frontier✝ } }))
+'R1Z.PV_Join_PublicCarrierBridge.source_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicCarrierBridge.source : ∀ (base : ProverRwFull.ExternalTypes)
+  (a b : R1Z.PV_Join_PublicCarrierBridge.Late base),
+  R1Z.PV_CB_Op229Source.source (R1Z.PV_CB_Op229Transport.encode base a) (R1Z.PV_CB_Op229Transport.encode base b) =
+    PV_CB3_ShippedOp229.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.Insts.CoreCmpPartialEqPoolV1PairLatePublicStatementV1.eq
+      (R1Z.PV_Join_PublicCarrierBridge.encode base a) (R1Z.PV_Join_PublicCarrierBridge.encode base b) :=
+fun base a b =>
+  Eq.refl
+    (R1Z.PV_CB_Op229Source.source (R1Z.PV_CB_Op229Transport.encode base a) (R1Z.PV_CB_Op229Transport.encode base b))
+'R1Z.PV_Join_PublicCarrierBridge.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicDataIff.refinement_of_bytes : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns) {S : Type}
+  (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (pub : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (v : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (binding digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),
+  store.reserve s digest attempt.mask_nonce = Aeneas.Std.Result.ok (accepted, after) →
+    ∀ (modelBytes : Aeneas.Std.Result R1Z.ProverRw19AuditData.ByteStatus),
+      R1Z.PV_RW_DataProduct.observe R1Z.PV_RW_DataProduct.first
+            (R1Z.ProverRwBodyDataCriterion.data
+              (R1Z.PV_Join_PublicCaller.execute base ops store pub compiled v hash binding digest attempt s)) =
+          modelBytes →
+        R1Z.PV_Join_PublicCaller.execute base ops store pub compiled v hash binding digest attempt s =
+          R1Z.ProverRwBodyCandidateData.withState after (R1Z.ProverRw19AuditData.attachAudit modelBytes) :=
+fun base ops {S} store pub compiled v hash binding digest attempt s after accepted reservation modelBytes bytes =>
+  R1Z.PV_Join_PublicCaller.refinement_of_data base ops store pub compiled v hash binding digest attempt s after accepted
+    reservation (R1Z.ProverRw19AuditData.attachAudit modelBytes)
+    (R1Z.PV_Join_AuditProjection.whole_of_bytes base ops store pub compiled v hash binding digest attempt s modelBytes
+      bytes)
+'R1Z.PV_Join_PublicDataIff.refinement_of_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicDataIff.criterion : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  {S : Type} (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (pub : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (v : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (binding digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),
+  store.reserve s digest attempt.mask_nonce = Aeneas.Std.Result.ok (accepted, after) →
+    ∀ (modelBytes : Aeneas.Std.Result R1Z.ProverRw19AuditData.ByteStatus),
+      R1Z.PV_Join_PublicCaller.execute base ops store pub compiled v hash binding digest attempt s =
+          R1Z.ProverRwBodyCandidateData.withState after (R1Z.ProverRw19AuditData.attachAudit modelBytes) ↔
+        R1Z.PV_RW_DataProduct.observe R1Z.PV_RW_DataProduct.first
+            (R1Z.ProverRwBodyDataCriterion.data
+              (R1Z.PV_Join_PublicCaller.execute base ops store pub compiled v hash binding digest attempt s)) =
+          modelBytes :=
+fun base ops {S} store pub compiled v hash binding digest attempt s after accepted reservation modelBytes =>
+  {
+    mp := fun whole =>
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              R1Z.PV_RW_DataProduct.observe R1Z.PV_RW_DataProduct.first (R1Z.ProverRwBodyDataCriterion.data _a) =
+                modelBytes)
+            whole))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => R1Z.PV_RW_DataProduct.observe R1Z.PV_RW_DataProduct.first _a = modelBytes)
+              (R1Z.ProverRwBodyCandidateData.data_withState after (R1Z.ProverRw19AuditData.attachAudit modelBytes))))
+          (R1Z.ProverRw19AuditData.bytes modelBytes)),
+    mpr :=
+      R1Z.PV_Join_PublicDataIff.refinement_of_bytes base ops store pub compiled v hash binding digest attempt s after
+        accepted reservation modelBytes }
+'R1Z.PV_Join_PublicDataIff.criterion' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicDictionary.raw_form : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns),
+  R1Z.PV_CB_Op229Source.selected base ops = R1Z.PV_Join_PublicDictionary.raw base ops :=
+fun base ops =>
+  have law := funext fun a => funext fun b => R1Z.PV_CB_Op229Source.op229_source base ops a b;
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            { op0 := @ProverRwFull.ExternalFuns.op0 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op1 := @ProverRwFull.ExternalFuns.op1 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op2 := ProverRwFull.ExternalFuns.op2,
+                op3 := @ProverRwFull.ExternalFuns.op3 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op4 := @ProverRwFull.ExternalFuns.op4 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op5 := @ProverRwFull.ExternalFuns.op5 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op6 := @ProverRwFull.ExternalFuns.op6 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op7 := @ProverRwFull.ExternalFuns.op7 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op8 := @ProverRwFull.ExternalFuns.op8 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op9 := @ProverRwFull.ExternalFuns.op9 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op10 := ProverRwFull.ExternalFuns.op10,
+                op11 := @ProverRwFull.ExternalFuns.op11 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op12 := @ProverRwFull.ExternalFuns.op12 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op13 := ProverRwFull.ExternalFuns.op13,
+                op14 := @ProverRwFull.ExternalFuns.op14 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op15 := ProverRwFull.ExternalFuns.op15,
+                op16 := @ProverRwFull.ExternalFuns.op16 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op17 := ProverRwFull.ExternalFuns.op17, op18 := ProverRwFull.ExternalFuns.op18,
+                op19 := ProverRwFull.ExternalFuns.op19, op20 := ProverRwFull.ExternalFuns.op20,
+                op21 := ProverRwFull.ExternalFuns.op21,
+                op22 := @ProverRwFull.ExternalFuns.op22 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op23 := ProverRwFull.ExternalFuns.op23, op24 := ProverRwFull.ExternalFuns.op24,
+                op25 := ProverRwFull.ExternalFuns.op25,
+                op26 := @ProverRwFull.ExternalFuns.op26 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op27 := ProverRwFull.ExternalFuns.op27, op28 := ProverRwFull.ExternalFuns.op28,
+                op29 := ProverRwFull.ExternalFuns.op29, op30 := ProverRwFull.ExternalFuns.op30,
+                op31 := ProverRwFull.ExternalFuns.op31,
+                op32 := @ProverRwFull.ExternalFuns.op32 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op33 := @ProverRwFull.ExternalFuns.op33 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op34 := @ProverRwFull.ExternalFuns.op34 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op35 := ProverRwFull.ExternalFuns.op35,
+                op36 := @ProverRwFull.ExternalFuns.op36 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op37 := ProverRwFull.ExternalFuns.op37, op38 := ProverRwFull.ExternalFuns.op38,
+                op39 := ProverRwFull.ExternalFuns.op39, op40 := ProverRwFull.ExternalFuns.op40,
+                op41 := ProverRwFull.ExternalFuns.op41, op42 := ProverRwFull.ExternalFuns.op42,
+                op43 := ProverRwFull.ExternalFuns.op43, op44 := ProverRwFull.ExternalFuns.op44,
+                op45 := ProverRwFull.ExternalFuns.op45, op46 := ProverRwFull.ExternalFuns.op46,
+                op47 := ProverRwFull.ExternalFuns.op47, op48 := ProverRwFull.ExternalFuns.op48,
+                op49 := ProverRwFull.ExternalFuns.op49, op50 := ProverRwFull.ExternalFuns.op50,
+                op51 := ProverRwFull.ExternalFuns.op51, op52 := ProverRwFull.ExternalFuns.op52,
+                op53 := ProverRwFull.ExternalFuns.op53, op54 := ProverRwFull.ExternalFuns.op54,
+                op55 := ProverRwFull.ExternalFuns.op55, op56 := ProverRwFull.ExternalFuns.op56,
+                op57 := ProverRwFull.ExternalFuns.op57, op58 := ProverRwFull.ExternalFuns.op58,
+                op59 := ProverRwFull.ExternalFuns.op59, op60 := ProverRwFull.ExternalFuns.op60,
+                op61 := ProverRwFull.ExternalFuns.op61, op62 := ProverRwFull.ExternalFuns.op62,
+                op63 := ProverRwFull.ExternalFuns.op63, op64 := ProverRwFull.ExternalFuns.op64,
+                op65 := ProverRwFull.ExternalFuns.op65, op66 := ProverRwFull.ExternalFuns.op66,
+                op67 := ProverRwFull.ExternalFuns.op67, op68 := ProverRwFull.ExternalFuns.op68,
+                op69 := ProverRwFull.ExternalFuns.op69, op70 := ProverRwFull.ExternalFuns.op70,
+                op71 := ProverRwFull.ExternalFuns.op71, op72 := ProverRwFull.ExternalFuns.op72,
+                op73 := ProverRwFull.ExternalFuns.op73, op74 := ProverRwFull.ExternalFuns.op74,
+                op75 := ProverRwFull.ExternalFuns.op75, op76 := ProverRwFull.ExternalFuns.op76,
+                op77 := @ProverRwFull.ExternalFuns.op77 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op78 := @ProverRwFull.ExternalFuns.op78 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op79 := @ProverRwFull.ExternalFuns.op79 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op80 := @ProverRwFull.ExternalFuns.op80 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op81 := @ProverRwFull.ExternalFuns.op81 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op82 := ProverRwFull.ExternalFuns.op82, op83 := ProverRwFull.ExternalFuns.op83,
+                op84 := ProverRwFull.ExternalFuns.op84, op85 := ProverRwFull.ExternalFuns.op85,
+                op86 := ProverRwFull.ExternalFuns.op86, op87 := ProverRwFull.ExternalFuns.op87,
+                op88 := ProverRwFull.ExternalFuns.op88, op89 := ProverRwFull.ExternalFuns.op89,
+                op90 := ProverRwFull.ExternalFuns.op90, op91 := ProverRwFull.ExternalFuns.op91,
+                op92 := ProverRwFull.ExternalFuns.op92, op93 := ProverRwFull.ExternalFuns.op93,
+                op94 := ProverRwFull.ExternalFuns.op94, op95 := ProverRwFull.ExternalFuns.op95,
+                op96 := ProverRwFull.ExternalFuns.op96, op97 := ProverRwFull.ExternalFuns.op97,
+                op98 := ProverRwFull.ExternalFuns.op98, op99 := ProverRwFull.ExternalFuns.op99,
+                op100 := ProverRwFull.ExternalFuns.op100, op101 := ProverRwFull.ExternalFuns.op101,
+                op102 := ProverRwFull.ExternalFuns.op102, op103 := ProverRwFull.ExternalFuns.op103,
+                op104 := ProverRwFull.ExternalFuns.op104, op105 := ProverRwFull.ExternalFuns.op105,
+                op106 := ProverRwFull.ExternalFuns.op106, op107 := ProverRwFull.ExternalFuns.op107,
+                op108 := ProverRwFull.ExternalFuns.op108, op109 := ProverRwFull.ExternalFuns.op109,
+                op110 := ProverRwFull.ExternalFuns.op110, op111 := ProverRwFull.ExternalFuns.op111,
+                op112 := ProverRwFull.ExternalFuns.op112, op113 := ProverRwFull.ExternalFuns.op113,
+                op114 := ProverRwFull.ExternalFuns.op114, op115 := ProverRwFull.ExternalFuns.op115,
+                op116 := ProverRwFull.ExternalFuns.op116, op117 := ProverRwFull.ExternalFuns.op117,
+                op118 := ProverRwFull.ExternalFuns.op118, op119 := ProverRwFull.ExternalFuns.op119,
+                op120 := ProverRwFull.ExternalFuns.op120, op121 := ProverRwFull.ExternalFuns.op121,
+                op122 := @ProverRwFull.ExternalFuns.op122 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op123 := @ProverRwFull.ExternalFuns.op123 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op124 := @ProverRwFull.ExternalFuns.op124 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op125 := @ProverRwFull.ExternalFuns.op125 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op126 := @ProverRwFull.ExternalFuns.op126 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op127 := @ProverRwFull.ExternalFuns.op127 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op128 := @ProverRwFull.ExternalFuns.op128 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op129 := ProverRwFull.ExternalFuns.op129,
+                op130 := @ProverRwFull.ExternalFuns.op130 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op131 := @ProverRwFull.ExternalFuns.op131 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op132 := ProverRwFull.ExternalFuns.op132, op133 := ProverRwFull.ExternalFuns.op133,
+                op134 := ProverRwFull.ExternalFuns.op134,
+                op135 := @ProverRwFull.ExternalFuns.op135 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op136 := @ProverRwFull.ExternalFuns.op136 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op137 := @ProverRwFull.ExternalFuns.op137 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op138 := @ProverRwFull.ExternalFuns.op138 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op139 := @ProverRwFull.ExternalFuns.op139 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op140 := @ProverRwFull.ExternalFuns.op140 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op141 := @ProverRwFull.ExternalFuns.op141 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op142 := @ProverRwFull.ExternalFuns.op142 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op143 := @ProverRwFull.ExternalFuns.op143 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op144 := @ProverRwFull.ExternalFuns.op144 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op145 := @ProverRwFull.ExternalFuns.op145 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op146 := @ProverRwFull.ExternalFuns.op146 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op147 := @ProverRwFull.ExternalFuns.op147 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op148 := @ProverRwFull.ExternalFuns.op148 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op149 := @ProverRwFull.ExternalFuns.op149 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op150 := @ProverRwFull.ExternalFuns.op150 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op151 := @ProverRwFull.ExternalFuns.op151 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op152 := @ProverRwFull.ExternalFuns.op152 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op153 := @ProverRwFull.ExternalFuns.op153 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op154 := @ProverRwFull.ExternalFuns.op154 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op155 := @ProverRwFull.ExternalFuns.op155 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op156 := @ProverRwFull.ExternalFuns.op156 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op157 := @ProverRwFull.ExternalFuns.op157 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op158 := @ProverRwFull.ExternalFuns.op158 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op159 := @ProverRwFull.ExternalFuns.op159 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op160 := @ProverRwFull.ExternalFuns.op160 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op161 := @ProverRwFull.ExternalFuns.op161 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op162 := @ProverRwFull.ExternalFuns.op162 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op163 := ProverRwFull.ExternalFuns.op163, op164 := ProverRwFull.ExternalFuns.op164,
+                op165 := ProverRwFull.ExternalFuns.op165, op166 := ProverRwFull.ExternalFuns.op166,
+                op167 := ProverRwFull.ExternalFuns.op167, op168 := ProverRwFull.ExternalFuns.op168,
+                op169 := ProverRwFull.ExternalFuns.op169, op170 := ProverRwFull.ExternalFuns.op170,
+                op171 := ProverRwFull.ExternalFuns.op171, op172 := ProverRwFull.ExternalFuns.op172,
+                op173 := ProverRwFull.ExternalFuns.op173, op174 := ProverRwFull.ExternalFuns.op174,
+                op175 := ProverRwFull.ExternalFuns.op175, op176 := ProverRwFull.ExternalFuns.op176,
+                op177 := ProverRwFull.ExternalFuns.op177, op178 := ProverRwFull.ExternalFuns.op178,
+                op179 := ProverRwFull.ExternalFuns.op179, op180 := ProverRwFull.ExternalFuns.op180,
+                op181 := ProverRwFull.ExternalFuns.op181, op182 := ProverRwFull.ExternalFuns.op182,
+                op183 := ProverRwFull.ExternalFuns.op183, op184 := ProverRwFull.ExternalFuns.op184,
+                op185 := @ProverRwFull.ExternalFuns.op185 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op186 := @ProverRwFull.ExternalFuns.op186 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op187 := @ProverRwFull.ExternalFuns.op187 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op188 := ProverRwFull.ExternalFuns.op188, op189 := ProverRwFull.ExternalFuns.op189,
+                op190 := ProverRwFull.ExternalFuns.op190, op191 := ProverRwFull.ExternalFuns.op191,
+                op192 := ProverRwFull.ExternalFuns.op192, op193 := ProverRwFull.ExternalFuns.op193,
+                op194 := ProverRwFull.ExternalFuns.op194,
+                op195 := @ProverRwFull.ExternalFuns.op195 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op196 := ProverRwFull.ExternalFuns.op196, op197 := ProverRwFull.ExternalFuns.op197,
+                op198 := ProverRwFull.ExternalFuns.op198, op199 := ProverRwFull.ExternalFuns.op199,
+                op200 := ProverRwFull.ExternalFuns.op200, op201 := ProverRwFull.ExternalFuns.op201,
+                op202 := ProverRwFull.ExternalFuns.op202, op203 := ProverRwFull.ExternalFuns.op203,
+                op204 := ProverRwFull.ExternalFuns.op204, op205 := ProverRwFull.ExternalFuns.op205,
+                op206 := ProverRwFull.ExternalFuns.op206, op207 := ProverRwFull.ExternalFuns.op207,
+                op208 := ProverRwFull.ExternalFuns.op208,
+                op209 := @ProverRwFull.ExternalFuns.op209 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op210 := ProverRwFull.ExternalFuns.op210,
+                op211 := @ProverRwFull.ExternalFuns.op211 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op212 := @ProverRwFull.ExternalFuns.op212 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op213 := @ProverRwFull.ExternalFuns.op213 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op214 := @ProverRwFull.ExternalFuns.op214 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op215 := @ProverRwFull.ExternalFuns.op215 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op216 := @ProverRwFull.ExternalFuns.op216 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op217 := @ProverRwFull.ExternalFuns.op217 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op218 := @ProverRwFull.ExternalFuns.op218 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op219 := @ProverRwFull.ExternalFuns.op219 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op220 := @ProverRwFull.ExternalFuns.op220 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op221 := ProverRwFull.ExternalFuns.op221, op222 := ProverRwFull.ExternalFuns.op222,
+                op223 := ProverRwFull.ExternalFuns.op223, op224 := ProverRwFull.ExternalFuns.op224,
+                op225 := ProverRwFull.ExternalFuns.op225, op226 := ProverRwFull.ExternalFuns.op226,
+                op227 := ProverRwFull.ExternalFuns.op227, op228 := ProverRwFull.ExternalFuns.op228, op229 := _a,
+                op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+                op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+                op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+                op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+                op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+                op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+                op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+                op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+                op246 := @ProverRwFull.ExternalFuns.op246 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op247 := ProverRwFull.ExternalFuns.op247, op248 := ProverRwFull.ExternalFuns.op248,
+                op249 := ProverRwFull.ExternalFuns.op249, op250 := ProverRwFull.ExternalFuns.op250,
+                op251 := ProverRwFull.ExternalFuns.op251, op252 := ProverRwFull.ExternalFuns.op252,
+                op253 := ProverRwFull.ExternalFuns.op253, op254 := ProverRwFull.ExternalFuns.op254,
+                op255 := @ProverRwFull.ExternalFuns.op255 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op256 := ProverRwFull.ExternalFuns.op256,
+                op257 := @ProverRwFull.ExternalFuns.op257 (R1Z.PV_Join_PublicDictionary.native base) ops,
+                op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+                op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 } =
+              R1Z.PV_Join_PublicDictionary.raw base ops)
+          law))
+      (Eq.refl
+        { op0 := @ProverRwFull.ExternalFuns.op0 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op1 := @ProverRwFull.ExternalFuns.op1 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op2 := ProverRwFull.ExternalFuns.op2,
+          op3 := @ProverRwFull.ExternalFuns.op3 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op4 := @ProverRwFull.ExternalFuns.op4 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op5 := @ProverRwFull.ExternalFuns.op5 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op6 := @ProverRwFull.ExternalFuns.op6 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op7 := @ProverRwFull.ExternalFuns.op7 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op8 := @ProverRwFull.ExternalFuns.op8 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op9 := @ProverRwFull.ExternalFuns.op9 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op10 := ProverRwFull.ExternalFuns.op10,
+          op11 := @ProverRwFull.ExternalFuns.op11 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op12 := @ProverRwFull.ExternalFuns.op12 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op13 := ProverRwFull.ExternalFuns.op13,
+          op14 := @ProverRwFull.ExternalFuns.op14 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op15 := ProverRwFull.ExternalFuns.op15,
+          op16 := @ProverRwFull.ExternalFuns.op16 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op17 := ProverRwFull.ExternalFuns.op17, op18 := ProverRwFull.ExternalFuns.op18,
+          op19 := ProverRwFull.ExternalFuns.op19, op20 := ProverRwFull.ExternalFuns.op20,
+          op21 := ProverRwFull.ExternalFuns.op21,
+          op22 := @ProverRwFull.ExternalFuns.op22 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op23 := ProverRwFull.ExternalFuns.op23, op24 := ProverRwFull.ExternalFuns.op24,
+          op25 := ProverRwFull.ExternalFuns.op25,
+          op26 := @ProverRwFull.ExternalFuns.op26 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op27 := ProverRwFull.ExternalFuns.op27, op28 := ProverRwFull.ExternalFuns.op28,
+          op29 := ProverRwFull.ExternalFuns.op29, op30 := ProverRwFull.ExternalFuns.op30,
+          op31 := ProverRwFull.ExternalFuns.op31,
+          op32 := @ProverRwFull.ExternalFuns.op32 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op33 := @ProverRwFull.ExternalFuns.op33 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op34 := @ProverRwFull.ExternalFuns.op34 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op35 := ProverRwFull.ExternalFuns.op35,
+          op36 := @ProverRwFull.ExternalFuns.op36 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op37 := ProverRwFull.ExternalFuns.op37, op38 := ProverRwFull.ExternalFuns.op38,
+          op39 := ProverRwFull.ExternalFuns.op39, op40 := ProverRwFull.ExternalFuns.op40,
+          op41 := ProverRwFull.ExternalFuns.op41, op42 := ProverRwFull.ExternalFuns.op42,
+          op43 := ProverRwFull.ExternalFuns.op43, op44 := ProverRwFull.ExternalFuns.op44,
+          op45 := ProverRwFull.ExternalFuns.op45, op46 := ProverRwFull.ExternalFuns.op46,
+          op47 := ProverRwFull.ExternalFuns.op47, op48 := ProverRwFull.ExternalFuns.op48,
+          op49 := ProverRwFull.ExternalFuns.op49, op50 := ProverRwFull.ExternalFuns.op50,
+          op51 := ProverRwFull.ExternalFuns.op51, op52 := ProverRwFull.ExternalFuns.op52,
+          op53 := ProverRwFull.ExternalFuns.op53, op54 := ProverRwFull.ExternalFuns.op54,
+          op55 := ProverRwFull.ExternalFuns.op55, op56 := ProverRwFull.ExternalFuns.op56,
+          op57 := ProverRwFull.ExternalFuns.op57, op58 := ProverRwFull.ExternalFuns.op58,
+          op59 := ProverRwFull.ExternalFuns.op59, op60 := ProverRwFull.ExternalFuns.op60,
+          op61 := ProverRwFull.ExternalFuns.op61, op62 := ProverRwFull.ExternalFuns.op62,
+          op63 := ProverRwFull.ExternalFuns.op63, op64 := ProverRwFull.ExternalFuns.op64,
+          op65 := ProverRwFull.ExternalFuns.op65, op66 := ProverRwFull.ExternalFuns.op66,
+          op67 := ProverRwFull.ExternalFuns.op67, op68 := ProverRwFull.ExternalFuns.op68,
+          op69 := ProverRwFull.ExternalFuns.op69, op70 := ProverRwFull.ExternalFuns.op70,
+          op71 := ProverRwFull.ExternalFuns.op71, op72 := ProverRwFull.ExternalFuns.op72,
+          op73 := ProverRwFull.ExternalFuns.op73, op74 := ProverRwFull.ExternalFuns.op74,
+          op75 := ProverRwFull.ExternalFuns.op75, op76 := ProverRwFull.ExternalFuns.op76,
+          op77 := @ProverRwFull.ExternalFuns.op77 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op78 := @ProverRwFull.ExternalFuns.op78 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op79 := @ProverRwFull.ExternalFuns.op79 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op80 := @ProverRwFull.ExternalFuns.op80 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op81 := @ProverRwFull.ExternalFuns.op81 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op82 := ProverRwFull.ExternalFuns.op82, op83 := ProverRwFull.ExternalFuns.op83,
+          op84 := ProverRwFull.ExternalFuns.op84, op85 := ProverRwFull.ExternalFuns.op85,
+          op86 := ProverRwFull.ExternalFuns.op86, op87 := ProverRwFull.ExternalFuns.op87,
+          op88 := ProverRwFull.ExternalFuns.op88, op89 := ProverRwFull.ExternalFuns.op89,
+          op90 := ProverRwFull.ExternalFuns.op90, op91 := ProverRwFull.ExternalFuns.op91,
+          op92 := ProverRwFull.ExternalFuns.op92, op93 := ProverRwFull.ExternalFuns.op93,
+          op94 := ProverRwFull.ExternalFuns.op94, op95 := ProverRwFull.ExternalFuns.op95,
+          op96 := ProverRwFull.ExternalFuns.op96, op97 := ProverRwFull.ExternalFuns.op97,
+          op98 := ProverRwFull.ExternalFuns.op98, op99 := ProverRwFull.ExternalFuns.op99,
+          op100 := ProverRwFull.ExternalFuns.op100, op101 := ProverRwFull.ExternalFuns.op101,
+          op102 := ProverRwFull.ExternalFuns.op102, op103 := ProverRwFull.ExternalFuns.op103,
+          op104 := ProverRwFull.ExternalFuns.op104, op105 := ProverRwFull.ExternalFuns.op105,
+          op106 := ProverRwFull.ExternalFuns.op106, op107 := ProverRwFull.ExternalFuns.op107,
+          op108 := ProverRwFull.ExternalFuns.op108, op109 := ProverRwFull.ExternalFuns.op109,
+          op110 := ProverRwFull.ExternalFuns.op110, op111 := ProverRwFull.ExternalFuns.op111,
+          op112 := ProverRwFull.ExternalFuns.op112, op113 := ProverRwFull.ExternalFuns.op113,
+          op114 := ProverRwFull.ExternalFuns.op114, op115 := ProverRwFull.ExternalFuns.op115,
+          op116 := ProverRwFull.ExternalFuns.op116, op117 := ProverRwFull.ExternalFuns.op117,
+          op118 := ProverRwFull.ExternalFuns.op118, op119 := ProverRwFull.ExternalFuns.op119,
+          op120 := ProverRwFull.ExternalFuns.op120, op121 := ProverRwFull.ExternalFuns.op121,
+          op122 := @ProverRwFull.ExternalFuns.op122 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op123 := @ProverRwFull.ExternalFuns.op123 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op124 := @ProverRwFull.ExternalFuns.op124 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op125 := @ProverRwFull.ExternalFuns.op125 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op126 := @ProverRwFull.ExternalFuns.op126 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op127 := @ProverRwFull.ExternalFuns.op127 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op128 := @ProverRwFull.ExternalFuns.op128 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op129 := ProverRwFull.ExternalFuns.op129,
+          op130 := @ProverRwFull.ExternalFuns.op130 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op131 := @ProverRwFull.ExternalFuns.op131 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op132 := ProverRwFull.ExternalFuns.op132, op133 := ProverRwFull.ExternalFuns.op133,
+          op134 := ProverRwFull.ExternalFuns.op134,
+          op135 := @ProverRwFull.ExternalFuns.op135 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op136 := @ProverRwFull.ExternalFuns.op136 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op137 := @ProverRwFull.ExternalFuns.op137 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op138 := @ProverRwFull.ExternalFuns.op138 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op139 := @ProverRwFull.ExternalFuns.op139 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op140 := @ProverRwFull.ExternalFuns.op140 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op141 := @ProverRwFull.ExternalFuns.op141 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op142 := @ProverRwFull.ExternalFuns.op142 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op143 := @ProverRwFull.ExternalFuns.op143 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op144 := @ProverRwFull.ExternalFuns.op144 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op145 := @ProverRwFull.ExternalFuns.op145 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op146 := @ProverRwFull.ExternalFuns.op146 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op147 := @ProverRwFull.ExternalFuns.op147 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op148 := @ProverRwFull.ExternalFuns.op148 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op149 := @ProverRwFull.ExternalFuns.op149 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op150 := @ProverRwFull.ExternalFuns.op150 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op151 := @ProverRwFull.ExternalFuns.op151 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op152 := @ProverRwFull.ExternalFuns.op152 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op153 := @ProverRwFull.ExternalFuns.op153 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op154 := @ProverRwFull.ExternalFuns.op154 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op155 := @ProverRwFull.ExternalFuns.op155 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op156 := @ProverRwFull.ExternalFuns.op156 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op157 := @ProverRwFull.ExternalFuns.op157 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op158 := @ProverRwFull.ExternalFuns.op158 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op159 := @ProverRwFull.ExternalFuns.op159 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op160 := @ProverRwFull.ExternalFuns.op160 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op161 := @ProverRwFull.ExternalFuns.op161 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op162 := @ProverRwFull.ExternalFuns.op162 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op163 := ProverRwFull.ExternalFuns.op163, op164 := ProverRwFull.ExternalFuns.op164,
+          op165 := ProverRwFull.ExternalFuns.op165, op166 := ProverRwFull.ExternalFuns.op166,
+          op167 := ProverRwFull.ExternalFuns.op167, op168 := ProverRwFull.ExternalFuns.op168,
+          op169 := ProverRwFull.ExternalFuns.op169, op170 := ProverRwFull.ExternalFuns.op170,
+          op171 := ProverRwFull.ExternalFuns.op171, op172 := ProverRwFull.ExternalFuns.op172,
+          op173 := ProverRwFull.ExternalFuns.op173, op174 := ProverRwFull.ExternalFuns.op174,
+          op175 := ProverRwFull.ExternalFuns.op175, op176 := ProverRwFull.ExternalFuns.op176,
+          op177 := ProverRwFull.ExternalFuns.op177, op178 := ProverRwFull.ExternalFuns.op178,
+          op179 := ProverRwFull.ExternalFuns.op179, op180 := ProverRwFull.ExternalFuns.op180,
+          op181 := ProverRwFull.ExternalFuns.op181, op182 := ProverRwFull.ExternalFuns.op182,
+          op183 := ProverRwFull.ExternalFuns.op183, op184 := ProverRwFull.ExternalFuns.op184,
+          op185 := @ProverRwFull.ExternalFuns.op185 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op186 := @ProverRwFull.ExternalFuns.op186 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op187 := @ProverRwFull.ExternalFuns.op187 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op188 := ProverRwFull.ExternalFuns.op188, op189 := ProverRwFull.ExternalFuns.op189,
+          op190 := ProverRwFull.ExternalFuns.op190, op191 := ProverRwFull.ExternalFuns.op191,
+          op192 := ProverRwFull.ExternalFuns.op192, op193 := ProverRwFull.ExternalFuns.op193,
+          op194 := ProverRwFull.ExternalFuns.op194,
+          op195 := @ProverRwFull.ExternalFuns.op195 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op196 := ProverRwFull.ExternalFuns.op196, op197 := ProverRwFull.ExternalFuns.op197,
+          op198 := ProverRwFull.ExternalFuns.op198, op199 := ProverRwFull.ExternalFuns.op199,
+          op200 := ProverRwFull.ExternalFuns.op200, op201 := ProverRwFull.ExternalFuns.op201,
+          op202 := ProverRwFull.ExternalFuns.op202, op203 := ProverRwFull.ExternalFuns.op203,
+          op204 := ProverRwFull.ExternalFuns.op204, op205 := ProverRwFull.ExternalFuns.op205,
+          op206 := ProverRwFull.ExternalFuns.op206, op207 := ProverRwFull.ExternalFuns.op207,
+          op208 := ProverRwFull.ExternalFuns.op208,
+          op209 := @ProverRwFull.ExternalFuns.op209 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op210 := ProverRwFull.ExternalFuns.op210,
+          op211 := @ProverRwFull.ExternalFuns.op211 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op212 := @ProverRwFull.ExternalFuns.op212 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op213 := @ProverRwFull.ExternalFuns.op213 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op214 := @ProverRwFull.ExternalFuns.op214 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op215 := @ProverRwFull.ExternalFuns.op215 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op216 := @ProverRwFull.ExternalFuns.op216 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op217 := @ProverRwFull.ExternalFuns.op217 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op218 := @ProverRwFull.ExternalFuns.op218 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op219 := @ProverRwFull.ExternalFuns.op219 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op220 := @ProverRwFull.ExternalFuns.op220 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op221 := ProverRwFull.ExternalFuns.op221, op222 := ProverRwFull.ExternalFuns.op222,
+          op223 := ProverRwFull.ExternalFuns.op223, op224 := ProverRwFull.ExternalFuns.op224,
+          op225 := ProverRwFull.ExternalFuns.op225, op226 := ProverRwFull.ExternalFuns.op226,
+          op227 := ProverRwFull.ExternalFuns.op227, op228 := ProverRwFull.ExternalFuns.op228,
+          op229 := fun a b =>
+            R1Z.PV_CB_Op229Source.source (R1Z.PV_CB_Op229Transport.encode base a)
+              (R1Z.PV_CB_Op229Transport.encode base b),
+          op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+          op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+          op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+          op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+          op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+          op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+          op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+          op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+          op246 := @ProverRwFull.ExternalFuns.op246 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op247 := ProverRwFull.ExternalFuns.op247, op248 := ProverRwFull.ExternalFuns.op248,
+          op249 := ProverRwFull.ExternalFuns.op249, op250 := ProverRwFull.ExternalFuns.op250,
+          op251 := ProverRwFull.ExternalFuns.op251, op252 := ProverRwFull.ExternalFuns.op252,
+          op253 := ProverRwFull.ExternalFuns.op253, op254 := ProverRwFull.ExternalFuns.op254,
+          op255 := @ProverRwFull.ExternalFuns.op255 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op256 := ProverRwFull.ExternalFuns.op256,
+          op257 := @ProverRwFull.ExternalFuns.op257 (R1Z.PV_Join_PublicDictionary.native base) ops,
+          op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+          op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 }))
+'R1Z.PV_Join_PublicDictionary.raw_form' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicDictionary.dictionary : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns),
+  R1Z.PV_Join_PublicInstall.selected base ops =
+    R1Z.PV_TraceValueInstall.selected (R1Z.PV_Join_PublicDictionary.raw base ops) :=
+fun base ops =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            R1Z.PV_TraceValueInstall.selected _a =
+              R1Z.PV_TraceValueInstall.selected (R1Z.PV_Join_PublicDictionary.raw base ops))
+          (R1Z.PV_Join_PublicDictionary.raw_form base ops)))
+      (Eq.refl (R1Z.PV_TraceValueInstall.selected (R1Z.PV_Join_PublicDictionary.raw base ops))))
+'R1Z.PV_Join_PublicDictionary.dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicInstall.source : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (a b : R1Z.PV_Join_PublicInstall.Late base),
+  ProverRwFull.ExternalFuns.op229 a b =
+    R1Z.PV_CB_Op229Source.source (R1Z.PV_CB_Op229Transport.encode base a) (R1Z.PV_CB_Op229Transport.encode base b) :=
+fun base ops a b => R1Z.PV_CB_Op229Source.op229_source base ops a b
+'R1Z.PV_Join_PublicInstall.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicInstall.callback_removed : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns)
+  (callback : R1Z.PV_Join_PublicInstall.Late base → R1Z.PV_Join_PublicInstall.Late base → Aeneas.Std.Result Bool),
+  R1Z.PV_Join_PublicInstall.selected base
+      { op0 := @ProverRwFull.ExternalFuns.op0 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op1 := @ProverRwFull.ExternalFuns.op1 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op2 := ProverRwFull.ExternalFuns.op2,
+        op3 := @ProverRwFull.ExternalFuns.op3 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op4 := @ProverRwFull.ExternalFuns.op4 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op5 := @ProverRwFull.ExternalFuns.op5 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op6 := @ProverRwFull.ExternalFuns.op6 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op7 := @ProverRwFull.ExternalFuns.op7 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op8 := @ProverRwFull.ExternalFuns.op8 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op9 := @ProverRwFull.ExternalFuns.op9 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op10 := ProverRwFull.ExternalFuns.op10,
+        op11 := @ProverRwFull.ExternalFuns.op11 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op12 := @ProverRwFull.ExternalFuns.op12 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op13 := ProverRwFull.ExternalFuns.op13,
+        op14 := @ProverRwFull.ExternalFuns.op14 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op15 := ProverRwFull.ExternalFuns.op15,
+        op16 := @ProverRwFull.ExternalFuns.op16 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op17 := ProverRwFull.ExternalFuns.op17, op18 := ProverRwFull.ExternalFuns.op18,
+        op19 := ProverRwFull.ExternalFuns.op19, op20 := ProverRwFull.ExternalFuns.op20,
+        op21 := ProverRwFull.ExternalFuns.op21,
+        op22 := @ProverRwFull.ExternalFuns.op22 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op23 := ProverRwFull.ExternalFuns.op23, op24 := ProverRwFull.ExternalFuns.op24,
+        op25 := ProverRwFull.ExternalFuns.op25,
+        op26 := @ProverRwFull.ExternalFuns.op26 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op27 := ProverRwFull.ExternalFuns.op27, op28 := ProverRwFull.ExternalFuns.op28,
+        op29 := ProverRwFull.ExternalFuns.op29, op30 := ProverRwFull.ExternalFuns.op30,
+        op31 := ProverRwFull.ExternalFuns.op31,
+        op32 := @ProverRwFull.ExternalFuns.op32 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op33 := @ProverRwFull.ExternalFuns.op33 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op34 := @ProverRwFull.ExternalFuns.op34 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op35 := ProverRwFull.ExternalFuns.op35,
+        op36 := @ProverRwFull.ExternalFuns.op36 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op37 := ProverRwFull.ExternalFuns.op37, op38 := ProverRwFull.ExternalFuns.op38,
+        op39 := ProverRwFull.ExternalFuns.op39, op40 := ProverRwFull.ExternalFuns.op40,
+        op41 := ProverRwFull.ExternalFuns.op41, op42 := ProverRwFull.ExternalFuns.op42,
+        op43 := ProverRwFull.ExternalFuns.op43, op44 := ProverRwFull.ExternalFuns.op44,
+        op45 := ProverRwFull.ExternalFuns.op45, op46 := ProverRwFull.ExternalFuns.op46,
+        op47 := ProverRwFull.ExternalFuns.op47, op48 := ProverRwFull.ExternalFuns.op48,
+        op49 := ProverRwFull.ExternalFuns.op49, op50 := ProverRwFull.ExternalFuns.op50,
+        op51 := ProverRwFull.ExternalFuns.op51, op52 := ProverRwFull.ExternalFuns.op52,
+        op53 := ProverRwFull.ExternalFuns.op53, op54 := ProverRwFull.ExternalFuns.op54,
+        op55 := ProverRwFull.ExternalFuns.op55, op56 := ProverRwFull.ExternalFuns.op56,
+        op57 := ProverRwFull.ExternalFuns.op57, op58 := ProverRwFull.ExternalFuns.op58,
+        op59 := ProverRwFull.ExternalFuns.op59, op60 := ProverRwFull.ExternalFuns.op60,
+        op61 := ProverRwFull.ExternalFuns.op61, op62 := ProverRwFull.ExternalFuns.op62,
+        op63 := ProverRwFull.ExternalFuns.op63, op64 := ProverRwFull.ExternalFuns.op64,
+        op65 := ProverRwFull.ExternalFuns.op65, op66 := ProverRwFull.ExternalFuns.op66,
+        op67 := ProverRwFull.ExternalFuns.op67, op68 := ProverRwFull.ExternalFuns.op68,
+        op69 := ProverRwFull.ExternalFuns.op69, op70 := ProverRwFull.ExternalFuns.op70,
+        op71 := ProverRwFull.ExternalFuns.op71, op72 := ProverRwFull.ExternalFuns.op72,
+        op73 := ProverRwFull.ExternalFuns.op73, op74 := ProverRwFull.ExternalFuns.op74,
+        op75 := ProverRwFull.ExternalFuns.op75, op76 := ProverRwFull.ExternalFuns.op76,
+        op77 := @ProverRwFull.ExternalFuns.op77 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op78 := @ProverRwFull.ExternalFuns.op78 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op79 := @ProverRwFull.ExternalFuns.op79 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op80 := @ProverRwFull.ExternalFuns.op80 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op81 := @ProverRwFull.ExternalFuns.op81 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op82 := ProverRwFull.ExternalFuns.op82, op83 := ProverRwFull.ExternalFuns.op83,
+        op84 := ProverRwFull.ExternalFuns.op84, op85 := ProverRwFull.ExternalFuns.op85,
+        op86 := ProverRwFull.ExternalFuns.op86, op87 := ProverRwFull.ExternalFuns.op87,
+        op88 := ProverRwFull.ExternalFuns.op88, op89 := ProverRwFull.ExternalFuns.op89,
+        op90 := ProverRwFull.ExternalFuns.op90, op91 := ProverRwFull.ExternalFuns.op91,
+        op92 := ProverRwFull.ExternalFuns.op92, op93 := ProverRwFull.ExternalFuns.op93,
+        op94 := ProverRwFull.ExternalFuns.op94, op95 := ProverRwFull.ExternalFuns.op95,
+        op96 := ProverRwFull.ExternalFuns.op96, op97 := ProverRwFull.ExternalFuns.op97,
+        op98 := ProverRwFull.ExternalFuns.op98, op99 := ProverRwFull.ExternalFuns.op99,
+        op100 := ProverRwFull.ExternalFuns.op100, op101 := ProverRwFull.ExternalFuns.op101,
+        op102 := ProverRwFull.ExternalFuns.op102, op103 := ProverRwFull.ExternalFuns.op103,
+        op104 := ProverRwFull.ExternalFuns.op104, op105 := ProverRwFull.ExternalFuns.op105,
+        op106 := ProverRwFull.ExternalFuns.op106, op107 := ProverRwFull.ExternalFuns.op107,
+        op108 := ProverRwFull.ExternalFuns.op108, op109 := ProverRwFull.ExternalFuns.op109,
+        op110 := ProverRwFull.ExternalFuns.op110, op111 := ProverRwFull.ExternalFuns.op111,
+        op112 := ProverRwFull.ExternalFuns.op112, op113 := ProverRwFull.ExternalFuns.op113,
+        op114 := ProverRwFull.ExternalFuns.op114, op115 := ProverRwFull.ExternalFuns.op115,
+        op116 := ProverRwFull.ExternalFuns.op116, op117 := ProverRwFull.ExternalFuns.op117,
+        op118 := ProverRwFull.ExternalFuns.op118, op119 := ProverRwFull.ExternalFuns.op119,
+        op120 := ProverRwFull.ExternalFuns.op120, op121 := ProverRwFull.ExternalFuns.op121,
+        op122 := @ProverRwFull.ExternalFuns.op122 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op123 := @ProverRwFull.ExternalFuns.op123 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op124 := @ProverRwFull.ExternalFuns.op124 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op125 := @ProverRwFull.ExternalFuns.op125 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op126 := @ProverRwFull.ExternalFuns.op126 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op127 := @ProverRwFull.ExternalFuns.op127 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op128 := @ProverRwFull.ExternalFuns.op128 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op129 := ProverRwFull.ExternalFuns.op129,
+        op130 := @ProverRwFull.ExternalFuns.op130 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op131 := @ProverRwFull.ExternalFuns.op131 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op132 := ProverRwFull.ExternalFuns.op132, op133 := ProverRwFull.ExternalFuns.op133,
+        op134 := ProverRwFull.ExternalFuns.op134,
+        op135 := @ProverRwFull.ExternalFuns.op135 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op136 := @ProverRwFull.ExternalFuns.op136 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op137 := @ProverRwFull.ExternalFuns.op137 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op138 := @ProverRwFull.ExternalFuns.op138 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op139 := @ProverRwFull.ExternalFuns.op139 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op140 := @ProverRwFull.ExternalFuns.op140 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op141 := @ProverRwFull.ExternalFuns.op141 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op142 := @ProverRwFull.ExternalFuns.op142 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op143 := @ProverRwFull.ExternalFuns.op143 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op144 := @ProverRwFull.ExternalFuns.op144 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op145 := @ProverRwFull.ExternalFuns.op145 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op146 := @ProverRwFull.ExternalFuns.op146 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op147 := @ProverRwFull.ExternalFuns.op147 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op148 := @ProverRwFull.ExternalFuns.op148 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op149 := @ProverRwFull.ExternalFuns.op149 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op150 := @ProverRwFull.ExternalFuns.op150 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op151 := @ProverRwFull.ExternalFuns.op151 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op152 := @ProverRwFull.ExternalFuns.op152 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op153 := @ProverRwFull.ExternalFuns.op153 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op154 := @ProverRwFull.ExternalFuns.op154 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op155 := @ProverRwFull.ExternalFuns.op155 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op156 := @ProverRwFull.ExternalFuns.op156 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op157 := @ProverRwFull.ExternalFuns.op157 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op158 := @ProverRwFull.ExternalFuns.op158 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op159 := @ProverRwFull.ExternalFuns.op159 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op160 := @ProverRwFull.ExternalFuns.op160 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op161 := @ProverRwFull.ExternalFuns.op161 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op162 := @ProverRwFull.ExternalFuns.op162 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op163 := ProverRwFull.ExternalFuns.op163, op164 := ProverRwFull.ExternalFuns.op164,
+        op165 := ProverRwFull.ExternalFuns.op165, op166 := ProverRwFull.ExternalFuns.op166,
+        op167 := ProverRwFull.ExternalFuns.op167, op168 := ProverRwFull.ExternalFuns.op168,
+        op169 := ProverRwFull.ExternalFuns.op169, op170 := ProverRwFull.ExternalFuns.op170,
+        op171 := ProverRwFull.ExternalFuns.op171, op172 := ProverRwFull.ExternalFuns.op172,
+        op173 := ProverRwFull.ExternalFuns.op173, op174 := ProverRwFull.ExternalFuns.op174,
+        op175 := ProverRwFull.ExternalFuns.op175, op176 := ProverRwFull.ExternalFuns.op176,
+        op177 := ProverRwFull.ExternalFuns.op177, op178 := ProverRwFull.ExternalFuns.op178,
+        op179 := ProverRwFull.ExternalFuns.op179, op180 := ProverRwFull.ExternalFuns.op180,
+        op181 := ProverRwFull.ExternalFuns.op181, op182 := ProverRwFull.ExternalFuns.op182,
+        op183 := ProverRwFull.ExternalFuns.op183, op184 := ProverRwFull.ExternalFuns.op184,
+        op185 := @ProverRwFull.ExternalFuns.op185 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op186 := @ProverRwFull.ExternalFuns.op186 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op187 := @ProverRwFull.ExternalFuns.op187 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op188 := ProverRwFull.ExternalFuns.op188, op189 := ProverRwFull.ExternalFuns.op189,
+        op190 := ProverRwFull.ExternalFuns.op190, op191 := ProverRwFull.ExternalFuns.op191,
+        op192 := ProverRwFull.ExternalFuns.op192, op193 := ProverRwFull.ExternalFuns.op193,
+        op194 := ProverRwFull.ExternalFuns.op194,
+        op195 := @ProverRwFull.ExternalFuns.op195 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op196 := ProverRwFull.ExternalFuns.op196, op197 := ProverRwFull.ExternalFuns.op197,
+        op198 := ProverRwFull.ExternalFuns.op198, op199 := ProverRwFull.ExternalFuns.op199,
+        op200 := ProverRwFull.ExternalFuns.op200, op201 := ProverRwFull.ExternalFuns.op201,
+        op202 := ProverRwFull.ExternalFuns.op202, op203 := ProverRwFull.ExternalFuns.op203,
+        op204 := ProverRwFull.ExternalFuns.op204, op205 := ProverRwFull.ExternalFuns.op205,
+        op206 := ProverRwFull.ExternalFuns.op206, op207 := ProverRwFull.ExternalFuns.op207,
+        op208 := ProverRwFull.ExternalFuns.op208,
+        op209 := @ProverRwFull.ExternalFuns.op209 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op210 := ProverRwFull.ExternalFuns.op210,
+        op211 := @ProverRwFull.ExternalFuns.op211 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op212 := @ProverRwFull.ExternalFuns.op212 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op213 := @ProverRwFull.ExternalFuns.op213 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op214 := @ProverRwFull.ExternalFuns.op214 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op215 := @ProverRwFull.ExternalFuns.op215 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op216 := @ProverRwFull.ExternalFuns.op216 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op217 := @ProverRwFull.ExternalFuns.op217 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op218 := @ProverRwFull.ExternalFuns.op218 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op219 := @ProverRwFull.ExternalFuns.op219 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op220 := @ProverRwFull.ExternalFuns.op220 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op221 := ProverRwFull.ExternalFuns.op221, op222 := ProverRwFull.ExternalFuns.op222,
+        op223 := ProverRwFull.ExternalFuns.op223, op224 := ProverRwFull.ExternalFuns.op224,
+        op225 := ProverRwFull.ExternalFuns.op225, op226 := ProverRwFull.ExternalFuns.op226,
+        op227 := ProverRwFull.ExternalFuns.op227, op228 := ProverRwFull.ExternalFuns.op228, op229 := callback,
+        op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+        op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+        op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+        op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+        op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+        op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+        op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+        op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+        op246 := @ProverRwFull.ExternalFuns.op246 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op247 := ProverRwFull.ExternalFuns.op247, op248 := ProverRwFull.ExternalFuns.op248,
+        op249 := ProverRwFull.ExternalFuns.op249, op250 := ProverRwFull.ExternalFuns.op250,
+        op251 := ProverRwFull.ExternalFuns.op251, op252 := ProverRwFull.ExternalFuns.op252,
+        op253 := ProverRwFull.ExternalFuns.op253, op254 := ProverRwFull.ExternalFuns.op254,
+        op255 := @ProverRwFull.ExternalFuns.op255 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op256 := ProverRwFull.ExternalFuns.op256,
+        op257 := @ProverRwFull.ExternalFuns.op257 (R1Z.PV_Join_PublicInstall.native base) ops,
+        op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+        op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 } =
+    R1Z.PV_Join_PublicInstall.selected base ops :=
+fun base ops callback =>
+  have raw := rfl;
+  congrArg R1Z.PV_TraceValueInstall.selected raw
+'R1Z.PV_Join_PublicInstall.callback_removed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicInstall.p6_source : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (a b : R1Z.PV_Join_PublicInstall.Late base),
+  ProverRwFull.ExternalFuns.op229 a b =
+    R1Z.PV_CB_Op229Source.source (R1Z.PV_CB_Op229Transport.encode base a) (R1Z.PV_CB_Op229Transport.encode base b) :=
+fun base ops a b => R1Z.PV_Join_PublicInstall.source base ops a b
+'R1Z.PV_Join_PublicInstall.p6_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicOp20.native_roundtrip : ∀ (x : R1Z.PV_Join_PublicOp20.NativeAfter),
+  R1Z.PV_Join_PublicOp20.decode (R1Z.PV_Join_PublicOp20.encode x) = x :=
+fun x =>
+  let ⟨next_pair_index✝, next_root✝, next_frontier✝, h✝⟩ := x
+  Eq.symm h✝ ▸
+    Eq.refl
+      (R1Z.PV_Join_PublicOp20.decode
+        (R1Z.PV_Join_PublicOp20.encode
+          { next_pair_index := next_pair_index✝, next_root := next_root✝, next_frontier := next_frontier✝ }))
+'R1Z.PV_Join_PublicOp20.native_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicOp20.cb3_roundtrip : ∀ (x : R1Z.PV_Join_PublicOp20.CB3After),
+  R1Z.PV_Join_PublicOp20.encode (R1Z.PV_Join_PublicOp20.decode x) = x :=
+fun x =>
+  let ⟨next_pair_index✝, next_root✝, next_frontier✝, h✝⟩ := x
+  Eq.symm h✝ ▸
+    Eq.refl
+      (R1Z.PV_Join_PublicOp20.encode
+        (R1Z.PV_Join_PublicOp20.decode
+          { next_pair_index := next_pair_index✝, next_root := next_root✝, next_frontier := next_frontier✝ }))
+'R1Z.PV_Join_PublicOp20.cb3_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_PublicOp20.selected_source : ∀ (base : ProverRwFull.ExternalTypes)
+  (left : ProverRwFull.ExternalFuns) (right : ProverRwFull.ExternalFuns) (a b : R1Z.PV_CB_Op229Transport.Late base),
+  ProverRwFull.ExternalFuns.op229 a b =
+    ProverRwFull.ExternalFuns.op229 (R1Z.PV_Join_PublicCarrierBridge.encode base a)
+      (R1Z.PV_Join_PublicCarrierBridge.encode base b) :=
+fun base left right a b =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            ProverRwFull.ExternalFuns.op229 (R1Z.PV_Join_PublicCarrierBridge.encode base a)
+              (R1Z.PV_Join_PublicCarrierBridge.encode base b))
+        (R1Z.PV_Join_PublicInstall.source base left a b)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            R1Z.PV_CB_Op229Source.source (R1Z.PV_CB_Op229Transport.encode base a)
+                (R1Z.PV_CB_Op229Transport.encode base b) =
+              _a)
+          (R1Z.PV_CB3_Op229Source.op229_source base right (R1Z.PV_Join_PublicCarrierBridge.encode base a)
+            (R1Z.PV_Join_PublicCarrierBridge.encode base b))))
+      (R1Z.PV_Join_PublicCarrierBridge.source base a b))
+'R1Z.PV_Join_PublicOp20.selected_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_RawSelectedMismatch.raw_entry_unconstrained : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns),
+  ∃ other,
+    ProverRwFull.ExternalFuns.op82 = Aeneas.Std.Result.fail Aeneas.Std.Error.panic ∧
+      ProverRwFull.ExternalFuns.op82 = Aeneas.Std.Result.ok 113#u8 ∧
+        ProverRwFull.ExternalFuns.op82 = Aeneas.Std.Result.ok 113#u8 :=
+fun [inst : ProverRwFull.ExternalTypes] ops =>
+  Exists.intro
+    { op0 := @ProverRwFull.ExternalFuns.op0 inst ops, op1 := @ProverRwFull.ExternalFuns.op1 inst ops,
+      op2 := ProverRwFull.ExternalFuns.op2, op3 := @ProverRwFull.ExternalFuns.op3 inst ops,
+      op4 := @ProverRwFull.ExternalFuns.op4 inst ops, op5 := @ProverRwFull.ExternalFuns.op5 inst ops,
+      op6 := @ProverRwFull.ExternalFuns.op6 inst ops, op7 := @ProverRwFull.ExternalFuns.op7 inst ops,
+      op8 := @ProverRwFull.ExternalFuns.op8 inst ops, op9 := @ProverRwFull.ExternalFuns.op9 inst ops,
+      op10 := ProverRwFull.ExternalFuns.op10, op11 := @ProverRwFull.ExternalFuns.op11 inst ops,
+      op12 := @ProverRwFull.ExternalFuns.op12 inst ops, op13 := ProverRwFull.ExternalFuns.op13,
+      op14 := @ProverRwFull.ExternalFuns.op14 inst ops, op15 := ProverRwFull.ExternalFuns.op15,
+      op16 := @ProverRwFull.ExternalFuns.op16 inst ops, op17 := ProverRwFull.ExternalFuns.op17,
+      op18 := ProverRwFull.ExternalFuns.op18, op19 := ProverRwFull.ExternalFuns.op19,
+      op20 := ProverRwFull.ExternalFuns.op20, op21 := ProverRwFull.ExternalFuns.op21,
+      op22 := @ProverRwFull.ExternalFuns.op22 inst ops, op23 := ProverRwFull.ExternalFuns.op23,
+      op24 := ProverRwFull.ExternalFuns.op24, op25 := ProverRwFull.ExternalFuns.op25,
+      op26 := @ProverRwFull.ExternalFuns.op26 inst ops, op27 := ProverRwFull.ExternalFuns.op27,
+      op28 := ProverRwFull.ExternalFuns.op28, op29 := ProverRwFull.ExternalFuns.op29,
+      op30 := ProverRwFull.ExternalFuns.op30, op31 := ProverRwFull.ExternalFuns.op31,
+      op32 := @ProverRwFull.ExternalFuns.op32 inst ops, op33 := @ProverRwFull.ExternalFuns.op33 inst ops,
+      op34 := @ProverRwFull.ExternalFuns.op34 inst ops, op35 := ProverRwFull.ExternalFuns.op35,
+      op36 := @ProverRwFull.ExternalFuns.op36 inst ops, op37 := ProverRwFull.ExternalFuns.op37,
+      op38 := ProverRwFull.ExternalFuns.op38, op39 := ProverRwFull.ExternalFuns.op39,
+      op40 := ProverRwFull.ExternalFuns.op40, op41 := ProverRwFull.ExternalFuns.op41,
+      op42 := ProverRwFull.ExternalFuns.op42, op43 := ProverRwFull.ExternalFuns.op43,
+      op44 := ProverRwFull.ExternalFuns.op44, op45 := ProverRwFull.ExternalFuns.op45,
+      op46 := ProverRwFull.ExternalFuns.op46, op47 := ProverRwFull.ExternalFuns.op47,
+      op48 := ProverRwFull.ExternalFuns.op48, op49 := ProverRwFull.ExternalFuns.op49,
+      op50 := ProverRwFull.ExternalFuns.op50, op51 := ProverRwFull.ExternalFuns.op51,
+      op52 := ProverRwFull.ExternalFuns.op52, op53 := ProverRwFull.ExternalFuns.op53,
+      op54 := ProverRwFull.ExternalFuns.op54, op55 := ProverRwFull.ExternalFuns.op55,
+      op56 := ProverRwFull.ExternalFuns.op56, op57 := ProverRwFull.ExternalFuns.op57,
+      op58 := ProverRwFull.ExternalFuns.op58, op59 := ProverRwFull.ExternalFuns.op59,
+      op60 := ProverRwFull.ExternalFuns.op60, op61 := ProverRwFull.ExternalFuns.op61,
+      op62 := ProverRwFull.ExternalFuns.op62, op63 := ProverRwFull.ExternalFuns.op63,
+      op64 := ProverRwFull.ExternalFuns.op64, op65 := ProverRwFull.ExternalFuns.op65,
+      op66 := ProverRwFull.ExternalFuns.op66, op67 := ProverRwFull.ExternalFuns.op67,
+      op68 := ProverRwFull.ExternalFuns.op68, op69 := ProverRwFull.ExternalFuns.op69,
+      op70 := ProverRwFull.ExternalFuns.op70, op71 := ProverRwFull.ExternalFuns.op71,
+      op72 := ProverRwFull.ExternalFuns.op72, op73 := ProverRwFull.ExternalFuns.op73,
+      op74 := ProverRwFull.ExternalFuns.op74, op75 := ProverRwFull.ExternalFuns.op75,
+      op76 := ProverRwFull.ExternalFuns.op76, op77 := @ProverRwFull.ExternalFuns.op77 inst ops,
+      op78 := @ProverRwFull.ExternalFuns.op78 inst ops, op79 := @ProverRwFull.ExternalFuns.op79 inst ops,
+      op80 := @ProverRwFull.ExternalFuns.op80 inst ops, op81 := @ProverRwFull.ExternalFuns.op81 inst ops,
+      op82 := Aeneas.Std.Result.fail Aeneas.Std.Error.panic, op83 := ProverRwFull.ExternalFuns.op83,
+      op84 := ProverRwFull.ExternalFuns.op84, op85 := ProverRwFull.ExternalFuns.op85,
+      op86 := ProverRwFull.ExternalFuns.op86, op87 := ProverRwFull.ExternalFuns.op87,
+      op88 := ProverRwFull.ExternalFuns.op88, op89 := ProverRwFull.ExternalFuns.op89,
+      op90 := ProverRwFull.ExternalFuns.op90, op91 := ProverRwFull.ExternalFuns.op91,
+      op92 := ProverRwFull.ExternalFuns.op92, op93 := ProverRwFull.ExternalFuns.op93,
+      op94 := ProverRwFull.ExternalFuns.op94, op95 := ProverRwFull.ExternalFuns.op95,
+      op96 := ProverRwFull.ExternalFuns.op96, op97 := ProverRwFull.ExternalFuns.op97,
+      op98 := ProverRwFull.ExternalFuns.op98, op99 := ProverRwFull.ExternalFuns.op99,
+      op100 := ProverRwFull.ExternalFuns.op100, op101 := ProverRwFull.ExternalFuns.op101,
+      op102 := ProverRwFull.ExternalFuns.op102, op103 := ProverRwFull.ExternalFuns.op103,
+      op104 := ProverRwFull.ExternalFuns.op104, op105 := ProverRwFull.ExternalFuns.op105,
+      op106 := ProverRwFull.ExternalFuns.op106, op107 := ProverRwFull.ExternalFuns.op107,
+      op108 := ProverRwFull.ExternalFuns.op108, op109 := ProverRwFull.ExternalFuns.op109,
+      op110 := ProverRwFull.ExternalFuns.op110, op111 := ProverRwFull.ExternalFuns.op111,
+      op112 := ProverRwFull.ExternalFuns.op112, op113 := ProverRwFull.ExternalFuns.op113,
+      op114 := ProverRwFull.ExternalFuns.op114, op115 := ProverRwFull.ExternalFuns.op115,
+      op116 := ProverRwFull.ExternalFuns.op116, op117 := ProverRwFull.ExternalFuns.op117,
+      op118 := ProverRwFull.ExternalFuns.op118, op119 := ProverRwFull.ExternalFuns.op119,
+      op120 := ProverRwFull.ExternalFuns.op120, op121 := ProverRwFull.ExternalFuns.op121,
+      op122 := @ProverRwFull.ExternalFuns.op122 inst ops, op123 := @ProverRwFull.ExternalFuns.op123 inst ops,
+      op124 := @ProverRwFull.ExternalFuns.op124 inst ops, op125 := @ProverRwFull.ExternalFuns.op125 inst ops,
+      op126 := @ProverRwFull.ExternalFuns.op126 inst ops, op127 := @ProverRwFull.ExternalFuns.op127 inst ops,
+      op128 := @ProverRwFull.ExternalFuns.op128 inst ops, op129 := ProverRwFull.ExternalFuns.op129,
+      op130 := @ProverRwFull.ExternalFuns.op130 inst ops, op131 := @ProverRwFull.ExternalFuns.op131 inst ops,
+      op132 := ProverRwFull.ExternalFuns.op132, op133 := ProverRwFull.ExternalFuns.op133,
+      op134 := ProverRwFull.ExternalFuns.op134, op135 := @ProverRwFull.ExternalFuns.op135 inst ops,
+      op136 := @ProverRwFull.ExternalFuns.op136 inst ops, op137 := @ProverRwFull.ExternalFuns.op137 inst ops,
+      op138 := @ProverRwFull.ExternalFuns.op138 inst ops, op139 := @ProverRwFull.ExternalFuns.op139 inst ops,
+      op140 := @ProverRwFull.ExternalFuns.op140 inst ops, op141 := @ProverRwFull.ExternalFuns.op141 inst ops,
+      op142 := @ProverRwFull.ExternalFuns.op142 inst ops, op143 := @ProverRwFull.ExternalFuns.op143 inst ops,
+      op144 := @ProverRwFull.ExternalFuns.op144 inst ops, op145 := @ProverRwFull.ExternalFuns.op145 inst ops,
+      op146 := @ProverRwFull.ExternalFuns.op146 inst ops, op147 := @ProverRwFull.ExternalFuns.op147 inst ops,
+      op148 := @ProverRwFull.ExternalFuns.op148 inst ops, op149 := @ProverRwFull.ExternalFuns.op149 inst ops,
+      op150 := @ProverRwFull.ExternalFuns.op150 inst ops, op151 := @ProverRwFull.ExternalFuns.op151 inst ops,
+      op152 := @ProverRwFull.ExternalFuns.op152 inst ops, op153 := @ProverRwFull.ExternalFuns.op153 inst ops,
+      op154 := @ProverRwFull.ExternalFuns.op154 inst ops, op155 := @ProverRwFull.ExternalFuns.op155 inst ops,
+      op156 := @ProverRwFull.ExternalFuns.op156 inst ops, op157 := @ProverRwFull.ExternalFuns.op157 inst ops,
+      op158 := @ProverRwFull.ExternalFuns.op158 inst ops, op159 := @ProverRwFull.ExternalFuns.op159 inst ops,
+      op160 := @ProverRwFull.ExternalFuns.op160 inst ops, op161 := @ProverRwFull.ExternalFuns.op161 inst ops,
+      op162 := @ProverRwFull.ExternalFuns.op162 inst ops, op163 := ProverRwFull.ExternalFuns.op163,
+      op164 := ProverRwFull.ExternalFuns.op164, op165 := ProverRwFull.ExternalFuns.op165,
+      op166 := ProverRwFull.ExternalFuns.op166, op167 := ProverRwFull.ExternalFuns.op167,
+      op168 := ProverRwFull.ExternalFuns.op168, op169 := ProverRwFull.ExternalFuns.op169,
+      op170 := ProverRwFull.ExternalFuns.op170, op171 := ProverRwFull.ExternalFuns.op171,
+      op172 := ProverRwFull.ExternalFuns.op172, op173 := ProverRwFull.ExternalFuns.op173,
+      op174 := ProverRwFull.ExternalFuns.op174, op175 := ProverRwFull.ExternalFuns.op175,
+      op176 := ProverRwFull.ExternalFuns.op176, op177 := ProverRwFull.ExternalFuns.op177,
+      op178 := ProverRwFull.ExternalFuns.op178, op179 := ProverRwFull.ExternalFuns.op179,
+      op180 := ProverRwFull.ExternalFuns.op180, op181 := ProverRwFull.ExternalFuns.op181,
+      op182 := ProverRwFull.ExternalFuns.op182, op183 := ProverRwFull.ExternalFuns.op183,
+      op184 := ProverRwFull.ExternalFuns.op184, op185 := @ProverRwFull.ExternalFuns.op185 inst ops,
+      op186 := @ProverRwFull.ExternalFuns.op186 inst ops, op187 := @ProverRwFull.ExternalFuns.op187 inst ops,
+      op188 := ProverRwFull.ExternalFuns.op188, op189 := ProverRwFull.ExternalFuns.op189,
+      op190 := ProverRwFull.ExternalFuns.op190, op191 := ProverRwFull.ExternalFuns.op191,
+      op192 := ProverRwFull.ExternalFuns.op192, op193 := ProverRwFull.ExternalFuns.op193,
+      op194 := ProverRwFull.ExternalFuns.op194, op195 := @ProverRwFull.ExternalFuns.op195 inst ops,
+      op196 := ProverRwFull.ExternalFuns.op196, op197 := ProverRwFull.ExternalFuns.op197,
+      op198 := ProverRwFull.ExternalFuns.op198, op199 := ProverRwFull.ExternalFuns.op199,
+      op200 := ProverRwFull.ExternalFuns.op200, op201 := ProverRwFull.ExternalFuns.op201,
+      op202 := ProverRwFull.ExternalFuns.op202, op203 := ProverRwFull.ExternalFuns.op203,
+      op204 := ProverRwFull.ExternalFuns.op204, op205 := ProverRwFull.ExternalFuns.op205,
+      op206 := ProverRwFull.ExternalFuns.op206, op207 := ProverRwFull.ExternalFuns.op207,
+      op208 := ProverRwFull.ExternalFuns.op208, op209 := @ProverRwFull.ExternalFuns.op209 inst ops,
+      op210 := ProverRwFull.ExternalFuns.op210, op211 := @ProverRwFull.ExternalFuns.op211 inst ops,
+      op212 := @ProverRwFull.ExternalFuns.op212 inst ops, op213 := @ProverRwFull.ExternalFuns.op213 inst ops,
+      op214 := @ProverRwFull.ExternalFuns.op214 inst ops, op215 := @ProverRwFull.ExternalFuns.op215 inst ops,
+      op216 := @ProverRwFull.ExternalFuns.op216 inst ops, op217 := @ProverRwFull.ExternalFuns.op217 inst ops,
+      op218 := @ProverRwFull.ExternalFuns.op218 inst ops, op219 := @ProverRwFull.ExternalFuns.op219 inst ops,
+      op220 := @ProverRwFull.ExternalFuns.op220 inst ops, op221 := ProverRwFull.ExternalFuns.op221,
+      op222 := ProverRwFull.ExternalFuns.op222, op223 := ProverRwFull.ExternalFuns.op223,
+      op224 := ProverRwFull.ExternalFuns.op224, op225 := ProverRwFull.ExternalFuns.op225,
+      op226 := ProverRwFull.ExternalFuns.op226, op227 := ProverRwFull.ExternalFuns.op227,
+      op228 := ProverRwFull.ExternalFuns.op228, op229 := ProverRwFull.ExternalFuns.op229,
+      op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+      op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+      op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+      op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+      op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+      op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+      op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+      op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+      op246 := @ProverRwFull.ExternalFuns.op246 inst ops, op247 := ProverRwFull.ExternalFuns.op247,
+      op248 := ProverRwFull.ExternalFuns.op248, op249 := ProverRwFull.ExternalFuns.op249,
+      op250 := ProverRwFull.ExternalFuns.op250, op251 := ProverRwFull.ExternalFuns.op251,
+      op252 := ProverRwFull.ExternalFuns.op252, op253 := ProverRwFull.ExternalFuns.op253,
+      op254 := ProverRwFull.ExternalFuns.op254, op255 := @ProverRwFull.ExternalFuns.op255 inst ops,
+      op256 := ProverRwFull.ExternalFuns.op256, op257 := @ProverRwFull.ExternalFuns.op257 inst ops,
+      op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+      op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 }
+    ⟨rfl, ⟨rfl, rfl⟩⟩
+'R1Z.PV_Join_RawSelectedMismatch.raw_entry_unconstrained' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_RawSelectedMismatch.no_universal_raw_source : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns),
+  ¬∀ (other : ProverRwFull.ExternalFuns), ProverRwFull.ExternalFuns.op82 = Aeneas.Std.Result.ok 113#u8 :=
+fun [inst : ProverRwFull.ExternalTypes] ops h =>
+  have bad :=
+    h
+      { op0 := @ProverRwFull.ExternalFuns.op0 inst ops, op1 := @ProverRwFull.ExternalFuns.op1 inst ops,
+        op2 := ProverRwFull.ExternalFuns.op2, op3 := @ProverRwFull.ExternalFuns.op3 inst ops,
+        op4 := @ProverRwFull.ExternalFuns.op4 inst ops, op5 := @ProverRwFull.ExternalFuns.op5 inst ops,
+        op6 := @ProverRwFull.ExternalFuns.op6 inst ops, op7 := @ProverRwFull.ExternalFuns.op7 inst ops,
+        op8 := @ProverRwFull.ExternalFuns.op8 inst ops, op9 := @ProverRwFull.ExternalFuns.op9 inst ops,
+        op10 := ProverRwFull.ExternalFuns.op10, op11 := @ProverRwFull.ExternalFuns.op11 inst ops,
+        op12 := @ProverRwFull.ExternalFuns.op12 inst ops, op13 := ProverRwFull.ExternalFuns.op13,
+        op14 := @ProverRwFull.ExternalFuns.op14 inst ops, op15 := ProverRwFull.ExternalFuns.op15,
+        op16 := @ProverRwFull.ExternalFuns.op16 inst ops, op17 := ProverRwFull.ExternalFuns.op17,
+        op18 := ProverRwFull.ExternalFuns.op18, op19 := ProverRwFull.ExternalFuns.op19,
+        op20 := ProverRwFull.ExternalFuns.op20, op21 := ProverRwFull.ExternalFuns.op21,
+        op22 := @ProverRwFull.ExternalFuns.op22 inst ops, op23 := ProverRwFull.ExternalFuns.op23,
+        op24 := ProverRwFull.ExternalFuns.op24, op25 := ProverRwFull.ExternalFuns.op25,
+        op26 := @ProverRwFull.ExternalFuns.op26 inst ops, op27 := ProverRwFull.ExternalFuns.op27,
+        op28 := ProverRwFull.ExternalFuns.op28, op29 := ProverRwFull.ExternalFuns.op29,
+        op30 := ProverRwFull.ExternalFuns.op30, op31 := ProverRwFull.ExternalFuns.op31,
+        op32 := @ProverRwFull.ExternalFuns.op32 inst ops, op33 := @ProverRwFull.ExternalFuns.op33 inst ops,
+        op34 := @ProverRwFull.ExternalFuns.op34 inst ops, op35 := ProverRwFull.ExternalFuns.op35,
+        op36 := @ProverRwFull.ExternalFuns.op36 inst ops, op37 := ProverRwFull.ExternalFuns.op37,
+        op38 := ProverRwFull.ExternalFuns.op38, op39 := ProverRwFull.ExternalFuns.op39,
+        op40 := ProverRwFull.ExternalFuns.op40, op41 := ProverRwFull.ExternalFuns.op41,
+        op42 := ProverRwFull.ExternalFuns.op42, op43 := ProverRwFull.ExternalFuns.op43,
+        op44 := ProverRwFull.ExternalFuns.op44, op45 := ProverRwFull.ExternalFuns.op45,
+        op46 := ProverRwFull.ExternalFuns.op46, op47 := ProverRwFull.ExternalFuns.op47,
+        op48 := ProverRwFull.ExternalFuns.op48, op49 := ProverRwFull.ExternalFuns.op49,
+        op50 := ProverRwFull.ExternalFuns.op50, op51 := ProverRwFull.ExternalFuns.op51,
+        op52 := ProverRwFull.ExternalFuns.op52, op53 := ProverRwFull.ExternalFuns.op53,
+        op54 := ProverRwFull.ExternalFuns.op54, op55 := ProverRwFull.ExternalFuns.op55,
+        op56 := ProverRwFull.ExternalFuns.op56, op57 := ProverRwFull.ExternalFuns.op57,
+        op58 := ProverRwFull.ExternalFuns.op58, op59 := ProverRwFull.ExternalFuns.op59,
+        op60 := ProverRwFull.ExternalFuns.op60, op61 := ProverRwFull.ExternalFuns.op61,
+        op62 := ProverRwFull.ExternalFuns.op62, op63 := ProverRwFull.ExternalFuns.op63,
+        op64 := ProverRwFull.ExternalFuns.op64, op65 := ProverRwFull.ExternalFuns.op65,
+        op66 := ProverRwFull.ExternalFuns.op66, op67 := ProverRwFull.ExternalFuns.op67,
+        op68 := ProverRwFull.ExternalFuns.op68, op69 := ProverRwFull.ExternalFuns.op69,
+        op70 := ProverRwFull.ExternalFuns.op70, op71 := ProverRwFull.ExternalFuns.op71,
+        op72 := ProverRwFull.ExternalFuns.op72, op73 := ProverRwFull.ExternalFuns.op73,
+        op74 := ProverRwFull.ExternalFuns.op74, op75 := ProverRwFull.ExternalFuns.op75,
+        op76 := ProverRwFull.ExternalFuns.op76, op77 := @ProverRwFull.ExternalFuns.op77 inst ops,
+        op78 := @ProverRwFull.ExternalFuns.op78 inst ops, op79 := @ProverRwFull.ExternalFuns.op79 inst ops,
+        op80 := @ProverRwFull.ExternalFuns.op80 inst ops, op81 := @ProverRwFull.ExternalFuns.op81 inst ops,
+        op82 := Aeneas.Std.Result.fail Aeneas.Std.Error.panic, op83 := ProverRwFull.ExternalFuns.op83,
+        op84 := ProverRwFull.ExternalFuns.op84, op85 := ProverRwFull.ExternalFuns.op85,
+        op86 := ProverRwFull.ExternalFuns.op86, op87 := ProverRwFull.ExternalFuns.op87,
+        op88 := ProverRwFull.ExternalFuns.op88, op89 := ProverRwFull.ExternalFuns.op89,
+        op90 := ProverRwFull.ExternalFuns.op90, op91 := ProverRwFull.ExternalFuns.op91,
+        op92 := ProverRwFull.ExternalFuns.op92, op93 := ProverRwFull.ExternalFuns.op93,
+        op94 := ProverRwFull.ExternalFuns.op94, op95 := ProverRwFull.ExternalFuns.op95,
+        op96 := ProverRwFull.ExternalFuns.op96, op97 := ProverRwFull.ExternalFuns.op97,
+        op98 := ProverRwFull.ExternalFuns.op98, op99 := ProverRwFull.ExternalFuns.op99,
+        op100 := ProverRwFull.ExternalFuns.op100, op101 := ProverRwFull.ExternalFuns.op101,
+        op102 := ProverRwFull.ExternalFuns.op102, op103 := ProverRwFull.ExternalFuns.op103,
+        op104 := ProverRwFull.ExternalFuns.op104, op105 := ProverRwFull.ExternalFuns.op105,
+        op106 := ProverRwFull.ExternalFuns.op106, op107 := ProverRwFull.ExternalFuns.op107,
+        op108 := ProverRwFull.ExternalFuns.op108, op109 := ProverRwFull.ExternalFuns.op109,
+        op110 := ProverRwFull.ExternalFuns.op110, op111 := ProverRwFull.ExternalFuns.op111,
+        op112 := ProverRwFull.ExternalFuns.op112, op113 := ProverRwFull.ExternalFuns.op113,
+        op114 := ProverRwFull.ExternalFuns.op114, op115 := ProverRwFull.ExternalFuns.op115,
+        op116 := ProverRwFull.ExternalFuns.op116, op117 := ProverRwFull.ExternalFuns.op117,
+        op118 := ProverRwFull.ExternalFuns.op118, op119 := ProverRwFull.ExternalFuns.op119,
+        op120 := ProverRwFull.ExternalFuns.op120, op121 := ProverRwFull.ExternalFuns.op121,
+        op122 := @ProverRwFull.ExternalFuns.op122 inst ops, op123 := @ProverRwFull.ExternalFuns.op123 inst ops,
+        op124 := @ProverRwFull.ExternalFuns.op124 inst ops, op125 := @ProverRwFull.ExternalFuns.op125 inst ops,
+        op126 := @ProverRwFull.ExternalFuns.op126 inst ops, op127 := @ProverRwFull.ExternalFuns.op127 inst ops,
+        op128 := @ProverRwFull.ExternalFuns.op128 inst ops, op129 := ProverRwFull.ExternalFuns.op129,
+        op130 := @ProverRwFull.ExternalFuns.op130 inst ops, op131 := @ProverRwFull.ExternalFuns.op131 inst ops,
+        op132 := ProverRwFull.ExternalFuns.op132, op133 := ProverRwFull.ExternalFuns.op133,
+        op134 := ProverRwFull.ExternalFuns.op134, op135 := @ProverRwFull.ExternalFuns.op135 inst ops,
+        op136 := @ProverRwFull.ExternalFuns.op136 inst ops, op137 := @ProverRwFull.ExternalFuns.op137 inst ops,
+        op138 := @ProverRwFull.ExternalFuns.op138 inst ops, op139 := @ProverRwFull.ExternalFuns.op139 inst ops,
+        op140 := @ProverRwFull.ExternalFuns.op140 inst ops, op141 := @ProverRwFull.ExternalFuns.op141 inst ops,
+        op142 := @ProverRwFull.ExternalFuns.op142 inst ops, op143 := @ProverRwFull.ExternalFuns.op143 inst ops,
+        op144 := @ProverRwFull.ExternalFuns.op144 inst ops, op145 := @ProverRwFull.ExternalFuns.op145 inst ops,
+        op146 := @ProverRwFull.ExternalFuns.op146 inst ops, op147 := @ProverRwFull.ExternalFuns.op147 inst ops,
+        op148 := @ProverRwFull.ExternalFuns.op148 inst ops, op149 := @ProverRwFull.ExternalFuns.op149 inst ops,
+        op150 := @ProverRwFull.ExternalFuns.op150 inst ops, op151 := @ProverRwFull.ExternalFuns.op151 inst ops,
+        op152 := @ProverRwFull.ExternalFuns.op152 inst ops, op153 := @ProverRwFull.ExternalFuns.op153 inst ops,
+        op154 := @ProverRwFull.ExternalFuns.op154 inst ops, op155 := @ProverRwFull.ExternalFuns.op155 inst ops,
+        op156 := @ProverRwFull.ExternalFuns.op156 inst ops, op157 := @ProverRwFull.ExternalFuns.op157 inst ops,
+        op158 := @ProverRwFull.ExternalFuns.op158 inst ops, op159 := @ProverRwFull.ExternalFuns.op159 inst ops,
+        op160 := @ProverRwFull.ExternalFuns.op160 inst ops, op161 := @ProverRwFull.ExternalFuns.op161 inst ops,
+        op162 := @ProverRwFull.ExternalFuns.op162 inst ops, op163 := ProverRwFull.ExternalFuns.op163,
+        op164 := ProverRwFull.ExternalFuns.op164, op165 := ProverRwFull.ExternalFuns.op165,
+        op166 := ProverRwFull.ExternalFuns.op166, op167 := ProverRwFull.ExternalFuns.op167,
+        op168 := ProverRwFull.ExternalFuns.op168, op169 := ProverRwFull.ExternalFuns.op169,
+        op170 := ProverRwFull.ExternalFuns.op170, op171 := ProverRwFull.ExternalFuns.op171,
+        op172 := ProverRwFull.ExternalFuns.op172, op173 := ProverRwFull.ExternalFuns.op173,
+        op174 := ProverRwFull.ExternalFuns.op174, op175 := ProverRwFull.ExternalFuns.op175,
+        op176 := ProverRwFull.ExternalFuns.op176, op177 := ProverRwFull.ExternalFuns.op177,
+        op178 := ProverRwFull.ExternalFuns.op178, op179 := ProverRwFull.ExternalFuns.op179,
+        op180 := ProverRwFull.ExternalFuns.op180, op181 := ProverRwFull.ExternalFuns.op181,
+        op182 := ProverRwFull.ExternalFuns.op182, op183 := ProverRwFull.ExternalFuns.op183,
+        op184 := ProverRwFull.ExternalFuns.op184, op185 := @ProverRwFull.ExternalFuns.op185 inst ops,
+        op186 := @ProverRwFull.ExternalFuns.op186 inst ops, op187 := @ProverRwFull.ExternalFuns.op187 inst ops,
+        op188 := ProverRwFull.ExternalFuns.op188, op189 := ProverRwFull.ExternalFuns.op189,
+        op190 := ProverRwFull.ExternalFuns.op190, op191 := ProverRwFull.ExternalFuns.op191,
+        op192 := ProverRwFull.ExternalFuns.op192, op193 := ProverRwFull.ExternalFuns.op193,
+        op194 := ProverRwFull.ExternalFuns.op194, op195 := @ProverRwFull.ExternalFuns.op195 inst ops,
+        op196 := ProverRwFull.ExternalFuns.op196, op197 := ProverRwFull.ExternalFuns.op197,
+        op198 := ProverRwFull.ExternalFuns.op198, op199 := ProverRwFull.ExternalFuns.op199,
+        op200 := ProverRwFull.ExternalFuns.op200, op201 := ProverRwFull.ExternalFuns.op201,
+        op202 := ProverRwFull.ExternalFuns.op202, op203 := ProverRwFull.ExternalFuns.op203,
+        op204 := ProverRwFull.ExternalFuns.op204, op205 := ProverRwFull.ExternalFuns.op205,
+        op206 := ProverRwFull.ExternalFuns.op206, op207 := ProverRwFull.ExternalFuns.op207,
+        op208 := ProverRwFull.ExternalFuns.op208, op209 := @ProverRwFull.ExternalFuns.op209 inst ops,
+        op210 := ProverRwFull.ExternalFuns.op210, op211 := @ProverRwFull.ExternalFuns.op211 inst ops,
+        op212 := @ProverRwFull.ExternalFuns.op212 inst ops, op213 := @ProverRwFull.ExternalFuns.op213 inst ops,
+        op214 := @ProverRwFull.ExternalFuns.op214 inst ops, op215 := @ProverRwFull.ExternalFuns.op215 inst ops,
+        op216 := @ProverRwFull.ExternalFuns.op216 inst ops, op217 := @ProverRwFull.ExternalFuns.op217 inst ops,
+        op218 := @ProverRwFull.ExternalFuns.op218 inst ops, op219 := @ProverRwFull.ExternalFuns.op219 inst ops,
+        op220 := @ProverRwFull.ExternalFuns.op220 inst ops, op221 := ProverRwFull.ExternalFuns.op221,
+        op222 := ProverRwFull.ExternalFuns.op222, op223 := ProverRwFull.ExternalFuns.op223,
+        op224 := ProverRwFull.ExternalFuns.op224, op225 := ProverRwFull.ExternalFuns.op225,
+        op226 := ProverRwFull.ExternalFuns.op226, op227 := ProverRwFull.ExternalFuns.op227,
+        op228 := ProverRwFull.ExternalFuns.op228, op229 := ProverRwFull.ExternalFuns.op229,
+        op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+        op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+        op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+        op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+        op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+        op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+        op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+        op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+        op246 := @ProverRwFull.ExternalFuns.op246 inst ops, op247 := ProverRwFull.ExternalFuns.op247,
+        op248 := ProverRwFull.ExternalFuns.op248, op249 := ProverRwFull.ExternalFuns.op249,
+        op250 := ProverRwFull.ExternalFuns.op250, op251 := ProverRwFull.ExternalFuns.op251,
+        op252 := ProverRwFull.ExternalFuns.op252, op253 := ProverRwFull.ExternalFuns.op253,
+        op254 := ProverRwFull.ExternalFuns.op254, op255 := @ProverRwFull.ExternalFuns.op255 inst ops,
+        op256 := ProverRwFull.ExternalFuns.op256, op257 := @ProverRwFull.ExternalFuns.op257 inst ops,
+        op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+        op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 };
+  let ⟨⟩ := Aeneas.Std.Result.ok 113#u8
+  bad
+'R1Z.PV_Join_RawSelectedMismatch.no_universal_raw_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_State.op111_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns),
+  ProverRwFull.ExternalFuns.op111 =
+    Aeneas.Std.Result.ok
+      PV_CB_ShippedOp111.aspis_core.state_only_hiding.PINNED_POOL_V1_PAYMENT_RELATION_FREE_MASK_FINGERPRINT :=
+fun [ProverRwFull.ExternalTypes] ops => R1Z.PV_CB_Op111Source.op111_source ops
+'R1Z.PV_Join_State.op111_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_State.op118_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize),
+  ProverRwFull.ExternalFuns.op118 x = R1Z.ProverRwSuccessPointsSource.state_only_prefix.r0.statement_points x :=
+fun [ProverRwFull.ExternalTypes] ops x => R1Z.PV_CB_Op118Source.op118_source ops x
+'R1Z.PV_Join_State.op118_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_StateChanged.source_status : ∀ (a b : R1Z.PV_Join_StateChanged.Context),
+  PV_CB_ShippedOp114.aspis_core.state_only_hiding.StateOnlyHidingContext.Insts.CoreCmpPartialEqStateOnlyHidingContext.eq
+      a b =
+    Aeneas.Std.Result.ok (decide (a = b)) :=
+fun a b =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (ite_congr (Eq.refl (a.mask_layout_fingerprint = b.mask_layout_fingerprint))
+              (fun a_1 =>
+                ite_congr (Eq.refl (a.layout_factor_fingerprint = b.layout_factor_fingerprint))
+                  (fun a_2 =>
+                    Eq.trans
+                      (congr
+                        (congrArg bind (R1Z.ProverRwSuccessByteEquality.array_eq a.statement_digest b.statement_digest))
+                        (funext fun b_1 =>
+                          ite_congr (Eq.refl (b_1 = true))
+                            (fun a_3 => R1Z.ProverRwSuccessByteEquality.array_eq a.mask_nonce b.mask_nonce) fun a =>
+                            Eq.refl (Aeneas.Std.Result.ok false)))
+                      (Aeneas.Std.bind_tc_ok (decide (a.statement_digest = b.statement_digest)) fun y =>
+                        if y = true then Aeneas.Std.Result.ok (decide (a.mask_nonce = b.mask_nonce))
+                        else Aeneas.Std.Result.ok false))
+                  fun a => Eq.refl (Aeneas.Std.Result.ok false))
+              fun a => Eq.refl (Aeneas.Std.Result.ok false)))
+          (Aeneas.Std.Result.ok (decide (a = b)))))
+      (let ⟨d, n, m, l, h✝⟩ := a
+      Eq.symm h✝ ▸
+        let ⟨d', n', m', l', h✝¹⟩ := b
+        Eq.symm h✝¹ ▸
+          if hd : d = d' then
+            if hn : n = n' then
+              if hm : m = m' then
+                if hl : l = l' then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_true
+                              (if
+                                  { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                        layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                        layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                                if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hm) m') (eq_self m')))
+                            (Eq.trans
+                              (ite_cond_eq_true
+                                (if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false)
+                                (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hl) l') (eq_self l')))
+                              (Eq.trans
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce)))
+                                  (Aeneas.Std.Result.ok false)
+                                  (Eq.trans
+                                    (congrFun'
+                                      (congrArg Eq
+                                        (Eq.trans
+                                          (Decidable.decide.congr_simp
+                                            ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                                  layout_factor_fingerprint := l }.statement_digest =
+                                              { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                                  layout_factor_fingerprint := l' }.statement_digest)
+                                            True (Eq.trans (congrFun' (congrArg Eq hd) d') (eq_self d')))
+                                          (decide_true instDecidableTrue)))
+                                      true)
+                                    (eq_self true)))
+                                (congrArg Aeneas.Std.Result.ok
+                                  (Eq.trans
+                                    (Decidable.decide.congr_simp
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce)
+                                      True (Eq.trans (congrFun' (congrArg Eq hn) n') (eq_self n')))
+                                    (decide_true instDecidableTrue)))))))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              True
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Eq
+                                    (congr
+                                      (congr
+                                        (congr
+                                          (congrArg ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk
+                                            hd)
+                                          hn)
+                                        hm)
+                                      hl))
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                    layout_factor_fingerprint := l' })
+                                (eq_self
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                    layout_factor_fingerprint := l' })))
+                            (decide_true instDecidableTrue))))
+                      (eq_self (Aeneas.Std.Result.ok true)))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_true
+                              (if
+                                  { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                        layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                        layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                                if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hm) m') (eq_self m')))
+                            (ite_cond_eq_false
+                              (if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (eq_false hl))))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congr
+                                          (congr
+                                            (congrArg
+                                              ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk hd)
+                                            hn)
+                                          hm)
+                                        l))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d' n' m' l
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self d'))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_self n'))
+                                        (Eq.trans (congr (congrArg And (eq_self m')) (eq_false hl)) (and_false True)))
+                                      (and_false True)))
+                                  (and_false True))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+              else
+                if hl : l = l' then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (ite_cond_eq_false
+                            (if
+                                { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                      layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                              if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false
+                            else Aeneas.Std.Result.ok false)
+                            (Aeneas.Std.Result.ok false) (eq_false hm)))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congr
+                                        (congrFun'
+                                          (congr
+                                            (congrArg
+                                              ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk hd)
+                                            hn)
+                                          m)
+                                        hl))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d' n' m l'
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self d'))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_self n'))
+                                        (Eq.trans (congr (congrArg And (eq_false hm)) (eq_self l')) (and_true False)))
+                                      (and_false True)))
+                                  (and_false True))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (ite_cond_eq_false
+                            (if
+                                { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                      layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                              if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false
+                            else Aeneas.Std.Result.ok false)
+                            (Aeneas.Std.Result.ok false) (eq_false hm)))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congrFun'
+                                          (congr
+                                            (congrArg
+                                              ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk hd)
+                                            hn)
+                                          m)
+                                        l))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d' n' m l
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self d'))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_self n'))
+                                        (Eq.trans (congr (congrArg And (eq_false hm)) (eq_false hl)) (and_self False)))
+                                      (and_false True)))
+                                  (and_false True))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+            else
+              if hm : m = m' then
+                if hl : l = l' then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_true
+                              (if
+                                  { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                        layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                        layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                                if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hm) m') (eq_self m')))
+                            (Eq.trans
+                              (ite_cond_eq_true
+                                (if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false)
+                                (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hl) l') (eq_self l')))
+                              (Eq.trans
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce)))
+                                  (Aeneas.Std.Result.ok false)
+                                  (Eq.trans
+                                    (congrFun'
+                                      (congrArg Eq
+                                        (Eq.trans
+                                          (Decidable.decide.congr_simp
+                                            ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                                  layout_factor_fingerprint := l }.statement_digest =
+                                              { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                                  layout_factor_fingerprint := l' }.statement_digest)
+                                            True (Eq.trans (congrFun' (congrArg Eq hd) d') (eq_self d')))
+                                          (decide_true instDecidableTrue)))
+                                      true)
+                                    (eq_self true)))
+                                (congrArg Aeneas.Std.Result.ok
+                                  (Eq.trans
+                                    (Decidable.decide.congr_simp
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce)
+                                      False (eq_false hn))
+                                    (decide_false instDecidableFalse)))))))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congr
+                                        (congr
+                                          (congrFun'
+                                            (congrArg
+                                              ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk hd)
+                                            n)
+                                          hm)
+                                        hl))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d' n m' l'
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self d'))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_false hn))
+                                        (Eq.trans (congr (congrArg And (eq_self m')) (eq_self l')) (and_self True)))
+                                      (and_true False)))
+                                  (and_false True))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_true
+                              (if
+                                  { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                        layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                        layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                                if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hm) m') (eq_self m')))
+                            (ite_cond_eq_false
+                              (if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (eq_false hl))))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congr
+                                          (congrFun'
+                                            (congrArg
+                                              ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk hd)
+                                            n)
+                                          hm)
+                                        l))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d' n m' l
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self d'))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_false hn))
+                                        (Eq.trans (congr (congrArg And (eq_self m')) (eq_false hl)) (and_false True)))
+                                      (and_self False)))
+                                  (and_false True))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+              else
+                if hl : l = l' then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (ite_cond_eq_false
+                            (if
+                                { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                      layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                              if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false
+                            else Aeneas.Std.Result.ok false)
+                            (Aeneas.Std.Result.ok false) (eq_false hm)))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congr
+                                        (congrFun'
+                                          (congrFun'
+                                            (congrArg
+                                              ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk hd)
+                                            n)
+                                          m)
+                                        hl))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d' n m l'
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self d'))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_false hn))
+                                        (Eq.trans (congr (congrArg And (eq_false hm)) (eq_self l')) (and_true False)))
+                                      (and_self False)))
+                                  (and_false True))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (ite_cond_eq_false
+                            (if
+                                { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                      layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                              if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false
+                            else Aeneas.Std.Result.ok false)
+                            (Aeneas.Std.Result.ok false) (eq_false hm)))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congrFun'
+                                          (congrFun'
+                                            (congrArg
+                                              ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk hd)
+                                            n)
+                                          m)
+                                        l))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d' n m l d'
+                                    n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self d'))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_false hn))
+                                        (Eq.trans (congr (congrArg And (eq_false hm)) (eq_false hl)) (and_self False)))
+                                      (and_self False)))
+                                  (and_false True))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+          else
+            if hn : n = n' then
+              if hm : m = m' then
+                if hl : l = l' then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_true
+                              (if
+                                  { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                        layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                        layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                                if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hm) m') (eq_self m')))
+                            (Eq.trans
+                              (ite_cond_eq_true
+                                (if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false)
+                                (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hl) l') (eq_self l')))
+                              (ite_cond_eq_false
+                                (Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce)))
+                                (Aeneas.Std.Result.ok false)
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (Eq.trans
+                                        (Decidable.decide.congr_simp
+                                          ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                                layout_factor_fingerprint := l }.statement_digest =
+                                            { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                                layout_factor_fingerprint := l' }.statement_digest)
+                                          False (eq_false hd))
+                                        (decide_false instDecidableFalse)))
+                                    true)
+                                  Bool.false_eq_true)))))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congr
+                                        (congr
+                                          (congrArg
+                                            (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk d) hn)
+                                          hm)
+                                        hl))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d n' m' l'
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_false hd))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_self n'))
+                                        (Eq.trans (congr (congrArg And (eq_self m')) (eq_self l')) (and_self True)))
+                                      (and_self True)))
+                                  (and_true False))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_true
+                              (if
+                                  { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                        layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                        layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                                if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hm) m') (eq_self m')))
+                            (ite_cond_eq_false
+                              (if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (eq_false hl))))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congr
+                                          (congrArg
+                                            (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk d) hn)
+                                          hm)
+                                        l))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d n' m' l
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_false hd))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_self n'))
+                                        (Eq.trans (congr (congrArg And (eq_self m')) (eq_false hl)) (and_false True)))
+                                      (and_false True)))
+                                  (and_self False))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+              else
+                if hl : l = l' then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (ite_cond_eq_false
+                            (if
+                                { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                      layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                              if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false
+                            else Aeneas.Std.Result.ok false)
+                            (Aeneas.Std.Result.ok false) (eq_false hm)))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congr
+                                        (congrFun'
+                                          (congrArg
+                                            (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk d) hn)
+                                          m)
+                                        hl))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d n' m l'
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_false hd))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_self n'))
+                                        (Eq.trans (congr (congrArg And (eq_false hm)) (eq_self l')) (and_true False)))
+                                      (and_false True)))
+                                  (and_self False))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (ite_cond_eq_false
+                            (if
+                                { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                      layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                              if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false
+                            else Aeneas.Std.Result.ok false)
+                            (Aeneas.Std.Result.ok false) (eq_false hm)))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congrFun'
+                                          (congrArg
+                                            (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk d) hn)
+                                          m)
+                                        l))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d n' m l d'
+                                    n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_false hd))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_self n'))
+                                        (Eq.trans (congr (congrArg And (eq_false hm)) (eq_false hl)) (and_self False)))
+                                      (and_false True)))
+                                  (and_self False))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+            else
+              if hm : m = m' then
+                if hl : l = l' then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_true
+                              (if
+                                  { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                        layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                        layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                                if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hm) m') (eq_self m')))
+                            (Eq.trans
+                              (ite_cond_eq_true
+                                (if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false)
+                                (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hl) l') (eq_self l')))
+                              (ite_cond_eq_false
+                                (Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce)))
+                                (Aeneas.Std.Result.ok false)
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (Eq.trans
+                                        (Decidable.decide.congr_simp
+                                          ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                                layout_factor_fingerprint := l }.statement_digest =
+                                            { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                                layout_factor_fingerprint := l' }.statement_digest)
+                                          False (eq_false hd))
+                                        (decide_false instDecidableFalse)))
+                                    true)
+                                  Bool.false_eq_true)))))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congr
+                                        (congrArg
+                                          (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk d n) hm)
+                                        hl))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d n m' l'
+                                    d' n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_false hd))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_false hn))
+                                        (Eq.trans (congr (congrArg And (eq_self m')) (eq_self l')) (and_self True)))
+                                      (and_true False)))
+                                  (and_self False))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_true
+                              (if
+                                  { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                        layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                        layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                                if
+                                    decide
+                                        ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                              layout_factor_fingerprint := l }.statement_digest =
+                                          { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                              layout_factor_fingerprint := l' }.statement_digest) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.mask_nonce =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.mask_nonce))
+                                else Aeneas.Std.Result.ok false
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (Eq.trans (congrFun' (congrArg Eq hm) m') (eq_self m')))
+                            (ite_cond_eq_false
+                              (if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false)
+                              (Aeneas.Std.Result.ok false) (eq_false hl))))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congrArg
+                                          (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk d n) hm)
+                                        l))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d n m' l d'
+                                    n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_false hd))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_false hn))
+                                        (Eq.trans (congr (congrArg And (eq_self m')) (eq_false hl)) (and_false True)))
+                                      (and_self False)))
+                                  (and_self False))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+              else
+                if hl : l = l' then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (ite_cond_eq_false
+                            (if
+                                { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                      layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                              if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false
+                            else Aeneas.Std.Result.ok false)
+                            (Aeneas.Std.Result.ok false) (eq_false hm)))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrArg
+                                        (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk d n m) hl))
+                                    { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' })
+                                  (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d n m l' d'
+                                    n' m' l'))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_false hd))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_false hn))
+                                        (Eq.trans (congr (congrArg And (eq_false hm)) (eq_self l')) (and_true False)))
+                                      (and_self False)))
+                                  (and_self False))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (ite_cond_eq_false
+                            (if
+                                { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                      layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                              if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false
+                            else Aeneas.Std.Result.ok false)
+                            (Aeneas.Std.Result.ok false) (eq_false hm)))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d n m l d' n'
+                                  m' l')
+                                (Eq.trans
+                                  (congr (congrArg And (eq_false hd))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_false hn))
+                                        (Eq.trans (congr (congrArg And (eq_false hm)) (eq_false hl)) (and_self False)))
+                                      (and_self False)))
+                                  (and_self False))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))))
+'R1Z.PV_Join_StateChanged.source_status' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_StateChanged.selected_bridge : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns) (a b : R1Z.PV_Join_StateChanged.Context),
+  ProverRwFull.ExternalFuns.op114 a b = ProverRwFull.ExternalFuns.op114 a b :=
+fun [ProverRwFull.ExternalTypes] ops a b =>
+  Eq.trans (R1Z.ProverRwSuccessEquality.context_total ops a b)
+    (Eq.trans (Eq.symm (R1Z.PV_Join_StateChanged.source_status a b))
+      (Eq.symm (R1Z.PV_CB_Op114Source.op114_source ops a b)))
+'R1Z.PV_Join_StateChanged.selected_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_StateChanged.op114_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (a b : R1Z.PV_Join_StateChanged.Context),
+  ProverRwFull.ExternalFuns.op114 a b =
+    PV_CB_ShippedOp114.aspis_core.state_only_hiding.StateOnlyHidingContext.Insts.CoreCmpPartialEqStateOnlyHidingContext.eq
+      a b :=
+fun [ProverRwFull.ExternalTypes] ops a b =>
+  Eq.trans (R1Z.PV_Join_StateChanged.selected_bridge ops a b) (R1Z.PV_CB_Op114Source.op114_source ops a b)
+'R1Z.PV_Join_StateChanged.op114_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_StoreLedgerSource.body_source : ∀ [inst : ProverRwFull.ExternalTypes]
+  [inst_1 : ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] {N C : Type}
+  (ops : R1Z.PV_RunJoin_LedgerBody.State N C → ProverRwFull.ExternalFuns)
+  (pub : R1Z.PV_RunJoin_LedgerBody.State N C → R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.PV_RunJoin_LedgerBody.State N C → R1Z.ProverRwRetryModel.Compiled)
+  (hash : R1Z.PV_RunJoin_LedgerBody.State N C → R1Z.ProverRwRetryModel.Hash)
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+    (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_StoreLedgerSource.inputs ops pub compiled hash))
+    (R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+      (R1Z.PV_Join_StoreLedgerSource.inputs ops pub compiled hash)) :=
+fun [inst : ProverRwFull.ExternalTypes] [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] {N C} ops pub
+    compiled hash schedule unix address =>
+  R1Z.PV_RunJoin_LedgerSourceBody.source_law schedule unix address
+    (R1Z.PV_Join_StoreLedgerSource.inputs ops pub compiled hash) fun s =>
+    Eq.refl (@ProverRwFull.ExternalFuns.op12 inst ((R1Z.PV_Join_StoreLedgerSource.inputs ops pub compiled hash).ops s))
+'R1Z.PV_Join_StoreLedgerSource.body_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

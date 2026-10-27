@@ -1,0 +1,16 @@
+[package]
+name = "pv-cb3-kani"
+version = "0.0.0"
+edition = "2021"
+[workspace]
+[lib]
+path = "lib.rs"
+[dependencies]
+aspis-core = { path = "../source/crates/aspis-core", features = ["r0", "ct-host-prover"] }
+aspis-statement = { path = "../source/crates/aspis-statement", features = ["r0"] }
+[profile.dev]
+opt-level = 3
+overflow-checks = false
+debug-assertions = false
+[profile.release]
+overflow-checks = false

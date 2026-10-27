@@ -1,0 +1,1 @@
+The join checked-case theorem was rejected at 39728 (tactic splitting under a let expression). It is unproved, not an op26 source law and not a ROW counterexample. It is excluded from publication and the final frozen manifest. Its exact failed source and receipt are retained; no retry consumed the three reserved bundle-audit attempts.

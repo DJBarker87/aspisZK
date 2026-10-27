@@ -1,0 +1,21 @@
+# Pinned x86_64 SHA backend
+
+Cargo.lock selects sha2@0.10.9, digest@0.10.7, block-buffer@0.10.4. File bytes and archive checksums: resume-backend-sources.json and source-provenance.json. Candidate prover extraction fingerprint records (resume-sha2-build-fingerprints.json) show sha2 features [default,std], x86_64-unknown-linux-gnu, no force-soft/force-soft-compact/asm; these diagnostic build fingerprints do not identify a deployed binary by themselves.
+
+sha256.rs chooses x86::compress with these features and target. x86.rs dispatches using cpufeatures shani_cpuid::get(), requiring sha/sse2/ssse3/sse4.1. The true branch calls the target-feature SHA-NI implementation digest_blocks; the false branch calls soft::compress, which is the Rust fallback (not sha2-asm). Both paths are compiled. Without a pinned deployed target CPU and dispatch observation, the branch executed cannot be uniquely claimed. The dispatcher must be proved, or both branches proved; a soft-only compression theorem cannot close op208.
+
+The SHA-NI path contains __m128i loads/stores and pointer casts, _mm_sha256rnds2_epu32, _mm_sha256msg1_epu32, _mm_sha256msg2_epu32, SSE shuffle/align/blend/add operations, unsafe memory access and target-feature calls. Exact semantic extraction of these operations plus CPU detection remains required. There is no Kani arithmetic retry and no force-soft substitution in this resume. Any fallback extraction is explicitly only the false branch of the shipped dispatcher.
+
+The exact dispatcher extraction has_errors=false at Charon (charon-source-sha-dispatch-opt-resume-dispatch-01), but Aeneas rejects escaping-reference outputs (aeneas-source-sha-dispatch-opt-resume-dispatch-01, exit 2). Thus even before assigning SHA-NI intrinsic semantics, loan validation is an explicit extraction obstruction. Direct scalar round/schedule diagnostics are separate supporting work. No compress256 binding or digest row credit is inferred from a model of these instructions.
+
+
+sha-dispatch-inventory.json pins the LLBC and lists the exact transparent dispatcher bodies and Foreign intrinsic symbols, including _mm_sha256rnds2_epu32, _mm_sha256msg1_epu32, _mm_sha256msg2_epu32, __cpuid, __cpuid_count, load/store/shuffle/align/blend/add SIMD primitives. It is not an empty private-root extraction. The development host reports Intel Core Ultra 7 155H (resume-host-cpu.txt), with SHA-NI flags; this observation alone is not a deployed-binary/CPU association.
+
+Third pass: `PV_CBL_SoftBlockSource.source` now proves the complete extracted
+owned soft word-block output for arbitrary state8/input16 arrays against
+sixteen conventional four-round groups, the canonical schedule recurrence,
+all pinned constants and feed-forward. `PV_CBL_SoftBlocks.composed` and
+`PV_CBL_SoftBlocksAppend.source_append` prove symbolic multi-block composition.
+This is neither the byte-loading/unsafe-layout driver nor the x86 dispatcher;
+V231–V238 remain open. Dispatcher measurements and the recommendation to
+retain SHA-NI are in `design/PV-SHA-DISPATCH-20261027.md`.

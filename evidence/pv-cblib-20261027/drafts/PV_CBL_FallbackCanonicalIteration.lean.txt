@@ -1,0 +1,17 @@
+import R1Z.PV_CBL_FallbackCanonicalStep
+import R1Z.PV_CBL_FallbackRoundsModel
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_FallbackCanonicalIteration
+open PV_CBL_FallbackScalar
+set_option autoImplicit false
+/-- Symbolic iteration transport for every word list. Source block scheduling
+and the SHA-NI/native association remain separate joins. -/
+theorem rounds (s : State) (ws : List U32) :
+    PV_CBL_FallbackRoundsModel.run s ws = ws.foldl PV_CBL_FallbackCanonicalStep.step s := by
+  induction ws generalizing s with
+  | nil => rfl
+  | cons w ws ih =>
+      simp only [PV_CBL_FallbackRoundsModel.run_cons,List.foldl_cons,
+        PV_CBL_FallbackCanonicalStep.source,ih]
+#print axioms rounds
+end R1Z.PV_CBL_FallbackCanonicalIteration

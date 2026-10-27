@@ -1,0 +1,19 @@
+import R1Z.PV_CBL_ByteCodecValue
+import R1Z.PV_CBL_ArrayReadValue
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_ByteLoadSource
+set_option autoImplicit false
+theorem source (b : Array U8 4#usize) :
+    PV_CBL_ShaBytes.sha_load_be4 b =
+      ok (PV_CBL_ByteCodecValue.load b.val[0]! b.val[1]! b.val[2]! b.val[3]!) := by
+  unfold PV_CBL_ShaBytes.sha_load_be4
+  rw [PV_CBL_ArrayReadValue.read b 0#usize (by decide),bind_tc_ok]
+  simp only [lift,bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read b 1#usize (by decide),bind_tc_ok]
+  simp only [lift,bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read b 2#usize (by decide),bind_tc_ok]
+  simp only [lift,bind_tc_ok]
+  rw [PV_CBL_ArrayReadValue.read b 3#usize (by decide),bind_tc_ok]
+  rfl
+#print axioms source
+end R1Z.PV_CBL_ByteLoadSource

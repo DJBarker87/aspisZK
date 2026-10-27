@@ -1,0 +1,22 @@
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+def Aeneas.Std.UScalar.wrapping_shl : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.shiftLeft (↑s % ty.numBits)#uscalar
+@[implicit_reducible] def Aeneas.Std.UScalarTy.numBits : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => System.Platform.numBits
+  | UScalarTy.U8 => 8
+  | UScalarTy.U16 => 16
+  | UScalarTy.U32 => 32
+  | UScalarTy.U64 => 64
+  | UScalarTy.U128 => 128
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+def Aeneas.Std.Slice.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Usize.max }
+System.Platform.numBits_eq : System.Platform.numBits = 32 ∨ System.Platform.numBits = 64
+BitVec.toNat_setWidth {n : ℕ} (i : ℕ) (x : BitVec n) : (BitVec.setWidth i x).toNat = x.toNat % 2 ^ i
+BitVec.toNat_shiftLeft {v n : ℕ} {x : BitVec v} : (x <<< n).toNat = x.toNat <<< n % 2 ^ v
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh

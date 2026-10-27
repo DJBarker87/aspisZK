@@ -1,0 +1,22 @@
+import R1Z.PV_CBL_SoftByteBlocks
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_SoftByteBlocksMap
+set_option autoImplicit false
+/-- The byte-block fold is exactly the existing canonical word-block fold,
+with one big-endian decoding at each corresponding input block. -/
+theorem value (state : Array U32 8#usize) (blocks : List (Array U8 64#usize)) :
+    PV_CBL_SoftByteBlocks.value state blocks =
+      PV_CBL_SoftBlocks.value state (blocks.map PV_CBL_ByteWordsSource.value) := by
+  induction blocks generalizing state with
+  | nil => rfl
+  | cons b bs ih =>
+    change PV_CBL_SoftByteBlocks.value (PV_CBL_SoftByteSource.value state b) bs =
+      PV_CBL_SoftBlocks.value (PV_CBL_SoftByteSource.value state b) (bs.map PV_CBL_ByteWordsSource.value)
+    exact ih _
+theorem source (state : Array U32 8#usize) (blocks : List (Array U8 64#usize)) :
+    PV_CBL_SoftByteBlocks.reference state blocks =
+      PV_CBL_SoftBlocks.source state (blocks.map PV_CBL_ByteWordsSource.value) := by
+  rw [PV_CBL_SoftByteBlocks.source,PV_CBL_SoftBlocks.composed,value]
+#print axioms value
+#print axioms source
+end R1Z.PV_CBL_SoftByteBlocksMap

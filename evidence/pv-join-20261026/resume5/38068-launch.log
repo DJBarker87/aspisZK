@@ -1,0 +1,66 @@
+reservation: populated 26 GiB + 8 GiB; window=1 (London 0103); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+value : aspis_core.field.QM31
+hvalue : Array.index_usize out k = Result.ok value
+hv : Q value
+m : aspis_core.field.M31
+hm : Array.index_usize basis k = Result.ok m
+d : ProverRwDictionaryTower.Q
+hd1 : PV_Join_ScaleCanonical5.scale scale m = Result.ok d
+hdelta : Q d
+hd : PV_Join_ScaleCanonical5.scale scale m = Result.ok d
+n : ProverRwDictionaryTower.Q
+hn1 : ProverRwDictionaryTower.qAdd value d = Result.ok n
+hnext : Q n
+hn : ProverRwDictionaryTower.qAdd value d = Result.ok n
+ys : Std.Array aspis_core.field.QM31 28#usize
+hys : Array.update out k n = Result.ok ys
+hy : QArray ys
+hcf✝³ :
+  (do
+      let value ← Array.index_usize out k
+      let m ← Array.index_usize basis k
+      let delta ← PV_Join_ScaleCanonical5.scale scale m
+      let next ← ProverRwDictionaryTower.qAdd value delta
+      let out1 ← Array.update out k next
+      let k1 ← lift (k.wrapping_add 1#usize)
+      Result.ok (ControlFlow.cont (out1, k1))) =
+    Result.ok (ControlFlow.cont (ys, k.wrapping_add 1#usize))
+hcf✝² :
+  (do
+      let m ← Array.index_usize basis k
+      let delta ← PV_Join_ScaleCanonical5.scale scale m
+      let next ← ProverRwDictionaryTower.qAdd value delta
+      let out1 ← Array.update out k next
+      let k1 ← lift (k.wrapping_add 1#usize)
+      Result.ok (ControlFlow.cont (out1, k1))) =
+    Result.ok (ControlFlow.cont (ys, k.wrapping_add 1#usize))
+hcf✝¹ :
+  (do
+      let delta ← PV_Join_ScaleCanonical5.scale scale m
+      let next ← ProverRwDictionaryTower.qAdd value delta
+      let out1 ← Array.update out k next
+      let k1 ← lift (k.wrapping_add 1#usize)
+      Result.ok (ControlFlow.cont (out1, k1))) =
+    Result.ok (ControlFlow.cont (ys, k.wrapping_add 1#usize))
+hcf✝ :
+  (do
+      let next ← ProverRwDictionaryTower.qAdd value d
+      let out1 ← Array.update out k next
+      let k1 ← lift (k.wrapping_add 1#usize)
+      Result.ok (ControlFlow.cont (out1, k1))) =
+    Result.ok (ControlFlow.cont (ys, k.wrapping_add 1#usize))
+hcf :
+  (do
+      let out1 ← Array.update out k n
+      let k1 ← lift (k.wrapping_add 1#usize)
+      Result.ok (ControlFlow.cont (out1, k1))) =
+    Result.ok (ControlFlow.cont (ys, k.wrapping_add 1#usize))
+⊢ ↑(k.wrapping_add 1#usize) = ↑k + 1
+'R1Z.PV_Join_AccumulateCanonical5.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.87
+	Maximum resident set size (kbytes): 4309924
+	Swaps: 0
+	Exit status: 1

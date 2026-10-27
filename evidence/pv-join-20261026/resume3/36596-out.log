@@ -1,0 +1,349 @@
+@[defeq] theorem R1Z.PV_Join_FixtureInputs.semantic_columns : ∀ [ProverRwRngCaller.NativeTypes]
+  [ProverRwRngCaller.ErasureFns] (base : ProverRwFull.ExternalTypes)
+  (c : R1Z.PV_RunJoin_NominalCompiledData.SourceCompiled),
+  (R1Z.PV_Join_FixtureInputs.compiled base c).semantic_c1.c1 = c.semantic_c1.c1 :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] base c => rfl
+'R1Z.PV_Join_FixtureInputs.semantic_columns' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_FixtureInputs.same_record : ∀ [inst : ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns]
+  (base : ProverRwFull.ExternalTypes) {N C : Type}
+  (ops : R1Z.PV_Join_LedgerSource.World base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (i : R1Z.PV_Src_NativeInput.Input) (s : R1Z.PV_Join_LedgerSource.World base N C),
+  (R1Z.PV_Join_FixtureInputs.inputs base ops hash i).pub s = R1Z.PV_Join_FixtureInputs.publicInput base i ∧
+    (R1Z.PV_Join_FixtureInputs.inputs base ops hash i).compiled s =
+      R1Z.PV_Join_FixtureInputs.compiled base i.compiled :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] base {N C} ops hash i s => ⟨rfl, rfl⟩
+'R1Z.PV_Join_FixtureInputs.same_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_FixtureInputs.body_source : ∀ [inst : ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns]
+  (base : ProverRwFull.ExternalTypes) {N C : Type}
+  (ops : R1Z.PV_Join_LedgerSource.World base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (i : R1Z.PV_Src_NativeInput.Input) (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+    (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_FixtureInputs.inputs base ops hash i))
+    (R1Z.PV_RunJoin_LedgerBody.body schedule unix address (R1Z.PV_Join_FixtureInputs.inputs base ops hash i)) :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] base {N C} ops hash i schedule unix address =>
+  R1Z.PV_Join_LedgerSource.body_source base ops (fun x => R1Z.PV_Join_FixtureInputs.publicInput base i)
+    (fun x => R1Z.PV_Join_FixtureInputs.compiled base i.compiled) (fun x => hash) schedule unix address
+'R1Z.PV_Join_FixtureInputs.body_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_FixtureSelected.both_source : ∀ [inst : ProverRwRngCaller.NativeTypes]
+  [ProverRwRngCaller.ErasureFns] {CommitHandle N C : Type} (base : ProverRwFull.ExternalTypes)
+  (ops : R1Z.PV_Join_LedgerSource.World base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (selection :
+    R0Z.ZkStatement.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R1Z.BuilderSource.prover.Instance → R1Z.PV_Src_NativeInput.Input)
+  (a b : CommitHandle) (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  have transfer := selection (R1Z.PV_RunJoin_DeployedFixtures.transferX a) R1Z.PV_RunJoin_CanonicalFixtures.transfer;
+  have withdrawal :=
+    selection (R1Z.PV_RunJoin_DeployedFixtures.withdrawalX b) R1Z.PV_RunJoin_CanonicalFixtures.withdrawal;
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+      (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_FixtureInputs.inputs base ops hash transfer))
+      (R1Z.PV_RunJoin_LedgerBody.body schedule unix address (R1Z.PV_Join_FixtureInputs.inputs base ops hash transfer)) ∧
+    R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+      (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_FixtureInputs.inputs base ops hash withdrawal))
+      (R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+        (R1Z.PV_Join_FixtureInputs.inputs base ops hash withdrawal)) :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] {CommitHandle N C} base ops hash selection a b
+    schedule unix address =>
+  ⟨R1Z.PV_Join_FixtureInputs.body_source base ops hash
+      (selection (R1Z.PV_RunJoin_DeployedFixtures.transferX a) R1Z.PV_RunJoin_CanonicalFixtures.transfer) schedule unix
+      address,
+    R1Z.PV_Join_FixtureInputs.body_source base ops hash
+      (selection (R1Z.PV_RunJoin_DeployedFixtures.withdrawalX b) R1Z.PV_RunJoin_CanonicalFixtures.withdrawal) schedule
+      unix address⟩
+'R1Z.PV_Join_FixtureSelected.both_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Generic.op3_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  {T : Type} (inst_1 : Aeneas.Std.core.default.Default T) (x : T),
+  ProverRwFull.ExternalFuns.op3 inst_1 x = PV_CB_ShippedTake.core.mem.take inst_1 x :=
+fun [ProverRwFull.ExternalTypes] ops {T} inst_1 x => R1Z.PV_CB_TakeSource.op3_source ops inst_1 x
+'R1Z.PV_Join_Generic.op3_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Generic.op77_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  {E : Type} (inst_1 : Aeneas.Std.core.clone.Clone E) (p : ProverRwFull.aspis_core.r0.domain.Point E),
+  ProverRwFull.ExternalFuns.op77 inst_1 p =
+    PV_CB_ShippedOp77.aspis_core.r0.domain.Point.Insts.CoreCloneClone.clone inst_1 p :=
+fun [ProverRwFull.ExternalTypes] ops {E} inst_1 p => R1Z.PV_CB_Op77Source.op77_source ops inst_1 p
+'R1Z.PV_Join_Generic.op77_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Heap.op81_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  {T : Type} (copy : Aeneas.Std.core.marker.Copy T) (n : Aeneas.Std.Usize) (value : T),
+  ProverRwFull.ExternalFuns.op81 copy n value = R1Z.ProverRwSuccessHeapSource.aspis_core.r0.heap.filled copy n value :=
+fun [ProverRwFull.ExternalTypes] ops {T} copy n value =>
+  R1Z.PV_CB_Op81Source.op81_source (R1Z.ProverRwP6BodyStore.selected ops) copy n value
+'R1Z.PV_Join_Heap.op81_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_HeapCompatibility.filled_congr : ∀ [inst : ProverRwFull.ExternalTypes]
+  (left right : ProverRwFull.ExternalFuns),
+  @ProverRwFull.ExternalFuns.op32 inst left = @ProverRwFull.ExternalFuns.op32 inst right →
+    @ProverRwFull.ExternalFuns.op12 inst left = @ProverRwFull.ExternalFuns.op12 inst right →
+      ∀ {T : Type} (copy : Aeneas.Std.core.marker.Copy T) (n : Aeneas.Std.Usize) (value : T),
+        R1Z.ProverRwSuccessHeapSource.aspis_core.r0.heap.filled copy n value =
+          R1Z.ProverRwSuccessHeapSource.aspis_core.r0.heap.filled copy n value :=
+fun [ProverRwFull.ExternalTypes] left right reserve mapError {T} copy n value =>
+  id
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (congr
+              (congrArg bind
+                (congrArg (fun x => x T R1Z.ProverRwSuccessHeapSource.Global (Aeneas.Std.alloc.vec.Vec.new T) n)
+                  reserve))
+              (congrArg Aeneas.Std.uncurry
+                (funext fun r =>
+                  funext fun out =>
+                    congrFun'
+                      (congrArg bind
+                        (congrArg
+                          (fun x =>
+                            x Unit
+                              (R1Z.ProverRwSuccessHeapSource.aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
+                                copy)
+                              r ())
+                          mapError))
+                      fun r1 => do
+                      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                      match cf with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                          let out1 ← Aeneas.Std.alloc.vec.Vec.resize copy.cloneInst out n value
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out1)
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (Aeneas.Std.alloc.vec.Vec T)
+                            (Aeneas.Std.core.convert.FromSame ProverRwFull.aspis_core.r0.Error) residual))))
+          do
+          let (r, out) ←
+            ProverRwFull.ExternalFuns.op32 R1Z.ProverRwSuccessHeapSource.Global (Aeneas.Std.alloc.vec.Vec.new T) n
+          let r1 ←
+            ProverRwFull.ExternalFuns.op12
+                (R1Z.ProverRwSuccessHeapSource.aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
+                  copy)
+                r ()
+          let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+              let out1 ← Aeneas.Std.alloc.vec.Vec.resize copy.cloneInst out n value
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out1)
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Aeneas.Std.alloc.vec.Vec T) (Aeneas.Std.core.convert.FromSame ProverRwFull.aspis_core.r0.Error)
+                residual)
+        (eq_self do
+          let (r, out) ←
+            ProverRwFull.ExternalFuns.op32 R1Z.ProverRwSuccessHeapSource.Global (Aeneas.Std.alloc.vec.Vec.new T) n
+          let r1 ←
+            ProverRwFull.ExternalFuns.op12
+                (R1Z.ProverRwSuccessHeapSource.aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
+                  copy)
+                r ()
+          let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+              let out1 ← Aeneas.Std.alloc.vec.Vec.resize copy.cloneInst out n value
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out1)
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Aeneas.Std.alloc.vec.Vec T) (Aeneas.Std.core.convert.FromSame ProverRwFull.aspis_core.r0.Error)
+                residual)))
+'R1Z.PV_Join_HeapCompatibility.filled_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem R1Z.PV_Join_HeapCompatibility.reserve : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns),
+  @ProverRwFull.ExternalFuns.op32 inst (R1Z.PV_CB_Borrow.selected (R1Z.ProverRwP6BodyStore.selected ops)) =
+    @ProverRwFull.ExternalFuns.op32 inst (R1Z.ProverRwSuccessBodyInterpretation.selected ops) :=
+fun [ProverRwFull.ExternalTypes] ops => rfl
+'R1Z.PV_Join_HeapCompatibility.reserve' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem R1Z.PV_Join_HeapCompatibility.mapError : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns),
+  @ProverRwFull.ExternalFuns.op12 inst (R1Z.PV_CB_Borrow.selected (R1Z.ProverRwP6BodyStore.selected ops)) =
+    @ProverRwFull.ExternalFuns.op12 inst (R1Z.ProverRwSuccessBodyInterpretation.selected ops) :=
+fun [ProverRwFull.ExternalTypes] ops => rfl
+'R1Z.PV_Join_HeapCompatibility.mapError' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_HeapCompatibility.dictionary : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns) {T : Type} (copy : Aeneas.Std.core.marker.Copy T) (n : Aeneas.Std.Usize)
+  (value : T),
+  R1Z.ProverRwSuccessHeapSource.aspis_core.r0.heap.filled copy n value =
+    R1Z.ProverRwSuccessHeapSource.aspis_core.r0.heap.filled copy n value :=
+fun [ProverRwFull.ExternalTypes] ops {T} copy n value =>
+  R1Z.PV_Join_HeapCompatibility.filled_congr (R1Z.PV_CB_Borrow.selected (R1Z.ProverRwP6BodyStore.selected ops))
+    (R1Z.ProverRwSuccessBodyInterpretation.selected ops) (R1Z.PV_Join_HeapCompatibility.reserve ops)
+    (R1Z.PV_Join_HeapCompatibility.mapError ops) copy n value
+'R1Z.PV_Join_HeapCompatibility.dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_InvLoop.mul : ∀ (a b : Aeneas.Std.U32),
+  R1Z.PV_Join_InvLoop.S.mul a b = R1Z.PV_Join_InvLoop.R.mul a b :=
+fun a b =>
+  Eq.trans
+    (id
+      (id
+        (id
+          (id
+            (id
+              (id
+                (id
+                  (id
+                    (id
+                      (id
+                        (id
+                          (id
+                            (Eq.refl do
+                              let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 a)
+                              let i1 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 b)
+                              let i2 ← Aeneas.Std.lift (Aeneas.Std.U64.wrapping_mul i i1)
+                              let i3 ←
+                                do
+                                  let i ←
+                                    Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 2147483647#u32)
+                                  let i1 ← Aeneas.Std.lift (i2 &&& i)
+                                  let i2 ← Aeneas.Std.lift (i2.wrapping_shr 31#u32)
+                                  let x1 ← Aeneas.Std.lift (Aeneas.Std.U64.wrapping_add i1 i2)
+                                  let i3 ←
+                                    Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 2147483647#u32)
+                                  let i4 ← Aeneas.Std.lift (x1 &&& i3)
+                                  let i5 ← Aeneas.Std.lift (x1.wrapping_shr 31#u32)
+                                  let x2 ← Aeneas.Std.lift (Aeneas.Std.U64.wrapping_add i4 i5)
+                                  let i6 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 x2)
+                                  let i ←
+                                    Aeneas.Std.lift
+                                        (Aeneas.Std.UScalar.cast_fromBool Aeneas.Std.UScalarTy.U32
+                                          (decide (i6 ≥ 2147483647#u32)))
+                                  let mask ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_sub 0#u32 i)
+                                  let i1 ← Aeneas.Std.lift (2147483647#u32 &&& mask)
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.num.U32.wrapping_sub i6 i1)
+                              Aeneas.Std.Result.ok i3)))))))))))))
+    (R1Z.ProverRwP7CurrentBaseBridge.mul a b)
+'R1Z.PV_Join_InvLoop.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_InvLoop.body : ∀ (exp : Aeneas.Std.U64) (base acc : Aeneas.Std.U32),
+  R1Z.PV_Join_InvLoop.S.body exp base acc = R1Z.PV_Join_InvLoop.R.body exp base acc :=
+fun exp base acc =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (ite_congr (Eq.refl (exp > 0#u64))
+            (fun a =>
+              congrArg (bind (Aeneas.Std.lift (exp &&& 1#u64)))
+                (funext fun i =>
+                  congr
+                    (congrArg bind
+                      (ite_congr (Eq.refl (i = 1#u64)) (fun a => R1Z.PV_Join_InvLoop.mul acc base) fun a =>
+                        Eq.refl (Aeneas.Std.Result.ok acc)))
+                    (funext fun acc1 =>
+                      congrFun' (congrArg bind (R1Z.PV_Join_InvLoop.mul base base)) fun base1 => do
+                        let exp1 ← Aeneas.Std.lift (exp.wrapping_shr 1#u32)
+                        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (exp1, base1, acc1)))))
+            fun a => Eq.refl (Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done acc))))
+        (if exp > 0#u64 then do
+          let i ← Aeneas.Std.lift (exp &&& 1#u64)
+          let acc1 ←
+            if i = 1#u64 then R1Z.ProverRwSuccessInverseSource.field.M31.mul acc base else Aeneas.Std.Result.ok acc
+          let base1 ← R1Z.ProverRwSuccessInverseSource.field.M31.mul base base
+          let exp1 ← Aeneas.Std.lift (exp.wrapping_shr 1#u32)
+          Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (exp1, base1, acc1))
+        else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done acc)))
+      (eq_self
+        (if exp > 0#u64 then do
+          let i ← Aeneas.Std.lift (exp &&& 1#u64)
+          let acc1 ← if i = 1#u64 then R1Z.PV_Join_InvLoop.R.mul acc base else Aeneas.Std.Result.ok acc
+          let base1 ← R1Z.PV_Join_InvLoop.R.mul base base
+          let exp1 ← Aeneas.Std.lift (exp.wrapping_shr 1#u32)
+          Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (exp1, base1, acc1))
+        else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done acc))))
+'R1Z.PV_Join_InvLoop.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_InvLoop.run : ∀ (exp : Aeneas.Std.U64) (base acc : Aeneas.Std.U32),
+  R1Z.PV_Join_InvLoop.S.run exp base acc = R1Z.PV_Join_InvLoop.R.run exp base acc :=
+fun exp base acc =>
+  id
+    (id
+      (id
+        (id
+          (congrArg (fun f => Aeneas.Std.loop f (exp, base, acc))
+            (funext fun triple =>
+              let ⟨e, snd✝⟩ := triple
+              let ⟨b, a⟩ := snd✝
+              R1Z.PV_Join_InvLoop.body e b a)))))
+'R1Z.PV_Join_InvLoop.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_InvLoop.pow : ∀ (x : Aeneas.Std.U32) (exp : Aeneas.Std.U64),
+  R1Z.PV_Join_InvLoop.S.pow x exp = R1Z.PV_Join_InvLoop.R.pow x exp :=
+fun x exp =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (PV_CB_ShippedOp105.aspis_core.field.M31.pow_loop exp x)
+              PV_CB_ShippedOp105.aspis_core.field.M31.ONE.eq_1)
+            (R1Z.PV_Join_InvLoop.run exp x 1#u32)))
+        (R1Z.ProverRwSuccessInverseSource.field.M31.pow_loop exp x 1#u32))
+      (eq_self (R1Z.PV_Join_InvLoop.R.run exp x 1#u32)))
+'R1Z.PV_Join_InvLoop.pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_InvSource.inverse : ∀ (x : Aeneas.Std.U32),
+  R1Z.PV_Join_InvLoop.S.inv x = R1Z.PV_Join_InvLoop.R.inv x :=
+fun x =>
+  of_eq_true
+    (Eq.trans
+      (congr
+        (congrArg Eq
+          (congr
+            (congrArg bind
+              (congrArg Aeneas.Std.Result.ok
+                (Decidable.decide.congr_simp (x = PV_CB_ShippedOp105.aspis_core.field.M31.ZERO) (x = 0#u32)
+                  (congrArg (Eq x) PV_CB_ShippedOp105.aspis_core.field.M31.ZERO.eq_1))))
+            (funext fun b =>
+              ite_congr (Eq.refl (b = true)) (fun a => Eq.refl (Aeneas.Std.Result.ok none)) fun a =>
+                congr
+                  (congrArg bind
+                    (congrArg Aeneas.Std.lift
+                      (congrFun' (congrArg Aeneas.Std.U32.wrapping_sub PV_CB_ShippedOp105.aspis_core.field.P.eq_1)
+                        2#u32)))
+                  (funext fun i =>
+                    congrArg (bind (Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i)))
+                      (funext fun i1 =>
+                        congrFun' (congrArg bind (R1Z.PV_Join_InvLoop.pow x i1)) fun m =>
+                          Aeneas.Std.Result.ok (some m))))))
+        (congr
+          (congrArg bind
+            (congrArg Aeneas.Std.Result.ok
+              (Decidable.decide.congr_simp (x = R1Z.ProverRwSuccessInverseSource.field.M31.ZERO) (x = 0#u32)
+                (congrArg (Eq x) AspisR1ProducerRelease47.field.M31.ZERO.eq_1))))
+          (funext fun b =>
+            ite_congr (Eq.refl (b = true)) (fun a => Eq.refl (Aeneas.Std.Result.ok none)) fun a =>
+              congrFun'
+                (congrArg bind
+                  (congrArg Aeneas.Std.lift
+                    (congrFun' (congrArg Aeneas.Std.U32.wrapping_sub AspisR1ProducerRelease47.field.P.eq_1) 2#u32)))
+                fun i => do
+                let i1 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i)
+                let m ← R1Z.ProverRwSuccessInverseSource.field.M31.pow x i1
+                Aeneas.Std.Result.ok (some m))))
+      (eq_self do
+        let b ← Aeneas.Std.Result.ok (decide (x = 0#u32))
+        if b = true then Aeneas.Std.Result.ok none
+          else do
+            let i ← Aeneas.Std.lift (Aeneas.Std.U32.wrapping_sub 2147483647#u32 2#u32)
+            let i1 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from i)
+            let m ← R1Z.PV_Join_InvLoop.R.pow x i1
+            Aeneas.Std.Result.ok (some m)))
+'R1Z.PV_Join_InvSource.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_LedgerSource.body_source : ∀ [inst : ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns]
+  (base : ProverRwFull.ExternalTypes) {N C : Type}
+  (ops : R1Z.PV_Join_LedgerSource.World base N C → ProverRwFull.ExternalFuns)
+  (pub : R1Z.PV_Join_LedgerSource.World base N C → R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.PV_Join_LedgerSource.World base N C → R1Z.ProverRwRetryModel.Compiled)
+  (hash : R1Z.PV_Join_LedgerSource.World base N C → R1Z.ProverRwRetryModel.Hash)
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+    (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_LedgerSource.inputs base ops pub compiled hash))
+    (R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+      (R1Z.PV_Join_LedgerSource.inputs base ops pub compiled hash)) :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] base {N C} ops pub compiled hash schedule unix
+    address =>
+  R1Z.PV_RunJoin_LedgerSourceBody.source_law schedule unix address
+    (R1Z.PV_Join_LedgerSource.inputs base ops pub compiled hash) fun s =>
+    Eq.refl
+      (@ProverRwFull.ExternalFuns.op12 (R1Z.PV_Join_PublicCaller.native base)
+        ((R1Z.PV_Join_LedgerSource.inputs base ops pub compiled hash).ops s))
+'R1Z.PV_Join_LedgerSource.body_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

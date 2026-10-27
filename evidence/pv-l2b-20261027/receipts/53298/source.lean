@@ -1,0 +1,19 @@
+import PV_L2B_AuditTrace
+
+#check PV_L2B_SourceWords.source_scan
+#check PV_L2B_SourceWords.source_count_relabel
+#check PV_L2B_Rejection.coins_only
+#check PV_L2B_SamplerLaw.uniform_on_success
+#check PV_L2B_SamplerLaw.entropy_uniform_pair
+#check PV_L2B_EntropyTrace.branches_relabel
+#check PV_L2B_Guards.inactive_balance
+#check PV_L2B_Guards.padding_total
+#check PV_L2B_Guards.sumcheck_boundary
+#check PV_L2B_Guards.sumcheck_terminal
+#check PV_L2B_JointTransport.accepted_conditional_uniform
+#check PV_L2B_JointTransport.outside_existing_event
+#check PV_L2B_JointTransport.weighted_joint_transport
+
+#print PV_L2B_SourceWords.classify
+#print PV_L2B_SourceWords.source
+#print axioms PV_L2B_SourceWords.source_scan

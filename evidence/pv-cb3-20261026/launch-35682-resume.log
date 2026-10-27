@@ -1,0 +1,66 @@
+reservation: populated 26 GiB + 8 GiB; window=1 (London 0102); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+          let (digits2, _) := PV_CB3_StagedMachineCarry.carry digits 1#u32
+          ok digits2
+        else ok digits
+    let i3 ← digits1.index_usize 1#usize
+    let i4 ← digits1.index_usize 2#usize
+    let i5 ← digits1.index_usize 3#usize
+    let i6 ← digits1.index_usize 4#usize
+    let i7 ← digits1.index_usize 5#usize
+    let i8 ← digits1.index_usize 6#usize
+    let i9 ← digits1.index_usize 7#usize
+    PV_CB3_StagedSource.aspis_core.field.wide_exact.WideExact.new
+        { c0 := { a := limb digits1 ⟨0, ⋯⟩, b := i3 }, c1 := { a := i4, b := i5 } }
+        { c0 := { a := i6, b := i7 }, c1 := { a := i8, b := i9 } }) =
+    PV_CB3_StagedDecode.decode (if false = true then (PV_CB3_StagedMachineCarry.carry digits 1#u32).1 else digits)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_StagedKernel.lean:72:4: error: Type mismatch
+  PV_CB3_StagedDecode.suffix_eq digits2
+has type
+  PV_CB3_StagedDecode.suffix digits2 = PV_CB3_StagedDecode.decode digits2
+but is expected to have type
+  (let (rank1, d0) := (rank1, d0)
+    let (rank2, d1) := PV_CB3_StagedMachinePass.pass rank1
+    let (rank3, d2) := PV_CB3_StagedMachinePass.pass rank2
+    let (rank4, d3) := PV_CB3_StagedMachinePass.pass rank3
+    let (rank5, d4) := PV_CB3_StagedMachinePass.pass rank4
+    let (rank6, d5) := PV_CB3_StagedMachinePass.pass rank5
+    let (rank7, d6) := PV_CB3_StagedMachinePass.pass rank6
+    let (rank8, d7) := PV_CB3_StagedMachinePass.pass rank7
+    let (digits, wrapped) :=
+      PV_CB3_StagedMachineCarry.carry (Array.make 8#usize [d0, d1, d2, d3, d4, d5, d6, d7] ⋯)
+        ((limb rank8 ⟨0, ⋯⟩).wrapping_add 1#u32)
+    do
+    let digits1 ←
+      if wrapped = true then
+          let (digits2, _) := PV_CB3_StagedMachineCarry.carry digits 1#u32
+          ok digits2
+        else ok digits
+    let i3 ← digits1.index_usize 1#usize
+    let i4 ← digits1.index_usize 2#usize
+    let i5 ← digits1.index_usize 3#usize
+    let i6 ← digits1.index_usize 4#usize
+    let i7 ← digits1.index_usize 5#usize
+    let i8 ← digits1.index_usize 6#usize
+    let i9 ← digits1.index_usize 7#usize
+    PV_CB3_StagedSource.aspis_core.field.wide_exact.WideExact.new
+        { c0 := { a := limb digits1 ⟨0, ⋯⟩, b := i3 }, c1 := { a := i4, b := i5 } }
+        { c0 := { a := i6, b := i7 }, c1 := { a := i8, b := i9 } }) =
+    PV_CB3_StagedDecode.decode (if true = true then digits2 else digits)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_StagedKernel.lean:33:44: warning: This simp argument is unused:
+  letFun
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵(̵c̵o̵n̵f̵i̵g̵ ̵:̵=̵ ̵{̵z̵e̵t̵a̵H̵a̵v̵e̵ ̵:̵=̵ ̵t̵r̵u̵e̵}̵)̵ ̵o̵n̵l̵y̵ ̵[̵l̵e̵t̵F̵u̵n̵,̵P̵V̵_̵C̵B̵3̵_̵S̵t̵a̵g̵e̵d̵S̵o̵u̵r̵c̵e̵.̵s̵t̵a̵g̵e̵d̵_̵r̵e̵f̵e̵r̵e̵n̵c̵e̵.̵g̵a̵m̵m̵a̵,̵h̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̵i̵p̵e̵l̵i̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵C̵B̵3̵_̵S̵t̵a̵g̵e̵d̵M̵a̵c̵h̵i̵n̵e̵P̵a̵s̵s̵.̵s̵o̵u̵r̵c̵e̵,̵P̵V̵_̵C̵B̵3̵_̵S̵t̵a̵g̵e̵d̵M̵a̵c̵h̵i̵n̵e̵C̵a̵r̵r̵y̵.̵s̵o̵u̵r̵c̵e̵,̵r̵e̵a̵d̵0̵,̵l̵i̵f̵t̵]̵s̲i̲m̲p̲ ̲(̲c̲o̲n̲f̲i̲g̲ ̲:̲=̲ ̲{̲ ̲z̲e̲t̲a̲H̲a̲v̲e̲ ̲:̲=̲ ̲t̲r̲u̲e̲ ̲}̲)̲ ̲o̲n̲l̲y̲ ̲[̲P̲V̲_̲C̲B̲3̲_̲S̲t̲a̲g̲e̲d̲S̲o̲u̲r̲c̲e̲.̲s̲t̲a̲g̲e̲d̲_̲r̲e̲f̲e̲r̲e̲n̲c̲e̲.̲g̲a̲m̲m̲a̲,̲ ̲h̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲i̲p̲e̲l̲i̲n̲e̲,̲ ̲P̲V̲_̲C̲B̲3̲_̲S̲t̲a̲g̲e̲d̲M̲a̲c̲h̲i̲n̲e̲P̲a̲s̲s̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲P̲V̲_̲C̲B̲3̲_̲S̲t̲a̲g̲e̲d̲M̲a̲c̲h̲i̲n̲e̲C̲a̲r̲r̲y̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲r̲e̲a̲d̲0̲,̲
+  ̲ ̲ ̲ ̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB3_StagedKernel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.40
+	Maximum resident set size (kbytes): 2639748
+	Swaps: 0
+	Exit status: 1

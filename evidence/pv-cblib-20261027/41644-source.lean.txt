@@ -1,0 +1,204 @@
+import R1Z.PV_CBL_BlockStage00
+import R1Z.PV_CBL_BlockValueFactored
+import R1Z.PV_CBL_FallbackConstantSource
+import R1Z.PV_CBL_FallbackArray16
+import R1Z.PV_CBL_BlockConstantRead00
+import R1Z.PV_CBL_BlockConstantRead01
+import R1Z.PV_CBL_BlockConstantRead02
+import R1Z.PV_CBL_BlockConstantRead03
+import R1Z.PV_CBL_BlockConstantRead04
+import R1Z.PV_CBL_BlockConstantRead05
+import R1Z.PV_CBL_BlockConstantRead06
+import R1Z.PV_CBL_BlockConstantRead07
+import R1Z.PV_CBL_BlockConstantRead08
+import R1Z.PV_CBL_BlockConstantRead09
+import R1Z.PV_CBL_BlockConstantRead10
+import R1Z.PV_CBL_BlockConstantRead11
+import R1Z.PV_CBL_BlockConstantRead12
+import R1Z.PV_CBL_BlockConstantRead13
+import R1Z.PV_CBL_BlockConstantRead14
+import R1Z.PV_CBL_BlockConstantRead15
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_BlockGraph
+open PV_CBL_FallbackArray4 PV_CBL_FallbackScalar
+set_option autoImplicit false
+def group0 (input : Array U32 16#usize) : A4 := pack input.val[3]! input.val[2]! input.val[1]! input.val[0]!
+def group1 (input : Array U32 16#usize) : A4 := pack input.val[7]! input.val[6]! input.val[5]! input.val[4]!
+def group2 (input : Array U32 16#usize) : A4 := pack input.val[11]! input.val[10]! input.val[9]! input.val[8]!
+def group3 (input : Array U32 16#usize) : A4 := pack input.val[15]! input.val[14]! input.val[13]! input.val[12]!
+def value (state : State) (input : Array U32 16#usize) : State :=
+  PV_CBL_BlockStage00.value state state (group0 input) (group1 input) (group2 input) (group3 input)
+def graph (state : State) (input : Array U32 16#usize) : Result (Array U32 8#usize) :=
+  PV_CBL_BlockStage00.source (PV_CBL_FallbackStateCodec.encode state)
+    (pack state.a state.b state.e state.f) (pack state.c state.d state.g state.h) (group0 input) (group1 input) (group2 input) (group3 input)
+theorem graph_value (state : State) (input : Array U32 16#usize) :
+    graph state input = ok (PV_CBL_FallbackStateCodec.encode (value state input)) :=
+  PV_CBL_BlockStage00.shape state state _ _ _ _
+theorem source (state : State) (input : Array U32 16#usize) :
+    PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block
+      (PV_CBL_FallbackStateCodec.encode state) input = graph state input := by
+  rw [PV_CBL_BlockValueFactored.source]
+  have hs0 := PV_CBL_FallbackArrayRead.read (PV_CBL_FallbackStateCodec.encode state) 0#usize (by decide)
+  have hs1 := PV_CBL_FallbackArrayRead.read (PV_CBL_FallbackStateCodec.encode state) 1#usize (by decide)
+  have hs2 := PV_CBL_FallbackArrayRead.read (PV_CBL_FallbackStateCodec.encode state) 2#usize (by decide)
+  have hs3 := PV_CBL_FallbackArrayRead.read (PV_CBL_FallbackStateCodec.encode state) 3#usize (by decide)
+  have hs4 := PV_CBL_FallbackArrayRead.read (PV_CBL_FallbackStateCodec.encode state) 4#usize (by decide)
+  have hs5 := PV_CBL_FallbackArrayRead.read (PV_CBL_FallbackStateCodec.encode state) 5#usize (by decide)
+  have hs6 := PV_CBL_FallbackArrayRead.read (PV_CBL_FallbackStateCodec.encode state) 6#usize (by decide)
+  have hs7 := PV_CBL_FallbackArrayRead.read (PV_CBL_FallbackStateCodec.encode state) 7#usize (by decide)
+  have hb0 := PV_CBL_FallbackArrayRead.read input 0#usize (by decide)
+  have hb1 := PV_CBL_FallbackArrayRead.read input 1#usize (by decide)
+  have hb2 := PV_CBL_FallbackArrayRead.read input 2#usize (by decide)
+  have hb3 := PV_CBL_FallbackArrayRead.read input 3#usize (by decide)
+  have hb4 := PV_CBL_FallbackArrayRead.read input 4#usize (by decide)
+  have hb5 := PV_CBL_FallbackArrayRead.read input 5#usize (by decide)
+  have hb6 := PV_CBL_FallbackArrayRead.read input 6#usize (by decide)
+  have hb7 := PV_CBL_FallbackArrayRead.read input 7#usize (by decide)
+  have hb8 := PV_CBL_FallbackArrayRead.read input 8#usize (by decide)
+  have hb9 := PV_CBL_FallbackArrayRead.read input 9#usize (by decide)
+  have hb10 := PV_CBL_FallbackArrayRead.read input 10#usize (by decide)
+  have hb11 := PV_CBL_FallbackArrayRead.read input 11#usize (by decide)
+  have hb12 := PV_CBL_FallbackArrayRead.read input 12#usize (by decide)
+  have hb13 := PV_CBL_FallbackArrayRead.read input 13#usize (by decide)
+  have hb14 := PV_CBL_FallbackArrayRead.read input 14#usize (by decide)
+  have hb15 := PV_CBL_FallbackArrayRead.read input 15#usize (by decide)
+  simp only [PV_CBL_BlockValueFactored.block,
+    graph,
+    PV_CBL_FallbackConstantSource.source,
+    PV_CBL_BlockConstantRead00.source,
+    PV_CBL_BlockConstantRead01.source,
+    PV_CBL_BlockConstantRead02.source,
+    PV_CBL_BlockConstantRead03.source,
+    PV_CBL_BlockConstantRead04.source,
+    PV_CBL_BlockConstantRead05.source,
+    PV_CBL_BlockConstantRead06.source,
+    PV_CBL_BlockConstantRead07.source,
+    PV_CBL_BlockConstantRead08.source,
+    PV_CBL_BlockConstantRead09.source,
+    PV_CBL_BlockConstantRead10.source,
+    PV_CBL_BlockConstantRead11.source,
+    PV_CBL_BlockConstantRead12.source,
+    PV_CBL_BlockConstantRead13.source,
+    PV_CBL_BlockConstantRead14.source,
+    PV_CBL_BlockConstantRead15.source,
+    hs0,
+    hs1,
+    hs2,
+    hs3,
+    hs4,
+    hs5,
+    hs6,
+    hs7,
+    hb0,
+    hb1,
+    hb2,
+    hb3,
+    hb4,
+    hb5,
+    hb6,
+    hb7,
+    hb8,
+    hb9,
+    hb10,
+    hb11,
+    hb12,
+    hb13,
+    hb14,
+    hb15,
+    bind_tc_ok]
+  conv_rhs => unfold PV_CBL_BlockStage00.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair0
+  rcases pair0 with ⟨abef0,cdgh0⟩
+  conv_rhs => unfold PV_CBL_BlockStage01.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair1
+  rcases pair1 with ⟨abef1,cdgh1⟩
+  conv_rhs => unfold PV_CBL_BlockStage02.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair2
+  rcases pair2 with ⟨abef2,cdgh2⟩
+  conv_rhs => unfold PV_CBL_BlockStage03.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair3
+  rcases pair3 with ⟨abef3,cdgh3⟩
+  conv_rhs => unfold PV_CBL_BlockStage04.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word4
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair4
+  rcases pair4 with ⟨abef4,cdgh4⟩
+  conv_rhs => unfold PV_CBL_BlockStage05.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word5
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair5
+  rcases pair5 with ⟨abef5,cdgh5⟩
+  conv_rhs => unfold PV_CBL_BlockStage06.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word6
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair6
+  rcases pair6 with ⟨abef6,cdgh6⟩
+  conv_rhs => unfold PV_CBL_BlockStage07.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word7
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair7
+  rcases pair7 with ⟨abef7,cdgh7⟩
+  conv_rhs => unfold PV_CBL_BlockStage08.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word8
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair8
+  rcases pair8 with ⟨abef8,cdgh8⟩
+  conv_rhs => unfold PV_CBL_BlockStage09.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word9
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair9
+  rcases pair9 with ⟨abef9,cdgh9⟩
+  conv_rhs => unfold PV_CBL_BlockStage10.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word10
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair10
+  rcases pair10 with ⟨abef10,cdgh10⟩
+  conv_rhs => unfold PV_CBL_BlockStage11.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word11
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair11
+  rcases pair11 with ⟨abef11,cdgh11⟩
+  conv_rhs => unfold PV_CBL_BlockStage12.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word12
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair12
+  rcases pair12 with ⟨abef12,cdgh12⟩
+  conv_rhs => unfold PV_CBL_BlockStage13.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word13
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair13
+  rcases pair13 with ⟨abef13,cdgh13⟩
+  conv_rhs => unfold PV_CBL_BlockStage14.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word14
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair14
+  rcases pair14 with ⟨abef14,cdgh14⟩
+  conv_rhs => unfold PV_CBL_BlockStage15.source
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro word15
+  apply PV_CBL_BlockBindExt.bind_ext
+  intro pair15
+  rcases pair15 with ⟨abef15,cdgh15⟩
+  conv_rhs => unfold PV_CBL_BlockStage16.source PV_CBL_FallbackFeedForward.source
+  conv_rhs => rw [hs0]; simp only [bind_tc_ok]
+  rfl
+#print axioms value
+#print axioms graph
+#print axioms graph_value
+#print axioms source
+end R1Z.PV_CBL_BlockGraph

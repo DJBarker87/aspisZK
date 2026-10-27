@@ -1,0 +1,31 @@
+--- a/crates/aspis-core/src/state_only_hiding.rs
++++ b/crates/aspis-core/src/state_only_hiding.rs
+@@ -652,18 +652,24 @@
+ ) -> QM31 {
+     let (linear, explicit_linear) = selected_mask_linears(point);
+     let mut coefficients = [QM31::ZERO; STATE_ONLY_HIDING_FACTOR_DEGREE + 1];
+-    for column in 0..STATE_ONLY_HIDING_C1_COLUMNS {
++    let mut column=0usize;
++    while column < STATE_ONLY_HIDING_C1_COLUMNS {
+         coefficients[usize::from(FACTOR_EXPONENTS[column])] =
+             mul_tower_basis(c1[column], column & 3);
+-    }
+-    for column in 0..STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
++        column += 1;
++    }
++    let mut column=0usize;
++    while column < STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
+         coefficients[usize::from(MASK_ONLY_FACTOR_EXPONENTS[column])] =
+             mul_tower_basis(mask_only_c1[column], column & 3);
++        column += 1;
+     }
+ 
+     let prepared_linear = PreparedQm31Multiplier::new(linear);
+     let mut shared = coefficients[STATE_ONLY_HIDING_FACTOR_DEGREE];
+-    for exponent in (0..STATE_ONLY_HIDING_FACTOR_DEGREE).rev() {
++    let mut exponent=STATE_ONLY_HIDING_FACTOR_DEGREE;
++    while exponent > 0 {
++        exponent -= 1;
+         shared = prepared_linear.mul(shared).add(coefficients[exponent]);
+     }
+ 

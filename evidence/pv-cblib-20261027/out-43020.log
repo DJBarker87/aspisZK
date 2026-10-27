@@ -1,0 +1,28 @@
+def Aeneas.Std.core.num.U32.rotate_right : U32 → U32 → U32 :=
+UScalar.rotate_right
+def Aeneas.Std.U32.wrapping_shr : U32 → U32 → U32 :=
+fun x s => UScalar.wrapping_shr x s
+def Aeneas.Std.U32.wrapping_shl : U32 → U32 → U32 :=
+fun x s => UScalar.wrapping_shl x s
+def Aeneas.Std.U32.wrapping_add : U32 → U32 → U32 :=
+fun x y => UScalar.wrapping_add x y
+structure Aeneas.Std.UScalar (ty : UScalarTy) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.UScalar.bv : BitVec ty.numBits
+constructor:
+  Aeneas.Std.UScalar.mk {ty : UScalarTy} (bv : BitVec ty.numBits) : UScalar ty
+Aeneas.Std.UScalar.wrapping_shl_bv_eq : ∀ {ty : UScalarTy} (x : UScalar ty) (s : U32),
+  (x.wrapping_shl s).bv = x.bv.shiftLeft (↑s % ty.numBits)
+Aeneas.Std.UScalar.rotate_right : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty
+Aeneas.Std.UScalar.wrapping_shr.eq_1 : ∀ {ty : UScalarTy} (x : UScalar ty) (s : U32),
+  x.wrapping_shr s = x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+Aeneas.Std.UScalar.wrapping_shl.eq_1 : ∀ {ty : UScalarTy} (x : UScalar ty) (s : U32),
+  x.wrapping_shl s = x.bv.shiftLeft (↑s % ty.numBits)#uscalar
+Aeneas.Std.UScalar.wrapping_shl : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty
+Aeneas.Std.UScalar.wrapping_shr_bv_eq : ∀ {ty : UScalarTy} (x : UScalar ty) (s : U32),
+  (x.wrapping_shr s).bv = x.bv.ushiftRight (↑s % ty.numBits)
+Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty
+Aeneas.Std.UScalar.rotate_left : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh

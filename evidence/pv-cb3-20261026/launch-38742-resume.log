@@ -1,0 +1,44 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0243); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_MaskShift.lean:8:40: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_MaskShift.lean:8:40: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_MaskShift.lean:13:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?x >>> ?i).toNat
+in the target expression
+  (row.bv.ushiftRight 4).toNat = ↑row / 16
+
+row : Usize
+⊢ (row.bv.ushiftRight 4).toNat = ↑row / 16
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_MaskShift.lean:31:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?m.40 <<< ?m.39).toNat
+in the target expression
+  (1#u16.bv.shiftLeft ↑(PV_CB3_MaskCast.low row)).toNat = 2 ^ ↑(PV_CB3_MaskCast.low row)
+
+row : Usize
+⊢ (1#u16.bv.shiftLeft ↑(PV_CB3_MaskCast.low row)).toNat = 2 ^ ↑(PV_CB3_MaskCast.low row)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.U16)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CB3_MaskShift.four_mod' depends on axioms: [propext]
+'R1Z.PV_CB3_MaskShift.block_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_MaskShift.in_bounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_MaskShift.out_of_bounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_MaskShift.bit_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.07
+	Maximum resident set size (kbytes): 2614640
+	Swaps: 0
+	Exit status: 1

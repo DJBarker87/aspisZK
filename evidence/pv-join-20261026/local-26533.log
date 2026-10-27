@@ -1,0 +1,90 @@
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:8:0: error: This instance has 1 argument that cannot be inferred using typeclass synthesis. Specifically
+
+  argument 1: `(base : ExternalTypes)`
+
+These arguments are not instance-implicit and appear neither in another instance-implicit argument nor the return type, so they cannot be inferred using typeclass synthesis.
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:20:86: error: Application type mismatch: The argument
+  pub
+has type
+  @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public base
+but is expected to have type
+  @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (PV_Join_PublicInstall.native base)
+in the application
+  ProverRwP6BodyStore.execute (PV_Join_PublicInstall.selected base ops) store pub
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:20:10: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  base
+inferred
+  PV_Join_PublicInstall.native base
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:21:82: error: Application type mismatch: The argument
+  pub
+has type
+  @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public base
+but is expected to have type
+  @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (PV_Join_PublicInstall.native base)
+in the application
+  ProverRwP6BodyStore.execute (PV_Join_PublicInstall.selected base ops) store pub
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:21:6: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  base
+inferred
+  PV_Join_PublicInstall.native base
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:26:88: error: Application type mismatch: The argument
+  pub
+has type
+  @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public base
+but is expected to have type
+  @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (PV_Join_PublicInstall.native base)
+in the application
+  ProverRwP6BodyStore.writeback (PV_Join_PublicInstall.selected base ops) store pub
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:42:43: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  base
+inferred
+  PV_Join_PublicInstall.native base
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:41:4: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  base
+inferred
+  PV_Join_PublicInstall.native base
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:45:12: error: Application type mismatch: The argument
+  pub
+has type
+  @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public base
+but is expected to have type
+  @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (PV_Join_PublicInstall.native base)
+in the application
+  ProverRwP6BodyStore.execute (PV_Join_PublicInstall.selected base ops) store pub
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:44:4: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  base
+inferred
+  PV_Join_PublicInstall.native base
+/Users/dominic/ZK/.worktrees/pv-join/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Join_PublicCaller.lean:47:14: error(lean.unknownIdentifier): Unknown constant `caller_callback_removed`
+theorem R1Z.PV_Join_PublicCaller.refinement_of_data : ∀ (base : ExternalTypes) (ops : ExternalFuns) {S : Type}
+  (store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1) (v : transport.Variant)
+  (hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)) (binding digest : Std.Array U8 32#usize)
+  (attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),
+  store.reserve s digest attempt.mask_nonce = ok (accepted, after) →
+    ∀ (model : Result (core.result.Result (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) verifier.Error)),
+      data sorry = model → sorry = ProverRwBodyCandidateData.withState after model :=
+fun base ops {S} store pub compiled v hash binding digest attempt s after accepted reservation model same =>
+  eq_of_data after sorry (ProverRwBodyCandidateData.withState after model) sorry
+    (ProverRwBodyCandidateData.keeps_withState after model)
+    (Eq.mpr (id (congrArg (fun _a => data sorry = _a) (ProverRwBodyCandidateData.data_withState after model))) same)
+'R1Z.PV_Join_PublicCaller.refinement_of_data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       24.30 real         1.59 user         3.63 sys
+          3342385152  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              180969  page reclaims
+              126565  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               41261  voluntary context switches
+              158011  involuntary context switches
+           367257479  instructions retired
+           140956701  cycles elapsed
+            11174608  peak memory footprint

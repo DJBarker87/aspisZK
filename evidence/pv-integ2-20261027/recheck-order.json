@@ -1,0 +1,229 @@
+[
+  {
+    "module": "PV_L2B_Rejection",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2B_Rejection.lean",
+    "sha256": "69645281fa569c687d48cd97226bda5679bc08d8533e524421d96e172174de5a",
+    "imports": [
+      "Mathlib.Data.Rat.Lemmas",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Linarith"
+    ]
+  },
+  {
+    "module": "PV_L2B_Cursor",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2B_Cursor.lean",
+    "sha256": "1d2c59895fd27f30d1564c2e03effd0a151bc44fff1ccb0ef2f13513e278da09",
+    "imports": [
+      "PV_L2B_Rejection"
+    ]
+  },
+  {
+    "module": "PV_L2B_SamplerLaw",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2B_SamplerLaw.lean",
+    "sha256": "b1621d5c62f4ae6881cdaf684023145d60ad4bb23cfed91ff2b4331fce7c82ed",
+    "imports": [
+      "Mathlib.Data.Rat.Lemmas",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Linarith"
+    ]
+  },
+  {
+    "module": "PV_L2B_EntropyTrace",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2B_EntropyTrace.lean",
+    "sha256": "a9f3aa2bb9f9f81be3dd23760b31f873e5a6db6ecbbabae0959e5c4296db546b",
+    "imports": [
+      "PV_L2B_SamplerLaw",
+      "PV_L2B_Rejection"
+    ]
+  },
+  {
+    "module": "PV_L2B_Guards",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2B_Guards.lean",
+    "sha256": "a91bb46ccf8b78367fb696a56b98e3ae49b7469f3ab4f901d8def1b7abe6be76",
+    "imports": [
+      "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+      "Mathlib.Data.ZMod.Basic",
+      "Mathlib.Tactic.Linarith"
+    ]
+  },
+  {
+    "module": "PV_L2B_JointTransport",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2B_JointTransport.lean",
+    "sha256": "109862b849ad5049747c586a3a2286ff4d491587adc3dd11c3e3d8251f0dd6a0",
+    "imports": [
+      "PV_L2B_Rejection",
+      "PV_L2B_Cursor",
+      "PV_L2B_EntropyTrace",
+      "PV_L2B_Guards"
+    ]
+  },
+  {
+    "module": "PV_L2B_SourceWords",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2B_SourceWords.lean",
+    "sha256": "c832727774c18cf814521ce62c26d7f9bb47bb783187f5200636910fbc90d6f5",
+    "imports": [
+      "PV_L2B_Rejection"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_Composition",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_Composition.lean",
+    "sha256": "b80dd37fa3f1f5b25f5c6263f1fa63ab3de72effd6056161fe903ff9088ecad3",
+    "imports": [
+      "R1Z.PV_CB_Heap"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_OwnedEncoder",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_OwnedEncoder.lean",
+    "sha256": "a39af0929f3cb7fb808705452d654ab21b005d0aa6e3b63f663140c80ea6e690",
+    "imports": [
+      "Aeneas",
+      "R1Z.ProverRwFullTypes"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_EncoderCell",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_EncoderCell.lean",
+    "sha256": "cad2a964cfb4e149b10a61ac468073bbe5a57db64240ecc543b7ccac222c9405",
+    "imports": [
+      "R1Z.PV_CB_OwnedEncoder",
+      "R1Z.ProverRwP6ArrayRead",
+      "R1Z.ProverRwSuccessPointsTotal"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_EncoderFill",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_EncoderFill.lean",
+    "sha256": "3e7b8c3d2c06979f4e49e4c2f269b4f42367af2f4d165c640a7dacea74792337",
+    "imports": [
+      "R1Z.PV_CB_EncoderCell",
+      "R1Z.PV_CB_ForwardRange"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_EncoderRound",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_EncoderRound.lean",
+    "sha256": "0545e5dbe18a00a40825729a1dcb6eb03613cb0822ee52f6357dde7ffd0ced85",
+    "imports": [
+      "R1Z.PV_CB_EncoderFill"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_EncoderBasis",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_EncoderBasis.lean",
+    "sha256": "1bb36fd0d57b64efd81e6bd2e0187de994ad0a5fdf93c6e6bcd295b87e59ee73",
+    "imports": [
+      "R1Z.PV_CB_EncoderRound"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_EncoderFoldBounds",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_EncoderFoldBounds.lean",
+    "sha256": "7168ab625456df6af920acfc9aa23720d3f0a7afff63354aa1890445ea91add9",
+    "imports": [
+      "R1Z.PV_CB_EncoderCell"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_EncoderFold",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_EncoderFold.lean",
+    "sha256": "c983ed50d248a068d6626a9c2747fd71c715b4afaa8682c88a7ee32152c6d740",
+    "imports": [
+      "R1Z.PV_CB_EncoderFoldBounds",
+      "R1Z.PV_CB_ForwardRange"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_EncoderFoldTotal",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_EncoderFoldTotal.lean",
+    "sha256": "48605ec8d86b24c1b3388505e40933c55064fa14a4c1c9fa4837200840f11984",
+    "imports": [
+      "R1Z.PV_CB_EncoderFold"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_EncoderTotal",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_EncoderTotal.lean",
+    "sha256": "3b976316c2a47b73f6c65845c5d49c0c17d50cd603d1233746daf04eb22267cb",
+    "imports": [
+      "R1Z.PV_CB_EncoderBasis",
+      "R1Z.PV_CB_EncoderFoldTotal"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_ForwardTotal",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_ForwardTotal.lean",
+    "sha256": "45b4aaa70d927e85f7923a28903bffd7e5481e1805c68c269b376259648c4831",
+    "imports": [
+      "R1Z.PV_CB_ForwardLoop",
+      "R1Z.ProverRwSuccessArithmeticTotal"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_Independent",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_Independent.lean",
+    "sha256": "05c6adc4a1a5a160facba17472b83e55a3711c72fb2522a4eb017963c44aa43f",
+    "imports": [
+      "R1Z.PV_CB_Composition"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_MaskHornerTotal",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_MaskHornerTotal.lean",
+    "sha256": "29023e92eb1e014d891f8906f9152e7e5812600ae922f62fb9557c1e77d102a4",
+    "imports": [
+      "R1Z.PV_CB_MaskHorner"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_MaskLinearsTotal",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_MaskLinearsTotal.lean",
+    "sha256": "4428f4fcb8fd22540620c4a65452647bfd9b592dd0695ef7210602ddbced20d3",
+    "imports": [
+      "R1Z.PV_CB_MaskLinearsFinite"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_OwnedMaskFillTotal",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_OwnedMaskFillTotal.lean",
+    "sha256": "2f4e1db44aa8de70a69620d7a87ed4a5a976987e9602c31213c460833c63877c",
+    "imports": [
+      "R1Z.PV_CB_MaskIndices",
+      "R1Z.PV_CB_OwnedMaskFill",
+      "R1Z.PV_CB_ForwardTotal",
+      "R1Z.ProverRwSuccessPointsTotal"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_OwnedMaskHornerTotal",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_OwnedMaskHornerTotal.lean",
+    "sha256": "e67b1496753ae585b06ce7c8215ba7db628ad400646348a30859437e6bbc545c",
+    "imports": [
+      "R1Z.PV_CB_OwnedMaskHorner",
+      "R1Z.PV_CB_MaskHornerTotal"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_OwnedMaskLinearsTotal",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_OwnedMaskLinearsTotal.lean",
+    "sha256": "cc4048837d246eb8a058eb221570327f90be99c5f43610750e35aa4c93837b51",
+    "imports": [
+      "R1Z.PV_CB_OwnedMaskLinears",
+      "R1Z.PV_CB_MaskLinearsTotal"
+    ]
+  },
+  {
+    "module": "R1Z.PV_CB_OwnedMaskTotal",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB_OwnedMaskTotal.lean",
+    "sha256": "8e204ceb75b26a513a8466982de3567ec4fd93dc3a552ec3ab9f45d6109eee75",
+    "imports": [
+      "R1Z.PV_CB_OwnedMaskFillTotal",
+      "R1Z.PV_CB_OwnedMaskLinearsTotal",
+      "R1Z.PV_CB_OwnedMaskHornerTotal"
+    ]
+  }
+]

@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2359); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+                  op205 := ProverRwFull.ExternalFuns.op205, op206 := ProverRwFull.ExternalFuns.op206,
+                  op207 := ProverRwFull.ExternalFuns.op207, op208 := ProverRwFull.ExternalFuns.op208,
+                  op209 := @ProverRwFull.ExternalFuns.op209 inst __src, op210 := ProverRwFull.ExternalFuns.op210,
+                  op211 := @ProverRwFull.ExternalFuns.op211 inst __src,
+                  op212 := @ProverRwFull.ExternalFuns.op212 inst __src,
+                  op213 := @ProverRwFull.ExternalFuns.op213 inst __src,
+                  op214 := @ProverRwFull.ExternalFuns.op214 inst __src,
+                  op215 := @ProverRwFull.ExternalFuns.op215 inst __src,
+                  op216 := @ProverRwFull.ExternalFuns.op216 inst __src,
+                  op217 := @ProverRwFull.ExternalFuns.op217 inst __src,
+                  op218 := @ProverRwFull.ExternalFuns.op218 inst __src,
+                  op219 := @ProverRwFull.ExternalFuns.op219 inst __src,
+                  op220 := @ProverRwFull.ExternalFuns.op220 inst __src, op221 := ProverRwFull.ExternalFuns.op221,
+                  op222 := ProverRwFull.ExternalFuns.op222, op223 := ProverRwFull.ExternalFuns.op223,
+                  op224 := ProverRwFull.ExternalFuns.op224, op225 := ProverRwFull.ExternalFuns.op225,
+                  op226 := ProverRwFull.ExternalFuns.op226, op227 := ProverRwFull.ExternalFuns.op227,
+                  op228 := ProverRwFull.ExternalFuns.op228, op229 := ProverRwFull.ExternalFuns.op229,
+                  op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+                  op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+                  op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+                  op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+                  op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+                  op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+                  op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+                  op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+                  op246 := @ProverRwFull.ExternalFuns.op246 inst __src, op247 := ProverRwFull.ExternalFuns.op247,
+                  op248 := ProverRwFull.ExternalFuns.op248, op249 := ProverRwFull.ExternalFuns.op249,
+                  op250 := ProverRwFull.ExternalFuns.op250, op251 := ProverRwFull.ExternalFuns.op251,
+                  op252 := ProverRwFull.ExternalFuns.op252, op253 := ProverRwFull.ExternalFuns.op253,
+                  op254 := ProverRwFull.ExternalFuns.op254, op255 := @ProverRwFull.ExternalFuns.op255 inst __src,
+                  op256 := ProverRwFull.ExternalFuns.op256, op257 := @ProverRwFull.ExternalFuns.op257 inst __src,
+                  op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+                  op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 })))))))
+'R1Z.PV_Join_FieldDictionary.dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_FixtureData.criterion : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  {S : Type} (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (i : R1Z.PV_Src_NativeInput.Input) (v : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (binding digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),
+  store.reserve s digest attempt.mask_nonce = Aeneas.Std.Result.ok (accepted, after) →
+    ∀ (fields : R1Z.ProverCommitFront46.Fields) (queries : List R1Z.ProverCommitPublish43.QueryParts)
+      (slots : List R1Z.ProverCommitPublish43.Slot),
+      R1Z.PV_Join_PublicCaller.execute base ops store (R1Z.PV_Join_FixtureInputs.publicInput base i)
+            (R1Z.PV_Join_FixtureInputs.compiled base i.compiled) v hash binding digest attempt s =
+          R1Z.ProverRwBodyCandidateData.withState after
+            (R1Z.ProverRw19MathematicalAssembly.output fields queries slots) ↔
+        R1Z.PV_RW_DataProduct.observe R1Z.PV_RW_DataProduct.first
+            (R1Z.ProverRwBodyDataCriterion.data
+              (R1Z.PV_Join_PublicCaller.execute base ops store (R1Z.PV_Join_FixtureInputs.publicInput base i)
+                (R1Z.PV_Join_FixtureInputs.compiled base i.compiled) v hash binding digest attempt s)) =
+          R1Z.ProverRw19MathematicalAssembly.proofBytes fields queries slots :=
+fun base ops {S} store i v hash binding digest attempt s after accepted reservation fields queries slots =>
+  R1Z.PV_Join_PublicDataIff.criterion base ops store (R1Z.PV_Join_FixtureInputs.publicInput base i)
+    (R1Z.PV_Join_FixtureInputs.compiled base i.compiled) v hash binding digest attempt s after accepted reservation
+    (R1Z.ProverRw19MathematicalAssembly.proofBytes fields queries slots)
+'R1Z.PV_Join_FixtureData.criterion' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.92
+	Maximum resident set size (kbytes): 4335572
+	Swaps: 0
+	Exit status: 0

@@ -1,0 +1,33 @@
+import R1Z.PV_CBL_PadContentSource
+import R1Z.PV_CBL_SoftByteBlocks
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_PadCallbackOrder
+set_option autoImplicit false
+/-- Owned callback sequence made explicit; the two-block order is observable
+in the state fold and is never replaced by an unordered collection. -/
+def blocks (first : Array U8 64#usize) (second : Option (Array U8 64#usize)) :
+    List (Array U8 64#usize) := first :: second.toList
+
+theorem content (buffer : Array U8 64#usize) (pos : Usize) (suffix : Array U8 8#usize)
+    (hp : pos.val<64) :
+    ∃ first second, PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos suffix =
+      ok (first,second,first,0#usize) ∧
+      (blocks first second).map (fun a => a.val) =
+        PV_CBL_PaddingModel.blocks buffer.val pos.val suffix.val := by
+  obtain ⟨first,second,he,hf,hs⟩ := PV_CBL_PadContentSource.source buffer pos suffix hp
+  refine ⟨first,second,he,?_⟩
+  simp only [blocks,PV_CBL_PaddingModel.blocks,List.map_cons,hf]
+  congr 1
+  cases second with
+  | none => simpa using congrArg Option.toList hs
+  | some a => simpa using congrArg Option.toList hs
+
+theorem two_order (state : Array U32 8#usize) (a b : Array U8 64#usize) :
+    PV_CBL_SoftByteBlocks.reference state (blocks a (some b)) =
+      ok (PV_CBL_SoftByteSource.value (PV_CBL_SoftByteSource.value state a) b) := by
+  rw [PV_CBL_SoftByteBlocks.source]
+  rfl
+#print axioms blocks
+#print axioms content
+#print axioms two_order
+end R1Z.PV_CBL_PadCallbackOrder

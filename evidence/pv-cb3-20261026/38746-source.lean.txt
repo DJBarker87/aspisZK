@@ -1,0 +1,22 @@
+import R1Z.PV_CB3_Op258End
+set_option autoImplicit false
+namespace R1Z.PV_CB3_PoleIndex
+open Aeneas Aeneas.Std Result
+
+theorem slice_length {T : Type} (xs : Slice T) : (Slice.len xs).val = xs.val.length := by
+  rfl
+
+theorem slice_read {T : Type} (xs : Slice T) (i : Usize) (h : i < Slice.len xs) :
+    Slice.index_usize xs i = ok (xs.val[i.val]'(by
+      have hi : i.val < (Slice.len xs).val := h
+      simpa only [slice_length] using hi)) := by
+  change (match xs.val[i.val]? with | none => _ | some x => _) = _
+  rw [List.getElem?_eq_getElem]
+
+theorem increment (row : Usize) (h : row.val < 1024) :
+    (Usize.wrapping_add row 1#usize).val = row.val+1 := by
+  scalar_tac
+#print axioms slice_length
+#print axioms slice_read
+#print axioms increment
+end R1Z.PV_CB3_PoleIndex

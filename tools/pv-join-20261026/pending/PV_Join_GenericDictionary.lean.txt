@@ -1,0 +1,24 @@
+import R1Z.PV_Join_Generic
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Join_GenericDictionary
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+@[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=
+  {ProverRwP6BodyStore.selected ops with
+    op3 := @ExternalFuns.op3 _ (PV_CB_Take.selected ops),
+    op77 := @ExternalFuns.op77 _ (PV_CB_PointClone.selected ops)}
+theorem dictionary (ops : ExternalFuns) : selected ops = ProverRwP6BodyStore.selected ops := by
+  have h3 : @ExternalFuns.op3 _ (PV_CB_Take.selected ops) =
+      @ExternalFuns.op3 _ (ProverRwP6BodyStore.selected ops) := by
+    funext T inst x
+    exact (PV_CB_TakeSource.op3_source ops inst x).trans (PV_Join_Generic.op3_source ops inst x).symm
+  have h77 : @ExternalFuns.op77 _ (PV_CB_PointClone.selected ops) =
+      @ExternalFuns.op77 _ (ProverRwP6BodyStore.selected ops) := by
+    funext E inst p
+    exact (PV_CB_Op77Source.op77_source ops inst p).trans (PV_Join_Generic.op77_source ops inst p).symm
+  unfold selected
+  rw [h3, h77]
+  rfl
+#print axioms dictionary
+end R1Z.PV_Join_GenericDictionary

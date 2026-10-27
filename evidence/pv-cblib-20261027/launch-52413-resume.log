@@ -1,0 +1,47 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 1040); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_PadSuffixValue.lean:27:54: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  ok
+      ((((((((out.set 56#usize (↑suffix)[↑0#usize]!).set 57#usize (↑suffix)[↑1#usize]!).set 58#usize
+                            (↑suffix)[↑2#usize]!).set
+                        59#usize (↑suffix)[↑3#usize]!).set
+                    60#usize (↑suffix)[↑4#usize]!).set
+                61#usize (↑suffix)[↑5#usize]!).set
+            62#usize (↑suffix)[↑6#usize]!).set
+        63#usize (↑suffix)[↑7#usize]!) =
+    ok (value out suffix)
+
+out : Std.Array U8 64#usize
+suffix : Std.Array U8 8#usize
+⊢ ok
+      ((((((((out.set 56#usize (↑suffix)[↑0#usize]!).set 57#usize (↑suffix)[↑1#usize]!).set 58#usize
+                            (↑suffix)[↑2#usize]!).set
+                        59#usize (↑suffix)[↑3#usize]!).set
+                    60#usize (↑suffix)[↑4#usize]!).set
+                61#usize (↑suffix)[↑5#usize]!).set
+            62#usize (↑suffix)[↑6#usize]!).set
+        63#usize (↑suffix)[↑7#usize]!) =
+    ok (value out suffix)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (64 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CBL_PadSuffixValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_PadSuffixValue.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.99
+	Maximum resident set size (kbytes): 2618168
+	Swaps: 0
+	Exit status: 1

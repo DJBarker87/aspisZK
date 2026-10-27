@@ -1,0 +1,61 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_trace.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_trace.rs
+@@ -523,12 +523,16 @@
+     if usize::from(tuple.row) >= 864 {
+         tuple.row += 48;
+     }
+-    for limb in &mut tuple.limbs {
+-        if let PoolV1PairTupleLimbV1::Cell { source, .. } = limb {
+-            if usize::from(source.cell.row) >= 864 {
+-                source.cell.row += 48;
++    let mut i=0usize;
++    while i<16 {
++        match tuple.limbs[i] {
++            PoolV1PairTupleLimbV1::Cell {mut source,offset} => {
++                if usize::from(source.cell.row)>=864 {source.cell.row+=48;}
++                tuple.limbs[i]=PoolV1PairTupleLimbV1::Cell {source,offset};
+             }
+-        }
++            PoolV1PairTupleLimbV1::Zero => {}
++        }
++        i+=1;
+     }
+     tuple
+ }
+@@ -548,7 +552,9 @@
+     let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1()
+         .map_err(|_| PoolV1PairTraceErrorV1::CopyLayout)?;
+     let mut output = Vec::with_capacity(schedule.len());
+-    for scheduled in schedule {
++    let mut schedule_index=0usize;
++    while schedule_index<schedule.len() {
++        let scheduled=schedule[schedule_index];
+         let (producer, consumer, weight) = if path_kind(scheduled.kind) {
+             match scheduled.kind {
+                 PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. } => (
+@@ -569,10 +575,13 @@
+                 _ => return Err(PoolV1PairTraceErrorV1::CopyLayout),
+             }
+         } else {
+-            let old = legacy
+-                .iter()
+-                .find(|link| link.kind == scheduled.kind)
+-                .ok_or(PoolV1PairTraceErrorV1::CopyLayout)?;
++            let mut found=None;
++            let mut i=0usize;
++            while i<legacy.len() && found.is_none() {
++                if legacy[i].kind==scheduled.kind {found=Some(legacy[i]);}
++                i+=1;
++            }
++            let old=match found {Some(v)=>v,None=>return Err(PoolV1PairTraceErrorV1::CopyLayout)};
+             (
+                 translate_aux_tuple(old.producer),
+                 translate_aux_tuple(old.consumer),
+@@ -591,6 +600,7 @@
+             producer,
+             consumer,
+         });
++            schedule_index+=1;
+     }
+     if output.len() != POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1 {
+         return Err(PoolV1PairTraceErrorV1::CopyLayout);

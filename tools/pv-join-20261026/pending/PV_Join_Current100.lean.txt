@@ -1,0 +1,14 @@
+import R1Z.ProverRwP6BodyData
+import R1Z.PV_CB_Op100Exact
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Join_Current100
+open Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op100Transport
+variable [ExternalTypes]
+theorem op100_source (ops : ExternalFuns) (x : aspis_core.field.wide_exact.WideExact) :
+    (ProverRwP6BodyStore.selected ops).op100 x = (do
+      let y ← PV_CB_ShippedOp100.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.neg (encodeW x)
+      ok (decodeW y)) := by
+  exact PV_CB_Op100Exact.op100_source ops x
+#print axioms op100_source
+end R1Z.PV_Join_Current100

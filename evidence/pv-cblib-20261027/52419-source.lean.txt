@@ -1,0 +1,25 @@
+import R1Z.PV_CBL_PadSuffixBytes
+import R1Z.PV_CBL_PadListFacts
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_PadSuffixList
+set_option autoImplicit false
+theorem append_byte (out suffix : List U8) (ho : out.length=64) (hs : suffix.length=8)
+    (j : Nat) (hj : j<64) :
+    (out.take 56 ++ suffix)[j]! = if j<56 then out[j]! else suffix[j-56]! := by
+  have ht : (out.take 56).length=56 := by simp [ho]
+  simp only [List.getElem!_eq_getElem?_getD]
+  by_cases h : j<56
+  · rw [if_pos h,List.getElem?_append_left (by omega)]
+    simp [List.getElem?_take,h]
+  · rw [if_neg h,List.getElem?_append_right (by omega),ht]
+theorem value (out : Array U8 64#usize) (suffix : Array U8 8#usize) :
+    (PV_CBL_PadSuffixValue.value out suffix).val = out.val.take 56 ++ suffix.val := by
+  apply PV_CBL_PadListFacts.ext
+  · simp [(PV_CBL_PadSuffixValue.value out suffix).property,out.property,suffix.property]
+  · intro j hj
+    have hj64 : j<64 := by simpa [Array.property] using hj
+    rw [PV_CBL_PadSuffixBytes.byte out suffix j hj64,
+      append_byte out.val suffix.val out.property suffix.property j hj64]
+#print axioms append_byte
+#print axioms value
+end R1Z.PV_CBL_PadSuffixList

@@ -1,0 +1,23 @@
+import R1Z.PV_Join_State
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Join_StateDictionary
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+@[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=
+  {ProverRwP6BodyStore.selected ops with
+    op111 := @ExternalFuns.op111 _ (PV_CB_State.selected ops),
+    op118 := @ExternalFuns.op118 _ (PV_CB_State.selected ops)}
+theorem dictionary (ops : ExternalFuns) : selected ops = ProverRwP6BodyStore.selected ops := by
+  have h111 : @ExternalFuns.op111 _ (PV_CB_State.selected ops) =
+      @ExternalFuns.op111 _ (ProverRwP6BodyStore.selected ops) := by
+    exact (PV_CB_Op111Source.op111_source ops ).trans (PV_Join_State.op111_source ops ).symm
+  have h118 : @ExternalFuns.op118 _ (PV_CB_State.selected ops) =
+      @ExternalFuns.op118 _ (ProverRwP6BodyStore.selected ops) := by
+    funext x
+    exact (PV_CB_Op118Source.op118_source ops x).trans (PV_Join_State.op118_source ops x).symm
+  unfold selected
+  rw [h111, h118]
+  rfl
+#print axioms dictionary
+end R1Z.PV_Join_StateDictionary

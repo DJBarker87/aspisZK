@@ -1,0 +1,37 @@
+--- a/crates/aspis-r1-cost-probe/src/prover_shared.rs
++++ b/crates/aspis-r1-cost-probe/src/prover_shared.rs
+@@ -0,0 +1,14 @@
++//! Candidate host-prover-only extraction leaf. See design/PV-EXTRACT-20261027.md.
++use aspis_core::field::{CM31, M31, QM31};
++
++pub(crate) fn compress_tagged_tuple(tag: M31, values: &[M31], lambda: QM31) -> QM31 {
++    let mut compressed = QM31::from_cm31(CM31::from_m31(tag));
++    let mut power = lambda;
++    let mut i = 0usize;
++    while i < values.len() {
++        compressed = compressed.add(power.mul_m31(values[i]));
++        power = power.mul(lambda);
++        i = i.wrapping_add(1);
++    }
++    compressed
++}
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -58,3 +58,6 @@
+ // Fixed public-shape scheduling for the host CT adoption candidate.
+ #[cfg(feature="ct-host-prover")]
+ pub mod host_work;
++
++#[cfg(all(feature = "prover", feature = "r1p-check"))]
++mod prover_shared;
+--- a/crates/aspis-r1-cost-probe/src/host_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/host_semantic.rs
+@@ -420,7 +420,7 @@
+     if row>=1024 || arity[row][side]>=2 {return Err(Error::Public);}
+     let slot=arity[row][side];arity[row][side]+=1;
+     let limbs=copy_tuple_values(trace,tuple)?;
+-    let compressed=aspis_statement::compress_tagged_tuple(tag,&limbs,lambda);
++    let compressed=crate::prover_shared::compress_tagged_tuple(tag,&limbs,lambda);
+     let next=values[row][side][slot].add(compressed);
+     values[row][side][slot]=next;
+     Ok((values,arity))

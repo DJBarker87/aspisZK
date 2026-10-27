@@ -1,0 +1,101 @@
+import R1Z.ProverCommitValueRange47
+import R1Z.ProverRw19PreparedAssembly
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21ProtocolOutput
+open ProverCommitValueRange47
+open ProverCommitPublish43 (Bytes)
+abbrev Digest := Fin 32 → UInt8
+
+/-- Mathematical protocol data only. No source result, equality, callback law,
+or successful-execution certificate occurs in this carrier. -/
+structure Semantic where
+  root1 : Digest
+  root2 : Digest
+  mask : Q
+  rounds : Fin 10 → Fin 28 → Q
+  claims : Fin 116 → Q
+  endpoint : Fin 29 → Q
+
+structure Opening where
+  base : Fin 4 → Fin 26 → AspisV8R15.ExactTowerBase.M31Exact
+  secure : Fin 4 → Fin 3 → Q
+  salt1 : Digest
+  salt2 : Digest
+  folded : Fin 4 → E
+  saltf : Digest
+
+structure Transcript where
+  semantic : Semantic
+  y1 : Fin 29 → Q
+  inactive : E
+  round0 : Fin 7 → E
+  foldedRoot : Digest
+  round1 : Fin 7 → E
+  finalValues : Fin 64 → E
+  openings : Fin 22 → Opening
+  nodes : Fin 6 → Except ProverCommitPublish43.Error Bytes
+
+def wide (x : E) : Bytes := List.ofFn (bytes x)
+def quarter (x : Q) : Bytes := ProverCommitCompact43.low (bytes (embed x))
+def wides {n : Nat} (xs : Fin n → E) : Bytes := (List.ofFn (fun i => wide (xs i))).flatten
+
+def word (n : Nat) : Bytes := (List.range 4).map (fun i => UInt8.ofNat (n / 256^i % 256))
+def tag (r : Nat) : UInt8 :=
+  if r=2 then 1 else if r=14 then 3 else if 15≤r ∧ r≤24 then 2
+    else if r=25 then 4 else if r=26 then 5 else 0
+
+def payload (s : Semantic) (r : Fin 27) : Bytes :=
+  if r.val=2 then List.ofFn s.root2
+  else if r.val=14 then wide (embed s.mask)
+  else if h : 15≤r.val ∧ r.val≤24 then
+    wides (fun i => embed (s.rounds ⟨r.val-15,by omega⟩ i))
+  else if r.val=25 then wides (fun i => embed (s.claims i))
+  else if r.val=26 then wides (fun i => embed (s.endpoint i))
+  else []
+
+def record (s : Semantic) (r : Fin 27) : Bytes :=
+  [tag r.val] ++ word (ProverCommitCompactRows46.size r.val) ++ payload s r
+
+def logical (s : Semantic) : Bytes :=
+  List.ofFn s.root1 ++ (List.ofFn (record s)).flatten
+
+def query (o : Opening) : ProverCommitPublish43.QueryParts where
+  c1 := (List.ofFn (fun i : Fin 4 =>
+    (List.ofFn (fun j : Fin 26 => word (o.base i j).val)).flatten ++ quarter (o.secure i 2))).flatten
+  c2 := (List.ofFn (fun i : Fin 4 => quarter (o.secure i 0) ++ quarter (o.secure i 1))).flatten
+  salt1 := List.ofFn o.salt1
+  salt2 := List.ofFn o.salt2
+  folded := wides o.folded
+  saltf := List.ofFn o.saltf
+
+def fields (t : Transcript) : ProverCommitFront46.Fields where
+  logical := logical t.semantic
+  y1 := wides (fun i => embed (t.y1 i))
+  inactive := wide t.inactive
+  c0 := wides t.round0
+  foldedRoot := List.ofFn t.foldedRoot
+  c1 := wides t.round1
+  fin := wides t.finalValues
+
+def slotNodes (i : Fin 6) : Nat := [146,146,128,172,172,150][i.val]'(by simpa using i.isLt)
+def slots (t : Transcript) : List ProverCommitPublish43.Slot :=
+  List.ofFn (fun i => ⟨t.nodes i,32*slotNodes i⟩)
+
+def prepared (t : Transcript) : ProverRw19PreparedAssembly.Prepared :=
+  (fields t,List.ofFn (fun i => query (t.openings i)),slots t)
+
+#print axioms wide
+#print axioms quarter
+#print axioms wides
+#print axioms word
+#print axioms tag
+#print axioms payload
+#print axioms record
+#print axioms logical
+#print axioms query
+#print axioms fields
+#print axioms slotNodes
+#print axioms slots
+#print axioms prepared
+end R1Z.ProverRw21ProtocolOutput

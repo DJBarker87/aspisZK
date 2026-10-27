@@ -1,0 +1,19 @@
+import R1Z.PV_Join_Heap
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Join_HeapDictionary
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+@[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=
+  {ProverRwP6BodyStore.selected ops with
+    op81 := @ExternalFuns.op81 _ (PV_CB_Heap.selected ops)}
+theorem dictionary (ops : ExternalFuns) : selected ops = ProverRwP6BodyStore.selected ops := by
+  have h81 : @ExternalFuns.op81 _ (PV_CB_Heap.selected ops) =
+      @ExternalFuns.op81 _ (ProverRwP6BodyStore.selected ops) := by
+    funext T copy n value
+    exact (PV_CB_Op81Source.op81_source ops copy n value).trans (PV_Join_Heap.op81_source ops copy n value).symm
+  unfold selected
+  rw [h81]
+  rfl
+#print axioms dictionary
+end R1Z.PV_Join_HeapDictionary

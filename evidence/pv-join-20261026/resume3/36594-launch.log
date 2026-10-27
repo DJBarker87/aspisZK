@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2359); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+  Trans.trans (Trans.trans (R1Z.PV_Join_Field.op105_source ops x) (Eq.symm (R1Z.PV_Join_InvSource.inverse x)))
+    (Eq.symm (R1Z.PV_CB_Op105Exact.op105_source ops x))
+'R1Z.PV_Join_Current105.selected_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current105.op105_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.M31),
+  ProverRwFull.ExternalFuns.op105 x =
+    PV_CB_ShippedOp105.aspis_core.field.M31.Insts.Aspis_coreR0ScalarCodeField.try_inv x :=
+fun [ProverRwFull.ExternalTypes] ops x =>
+  Eq.trans (R1Z.PV_Join_Current105.selected_bridge ops x) (R1Z.PV_CB_Op105Exact.op105_source ops x)
+'R1Z.PV_Join_Current105.op105_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.scalar : ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  PV_CB_ShippedOp71.aspis_core.field.M31.from_le_bytes bytes =
+    R1Z.ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes bytes :=
+fun bytes => R1Z.PV_Join_ParserTransport.scalar bytes
+'R1Z.PV_Join_Current71.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.complex : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (do
+      let value ← PV_CB_ShippedOp71.aspis_core.field.CM31.from_le_bytes bytes
+      Aeneas.Std.Result.ok (Option.map R1Z.PV_CB_Op71Transport.decodeC value)) =
+    R1Z.ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes bytes :=
+fun bytes => R1Z.PV_Join_ParserTransport.complex bytes
+'R1Z.PV_Join_Current71.complex' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.quartic : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (do
+      let value ← PV_CB_ShippedOp71.aspis_core.field.QM31.from_le_bytes bytes
+      Aeneas.Std.Result.ok (Option.map R1Z.PV_CB_Op71Transport.decode value)) =
+    R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes :=
+fun bytes => R1Z.PV_Join_ParserTransport.quartic bytes
+'R1Z.PV_Join_Current71.quartic' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.selected_bridge : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op71 bytes = ProverRwFull.ExternalFuns.op71 bytes :=
+fun [ProverRwFull.ExternalTypes] ops bytes =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = _a)
+          (R1Z.PV_CB_Op71Exact.op71_source ops bytes)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = _a)
+            (R1Z.PV_Join_Current71.quartic bytes)))
+        (Eq.refl (R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes))))
+'R1Z.PV_Join_Current71.selected_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current71.op71_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op71 bytes = do
+    let value ← PV_CB_ShippedOp71.aspis_core.field.QM31.from_le_bytes bytes
+    Aeneas.Std.Result.ok (Option.map R1Z.PV_CB_Op71Transport.decode value) :=
+fun [ProverRwFull.ExternalTypes] ops bytes =>
+  Eq.trans (R1Z.PV_Join_Current71.selected_bridge ops bytes) (R1Z.PV_CB_Op71Exact.op71_source ops bytes)
+'R1Z.PV_Join_Current71.op71_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_Current72.op72_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.QM31) (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op72 x bytes =
+    PV_CB_ShippedOp72.aspis_core.field.QM31.write_le_bytes (R1Z.PV_CB_Op72Transport.encode x) bytes :=
+fun [ProverRwFull.ExternalTypes] ops x bytes => R1Z.PV_CB_Op72Exact.op72_source ops x bytes
+'R1Z.PV_Join_Current72.op72_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.87
+	Maximum resident set size (kbytes): 4295956
+	Swaps: 0
+	Exit status: 0

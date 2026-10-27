@@ -1,0 +1,33 @@
+import R1Z.PV_CBL_ShaPadFixed
+import R1Z.PV_CBL_ArrayStep
+import R1Z.PV_CBL_ArrayUnfold
+open Aeneas Aeneas.Std Result ControlFlow
+namespace R1Z.PV_CBL_PadZeroStep
+set_option autoImplicit false
+theorem unfold_loop (out : Array U8 64#usize) (i : Usize) :
+    PV_CBL_ShaPadFixed.sha_pad_zero_loop out i =
+      (do let cf ← PV_CBL_ShaPadFixed.sha_pad_zero_loop.body out i
+          match cf with
+          | .done a => ok a
+          | .cont (a,j) => PV_CBL_ShaPadFixed.sha_pad_zero_loop a j) := by
+  unfold PV_CBL_ShaPadFixed.sha_pad_zero_loop
+  rw [PV_CBL_ArrayUnfold.bind]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro cf _
+  cases cf with
+  | done a => rfl
+  | cont next => rcases next with ⟨a,j⟩; rfl
+theorem continuing (out : Array U8 64#usize) (i : Usize) (h : i.val<64) :
+    PV_CBL_ShaPadFixed.sha_pad_zero_loop.body out i =
+      ok (.cont (out.set i 0#u8,Usize.wrapping_add i 1#usize)) := by
+  have hn : i<64#usize := h
+  simp only [PV_CBL_ShaPadFixed.sha_pad_zero_loop.body,hn,if_true,
+    PV_CBL_ArrayStep.write out i 0#u8 h,lift,bind_tc_ok]
+theorem done (out : Array U8 64#usize) (i : Usize) (h : 64≤i.val) :
+    PV_CBL_ShaPadFixed.sha_pad_zero_loop.body out i = ok (.done out) := by
+  have hn : ¬i<64#usize := by change ¬i.val<64; omega
+  simp only [PV_CBL_ShaPadFixed.sha_pad_zero_loop.body,hn,if_false]
+#print axioms unfold_loop
+#print axioms continuing
+#print axioms done
+end R1Z.PV_CBL_PadZeroStep

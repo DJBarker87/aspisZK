@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2337); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+    do
+    let (r, out) ← alloc.vec.Vec.try_reserve_exact ProverRwSuccessHeapSource.Global (alloc.vec.Vec.new T) n
+    let r1 ←
+      core.result.Result.map_err
+          (ProverRwSuccessHeapSource.aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
+            copy)
+          r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let out1 ← alloc.vec.Vec.resize copy.cloneInst out n value
+        ok (core.result.Result.Ok out1)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+          (core.convert.FromSame aspis_core.r0.Error) residual
+
+inst✝ : ExternalTypes
+left right : ExternalFuns
+reserve : @ExternalFuns.op32 inst✝ left = @ExternalFuns.op32 inst✝ right
+mapError : @ExternalFuns.op12 inst✝ left = @ExternalFuns.op12 inst✝ right
+T : Type
+copy : core.marker.Copy T
+n : Usize
+value : T
+⊢ (do
+      let (r, out) ← alloc.vec.Vec.try_reserve_exact ProverRwSuccessHeapSource.Global (alloc.vec.Vec.new T) n
+      let r1 ←
+        core.result.Result.map_err
+            (ProverRwSuccessHeapSource.aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
+              copy)
+            r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let out1 ← alloc.vec.Vec.resize copy.cloneInst out n value
+          ok (core.result.Result.Ok out1)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+            (core.convert.FromSame aspis_core.r0.Error) residual) =
+    do
+    let (r, out) ← alloc.vec.Vec.try_reserve_exact ProverRwSuccessHeapSource.Global (alloc.vec.Vec.new T) n
+    let r1 ←
+      core.result.Result.map_err
+          (ProverRwSuccessHeapSource.aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
+            copy)
+          r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let out1 ← alloc.vec.Vec.resize copy.cloneInst out n value
+        ok (core.result.Result.Ok out1)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+          (core.convert.FromSame aspis_core.r0.Error) residual
+'R1Z.PV_Join_HeapCompatibility.filled_congr' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Join_HeapCompatibility.reserve' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Join_HeapCompatibility.mapError' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Join_HeapCompatibility.dictionary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.82
+	Maximum resident set size (kbytes): 4281024
+	Swaps: 0
+	Exit status: 1

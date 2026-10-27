@@ -1,0 +1,59 @@
+import R1Z.PV_CBM_PathClassification
+import Mathlib.Data.Fintype.Prod
+import Mathlib.Data.Fintype.Card
+namespace R1Z.PV_CBM_PaddingBijection
+open PV_CBM_InventoryShape PV_CBM_PathClassification
+set_option autoImplicit false
+abbrev Index := Fin 57 × (Fin 3 × Fin 16)
+abbrev Cell := {cell : Fin 1024 × Fin 16 // cell.1.val < 912 ∧ free cell.1.val cell.2.val}
+
+noncomputable instance : Fintype Cell := Fintype.ofFinite Cell
+
+def toCell (i : Index) : Cell :=
+  ⟨(⟨16 * i.1.val + 13 + i.2.1.val, by have := i.1.isLt; have := i.2.1.isLt; omega⟩, i.2.2),
+    ⟨by have := i.1.isLt; have := i.2.1.isLt; omega,
+     free_padding _ _ (by have := i.1.isLt; have := i.2.1.isLt; omega)
+       (by have := i.2.1.isLt; omega)⟩⟩
+
+theorem toCell_injective : Function.Injective toCell := by
+  intro a b h
+  have hr := congrArg (fun x : Cell => x.val.1.val) h
+  have hc := congrArg (fun x : Cell => x.val.2) h
+  apply Prod.ext
+  · apply Fin.ext
+    dsimp [toCell] at hr
+    have := a.2.1.isLt
+    have := b.2.1.isLt
+    omega
+  · apply Prod.ext
+    · apply Fin.ext
+      dsimp [toCell] at hr
+      have := a.2.1.isLt
+      have := b.2.1.isLt
+      omega
+    · exact hc
+
+theorem toCell_surjective : Function.Surjective toCell := by
+  intro cell
+  have hr := cell.prop.1
+  have hp := (paddingFree_iff cell.val.1.val cell.val.2.val hr).mp cell.prop.2
+  refine ⟨(⟨cell.val.1.val / 16, by omega⟩,
+    (⟨cell.val.1.val % 16 - 13, by omega⟩, cell.val.2)), ?_⟩
+  apply Subtype.ext
+  apply Prod.ext
+  · apply Fin.ext
+    dsimp [toCell]
+    omega
+  · rfl
+
+noncomputable def equiv : Index ≃ Cell := Equiv.ofBijective toCell ⟨toCell_injective,toCell_surjective⟩
+
+theorem cardinal : Fintype.card Cell = 2736 := by
+  classical
+  rw [← Fintype.card_congr equiv]
+  simp only [Index, Fintype.card_prod, Fintype.card_fin]
+
+#print axioms toCell_injective
+#print axioms toCell_surjective
+#print axioms cardinal
+end R1Z.PV_CBM_PaddingBijection

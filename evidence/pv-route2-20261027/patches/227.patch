@@ -1,0 +1,26 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2083,8 +2083,10 @@
+             alpha: &[QM31; 10],
+             c: &Challenges,
+         ) -> Result<QM31, Error> {
+-            let selected = core::array::from_fn(|i| claims[i / 28][i % 28]);
+-            terminal_parts(
++            let mut selected=[QM31::ZERO;84];
++            let mut i=0usize;
++            while i<84 {selected[i]=claims[i/28][i%28];i+=1;}
++            match terminal_parts(
+                 self.semantic(),
+                 &selected,
+                 alpha,
+@@ -2093,9 +2095,7 @@
+                 c.theta,
+                 &c.zc,
+                 c.mu,
+-            )
+-            .map(|parts| parts.0)
+-            .map_err(|_| Error::Public)
++            ) {Ok(parts)=>Ok(parts.0),Err(_)=>Err(Error::Public)}
+         }
+         /// Extend the existing polynomial evaluator to E without narrowing
+         /// adversarial E claims. At fixed K coordinates, substituting

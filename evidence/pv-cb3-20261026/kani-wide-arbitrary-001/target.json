@@ -1,0 +1,42 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source/crates/aspis-core/Cargo.toml",
+    "--features",
+    "r0,ct-host-prover",
+    "--lib",
+    "--exact",
+    "--harness",
+    "field::wide_exact::pv_cb3_arbitrary_bytes::all_carriers",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "harness": "field::wide_exact::pv_cb3_arbitrary_bytes::all_carriers",
+  "source_revision": "857b02fb247b070132ea66aa0de96246977c4dbc",
+  "expected_phase": "Optimized compilation, then complete arbitrary-field serialization comparison; no stubs, bounded shipped byte-copy loop.",
+  "print_axioms": "N/A native P6 gate",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  }
+}

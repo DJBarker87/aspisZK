@@ -1,0 +1,13 @@
+import R1Z.PV_CBL_ArrayReadValue
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_ArrayMutableValue
+set_option autoImplicit false
+theorem read_write {T : Type} [Inhabited T] {N : Usize} (a : Array T N) (i : Usize)
+    (h : i.val<N.val) :
+    Array.index_mut_usize a i = ok (a.val[i.val]!,fun x => a.set i x) := by
+  have hi : i.val<a.val.length := by simpa only [a.property] using h
+  unfold Array.index_mut_usize
+  rw [Array.getElem?_Usize_eq,List.getElem?_eq_getElem hi]
+  rw [PV_CBL_PadListFacts.get_bang a.val i.val hi]
+#print axioms read_write
+end R1Z.PV_CBL_ArrayMutableValue

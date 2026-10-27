@@ -1,0 +1,40 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_NET_OFFLINE=true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "checks::wide_flat",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "593e8e331c9fab309af0e76db84ee5bee648573a",
+  "expected_phase": "Complete arbitrary-eight-u32-component shipped serialization equality to retained P6 flat reference, no stubs or assumptions; optimized compile cache then constant-size bitwise comparison, safety/unwinding checks retained.",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A native P6 equivalence gate; extracted reference Lean law still required"
+}

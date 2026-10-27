@@ -1,0 +1,18 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0719); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+R1Z.PV_CBM_CellsSpec.callback :
+  ∃ result,
+    R1Z.PV_CBM_CellsMaterializer.callback = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok result) ∧
+      (↑result).length = 3803 ∧ ∀ cell ∈ ↑result, R1Z.PV_CBM_InventoryShape.free ↑cell.row ↑cell.column
+R1Z.PV_CBM_InventoryCardinality.cardinal : Fintype.card R1Z.PV_CBM_InventoryCardinality.Cell = 3803
+'R1Z.PV_CBM_CellsSpec.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBM_CellsSpec.all_free' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBM_CellsSpec.fill' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBM_CellsSpec.callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBM_InventoryCardinality.cardinal' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.00
+	Maximum resident set size (kbytes): 2649344
+	Swaps: 0
+	Exit status: 0

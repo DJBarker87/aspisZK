@@ -1,0 +1,18 @@
+[package]
+name = "pv-cblib-dispatch-bench"
+version = "0.0.0"
+edition = "2021"
+[workspace]
+[features]
+soft = ["sha2/force-soft"]
+count = ["dep:aspis-prover", "dep:aspis-r1-cost-probe"]
+[dependencies]
+sha2 = "=0.10.9"
+serde_json = "1"
+aspis-prover = { path = "../source/crates/aspis-prover", features = ["r0", "insecure-spend-fixture", "ct-host-prover"], optional = true }
+aspis-r1-cost-probe = { path = "../source/crates/aspis-r1-cost-probe", features = ["ct-host-prover"], optional = true }
+[[bin]]
+name = "dispatch-bench"
+path = "main.rs"
+[profile.release]
+overflow-checks = false

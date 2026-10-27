@@ -1,0 +1,25 @@
+import R1Z.PV_CBL_PadContentSource
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_PadResultShape
+set_option autoImplicit false
+theorem returned (buffer : Array U8 64#usize) (pos : Usize) (suffix : Array U8 8#usize)
+    (hp : pos.val<64) (first retained : Array U8 64#usize)
+    (second : Option (Array U8 64#usize)) (newpos : Usize)
+    (he : PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos suffix = ok (first,second,retained,newpos)) :
+    retained=first ∧ newpos=0#usize ∧
+      first.val=PV_CBL_PaddingModel.first buffer.val pos.val suffix.val ∧
+      second.map (fun a => a.val)=PV_CBL_PaddingModel.second pos.val suffix.val := by
+  obtain ⟨f,s,hr,hf,hs⟩ := PV_CBL_PadContentSource.source buffer pos suffix hp
+  rw [he] at hr
+  cases hr
+  exact ⟨rfl,rfl,hf,hs⟩
+theorem no_fail (buffer : Array U8 64#usize) (pos : Usize) (suffix : Array U8 8#usize)
+    (hp : pos.val<64) (error : Error) :
+    PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos suffix ≠ fail error := by
+  obtain ⟨f,s,hr,_⟩ := PV_CBL_PadContentSource.source buffer pos suffix hp
+  rw [hr]
+  intro h
+  cases h
+#print axioms returned
+#print axioms no_fail
+end R1Z.PV_CBL_PadResultShape

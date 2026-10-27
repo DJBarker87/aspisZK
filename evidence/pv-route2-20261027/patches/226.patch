@@ -1,0 +1,18 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2016,11 +2016,14 @@
+         /// Existing reject-only public guards remain in the terminal.
+         pub fn public_bytes(self) -> Result<Vec<u8>, Error> {
+             fn fields(out: &mut Vec<u8>, values: &[M31]) -> Result<(), Error> {
+-                for value in values {
++                let mut i=0usize;
++                while i<values.len() {
++                    let value=values[i];
+                     if value.0 >= aspis_core::field::P {
+                         return Err(Error::Public);
+                     }
+                     out.extend_from_slice(&value.0.to_le_bytes());
++                    i+=1;
+                 }
+                 Ok(())
+             }

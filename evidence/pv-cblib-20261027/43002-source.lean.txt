@@ -1,0 +1,16 @@
+import R1Z.PV_CBL_StringViewTypes
+import R1Z.PV_CBL_StringOwnedReference
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_StringViewSource
+open ProverRwFull
+set_option autoImplicit false
+@[reducible] def selected (b : ExternalTypes)
+    (ops : @ExternalFuns (PV_CBL_StringViewTypes.Types b)) :
+    @ExternalFuns (PV_CBL_StringViewTypes.Types b) :=
+  {ops with op28 := PV_CBL_StringOwnedReference.string_owned_reference}
+theorem op28_source (b : ExternalTypes)
+    (ops : @ExternalFuns (PV_CBL_StringViewTypes.Types b)) (s : String) :
+    @ExternalFuns.op28 (PV_CBL_StringViewTypes.Types b) (selected b ops) s =
+      PV_CBL_StringOwnedReference.string_owned_reference s := rfl
+#print axioms op28_source
+end R1Z.PV_CBL_StringViewSource

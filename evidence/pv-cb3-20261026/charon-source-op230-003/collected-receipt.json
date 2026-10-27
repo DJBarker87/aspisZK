@@ -1,0 +1,91 @@
+{
+  "target": [
+    "timeout",
+    "120",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "RUSTUP_TOOLCHAIN=nightly-2026-06-01",
+    "RUSTFLAGS=--cfg pv_cb_extract",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/charon-target",
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--rustc-arg=--cfg=kani",
+    "--rustc-arg=--cfg=pv_cb_extract",
+    "--sysroot",
+    "default",
+    "--start-from",
+    "pv_cb3_source::helper_sum",
+    "--include",
+    "aspis_statement::state_only_semantic::*",
+    "--include",
+    "aspis_core::field::*",
+    "--include",
+    "core::iter::traits::iterator::Iterator::fold",
+    "--include",
+    "core::slice::iter::_::fold",
+    "--include",
+    "core::iter::adapters::copied::_::fold",
+    "--include",
+    "core::bool::_::then",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/PV_CB3_ShippedOp230.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source-proof/Cargo.toml",
+    "--release",
+    "--offline",
+    "--lib",
+    "--jobs",
+    "4"
+  ],
+  "source_revision": "675cae300f080a7549f85de3e2689fa974bb276b",
+  "source_identity": "post-run read-only input snapshot; mutable proof inputs need retained per-run snapshots, not attribution to current files. Shipped snapshot is verified against base 09df2340e24cdcc86fe4ef272eed9994562fcda9; see source-identity.json (782 matching tracked files)",
+  "exit": "0",
+  "wall": "0:00.38",
+  "peak_rss_kib": "212784",
+  "swap": "0",
+  "print_axioms": "N/A extraction; corresponding Lean proof receipt required",
+  "attempt_charged": true,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "inputs": {
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/PV_CB3_ShippedOp230.llbc": {
+      "sha256": "2f49d9bee21243061b9e96bee1690e27775dd28c513da0a83b6f98641e4393b5",
+      "size": 592205
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source-proof/lib.rs": {
+      "sha256": "d4008adf77ee5bdaa82d9584571a221301255e113d44adc494ca51d496834271",
+      "size": 3000
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source-proof/Cargo.toml": {
+      "sha256": "d8bf3472434ed90e806dcb41eed57b7ee8bd9c094536db152301aa39351ae6a6",
+      "size": 436
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source-proof/Cargo.lock": {
+      "sha256": "2a68664463167295345d39ea2172e74270502f14789f4900da055ea059ba1567",
+      "size": 7071
+    }
+  },
+  "dependency_fingerprint": "1a5ea7369c8ab8d83c4e998cb2223f993462fa813b1d0b913042797e6997b336",
+  "admissions": {
+    "admission-before.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-26T19:34:22.283307+00:00",
+      "requested_bytes": 8589934592,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 34762391552,
+      "projected_reserved_bytes": 43352326144
+    }
+  }
+}

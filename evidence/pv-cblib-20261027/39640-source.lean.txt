@@ -1,0 +1,24 @@
+import R1Z.PV_CBL_Op208Extracted
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_Op208Outcomes
+open ProverRwFull
+set_option autoImplicit false
+
+def nextCount (base : ExternalTypes) (self : PV_CBL_ShaCore.Core)
+    (blocks : PV_CBL_ShaTypes.Blocks base) : U64 :=
+  U64.wrapping_add self.block_len (UScalar.cast .U64 (Slice.len blocks))
+
+/-- Complete Result decomposition, including errors and divergence. No claim
+about the opaque compressor's implementation is hidden in this statement. -/
+theorem full_result (base : ExternalTypes)
+    (compress : PV_CBL_Op208Extracted.Compression base)
+    (self : PV_CBL_ShaCore.Core) (blocks : PV_CBL_ShaTypes.Blocks base) :
+    PV_CBL_Op208Extracted.update_blocks base compress self blocks =
+      match compress self.state blocks with
+      | ok state => ok { state := state, block_len := nextCount base self blocks }
+      | fail e => fail e
+      | div => div := by
+  cases hc : compress self.state blocks <;>
+    simp only [PV_CBL_Op208Extracted.update_blocks, nextCount, Aeneas.Std.lift, bind_tc_ok, hc, bind_tc_fail, bind_tc_div]
+#print axioms full_result
+end R1Z.PV_CBL_Op208Outcomes

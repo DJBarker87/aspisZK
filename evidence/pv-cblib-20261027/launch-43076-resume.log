@@ -1,0 +1,66 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0840); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+    let a12 ← a.index_usize 11#usize
+    let (abef11, cdgh11) ← PV_CBL_FallbackFourModel.source abef10 cdgh10 w11 a12
+    let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+    let a13 ← a.index_usize 12#usize
+    let (abef12, cdgh12) ← PV_CBL_FallbackFourModel.source abef11 cdgh11 w21 a13
+    let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+    let a14 ← a.index_usize 13#usize
+    let (abef13, cdgh13) ← PV_CBL_FallbackFourModel.source abef12 cdgh12 w31 a14
+    let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+    let a15 ← a.index_usize 14#usize
+    let (abef14, cdgh14) ← PV_CBL_FallbackFourModel.source abef13 cdgh13 w42 a15
+    let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+    let a16 ← a.index_usize 15#usize
+    let (abef15, cdgh15) ← PV_CBL_FallbackFourModel.source abef14 cdgh14 w02 a16
+    let a17 ← Array.index_usize abef15 0#usize
+    let b ← Array.index_usize abef15 1#usize
+    let e ← Array.index_usize abef15 2#usize
+    let f ← Array.index_usize abef15 3#usize
+    let c ← Array.index_usize cdgh15 0#usize
+    let d ← Array.index_usize cdgh15 1#usize
+    let g ← Array.index_usize cdgh15 2#usize
+    let h ← Array.index_usize cdgh15 3#usize
+    let i24 ← lift (core.num.U32.wrapping_add i a17)
+    let state1 ← state.update 0#usize i24
+    let i25 ← state1.index_usize 1#usize
+    let i26 ← lift (core.num.U32.wrapping_add i25 b)
+    let state2 ← state1.update 1#usize i26
+    let i27 ← state2.index_usize 2#usize
+    let i28 ← lift (core.num.U32.wrapping_add i27 c)
+    let state3 ← state2.update 2#usize i28
+    let i29 ← state3.index_usize 3#usize
+    let i30 ← lift (core.num.U32.wrapping_add i29 d)
+    let state4 ← state3.update 3#usize i30
+    let i31 ← state4.index_usize 4#usize
+    let i32 ← lift (core.num.U32.wrapping_add i31 e)
+    let state5 ← state4.update 4#usize i32
+    let i33 ← state5.index_usize 5#usize
+    let i34 ← lift (core.num.U32.wrapping_add i33 f)
+    let state6 ← state5.update 5#usize i34
+    let i35 ← state6.index_usize 6#usize
+    let i36 ← lift (core.num.U32.wrapping_add i35 g)
+    let state7 ← state6.update 6#usize i36
+    let i37 ← state7.index_usize 7#usize
+    let i38 ← lift (core.num.U32.wrapping_add i37 h)
+    state7.update 7#usize i38
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CBL_FallbackBlockFactored.block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_FallbackBlockFactored.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.51
+	Maximum resident set size (kbytes): 2637188
+	Swaps: 0
+	Exit status: 1

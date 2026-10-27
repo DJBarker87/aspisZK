@@ -1,0 +1,375 @@
+Aeneas.Std.alloc.vec.Vec.get? : {α : Type u} → Aeneas.Std.alloc.vec.Vec α → ℕ → Option α
+Aeneas.Std.alloc.vec.Vec.getElem!_Usize_eq : ∀ {α : Type u} [inst : Inhabited α] (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize), v[i]! = (↑v)[↑i]!
+Aeneas.Std.alloc.vec.Vec.v : {α : Type u} → Aeneas.Std.alloc.vec.Vec α → List α
+Aeneas.Std.alloc.vec.Vec.set_getElem_eq : ∀ (α : Type u_1) (x : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (h : ↑i < x.length), x.set i x[i] = x
+Aeneas.Std.alloc.vec.Vec.set_opt_val_eq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (x : Option α), ↑(v.set_opt i x) = (↑v).set_opt (↑i) x
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_suffix : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α)
+  (i j : ℕ) (h : i + s'.length ≤ j ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+Aeneas.Std.alloc.vec.Vec.resize : {T : Type} →
+  Aeneas.Std.core.clone.Clone T →
+    Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Usize → T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T)
+Aeneas.Std.alloc.vec.Vec.index_mut_RangeFrom_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize),
+  ↑r.start ≤ v.length →
+    Aeneas.Std.WP.spec
+      (Aeneas.Std.alloc.vec.Vec.index_mut (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice α) v r)
+      (Aeneas.Std.WP.uncurry' fun s1 back =>
+        ↑s1 = List.drop ↑r.start ↑v ∧
+          s1.length = v.length - ↑r.start ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑v).setSlice! ↑r.start ↑s')
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_prefix : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α)
+  (i j : ℕ) (h : j < i ∧ j < s.length), (s.setSlice! i s')[j] = s[j]
+Aeneas.Std.alloc.vec.Vec.index_mut_usize_spec.mvcgen_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize) (hbound : ↑i < v.length),
+  ⦃⌜True⌝⦄
+    v.index_mut_usize
+      i ⦃Std.Do.PostCond.noThrow fun r => ⌜Aeneas.Std.WP.uncurry' (fun x y => x = (↑v)[↑i] ∧ y = v.set i) r⌝⦄
+Aeneas.Std.alloc.vec.Vec.push_spec.mvcgen_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (x : α),
+  (↑v).length < Aeneas.Std.Usize.max → ⦃⌜True⌝⦄ v.push x ⦃Std.Do.PostCond.noThrow fun r => ⌜↑r = ↑v ++ [x]⌝⦄
+Aeneas.Std.alloc.vec.Vec.deref_mut : {T : Type} →
+  Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.alloc.vec.Vec T)
+Aeneas.Std.alloc.vec.Vec.push_spec._proof_1_2 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α) (x : α),
+  (↑v).length < Aeneas.Std.Usize.max → ((↑v).concat x).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.getElem_Nat_eq._proof_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α),
+  ∀ i < (↑v).length, i < (↑v).length
+Aeneas.Std.alloc.vec.Vec.setSlice!_length : ∀ {α : Type u} (s : Aeneas.Std.alloc.vec.Vec α) (i : ℕ) (s' : List α),
+  (s.setSlice! i s').length = s.length
+Aeneas.Std.alloc.vec.Vec.insert : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec α)
+Aeneas.Std.alloc.vec.Vec.length : {α : Type u} → Aeneas.Std.alloc.vec.Vec α → ℕ
+Aeneas.Std.alloc.vec.Vec.update : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec α)
+Aeneas.Std.alloc.vec.Vec.resize_spec.mvcgen_spec : ∀ {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (v : Aeneas.Std.alloc.vec.Vec T) (new_len : Aeneas.Std.Usize) (value : T),
+  cloneInst.clone value = Aeneas.Std.Result.ok value →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.alloc.vec.Vec.resize cloneInst v new_len
+        value ⦃Std.Do.PostCond.noThrow fun r => ⌜↑r = (↑v).resize (↑new_len) value⌝⦄
+Aeneas.Std.alloc.vec.Vec.getElem_set_neq._proof_2 : ∀ (α : Type u_1) (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize) (x : α), (↑(v.set i x)).length < 2 ^ Aeneas.Std.UScalarTy.Usize.numBits
+Aeneas.Std.alloc.vec.Vec.extend_from_slice._proof_1 : ∀ {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (v : Aeneas.Std.alloc.vec.Vec T) (s : Aeneas.Std.Slice T),
+  v.length + s.length ≤ Aeneas.Std.Usize.max →
+    ∀ (s' : Aeneas.Std.Slice T),
+      Aeneas.Std.Slice.clone cloneInst.clone s = Aeneas.Std.Result.ok s' → (↑v ++ ↑s').length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.update_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize) (x : α),
+  ↑i < v.length → Aeneas.Std.WP.spec (v.update i x) fun nv => nv = v.set i x
+Aeneas.Std.alloc.vec.Vec.insert_spec.mvcgen_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize) (x : α),
+  ↑i < v.length → ⦃⌜True⌝⦄ v.insert i x ⦃Std.Do.PostCond.noThrow fun r => ⌜↑r = (↑v).set (↑i) x⌝⦄
+Aeneas.Std.alloc.vec.Vec.getElem_Nat_eq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : ℕ) (h : i < (↑v).length),
+  v[i] = (↑v)[i]
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem!_suffix : ∀ {α : Type u_1} [inst : Inhabited α]
+  (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ), i + s'.length ≤ j → (s.setSlice! i s')[j]! = s[j]!
+Aeneas.Std.alloc.vec.Vec.len._proof_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α),
+  (↑v).length < 2 ^ Aeneas.Std.UScalarTy.Usize.numBits
+Aeneas.Std.alloc.vec.Vec.set_getElem!_eq : ∀ (α : Type u_1) [inst : Inhabited α] (x : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize), x.set i x[i]! = x
+Aeneas.Std.alloc.vec.Vec.extend_from_slice.match_1 : {T : Type} →
+  (motive : Aeneas.Std.Result (Aeneas.Std.Slice T) → Sort u_1) →
+    (x : Aeneas.Std.Result (Aeneas.Std.Slice T)) →
+      ((s' : Aeneas.Std.Slice T) → x = Aeneas.Std.Result.ok s' → motive (Aeneas.Std.Result.ok s')) →
+        ((e : Aeneas.Std.Error) → x = Aeneas.Std.Result.fail e → motive (Aeneas.Std.Result.fail e)) →
+          (x = Aeneas.Std.Result.div → motive Aeneas.Std.Result.div) → motive x
+Aeneas.Std.alloc.vec.Vec.getElem_set_eq : ∀ (α : Type u_1) (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (x : α) (h : ↑i < (v.set i x).length), (v.set i x)[i] = x
+Aeneas.Std.alloc.vec.Vec.index_mut_Range_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  r.start ≤ r.end →
+    ↑r.end ≤ v.length →
+      Aeneas.Std.WP.spec
+        (Aeneas.Std.alloc.vec.Vec.index_mut (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice α) v r)
+        (Aeneas.Std.WP.uncurry' fun s1 back =>
+          ↑s1 = List.slice ↑r.start ↑r.end ↑v ∧
+            s1.length = ↑r.end - ↑r.start ∧
+              ∀ (s2 : Aeneas.Std.Slice α), back s2 = Aeneas.Std.Slice.setSlice! v ↑r.start ↑s2)
+Aeneas.Std.alloc.vec.Vec.resize_spec : ∀ {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (v : Aeneas.Std.alloc.vec.Vec T) (new_len : Aeneas.Std.Usize) (value : T),
+  cloneInst.clone value = Aeneas.Std.Result.ok value →
+    Aeneas.Std.WP.spec (Aeneas.Std.alloc.vec.Vec.resize cloneInst v new_len value) fun nv =>
+      ↑nv = (↑v).resize (↑new_len) value
+Aeneas.Std.alloc.vec.Vec.index_usize_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (hbound : ↑i < v.length), Aeneas.Std.WP.spec (v.index_usize i) fun x => x = (↑v)[↑i]
+Aeneas.Std.alloc.vec.Vec.update_spec.mvcgen_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize) (x : α),
+  ↑i < v.length → ⦃⌜True⌝⦄ v.update i x ⦃Std.Do.PostCond.noThrow fun r => ⌜r = v.set i x⌝⦄
+Aeneas.Std.alloc.vec.Vec.resize.eq_1 : ∀ {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (v : Aeneas.Std.alloc.vec.Vec T) (new_len : Aeneas.Std.Usize) (value : T),
+  Aeneas.Std.alloc.vec.Vec.resize cloneInst v new_len value =
+    if ↑new_len < v.length then Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+    else do
+      let value ← cloneInst.clone value
+      Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  Aeneas.Std.core.clone.Clone T →
+    Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T)
+Aeneas.Std.alloc.vec.Vec.index_usize_spec._proof_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize), ↑i < v.length → ↑i < (↑v).length
+Aeneas.Std.alloc.vec.Vec.length.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α), v.length = (↑v).length
+Aeneas.Std.alloc.vec.Vec.getElem?_Usize_eq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize),
+  v[i]? = (↑v)[↑i]?
+Aeneas.Std.alloc.vec.Vec.index_Range_spec.mvcgen_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  r.start ≤ r.end →
+    ↑r.end ≤ v.length →
+      ⦃⌜True⌝⦄
+        Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice α) v
+          r ⦃Std.Do.PostCond.noThrow fun r_1 => ⌜↑r_1 = List.slice ↑r.start ↑r.end ↑v ∧ r_1.length = ↑r.end - ↑r.start⌝⦄
+Aeneas.Std.alloc.vec.Vec.set_getElem_eq' : ∀ (α : Type u_1) (x : Aeneas.Std.alloc.vec.Vec α) (i j : Aeneas.Std.Usize)
+  (h : ↑j < x.length), i = j → x.set i x[j] = x
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_suffix._proof_2 : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α)
+  (s' : List α) (i j : ℕ), i + s'.length ≤ j ∧ j < s.length → j < (↑s).length
+Aeneas.Std.alloc.vec.Vec.v.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α), v.v = ↑v
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_prefix._proof_3 : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α)
+  (i j : ℕ), j < i ∧ j < s.length → j < (↑s).length
+Aeneas.Std.alloc.vec.Vec.set_val_eq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize) (x : α),
+  ↑(v.set i x) = (↑v).set (↑i) x
+Aeneas.Std.alloc.vec.Vec.getElem_Usize_eq._proof_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize), ↑i < (↑v).length → ↑i < (↑v).length
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_middle : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α)
+  (i j : ℕ) (h : i ≤ j ∧ j - i < s'.length ∧ j < s.length), (s.setSlice! i s')[j] = s'[j - i]
+Aeneas.Std.alloc.vec.Vec.IndexMut : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.core.ops.index.IndexMut (Aeneas.Std.alloc.vec.Vec T) I Output
+Aeneas.Std.alloc.vec.Vec.index_mut_usize.match_1 : {α : Type u_1} →
+  (motive : Aeneas.Std.Result α → Sort u_2) →
+    (x : Aeneas.Std.Result α) →
+      ((x : α) → motive (Aeneas.Std.Result.ok x)) →
+        ((e : Aeneas.Std.Error) → motive (Aeneas.Std.Result.fail e)) → (Unit → motive Aeneas.Std.Result.div) → motive x
+Aeneas.Std.alloc.vec.Vec.deref_mut._proof_1 : ∀ {T : Type} (s : Aeneas.Std.Slice T), (↑s).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.getElem_set_neq : ∀ (α : Type u_1) (v : Aeneas.Std.alloc.vec.Vec α) (i j : Aeneas.Std.Usize)
+  (x : α) (h : ↑j < (v.set i x).length), i ≠ j → (v.set i x)[j] = v[j]
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem!_prefix : ∀ {α : Type u_1} [inst : Inhabited α]
+  (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ), j < i → (s.setSlice! i s')[j]! = s[j]!
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem!_middle : ∀ {α : Type u_1} [inst : Inhabited α]
+  (s : Aeneas.Std.alloc.vec.Vec α) (s' : List α) (i j : ℕ),
+  i ≤ j ∧ j - i < s'.length ∧ j < s.length → (s.setSlice! i s')[j]! = s'[j - i]!
+Aeneas.Std.alloc.vec.Vec.getElem_set_eq' : ∀ (α : Type u_1) (v : Aeneas.Std.alloc.vec.Vec α) (i j : Aeneas.Std.Usize)
+  (x : α) (h : ↑j < (v.set i x).length), i = j → (v.set i x)[j] = x
+Aeneas.Std.alloc.vec.Vec.set_opt.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (x : Option α), v.set_opt i x = ⟨(↑v).set_opt (↑i) x, ⋯⟩
+Aeneas.Std.alloc.vec.Vec.extend_from_slice._proof_3 : ∀ {T : Type} (v : Aeneas.Std.alloc.vec.Vec T)
+  (s : Aeneas.Std.Slice T),
+  v.length + s.length ≤ Aeneas.Std.Usize.max →
+    ∀ (s' : Aeneas.Std.Slice T), s'.length = s.length → (↑v ++ ↑s').length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.insert_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize) (x : α),
+  ↑i < v.length → Aeneas.Std.WP.spec (v.insert i x) fun nv => ↑nv = (↑v).set (↑i) x
+Aeneas.Std.alloc.vec.Vec.index_RangeTo_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize),
+  ↑r.end ≤ v.length →
+    Aeneas.Std.WP.spec (Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice α) v r)
+      fun s1 => ↑s1 = List.slice 0 ↑r.end ↑v ∧ s1.length = ↑r.end
+Aeneas.Std.alloc.vec.Vec.index : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.alloc.vec.Vec T → I → Aeneas.Std.Result Output
+Aeneas.Std.alloc.vec.Vec.index.eq_1 : ∀ {T I Output : Type}
+  (inst : Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output) (self : Aeneas.Std.alloc.vec.Vec T)
+  (i : I), Aeneas.Std.alloc.vec.Vec.index inst self i = inst.index i self
+Aeneas.Std.alloc.vec.Vec.set_opt._proof_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (x : Option α), ((↑v).set_opt (↑i) x).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.deref._proof_1 : ∀ {T : Type} (v : Aeneas.Std.alloc.vec.Vec T),
+  (↑v).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.push._proof_2 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α) (x : α),
+  (decide ((↑v).length + 1 ≤ Aeneas.Std.U32.max) || decide ((↑v).length + 1 ≤ Aeneas.Std.Usize.max)) = true →
+    ((↑v).concat x).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_prefix._proof_1 : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α)
+  (s' : List α) (i : ℕ), (↑(s.setSlice! i s')).length < 2 ^ Aeneas.Std.UScalarTy.Usize.numBits
+Aeneas.Std.alloc.vec.Vec.index_mut_RangeFrom_spec.mvcgen_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize),
+  ↑r.start ≤ v.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.alloc.vec.Vec.index_mut (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice α) v
+        r ⦃Std.Do.PostCond.noThrow fun r_1 =>
+        ⌜Aeneas.Std.WP.uncurry'
+            (fun s1 back =>
+              ↑s1 = List.drop ↑r.start ↑v ∧
+                s1.length = v.length - ↑r.start ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑v).setSlice! ↑r.start ↑s')
+            r_1⌝⦄
+Aeneas.Std.alloc.vec.Vec.set : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → Aeneas.Std.Usize → α → Aeneas.Std.alloc.vec.Vec α
+Aeneas.Std.alloc.vec.Vec.index_mut_Range_spec.mvcgen_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  r.start ≤ r.end →
+    ↑r.end ≤ v.length →
+      ⦃⌜True⌝⦄
+        Aeneas.Std.alloc.vec.Vec.index_mut (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice α) v
+          r ⦃Std.Do.PostCond.noThrow fun r_1 =>
+          ⌜Aeneas.Std.WP.uncurry'
+              (fun s1 back =>
+                ↑s1 = List.slice ↑r.start ↑r.end ↑v ∧
+                  s1.length = ↑r.end - ↑r.start ∧
+                    ∀ (s2 : Aeneas.Std.Slice α), back s2 = Aeneas.Std.Slice.setSlice! v ↑r.start ↑s2)
+              r_1⌝⦄
+Aeneas.Std.alloc.vec.Vec.len : {α : Type u} → Aeneas.Std.alloc.vec.Vec α → Aeneas.Std.Usize
+Aeneas.Std.alloc.vec.Vec.index_usize : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → Aeneas.Std.Usize → Aeneas.Std.Result α
+Aeneas.Std.alloc.vec.Vec.index_RangeFrom_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize),
+  ↑r.start ≤ v.length →
+    Aeneas.Std.WP.spec
+      (Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice α) v r) fun s1 =>
+      ↑s1 = List.drop ↑r.start ↑v ∧ s1.length = v.length - ↑r.start
+Aeneas.Std.alloc.vec.Vec.index_usize.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize),
+  v.index_usize i =
+    match v[↑i]? with
+    | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+    | some x => Aeneas.Std.Result.ok x
+Aeneas.Std.alloc.vec.Vec.push_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (x : α),
+  (↑v).length < Aeneas.Std.Usize.max → Aeneas.Std.WP.spec (v.push x) fun v1 => ↑v1 = ↑v ++ [x]
+Aeneas.Std.alloc.vec.Vec.index_slice_index : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize),
+  Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexUsizeSlice α) v i = v.index_usize i
+Aeneas.Std.alloc.vec.Vec.deref : {T : Type} → Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Slice T
+Aeneas.Std.alloc.vec.Vec.get!.eq_1 : ∀ {α : Type u} [inst : Inhabited α] (v : Aeneas.Std.alloc.vec.Vec α) (i : ℕ),
+  v.get! i = v[i]!
+Aeneas.Std.alloc.vec.Vec.index_mut_usize : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → Aeneas.Std.Usize → Aeneas.Std.Result (α × (α → Aeneas.Std.alloc.vec.Vec α))
+Aeneas.Std.alloc.vec.Vec.index_Range_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  r.start ≤ r.end →
+    ↑r.end ≤ v.length →
+      Aeneas.Std.WP.spec (Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice α) v r)
+        fun s1 => ↑s1 = List.slice ↑r.start ↑r.end ↑v ∧ s1.length = ↑r.end - ↑r.start
+Aeneas.Std.alloc.vec.Vec.len_val : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α), ↑v.len = v.length
+Aeneas.Std.alloc.vec.Vec.setSlice!._proof_1 : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α) (i : ℕ) (s' : List α),
+  ((↑s).setSlice! i s').length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.set._proof_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (x : α), ((↑v).set (↑i) x).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.insert.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize) (x : α),
+  v.insert i x =
+    if ↑i < v.length then Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+    else Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+Aeneas.Std.alloc.vec.Vec.set.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize) (x : α),
+  v.set i x = ⟨(↑v).set (↑i) x, ⋯⟩
+Aeneas.Std.alloc.vec.Vec.get?.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : ℕ), v.get? i = v[i]?
+Aeneas.Std.alloc.vec.Vec.getElem!_Nat_eq : ∀ {α : Type u} [inst : Inhabited α] (v : Aeneas.Std.alloc.vec.Vec α) (i : ℕ),
+  v[i]! = (↑v)[i]!
+Aeneas.Std.alloc.vec.Vec.index_usize.match_1 : {α : Type u_1} →
+  (motive : Option α → Sort u_2) → (x : Option α) → (Unit → motive none) → ((x : α) → motive (some x)) → motive x
+Aeneas.Std.alloc.vec.Vec.eq_1 : ∀ (α : Type u), Aeneas.Std.alloc.vec.Vec α = { l // l.length ≤ Aeneas.Std.Usize.max }
+Aeneas.Std.alloc.vec.Vec.len_ineq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α), (↑v).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.index_mut_RangeTo_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize),
+  ↑r.end ≤ v.length →
+    Aeneas.Std.WP.spec
+      (Aeneas.Std.alloc.vec.Vec.index_mut (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice α) v r)
+      (Aeneas.Std.WP.uncurry' fun s1 back =>
+        ↑s1 = List.slice 0 ↑r.end ↑v ∧
+          s1.length = ↑r.end ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑v).setSlice! 0 ↑s')
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_prefix._proof_2 : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α)
+  (s' : List α) (i j : ℕ), j < i ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+Aeneas.Std.alloc.vec.Vec.index_mut_usize.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize),
+  v.index_mut_usize i =
+    match v.index_usize i with
+    | Aeneas.Std.Result.ok x => Aeneas.Std.Result.ok (x, v.set i)
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+Aeneas.Std.alloc.vec.Vec.set_length : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize) (x : α),
+  (v.set i x).length = v.length
+Aeneas.Std.alloc.vec.Vec.index_mut : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.alloc.vec.Vec T → I → Aeneas.Std.Result (Output × (Output → Aeneas.Std.alloc.vec.Vec T))
+Aeneas.Std.alloc.vec.Vec.index_mut_usize_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (hbound : ↑i < v.length),
+  Aeneas.Std.WP.spec (v.index_mut_usize i) (Aeneas.Std.WP.uncurry' fun x y => x = (↑v)[↑i] ∧ y = v.set i)
+Aeneas.Std.alloc.vec.Vec.new._proof_1 : 0 ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_middle._proof_1 : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α)
+  (s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+Aeneas.Std.alloc.vec.Vec.index_mut.eq_1 : ∀ {T I Output : Type}
+  (inst : Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output) (self : Aeneas.Std.alloc.vec.Vec T)
+  (i : I), Aeneas.Std.alloc.vec.Vec.index_mut inst self i = inst.index_mut i self
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_suffix._proof_1 : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α)
+  (s' : List α) (i j : ℕ), i + s'.length ≤ j ∧ j < s.length → j < (↑(s.setSlice! i s')).length
+Aeneas.Std.alloc.vec.Vec.Index : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.core.ops.index.Index (Aeneas.Std.alloc.vec.Vec T) I Output
+Aeneas.Std.alloc.vec.Vec.index_RangeTo_spec.mvcgen_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize),
+  ↑r.end ≤ v.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice α) v
+        r ⦃Std.Do.PostCond.noThrow fun r_1 => ⌜↑r_1 = List.slice 0 ↑r.end ↑v ∧ r_1.length = ↑r.end⌝⦄
+Aeneas.Std.alloc.vec.Vec.index_mut_usize_spec.match_1_3 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize) (hbound : ↑i < v.length)
+  (motive : (∃ y, v.index_usize i = Aeneas.Std.Result.ok y ∧ y = (↑v)[↑i]) → Prop)
+  (x : ∃ y, v.index_usize i = Aeneas.Std.Result.ok y ∧ y = (↑v)[↑i]),
+  (∀ (x : α) (h : v.index_usize i = Aeneas.Std.Result.ok x ∧ x = (↑v)[↑i]), motive ⋯) → motive x
+Aeneas.Std.alloc.vec.Vec.index_mut_slice_index : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize),
+  Aeneas.Std.alloc.vec.Vec.index_mut (Aeneas.Std.core.slice.index.SliceIndexUsizeSlice α) v i = v.index_mut_usize i
+Aeneas.Std.alloc.vec.Vec.index_usize_spec.mvcgen_spec : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize) (hbound : ↑i < v.length),
+  ⦃⌜True⌝⦄ v.index_usize i ⦃Std.Do.PostCond.noThrow fun r => ⌜r = (↑v)[↑i]⌝⦄
+Aeneas.Std.alloc.vec.Vec : Type u → Type (max 0 u)
+Aeneas.Std.alloc.vec.Vec.setSlice!_getElem_middle._proof_2 : ∀ {α : Type u_1} (s : Aeneas.Std.alloc.vec.Vec α)
+  (s' : List α) (i j : ℕ), i ≤ j ∧ j - i < s'.length ∧ j < s.length → j - i < s'.length
+Aeneas.Std.alloc.vec.Vec.getElem?_Nat_eq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : ℕ), v[i]? = (↑v)[i]?
+Aeneas.Std.alloc.vec.Vec.push_spec._proof_1_3 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α) (x : α),
+  (↑v).length < Aeneas.Std.Usize.max →
+    Aeneas.Std.WP.spec
+      (let nlen := (↑v).length + 1;
+      if h : (decide (nlen ≤ Aeneas.Std.U32.max) || decide (nlen ≤ Aeneas.Std.Usize.max)) = true then
+        Aeneas.Std.Result.ok ⟨(↑v).concat x, ⋯⟩
+      else Aeneas.Std.Result.fail Aeneas.Std.Error.maximumSizeExceeded)
+      fun v1 => ↑v1 = ↑v ++ [x]
+Aeneas.Std.alloc.vec.Vec.index_mut_RangeTo_spec.mvcgen_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize),
+  ↑r.end ≤ v.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.alloc.vec.Vec.index_mut (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice α) v
+        r ⦃Std.Do.PostCond.noThrow fun r_1 =>
+        ⌜Aeneas.Std.WP.uncurry'
+            (fun s1 back =>
+              ↑s1 = List.slice 0 ↑r.end ↑v ∧
+                s1.length = ↑r.end ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑v).setSlice! 0 ↑s')
+            r_1⌝⦄
+Aeneas.Std.alloc.vec.Vec.with_capacity : (T : Type) → Aeneas.Std.Usize → Aeneas.Std.alloc.vec.Vec T
+Aeneas.Std.alloc.vec.Vec.set_getElem!_eq._simp_1_2 : ∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }},
+  (a1 = a2) = (↑a1 = ↑a2)
+Aeneas.Std.alloc.vec.Vec.setSlice!.eq_1 : ∀ {α : Type u} (s : Aeneas.Std.alloc.vec.Vec α) (i : ℕ) (s' : List α),
+  s.setSlice! i s' = ⟨(↑s).setSlice! i s', ⋯⟩
+Aeneas.Std.alloc.vec.Vec.getElem_set_neq._proof_3 : ∀ (α : Type u_1) (v : Aeneas.Std.alloc.vec.Vec α)
+  (i j : Aeneas.Std.Usize) (x : α), ↑j < (v.set i x).length → ↑j < (↑v).length
+Aeneas.Std.alloc.vec.Vec.push : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → α → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec α)
+Aeneas.Std.alloc.vec.Vec.set_opt : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → Aeneas.Std.Usize → Option α → Aeneas.Std.alloc.vec.Vec α
+Aeneas.Std.alloc.vec.Vec.set_getElem_eq._simp_1_2 : ∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }},
+  (a1 = a2) = (↑a1 = ↑a2)
+Aeneas.Std.alloc.vec.Vec.setSlice! : {α : Type u} → Aeneas.Std.alloc.vec.Vec α → ℕ → List α → Aeneas.Std.alloc.vec.Vec α
+Aeneas.Std.alloc.vec.Vec.resize._proof_1 : ∀ {T : Type} (v : Aeneas.Std.alloc.vec.Vec T) (new_len : Aeneas.Std.Usize)
+  (value : T), ((↑v).resize (↑new_len) value).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.update.eq_1 : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize) (x : α),
+  v.update i x =
+    match (↑v)[↑i]? with
+    | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+    | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+Aeneas.Std.alloc.vec.Vec.new : (α : Type u) → Aeneas.Std.alloc.vec.Vec α
+Aeneas.Std.alloc.vec.Vec.push_spec._proof_1_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α) (x : α),
+  (↑v).length + 1 ≤ Aeneas.Std.U32.max ∨ (↑v).length + 1 ≤ Aeneas.Std.Usize.max →
+    ((↑v).concat x).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.index_RangeFrom_spec.mvcgen_spec : ∀ {α : Type} (v : Aeneas.Std.alloc.vec.Vec α)
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize),
+  ↑r.start ≤ v.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice α) v
+        r ⦃Std.Do.PostCond.noThrow fun r_1 => ⌜↑r_1 = List.drop ↑r.start ↑v ∧ r_1.length = v.length - ↑r.start⌝⦄
+Aeneas.Std.alloc.vec.Vec.push._proof_1 : ∀ {α : Type u_1} (v : Aeneas.Std.alloc.vec.Vec α),
+  (decide ((↑v).length + 1 ≤ Aeneas.Std.U32.max) || decide ((↑v).length + 1 ≤ Aeneas.Std.Usize.max)) = true →
+    (↑v).length < Aeneas.Std.Usize.max
+Aeneas.Std.alloc.vec.Vec.get! : {α : Type u} → [Inhabited α] → Aeneas.Std.alloc.vec.Vec α → ℕ → α
+Aeneas.Std.alloc.vec.Vec.getElem_Usize_eq : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : Aeneas.Std.Usize)
+  (h : ↑i < (↑v).length), v[i] = (↑v)[↑i]
+Aeneas.Std.alloc.vec.Vec.getElem_set_neq._proof_1 : ∀ (i : ℕ),
+  i + 1 ≤ Aeneas.Std.UScalarTy.Usize.numBits → i < Aeneas.Std.UScalarTy.Usize.numBits
+structure String : Type
+number of parameters: 0
+fields:
+  String.toByteArray : ByteArray
+  String.isValidUTF8 : self.toByteArray.IsValidUTF8
+constructor:
+  String.ofByteArray (toByteArray : ByteArray) (isValidUTF8 : toByteArray.IsValidUTF8) : String
+def Aeneas.Std.Str : Type :=
+Aeneas.Std.Slice Aeneas.Std.U8
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh

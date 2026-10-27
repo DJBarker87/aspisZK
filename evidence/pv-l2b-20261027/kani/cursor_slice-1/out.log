@@ -1,0 +1,95 @@
+Kani Rust Verifier 0.67.0 (standalone)
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --harness cursor_slice --exact -Z unstable-options --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib -C opt-level=3 -Z mir-opt-level=4 -Z inline-mir=yes -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler /home/dombarker/project-offloads/codex-pv-l2b-20261027/control.rs --out-dir /home/dombarker/project-offloads/codex-pv-l2b-20261027 --crate-name control --crate-type lib`
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.04734664s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.2545502s
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+====== Reachability Analysis Result =======
+Total # items: 508
+Total # statements: 7215
+Total # expressions: 1979
+
+Reachable Items:
+  - function: 507
+  - static item: 1
+
+Statements:
+  - Return: 483
+  - SwitchInt: 275
+  - Goto: 404
+  - Assign: 1979
+  - Call: 914
+  - Intrinsic: 3
+  - Drop: 22
+  - Unreachable: 44
+  - Ignored: 2957
+  - Assert: 134
+
+Expressions:
+  - BinaryOp: 291
+  - Discriminant: 77
+  - Aggregate: 248
+  - Use: 765
+  - AddressOf: 31
+  - NullaryOp: 5
+  - Cast: 252
+  - Ref: 151
+  - UnaryOp: 73
+  - Repeat: 5
+  - CheckedBinaryOp: 81
+
+-------------------------------------------
+warning: 1 warning emitted
+
+Finished /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler in 0.8014191s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.symtab.out /home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out`
+Finished goto-cc in 1.1410497s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out --function _RNvCs7bmo52P6UG_7control12cursor_slice -o /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out`
+Finished goto-cc in 0.4957651s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out'
+Finished goto-instrument in 1.3773311s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out'
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_precondition' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out'
+Finished goto-instrument in 0.51358986s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out'
+Finished goto-instrument in 0.41155407s
+Thread 0: Checking harness cursor_slice...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control12cursor_slice.out --verbosity 9 --json-ui`
+Finished run_cbmc in 0.95753795s
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 41 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.95707726s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+exit=0

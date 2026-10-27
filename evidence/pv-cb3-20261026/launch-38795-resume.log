@@ -1,0 +1,19 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0455); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+def Aeneas.Std.UScalar.wrapping_sub : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv - y.bv)#uscalar
+def Aeneas.Std.UScalar.sub : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y =>
+  if ↑x < ↑y then Result.fail Error.integerOverflow else Result.ok (BitVec.ofNat ty.numBits (↑x - ↑y)#uscalar)
+def Aeneas.Std.UScalar.div : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if (y.bv != 0) = true then Result.ok (x.bv.udiv y.bv#uscalar) else Result.fail Error.divisionByZero
+def Aeneas.Std.UScalar.rem : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if (↑y != 0) = true then Result.ok (x.bv.umod y.bv#uscalar) else Result.fail Error.divisionByZero
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.01
+	Maximum resident set size (kbytes): 2615172
+	Swaps: 0
+	Exit status: 0

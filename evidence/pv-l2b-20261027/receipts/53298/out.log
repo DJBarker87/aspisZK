@@ -1,0 +1,39 @@
+PV_L2B_SourceWords.source_scan (n : ℕ) (words : List UInt32) :
+  PV_L2B_SourceWords.source n words = PV_L2B_Rejection.scan n (List.map PV_L2B_SourceWords.classify words)
+PV_L2B_SourceWords.source_count_relabel (transform : UInt32 → UInt32) (f : ℕ → ℕ)
+  (preserves : ∀ (w : UInt32), PV_L2B_SourceWords.classify (transform w) = Option.map f (PV_L2B_SourceWords.classify w))
+  (n : ℕ) (words : List UInt32) :
+  (PV_L2B_SourceWords.source n (List.map transform words)).1 = (PV_L2B_SourceWords.source n words).1
+PV_L2B_Rejection.coins_only {A : Type} (n : ℕ) (xs : List (Option A)) :
+  PV_L2B_Rejection.trace n xs = PV_L2B_Rejection.trace n (PV_L2B_Rejection.flags xs)
+PV_L2B_SamplerLaw.uniform_on_success (q u p : ℚ) (n : ℕ) (hp : p ≠ 0) (h : u * p = 1 - q) :
+  PV_L2B_SamplerLaw.valueMass q u n = PV_L2B_SamplerLaw.success q n / p
+PV_L2B_SamplerLaw.entropy_uniform_pair (b : ℚ) (hb : b ≠ 0) (hn : (b - 1) ^ 2 ≠ 0) (n : ℕ) :
+  PV_L2B_SamplerLaw.valueMass (1 - (1 - 1 / b) ^ 2) (1 / b ^ 2) n =
+    PV_L2B_SamplerLaw.success (1 - (1 - 1 / b) ^ 2) n / (b - 1) ^ 2
+PV_L2B_EntropyTrace.branches_relabel {A B C D : Type} (f : A → C) (g : B → D) (n : ℕ)
+  (xs : List (Option A × Option B)) :
+  PV_L2B_EntropyTrace.branches n (List.map (fun p => (Option.map f p.1, Option.map g p.2)) xs) =
+    PV_L2B_EntropyTrace.branches n xs
+PV_L2B_Guards.inactive_balance {I A : Type} [Fintype I] [DecidableEq I] [AddCommGroup A] (d : I) (v : I → A) :
+  (∑ i, if i = d then -∑ j ∈ Finset.univ.erase d, v j else v i) = 0
+PV_L2B_Guards.padding_total {I A : Type} [Fintype I] [AddCommGroup A] (active : I → Bool) (padding : I → A)
+  (hz : ∀ (i : I), active i = true → padding i = 0) (hs : (∑ i, if active i = true then 0 else padding i) = 0) :
+  ∑ i, padding i = 0
+PV_L2B_Guards.sumcheck_boundary {A : Type} [AddMonoid A] (v0 v1 running p0 p1 : A) (interpolation0 : p0 = v0)
+  (interpolation1 : p1 = v1) (initial : v0 + v1 = running) : p0 + p1 = running
+PV_L2B_Guards.sumcheck_terminal {A : Type} [DecidableEq A] (oracle running polynomial : A)
+  (low_degree_identity : oracle = polynomial) (running_eval : running = polynomial) : decide (oracle ≠ running) = false
+PV_L2B_JointTransport.accepted_conditional_uniform (q u p : ℚ) (n : ℕ) (hp : p ≠ 0) (h : u * p = 1 - q)
+  (hs : PV_L2B_SamplerLaw.success q n ≠ 0) : PV_L2B_SamplerLaw.valueMass q u n / PV_L2B_SamplerLaw.success q n = 1 / p
+PV_L2B_JointTransport.outside_existing_event {I O : Type} (real sim : I → O) (bad : I → Prop)
+  (agreement : ∀ (i : I), ¬bad i → real i = sim i) (i : I) : real i ≠ sim i → bad i
+PV_L2B_JointTransport.weighted_joint_transport {I O : Type} [Fintype I] (weight : I → ℚ) (real sim : I → O)
+  (test : O → ℚ) (same : ∀ (i : I), real i = sim i) : ∑ i, weight i * test (real i) = ∑ i, weight i * test (sim i)
+def PV_L2B_SourceWords.classify : UInt32 → Option ℕ :=
+fun raw => if PV_L2B_SourceWords.candidate raw < 2147483647 then some (PV_L2B_SourceWords.candidate raw) else none
+def PV_L2B_SourceWords.source : ℕ → List UInt32 → ℕ × Option ℕ :=
+fun x x_1 => Nat.brecOn (motive := fun x => List UInt32 → ℕ × Option ℕ) x PV_L2B_SourceWords.source._f x_1
+'PV_L2B_SourceWords.source_scan' depends on axioms: [propext, Quot.sound]
+
+exit=0

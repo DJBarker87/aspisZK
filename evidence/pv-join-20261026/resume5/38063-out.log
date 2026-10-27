@@ -1,0 +1,211 @@
+@[reducible] def ProverRwFull.aspis_core.field.M31 : Type :=
+Aeneas.Std.U32
+structure ProverRwFull.aspis_core.field.CM31 : Type
+number of parameters: 0
+fields:
+  ProverRwFull.aspis_core.field.CM31.a : ProverRwFull.aspis_core.field.M31
+  ProverRwFull.aspis_core.field.CM31.b : ProverRwFull.aspis_core.field.M31
+constructor:
+  ProverRwFull.aspis_core.field.CM31.mk (a b : ProverRwFull.aspis_core.field.M31) : ProverRwFull.aspis_core.field.CM31
+structure ProverRwFull.aspis_core.field.QM31 : Type
+number of parameters: 0
+fields:
+  ProverRwFull.aspis_core.field.QM31.c0 : ProverRwFull.aspis_core.field.CM31
+  ProverRwFull.aspis_core.field.QM31.c1 : ProverRwFull.aspis_core.field.CM31
+constructor:
+  ProverRwFull.aspis_core.field.QM31.mk (c0 c1 : ProverRwFull.aspis_core.field.CM31) :
+    ProverRwFull.aspis_core.field.QM31
+@[reducible] def ProverRwFull.aspis_core.field.QM31.from_le_bytes : [types : ProverRwFull.ExternalTypes] →
+  [ext : ProverRwFull.ExternalFuns] →
+    Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Option ProverRwFull.aspis_core.field.QM31) :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] => ProverRwFull.ExternalFuns.op71
+def ProverRwFull.host_sumcheck.interpolation_accumulate_loop.body : [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    Aeneas.Std.Array ProverRwFull.aspis_core.field.M31 28#usize →
+      ProverRwFull.aspis_core.field.QM31 →
+        Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 28#usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.ControlFlow (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 28#usize × Aeneas.Std.Usize)
+                (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 28#usize)) :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] basis scale out k =>
+  if k < 28#usize then do
+    let value ← out.index_usize k
+    let m ← basis.index_usize k
+    let delta ← scale.mul_m31 m
+    let next ← value.add delta
+    let out1 ← out.update k next
+    let k1 ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (out1, k1))
+  else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out)
+Aeneas.Std.UScalar.val {ty : Aeneas.Std.UScalarTy} (x : Aeneas.Std.UScalar ty) : ℕ
+def Aeneas.Std.Array.{u} : Type u → Aeneas.Std.Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+def Aeneas.Std.Array.update.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.set.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Array α n :=
+fun {α} {n} v i x => ⟨(↑v).set (↑i) x, ⋯⟩
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) → α → Aeneas.Std.Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | Aeneas.Std.Result.ok r =>
+        match r with
+        | Aeneas.Std.ControlFlow.cont x => f x
+        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+    ⋯
+Aeneas.Std.loop.spec.match_1.congr_eq_1: ∀ {α : Type u_1} {β : Type u_2}
+  (motive : Aeneas.Std.ControlFlow α β → Sort u_3) (r : Aeneas.Std.ControlFlow α β)
+  (h_1 : (y : β) → motive (Aeneas.Std.ControlFlow.done y)) (h_2 : (x' : α) → motive (Aeneas.Std.ControlFlow.cont x'))
+  (y : β),
+  r = Aeneas.Std.ControlFlow.done y →
+    (match r with
+      | Aeneas.Std.ControlFlow.done y => h_1 y
+      | Aeneas.Std.ControlFlow.cont x' => h_2 x') ≍
+      h_1 y
+Aeneas.Std.loop.match_1: {α : Type u_2} →
+  {β : Type u_1} →
+    (motive : Aeneas.Std.Result (Aeneas.Std.ControlFlow α β) → Sort u_3) →
+      (x : Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) →
+        ((r : Aeneas.Std.ControlFlow α β) → motive (Aeneas.Std.Result.ok r)) →
+          ((e : Aeneas.Std.Error) → motive (Aeneas.Std.Result.fail e)) →
+            (Unit → motive Aeneas.Std.Result.div) → motive x
+Aeneas.Std.loop.fixpoint_induct: ∀ {α : Type u} {β : Type v} (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β))
+  (motive : (α → Aeneas.Std.Result β) → Prop),
+  Order.admissible motive →
+    (∀ (loop : α → Aeneas.Std.Result β),
+        motive loop →
+          motive fun x =>
+            match body x with
+            | Aeneas.Std.Result.ok r =>
+              match r with
+              | Aeneas.Std.ControlFlow.cont x => loop x
+              | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+            | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+            | Aeneas.Std.Result.div => Aeneas.Std.Result.div) →
+      motive (Aeneas.Std.loop body)
+Aeneas.Std.loop.spec.match_1: {α : Type u_1} →
+  {β : Type u_2} →
+    (motive : Aeneas.Std.ControlFlow α β → Sort u_3) →
+      (r : Aeneas.Std.ControlFlow α β) →
+        ((y : β) → motive (Aeneas.Std.ControlFlow.done y)) →
+          ((x' : α) → motive (Aeneas.Std.ControlFlow.cont x')) → motive r
+Aeneas.Std.loop.match_1.congr_eq_2: ∀ {α : Type u_2} {β : Type u_1}
+  (motive : Aeneas.Std.Result (Aeneas.Std.ControlFlow α β) → Sort u_3)
+  (x : Aeneas.Std.Result (Aeneas.Std.ControlFlow α β))
+  (h_1 : (r : Aeneas.Std.ControlFlow α β) → motive (Aeneas.Std.Result.ok r))
+  (h_2 : (e : Aeneas.Std.Error) → motive (Aeneas.Std.Result.fail e)) (h_3 : Unit → motive Aeneas.Std.Result.div)
+  (e : Aeneas.Std.Error),
+  x = Aeneas.Std.Result.fail e →
+    (match x with
+      | Aeneas.Std.Result.ok r => h_1 r
+      | Aeneas.Std.Result.fail e => h_2 e
+      | Aeneas.Std.Result.div => h_3 ()) ≍
+      h_2 e
+Aeneas.Std.loop.match_1.congr_eq_3: ∀ {α : Type u_2} {β : Type u_1}
+  (motive : Aeneas.Std.Result (Aeneas.Std.ControlFlow α β) → Sort u_3)
+  (x : Aeneas.Std.Result (Aeneas.Std.ControlFlow α β))
+  (h_1 : (r : Aeneas.Std.ControlFlow α β) → motive (Aeneas.Std.Result.ok r))
+  (h_2 : (e : Aeneas.Std.Error) → motive (Aeneas.Std.Result.fail e)) (h_3 : Unit → motive Aeneas.Std.Result.div),
+  x = Aeneas.Std.Result.div →
+    (match x with
+      | Aeneas.Std.Result.ok r => h_1 r
+      | Aeneas.Std.Result.fail e => h_2 e
+      | Aeneas.Std.Result.div => h_3 ()) ≍
+      h_3 ()
+Aeneas.Std.loop.eq_1: ∀ {α : Type u} {β : Type v} (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  Aeneas.Std.loop body x =
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => Aeneas.Std.loop body x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+Aeneas.Std.loop._unsafe_rec: {α : Type u} →
+  {β : Type v} → (α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) → α → Aeneas.Std.Result β
+Aeneas.Std.loop.match_1.congr_eq_1: ∀ {α : Type u_2} {β : Type u_1}
+  (motive : Aeneas.Std.Result (Aeneas.Std.ControlFlow α β) → Sort u_3)
+  (x : Aeneas.Std.Result (Aeneas.Std.ControlFlow α β))
+  (h_1 : (r : Aeneas.Std.ControlFlow α β) → motive (Aeneas.Std.Result.ok r))
+  (h_2 : (e : Aeneas.Std.Error) → motive (Aeneas.Std.Result.fail e)) (h_3 : Unit → motive Aeneas.Std.Result.div)
+  (r : Aeneas.Std.ControlFlow α β),
+  x = Aeneas.Std.Result.ok r →
+    (match x with
+      | Aeneas.Std.Result.ok r => h_1 r
+      | Aeneas.Std.Result.fail e => h_2 e
+      | Aeneas.Std.Result.div => h_3 ()) ≍
+      h_1 r
+Aeneas.Std.loop.spec_decr_nat: ∀ {α : Type u} {β : Type v} (measure : α → ℕ) (inv : α → Prop) (post : β → Prop)
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        Aeneas.Std.WP.spec (body x) fun r =>
+          match r with
+          | Aeneas.Std.ControlFlow.done y => post y
+          | Aeneas.Std.ControlFlow.cont x' => inv x' ∧ measure x' < measure x) →
+    inv x → Aeneas.Std.WP.spec (Aeneas.Std.loop body x) post
+Aeneas.Std.loop.spec.match_1.congr_eq_2: ∀ {α : Type u_1} {β : Type u_2}
+  (motive : Aeneas.Std.ControlFlow α β → Sort u_3) (r : Aeneas.Std.ControlFlow α β)
+  (h_1 : (y : β) → motive (Aeneas.Std.ControlFlow.done y)) (h_2 : (x' : α) → motive (Aeneas.Std.ControlFlow.cont x'))
+  (x' : α),
+  r = Aeneas.Std.ControlFlow.cont x' →
+    (match r with
+      | Aeneas.Std.ControlFlow.done y => h_1 y
+      | Aeneas.Std.ControlFlow.cont x' => h_2 x') ≍
+      h_2 x'
+Aeneas.Std.loop.spec._proof_1_9: ∀ {α : Type u_3} {β : Type u_2} {γ : Type u_1} (measure : α → γ)
+  [wf : WellFoundedRelation γ] (inv : α → Prop) (post : β → Prop)
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        Aeneas.Std.WP.spec (body x) fun r =>
+          match r with
+          | Aeneas.Std.ControlFlow.done y => post y
+          | Aeneas.Std.ControlFlow.cont x' => inv x' ∧ WellFoundedRelation.rel (measure x') (measure x)) →
+    inv x →
+      ∀ (x_1 : γ),
+        (∀ (y : γ),
+            WellFoundedRelation.rel y x_1 →
+              ∀ (x : α), measure x = y → inv x → Aeneas.Std.WP.spec (Aeneas.Std.loop body x) post) →
+          ∀ (x_2 : α), measure x_2 = x_1 → inv x_2 → Aeneas.Std.WP.spec (Aeneas.Std.loop body x_2) post
+Aeneas.Std.loop._proof_1: ∀ {α : Type u_1} {β : Type u_2} (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)),
+  Order.monotone fun f x =>
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => f x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+Aeneas.Std.loop.spec: ∀ {α : Type u} {β : Type v} {γ : Type w} (measure : α → γ) [wf : WellFoundedRelation γ]
+  (inv : α → Prop) (post : β → Prop) (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        Aeneas.Std.WP.spec (body x) fun r =>
+          match r with
+          | Aeneas.Std.ControlFlow.done y => post y
+          | Aeneas.Std.ControlFlow.cont x' => inv x' ∧ WellFoundedRelation.rel (measure x') (measure x)) →
+    inv x → Aeneas.Std.WP.spec (Aeneas.Std.loop body x) post
+Aeneas.Std.loop: {α : Type u} →
+  {β : Type v} → (α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) → α → Aeneas.Std.Result β
+Aeneas.Std.loop.eq_def: ∀ {α : Type u} {β : Type v} (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  Aeneas.Std.loop body x =
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => Aeneas.Std.loop body x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

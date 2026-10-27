@@ -1,0 +1,28 @@
+import R1Z.PV_CBL_FallbackHelpersTotal
+import R1Z.PV_CBL_FallbackConstantSource
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_CBL_FallbackBlockTotal
+open PV_CBL_FallbackTotal
+set_option autoImplicit false
+theorem constants : Total PV_CBL_FallbackBlock.sha_fallback_consts.K32X4 :=
+  ⟨_,PV_CBL_FallbackConstantSource.source⟩
+/-- Totality of the exact extracted owned block. No arithmetic value is reduced;
+every primitive block computation remains behind its named totality theorem. -/
+theorem total (state : Array U32 8#usize) (input : Array U32 16#usize) :
+    Total (PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state input) := by
+  unfold PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block
+    PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_block_u32
+  repeat' first
+    | exact PV_CBL_FallbackTotal.read _ _ (by decide)
+    | exact PV_CBL_FallbackHelpersTotal.add _ _
+    | exact PV_CBL_FallbackHelpersTotal.round _ _ _
+    | exact PV_CBL_FallbackHelpersTotal.swap _
+    | exact PV_CBL_FallbackHelpersTotal.schedule _ _ _ _
+    | exact PV_CBL_FallbackTotal.update _ _ _ (by decide)
+    | exact constants
+    | exact PV_CBL_FallbackTotal.pure _
+    | apply PV_CBL_FallbackTotal.bind
+    | intro x
+#print axioms constants
+#print axioms total
+end R1Z.PV_CBL_FallbackBlockTotal

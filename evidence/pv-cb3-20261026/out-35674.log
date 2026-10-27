@@ -1,0 +1,28 @@
+theorem Aeneas.Std.UScalar.eq_equiv_bv_eq : ∀ {ty : UScalarTy} (x y : UScalar ty), x = y ↔ x.bv = y.bv :=
+fun {ty} x y =>
+  let ⟨bv✝, h✝⟩ := x
+  Eq.symm h✝ ▸
+    let ⟨bv✝¹, h✝¹⟩ := y
+    Eq.symm h✝¹ ▸
+      of_eq_true (Eq.trans (congrFun' (congrArg Iff (UScalar.mk.injEq bv✝ bv✝¹)) (bv✝ = bv✝¹)) (iff_self (bv✝ = bv✝¹)))
+theorem Aeneas.Std.UScalar.eq_equiv : ∀ {ty : UScalarTy} (x y : UScalar ty), x = y ↔ ↑x = ↑y :=
+fun {ty} x y =>
+  let ⟨bv✝, h✝⟩ := x
+  Eq.symm h✝ ▸
+    let ⟨bv✝¹, h✝¹⟩ := y
+    Eq.symm h✝¹ ▸
+      of_eq_true
+        (Eq.trans
+          (congrFun' (congrArg Iff (Eq.trans (UScalar.mk.injEq bv✝ bv✝¹) UScalar.eq_equiv._simp_1_1))
+            (bv✝.toNat = bv✝¹.toNat))
+          (iff_self (bv✝.toNat = bv✝¹.toNat)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_StagedZero.lean:10:35: warning: This simp argument is unused:
+  UScalar.zero_bv
+
+Hint: Omit it from the simp argument list.
+  simp [̵b̵n̵e̵,̵U̵S̵c̵a̵l̵a̵r̵.̵e̵q̵_̵e̵q̵u̵i̵v̵_̵b̵v̵_̵e̵q̵,̵U̵S̵c̵a̵l̵a̵r̵.̵z̵e̵r̵o̵_̵b̵v̵]̵[̲b̲n̲e̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲e̲q̲_̲e̲q̲u̲i̲v̲_̲b̲v̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB3_StagedZero.neq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

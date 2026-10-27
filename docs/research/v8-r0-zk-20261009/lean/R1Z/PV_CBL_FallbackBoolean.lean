@@ -1,0 +1,26 @@
+import R1Z.PV_CBL_FallbackScalar
+open Aeneas Aeneas.Std
+namespace R1Z.PV_CBL_FallbackBoolean
+open PV_CBL_FallbackScalar
+set_option autoImplicit false
+/-- The optimized XOR/AND choose expression equals the conventional SHA choose. -/
+theorem choose_eq (x y z : U32) : choose x y z = (x &&& y) ||| ((~~~x) &&& z) := by
+  apply U32.bv_eq_imp_eq
+  change z.bv ^^^ (x.bv &&& (y.bv ^^^ z.bv)) = (x.bv &&& y.bv) ||| ((~~~x.bv) &&& z.bv)
+  apply BitVec.eq_of_getLsbD_eq_iff.mpr
+  intro i hi
+  simp only [BitVec.getLsbD_xor,BitVec.getLsbD_and,BitVec.getLsbD_or,
+    BitVec.getLsbD_not,hi,decide_true,Bool.true_and]
+  cases x.bv.getLsbD i <;> cases y.bv.getLsbD i <;> cases z.bv.getLsbD i <;> decide
+theorem majority_eq (x y z : U32) : majority x y z = (x &&& y) ||| (x &&& z) ||| (y &&& z) := by
+  apply U32.bv_eq_imp_eq
+  change (x.bv &&& y.bv) ^^^ (x.bv &&& z.bv) ^^^ (y.bv &&& z.bv) =
+    (x.bv &&& y.bv) ||| (x.bv &&& z.bv) ||| (y.bv &&& z.bv)
+  apply BitVec.eq_of_getLsbD_eq_iff.mpr
+  intro i hi
+  simp only [BitVec.getLsbD_xor,BitVec.getLsbD_and,BitVec.getLsbD_or,
+    BitVec.getLsbD_not,hi,decide_true,Bool.true_and]
+  cases x.bv.getLsbD i <;> cases y.bv.getLsbD i <;> cases z.bv.getLsbD i <;> decide
+#print axioms choose_eq
+#print axioms majority_eq
+end R1Z.PV_CBL_FallbackBoolean

@@ -1,0 +1,746 @@
+[
+  {
+    "body": "theorem empty {A : Type} (n : Nat) : scan (n+1) ([] : List (Option A)) = (0, none) := rfl",
+    "theorems": [
+      "empty"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem accepted {A : Type} (n : Nat) (a : A) (xs : List (Option A)) : scan (n+1) (some a :: xs) = (1, some a) := rfl",
+    "theorems": [
+      "accepted"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem rejected {A : Type} (n : Nat) (xs : List (Option A)) : scan (n+1) (none :: xs) = ((scan n xs).1+1, (scan n xs).2) := rfl",
+    "theorems": [
+      "rejected"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem consumed_le_cap {A : Type} (n : Nat) (xs : List (Option A)) : (scan n xs).1 \u2264 n := by\n  induction n generalizing xs with\n  | zero => simp [scan]\n  | succ n ih =>\n    cases xs with\n    | nil => simp [scan]\n    | cons x xs => cases x <;> simp [scan]; exact ih xs",
+    "theorems": [
+      "consumed_le_cap"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem consumed_le_length {A : Type} (n : Nat) (xs : List (Option A)) : (scan n xs).1 \u2264 xs.length := by\n  induction n generalizing xs with\n  | zero => simp [scan]\n  | succ n ih =>\n    cases xs with\n    | nil => simp [scan]\n    | cons x xs => cases x <;> simp [scan]; exact ih xs",
+    "theorems": [
+      "consumed_le_length"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem scan_map {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) :\n    scan n (xs.map (Option.map f)) = ((scan n xs).1, (scan n xs).2.map f) := by\n  induction n generalizing xs with\n  | zero => rfl\n  | succ n ih =>\n    cases xs with\n    | nil => rfl\n    | cons x xs => cases x <;> simp [scan, ih]",
+    "theorems": [
+      "scan_map"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem count_map {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) :\n    (scan n (xs.map (Option.map f))).1 = (scan n xs).1 := by rw [scan_map]",
+    "theorems": [
+      "count_map"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem status_map {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) :\n    (scan n (xs.map (Option.map f))).2.isSome = (scan n xs).2.isSome := by\n  rw [scan_map]; cases (scan n xs).2 <;> rfl",
+    "theorems": [
+      "status_map"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "def trace {A : Type} (n : Nat) (xs : List (Option A)) : Nat \u00d7 Bool :=\n  ((scan n xs).1, (scan n xs).2.isSome)\ntheorem trace_relabel {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) :\n    trace n (xs.map (Option.map f)) = trace n xs := by\n  simp only [trace, count_map, status_map]",
+    "theorems": [
+      "trace_relabel"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "def flags {A : Type} (xs : List (Option A)) : List (Option Unit) := xs.map (Option.map (fun _ => ()))\ntheorem coins_only {A : Type} (n : Nat) (xs : List (Option A)) :\n    trace n xs = trace n (flags xs) := (trace_relabel (fun _ => ()) n xs).symm",
+    "theorems": [
+      "coins_only"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem same_flags {A B : Type} (n : Nat) (xs : List (Option A)) (ys : List (Option B))\n    (h : flags xs = flags ys) : trace n xs = trace n ys := by\n  rw [coins_only n xs, coins_only n ys, h]",
+    "theorems": [
+      "same_flags"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem rejected_prefix {A : Type} (r n : Nat) (xs : List (Option A)) :\n    scan (r+n) (List.replicate r none ++ xs) =\n      (r + (scan n xs).1, (scan n xs).2) := by\n  induction r with\n  | zero => simp\n  | succ r ih =>\n    rw [Nat.succ_add, List.replicate_succ, List.cons_append, rejected, ih]\n    simp only [Nat.succ_add, Nat.add_succ]",
+    "theorems": [
+      "rejected_prefix"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem first_accept {A : Type} (r n : Nat) (a : A) (xs : List (Option A)) :\n    scan (r+n+1) (List.replicate r none ++ some a :: xs) = (r+1, some a) := by\n  rw [show r+n+1=r+(n+1) by omega, rejected_prefix, accepted]",
+    "theorems": [
+      "first_accept"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem exhausted {A : Type} (n : Nat) :\n    scan n (List.replicate n (none : Option A)) = (n, none) := by\n  have h := rejected_prefix (A := A) n 0 []\n  simpa [scan] using h",
+    "theorems": [
+      "exhausted"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem accept_in_range (p x : Nat) (h : x < p) :\n    (if x < p then some x else none) = some x := if_pos h",
+    "theorems": [
+      "accept_in_range"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem reject_at_boundary (p : Nat) :\n    (if p < p then some p else none : Option Nat) = none := by simp",
+    "theorems": [
+      "reject_at_boundary"
+    ],
+    "module": "PV_L2B_Rejection",
+    "namespace": "PV_L2B_Rejection"
+  },
+  {
+    "body": "theorem geometric_zero (q : \u211a) : geom q 0 = 1-q := by simp [geom]",
+    "theorems": [
+      "geometric_zero"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw",
+    "initial": "import Mathlib.Data.Rat.Lemmas\nimport Mathlib.Tactic.Ring\nimport Mathlib.Tactic.FieldSimp\nimport Mathlib.Tactic.NormNum\nimport Mathlib.Tactic.Linarith\nset_option autoImplicit false\nnamespace PV_L2B_SamplerLaw\n-- IID path weights, not an axiom identifying SHA outputs with IID words.\ndef geom (q : \u211a) (r : Nat) : \u211a := q^r * (1-q)\ndef success (q : \u211a) : Nat \u2192 \u211a\n  | 0 => 0\n  | n+1 => (1-q)+q*success q n\ndef valueMass (q u : \u211a) : Nat \u2192 \u211a\n  | 0 => 0\n  | n+1 => u+q*valueMass q u n\ndef prefixMass (q u : \u211a) (r : Nat) : \u211a := q^r*u\nend PV_L2B_SamplerLaw\n"
+  },
+  {
+    "body": "theorem geometric_step (q : \u211a) (r : Nat) : geom q (r+1) = q*geom q r := by simp [geom,pow_succ]; ring",
+    "theorems": [
+      "geometric_step"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem success_zero (q : \u211a) : success q 0 = 0 := rfl",
+    "theorems": [
+      "success_zero"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem success_closed (q : \u211a) (n : Nat) : success q n = 1-q^n := by\n  induction n with\n  | zero => simp [success]\n  | succ n ih => rw [success, ih, pow_succ]; ring",
+    "theorems": [
+      "success_closed"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem total_capped (q : \u211a) (n : Nat) : success q n + q^n = 1 := by rw [success_closed]; ring",
+    "theorems": [
+      "total_capped"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem value_factor (q u : \u211a) (n : Nat) (p : \u211a) (h : u*p=1-q) : valueMass q u n * p = success q n := by\n  induction n with\n  | zero => simp [valueMass,success]\n  | succ n ih => simp only [valueMass,success]; calc\n      (u+q*valueMass q u n)*p = u*p+q*(valueMass q u n*p) := by ring\n      _ = (1-q)+q*success q n := by rw [h,ih]",
+    "theorems": [
+      "value_factor"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem uniform_on_success (q u p : \u211a) (n : Nat) (hp : p \u2260 0) (h : u*p=1-q) : valueMass q u n = success q n / p := by\n  apply (eq_div_iff hp).2; exact value_factor q u n p h",
+    "theorems": [
+      "uniform_on_success"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem prefix_independent (q u p : \u211a) (r : Nat) (h : u*p=1-q) : prefixMass q u r * p = geom q r := by\n  unfold prefixMass geom; calc q^r*u*p = q^r*(u*p) := by ring\n  _ = q^r*(1-q) := by rw [h]",
+    "theorems": [
+      "prefix_independent"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem prefix_uniform (q u p : \u211a) (r : Nat) (hp : p \u2260 0) (h : u*p=1-q) : prefixMass q u r = geom q r / p := by\n  apply (eq_div_iff hp).2; exact prefix_independent q u p r h",
+    "theorems": [
+      "prefix_uniform"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem scalar_normalization (p : \u211a) (hp : p+1 \u2260 0) : (1/(p+1))*p = 1-1/(p+1) := by field_simp; ring",
+    "theorems": [
+      "scalar_normalization"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem scalar_trace_law (p : \u211a) (hp : p+1 \u2260 0) (r : Nat) : prefixMass (1/(p+1)) (1/(p+1)) r*p = geom (1/(p+1)) r :=\n  prefix_independent _ _ _ _ (scalar_normalization p hp)",
+    "theorems": [
+      "scalar_trace_law"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem scalar_uniform (p : \u211a) (hp : p \u2260 0) (hp1 : p+1 \u2260 0) (n : Nat) : valueMass (1/(p+1)) (1/(p+1)) n = (1-(1/(p+1))^n)/p := by\n  rw [uniform_on_success _ _ _ _ hp (scalar_normalization p hp1), success_closed]",
+    "theorems": [
+      "scalar_uniform"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem scalar_prefix_product (p : \u211a) (hp : p \u2260 0) (hp1 : p+1 \u2260 0) (r : Nat) : prefixMass (1/(p+1)) (1/(p+1)) r = geom (1/(p+1)) r * (1/p) := by\n  rw [prefix_uniform _ _ _ _ hp (scalar_normalization p hp1)]; ring",
+    "theorems": [
+      "scalar_prefix_product"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem entropy_reject_partition (z : \u211a) : z + (1-z)*z = 1-(1-z)^2 := by ring",
+    "theorems": [
+      "entropy_reject_partition"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem entropy_accept_partition (z : \u211a) : z+(1-z)*z+(1-z)^2=1 := by ring",
+    "theorems": [
+      "entropy_accept_partition"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem entropy_pair_normalization (b : \u211a) (hb : b \u2260 0) : (1/b^2)*(b-1)^2 = 1-(1-(1-1/b)^2) := by field_simp; ring",
+    "theorems": [
+      "entropy_pair_normalization"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem entropy_uniform_pair (b : \u211a) (hb : b \u2260 0) (hn : (b-1)^2 \u2260 0) (n : Nat) :\n  valueMass (1-(1-1/b)^2) (1/b^2) n = success (1-(1-1/b)^2) n / (b-1)^2 :=\n  uniform_on_success _ _ _ _ hn (entropy_pair_normalization b hb)",
+    "theorems": [
+      "entropy_uniform_pair"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem entropy_prefix_pair (b : \u211a) (hb : b \u2260 0) (hn : (b-1)^2 \u2260 0) (r : Nat) :\n  prefixMass (1-(1-1/b)^2) (1/b^2) r = geom (1-(1-1/b)^2) r / (b-1)^2 :=\n  prefix_uniform _ _ _ _ hn (entropy_pair_normalization b hb)",
+    "theorems": [
+      "entropy_prefix_pair"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem geometric_nonnegative (q : \u211a) (hq : 0 \u2264 q) (hq1 : q \u2264 1) (r : Nat) : 0 \u2264 geom q r :=\n  mul_nonneg (pow_nonneg hq _) (sub_nonneg.mpr hq1)",
+    "theorems": [
+      "geometric_nonnegative"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem exhaustion_nonnegative (q : \u211a) (hq : 0 \u2264 q) (n : Nat) : 0 \u2264 q^n := pow_nonneg hq n",
+    "theorems": [
+      "exhaustion_nonnegative"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem source_scalar_reject_probability : (1 : \u211a)/((2147483647:\u211a)+1) = 1/(2:\u211a)^31 := by norm_num",
+    "theorems": [
+      "source_scalar_reject_probability"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem source_scalar_exhaustion_probability : ((1:\u211a)/(2:\u211a)^31)^16 = 1/(2:\u211a)^496 := by\n  rw [div_pow, one_pow, \u2190 pow_mul]",
+    "theorems": [
+      "source_scalar_exhaustion_probability"
+    ],
+    "module": "PV_L2B_SamplerLaw",
+    "namespace": "PV_L2B_SamplerLaw"
+  },
+  {
+    "body": "theorem offset_bound (n : Nat) : offset n < 32 := by unfold offset; have := Nat.mod_lt n (by decide : 0<8); omega",
+    "theorems": [
+      "offset_bound"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor",
+    "initial": "import PV_L2B_Rejection\nset_option autoImplicit false\nnamespace PV_L2B_Cursor\n-- Absolute consumed-word cursor; initial source word=8 triggers the first refill.\ndef offset (consumed : Nat) : Nat := 4*(consumed % 8)\ndef blockIndex (consumed : Nat) : Nat := consumed/8\ndef afterWord (consumed : Nat) : Nat := consumed%8+1\ndef consumed (rejections : List Nat) : Nat := (rejections.map (fun r => r+1)).sum\ntheorem offset_zero : offset 0 = 0 := rfl\n#print axioms offset_zero\nend PV_L2B_Cursor\n"
+  },
+  {
+    "body": "theorem last_byte_bound (n : Nat) : offset n + 3 < 32 := by unfold offset; have := Nat.mod_lt n (by decide : 0<8); omega",
+    "theorems": [
+      "last_byte_bound"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem read_word_bound (n : Nat) : afterWord n \u2264 8 := by unfold afterWord; have := Nat.mod_lt n (by decide : 0<8); omega",
+    "theorems": [
+      "read_word_bound"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem read_word_positive (n : Nat) : 0 < afterWord n := by unfold afterWord; omega",
+    "theorems": [
+      "read_word_positive"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem offset_period (n : Nat) : offset (n+8) = offset n := by simp [offset,Nat.add_mod]",
+    "theorems": [
+      "offset_period"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem block_step (n : Nat) : blockIndex (n+8) = blockIndex n+1 := by simp [blockIndex,Nat.add_div_right]",
+    "theorems": [
+      "block_step"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem word_period (n : Nat) : afterWord (n+8) = afterWord n := by simp [afterWord,Nat.add_mod]",
+    "theorems": [
+      "word_period"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem absolute_decomposition (n : Nat) : n = 8*blockIndex n+n%8 := by unfold blockIndex; omega",
+    "theorems": [
+      "absolute_decomposition"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem refill_iff (n : Nat) : afterWord n = 8 \u2194 n%8=7 := by unfold afterWord; omega",
+    "theorems": [
+      "refill_iff"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem first_limb_offset (r : Nat) : offset (r+1) = 4*((r+1)%8) := rfl",
+    "theorems": [
+      "first_limb_offset"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem accepted_no_rejection_next : offset 1 = 4 := rfl",
+    "theorems": [
+      "accepted_no_rejection_next"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem one_rejection_next : offset 2 = 8 := rfl",
+    "theorems": [
+      "one_rejection_next"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem cursor_nil : consumed [] = 0 := rfl",
+    "theorems": [
+      "cursor_nil"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem cursor_cons (r : Nat) (rs : List Nat) : consumed (r::rs) = r+1+consumed rs := by simp [consumed]",
+    "theorems": [
+      "cursor_cons"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem cursor_append (rs ts : List Nat) : consumed (rs++ts) = consumed rs+consumed ts := by simp [consumed,List.sum_append]",
+    "theorems": [
+      "cursor_append"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem cursor_rejection_sum (rs : List Nat) : consumed rs = rs.sum+rs.length := by\n  induction rs with\n  | nil => rfl\n  | cons r rs ih => simp only [cursor_cons,List.sum_cons,List.length_cons]; rw [ih]; omega",
+    "theorems": [
+      "cursor_rejection_sum"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem qm31_cursor (a b c d : Nat) : consumed [a,b,c,d] = a+b+c+d+4 := by simp [consumed]; omega",
+    "theorems": [
+      "qm31_cursor"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem qm31_consumption_bound (a b c d : Nat) (ha : a<16) (hb : b<16) (hc : c<16) (hd : d<16) : consumed [a,b,c,d] \u2264 64 := by rw [qm31_cursor]; omega",
+    "theorems": [
+      "qm31_consumption_bound"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem cap_cursor_independent {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) : offset (PV_L2B_Rejection.scan n (xs.map (Option.map f))).1 = offset (PV_L2B_Rejection.scan n xs).1 := by rw [PV_L2B_Rejection.count_map]",
+    "theorems": [
+      "cap_cursor_independent"
+    ],
+    "module": "PV_L2B_Cursor",
+    "namespace": "PV_L2B_Cursor"
+  },
+  {
+    "body": "theorem first_zero {A B : Type} (b : Option B) : kind ((none : Option A), b)=0 := rfl",
+    "theorems": [
+      "first_zero"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace",
+    "initial": "import PV_L2B_SamplerLaw\nimport PV_L2B_Rejection\nset_option autoImplicit false\nnamespace PV_L2B_EntropyTrace\n-- Per successful 64-byte fill: 0=first zero (second check skipped),\n-- 1=second zero, 2=both nonzero. OS error schedule is a separate input.\ndef kind {A B : Type} : Option A \u00d7 Option B \u2192 Nat\n | (none, _) => 0\n | (some _, none) => 1\n | (some _, some _) => 2\ndef checks (kind : Nat) : Nat := if kind=0 then 1 else 2\ndef branches {A B : Type} : Nat \u2192 List (Option A \u00d7 Option B) \u2192 List Nat\n | 0, _ => []\n | _+1, [] => []\n | n+1, x::xs => if kind x=2 then [2] else kind x :: branches n xs\nend PV_L2B_EntropyTrace\n"
+  },
+  {
+    "body": "theorem second_zero {A B : Type} (a : A) : kind (some a, (none : Option B))=1 := rfl",
+    "theorems": [
+      "second_zero"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem accepted_pair {A B : Type} (a : A) (b : B) : kind (some a,some b)=2 := rfl",
+    "theorems": [
+      "accepted_pair"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem kind_relabel {A B C D : Type} (f : A \u2192 C) (g : B \u2192 D) (p : Option A \u00d7 Option B) :\n    kind (p.1.map f,p.2.map g)=kind p := by\n  rcases p with \u27e8a,b\u27e9; cases a <;> cases b <;> rfl",
+    "theorems": [
+      "kind_relabel"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem branches_relabel {A B C D : Type} (f : A \u2192 C) (g : B \u2192 D)\n    (n : Nat) (xs : List (Option A \u00d7 Option B)) :\n    branches n (xs.map (fun p => (p.1.map f,p.2.map g)))=branches n xs := by\n  induction n generalizing xs with\n  | zero => rfl\n  | succ n ih =>\n    cases xs with\n    | nil => rfl\n    | cons x xs => simp only [List.map_cons,branches,kind_relabel,ih]",
+    "theorems": [
+      "branches_relabel"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem first_skips_second : checks 0=1 := rfl",
+    "theorems": [
+      "first_skips_second"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem second_checks_both : checks 1=2 := rfl",
+    "theorems": [
+      "second_checks_both"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem success_checks_both : checks 2=2 := rfl",
+    "theorems": [
+      "success_checks_both"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem full_comparison_count_relabel {A B C D : Type} (f : A \u2192 C) (g : B \u2192 D)\n    (n : Nat) (xs : List (Option A \u00d7 Option B)) :\n    ((branches n (xs.map (fun p => (p.1.map f,p.2.map g)))).map checks).sum =\n      ((branches n xs).map checks).sum := by rw [branches_relabel]",
+    "theorems": [
+      "full_comparison_count_relabel"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem first_reject_conditional (z : \u211a) (hz : z \u2260 0) (ht : 2-z \u2260 0) : z/(z+(1-z)*z) = 1/(2-z) := by\n  rw [show z+(1-z)*z=z*(2-z) by ring]\n  field_simp <;> ring\ntheorem entropy_q_valid (z : \u211a) (hz : 0<z) (hz1 : z\u22641) :\n    0<z+(1-z)*z \u2227 z+(1-z)*z\u22641 := by\n  have hm : 0\u2264(1-z)*z := mul_nonneg (sub_nonneg.mpr hz1) hz.le\n  constructor\n  \u00b7 linarith\n  \u00b7 nlinarith [sq_nonneg (1-z)]",
+    "theorems": [
+      "first_reject_conditional",
+      "entropy_q_valid"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem second_reject_conditional (z : \u211a) (hz : z \u2260 0) (ht : 2-z \u2260 0) : ((1-z)*z)/(z+(1-z)*z) = (1-z)/(2-z) := by\n  rw [show z+(1-z)*z=z*(2-z) by ring]\n  field_simp <;> ring",
+    "theorems": [
+      "second_reject_conditional"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem conditional_class_total (z : \u211a) (ht : 2-z \u2260 0) : 1/(2-z)+(1-z)/(2-z)=1 := by field_simp; ring",
+    "theorems": [
+      "conditional_class_total"
+    ],
+    "module": "PV_L2B_EntropyTrace",
+    "namespace": "PV_L2B_EntropyTrace"
+  },
+  {
+    "body": "theorem passing_trace (n : Nat) : firstFailure (List.replicate n false) = n := by\n  induction n with\n  | zero => rfl\n  | succ n ih => simp [List.replicate_succ,firstFailure,ih]; omega",
+    "theorems": [
+      "passing_trace"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards",
+    "initial": "import Mathlib.Algebra.BigOperators.Group.Finset.Basic\nimport Mathlib.Data.ZMod.Basic\nimport Mathlib.Tactic.Linarith\nset_option autoImplicit false\nnamespace PV_L2B_Guards\n-- Mathematical guard laws. Native builder/canonicality/refinement association\n-- is retained, never represented by an additional trust item.\ndef firstFailure : List Bool \u2192 Nat\n | [] => 0\n | true :: _ => 1\n | false :: xs => 1+firstFailure xs\nend PV_L2B_Guards\n"
+  },
+  {
+    "body": "theorem failed_trace (xs : List Bool) : firstFailure (true::xs) = 1 := rfl",
+    "theorems": [
+      "failed_trace"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem zero_guard {A : Type} [Zero A] [DecidableEq A] (x : A) (hx : x=0) : decide (x \u2260 0) = false := by simp [hx]",
+    "theorems": [
+      "zero_guard"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem equality_guard {A : Type} [DecidableEq A] (x y : A) (h : x=y) : decide (x \u2260 y) = false := by simp [h]",
+    "theorems": [
+      "equality_guard"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem active_zero_guard {A : Type} [Zero A] [DecidableEq A] (active : Bool) (x : A) (h : active=true \u2192 x=0) : (active && decide (x \u2260 0)) = false := by\n  cases active <;> simp_all",
+    "theorems": [
+      "active_zero_guard"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem canonical_guard (p x : Nat) (hx : x<p) : decide (p\u2264x) = false := by simp; omega",
+    "theorems": [
+      "canonical_guard"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem modular_canonical (p a b : Nat) (hp : 0<p) : (a+b)%p<p := Nat.mod_lt _ hp",
+    "theorems": [
+      "modular_canonical"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem zmod_canonical (p : Nat) [NeZero p] (x : ZMod p) : x.val<p := ZMod.val_lt x",
+    "theorems": [
+      "zmod_canonical"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem balanced_dependent {A : Type} [AddGroup A] (sum : A) : sum+(-sum)=0 := add_neg_cancel sum",
+    "theorems": [
+      "balanced_dependent"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem balanced_dependent_first {A : Type} [AddGroup A] (sum : A) : (-sum)+sum=0 := neg_add_cancel sum",
+    "theorems": [
+      "balanced_dependent_first"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem inactive_balance {I A : Type} [Fintype I] [DecidableEq I] [AddCommGroup A]\n    (d : I) (v : I \u2192 A) :\n    (\u2211 i : I, if i=d then -(\u2211 j \u2208 Finset.univ.erase d, v j) else v i)=0 := by\n  classical\n  rw [\u2190 Finset.add_sum_erase _ _ (Finset.mem_univ d)]\n  simp only [ite_true]\n  have hs : (\u2211 i \u2208 Finset.univ.erase d, if i=d then -(\u2211 j \u2208 Finset.univ.erase d, v j) else v i) = \u2211 i \u2208 Finset.univ.erase d, v i := by\n    apply Finset.sum_congr rfl\n    intro i hi\n    simp only [Finset.mem_erase] at hi\n    simp [hi.1]\n  rw [hs]; exact neg_add_cancel _",
+    "theorems": [
+      "inactive_balance"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem padding_total {I A : Type} [Fintype I] [AddCommGroup A]\n    (active : I \u2192 Bool) (padding : I \u2192 A)\n    (hz : \u2200 i, active i=true \u2192 padding i=0)\n    (hs : (\u2211 i : I, if active i then 0 else padding i)=0) :\n    (\u2211 i : I, padding i)=0 := by\n  classical\n  have h : (\u2211 i : I, padding i) = \u2211 i : I, if active i then 0 else padding i := by\n    apply Finset.sum_congr rfl\n    intro i hi\n    cases ha : active i with\n    | false => simp [ha]\n    | true => simp [ha,hz i ha]\n  exact h.trans hs",
+    "theorems": [
+      "padding_total"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem padding_preserves_sum {I A : Type} [Fintype I] [AddCommGroup A]\n    (helper padding : I \u2192 A) (hh : (\u2211 i : I, helper i)=0)\n    (hp : (\u2211 i : I, padding i)=0) :\n    (\u2211 i : I, (helper i + padding i))=0 := by rw [Finset.sum_add_distrib,hh,hp,add_zero]",
+    "theorems": [
+      "padding_preserves_sum"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem paired_helper_cancels {I A : Type} [Fintype I] [AddCommGroup A] (v : I \u2192 A) : (\u2211 i : I, v i) - (\u2211 i : I, v i) = 0 := sub_self _",
+    "theorems": [
+      "paired_helper_cancels"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem c1_count_guard (count : Nat) (h : count=16) : decide (count \u2260 16)=false := by simp [h]",
+    "theorems": [
+      "c1_count_guard"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem mask_count_guard (count : Nat) (h : count=10) : decide (count \u2260 10)=false := by simp [h]",
+    "theorems": [
+      "mask_count_guard"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem audit_shortcircuit (a b c d e : Bool) (ha : a=false) (hb : b=false) (hc : c=false) (hd : d=false) (he : e=false) : a || b || c || d || e = false := by simp [ha,hb,hc,hd,he]",
+    "theorems": [
+      "audit_shortcircuit"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem helper_option_guard {A : Type} [Zero A] [DecidableEq A] (v : Option A) (h : v=some 0) : decide (v \u2260 some 0)=false := by simp [h]",
+    "theorems": [
+      "helper_option_guard"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem sumcheck_boundary {A : Type} [AddMonoid A] (v0 v1 running p0 p1 : A)\n    (interpolation0 : p0=v0) (interpolation1 : p1=v1)\n    (initial : v0+v1=running) : p0+p1=running := by rw [interpolation0,interpolation1,initial]",
+    "theorems": [
+      "sumcheck_boundary"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem sumcheck_terminal {A : Type} [DecidableEq A] (oracle running polynomial : A)\n    (low_degree_identity : oracle=polynomial) (running_eval : running=polynomial) :\n    decide (oracle \u2260 running)=false := by simp [low_degree_identity,running_eval]",
+    "theorems": [
+      "sumcheck_terminal"
+    ],
+    "module": "PV_L2B_Guards",
+    "namespace": "PV_L2B_Guards"
+  },
+  {
+    "body": "theorem rejection_cursor_joint {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) :\n    (PV_L2B_Rejection.trace n (xs.map (Option.map f)),\n      PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n (xs.map (Option.map f))).1) =\n    (PV_L2B_Rejection.trace n xs, PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n xs).1) := by\n  rw [PV_L2B_Rejection.trace_relabel,PV_L2B_Rejection.count_map]\ntheorem accepted_conditional_uniform (q u p : \u211a) (n : Nat)\n    (hp : p\u22600) (h : u*p=1-q) (hs : PV_L2B_SamplerLaw.success q n\u22600) :\n    PV_L2B_SamplerLaw.valueMass q u n / PV_L2B_SamplerLaw.success q n = 1/p := by\n  rw [PV_L2B_SamplerLaw.uniform_on_success q u p n hp h]\n  field_simp\ntheorem constant_guard_joint {View Trace : Type} (v w : View) (tv tw : Trace)\n    (hv : v=w) (ht : tv=tw) (checks : Nat) :\n    (v,tv,PV_L2B_Guards.firstFailure (List.replicate checks false)) = (w,tw,checks) := by\n  rw [hv,ht,PV_L2B_Guards.passing_trace]",
+    "theorems": [
+      "rejection_cursor_joint",
+      "accepted_conditional_uniform",
+      "constant_guard_joint"
+    ],
+    "module": "PV_L2B_JointTransport",
+    "namespace": "PV_L2B_JointTransport",
+    "initial": "import PV_L2B_Rejection\nimport PV_L2B_Cursor\nimport PV_L2B_EntropyTrace\nimport PV_L2B_Guards\nset_option autoImplicit false\nnamespace PV_L2B_JointTransport\nend PV_L2B_JointTransport\n"
+  },
+  {
+    "body": "theorem outside_existing_event {I O : Type} (real sim : I \u2192 O) (bad : I \u2192 Prop)\n    (agreement : \u2200 i, \u00ac bad i \u2192 real i=sim i) (i : I) :\n    real i \u2260 sim i \u2192 bad i := by\n  intro h; by_contra hb; exact h (agreement i hb)",
+    "theorems": [
+      "outside_existing_event"
+    ],
+    "module": "PV_L2B_JointTransport",
+    "namespace": "PV_L2B_JointTransport"
+  },
+  {
+    "body": "theorem weighted_joint_transport {I O : Type} [Fintype I]\n    (weight : I \u2192 \u211a) (real sim : I \u2192 O) (test : O \u2192 \u211a)\n    (same : \u2200 i, real i=sim i) :\n    (\u2211 i : I, weight i*test (real i)) = \u2211 i : I, weight i*test (sim i) := by\n  apply Finset.sum_congr rfl\n  intro i hi; rw [same i]",
+    "theorems": [
+      "weighted_joint_transport"
+    ],
+    "module": "PV_L2B_JointTransport",
+    "namespace": "PV_L2B_JointTransport"
+  }
+]
