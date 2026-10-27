@@ -31,9 +31,15 @@ theorem source (values : Rows) (masks : Array U16 64#usize) (chi : Q)
     have hv : row.val < values.val.length := h
     let r := values.val[row.val]'hv
     have hr : Slice.index_usize values row = ok r := PV_B1_ArrayRead.slice_read values row hv
-    rw [PV_B1_PoleMiddle.source]
-    rw [PV_B1_PoleRow.source values chi clear row _ r hr]
-    simp only [hr,bind_tc_ok,active] <;> rfl
+    have hs : all_slots_clear_loop0_loop0 values chi clear row (active mask row) 0#usize =
+        ok (clear && PV_B1_PoleRow.rowTest (active mask row) chi r) :=
+      (PV_B1_PoleMiddle.source values chi clear row (active mask row)).trans
+        (PV_B1_PoleRow.source values chi clear row (active mask row) r hr)
+    simp only [hr,bind_tc_ok]
+    simpa only [bind_tc_ok,active] using
+      congrArg (fun res : Result Bool =>
+        (do let c ← res; ok (cont (c,Usize.wrapping_add row 1#usize)) :
+          Result (ControlFlow (Bool × Usize) Bool))) hs
   · simp only [h,if_false,bind_tc_ok]
 
 theorem original (values : Rows) (masks : Array U16 64#usize) (chi : Q)

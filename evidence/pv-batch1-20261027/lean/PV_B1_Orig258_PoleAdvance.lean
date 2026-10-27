@@ -1,0 +1,34 @@
+import PV_B1_Orig258_PoleIndex
+set_option autoImplicit false
+namespace PV_B1_Orig258_PoleAdvance
+open Aeneas Aeneas.Std
+
+def advance : Nat → Usize → Usize
+  | 0,row => row
+  | n+1,row => advance n (Usize.wrapping_add row 1#usize)
+
+theorem append (n m : Nat) (row : Usize) : advance (n+m) row = advance n (advance m row) := by
+  induction m generalizing row with
+  | zero => simp only [Nat.add_zero,advance]
+  | succ m ih =>
+    simp only [Nat.add_succ,advance]
+    exact ih (Usize.wrapping_add row 1#usize)
+
+theorem value (n : Nat) (row : Usize) (h : row.val+n ≤ 1024) :
+    (advance n row).val = row.val+n := by
+  induction n generalizing row with
+  | zero => simp only [advance,Nat.add_zero]
+  | succ n ih =>
+    have hr : row.val < 1024 := by omega
+    have hi := PV_B1_Orig258_PoleIndex.increment row hr
+    simp only [advance]
+    rw [ih _ (by omega),hi]
+    omega
+
+theorem from_zero (n : Nat) (h : n ≤ 1024) : (advance n 0#usize).val = n := by
+  have hz : (0#usize).val = 0 := rfl
+  simpa only [hz,Nat.zero_add] using value n 0#usize (by change 0+n≤1024; omega)
+#print axioms append
+#print axioms value
+#print axioms from_zero
+end PV_B1_Orig258_PoleAdvance

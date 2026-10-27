@@ -1,0 +1,72 @@
+{"attempt": 53643, "module": "PV_B1_PoleBody", "exit": 1, "wall_seconds": 1.2500368779874407, "peak_rss_kib": "2624568", "swap": "0", "charged": true}
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleBody.lean:34:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_B1_PoleMiddle.Mid ?values ?chi ?clear ?row ?active 0#usize
+in the target expression
+  (do
+      let clear1 ←
+        all_slots_clear_loop0_loop0 values chi clear row
+            (mask &&& U16.wrapping_shl 1#u16 (UScalar.cast UScalarTy.U32 (row &&& 15#usize)) != 0#u16) 0#usize
+      ok (cont (clear1, row.wrapping_add 1#usize))) =
+    do
+    let r ← Slice.index_usize values row
+    ok (cont (clear && PV_B1_PoleRow.rowTest (active mask row) chi r, row.wrapping_add 1#usize))
+
+case pos
+values : Rows
+masks : Std.Array U16 64#usize
+chi : Q
+clear : Bool
+row : Usize
+h : row < Slice.len values
+mask : U16
+hm : masks.index_usize (row.wrapping_shr 4#u32) = ok mask
+hv : ↑row < (↑values).length
+r : Std.Array (Std.Array PV_B1_PoleInner.Q 2#usize) 2#usize := (↑values)[↑row]
+hr : Slice.index_usize values row = ok r
+⊢ (do
+      let clear1 ←
+        all_slots_clear_loop0_loop0 values chi clear row
+            (mask &&& U16.wrapping_shl 1#u16 (UScalar.cast UScalarTy.U32 (row &&& 15#usize)) != 0#u16) 0#usize
+      ok (cont (clear1, row.wrapping_add 1#usize))) =
+    do
+    let r ← Slice.index_usize values row
+    ok (cont (clear && PV_B1_PoleRow.rowTest (active mask row) chi r, row.wrapping_add 1#usize))
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleBody.lean:28:41: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲h̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleBody.lean:37:26: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleBody.lean:46:41: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲h̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleBody.lean:54:26: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleBody.lean:53:64: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleBody.lean:53:64: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'PV_B1_PoleBody.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B1_PoleBody.original' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+
