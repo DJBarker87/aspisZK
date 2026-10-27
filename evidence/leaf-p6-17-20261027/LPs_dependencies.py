@@ -13,7 +13,7 @@ def visit(m):
 for m in sys.argv[1:]:visit(m)
 script='from pathlib import Path; import json; roots='+repr(['/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027',X,C,C+'/objects','/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'])+'; modules='+repr(list(seen))+'; print(json.dumps({m:next((str(Path(r)/(m.replace(".","/")+".olean")) for r in roots if (Path(r)/(m.replace(".","/")+".olean")).is_file()),None) for m in modules}))'
 for retry in range(11):
- r=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2','dombarker@100.108.41.90','python3 -c '+shlex.quote(script)],capture_output=True,text=True)
+ r=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2','dombarker@100.108.41.90','python3 -'],input=script,capture_output=True,text=True)
  with (E/'LPs_DEPENDENCY_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(retry=retry,exit=r.returncode,stdout=r.stdout,stderr=r.stderr))+'\n')
  if r.returncode==0:break
  if r.returncode!=255 or retry==10:raise SystemExit('STOP dependency inventory '+r.stderr)
