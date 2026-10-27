@@ -22,8 +22,8 @@ theorem full {F : Type}
   | cons p xs ih =>
     rcases p with ⟨index,c⟩
     rw [fullSteps] at hr
-    obtain ⟨state1,hstate,rest⟩ := bind_ok_inv hr
-    obtain ⟨callback1,hcallback,hresult⟩ := bind_ok_inv rest
+    obtain ⟨state1,hstate,rest⟩ := R0Z.PoseidonRefine.bind_ok_inv hr
+    obtain ⟨callback1,hcallback,hresult⟩ := R0Z.PoseidonRefine.bind_ok_inv rest
     obtain ⟨expected,hexpected,hcan⟩ := full_total s c
     have he : state1=expected := Result.ok.inj (hstate.symm.trans hexpected)
     have hstatecan : Canonical state1 := by rw [he];exact hcan
@@ -44,8 +44,8 @@ theorem internal {F : Type}
   | cons p xs ih =>
     rcases p with ⟨index,c⟩
     rw [PV_Src_PortInternalRounds.steps] at hr
-    obtain ⟨state1,hstate,rest⟩ := bind_ok_inv hr
-    obtain ⟨callback1,hcallback,hresult⟩ := bind_ok_inv rest
+    obtain ⟨state1,hstate,rest⟩ := R0Z.PoseidonRefine.bind_ok_inv hr
+    obtain ⟨callback1,hcallback,hresult⟩ := R0Z.PoseidonRefine.bind_ok_inv rest
     obtain ⟨expected,hexpected,hcan⟩ := PV_Src_PortInternalRounds.total s c
     have he : state1=expected := Result.ok.inj (hstate.symm.trans hexpected)
     have hstatecan : Canonical state1 := by rw [he];exact hcan
