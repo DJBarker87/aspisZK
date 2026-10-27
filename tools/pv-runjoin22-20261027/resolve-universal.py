@@ -62,10 +62,10 @@ def visit(m):
 
  assert hashlib.sha256(b).hexdigest()==expected,m
  imports=re.findall(r'^import\s+(\S+)',uncomment(b.decode()),re.M)
- done[m]=dict(authority=a,path=r['path'],sha256=expected,imports=imports);sources[m]=b.decode()
+ done[m]=dict(authority=a,path=r['path'],git_blob=r.get('git_blob',r.get('blob')),sha256=expected,imports=imports);sources[m]=b.decode()
  for dep in imports:visit(dep)
 
-roots=['R1Z.PV_RunJoin_UniversalPublic22','R1Z.PV_RunJoin_UniversalRecords22','R1Z.PV_RunJoin_UniversalTransition22']
+roots=['R1Z.PV_RunJoin_UniversalPublic22','R1Z.PV_RunJoin_UniversalRecords22','R1Z.PV_RunJoin_UniversalTransition22','R1Z.PV_RunJoin_UniversalBuild22']
 for m in roots:visit(m)
 (E/'universal-resolution.json').write_text(json.dumps(dict(head=head,research_revision=rev,resolved=done,unpinned=sorted(missing)),indent=2)+'\n')
 (E/'universal-project-sources.json').write_text(json.dumps(sources)+'\n')
