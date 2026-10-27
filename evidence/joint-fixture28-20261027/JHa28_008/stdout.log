@@ -1,0 +1,153 @@
+def AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  Aeneas.Std.Result AspisR1Post25SamplerOrdinaryCallbackV2.PE :=
+fun block => do
+  let x ← AspisR1Post25Sampler.sampler.ordinary_sample block
+  Aeneas.Std.Result.ok (AspisR1Post25SamplerPreparedCarrier.candidateToPE x)
+theorem AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.ordinary_sample_candidate_eq_fieldRank : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  ∃ value,
+    AspisR1Post25Sampler.sampler.ordinary_sample block = Aeneas.Std.Result.ok value ∧
+      AspisR1.ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.candidateWideToExact value =
+        R0C.ModuloField.fieldRank ⟨AspisR1.SourceSamplerByteRank.rank block % AspisCircleGroupOrder.P ^ 8, ⋯⟩ :=
+fun block =>
+  let ⟨_outRank, h✝⟩ := AspisR1.ExtractedQM31SamplerIndexedOrdinaryBridgeV1.ordinary_sample_candidate block
+  let ⟨digits, h✝¹⟩ := h✝
+  let ⟨_highWord, h✝²⟩ := h✝¹
+  let ⟨_hlow, right✝⟩ := h✝²
+  let ⟨hordinary, right✝¹⟩ := right✝
+  let ⟨hvalues, right✝²⟩ := right✝¹
+  let ⟨_hpos, _hquot⟩ := right✝²
+  have hcanonical := fun i =>
+    Trans.trans
+      (Trans.trans
+        (Trans.trans (Eq.symm (AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.values_getD✝ digits i))
+          (congrArg (fun xs => xs.getD (↑i) 0) hvalues))
+        (AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.ordinaryDigits_getD✝
+          (AspisR1.SourceSamplerByteRank.rank block) i))
+      (Nat.mod_lt (AspisR1.SourceSamplerByteRank.rank block / AspisR1.SamplerMachineBounds.P ^ ↑i)
+        AspisR1.SamplerMachineBounds.P_pos);
+  have hrank := fun i =>
+    Trans.trans
+      (Trans.trans (Eq.symm (AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.values_getD✝ digits i))
+        (congrArg (fun xs => xs.getD (↑i) 0) hvalues))
+      (AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.ordinaryDigits_getD✝
+        (AspisR1.SourceSamplerByteRank.rank block) i);
+  let ⟨value, h✝³⟩ :=
+    AspisR1.ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.decode8_candidate_eq_retained digits fun i =>
+      hcanonical i
+  let ⟨hdecode, hretained⟩ := h✝³
+  have hretainedCanonical := funext fun i => Fin.ext (id (hrank i));
+  have hcanonicalTransport :=
+    AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.canonicalDigits_eq_circleCanonical✝
+      (AspisR1.SourceSamplerByteRank.rank block);
+  have hfinCanonical :=
+    Eq.symm
+      (AspisR1.SamplerRanking.canonicalDigits_eq_rank_symm
+        AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.circleP_pos✝);
+  have hfield :=
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a
+                ⟨AspisR1.SourceSamplerByteRank.rank block % AspisCircleGroupOrder.P ^ 8,
+                  Nat.mod_lt (AspisR1.SourceSamplerByteRank.rank block)
+                    AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.pow8_pos✝⟩ =
+              R0C.ModuloField.digitsField
+                (AspisR1.SamplerRanking.canonicalDigits AspisR1.SamplerMachineBounds.P 8
+                  (AspisR1.SourceSamplerByteRank.rank block) AspisR1.SamplerMachineBounds.P_pos))
+          R0C.ModuloField.fieldRank.eq_1))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                R0C.ModuloField.digitsField
+                  (AspisR1.SamplerRanking.canonicalDigits AspisR1.SamplerMachineBounds.P 8
+                    (AspisR1.SourceSamplerByteRank.rank block) AspisR1.SamplerMachineBounds.P_pos))
+            (Equiv.trans_apply finFunctionFinEquiv.symm R0C.ModuloField.digitsField
+              ⟨AspisR1.SourceSamplerByteRank.rank block % AspisCircleGroupOrder.P ^ 8,
+                Nat.mod_lt (AspisR1.SourceSamplerByteRank.rank block)
+                  AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.pow8_pos✝⟩)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                R0C.ModuloField.digitsField _a =
+                  R0C.ModuloField.digitsField
+                    (AspisR1.SamplerRanking.canonicalDigits AspisR1.SamplerMachineBounds.P 8
+                      (AspisR1.SourceSamplerByteRank.rank block) AspisR1.SamplerMachineBounds.P_pos))
+              hfinCanonical))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  R0C.ModuloField.digitsField
+                      (AspisR1.SamplerRanking.canonicalDigits AspisCircleGroupOrder.P 8
+                        (AspisR1.SourceSamplerByteRank.rank block)
+                        AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.circleP_pos✝) =
+                    R0C.ModuloField.digitsField _a)
+                hcanonicalTransport))
+            (Eq.refl
+              (R0C.ModuloField.digitsField
+                (AspisR1.SamplerRanking.canonicalDigits AspisCircleGroupOrder.P 8
+                  (AspisR1.SourceSamplerByteRank.rank block)
+                  AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.circleP_pos✝))))));
+  Exists.intro value
+    ⟨Eq.mpr (id (congrArg (fun _a => _a = Aeneas.Std.Result.ok value) hordinary))
+        (Eq.mpr (id (congrArg (fun _a => _a = Aeneas.Std.Result.ok value) hdecode))
+          (Eq.refl (Aeneas.Std.Result.ok value))),
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                R0C.ModuloField.fieldRank
+                  ⟨AspisR1.SourceSamplerByteRank.rank block % AspisCircleGroupOrder.P ^ 8,
+                    Nat.mod_lt (AspisR1.SourceSamplerByteRank.rank block)
+                      AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.pow8_pos✝⟩)
+            hretained))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                R0C.ModuloField.digitsField _a =
+                  R0C.ModuloField.fieldRank
+                    ⟨AspisR1.SourceSamplerByteRank.rank block % AspisCircleGroupOrder.P ^ 8,
+                      Nat.mod_lt (AspisR1.SourceSamplerByteRank.rank block)
+                        AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5.pow8_pos✝⟩)
+              hretainedCanonical))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  R0C.ModuloField.digitsField
+                      (AspisR1.SamplerRanking.canonicalDigits AspisR1.SamplerMachineBounds.P 8
+                        (AspisR1.SourceSamplerByteRank.rank block) AspisR1.SamplerMachineBounds.P_pos) =
+                    _a)
+                hfield))
+            (Eq.refl
+              (R0C.ModuloField.digitsField
+                (AspisR1.SamplerRanking.canonicalDigits AspisR1.SamplerMachineBounds.P 8
+                  (AspisR1.SourceSamplerByteRank.rank block) AspisR1.SamplerMachineBounds.P_pos)))))⟩
+def AspisR1Post25SamplerPreparedCarrier.candidateToPE : AspisR1Post25SamplerPreparedCarrier.CandidateE →
+  AspisR1Post25SamplerPreparedCarrier.PE :=
+fun x =>
+  { c0 := { c0 := { a := x.c0.c0.a, b := x.c0.c0.b }, c1 := { a := x.c0.c1.a, b := x.c0.c1.b } },
+    c1 := { c0 := { a := x.c1.c0.a, b := x.c1.c0.b }, c1 := { a := x.c1.c1.a, b := x.c1.c1.b } } }
+def AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling : AspisR1PublicPreparation.PreparedModel.Boundaries :=
+{ toBytes := AspisR1CurrentCaller.OriginalSerializerInstallation.sourceBytes,
+  fromQm := AspisR1PublicPreparation.PreparedFromQmSourceBridge.fromQmSource,
+  ordinary := AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic,
+  gamma := AspisR1ClaimPreparedBridge.candidateGammaPublic,
+  queries := fun {H} digest transcript row payload =>
+    AspisR1PublicPreparation.QueriesModel.queries
+      (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+        AspisS1M31Embedding.Total.embed)
+      digest transcript row payload,
+  claim := fun {H} => AspisR1CurrentCaller.BorrowedClaimPrepared.legacyReference }
+def AspisR1ClaimPreparedBridge.candidateGammaPublic : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  Aeneas.Std.Result AspisR1ClaimPreparedBridge.PE :=
+fun block => do
+  let out ← AspisR1GammaCaller.sampler.gamma_sample AspisR1GammaCaller.DigitsModel.candidateGammaHelpers block
+  Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.gammaToPublic out)

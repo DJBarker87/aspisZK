@@ -1,0 +1,166 @@
+JHa_OrdinaryInspect2.lean:3:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1Post25SamplerOrdinaryCallbackV2.candidate_ordinary_canonical`
+JHa_OrdinaryInspect2.lean:4:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1Post25SamplerOrdinaryCallbackV2.ordinary_candidate_canonical`
+AspisR1Post25SamplerOrdinaryCallbackV2.scalar_candidate_ordinary_canonical {H : Type}
+  (sampling : AspisR1Post25SamplerOrdinaryCallbackV2.PreparedBoundaries)
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H) (before after : AspisR1PublicPreparation.transcript.Transcript H)
+  (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) (out : AspisR1Post25SamplerOrdinaryCallbackV2.PE)
+  (h :
+    AspisR1PublicPreparation.PreparedModel.scalar
+        (AspisR1Post25SamplerOrdinaryCallbackV2.withCandidateOrdinary sampling) D before row payload false =
+      Aeneas.Std.Result.ok (out, after)) :
+  AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE out)
+theorem AspisR1Post25SamplerOrdinaryCallbackV2.scalar_candidate_ordinary_canonical : ∀ {H : Type}
+  (sampling : AspisR1Post25SamplerOrdinaryCallbackV2.PreparedBoundaries)
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H) (before after : AspisR1PublicPreparation.transcript.Transcript H)
+  (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) (out : AspisR1Post25SamplerOrdinaryCallbackV2.PE),
+  AspisR1PublicPreparation.PreparedModel.scalar (AspisR1Post25SamplerOrdinaryCallbackV2.withCandidateOrdinary sampling)
+        D before row payload false =
+      Aeneas.Std.Result.ok (out, after) →
+    AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE out) :=
+fun {H} sampling D before after row payload out h =>
+  let ⟨p, h✝⟩ :=
+    AspisR1Post25SamplerOrdinaryCallbackV2.bind_success✝
+      (AspisR1PublicPreparation.transcript.Transcript.block D before row payload)
+      (Aeneas.Std.uncurry fun block self1 => do
+        let out ←
+          if false = true then (AspisR1Post25SamplerOrdinaryCallbackV2.withCandidateOrdinary sampling).gamma block
+            else (AspisR1Post25SamplerOrdinaryCallbackV2.withCandidateOrdinary sampling).ordinary block
+        let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize row)
+        AspisR1PublicPreparation.trace.value 4#u16 i out
+        Aeneas.Std.Result.ok (out, self1))
+      (out, after) h
+  let ⟨hblock, h⟩ := h✝
+  let ⟨block, t, hblock, h⟩ := p
+  let ⟨value, h✝¹⟩ :=
+    AspisR1Post25SamplerOrdinaryCallbackV2.bind_success✝
+      (if false = true then sampling.gamma block
+      else AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic block)
+      (fun x => do
+        let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize row)
+        AspisR1PublicPreparation.trace.value 4#u16 i x
+        Aeneas.Std.Result.ok (x, t))
+      (out, after)
+      (Eq.mp
+        (congrFun'
+          (congrArg Eq
+            (congrFun'
+              (congrArg Aeneas.Std.uncurry
+                (funext fun block =>
+                  funext fun self1 =>
+                    congrFun'
+                      (congrArg bind
+                        (ite_congr (Eq.refl (false = true)) (fun a => Eq.refl (sampling.gamma block)) fun a =>
+                          Eq.refl (AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic block)))
+                      fun out => do
+                      let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize row)
+                      AspisR1PublicPreparation.trace.value 4#u16 i out
+                      Aeneas.Std.Result.ok (out, self1)))
+              (block, t)))
+          (Aeneas.Std.Result.ok (out, after)))
+        h)
+  let ⟨hvalue, h⟩ := h✝¹
+  let ⟨i, h✝²⟩ :=
+    AspisR1Post25SamplerOrdinaryCallbackV2.bind_success✝
+      (Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize row))
+      (fun x => do
+        AspisR1PublicPreparation.trace.value 4#u16 x value
+        Aeneas.Std.Result.ok (value, t))
+      (out, after) h
+  let ⟨hi, h⟩ := h✝²
+  let ⟨u, h✝³⟩ :=
+    AspisR1Post25SamplerOrdinaryCallbackV2.bind_success✝ (AspisR1PublicPreparation.trace.value 4#u16 i value)
+      (fun x => Aeneas.Std.Result.ok (value, t)) (out, after) h
+  let ⟨htrace, h⟩ := h✝³
+  have he := congrArg Prod.fst (Aeneas.Std.Result.ok.inj h);
+  Eq.mpr
+    (id
+      (congrArg (fun _a => AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE _a))
+        (Eq.symm he)))
+    (AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic_success_canonical block value hvalue)
+def AspisR1.ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.candidateWideToExact : AspisR1.ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.CandidateWide →
+  AspisWideTower.WideExact :=
+fun v =>
+  { re := AspisR1.ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.candidateQMToExact v.c0,
+    im := AspisR1.ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.candidateQMToExact v.c1 }
+theorem AspisR1.JFw_TX2_ValueUnique.native : ∀ (x y : AspisR1.FIo_Install.NE),
+  AspisR1.FIo_WideValues.Canon x →
+    AspisR1.FIo_WideValues.Canon y →
+      AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide x) =
+          AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide y) →
+        x = y :=
+fun x y hx hy same =>
+  let ⟨c0✝, c1✝, hx, same⟩ := x
+  let ⟨c0✝¹, c1✝¹, hx, same⟩ := c0✝
+  let ⟨a, b, hx, same⟩ := c0✝¹
+  let ⟨c, d, hx, same⟩ := c1✝¹
+  let ⟨c0✝², c1✝², hx, same⟩ := c1✝
+  let ⟨e, f, hx, same⟩ := c0✝²
+  let ⟨g, h, hx, same⟩ := c1✝²
+  let ⟨c0✝³, c1✝³, hy, same⟩ := y
+  let ⟨c0✝⁴, c1✝⁴, hy, same⟩ := c0✝³
+  let ⟨a1, b1, hy, same⟩ := c0✝⁴
+  let ⟨c1, d1, hy, same⟩ := c1✝⁴
+  let ⟨c0✝⁵, c1✝⁵, hy, same⟩ := c1✝³
+  let ⟨e1, f1, hy, same⟩ := c0✝⁵
+  let ⟨g1, h1, hy, same⟩ := c1✝⁵
+  (fun c0 c0_1 e_c0 =>
+      Eq.rec (motive := fun c0_2 e_c0 =>
+        ∀ (c1 c1_1 : FIo_Native.aspis_core.field.QM31), c1 = c1_1 → { c0 := c0, c1 := c1 } = { c0 := c0_2, c1 := c1_1 })
+        (fun c1 c1_1 e_c1 => e_c1 ▸ Eq.refl { c0 := c0, c1 := c1 }) e_c0)
+    { c0 := { a := a, b := b }, c1 := { a := c, b := d } } { c0 := { a := a1, b := b1 }, c1 := { a := c1, b := d1 } }
+    ((fun c0 c0_1 e_c0 =>
+        Eq.rec (motive := fun c0_2 e_c0 =>
+          ∀ (c1 c1_1 : FIo_Native.aspis_core.field.CM31),
+            c1 = c1_1 → { c0 := c0, c1 := c1 } = { c0 := c0_2, c1 := c1_1 })
+          (fun c1 c1_1 e_c1 => e_c1 ▸ Eq.refl { c0 := c0, c1 := c1 }) e_c0)
+      { a := a, b := b } { a := a1, b := b1 }
+      ((fun a a_1 e_a =>
+          Eq.rec (motive := fun a_2 e_a =>
+            ∀ (b b_1 : FIo_Native.aspis_core.field.M31), b = b_1 → { a := a, b := b } = { a := a_2, b := b_1 })
+            (fun b b_1 e_b => e_b ▸ Eq.refl { a := a, b := b }) e_a)
+        a a1
+        (AspisR1.SAQ_Inverse.canonical_injective a a1 hx.left.left.left hy.left.left.left
+          (congrArg (fun z => z.re.re.re) same))
+        b b1
+        (AspisR1.SAQ_Inverse.canonical_injective b b1 hx.left.left.right hy.left.left.right
+          (congrArg (fun z => z.re.re.im) same)))
+      { a := c, b := d } { a := c1, b := d1 }
+      ((fun a a_1 e_a =>
+          Eq.rec (motive := fun a_2 e_a =>
+            ∀ (b b_1 : FIo_Native.aspis_core.field.M31), b = b_1 → { a := a, b := b } = { a := a_2, b := b_1 })
+            (fun b b_1 e_b => e_b ▸ Eq.refl { a := a, b := b }) e_a)
+        c c1
+        (AspisR1.SAQ_Inverse.canonical_injective c c1 hx.left.right.left hy.left.right.left
+          (congrArg (fun z => z.re.im.re) same))
+        d d1
+        (AspisR1.SAQ_Inverse.canonical_injective d d1 hx.left.right.right hy.left.right.right
+          (congrArg (fun z => z.re.im.im) same))))
+    { c0 := { a := e, b := f }, c1 := { a := g, b := h } } { c0 := { a := e1, b := f1 }, c1 := { a := g1, b := h1 } }
+    ((fun c0 c0_1 e_c0 =>
+        Eq.rec (motive := fun c0_2 e_c0 =>
+          ∀ (c1 c1_1 : FIo_Native.aspis_core.field.CM31),
+            c1 = c1_1 → { c0 := c0, c1 := c1 } = { c0 := c0_2, c1 := c1_1 })
+          (fun c1 c1_1 e_c1 => e_c1 ▸ Eq.refl { c0 := c0, c1 := c1 }) e_c0)
+      { a := e, b := f } { a := e1, b := f1 }
+      ((fun a a_1 e_a =>
+          Eq.rec (motive := fun a_2 e_a =>
+            ∀ (b b_1 : FIo_Native.aspis_core.field.M31), b = b_1 → { a := a, b := b } = { a := a_2, b := b_1 })
+            (fun b b_1 e_b => e_b ▸ Eq.refl { a := a, b := b }) e_a)
+        e e1
+        (AspisR1.SAQ_Inverse.canonical_injective e e1 hx.right.left.left hy.right.left.left
+          (congrArg (fun z => z.im.re.re) same))
+        f f1
+        (AspisR1.SAQ_Inverse.canonical_injective f f1 hx.right.left.right hy.right.left.right
+          (congrArg (fun z => z.im.re.im) same)))
+      { a := g, b := h } { a := g1, b := h1 }
+      ((fun a a_1 e_a =>
+          Eq.rec (motive := fun a_2 e_a =>
+            ∀ (b b_1 : FIo_Native.aspis_core.field.M31), b = b_1 → { a := a, b := b } = { a := a_2, b := b_1 })
+            (fun b b_1 e_b => e_b ▸ Eq.refl { a := a, b := b }) e_a)
+        g g1
+        (AspisR1.SAQ_Inverse.canonical_injective g g1 hx.right.right.left hy.right.right.left
+          (congrArg (fun z => z.im.im.re) same))
+        h h1
+        (AspisR1.SAQ_Inverse.canonical_injective h h1 hx.right.right.right hy.right.right.right
+          (congrArg (fun z => z.im.im.im) same))))
+JHa_OrdinaryInspect2.lean:9:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1CurrentPreparedClaim.Concrete.canonical_decode_injective`
