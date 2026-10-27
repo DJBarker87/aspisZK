@@ -58,6 +58,7 @@ before AND after. Tool pins: LPm_tools.sha256. Harnesses are patches/receipts on
 | Header | Inherited LPe_K015 | Actual S2 tag/next cast/magic/flags; existing provenance supplies S2 and next10. |
 | First two reads / state | LPe_K016, LPi_K018; new K004 | Same input slices/replies, chronological order and state bytes; arbitrary-prefix32-byte append/frame. K018 covers actual57607/1880 carriers. |
 | Roots / queries | LPe_K017; K004/K005; existing CheckpointBytesQuery/F3K_WordCodec | Exact immutable roots/query order; every query's native LE word byte and arbitrary-prefix frame, all U32s. |
+| E four/two-field iterators | K006/K007; L018 indexed_values | Actual native IntoIter on arbitrary canonical E fields: exact8-word head, remaining array, exhaustion and covers0/last/end. Constructor setup advances at most4 positions; ONE source iteration is checked. |
 | E/Q serializers / put/put_k | LPi_K012/K013, LPi_WriterValues; L007 LPm_BytePorts.e_source | Arbitrary-prefix0..1720/0..1704 native private callers. Total emitted serializers with exact byte values; explicit eight-word E owner port. No new unpaired stub. |
 | Alpha / Z | LPe_K019; LPi fold; L018 LPm_FieldCarriers.semantic_values/coordinate_values | SAME actual10 semantic values and nested2-point x/y order, transported to10/4 source field lists, with append-only arbitrary-prefix induction. The inline16-byte writer body is the same body as put_k. |
 |64 weights | K001, K003; L004 LPm_WeightLoop.* | Actual Vec suffix/head/tail/exhaustion; shared-reference dereference and native put_k; ONE arbitrary iteration, then induction on the actual accumulator carrier. No whole-buffer loop verification. |
@@ -115,3 +116,5 @@ Inherited pins, NOT newly reproduced:
 
 All commits local; no push, merge, other-worker worktree/candidate edit or key
 operation. Next leaf is prepared_claim, still OPEN.
+
+Follow-up iterator association: K006 exit0/wall30.333s/RSS916340KiB/swap0; K007 exit0/wall21.577s/RSS622184KiB/swap0. Each503 checks and3 covers passes. Checkpoint packet now uses7 Kani runs (6 pass/1 excluded timeout); Lean remains19. This resolves the explicit native E-array ordering concern without another whole-body or unchanged regression.

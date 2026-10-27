@@ -100,7 +100,7 @@
 +}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/LPm_verifier.rs
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,85 @@
 +//! Frozen checkpoint weights: actual Vec carrier and one iterator transition.
 +use super::*;
 +use aspis_core::field::CM31;
@@ -171,6 +171,21 @@
 + assert_eq!(out[at],if at<len{initial[at]}else{(q>>(8*(at-len))) as u8});
 + kani::cover!(len==320);kani::cover!(len==404);kani::cover!(q==u32::MAX);
 +}
++// Inspect the concrete E array IntoIter carrier (4 prepared fields / 2 tail fields).
++// Setup constructs an arbitrary reached suffix; only ONE source next is checked.
++fn e_iterator<const N:usize>() {
++ let raw:[[u32;8];N]=kani::any();
++ let values=raw.map(|w| {for v in w {kani::assume(v<0x7fff_ffff);}E::from_limbs(w).unwrap()});
++ let at:usize=kani::any();kani::assume(at<=N);
++ let mut iter=values.into_iter();for _ in 0..at {let _=iter.next();}
++ let item=iter.next();assert_eq!(item.is_none(),at==N);
++ if let Some(x)=item {let limb:usize=kani::any();kani::assume(limb<8);assert_eq!(x.to_limbs()[limb],raw[at][limb]);}
++ assert_eq!(iter.as_slice().len(),if at==N{0}else{N-at-1});
++ if at+1<N {let j:usize=kani::any();kani::assume(j<N-at-1);let limb:usize=kani::any();kani::assume(limb<8);assert_eq!(iter.as_slice()[j].to_limbs()[limb],raw[at+1+j][limb]);}
++ kani::cover!(at==0);kani::cover!(at==N-1);kani::cover!(at==N);
++}
++#[kani::proof] #[kani::unwind(66)] fn e_four_iterator(){e_iterator::<4>();}
++#[kani::proof] #[kani::unwind(66)] fn e_two_iterator(){e_iterator::<2>();}
 --- a/crates/aspis-r1-cost-probe/src/verifier.rs
 +++ b/crates/aspis-r1-cost-probe/src/verifier.rs
 @@ -526,3 +526,8 @@
