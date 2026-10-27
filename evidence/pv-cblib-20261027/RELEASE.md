@@ -41,7 +41,7 @@ This is not the op217 generic default/buffer wrapper.
 Fixed-size safe padding reference extraction succeeds after replacing the
 eight-byte suffix loop with explicit assignments. Lean proves its zero-fill
 loop totality by decreasing fuel, suffix totality, and full Result totality
-for pos<64 with exact first-output/retained-buffer equality and reset pos0.
+for pos<64 with exact first-output/retained-buffer equality and reset pos 0.
 The separate padding model proves lengths, one/two-block branch/count and
 retained-buffer shape. Full content refinement to that model, actual buffer
 loan/callback/destructor semantics and the byte-loading driver remain open.
@@ -73,31 +73,36 @@ under the current 15 s / +10% gates on these measurements.
 
 ## Remaining std/alloc frontiers
 
-Op26 native Unix join passes arbitrary byte lengths0–2; complete reference
+Op26 native Unix join passes arbitrary byte lengths 0–2; complete reference
 loan/destructor extraction remains open. Op33 borrowed extraction exposes
 an absent/foreign Vec.remove leaf; no invented leaf is installed. Its
 small u32 gate timed out. Op36 success diagnostics hit a memcmp unwind
-bound; a changed first-run N=3 rejection gate passes lengths0–2. The full
+bound; a changed first-run N=3 rejection gate passes lengths 0–2. The full
 1024-QM31 success/loan/destructor association remains open. Op32 retains
 its exact allocator-effect deferral in NATIVE-EFFECTS.md.
 
 ## Verification and custody
 
-Focused attempts: 97/100; Kani: 6/6 (four passes, one timeout, one unwind
-failure; no checked ROW counterexample). The three reserved audit attempts
-and final metrics are pending. RESUME8-RECEIPTS.json is the new pass index;
+Lean attempts: **100/100** (92 standard-axiom accepted, 8 rejected); Kani: 6/6 (four passes, one timeout, one unwind
+failure; no checked ROW counterexample). The three reserved audits pass. The final manifest imports 243 modules and
+checks 735 explicit declarations; all printed axiom sets are subsets of
+propext, Classical.choice, Quot.sound. All 244 current own modules have
+accepted source-hash-matching receipts. RESUME8-RECEIPTS.json is the new pass index;
 RESUME-RECEIPTS.json and TALLY-resume2-prior.json retain the preceding pass.
-All raw rejected attempts remain. 41604 hit the internal7GB limit; 41606
+All raw rejected attempts remain. 41604 hit the internal 7 GB limit; 41606
 was stopped as memory rose. Named symbolic boundaries replaced the proof;
 no cap or recursion/heartbeat option was raised and no failed source was
 rerun unchanged. Both padding interpreter failures remain as evidence;
 the extractor was not changed.
 
-Only assigned Env-J IDs41588–41799 are used once. Last three charged Lean
+Only assigned Env-J IDs 41588–41799 are used once. Last three charged Lean
 attempts are reserved for callback/selection/own-manifest audits. The final
 manifest is an own-module replay, not a repository-wide/deployed replay.
 No production crate/program change, ELF rebuild, push, merge, wallet/key
-creation or cleanup occurred. Host scratch/cache disposition follows below.
+creation or cleanup occurred. 244 accepted own objects are retained in the pinned host lean-objects cache.
+Own kani-target, charon-target and dispatch-target scratch were removed after
+checking no active target processes. No shared /tmp sweep was performed;
+unattributed solver remnants are not assigned fabricated ownership.
 
 ## Next concrete deliverable
 
@@ -105,3 +110,21 @@ Integrate the seven bounded candidate laws without dropping their native
 association limits; prove the fixed padding content/source-wrapper link,
 byte compression driver and digest wrappers, then the SHA-NI/dispatcher
 instruction/source/compiler/deployed association. Target not yet established.
+
+## Final audit receipts
+
+Source freeze `2c21958db216da160c9f160b5a438934c255caf5`. Every final
+row exits 0, swap 0, standard axioms only; exact commands/dependency hashes and
+full #print output are in the numbered JSON/log files.
+
+| ID | target | wall | peak RSS KiB |
+|---|---|---:|---:|
+| 41797 | R1Z/PV_CBL_Resume8CallbackAudit | 0:02.37 | 2627708 |
+| 41798 | R1Z/PV_CBL_Resume8SelectionAudit | 0:03.99 | 2624784 |
+| 41799 | R1Z/PV_CBL_Resume8Manifest | 0:03.27 | 2645688 |
+
+Env-J used IDs: 105, all unique, including 5 uncharged admission
+refusals. Reserved 41797–41799 were the last three charged attempts. The next
+unused assigned ID is 41690 (41690–41796 remain unused); 41797–41799 must never
+be reused. Work stopped on exhaustion of both authorized budgets. No checked
+ROW counterexample was found.

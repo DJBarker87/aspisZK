@@ -33,7 +33,7 @@ empty-only String representation adapter. Native P6 proves contents agree
 and capacity≥request for n≤4. This adds a bounded candidate value law, not
 allocation-effect, deployed-toolchain, endpoint, or side-channel closure.
 Op31 safe borrowed byte append extracted with no external template; its
-String representation transport is pending. Op33 borrowed extraction passes
+String representation transport is now kernel checked. Op33 borrowed extraction passes
 but calls missing `Vec.remove`; 41588 is rejected and gives no row credit.
 Op26 and op36 loan frontiers, and op32 allocator-effect deferral, remain.
 
@@ -46,3 +46,7 @@ bytes fail decoding; size-overflow, fail and divergence are not erased.
 Rust's valid-UTF-8/source-image, allocator/world, separate toolchain and
 unbounded deployed association remain explicit P6 limits. No canonical
 endpoint/deployment premise is removed by this candidate publication.
+
+Final third-pass audits:41797/41798/41799, all exit0 and standard axioms only.
+Current publication: `PV_CBL_AppendBundle`; full soft block source theorem:
+`PV_CBL_SoftBlockSource.source`. No digest row or endpoint closure is inferred.
