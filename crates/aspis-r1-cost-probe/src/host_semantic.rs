@@ -137,7 +137,7 @@ struct SemanticOracle<'a,'p> {
 impl crate::host_sumcheck::Oracle for SemanticOracle<'_,'_> {
     fn evaluate(&self,point:&[QM31;10])->Result<QM31,Error> {
         let claims=point_claims(self.columns,point)?;
-        let terminal=crate::host_public::terminal_qm31(self.public,&claims,point,self.challenges).map_err(|_|Error::Public)?;
+        let terminal=crate::host_public::terminal_qm31(*self.public,&claims,point,self.challenges).map_err(|_|Error::Public)?;
         let mask=claim_mask_value(claims[0],point);
         Ok(mask.add(self.eta.mul(terminal)).add(extra(self.d,point[8],point[9])))
     }

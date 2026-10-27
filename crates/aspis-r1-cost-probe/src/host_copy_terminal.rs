@@ -5,7 +5,6 @@
 //! active-row masks. The allocation-heavy typed registry remains the
 //! independent host compiler/reference boundary and is not linked on SBF.
 
-use alloc::vec;
 
 #[cfg(any(test, feature = "optimized-terminal"))]
 use aspis_core::field::{qm31_sum_products2, qm31_sum_products3, qm31_sum_products4};
@@ -18,7 +17,7 @@ pub const POOL_V1_PAIR_FOREST_COPY_TERMINAL_COLUMNS_V1: usize = 16;
 pub const POOL_V1_PAIR_FOREST_COPY_TERMINAL_LINKS_V1: usize = 136;
 pub const POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1: usize = 14;
 pub const POOL_V1_PAIR_FOREST_COPY_TERMINAL_FIXED_HEAP_ALLOCATIONS_V1: usize =
-    if cfg!(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit") {
+    if cfg!(feature = "optimized-terminal") {
         2
     } else {
         1
@@ -26,7 +25,7 @@ pub const POOL_V1_PAIR_FOREST_COPY_TERMINAL_FIXED_HEAP_ALLOCATIONS_V1: usize =
 pub const POOL_V1_PAIR_FOREST_COPY_TERMINAL_SELECTOR_HEAP_BYTES_V1: usize =
     core::mem::size_of::<Selectors>();
 pub const POOL_V1_PAIR_FOREST_COPY_TERMINAL_TENSOR_HEAP_BYTES_V1: usize =
-    if cfg!(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit") {
+    if cfg!(feature = "optimized-terminal") {
         103 * core::mem::size_of::<QM31>()
     } else {
         0
@@ -464,9 +463,9 @@ fn accumulate_endpoint(
 /// Exact support of the four `(side, slot)` linear forms in the generated
 /// fourteen-pattern basis.  The masks are derived from `COPY_LINKS` and are
 /// checked against that table in the focused tests below.
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-pattern-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_PATTERN_GROUP_SUPPORT: [u16; 4] = [0x0ed7, 0x2042, 0x1dcb, 0x01e2];
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-pattern-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_PATTERN_COORDINATES: [[u8; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1]; 4] = [
     [
         0,
@@ -533,46 +532,46 @@ const COPY_PATTERN_COORDINATES: [[u8; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS
         u8::MAX,
     ],
 ];
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-pattern-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_PATTERN_COORDINATE_PATTERNS: [u8; 26] = [
     0, 1, 2, 4, 6, 7, 9, 10, 11, 1, 6, 13, 0, 1, 3, 6, 7, 8, 10, 11, 12, 1, 5, 6, 7, 8,
 ];
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-pattern-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_PATTERN_GROUP_OFFSETS: [usize; 5] = [0, 9, 12, 21, 26];
 
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_GROUP_LOCAL_COORDINATE_GROUPS: [u8; 30] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3,
 ];
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_GROUP_LOCAL_COORDINATE_LOCALS: [u8; 30] = [
     0, 1, 2, 4, 6, 10, 11, 12, 14, 2, 6, 10, 11, 12, 14, 0, 1, 2, 4, 5, 6, 7, 9, 10, 12, 13, 6, 7,
     9, 12,
 ];
 #[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_GROUP_LOCAL_GROUP_OFFSETS: [usize; 5] = [0, 9, 15, 26, 30];
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_PATTERN_LOCAL_COORDINATE_GROUPS: [u8; 43] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
     2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3,
 ];
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_PATTERN_LOCAL_COORDINATE_PATTERNS: [u8; 43] = [
     0, 1, 1, 1, 1, 1, 1, 2, 4, 6, 6, 7, 7, 7, 9, 10, 11, 1, 6, 13, 13, 13, 13, 0, 1, 3, 6, 7, 7, 7,
     8, 10, 11, 11, 12, 12, 12, 12, 1, 5, 6, 7, 8,
 ];
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_PATTERN_LOCAL_COORDINATE_LOCALS: [u8; 43] = [
     11, 2, 6, 10, 11, 12, 14, 12, 12, 1, 12, 0, 2, 4, 6, 0, 10, 11, 12, 2, 6, 10, 14, 0, 12, 12, 6,
     0, 2, 4, 7, 0, 9, 10, 1, 5, 9, 13, 12, 12, 7, 9, 6,
 ];
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_PATTERN_LOCAL_OUTPUT_COORDINATES: [u8; 43] = [
     0, 1, 1, 1, 1, 1, 1, 2, 3, 4, 4, 5, 5, 5, 6, 7, 8, 9, 10, 11, 11, 11, 11, 12, 13, 14, 15, 16,
     16, 16, 17, 18, 19, 19, 20, 20, 20, 20, 21, 22, 23, 24, 25,
 ];
 
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const fn build_group_local_coordinates() -> [[u8; 16]; 4] {
     let mut output = [[u8::MAX; 16]; 4];
     let mut coordinate = 0usize;
@@ -584,7 +583,7 @@ const fn build_group_local_coordinates() -> [[u8; 16]; 4] {
     output
 }
 
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const fn build_pattern_local_coordinates() -> [[[u8; 16]; 14]; 4] {
     let mut output = [[[u8::MAX; 16]; 14]; 4];
     let mut coordinate = 0usize;
@@ -597,17 +596,17 @@ const fn build_pattern_local_coordinates() -> [[[u8; 16]; 14]; 4] {
     output
 }
 
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_GROUP_LOCAL_COORDINATES: [[u8; 16]; 4] = build_group_local_coordinates();
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_PATTERN_LOCAL_COORDINATES: [[[u8; 16]; 14]; 4] = build_pattern_local_coordinates();
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_SELECTOR_TENSOR_TAG_OFFSET: usize = 0;
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_SELECTOR_TENSOR_WEIGHT_OFFSET: usize = 30;
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_SELECTOR_TENSOR_PATTERN_OFFSET: usize = 60;
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 const COPY_SELECTOR_TENSOR_SCRATCH: usize = 103;
 
 #[cfg(any(test, feature = "optimized-terminal"))]
@@ -728,7 +727,7 @@ fn qm31_sum_products_up_to4(left: [QM31; 4], right: [QM31; 4], count: usize) -> 
 }
 
 #[cfg(all(
-    any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"),
+    any(test, feature = "optimized-terminal"),
     not(feature = "optimized-terminal")
 ))]
 #[inline(always)]
@@ -750,7 +749,7 @@ fn copy_tag_coordinate_value(_scratch: &[QM31], coordinate: usize, selectors: &S
 /// The first product is by an M31 value.  Dynamic QM31 pattern values are
 /// multiplied only once per nonzero `(side, slot, pattern)` coordinate after
 /// all 272 endpoint selectors have been collected.
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-pattern-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 fn accumulate_endpoint_pattern_basis(
     tag_values: &mut [QM31; 4],
     pattern_selectors: &mut [QM31; 26],
@@ -785,7 +784,7 @@ fn accumulate_endpoint_pattern_basis(
     }
 }
 
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-pattern-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 fn finish_pattern_basis_values(
     mut values: [QM31; 4],
     pattern_selectors: [QM31; 26],
@@ -804,7 +803,7 @@ fn finish_pattern_basis_values(
     values
 }
 
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 #[inline(never)]
 fn selected_binary_weight(high: QM31, weight: M31) -> QM31 {
     if weight.0 == 1 {
@@ -814,7 +813,7 @@ fn selected_binary_weight(high: QM31, weight: M31) -> QM31 {
     }
 }
 
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 fn accumulate_endpoint_selector_tensor_basis(
     scratch: &mut [QM31],
     side: usize,
@@ -844,7 +843,7 @@ fn accumulate_endpoint_selector_tensor_basis(
         scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + pattern_local].add(high);
 }
 
-#[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 fn finish_selector_tensor_basis(
     scratch: &[QM31],
     patterns: &[QM31; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1],
@@ -937,28 +936,28 @@ pub(crate) fn evaluate_with_selectors(
     };
     #[cfg(all(
         feature = "optimized-terminal",
-        not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+        not(feature = "optimized-terminal")
     ))]
     let mut selector_cache = EndpointSelectorCache::new();
     #[cfg(all(
-        feature = "pool-v1-pair-forest-copy-pattern-basis-audit",
-        not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+        feature = "optimized-terminal",
+        not(feature = "optimized-terminal")
     ))]
     let mut tag_values = [QM31::ZERO; 4];
     #[cfg(all(
-        feature = "pool-v1-pair-forest-copy-pattern-basis-audit",
-        not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+        feature = "optimized-terminal",
+        not(feature = "optimized-terminal")
     ))]
     let mut pattern_selectors = [QM31::ZERO; 26];
-    #[cfg(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")]
-    let mut selector_tensor_scratch = vec![QM31::ZERO; COPY_SELECTOR_TENSOR_SCRATCH];
+    #[cfg(feature = "optimized-terminal")]
+    let mut selector_tensor_scratch = [QM31::ZERO; COPY_SELECTOR_TENSOR_SCRATCH];
     let mut link_index = 0usize;
     while link_index < POOL_V1_PAIR_FOREST_COPY_TERMINAL_LINKS_V1 {
         let link = constants::COPY_LINKS[link_index];
         let weight = link_weight(link, append_index, variant);
         #[cfg(all(
-            not(feature = "pool-v1-pair-forest-copy-pattern-basis-audit"),
-            not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+            not(feature = "optimized-terminal"),
+            not(feature = "optimized-terminal")
         ))]
         #[cfg(not(feature = "optimized-terminal"))]
         {
@@ -982,8 +981,8 @@ pub(crate) fn evaluate_with_selectors(
             );
         }
         #[cfg(all(
-            not(feature = "pool-v1-pair-forest-copy-pattern-basis-audit"),
-            not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+            not(feature = "optimized-terminal"),
+            not(feature = "optimized-terminal")
         ))]
         #[cfg(feature = "optimized-terminal")]
         {
@@ -1009,8 +1008,8 @@ pub(crate) fn evaluate_with_selectors(
             );
         }
         #[cfg(all(
-            feature = "pool-v1-pair-forest-copy-pattern-basis-audit",
-            not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+            feature = "optimized-terminal",
+            not(feature = "optimized-terminal")
         ))]
         {
             accumulate_endpoint_pattern_basis(
@@ -1038,7 +1037,7 @@ pub(crate) fn evaluate_with_selectors(
                 &mut selector_cache,
             );
         }
-        #[cfg(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")]
+        #[cfg(feature = "optimized-terminal")]
         {
             accumulate_endpoint_selector_tensor_basis(
                 &mut selector_tensor_scratch,
@@ -1060,15 +1059,15 @@ pub(crate) fn evaluate_with_selectors(
         link_index += 1;
     }
     #[cfg(all(
-        feature = "pool-v1-pair-forest-copy-pattern-basis-audit",
-        not(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")
+        feature = "optimized-terminal",
+        not(feature = "optimized-terminal")
     ))]
     {
         let values = finish_pattern_basis_values(tag_values, pattern_selectors, &patterns);
         row.producer_values = [values[0], values[1]];
         row.consumer_values = [values[2], values[3]];
     }
-    #[cfg(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit")]
+    #[cfg(feature = "optimized-terminal")]
     {
         let (values, weights) =
             finish_selector_tensor_basis(&selector_tensor_scratch, &patterns, selectors);

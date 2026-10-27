@@ -10,7 +10,6 @@ use aspis_core::{
 
 use aspis_statement::{
     poseidon2::{Digest, DIGEST_ELEMS, MERKLE_NODE_COMPRESSION_V3_TWEAK, POSEIDON2_WIDTH, RATE},
-    spend::{DOMAIN_NOTE, DOMAIN_NULLIFIER, DOMAIN_OWNER_KEY},
     state_only_poseidon::{
         evaluate_state_only_poseidon_oracle_projected, StateOnlyPoseidonOpenings,
         StateOnlyPoseidonSelectors,
@@ -23,6 +22,10 @@ use aspis_statement::pool_v1::{
 };
 
 use crate::host_copy_terminal::{evaluate_with_selectors,PoolV1PairForestCompiledVariantV1,Selectors};
+
+const DOMAIN_OWNER_KEY:M31=M31(0x4153_0001);
+const DOMAIN_NULLIFIER:M31=M31(0x4153_0002);
+const DOMAIN_NOTE:M31=M31(0x4153_0003);
 
 pub const POOL_V1_PAIR_FOREST_TERMINAL_ROWS_V1: usize = 1024;
 pub const POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1: usize = 16;
@@ -44,7 +47,7 @@ pub const POOL_V1_PAIR_FOREST_SEMANTIC_ORACLE_INDIVIDUAL_DEGREE_V1: usize = 26;
 pub const POOL_V1_PAIR_FOREST_SEMANTIC_ZEROCHECK_INDIVIDUAL_DEGREE_V1: usize = 27;
 pub const POOL_V1_PAIR_FOREST_MASKED_TERMINAL_DEGREE_V1: usize = 27;
 pub const POOL_V1_PAIR_FOREST_TERMINAL_FIXED_HEAP_ALLOCATIONS_V1: usize =
-    if cfg!(feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit") {
+    if cfg!(feature = "optimized-terminal") {
         2
     } else {
         1
@@ -373,7 +376,7 @@ fn absorption_lanes_factored(
 }
 
 #[inline(always)]
-#[cfg(any(test, not(feature = "pool-v1-pair-forest-packed-digest-audit")))]
+#[cfg(any(test, not(feature = "optimized-terminal")))]
 fn add_digest_binding(
     output: &mut [QM31; DIGEST_ELEMS],
     selector: QM31,
@@ -618,7 +621,7 @@ fn occupancy_lanes_factored(
 }
 
 #[inline(never)]
-#[cfg(any(test, not(feature = "pool-v1-pair-forest-packed-digest-audit")))]
+#[cfg(any(test, not(feature = "optimized-terminal")))]
 fn public_digest_lanes(
     public: SemanticPublic<'_>,
     openings: &StateOnlyPoseidonOpenings,
@@ -713,7 +716,7 @@ fn public_digest_lanes(
 /// The two outputs are the unchanged semantic theta lanes 21 and 22.  Keeping
 /// the literal evaluator above available to tests makes the source-level
 /// equivalence executable for both variants and every selector point.
-#[cfg(any(test, feature = "pool-v1-pair-forest-packed-digest-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 #[inline(always)]
 fn add_digest_binding_packed(
     output: &mut [QM31; DIGEST_ELEMS / 4],
@@ -739,7 +742,7 @@ fn add_digest_binding_packed(
 #[cfg(any(
     test,
     all(
-        feature = "pool-v1-pair-forest-packed-digest-audit",
+        feature = "optimized-terminal",
         not(feature = "optimized-terminal")
     )
 ))]
@@ -1118,7 +1121,7 @@ fn public_digest_packed_selector_tensor(
     output
 }
 
-#[cfg(any(test, feature = "pool-v1-pair-forest-packed-digest-audit"))]
+#[cfg(any(test, feature = "optimized-terminal"))]
 #[inline(always)]
 fn public_digest_packed(
     public: SemanticPublic<'_>,
@@ -1163,13 +1166,13 @@ fn semantic_packed(
     add_path_lanes(&mut packed, openings, selectors);
     add_value_lanes(&mut packed, openings, selectors);
     add_occupancy_lanes(&mut packed, public, openings, selectors);
-    #[cfg(not(feature = "pool-v1-pair-forest-packed-digest-audit"))]
+    #[cfg(not(feature = "optimized-terminal"))]
     add_preweighted(
         &mut packed,
         84,
         &public_digest_lanes(public, openings, selectors),
     );
-    #[cfg(feature = "pool-v1-pair-forest-packed-digest-audit")]
+    #[cfg(feature = "optimized-terminal")]
     {
         let digests = public_digest_packed(public, openings, selectors);
         packed[84 / 4] = packed[84 / 4].add(digests[0]);
