@@ -1,0 +1,39 @@
+{"attempt": "LPf_K008", "exit_status": 1, "wall_seconds": 5.036249344993848, "peak_rss_kib": "556408", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt
+...
+ to snake case: `lpf_reduce_contract`
+
+warning: function `LPf_mul_inline_contract` should have a snake case name
+  --> crates/aspis-core/src/field/LPf_contracts.rs:10:4
+   |
+10 | fn LPf_mul_inline_contract(){let a=M31(kani::any());let b=M31(kani::any());let _=a.mul(b);}
+   |    ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_mul_inline_contract`
+
+warning: function `LPf_kbytes_contract` should have a snake case name
+  --> crates/aspis-core/src/field/LPf_contracts.rs:13:4
+   |
+13 | fn LPf_kbytes_contract(){let x:[u32;4]=kani::any();let k=QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}};let...
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_kbytes_contract`
+
+   Compiling aspis-r0-block-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/docs/research/v8-r0-zk-20261009/refine/blockwriters)
+   Compiling aspis-r0-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/docs/research/v8-r0-zk-20261009/refine/writers)
+   Compiling aspis-r0-poseidon-copy v0.0.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/docs/research/v8-r0-zk-20261009/refine/poseidon)
+   Compiling aspis-statement v0.1.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/crates/aspis-statement)
+error: couldn't read `crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/tree.rs`: No such file or directory (os error 2)
+   --> crates/aspis-statement/src/pool_v1/incremental_merkle.rs:766:1
+    |
+766 | pub mod tree_reference;
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+
+error: could not compile `aspis-statement` (lib) due to 1 previous error
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-rf4b7faa9d89848748e9cf22b0d974aa0.scope; invocation ID: 1202ca0648134fb1875ad248cacc2de5

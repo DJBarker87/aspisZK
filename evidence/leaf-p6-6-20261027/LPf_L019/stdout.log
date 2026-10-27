@@ -1,0 +1,27 @@
+LPf_generated/LPf_PublicDotAllStates.lean:24:2: error: Type mismatch: After simplification, term
+  LPf_PublicDotFinish.source a b c d e f g h count
+ has type
+  ∃ out,
+    { c0 := { sums := Array.make 4#usize [a, b, c, d] ⋯ }, c1 := { sums := Array.make 4#usize [e, f, g, h] ⋯ },
+            count := count }.finish =
+        ok out ∧
+      ↑out.c0.c0.a = ↑a % 2147483647 ∧
+        ↑out.c0.c0.b = ↑b % 2147483647 ∧
+          ↑out.c0.c1.a = ↑c % 2147483647 ∧
+            ↑out.c0.c1.b = ↑d % 2147483647 ∧
+              ↑out.c1.c0.a = ↑e % 2147483647 ∧
+                ↑out.c1.c0.b = ↑f % 2147483647 ∧ ↑out.c1.c1.a = ↑g % 2147483647 ∧ ↑out.c1.c1.b = ↑h % 2147483647
+but is expected to have type
+  ∃ out,
+    { c0 := { sums := Array.make 4#usize [a, b, c, d] ⋯ }, c1 := { sums := Array.make 4#usize [e, f, g, h] ⋯ },
+            count := count }.finish =
+        ok out ∧
+      ↑out.c0.c0.a = ↑(↑(Array.make 4#usize [a, b, c, d] ⋯))[0] % 2147483647 ∧
+        ↑out.c0.c0.b = ↑(↑(Array.make 4#usize [a, b, c, d] ⋯))[1] % 2147483647 ∧
+          ↑out.c0.c1.a = ↑(↑(Array.make 4#usize [a, b, c, d] ⋯))[2] % 2147483647 ∧
+            ↑out.c0.c1.b = ↑(↑(Array.make 4#usize [a, b, c, d] ⋯))[3] % 2147483647 ∧
+              ↑out.c1.c0.a = ↑(↑(Array.make 4#usize [e, f, g, h] ⋯))[0] % 2147483647 ∧
+                ↑out.c1.c0.b = ↑(↑(Array.make 4#usize [e, f, g, h] ⋯))[1] % 2147483647 ∧
+                  ↑out.c1.c1.a = ↑(↑(Array.make 4#usize [e, f, g, h] ⋯))[2] % 2147483647 ∧
+                    ↑out.c1.c1.b = ↑(↑(Array.make 4#usize [e, f, g, h] ⋯))[3] % 2147483647
+'AspisR1.LPf_PublicDotAllStates.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

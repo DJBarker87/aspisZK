@@ -1,0 +1,18 @@
+{"attempt": "LPf_K016", "exit_status": 1, "wall_seconds": 4.048577843001112, "peak_rss_kib": "581476", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt
+...
+ject-offloads/codex-cx-leaf-p6-6-20261027/LPf_target/kani/x86_64-unknown-linux-gnu/debug/incremental -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_target/kani/debug/deps '-Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --enable-stubbing --harness field::LPf_contracts::LPf_kbytes_composed_contract --exact -Z unstable-options -Z function-contracts -Z stubbing' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib' -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0` (exit status: 101)
+error: Failed to compile `aspis_core` due to an internal compiler error.: error: internal compiler error: Kani unexpectedly panicked at panicked at kani-compiler/src/kani_middle/reachability.rs:419:69:
+                                called `Result::unwrap()` on an `Err` value: Error("Failed to resolve `FnDef(DefId { id: 5211, name: \"core::iter::IntoIterator::into_iter\" })` with `GenericArgs([Type(Ty { id: 1026, kind: RigidTy(Ref(Region { kind: ReErased }, Ty { id: 1027, kind: RigidTy(Slice(Ty { id: 43, kind: RigidTy(Slice(Ty { id: 44, kind: RigidTy(Uint(U8)) })) })) }, Mut)) })])`").
+
+
+
+Running as unit: run-rc821124778b54dfc9f2b379ffe502892.scope; invocation ID: 0a0c51bbd84647adaf47f0808bdea217

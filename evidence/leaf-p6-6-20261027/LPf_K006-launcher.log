@@ -1,0 +1,51 @@
+{"attempt": "LPf_K006", "exit_status": 1, "wall_seconds": 94.7351782869664, "peak_rss_kib": "570096", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt
+...
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `LPf_contracts` should have a snake case name
+    --> crates/aspis-core/src/field.rs:3272:51
+     |
+3272 | #[cfg(kani)] #[path="field/LPf_contracts.rs"] mod LPf_contracts;
+     |                                                   ^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_contracts`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `LPf_reduce_ref` should have a snake case name
+ --> crates/aspis-core/src/field/LPf_contracts.rs:2:15
+  |
+2 | pub(super) fn LPf_reduce_ref(n:u64)->u32 {
+  |               ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_reduce_ref`
+
+warning: function `LPf_reduce_contract` should have a snake case name
+ --> crates/aspis-core/src/field/LPf_contracts.rs:8:4
+  |
+8 | fn LPf_reduce_contract(){let n:u64=kani::any();let _=reduce_u64(n);}
+  |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_reduce_contract`
+
+warning: function `LPf_mul_contract` should have a snake case name
+  --> crates/aspis-core/src/field/LPf_contracts.rs:11:4
+   |
+11 | fn LPf_mul_contract(){let a=M31(kani::any());let b=M31(kani::any());let _=a.mul(b);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_mul_contract`
+
+    Finished `dev` profile [optimized] target(s) in 4.22s
+Checking harness field::LPf_contracts::LPf_mul_contract...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - field::LPf_contracts::LPf_mul_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r5aecfea536a94a0d859c6173a8dc477b.scope; invocation ID: aedf16263b1b4cccb8f74c3e6d80d701

@@ -1,0 +1,36 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -46,0 +47,2 @@
++
++#[cfg(kani)] mod LPf_replay;
+--- /dev/null
++++ b/crates/aspis-core/src/field/LPf_contracts.rs
+@@ -0,0 +1,11 @@
++use super::*;
++pub(super) fn LPf_reduce_ref(n:u64)->u32 {
++ let b=2147483648u64;
++ let n=n%b+n/b; let n=n%b+n/b;
++ if n>=u64::from(P){(n-u64::from(P)) as u32}else{n as u32}
++}
++#[kani::proof_for_contract(reduce_u64)]
++fn LPf_reduce_contract(){let n:u64=kani::any();let _=reduce_u64(n);}
++#[kani::proof_for_contract(M31::mul)]
++#[kani::stub_verified(reduce_u64)]
++fn LPf_mul_contract(){let a=M31(kani::any());let b=M31(kani::any());let _=a.mul(b);}
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -30,0 +31 @@
++#[cfg_attr(kani, kani::ensures(|r: &u32| *r == LPf_contracts::LPf_reduce_ref(x) && *r < P))]
+@@ -132,0 +134 @@
++    #[cfg_attr(kani, kani::ensures(|r: &M31| r.0 == LPf_contracts::LPf_reduce_ref(self.0 as u64 * rhs.0 as u64) && r.0 < P))]
+@@ -3268,0 +3271,2 @@
++
++#[cfg(kani)] #[path="field/LPf_contracts.rs"] mod LPf_contracts;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPf_replay.rs
+@@ -0,0 +1 @@
++// LPf caller stages added after verified contracts.
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPf_verifier.rs
+@@ -0,0 +1 @@
++// LPf checkpoint stages.
