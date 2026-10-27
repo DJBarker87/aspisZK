@@ -11078,3 +11078,19 @@ preflight's concern does not apply), close op223/V164 if so, otherwise a design 
 the extraction versus prover-local index-loop copies under D187 (verifier path unchanged; candidate gates
 to re-run). Six slots: cblib, cbmid, runjoin12, srcid8, optb, extract. The inversion job (D248) takes the
 next slot in the idle pv-cb3 worktree. Rows removed outright: 0. Privacy target not yet established.
+
+## D253 (Stream B) 2026-10-27 07:30 UTC: cbmid exhausted (0 rows; reference equations only); inversion job launched
+
+pv-cbmid (`codex/pv-cbmid-20261027`, head 8483406290; budget exhausted; three final audits 40743-40745
+standard axioms, ≤1.03 s / 2.65 GB / swap 0; no crates/programs change; no forbidden tokens). No row
+discharged: PV_CBM_CallbackBundle publishes REFERENCE equations for ops 132/133/134 (V228-V230: reference
+selection and inventory cardinality proved), not opN_source laws; the native shipped = reference
+comparisons for 133 and 134 timed out at 180 s and 900 s (launched before ruling (k)); op79 (V201)
+extraction and caller invariants open; ops 222/224 prepared only. Next deliverable named: op132's
+shipped/reference association with inventory uniqueness and completeness, which under ruling (k) goes
+by Lean on an extraction. Launched pv-inv (D248 owner decision: inversion zero-boundary; new branch
+`codex/pv-inv-20261027` from research, reusing the idle pv-cb3 worktree; IDs 42100-42399, 100 Lean / 10
+Kani): inventory every inversion call site reachable from the deployed caller with operand provenance,
+prove witness-bearing operands nonzero outside an already-charged bad event, or stop on a checked
+witness-dependent zero (a protocol leak for the owner). Six slots: cblib, runjoin12, srcid8, optb,
+extract, inv. Rows removed outright: 0. Privacy target not yet established.
