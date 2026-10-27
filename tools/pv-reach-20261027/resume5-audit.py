@@ -16,7 +16,7 @@ for r in old:mods.add(r['module'])
 contextMods={m for m in mods if 'ComposedChunk' in m or 'Exceptional' in m}
 contextNames=sorted(set(contexts));coreNames=sorted(set(core))
 a='\n'.join('import '+m.replace('/','.') for m in sorted(contextMods))+'\n'+'\n'.join('#print axioms '+n for n in contextNames)+'\n'
-b='\n'.join('import '+m.replace('/','.') for m in sorted(mods-contextMods))+'\n'+'\n'.join('#print axioms '+n for n in coreNames)+'\n'
+b='import R1Z.PV_RE_Exceptional6\n'+'\n'.join('import '+m.replace('/','.') for m in sorted(mods-contextMods))+'\n'+'\n'.join('#print axioms '+n for n in coreNames)+'\n'
 b+='\n#print R1Z.PV_RE_EntropyBoundaryFrames.retry_failure\n#print R1Z.PV_RE_LiteralShape5.legacy_success\n'
 for n in contextNames:
  if '.literalShape' in n or '.literalSuccess' in n:b+='#print '+n+'\n'

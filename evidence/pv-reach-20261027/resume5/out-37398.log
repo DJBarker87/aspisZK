@@ -1,0 +1,273 @@
+'R1Z.PV_RE_CapValue.at_cap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_CapValue.below_cap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_CapValue.cap_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_EntropyBoundaryFrames.closure_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_EntropyBoundaryFrames.retry_divergence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_EntropyBoundaryFrames.retry_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_EntropyBoundaryFrames.trait_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_LiteralShape5.legacy_not_div' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_LiteralShape5.legacy_not_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_LiteralShape5.legacy_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_RetryStep.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_RetryStep.unfold_retry' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_EntropyBoundaryFrames.retry_failure : ∀ [inst : ProverRwFull.ExternalTypes]
+  [inst_1 : ProverRwFull.ExternalFuns] {C : Type} (entropy : R1Z.PV_RE_RetryStep.Entropy C)
+  (pub : R1Z.PV_RE_RetryStep.Public) (compiled : R1Z.PV_RE_RetryStep.Compiled)
+  (variant : ProverRwFull.transport.Variant) (hash : R1Z.PV_RE_RetryStep.Hash) (store : R1Z.PV_RE_RetryStep.Store)
+  (state : C) (k : Aeneas.Std.Usize) (e : Aeneas.Std.Error),
+  ¬k ≥ ProverRwFull.prover.ATTEMPT_CAP →
+    entropy.call_mut state k = Aeneas.Std.Result.fail e →
+      ProverRwFull.prover.retry_attempt entropy pub compiled variant hash store state k = Aeneas.Std.Result.fail e :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C} entropy pub compiled variant hash store state k e
+    active h =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = Aeneas.Std.Result.fail e)
+        (R1Z.PV_RE_RetryStep.unfold_retry entropy pub compiled variant hash store state k)))
+    (id
+      (Eq.mpr (id (congrArg (fun _a => _a = Aeneas.Std.Result.fail e) (if_neg active)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let (r, next_attempt1) ← _a
+                    let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+                        let (r1, nonce_store1) ←
+                          ProverRwFull.prover.prove_masked_attempt pub compiled variant hash val store
+                        match r1 with
+                          | Aeneas.Std.core.result.Result.Ok p =>
+                            let (proof, audit) := p
+                            do
+                            let i ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                            Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Ok { proof := proof, audit := audit, attempts := i },
+                                  nonce_store1)
+                          | Aeneas.Std.core.result.Result.Err e =>
+                            match e with
+                            | ProverRwFull.verifier.Error.Parse =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Parse, nonce_store1)
+                            | ProverRwFull.verifier.Error.Semantic =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, nonce_store1)
+                            | ProverRwFull.verifier.Error.Transcript =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Transcript, nonce_store1)
+                            | ProverRwFull.verifier.Error.Relation =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Relation, nonce_store1)
+                            | ProverRwFull.verifier.Error.Merkle =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Merkle, nonce_store1)
+                            | ProverRwFull.verifier.Error.Query =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Query, nonce_store1)
+                            | ProverRwFull.verifier.Error.Checkpoint =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Checkpoint, nonce_store1)
+                            | ProverRwFull.verifier.Error.Allocation =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Allocation, nonce_store1)
+                            | ProverRwFull.verifier.Error.Rejected => do
+                              let i ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                              ProverRwFull.prover.retry_attempt entropy pub compiled variant hash nonce_store1
+                                  next_attempt1 i
+                            | ProverRwFull.verifier.Error.AttemptsExhausted =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.AttemptsExhausted,
+                                  nonce_store1)
+                            | ProverRwFull.verifier.Error.Entropy =>
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Entropy, nonce_store1)
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                        let r1 ←
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              ProverRwFull.prover.RetriedProof
+                              (Aeneas.Std.core.convert.FromSame ProverRwFull.verifier.Error) residual
+                        Aeneas.Std.Result.ok (r1, store)) =
+                  Aeneas.Std.Result.fail e)
+              h))
+          (Eq.refl do
+            let (r, next_attempt1) ← Aeneas.Std.Result.fail e
+            let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+                let (r1, nonce_store1) ← ProverRwFull.prover.prove_masked_attempt pub compiled variant hash val store
+                match r1 with
+                  | Aeneas.Std.core.result.Result.Ok p =>
+                    let (proof, audit) := p
+                    do
+                    let i ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                    Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Ok { proof := proof, audit := audit, attempts := i },
+                          nonce_store1)
+                  | Aeneas.Std.core.result.Result.Err e =>
+                    match e with
+                    | ProverRwFull.verifier.Error.Parse =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Parse, nonce_store1)
+                    | ProverRwFull.verifier.Error.Semantic =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Semantic, nonce_store1)
+                    | ProverRwFull.verifier.Error.Transcript =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Transcript, nonce_store1)
+                    | ProverRwFull.verifier.Error.Relation =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Relation, nonce_store1)
+                    | ProverRwFull.verifier.Error.Merkle =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Merkle, nonce_store1)
+                    | ProverRwFull.verifier.Error.Query =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Query, nonce_store1)
+                    | ProverRwFull.verifier.Error.Checkpoint =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Checkpoint, nonce_store1)
+                    | ProverRwFull.verifier.Error.Allocation =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Allocation, nonce_store1)
+                    | ProverRwFull.verifier.Error.Rejected => do
+                      let i ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                      ProverRwFull.prover.retry_attempt entropy pub compiled variant hash nonce_store1 next_attempt1 i
+                    | ProverRwFull.verifier.Error.AttemptsExhausted =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.AttemptsExhausted, nonce_store1)
+                    | ProverRwFull.verifier.Error.Entropy =>
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Entropy, nonce_store1)
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      ProverRwFull.prover.RetriedProof (Aeneas.Std.core.convert.FromSame ProverRwFull.verifier.Error)
+                      residual
+                Aeneas.Std.Result.ok (r1, store)))))
+theorem R1Z.PV_RE_LiteralShape5.legacy_success : ∀ (x : Aeneas.Std.U64),
+  ∃ out, R1Z.PV_RE_LiteralShape5.legacy x = Aeneas.Std.Result.ok out :=
+fun x =>
+  id
+    (R1Z.PV_RE_LiteralShape5.legacy.match_1.splitter✝
+      (fun x_1 =>
+        x = x_1 →
+          ∃ out,
+            (match x with
+              | 2974012453224067339#64#uscalar => Aeneas.Std.Result.ok (2974012453224067339#u64, true)
+              | 1731042625218380614#64#uscalar => Aeneas.Std.Result.ok (1731042625218380614#u64, true)
+              | x_2 => Aeneas.Std.Result.ok (x, false)) =
+              Aeneas.Std.Result.ok out)
+      x
+      (fun _ h =>
+        Eq.symm h ▸
+          Eq.mpr
+            (id
+              (congrArg Exists
+                (funext fun out =>
+                  congrFun'
+                    (congrArg Eq
+                      (R1Z.PV_RE_LiteralShape5.legacy.match_1.eq_1✝ (fun x => Aeneas.Std.Result (Aeneas.Std.U64 × Bool))
+                        (fun _ => Aeneas.Std.Result.ok (2974012453224067339#u64, true))
+                        (fun _ => Aeneas.Std.Result.ok (1731042625218380614#u64, true)) fun x =>
+                        Aeneas.Std.Result.ok (2974012453224067339#64#uscalar, false)))
+                    (Aeneas.Std.Result.ok out))))
+            (Exists.intro (2974012453224067339#u64, true) rfl))
+      (fun _ h =>
+        Eq.symm h ▸
+          Eq.mpr
+            (id
+              (congrArg Exists
+                (funext fun out =>
+                  congrFun'
+                    (congrArg Eq
+                      (R1Z.PV_RE_LiteralShape5.legacy.match_1.eq_2✝ (fun x => Aeneas.Std.Result (Aeneas.Std.U64 × Bool))
+                        (fun _ => Aeneas.Std.Result.ok (2974012453224067339#u64, true))
+                        (fun _ => Aeneas.Std.Result.ok (1731042625218380614#u64, true)) fun x =>
+                        Aeneas.Std.Result.ok (1731042625218380614#64#uscalar, false)))
+                    (Aeneas.Std.Result.ok out))))
+            (Exists.intro (1731042625218380614#u64, true) rfl))
+      (fun x_1 x_2 x_3 h =>
+        Eq.ndrec (motive := fun x_4 =>
+          (x_4 = 2974012453224067339#64#uscalar → False) →
+            (x_4 = 1731042625218380614#64#uscalar → False) →
+              ∃ out,
+                (match x with
+                  | 2974012453224067339#64#uscalar => Aeneas.Std.Result.ok (2974012453224067339#u64, true)
+                  | 1731042625218380614#64#uscalar => Aeneas.Std.Result.ok (1731042625218380614#u64, true)
+                  | x_7 => Aeneas.Std.Result.ok (x, false)) =
+                  Aeneas.Std.Result.ok out)
+          (fun x_4 x_5 =>
+            Eq.mpr
+              (id
+                (congrArg Exists
+                  (funext fun out =>
+                    congrFun'
+                      (congrArg Eq
+                        (R1Z.PV_RE_LiteralShape5.legacy.match_1.eq_3✝
+                          (fun x => Aeneas.Std.Result (Aeneas.Std.U64 × Bool)) x
+                          (fun _ => Aeneas.Std.Result.ok (2974012453224067339#u64, true))
+                          (fun _ => Aeneas.Std.Result.ok (1731042625218380614#u64, true))
+                          (fun x_6 => Aeneas.Std.Result.ok (x, false)) x_4 x_5))
+                      (Aeneas.Std.Result.ok out))))
+              (Exists.intro (x, false) rfl))
+          h x_2 x_3)
+      (Eq.refl x))
+theorem R1Z.PV_RE_ComposedContext6.ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.validate_pool_v1_context.callee1.yes.literalShape0 : ∀
+  [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]
+  (self : ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext) (value0 : Aeneas.Std.U64),
+  ProverRwFull.aspis_core.state_only_hiding.PINNED_POOL_V1_PAYMENT_RELATION_FREE_MASK_FINGERPRINT =
+      Aeneas.Std.Result.ok value0 →
+    context.mask_layout_fingerprint = value0 →
+      (match context.layout_factor_fingerprint with
+        | 2974012453224067339#64#uscalar => Aeneas.Std.Result.ok (2974012453224067339#u64, true)
+        | 1731042625218380614#64#uscalar => Aeneas.Std.Result.ok (1731042625218380614#u64, true)
+        | x => Aeneas.Std.Result.ok (context.layout_factor_fingerprint, false)) =
+        R1Z.PV_RE_LiteralShape5.legacy context.layout_factor_fingerprint :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] self context value0 prefix0 branch_true =>
+  Eq.refl
+    (match context.layout_factor_fingerprint with
+    | 2974012453224067339#64#uscalar => Aeneas.Std.Result.ok (2974012453224067339#u64, true)
+    | 1731042625218380614#64#uscalar => Aeneas.Std.Result.ok (1731042625218380614#u64, true)
+    | x => Aeneas.Std.Result.ok (context.layout_factor_fingerprint, false))
+theorem R1Z.PV_RE_ComposedContext6.ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.validate_pool_v1_context.callee1.yes.literalSuccess0 : ∀
+  [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]
+  (self : ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext) (value0 : Aeneas.Std.U64),
+  ProverRwFull.aspis_core.state_only_hiding.PINNED_POOL_V1_PAYMENT_RELATION_FREE_MASK_FINGERPRINT =
+      Aeneas.Std.Result.ok value0 →
+    context.mask_layout_fingerprint = value0 →
+      ∃ out, R1Z.PV_RE_LiteralShape5.legacy context.layout_factor_fingerprint = Aeneas.Std.Result.ok out :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] self context value0 prefix0 branch_true =>
+  R1Z.PV_RE_LiteralShape5.legacy_success context.layout_factor_fingerprint
+theorem R1Z.PV_RE_ComposedContext6.R1Z.PV_RE_ComposedSuffix6_003.continueAfter.callee0.yes.literalShape0 : ∀
+  [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]
+  (self : ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext)
+  (out :
+    R1Z.PV_RE_ComposedSuffix6_003.Payload✝
+      ProverRwFull.aspis_core.state_only_hiding.PINNED_POOL_V1_PAYMENT_RELATION_FREE_MASK_FINGERPRINT),
+  context.mask_layout_fingerprint = out →
+    (match context.layout_factor_fingerprint with
+      | 2974012453224067339#64#uscalar => Aeneas.Std.Result.ok (2974012453224067339#u64, true)
+      | 1731042625218380614#64#uscalar => Aeneas.Std.Result.ok (1731042625218380614#u64, true)
+      | x => Aeneas.Std.Result.ok (context.layout_factor_fingerprint, false)) =
+      R1Z.PV_RE_LiteralShape5.legacy context.layout_factor_fingerprint :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] self context out branch_true =>
+  Eq.refl
+    (match context.layout_factor_fingerprint with
+    | 2974012453224067339#64#uscalar => Aeneas.Std.Result.ok (2974012453224067339#u64, true)
+    | 1731042625218380614#64#uscalar => Aeneas.Std.Result.ok (1731042625218380614#u64, true)
+    | x => Aeneas.Std.Result.ok (context.layout_factor_fingerprint, false))
+theorem R1Z.PV_RE_ComposedContext6.R1Z.PV_RE_ComposedSuffix6_003.continueAfter.callee0.yes.literalSuccess0 : ∀
+  [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]
+  (self : ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext)
+  (out :
+    R1Z.PV_RE_ComposedSuffix6_003.Payload✝
+      ProverRwFull.aspis_core.state_only_hiding.PINNED_POOL_V1_PAYMENT_RELATION_FREE_MASK_FINGERPRINT),
+  context.mask_layout_fingerprint = out →
+    ∃ out, R1Z.PV_RE_LiteralShape5.legacy context.layout_factor_fingerprint = Aeneas.Std.Result.ok out :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] self context out branch_true =>
+  R1Z.PV_RE_LiteralShape5.legacy_success context.layout_factor_fingerprint
