@@ -2,7 +2,7 @@ from run import H,run
 import json,hashlib,sys,os
 S=H/'source'
 pins={'default':'f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4','devnet':'63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299','pool':'121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548'}
-for mode in ['default','devnet','pool']:
+for mode in (sys.argv[2:] or ['default','devnet','pool']):
  label=sys.argv[1]+'-'+mode
  out=H/label/'artifacts';program='aspis-pool' if mode=='pool' else 'r1-cost-probe'
  features='r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit' if mode=='pool' else 'pool-adapter,private-leaf-salts'

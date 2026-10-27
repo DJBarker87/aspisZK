@@ -1,3 +1,4 @@
+use crate::host_multilinear::multilinear_evaluate_qm31;
 //! UNPROVED COST PROBE. G-sim (LOG D44.3): the explicit, witness-free R1
 //! simulator `simE` of R0Z/RefPayload.lean, inside the ideal game of
 //! R1Z/GamesR1.lean (`fsR1.ideal`, design zf1/DESIGN-R1-GAMES.txt §5).
@@ -31,7 +32,7 @@ use aspis_core::{Digest32,HashFn,circle::SecureCirclePoint,digest::LegacyHashFn,
     state_only_hiding::{StateOnlyHidingContext,state_only_selected_mask_value},
     state_only_private_merkle::private_leaf_hash_with_digest,
     state_only_sumcheck::{evaluate_state_only_polynomial,state_only_boundary_sum}};
-use aspis_statement::{multilinear_evaluate_qm31,StateOnlyTraceFoundation,pool_v1::pair_forest_semantic_terminal::r0::Public};
+use aspis_statement::{StateOnlyTraceFoundation,pool_v1::pair_forest_semantic_terminal::r0::Public};
 use aspis_prover::{HOST_HASH,state_only_entropy::StateOnlyAttemptSecrets,
     state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,apply_pool_v1_pair_forest_h1_padding_mask_v1,InMemoryStateOnlyMaskNonceStore}};
 use crate::{compact, multiproof,transport::Variant,verifier::Error,weights::Weights,transcript::Transcript,

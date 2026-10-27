@@ -64,3 +64,6 @@ mod prover_shared;
 
 #[cfg(feature = "prover")]
 pub use aspis_prover::host_forest;
+
+#[cfg(feature = "prover")]
+pub mod host_multilinear;

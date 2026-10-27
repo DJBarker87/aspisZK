@@ -1,12 +1,12 @@
 //! Prover-local Drop-free forest inventory. Originals remain in aspis-statement.
 use aspis_core::field::{M31, QM31};
-use aspis_statement::logup::{build_copy_logup_helper, compress_tagged_tuple, CopyLogUpRow};
+use aspis_statement::logup::CopyLogUpRow;
 use aspis_statement::pool_v1::pair_forest_trace::PoolV1PairForestTraceV1;
 use aspis_statement::pool_v1::pair_trace::*;
 use aspis_statement::pool_v1::{pair_forest_hiding::*, pair_tree_hiding::*, pair_tree_profile::*};
 use aspis_statement::poseidon2::MERKLE_NODE_COMPRESSION_V3_TWEAK;
 use aspis_statement::trace_v4::TraceCell;
-use std::{vec, vec::Vec};
+use std::vec::Vec;
 
 #[derive(Clone, Copy)]
 pub struct Schedule {
@@ -631,16 +631,33 @@ pub fn build_pool_v1_pair_forest_copy_registry_v1() -> Result<Registry, PoolV1Pa
     Ok(output)
 }
 fn tuple_value(trace: &PoolV1PairForestTraceV1, tuple: PoolV1PairCopyTupleV1) -> [M31; 16] {
-    tuple.limbs.map(|limb| match limb {
-        PoolV1PairTupleLimbV1::Zero => M31::ZERO,
-        PoolV1PairTupleLimbV1::Cell { source, offset } => {
-            let columns = match source.bank {
-                PoolV1PairTraceBankV1::Stable => &trace.stable.c1,
-                PoolV1PairTraceBankV1::Late => &trace.late,
-            };
-            columns[source.cell.column as usize][source.cell.row as usize].add(offset)
-        }
-    })
+    let mut out = [M31::ZERO; 16];
+    let mut i = 0usize;
+    while i < 16 {
+        out[i] = match tuple.limbs[i] {
+            PoolV1PairTupleLimbV1::Zero => M31::ZERO,
+            PoolV1PairTupleLimbV1::Cell { source, offset } => {
+                let columns = match source.bank {
+                    PoolV1PairTraceBankV1::Stable => &trace.stable.c1,
+                    PoolV1PairTraceBankV1::Late => &trace.late,
+                };
+                columns[source.cell.column as usize][source.cell.row as usize].add(offset)
+            }
+        };
+        i += 1;
+    }
+    out
+}
+fn compress_tuple(tag: M31, values: &[M31; 16], lambda: QM31) -> QM31 {
+    let mut value = QM31::from_cm31(aspis_core::field::CM31::from_m31(tag));
+    let mut power = lambda;
+    let mut i = 0usize;
+    while i < 16 {
+        value = value.add(power.mul_m31(values[i]));
+        power = power.mul(lambda);
+        i += 1;
+    }
+    value
 }
 
 fn copy_weight(
@@ -669,32 +686,42 @@ pub fn pool_v1_pair_forest_copy_rows_v1(
     trace: &PoolV1PairForestTraceV1,
     append_index: u64,
     lambda: QM31,
-) -> Result<Vec<CopyLogUpRow>, PoolV1PairTraceErrorV1> {
+) -> Result<[CopyLogUpRow; 1024], PoolV1PairTraceErrorV1> {
     let empty = CopyLogUpRow {
         producer_values: [QM31::ZERO; 2],
         producer_weights: [M31::ZERO; 2],
         consumer_values: [QM31::ZERO; 2],
         consumer_weights: [M31::ZERO; 2],
     };
-    let mut rows = vec![empty; 1024];
+    let mut rows = [empty; 1024];
     let registry = build_pool_v1_pair_forest_copy_registry_v1()?;
     let mut i = 0usize;
     while i < registry.len {
         let link = registry.data[i];
         let weight = copy_weight(link.weight, append_index, trace.variant);
-        for (tuple, producer) in [(link.producer, true), (link.consumer, false)] {
+        let mut side = 0usize;
+        while side < 2 {
+            let tuple = if side == 0 {
+                link.producer
+            } else {
+                link.consumer
+            };
             let row = &mut rows[tuple.row as usize];
-            let (values, weights) = if producer {
+            let (values, weights) = if side == 0 {
                 (&mut row.producer_values, &mut row.producer_weights)
             } else {
                 (&mut row.consumer_values, &mut row.consumer_weights)
             };
-            let slot = weights
-                .iter()
-                .position(|value| *value == M31::ZERO)
-                .ok_or(PoolV1PairTraceErrorV1::CopyLayout)?;
-            values[slot] = compress_tagged_tuple(link.tag, &tuple_value(trace, tuple), lambda);
+            let slot = if weights[0] == M31::ZERO {
+                0
+            } else if weights[1] == M31::ZERO {
+                1
+            } else {
+                return Err(PoolV1PairTraceErrorV1::CopyLayout);
+            };
+            values[slot] = compress_tuple(link.tag, &tuple_value(trace, tuple), lambda);
             weights[slot] = weight;
+            side += 1;
         }
         i += 1;
     }
@@ -706,9 +733,50 @@ pub fn build_pool_v1_pair_forest_copy_helper_v1(
     append_index: u64,
     lambda: QM31,
     chi: QM31,
-) -> Result<Vec<QM31>, PoolV1PairTraceErrorV1> {
+) -> Result<[QM31; 1024], PoolV1PairTraceErrorV1> {
     let rows = pool_v1_pair_forest_copy_rows_v1(trace, append_index, lambda)?;
-    build_copy_logup_helper(&rows, chi).map_err(|_| PoolV1PairTraceErrorV1::CopyImbalance)
+    let mut helper = [QM31::ZERO; 1024];
+    let mut r = 0usize;
+    while r < 1024 {
+        let row = rows[r];
+        let mut value = QM31::ZERO;
+        let mut slot = 0usize;
+        while slot < 2 {
+            let weight = row.producer_weights[slot];
+            if weight != M31::ZERO {
+                let inv = match chi.sub(row.producer_values[slot]).try_inv() {
+                    Some(v) => v,
+                    None => return Err(PoolV1PairTraceErrorV1::CopyImbalance),
+                };
+                value = value.add(inv.mul_m31(weight));
+            }
+            slot += 1;
+        }
+        slot = 0;
+        while slot < 2 {
+            let weight = row.consumer_weights[slot];
+            if weight != M31::ZERO {
+                let inv = match chi.sub(row.consumer_values[slot]).try_inv() {
+                    Some(v) => v,
+                    None => return Err(PoolV1PairTraceErrorV1::CopyImbalance),
+                };
+                value = value.sub(inv.mul_m31(weight));
+            }
+            slot += 1;
+        }
+        helper[r] = value;
+        r += 1;
+    }
+    Ok(helper)
+}
+pub fn materialize_copy_helper(
+    trace: &PoolV1PairForestTraceV1,
+    append_index: u64,
+    lambda: QM31,
+    chi: QM31,
+) -> Result<Vec<QM31>, PoolV1PairTraceErrorV1> {
+    let helper = build_pool_v1_pair_forest_copy_helper_v1(trace, append_index, lambda, chi)?;
+    Ok(helper.to_vec())
 }
 
 fn forest_path_aux_cell_is_used(row: usize, column: usize) -> bool {
