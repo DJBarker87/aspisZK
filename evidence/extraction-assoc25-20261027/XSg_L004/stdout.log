@@ -1,0 +1,60 @@
+XSg_generated/XSg_RowPhase.lean:16:72: error: Application type mismatch: The argument
+  hj
+has type
+  ↑j < 4
+but is expected to have type
+  ↑j < Array.length row
+in the application
+  Array.index_usize_spec row j hj
+XSg_generated/XSg_RowPhase.lean:18:15: error(lean.unknownIdentifier): Unknown identifier `x`
+XSg_generated/XSg_RowPhase.lean:23:40: error(lean.unknownIdentifier): Unknown identifier `x`
+XSg_generated/XSg_RowPhase.lean:23:96: error(lean.unknownIdentifier): Unknown identifier `x`
+XSg_generated/XSg_RowPhase.lean:40:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?terms &&& 3#usize = 3#usize
+in the target expression
+  S7Kani2OwnedRow.residue_owned (S7Kani2OwnedRowRefinement.makeRow x) (XRu_PushTransport.power q) basis
+      (decide (↑terms % 4 = 3)) =
+    ok (S7Kani2OwnedRowRefinement.makeRow y)
+
+out : Row
+q : aspis_core.field.QM31
+basis : U32
+terms : Usize
+canon : XRp_PowersQAdd.CanonicalQ q
+bm : ↑basis < 2 ^ 31 - 1
+a b c d : U64
+phase : Bound (↑terms) (Array.make 4#usize [a, b, c, d] ⋯)
+run :
+  verifier.update_residue_row (Array.make 4#usize [a, b, c, d] ⋯) q basis (decide (terms &&& 3#usize = 3#usize)) =
+    ok out
+x : Fin 4 → U64 := fun j => if j = 0 then a else if j = 1 then b else if j = 2 then c else d
+shaped : S7Kani2OwnedRowRefinement.makeRow x = Array.make 4#usize [a, b, c, d] ⋯
+xp : ∀ (j : Fin 4), ↑(x j) < 2 ^ 34 + ↑terms % 4 * (2 ^ 31 - 2) ^ 2
+y : Fin 4 → U64
+hy :
+  S7Kani2OwnedRow.residue_owned (S7Kani2OwnedRowRefinement.makeRow x) (XRu_PushTransport.power q) basis
+      (decide (↑terms % 4 = 3)) =
+    ok (S7Kani2OwnedRowRefinement.makeRow y)
+hval :
+  ∀ (j : Fin 4),
+    ↑(y j) =
+      AspisR1BatchedFoldSourceStep.sourcePush (↑terms) (↑(x j))
+        (↑(S7Kani2OwnedRowRefinement.powerLimb (XRu_PushTransport.power q) j) * ↑basis)
+eq :
+  verifier.update_residue_row (Array.make 4#usize [a, b, c, d] ⋯) q basis (decide (terms &&& 3#usize = 3#usize)) =
+    S7Kani2OwnedRow.residue_owned (Array.make 4#usize [a, b, c, d] ⋯) { c0 := (q.c0.a, q.c0.b), c1 := (q.c1.a, q.c1.b) }
+      basis (decide (terms &&& 3#usize = 3#usize))
+⊢ Bound (↑terms + 1) out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XSg_RowPhase.safe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XSg_RowPhase.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
