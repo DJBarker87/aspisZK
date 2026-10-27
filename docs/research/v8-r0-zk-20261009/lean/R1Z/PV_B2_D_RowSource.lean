@@ -1,4 +1,5 @@
 import R1Z.PV_B2_C_RawWeights251Funs
+import R1Z.PV_B2_D_SmallScalar
 set_option autoImplicit false
 namespace PV_B2_D_RowSource
 open Aeneas Aeneas.Std Result ControlFlow PV_B2_251c1
@@ -13,19 +14,16 @@ theorem body0 (j out : Usize) : host_weights.host_row_loop0.body j out 0#usize =
   simp only [show (0#usize < 5#usize) from by decide,if_pos,lift,bind_tc_ok,tau0]
   simp only [show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 0#usize) = 0#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 3#usize) = 6#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show Usize.wrapping_add 0#usize 1#usize = 1#usize from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.val,Usize.wrapping_add,UScalar.wrapping_add,
-          Usize.ofNat_bv,UScalarTy.numBits,h]]
+      rw [PV_B2_D_SmallScalar.add_val _ _ (by scalar_tac)]
+      scalar_tac]
 #print axioms tau0
 #print axioms body0
 theorem tau1 : Array.index_usize transport.TAU 1#usize = ok 4#usize := by
@@ -39,19 +37,16 @@ theorem body1 (j out : Usize) : host_weights.host_row_loop0.body j out 1#usize =
   simp only [show (1#usize < 5#usize) from by decide,if_pos,lift,bind_tc_ok,tau1]
   simp only [show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 1#usize) = 2#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 4#usize) = 8#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show Usize.wrapping_add 1#usize 1#usize = 2#usize from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.val,Usize.wrapping_add,UScalar.wrapping_add,
-          Usize.ofNat_bv,UScalarTy.numBits,h]]
+      rw [PV_B2_D_SmallScalar.add_val _ _ (by scalar_tac)]
+      scalar_tac]
 #print axioms tau1
 #print axioms body1
 theorem tau2 : Array.index_usize transport.TAU 2#usize = ok 2#usize := by
@@ -65,19 +60,16 @@ theorem body2 (j out : Usize) : host_weights.host_row_loop0.body j out 2#usize =
   simp only [show (2#usize < 5#usize) from by decide,if_pos,lift,bind_tc_ok,tau2]
   simp only [show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 2#usize) = 4#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 2#usize) = 4#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show Usize.wrapping_add 2#usize 1#usize = 3#usize from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.val,Usize.wrapping_add,UScalar.wrapping_add,
-          Usize.ofNat_bv,UScalarTy.numBits,h]]
+      rw [PV_B2_D_SmallScalar.add_val _ _ (by scalar_tac)]
+      scalar_tac]
 #print axioms tau2
 #print axioms body2
 theorem tau3 : Array.index_usize transport.TAU 3#usize = ok 0#usize := by
@@ -91,19 +83,16 @@ theorem body3 (j out : Usize) : host_weights.host_row_loop0.body j out 3#usize =
   simp only [show (3#usize < 5#usize) from by decide,if_pos,lift,bind_tc_ok,tau3]
   simp only [show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 3#usize) = 6#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 0#usize) = 0#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show Usize.wrapping_add 3#usize 1#usize = 4#usize from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.val,Usize.wrapping_add,UScalar.wrapping_add,
-          Usize.ofNat_bv,UScalarTy.numBits,h]]
+      rw [PV_B2_D_SmallScalar.add_val _ _ (by scalar_tac)]
+      scalar_tac]
 #print axioms tau3
 #print axioms body3
 theorem tau4 : Array.index_usize transport.TAU 4#usize = ok 1#usize := by
@@ -117,19 +106,16 @@ theorem body4 (j out : Usize) : host_weights.host_row_loop0.body j out 4#usize =
   simp only [show (4#usize < 5#usize) from by decide,if_pos,lift,bind_tc_ok,tau4]
   simp only [show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 4#usize) = 8#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show UScalar.cast .U32 (Usize.wrapping_mul 2#usize 1#usize) = 2#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show Usize.wrapping_add 4#usize 1#usize = 5#usize from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.val,Usize.wrapping_add,UScalar.wrapping_add,
-          Usize.ofNat_bv,UScalarTy.numBits,h]]
+      rw [PV_B2_D_SmallScalar.add_val _ _ (by scalar_tac)]
+      scalar_tac]
 #print axioms tau4
 #print axioms body4
 theorem end_body (j out : Usize) : host_weights.host_row_loop0.body j out 5#usize = ok (done out) := by

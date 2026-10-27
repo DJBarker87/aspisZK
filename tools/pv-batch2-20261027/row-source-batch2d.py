@@ -2,6 +2,7 @@
 from pathlib import Path
 import sys
 L=Path('docs/research/v8-r0-zk-20261009/lean/R1Z');s='''import R1Z.PV_B2_C_RawWeights251Funs
+import R1Z.PV_B2_D_SmallScalar
 set_option autoImplicit false
 namespace PV_B2_D_RowSource
 open Aeneas Aeneas.Std Result ControlFlow PV_B2_251c1
@@ -18,19 +19,16 @@ theorem body{d} (j out : Usize) : host_weights.host_row_loop0.body j out {d}#usi
   simp only [show ({d}#usize < 5#usize) from by decide,if_pos,lift,bind_tc_ok,tau{d}]
   simp only [show UScalar.cast .U32 (Usize.wrapping_mul 2#usize {d}#usize) = {2*d}#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show UScalar.cast .U32 (Usize.wrapping_mul 2#usize {v}#usize) = {2*v}#u32 from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.cast,UScalar.val,Usize.wrapping_mul,UScalar.wrapping_mul,
-          Usize.ofNat_bv,U32.ofNat_bv,UScalarTy.numBits,h],
+      rw [PV_B2_D_SmallScalar.cast_val,PV_B2_D_SmallScalar.mul_val _ _ (by scalar_tac)]
+      scalar_tac,
     show Usize.wrapping_add {d}#usize 1#usize = {d+1}#usize from by
       apply UScalar.eq_of_val_eq
-      rcases System.Platform.numBits_eq with h | h <;>
-        simp [UScalar.val,Usize.wrapping_add,UScalar.wrapping_add,
-          Usize.ofNat_bv,UScalarTy.numBits,h]]
+      rw [PV_B2_D_SmallScalar.add_val _ _ (by scalar_tac)]
+      scalar_tac]
 #print axioms tau{d}
 #print axioms body{d}
 '''
