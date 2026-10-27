@@ -123,3 +123,10 @@ Exact command, dirty-source hashes, dependency object hashes, scope limits and f
 axiom/error lines are in each receipt.json/stdout.log. Passing final sources are
 003 (components),005 (top/projections),006 (non-vacuity),007 (full types/axioms),
 009 (split current residual). Only standard axioms in all accepted results.
+
+Final read-only checks: IDb_validate.py passed exact-source/passing-receipt
+validation for all five delivered modules; IDb_recount.py passed complete kernel
+substitution and unchanged ledger inventory; git diff --check passed. No full
+regression was repeated. IDb_CLEANUP.json records SHA-256/size and removal of
+only this job's compiled host scratch objects; coherent dependencies and all
+source/receipt evidence remain. No binary/object/tarball is committed.
