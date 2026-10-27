@@ -1,0 +1,44 @@
+FJm_AbsorptionFactors.lean:36:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJf_ModelPoint.decoded absorption
+in the target expression
+  FJd_PointReference.pointFactors (FJj_SuccessorStep.decoded absorption) d s =
+    FJd_PointReference.pointFactors (R0P.SemSource.xor12Point (FJf_ModelPoint.decoded alpha)) d s
+
+case right
+v : FIn_WeightsExtract.FInVariant
+alpha : Std.Array SQ 10#usize
+z : FJf_CircleOuterBody.Z
+hc : FJc_WeightArray.canonical alpha
+points : Std.Array (Std.Array FIn_WeightsExtract.field.QM31 10#usize) 3#usize
+a8 a9 : FIn_WeightsExtract.field.QM31
+f1 f2 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize
+hp : FIn_WeightsExtract.state_only_prefix.r0.statement_points alpha = ok points
+h8 : alpha.index_usize 8#usize = ok a8
+h9 : alpha.index_usize 9#usize = ok a9
+hf1 :
+  FIn_WeightsExtract.weights_new_loop0 { start := 0#usize, «end» := 3#usize } points
+      (Array.repeat 5#usize (Array.repeat 5#usize (Array.repeat 4#usize FIn_WeightsExtract.field.QM31.ZERO))) =
+    ok f1
+hf2 : FIn_WeightsExtract.weights_new_loop1 { start := 0#usize, «end» := 2#usize } z f1 = ok f2
+hp0 : points.index_usize 0#usize = ok alpha
+successor : Std.Array SQ 10#usize
+hs : points.index_usize 1#usize = ok successor
+cs : FJc_WeightArray.canonical successor
+vs : FJj_SuccessorStep.decoded successor = R0P.SemSource.successorPoint (FJj_SuccessorStep.decoded alpha)
+absorption : Std.Array SQ 10#usize
+ha : points.index_usize 2#usize = ok absorption
+ca : FJc_WeightArray.canonical absorption
+va : FJf_ModelPoint.decoded absorption = R0P.SemSource.xor12Point (FJf_ModelPoint.decoded alpha)
+third :
+  (∀ (row : FJf_FactorArray.Row), (↑f1)[2]? = some row → FJf_FactorArray.rowCanon row) ∧
+    ∀ (d : Fin 5) (s : Fin 4), FJf_FactorArray.value f1 2 ↑d ↑s = FJf_PointCell.point absorption (↑d) s
+frame : ∀ (d s : ℕ), FJf_FactorArray.value f2 2 d s = FJf_FactorArray.value f1 2 d s
+raw : (↑f2)[2]? = (↑f1)[2]?
+run :
+  FIn_WeightsExtract.weights_new v alpha z =
+    ok (core.result.Result.Ok { variant := v, factors := f2, points := points, extra := Array.make 2#usize [a8, a9] ⋯ })
+d : Fin 5
+s : Fin 4
+⊢ FJd_PointReference.pointFactors (FJj_SuccessorStep.decoded absorption) d s =
+    FJd_PointReference.pointFactors (R0P.SemSource.xor12Point (FJf_ModelPoint.decoded alpha)) d s
+'AspisR1.FJm_AbsorptionFactors.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

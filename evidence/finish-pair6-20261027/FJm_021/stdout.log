@@ -1,0 +1,148 @@
+FJm_AbsorptionPoint.lean:38:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJc_WeightArray.value abs 6
+in the target expression
+  FJc_WeightArray.value abs ↑6#usize = FJc_WeightArray.value alpha 6
+
+alpha : Std.Array SQ 10#usize
+hc : FJc_WeightArray.canonical alpha
+s : Slice FIn_WeightsExtract.field.QM31
+hs : lift alpha.to_slice = ok s
+iter : core.iter.adapters.rev.Rev (core.ops.range.Range (UScalar UScalarTy.Usize))
+hi :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := s.len } =
+    ok iter
+successor : Std.Array FIn_WeightsExtract.field.QM31 10#usize
+hsc :
+  FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop iter alpha alpha
+      FIn_WeightsExtract.field.QM31.ONE =
+    ok successor
+q : FIn_WeightsExtract.field.QM31
+hq : alpha.index_usize 7#usize = ok q
+q1 : FIn_WeightsExtract.field.QM31
+hq1 : FIn_WeightsExtract.field.QM31.ONE.sub q = ok q1
+abs : Std.Array FIn_WeightsExtract.field.QM31 10#usize
+habs : alpha.update 7#usize q1 = ok abs
+q2 : FIn_WeightsExtract.field.QM31
+hq2 : abs.index_usize 6#usize = ok q2
+q3 : FIn_WeightsExtract.field.QM31
+hq3 : FIn_WeightsExtract.field.QM31.ONE.sub q2 = ok q3
+abs1 : Std.Array FIn_WeightsExtract.field.QM31 10#usize
+habs1 : abs.update 6#usize q3 = ok abs1
+run✝⁸ :
+  (do
+      let s ← lift alpha.to_slice
+      have i : Usize := s.len
+      let iter ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := i }
+      let successor ←
+        FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop iter alpha alpha
+            FIn_WeightsExtract.field.QM31.ONE
+      let q ← alpha.index_usize 7#usize
+      let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+      let absorption ← alpha.update 7#usize q1
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+run✝⁷ :
+  (have i := s.len;
+    do
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := i }
+    let successor ←
+      FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop iter alpha alpha
+          FIn_WeightsExtract.field.QM31.ONE
+    let q ← alpha.index_usize 7#usize
+    let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+    let absorption ← alpha.update 7#usize q1
+    let q2 ← absorption.index_usize 6#usize
+    let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+    let absorption1 ← absorption.update 6#usize q3
+    ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+run✝⁶ :
+  (do
+      let successor ←
+        FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop iter alpha alpha
+            FIn_WeightsExtract.field.QM31.ONE
+      let q ← alpha.index_usize 7#usize
+      let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+      let absorption ← alpha.update 7#usize q1
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+run✝⁵ :
+  (do
+      let q ← alpha.index_usize 7#usize
+      let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+      let absorption ← alpha.update 7#usize q1
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+run✝⁴ :
+  (do
+      let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub q
+      let absorption ← alpha.update 7#usize q1
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+run✝³ :
+  (do
+      let absorption ← alpha.update 7#usize q1
+      let q2 ← absorption.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← absorption.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+run✝² :
+  (do
+      let q2 ← abs.index_usize 6#usize
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← abs.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+run✝¹ :
+  (do
+      let q3 ← FIn_WeightsExtract.field.QM31.ONE.sub q2
+      let absorption1 ← abs.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+run✝ :
+  (do
+      let absorption1 ← abs.update 6#usize q3
+      ok (Array.make 3#usize [alpha, successor, absorption1] ⋯)) =
+    ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+run : ok (Array.make 3#usize [alpha, successor, abs1] ⋯) = ok (Array.make 3#usize [alpha, successor, abs1] ⋯)
+cq : FJc_WeightValues.Canon q
+vq : FJc_WeightArray.value alpha ↑7#usize = decode q
+v1 : FJc_WeightValues.Canon q1 ∧ decode q1 = decode FIn_WeightsExtract.field.QM31.ONE - decode q
+cabs : FJc_WeightArray.canonical abs
+cq2 : FJc_WeightValues.Canon q2
+vq2 : FJc_WeightArray.value abs ↑6#usize = decode q2
+v3 : FJc_WeightValues.Canon q3 ∧ decode q3 = decode FIn_WeightsExtract.field.QM31.ONE - decode q2
+⊢ FJc_WeightArray.value abs ↑6#usize = FJc_WeightArray.value alpha 6
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (6 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJm_AbsorptionPoint.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

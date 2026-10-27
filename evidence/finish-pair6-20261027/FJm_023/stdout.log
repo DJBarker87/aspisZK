@@ -1,0 +1,70 @@
+FJm_PointThird.lean:53:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑mid2)[2]?
+in the target expression
+  row ∈ ↑mid2
+
+case left
+points : Points
+p0 p1 p2 : Std.Array SQ 10#usize
+hp0 : Array.index_usize points 0#usize = ok p0
+hc0 : FJc_WeightArray.canonical p0
+hp1 : Array.index_usize points 1#usize = ok p1
+hc1 : FJc_WeightArray.canonical p1
+hp2 : Array.index_usize points 2#usize = ok p2
+hc2 : FJc_WeightArray.canonical p2
+factors out : Factors
+hf : FJf_FactorArray.canon factors
+run : FIn_WeightsExtract.weights_new_loop0 { start := 0#usize, «end» := 3#usize } points factors = ok out
+cursor0 : FIo_RangeNext.Range
+mid0 : Factors
+tail0 : FIn_WeightsExtract.weights_new_loop0 cursor0 points mid0 = ok out
+hn0 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 0#usize, «end» := 3#usize } =
+    ok (some 0#usize, cursor0)
+hm0 : FIn_WeightsExtract.weights_new_loop0_loop0 { start := 0#usize, «end» := 5#usize } points factors 0#usize = ok mid0
+pr0 :
+  0#usize = { start := 0#usize, «end» := 3#usize }.start ∧
+    cursor0.end = { start := 0#usize, «end» := 3#usize }.end ∧
+      ↑cursor0.start = ↑{ start := 0#usize, «end» := 3#usize }.start + 1 ∧
+        ↑{ start := 0#usize, «end» := 3#usize }.start < ↑{ start := 0#usize, «end» := 3#usize }.end
+start0 : ↑cursor0.start = 1
+end0 : ↑cursor0.end = 3
+first : FJf_PointStep.Post p0 0#usize factors mid0
+cursor1 : FIo_RangeNext.Range
+mid1 : Factors
+tail1 : FIn_WeightsExtract.weights_new_loop0 cursor1 points mid1 = ok out
+hn1 : core.iter.range.IteratorRange.next core.iter.range.StepUsize cursor0 = ok (some 1#usize, cursor1)
+hm1 : FIn_WeightsExtract.weights_new_loop0_loop0 { start := 0#usize, «end» := 5#usize } points mid0 1#usize = ok mid1
+pr1 :
+  1#usize = cursor0.start ∧
+    cursor1.end = cursor0.end ∧ ↑cursor1.start = ↑cursor0.start + 1 ∧ ↑cursor0.start < ↑cursor0.end
+start1 : ↑cursor1.start = 2
+second : FJf_PointStep.Post p1 1#usize mid0 mid1
+end1 : ↑cursor1.end = 3
+cursor2 : FIo_RangeNext.Range
+mid2 : Factors
+tail2 : FIn_WeightsExtract.weights_new_loop0 cursor2 points mid2 = ok out
+hn2 : core.iter.range.IteratorRange.next core.iter.range.StepUsize cursor1 = ok (some 2#usize, cursor2)
+hm2 : FIn_WeightsExtract.weights_new_loop0_loop0 { start := 0#usize, «end» := 5#usize } points mid1 2#usize = ok mid2
+pr2 :
+  2#usize = cursor1.start ∧
+    cursor2.end = cursor1.end ∧ ↑cursor2.start = ↑cursor1.start + 1 ∧ ↑cursor1.start < ↑cursor1.end
+start2 : ↑cursor2.start = 3
+third : FJf_PointStep.Post p2 2#usize mid1 mid2
+frame : ∀ (d s : ℕ), FJf_FactorArray.value out 2 d s = FJf_FactorArray.value mid2 2 d s
+raw : (↑out)[2]? = (↑mid2)[2]?
+row : FJf_FactorArray.Row
+hr : (↑out)[2]? = some row
+⊢ row ∈ ↑mid2
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    mid2
+  has type
+    Factors
+  but is expected to have type
+    { l // l.length = ↑5#usize }
+  in the application
+    ↑mid2
+'AspisR1.FJm_PointThird.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
