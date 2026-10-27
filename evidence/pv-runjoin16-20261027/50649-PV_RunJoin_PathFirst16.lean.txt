@@ -1,0 +1,13 @@
+import R1Z.PV_RunJoin_PathCell0616
+import R1Z.PV_RunJoin_FixtureInputCommitment
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_PathFirst16
+open R0P PV_RunJoin_PathModel16
+local notation "leaf" => digestOf PV_RunJoin_FixtureHashModel.s_3_23
+theorem prefix_1 : merkleRootAux leaf PV_RunJoin_FixtureRecords.path 1 = (![1055864870,1015153496,899228473,2043224478,1075657363,1804637297,712143154,1156362644] : Fin 8 → Scalar) := by
+  rw [merkleRootAux,dif_pos (show 0 < 24 by decide)]
+  change nodeCompress _ _ = _
+  exact node_6
+#print axioms prefix_1
+end R1Z.PV_RunJoin_PathFirst16

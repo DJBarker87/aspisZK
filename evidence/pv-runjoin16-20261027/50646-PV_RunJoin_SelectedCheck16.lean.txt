@@ -1,0 +1,44 @@
+import R1Z.PV_RunJoin_InputLeaf16
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_SelectedCheck16
+open Aeneas Aeneas.Std Result BuilderForestAdmissionPort
+open BuilderForestAdmissionPort.pool_v1 PV_RunJoin_FixtureArguments
+open PV_RunJoin_ReferenceFixtureResults
+abbrev leaf := witness.pair.pair_leaf.first_commitment
+
+theorem selected : pair_tree_profile.PoolV1PairLeafWitnessV1.selected_commitment
+    witness.pair.pair_leaf witness.pair.selected_second = ok leaf := by rfl
+
+theorem comparison : BuilderForestStdPort.core.cmp.impls.PartialEqShared.ne
+    (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray
+      8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31) leaf leaf = ok false := by
+  with_unfolding_all rfl
+
+theorem transfer : ∃ records selected leaf,
+    @pair_forest_copy_builder.CopyRecords.new PV_RunJoin_CompilerDictionary16.shipped
+      witness 600#u32 (some recipient) transferChange snapshot 77#u32 = ok records ∧
+    pair_tree_profile.PoolV1PairLeafWitnessV1.selected_commitment
+      witness.pair.pair_leaf witness.pair.selected_second = ok selected ∧
+    pair_forest_copy_builder.CopyRecords.input_leaf records = ok leaf ∧
+    BuilderForestStdPort.core.cmp.impls.PartialEqShared.ne
+      (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray
+        8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31) selected leaf = ok false :=
+  ⟨⟨transferWitness,transferPublic⟩,leaf,leaf,PV_RunJoin_FixtureReturns16.transfer_new,
+    selected,PV_RunJoin_InputLeaf16.transfer,comparison⟩
+
+theorem withdrawal : ∃ records selected leaf,
+    @pair_forest_copy_builder.CopyRecords.new PV_RunJoin_CompilerDictionary16.shipped
+      witness 250#u32 none withdrawalChange snapshot 77#u32 = ok records ∧
+    pair_tree_profile.PoolV1PairLeafWitnessV1.selected_commitment
+      witness.pair.pair_leaf witness.pair.selected_second = ok selected ∧
+    pair_forest_copy_builder.CopyRecords.input_leaf records = ok leaf ∧
+    BuilderForestStdPort.core.cmp.impls.PartialEqShared.ne
+      (BuilderForestStdPort.Array.Insts.CoreCmpPartialEqArray
+        8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31) selected leaf = ok false :=
+  ⟨⟨withdrawalWitness,withdrawalPublic⟩,leaf,leaf,PV_RunJoin_FixtureReturns16.withdrawal_new,
+    selected,PV_RunJoin_InputLeaf16.withdrawal,comparison⟩
+#print axioms selected
+#print axioms comparison
+#print axioms transfer
+#print axioms withdrawal
+end R1Z.PV_RunJoin_SelectedCheck16

@@ -3,6 +3,14 @@ import pathlib,sys,subprocess,json,hashlib,shlex,time,re,datetime,atexit
 R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin16-20261027'
 H='/home/dombarker/project-offloads/codex-pv-runjoin-20261026'; P=H+'/runjoin16-lean';host='dombarker@100.108.41.90'
 A=int(sys.argv[1]);M=sys.argv[2];assert 50600<=A<=50899 and 'PV_RunJoin_' in M
+# Enforce ruling (d) before consuming an ID; never depend on estimated wait time.
+prior_refusals=[dict(json.loads(p.read_text()),utc=json.loads(p.read_text()).get('utc',json.loads((E/('used-'+p.stem.split('-')[1]+'.json')).read_text())['utc'])) for p in E.glob('refusal-[0-9]*.json')]
+if prior_refusals:
+ last=max(datetime.datetime.fromisoformat(r['utc']) for r in prior_refusals)
+ remaining=180-(datetime.datetime.now(datetime.timezone.utc)-last).total_seconds()
+ if remaining>0:
+  print(f'WAIT: {remaining:.1f}s remain before another admission check; no ID consumed',flush=True)
+  sys.exit(77)
 assert (A>=50897) == ('TrustAudit16' in M), 'IDs 50897–50899 reserved for focused audit'
 rows=[json.loads(p.read_text()) for p in E.glob('receipt-[0-9]*.json')];charged=sum(r.get('exit') is not None for r in rows)
 assert charged<100 and (charged<97 or 'TrustAudit16' in M)
@@ -38,6 +46,8 @@ cmd=['systemd-run','--user','--scope','--quiet','--unit=pv16-lean-'+str(A),'-p',
 record=dict(attempt=A,target=M,source_revision=rev,source_sha256=sha,source_snapshot=snapshot,dependencies=deps,deps_fingerprint=fp,command=cmd,reservation=admission,shared_sources_written=False)
 with (E/'launches.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
 print('LAUNCH',A,M,flush=True);start=time.monotonic();r=ssh(shlex.join(cmd)+f' > {H}/evidence/pv16-out-{A}.log 2>&1');record.update(launcher_exit=r.returncode,wall_seconds=time.monotonic()-start)
+if r.returncode==78:
+ (E/f'refusal-{A}.json').write_text(json.dumps(dict(allowed=False,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),reason='scope launcher exit78 after initial admission; wait under lead rulings (d)/(e)/(m)'),indent=2)+'\n')
 for name in ['out','time']:
  q=ssh(f'cat {H}/evidence/pv16-{name}-{A}.log');(E/f'{name}-{A}.log').write_text(q.stdout+q.stderr)
 out=(E/f'out-{A}.log').read_text();tim=(E/f'time-{A}.log').read_text();print(out[-8500:],flush=True)
