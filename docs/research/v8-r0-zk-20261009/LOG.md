@@ -11572,3 +11572,30 @@ a..b` → index `while` loop with identical body, bounds and order; each recorde
 once after the last change; a blocker of another kind or in another function stops the route.
 Launched pv-runjoin15 (same branch, IDs 50600-50899 still unused). Six slots: op223, op134, l3dis4,
 route2, cblib4, runjoin15. Rows removed outright: 0. Privacy target not yet established.
+
+## D276 (Stream B) 2026-10-27 11:00 UTC: candidate client audited (N1 removed by the CT path; N7 remains); candidate lacks the proof-account client route; rebase3 launched
+
+pv-l3dis4 (`codex/pv-l3-20261026`, head aafc302223; no Lean/Kani; five capped scopes; no Rust or Lean
+source change). Lockfile repair 1f02f0ecd7: tools/r1-cost-probe/Cargo.lock gains only the
+aspis-r1-cert-build → aspis-r1-cert-check path edge (+3 lines); all 423 registry records, versions and
+checksums identical. Artifact B = candidate + repaired lockfile, built with the RECOMMENDED recipe
+pending owner approval (r1p-check + aspis-r1-cost-probe/ct-host-prover, --locked, host rustc 1.94.1,
+toolchain unpinned): exit 0, 177.5 s, peak 1.98 GB, swap 0, sha256
+898005412d46103cfeffe5740f7892ee01d1e3d73a7293338c62e679445b5e67. A/B comparison: N1 REMOVED in B (the
+reviewed constant-time pole scan; only the final verdict branch remains); N2-N6 remain in both (guard
+outcomes constant on valid honest inputs: proof obligations on the L2 rows); N7 REMAINS in both
+(decimal JSON parsing of private key bytes: about 7 conditional jumps for a zero byte, 10/13/16 for 1/2/3
+digit bytes); no fixture-feature-gated API is linked or reached in B, but local deterministic NOTE
+fixtures of the devnet tool remain reachable. NEW: in B, devnet_spend reaches the 96-byte generate()
+entropy API, not the proof-account route's generate_for_mask_nonce: the candidate predates the
+proof-account client route merged into research (D162 route; client-pins.json), consistent with its 6
+missing and 26 differing pinned files. V373 stays OPEN (transitive classification incomplete). V374 plan
+preregistered (dudect classes, inputs, sample counts, 90-minute kernel windows and a separate four-hour
+attempt window): NOT scheduled until the owner fixes the release recipe and the candidate carries the
+client route. Launched pv-rebase3 (`codex/pv-rebase3-20261027`, candidate sibling in the reused pv-l3
+worktree; IDs 52700-52999): merge research (1,907 commits past the candidate's merge base 970912bfe7)
+under the D209 conflict rules (candidate wins inside prover-rewrite files, research elsewhere,
+undecidable hunks stop), port devnet_spend onto the proof-account route with call-graph evidence, ELF
+pins, the recommended-recipe build and the fixture-byte gate, and the re-validation list of candidate
+proofs touched by the merge. Six slots: op223, op134, route2, cblib4, runjoin15, rebase3. Rows removed
+outright: 0. Privacy target not yet established.
