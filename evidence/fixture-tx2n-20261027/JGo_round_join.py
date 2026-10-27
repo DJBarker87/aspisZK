@@ -7,7 +7,7 @@ for r in range(2):
  imports='\n'.join(f'import JGo_TX2_Cell{r}_{i}\nimport JGo_TX2_Horner{r}_{i}' for i in range(7))
  boundary=x['add'](x['nums'](f'JGo_TX2_Cell{r}_0','value'),x['nums'](f'JGo_TX2_Cell{r}_4','value'))
  claim='JFq_Claim.scalar' if r==0 else 'JGo_TX2_Horner0_6.after'
- s=imports+'\nimport FIo_Install\nimport RowFinish_Control\n'+('import JGo_TX2_Horner0_6\n' if r else '')+f'''set_option autoImplicit false
+ s=imports+'\nimport JFq_Claim\nimport JFq_Alpha0\nimport JFq_Alpha1\nimport FIo_Install\nimport RowFinish_Control\n'+('import JGo_TX2_Horner0_6\n' if r else '')+f'''set_option autoImplicit false
 noncomputable section
 namespace AspisR1.{mod}
 open Aeneas Aeneas.Std Result AspisR1Stage2.Stage2Finish
@@ -30,6 +30,8 @@ theorem polynomial : FIn_ExtractInstall.polynomial (JFw_Frames.window {off} 224)
 '''
  for step in range(7):
   i=6-step
+  tail='['+','.join(f'{j}#usize' for j in range(i,-1,-1))+']'
+  s+=f'  change FIn_Polynomial.go (JFw_Frames.window {off} 224) JGo_TX2_Horner{r}_{step}.alpha {tail} JGo_TX2_Horner{r}_{step}.before=ok JGo_TX2_Horner{r}_6.after\n'
   s+=f'  rw [FIn_Polynomial.go,JGo_TX2_Horner{r}_{step}.multiply,bind_tc_ok,JGo_TX2_Cell{r}_{i}.source,bind_tc_ok,JGo_TX2_Horner{r}_{step}.addition,bind_tc_ok]\n'
  s+='  rfl\n#print axioms polynomial\n'
  s+=f'''

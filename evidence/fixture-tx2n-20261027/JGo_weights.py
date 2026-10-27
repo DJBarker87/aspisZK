@@ -49,6 +49,13 @@ for k in range(5):
 for n in range(26):
  k,d=divmod(n,5)
  s+=f'def factors{n:02} : Factors := '+arr([f'r{j}_5' if j<k else f'r{j}_{d}' if j==k else f'r{j}_0' for j in range(5)])+'\n'
+for k in range(2):
+ u,v=z[2*k:2*k+2];t=mul(u,v)
+ s+=f'def z{k}x : Q := '+q(u)+'\n'+f'def z{k}y : Q := '+q(v)+'\n'+f'def z{k}product : Q := '+q(t)+'\n'
+ u=sub(add(mul(u,u),mul(u,u)),one)
+ for d in range(1,6):
+  s+=f'def x{k}_{d} : Q := '+q(u)+'\n'
+  y=sub(add(mul(u,u),mul(u,u)),one);u=sub(add(mul(y,y),mul(y,y)),one)
 s+='def value : Weights := ⟨.S2,factors25,points,Array.make 2#usize [alpha.val[8],alpha.val[9]]⟩\n'
 s+='end AspisR1.JGo_TX2_WeightData\nend\n'
 mods={'JGo_TX2_WeightData.lean':s}
@@ -85,9 +92,21 @@ open Aeneas Aeneas.Std Result ControlFlow FIn_WeightsExtract JGo_TX2_WeightData
   with_unfolding_all rfl
 #print axioms step{d}
 '''
- # k3,k4 need double-X state exported separately; prepared later.
+ if k>=3:
+  point=k-3
+  s+=f"theorem product : field.QM31.mul z{point}x z{point}y=ok z{point}product := by with_unfolding_all rfl\n#print axioms product\n"
+  s+=f"theorem double : FIn_WeightsExtract.double z{point}x=ok x{point}_1 := by with_unfolding_all rfl\n#print axioms double\n"
+  for d in range(1,5):
+   n=k*5+d
+   s+=f"""theorem step{d} : weights_new_loop1_loop0.body {point}#usize
+    {{start:={d}#usize,«end»:=5#usize}} factors{n:02} x{point}_{d}=
+      ok (.cont ({{start:={d+1}#usize,«end»:=5#usize}},factors{n+1:02},x{point}_{d+1})) := by
+  with_unfolding_all rfl
+#print axioms step{d}
+"""
+
  s+=f'end AspisR1.JGo_TX2_WeightRow{k}\nend\n'
- if k<3:mods[f'JGo_TX2_WeightRow{k}.lean']=s
+ mods[f'JGo_TX2_WeightRow{k}.lean']=s
 for f,s in mods.items():
  p=R/'lean'/f
  if '--check' in sys.argv:assert p.read_text()==s,f
