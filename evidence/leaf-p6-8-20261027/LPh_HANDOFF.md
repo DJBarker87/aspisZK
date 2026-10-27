@@ -1,0 +1,19 @@
+# LPh handoff
+
+**Target not yet established. No actual-top premise removed; all ten whole leaves remain OPEN.** Branch codex/cx-leaf-p6-8-20261027. Each stage committed locally; no push/merge. Changes are confined to this evidence directory; new module names use LPh_. The retained evidence-module layout follows LPg.
+
+AspisR1.FJv_Top.deployed remains 83T/3P/13G. Literal before/after source and imports are identical; strict T/P/G/C delta 0 and removed/added/changed0/0/0 in LPh_RECOUNT.json. Quantifiers, SAME witnesses, carriers, failure event/conclusion, frozen3, ARX lineage, owner-approved game, RuntimePersistence, D188 trace fidelity, trust inventory and work metric are unchanged. No joint top non-vacuity is supplied.
+
+Established: all six translated-field replacements have named emitted exact Nat-value/canonicality theorems and explicit domains (LPh_STUBS.md). Four actual Dot coordinate consumers PASS with the paired raw stub; corrected -Z stubbing verified-reduce finish consumer PASS. Full928 echeck iteration windows (both k) and464 compact windows PASS; remaining late decoder constant offsets16–27/74–85 PASS; local expansion live/frame windows, indexed116-stage error association and arbitrary29-cell decode/write frames PASS. Existing symbolic inductions and byte/canonicality laws are imported unchanged through38 private prerequisite builds.
+
+Native LPh.Raw.raw_nat and model LPh.Model.raw_words separately reach the identical shared four-word Nat spec. Joint composition FAILS at generated global-name collision `instDiscriminantErrorIsize` from AspisR1FinishRelationCurrent.Types versus XRk_Types (L056). No existing generated/candidate file is edited. This is an open context/carrier bridge, not a new trust assumption. LPh_LEAVES.md gives every exact open stage.
+
+The wide_view K023 diagnosis is CLOSED as a harness modelling artefact: the tiny identity function preserves captured pointers but reproduces fresh zero-sized-array comparison failures; actual wide_view captured-pointer nonempty and empty-from-live-backing gates PASS. K030 reproduces original failures and shows returned fields preserving incoming pointer words. Complete 53,293,707-byte trace stays on host; SHA/size/reference and exact SSA excerpts are committed. No shipped-behaviour finding or patch.
+
+STOP:60/60 Lean (52PASS,8failed),30/30 Kani (22PASS,3TIMEOUT,2compile failures,1setup-unwind failure,2diagnostic counterexamples). L059/L060 audit38 native and75 model names; L001 separately audits six SemanticCall names. Accepted axioms are only standard or none; failed sorryAx outputs excluded. No more prover runs permitted under this allocation.
+
+LPh_VERIFICATION.json: zero errors;30 exact patches reconstructed;955 input hashes match; every native run frozen-graph/offline checked and lock unchanged; all11 tool pins match. Exact targets, exits, wall/RSS/swap, revisions/hashes, dependencies, limits and axiom lines retained. Serial admitted 6G/8G/swap0/tasks64/-M7000; native optimized profile3. No cap/timeout raised or memory kill.
+
+Frozen crates/programs/lock unchanged; cfg harnesses are scratch-only patches. No ELF rebuild trigger; default f8c0ec72…,devnet 63ad3e9c…,Pool 121f3e29… inherited, not freshly rebuilt. Own Rust438428217-byte and Lean6642352-byte caches hashed/removed, no live own prover. Shared caches/source snapshots/full trace and all wallet/account keys retained. No full release replay or 100-bit closure claimed.
+
+Next: permissible generated-name reconciliation/coherent dependent replay; joint typed raw/Dot carrier theorem; full native loop/output/error associations; actual caller/P6 installation into FJv_Top.deployed with nonzero recount delta and joint non-vacuity. Fresh proof allocation required. LPb prepared_claim/checkpoint replays remain parallel LPf's scope; none claimed here.
