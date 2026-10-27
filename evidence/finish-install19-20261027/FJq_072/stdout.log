@@ -1,0 +1,42 @@
+FJq_SourceLiteralExtra.lean:27:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SelectedOpeningClaims.Y ?row25 ?row26 ?row27 ⟨3, ⋯⟩ ?l
+in the target expression
+  embed (FIp_SemanticValues.decode (FJq_MainCells.cell out l)) = SelectedOpeningClaims.Y row25 row26 row27 3 l
+
+pre : r1_wire.Prefix
+record : r1_wire.ValidatedRecord
+source : pre.validated_record 25#u8 = ok (core.result.Result.Ok record)
+out : Std.Array aspis_core.field.QM31 29#usize
+run : AspisS1ExtractedRoundChildren.decodeMain 29#usize record 87#usize = ok (core.result.Result.Ok out)
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : RawCutTranscriptRun.ErasedPrefix
+aligned : Aligned p tr
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+data : MatchingSupport.Data AspisWideTower.WideExact
+read : LiteralMatchingData.read (typedRows p q tr) = some data
+row25 : CircleRecordCodec.Payload 0
+row26 : CircleRecordCodec.Payload 1
+row27 : OpeningRecordCodec.Payload OpeningRecordCodec.Row.gamma
+r25 : LiteralOpeningStages.readAt (typedRows p q tr) 25 (CircleRecordCodec.decode 0) = some row25
+r26 : LiteralOpeningStages.readAt (typedRows p q tr) 26 (CircleRecordCodec.decode 1) = some row26
+r27 :
+  LiteralOpeningStages.readAt (typedRows p q tr) 27 (OpeningRecordCodec.decode OpeningRecordCodec.Row.gamma) =
+    some row27
+ys : data.Y = SelectedOpeningClaims.Y row25 row26 row27
+frame : rowBytes p ↑25#u8 = List.map ExtractedRecordByteValue.rawByte ↑record.framed
+literal : CircleRecordCodec.decode 0 (List.map ExtractedRecordByteValue.rawByte ↑record.framed) = some row25
+l : Fin ↑29#usize
+⊢ embed (FIp_SemanticValues.decode (FJq_MainCells.cell out l)) = SelectedOpeningClaims.Y row25 row26 row27 3 l
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJq_SourceLiteralExtra.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

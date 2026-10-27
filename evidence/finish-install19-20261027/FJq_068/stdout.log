@@ -1,0 +1,69 @@
+FJq_MaskedSourceFormula.lean:43:54: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑29#usize) 28
+numerals are polymorphic in Lean, but the numeral `28` cannot be used in a context where the expected type is
+  Fin ↑29#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+FJq_MaskedSourceFormula.lean:45:55: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑29#usize) 28
+numerals are polymorphic in Lean, but the numeral `28` cannot be used in a context where the expected type is
+  Fin ↑29#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+FJq_MaskedSourceFormula.lean:35:100: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+claims : FJn_MaskC1Gather.Claims
+alpha : Std.Array MQ 10#usize
+extra : Std.Array MQ 29#usize
+c1 : Std.Array MQ 16#usize
+m : Std.Array MQ 10#usize
+row : Std.Array MQ 29#usize
+g eta terminal x mask product sum running : MQ
+hc : FJn_MaskC1Gather.CanonClaims claims
+ha : ∀ x ∈ ↑alpha, Canon x
+hx : ∀ x ∈ ↑extra, Canon x
+he : Canon eta
+ht : Canon terminal
+rc : OraclePortStdBuilder.fromFn 16#usize (FinishModel.closureFn9 D) claims = ok c1
+rm : OraclePortStdBuilder.fromFn 10#usize (FinishModel.closureFn5 D) claims = ok m
+rr : Array.index_usize claims 0#usize = ok row
+rg : row.index_usize 27#usize = ok g
+rx : extra.index_usize 28#usize = ok x
+maskCall : FIp_SemanticArithmetic.mask c1 m g alpha = ok mask
+multiply : FIp_SemanticArithmetic.mul eta terminal = ok product
+add : FIp_SemanticArithmetic.add mask product = ok sum
+finish : FIp_SemanticArithmetic.add sum x = ok running
+rowCan : ∀ x ∈ ↑row, Canon x
+gc : Canon g
+xc : Canon x
+actual :
+  Canon running ∧
+    embed (decode running) =
+      R0P.Mask.maskValue ConcretePackBasis.basis (FJn_MaskWide.cell16 c1) (FJn_MaskWide.cell10 m) (embed (decode g))
+            (FJn_MaskWide.cell10 alpha) +
+          embed (decode eta) * embed (decode terminal) +
+        embed (decode x)
+gv : decode g = FJn_MainClaims.claims claims 0 27
+xv : decode x = decode (FJq_MainCells.cell extra sorry)
+point : FJn_MaskWide.cell10 alpha = fun i => embed (FJn_MainPoint.point alpha i)
+⊢ (R0P.Mask.maskValue ConcretePackBasis.basis (fun i => embed (FJn_MainClaims.claims claims 0 ⟨↑i, ⋯⟩))
+          (fun i => embed (FJn_MainClaims.claims claims 0 ⟨16 + ↑i, ⋯⟩)) (embed (FJn_MainClaims.claims claims 0 27))
+          fun i => embed (FJn_MainPoint.point alpha i)) +
+        embed (decode eta) * embed (decode terminal) +
+      embed (decode (FJq_MainCells.cell extra sorry)) =
+    (embed (decode eta) * embed (decode terminal) +
+        R0P.Mask.maskValue ConcretePackBasis.basis
+          (fun c => embed (FJn_MainClaims.claims claims 0 (Fin.castLE R0P.Mask.maskClaimsR0._proof_1 c)))
+          (fun c => embed (FJn_MainClaims.claims claims 0 ⟨16 + ↑c, ⋯⟩)) (embed (FJn_MainClaims.claims claims 0 27))
+          fun i => embed (FJn_MainPoint.point alpha i)) +
+      embed (decode (FJq_MainCells.cell extra 28))
+'AspisR1.FJq_MaskedSourceFormula.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
