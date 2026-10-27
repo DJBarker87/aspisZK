@@ -1902,3 +1902,153 @@ three assignments write exactly those cells with the same conversion
 and bounded indices. The dead level value after that loop is unused.
 No other value, behavior, signature or outside-records change. Arrays
 and bool are Copy; other derives remain as recorded.
+
+22. D277, lexical owned subitem inside records, verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index 0e0650a526..2e4668487d 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -226,66 +226,69 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
+ 
+ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
+            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31, empty: [Digest; 21]) -> (RW, RP) {
+-    let input = *input;
+-    let chg = *chg;
+-    let snapshot = *snapshot;
+-    let pair = input.pair;
+-    let membership_index = pair.membership.index;
+-    let directions = input.super_root_directions;
+-    let key = pair.nullifier_key;
+-    let salt = pair.salt;
+-    let first = pair.pair_leaf.first_commitment;
+-    let second = pair.pair_leaf.second_commitment;
+-    let owner = chg.owner_key;
+-    let change_salt = chg.salt;
+-    let siblings = pair.membership.siblings;
+-    let frontier = snapshot.frontier;
+-    let supers = input.super_root_siblings;
+-    let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
+-    let mut w = RW {
+-        input_value: pair.value, output_value: out, change_value: chg.value,
+-        sk: [0u32; 8], salt: [0u32; 8], bits: [0; 24], sibs: [[0; 8]; 24],
+-        pair_first: [0u32; 8], pair_occupied: pair.pair_leaf.second_occupied.0,
+-        pair_second: [0u32; 8], pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
+-        recipient_owner: [0u32; 8], recipient_salt: [0u32; 8],
+-        change_owner: [0u32; 8], change_salt: [0u32; 8],
+-    };
+-    let mut p = RP {
+-        transfer: false, asset: asset.0, next_pair_index: snapshot.next_pair_index,
+-        frontier: [[0; 8]; 20], empty: [[0; 8]; 20],
+-    };
+-    w.bits[0] = u32::from(pair.selected_second);
+-    let mut level = 1;
+-    while level < 21 {
+-        w.bits[level] = ((membership_index >> (level - 1)) & 1) as u32;
+-        level += 1;
+-    }
+-    w.bits[21] = u32::from(directions[0]);
+-    w.bits[22] = u32::from(directions[1]);
+-    w.bits[23] = u32::from(directions[2]);
+-    let mut j = 0;
+-    while j < 8 {
+-        w.sk[j] = key[j].0;
+-        w.salt[j] = salt[j].0;
+-        w.sibs[0][j] = other[j].0;
+-        w.pair_first[j] = first[j].0;
+-        w.pair_second[j] = second[j].0;
+-        w.change_owner[j] = owner[j].0;
+-        w.change_salt[j] = change_salt[j].0;
+-        let mut l = 0;
+-        while l < 20 {
+-            w.sibs[l + 1][j] = siblings[l][j].0;
+-            p.frontier[l][j] = frontier[l][j].0;
+-            p.empty[l][j] = empty[l][j].0;
+-            l += 1;
++    fn owned(input: PoolV1PairForestInputNoteWitnessV1, out: u32,
++        chg: PoolV1OutputNoteWitnessV1, snapshot: PoolV1PairLiveSnapshotV1,
++        asset: M31, empty: [Digest; 21]) -> (RW, RP) {
++        let pair = input.pair;
++        let membership_index = pair.membership.index;
++        let directions = input.super_root_directions;
++        let key = pair.nullifier_key;
++        let salt = pair.salt;
++        let first = pair.pair_leaf.first_commitment;
++        let second = pair.pair_leaf.second_commitment;
++        let owner = chg.owner_key;
++        let change_salt = chg.salt;
++        let siblings = pair.membership.siblings;
++        let frontier = snapshot.frontier;
++        let supers = input.super_root_siblings;
++        let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
++        let mut w = RW {
++            input_value: pair.value, output_value: out, change_value: chg.value,
++            sk: [0u32; 8], salt: [0u32; 8], bits: [0; 24], sibs: [[0; 8]; 24],
++            pair_first: [0u32; 8], pair_occupied: pair.pair_leaf.second_occupied.0,
++            pair_second: [0u32; 8], pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
++            recipient_owner: [0u32; 8], recipient_salt: [0u32; 8],
++            change_owner: [0u32; 8], change_salt: [0u32; 8],
++        };
++        let mut p = RP {
++            transfer: false, asset: asset.0, next_pair_index: snapshot.next_pair_index,
++            frontier: [[0; 8]; 20], empty: [[0; 8]; 20],
++        };
++        w.bits[0] = u32::from(pair.selected_second);
++        let mut level = 1;
++        while level < 21 {
++            w.bits[level] = ((membership_index >> (level - 1)) & 1) as u32;
++            level += 1;
+         }
+-        let mut l = 0;
+-        while l < 3 {
+-            w.sibs[l + 21][j] = supers[l][j].0;
+-            l += 1;
++        w.bits[21] = u32::from(directions[0]);
++        w.bits[22] = u32::from(directions[1]);
++        w.bits[23] = u32::from(directions[2]);
++        let mut j = 0;
++        while j < 8 {
++            w.sk[j] = key[j].0;
++            w.salt[j] = salt[j].0;
++            w.sibs[0][j] = other[j].0;
++            w.pair_first[j] = first[j].0;
++            w.pair_second[j] = second[j].0;
++            w.change_owner[j] = owner[j].0;
++            w.change_salt[j] = change_salt[j].0;
++            let mut l = 0;
++            while l < 20 {
++                w.sibs[l + 1][j] = siblings[l][j].0;
++                p.frontier[l][j] = frontier[l][j].0;
++                p.empty[l][j] = empty[l][j].0;
++                l += 1;
++            }
++            let mut l = 0;
++            while l < 3 {
++                w.sibs[l + 21][j] = supers[l][j].0;
++                l += 1;
++            }
++            j += 1;
+         }
+-        j += 1;
++        (w, p)
+     }
++    let (mut w, mut p) = owned(*input, out, *chg, *snapshot, asset, empty);
+     match rec {
+         Some(r) => {
+             let r = *r;
+```
+
+Replay 08 fails with Not_found in InterpReduceCollapse.ml:1991 while
+applying a loop (1.609s, zero swap). All common construction is moved
+verbatim into a local named function defined lexically inside records.
+The root immediately calls that subitem with the identical Copy inputs;
+the unchanged final recipient match remains in records. This direct call
+uses no closure or FnOnce dispatch and no heap allocation. It creates no
+module-level helper and changes no other existing function, type or
+signature. It is an inside-records structural change: the local function
+returns the same common records, with the same bounded reads/writes and
+no hash, panic, allocation, I/O or other effect. Copy derives remain
+field.rs:22, pair_trace.rs:71, pair_forest_trace.rs:53, payment_relation.rs:88
+and pair_tree_profile.rs:403. Aeneas must extract this local subitem
+concretely; it will never be made opaque or assumed successful.
