@@ -1,0 +1,90 @@
+LPl_generated/LPl_ExpandResult.lean:25:77: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_ok`
+LPl_generated/LPl_ExpandResult.lean:18:59: error: unsolved goals
+bs before after : Slice U8
+bound : (↑bs).length ≤ 1856
+aligned : (↑bs).length % 16 = 0
+shape : (↑before).length = 2 * (↑bs).length
+trace : Trace (↑bs) (↑before) ((↑bs).length / 16) ↑after
+done : 32 * ((↑bs).length / 16) = (↑before).length
+hafter : ↑after = LPl_A.Expand.loop (↑bs) (↑before).length
+z : Usize
+mul : bs.len * 2#usize = ok z
+hz : ↑z = 2 * (↑bs).length
+z_eq : z = before.len
+values : LPl_A.Expand.loop (↑bs) (↑before).length = ↑after
+⊢ (do
+      let size ← ok before.len
+      if (before.len != size) = true then ok (core.result.Result.Err compact.CodecError.Length, before)
+        else ok (core.result.Result.Ok (), ⟨↑after, ⋯⟩)) =
+    ok (core.result.Result.Ok (), after)
+LPl_generated/LPl_ExpandResult.lean:25:21: warning: This simp argument is unused:
+  ne_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [aligned, ̲ne̵_̵e̵q̵,̵n̵ot_true_eq_false, ̲Bool.false_eq_true, ̲if_false, ̲mul, ̲Result.bind_ok, ̲z_eq,
+      bne_self_eq_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPl_generated/LPl_ExpandResult.lean:25:27: warning: This simp argument is unused:
+  not_true_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵l̵i̵g̵n̵e̵d̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵m̵u̵l̵,̵R̵e̵s̵u̵l̵t̵.̵b̵i̵n̵d̵_̵o̵k̵,̵z̵_̵e̵q̵,̵[̲a̲l̲i̲g̲n̲e̲d̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲m̲u̲l̲,̲ ̲R̲e̲s̲u̲l̲t̲.̲b̲i̲n̲d̲_̲o̲k̲,̲ ̲z̲_̲e̲q̲,̲
+      bne_self_eq_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPl_generated/LPl_ExpandResult.lean:43:79: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_ok`
+LPl_generated/LPl_ExpandResult.lean:37:2: error: unsolved goals
+case pos
+bs before : Slice U8
+bound : (↑bs).length ≤ 1856
+bad : (↑bs).length % 16 ≠ 0 ∨ (↑before).length ≠ 2 * (↑bs).length
+aligned : (↑bs).length % 16 = 0
+mismatch : (↑before).length ≠ 2 * (↑bs).length
+z : Usize
+mul : bs.len * 2#usize = ok z
+hz : ↑z = 2 * (↑bs).length
+neq : before.len ≠ z
+⊢ (↑before).length = ↑z →
+    (if h : (LPl_A.Expand.loop (↑bs) (↑before).length).length ≤ Usize.max then
+        ok (core.result.Result.Ok (), ⟨LPl_A.Expand.loop (↑bs) (↑before).length, h⟩)
+      else fail Error.panic) =
+      ok (core.result.Result.Err compact.CodecError.Length, before)
+LPl_generated/LPl_ExpandResult.lean:43:23: warning: This simp argument is unused:
+  ne_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [aligned, ̲ne̵_̵e̵q̵,̵n̵ot_true_eq_false, ̲Bool.false_eq_true, ̲if_false, ̲mul, ̲Result.bind_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPl_generated/LPl_ExpandResult.lean:43:29: warning: This simp argument is unused:
+  not_true_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵l̵i̵g̵n̵e̵d̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵m̵u̵l̵,̵R̵e̵s̵u̵l̵t̵.̵b̵i̵n̵d̵_̵o̵k̵]̵[̲a̲l̲i̲g̲n̲e̲d̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲m̲u̲l̲,̲ ̲R̲e̲s̲u̲l̲t̲.̲b̲i̲n̲d̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPl_generated/LPl_ExpandResult.lean:43:47: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵l̵i̵g̵n̵e̵d̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵m̵u̵l̵,̵R̵e̵s̵u̵l̵t̵.̵b̵i̵n̵d̵_̵o̵k̵]̵[̲a̲l̲i̲g̲n̲e̲d̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲m̲u̲l̲,̲ ̲R̲e̲s̲u̲l̲t̲.̲b̲i̲n̲d̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPl_generated/LPl_ExpandResult.lean:43:66: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [aligned, ̲ne_eq, ̲not_true_eq_false, ̲Bool.false_eq_true,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲mul, ̲Result.bind_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+LPl_generated/LPl_ExpandResult.lean:44:10: warning: This simp argument is unused:
+  neq
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵n̵e̵q̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'LPl.Expand.double' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LPl.Expand.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'LPl.Expand.length_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,65 @@
+import LPl_C_ExpandRows
+open Aeneas Aeneas.Std Result LPl_Kit_Release
+set_option autoImplicit false
+namespace LPl.Expand
+/-- Pointwise interpretation of exactly one native16→32 slice write, including
+    both live frames. These are the four inherited local native frame classes. -/
+def step (bs before : List U8) (row j : Nat) : U8 :=
+  if 32*row ≤ j ∧ j < 32*row+32 then
+    if j < 32*row+16 then bs[16*row+(j-32*row)]?.getD 0#u8 else 0#u8
+  else before[j]?.getD 0#u8
+
+/-- Native pointer offsets become the model's global byte index, without
+    reducing a whole concrete928/3712-byte output. -/
+theorem inside (bs before : List U8) (row j : Nat)
+    (lo : 32*row ≤ j) (hi : j<32*row+32) :
+    step bs before row j = LPl_A.Expand.byte bs j := by
+  have div : j/32=row := by omega
+  have mod : j%32=j-32*row := by omega
+  unfold step LPl_A.Expand.byte
+  rw [if_pos ⟨lo,hi⟩,div,mod]
+  split <;> split <;> try omega
+  congr 2 <;> omega
+
+theorem outside (bs before : List U8) (row j : Nat)
+    (frame : j<32*row ∨ 32*row+32≤j) :
+    step bs before row j = before[j]?.getD 0#u8 := by
+  unfold step; rw [if_neg (by omega)]
+
+/-- Source write relation: no assumed whole-output equality. The exact local
+    native/frame gates instantiate each byte observation of a reached window. -/
+structure Write (bs before after : List U8) (row : Nat) : Prop where
+  length : after.length=before.length
+  bytes : ∀ j, j<before.length → after[j]?.getD 0#u8=step bs before row j
+
+inductive Trace (bs initial : List U8) : Nat → List U8 → Prop where
+  | start : Trace bs initial 0 initial
+  | next (row : Nat) (before after : List U8) (rest : Trace bs initial row before)
+      (write : Write bs before after row) : Trace bs initial (row+1) after
+
+theorem length (bs initial after : List U8) (n : Nat) (h : Trace bs initial n after) :
+    after.length=initial.length := by
+  induction h with
+  | start => rfl
+  | next row before after rest write ih => exact write.length.trans ih
+
+theorem invariant (bs initial after : List U8) (n : Nat) (h : Trace bs initial n after) :
+    ∀ j, j<initial.length → after[j]?.getD 0#u8 =
+      if j<32*n then LPl_A.Expand.byte bs j else initial[j]?.getD 0#u8 := by
+  induction h with
+  | start => intro j hj; simp
+  | next row before after rest write ih =>
+    intro j hj
+    have size := length bs initial before row rest
+    rw [write.bytes j (by omega)]
+    by_cases low : j<32*row
+    · rw [outside bs before row j (Or.inl low),ih j hj,if_pos low,if_pos (by omega)]
+    · by_cases hi : j<32*row+32
+      · rw [inside bs before row j (by omega) hi,if_pos (by omega)]
+      · rw [outside bs before row j (Or.inr (by omega)),ih j hj,if_neg low,if_neg (by omega)]
+
+#print axioms inside
+#print axioms outside
+#print axioms length
+#print axioms invariant
+end LPl.Expand

@@ -10,6 +10,14 @@ def collect(n):
  (E/n).parent.mkdir(parents=True,exist_ok=True)
  subprocess.run(['scp','-q',H+':'+B+'/'+n,str(E/n)],check=True)
 if (E/a/'receipt.json').exists():raise SystemExit('Refuse existing attempt')
+# Own launch guard: never admit a second proof while an older attempt lacks
+# its terminal receipt. Source writing/read-only work can proceed separately.
+for existing in E.glob('LPl_[LK][0-9][0-9][0-9].json'):
+ name=existing.stem
+ if name!=a and not (E/name/'receipt.json').exists():
+  raise SystemExit('STOP own attempt still active or needs receipt: '+name)
+remote=ssh("pgrep -af '^(/usr/bin/)?python3 S2W_(run|lean)_host.py LPl_' || true")
+if remote.stdout.strip():raise SystemExit('STOP own host proof active: '+remote.stdout)
 for retry in range(11):
  log=a+f'-barrier-{retry}.log';r=ssh(f'python3 /home/dombarker/project-offloads/codex-cx-s2h-20261023/S2H_reservation.py {B}/{a}-reservation.json > {B}/{log} 2>&1');collect(log)
  exists=ssh(f'test -f {B}/{a}-reservation.json').returncode==0

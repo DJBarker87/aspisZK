@@ -89,6 +89,281 @@
 + assert_eq!(c::FINAL_LEN,64);
 +}
 --- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPl_expand.rs
+@@ -0,0 +1,272 @@
++use super::*;
++#[kani::proof] #[kani::unwind(10)]
++fn LPl_iterator(){
++ let input:[u8;1856]=kani::any();let mut out:[u8;3712]=kani::any();
++ let n:usize=kani::any();kani::assume(n<=1856&&n%16==0);
++ let i:usize=kani::any();kani::assume(i<=n/16);
++ let source=input.as_ptr();let dest=out.as_mut_ptr();
++ let mut src=input[..n].chunks_exact(16);let mut dst=out[..2*n].chunks_exact_mut(32);
++ if i>0{assert!(src.nth(i-1).is_some());assert!(dst.nth(i-1).is_some());}
++ let mut it=src.zip(dst);assert_eq!(it.len(),n/16-i);
++ match it.next(){None=>{assert_eq!(i,n/16);assert_eq!(it.len(),0);},Some((c,o))=>{
++  assert!(i<n/16);assert_eq!(c.len(),16);assert_eq!(o.len(),32);
++  assert!(core::ptr::eq(c.as_ptr(),source.wrapping_add(16*i)));assert!(core::ptr::eq(o.as_ptr(),dest.wrapping_add(32*i)));
++  assert_eq!(it.len(),n/16-(i+1));
++  match it.next(){None=>assert_eq!(i+1,n/16),Some((c,o))=>{
++   assert!(i+1<n/16);assert!(core::ptr::eq(c.as_ptr(),source.wrapping_add(16*(i+1))));assert!(core::ptr::eq(o.as_ptr(),dest.wrapping_add(32*(i+1))));}}
++ }}
++}
++#[kani::proof] #[kani::unwind(18)]
++fn LPl_length_error(){
++ let input:[u8;1856]=kani::any();let mut out:[u8;3712]=kani::any();
++ let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=1856&&m<=3712);kani::assume(n%16!=0||m!=2*n);
++ let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ assert_eq!(expand_values(&input[..n],&mut out[..m]),Err(CodecError::Length));assert_eq!(out[j],old);
++}
++#[kani::proof] #[kani::unwind(18)]
++fn LPl_nonvacuity(){
++ let input:[u8;16]=kani::any();let mut out=[99u8;32];let j:usize=kani::any();kani::assume(j<32);
++ assert_eq!(expand_values(&input,&mut out),Ok(()));assert_eq!(out[j],if j<16{input[j]}else{0});
++ assert_eq!(expand_values(&[],&mut []),Ok(()));
++ let row:u8=kani::any();if row>=14&&row<=26{let size=row_shape(row).unwrap().1;assert!(size/2<=1856);assert!(size<=3712);assert_eq!(size%32,0);}
++}
++// Separate arbitrary16-byte source from its global pointer carrier (K012).
++// Split each destination-frame class; no full464/1856-byte source mux.
++fn frame<const PART:usize>(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();
++ let row:usize=kani::any();let j:usize=kani::any();kani::assume(row<116&&j<3712);
++ let at=32*row;kani::assume(if PART==0{j<at}else if PART==1{j>=at&&j<at+16}else if PART==2{j>=at+16&&j<at+32}else{j>=at+32});
++ let old=out[j];assert_eq!(expand_values(&input,&mut out[at..at+32]),Ok(()));
++ assert_eq!(out[j],if PART==1{input[j-at]}else if PART==2{0}else{old});
++}
++#[kani::proof] #[kani::unwind(18)] fn LPl_frame_before(){frame::<0>()}
++#[kani::proof] #[kani::unwind(18)] fn LPl_frame_low(){frame::<1>()}
++#[kani::proof] #[kani::unwind(18)] fn LPl_frame_high(){frame::<2>()}
++#[kani::proof] #[kani::unwind(18)] fn LPl_frame_after(){frame::<3>()}
++// Constant-offset replacement for K014's timed-out symbolic destination mux.
++fn fixed<const ROW:usize>(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);
++ let old=out[j];let at=32*ROW;assert_eq!(expand_values(&input,&mut out[at..at+32]),Ok(()));
++ assert_eq!(out[j],if j>=at&&j<at+16{input[j-at]}else if j>=at+16&&j<at+32{0}else{old});
++}
++#[kani::proof] #[kani::unwind(18)] fn LPl_fixed_probe(){fixed::<1>()}
++// No global symbolic store offset: all116 rows are an exhaustive disjoint set
++// of constant-offset classes, with shared arbitrary input/output/j per class.
++#[inline(always)]
++fn constant<const ROW:usize>(input:&[u8;16],out:&mut[u8;3712],j:usize,old:u8){
++ let at=32*ROW;assert_eq!(expand_values(input,&mut out[at..at+32]),Ok(()));
++ assert_eq!(out[j],if j>=at&&j<at+16{input[j-at]}else if j>=at+16&&j<at+32{0}else{old});
++}
++fn guard(){
++ let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=1856&&m<=3712);
++ let native=n%16!=0||m!=2*n;
++ let natural=(n as u128)%16!=0||(m as u128)!=2*(n as u128);
++ assert_eq!(native,natural);assert_eq!((2*n)as u128,2*(n as u128));
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class0(){
++ guard();
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<0>(&input,&mut out,j,old),
++ 1=>constant::<1>(&input,&mut out,j,old),
++ 2=>constant::<2>(&input,&mut out,j,old),
++ 3=>constant::<3>(&input,&mut out,j,old),
++ 4=>constant::<4>(&input,&mut out,j,old),
++ 5=>constant::<5>(&input,&mut out,j,old),
++ 6=>constant::<6>(&input,&mut out,j,old),
++ 7=>constant::<7>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class8(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<8>(&input,&mut out,j,old),
++ 1=>constant::<9>(&input,&mut out,j,old),
++ 2=>constant::<10>(&input,&mut out,j,old),
++ 3=>constant::<11>(&input,&mut out,j,old),
++ 4=>constant::<12>(&input,&mut out,j,old),
++ 5=>constant::<13>(&input,&mut out,j,old),
++ 6=>constant::<14>(&input,&mut out,j,old),
++ 7=>constant::<15>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class16(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<16>(&input,&mut out,j,old),
++ 1=>constant::<17>(&input,&mut out,j,old),
++ 2=>constant::<18>(&input,&mut out,j,old),
++ 3=>constant::<19>(&input,&mut out,j,old),
++ 4=>constant::<20>(&input,&mut out,j,old),
++ 5=>constant::<21>(&input,&mut out,j,old),
++ 6=>constant::<22>(&input,&mut out,j,old),
++ 7=>constant::<23>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class24(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<24>(&input,&mut out,j,old),
++ 1=>constant::<25>(&input,&mut out,j,old),
++ 2=>constant::<26>(&input,&mut out,j,old),
++ 3=>constant::<27>(&input,&mut out,j,old),
++ 4=>constant::<28>(&input,&mut out,j,old),
++ 5=>constant::<29>(&input,&mut out,j,old),
++ 6=>constant::<30>(&input,&mut out,j,old),
++ 7=>constant::<31>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class32(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<32>(&input,&mut out,j,old),
++ 1=>constant::<33>(&input,&mut out,j,old),
++ 2=>constant::<34>(&input,&mut out,j,old),
++ 3=>constant::<35>(&input,&mut out,j,old),
++ 4=>constant::<36>(&input,&mut out,j,old),
++ 5=>constant::<37>(&input,&mut out,j,old),
++ 6=>constant::<38>(&input,&mut out,j,old),
++ 7=>constant::<39>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class40(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<40>(&input,&mut out,j,old),
++ 1=>constant::<41>(&input,&mut out,j,old),
++ 2=>constant::<42>(&input,&mut out,j,old),
++ 3=>constant::<43>(&input,&mut out,j,old),
++ 4=>constant::<44>(&input,&mut out,j,old),
++ 5=>constant::<45>(&input,&mut out,j,old),
++ 6=>constant::<46>(&input,&mut out,j,old),
++ 7=>constant::<47>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class48(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<48>(&input,&mut out,j,old),
++ 1=>constant::<49>(&input,&mut out,j,old),
++ 2=>constant::<50>(&input,&mut out,j,old),
++ 3=>constant::<51>(&input,&mut out,j,old),
++ 4=>constant::<52>(&input,&mut out,j,old),
++ 5=>constant::<53>(&input,&mut out,j,old),
++ 6=>constant::<54>(&input,&mut out,j,old),
++ 7=>constant::<55>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class56(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<56>(&input,&mut out,j,old),
++ 1=>constant::<57>(&input,&mut out,j,old),
++ 2=>constant::<58>(&input,&mut out,j,old),
++ 3=>constant::<59>(&input,&mut out,j,old),
++ 4=>constant::<60>(&input,&mut out,j,old),
++ 5=>constant::<61>(&input,&mut out,j,old),
++ 6=>constant::<62>(&input,&mut out,j,old),
++ 7=>constant::<63>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class64(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<64>(&input,&mut out,j,old),
++ 1=>constant::<65>(&input,&mut out,j,old),
++ 2=>constant::<66>(&input,&mut out,j,old),
++ 3=>constant::<67>(&input,&mut out,j,old),
++ 4=>constant::<68>(&input,&mut out,j,old),
++ 5=>constant::<69>(&input,&mut out,j,old),
++ 6=>constant::<70>(&input,&mut out,j,old),
++ 7=>constant::<71>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class72(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<72>(&input,&mut out,j,old),
++ 1=>constant::<73>(&input,&mut out,j,old),
++ 2=>constant::<74>(&input,&mut out,j,old),
++ 3=>constant::<75>(&input,&mut out,j,old),
++ 4=>constant::<76>(&input,&mut out,j,old),
++ 5=>constant::<77>(&input,&mut out,j,old),
++ 6=>constant::<78>(&input,&mut out,j,old),
++ 7=>constant::<79>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class80(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<80>(&input,&mut out,j,old),
++ 1=>constant::<81>(&input,&mut out,j,old),
++ 2=>constant::<82>(&input,&mut out,j,old),
++ 3=>constant::<83>(&input,&mut out,j,old),
++ 4=>constant::<84>(&input,&mut out,j,old),
++ 5=>constant::<85>(&input,&mut out,j,old),
++ 6=>constant::<86>(&input,&mut out,j,old),
++ 7=>constant::<87>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class88(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<88>(&input,&mut out,j,old),
++ 1=>constant::<89>(&input,&mut out,j,old),
++ 2=>constant::<90>(&input,&mut out,j,old),
++ 3=>constant::<91>(&input,&mut out,j,old),
++ 4=>constant::<92>(&input,&mut out,j,old),
++ 5=>constant::<93>(&input,&mut out,j,old),
++ 6=>constant::<94>(&input,&mut out,j,old),
++ 7=>constant::<95>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class96(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<96>(&input,&mut out,j,old),
++ 1=>constant::<97>(&input,&mut out,j,old),
++ 2=>constant::<98>(&input,&mut out,j,old),
++ 3=>constant::<99>(&input,&mut out,j,old),
++ 4=>constant::<100>(&input,&mut out,j,old),
++ 5=>constant::<101>(&input,&mut out,j,old),
++ 6=>constant::<102>(&input,&mut out,j,old),
++ 7=>constant::<103>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class104(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<8);match c{
++ 0=>constant::<104>(&input,&mut out,j,old),
++ 1=>constant::<105>(&input,&mut out,j,old),
++ 2=>constant::<106>(&input,&mut out,j,old),
++ 3=>constant::<107>(&input,&mut out,j,old),
++ 4=>constant::<108>(&input,&mut out,j,old),
++ 5=>constant::<109>(&input,&mut out,j,old),
++ 6=>constant::<110>(&input,&mut out,j,old),
++ 7=>constant::<111>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
++
++#[kani::proof] #[kani::unwind(18)] fn LPl_class112(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
++ let c:u8=kani::any();kani::assume(c<4);match c{
++ 0=>constant::<112>(&input,&mut out,j,old),
++ 1=>constant::<113>(&input,&mut out,j,old),
++ 2=>constant::<114>(&input,&mut out,j,old),
++ 3=>constant::<115>(&input,&mut out,j,old),
++ _=>unreachable!()}
++}
+--- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/LPl_validate.rs
 @@ -0,0 +1,24 @@
 +use super::*;
@@ -117,12 +392,14 @@
 +}
 --- a/crates/aspis-r1-cost-probe/src/compact.rs
 +++ b/crates/aspis-r1-cost-probe/src/compact.rs
-@@ -209,3 +209,5 @@
+@@ -209,3 +209,7 @@
  #[cfg(kani)] mod LPg_compact { include!("LPg_compact.rs"); }
  
  #[cfg(kani)] mod LPh_compact { include!("LPh_compact.rs"); }
 +
 +#[cfg(kani)] mod LPl_check { include!("LPl_check.rs"); }
++
++#[cfg(kani)] mod LPl_expand { include!("LPl_expand.rs"); }
 --- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
 +++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
 @@ -858,3 +858,5 @@

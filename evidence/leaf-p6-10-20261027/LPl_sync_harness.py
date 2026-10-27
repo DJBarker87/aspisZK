@@ -1,10 +1,14 @@
 from pathlib import Path
-import subprocess,json,hashlib
+import subprocess,json,hashlib,tempfile
+from LPl_harness_sources import sources
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-leaf-p6-10-20261027'
 # Only our prefixed harness is mutable. Other jobs' source is read only.
-for local in E.glob('LPl_*.rs'):
- target='verifier.rs' if local.name=='LPl_echeck.rs' else 'compact.rs'
- subprocess.run(['scp','-q',str(local),H+':'+B+'/LPl_src/crates/aspis-r1-cost-probe/src/'+local.name],check=True)
+harnesses=sources(E/'LPl_harness.patch')
+harnesses.update({p.name:p.read_bytes() for p in E.glob('LPl_*.rs')})
+with tempfile.TemporaryDirectory(prefix='LPl_harness_') as td:
+ for name,data in harnesses.items():
+  local=Path(td)/name;local.write_bytes(data)
+  subprocess.run(['scp','-q',str(local),H+':'+B+'/LPl_src/crates/aspis-r1-cost-probe/src/'+name],check=True)
 code=f'''from pathlib import Path
 import difflib,json,hashlib
 B=Path('{B}');base=Path('/home/dombarker/project-offloads/codex-cx-leaf-p6-8-20261027/LPh_src');scratch=B/'LPl_src'
@@ -26,5 +30,5 @@ print(r.stdout)
 subprocess.run(['scp','-q',H+':'+B+'/LPl_harness.patch',str(E/'LPl_harness.patch')],check=True)
 
 files=json.loads((E/'LPl_sources.json').read_text())
-files=sorted(set(files+['crates/aspis-r1-cost-probe/src/'+p.name for p in E.glob('LPl_*.rs')]))
+files=sorted(set(files+['crates/aspis-r1-cost-probe/src/'+p.name for p in map(Path,harnesses)]))
 (E/'LPl_sources.json').write_text(json.dumps(files,indent=2)+'\n')
