@@ -2,8 +2,9 @@ from pathlib import Path
 import datetime,json,subprocess,sys,time
 H=Path('/home/dombarker/project-offloads/codex-pv-batch2-20261027')
 mode=sys.argv[1]
+stage=sys.argv[2] if len(sys.argv)>2 else 'build'
 for n in range(1,11):
- label=f'batch2b-build-{mode}-{n:03}'
+ label=f'batch2b-{stage}-{mode}-{n:03}'
  out=H/'candidate'/label
  if out.exists():
   r=json.loads((out/'reservation.json').read_text())

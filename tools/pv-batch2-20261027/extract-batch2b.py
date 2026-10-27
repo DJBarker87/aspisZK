@@ -1,7 +1,7 @@
 """Measure actual applied sources, unchanged pinned Charon/Aeneas, one scope."""
 from pathlib import Path
-import subprocess,json,time,hashlib
-H=Path('/home/dombarker/project-offloads/codex-pv-batch2-20261027');S=H/'candidate/src';D=H/'batch2b-extraction';D.mkdir(exist_ok=False)
+import subprocess,json,time,hashlib,sys
+H=Path('/home/dombarker/project-offloads/codex-pv-batch2-20261027');S=H/'candidate/src';run_id=int(sys.argv[1]);D=H/f'batch2b-extraction-{run_id}';D.mkdir(exist_ok=False)
 P=Path('/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools')
 assert {n:hashlib.sha256((P/n).read_bytes()).hexdigest() for n in ['charon','aeneas']} == {'charon':'daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8','aeneas':'562e1f51ef9bea84f62793f21b4d6b48f9ae65c61ec72588170b2c3abdc37f19'}
 (D/'tool-pins.json').write_text(json.dumps({n:hashlib.sha256((P/n).read_bytes()).hexdigest() for n in ['charon','aeneas']},indent=2)+'\n')
@@ -17,7 +17,7 @@ try:
  for op,fn in [(253,'pv_b2_raw'),(251,'pv_b2_materialize')]:
   llbc=D/f'PV_B2_{op}.llbc';out=D/f'generated-{op}';out.mkdir()
   cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','CARGO_TARGET_DIR='+str(H/'charon-target'),str(P/'charon'),'cargo','--preset','aeneas','--mir','optimized','--sysroot','default','--start-from','crate::'+fn,'--include','aspis_r1_cost_probe::'+fn,'--include','aspis_r1_cost_probe::host_weights::*','--include','aspis_r1_cost_probe::prover_powers::*','--include','aspis_core::field::*','--dest-file',str(llbc),'--','--manifest-path',str(S/'crates/aspis-r1-cost-probe/Cargo.toml'),'--release','--offline','--lib','--jobs','4','--features','optimized-terminal,r1p-check,ct-host-prover']
-  if run(f'charon-{op}-003',cmd):continue
-  run(f'aeneas-{op}-003',['timeout','180',str(P/'aeneas'),'-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',f'PV_B2_{op}b','-dest',str(out),'-split-files','-emit-json',str(llbc)])
+  if run(f'charon-{op}-{run_id:03}',cmd):continue
+  run(f'aeneas-{op}-{run_id:03}',['timeout','180',str(P/'aeneas'),'-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',f'PV_B2_{op}b{run_id}','-dest',str(out),'-split-files','-emit-json',str(llbc)])
 finally:
  lib.write_bytes(original);(D/'restored.json').write_text(json.dumps(dict(lib_restored=lib.read_bytes()==original,lib_sha256=hashlib.sha256(original).hexdigest()),indent=2)+'\n')

@@ -3,6 +3,7 @@ use aspis_core::field::{QM31,QM31 as K,WideExact as E};
 use aspis_core::circle::SecureCirclePoint;
 use crate::{transport::Variant,verifier::Error};
 pub use crate::weights::{QUARTER,PERM};
+#[derive(Clone,Copy)]
 pub struct Weights {pub variant:Variant,pub factors:[[[K;4];5];5],pub points:[[K;10];3],pub extra:[K;2]}
 fn double(x:K)->K { x.mul(x).add(x.mul(x)).sub(K::ONE) }
 fn state_only_statement_points(z: &[QM31; 10]) -> [[QM31; 10]; 3] {
@@ -57,41 +58,50 @@ pub fn new(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2])->Result<Weigh
     let y=double(x);factors[4][4]=[K::ONE,x,y,x.mul(y)];x=double(y);
         Ok(Weights {variant,factors,points,extra})
 }
-    pub fn raw(&self,kind:usize,j:usize)->K {
-        if kind==0 {
-            return if aspis_core::r0::opening::inactive(self.variant.row(j)).unwrap() {K::ONE} else {K::ZERO};
-        }
-        if kind==4 {
-            if j<56 { return self.extra[j/28].pow((j%28) as u64); }
-            return K::ZERO;
-        }
-        if kind>=1 && kind<=3 && self.variant==Variant::D {
-            let r=self.variant.row(j);
-            return point_raw(self.points[kind-1],r);
-        }
-        let k=if kind<4 {kind-1}else{kind-2};
-        tensor_raw(self.factors[k],j)
-    }
+    pub fn raw(&self,kind:usize,j:usize)->K { raw_value(*self,kind,j) }
 
     /// The caller owns allocation and retains Error::Allocation before this kernel.
     pub fn materialize(&self,kappa:E,w:&mut [E;1024])->Result<(),Error> {
+        let out=materialize_values(*self,kappa,*w);
+        *w=out;
+        Ok(())
+    }
+}
+
+// The loop carries owned fixed arrays, with no loan from the caller at its joins.
+fn materialize_values(weights:Weights,kappa:E,mut out:[E;1024])->[E;1024] {
         let kp=crate::prover_powers::powers::<7>(kappa);
         let k0=kp[0]; let k1=kp[1]; let k2=kp[2]; let k3=kp[3];
         let k4=kp[4]; let k5=kp[5]; let k6=kp[6];
         let mut j=0usize;
         while j<1024 {
             let mut v=E::ZERO;
-            v=v.add(mul_qm31(k0,self.raw(0,j)));
-            v=v.add(mul_qm31(k1,self.raw(1,j)));
-            v=v.add(mul_qm31(k2,self.raw(2,j)));
-            v=v.add(mul_qm31(k3,self.raw(3,j)));
-            v=v.add(mul_qm31(k4,self.raw(4,j)));
-            v=v.add(mul_qm31(k5,self.raw(5,j)));
-            v=v.add(mul_qm31(k6,self.raw(6,j)));
-            w[j]=v; j+=1;
+            v=v.add(mul_qm31(k0,raw_value(weights,0,j)));
+            v=v.add(mul_qm31(k1,raw_value(weights,1,j)));
+            v=v.add(mul_qm31(k2,raw_value(weights,2,j)));
+            v=v.add(mul_qm31(k3,raw_value(weights,3,j)));
+            v=v.add(mul_qm31(k4,raw_value(weights,4,j)));
+            v=v.add(mul_qm31(k5,raw_value(weights,5,j)));
+            v=v.add(mul_qm31(k6,raw_value(weights,6,j)));
+            out[j]=v; j+=1;
         }
-        Ok(())
-    }
+        out
+}
+fn raw_value(weights:Weights,kind:usize,j:usize)->K {
+        if kind==0 {
+            let r=weights.variant.row(j);
+            return if (aspis_core::r0::opening::COPY_ACTIVE_ROW_MASKS[r/16]>>(r%16))&1==0 {K::ONE}else{K::ZERO};
+        }
+        if kind==4 {
+            if j<56 { return weights.extra[j/28].pow((j%28) as u64); }
+            return K::ZERO;
+        }
+        if kind>=1 && kind<=3 && weights.variant==Variant::D {
+            let r=weights.variant.row(j);
+            return point_raw(weights.points[kind-1],r);
+        }
+        let k=if kind<4 {kind-1}else{kind-2};
+        tensor_raw(weights.factors[k],j)
 }
 
 // Copy values before branch joins: no mutable element loan or restoration.
