@@ -17,9 +17,9 @@ def base : Public M :=
     change := noteCommitment witness.changeOwner 0 77 witness.changeSalt
     withdrawalAmount := some 1000 }
 
-def public : Public M := attachAppend base (nodeCompress base.change (fun _ => 0))
+def statement : Public M := attachAppend base (nodeCompress base.change (fun _ => 0))
 
-theorem input_relation : InputWitnessCore.Relation public witness.inputValue.val
+theorem input_relation : InputWitnessCore.Relation statement witness.inputValue.val
     witness.sk witness.salt witness.path witness.pair where
   valid := pair_valid
   spendable := rfl
@@ -29,11 +29,11 @@ theorem input_relation : InputWitnessCore.Relation public witness.inputValue.val
   membership := rfl
 #print axioms input_relation
 
-theorem append : AppendBinding public :=
+theorem append : AppendBinding statement :=
   seal_append base _ rfl
 #print axioms append
 
-theorem admitted : BuilderSpendRelation.RspendPlus public witness := by
+theorem admitted : BuilderSpendRelation.RspendPlus statement witness := by
   refine ⟨⟨?_,input_relation,?_,rfl,rfl,append⟩,?_⟩
   · refine ⟨rfl,rfl,?_⟩
     change (some (1000 : M)) ≠ some 0
@@ -53,7 +53,7 @@ theorem positive_change_does_not_follow :
     ¬ (∀ p : Public M, ∀ w : Wspend,
       BuilderSpendRelation.RspendPlus p w → 0 < w.changeValue.val) := by
   intro h
-  have impossible := h public witness admitted
+  have impossible := h statement witness admitted
   change 0 < 0 at impossible
   omega
 #print axioms positive_change_does_not_follow
