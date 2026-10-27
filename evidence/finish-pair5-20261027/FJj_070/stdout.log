@@ -1,0 +1,32 @@
+FJj_TensorOuterStep.lean:35:2: error: Tactic `subst` failed: did not find equation for eliminating 'current'
+
+self : FIo_Native.weights.Weights
+k : Usize
+row : Row
+hr : self.factors.index_usize k = ok row
+hc : ∀ digit ∈ ↑row, FJf_QMArray.canon digit
+len : ℕ
+out : ControlFlow State (Slice NQ)
+iter : FIo_RangeNext.Range
+current : FIo_Native.weights.Weights
+input : Slice NQ
+n : Usize
+run :
+  FIo_Native.weights.Weights.tensor_loop0.body k (iter, current, input, n).1 (iter, current, input, n).2.1
+      (iter, current, input, n).2.2.1 (iter, current, input, n).2.2.2 =
+    ok out
+he : ↑(iter, current, input, n).1.end = 5
+lower : 2 ≤ ↑(iter, current, input, n).1.start
+upper : ↑(iter, current, input, n).1.start ≤ 5
+es : (iter, current, input, n).2.1 = self
+cs : FJj_QMSlice.canon (iter, current, input, n).2.2.1
+hl : (↑(iter, current, input, n).2.2.1).length = len
+wn : ↑(iter, current, input, n).2.2.2 = 4 ^ (↑(iter, current, input, n).1.start - 2)
+hv :
+  ∀ j < ↑(iter, current, input, n).2.2.2,
+    FJj_QMSlice.value (iter, current, input, n).2.2.1 j =
+      FJj_TensorPrefix.prefixValue (FJj_TensorPrefix.rowValue row) (↑(iter, current, input, n).1.start - 2) j
+⊢ match out, run with
+  | done result, run => Post row len result
+  | cont next, run => Inv self row len next ∧ measure next < measure (iter, current, input, n)
+'AspisR1.FJj_TensorOuterStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
