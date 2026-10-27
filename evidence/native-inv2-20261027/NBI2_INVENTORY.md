@@ -8,13 +8,13 @@ The JSON flags **47 rows** in these boundary groups, including their codec helpe
 |---|---|---|
 | ASQ8 decoder / registry / policy | `AdapterRw.Ops.op23`, `op15`, `op25`–`op34` | Validate exact request/version/flags, reserved bytes, payment and current-slot domains; retain rejected prefixes. |
 | Pool IDs / account decoders | `AdapterRw.Ops.op45`–`op46`, `op48`–`op50` | Frozen default/devnet deployment constants, saved-bump PDA derivation, canonical master/checkpoint/lane bytes and frontier invariant. |
-| Proof buffer / ASF8 reconstruction | `AdapterRw.Ops.op51`–`op52`, `op22` | Same58295-byte proof account,688-byte afterstate and57607-byte suffix; same authenticated1880-byte serialization used in resume. |
+| Proof buffer / ASF8 reconstruction | `AdapterRw.Ops.op51`–`op52`; `op22` is concretely installed as `AspisS6CurrentCodecInstallation.encode` | Same 58295-byte proof account, 688-byte afterstate and 57607-byte suffix; same authenticated 1880-byte serialization used in resume. |
 | ASR8 emission | `AdapterRw.Ops.op53` | Same accepted statement, full result validation/encoding, exact magic/length, ordered runtime return-data write. |
 | SDK second wrapper / entry | `AspisR1.S2W_D189Wrappers.second`, `S2W_D189Entry.Entry.snapshot`; native/extraction inputs retained | Seven same-account snapshots, allocator cleanup, observer None and Clock/return-data effects; preserve metadata and same saved checkpoint. |
 
 ## Claim, pins and scope
 
-This is a source-reading inventory and bridge plan, not a proof or premise removal. **S2 and the deployed100-bit target remain not established.** Headline: `AspisR1.RPx_Deployed.deployed`; L154 remains a statement parameter. Narrowed D188, frozen3, the approved two-transaction game and `RuntimePersistence` are unchanged. No XRn_Join kit or stand-in is used.
+This is a source-reading inventory and bridge plan, not a proof or premise removal. **S2 and the deployed 100-bit target remain not established.** Headline: `AspisR1.RPx_Deployed.deployed`; L154 remains a statement parameter. Narrowed D188, frozen3, the approved two-transaction game and `RuntimePersistence` are unchanged. No XRn_Join kit or stand-in is used.
 
 Frozen source: `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. All bodies are read using `git show`/`git cat-file` at that revision. SHA256 includes the complete `{...}` body, including disabled branches, byte-for-byte; JSON gives byte offsets and full-file hashes. The two `FibreIndex` macro-generated methods hash their verbatim method templates and cite the invocation/bound. Anonymous closures are merged into the enclosing caller and its hash; local closure calls are distinguished from repository functions.
 
@@ -4714,6 +4714,6 @@ Callee domain obligations: Seven distinct account keys; proof read-only nonsigne
 
 ## Validation, assumptions and handoff
 
-New Lean modules/theorems: none. Lean0/30, Kani0/0, Rust0/0. No host process/scope/reservation was submitted, no Aeneas objects or persistent/private Lean cache were read or written, and no axioms audit was rerun. `#print axioms` is not applicable: this artifact introduces no theorem. Exact source-only validation fields are in NBI2_VALIDATION.json; they must not be presented as formal-release build results. The pre-existing SInt2 host workspace/handoff was read; this inventory needed none of its objects.
+New Lean modules/theorems: none. Lean 0/30, Kani 0/0, Rust 0/0. No host process/scope/reservation was submitted, no Aeneas objects or persistent/private Lean cache were read or written, and no axioms audit was rerun. `#print axioms` is not applicable: this artifact introduces no theorem. Exact source-only validation fields are in NBI2_VALIDATION.json; they must not be presented as formal-release build results. The pre-existing SInt2 host workspace/handoff was read; this inventory needed none of its objects.
 
 No cryptographic assumption, trust item, carrier, failure event, query accounting, metric or source adoption changed. No headline premise was removed. No shipped/cfg(kani) file, candidate, other worktree, wallet/key or release artifact changed. No push or merge. Next deliverable: commission the smallest bottom-up native unit with its exact selected cohort, prove the listed caller domains, compose to saved-checkpoint TX2, and finally associate the entry/emission effects. This inventory establishes none of those equivalences by itself.
