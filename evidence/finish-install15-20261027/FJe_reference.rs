@@ -52,7 +52,7 @@ mod FJe_reference {
     }
 
     fn any_q() -> QM31 {
-        let x: [u32;4] = kani::any();
+        let x: [u32;4] = kani::any::<[u32;4]>().map(|v| v & 0x7fff_ffff);
         kani::assume(x.iter().all(|v| *v < P));
         QM31 { c0: CM31::new(M31(x[0]),M31(x[1])), c1: CM31::new(M31(x[2]),M31(x[3])) }
     }
@@ -65,6 +65,15 @@ mod FJe_reference {
     fn assert_packed(a:[QM31;4],b:[QM31;4]) {
         for j in 0..4 { assert_q(a[j],b[j]); }
     }
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn local_raw_output0() {
+        let input: [QM31;4] = core::array::from_fn(|_| any_q());
+        kani::cover!(true, "canonical raw output0 domain inhabited");
+        let a = external_local_packed_raw(input); let b = local_raw(input);
+        assert_eq!(a[0],b[0]);
+    }
+
     #[kani::proof]
     #[kani::unwind(6)]
     fn local_raw_value() {

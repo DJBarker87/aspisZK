@@ -36,7 +36,8 @@ theorem value (o : Openings) (out : Array NQ 4#usize)
       ((FJb_TailCell.cell (FJb_InitialConstants.row 0) j).val : FIv_NativeValue.K))=
       R0P.poseidonExternalInitial 0 := funext (FJb_InitialConstants.model 0)
   refine ⟨middle,vm.1,?_,tail⟩
-  rw [vm.2,vi.2,ea,ec]
+  exact vm.2.trans (congrArg₂ R0P.poseidonFullRound
+    (vi.2.trans (congrArg R0P.poseidonExternalLinear ea)) ec)
 #print axioms value
 end AspisR1.FJe_LeadingPrefix
 end

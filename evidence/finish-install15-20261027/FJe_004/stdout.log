@@ -1,0 +1,25 @@
+FJe_ExternalAdjoint.lean:25:4: error: Tactic `rfl` failed: The left-hand side
+  R0P.poseidonMat4 (fun lane => s ⟨4 * ↑g + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩ +
+    (0 + R0P.poseidonMat4 (fun lane => s ⟨4 * ↑0 + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩ +
+          R0P.poseidonMat4 (fun lane => s ⟨4 * ↑1 + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩ +
+        R0P.poseidonMat4 (fun lane => s ⟨4 * ↑2 + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩ +
+      R0P.poseidonMat4 (fun lane => s ⟨4 * ↑3 + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩)
+is not definitionally equal to the right-hand side
+  localRows s g j + (0 + localRows s 0 j + localRows s 1 j + localRows s 2 j) + localRows s 3 j
+
+K : Type
+inst✝ : Field K
+i u : K
+s : Fin 16 → K
+g j : Fin 4
+hg : ↑g < 4
+hj : ↑j < 4
+hdiv : (4 * ↑g + ↑j) / 4 = ↑g
+hmod : (4 * ↑g + ↑j) % 4 = ↑j
+⊢ R0P.poseidonMat4 (fun lane => s ⟨4 * ↑g + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩ +
+      (0 + R0P.poseidonMat4 (fun lane => s ⟨4 * ↑0 + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩ +
+            R0P.poseidonMat4 (fun lane => s ⟨4 * ↑1 + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩ +
+          R0P.poseidonMat4 (fun lane => s ⟨4 * ↑2 + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩ +
+        R0P.poseidonMat4 (fun lane => s ⟨4 * ↑3 + ↑lane, ⋯⟩) ⟨↑j, ⋯⟩) =
+    localRows s g j + (0 + localRows s 0 j + localRows s 1 j + localRows s 2 j) + localRows s 3 j
+'AspisR1.FJe_ExternalAdjoint.value' depends on axioms: [propext, sorryAx, Quot.sound]
