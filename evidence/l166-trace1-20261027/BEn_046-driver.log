@@ -1,0 +1,46 @@
+{"attempt": "BEn_046", "exit_status": 0, "wall_seconds": 2.7488219809602015, "peak_rss_kib": "5558040", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_LeafCode.code_exact' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port4B_LeafCode.code_exact : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (kind : Aeneas.Std.Usize) (o : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑o).length = 832 →
+    ∀ (before : AspisR1.CheckpointBytes5Effect.Log),
+      AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port4B_LeafCode.code kind o) =
+          D.digest hash (AspisR1.Port4B_LeafCode.input kind o) ∧
+        AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.Port4B_LeafCode.code kind o) before = do
+          let d ← D.digest hash (AspisR1.Port4B_LeafCode.input kind o)
+          Aeneas.Std.Result.ok (d, before ++ [(AspisR1.Port4B_LeafCode.input kind o, d)]) :=
+fun {X} D hash kind o 
+...
+                       (b,
+                                  before ++
+                                    [(AspisR1.Port4B_LeafCode.parts 113#u8
+                                          (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize) y,
+                                        b)])))))
+                    do
+                    let d ←
+                      D.digest hash
+                          (AspisR1.Port4B_LeafCode.parts 113#u8 (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                            (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize))
+                    Aeneas.Std.Result.ok
+                        (d,
+                          before ++
+                            [(AspisR1.Port4B_LeafCode.parts 113#u8
+                                  (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                                  (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize),
+                                d)]))
+                  (eq_self do
+                    let b ←
+                      D.digest hash
+                          (AspisR1.Port4B_LeafCode.parts 113#u8 (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                            (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize))
+                    Aeneas.Std.Result.ok
+                        (b,
+                          before ++
+                            [(AspisR1.Port4B_LeafCode.parts 113#u8
+                                  (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                                  (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize),
+                                b)]))))
+              (and_self True)))))
+'AspisR1.Port4B_LeafCode.code_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9c0f1ce94f8e48b990627d413b433398.scope; invocation ID: 409a487ee9da41fdab46ec280b6e41a3
+

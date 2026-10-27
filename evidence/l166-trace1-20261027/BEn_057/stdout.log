@@ -1,0 +1,14 @@
+theorem AspisR1.BEl_Recorder.completed_append : ∀ (before : AspisR1.SdkC_Source.Log) (parts : AspisR1.SdkC_Source.Parts)
+  (answer : Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.BEl_Recorder.completed (before ++ [{ parts := parts, returned := answer }]) =
+    AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before) parts answer :=
+fun before parts answer =>
+  of_eq_true
+    (Eq.trans
+      (congrFun' (congrArg Eq List.map_append)
+        (List.map (fun call => { parts := call.parts, returned := Option.some call.returned }) before ++
+          [{ parts := parts, returned := Option.some answer }]))
+      (eq_self
+        (List.map (fun call => { parts := call.parts, returned := Option.some call.returned }) before ++
+          [{ parts := parts, returned := Option.some answer }])))
+'AspisR1.BEl_Recorder.completed_append' depends on axioms: [propext, Classical.choice, Quot.sound]

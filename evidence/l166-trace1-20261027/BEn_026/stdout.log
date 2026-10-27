@@ -1,0 +1,16 @@
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1Stage2.verifier.Prepared →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            Aeneas.Std.Usize →
+              H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun ops {H} aspis_coredigestDigest32Inst proof p folded_root batch hash => do
+  let root0 ← p.roots.index_usize 0#usize
+  let root1 ← p.roots.index_usize 1#usize
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values ops aspis_coredigestDigest32Inst proof p.queries
+      (Aeneas.Std.Array.make 3#usize [root0, root1, folded_root] ⋯) batch hash
+'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

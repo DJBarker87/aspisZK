@@ -1,0 +1,36 @@
+theorem AspisR1.Port4B_LeafCode.native_and_reads : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X)
+  (hash : X) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (p : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash p = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H p)) →
+    ∀ (kind : Aeneas.Std.Usize) (o : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑o).length = 832 →
+        ∀ (before : AspisR1.CheckpointBytes5Effect.Log),
+          AspisR1.Port4B_LeafCode.native D hash kind o =
+              Aeneas.Std.Result.ok
+                (AspisV8R19.SqueezeOracleBridge.encodeState
+                  (H (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind o)))) ∧
+            AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.Port4B_LeafCode.code kind o) before =
+              Aeneas.Std.Result.ok
+                (AspisV8R19.SqueezeOracleBridge.encodeState
+                    (H (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind o))),
+                  before ++
+                    [(AspisR1.Port4B_LeafCode.input kind o,
+                        AspisV8R19.SqueezeOracleBridge.encodeState
+                          (H (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind o))))]) :=
+fun {X} D hash H law kind o len before =>
+  have exactCode := AspisR1.Port4B_LeafCode.code_exact D hash kind o len before;
+  Eq.mp
+    (congr
+      (congrArg And
+        (congrArg (Eq (AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port4B_LeafCode.code kind o)))
+          ((fun p => law p) (AspisR1.Port4B_LeafCode.input kind o))))
+      (congrArg (Eq (AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.Port4B_LeafCode.code kind o) before))
+        (Eq.trans
+          (congrFun' (congrArg Bind.bind ((fun p => law p) (AspisR1.Port4B_LeafCode.input kind o))) fun d =>
+            Aeneas.Std.Result.ok (d, before ++ [(AspisR1.Port4B_LeafCode.input kind o, d)]))
+          (Aeneas.Std.bind_tc_ok
+            (AspisV8R19.SqueezeOracleBridge.encodeState
+              (H (AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind o))))
+            fun y => Aeneas.Std.Result.ok (y, before ++ [(AspisR1.Port4B_LeafCode.input kind o, y)])))))
+    exactCode
+'AspisR1.Port4B_LeafCode.native_and_reads' depends on axioms: [propext, Classical.choice, Quot.sound]

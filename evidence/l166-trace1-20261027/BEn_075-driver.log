@@ -1,0 +1,62 @@
+{"attempt": "BEn_075", "exit_status": 0, "wall_seconds": 2.287248077976983, "peak_rss_kib": "5554296", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_Source.consistent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.SdkC_Source.consistent : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ {A : Type} (code : AspisR1.SdkC_Source.Code A),
+        ∀ q ∈ AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code []).2, q.2 = H q.1 :=
+fun hashv sha256 H p1 syscall {A} code q member =>
+  let ⟨attempt, h✝⟩ := List.mem_filterMap.mp member
+  let ⟨belongs, emitted⟩ := h✝
+  have actual :=
+    AspisR1.SdkC_Source.associated hashv code []
+      (of_eq_true
+    
+...
+ => attempt.returned = x → q.2 = H q.1)
+        (fun returned =>
+          False.elim
+            (Eq.mp
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg
+                      (fun x =>
+                        match x with
+                        | Aeneas.Std.Result.ok digest =>
+                          Option.some
+                            (AspisV8R19.SqueezeOracleBridge.flatten attempt.parts,
+                              AspisV8R19.SqueezeOracleBridge.decodeState digest)
+                        | x => Option.none)
+                      returned))
+                  (Option.some q))
+                (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+              emitted))
+        (Eq.symm h) (Eq.refl attempt.returned))
+    (fun h =>
+      Eq.ndrec (motive := fun x => attempt.returned = x → q.2 = H q.1)
+        (fun returned =>
+          False.elim
+            (Eq.mp
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg
+                      (fun x =>
+                        match x with
+                        | Aeneas.Std.Result.ok digest =>
+                          Option.some
+                            (AspisV8R19.SqueezeOracleBridge.flatten attempt.parts,
+                              AspisV8R19.SqueezeOracleBridge.decodeState digest)
+                        | x => Option.none)
+                      returned))
+                  (Option.some q))
+                (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+              emitted))
+        (Eq.symm h) (Eq.refl attempt.returned))
+    (Eq.refl attempt.returned)
+'AspisR1.SdkC_Source.consistent' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r69bcb48daa2345a289cca529e415bd4f.scope; invocation ID: 31c09e0fbb6d44e28cbc81d9677bd274
+

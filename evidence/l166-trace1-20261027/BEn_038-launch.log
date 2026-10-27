@@ -1,0 +1,38 @@
+{"attempt": "BEn_038", "exit_status": 0, "wall_seconds": 2.533509419008624, "peak_rss_kib": "5557020", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_P6Verify.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port9OR_P6Verify.source : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (root : AspisR1.CheckpointBytes5Effect.Digest) (s : MultiproofConeRef.reference.Scratch)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Verify.code root s nodes) =
+    MultiproofConeRef.reference.verify_owned (AspisR1.Port9OR_P6Node.digest D) hash root s nodes :=
+fun {Hash} D hash root s nodes =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Verify.code root s nodes) = _a)
+        (Eq.symm (AspisR1.Port9OR_P6Verify.source_factor (AspisR1.P
+...
+                    AspisR1.Port9OR_P6Verify.after root nodes a) =
+                                              do
+                                              let a ←
+                                                MultiproofConeRef.reference.levels (AspisR1.Port9OR_P6Node.digest D)
+                                                    hash { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                                                    18#u32
+                                              AspisR1.Port9OR_P6Verify.after root nodes a)
+                                          (AspisR1.Port9OR_P6Levels.eighteen D hash
+                                            { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes domain)))
+                                      (Eq.refl do
+                                        let a ←
+                                          MultiproofConeRef.reference.levels (AspisR1.Port9OR_P6Node.digest D) hash
+                                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes 18#u32
+                                        AspisR1.Port9OR_P6Verify.after root nodes a)))
+                                fun h =>
+                                Eq.mpr (id (congr (congrArg Eq (if_pos h)) (if_pos h)))
+                                  (Eq.refl (Aeneas.Std.Result.ok (Bool.false, s))))))
+                  fun h =>
+                  Eq.mpr (id (congr (congrArg Eq (if_pos h)) (if_pos h)))
+                    (Eq.refl (Aeneas.Std.Result.ok (Bool.false, s)))))
+            fun h =>
+            Eq.mpr (id (congr (congrArg Eq (if_pos h)) (if_pos h))) (Eq.refl (Aeneas.Std.Result.ok (Bool.false, s)))))))
+'AspisR1.Port9OR_P6Verify.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc2cb9836dd1348fb913ee2d255fc133c.scope; invocation ID: 4f8237df726d47a8a4f80f16a37c1581

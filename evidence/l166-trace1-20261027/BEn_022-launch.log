@@ -1,0 +1,46 @@
+{"attempt": "BEn_022", "exit_status": 0, "wall_seconds": 2.5203336119884625, "peak_rss_kib": "5555680", "swaps": "0", "print_axioms": ["'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]"]}
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Usize →
+            H →
+              Aeneas.Std.Usize →
+                Aeneas.Std.Usize →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Array Aeneas.Std.U64 16#usize →
+                      Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+                        Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                          Aeneas.Std.Usize →
+                  
+...
+et ce ← Aeneas.Std.core.slice.Slice.chunks_exact s2 8#usize
+            let (b, _) ←
+              ops.op0 (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+                  (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                    ops aspis_coredigestDigest32Inst)
+                  ce ()
+            if b = Bool.true then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, Option.none))
+              else do
+                let i2 ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 32#usize val1)
+                let s3 ←
+                  Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) nodes { «end» := i2 }
+                let (b1, idx1, val2) ←
+                  ops.op10 aspis_coredigestDigest32Inst hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx
+                      val d s3
+                if b1 = Bool.true then
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.ControlFlow.done (idx1, val2, Option.some (Aeneas.Std.core.result.Result.Ok ())))
+                  else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx1, val2, Option.none))
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+        let _ ←
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, Option.none))
+'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+Running as unit: run-r74a7968db6614a8bbaef9142692caa94.scope; invocation ID: 3bb36ba97c8443d3aef9f7375a0a8cc4

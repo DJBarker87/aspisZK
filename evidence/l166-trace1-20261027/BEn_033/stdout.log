@@ -1,0 +1,11 @@
+theorem AspisR1.Port9OR_BatchStep.pair_match.{u} : ∀ {A B : Type} {C : Sort u} (x : A × B) (f : A → B → C),
+  (match x with
+    | (a, b) => f a b) =
+    f x.1 x.2 :=
+fun {A B} {C} x f =>
+  let ⟨fst✝, snd✝, h✝⟩ := x
+  Eq.symm h✝ ▸
+    Eq.refl
+      (match (fst✝, snd✝) with
+      | (a, b) => f a b)
+'AspisR1.Port9OR_BatchStep.pair_match' does not depend on any axioms

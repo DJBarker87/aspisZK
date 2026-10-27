@@ -1,0 +1,39 @@
+{"attempt": "BEn_063", "exit_status": 0, "wall_seconds": 2.848304598010145, "peak_rss_kib": "5553236", "swaps": "0", "print_axioms": ["'AspisR1.BEh_Scope.of_observe' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEh_Scope.of_observe : ∀ {S A E F : Type} (native : AspisR1.BEh_Scope.Outcome S A E)
+  (source : AspisR1.BEh_Scope.Outcome S A F),
+  AspisR1.BEg_Observation.observe native = AspisR1.BEg_Observation.observe source →
+    AspisR1.BEh_Scope.Law native source :=
+fun {S A E F} native source same =>
+  have values := congrArg Prod.fst same;
+  have effects := congrArg Prod.snd same;
+  ⟨⟨fun a =>
+      Eq.mpr
+        (id
+          (congrArg (fun _a => _a ↔ source.1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a))
+            (Eq.symm (propext (AspisR1.BEg_Observation.accepted_iff native.1 a)))))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => AspisR1.BEg_Obse
+...
+theorem AspisR1.BEh_Scope.of_observe : ∀ {S A E F : Type} (native : AspisR1.BEh_Scope.Outcome S A E)
+  (source : AspisR1.BEh_Scope.Outcome S A F),
+  AspisR1.BEg_Observation.observe native = AspisR1.BEg_Observation.observe source →
+    AspisR1.BEh_Scope.Law native source :=
+fun {S A E F} native source same =>
+  have values := congrArg Prod.fst same;
+  have effects := congrArg Prod.snd same;
+  ⟨⟨fun a =>
+      Eq.mpr
+        (id
+          (congrArg (fun _a => _a ↔ source.1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a))
+            (Eq.symm (propext (AspisR1.BEg_Observation.accepted_iff native.1 a)))))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => AspisR1.BEg_Observation.accepted native.1 = Option.some a ↔ _a)
+              (Eq.symm (propext (AspisR1.BEg_Observation.accepted_iff source.1 a)))))
+          (Iff.of_eq (congrArg (fun x => x = Option.some a) values))),
+      fun x x_1 => effects⟩,
+    ⟨Iff.of_eq (congrArg (fun x => x = Option.none) values), fun x => congrArg Prod.snd effects⟩⟩
+'AspisR1.BEh_Scope.of_observe' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0cd0cfefe5014bf297d2bc56972e6f6c.scope; invocation ID: 13981c2b503b477cb3427f68e88d11b5

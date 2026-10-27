@@ -1,0 +1,36 @@
+{"attempt": "BEn_049", "exit_status": 0, "wall_seconds": 3.021987446001731, "peak_rss_kib": "5558212", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_BatchJoin.compose' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port4B_BatchJoin.compose : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) (batch : ℕ) (s0 s1 s2 : MultiproofConeRef.reference.Scratch)
+  (l0 l1 l2 : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)),
+  AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.MultiproofConeP6Batch.batch_tree (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf
+          parsed q batch 0 (nodes batch 0
+...
+                   (List.append_nil l2)))
+                                      (congrArg Prod.snd
+                                        (Eq.trans
+                                          (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                            (Eq.trans
+                                              (ite_congr
+                                                (Eq.trans
+                                                  (congrFun' (congrArg Eq (congrArg Prod.fst (congrArg Prod.snd h2)))
+                                                    Bool.true)
+                                                  (eq_self Bool.true))
+                                                (fun a =>
+                                                  congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                    (congrArg (Prod.mk Bool.true)
+                                                      (congrArg Prod.snd (congrArg Prod.snd h2))))
+                                                fun a =>
+                                                congrArg AspisV8R19.MemoizedProgramLaw.Program.done
+                                                  (congrArg Prod.snd h2))
+                                              (if_true (AspisV8R19.MemoizedProgramLaw.Program.done (Bool.true, s2))
+                                                (AspisV8R19.MemoizedProgramLaw.Program.done (Bool.true, s2)))))
+                                          (AspisV8R19.MemoizedProgramLaw.eval.eq_1 H (Bool.true, s2)))))))))))))))))))
+        (congrFun' (congrArg Prod.mk (List.append_assoc l0 l1 l2)) Bool.true))
+      (eq_self (l0 ++ (l1 ++ l2), Bool.true)))
+'AspisR1.Port4B_BatchJoin.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r27b5fa123e7340b8843bc03006981d76.scope; invocation ID: af4420ea46d94517bc0cfab3a0041a8d
+

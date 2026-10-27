@@ -1,0 +1,57 @@
+{"attempt": "BEn_039", "exit_status": 0, "wall_seconds": 3.324733627960086, "peak_rss_kib": "5552524", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_P6Levels.level_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port9OR_P6Levels.level_source : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.MultiproofConeLevelIteration.Domain physical s →
+    AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Levels.level s physical) =
+      MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize :=
+fun {Hash} D hash s physical domain =>
+  AspisR1.Port9OR_P6Rows.source D hash physical (↑s.n) s 0#usize 0#usize
+    ⟨domain.left,
+      ⟨domain.right.left,
+        ⟨of_eq_true
+            (Eq.trans
+              (c
+...
+se D hash (AspisR1.Port9OR_P6Levels.level s physical) =
+      MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize :=
+fun {Hash} D hash s physical domain =>
+  AspisR1.Port9OR_P6Rows.source D hash physical (↑s.n) s 0#usize 0#usize
+    ⟨domain.left,
+      ⟨domain.right.left,
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg LE.le
+                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                      AspisR1.Port9OR_P6Levels.level._proof_1)))
+                ↑s.n)
+              zero_le._simp_1),
+          ⟨of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg LE.le
+                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                        AspisR1.Port9OR_P6Levels.level._proof_1)))
+                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                      AspisR1.Port9OR_P6Levels.level._proof_1)))
+                (Std.le_refl._simp_1 0)),
+            domain.right.right⟩⟩⟩⟩
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg LE.le
+            (Eq.trans
+              (congrArg (HSub.hSub ↑s.n)
+                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                    AspisR1.Port9OR_P6Levels.level._proof_1)))
+              (tsub_zero ↑s.n)))
+          ↑s.n)
+        (Std.le_refl._simp_1 ↑s.n)))
+'AspisR1.Port9OR_P6Levels.level_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1569306cdab74e3682e2cc6561adbf3a.scope; invocation ID: a9c16cf46ef74607ae47852bde378a1a
+

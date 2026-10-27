@@ -1,0 +1,10 @@
+theorem AspisR1.BEl_PartialRecorder.decode_enter : ∀ (stopped : Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (before : AspisR1.SdkC_Source.Log) (parts : AspisR1.SdkC_Source.Parts),
+  AspisR1.BEl_PartialRecorder.decode stopped
+      (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts) =
+    before ++ [{ parts := parts, returned := stopped }] :=
+fun stopped before parts =>
+  Eq.mpr (id (congrFun' (congrArg Eq List.map_append) (before ++ [{ parts := parts, returned := stopped }])))
+    (congrArg (fun x => x ++ [{ parts := parts, returned := stopped }])
+      (AspisR1.BEl_PartialRecorder.decode_completed stopped before))
+'AspisR1.BEl_PartialRecorder.decode_enter' depends on axioms: [propext, Classical.choice, Quot.sound]

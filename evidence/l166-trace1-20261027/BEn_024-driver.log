@@ -1,0 +1,54 @@
+{"attempt": "BEn_024", "exit_status": 0, "wall_seconds": 2.8149245000095107, "peak_rss_kib": "5553828", "swaps": "0", "print_axioms": ["'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            Aeneas.Std.Usize →
+              Aeneas.Std.Usize →
+                Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+                  Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                    H →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error ×
+                          
+...
+tch_tree : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            Aeneas.Std.Usize →
+              Aeneas.Std.Usize →
+                Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+                  Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                    H →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error ×
+                          Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                            Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize) :=
+fun ops {H} aspis_coredigestDigest32Inst proof queries root batch tree idx val hash => do
+  let (lo, hi) ←
+    if batch = 0#usize then do
+        let i ← ops.op13
+        Aeneas.Std.Result.ok (0#usize, i)
+      else do
+        let i ← ops.op13
+        Aeneas.Std.Result.ok (i, 22#usize)
+  let n ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_sub hi lo)
+  let i ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 3#usize batch)
+  let s ← Aeneas.Std.lift (i.wrapping_add tree)
+  let a ← ops.op4 queries lo n tree
+  let keys ← ops.op5 a n
+  let (idx1, val1, pending_return) ←
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops aspis_coredigestDigest32Inst proof root tree
+        idx val hash lo n s keys 0#usize 0#usize
+  match pending_return with
+    | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+    | Option.some r => Aeneas.Std.Result.ok (r, idx1, val1)
+'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0a33225920fd40dca5bf765489e71882.scope; invocation ID: 1ca1c9e51bbb4ecfb6ccdee3cccdff5b
+

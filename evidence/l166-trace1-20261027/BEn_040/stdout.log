@@ -1,0 +1,33 @@
+theorem AspisR1.Port9OR_P6Levels.level_preserve : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (s next : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.MultiproofConeLevelIteration.Domain physical s →
+    MultiproofConeRef.reference.level_rows (AspisR1.Port9OR_P6Node.digest D) hash s physical 0#usize 0#usize =
+        Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Done next) →
+      AspisR1.MultiproofConeLevelIteration.Domain physical next :=
+fun {Hash} D hash s next physical domain ran =>
+  AspisR1.Port9OR_P6Rows.preserve D hash physical (↑s.n) s 0#usize 0#usize
+    ⟨domain.left,
+      ⟨domain.right.left,
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg LE.le
+                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                      (of_decide_eq_true (id (Eq.refl Bool.true))))))
+                ↑s.n)
+              zero_le._simp_1),
+          ⟨of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg LE.le
+                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                        (of_decide_eq_true (id (Eq.refl Bool.true))))))
+                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                      (of_decide_eq_true (id (Eq.refl Bool.true))))))
+                (Std.le_refl._simp_1 0)),
+            domain.right.right⟩⟩⟩⟩
+    (Or.inl rfl) next (Eq.trans (AspisR1.Port9OR_P6Levels.level_source D hash s physical domain) ran)
+'AspisR1.Port9OR_P6Levels.level_preserve' depends on axioms: [propext, Classical.choice, Quot.sound]

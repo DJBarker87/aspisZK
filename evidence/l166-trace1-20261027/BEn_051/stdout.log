@@ -1,0 +1,218 @@
+theorem AspisR1.Port4B_TreeJoin.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.Port4B_VerifyInstall.digest D) hash H binary occupied sibling
+      leaf →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑proof).length = 57607 →
+        ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (q : Fin 22 → Fin 262144)
+              (batch kind : Aeneas.Std.Usize),
+              ↑batch < 2 →
+                ↑kind < 3 →
+                  AspisR1.Port4B_TreeJoin.PackedKeys base queries q batch kind →
+                    ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+                      root =
+                          AspisV8R19.SqueezeOracleBridge.encodeState
+                            (AspisR1.OraclePortBatchDraft.committedRoot parsed ↑kind) →
+                        ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+                          AspisR1.MultiproofConeCanonical.bytesOf ↑physical =
+                              AspisR1.OraclePortCompactDraft.slice parsed.wire
+                                (AspisR1.OraclePortSelectedDraft.slotStart (3 * ↑batch + ↑kind))
+                                (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * ↑batch + ↑kind)) →
+                            ∀ (initial : MultiproofConeRef.reference.Scratch)
+                              (outIdx : AspisR1.Port3_NativeBatchCalls.Indices)
+                              (outVal : AspisR1.Port3_NativeBatchCalls.Values),
+                              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                    (AspisR1.Port3_BatchStd.install (AspisR1.Port4B_VerifyInstall.install base)) D proof
+                                    queries root batch kind initial.idx initial.val hash =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), outIdx, outVal) →
+                                ∃ afterLeaf final,
+                                  AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.MultiproofConeP6Batch.batch_tree
+                                          (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q
+                                          (↑batch) (↑kind) physical initial) =
+                                      (List.map
+                                            (fun p =>
+                                              (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p,
+                                                H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+                                            (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind) ++
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.MultiproofConeP6Batch.tailState
+                                                (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed
+                                                (↑batch) (↑kind) physical afterLeaf)).1,
+                                        Bool.true, final) ∧
+                                    final.idx = outIdx ∧ final.val = outVal :=
+fun base {X} D hash H binary occupied sibling leaf p6 proof len parsed wire queries q batch kind hb hk builder root
+    rootValue physical view initial outIdx outVal run =>
+  let ⟨raw, h✝⟩ :=
+    AspisR1.Port4B_TreeCuts.keys (AspisR1.Port4B_VerifyInstall.install base) D hash proof queries root batch kind
+      initial.idx outIdx initial.val outVal run
+  let ⟨sorted, h✝¹⟩ := h✝
+  let ⟨built, right✝⟩ := h✝¹
+  let ⟨sortedCall, loopCall⟩ := right✝
+  have bounds := AspisR1.Port4B_Bounds.count batch;
+  have small :=
+    Eq.mpr (id (congrArg (fun _a => _a ≤ 16) bounds.left))
+      (Decidable.casesOn (Aeneas.Std.instDecidableEqUScalar_1 Aeneas.Std.UScalarTy.Usize batch 0#usize)
+        (fun h => Eq.mpr (id (congrFun' (congrArg LE.le (if_neg h)) 16)) (of_decide_eq_true (id (Eq.refl Bool.true))))
+        fun h => Eq.mpr (id (congrFun' (congrArg LE.le (if_pos h)) 16)) (of_decide_eq_true (id (Eq.refl Bool.true))));
+  have positive :=
+    Eq.mpr (id (congrArg (fun _a => 0 < _a) bounds.left))
+      (Decidable.casesOn (Aeneas.Std.instDecidableEqUScalar_1 Aeneas.Std.UScalarTy.Usize batch 0#usize)
+        (fun h => Eq.mpr (id (congrArg (LT.lt 0) (if_neg h))) (of_decide_eq_true (id (Eq.refl Bool.true)))) fun h =>
+        Eq.mpr (id (congrArg (LT.lt 0) (if_pos h))) (of_decide_eq_true (id (Eq.refl Bool.true))));
+  have packed := builder raw built;
+  let ⟨length, stream⟩ :=
+    AspisR1.Port4B_SortInstall.key_stream (AspisR1.Port4B_VerifyInstall.install base) q (↑batch) (↑kind) raw sorted
+      (AspisR1.Port4B_TreeCuts.count batch) small positive packed sortedCall
+  have room :=
+    id
+      (Decidable.byContradiction fun a =>
+        AspisR1.Port4B_TreeJoin.accepted._proof_1 proof q batch kind bounds small positive length a);
+  let ⟨afterLeaf, h✝²⟩ :=
+    AspisR1.Port4B_LeafLoop.accepted (AspisR1.Port4B_VerifyInstall.install base) D hash H p6.oracle proof len parsed
+      wire q (↑batch) kind (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch)
+      (AspisR1.Port4B_TreeCuts.slot batch kind) root sorted outIdx outVal
+      (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind) (AspisR1.MultiproofConeSlotState.reset initial)
+      0#usize (fun p hp => hp) bounds.right
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (congrFun'
+                  (congrArg HAdd.hAdd
+                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                        (of_decide_eq_true (id (Eq.refl Bool.true))))))
+                  (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind).length)
+                (zero_add (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind).length)))
+            ↑(AspisR1.Port4B_TreeCuts.count batch)))
+        length)
+      small room stream loopCall
+  let ⟨fold, terminal⟩ := h✝²
+  have terminalBody :=
+    AspisR1.Port4B_TreeCuts.terminal (AspisR1.Port4B_VerifyInstall.install base) D hash proof root kind
+      (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch) (AspisR1.Port4B_TreeCuts.slot batch kind)
+      afterLeaf.n sorted afterLeaf.idx outIdx afterLeaf.val outVal terminal;
+  let ⟨nodes, h✝³⟩ :=
+    AspisR1.Port4B_TailRun.accepted base D hash H binary occupied sibling leaf p6 proof len parsed wire (↑batch) kind
+      (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch) (AspisR1.Port4B_TreeCuts.slot batch kind)
+      hb hk (AspisR1.Port4B_Bounds.slot batch kind hb hk) root rootValue sorted afterLeaf outIdx outVal terminalBody
+  let ⟨final, h✝⁴⟩ := h✝³
+  let ⟨nodeRead, right✝¹⟩ := h✝⁴
+  let ⟨nodeView, right✝²⟩ := right✝¹
+  let ⟨tailValue, right✝³⟩ := right✝²
+  let ⟨indices, values⟩ := right✝³
+  have sameNodes := Subtype.ext (AspisR1.MultiproofConeByteEquality.bytes_injective (Eq.trans nodeView (Eq.symm view)));
+  Eq.ndrec (motive := fun nodes =>
+    AspisR1.Port4B_SlotInstall.nodeSlot proof (AspisR1.Port4B_TreeCuts.slot batch kind) = Aeneas.Std.Result.ok nodes →
+      AspisR1.MultiproofConeCanonical.bytesOf ↑nodes =
+          AspisR1.OraclePortCompactDraft.slice parsed.wire
+            (AspisR1.OraclePortSelectedDraft.slotStart (3 * ↑batch + ↑kind))
+            (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * ↑batch + ↑kind)) →
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.MultiproofConeP6Batch.tailState (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling)
+                  parsed (↑batch) (↑kind) nodes afterLeaf)).2 =
+            (Bool.true, final) →
+          ∃ afterLeaf final,
+            AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.MultiproofConeP6Batch.batch_tree
+                    (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q (↑batch) (↑kind)
+                    physical initial) =
+                (List.map
+                      (fun p =>
+                        (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p,
+                          H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+                      (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind) ++
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.MultiproofConeP6Batch.tailState
+                          (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch) (↑kind) physical
+                          afterLeaf)).1,
+                  Bool.true, final) ∧
+              final.idx = outIdx ∧ final.val = outVal)
+    (fun nodeRead nodeView tailValue =>
+      have referenceGate := fun p q k j s room =>
+        Eq.refl (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeP6Batch.referenceLeaf p q k j s));
+      have sourceFold :=
+        AspisR1.MultiproofConeP6Batch.leaves_eq H leaf p6.leaf parsed q (↑kind)
+          (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind) (AspisR1.MultiproofConeSlotState.reset initial)
+          room;
+      have referenceFold :=
+        AspisR1.MultiproofConeP6Batch.leaves_eq H AspisR1.MultiproofConeP6Batch.referenceLeaf referenceGate parsed q
+          (↑kind) (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind)
+          (AspisR1.MultiproofConeSlotState.reset initial) room;
+      have observed := Eq.trans sourceFold (Eq.trans (Eq.symm referenceFold) fold);
+      Exists.intro afterLeaf
+        (Exists.intro final
+          ⟨of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (AspisV8R19.OracleProgramOps.eval_bind
+                        (AspisR1.MultiproofConeP6Batch.leaves leaf parsed q (↑kind)
+                          (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind)
+                          (AspisR1.MultiproofConeSlotState.reset initial))
+                        (fun out =>
+                          match out with
+                          | Aeneas.Std.Result.ok (Option.some after) =>
+                            AspisR1.MultiproofConeP6Batch.tailState
+                              (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch) (↑kind)
+                              physical after
+                          | x => AspisV8R19.MemoizedProgramLaw.Program.done (Bool.false, initial))
+                        H)
+                      (congr
+                        (congrArg Prod.mk
+                          (congr (congrArg HAppend.hAppend (congrArg Prod.fst observed))
+                            (congrArg Prod.fst
+                              (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                (congrArg
+                                  (fun x =>
+                                    match x.2 with
+                                    | Aeneas.Std.Result.ok (Option.some after) =>
+                                      AspisR1.MultiproofConeP6Batch.tailState
+                                        (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+                                        (↑kind) physical after
+                                    | x => AspisV8R19.MemoizedProgramLaw.Program.done (Bool.false, initial))
+                                  observed)))))
+                        (Eq.trans
+                          (congrArg Prod.snd
+                            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                              (congrArg
+                                (fun x =>
+                                  match x.2 with
+                                  | Aeneas.Std.Result.ok (Option.some after) =>
+                                    AspisR1.MultiproofConeP6Batch.tailState
+                                      (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+                                      (↑kind) physical after
+                                  | x => AspisV8R19.MemoizedProgramLaw.Program.done (Bool.false, initial))
+                                observed)))
+                          tailValue))))
+                  (List.map
+                        (fun p =>
+                          (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p,
+                            H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+                        (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind) ++
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.MultiproofConeP6Batch.tailState
+                            (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch) (↑kind)
+                            physical afterLeaf)).1,
+                    Bool.true, final))
+                (eq_self
+                  (List.map
+                        (fun p =>
+                          (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p,
+                            H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+                        (AspisR1.OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind) ++
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.MultiproofConeP6Batch.tailState
+                            (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch) (↑kind)
+                            physical afterLeaf)).1,
+                    Bool.true, final))),
+            ⟨indices, values⟩⟩))
+    (Eq.symm sameNodes) nodeRead nodeView tailValue
+'AspisR1.Port4B_TreeJoin.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]

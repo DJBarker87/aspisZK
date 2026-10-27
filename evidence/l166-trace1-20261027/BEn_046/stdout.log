@@ -1,0 +1,520 @@
+theorem AspisR1.Port4B_LeafCode.code_exact : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (kind : Aeneas.Std.Usize) (o : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑o).length = 832 →
+    ∀ (before : AspisR1.CheckpointBytes5Effect.Log),
+      AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port4B_LeafCode.code kind o) =
+          D.digest hash (AspisR1.Port4B_LeafCode.input kind o) ∧
+        AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.Port4B_LeafCode.code kind o) before = do
+          let d ← D.digest hash (AspisR1.Port4B_LeafCode.input kind o)
+          Aeneas.Std.Result.ok (d, before ++ [(AspisR1.Port4B_LeafCode.input kind o, d)]) :=
+fun {X} D hash kind o len before =>
+  have rightId := fun {A} r =>
+    Aeneas.Std.Result.casesOn (motive := fun t =>
+      r = t →
+        (do
+            let a ← r
+            Aeneas.Std.Result.ok a) =
+          r)
+      r
+      (fun v h =>
+        Eq.symm h ▸
+          Eq.refl do
+            let a ← Aeneas.Std.Result.ok v
+            Aeneas.Std.Result.ok a)
+      (fun e h =>
+        Eq.symm h ▸
+          Eq.refl do
+            let a ← Aeneas.Std.Result.fail e
+            Aeneas.Std.Result.ok a)
+      (fun h =>
+        Eq.symm h ▸
+          Eq.refl do
+            let a ← Aeneas.Std.Result.div
+            Aeneas.Std.Result.ok a)
+      (Eq.refl r);
+  have range := fun s e order fit =>
+    AspisR1.MultiproofConeSlices.range_total o s e order
+      (Decidable.byContradiction fun a => AspisR1.Port4B_LeafCode.code_exact._proof_1 o len s e fit a);
+  id
+    (id
+      (Decidable.casesOn (Aeneas.Std.instDecidableEqUScalar_1 Aeneas.Std.UScalarTy.Usize kind 0#usize)
+        (fun h =>
+          Eq.mpr
+            (id
+              (congr
+                (congrArg And
+                  (congr (congrArg Eq (congrArg (AspisR1.CheckpointBytes5Effect.erase D hash) (if_neg h)))
+                    (congrArg (D.digest hash) (if_neg h))))
+                (congr
+                  (congrArg Eq (congrFun' (congrArg (AspisR1.CheckpointBytes5Effect.run D hash) (if_neg h)) before))
+                  (congr (congrArg Bind.bind (congrArg (D.digest hash) (if_neg h)))
+                    (funext fun d =>
+                      congrArg Aeneas.Std.Result.ok
+                        (congrArg (Prod.mk d)
+                          (congrArg (HAppend.hAppend before)
+                            (congrFun' (congrArg List.cons (congrFun' (congrArg Prod.mk (if_neg h)) d)) []))))))))
+            (Decidable.casesOn (Aeneas.Std.instDecidableEqUScalar_1 Aeneas.Std.UScalarTy.Usize kind 1#usize)
+              (fun h =>
+                Eq.mpr
+                  (id
+                    (congr
+                      (congrArg And
+                        (congr (congrArg Eq (congrArg (AspisR1.CheckpointBytes5Effect.erase D hash) (if_neg h)))
+                          (congrArg (D.digest hash) (if_neg h))))
+                      (congr
+                        (congrArg Eq
+                          (congrFun' (congrArg (AspisR1.CheckpointBytes5Effect.run D hash) (if_neg h)) before))
+                        (congr (congrArg Bind.bind (congrArg (D.digest hash) (if_neg h)))
+                          (funext fun d =>
+                            congrArg Aeneas.Std.Result.ok
+                              (congrArg (Prod.mk d)
+                                (congrArg (HAppend.hAppend before)
+                                  (congrFun' (congrArg List.cons (congrFun' (congrArg Prod.mk (if_neg h)) d)) []))))))))
+                  (of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (Eq.trans
+                                  (Eq.trans
+                                    (congrArg (AspisR1.CheckpointBytes5Effect.erase D hash)
+                                      (congr
+                                        (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                          (range 800#usize 832#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                            (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                        (funext fun salt =>
+                                          congrFun'
+                                            (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                              (range 672#usize 800#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                                (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                            fun value =>
+                                            AspisR1.CheckpointBytes5Effect.Code.read
+                                              (AspisR1.Port4B_LeafCode.parts 114#u8 value salt)
+                                              AspisR1.CheckpointBytes5Effect.Code.done)))
+                                    (AspisR1.CheckpointBytes5Effect.erase.eq_2 D hash (Aeneas.Std.Slice Aeneas.Std.U8)
+                                      (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize))
+                                      fun salt =>
+                                      AspisR1.CheckpointBytes5Effect.Code.step
+                                        (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize))
+                                        fun value =>
+                                        AspisR1.CheckpointBytes5Effect.Code.read
+                                          (AspisR1.Port4B_LeafCode.parts 114#u8 value salt)
+                                          AspisR1.CheckpointBytes5Effect.Code.done))
+                                  (Eq.trans
+                                    (congrArg
+                                      (Bind.bind
+                                        (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize)))
+                                      (funext fun b =>
+                                        Eq.trans
+                                          (congrArg
+                                            (Bind.bind
+                                              (Aeneas.Std.Result.ok
+                                                (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)))
+                                            (funext fun b_1 =>
+                                              (fun {A} r => rightId r)
+                                                (D.digest hash (AspisR1.Port4B_LeafCode.parts 114#u8 b_1 b))))
+                                          (Aeneas.Std.bind_tc_ok
+                                            (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize) fun y =>
+                                            D.digest hash (AspisR1.Port4B_LeafCode.parts 114#u8 y b))))
+                                    (Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize)
+                                      fun y =>
+                                      D.digest hash
+                                        (AspisR1.Port4B_LeafCode.parts 114#u8
+                                          (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize) y)))))
+                              (D.digest hash
+                                (AspisR1.Port4B_LeafCode.parts 114#u8
+                                  (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+                                  (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize))))
+                            (eq_self
+                              (D.digest hash
+                                (AspisR1.Port4B_LeafCode.parts 114#u8
+                                  (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+                                  (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize))))))
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg (AspisR1.CheckpointBytes5Effect.run D hash)
+                                      (congr
+                                        (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                          (range 800#usize 832#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                            (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                        (funext fun salt =>
+                                          congrFun'
+                                            (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                              (range 672#usize 800#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                                (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                            fun value =>
+                                            AspisR1.CheckpointBytes5Effect.Code.read
+                                              (AspisR1.Port4B_LeafCode.parts 114#u8 value salt)
+                                              AspisR1.CheckpointBytes5Effect.Code.done)))
+                                    before)
+                                  (congrFun
+                                    (AspisR1.CheckpointBytes5Effect.run.eq_2 D hash (Aeneas.Std.Slice Aeneas.Std.U8)
+                                      (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize))
+                                      fun salt =>
+                                      AspisR1.CheckpointBytes5Effect.Code.step
+                                        (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize))
+                                        fun value =>
+                                        AspisR1.CheckpointBytes5Effect.Code.read
+                                          (AspisR1.Port4B_LeafCode.parts 114#u8 value salt)
+                                          AspisR1.CheckpointBytes5Effect.Code.done)
+                                    before))
+                                (Eq.trans
+                                  (congrArg
+                                    (Bind.bind
+                                      (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize)))
+                                    (funext fun b =>
+                                      Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+                                        fun y => do
+                                        let b_1 ← D.digest hash (AspisR1.Port4B_LeafCode.parts 114#u8 y b)
+                                        Aeneas.Std.Result.ok
+                                            (b_1, before ++ [(AspisR1.Port4B_LeafCode.parts 114#u8 y b, b_1)])))
+                                  (Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize)
+                                    fun y => do
+                                    let b ←
+                                      D.digest hash
+                                          (AspisR1.Port4B_LeafCode.parts 114#u8
+                                            (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize) y)
+                                    Aeneas.Std.Result.ok
+                                        (b,
+                                          before ++
+                                            [(AspisR1.Port4B_LeafCode.parts 114#u8
+                                                  (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize) y,
+                                                b)])))))
+                            do
+                            let d ←
+                              D.digest hash
+                                  (AspisR1.Port4B_LeafCode.parts 114#u8
+                                    (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+                                    (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize))
+                            Aeneas.Std.Result.ok
+                                (d,
+                                  before ++
+                                    [(AspisR1.Port4B_LeafCode.parts 114#u8
+                                          (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+                                          (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize),
+                                        d)]))
+                          (eq_self do
+                            let b ←
+                              D.digest hash
+                                  (AspisR1.Port4B_LeafCode.parts 114#u8
+                                    (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+                                    (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize))
+                            Aeneas.Std.Result.ok
+                                (b,
+                                  before ++
+                                    [(AspisR1.Port4B_LeafCode.parts 114#u8
+                                          (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+                                          (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize),
+                                        b)]))))
+                      (and_self True))))
+              fun h =>
+              Eq.mpr
+                (id
+                  (congr
+                    (congrArg And
+                      (congr (congrArg Eq (congrArg (AspisR1.CheckpointBytes5Effect.erase D hash) (if_pos h)))
+                        (congrArg (D.digest hash) (if_pos h))))
+                    (congr
+                      (congrArg Eq (congrFun' (congrArg (AspisR1.CheckpointBytes5Effect.run D hash) (if_pos h)) before))
+                      (congr (congrArg Bind.bind (congrArg (D.digest hash) (if_pos h)))
+                        (funext fun d =>
+                          congrArg Aeneas.Std.Result.ok
+                            (congrArg (Prod.mk d)
+                              (congrArg (HAppend.hAppend before)
+                                (congrFun' (congrArg List.cons (congrFun' (congrArg Prod.mk (if_pos h)) d)) []))))))))
+                (of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg And
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrArg (AspisR1.CheckpointBytes5Effect.erase D hash)
+                                    (congr
+                                      (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                        (range 640#usize 672#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                          (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                      (funext fun salt =>
+                                        congrFun'
+                                          (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                            (range 480#usize 608#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                              (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                          fun value =>
+                                          AspisR1.CheckpointBytes5Effect.Code.read
+                                            (AspisR1.Port4B_LeafCode.parts 241#u8 value salt)
+                                            AspisR1.CheckpointBytes5Effect.Code.done)))
+                                  (AspisR1.CheckpointBytes5Effect.erase.eq_2 D hash (Aeneas.Std.Slice Aeneas.Std.U8)
+                                    (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize))
+                                    fun salt =>
+                                    AspisR1.CheckpointBytes5Effect.Code.step
+                                      (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize))
+                                      fun value =>
+                                      AspisR1.CheckpointBytes5Effect.Code.read
+                                        (AspisR1.Port4B_LeafCode.parts 241#u8 value salt)
+                                        AspisR1.CheckpointBytes5Effect.Code.done))
+                                (Eq.trans
+                                  (congrArg
+                                    (Bind.bind
+                                      (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize)))
+                                    (funext fun b =>
+                                      Eq.trans
+                                        (congrArg
+                                          (Bind.bind
+                                            (Aeneas.Std.Result.ok
+                                              (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)))
+                                          (funext fun b_1 =>
+                                            (fun {A} r => rightId r)
+                                              (D.digest hash (AspisR1.Port4B_LeafCode.parts 241#u8 b_1 b))))
+                                        (Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                                          fun y => D.digest hash (AspisR1.Port4B_LeafCode.parts 241#u8 y b))))
+                                  (Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize)
+                                    fun y =>
+                                    D.digest hash
+                                      (AspisR1.Port4B_LeafCode.parts 241#u8
+                                        (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize) y)))))
+                            (D.digest hash
+                              (AspisR1.Port4B_LeafCode.parts 241#u8
+                                (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                                (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize))))
+                          (eq_self
+                            (D.digest hash
+                              (AspisR1.Port4B_LeafCode.parts 241#u8
+                                (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                                (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize))))))
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg (AspisR1.CheckpointBytes5Effect.run D hash)
+                                    (congr
+                                      (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                        (range 640#usize 672#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                          (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                      (funext fun salt =>
+                                        congrFun'
+                                          (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                            (range 480#usize 608#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                              (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                          fun value =>
+                                          AspisR1.CheckpointBytes5Effect.Code.read
+                                            (AspisR1.Port4B_LeafCode.parts 241#u8 value salt)
+                                            AspisR1.CheckpointBytes5Effect.Code.done)))
+                                  before)
+                                (congrFun
+                                  (AspisR1.CheckpointBytes5Effect.run.eq_2 D hash (Aeneas.Std.Slice Aeneas.Std.U8)
+                                    (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize))
+                                    fun salt =>
+                                    AspisR1.CheckpointBytes5Effect.Code.step
+                                      (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize))
+                                      fun value =>
+                                      AspisR1.CheckpointBytes5Effect.Code.read
+                                        (AspisR1.Port4B_LeafCode.parts 241#u8 value salt)
+                                        AspisR1.CheckpointBytes5Effect.Code.done)
+                                  before))
+                              (Eq.trans
+                                (congrArg
+                                  (Bind.bind
+                                    (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize)))
+                                  (funext fun b =>
+                                    Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                                      fun y => do
+                                      let b_1 ← D.digest hash (AspisR1.Port4B_LeafCode.parts 241#u8 y b)
+                                      Aeneas.Std.Result.ok
+                                          (b_1, before ++ [(AspisR1.Port4B_LeafCode.parts 241#u8 y b, b_1)])))
+                                (Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize) fun y =>
+                                  do
+                                  let b ←
+                                    D.digest hash
+                                        (AspisR1.Port4B_LeafCode.parts 241#u8
+                                          (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize) y)
+                                  Aeneas.Std.Result.ok
+                                      (b,
+                                        before ++
+                                          [(AspisR1.Port4B_LeafCode.parts 241#u8
+                                                (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize) y,
+                                              b)])))))
+                          do
+                          let d ←
+                            D.digest hash
+                                (AspisR1.Port4B_LeafCode.parts 241#u8
+                                  (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                                  (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize))
+                          Aeneas.Std.Result.ok
+                              (d,
+                                before ++
+                                  [(AspisR1.Port4B_LeafCode.parts 241#u8
+                                        (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                                        (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize),
+                                      d)]))
+                        (eq_self do
+                          let b ←
+                            D.digest hash
+                                (AspisR1.Port4B_LeafCode.parts 241#u8
+                                  (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                                  (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize))
+                          Aeneas.Std.Result.ok
+                              (b,
+                                before ++
+                                  [(AspisR1.Port4B_LeafCode.parts 241#u8
+                                        (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                                        (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize),
+                                      b)]))))
+                    (and_self True)))))
+        fun h =>
+        Eq.mpr
+          (id
+            (congr
+              (congrArg And
+                (congr (congrArg Eq (congrArg (AspisR1.CheckpointBytes5Effect.erase D hash) (if_pos h)))
+                  (congrArg (D.digest hash) (if_pos h))))
+              (congr (congrArg Eq (congrFun' (congrArg (AspisR1.CheckpointBytes5Effect.run D hash) (if_pos h)) before))
+                (congr (congrArg Bind.bind (congrArg (D.digest hash) (if_pos h)))
+                  (funext fun d =>
+                    congrArg Aeneas.Std.Result.ok
+                      (congrArg (Prod.mk d)
+                        (congrArg (HAppend.hAppend before)
+                          (congrFun' (congrArg List.cons (congrFun' (congrArg Prod.mk (if_pos h)) d)) []))))))))
+          (of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg And
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans
+                          (Eq.trans
+                            (congrArg (AspisR1.CheckpointBytes5Effect.erase D hash)
+                              (congr
+                                (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                  (range 608#usize 640#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                    (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                (funext fun salt =>
+                                  congrFun'
+                                    (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                      (range 0#usize 480#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                        (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                    fun value =>
+                                    AspisR1.CheckpointBytes5Effect.Code.read
+                                      (AspisR1.Port4B_LeafCode.parts 113#u8 value salt)
+                                      AspisR1.CheckpointBytes5Effect.Code.done)))
+                            (AspisR1.CheckpointBytes5Effect.erase.eq_2 D hash (Aeneas.Std.Slice Aeneas.Std.U8)
+                              (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize))
+                              fun salt =>
+                              AspisR1.CheckpointBytes5Effect.Code.step
+                                (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize))
+                                fun value =>
+                                AspisR1.CheckpointBytes5Effect.Code.read
+                                  (AspisR1.Port4B_LeafCode.parts 113#u8 value salt)
+                                  AspisR1.CheckpointBytes5Effect.Code.done))
+                          (Eq.trans
+                            (congrArg
+                              (Bind.bind
+                                (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize)))
+                              (funext fun b =>
+                                Eq.trans
+                                  (congrArg
+                                    (Bind.bind
+                                      (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)))
+                                    (funext fun b_1 =>
+                                      (fun {A} r => rightId r)
+                                        (D.digest hash (AspisR1.Port4B_LeafCode.parts 113#u8 b_1 b))))
+                                  (Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize) fun y =>
+                                    D.digest hash (AspisR1.Port4B_LeafCode.parts 113#u8 y b))))
+                            (Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize) fun y =>
+                              D.digest hash
+                                (AspisR1.Port4B_LeafCode.parts 113#u8
+                                  (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize) y)))))
+                      (D.digest hash
+                        (AspisR1.Port4B_LeafCode.parts 113#u8 (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                          (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize))))
+                    (eq_self
+                      (D.digest hash
+                        (AspisR1.Port4B_LeafCode.parts 113#u8 (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                          (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize))))))
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg (AspisR1.CheckpointBytes5Effect.run D hash)
+                              (congr
+                                (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                  (range 608#usize 640#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                    (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                (funext fun salt =>
+                                  congrFun'
+                                    (congrArg AspisR1.CheckpointBytes5Effect.Code.step
+                                      (range 0#usize 480#usize (of_decide_eq_true (id (Eq.refl Bool.true)))
+                                        (of_decide_eq_true (id (Eq.refl Bool.true)))))
+                                    fun value =>
+                                    AspisR1.CheckpointBytes5Effect.Code.read
+                                      (AspisR1.Port4B_LeafCode.parts 113#u8 value salt)
+                                      AspisR1.CheckpointBytes5Effect.Code.done)))
+                            before)
+                          (congrFun
+                            (AspisR1.CheckpointBytes5Effect.run.eq_2 D hash (Aeneas.Std.Slice Aeneas.Std.U8)
+                              (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize))
+                              fun salt =>
+                              AspisR1.CheckpointBytes5Effect.Code.step
+                                (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize))
+                                fun value =>
+                                AspisR1.CheckpointBytes5Effect.Code.read
+                                  (AspisR1.Port4B_LeafCode.parts 113#u8 value salt)
+                                  AspisR1.CheckpointBytes5Effect.Code.done)
+                            before))
+                        (Eq.trans
+                          (congrArg
+                            (Bind.bind (Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize)))
+                            (funext fun b =>
+                              Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize) fun y => do
+                                let b_1 ← D.digest hash (AspisR1.Port4B_LeafCode.parts 113#u8 y b)
+                                Aeneas.Std.Result.ok
+                                    (b_1, before ++ [(AspisR1.Port4B_LeafCode.parts 113#u8 y b, b_1)])))
+                          (Aeneas.Std.bind_tc_ok (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize) fun y => do
+                            let b ←
+                              D.digest hash
+                                  (AspisR1.Port4B_LeafCode.parts 113#u8
+                                    (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize) y)
+                            Aeneas.Std.Result.ok
+                                (b,
+                                  before ++
+                                    [(AspisR1.Port4B_LeafCode.parts 113#u8
+                                          (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize) y,
+                                        b)])))))
+                    do
+                    let d ←
+                      D.digest hash
+                          (AspisR1.Port4B_LeafCode.parts 113#u8 (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                            (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize))
+                    Aeneas.Std.Result.ok
+                        (d,
+                          before ++
+                            [(AspisR1.Port4B_LeafCode.parts 113#u8
+                                  (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                                  (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize),
+                                d)]))
+                  (eq_self do
+                    let b ←
+                      D.digest hash
+                          (AspisR1.Port4B_LeafCode.parts 113#u8 (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                            (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize))
+                    Aeneas.Std.Result.ok
+                        (b,
+                          before ++
+                            [(AspisR1.Port4B_LeafCode.parts 113#u8
+                                  (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                                  (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize),
+                                b)]))))
+              (and_self True)))))
+'AspisR1.Port4B_LeafCode.code_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
