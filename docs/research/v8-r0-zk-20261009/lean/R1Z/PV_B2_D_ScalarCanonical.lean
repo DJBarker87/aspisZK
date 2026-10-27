@@ -16,6 +16,9 @@ theorem reduce_bound (x : U64) : reduce x < F := by
     U64.wrapping_add,U64.wrapping_shr,UScalar.wrapping_add,UScalar.wrapping_sub,
     UScalar.bv_and,UScalarTy.numBits,BitVec.zeroExtend_eq_setWidth,decide_eq_true_eq,
     U32.ofNat_bv]
+  simp only [show BitVec.setWidth 64 2147483647#32 = 2147483647#64 from by decide,
+    show (31#32).toNat % 64 = 31 from rfl,
+    show (2147483647#32).toNat = 2147483647 from rfl]
   have h := bitvec_bound x.bv
   simpa only [reduced,word,fold64,BitVec.ule,decide_eq_true_eq,apply_ite] using h
 #print axioms reduce_bound
