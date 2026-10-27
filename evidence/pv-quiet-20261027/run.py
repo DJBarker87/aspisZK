@@ -12,6 +12,11 @@ def run(label,who,cmd,owner=False):
  if r.returncode:return r.returncode
  command=['systemd-run','--user','--scope','--unit=pv-quiet-'+label,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(G/'barrier.py'),str(out/'barrier.json'),'python3',str(H/'capped.py'),str(out/'receipt'), 'optimized compilation' if cmd[0]=='cargo' else 'optimized proof generation and P_R1 elimination','--',*cmd]
  with (out/'scope.log').open('w') as f:r=subprocess.run(command,cwd=H/who/'source',env=env,stdout=f,stderr=subprocess.STDOUT)
+ if r.returncode and (out/'barrier.json').exists() and not (out/'receipt/receipt.json').exists():
+  admission=json.loads((out/'barrier.json').read_text())
+  if not admission['allowed']:
+   (out/'refusal-classification.json').write_text(json.dumps(dict(raw_exit=r.returncode,classified_exit=78,reason='reservation barrier refused before command execution'),indent=2))
+   return 78
  return r.returncode
 if __name__=='__main__':
  who=sys.argv[1]
