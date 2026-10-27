@@ -23,7 +23,7 @@ use aspis_core::HashFn;
 use aspis_statement::{
     atomic_state_only_terminal::atomic_state_only_copy_active_rows_v3,
     pool_v1::{
-        pool_v1_pair_forest_copy_active_row_masks_v1,
+        
         pool_v1_private_transfer_copy_active_row_masks_compiled_v1,
         pool_v1_withdrawal_copy_active_row_masks_compiled_v1,
     },
@@ -39,6 +39,11 @@ use crate::state_only_hiding::{
     build_pool_v1_withdrawal_mask_material_v1_from_entropy_ref, StateOnlyMaskBuildError,
     StateOnlyMaskMaterial, StateOnlyMaskNonceStore,
 };
+
+#[cfg(not(feature="prover"))]
+use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1;
+#[cfg(feature="prover")]
+use crate::host_forest::pool_v1_pair_forest_copy_active_row_masks_v1 as pool_v1_pair_forest_copy_active_row_masks_v1;
 
 const ATTEMPT_RESERVATION_DOMAIN: &[u8] = b"aspis:state-only:attempt-reservation:v1";
 const PROFILE21_ATTEMPT_BINDING_DOMAIN: &[u8] = b"aspis:state-only:profile21:attempt-binding:v1";

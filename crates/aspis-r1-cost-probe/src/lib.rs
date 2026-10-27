@@ -69,3 +69,18 @@ mod prover_helper_sum;
 mod prover_powers;
 #[cfg(feature="prover")] mod host_sampler;
 #[cfg(feature="prover")] mod host_weights;
+
+#[cfg(feature = "prover")]
+pub use aspis_prover::host_forest;
+
+#[cfg(feature = "prover")]
+pub mod host_multilinear;
+
+#[cfg(feature="prover")]
+mod host_copy_terminal;
+
+#[cfg(feature="prover")]
+mod host_terminal;
+
+#[cfg(feature="prover")]
+pub mod host_public;

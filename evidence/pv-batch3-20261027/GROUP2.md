@@ -1,0 +1,15 @@
+# Group 2 candidate: op222 / op224
+
+New host_multilinear module is behind `#[cfg(feature="prover")]` in cost-probe lib.rs. It copies sparse_eq_weights into a 1,024-slot Copy carrier with logical length, retains the literal Boolean suffix test, field operation order and column.len()!=1024 -> None branch. Host semantic and simulator calls are redirected; original shared statement evaluator is unchanged.
+
+The forest module remains behind aspis-prover/prover. Its copied row builder now returns an owned 1,024-row carrier. Tuple-value/compression loops are explicit index loops, and the original first-zero-weight slot behavior is retained. The copied op224 helper returns an owned 1,024-field carrier, processes producers before consumers in slot order, skips zero weights and maps the first inversion failure to CopyImbalance. A materializing adapter preserves the existing host Vec interface. No arithmetic is regrouped.
+
+The forest projection is +31.6399 microseconds on each fixture. Group 2 gates pending. Op224's microbenchmark includes the registry dependency, so its projection must replace (not double-count) the forest registry contribution of the helper call.
+
+Early unchanged-extractor preflight on forest134-01 failed `escaping reference output requires loan validation` before emission; retained as extraction refusal, not a checked row counterexample or a Lean compile. The full include closure must be inspected and narrowed to the actual root before deciding which source helper needs an owned replacement. The guard is not changed.
+
+Focused corrections: check01 rejected the newly introduced use-before-inner-doc ordering and a missing new module in the host source manifest. Imports now follow the inner documentation, and source staging enumerates tracked crate files. Check02 passed. The forest134 LLBC identifies exactly one reference-output declaration: core::array's range index returning a slice, introduced by endpoint_counts(&links.data[..links.len]). The source now passes the fixed array and logical length separately; this removes that loan without weakening the guard or changing endpoint order. No failed extraction is rerun unchanged.
+
+## Gates at cc227b3e2c
+
+All three ELF hashes match (group2-elf-01-default/devnet/pool). Optimized interleaved microbenchmarks preserve wrong-length None and agree on all 11 suffix shapes; both fixture helper outputs agree. Each fixture has 2,492,202 op222 calls and one op224 call. The 11-bin Boolean-suffix histogram is retained in group2-cost-projection.json. After replacing the helper's already counted registry contribution, the cumulative batch-3 projection is +242,713.95us transfer / +242,714.14us withdrawal, at most +1.68786% of 14.38s. This is below +2% by 44,885.86us; it is a measured projection, not a formal bound or whole-prover timing. Both count harnesses verified the proof with the original verifier and retained the same fixture proof hashes as the forest stage; the requested comparison to base 37e5e133f8 remains a separate final gate.

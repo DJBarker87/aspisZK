@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_CanonicalPreparedMul.lean:10:95: error: unsolved goals
+left : Prepared
+right : aspis_core.field.QM31
+hr : Q right
+a : Std.Array aspis_core.field.M31 3#usize
+ha : left.components.index_usize 0#usize = ok a
+b : Std.Array aspis_core.field.M31 3#usize
+hb : left.components.index_usize 1#usize = ok b
+c : Std.Array aspis_core.field.M31 3#usize
+hc : left.components.index_usize 2#usize = ok c
+m0 : aspis_core.field.CM31
+hm0 : PreparedComponent a right.c0 = ok m0
+hcm0 : C m0
+m1 : aspis_core.field.CM31
+hm1 : PreparedComponent b right.c1 = ok m1
+hcm1 : C m1
+s : aspis_core.field.CM31
+hs : right.c0.add right.c1 = ok s
+hcs : C s
+m2 : aspis_core.field.CM31
+hm2 : PreparedComponent c s = ok m2
+hcm2 : C m2
+r : aspis_core.field.CM31
+hrr : aspis_core.field.mul_by_r m1 = ok r
+hcr : C r
+d : aspis_core.field.CM31
+hd : m0.add r = ok d
+hcd : C d
+e : aspis_core.field.CM31
+he : m2.sub m0 = ok e
+hce : C e
+f : aspis_core.field.CM31
+hf : e.sub m1 = ok f
+hcf : C f
+⊢ (do
+      let c1 ← host_arithmetic.cm31_mul_r m1
+      let c2 ← m0.add c1
+      ok { c0 := c2, c1 := f }) =
+    ok { c0 := d, c1 := f }
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_CanonicalPreparedMul.lean:24:28: warning: This simp argument is unused:
+  hrr
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B3_Copy_117.host_arithmetic.PreparedQm31Multiplier.mul,
+  ̵  ̵ ̵ ̵ha, ̲hb, ̲hc, ̲hm0, ̲hm1, ̲hs,
+  ̲ ̲ ̲ ̲ ̲hm2, ̲hr̵r̵,̵h̵d, ̲he, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_CanonicalPreparedMul.lean:24:32: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B3_Copy_117.host_arithmetic.PreparedQm31Multiplier.mul,
+  ̵  ̵ ̵ ̵ha, ̲hb, ̲hc, ̲hm0, ̲hm1, ̲hs,
+  ̲ ̲ ̲ ̲ ̲hm2, ̲hrr, ̲hd̵,̵h̵e, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3_Canonical.prepared_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

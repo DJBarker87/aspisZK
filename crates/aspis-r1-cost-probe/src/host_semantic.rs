@@ -1,9 +1,11 @@
 //! UNPROVED COST PROBE. Own D14 semantic prover; original prover unchanged.
 use crate::prover_helper_sum::state_only_copy_helper_sum;
+use crate::host_multilinear::multilinear_evaluate_qm31;
 use alloc::vec::Vec;
+use crate::host_forest::materialize_copy_helper as build_pool_v1_pair_forest_copy_helper_v1;
 use aspis_core::{field::{WideExact, M31, QM31, P},Digest32,r0::{domain::Point,encoder::eval_message}};
 use crate::host_wire::{self as wire,Challenges,Error,SemanticTranscript};
-use aspis_statement::{multilinear_evaluate_qm31,StateOnlyTraceFoundation,pool_v1::{pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1,pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1}};
+use aspis_statement::{StateOnlyTraceFoundation,pool_v1::{pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1}};
     /// Backend errors abort. Inputs are borrowed only during each call;
     /// no array of column loans survives the call boundary.
     pub trait Commitments {
@@ -61,7 +63,7 @@ fn claims_at_point(columns:&[Vec<QM31>;29],point:&[QM31;10])->Result<[QM31;29],E
         // commitment representation. D is supplied before any challenge.
         check_semantic_columns(c1,d,g)?;
         let c1_root=commitments.c1(c1,d)?;
-        let mut transcript = SemanticTranscript::new(hash, &public.public_bytes().map_err(|_|Error::Public)?, &c1_root)?;
+        let mut transcript = SemanticTranscript::new(hash, &crate::host_public::materialize_public_bytes(public).map_err(|_|Error::Public)?, &c1_root)?;
         let mut bytes = c1_root.to_vec();
         let lambda = semantic_row(0, &[], &mut transcript, &mut bytes)?;
         let chi = semantic_row(1, &[], &mut transcript, &mut bytes)?;
@@ -136,7 +138,7 @@ struct SemanticOracle<'a,'p> {
 impl crate::host_sumcheck::Oracle for SemanticOracle<'_,'_> {
     fn evaluate(&self,point:&[QM31;10])->Result<QM31,Error> {
         let claims=point_claims(self.columns,point)?;
-        let terminal=self.public.terminal_qm31(&claims,point,self.challenges).map_err(|_|Error::Public)?;
+        let terminal=crate::host_public::terminal_qm31(*self.public,&claims,point,self.challenges).map_err(|_|Error::Public)?;
         let mask=claim_mask_value(claims[0],point);
         Ok(mask.add(self.eta.mul(terminal)).add(extra(self.d,point[8],point[9])))
     }
@@ -222,13 +224,13 @@ fn initial_mask_value(columns:&[Vec<QM31>;29],row:usize)->QM31 {
     let mut i=0;
     while i<16 {let value=columns[i][row];semantic[i]=value;i+=1;}
     i=0;while i<10 {let value=columns[16+i][row];mask_only[i]=value;i+=1;}
-    aspis_core::state_only_hiding::state_only_selected_mask_value(&semantic,&mask_only,columns[27][row],&point)
+    aspis_prover::host_arithmetic::state_only_selected_mask_value(&semantic,&mask_only,columns[27][row],&point)
 }
 fn claim_mask_value(claims:[QM31;29],point:&[QM31;10])->QM31 {
     let mut semantic=[QM31::ZERO;16];let mut mask_only=[QM31::ZERO;10];
     semantic.copy_from_slice(&claims[..16]);
     mask_only.copy_from_slice(&claims[16..26]);
-    aspis_core::state_only_hiding::state_only_selected_mask_value(&semantic,&mask_only,claims[27],point)
+    aspis_prover::host_arithmetic::state_only_selected_mask_value(&semantic,&mask_only,claims[27],point)
 }
 
 fn column_coefficients(column:&[QM31],variant:crate::transport::Variant)->[QM31;1024] {
@@ -366,7 +368,7 @@ pub(crate) fn no_pole(
         return Ok(false);
     }
     let values = lean_copy_row_values(&compiled.trace, lambda)?;
-    let masks = aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1()
+    let masks = crate::host_forest::pool_v1_pair_forest_copy_active_row_masks_v1()
         .map_err(|_| Error::Public)?;
     #[cfg(feature = "ct-host-prover")]
     return Ok(crate::ct_pole::all_slots_clear(&values, &masks, chi));
@@ -401,13 +403,13 @@ pub(crate) fn lean_copy_row_values(
     trace: &aspis_statement::pool_v1::pair_forest_trace::PoolV1PairForestTraceV1,
     lambda: QM31,
 ) -> Result<Vec<[[QM31; 2]; 2]>, Error> {
-    let registry = aspis_statement::pool_v1::pair_forest_trace::build_pool_v1_pair_forest_copy_registry_v1()
+    let registry = crate::host_forest::build_pool_v1_pair_forest_copy_registry_v1()
         .map_err(|_| Error::Public)?;
     let mut values = alloc::vec![[[QM31::ZERO; 2]; 2]; 1024];
     let mut arity = alloc::vec![[0usize; 2]; 1024];
-    let count=registry.len();let mut index=0;
+    let count=registry.len;let mut index=0;
     while index<count {
-        let link=registry[index];
+        let link=registry.data[index];
         (values,arity)=copy_endpoint_values(trace,link.producer,link.tag,lambda,0,values,arity)?;
         (values,arity)=copy_endpoint_values(trace,link.consumer,link.tag,lambda,1,values,arity)?;
         index+=1;

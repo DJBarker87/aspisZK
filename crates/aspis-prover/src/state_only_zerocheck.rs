@@ -6,12 +6,17 @@
 
 use aspis_core::field::{CM31, M31, QM31};
 use aspis_core::state_only_sumcheck::{
-    absorb_state_only_sumcheck_round, encode_state_only_polynomial, evaluate_state_only_polynomial,
+    absorb_state_only_sumcheck_round, encode_state_only_polynomial, 
     state_only_boundary_sum, StateOnlySumcheckPolynomial, STATE_ONLY_SUMCHECK_BYTES,
     STATE_ONLY_SUMCHECK_COEFFICIENTS, STATE_ONLY_SUMCHECK_DEGREE, STATE_ONLY_SUMCHECK_ROUNDS,
     STATE_ONLY_SUMCHECK_ROUND_BYTES,
 };
 use aspis_core::transcript::{ChallengeSampleExhausted, Transcript};
+
+#[cfg(feature="prover")]
+use crate::host_arithmetic::evaluate_state_only_polynomial;
+#[cfg(not(feature="prover"))]
+use aspis_core::state_only_sumcheck::evaluate_state_only_polynomial;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct StateOnlyZerocheckTrace {

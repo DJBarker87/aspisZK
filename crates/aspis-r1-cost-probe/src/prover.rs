@@ -2,7 +2,7 @@
 use alloc::{vec,vec::Vec};
 use aspis_core::{digest::LegacyHashFn,HashFn,field::{WideExact as E,M31,QM31 as K,CM31},r0::{self,CodeField,domain::{Point,FibreIndex},merkle,wire::FibreOpening,Message},state_only_hiding::StateOnlyHidingContext};
 use aspis_statement::pool_v1::{pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1};
-use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1;
+use crate::host_forest::pool_v1_pair_forest_copy_active_row_masks_v1;
 use aspis_prover::{state_only_entropy::{StateOnlyAttemptSecrets,ReservedStateOnlyAttemptSecrets,DurableStateOnlyMaskNonceStore},state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore,StateOnlyMaskBuildError,StateOnlyMaskNonceStore}};
 use crate::{transport::Variant,verifier::{Error},host_weights::{Weights,QUARTER,PERM},host_transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Commitments},r1_wire::Error as SError};
 /// Host commitment backend. Adopted format (PREREG-PROOF-SIZE-2): salted
@@ -148,7 +148,7 @@ pub fn prove_masked_fixture(
     hash:HashFn,
     fixture_seed:&[u8;32],
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
-    let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
+    let public_bytes=crate::host_public::materialize_public_bytes(public).map_err(|_|Error::Semantic)?;
     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),fixture_secret(hash,b"UNPROVED:R1:fixture-mask-nonce",fixture_seed,&public_bytes,variant)?);
     let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
     let attempt=StateOnlyAttemptSecrets::deterministic_spend_fixture(
@@ -172,7 +172,7 @@ pub fn prove_masked_attempt(
     attempt:StateOnlyAttemptSecrets,
     nonce_store:&mut DurableStateOnlyMaskNonceStore,
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
-    let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
+    let public_bytes=crate::host_public::materialize_public_bytes(public).map_err(|_|Error::Semantic)?;
     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());
     let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
     prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store)

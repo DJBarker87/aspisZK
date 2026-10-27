@@ -1,0 +1,48 @@
+"""Compile one new module through pinned run2.py in a private env-J overlay.
+Never writes shared env-J sources or objects. IDs and budget remain job-owned.
+"""
+from run import H,run
+from pathlib import Path
+import os,sys,json,hashlib,re,time
+ORIGINAL_JENV=Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json')
+JENV=H/'env-J-private.json'
+shared_env=json.loads(ORIGINAL_JENV.read_text())
+shared_env['LEAN_PATH']='/home/dombarker/project-offloads/aspis-joint-20261019/objects:'+shared_env['LEAN_PATH']
+JENV.write_text(json.dumps(shared_env,indent=2)+'\n')
+DRIVER=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py')
+module=sys.argv[1];assert module.startswith('PV_B3_'),module
+S=H/'lean';O=H/'lean-objects';S.mkdir(exist_ok=True);O.mkdir(exist_ok=True)
+p=S/(module.replace('.','/')+'.lean');assert p.exists(),p
+state=H/'TALLY.json';t=json.loads(state.read_text())
+assert t['lean_attempts']<100,t
+is_audit=len(sys.argv)>2 and sys.argv[2]=='audit'
+a=(52997+len(t.get('audit_ids_used',[]))) if is_audit else t['next_unused_id']
+assert 52700<=a<=52999 and a not in t['used_ids']
+if not is_audit:assert a<52997
+# Reject IDs already used by the existing shared launcher, including refusals.
+T=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence')
+assert not (T/f'out-{a}.log').exists(),a
+srcsha=hashlib.sha256(p.read_bytes()).hexdigest();env=json.loads(JENV.read_text());search=[str(O)]+env['LEAN_PATH'].split(':')
+imports=re.findall(r'^import (\S+)',p.read_text(),re.M);deps={}
+for imp in imports:
+ q=next((Path(x)/(imp.replace('.','/')+'.olean') for x in search if (Path(x)/(imp.replace('.','/')+'.olean')).exists()),None)
+ deps[imp]=dict(path=str(q) if q else None,sha256=hashlib.sha256(q.read_bytes()).hexdigest() if q else 'missing')
+fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();key=srcsha+':'+fp
+assert key not in t.get('sent_inputs',[]),'unchanged source/dependencies refused'
+t['used_ids'].append(a)
+if is_audit:t.setdefault('audit_ids_used',[]).append(a)
+else:t['next_unused_id']=a+1
+state.write_text(json.dumps(t,indent=2)+'\n')
+label=f'lean-{a}';sub=dict(attempt=a,module=module,source_sha256=srcsha,dependency_objects=deps,deps_fingerprint=fp,source_revision=(H/'revision').read_text().strip(),source_revision_kind='Rust source freeze; Lean source is exact SHA snapshot in source.lean',environment='J',environment_sha256=hashlib.sha256(JENV.read_bytes()).hexdigest(),original_environment_sha256=hashlib.sha256(ORIGINAL_JENV.read_bytes()).hexdigest(),private_sources=str(S),private_objects=str(O),shared_sources_written=False)
+cmd=['timeout','900','python3',str(DRIVER),str(JENV),str(O),str(S),str(O/(module.replace('.','/')+'.olean')),str(p),'7000']
+status=run(label,cmd,'one focused Lean module via pinned run2.py, env J, -M7000; private source/object overlay')
+R=H/label;(R/'source.lean').write_bytes(p.read_bytes());(R/'submission.json').write_text(json.dumps(sub,indent=2)+'\n')
+charged=(R/'receipt/receipt.json').exists()
+if charged:
+ t['lean_attempts']+=1;t.setdefault('sent_inputs',[]).append(key)
+ log=(R/'receipt/stdout.log').read_text()+(R/'receipt/stderr.log').read_text()
+ rec=json.loads((R/'receipt/receipt.json').read_text());rec.update(sub);rec['print_axioms']=re.findall(r"^.*(?:depends on axioms|does not depend on any axioms).*(?:\n\s+.*)?",log,re.M);rec['charged_lean_attempt']=True;(R/'receipt/receipt.json').write_text(json.dumps(rec,indent=2)+'\n')
+ t.setdefault('receipts',[]).append(dict(attempt=a,module=module,exit=status,receipt=str(R/'receipt/receipt.json')))
+else:t.setdefault('refusals',[]).append(dict(attempt=a,module=module,exit=status,charged_lean_attempts=0))
+state.write_text(json.dumps(t,indent=2)+'\n');print(json.dumps(dict(attempt=a,module=module,exit=status,charged=charged,lean_attempts=t['lean_attempts'],next_unused_id=t['next_unused_id'])),flush=True)
+sys.exit(status)

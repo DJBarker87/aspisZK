@@ -3,8 +3,9 @@
     use alloc::vec::Vec;
     use aspis_core::field::{WideExact, CM31, M31, QM31};
     use crate::host_wire::{self as wire, Error, SemanticTranscript};
+    use aspis_prover::host_arithmetic::evaluate_state_only_polynomial;
     use aspis_core::state_only_sumcheck::{
-        evaluate_state_only_polynomial, state_only_boundary_sum,
+        state_only_boundary_sum,
     };
 
     /// R0 keeps all 28 coefficients on the wire, embedded in E. This is the

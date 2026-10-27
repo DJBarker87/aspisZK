@@ -1615,3 +1615,9 @@ mod prover_commit_oracle;
 
 #[cfg(any(kani, aeneas_ref))]
 mod prover_commit_reference;
+
+#[cfg(feature = "prover")]
+pub mod host_forest;
+
+#[cfg(feature="prover")]
+pub mod host_arithmetic;

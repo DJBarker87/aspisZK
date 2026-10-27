@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_PolynomialRank.lean:13:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Type ?u.31) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Type ?u.31
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_PolynomialRank.lean:13:15: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.30
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_PolynomialRank.lean:16:6: error: Tactic `assumption` failed
+
+case isTrue
+poly : Std.Array Q 28#usize
+powers : Std.Array Q 3#usize
+p : host_arithmetic.PreparedQm31Multiplier
+a : Q
+i : Usize
+next : State
+hc : next.2 = i.wrapping_sub 1#usize
+h✝ : i > 0#usize
+h :
+  (do
+      let block1 ← lift (i.wrapping_sub 1#usize)
+      let q ← p.mul a
+      let q1 ← host_arithmetic.evaluate_state_only_polynomial.block_value poly powers block1
+      let accumulator1 ← q.add q1
+      ok (cont (accumulator1, block1))) =
+    ok (cont next)
+⊢ PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_PolynomialRank.lean:10:30: error: unsolved goals
+poly : Std.Array Q 28#usize
+powers : Std.Array Q 3#usize
+p : host_arithmetic.PreparedQm31Multiplier
+a : Q
+i : Usize
+next : State
+h : host_arithmetic.evaluate_state_only_polynomial_loop.body poly powers p a i = ok (cont next)
+hc : next.2 = i.wrapping_sub 1#usize
+hi : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ ↑(i.wrapping_sub 1#usize) < ↑i
+'PV_B3_PolynomialRank.rank' does not depend on any axioms
+'PV_B3_PolynomialRank.decreases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

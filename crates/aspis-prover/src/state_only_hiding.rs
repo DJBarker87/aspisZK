@@ -13,7 +13,7 @@ use aspis_core::state_only_hiding::{
     begin_state_only_hiding_precommit, STATE_ONLY_H1_PADDING_MASK_FREE_QM31,
 };
 use aspis_core::state_only_hiding::{
-    begin_state_only_masked_sumcheck, state_only_selected_mask_value, StateOnlyHidingContext,
+    begin_state_only_masked_sumcheck, StateOnlyHidingContext,
     StateOnlyHidingScheduleError, PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1,
     PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1,
     PINNED_POOL_V1_PAYMENT_RELATION_FREE_MASK_FINGERPRINT,
@@ -28,7 +28,7 @@ use aspis_statement::{
     atomic_state_only_registry::atomic_state_only_relation_free_mask_cells_v3,
     atomic_state_only_terminal::atomic_state_only_copy_active_rows_v3,
     pool_v1::{
-        pool_v1_pair_forest_copy_active_rows_v1, pool_v1_pair_forest_relation_free_mask_cells_v1,
+         
         pool_v1_payment_relation_free_mask_cells_v1,
         pool_v1_private_transfer_copy_active_row_masks_compiled_v1,
         pool_v1_withdrawal_copy_active_row_masks_compiled_v1,
@@ -41,6 +41,21 @@ use zeroize::Zeroize;
 use crate::state_only_zerocheck::{
     prove_state_only_sumcheck_from_claim, StateOnlyZerocheckProveError, StateOnlyZerocheckTrace,
 };
+
+#[cfg(not(feature="prover"))]
+use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_rows_v1;
+#[cfg(feature="prover")]
+use crate::host_forest::materialize_active_rows as pool_v1_pair_forest_copy_active_rows_v1;
+
+#[cfg(not(feature="prover"))]
+use aspis_statement::pool_v1::pool_v1_pair_forest_relation_free_mask_cells_v1;
+#[cfg(feature="prover")]
+use crate::host_forest::materialize_mask_cells as pool_v1_pair_forest_relation_free_mask_cells_v1;
+
+#[cfg(feature="prover")]
+use crate::host_arithmetic::state_only_selected_mask_value;
+#[cfg(not(feature="prover"))]
+use aspis_core::state_only_hiding::state_only_selected_mask_value;
 
 const MASK_SEED_DOMAIN: &[u8] = b"aspis:state-only:private-mask-seed:v1";
 const MASK_EXPAND_DOMAIN: &[u8] = b"aspis:state-only:private-mask-expand:v1";

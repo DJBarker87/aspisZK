@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskLoopDone.lean:13:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  host_forest.pool_v1_pair_forest_copy_active_row_masks_v1_loop.body producers consumers masks i
+in the target expression
+  (match
+      match (producers, consumers, masks, i) with
+      | (producers1, consumers1, masks1, i1) =>
+        host_forest.pool_v1_pair_forest_copy_active_row_masks_v1_loop.body producers1 consumers1 masks1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (producers1, consumers1, masks1, i1) =>
+              host_forest.pool_v1_pair_forest_copy_active_row_masks_v1_loop.body producers1 consumers1 masks1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok masks)
+
+producers consumers : Std.Array U8 1024#usize
+masks : Std.Array U16 64#usize
+i : Usize
+h : 136#usize ≤ i
+⊢ (match
+      match (producers, consumers, masks, i) with
+      | (producers1, consumers1, masks1, i1) =>
+        host_forest.pool_v1_pair_forest_copy_active_row_masks_v1_loop.body producers1 consumers1 masks1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (producers1, consumers1, masks1, i1) =>
+              host_forest.pool_v1_pair_forest_copy_active_row_masks_v1_loop.body producers1 consumers1 masks1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok masks)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (64 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_B3_MaskLoopDone.source_done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
