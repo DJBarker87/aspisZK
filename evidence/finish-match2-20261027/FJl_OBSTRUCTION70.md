@@ -61,3 +61,12 @@ strict scalar transport (054), strict QM31 transport (060/061), all three tail
 read witnesses (067), and saved-field gamma/alpha0 projection (068) check.
 The complete29-coordinate backend sum to literal batchedWord and both original
 owner installations still do not check. Continue using the remaining budget.
+
+Later checked source read transport: FJl_InnerReads (075), FJl_OuterReads (083)
+and FJl_SlotReads (084) derive every scalar/tail read from the SAME successful
+source loops; FJl_ScalarValues (085), FJl_BaseLiteral (088), and
+FJl_SlotLiteral (090) compose the imported backend arithmetic into the exact
+literal26-scalar/three-tail formula. The slot theorem retains explicit strict
+C1/C2 decoder and selected-power identities. Those local inputs are not newly
+assumed at the adopted top. FJl_Nonvacuity.scalar (079) checks all1248 retained
+fixture scalar reads without recomputing the fixture. Both L143 rows remain.

@@ -20,3 +20,16 @@ Each receipt records exact target, source revision/hash, dependencies, exit,
 wall, peak RSS, swaps, cgroup limits and printed axioms. Failed attempts are
 excluded. Reuse coherent SInt2 cache and unchanged launchers, one scope at a
 time, -M7000 / 6G high / 8G max / swap0 / tasks64. No package replay.
+
+Stage 2 checked native byte/coordinate transport: scalar strict byte semantics,
+CM31/QM31 parser-carrier transport, fixed-width coordinate inversion, all29
+literal W projections, gamma/alpha0 in the original At context, native circle
+comparison and inverse reads. FJl_Tx2Values.accepted derives actual12 resumed
+backend VALUES and29 powers directly from e.second, including canonicality.
+FJl_SlotReads.reached proves all26 scalar and three tail reads are reached
+inside each successful backend slot. FJl_Nonvacuity.scalar inhabits the strict
+scalar transport with all1248 retained TX2 fixture reads. No arithmetic
+aggregation or fixture byte computation was rerun.
+
+No adopted-top row removal is claimed. FJl_OBSTRUCTION70.md was written before
+attempt70; work continued. Native/global L143 remain distinct retained P rows.
