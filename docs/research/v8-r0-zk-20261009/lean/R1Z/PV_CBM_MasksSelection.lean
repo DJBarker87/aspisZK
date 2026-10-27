@@ -3,6 +3,7 @@ import R1Z.ProverRwFullExternalFuns
 open Aeneas Aeneas.Std Result ProverRwFull
 namespace R1Z.PV_CBM_MasksSelection
 set_option autoImplicit false
+noncomputable section
 
 /-- Concrete error carrier produced by the owned reference extraction. -/
 @[reducible] def Types (base : ExternalTypes) : ExternalTypes :=
@@ -11,6 +12,7 @@ set_option autoImplicit false
 /-- Reference selection only. Shipped/reference P6 equality is still open. -/
 @[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
     @ExternalFuns (Types base) :=
+  letI : ExternalTypes := Types base
   {ops with op134 := PV_CBM_ReferenceRaw.reference.masks}
 
 theorem op134_reference (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
@@ -18,4 +20,5 @@ theorem op134_reference (base : ExternalTypes) (ops : @ExternalFuns (Types base)
       PV_CBM_ReferenceRaw.reference.masks := rfl
 
 #print axioms op134_reference
+end
 end R1Z.PV_CBM_MasksSelection

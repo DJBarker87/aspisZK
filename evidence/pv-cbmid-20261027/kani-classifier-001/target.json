@@ -1,0 +1,63 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_PROFILE_DEV_DEBUG_ASSERTIONS=false",
+    "CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false",
+    "RUSTFLAGS=--cfg kani",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cbmid-20261027/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cbmid-20261027/source-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "pool_v1::hiding::pv_cbm_checks::classifier_complete",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_snapshots": {
+    "lib.rs": {
+      "sha256": "a192526d6c1ae7660885324bb1e1fe51cf516790d29994a97c74dd53b5614038",
+      "size": 1457
+    },
+    "Cargo.toml": {
+      "sha256": "96c2794125981b277beadf023ac45f540d270c51801ea35b6f474c8e946939a2",
+      "size": 383
+    },
+    "reference.rs": {
+      "sha256": "17fc9c57309f132b380c4746871c0d193be1c06c396009a828aa0824340d26d6",
+      "size": 267289
+    },
+    "hiding-with-harness.rs": {
+      "sha256": "144eac15b6c8d5dc55c83fe18eac55e3b11d1ae805dd8ff2108b55cd57aece2a",
+      "size": 16981
+    }
+  },
+  "source_revision": "e24853d31a00bcd1be1c11b18ea9108ed6213d97",
+  "expected_phase": "optimized compilation then exact named CBMC harness, no stubs",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A extraction; no Lean theorem yet"
+}

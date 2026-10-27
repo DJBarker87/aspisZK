@@ -23,8 +23,27 @@ for r in rows:masks[r//16] |= 1<<(r%16)
 s='//! Owned P6 candidates. No shipped/reference association asserted here.\n'
 s+='use aspis_statement::pool_v1::pair_tree_hiding::PoolV1PairHidingLayoutErrorV1 as Error;\n'
 s+='pub fn masks()->Result<[u16;64],Error>{Ok(['+','.join(map(str,masks))+'])}\n'
-s+='pub fn rows()->Result<alloc::vec::Vec<u16>,Error>{\nlet data=['+','.join(map(str,rows))+'];\nlet mut out=alloc::vec::Vec::new();let mut i=0;while i<214 {out.push(data[i]);i+=1;}Ok(out)\n}\n'
+s+='pub fn rows()->Result<alloc::vec::Vec<u16>,Error>{\nlet mut out=alloc::vec::Vec::new();\n'
+for row in rows:s+='out.push('+str(row)+');\n'
+s+='Ok(out)\n}\n'
+s+=(root/'tools/pv-cbmid-20261027/reference_classifier.rs').read_text()
+# Symbolic classifier determines the literal candidate. Kani is still required.
+def aux(row,col):
+ if row<912:return False
+ if row<1008:return (row-912)%4==2 or ((row-912)%4==1 and col<=8)
+ translated=row-48
+ return any((translated==960+2*v or translated==961+2*v or translated==((960+2*v)^12)) and col<=10 for v in range(3)) or (translated==966 and col<3) or (translated==967 and col<2) or (translated==969 and col<=10) or (translated==970 and col<10)
+cells=[(row,col) for col in range(16) for row in range(1024) if (row<912 and row%16>=13) or (row>=912 and not aux(row,col))]
+assert len(cells)==3803
+s+='pub fn cells()->Result<alloc::vec::Vec<aspis_statement::trace_v4::TraceCell>,Error>{\nlet mut out=alloc::vec::Vec::new();\n'
+chunks=[cells[i:i+64] for i in range(0,len(cells),64)]
+for i in range(len(chunks)):s+='out=cells_chunk_'+str(i)+'(out);\n'
+s+='Ok(out)\n}\n'
+for i,chunk in enumerate(chunks):
+ s+='pub fn cells_chunk_'+str(i)+'(mut out:alloc::vec::Vec<aspis_statement::trace_v4::TraceCell>)->alloc::vec::Vec<aspis_statement::trace_v4::TraceCell>{\n'
+ for row,col in chunk:s+='out.push(aspis_statement::trace_v4::TraceCell{row:'+str(row)+',column:'+str(col)+'});\n'
+ s+='out\n}\n'
 p=root/'tools/pv-cbmid-20261027/reference.rs';p.write_text(s)
 e=root/'evidence/pv-cbmid-20261027/REFERENCE-CANDIDATE.json'
-e.write_text(json.dumps(dict(status='candidate only; independent complete native association required',links=links,active_rows=rows,masks=masks,reference_sha256=hashlib.sha256(s.encode()).hexdigest()),indent=2)+'\n')
+e.write_text(json.dumps(dict(status='candidate only; independent complete native association required',links=links,active_rows=rows,masks=masks,cells=cells,chunk_sizes=[len(c) for c in chunks],reference_sha256=hashlib.sha256(s.encode()).hexdigest()),indent=2)+'\n')
 print('candidate',len(links),len(rows))

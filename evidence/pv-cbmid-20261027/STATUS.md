@@ -42,3 +42,11 @@ Admission ID40601 refused (projected 60,532,195,328 bytes > 55 GiB limit);
 zero compiler charge. Wait 180 seconds, then use the next unused ID. Earlier
 op79 upload admission hit a vanished unrelated session cgroup, retained in
 admission-state.json; special transient wait was 30 seconds and retry succeeded.
+
+## Checked prerequisite stage
+
+InventoryCardinality.cardinal proves the mathematical classification has exactly 3803 cells (40624). Padding/path/value bijections passed at 40618/40621/40623, with standard axioms, swap0. This is a model/count prerequisite, not the shipped callback law.
+
+Native classifier: kani-classifier-001 passed (0/61 failed), exact frozen source-prefix child harness vs owned classifier, all 1024×16 valid inputs, unwind25, no stubs. Full masks gate180 timed out; ruling(i) now permits one 900-second retry with identical bounds/caps.
+
+Current tally: Lean 20/100, Kani 2/10; next Env-J ID 40627. Last three charged Lean attempts remain reserved. No ROW counterexample. Rows0→0 and endpoint premises unchanged.

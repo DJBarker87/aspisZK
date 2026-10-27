@@ -1,0 +1,74 @@
+import R1Z.PV_CBM_PathClassification
+import Mathlib.Data.Fintype.Prod
+import Mathlib.Data.Fintype.Card
+namespace R1Z.PV_CBM_PathBijection
+open PV_CBM_InventoryShape PV_CBM_PathClassification
+set_option autoImplicit false
+abbrev Index := Fin 24 × Fin 39
+abbrev Cell := {cell : Fin 1024 × Fin 16 //
+  (912 ≤ cell.1.val ∧ cell.1.val < 1008) ∧ free cell.1.val cell.2.val}
+noncomputable instance : Fintype Cell := Fintype.ofFinite Cell
+
+def toRow (i : Index) : Nat :=
+  912 + 4 * i.1.val + if i.2.val < 16 then 0 else if i.2.val < 23 then 1 else 3
+
+def toColumn (i : Index) : Nat :=
+  if i.2.val < 16 then i.2.val else if i.2.val < 23 then i.2.val - 7 else i.2.val - 23
+
+theorem coordinates_valid (i : Index) :
+    (912 ≤ toRow i ∧ toRow i < 1008) ∧ toColumn i < 16 := by
+  have h0 := i.1.isLt
+  have h1 := i.2.isLt
+  unfold toRow toColumn
+  split_ifs <;> omega
+
+theorem coordinates_free (i : Index) : free (toRow i) (toColumn i) := by
+  apply (pathFree_mod _ _ (coordinates_valid i).1).mpr
+  have h := i.2.isLt
+  unfold toRow toColumn
+  split_ifs <;> omega
+
+def toCell (i : Index) : Cell :=
+  ⟨(⟨toRow i, by have := (coordinates_valid i).1; omega⟩,
+      ⟨toColumn i, (coordinates_valid i).2⟩),
+    (coordinates_valid i).1, coordinates_free i⟩
+
+theorem toCell_injective : Function.Injective toCell := by
+  intro a b h
+  have hr := congrArg (fun x : Cell => x.val.1.val) h
+  have hc := congrArg (fun x : Cell => x.val.2.val) h
+  have ha := a.2.isLt
+  have hb := b.2.isLt
+  apply Prod.ext <;> apply Fin.ext <;>
+    dsimp [toCell, toRow, toColumn] at hr hc <;>
+    split_ifs at hr hc <;> omega
+
+theorem toCell_surjective : Function.Surjective toCell := by
+  intro cell
+  have hr := cell.prop.1
+  have hc := cell.val.2.isLt
+  have hf := (pathFree_mod _ _ hr).mp cell.prop.2
+  let row := cell.val.1.val
+  let col := cell.val.2.val
+  have hr' : 912 ≤ row ∧ row < 1008 := hr
+  have hc' : col < 16 := hc
+  have hf' : (row-912)%4=0 ∨ (row-912)%4=3 ∨ ((row-912)%4=1 ∧ 9≤col) := hf
+  refine ⟨(⟨(row-912)/4, by omega⟩,
+    ⟨if (row-912)%4=0 then col else if (row-912)%4=1 then col+7 else col+23,
+      by split_ifs <;> omega⟩), ?_⟩
+  apply Subtype.ext
+  apply Prod.ext <;> apply Fin.ext <;>
+    dsimp [toCell, toRow, toColumn] <;> split_ifs <;> omega
+
+noncomputable def equiv : Index ≃ Cell := Equiv.ofBijective toCell ⟨toCell_injective,toCell_surjective⟩
+
+theorem cardinal : Fintype.card Cell = 936 := by
+  rw [← Fintype.card_congr equiv]
+  simp only [Index, Fintype.card_prod, Fintype.card_fin]
+
+#print axioms coordinates_valid
+#print axioms coordinates_free
+#print axioms toCell_injective
+#print axioms toCell_surjective
+#print axioms cardinal
+end R1Z.PV_CBM_PathBijection
