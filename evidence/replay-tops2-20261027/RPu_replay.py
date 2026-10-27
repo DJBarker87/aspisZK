@@ -5,7 +5,7 @@ p=json.loads((E/'RPu_plan.json').read_text());rs=lambda:sorted([json.loads(f.rea
 if __name__=='__main__':
  state={d['module']:d['exit_status']==0 for d in rs()}
  r=ssh(f'mkdir -p {B}/RPu_overlay');assert r.returncode==0,r.stderr
- cap=int(sys.argv[1]);assert cap<=492
+ cap=int(sys.argv[1]);assert cap<=495
  # Dependency postorder visits FJp, FJu, then FJv_Top and Deployed.
  for row in p['rows']:
   if row['module'] in state:continue

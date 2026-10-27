@@ -1,6 +1,6 @@
 import RPu_FJe_Sum3WrapperBridge
 import RPu_FJe_PreparedInjective
-import RPu_AspisR1.PoseidonPreparedSum3ActualValue
+import RPu_AspisR1_PoseidonPreparedSum3ActualValue
 import RPu_FIw_ArrayValue
 set_option autoImplicit false
 noncomputable section

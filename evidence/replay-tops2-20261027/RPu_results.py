@@ -15,7 +15,7 @@ for d in rs:
  if not d['module'].endswith('_TopAudit') or d['exit_status']!=0:continue
  root=d['module'][4:-5];name='AspisR1.'+root+'.deployed';log=(E/d['attempt']/'stdout.log').read_text()
  def parse(tag):return [json.loads(l.split(tag,1)[1]) for l in log.splitlines() if tag in l]
- statement=parse('RPU_KERNEL_STATEMENT ')[0];records=parse('RPU_FORMATTER ');reachable=parse('RPU_REACHABLE_CONSTANTS ')[0];axioms=parse('RPU_ACTUAL_AXIOMS ')[0]
+ statement=parse('RPU_KERNEL_STATEMENT ')[0];records=parse('RPU_FORMATTER ');reachable=parse('RPU_REACHABLE_CONSTANTS ')[0];axioms=parse('RPU_ACTUAL_AXIOMS ')[0];assert set(axioms)<={'propext','Classical.choice','Quot.sound'},(root,axioms)
  raw=(json.dumps(statement,sort_keys=True,separators=(',',':'),ensure_ascii=False)+'\n').encode();(E/f'RPu_{root}.kernel-expr.json').write_bytes(raw)
  m=re.search('BEGIN KERNEL TYPE '+re.escape(name)+r'\n(.*?)\nEND KERNEL TYPE '+re.escape(name),log,re.S);assert m,name
  pretty='-- Complete kernel type of '+name+'\n'+m.group(1).strip()+'\n';assert '⋯' not in pretty and '...' not in pretty

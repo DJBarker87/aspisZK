@@ -1,5 +1,5 @@
-import RPu_AspisR1.PoseidonPreparedIndexLoopExactV2Fix4
-import RPu_AspisR1.PoseidonPreparedIndexComponentsCanonical
+import RPu_AspisR1_PoseidonPreparedIndexLoopExactV2Fix4
+import RPu_AspisR1_PoseidonPreparedIndexComponentsCanonical
 import RPu_AspisR1PoseidonPreparedChannelArraySpecs
 
 set_option autoImplicit false

@@ -15,3 +15,8 @@ A source-statement byte check subsequently found only an extra trailing blank
 line in FJu_after.lean.txt. The raw equality is recorded false and the normalized
 source equality true. Full fresh kernel statements and independent byte comparisons
 remain separate gates. Recount script recomputes all four ledgers from atomic rows.
+
+Before reaching any dotted module, 32 future module aliases were flattened
+to unique RPu identifiers to match the unchanged launcher output layout.
+All already compiled snapshot hashes were checked unchanged; logical declarations
+and source bodies are unchanged. RPu_module-name-check.json retains the list.

@@ -23,7 +23,7 @@ def visit(n):
  imports=['Init']
  for line in path.read_text().splitlines():
   if line.startswith('import '):imports.extend(line[7:].split())
- new[n]={'original':n,'module':'RPu_'+n,'original_source':str(path.relative_to(R)),'original_sha256':sha(path),'original_imports':imports}
+ new[n]={'original':n,'module':'RPu_'+n.replace('.','_'),'original_source':str(path.relative_to(R)),'original_sha256':sha(path),'original_imports':imports}
  base[n]={'kind':'repository','source':str(path.relative_to(R)),'imports':imports}
  for i in imports:visit(i)
  order.append(n)
