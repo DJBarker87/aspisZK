@@ -79,7 +79,7 @@ for group,steps in enumerate([[(1,1),(2,2),(4,4)],[(8,8),(16,8),(24,2)]]):
   n=a+b
   s+=f'def x{n} : W := {w(powers[n])}\n'
   s+=f'theorem product{n} : value {w(powers[a])} * value {w(powers[b])} = value x{n} := by\n  apply mul\n  change AspisV8R17.GeneratedQM31Products.qmMulWords {w(powers[a])} {w(powers[b])} = {w(powers[n])}\n  {norm}\n#print axioms product{n}\n'
-  proof='by rw [pow_one]' if n==2 else 'by rw ['+','.join(f'{"JGd_Power0." if k<16 else ""}power{k}' for k in sorted(set([a,b])))+']'
+  proof='by rw [pow_one]; rfl' if n==2 else 'by rw ['+','.join(f'{"JGd_Power0." if k<16 else ""}power{k}' for k in sorted(set([a,b])))+']; rfl'
   s+=f'theorem power{n} : value JGd_Linear00.sum16 ^ {n} = value x{n} := by\n  calc\n    _ = value JGd_Linear00.sum16 ^ {a} * value JGd_Linear00.sum16 ^ {b} := pow_add _ {a} {b}\n    _ = value {w(powers[a])} * value {w(powers[b])} := {proof}\n    _ = value x{n} := product{n}\n#print axioms power{n}\n'
  s+=f'end AspisR1.{name}\nend\n';pf[name]=s
 if '--check' in sys.argv:
@@ -101,11 +101,13 @@ s+=f'end AspisR1.{name}\nend\n';hf[name]=s
 for j in reversed(range(26)):
  name=f'JGd_Horner{j:02}';s=head(name,'JGd_HornerData' if j==25 else f'JGd_Horner{j+1:02}')
  s+='open JGd_HornerData\n'
+ if j==0:s=s.replace('attribute [local irreducible] HPow.hPow HMul.hMul HAdd.hAdd\n','')
  prev=horner[j+1];product=mul(tails[0][0],prev);out=horner[j];cw=arrays[-1][j]
  s+=f'def product : W := {w(product)}\ndef r{j:02} : W := {w(out)}\n'
  s+=f'theorem multiplied : value {w(tails[0][0])} * value {w(prev)} = value product := by\n  apply mul\n  change AspisV8R17.GeneratedQM31Products.qmMulWords {w(tails[0][0])} {w(prev)} = {w(product)}\n  {norm}\n#print axioms multiplied\n'
  s+=f'theorem added : value product + value {w(cw)} = value r{j:02} := by\n  apply add\n  change AspisV8R17.GeneratedQM31Linear.qmAddWords {w(product)} {w(cw)} = {w(out)}\n  {norm}\n#print axioms added\n'
  s+=f'theorem step : run {j+1} (value {w(prev)}) = run {j} (value r{j:02}) := by\n  unfold run\n  rw [ExtractedMaskHornerPolynomial.hornerLoopModel]\n  have hcell := JGd_Coefficients.value ⟨{j},by omega⟩\n  change coeff {j} = value (JGd_Coefficients.cell ⟨{j},by omega⟩) at hcell\n  rw [hcell]\n  change ExtractedMaskHornerPolynomial.hornerLoopModel coeff (value JGd_Linear00.sum0) {j}\n    (value {w(tails[0][0])} * value {w(prev)} + value {w(cw)}) = _\n  rw [multiplied,added]\n#print axioms step\n'
+ if j==0:s=s.replace('  rw [ExtractedMaskHornerPolynomial.hornerLoopModel]','  conv_lhs => rw [ExtractedMaskHornerPolynomial.hornerLoopModel]')
  s+=f'end AspisR1.{name}\nend\n';hf[name]=s
 if '--check' in sys.argv:
  for n,s in hf.items():assert (L/(n+'.lean')).read_text()==s,n
@@ -120,7 +122,7 @@ running=(1645475237,1054917232,2009538975,558867101)
 residual=tuple((a-b-c)%MOD for a,b,c in zip(running,mask,claims[115]))
 needed=mul(residual,powq(eta,MOD**4-2));assert mul(eta,needed)==residual
 name='JGd_NumericData';s=head(name,'JGd_HornerValue\nimport JGb_MaskedArithmetic')+'open Aeneas Aeneas.Std Result\n'
-for n,v in [('factor',maskfactor),('weightedMask',maskmul),('maskWords',mask),('neededWords',needed),('weightedTerminal',residual),('partial',add(mask,residual))]:s+=f'def {n} : W := {w(v)}\n'
+for n,v in [('factor',maskfactor),('weightedMask',maskmul),('maskWords',mask),('neededWords',needed),('weightedTerminal',residual),('partialWords',add(mask,residual))]:s+=f'def {n} : W := {w(v)}\n'
 for n,v in [('mask',mask),('neededTerminal',needed),('running',running)]:
  s+=f'def {n} : FIp_SemanticArithmetic.MQ := {pq(v)}\n'
  s+=f'theorem {n}_canonical : FIp_SemanticValues.Canon {n} := by\n  change ({v[0]}<2147483647 ∧ {v[1]}<2147483647) ∧ ({v[2]}<2147483647 ∧ {v[3]}<2147483647)\n  omega\n#print axioms {n}_canonical\n'

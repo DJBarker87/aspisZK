@@ -34,3 +34,22 @@ steps. All source steps and both assembled loop results compile with standard
 axioms only. Attempts through058 are complete. No final mask, terminal gate
 or preparation acceptance is claimed at this checkpoint. Polynomial/power
 modules are generated candidates awaiting focused compilation.
+
+## Exact real-byte mask
+
+JGd_MaskSource.source (097) unconditionally proves the actual retained mask
+call returns the canonical four-word value
+(41384146,1551057496,121138204,744059949). JGd_HornerValue.source proves the
+coefficient polynomial and JGd_Power1.power26 supplies six named power steps.
+No terminal/composition return is used as a mask premise.
+
+The canonical numeric terminal operand required by the arithmetic gate is
+(1711374173,2026192144,428817833,318295749). Its identification with the actual
+public terminal return is NOT established. No accepted wrapper or top-premise
+removal is claimed.
+
+Attempt090 unintentionally repeated the ordinary rejected089 source after a
+local generator IndentationError; the surrounding batch was not fail-fast.
+It is charged and excluded, with both receipts retained. Sequencing was then
+changed to require generation/check success before compilation. No timeout or
+memory-killed source was repeated, and no cap was raised.
