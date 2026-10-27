@@ -17,17 +17,32 @@ for i,f in enumerate(fields):
 '''
 s+='''theorem source (a b : Q) (ha : QC a) (hb : QC b) :
   aspis_core.field.wide_exact.WideExact.from_limbs (limbs a b) = ok (some (⟨a,b⟩ : E)) := by
-  have hp : aspis_core.field.P = 2147483647#u32 := by rfl
-  have n0 : ¬ a.c0.a ≥ aspis_core.field.P := Nat.not_le.mpr ha.1.1
-  have n1 : ¬ a.c0.b ≥ aspis_core.field.P := Nat.not_le.mpr ha.1.2
-  have n2 : ¬ a.c1.a ≥ aspis_core.field.P := Nat.not_le.mpr ha.2.1
-  have n3 : ¬ a.c1.b ≥ aspis_core.field.P := Nat.not_le.mpr ha.2.2
-  have n4 : ¬ b.c0.a ≥ aspis_core.field.P := Nat.not_le.mpr hb.1.1
-  have n5 : ¬ b.c0.b ≥ aspis_core.field.P := Nat.not_le.mpr hb.1.2
-  have n6 : ¬ b.c1.a ≥ aspis_core.field.P := Nat.not_le.mpr hb.2.1
-  have n7 : ¬ b.c1.b ≥ aspis_core.field.P := Nat.not_le.mpr hb.2.2
+  have n0 : ¬ a.c0.a ≥ aspis_core.field.P := by
+    rw [PV_B2_C_251FieldTotal.P]
+    exact Nat.not_le.mpr ha.1.1
+  have n1 : ¬ a.c0.b ≥ aspis_core.field.P := by
+    rw [PV_B2_C_251FieldTotal.P]
+    exact Nat.not_le.mpr ha.1.2
+  have n2 : ¬ a.c1.a ≥ aspis_core.field.P := by
+    rw [PV_B2_C_251FieldTotal.P]
+    exact Nat.not_le.mpr ha.2.1
+  have n3 : ¬ a.c1.b ≥ aspis_core.field.P := by
+    rw [PV_B2_C_251FieldTotal.P]
+    exact Nat.not_le.mpr ha.2.2
+  have n4 : ¬ b.c0.a ≥ aspis_core.field.P := by
+    rw [PV_B2_C_251FieldTotal.P]
+    exact Nat.not_le.mpr hb.1.1
+  have n5 : ¬ b.c0.b ≥ aspis_core.field.P := by
+    rw [PV_B2_C_251FieldTotal.P]
+    exact Nat.not_le.mpr hb.1.2
+  have n6 : ¬ b.c1.a ≥ aspis_core.field.P := by
+    rw [PV_B2_C_251FieldTotal.P]
+    exact Nat.not_le.mpr hb.2.1
+  have n7 : ¬ b.c1.b ≥ aspis_core.field.P := by
+    rw [PV_B2_C_251FieldTotal.P]
+    exact Nat.not_le.mpr hb.2.2
   unfold aspis_core.field.wide_exact.WideExact.from_limbs
-  simp only ['''+','.join(f'read{i}' for i in range(8))+',bind_tc_ok,'+','.join(f'n{i}' for i in range(8))+''',if_neg]
+  simp only ['''+','.join(f'read{i}' for i in range(8))+',bind_tc_ok,'+','.join(f'n{i}' for i in range(8))+''',if_neg,if_false]
   rfl
 #print axioms source
 end PV_B2_D_FromLimbs
