@@ -1,16 +1,19 @@
 # MERGE GATE v2: BLOCKED
 
-D241; research `8d24f3b9aea9a28803cfc7f571e92b908c8d92af`. PROJECT gaps: **48 → 1**; 859 project objects. EXTERNAL objects: 5640; manifest gaps: 0.
+D241; research `8d24f3b9aea9a28803cfc7f571e92b908c8d92af`. PROJECT gaps: **48 → 4**; 859 project objects. EXTERNAL objects: 5640; manifest gaps: 0.
 
 Every external object below is linked individually to the env-J toolchain and manifest package revision. Repository copies already selected by the source manifest remain PROJECT; R1FirstFold is also PROJECT (its repository filename is FirstFold.lean). Branch additions remain separately identified in each JSON source_kind field; their hash links bind the proposed branch bytes, and are not described as already present at research HEAD.
 
-Named exception **ProjectionHEAD**: R1NaturalProjection fails on two goals at source lines 28 and 58. No repair or clone is substituted. Exact dependent cone: 167 modules, listed in resume7-merge-gate-v2.json. The stale object remains flagged. No repair is present in research at this stage.
+Lead ruling (h) corrects the projection association: `lean/NaturalProjection.lean` is authoritative. Its source/object receipt 30200 matches current HEAD and current object; ProjectionHEAD is CLOSED without changing its source or object. The earlier two-goal failure concerned the wrong historical variant. Its dependency cone (167 modules) is retained as historical inventory, not a live exception. Four other module source paths differ from the authoritative pin table; their exact mismatches are recorded in resume7-source-resolution-correction.json and remain blocked, with no shared-source replacement.
 
 Recompilation receipts retain exact import hashes. Historical changed-input replay flags are retained in JSON; a source hash link alone is not a claim of replaying every dependent.
 
 ## Remaining project gaps
 
-- `R1NaturalProjection`: No accepted receipt binds current object SHA to expected source SHA; expected `41db583fe5032f1d5ca0757d98da80d34f6949983599d369560eaa3574c5a368`.
+- `AspisFormal.V6PublishedTheoremInterfaces`: No accepted receipt binds current object SHA to expected source SHA; expected `904f5e5b9b6b38b7b3009cbe755ae90c692cb88c2aa303f1abf3c212a152a37c`.
+- `R0P.LogUpAssembly`: No accepted receipt binds current object SHA to expected source SHA; expected `ccd2282e2da4669ed9f7c48d8260e38fda2361b8af3e69592e4ffcc38ce20a24`.
+- `R0P.LogUpChain`: No accepted receipt binds current object SHA to expected source SHA; expected `a9b0e52dd73026f356c16237d4b29527a70a479fc14cb0d59c178e1d94ff1fb6`.
+- `R0P.SemRounds`: No accepted receipt binds current object SHA to expected source SHA; expected `564b9026233a36736f524407f357b44e173173139e52b9c4c6effbd88335bfd4`.
 
 ## Every imported object
 
@@ -414,7 +417,7 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `AspisFormal.V6EncoderDistance` | PROJECT | `57db8261c314309040290b6b55da116ed63243426ec5c158c0c09d8cbbd6080c` | 36ee79a60cb5e7909beb4da3ebba1af63fd9a2ad35dcdd1ff74f516aa153e196 |
 | `AspisFormal.V6OneFoldCandidateExtraction` | PROJECT | `14d1a2acc7ec92de842dfbe55f2e276fc5a237481228f3b3f15ae59ead65f269` | c5b0e705f36b2961c5c2e7edb251fd026edd780a9a3f6c5982d2ac8a124fe8c3 |
 | `AspisFormal.V6OneFoldParameterAudit` | PROJECT | `24c7103f86e1b074e64bb5026a05d9b7db4aab1bdbe24bc5a4598875061ec513` | d0cb3212d36dfdefcf5083e51ff91d2d60a0a8d53ad1d11584eb07eded3380c1 |
-| `AspisFormal.V6PublishedTheoremInterfaces` | PROJECT | `4b61bc0bfbf730d91765ad5b6156e8a731a010d7152b2f5a079523b809c46df1` | 80610f3a492b3d6012a1d75c0efbaa0233d29eaed337345d2ab9d98364a5e3a3 |
+| `AspisFormal.V6PublishedTheoremInterfaces` | PROJECT | `4b61bc0bfbf730d91765ad5b6156e8a731a010d7152b2f5a079523b809c46df1` | GAP: No accepted receipt binds current object SHA to expected source SHA |
 | `AspisFormal.V6Width29CorrelatedAgreement` | PROJECT | `991b8cfa9695fbf77ffa876d9d3124225852e94d9e01c65cb12706c3e7f20202` | 764d79d83b6d5a38e63aa483c8fc6708adf7d22606bc7a31403fdbf21929452a |
 | `AspisFormal.V7ExactOneFoldDomains` | PROJECT | `620092b73303869204f9b171f17d69032e94ad1142eab7488e72c076a49c636a` | 60eb390e89f9ad82537b784a7c328a8fa1ab76e328dd7b5c836c8d587cf42d98 |
 | `AspisR1ProverCommit.Funs` | PROJECT | `71769b4811ecb0b602f1c0ba18add118608a953f5d9cf7b96b68f0b44a1a88e9` | 057cd0fea73086fc9c7a1cbc119660c5b746a40e5a63abd2c794d5864ebe4b93 |
@@ -5416,8 +5419,8 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R0P.EmptyRoots` | PROJECT | `2030fc5602225d69b7daa93fc3df34e0582a4b9efdc5072753255f2b587828af` | 648c9aaccf1691b634b2a91f46348ecb1e2d7382a982dcbddff1dcc786b77cbc |
 | `R0P.Extraction` | PROJECT | `15e52da01df82969e9ce829430cbee3f4cac73841de398e04879dddc6ff80da7` | 7f7736179026639936fa5d7ad1647e9804676863cf328cb416ea8723d2b72804 |
 | `R0P.LaneMap` | PROJECT | `42ccbc59eb12c2feddd6e2345ae325c7da7b0f11673b7c9f37cdd9f10e4e0029` | 122aa0b15111da62ae6672051c43a1cfe792e6cd240974669af87732539f6e17 |
-| `R0P.LogUpAssembly` | PROJECT | `9639f23da5a09f5fde90dd41df72bee964d724b1f3f53d2c3c469733e6ca0da7` | a166c26c7adc833605f095ee693a317b5985a4fc6ed8c61743d61c26087e178f |
-| `R0P.LogUpChain` | PROJECT | `14694e1faa7cff4cc06d1cbb6de82475fd838218ab627e9a1349727e8f7223a6` | 89e6f1477c616f5ab887fec3a5479d29fd0f33c6c5d0283d263186fdee30f6bd |
+| `R0P.LogUpAssembly` | PROJECT | `9639f23da5a09f5fde90dd41df72bee964d724b1f3f53d2c3c469733e6ca0da7` | GAP: No accepted receipt binds current object SHA to expected source SHA |
+| `R0P.LogUpChain` | PROJECT | `14694e1faa7cff4cc06d1cbb6de82475fd838218ab627e9a1349727e8f7223a6` | GAP: No accepted receipt binds current object SHA to expected source SHA |
 | `R0P.LogUpCompress` | PROJECT | `8668db18f4a1a7f255215c9b3e8665a6884e11ea6eec7da6eb51e93f7dc384b7` | 2a8ee84dbbc341e899441847ef68ed4f91c1a25d308a2124966bf3c587a32c4e |
 | `R0P.LogUpFrac` | PROJECT | `e02d662debcba23f12e861d970de0a20b27fa946a1ecccb0d0d5b45ed1e5fcd6` | f4d1c635188c74aeb5e2150e94b8627c22439e0bf1a482a173c0a5b38566b0b2 |
 | `R0P.MaskProtocol` | PROJECT | `805ce6d6fe866323fcd8c1a0444623ee88c8263b046d8b1afde5d22d8970a014` | 370faede24fa9a3afedb872da2d2e5843091d4653ad8a69f668d2facecc5aa5b |
@@ -5444,7 +5447,7 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R0P.SemDegFamilies` | PROJECT | `531f16e3020bc8f4cecc4326e45363841a7d5161bf39db6bb5b4d0a023fd98b9` | 60daa294e557252938f4d87fb9eb93df7aca5eff51795abf595c140a3b15c3e1 |
 | `R0P.SemHonest` | PROJECT | `4f0883ed662749c057dfcf01509e076987233238a3a0c278fac8d0c69fa2c984` | 63c890ceebfe82d2ef16e73aed51b4acac0e6bc0af8c5fb3b0d5eca05034234f |
 | `R0P.SemPad` | PROJECT | `a49ff7539617a1caa16c066213318890dc7e90ebdf3c960d76805b158e289eec` | b5cd6f82b930644a81bbeabdfc4003425e52ddf5eefdc0c9485698d9e82de164 |
-| `R0P.SemRounds` | PROJECT | `5be88b7b1b5319236ae0a936a56808ef314afacc1ab26e8eb006bd0708dc02c9` | 84cd1819f182940e61a11d0f46154d493b65a439a0b7a6a0f18e5f738af71383 |
+| `R0P.SemRounds` | PROJECT | `5be88b7b1b5319236ae0a936a56808ef314afacc1ab26e8eb006bd0708dc02c9` | GAP: No accepted receipt binds current object SHA to expected source SHA |
 | `R0P.SemSource` | PROJECT | `46cf3971996511a432227d49d2c6fdff5963261786dfce828d474100a8530424` | e79ce46d3ce2dc99e65aa99c78581f5069c66eec3dba4dae0dce09ec86f7a024 |
 | `R0P.SemView` | PROJECT | `6232c06ad920b13749e44040fca38707f2aa22a29f9f2dfb1ecedf48c772f734` | a8e8fab6e0efaa76bf64f1197edb5ab51327f8906aecdb668c55885e94837fbd |
 | `R0P.SemVirtualDeg` | PROJECT | `dd379146a8bf8e8ae3df95b56730b1b7818977e92641b8ba875bd6feb667cc63` | c7660c31f4d9c72d6b8b654450ffb6d4e6dc180de99b158c84e79d4f4874f4ee |
@@ -5552,19 +5555,19 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1FixedWidthDecoder` | PROJECT | `a0b3c69bffa588bab24a76e5eeb9d1dd323c79920ec31d0c0b131dfbf2e957d9` | 219cf7718204fbadb3e5551c3a9864c352b864ef8cd6520d76dc6b02cf6ea29e |
 | `R1FixedWidthReconstruction` | PROJECT | `4735346fa195eb75b7786679a62d3130b10f1a104e5d4dc0ea9655e38d032425` | 1b71a52cad69e57c163d77e4e0707ba84697c6082da30c75ff12ba9e86c1759e |
 | `R1FixedWidthSlice` | PROJECT | `30df8df1160c74769eceb800b219552b43715da59a8fa0602d71e70a2a553985` | 3ec5915c59cd5ed3151a2850664c1615b9c77faf57f1906204f369f4944b7a42 |
-| `R1FoldCoefficientBridge` | PROJECT | `5fb8af90cb02d134dbb62c6c02c5d305a9fc52ba2fdf42691313df66557cc12b` | 048c725e67b6ad08da5f0bcd419f652f13fe5d9d2db0866d9d87f5b97bd96060; ProjectionHEAD |
+| `R1FoldCoefficientBridge` | PROJECT | `5fb8af90cb02d134dbb62c6c02c5d305a9fc52ba2fdf42691313df66557cc12b` | 048c725e67b6ad08da5f0bcd419f652f13fe5d9d2db0866d9d87f5b97bd96060 |
 | `R1FoldedLeafCodec` | PROJECT | `527fb4887abc32401b1f7c2eb39f7f593e39fbed9457df4a9943972999bf93b0` | 0d01c041523d28682af952f91290feddf0702d0797b38e4cab988898a2266633 |
 | `R1InputPair` | PROJECT | `7394e63da70b38036b43a9a0105e1179991426b41542ab67ad3038e6f0ae3ee6` | e97853456b75cc9970db0504df22b398802cc81d03993d492eec59f2d348316e |
 | `R1InputPairCopyLinks` | PROJECT | `48d758e581d439beeb8b1bbee5485e84e4e6a520d858980a00246fcf9c684ac1` | 857e534a6ad063f09f604c2a4a307907fd7f7a0f1f1c8e434b46179a2d980fcd |
 | `R1InputPairSelection` | PROJECT | `de859948ce815d837b20f03ff63a14e962da9884bf08a1e91699d990ba473168` | 7c0aa7bc71afe9d6b2e4ff8c59847dad28f76529d7d5682ac8f8d1c479400f45 |
 | `R1InputWitnessCheck` | PROJECT | `4d69b40cb3a9f03a28559f92db27a0cf63619b12e7cfca08fd4489bdc111181a` | 15e062731eb903b431fddfcf3bbeaf7cb289c2f95aa4211a8720053f4cd10b60 |
 | `R1InputWitnessCore` | PROJECT | `90dd1c693591467c096babf373d5f0e9645c7371456b17ee647c4396a3269ce6` | fec688b4ae7650f4ba4c266613853eb9f858aabd5d36f2d8a5f4d01107a85d5d |
-| `R1J.PrivacySamplerSpend` | PROJECT | `701ab36579d8479b3f050330f174aedf6752c120b44e1da39a8aa74054805db7` | ea3b95d766e10eaa4b14f428c1b67538827a97379016d7e5bfe808528421fde1; ProjectionHEAD |
-| `R1J.PrivacySamplerSpendBin` | PROJECT | `61821f4cf259e456c5b83f1ecaaf056875699691f83b9c12ff5ef4dd47115a09` | 24497ddd628e005aecdf522950e18068066e3e6d206131175ebddd4b95fec536; ProjectionHEAD |
+| `R1J.PrivacySamplerSpend` | PROJECT | `701ab36579d8479b3f050330f174aedf6752c120b44e1da39a8aa74054805db7` | ea3b95d766e10eaa4b14f428c1b67538827a97379016d7e5bfe808528421fde1 |
+| `R1J.PrivacySamplerSpendBin` | PROJECT | `61821f4cf259e456c5b83f1ecaaf056875699691f83b9c12ff5ef4dd47115a09` | 24497ddd628e005aecdf522950e18068066e3e6d206131175ebddd4b95fec536 |
 | `R1J.SamplerLawSpend` | PROJECT | `bdddf3a015af9bb9378f2c9bcc430290e75e6a661e18e8f27e2b51557329d048` | 42776a5775ec592fed4fe42782decd8d82f41c556714b4ced297676851a922c5 |
 | `R1J.SpendWitnessMap` | PROJECT | `cd03808d827c1344661036740bb301f90ce6afd21ceba424e289f7b786d80517` | 592e2ea1d4a89c25098c3571a2e8fe610521201eded4c1f28a2b91014904587f |
 | `R1ListFieldCodec` | PROJECT | `7a531d0a977c45d3d494f122df9cf2e6e72e4121e7299847c569a69d5a4a06b1` | c30eeb96043b627a2fb240777bae9f31b7b4a01e86f1ccd129acf415877f7b7a |
-| `R1NaturalProjection` | PROJECT | `6cf99b13ebafcea1e3c387280feed33f16a40c43d89902bc9a6f07951cd4f716` | GAP: No accepted receipt binds current object SHA to expected source SHA; ProjectionHEAD |
+| `R1NaturalProjection` | PROJECT | `6cf99b13ebafcea1e3c387280feed33f16a40c43d89902bc9a6f07951cd4f716` | add9c506d5cbf5c55447c9df156a52eb2298fe5ecf53faff2ea6a9654152726a |
 | `R1OutputCopyLinks` | PROJECT | `00d0eba42c123dacba1cbaf4de6707397ee638bce86d67753834678ad7e509f1` | e3423b3a6a31419cafaf951f9e10c97bd5cb69087b96b7efbf48543ec4fae8af |
 | `R1OutputNotes` | PROJECT | `b7580d0a95f986afedd8f868c467a74883a8f2d6c18ba108c20ac6f51a3a0989` | 70899b6106486fc78418509dae3c7c3ff378358bb19e2e21f9ad7ac9c91a4fa2 |
 | `R1PairCopyLinks` | PROJECT | `b41b95c1725fa3cae65f354910d1b46e74b1a6ea5bf074a5637e2a932bbabcbd` | e36f05283cad4c52e610b002a5447df7afdfa9986388b4b48062849a6fa5be7c |
@@ -5572,7 +5575,7 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1RecordFrameCodec` | PROJECT | `9474a7f2b9c00d918000932e715c8551c4e2dddc72622fc636f3bf96b08dc8d3` | aa077eb03d0a5044f4198b369c4b5977ed543418eb5a518abd3db1b4875e6352 |
 | `R1RetainedExactLimbCodec` | PROJECT | `e138cb202c4c5836a3bde99f4593739bbdef2bcaa1e4bd556e74a750a7623d79` | c9988894652cc59e9b6ecb9a02e6fcf47164b503e365e1f8bee45f9d4d64b37f |
 | `R1RetainedFieldByteCodec` | PROJECT | `5581e6477afd2faeb133b51e8736de63a2ac2d5f0756dc3ba86d4ed676437eb6` | d29e2d982954b31fc3c68d225df3aa78124f153e9e2fcc99ffddca14f65fc18b |
-| `R1RoundPairing` | PROJECT | `fee1c264cafd8b6e1e96491e9e04a0354121c44796fcde9cf5f1b4ecc7b590fd` | 1c03d1bb7d9360207bbc20f1b293a8e2de4c550c237fe3eb9d56713bf7e16797; ProjectionHEAD |
+| `R1RoundPairing` | PROJECT | `fee1c264cafd8b6e1e96491e9e04a0354121c44796fcde9cf5f1b4ecc7b590fd` | 1c03d1bb7d9360207bbc20f1b293a8e2de4c550c237fe3eb9d56713bf7e16797 |
 | `R1SamplerAddBridge` | PROJECT | `ab6a25dbdacdb42a0679118971ee7790bda9d79cbaf333872a824192e69ed5a6` | 22a9d1474abe3ebbefaae867a287f15e36c572a2d51ff9b846f5478c713496a8 |
 | `R1SamplerAddDigits` | PROJECT | `695a37d7b9a9913bbece940ecc0cd80c8b9e87f5af783cd8e144c729a7fd1107` | 174cca73fae636a113242c08f938d451a1234ba237dddfeb3da78afb2ad02b62 |
 | `R1SamplerArithmetic` | PROJECT | `3981f1209f46d74e1afecc5feb94587810d9c1df18aed2027db2bb53b5527615` | fc7502a6119f5626e2391c6592c4127b1bd5af073a5b4e07afdc7cab1c8cccec |
@@ -5596,10 +5599,10 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1StrictWideByteCodec` | PROJECT | `bb78e2aaa14e07670f574bbe468619a089a2dfc039710c7e8b91cfe63e75e4bc` | 2920218159bd1eb149ef588a5d2b5dcfc6ec7b6e53e06a8a03cf5150b50a9713 |
 | `R1TrailingStateFrame` | PROJECT | `2fc71f951f185afb48cae34f0939b4aa1719c67783fb80d1c47919df7350e130` | ebe717b3076421cc3f83b90a454c18bf1619f320feb65bc901aa3cb11c0e1711 |
 | `R1WideExactLimbCodec` | PROJECT | `2ed1d77a11e00c7a4a03d0a0bd37a240206a6ed4aaf033b1b0d90e8e249864ce` | 7fdbbd8da262ec8c7dbe539bb13b76af6c7ce7f91ae5e52cfdcf3327aa020dd6 |
-| `R1Z.AgreeR1P2Bin` | PROJECT | `1566defd31f2d11f83311504d71820507379b95e2a50173ebf621812dc51d0be` | f665f3baf39db70dfb384d3834e8079b90c4a06fef4a085278e911740761cf45; ProjectionHEAD |
-| `R1Z.AgreeR1PBin` | PROJECT | `4d99a3f6b7045ba87af15edde148e242f2f624cbab9d2c89e283d4bd140f44b5` | c829e728a37722d87c086fa86f9bd3ed63072f4146890eaf4e1e55cf7e462515; ProjectionHEAD |
-| `R1Z.Batched` | PROJECT | `5d038e53e0cbb6987c86f354c1a8aa98b515c95722bf0aa24f296848f99699fa` | fd43a24413d6d9991ec61d67ad7e0ea6fd22413158765a8c73757ec194922cee; ProjectionHEAD |
-| `R1Z.BatchedAlgebra` | PROJECT | `d795bf8edceed9eb9969b3f6d29e2aa9ae7a39d6bd20cbf050b52d107e4f8bb3` | 3e36c4d30a277c2be5836e8c5b7243cfb58b98488a70422330b64d6094cd66a5; ProjectionHEAD |
+| `R1Z.AgreeR1P2Bin` | PROJECT | `1566defd31f2d11f83311504d71820507379b95e2a50173ebf621812dc51d0be` | f665f3baf39db70dfb384d3834e8079b90c4a06fef4a085278e911740761cf45 |
+| `R1Z.AgreeR1PBin` | PROJECT | `4d99a3f6b7045ba87af15edde148e242f2f624cbab9d2c89e283d4bd140f44b5` | c829e728a37722d87c086fa86f9bd3ed63072f4146890eaf4e1e55cf7e462515 |
+| `R1Z.Batched` | PROJECT | `5d038e53e0cbb6987c86f354c1a8aa98b515c95722bf0aa24f296848f99699fa` | fd43a24413d6d9991ec61d67ad7e0ea6fd22413158765a8c73757ec194922cee |
+| `R1Z.BatchedAlgebra` | PROJECT | `d795bf8edceed9eb9969b3f6d29e2aa9ae7a39d6bd20cbf050b52d107e4f8bb3` | 3e36c4d30a277c2be5836e8c5b7243cfb58b98488a70422330b64d6094cd66a5 |
 | `R1Z.BuilderAdmissionCanonical` | PROJECT | `8489a8db77e4bb8a9ee5eb430d29a3dc67ebd063e18b274212f38d477ce90690` | d9de70ea8ef79f626ad618eb57f92186e56ffb759bf7fc80474a8fddfa255eaf |
 | `R1Z.BuilderAdmissionCommon` | PROJECT | `cb4420f01736c85eaba92d689fafa449b550de44ef07f800b58b4e6b02dab9f1` | eca6b68dfa903df27f0d07b79d315be376472fe74cbb6bab00d2b02ae722b89c |
 | `R1Z.BuilderAdmissionExtracted` | PROJECT | `3d8cb34b1106832e2c5eef7b8dba846e78aef92f323db618c33792afc20fb36c` | 19d637faebb2eb5aa0d8e2f66e0e3f9b2f31e5ff036594c1da8ff0fe254753b6 |
@@ -5642,8 +5645,8 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.BuilderPrimitiveArguments` | PROJECT | `52c87b1205038f0729bb47163337b40faea47f29328dc2edf928e0e42d0e01f7` | f04b399fca21887b35483cf889e408b3f399a7b2527c733f17100fd19579e5a5 |
 | `R1Z.BuilderPrimitiveDigests` | PROJECT | `7b0099e12bdabb3777721d4977633e8a94bf48d66a2d5715797123f6ba32abb5` | 97bc181692ae988c275921a04b0e81c521687cf5d9bedbfe2bcb51472102f359 |
 | `R1Z.BuilderPrimitiveWriters` | PROJECT | `fe1129b87db1f749c3d134ac2753cfca226d1fc004fadb4e9a99be68967cacdd` | d7063474d90229f7894e6198097ca7265fa0ce50148fcef6889f1c18bb10bae2 |
-| `R1Z.BuilderProtocolBounds` | PROJECT | `7d480429595351bf019b3edb0d890fa16418604129573dd04f44fe4da5858126` | eeca980c1327da4514b93a49e935fdeaa1a5b97c459e9c00323040f9e3793b0c; ProjectionHEAD |
-| `R1Z.BuilderProtocolInstance` | PROJECT | `c2b6e2645e2d64b810115bbf85295a8c0afbce411922c0560aefb82a6ff23a05` | f258f5c027c8dbb48268f2a18fb74fc76e4aa41a653e97983701809547767289; ProjectionHEAD |
+| `R1Z.BuilderProtocolBounds` | PROJECT | `7d480429595351bf019b3edb0d890fa16418604129573dd04f44fe4da5858126` | eeca980c1327da4514b93a49e935fdeaa1a5b97c459e9c00323040f9e3793b0c |
+| `R1Z.BuilderProtocolInstance` | PROJECT | `c2b6e2645e2d64b810115bbf85295a8c0afbce411922c0560aefb82a6ff23a05` | f258f5c027c8dbb48268f2a18fb74fc76e4aa41a653e97983701809547767289 |
 | `R1Z.BuilderPublicCanonical` | PROJECT | `f259c1d436c021662d0bbc6b3092942ec8d7e868f75ba892bee876fa21b1dd80` | 7dbdb04206582fb567d2eab66c226d7ae427aeebde29344140b24bb8e8c19c43 |
 | `R1Z.BuilderPublicExtracted` | PROJECT | `f5d94229e48ecaee65246f29bcba28c78b2f8c6215c76b6f2a594c2f66614f33` | 06c46af8bfad5676606a532ee2fe472418c58adddc84655d386199605b5eccde |
 | `R1Z.BuilderPublicProjection` | PROJECT | `127781af3c072e03c6403aa6aecee7266188ce8c8f17da82d12525f3b12b3d69` | 960b118690aad8b62101e39b3b320650afa713049dc32c4bda2bbd800cdae520 |
@@ -5660,7 +5663,7 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.BuilderRecordsRecipient` | PROJECT | `151bd2de9219fe6f52994effc2d59f069e893ba41253c20fa2400a7b8f1dbd41` | 5e4e5d361fc948f7e5fc78d1c81bbc56efa689d655204b0064efc9f90978b89d |
 | `R1Z.BuilderRecordsReference` | PROJECT | `d9cafbfff6cd5e26772ffa06338124b41497026dafa26d65500587fd5601d8fe` | 89ea8e0d18016d793775bb9b09008b2f2c1e706e87f31102425eef0deacfe2dc |
 | `R1Z.BuilderRefinement` | PROJECT | `f126b506432a1974986b5e8be4fa882dfbf1a0f66d5a33f83758889a63f09b31` | 22b6b09204a17027d7be50dc55fda280334f5e1527497a11857179e83966baf3 |
-| `R1Z.BuilderRuntimeJoin` | PROJECT | `ef117436ee51d536ddeaeb595fa092ba66461ff352ea5b1df63e0f02cf6631d4` | f57b2004f2956758abe9a65e19b0bf9dfb1e77604a4f91aba126c691f580dd31; ProjectionHEAD |
+| `R1Z.BuilderRuntimeJoin` | PROJECT | `ef117436ee51d536ddeaeb595fa092ba66461ff352ea5b1df63e0f02cf6631d4` | f57b2004f2956758abe9a65e19b0bf9dfb1e77604a4f91aba126c691f580dd31 |
 | `R1Z.BuilderSemanticBridge` | PROJECT | `a048214627105ca9b17154960533ae9077a653b04d26e52682899cd810f8878c` | a0b42b2a9aec3fbc18df0ca3473d889c49c5f012ce8cac00fc6af1bdfdda4b1c |
 | `R1Z.BuilderSliceCollect` | PROJECT | `eda22f70f5b4798be466a0f8f7ebd010b7e5d5e41feed8e190c179d0f79249d4` | 00474996a55d1d9f984261bea5710c4fdaf19d7182d598985c3e7ffae8b98992 |
 | `R1Z.BuilderSource` | PROJECT | `ddc5aeacb6d7a007c2785534d3f4b6b1c64376256a825e264efe05218dcd0b39` | 56ea8c7b519616f3cb5bcd14205c135dfb48f26a6cd5039001ec2b502afd8cd4 |
@@ -5676,32 +5679,32 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.BuilderTreeCarryExtracted` | PROJECT | `5f3a4f3f6bce108fa6c24d12682c070c2f7770ab2564e6fa16350716450394c5` | aafcc9c9d58d8491eb87fac3b33999b68a246bf0b1d3a98d032631d346b69f3a |
 | `R1Z.BuilderTreeStep` | PROJECT | `7ed954f83799a7335b45ac91ddff96f4040541359ecb7f73ec2115b1500e75a1` | d5bd0e2a8d3218087854bb5d330f7fc06ace893e12a2473a87721a481f7f0e11 |
 | `R1Z.BuilderTreeStepExtracted` | PROJECT | `41ed15c2dd56544498caa54386ed9e8279b97391337a4e0f60d2da953d246488` | d5545a6afb07d30fe0a40ab00646ed9df86021718df281e8024dccf7d6d060ea |
-| `R1Z.CausalPremisesR1PBin` | PROJECT | `348312d9619bba649416ed6246b84dbc84536314ef0cc9e0517d1c0263b894fb` | 45f9664a3ed8efa9291b2572784d3b92849eb8d912492b69063116adbe318e43; ProjectionHEAD |
-| `R1Z.CausalTreeOrderBin` | PROJECT | `72d873dadbc5f86f5a25672d75b302c8f9131bbd699175399ae41f239c26dd0e` | 6ce4b2d14fd2f9ab5e0bed323972a8ad8071a123a69efb5d7cccdc7f47e370cf; ProjectionHEAD |
-| `R1Z.ClauseIR1` | PROJECT | `9f8e8ac5c438c6a1b628f366d106cb4899e976065c97f81a3b06c9fb4c3e76fe` | 8eb17206e4053a2ea7a9082b7efb9c7783e41409789b6e4c26c2749f47ca15a5; ProjectionHEAD |
+| `R1Z.CausalPremisesR1PBin` | PROJECT | `348312d9619bba649416ed6246b84dbc84536314ef0cc9e0517d1c0263b894fb` | 45f9664a3ed8efa9291b2572784d3b92849eb8d912492b69063116adbe318e43 |
+| `R1Z.CausalTreeOrderBin` | PROJECT | `72d873dadbc5f86f5a25672d75b302c8f9131bbd699175399ae41f239c26dd0e` | 6ce4b2d14fd2f9ab5e0bed323972a8ad8071a123a69efb5d7cccdc7f47e370cf |
+| `R1Z.ClauseIR1` | PROJECT | `9f8e8ac5c438c6a1b628f366d106cb4899e976065c97f81a3b06c9fb4c3e76fe` | 8eb17206e4053a2ea7a9082b7efb9c7783e41409789b6e4c26c2749f47ca15a5 |
 | `R1Z.CommitReadsR1` | PROJECT | `0b1e312fe2214dfdb8b9ae4a40f775a38ced7c16e150b5eeedc9a5c01fa3ac73` | 2252d377bb9c3e4ebe490ed4956f9b28ac57ae1ee8e7d4424a7112d51de67d22 |
-| `R1Z.CouplingR1P2Bin` | PROJECT | `bebd26f0df3ca364ac1fa94c1ea59f4ed0391152739dd482c24193c81271f83e` | 6057cfd04b3c228505f5b054b79572d8956f106442000aab95fa38104228f536; ProjectionHEAD |
-| `R1Z.CouplingR1PBin` | PROJECT | `a1f2b7ec922c4ceee7b8da3a74822361130be2e9af93aede4b8a70b7395e419d` | b64acdcff67908209b70ba8afd7f35e3fa7f32a27ac9d6fab4d8b94055d382d2; ProjectionHEAD |
-| `R1Z.EventsR1P2Bin` | PROJECT | `040348f5795b33f10c811860919ca251dc2eae3f399d20589fb145c2d71c7678` | ea64705368cd274f19de29e97bf42b6cfca9f52dd6f6bae0fe0d472218fc50b9; ProjectionHEAD |
-| `R1Z.EventsR1P3Bin` | PROJECT | `a5663ac8785484234b741f383cf59b0b3bdc83c97c9610f9f6211d854881f514` | 305bc57319263598e3b747cbbf5c1c3ddfbe75d7ff33f2ccb819255a1614687c; ProjectionHEAD |
-| `R1Z.EventsR1P4Bin` | PROJECT | `ff7f5234507f8967f4207b142a0c31eab10ef108a2d253cc766068a7b7ab60f6` | 26c8fd3c0b8b6e4d73f819c5018171b283ec5cb498d8479ea5ba0ab84c1802ab; ProjectionHEAD |
-| `R1Z.EventsR1PBin` | PROJECT | `473ff49879ecd5810cd6478340708efc0cd52ad651d2e8b425aa468af8d5f18a` | 3c1468d63f16bc2407600ce8703d0c53e5dbde9b05acdbc38130a97e695a070b; ProjectionHEAD |
-| `R1Z.FinalR1PBin` | PROJECT | `59a6dda2202e6cb18ad759d4e97ae0967fab308bf774e19fb80d73ba39e22e32` | 5814c74c8537f602e1bfcdb2629fb3efa9a98238e79d21bed313ecbea3aa0ed6; ProjectionHEAD |
-| `R1Z.GamesR1` | PROJECT | `aa3bfcf97ca9498a296a35094dbce0369d3c983ca11dcf5644ef556502330eff` | 630393aae997057e057047a822cdc87647e486b6180e5a081a47da36569e0c2a; ProjectionHEAD |
-| `R1Z.GamesR1PBin` | PROJECT | `adaf71743e4007a0eb851c36d64d7438725cbc31a75a6030a944a76dd7a836d4` | 2eee9f281f0caa3086765d089d55c8087c41af4ab89576187672b94cf9cb2d50; ProjectionHEAD |
-| `R1Z.IIPrimeR1` | PROJECT | `0b3512780ef70ddd151d4ea5477b569afdddda7ba521bdde5e0cbf2b9394995a` | a9d99c890d0c12b6f9bfb5e4ee776fa88c271a04d4b4f1071ac2e0231b789a09; ProjectionHEAD |
-| `R1Z.LayoutCountR1PBin` | PROJECT | `b82b220cf2052baa1d3ecb2325aebd656ee6717314a37e613e913c22eac24ec3` | 1e1a2671138bb2d6dbe3e115b75bca0bb4893df5052af1c9cc1afd7d1b9af3d0; ProjectionHEAD |
-| `R1Z.LayoutObstructionR1PBin` | PROJECT | `50907767ba12d06239c7776a2973bb90b7778a8c6ff1db483aa886c847031395` | 9eb942ed50a5c0972d701c2969630ce97bde974091bebceebe03089461e00f3b; ProjectionHEAD |
-| `R1Z.LayoutR1P2Bin` | PROJECT | `949f684e52a6c582d59c38e2ed8e61edf31dc6d31a4a08082345e442a911d9a1` | b5ebd242323f1a1ca7c33173507041ee433e61d1e7dc0962ae55f2595f830131; ProjectionHEAD |
-| `R1Z.LayoutR1P3Bin` | PROJECT | `e00a8c12975fab98ead616b3c78b7a2b471cb874bbee3c53a76cea3b7b47f771` | 53e661bd706ead8b44ce7d31c847743929d5341eac30860ca38e9d9fd284639e; ProjectionHEAD |
-| `R1Z.LayoutR1PBin` | PROJECT | `f913b590baeadc64c972cad01de2fa7ae43a38adc1d5ba870eb4ab656915039f` | fba3589e5c0b7794311571f37d454d2e3a8df6a858d77e507e442adac07f9f36; ProjectionHEAD |
-| `R1Z.LayoutTagR1PBin` | PROJECT | `083171520e32a586e5dbf1b874c5b0b48d742d6322bdc5df468df4afe16418d4` | 37ee40171804d40488bf63f3d0e4746216db84d4a3d1877a65174cb05bd939e9; ProjectionHEAD |
+| `R1Z.CouplingR1P2Bin` | PROJECT | `bebd26f0df3ca364ac1fa94c1ea59f4ed0391152739dd482c24193c81271f83e` | 6057cfd04b3c228505f5b054b79572d8956f106442000aab95fa38104228f536 |
+| `R1Z.CouplingR1PBin` | PROJECT | `a1f2b7ec922c4ceee7b8da3a74822361130be2e9af93aede4b8a70b7395e419d` | b64acdcff67908209b70ba8afd7f35e3fa7f32a27ac9d6fab4d8b94055d382d2 |
+| `R1Z.EventsR1P2Bin` | PROJECT | `040348f5795b33f10c811860919ca251dc2eae3f399d20589fb145c2d71c7678` | ea64705368cd274f19de29e97bf42b6cfca9f52dd6f6bae0fe0d472218fc50b9 |
+| `R1Z.EventsR1P3Bin` | PROJECT | `a5663ac8785484234b741f383cf59b0b3bdc83c97c9610f9f6211d854881f514` | 305bc57319263598e3b747cbbf5c1c3ddfbe75d7ff33f2ccb819255a1614687c |
+| `R1Z.EventsR1P4Bin` | PROJECT | `ff7f5234507f8967f4207b142a0c31eab10ef108a2d253cc766068a7b7ab60f6` | 26c8fd3c0b8b6e4d73f819c5018171b283ec5cb498d8479ea5ba0ab84c1802ab |
+| `R1Z.EventsR1PBin` | PROJECT | `473ff49879ecd5810cd6478340708efc0cd52ad651d2e8b425aa468af8d5f18a` | 3c1468d63f16bc2407600ce8703d0c53e5dbde9b05acdbc38130a97e695a070b |
+| `R1Z.FinalR1PBin` | PROJECT | `59a6dda2202e6cb18ad759d4e97ae0967fab308bf774e19fb80d73ba39e22e32` | 5814c74c8537f602e1bfcdb2629fb3efa9a98238e79d21bed313ecbea3aa0ed6 |
+| `R1Z.GamesR1` | PROJECT | `aa3bfcf97ca9498a296a35094dbce0369d3c983ca11dcf5644ef556502330eff` | 630393aae997057e057047a822cdc87647e486b6180e5a081a47da36569e0c2a |
+| `R1Z.GamesR1PBin` | PROJECT | `adaf71743e4007a0eb851c36d64d7438725cbc31a75a6030a944a76dd7a836d4` | 2eee9f281f0caa3086765d089d55c8087c41af4ab89576187672b94cf9cb2d50 |
+| `R1Z.IIPrimeR1` | PROJECT | `0b3512780ef70ddd151d4ea5477b569afdddda7ba521bdde5e0cbf2b9394995a` | a9d99c890d0c12b6f9bfb5e4ee776fa88c271a04d4b4f1071ac2e0231b789a09 |
+| `R1Z.LayoutCountR1PBin` | PROJECT | `b82b220cf2052baa1d3ecb2325aebd656ee6717314a37e613e913c22eac24ec3` | 1e1a2671138bb2d6dbe3e115b75bca0bb4893df5052af1c9cc1afd7d1b9af3d0 |
+| `R1Z.LayoutObstructionR1PBin` | PROJECT | `50907767ba12d06239c7776a2973bb90b7778a8c6ff1db483aa886c847031395` | 9eb942ed50a5c0972d701c2969630ce97bde974091bebceebe03089461e00f3b |
+| `R1Z.LayoutR1P2Bin` | PROJECT | `949f684e52a6c582d59c38e2ed8e61edf31dc6d31a4a08082345e442a911d9a1` | b5ebd242323f1a1ca7c33173507041ee433e61d1e7dc0962ae55f2595f830131 |
+| `R1Z.LayoutR1P3Bin` | PROJECT | `e00a8c12975fab98ead616b3c78b7a2b471cb874bbee3c53a76cea3b7b47f771` | 53e661bd706ead8b44ce7d31c847743929d5341eac30860ca38e9d9fd284639e |
+| `R1Z.LayoutR1PBin` | PROJECT | `f913b590baeadc64c972cad01de2fa7ae43a38adc1d5ba870eb4ab656915039f` | fba3589e5c0b7794311571f37d454d2e3a8df6a858d77e507e442adac07f9f36 |
+| `R1Z.LayoutTagR1PBin` | PROJECT | `083171520e32a586e5dbf1b874c5b0b48d742d6322bdc5df468df4afe16418d4` | 37ee40171804d40488bf63f3d0e4746216db84d4a3d1877a65174cb05bd939e9 |
 | `R1Z.LazyFrozen` | PROJECT | `b50ef35a12f561f8760d791f1831140836084c961921a57fe31101e7d1d13690` | 97445a5aad545cdd5d57df5fcde8535b6d918066ef760826189039fa9619c7d6 |
 | `R1Z.LazyTable` | PROJECT | `5375e6e5ce20c16d8aa64aeb7963678f132dbb8a1e8192755fccad793b7b7b30` | 437089d4a9d819a07b793a6cccffc5493302d7398c673e77efd9d28f0b056854 |
 | `R1Z.LensR1` | PROJECT | `f49600b77608770265c6069ebbd568891b71bb531f62dd8881e01684013a7e41` | 61f6c72672ccf51d83299b65ad77019c27315f63e2945856c34a4b84dcfe1024 |
-| `R1Z.MaskImageVR1` | PROJECT | `8aad67dfe5ec63e452f0493e6062f775612ef2d0b3277c6fe051cf03e3e201fb` | 179d2d9872a8f441f53122939af70f87fc7eaf5aa2cc17cacc38fe10bf1fdb61; ProjectionHEAD |
-| `R1Z.ModelsVR1` | PROJECT | `9100064402a0bcdb6479f37f2517d1a8c42d37e801b2f97c18056c1aef16682f` | cfcf9954753711e49af447ea92661016be916832385b6899e181a08caecedcb9; ProjectionHEAD |
-| `R1Z.NoiseLiftR1` | PROJECT | `ea6329d02b394c6d6c5c0492b9e4dda5076db3db87fd9c9a48d68a8bf75a2778` | cba81e304615e6bfee5538f58ff79ed1872b3c17493988d2625c77342e6c29ab; ProjectionHEAD |
+| `R1Z.MaskImageVR1` | PROJECT | `8aad67dfe5ec63e452f0493e6062f775612ef2d0b3277c6fe051cf03e3e201fb` | 179d2d9872a8f441f53122939af70f87fc7eaf5aa2cc17cacc38fe10bf1fdb61 |
+| `R1Z.ModelsVR1` | PROJECT | `9100064402a0bcdb6479f37f2517d1a8c42d37e801b2f97c18056c1aef16682f` | cfcf9954753711e49af447ea92661016be916832385b6899e181a08caecedcb9 |
+| `R1Z.NoiseLiftR1` | PROJECT | `ea6329d02b394c6d6c5c0492b9e4dda5076db3db87fd9c9a48d68a8bf75a2778` | cba81e304615e6bfee5538f58ff79ed1872b3c17493988d2625c77342e6c29ab |
 | `R1Z.PV_Src_AdmissionArray` | PROJECT | `1df917187ac31d52c4c0188c9da15bdf33c75e700f16e96c4fe43adae96b683f` | aa4cda7e2afa9fb8edf399b7cdaea4f7ab84d996280fb231bb12b5b7ff8cee3d |
 | `R1Z.PV_Src_AdmissionCommonSuccess` | PROJECT | `38b28c227366e36ca933bb236f50d0d0c8e1b41a1af72e9eb0adbf6d64c32597` | 9e7dda5791ac0c7dac75f034f329ca706e3433d5fde2fa08f3139d0860b37c01 |
 | `R1Z.PV_Src_AdmissionDigest` | PROJECT | `9f43e3a2098730c4c0a0cdbb4df69ec451e70ec96a35e762ad90c797cf37de36` | 20c0890b513424377a47bd48a648227212bf6bf7ef690f5c3718011a6d5375a3 |
@@ -5709,7 +5712,7 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_AdmissionOccupiedScan` | PROJECT | `21dee07533c3493376d4e501b702fb91ffb7f2498516b6262903d9cef02787c5` | bede0263c66e686f5427760627021a527282634a689c956b43b28d0ec0e912af |
 | `R1Z.PV_Src_AdmissionScalar` | PROJECT | `c64279b156802d7908bba52dee557cced16553b7dbdddb9ecf41f724c15a3fcf` | b9ab47f6b1bcb2563596bb1343a6d4eaa6c8a7f41a6f2bc9ddee66f61ea11763 |
 | `R1Z.PV_Src_BanksTotal` | PROJECT | `7aaff034656df79943f5805f2cb3a189bb42bd2cdd1165619d7c19088457a7d9` | 9bccf1ff046fe24abf856b29121a751903c464b0629cc2c57c8aa0c17dc20ad0 |
-| `R1Z.PV_Src_CacheInventory` | PROJECT | `9373b70e5131d9af63eedd60ceb9c0d19010b1f597ce78b32f7679f678ab7020` | 6d9861fa5fe3ab5dd4e952cddc17ad10b0f33e371b78ad5e8a1076209d9b0c39; ProjectionHEAD |
+| `R1Z.PV_Src_CacheInventory` | PROJECT | `9373b70e5131d9af63eedd60ceb9c0d19010b1f597ce78b32f7679f678ab7020` | 6d9861fa5fe3ab5dd4e952cddc17ad10b0f33e371b78ad5e8a1076209d9b0c39 |
 | `R1Z.PV_Src_Canonical` | PROJECT | `9ca5a4f07537abd104028e3d6d66a392cb39848b9eb988345281c833205a08b8` | fe810650b5bfb221292c3f5ccc16cd71b408a067da35f2e970209dd5b95b3261 |
 | `R1Z.PV_Src_CanonicalDecode` | PROJECT | `6fea852b733cf5b7cfff589f20cb723006c7efa6db0118d116c9bbf7252141b1` | 715bb995ff6e1bf0ef752f26cc9dfe0182915ea86173eae970c233281a987803 |
 | `R1Z.PV_Src_CanonicalNormalize` | PROJECT | `995bc1118097c4a959017599d27d65f4e81c1d487df2b988970d131e696c94f6` | 6c0c51e0ee441d550100751553b70d77a9c6f3646434ac6b099115610b246c52 |
@@ -5722,12 +5725,12 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_CanonicalWithdrawalRecord` | PROJECT | `e5c349b838c093067143788323ed80da4406fa939c1612e9cdcf9146cf5e82dc` | 94489f200d30c9bca0eb244752c4b18f30f4d7610fada7cf80f31cc02d98f74b |
 | `R1Z.PV_Src_CheckedCanonical` | PROJECT | `eadf356de71599667de4cec6034fac8d835448464e537c1a79f63b2df71e1e73` | ec5ec4e5519ece03f87e948a9610565e963bd916e348f4a07c4b9b87c79d9d98 |
 | `R1Z.PV_Src_CheckedEncoding` | PROJECT | `a29651f2cb3fe5fad4b3d5cf99cf45f98b0e00cd7737747193a576bedf44ad2a` | c099f98264b9927462567b935aab4cf78b57cffcdf507df9d32787a8653ea76b |
-| `R1Z.PV_Src_CheckedFixtures` | PROJECT | `b3c98600320b587285dd0507404c2dc2ca9cabf017de3737fba1cda7ed1877f7` | e4db96bdd2e2fe08126605342d07dd5fb8342c2696dbb1aefa805d12980ddc11; ProjectionHEAD |
-| `R1Z.PV_Src_CheckedPipeline` | PROJECT | `53e766fbbc477869ac7fab5e08375a3edd9658a3db9648f2e009d900edf47fe3` | 1b8c333ab5f166e1bb22fb4608531961744ad8fbefddef5141bcf338e31f8b36; ProjectionHEAD |
+| `R1Z.PV_Src_CheckedFixtures` | PROJECT | `b3c98600320b587285dd0507404c2dc2ca9cabf017de3737fba1cda7ed1877f7` | e4db96bdd2e2fe08126605342d07dd5fb8342c2696dbb1aefa805d12980ddc11 |
+| `R1Z.PV_Src_CheckedPipeline` | PROJECT | `53e766fbbc477869ac7fab5e08375a3edd9658a3db9648f2e009d900edf47fe3` | 1b8c333ab5f166e1bb22fb4608531961744ad8fbefddef5141bcf338e31f8b36 |
 | `R1Z.PV_Src_CheckedValidation` | PROJECT | `39a22488162f7ed6ef77c150f0a99549e6951f7065ffff7c06f89d6f13fd0465` | 107d837a2548bfa99db4375eb6a6b2e0211a41667f3a4368ef18e6cc5f5e6529 |
 | `R1Z.PV_Src_CheckedVariants` | PROJECT | `da87ae46e1cbd8634b1771a77a81f57ca5102adb28b524fa87757627c602da4c` | 3fe1c8270377f2e7121a4ca494610d9192b1518052f93ab1776780afd7292169 |
 | `R1Z.PV_Src_CompilerTactic` | PROJECT | `c15eadc2582ec7e1d55346bbca2a5bdee036ff2f5399106bfdf743ec2157dd96` | f2c591450e97cd7dc0fd5fa858dc45815cbf7b4f58167768ea55d8b20d1a087c |
-| `R1Z.PV_Src_Consumer` | PROJECT | `67a895f6b13732d550ada5e0297e36c0c58ebfe4ebc60cc82b2e525ea10f5df5` | 73ee90e1eed9be350d9ef2ae6e96a0245f1472cd6fce844e5a8f01f3c02658f4; ProjectionHEAD |
+| `R1Z.PV_Src_Consumer` | PROJECT | `67a895f6b13732d550ada5e0297e36c0c58ebfe4ebc60cc82b2e525ea10f5df5` | 73ee90e1eed9be350d9ef2ae6e96a0245f1472cd6fce844e5a8f01f3c02658f4 |
 | `R1Z.PV_Src_DynamicAdmission` | PROJECT | `ad5c840a8777b31caca45a52dd927a2fc44ef452b1c1bcc63fd893bbb723af57` | 0a0280646e182e2175ec974f92d38095a4a36a5744fb52e56b4c5b12b319fd69 |
 | `R1Z.PV_Src_DynamicCallEquation` | PROJECT | `ae78dc409029ee53e32df7ed71377a1fc604098aa16097c36bf28d616946233a` | 6048c535fc2d35a46ba47e407ab3d4af049e395628a283d2041f22d05d4679cc |
 | `R1Z.PV_Src_DynamicPublic` | PROJECT | `4d46922e5b73c725fb73ce45207c090665066db59ae104012f82d327d43c2be3` | 014e34e3b40019487867cfcc99d5a496f36e296a60089d60d0e068724bdd9136 |
@@ -5739,16 +5742,16 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_ExternalReference` | PROJECT | `52d0ce204872fef254ab1f1a31c3695ab0c783b44c9582b9aac4512111efa58f` | 5a0299952e59debf5fffbff523e3ab0aa30fce9d156faadd08a8d58a808a31c3 |
 | `R1Z.PV_Src_ExternalSums` | PROJECT | `24cb3557f9fd6446503488399ff89bf3dc8e855bc44154a0d1b355c03cc9b2d1` | f18dc68ab20b384c6a0ef649e7cfce742dbe1df3676c70dd6841d3929d948b33 |
 | `R1Z.PV_Src_ExternalTotal` | PROJECT | `3ab9c6e05230203d40d5100374b35186cba72bb9f9318d26e93db7b13b42bfe3` | 1430548f51bf4f8691bc9d297d11607ce8b0aee0da1040dac06921c42a23e4b1 |
-| `R1Z.PV_Src_FinalAudit` | PROJECT | `cf7d5e18cec9f94e420e443ac745a8e017ee361f462d1e2e28d58798abee518e` | 5d48ff076a5c173c8a0c6bab12c063350b2bc1b5be2d85d22514267f1992dd36; ProjectionHEAD |
-| `R1Z.PV_Src_FinalAudit6A` | PROJECT | `a017d0f097dafb6cbce8488995fb5b16e4af7ae120ecbcd58d5819fae3b18c89` | 69f0fd4aa1e199084e0e7c0273dbaff1f086b11785f844d2cef04af54cd11b65; ProjectionHEAD |
-| `R1Z.PV_Src_FinalAudit6B` | PROJECT | `a8f255344244b6e67721a1cc7afd9c40951d7e9b3acfb950a0738f790a9d5aef` | 900d4b38724efface201d67239757ca3f36986f99ab3a2b2d3d187797529e1bb; ProjectionHEAD |
-| `R1Z.PV_Src_FinalAudit6C` | PROJECT | `524845f9c5158c419d1a3744cd9e0cd34e069490eb316dba284ff92ed4e0b2ae` | f76c1852977a8cd8c93a9128c0041dcf4e2712364008d1c19853624c841c353a; ProjectionHEAD |
-| `R1Z.PV_Src_FixtureCheckedSource` | PROJECT | `e30f0dfe1337e6ec20b7c499cdc2ff37765525446e03a5aac31a3623b4898e84` | e8ee6e94e55760cdd233c0712a0a502da21dc74e0817f3388e4a7c1184bb787c; ProjectionHEAD |
-| `R1Z.PV_Src_FixtureCommonValidation` | PROJECT | `03e83c713a1f9df9e4b7b04b41e0b7c5e2d5c1cebc0b6b999a32e04707b8895a` | 32dba6b7777d6f82a403c6b234d8e0094681d03f0f06a972fb918767aaa6aa7d; ProjectionHEAD |
-| `R1Z.PV_Src_FixturePairValidation` | PROJECT | `27a9fa4c0f93d67a0771ddc46e055367106631ab67e3c2ca984b9354362d5d0f` | 74afd6083a12c0007b554f5ff82978e44851fca9717ee0f1de7a51d1ae978351; ProjectionHEAD |
-| `R1Z.PV_Src_FixtureValidationInputs` | PROJECT | `969a648dbb306f9bdad8720bccf7f2decf7317786b075a488b48443fc2f93e8d` | bc9ed8b1c6c0a4c0605cda0cfa2ca4bb56d3b92cd78df74e4e1604136924381e; ProjectionHEAD |
+| `R1Z.PV_Src_FinalAudit` | PROJECT | `cf7d5e18cec9f94e420e443ac745a8e017ee361f462d1e2e28d58798abee518e` | 5d48ff076a5c173c8a0c6bab12c063350b2bc1b5be2d85d22514267f1992dd36 |
+| `R1Z.PV_Src_FinalAudit6A` | PROJECT | `a017d0f097dafb6cbce8488995fb5b16e4af7ae120ecbcd58d5819fae3b18c89` | 69f0fd4aa1e199084e0e7c0273dbaff1f086b11785f844d2cef04af54cd11b65 |
+| `R1Z.PV_Src_FinalAudit6B` | PROJECT | `a8f255344244b6e67721a1cc7afd9c40951d7e9b3acfb950a0738f790a9d5aef` | 900d4b38724efface201d67239757ca3f36986f99ab3a2b2d3d187797529e1bb |
+| `R1Z.PV_Src_FinalAudit6C` | PROJECT | `524845f9c5158c419d1a3744cd9e0cd34e069490eb316dba284ff92ed4e0b2ae` | f76c1852977a8cd8c93a9128c0041dcf4e2712364008d1c19853624c841c353a |
+| `R1Z.PV_Src_FixtureCheckedSource` | PROJECT | `e30f0dfe1337e6ec20b7c499cdc2ff37765525446e03a5aac31a3623b4898e84` | e8ee6e94e55760cdd233c0712a0a502da21dc74e0817f3388e4a7c1184bb787c |
+| `R1Z.PV_Src_FixtureCommonValidation` | PROJECT | `03e83c713a1f9df9e4b7b04b41e0b7c5e2d5c1cebc0b6b999a32e04707b8895a` | 32dba6b7777d6f82a403c6b234d8e0094681d03f0f06a972fb918767aaa6aa7d |
+| `R1Z.PV_Src_FixturePairValidation` | PROJECT | `27a9fa4c0f93d67a0771ddc46e055367106631ab67e3c2ca984b9354362d5d0f` | 74afd6083a12c0007b554f5ff82978e44851fca9717ee0f1de7a51d1ae978351 |
+| `R1Z.PV_Src_FixtureValidationInputs` | PROJECT | `969a648dbb306f9bdad8720bccf7f2decf7317786b075a488b48443fc2f93e8d` | bc9ed8b1c6c0a4c0605cda0cfa2ca4bb56d3b92cd78df74e4e1604136924381e |
 | `R1Z.PV_Src_Fixture_AppendBindingMap` | PROJECT | `e5bcdcab568faa348f3c0502feaf8193f8b439bdbbd73cca81063b39dc1e6c96` | 437b17e512a4a631e2ec085220775359e5ed448757af9cea27ccdd6ab01b457e |
-| `R1Z.PV_Src_Fixture_CanonicalFixtures` | PROJECT | `c65ea3ce9fa01a098d88332425f4a6eda5a3f0ae2cf0f83a42989a628dfe20db` | 252118aba90ba3c4142892bc098afb9f35e517227a0cf90c8a36bfc0b19ef7a1; ProjectionHEAD |
+| `R1Z.PV_Src_Fixture_CanonicalFixtures` | PROJECT | `c65ea3ce9fa01a098d88332425f4a6eda5a3f0ae2cf0f83a42989a628dfe20db` | 252118aba90ba3c4142892bc098afb9f35e517227a0cf90c8a36bfc0b19ef7a1 |
 | `R1Z.PV_Src_Fixture_FixtureFibres` | PROJECT | `9a8fa4500f47a0bf439b818d6e4509276052656b36dc1b5ce5aee86a6ea082c7` | 73a2f6bc41af06a92f916c99d3b1d8224f284bf8c698fb75a9d611e8fbddac2f |
 | `R1Z.PV_Src_Fixture_FixtureRecords` | PROJECT | `120dc8d56649699a22d9d56922a8f8f1ac637ccfdd40d5b8f07c5d58d84c0e06` | 95199ad11aa91f2787b3c5130fcd1887747018dff35deddf2ec6ffa755b5fa5c |
 | `R1Z.PV_Src_Fixture_NoteHashMap` | PROJECT | `05f85d094bf0000153752333137b863a2b708c36aec725748fbf2d442d37ec79` | 57307d5518469dbf10158e4cd3031886b1736faa8a2d8f6d481cfd490c44dbce |
@@ -5760,7 +5763,7 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_Fixture_SpendDataMap` | PROJECT | `359e7964ea09a2c2112ffc6a90986a0511b4967f778067b52d728186b17cef03` | 1b4a12f35143dc8385cadbdb7e09cda99c33a3a96f4109ea870a94ed8034eb6a |
 | `R1Z.PV_Src_Fixture_SpendRelationMap` | PROJECT | `37f1e76b16c3700157e6cdd6dfcda40e7d3857e9a7e96dc1ed54a3c52e2449e1` | fc4e6a65b235ff00b73be6cd8e12ecf281264d8a5248e6699f957975ac185b2a |
 | `R1Z.PV_Src_Fixture_TransferSentinel` | PROJECT | `bae48ce4aa16d43be71cd7fbcd7988883f5767aec56a5b03e75dc62c34369bfe` | 031a86e18bdf0a84432650aa29b033792139321c8f88edc929597b12463f6e59 |
-| `R1Z.PV_Src_Fixtures` | PROJECT | `735cf01873e0d0ae399423d50b89db007a320e0817dcd2d8df738a16cb6b1b46` | 3672889efc7a30259269743b8c6568f90a20883568fab853059419558aa70d7b; ProjectionHEAD |
+| `R1Z.PV_Src_Fixtures` | PROJECT | `735cf01873e0d0ae399423d50b89db007a320e0817dcd2d8df738a16cb6b1b46` | 3672889efc7a30259269743b8c6568f90a20883568fab853059419558aa70d7b |
 | `R1Z.PV_Src_FocusedAudit` | PROJECT | `afdf3c24706edfe574d9e5b91e665402a26994ef1f423f7226c404ede1e1c78d` | 592ed505dfa458ae133958cf14e96888ad76cac26b5ae7e2ab254f2f766abbc3 |
 | `R1Z.PV_Src_ForestBanks` | PROJECT | `a2996a2ae7ac3784de53db9a7435c3ce4671cd02c37bb518ba675c76f88ea42d` | 8c065cbbbe277e78b8de386a7ad741b61f5971ed43edabcacf91250dcec7a045 |
 | `R1Z.PV_Src_ForestCanonical` | PROJECT | `8a5d614da87c92f30608a8dc934a0c02541b70dcd96786b058020b3b23e25f71` | 8fb37e894bb95c9462bb4a2706b24a047a8d2cf772367a69d1f53ebd2f9b16df |
@@ -5794,15 +5797,15 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_Forest_PrimitiveWriters` | PROJECT | `bccf5862d2ee6cb723cb805d230b6e792025c7d155cbc3daad47d53a89a65ab1` | 330b7c1d1ef6f4346877c5fb4df94425e063ba92bcadfe799ec001410d0c8383 |
 | `R1Z.PV_Src_Forest_TreeArguments` | PROJECT | `d9940b79bd3d17b8ab36e11a1ddc2dc5a3622757650730d1a34af5fcd38bd73f` | cc2016dc65e4e30bab0ccf88ac045670e1f47639e4d7b1f690feb5ecf38b4559 |
 | `R1Z.PV_Src_FormatterAudit` | PROJECT | `5d1325642edbda0fa7d4cbfd4e294881a7672438b6061703247f1a975ecbfdc7` | a137a2d4cd95da60fc27f800ca6f24cd5fa97a0c4ebc62258f42161dfedf6fb7 |
-| `R1Z.PV_Src_FrozenFixtures` | PROJECT | `161512ace5b05ed1bc6c4d644c0f2ab14b73ea17db43d10e2c2918d45ba3f138` | 81ecaeee12fb57d71767bdb3d3f0de6d6dd59a0a828fe81498992c66f36f88f1; ProjectionHEAD |
+| `R1Z.PV_Src_FrozenFixtures` | PROJECT | `161512ace5b05ed1bc6c4d644c0f2ab14b73ea17db43d10e2c2918d45ba3f138` | 81ecaeee12fb57d71767bdb3d3f0de6d6dd59a0a828fe81498992c66f36f88f1 |
 | `R1Z.PV_Src_FrozenInput` | PROJECT | `83533dd46dae71f49db140f244bfd706c5178d757d3204b6f83405adcb47d48c` | 637636b68f504860df9a2d18092da8fbc58e9daca96e7b8463652a439fa748cc |
 | `R1Z.PV_Src_FrozenPublic` | PROJECT | `a6d3a44525a9b39fe7ce311ffc3e429372052e0f6125cfda69162cc0e554fac2` | 8664a51117e9e4a50d7759891c87ce85808a12b5de79dcacdbf96fc8dc527c50 |
-| `R1Z.PV_Src_FrozenStages` | PROJECT | `fc7d69b0ae7499d760a06a9264731b1ec6a5f28b5450722057dcf05dea86a365` | 768d494a7ec9a461862f7f9fe230ae112d06f7b31b54e09df876237c097d4b2f; ProjectionHEAD |
+| `R1Z.PV_Src_FrozenStages` | PROJECT | `fc7d69b0ae7499d760a06a9264731b1ec6a5f28b5450722057dcf05dea86a365` | 768d494a7ec9a461862f7f9fe230ae112d06f7b31b54e09df876237c097d4b2f |
 | `R1Z.PV_Src_Identification` | PROJECT | `8aef5141167a3a47921dbcbedcfe5f6a036a424ee325a0b5cdb298369bacc836` | 491efaeeb3eb6c21f85284122e7e8102fa60a317e43d10a6b3ae0f1ad5067216 |
 | `R1Z.PV_Src_LowBits` | PROJECT | `1ae473dcef426d4d7ec96fb2e0e801beed7e48944e514997d2c564eeed8d2c23` | 547ba4b67d3b716ea125b0695651d3aa7a21258fa544f0e5d53b2d9cbcedff6a |
-| `R1Z.PV_Src_NativeConsumer` | PROJECT | `8715f5818f115b76d04b7910dfff1be96e01d0ee13b890b45e6c8ae94beebd3f` | 8e6b5ac55b7f3f0fa21a91e4c2ce325bee07bd9636b344bff129dcbcaf98cbe4; ProjectionHEAD |
+| `R1Z.PV_Src_NativeConsumer` | PROJECT | `8715f5818f115b76d04b7910dfff1be96e01d0ee13b890b45e6c8ae94beebd3f` | 8e6b5ac55b7f3f0fa21a91e4c2ce325bee07bd9636b344bff129dcbcaf98cbe4 |
 | `R1Z.PV_Src_NativeDirections` | PROJECT | `5e9bd3db5595968a2148a81f8caa8705f4122d90212b9703f1481d20e6b6b2fa` | 8512fcbf7e6d76c0bb54343585ac744b4428a42763ea4b30e400b8e198b476a5 |
-| `R1Z.PV_Src_NativeFamilyAudit` | PROJECT | `0c55e0deef9029cb7c3677b78a5c081b9cdc3d7088f60db1d0c5e771157b1f24` | a3b12d77fb80b5fb6140922dfd8acc57e7ccdf67e1d1b7d580e536bf8683dfcb; ProjectionHEAD |
+| `R1Z.PV_Src_NativeFamilyAudit` | PROJECT | `0c55e0deef9029cb7c3677b78a5c081b9cdc3d7088f60db1d0c5e771157b1f24` | a3b12d77fb80b5fb6140922dfd8acc57e7ccdf67e1d1b7d580e536bf8683dfcb |
 | `R1Z.PV_Src_NativeIdentification` | PROJECT | `7747e4150c5f574f2dd0230cbf22c9ca37aae96b2350f8818d7d728a2d6e954b` | 59eb08f9c2ffe7541bb0ba21c360e660cfd30be043bca0ab86211843b6108d08 |
 | `R1Z.PV_Src_NativeInput` | PROJECT | `c42f18fb2e048c57cd9aaf27478d43cae65c2605b7e8454fc422cabb52057c13` | 82631c70e4269ff461ca8aa7b445d5b18c2c91d94e149d8419e9b2fcb3e22d5b |
 | `R1Z.PV_Src_NativePremises` | PROJECT | `b378b853e8f6b877730510711efc2b82182cf298b7a2590cf137e6921d3ef088` | 3a581104239be249210fe68241c21189180b0a0abc5863a7aaf184bbb6dafb23 |
@@ -5837,7 +5840,7 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_ReduceModulo` | PROJECT | `0fda7cd114041e82ca1b2a335b52e90fe20d2eb2f1ff3393385aa347de86314a` | c91246c4f8654bdc6d0298fdbd76cb54233ea86507b83a14dcfcc929aa120aff |
 | `R1Z.PV_Src_ReferenceTransfer` | PROJECT | `086ff8bc7428b9c5096348f9367a32518f58fd9cc886e737c522017a6c522837` | a785ed86c877951319b5b6c62da6e339be545b150e3dcf9f6e317e45a6c820c1 |
 | `R1Z.PV_Src_ReferenceWithdrawal` | PROJECT | `07031d3b08fb2336c8ca075be0169aaf6c58a324d56d078b394eb67606964722` | 1f1e3d667a0208a55f007a923ad2ae9c2609ddf6b1ada2803b71a5fc7f644fbe |
-| `R1Z.PV_Src_ReleaseAudit` | PROJECT | `1094f98e2f9b0ae869cc9af551ff29fec31b5a6da945d568473bad3494f76b95` | 7a8f0a6b1c9f8b917bbc73cbad8b243c45661e0983f9c6a7d92a52eecb4b530f; ProjectionHEAD |
+| `R1Z.PV_Src_ReleaseAudit` | PROJECT | `1094f98e2f9b0ae869cc9af551ff29fec31b5a6da945d568473bad3494f76b95` | 7a8f0a6b1c9f8b917bbc73cbad8b243c45661e0983f9c6a7d92a52eecb4b530f |
 | `R1Z.PV_Src_ResultControl` | PROJECT | `34f33547e6b2312e4ad52e1ffb66d9b43eb61ebef83c9287275757af4a620222` | 12b3507534bdc445d5afaec176bf67f30beefc5eedc6bb1bda4b17006a8790d2 |
 | `R1Z.PV_Src_ReturnedSnapshot` | PROJECT | `bae11e8f8a7714beaaa38774b1d6f4d72012a9aa28aa038dc5cb6b50830a8293` | 8b6847a963f750f27186653eea3d906c0fa5613056337ae0f4d48d09a48c6b3d |
 | `R1Z.PV_Src_RootCertificate` | PROJECT | `475881037b0607959ba2cba62c5091adc9a1cd82a7a42f3da07d378595e553d8` | c5650c561735ca32a6a580dfc27b6a80a67a4e62fb8276021020d5b692845818 |
@@ -5846,142 +5849,142 @@ Recompilation receipts retain exact import hashes. Historical changed-input repl
 | `R1Z.PV_Src_RootSourceEquation` | PROJECT | `4dd04e406ddd5c4ca425f740940755823ef5cc7d2358f7ef5651148693be19e7` | b89b0a20978ed6aff295887bc1dd8c0f18310d8bd17e63e663abc1985f1bd4a7 |
 | `R1Z.PV_Src_ScalarFold` | PROJECT | `bc0ebdab537679037bd7478ec2cf5d5e55b163881d20e1d0a355256de979aa3a` | b6602230598eb4b66e7e05c07b0a07eb1b44bb315f7a2d1b056f2b93013b7387 |
 | `R1Z.PV_Src_ScalarReduce` | PROJECT | `bd3c2d458716aebc614e10a22d83da1535880731cea2cb11201f76fdb10f4e94` | 5e865de952844340212ef43c554e98846cc796915651192751d86f286f2e287f |
-| `R1Z.PV_Src_SelectedConsumer` | PROJECT | `dc09c0a4a4906df0fda004259a1bda0e78fa7d71969f0ccf401e5d66d13adeb1` | 6079a8edab7ab812d112382d78c03d7e5db5e43e87d05e409ef171b93cdad777; ProjectionHEAD |
+| `R1Z.PV_Src_SelectedConsumer` | PROJECT | `dc09c0a4a4906df0fda004259a1bda0e78fa7d71969f0ccf401e5d66d13adeb1` | 6079a8edab7ab812d112382d78c03d7e5db5e43e87d05e409ef171b93cdad777 |
 | `R1Z.PV_Src_SelectedFour` | PROJECT | `41008d0e278612bb3bed83f96e1b2129cad8699945949967cda39d934ecd39ed` | f460b47a458d108609ebd1df1cb22e4f0251eb142cf6f077b924b4a85d436e08 |
 | `R1Z.PV_Src_SelectedThree` | PROJECT | `69aea19cd57f07986402564f74e575c9bdcc527d967c71ecda1a2050513f4be5` | 2c26b82620693c6165acfb36edb1644fdafc335a49ba48d4f36df71489858473 |
-| `R1Z.PV_Src_ThreeConsumer` | PROJECT | `c8ac98835de83f5a74ba1bfc851a0c4408bdb7c3bbce428e07144f0060e7bc58` | a513c3b2de4c9cb13a29cc622b1bfd7ad5e3784bba18b2a070d26d0b9c34b2f2; ProjectionHEAD |
+| `R1Z.PV_Src_ThreeConsumer` | PROJECT | `c8ac98835de83f5a74ba1bfc851a0c4408bdb7c3bbce428e07144f0060e7bc58` | a513c3b2de4c9cb13a29cc622b1bfd7ad5e3784bba18b2a070d26d0b9c34b2f2 |
 | `R1Z.PV_Src_Trace` | PROJECT | `1cb52c1d5a22ae1d9e0aa6f0abc9d10595070fc17c0bbd475d511df682aae46b` | 75bc27dccfe53df6d613775b9e690857f3742d9723d485b48ba3558133d82e1d |
 | `R1Z.PV_Src_Transport` | PROJECT | `1f383ea3c5aa0e4b661bf6c5fb214bcc4985e6299f2c68a67cdb16ea3bafa259` | 5793c8b9d1a501dbcf0870113b8ec1d83c41945b0371aa85fac5d901dae0addf |
 | `R1Z.PV_Src_WithdrawalRecipient` | PROJECT | `7892d9aee0d9cc76bbd3bf0a111f1602b3aa02bfe974a629f230ffab2f2cc293` | 14e915c1e789f2c7f137513ad08d4060ea17b8d8784c228d5e4ce52be895c2b6 |
 | `R1Z.PV_Src_ZeroDigest` | PROJECT | `f698c6c12612f8000a8b6c79fa48342ecde0d5e80ad7fae1b358a94bfd98e81e` | b078c2a630361f59c381cd3fb47ee7d6ac6ea872dae40bb2b22a584bdf4a6be8 |
-| `R1Z.PhaseBuilderDependenciesBin` | PROJECT | `3072f9d47b244363c8a9caf23aa1bdf7c4070cf63590c935385eed1da73a3e89` | d504492b8f650e0bbab796d8af53cd1ae3389110879c44104ea6a503b3e6dad2; ProjectionHEAD |
-| `R1Z.PhaseCausalityBin` | PROJECT | `ba505fc7b8bb50da60f509e9deb698c1c08e841cbdaecf172bfca8508e050c6b` | b32dd273d1ea6168f57c1296d1f0f375df099849b66a600eec7c16aadc2c2872; ProjectionHEAD |
-| `R1Z.PhaseCircleBlocksBin` | PROJECT | `61af62bf04e71f88aaa3b1e20a5ef6d82dba457c8cfe5dd92b64a43914ad6b0a` | 9205fe7a193862fd0028e09257c42b7dc311f97150ccf391f57cdbb633b23564; ProjectionHEAD |
-| `R1Z.PhaseLeafConstructionBin` | PROJECT | `a337ee220456ce31245eb38f0b89bb223bee767b1f9ff226d79924b8864d8199` | 52d5db26690304fb47933a2b06a08a87a3a3eca9fe01b81dc7ff8a6c0ba88e37; ProjectionHEAD |
-| `R1Z.PhaseLeafEncodingBin` | PROJECT | `91352ef7b9678c43eee5c903be88afa8667c925e9b537ac0195d1c07b79f414f` | d59778ca42e2b37e5585fef3d4d79ece1660371b09f2c91ebfad99311587736c; ProjectionHEAD |
-| `R1Z.PhaseLocalityBin` | PROJECT | `116c07bec5aa6bb98ab103beb4e0eaf1db71087e38416ef4e788ae09cda2faa8` | 5c0fe1e2e2379512fd70b3b2e3ea066c042eaadce843019933944d9ad370cf20; ProjectionHEAD |
-| `R1Z.PhaseMessageDependenciesBin` | PROJECT | `93291afe3c33f23554e84cb9d94cca6e2b767fd76610607d73fc081b71db61b7` | e82bc1967a40b740abab8256095ecdbd6c81cfaedaf105bd6cfbb6244c3bee88; ProjectionHEAD |
-| `R1Z.PhaseMessageEncodingBin` | PROJECT | `a95904fde4089c4552a540def83731a869f5e10e0ec2d982b2b17c167bc00219` | 03838c639a5898765eb9647ddd19f7bd2632afa7524d74882fdb592f822cf29b; ProjectionHEAD |
-| `R1Z.PhaseProtocolCoverageBin` | PROJECT | `a823417c098072319361342bd91640b05ac1827092577f75d40a7e6aa2fe4c9b` | 61897037f04f4ada6e96ebf9030b02db96a0718b998adee3c27f13ca570c63d6; ProjectionHEAD |
-| `R1Z.PhaseProtocolInstanceBin` | PROJECT | `806c08f1d3ff63ee284c182c5ceaba8ef437edcae239b79bbb41a18852b27c0d` | d4c6c705ad2b7312084d795a90d4889345bc0cb797e2a2125dd7f76d057f7c61; ProjectionHEAD |
-| `R1Z.PhaseQueryScanBin` | PROJECT | `02ac666632a0a2ec3c0b5076ecfc56d3bb97e4fd484b175ba3a92419bf88318a` | 4701ce14185c54cdb09d201f3a6dc2db2395450be12662d3e02fee17754c2282; ProjectionHEAD |
-| `R1Z.PhaseSamplerParserBin` | PROJECT | `609c3fab99ea752cc187a197dc341bb6e9291a28afeb4e11fb6eb02a1b1838ba` | 5c49ee1801c301482c3c6992af2270bf559d4f61b107bba07578f01bfc5f3a55; ProjectionHEAD |
-| `R1Z.PhaseScheduleBin` | PROJECT | `10c19f871d398bddd5bf2290360e2c5bb61ff63d1eb30466bf4200ce99acf158` | 2b2b4136f865cedb15b11b828aefdf8b646f7796693f88af8fc85c7e61fe1b5d; ProjectionHEAD |
-| `R1Z.PhaseTranscriptBin` | PROJECT | `25ae2b8beb099f98af57890eadabdbbf5c2d7cab860f9c1e4bf458a3ffda480f` | cf15d630bde8972cdf4c52e292e865a1000b49ead588e0295a211c93cef9cc3f; ProjectionHEAD |
-| `R1Z.PhaseWireLog2Bin` | PROJECT | `9c73ae2c3456735de50d4569e091796db86b8f7cee923e6c0e8df36a1b5e75ae` | 48daf6bcfc7a2c43a7623264f7576e3bb38ff877d4c1af5416b730763b06334b; ProjectionHEAD |
+| `R1Z.PhaseBuilderDependenciesBin` | PROJECT | `3072f9d47b244363c8a9caf23aa1bdf7c4070cf63590c935385eed1da73a3e89` | d504492b8f650e0bbab796d8af53cd1ae3389110879c44104ea6a503b3e6dad2 |
+| `R1Z.PhaseCausalityBin` | PROJECT | `ba505fc7b8bb50da60f509e9deb698c1c08e841cbdaecf172bfca8508e050c6b` | b32dd273d1ea6168f57c1296d1f0f375df099849b66a600eec7c16aadc2c2872 |
+| `R1Z.PhaseCircleBlocksBin` | PROJECT | `61af62bf04e71f88aaa3b1e20a5ef6d82dba457c8cfe5dd92b64a43914ad6b0a` | 9205fe7a193862fd0028e09257c42b7dc311f97150ccf391f57cdbb633b23564 |
+| `R1Z.PhaseLeafConstructionBin` | PROJECT | `a337ee220456ce31245eb38f0b89bb223bee767b1f9ff226d79924b8864d8199` | 52d5db26690304fb47933a2b06a08a87a3a3eca9fe01b81dc7ff8a6c0ba88e37 |
+| `R1Z.PhaseLeafEncodingBin` | PROJECT | `91352ef7b9678c43eee5c903be88afa8667c925e9b537ac0195d1c07b79f414f` | d59778ca42e2b37e5585fef3d4d79ece1660371b09f2c91ebfad99311587736c |
+| `R1Z.PhaseLocalityBin` | PROJECT | `116c07bec5aa6bb98ab103beb4e0eaf1db71087e38416ef4e788ae09cda2faa8` | 5c0fe1e2e2379512fd70b3b2e3ea066c042eaadce843019933944d9ad370cf20 |
+| `R1Z.PhaseMessageDependenciesBin` | PROJECT | `93291afe3c33f23554e84cb9d94cca6e2b767fd76610607d73fc081b71db61b7` | e82bc1967a40b740abab8256095ecdbd6c81cfaedaf105bd6cfbb6244c3bee88 |
+| `R1Z.PhaseMessageEncodingBin` | PROJECT | `a95904fde4089c4552a540def83731a869f5e10e0ec2d982b2b17c167bc00219` | 03838c639a5898765eb9647ddd19f7bd2632afa7524d74882fdb592f822cf29b |
+| `R1Z.PhaseProtocolCoverageBin` | PROJECT | `a823417c098072319361342bd91640b05ac1827092577f75d40a7e6aa2fe4c9b` | 61897037f04f4ada6e96ebf9030b02db96a0718b998adee3c27f13ca570c63d6 |
+| `R1Z.PhaseProtocolInstanceBin` | PROJECT | `806c08f1d3ff63ee284c182c5ceaba8ef437edcae239b79bbb41a18852b27c0d` | d4c6c705ad2b7312084d795a90d4889345bc0cb797e2a2125dd7f76d057f7c61 |
+| `R1Z.PhaseQueryScanBin` | PROJECT | `02ac666632a0a2ec3c0b5076ecfc56d3bb97e4fd484b175ba3a92419bf88318a` | 4701ce14185c54cdb09d201f3a6dc2db2395450be12662d3e02fee17754c2282 |
+| `R1Z.PhaseSamplerParserBin` | PROJECT | `609c3fab99ea752cc187a197dc341bb6e9291a28afeb4e11fb6eb02a1b1838ba` | 5c49ee1801c301482c3c6992af2270bf559d4f61b107bba07578f01bfc5f3a55 |
+| `R1Z.PhaseScheduleBin` | PROJECT | `10c19f871d398bddd5bf2290360e2c5bb61ff63d1eb30466bf4200ce99acf158` | 2b2b4136f865cedb15b11b828aefdf8b646f7796693f88af8fc85c7e61fe1b5d |
+| `R1Z.PhaseTranscriptBin` | PROJECT | `25ae2b8beb099f98af57890eadabdbbf5c2d7cab860f9c1e4bf458a3ffda480f` | cf15d630bde8972cdf4c52e292e865a1000b49ead588e0295a211c93cef9cc3f |
+| `R1Z.PhaseWireLog2Bin` | PROJECT | `9c73ae2c3456735de50d4569e091796db86b8f7cee923e6c0e8df36a1b5e75ae` | 48daf6bcfc7a2c43a7623264f7576e3bb38ff877d4c1af5416b730763b06334b |
 | `R1Z.PoleMassR1` | PROJECT | `959ef3c65713e0ef703189c943f51d07ec22b7b9d3373b2c247b626403ea9850` | 72fa96fc71f9484301a59720a7a75b93564e24aca914c49250c3b6b20adaac7f |
 | `R1Z.PoleN8` | PROJECT | `6bce67a23194ffbee3f47d2bdf8c2ff7ea55278921c606d4d6cd5984674a967d` | 7eebeaddb4677897183e019df9378421fa916ae47a2b65d92c29911147d9d984 |
-| `R1Z.PredicateR1` | PROJECT | `526e4cc4de7c79dc600ea5acd0318c476ee34e3366ec8ed0f6b78f381cfdf83f` | 005130bb95b7b53cb1d5f6b739c59ebaf050c062a6924bceeb275c0b543a1bf2; ProjectionHEAD |
-| `R1Z.PremisesR1PBin` | PROJECT | `06ce53f1a0f9714c5371f49f60f093fd1b390bf29320dd5510e90f6e3eecba60` | b26f7e3a64c9fc8325edf2efa11605e2c2a8ddaecd98d31ec6f9fdb04fa423d8; ProjectionHEAD |
-| `R1Z.PrivacyBoundR1PBin` | PROJECT | `a0ff6ddc42680bf9a269f058d695f686ff36d3a8816a74ad919414129c96bc75` | 0083b19db9fbf6b679f40478dfd7271d046148604d06c157a017109b0be8a624; ProjectionHEAD |
-| `R1Z.PrivacyGamesR1` | PROJECT | `7a8d5f5e000b33b70c8ded5ff973b5733e36e755e46a9b9f4a1821d07c0a1256` | ec1a2ede547695dec3e091e9d9fc0e5140620d53aaa42d6f6ff454f3bf79fe38; ProjectionHEAD |
-| `R1Z.PrivacyGamesSamplerR1` | PROJECT | `60ec3d694459099a8069546b8ff00b9db22b5fd863f3f160f85ca22d7d7ecbf1` | 2f3773221c43a7faca707219511d123899e6ec3d4ec1a70df4593db5d5536963; ProjectionHEAD |
-| `R1Z.PrivacyPremisesBin` | PROJECT | `e05a4c3dcb969fafe29c61c42845395f06a36f75fba4a2498cbf5aafa1fcab98` | 8bd0c74547243d46ac2ce511e1c975323cbdb4216b0b8868dbcbaeaa890165e3; ProjectionHEAD |
-| `R1Z.PrivacyR1AcctBasis` | PROJECT | `41131606515a196f979e3c565ec5b48f608b675c5001dc7de84041dcddd214db` | 4eaa22f0c74145544a358ab1382310c192e586e6ac3d91368848973f9d72734e; ProjectionHEAD |
-| `R1Z.PrivacyR1AcctModel` | PROJECT | `17727d584bf8174018941fb2106e17b363c5ab475556ead767c3dde6ad7cd434` | 6a625b7931eeea4e3d8f9a28a8fd2fd4e4bef49a77401f520957c6b21fdfbf37; ProjectionHEAD |
-| `R1Z.PrivacyR1Final` | PROJECT | `a1e2370bfa87b4202f64cd9bc9a8e4cfd57df075da6c129f7d0bbee486257ee8` | 73b730e45a4d8b9b3ab01133700d99c063e82bd9bb8f83e544945baa3cb58b67; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalProtocol` | PROJECT | `80035beacc624585beda45e996f54c817dcb1dbdaec8d9946bd4b15cf1b16a8d` | 6161516d6e96b5c6eb5f4e2933ff988059dabda532f02cd10c15c2809030b6c4; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalProtocolBuilder` | PROJECT | `0c03074eb0c9f33f9684ab4a92cd60797ded39f821f5238edb5471dd682f4c32` | 098ff288973c44a5d61b7b97f975a4c130c9bac7de8089c4f1e980b61f87bb9e; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalProtocolCaller` | PROJECT | `1e92d9c664225a6a5a7abaff866233685ed9b5208773dacbb1cb9096007db846` | dfbcc6c0b26bdfe67d0e9fbeb72695a5c31ce70aa7be3db03c4f068cc1e57cc4; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalProtocolHistory` | PROJECT | `040ee90196ef8e4873ec43fb207adc32fdf3ebc870ce2d0b914c215293eee6ce` | 1d760d8f048602cf7ca691464b6cf50746da14ea28e052b855e353c80d9753ee; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalProtocolHistoryReal` | PROJECT | `98a06cb2555a71a0c02dde5ce18843b688c82b2c35ecf7ca8f5034d7982bb36c` | 91efbad183e87d6dc5c1dc736469c7fa878b4e38da524074d09a2c153e19e849; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalProtocolQuotient` | PROJECT | `61cec2e65562b0cd914b3c1bac787a7d02507763cdab484fbf72e33707b29e6b` | 6d8feeb9c0374d62d29be5bfd6886a5cec5840e86676a14213aa36a10b426e1d; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalRelease` | PROJECT | `355a2d10a07126b291a60861bdc42c78f35e741c26f8ba27b0927d220555bbd0` | 0f9f90cac950e75c904e541c97beb111d5ee8f7e9a69f31b09b94fbd7a2bbb70; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalReleaseSource` | PROJECT | `dbac863c24ddefc722775a3ff57a57ada5043b76e52adade81c359d7e44f01e1` | dcee088d2668ac4527a58314139d63e130cba5f53762f89fa32846b80c99d67d; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalReleaseSource2` | PROJECT | `41e1dfcd0020650f4e7eaa23d44f3ed574c1a0f87e1ed7eec94cf45ba1e2c653` | 8a4aeb1fe9985b1f45ce76607107b394fc8ab90f0aa7fccd0e2e395f5dc9f7b7; ProjectionHEAD |
-| `R1Z.PrivacyR1FinalReleaseSource3` | PROJECT | `13c8b3e47db9f42cddeb73c4af358dc1ba9176bff0a60971f66bdf5ef174369d` | dc912d088214ce974cbf435b60cf3bc2f720d36427084d8b1aeb2bde8561de95; ProjectionHEAD |
-| `R1Z.PrivacyR1Headline` | PROJECT | `b69ec23ddf5dd3ffbb04980a82ef84813c67af191cc2f8f9d60ab67ea8616d7a` | 6bdf33525afc01faf95125de34ead2af9d877a188387676d7746666380a348af; ProjectionHEAD |
-| `R1Z.PrivacyR1HeadlineAcct` | PROJECT | `2046498b3c397adf4d21f9fd927b5e2e4739528a26bc8da4955ec59bd35114aa` | ebbcd9a4e5423873e7d10802d13e30d355eb1355c019ebe996a59d512aa4549d; ProjectionHEAD |
-| `R1Z.PrivacyR1HeadlineOwned` | PROJECT | `b7530d285d147dddd280d643d4b02d30489d65b2a1486b643e7f015a4c623f7a` | e2e950febffc0641e16c722a2e592b5148bd9d9410b7415eabc6ba177eaec060; ProjectionHEAD |
-| `R1Z.PrivacyR1HeadlineOwnedClosed` | PROJECT | `ae5b1c14e28158d763bba61669f0544582b11ec85d7b73287ff670a2dbefff54` | be48d4529780163924a46635df7c3295e955f03213aa342fc850e9dc09b0136b; ProjectionHEAD |
-| `R1Z.PrivacyR1HeadlineV2` | PROJECT | `0cf5b991b623d35edd390a7898223015f07d28b01743aa659f06384a333ea66f` | 0bb8dcc74e6d33492d386582c06836aca1ee35fc61ce898cc3afb8f6d1b20e16; ProjectionHEAD |
-| `R1Z.PrivacyR1HeadlineWire2` | PROJECT | `08ef7a01e1573632dbdf1ba59e12229046949fee0a5d592ca6a7afbe7217886b` | 6da67a3566b461b535696ec95b1c70b8be5f6d860040e1c3714845a2b96fbee6; ProjectionHEAD |
-| `R1Z.PrivacyR1PBin` | PROJECT | `0af2d93f9bd6f0fe6f930cf99f6fde9b3e867f12d1b089b92a66783584f41194` | 1009cc311ae3bac2013623577ab03c0adbf8c859e49dd4408c21ab54fb255a63; ProjectionHEAD |
-| `R1Z.PrivacySimulatorBin` | PROJECT | `cb5dabdd81c5a64f103968ffb543b7feaa1ca332d250749fdeb5a2403667b76b` | 7122fff5e8b0962d16dc3f45af41b783de6f9cf5d1acb3c9398e3d26a0f717f1; ProjectionHEAD |
-| `R1Z.ProverCommitAdmittedEndpoint` | PROJECT | `3d6318fef6f0711a9f5c284887b9b102f290bb91174271c4ae93f34e7b573774` | 974ce8accd8785bef23e433fb95253b7d35b8455c3b9c75083985e0e2fefd6ec; ProjectionHEAD |
+| `R1Z.PredicateR1` | PROJECT | `526e4cc4de7c79dc600ea5acd0318c476ee34e3366ec8ed0f6b78f381cfdf83f` | 005130bb95b7b53cb1d5f6b739c59ebaf050c062a6924bceeb275c0b543a1bf2 |
+| `R1Z.PremisesR1PBin` | PROJECT | `06ce53f1a0f9714c5371f49f60f093fd1b390bf29320dd5510e90f6e3eecba60` | b26f7e3a64c9fc8325edf2efa11605e2c2a8ddaecd98d31ec6f9fdb04fa423d8 |
+| `R1Z.PrivacyBoundR1PBin` | PROJECT | `a0ff6ddc42680bf9a269f058d695f686ff36d3a8816a74ad919414129c96bc75` | 0083b19db9fbf6b679f40478dfd7271d046148604d06c157a017109b0be8a624 |
+| `R1Z.PrivacyGamesR1` | PROJECT | `7a8d5f5e000b33b70c8ded5ff973b5733e36e755e46a9b9f4a1821d07c0a1256` | ec1a2ede547695dec3e091e9d9fc0e5140620d53aaa42d6f6ff454f3bf79fe38 |
+| `R1Z.PrivacyGamesSamplerR1` | PROJECT | `60ec3d694459099a8069546b8ff00b9db22b5fd863f3f160f85ca22d7d7ecbf1` | 2f3773221c43a7faca707219511d123899e6ec3d4ec1a70df4593db5d5536963 |
+| `R1Z.PrivacyPremisesBin` | PROJECT | `e05a4c3dcb969fafe29c61c42845395f06a36f75fba4a2498cbf5aafa1fcab98` | 8bd0c74547243d46ac2ce511e1c975323cbdb4216b0b8868dbcbaeaa890165e3 |
+| `R1Z.PrivacyR1AcctBasis` | PROJECT | `41131606515a196f979e3c565ec5b48f608b675c5001dc7de84041dcddd214db` | 4eaa22f0c74145544a358ab1382310c192e586e6ac3d91368848973f9d72734e |
+| `R1Z.PrivacyR1AcctModel` | PROJECT | `17727d584bf8174018941fb2106e17b363c5ab475556ead767c3dde6ad7cd434` | 6a625b7931eeea4e3d8f9a28a8fd2fd4e4bef49a77401f520957c6b21fdfbf37 |
+| `R1Z.PrivacyR1Final` | PROJECT | `a1e2370bfa87b4202f64cd9bc9a8e4cfd57df075da6c129f7d0bbee486257ee8` | 73b730e45a4d8b9b3ab01133700d99c063e82bd9bb8f83e544945baa3cb58b67 |
+| `R1Z.PrivacyR1FinalProtocol` | PROJECT | `80035beacc624585beda45e996f54c817dcb1dbdaec8d9946bd4b15cf1b16a8d` | 6161516d6e96b5c6eb5f4e2933ff988059dabda532f02cd10c15c2809030b6c4 |
+| `R1Z.PrivacyR1FinalProtocolBuilder` | PROJECT | `0c03074eb0c9f33f9684ab4a92cd60797ded39f821f5238edb5471dd682f4c32` | 098ff288973c44a5d61b7b97f975a4c130c9bac7de8089c4f1e980b61f87bb9e |
+| `R1Z.PrivacyR1FinalProtocolCaller` | PROJECT | `1e92d9c664225a6a5a7abaff866233685ed9b5208773dacbb1cb9096007db846` | dfbcc6c0b26bdfe67d0e9fbeb72695a5c31ce70aa7be3db03c4f068cc1e57cc4 |
+| `R1Z.PrivacyR1FinalProtocolHistory` | PROJECT | `040ee90196ef8e4873ec43fb207adc32fdf3ebc870ce2d0b914c215293eee6ce` | 1d760d8f048602cf7ca691464b6cf50746da14ea28e052b855e353c80d9753ee |
+| `R1Z.PrivacyR1FinalProtocolHistoryReal` | PROJECT | `98a06cb2555a71a0c02dde5ce18843b688c82b2c35ecf7ca8f5034d7982bb36c` | 91efbad183e87d6dc5c1dc736469c7fa878b4e38da524074d09a2c153e19e849 |
+| `R1Z.PrivacyR1FinalProtocolQuotient` | PROJECT | `61cec2e65562b0cd914b3c1bac787a7d02507763cdab484fbf72e33707b29e6b` | 6d8feeb9c0374d62d29be5bfd6886a5cec5840e86676a14213aa36a10b426e1d |
+| `R1Z.PrivacyR1FinalRelease` | PROJECT | `355a2d10a07126b291a60861bdc42c78f35e741c26f8ba27b0927d220555bbd0` | 0f9f90cac950e75c904e541c97beb111d5ee8f7e9a69f31b09b94fbd7a2bbb70 |
+| `R1Z.PrivacyR1FinalReleaseSource` | PROJECT | `dbac863c24ddefc722775a3ff57a57ada5043b76e52adade81c359d7e44f01e1` | dcee088d2668ac4527a58314139d63e130cba5f53762f89fa32846b80c99d67d |
+| `R1Z.PrivacyR1FinalReleaseSource2` | PROJECT | `41e1dfcd0020650f4e7eaa23d44f3ed574c1a0f87e1ed7eec94cf45ba1e2c653` | 8a4aeb1fe9985b1f45ce76607107b394fc8ab90f0aa7fccd0e2e395f5dc9f7b7 |
+| `R1Z.PrivacyR1FinalReleaseSource3` | PROJECT | `13c8b3e47db9f42cddeb73c4af358dc1ba9176bff0a60971f66bdf5ef174369d` | dc912d088214ce974cbf435b60cf3bc2f720d36427084d8b1aeb2bde8561de95 |
+| `R1Z.PrivacyR1Headline` | PROJECT | `b69ec23ddf5dd3ffbb04980a82ef84813c67af191cc2f8f9d60ab67ea8616d7a` | 6bdf33525afc01faf95125de34ead2af9d877a188387676d7746666380a348af |
+| `R1Z.PrivacyR1HeadlineAcct` | PROJECT | `2046498b3c397adf4d21f9fd927b5e2e4739528a26bc8da4955ec59bd35114aa` | ebbcd9a4e5423873e7d10802d13e30d355eb1355c019ebe996a59d512aa4549d |
+| `R1Z.PrivacyR1HeadlineOwned` | PROJECT | `b7530d285d147dddd280d643d4b02d30489d65b2a1486b643e7f015a4c623f7a` | e2e950febffc0641e16c722a2e592b5148bd9d9410b7415eabc6ba177eaec060 |
+| `R1Z.PrivacyR1HeadlineOwnedClosed` | PROJECT | `ae5b1c14e28158d763bba61669f0544582b11ec85d7b73287ff670a2dbefff54` | be48d4529780163924a46635df7c3295e955f03213aa342fc850e9dc09b0136b |
+| `R1Z.PrivacyR1HeadlineV2` | PROJECT | `0cf5b991b623d35edd390a7898223015f07d28b01743aa659f06384a333ea66f` | 0bb8dcc74e6d33492d386582c06836aca1ee35fc61ce898cc3afb8f6d1b20e16 |
+| `R1Z.PrivacyR1HeadlineWire2` | PROJECT | `08ef7a01e1573632dbdf1ba59e12229046949fee0a5d592ca6a7afbe7217886b` | 6da67a3566b461b535696ec95b1c70b8be5f6d860040e1c3714845a2b96fbee6 |
+| `R1Z.PrivacyR1PBin` | PROJECT | `0af2d93f9bd6f0fe6f930cf99f6fde9b3e867f12d1b089b92a66783584f41194` | 1009cc311ae3bac2013623577ab03c0adbf8c859e49dd4408c21ab54fb255a63 |
+| `R1Z.PrivacySimulatorBin` | PROJECT | `cb5dabdd81c5a64f103968ffb543b7feaa1ca332d250749fdeb5a2403667b76b` | 7122fff5e8b0962d16dc3f45af41b783de6f9cf5d1acb3c9398e3d26a0f717f1 |
+| `R1Z.ProverCommitAdmittedEndpoint` | PROJECT | `3d6318fef6f0711a9f5c284887b9b102f290bb91174271c4ae93f34e7b573774` | 974ce8accd8785bef23e433fb95253b7d35b8455c3b9c75083985e0e2fefd6ec |
 | `R1Z.ProverCommitBudgetJoin` | PROJECT | `4cf66bf3bc982c140826aebc3cdd6e51d6cba1429c0fdc48e3908afa81890bc6` | 2ffad3f0b5045c76001c0403f42ad895dfe30cbdcb5148ff3f74643963c92e64 |
-| `R1Z.ProverCommitCallerInstance` | PROJECT | `5a14f2c99201274474f5567c697b0bb2ffe1e6f98ea3c99eceba63fe3bf9f8d2` | 540c73a5f3d5e06c9ef5c397dd26cc301c1b62e6bf275ed700ea06457c8e641b; ProjectionHEAD |
-| `R1Z.ProverCommitCompletionAdapter` | PROJECT | `d1aa4e7d1da2be944285f67f534b76f79f2ae14cc4bc495d985d7bf6dc6bcc4c` | eaf400d1d046a84db99afbf7691798e09c69bcf98705a1159317fa4f56e72fea; ProjectionHEAD |
-| `R1Z.ProverCommitCursor` | PROJECT | `cfa2880881b3ebc70f12f560cbb407557c1599363b74915b712eafae277d121c` | b7410a6a4baf2afc58d58674b37c2d10bd69783b94efb6b99a4b76286692131c; ProjectionHEAD |
+| `R1Z.ProverCommitCallerInstance` | PROJECT | `5a14f2c99201274474f5567c697b0bb2ffe1e6f98ea3c99eceba63fe3bf9f8d2` | 540c73a5f3d5e06c9ef5c397dd26cc301c1b62e6bf275ed700ea06457c8e641b |
+| `R1Z.ProverCommitCompletionAdapter` | PROJECT | `d1aa4e7d1da2be944285f67f534b76f79f2ae14cc4bc495d985d7bf6dc6bcc4c` | eaf400d1d046a84db99afbf7691798e09c69bcf98705a1159317fa4f56e72fea |
+| `R1Z.ProverCommitCursor` | PROJECT | `cfa2880881b3ebc70f12f560cbb407557c1599363b74915b712eafae277d121c` | b7410a6a4baf2afc58d58674b37c2d10bd69783b94efb6b99a4b76286692131c |
 | `R1Z.ProverCommitExtractedStep` | PROJECT | `960d08536b02496d3467ae22ed7cde8db063ec94c020882fa62e0ba8abf3ffef` | 36cd398355687bd4f24c07f2ca02f70dc657fa16769a0978ad10e7bd7b595573 |
 | `R1Z.ProverCommitFourSteps` | PROJECT | `3333b9b76fbcc9b7e59397ca54bd489151690ea805345f77b55caa2990f39b4f` | 456cf4210e093d9b0c3af1cb74dd37c218b03c90172a2d1f668f16d0a532211c |
-| `R1Z.ProverCommitOwnedArrayLaw` | PROJECT | `cdea27bf0f6dd1d9df39a47e2d86faa02ec45dacd8372d2d13d5aca12fcf7567` | 7177db45a1cddd4f5284af3a1578e6fefeedac6eed0c6a2a66b0c0cc18aab93d; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedArrays` | PROJECT | `36a47370a7e2b60ebd7abbe5faca74120926e685c1693a44872e50822591d8dc` | 2bfc07a3a02303a04a3bfbb545f98d30d50d06460303514a517ad6485b7ca469; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedBackend` | PROJECT | `f7b9abaa97709cd189561da23f950e5922e95d0d815ad9f015f4729726bc5f30` | 6163b7b02393aa791ed66ad4696527dadac7fe9c2c1241583c44eaa70b1d3edb; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedByteValue` | PROJECT | `ab28d2dbad3866b5af7f926281cdfdb13723403d53f560d954db2c1f482ec01a` | 6fa0b0e8628d3122f4ce5a67aaeebbc40149dcceba1429f23316e116a9eaacf3; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedBytes` | PROJECT | `65f6aee980810a2c182badf057909067ed352453e81c35d68775f3442eb4b234` | 324435d4433d6ce5df7f9c22df820a8f90582de3e91475522b48ccd60749caba; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedCache` | PROJECT | `5c8c4229518fc223d48835484cbbce8dc59eef102a19b99c5a4d7b712a4cc8e3` | 5da72a30f0f9f7a5848d7da421c9fb7b687657b61a8ae12c9c331d09da9c64fe; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedCallerLaw` | PROJECT | `ba4950347060a254091cc5e1fa1f07c8f8e2b52f5a35798b448799ed73f78461` | e8cdcdba87de9f22500013cf81fc57085669fca7dedb2f20bfbfcbeb097b274d; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedCursorProgress` | PROJECT | `3b74a43f1dc6dbeab5b5ef4a105c0a3394458cf68c56ac7633f0d349667ca970` | 9a2a82337e5ed009703ac5390e7208e00d01b3ada7682d25c5745cfb51f19b07; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedDecoder` | PROJECT | `96873367f4c62b709db0c93da3b697dcd07e3d85d7af7fbf8d74a4e091393545` | c49d664222d80bc64bbf9ace1ec3e28354bc9d474c50735df72659df7eecad7f; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedEndpoint` | PROJECT | `c3a4101635cbc9014f5af7ff4dfd984754cff2107ec77de559b4f8d2371d7943` | 00ec52228ad73a354d2bffecb4a514889856ce0ebaf576e68cf6e3ee2047e772; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedModel` | PROJECT | `01b810320e031fbaae25ed0fef0e0d599f6b15285e155bf549c68453d31d34c9` | 27d98a166781c11970364d7f2cf60b270b2f7c511639267a2cd2d295a7866771; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedProgress` | PROJECT | `c4494c0ef6679040909682c6f1979f8f3057c7a3baf9312668e006d0f3d78591` | c7c6770b751a079a5f4db461dc61c2a2cf0914230e7ec526f6b7687d575b9546; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedReadBound` | PROJECT | `5e2d9cd43ae85f4309b1c75b60e9cb61b4e552526e5335696558112810d60906` | 88df01ff700fd0b7e46fdb116a0258423abdd83ec307aec14e6d562d2b62e52f; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedSequence` | PROJECT | `db609b5e3cc7dd8eb54bdc044102727d62771aadd46f452100e4675ca9652b7d` | 258475b72d7391eff621fc6a326ffda28591a3220881ad5551b5e1cffc191ca7; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedTotal` | PROJECT | `97cb202efc612cfe29ef299f2a781d1a9d93f16a1cc886c74522d25590500c81` | 7a194d8717a07150c20684814ec8c8bf25e121df6c89639224656f29b9950795; ProjectionHEAD |
-| `R1Z.ProverCommitOwnedWord` | PROJECT | `5690409323aa1c7e92d4924707658d17dc21ca3c654be86b8a49fa9234f05059` | d8137f89ab00d40a6eb54b109bced364ea64c4782ca0248646f8f48449e9fec2; ProjectionHEAD |
-| `R1Z.ProverCommitQuotientCoupling` | PROJECT | `3e6bcfb18f16441431d23662fa625bc0bfad60c9ebff169610fd1120b0e2e242` | 7be5f101e4fac0f97c553ceaae7638a5e9765196c8a99783dbec79f58e71a66b; ProjectionHEAD |
-| `R1Z.ProverCommitQuotientLaw` | PROJECT | `03f0abbd6432330668df65214192485d41efcb1db56594198506f1a2d91d6057` | b1b8192977d932a5054dd5f5dbeb23f17c21e500b104354715fbda4d2753c707; ProjectionHEAD |
-| `R1Z.ProverCommitQuotientModel` | PROJECT | `2d597a2c9e8622c3ef6f4505b145c4ae2f0887757873698b44ffa2766218e99d` | 1bba2a059ce42f0b05c5cadc1d23bc63b7025a38dcb27673321d9f635e702ff7; ProjectionHEAD |
-| `R1Z.ProverCommitQuotientPrivacy` | PROJECT | `bbb953d013eb69298a8377fed9c443a5425803c9b1b4d60edc7cfb8e99e1c2cb` | 82e847e2be2cf9ef13a09c72d235ff36ba94aca53f058bc8982e27017e22bba3; ProjectionHEAD |
-| `R1Z.ProverCommitQuotientStrict` | PROJECT | `871d98e922089fcf0444bed3bed62b46978caa7d30c7dfc6238eb126c513a312` | d90e15c50d70e7fb7edd2f59162cb6115361eb54f28a052d798ce684f9e492cd; ProjectionHEAD |
-| `R1Z.ProverCommitQuotientView` | PROJECT | `070024aeab2d3c084f7a2d8606d6c569ea3a937dadf5dafb61197a54866c3bde` | 7abb6fdbe2f2b14f613149a4cc41a10b2f6c51c0c1804d50dd041397e5b9d34f; ProjectionHEAD |
-| `R1Z.ProverCommitReferenceReads` | PROJECT | `d967cb9a219341b446d185224e8d428828148e0afebf4a9d197ad8e4854fee45` | aa7b820f97550ee9581f221669d7a5051d714e2d2fcbbf764c5e78c28f2a0dfb; ProjectionHEAD |
+| `R1Z.ProverCommitOwnedArrayLaw` | PROJECT | `cdea27bf0f6dd1d9df39a47e2d86faa02ec45dacd8372d2d13d5aca12fcf7567` | 7177db45a1cddd4f5284af3a1578e6fefeedac6eed0c6a2a66b0c0cc18aab93d |
+| `R1Z.ProverCommitOwnedArrays` | PROJECT | `36a47370a7e2b60ebd7abbe5faca74120926e685c1693a44872e50822591d8dc` | 2bfc07a3a02303a04a3bfbb545f98d30d50d06460303514a517ad6485b7ca469 |
+| `R1Z.ProverCommitOwnedBackend` | PROJECT | `f7b9abaa97709cd189561da23f950e5922e95d0d815ad9f015f4729726bc5f30` | 6163b7b02393aa791ed66ad4696527dadac7fe9c2c1241583c44eaa70b1d3edb |
+| `R1Z.ProverCommitOwnedByteValue` | PROJECT | `ab28d2dbad3866b5af7f926281cdfdb13723403d53f560d954db2c1f482ec01a` | 6fa0b0e8628d3122f4ce5a67aaeebbc40149dcceba1429f23316e116a9eaacf3 |
+| `R1Z.ProverCommitOwnedBytes` | PROJECT | `65f6aee980810a2c182badf057909067ed352453e81c35d68775f3442eb4b234` | 324435d4433d6ce5df7f9c22df820a8f90582de3e91475522b48ccd60749caba |
+| `R1Z.ProverCommitOwnedCache` | PROJECT | `5c8c4229518fc223d48835484cbbce8dc59eef102a19b99c5a4d7b712a4cc8e3` | 5da72a30f0f9f7a5848d7da421c9fb7b687657b61a8ae12c9c331d09da9c64fe |
+| `R1Z.ProverCommitOwnedCallerLaw` | PROJECT | `ba4950347060a254091cc5e1fa1f07c8f8e2b52f5a35798b448799ed73f78461` | e8cdcdba87de9f22500013cf81fc57085669fca7dedb2f20bfbfcbeb097b274d |
+| `R1Z.ProverCommitOwnedCursorProgress` | PROJECT | `3b74a43f1dc6dbeab5b5ef4a105c0a3394458cf68c56ac7633f0d349667ca970` | 9a2a82337e5ed009703ac5390e7208e00d01b3ada7682d25c5745cfb51f19b07 |
+| `R1Z.ProverCommitOwnedDecoder` | PROJECT | `96873367f4c62b709db0c93da3b697dcd07e3d85d7af7fbf8d74a4e091393545` | c49d664222d80bc64bbf9ace1ec3e28354bc9d474c50735df72659df7eecad7f |
+| `R1Z.ProverCommitOwnedEndpoint` | PROJECT | `c3a4101635cbc9014f5af7ff4dfd984754cff2107ec77de559b4f8d2371d7943` | 00ec52228ad73a354d2bffecb4a514889856ce0ebaf576e68cf6e3ee2047e772 |
+| `R1Z.ProverCommitOwnedModel` | PROJECT | `01b810320e031fbaae25ed0fef0e0d599f6b15285e155bf549c68453d31d34c9` | 27d98a166781c11970364d7f2cf60b270b2f7c511639267a2cd2d295a7866771 |
+| `R1Z.ProverCommitOwnedProgress` | PROJECT | `c4494c0ef6679040909682c6f1979f8f3057c7a3baf9312668e006d0f3d78591` | c7c6770b751a079a5f4db461dc61c2a2cf0914230e7ec526f6b7687d575b9546 |
+| `R1Z.ProverCommitOwnedReadBound` | PROJECT | `5e2d9cd43ae85f4309b1c75b60e9cb61b4e552526e5335696558112810d60906` | 88df01ff700fd0b7e46fdb116a0258423abdd83ec307aec14e6d562d2b62e52f |
+| `R1Z.ProverCommitOwnedSequence` | PROJECT | `db609b5e3cc7dd8eb54bdc044102727d62771aadd46f452100e4675ca9652b7d` | 258475b72d7391eff621fc6a326ffda28591a3220881ad5551b5e1cffc191ca7 |
+| `R1Z.ProverCommitOwnedTotal` | PROJECT | `97cb202efc612cfe29ef299f2a781d1a9d93f16a1cc886c74522d25590500c81` | 7a194d8717a07150c20684814ec8c8bf25e121df6c89639224656f29b9950795 |
+| `R1Z.ProverCommitOwnedWord` | PROJECT | `5690409323aa1c7e92d4924707658d17dc21ca3c654be86b8a49fa9234f05059` | d8137f89ab00d40a6eb54b109bced364ea64c4782ca0248646f8f48449e9fec2 |
+| `R1Z.ProverCommitQuotientCoupling` | PROJECT | `3e6bcfb18f16441431d23662fa625bc0bfad60c9ebff169610fd1120b0e2e242` | 7be5f101e4fac0f97c553ceaae7638a5e9765196c8a99783dbec79f58e71a66b |
+| `R1Z.ProverCommitQuotientLaw` | PROJECT | `03f0abbd6432330668df65214192485d41efcb1db56594198506f1a2d91d6057` | b1b8192977d932a5054dd5f5dbeb23f17c21e500b104354715fbda4d2753c707 |
+| `R1Z.ProverCommitQuotientModel` | PROJECT | `2d597a2c9e8622c3ef6f4505b145c4ae2f0887757873698b44ffa2766218e99d` | 1bba2a059ce42f0b05c5cadc1d23bc63b7025a38dcb27673321d9f635e702ff7 |
+| `R1Z.ProverCommitQuotientPrivacy` | PROJECT | `bbb953d013eb69298a8377fed9c443a5425803c9b1b4d60edc7cfb8e99e1c2cb` | 82e847e2be2cf9ef13a09c72d235ff36ba94aca53f058bc8982e27017e22bba3 |
+| `R1Z.ProverCommitQuotientStrict` | PROJECT | `871d98e922089fcf0444bed3bed62b46978caa7d30c7dfc6238eb126c513a312` | d90e15c50d70e7fb7edd2f59162cb6115361eb54f28a052d798ce684f9e492cd |
+| `R1Z.ProverCommitQuotientView` | PROJECT | `070024aeab2d3c084f7a2d8606d6c569ea3a937dadf5dafb61197a54866c3bde` | 7abb6fdbe2f2b14f613149a4cc41a10b2f6c51c0c1804d50dd041397e5b9d34f |
+| `R1Z.ProverCommitReferenceReads` | PROJECT | `d967cb9a219341b446d185224e8d428828148e0afebf4a9d197ad8e4854fee45` | aa7b820f97550ee9581f221669d7a5051d714e2d2fcbbf764c5e78c28f2a0dfb |
 | `R1Z.ProverCommitReferenceSource` | PROJECT | `a009d5bc0dee04b41639282e19bf452f995be3dda24ebd649bda034f5e4427f5` | 27852da384f379d8a6f022596975b397291b748e7ee11e118391752c9c139897 |
-| `R1Z.ProverCommitSaltBytes` | PROJECT | `b24481daab6dc1cf18f3dcc06ff4d9cfa77e0b0f278c984f48c698211b0a5191` | bdd29e0391b3a2ef05fa0ded13cbfca86cc1a3c320582746a1013c335b3bc804; ProjectionHEAD |
+| `R1Z.ProverCommitSaltBytes` | PROJECT | `b24481daab6dc1cf18f3dcc06ff4d9cfa77e0b0f278c984f48c698211b0a5191` | bdd29e0391b3a2ef05fa0ded13cbfca86cc1a3c320582746a1013c335b3bc804 |
 | `R1Z.ProverCommitSaltSource` | PROJECT | `6dcfe8fbbb49b2de73189ad4ff33e60db53148fe2f53223e6f072174a3b94e43` | 7751ac6d9507ba607d8ffba572be07a1e1c41ecf3b349892d8e80326cecb6f2d |
 | `R1Z.ProverCommitSamplerComposition` | PROJECT | `0dc2061ecd55d4546a41ed1b211fd7c1c634ba0306529de7471138fe38525ff7` | 3dc3ff21fbd06d78925e1f2fa8a935b6b5f108ad6c4707d508c0ebbef6651803 |
-| `R1Z.ProverCommitSectionObstruction` | PROJECT | `af1d2ac64a3ee7ff4bce0545feb5aee709f91056cae2e9be930ca603b11f3ca0` | 1805e3862ab30a7fc00f69df1ebf2ec45057e8fd243d36a89fb43cfbb6f4b221; ProjectionHEAD |
-| `R1Z.ProverCommitSequentialArrays` | PROJECT | `947cdfb200bde1149126f06ef89b24a0e17f21967131e5474722acd0d9afab68` | 1951efad0e66d7d64748db44c77668569d845e36b7f5b0bf615b716dc7a17bfa; ProjectionHEAD |
-| `R1Z.ProverCommitSequentialFibres` | PROJECT | `ff1fca0d444cf97178e072c779bab77a55d4c900fc3e7434cee4fcca279187d4` | 1eed2631c9532349f2660ab29a4c8f637ba32c6319ba7bd9e3246bd7e9ebe549; ProjectionHEAD |
-| `R1Z.ProverCommitSourceCallerLaw` | PROJECT | `ae21bfe7b1cca3026d5f4ba5ae2b7b4af3bf9ef062fd6f5f0d4f82c3a78bcca2` | e0a69e222291f644e0da70707fa6ea1536e9b18bdda84430ce682f9ac39b3726; ProjectionHEAD |
-| `R1Z.ProverCommitSourceCarrier` | PROJECT | `09432911e1c8e3e51b10cac109eb0e10abb38804ebac0fffbb4e67459e9d4665` | 2e161b33830084b280a28abb05830c263c9d2f65e3db6e9d9278c6941ffeb1a3; ProjectionHEAD |
-| `R1Z.ProverCommitSourceCounts` | PROJECT | `99436775d610dbc835a701fa45381a09f330f0948d285459503e8568e918e4ca` | 62cfa9c3c3d241275d4e3f45214ffc77c94575a2b134a1baf3fcfdb046ae18a6; ProjectionHEAD |
-| `R1Z.ProverCommitSourceDecoder` | PROJECT | `820cd0eb858ebca90987e41b911ce5210b53f7172e1a3b5eadd873a45e899441` | 93d0b1b3a58b48eea6f23c47676202acc03c8136374570afb82b4d7ddd1a08aa; ProjectionHEAD |
-| `R1Z.ProverCommitSourceExhaustion` | PROJECT | `a45ba655ad473dfa624cdf45f09d0960ac982e6647bbc52818f94c9ad65726ad` | e74ba4c696e925809efa4e43408c9408a39ab0efd37f209e483effddbae149ed; ProjectionHEAD |
-| `R1Z.ProverCommitSourceFailure` | PROJECT | `2813e610c1560a05fedce47d7bd0325b6b176663bd6d5db26aadefa80ce1f92b` | a797ac3bf343ce37d2c0b7dcab2b0c23a73703e3490ddbbbc9d049815be10322; ProjectionHEAD |
-| `R1Z.ProverCommitSourceSuccess` | PROJECT | `30233ef13b3f81d99be3af0b4314c6a398f447b75d6f85b8428150729ab27dcd` | be9c2108e453306554b41d2412eb9299259df0815aa194169c6ba682ecd7225d; ProjectionHEAD |
+| `R1Z.ProverCommitSectionObstruction` | PROJECT | `af1d2ac64a3ee7ff4bce0545feb5aee709f91056cae2e9be930ca603b11f3ca0` | 1805e3862ab30a7fc00f69df1ebf2ec45057e8fd243d36a89fb43cfbb6f4b221 |
+| `R1Z.ProverCommitSequentialArrays` | PROJECT | `947cdfb200bde1149126f06ef89b24a0e17f21967131e5474722acd0d9afab68` | 1951efad0e66d7d64748db44c77668569d845e36b7f5b0bf615b716dc7a17bfa |
+| `R1Z.ProverCommitSequentialFibres` | PROJECT | `ff1fca0d444cf97178e072c779bab77a55d4c900fc3e7434cee4fcca279187d4` | 1eed2631c9532349f2660ab29a4c8f637ba32c6319ba7bd9e3246bd7e9ebe549 |
+| `R1Z.ProverCommitSourceCallerLaw` | PROJECT | `ae21bfe7b1cca3026d5f4ba5ae2b7b4af3bf9ef062fd6f5f0d4f82c3a78bcca2` | e0a69e222291f644e0da70707fa6ea1536e9b18bdda84430ce682f9ac39b3726 |
+| `R1Z.ProverCommitSourceCarrier` | PROJECT | `09432911e1c8e3e51b10cac109eb0e10abb38804ebac0fffbb4e67459e9d4665` | 2e161b33830084b280a28abb05830c263c9d2f65e3db6e9d9278c6941ffeb1a3 |
+| `R1Z.ProverCommitSourceCounts` | PROJECT | `99436775d610dbc835a701fa45381a09f330f0948d285459503e8568e918e4ca` | 62cfa9c3c3d241275d4e3f45214ffc77c94575a2b134a1baf3fcfdb046ae18a6 |
+| `R1Z.ProverCommitSourceDecoder` | PROJECT | `820cd0eb858ebca90987e41b911ce5210b53f7172e1a3b5eadd873a45e899441` | 93d0b1b3a58b48eea6f23c47676202acc03c8136374570afb82b4d7ddd1a08aa |
+| `R1Z.ProverCommitSourceExhaustion` | PROJECT | `a45ba655ad473dfa624cdf45f09d0960ac982e6647bbc52818f94c9ad65726ad` | e74ba4c696e925809efa4e43408c9408a39ab0efd37f209e483effddbae149ed |
+| `R1Z.ProverCommitSourceFailure` | PROJECT | `2813e610c1560a05fedce47d7bd0325b6b176663bd6d5db26aadefa80ce1f92b` | a797ac3bf343ce37d2c0b7dcab2b0c23a73703e3490ddbbbc9d049815be10322 |
+| `R1Z.ProverCommitSourceSuccess` | PROJECT | `30233ef13b3f81d99be3af0b4314c6a398f447b75d6f85b8428150729ab27dcd` | be9c2108e453306554b41d2412eb9299259df0815aa194169c6ba682ecd7225d |
 | `R1Z.ProverCommitStepLoop` | PROJECT | `0e97db6ebcb7a0e6664c494d428dfdbba3ff2a7a8c8f9e8621a79913d72ed5ec` | fd257517b8aaceadcb04abf4ff1925ea3516ff9da86b7ad51e1606b12b2007d3 |
-| `R1Z.ProverCommitStreamBytes` | PROJECT | `d80ad93f1aa3a3491f93a6313dccf6635319eb422b9915be506025c9f2ff1278` | be51627e07f7a09cbdfed532e3620e29a501976bea74cdd6b1ad1de6442e3c74; ProjectionHEAD |
+| `R1Z.ProverCommitStreamBytes` | PROJECT | `d80ad93f1aa3a3491f93a6313dccf6635319eb422b9915be506025c9f2ff1278` | be51627e07f7a09cbdfed532e3620e29a501976bea74cdd6b1ad1de6442e3c74 |
 | `R1Z.ProverCommitStreamSource` | PROJECT | `3ae3fb83f6dae94f046552d61d91097bbc3ed59e1b72a72bc893880d65b31d66` | 354e5b18122a168d44ec4bea9c8e24438e9347643d59967a691082d20c8fd339 |
-| `R1Z.ProverCommitTapeCompletion` | PROJECT | `26815db6ec5171267bfeb6ea2d717a2c7221790ed7a66ba2de11c9e6db130319` | 223b7b18c2b89ba8c2a3d79dc34a42cde1321dfa678d5d52ed0e5b164afdbd2d; ProjectionHEAD |
-| `R1Z.ProverCommitTapeMeasure` | PROJECT | `ad90193b2a0acdd78e7704be5b2a4fcbf9943613629ee12720a5dbfd0e839497` | e75b90c8b8570c5dcd935901ff43927264213c0aa8fed6cdfdadaba48c8eb1c1; ProjectionHEAD |
-| `R1Z.ProverCommitWordCarrier` | PROJECT | `b8b0713065242cfad775890a826c0d7eb28de481a66fa4b7d0960176b8ce9b06` | 5a57c5b0958ace18082b2535688f5aa36935b8bf38cf804c1d65fd38aa46c0c0; ProjectionHEAD |
-| `R1Z.QueryScanFirstStopHistory` | PROJECT | `5d8504ebffe1f7278fbbf06639d5a1363158b9964f89a253a68fe3f6dd594862` | 3b7ef4f05ce3ab58afc44827161a7e52fa0561290b6e50d6311bf21e0bdb8994; ProjectionHEAD |
-| `R1Z.QueryScanFreshInputs` | PROJECT | `24fab81f4395537aea680bee36c758806a3564225d88b25fc35c9f2dddc6130b` | 88b2c4a16092cf5990cc0d524870c48c3462010d98776d4d78f1529bb8d8a610; ProjectionHEAD |
-| `R1Z.QueryScanFreshNumerics` | PROJECT | `6d5413685e975c7bbe0f1f7a696a3469002fe0d2acd782d14d7f3048e649373d` | e399aea6c42294bf91816d14a126c3f87de6ad2d62cbf29de4979b6a6e0696df; ProjectionHEAD |
-| `R1Z.QueryScanFreshUnion` | PROJECT | `f7dcb96947c986a0b2e7f61553cdbe2287f03eb60e3b300f650c77c286396314` | 3955e0181be6c4eee02af246f38fb49db4599816bed744da0a9a262b4c03aea9; ProjectionHEAD |
-| `R1Z.QueryScanHistoryRealNumerics` | PROJECT | `98cb8efaf6fb7c8ba9bb5a53734d7c055ddea0d8974599b66a3d8df984c52b20` | c68d36e516ab7cba40640fbe2150d327a01bb508e5ad19624ffcbb4a77471f04; ProjectionHEAD |
+| `R1Z.ProverCommitTapeCompletion` | PROJECT | `26815db6ec5171267bfeb6ea2d717a2c7221790ed7a66ba2de11c9e6db130319` | 223b7b18c2b89ba8c2a3d79dc34a42cde1321dfa678d5d52ed0e5b164afdbd2d |
+| `R1Z.ProverCommitTapeMeasure` | PROJECT | `ad90193b2a0acdd78e7704be5b2a4fcbf9943613629ee12720a5dbfd0e839497` | e75b90c8b8570c5dcd935901ff43927264213c0aa8fed6cdfdadaba48c8eb1c1 |
+| `R1Z.ProverCommitWordCarrier` | PROJECT | `b8b0713065242cfad775890a826c0d7eb28de481a66fa4b7d0960176b8ce9b06` | 5a57c5b0958ace18082b2535688f5aa36935b8bf38cf804c1d65fd38aa46c0c0 |
+| `R1Z.QueryScanFirstStopHistory` | PROJECT | `5d8504ebffe1f7278fbbf06639d5a1363158b9964f89a253a68fe3f6dd594862` | 3b7ef4f05ce3ab58afc44827161a7e52fa0561290b6e50d6311bf21e0bdb8994 |
+| `R1Z.QueryScanFreshInputs` | PROJECT | `24fab81f4395537aea680bee36c758806a3564225d88b25fc35c9f2dddc6130b` | 88b2c4a16092cf5990cc0d524870c48c3462010d98776d4d78f1529bb8d8a610 |
+| `R1Z.QueryScanFreshNumerics` | PROJECT | `6d5413685e975c7bbe0f1f7a696a3469002fe0d2acd782d14d7f3048e649373d` | e399aea6c42294bf91816d14a126c3f87de6ad2d62cbf29de4979b6a6e0696df |
+| `R1Z.QueryScanFreshUnion` | PROJECT | `f7dcb96947c986a0b2e7f61553cdbe2287f03eb60e3b300f650c77c286396314` | 3955e0181be6c4eee02af246f38fb49db4599816bed744da0a9a262b4c03aea9 |
+| `R1Z.QueryScanHistoryRealNumerics` | PROJECT | `98cb8efaf6fb7c8ba9bb5a53734d7c055ddea0d8974599b66a3d8df984c52b20` | c68d36e516ab7cba40640fbe2150d327a01bb508e5ad19624ffcbb4a77471f04 |
 | `R1Z.QueryScanHistorySplit` | PROJECT | `080970ee791d3d444f87449214d312bb6d058e1aa0a410a8b444664181a6e134` | 01cfad4fa08b4eac3b7376c8b3f400e2abce018242d8b333a2c5ccb9b9e5a8e5 |
-| `R1Z.QueryScanIdealHistory` | PROJECT | `c9d4b21f3feb43f248bd58d8ca40a06c40b7e9cc23f298ef3914bd05b650a9a0` | 042c15b70c549709479054045606d9f234e583cfeb80801457bedbe214003051; ProjectionHEAD |
-| `R1Z.QueryScanIndependentHistory` | PROJECT | `81ce90464872534624a325d73b50a1e31a4d32944a59861f8fa0028137bbd1e6` | befa35efe5b3cd44ba00577ac8f040c2fb03841f6d8ad99f869687c16d4c0089; ProjectionHEAD |
+| `R1Z.QueryScanIdealHistory` | PROJECT | `c9d4b21f3feb43f248bd58d8ca40a06c40b7e9cc23f298ef3914bd05b650a9a0` | 042c15b70c549709479054045606d9f234e583cfeb80801457bedbe214003051 |
+| `R1Z.QueryScanIndependentHistory` | PROJECT | `81ce90464872534624a325d73b50a1e31a4d32944a59861f8fa0028137bbd1e6` | befa35efe5b3cd44ba00577ac8f040c2fb03841f6d8ad99f869687c16d4c0089 |
 | `R1Z.QueryScanPrivacyFinal` | PROJECT | `24c2af2b89ef06466db78ceaa48df49a2160506945b0113c4f0db85f987f2e4c` | 232f16c8abf4efab15c35c7ea24e8bd4ac733ccc88e0ff8479ed1d2ab324242d |
-| `R1Z.QueryScanRealEntropy` | PROJECT | `d94e42c2e4a1afd7541e1593b8f90a09036a1b64904cae52dd3b8f5bcc792327` | e060187f150ecbe411892b61e201f557610b0088c739507c6472104c6f0222e3; ProjectionHEAD |
-| `R1Z.QueryScanRealFreshMass` | PROJECT | `3a5b9a45b63e52b159e2e926bec5947b12b3b2bd947033693f2650a9ed44b47c` | d6e0ee465a921cff38381772dc60fef071d7f095158cec7d43b54d4af51c269e; ProjectionHEAD |
-| `R1Z.QueryScanRealLazyBound` | PROJECT | `021009220ddd0687177b2d513574f23e9d7c6b8296f96fb125a0bd4a7282bcaf` | 3af5024973b9f8e7673d336490fcc2d2744d75a2c4c5709a5e70a1fc233ca15b; ProjectionHEAD |
-| `R1Z.QueryScanRealLazyJoin` | PROJECT | `2c2550c596c9f8ba2241f017208c1ade15139e63634e23203c7533e33d4f001e` | acdbb19cfd86618b17feecc8f1650baedde2689e5cc94da644dfaeabacd0b820; ProjectionHEAD |
-| `R1Z.QueryScanSharedHistoryMass` | PROJECT | `4e98bb4c977a53099d411d215240c58bbba4ee7474fbeb7426745d9f275ef31d` | 56a6747618d0ea0b8f3c20f8a9b0d9f05f41770b6863bb2d95bb1919fef1c69e; ProjectionHEAD |
-| `R1Z.QueryScanSharedHistoryObstruction` | PROJECT | `6b4b1d3be8038d38351cb8f730115306628c6e546331c0a44dd55e050af12d2a` | d78c084e222ca162fab4b54522bcede13e34efd1de68d965185fd33ec65edfb8; ProjectionHEAD |
-| `R1Z.QueryScanWholeRunRepeatObstruction` | PROJECT | `afa6f6b7766c3a3e04371d737f70fcf96b602d4d20b750ccf3349cceb65ebae3` | 0c84eab7a5d89dc5205cd93b90ed94649928d28f40dcb39f451bd9bad56c002c; ProjectionHEAD |
-| `R1Z.QueryScanWholeRunRepeatReal` | PROJECT | `c90d8835259db4a368ca205d2fb25ab7aa0b27dd52f0c60a702672190332bb22` | 565115b4ffc633a7a94e9eea3d7c528e8d9c184feefcfc00ff1f8df738713f41; ProjectionHEAD |
+| `R1Z.QueryScanRealEntropy` | PROJECT | `d94e42c2e4a1afd7541e1593b8f90a09036a1b64904cae52dd3b8f5bcc792327` | e060187f150ecbe411892b61e201f557610b0088c739507c6472104c6f0222e3 |
+| `R1Z.QueryScanRealFreshMass` | PROJECT | `3a5b9a45b63e52b159e2e926bec5947b12b3b2bd947033693f2650a9ed44b47c` | d6e0ee465a921cff38381772dc60fef071d7f095158cec7d43b54d4af51c269e |
+| `R1Z.QueryScanRealLazyBound` | PROJECT | `021009220ddd0687177b2d513574f23e9d7c6b8296f96fb125a0bd4a7282bcaf` | 3af5024973b9f8e7673d336490fcc2d2744d75a2c4c5709a5e70a1fc233ca15b |
+| `R1Z.QueryScanRealLazyJoin` | PROJECT | `2c2550c596c9f8ba2241f017208c1ade15139e63634e23203c7533e33d4f001e` | acdbb19cfd86618b17feecc8f1650baedde2689e5cc94da644dfaeabacd0b820 |
+| `R1Z.QueryScanSharedHistoryMass` | PROJECT | `4e98bb4c977a53099d411d215240c58bbba4ee7474fbeb7426745d9f275ef31d` | 56a6747618d0ea0b8f3c20f8a9b0d9f05f41770b6863bb2d95bb1919fef1c69e |
+| `R1Z.QueryScanSharedHistoryObstruction` | PROJECT | `6b4b1d3be8038d38351cb8f730115306628c6e546331c0a44dd55e050af12d2a` | d78c084e222ca162fab4b54522bcede13e34efd1de68d965185fd33ec65edfb8 |
+| `R1Z.QueryScanWholeRunRepeatObstruction` | PROJECT | `afa6f6b7766c3a3e04371d737f70fcf96b602d4d20b750ccf3349cceb65ebae3` | 0c84eab7a5d89dc5205cd93b90ed94649928d28f40dcb39f451bd9bad56c002c |
+| `R1Z.QueryScanWholeRunRepeatReal` | PROJECT | `c90d8835259db4a368ca205d2fb25ab7aa0b27dd52f0c60a702672190332bb22` | 565115b4ffc633a7a94e9eea3d7c528e8d9c184feefcfc00ff1f8df738713f41 |
 | `R1Z.ReadBudgetR1` | PROJECT | `64fe454c515f96c887cffb135e21d0c254a56f769f5b2bd94e93da1644af12dd` | 9f1304bc1f1ac3c192d56a7616c1ca51e5142be6eddaaf7f5edbc4a079b9c3a1 |
-| `R1Z.RefCosetR1` | PROJECT | `8ac2050025e0ba80e91268a03e35123db99675b5e4875893f833433e908ca8f1` | deaffbc83423ab95608914b4424f9f44b3df657c8e7f0ee524d726434c961dc2; ProjectionHEAD |
-| `R1Z.RomFiniteBin` | PROJECT | `2d07a4e47e84d8f1bce70db0a95e35df6ced45ab1235bfd5d9e42ec04767e8f5` | f4cef0f951e5ee5d86b6d6efd9891b6b320c42ca0d2d1c88ebca3589f1773b14; ProjectionHEAD |
-| `R1Z.RomGrammarBin` | PROJECT | `e16b9997a540f5a12a040830b5920c5bf114e0a9adbc6353d86bcb369aa01b3b` | 15223062594985ecf657e731ddb35bda82842177ec93e882661735b9747dac07; ProjectionHEAD |
-| `R1Z.RomObserverBin` | PROJECT | `ad2ac98e3bab329a4c5fdb5981db190e748070289449d92ee83851d1511439a3` | 459cc15331f0481bf5a7534555c7caaad97103b489f452288943c4056da24503; ProjectionHEAD |
-| `R1Z.SamplerLawBridge` | PROJECT | `9779563987f822f457d380cfeafe361b7f8d7f641bc50a1cd724d80d4a2bce78` | d171954f27867f16113ad2190e33578743806db622c332c73b770aa56562f551; ProjectionHEAD |
+| `R1Z.RefCosetR1` | PROJECT | `8ac2050025e0ba80e91268a03e35123db99675b5e4875893f833433e908ca8f1` | deaffbc83423ab95608914b4424f9f44b3df657c8e7f0ee524d726434c961dc2 |
+| `R1Z.RomFiniteBin` | PROJECT | `2d07a4e47e84d8f1bce70db0a95e35df6ced45ab1235bfd5d9e42ec04767e8f5` | f4cef0f951e5ee5d86b6d6efd9891b6b320c42ca0d2d1c88ebca3589f1773b14 |
+| `R1Z.RomGrammarBin` | PROJECT | `e16b9997a540f5a12a040830b5920c5bf114e0a9adbc6353d86bcb369aa01b3b` | 15223062594985ecf657e731ddb35bda82842177ec93e882661735b9747dac07 |
+| `R1Z.RomObserverBin` | PROJECT | `ad2ac98e3bab329a4c5fdb5981db190e748070289449d92ee83851d1511439a3` | 459cc15331f0481bf5a7534555c7caaad97103b489f452288943c4056da24503 |
+| `R1Z.SamplerLawBridge` | PROJECT | `9779563987f822f457d380cfeafe361b7f8d7f641bc50a1cd724d80d4a2bce78` | d171954f27867f16113ad2190e33578743806db622c332c73b770aa56562f551 |
 | `R1Z.SamplerLawIface` | PROJECT | `85e97ce06aff3d78d81cfe8133d2639efe58009ec267e849ebe4bb0c74d56da6` | 817eb4e00409ed7f200013a47fcb9ac58a27569fb93b394b526be0f611e19157 |
 | `R1Z.SamplerLawR1` | PROJECT | `6aa155b70d2563cfe4e6e8ea51469441d94f12719118561b091d4e48c6c9ea57` | a30ae96cb406d7259a1655d42aedcef03f2d2b1835ec72b01b5f6af4131d8c33 |
-| `R1Z.Sem1UniformR1` | PROJECT | `fc3ecfdc1d2b5a774cd78121f2dbbf35a58341d4e0fe959ce699bc237810943f` | ee8aed45204179c498ff5ebf26bb888f209ced8c1904c4fa22b6f9a463a22ddb; ProjectionHEAD |
-| `R1Z.SharedGrammarBridgeBin` | PROJECT | `4937377d1e64dec21a2003680ac7b1ce76cd81447632ed0498a2111baa5fcf6d` | 6d512821d57e6a41a8bc02d673b99f929ebe1be65ddf2d64e99b99d3e2ddfa85; ProjectionHEAD |
-| `R1Z.SimulatorLogR1PBin` | PROJECT | `8996a72927ca6492c9beb1ef699d4777708b17f3ca3112972976857c2077895e` | 15f7af508284fa5f02c90e9290b40c3c0ae4518156fac71732d634acc90c4ba2; ProjectionHEAD |
-| `R1Z.SimulatorR1` | PROJECT | `ef541af3d7a0986f55c7d924056bab6c0db89223e943fb63f5afea3cd7af4c69` | b282055926208810142c81d3c4ecf98a401080e942efd6edc8a090215c0a0fbc; ProjectionHEAD |
-| `R1Z.SimulatorSupportBin` | PROJECT | `a709800478bdb24f3ba21fd46dd434917c8e8f47d344be7c4424b40030d99d23` | 1b1c2188cd9a4178cd561f7069fbf528116c1ad7ef586ba9faa6e45d31ecaac4; ProjectionHEAD |
+| `R1Z.Sem1UniformR1` | PROJECT | `fc3ecfdc1d2b5a774cd78121f2dbbf35a58341d4e0fe959ce699bc237810943f` | ee8aed45204179c498ff5ebf26bb888f209ced8c1904c4fa22b6f9a463a22ddb |
+| `R1Z.SharedGrammarBridgeBin` | PROJECT | `4937377d1e64dec21a2003680ac7b1ce76cd81447632ed0498a2111baa5fcf6d` | 6d512821d57e6a41a8bc02d673b99f929ebe1be65ddf2d64e99b99d3e2ddfa85 |
+| `R1Z.SimulatorLogR1PBin` | PROJECT | `8996a72927ca6492c9beb1ef699d4777708b17f3ca3112972976857c2077895e` | 15f7af508284fa5f02c90e9290b40c3c0ae4518156fac71732d634acc90c4ba2 |
+| `R1Z.SimulatorR1` | PROJECT | `ef541af3d7a0986f55c7d924056bab6c0db89223e943fb63f5afea3cd7af4c69` | b282055926208810142c81d3c4ecf98a401080e942efd6edc8a090215c0a0fbc |
+| `R1Z.SimulatorSupportBin` | PROJECT | `a709800478bdb24f3ba21fd46dd434917c8e8f47d344be7c4424b40030d99d23` | 1b1c2188cd9a4178cd561f7069fbf528116c1ad7ef586ba9faa6e45d31ecaac4 |
 | `R1Z.TranscriptR1` | PROJECT | `3c4cc7d4b3339477838607ce5b1652a1aa621041b929408686a58c41ff26b23c` | e8b6f22d2294496c6efe1f193a870316ac32699d8edd179d9b6b3539e964cda1 |
-| `R1Z.VerifierRelationsR1` | PROJECT | `40cffd614704bdd3cc633c8761f2304f124dcbbb7802661e942ce1878a7fecab` | 3fc38a95ece8c8089304b420f09928749461f0ebcf22afae9f85b37616be523b; ProjectionHEAD |
-| `R1Z.WireBindingLengthsR1PBin` | PROJECT | `03b978fcdc316fad8b4b2c2b918f8bc67510133176e66a7d1ca3b32dcd4afa66` | ce417ae7ce0d9519ddbc029dc7e36b3fc3f93e7f62eb5b3a3fbe63284ae9cdf2; ProjectionHEAD |
-| `R1Z.WireLengthsR1PBin` | PROJECT | `fb60e6ec0b966415d8e32b5beb049cdd3650ca913e7d3621f16b57eca70ae840` | e51f6c981a0a248ed85276264372774e77b6a52920a81bc8c7d67c728711a328; ProjectionHEAD |
+| `R1Z.VerifierRelationsR1` | PROJECT | `40cffd614704bdd3cc633c8761f2304f124dcbbb7802661e942ce1878a7fecab` | 3fc38a95ece8c8089304b420f09928749461f0ebcf22afae9f85b37616be523b |
+| `R1Z.WireBindingLengthsR1PBin` | PROJECT | `03b978fcdc316fad8b4b2c2b918f8bc67510133176e66a7d1ca3b32dcd4afa66` | ce417ae7ce0d9519ddbc029dc7e36b3fc3f93e7f62eb5b3a3fbe63284ae9cdf2 |
+| `R1Z.WireLengthsR1PBin` | PROJECT | `fb60e6ec0b966415d8e32b5beb049cdd3650ca913e7d3621f16b57eca70ae840` | e51f6c981a0a248ed85276264372774e77b6a52920a81bc8c7d67c728711a328 |
 | `SharedBinaryRecordGrammar` | PROJECT | `0ae24037c753466f2bbc0c2de13f28ec94a1531e85d82ea80e5aee92ec033ddf` | 5d20da7f367497cf1d98b045a935162e0a0e2e4b2c888bb708bc59a0cd55f60d |
 | `SpendAppendBinding` | PROJECT | `9add926c06bf9afdaa42238c73adeaddc2caedffd95b4a311246cebb68dc4c4b` | e0c93ad6890d5db811236fb3dae17334481064911df92972abee19f51075e311 |
 | `SpendRelation` | PROJECT | `3f098ff1e9bbb213e3552a6438519f8c7dcd9f16c3e6b1fa4b9e0d08dada94f0` | d2546e86976424b968a3d3fa546c1d9b9da44bf405eea19ea8bb053f37052e8e |

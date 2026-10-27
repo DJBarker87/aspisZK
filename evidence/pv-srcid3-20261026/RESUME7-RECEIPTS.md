@@ -85,8 +85,24 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 40104 | R1Z/PV_Src_PortInternalModel | 1 | REJECTED | 0:02.81 | 4139384 | 0 | 9a8f8137c3 | 1/1 |
 | 40107 | R1Z/PV_Src_PortInternalModel | 0 | standard | 0:02.29 | 4160072 | 0 | e0d50b8a1e | 1/1 |
 | 40108 | R1Z/PV_Src_PortInternalCopy | 0 | standard | 0:01.86 | 4155492 | 0 | e0d50b8a1e | 3/3 |
+| 40109 | R1J/PrivacySamplerSpend | 0 | standard | 0:01.57 | 4113076 | 0 | acf4eb76a7 | 2/2 |
+| 40110 | R1J/PrivacySamplerSpendBin | 0 | standard | 0:01.63 | 4119664 | 0 | acf4eb76a7 | 1/1 |
+| 40111 | R1Z/PhaseSamplerParserBin | 0 | standard | 0:02.26 | 4128288 | 0 | acf4eb76a7 | 14/14 |
+| 40112 | R1Z/PhaseProtocolInstanceBin | 0 | standard | 0:04.86 | 4136520 | 0 | acf4eb76a7 | 7/7 |
+| 40113 | R1Z/PhaseProtocolCoverageBin | 0 | standard | 0:03.63 | 4156304 | 0 | acf4eb76a7 | 17/17 |
+| 40114 | R1Z/PrivacyBoundR1PBin | 0 | standard | 0:02.84 | 4137996 | 0 | acf4eb76a7 | 2/2 |
+| 40115 | R1Z/PrivacySimulatorBin | 0 | standard | 0:01.77 | 4127128 | 0 | acf4eb76a7 | 1/1 |
+| 40116 | R1Z/PrivacyPremisesBin | 0 | standard | 0:01.58 | 4101400 | 0 | acf4eb76a7 | 5/5 |
+| 40117 | R1Z/PrivacyR1Final | 0 | standard | 0:03.29 | 4165272 | 0 | acf4eb76a7 | 7/7 |
+| 40118 | R1Z/PrivacyR1FinalProtocol | 0 | standard | 0:07.26 | 4152732 | 0 | acf4eb76a7 | 2/2 |
+| 40119 | R1Z/BuilderProtocolBounds | 0 | standard | 0:02.75 | 4156192 | 0 | acf4eb76a7 | 1/1 |
+| 40120 | R1Z/BuilderProtocolInstance | 0 | standard | 0:02.68 | 4182948 | 0 | acf4eb76a7 | 4/4 |
+| 40121 | R1Z/BuilderRuntimeJoin | 0 | standard | 0:01.96 | 4189272 | 0 | acf4eb76a7 | 4/4 |
+| 40122 | R1Z/QueryScanIndependentHistory | 0 | standard | 0:01.91 | 4121784 | 0 | acf4eb76a7 | 6/6 |
+| 40123 | R1Z/QueryScanFirstStopHistory | 0 | standard | 0:02.09 | 4128092 | 0 | acf4eb76a7 | 5/5 |
+| 40124 | R1Z/QueryScanIdealHistory | 0 | standard | 0:01.95 | 4139796 | 0 | acf4eb76a7 | 7/7 |
 
-Charged Lean attempts: 81/100. Reservation refusals: 28, uncharged. Next unused ID: 40109.
+Charged Lean attempts: 97/100. Reservation refusals: 28, uncharged. Next unused ID: 40125.
 
 ## Shared replacements
 

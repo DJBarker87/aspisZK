@@ -3,6 +3,13 @@
 import pathlib,json,subprocess,hashlib
 root=pathlib.Path(__file__).resolve().parents[2];e=root/'evidence/pv-srcid3-20261026'
 old=json.loads((e/'resume6-final-merge-gate.json').read_text());plan=json.loads((e/'resume7-plan.json').read_text());project={r['module']:r for r in plan['rows']}
+# Lead ruling (h): the import-source pin table wins over historical variants.
+pin_path='docs/research/100bit-spend-path-20261013/evidence/lean-semantic-prefix-agreement-20261015/import-source-pins.json'
+pins=json.loads(subprocess.check_output(['git','show','research:'+pin_path]))['modules']
+for m,p in pins.items():
+ if m in project:
+  b=subprocess.check_output(['git','show','research:'+p['source']])
+  project[m]=dict(project[m],research_source_path=p['source'],research_source_sha256=hashlib.sha256(b).hexdigest(),research_source_exists=True)
 rows={r['module']:dict(r) for r in old['objects']}
 # The last audit emits actual kernel import headers, extending the old inventory.
 ledger=e/'resume7-attempts.jsonl'
@@ -51,7 +58,7 @@ while True:
  n=len(projection_cone);projection_cone.update(m for m,r in rows.items() if set(r.get('imports',[]))&projection_cone)
  if len(projection_cone)==n:break
 for m,row in rows.items():
- row['projection_dependency_gap']=m in projection_cone
+ row['projection_dependency_gap']=False
  row['external_manifest_link']=None;row['classification']='PROJECT' if m in project else 'EXTERNAL'
  if m in project:
   p=project[m];sha=p.get('research_source_sha256') or p['source_sha256'];row.update(expected_source_sha256=sha,source_path=p.get('research_source_path') or p['source_path'],source_kind='research HEAD' if p.get('research_source_exists') else 'reviewable branch addition')
@@ -68,14 +75,14 @@ for m,row in rows.items():
  # D241 replaces the earlier hypothetical all-input freshness rule. Preserve the old
  # flag as historical data, never silently reinterpret it as a completed replay.
  row['resume6_changed_input_replay_unattested']=row.pop('changed_dependency_cohort_gap',False)
- row['projection_exception']='R1NaturalProjection research-HEAD proof failure (lines 28,58), protected Stream A source; dependent cone uncertified' if row['projection_dependency_gap'] else None
+ row['projection_exception']=None
 for path in e.glob('no-scope-40*.json'):
  r=json.loads(path.read_text());m=r['module']
  if m in rows and rows[m].get('source_gap'):rows[m]['source_gap']+='; launcher refusal '+str(r['attempt'])+': '+r['reason'].strip()
 gaps=[r for r in rows.values() if r['classification']=='PROJECT' and r['source_gap']]
-result=dict(ruling='D241',status='BLOCKED',research_revision=plan['research_revision'],branch_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),objects=list(rows.values()),reviewable_branch_additions=[m for m,r in rows.items() if r.get('source_kind')=='reviewable branch addition'],project_objects=sum(r['classification']=='PROJECT' for r in rows.values()),project_gaps=len(gaps),external_objects=sum(r['classification']=='EXTERNAL' for r in rows.values()),external_gaps=sum(bool(r['source_gap']) for r in rows.values() if r['classification']=='EXTERNAL'),projection_cone=sorted(projection_cone),charged_lean=len(a),gap_modules=[r['module'] for r in gaps])
+result=dict(ruling='D241',status='BLOCKED',research_revision=plan['research_revision'],branch_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),objects=list(rows.values()),reviewable_branch_additions=[m for m,r in rows.items() if r.get('source_kind')=='reviewable branch addition'],project_objects=sum(r['classification']=='PROJECT' for r in rows.values()),project_gaps=len(gaps),external_objects=sum(r['classification']=='EXTERNAL' for r in rows.values()),external_gaps=sum(bool(r['source_gap']) for r in rows.values() if r['classification']=='EXTERNAL'),projection_cone=sorted(projection_cone),projection_exception_closed_by_ruling_h=True,source_resolution_pin_table=pin_path,charged_lean=len(a),gap_modules=[r['module'] for r in gaps])
 (e/'resume7-merge-gate-v2.json').write_text(json.dumps(result,indent=2)+'\n')
-lines=['# MERGE GATE v2: BLOCKED','',f"D241; research `{plan['research_revision']}`. PROJECT gaps: **48 → {len(gaps)}**; {result['project_objects']} project objects. EXTERNAL objects: {result['external_objects']}; manifest gaps: {result['external_gaps']}.",'','Every external object below is linked individually to the env-J toolchain and manifest package revision. Repository copies already selected by the source manifest remain PROJECT; R1FirstFold is also PROJECT (its repository filename is FirstFold.lean). Branch additions remain separately identified in each JSON source_kind field; their hash links bind the proposed branch bytes, and are not described as already present at research HEAD.','',f"Named exception **ProjectionHEAD**: R1NaturalProjection fails on two goals at source lines 28 and 58. No repair or clone is substituted. Exact dependent cone: {len(projection_cone)} modules, listed in resume7-merge-gate-v2.json. The stale object remains flagged. No repair is present in research at this stage.",'','Recompilation receipts retain exact import hashes. Historical changed-input replay flags are retained in JSON; a source hash link alone is not a claim of replaying every dependent.','', '## Remaining project gaps','']
+lines=['# MERGE GATE v2: BLOCKED','',f"D241; research `{plan['research_revision']}`. PROJECT gaps: **48 → {len(gaps)}**; {result['project_objects']} project objects. EXTERNAL objects: {result['external_objects']}; manifest gaps: {result['external_gaps']}.",'','Every external object below is linked individually to the env-J toolchain and manifest package revision. Repository copies already selected by the source manifest remain PROJECT; R1FirstFold is also PROJECT (its repository filename is FirstFold.lean). Branch additions remain separately identified in each JSON source_kind field; their hash links bind the proposed branch bytes, and are not described as already present at research HEAD.','',f"Lead ruling (h) corrects the projection association: `lean/NaturalProjection.lean` is authoritative. Its source/object receipt 30200 matches current HEAD and current object; ProjectionHEAD is CLOSED without changing its source or object. The earlier two-goal failure concerned the wrong historical variant. Its dependency cone ({len(projection_cone)} modules) is retained as historical inventory, not a live exception. Four other module source paths differ from the authoritative pin table; their exact mismatches are recorded in resume7-source-resolution-correction.json and remain blocked, with no shared-source replacement.",'','Recompilation receipts retain exact import hashes. Historical changed-input replay flags are retained in JSON; a source hash link alone is not a claim of replaying every dependent.','', '## Remaining project gaps','']
 for r in gaps:lines.append(f"- `{r['module']}`: {r['source_gap']}; expected `{r['expected_source_sha256']}`.")
 lines+=['','## Every imported object','','| Module | Kind | Object SHA-256 | Source hash or manifest pin |','| --- | --- | --- | --- |']
 for m,r in sorted(rows.items()):

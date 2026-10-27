@@ -1,0 +1,15 @@
+Host restoration instructions: HOST RESTORED 2026-10-26 21:50 UTC (Stream B lead). Launcher: /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh <attempt> <Module> J 7000 8 [deps-fingerprint]; sources /home/dombarker/project-offloads/aspis-joint-20261019/sources, objects .../aspis-joint-20261019/objects; env/J.json and run2.py committed; verification attempt 30799 exit 0. Accepted IDs 5000-39999; 20000-27099 BLOCKED (exit 65); 28000-29999 reserved (do not use); 30000-34999 Stream A.
+Per-job env-J ranges (use ONLY yours, next unused ID, never an old ID):
+cb3: 35600-35899 (your old range 24700-24999 is blocked)
+cb4: 27100-27399
+srcid4: 27400-27699
+rw20: 27700-27999
+runjoin8: 35000-35299
+join2: 35300-35599
+CAVEAT: the rebuilt object cache is PARTIAL (767/800 compiled, 1,007 resolved sources not yet attempted; see evidence/envj-rebuild-20261026/EJR_HANDOFF.md on research). A missing imported .olean in the shared objects is not a stop and not a sorry: first use your own job's surviving host cache (codex-pv-*/lean-objects), else compile the missing dependency module yourself as a charged attempt (smallest first), else record the exact missing object and continue with other work. Never retry EventsR1P2 or SimCostOuterRetry6; they are assigned to a dedicated Stream B job. Quiet windows (ruling (e)) still apply via the systemd-run shim.
+
+UPDATE 2026-10-27 01:45 UTC: accepted IDs now 5000-49999; 40000-44999 Stream B, 45000-49999 Stream A (LOG D238).
+
+CHARGED {"number": 2, "name": "srcid7-rootinternal-try0", "harness": "poseidon2::builder_reference::pv_srcid7_internal_linear_copy", "command": ["systemd-run", "--user", "--scope", "--quiet", "--unit=pv-srcid7-rootinternal-try0", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "env", "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin", "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-srcid-20261026/kani-target", "CARGO_BUILD_JOBS=4", "CARGO_PROFILE_DEV_OPT_LEVEL=3", "RUSTFLAGS=-C opt-level=3 -Z mir-opt-level=4 -Z inline-mir=yes -C link-arg=-Wl,--threads=4", "PV_SRCID3_EXPECTED=Optimized proof compilation (own cache reused if present), then bounded unstubbed CBMC for poseidon2::builder_reference::pv_srcid7_internal_linear_copy", "python3", "/home/dombarker/project-offloads/codex-pv-srcid-20261026/srcid3-receipt-run.py", "srcid7-rootinternal-try0", "timeout", "180", "cargo", "kani", "--no-assertion-reach-checks", "-Z", "stubbing", "-Z", "function-contracts", "-Z", "unstable-options", "-p", "aspis-statement", "--lib", "-j", "4", "--exact", "--harness", "poseidon2::builder_reference::pv_srcid7_internal_linear_copy", "--output-format", "terse", "--cbmc-args", "--unwinding-assertions", "--slice-formula"], "source_revision": "acf4eb76a7e43ab9d3b041716a98b38c6eeeeb06"}
+{"name": "srcid7-rootinternal-try0", "exit_status": 0, "wall_seconds": 84.36061098100618, "peak_rss_kib": 701172, "cgroup_memory_peak_bytes": 758534144, "swaps": 0}
+

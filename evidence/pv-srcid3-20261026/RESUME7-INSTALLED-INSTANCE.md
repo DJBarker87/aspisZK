@@ -39,3 +39,5 @@ its adapter draft is explicitly P6/uninstalled. See resume7-runjoin-new-pin.json
 and retained reports. RunJoin11 source root leaves 18/19 passed, now 21/21;
 those existing Rust leaf receipts are reused, not rerun and not promoted to Lean
 parent-cell equations. Deployed premise count remains 5→5.
+
+Source-pin clarification: RunJoin11 21/21 coverage belongs to its own recorded build. Field feature guards/candidate code, a cfg(kani) pair-trace module and Cargo.lock differ from this branch. See resume7-runjoin-root-profile-boundary.json. No whole-corpus byte identity or new frozen-build source equality is inferred.

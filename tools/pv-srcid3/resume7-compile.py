@@ -44,6 +44,13 @@ if row and row['research_source_exists']:
  data=subprocess.check_output(['git','show',plan['research_revision']+':'+row.get('research_source_path','docs/research/v8-r0-zk-20261009/lean/'+module_path+'.lean')],cwd=root)
  src=e/'sources'/('research-'+m+'.lean')
  src.parent.mkdir(exist_ok=True);src.write_bytes(data)
+# Never install a historical variant under a pin-table module name (lead h).
+pin_table=root/'docs/research/100bit-spend-path-20261013/evidence/lean-semantic-prefix-agreement-20261015/import-source-pins.json'
+pin=json.loads(pin_table.read_text())['modules'].get(module_name)
+if pin:
+ expected=subprocess.check_output(['git','show','research:'+pin['source']],cwd=root)
+ if src.read_bytes()!=expected:
+  print('STOP module: source does not match authoritative import-source pin',module_name,pin['source']);sys.exit(76)
 (e/'sources').mkdir(exist_ok=True)
 (e/f'sources/{a}.lean.txt').write_bytes(src.read_bytes())
 def ssh(s): return subprocess.run(['ssh',host,s],capture_output=True,text=True)
