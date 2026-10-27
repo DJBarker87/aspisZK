@@ -1,0 +1,45 @@
+{"attempt": "XSc_L059", "exit_status": 1, "wall_seconds": 1.0815118579776026, "peak_rss_kib": "2648832", "swaps": "0", "print_axioms": ["'XSc_ParseDriver.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSc_generated/XSc_ParseDriver.lean:20:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  XSc_ParseCuts.tail0 ?bytes ?root ?offset
+in the target expression
+  (match core.result.Result.Ok root with
+    | core.result.Result.Ok root => XSc_ParseCuts.tail0 bytes root 32#usize
+    | core.result.Result.Err a => ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))) =
+    match core.result.Result.Ok root with
+    | core.result.Result.Err a => ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))
+    | core.result.Result.Ok root => do
+      let out ← XRx_StageFold.fold (XRz_ParseFold.step bytes) (List.range' 0 27) (core.result.Result.Ok ([], 32#usize))
+      match out 
+...
+XSc_generated/XSc_ParseDriver.lean:20:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  XSc_ParseCuts.tail0 ?bytes ?root ?offset
+in the target expression
+  (match core.result.Result.Ok root with
+    | core.result.Result.Ok root => XSc_ParseCuts.tail0 bytes root 32#usize
+    | core.result.Result.Err a => ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))) =
+    match core.result.Result.Ok root with
+    | core.result.Result.Err a => ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))
+    | core.result.Result.Ok root => do
+      let out ← XRx_StageFold.fold (XRz_ParseFold.step bytes) (List.range' 0 27) (core.result.Result.Ok ([], 32#usize))
+      match out with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok state => XRz_ParseFold.finish bytes root state
+
+case e_a.Ok
+bytes : Slice U8
+h✝ : ¬bytes.len < 32#usize
+s : Slice U8
+root : Std.Array U8 32#usize
+⊢ (match core.result.Result.Ok root with
+    | core.result.Result.Ok root => XSc_ParseCuts.tail0 bytes root 32#usize
+    | core.result.Result.Err a => ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))) =
+    match core.result.Result.Ok root with
+    | core.result.Result.Err a => ok (core.result.Result.Err (r1_wire.Error.Length 0#u8))
+    | core.result.Result.Ok root => do
+      let out ← XRx_StageFold.fold (XRz_ParseFold.step bytes) (List.range' 0 27) (core.result.Result.Ok ([], 32#usize))
+      match out with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok state => XRz_ParseFold.finish bytes root state
+'XSc_ParseDriver.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd6c0420bd565439bb3ffaaae618edef4.scope; invocation ID: 95b34127b90346bbac13e15f9efe1ae9

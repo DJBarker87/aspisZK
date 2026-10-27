@@ -1,0 +1,36 @@
+XSc_generated/XSc_QueryPath.lean:43:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (let (a, pending) := (a, pending)
+    if a.next ≥ end1 then ok (done (core.result.Result.Ok (a, pending)))
+    else do
+      let state1 ← verifier.candidate.query_values proof p a g obs geo pending
+      ok (cont state1)) =
+    ok r
+of `hr`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case Ok
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+initial out : State
+run : loop (fun state1 => verifier.candidate.query_loop_loop.body proof p g obs geo end1 state1) initial = ok out
+r : ControlFlow State State
+a : verifier.Accumulator
+pending : verifier.BatchedWeights
+hs : Reached proof p g obs geo end1 initial (core.result.Result.Ok (a, pending))
+hr :
+  (let (a, pending) := (a, pending)
+    if a.next ≥ end1 then ok (done (core.result.Result.Ok (a, pending)))
+    else do
+      let state1 ← verifier.candidate.query_values proof p a g obs geo pending
+      ok (cont state1)) =
+    ok r
+⊢ match r with
+  | done v => Reached proof p g obs geo end1 initial v
+  | cont next =>
+    Reached proof p g obs geo end1 initial next ∧ measure end1 next < measure end1 (core.result.Result.Ok (a, pending))
+'XSc_QueryPath.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
