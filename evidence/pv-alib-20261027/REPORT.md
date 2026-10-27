@@ -1,4 +1,4 @@
-# pv-alib resume at 86aae376c0
+# pv-alib resume from 86aae376c0 — host-stop handoff
 
 Worktree `/Users/dominic/ZK/.worktrees/pv-alib`, branch
 `codex/pv-alib-20261027`. **Target not yet established.**
@@ -41,7 +41,7 @@ rejected by the fail-closed structured-Drop preflight; the owned wrapper is
 also rejected for structured Drop. The emitted external axiom template is
 retained as rejected extraction evidence, never installed or kernel-accepted.
 After: native remove fidelity remains; V184 stays **OPEN**, no closing theorem.
-Work continues on alternative source routes and the other two rows.
+The other two rows received real source-law attempts and candidate results below.
 
 ## V233 selected split-block law
 
@@ -128,9 +128,87 @@ chained-field-arithmetic Kani was attempted.
 This is a structural source/library result plus fresh extraction and native
 checks, not an unbounded whole-machine proof or a deployed endpoint instance.
 The final owner dependency replay and whole native composition remain separate.
-V184 work continues within the remaining budget.
+Final audit and closure replay remain pending at the host stop described below.
 
 No endpoint premise or T field changed. No `crates/` or `programs/` file changed,
 so no ELF rebuild is claimed; the three release pins remain inherited, not
 freshly checked. The initial `[17,29]` copy-reference counterexample is retained
 and is not relabeled as a row counterexample or a successful gate.
+
+## V184 further source work and exact remaining gap
+
+Attempts 52768/52769/52770/52772/52773 pass. In particular,
+`PV_AL_MoveLast.source` proves the complete generic Result law for the safe
+move reference using the explicit `Vec::remove` library model, for every
+representable vector and every payload Type, with no Copy/Clone bound.
+`PV_AL_MoveFacts` proves the last index bounds and that the suffix copy count
+is zero. `PV_AL_MoveMemory.last_copy` proves the data-buffer memory is unchanged
+for every element width, including zero-sized types. The explicit world model
+retains allocation history/counters, address, capacity, data bytes and an
+arbitrary external frame. No source-equality hypothesis is introduced.
+
+These facts do not yet close the native/world association. Attempt 52774's
+native-value bridge failed on a guard simplification; its failed log, including
+Lean's error-generated `sorryAx`, is retained and receives no proof credit.
+The adjusted 52775 source was admitted, and its fetched time log reports exit
+0, 1.07 s, peak 2,637,212 KiB and zero swaps. However, output/axioms collection
+failed, so it is **not accepted for closure**. `52775-INCOMPLETE.json` distinguishes
+the observed timed exit from the missing proof audit. `PV_AL_MoveWorld` and
+`PV_AL_MoveSelected` are written, uncompiled drafts; their statements are not
+claimed as theorems. `pop-zst-world.rs` is an unexecuted additional native test.
+
+V184 therefore remains **OPEN -> OPEN**. Before: exact selected op33 complete
+source/value law with explicit allocation world. After: generic move-reference
+value and zero-copy facts proved; native/world/selected bridge and frozen stdlib
+structural association still pending. There is no closing theorem credited.
+The 99-case allocation observation and 697-check Kani gate remain valid at
+their stated bounds. The old `[17,29]` copy-reference counterexample remains
+retained as a failed approach, never a counterexample to V184.
+
+## Host stop, accounting and handoff
+
+Host SSH receipt collection failed with a missing `52775-output.log`; a
+read-only follow-up exited 255 with `Connection closed by 100.108.41.90 port 22`.
+Per `local-lean.txt` rule 5 ("If the launcher or host misbehaves, stop and report
+the exact error ... the lead fixes infrastructure"), no further host scope was
+launched and no infrastructure was repaired. This is an infrastructure stop,
+not budget exhaustion, a row counterexample, or an ELF mismatch. `HOST-STOP.txt`
+records the exact failure. Own host cache cleanup is deferred because the
+host connection failed; preserve source, receipts and keys when cleaning caches.
+No wallet/account keys were created or removed.
+
+Total: **75/100 charged Lean attempts**, of which 40 have accepted complete
+receipts, 34 are rejected and 1 has incomplete receipt collection. The resume
+used 69 of its 94 remaining attempts. **2/6 Kani runs** passed; 25 Lean attempts
+and 4 Kani runs remain. IDs 52700–52775 are used, with 52727 uncharged; prior
+excluded IDs remain excluded. Audit IDs 52997–52999 are unused. The latest
+user instruction explicitly reauthorizes the full 52500–52999 block despite
+the earlier common-file range correction; no claim of global ID exclusivity
+is made. `TALLY.json` and per-attempt source snapshots retain exact accounting.
+
+`RECEIPTS.json` records exact targets, exits, wall/RSS/swap, revisions and
+printed axioms for all complete receipts. Accepted receipts print only standard
+axioms; failed logs are never treated as accepted proofs. The only incomplete
+receipt is identified separately. Capped scopes used 6G high / 8G max / zero
+swap / 64 tasks and Lean -M7000; no caps were raised. Generator promotion
+`--check` and the circle structural gate pass locally at handoff. No final
+combined axioms audit or frozen dependency-manifest replay was performed:
+focused V184 prerequisites are not yet fully audited. Candidate row results
+are not a coherent release replay.
+
+Endpoint assumptions removed: **zero**. Retained: all deployed endpoint,
+whole-native composition and owner-integration obligations. Added/changed:
+no endpoint premise, simulator/observer weakening or T field; only scoped
+candidate source laws and proof-only references. V233 and V265 are candidate
+library/source closures, subject to owner integration and final replay. No
+release Rust source changed. Inherited ELF pins (not freshly checked):
+
+- default `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`
+- devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`
+- Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`
+
+Next: recover the existing 52775 output/axioms without rerunning its source;
+then compile the smallest changed native/world/selected bridges, check the
+frozen stdlib structural link, perform one combined axioms audit and one final
+candidate closure-manifest replay. Clean only own compiled caches after those
+checks. **Target not yet established.**

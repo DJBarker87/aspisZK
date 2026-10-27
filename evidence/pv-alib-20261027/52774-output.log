@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_MoveNativeValue.lean:47:4: error: Tactic `apply` failed: could not unify the conclusion of `congrArg ok`
+  ok ?m.96 = ok ?m.97
+with the goal
+  (if (↑v).length - 1 < capacity then ok (some (↑v)[(↑v).length - 1], shorten v (v.len.wrapping_sub 1#usize))
+    else fail Error.undef) =
+    ok (PV_CBL_VectorPopSpec.pop v)
+
+Note: The full type of `congrArg ok` is
+  ?m.96 = ?m.97 → ok ?m.96 = ok ?m.97
+
+case neg
+T : Type
+v : alloc.vec.Vec T
+capacity : ℕ
+fits : (↑v).length ≤ capacity
+h : ¬↑v = []
+hn : v.len ≠ 0#usize
+hi : ↑(v.len.wrapping_sub 1#usize) = (↑v).length - 1
+hb : (↑v).length - 1 < (↑v).length
+hc : ↑(v.len.wrapping_sub 1#usize) < capacity
+⊢ (if (↑v).length - 1 < capacity then ok (some (↑v)[(↑v).length - 1], shorten v (v.len.wrapping_sub 1#usize))
+    else fail Error.undef) =
+    ok (PV_CBL_VectorPopSpec.pop v)
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_MoveNativeValue.lean:45:37: warning: This simp argument is unused:
+  if_pos hc
+
+Hint: Omit it from the simp argument list.
+  simp only [nativeValue, ̲if_neg hn,i̵f̵_̵p̵o̵s̵ h̵c̵,̵readSlot, ̲hi, ̲List.getElem?_eq_getElem hb, ̲bind_tc_ok,
+        PV_CBL_VectorPopSpec.reference]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_AL_MoveNativeValue.readSlot' depends on axioms: [propext]
+'R1Z.PV_AL_MoveNativeValue.shorten' depends on axioms: [propext]
+'R1Z.PV_AL_MoveNativeValue.nativeValue' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_MoveNativeValue.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_AL_MoveNativeValue.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
