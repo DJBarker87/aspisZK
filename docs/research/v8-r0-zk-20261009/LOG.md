@@ -10721,3 +10721,30 @@ Lean. Launched pv-cb6 (same branch, IDs 38300-38599, 100 Lean / 12 Kani): op223 
 name PV_CB_Op223Source.op223_source for rw21, then op117 by split gates, op259, the remaining upward ops;
 P6 references on the canonical domain with the invariant proved at call sites (D234). Six slots: cb5,
 srcid6, runjoin9, rw21, join5, cb6. Rows removed outright: 0. Privacy target not yet established.
+
+## D236 (Stream B) 2026-10-27 01:30 UTC: join5 and cb5 exhausted; op51 discharged; join track paused for recount 3; cb7 launched
+
+pv-join5 (`codex/pv-join-20261026`, head 908f14a854; 95/95 Lean, 6/6 Kani, final audits 38092-38094
+standard axioms, swap 0; no crates/programs change; no forbidden tokens). Proved canonical interpolation
+outputs for the current joined caller with arbitrary raw evaluation values. op121 OPEN: direct extraction
+failed; the canonical-domain owned reference compiles but both Kani equivalence checks timed out (not
+rerun unchanged); the D234 counterexample is preserved. Inventory 30 → 30; per-fixture reached sets still
+unresolved; both proof-byte equations open; rw21's published serializer inspected, its
+deployed-input-to-Transcript association still open. Lead decision (AGENTS.md §7): five join rounds have
+not moved the inventory or reachability; the join slot is paused until rw21 publishes the model instance
+or recount 3 identifies a better independent row. pv-cb5 (`codex/pv-cb3-20261026`, head 29297acd5c;
+100/100 Lean = 71 passed, Kani 2/15 then the shared configuration failure; frozen 39-module manifest,
+final audit exit 0 / 1.55 s / 4.28 GB / swap 0, 78 axiom checks standard; no crates/programs change; no
+forbidden tokens). V195/op51 ROW-DISCHARGED(candidate) for ARBITRARY extracted carriers (complete Result,
+no canonicality or desired-output premise; native harness 170 checks), repairing the cb3 withdrawal.
+op249: staged reference and typed kernel pass, shipped-to-reference correspondence open. op223: direct
+extraction refused by Aeneas (escaping-reference loan validation), so its law goes by the P6 route (cb6).
+cb3-track rows 4 → 5; candidate closures 44 → 45 before the op229 dedupe. Endpoint premises removed: 0.
+Launched pv-recount3 (`codex/pv-recount3-20261027`, research base, IDs 38600-38699, statement checks
+only): recount 3 of the ledger over all sibling branches with a new column "in headline closure?
+(research / candidate / neither)" derived by import-chain inspection, the D223 inventory correction, the
+D234 canonical-domain obligation and per-fixture reachability as new rows, dedupe op229, corrections to
+D209-D235 claims, and the most valuable independent row. Launched pv-cb7 (cb3 branch, IDs 38700-38999,
+100 Lean / 10 Kani): op249 correspondence and law, then the remaining top-down ops; op223 stays with cb6.
+Six slots: srcid6, runjoin9, rw21, cb6, recount3, cb7. Rows removed outright: 0. Privacy target not yet
+established.
