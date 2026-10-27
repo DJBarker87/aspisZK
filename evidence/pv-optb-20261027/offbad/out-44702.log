@@ -1,0 +1,448 @@
+'R1Z.PV_OptB_JointTransport.overlay' does not depend on any axioms
+'R1Z.PV_OptB_JointTransport.overlay_none' depends on axioms: [propext]
+'R1Z.PV_OptB_JointTransport.overlay_some' depends on axioms: [propext]
+'R1Z.PV_OptB_JointTransport.overlay_bounds' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OptB_JointTransport.overlay_agreement' does not depend on any axioms
+'R1Z.PV_OptB_JointTransport.until_bad_overlay' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_JointTransport.same_bound_no_new_charge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_JointTransport.observe_overlay' depends on axioms: [Quot.sound]
+'R1Z.PV_OptB_JointTransport.failure_run_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_JointTransport.failure_test_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_Correlation.left' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OptB_Correlation.right' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OptB_Correlation.signal' does not depend on any axioms
+'R1Z.PV_OptB_Correlation.old_equal_means' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_Correlation.left_overlay_mean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_Correlation.right_overlay_mean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_Correlation.old_marginal_is_insufficient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_BoundComposition.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_BoundComposition.compose_existing_charges' depends on axioms: [propext, Classical.choice, Quot.sound]
+def R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement : {CommitHandle Aux : Type} →
+  R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+    (R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        (rust :
+            R0Z.FsStatement.FSExperiments R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat
+              R1Z.PrivacyR1AcctBasis.F) →
+          [Fintype rust.RealRand] →
+            (rust.Adversary →
+                R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat →
+                  List (List UInt8 × R0Z.FsStatement.OracleAnswer) → R1Z.GamesR1.OProg) →
+              Prop :=
+fun {CommitHandle Aux} template outputs x rust [Fintype rust.RealRand] observer_program =>
+  ∀ (adv : rust.Adversary) (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).Instance),
+    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).public w = x.1 →
+      Nonempty
+        (R1Z.ProverCommitFuelJoin22.RunJoin
+          (fun r =>
+            have v :=
+              rust.real (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                R1Z.PrivacyR1AcctBasis.basis outputs adv x w r;
+            (v, rust.observe adv v))
+          (fun r =>
+            have a := R1Z.RomObserverBin.observerMap rust observer_program adv;
+            have v :=
+              (R1Z.ProverCommitReencode16.experiment
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                    (R1Z.PredicateR1.P_R1
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                      R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                    (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode).real
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs a x w r;
+            (v,
+              (R1Z.ProverCommitReencode16.experiment
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                    (R1Z.PredicateR1.P_R1
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                      R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                    (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode).observe
+                a v))
+          (R1Z.QueryScanRealLazyBound.realBad
+            (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs x).toWire
+            (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs x
+                (R1Z.PrivacyR1AcctModel.seed
+                  (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                      outputs x).toWire
+                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                  R1Z.PhaseWireLog2Bin.opens)).toProver
+            8 (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+            x w)
+          (R1Z.PrivacyR1HeadlineDeployedReal.realSeedQueries template outputs x rust observer_program adv w))
+theorem R1Z.PV_OptB_Endpoint.privacy_headline_deployed_B : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle)
+  (rust :
+    R0Z.FsStatement.FSExperiments R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat R1Z.PrivacyR1AcctBasis.F)
+  [inst : Fintype rust.RealRand] [Nonempty rust.RealRand]
+  (observer_program :
+    rust.Adversary →
+      R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat →
+        List (List UInt8 × R0Z.FsStatement.OracleAnswer) → R1Z.GamesR1.OProg)
+  {E : Type}
+  (failure : E → rust.Adversary → R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat),
+  R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement template outputs x rust observer_program →
+    ∀ (signal : Option E),
+      (∀ (adv : rust.Adversary) (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input).Instance),
+          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input).public w = x.1 →
+            |R0Z.mean (R1Z.PV_OptB_Endpoint.realTestB outputs x rust failure signal adv w) -
+                  R0Z.mean
+                    (R1Z.PV_OptB_Endpoint.idealTestSB template outputs x rust observer_program failure signal adv)| ≤
+              R1Z.PrivacyR1Final.modelError
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                            outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                            outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                                  outputs x).toWire
+                              R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver
+                        R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                      16 / 2 ^ 486 +
+                    R1Z.QueryScanFreshUnion.freshBudget
+                      (8 *
+                          R1Z.GamesR1PBin.n1
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                                outputs x).toWire
+                            (R1Z.PhaseProtocolInstanceBin.prover
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                                outputs x
+                                (R1Z.PrivacyR1AcctModel.seed
+                                  (R1Z.PhaseProtocolInstanceBin.wire
+                                      (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                          x).length
+                                      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input)
+                                      R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                  R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                  R1Z.PhaseWireLog2Bin.opens)).toProver +
+                        1) +
+                  2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+                2 * R1Z.ProverCommitFuelMass22.charge) ∧
+        R1Z.PrivacyR1Final.modelError
+                      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                          x).toWire
+                      (R1Z.PhaseProtocolInstanceBin.prover
+                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                          x
+                          (R1Z.PrivacyR1AcctModel.seed
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                                outputs x).toWire
+                            R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                            R1Z.PhaseWireLog2Bin.opens)).toProver
+                      R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                    16 / 2 ^ 486 +
+                  R1Z.QueryScanFreshUnion.freshBudget
+                    (8 *
+                        R1Z.GamesR1PBin.n1
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver +
+                      1) +
+                2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+              2 * R1Z.ProverCommitFuelMass22.charge ≤
+            1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+                  R1Z.QueryScanFreshUnion.freshBudget
+                    (8 *
+                        R1Z.GamesR1PBin.n1
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver +
+                      1) +
+                2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+              2 * R1Z.ProverCommitFuelMass22.charge ∧
+          R1Z.PrivacyR1Final.modelError
+                      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                          x).toWire
+                      (R1Z.PhaseProtocolInstanceBin.prover
+                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                          x
+                          (R1Z.PrivacyR1AcctModel.seed
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                                outputs x).toWire
+                            R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                            R1Z.PhaseWireLog2Bin.opens)).toProver
+                      R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                    16 / 2 ^ 486 +
+                  R1Z.QueryScanFreshUnion.freshBudget
+                    (8 *
+                        R1Z.GamesR1PBin.n1
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver +
+                      1) +
+                2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+              2 * R1Z.ProverCommitFuelMass22.charge <
+            1 / 2 ^ 100 :=
+fun {CommitHandle Aux} template outputs x rust [Fintype rust.RealRand] [Nonempty rust.RealRand] observer_program {E}
+    failure refinement signal =>
+  have old :=
+    R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed template outputs x rust observer_program refinement;
+  ⟨fun adv w hw =>
+    Option.casesOn (motive := fun t =>
+      signal = t →
+        |R0Z.mean (R1Z.PV_OptB_Endpoint.realTestB outputs x rust failure signal adv w) -
+              R0Z.mean (R1Z.PV_OptB_Endpoint.idealTestSB template outputs x rust observer_program failure signal adv)| ≤
+          R1Z.PrivacyR1Final.modelError
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs
+                        x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x).toWire
+                          R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                  16 / 2 ^ 486 +
+                R1Z.QueryScanFreshUnion.freshBudget
+                  (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                            outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                            outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                                  outputs x).toWire
+                              R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver +
+                    1) +
+              2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * R1Z.ProverCommitFuelMass22.charge)
+      signal (fun h => Eq.symm h ▸ old.left adv w hw)
+      (fun e h =>
+        Eq.symm h ▸
+          Eq.mpr
+            (id
+              (congrFun'
+                (congrArg LE.le
+                  (Eq.trans
+                    (congrArg abs
+                      (Eq.trans
+                        (congr
+                          (congrArg HSub.hSub
+                            (R0Z.FsAbort.mean_const (R0Z.FsStatement.bit (rust.observe adv (failure e adv)))))
+                          (R0Z.FsAbort.mean_const (R0Z.FsStatement.bit (rust.observe adv (failure e adv)))))
+                        (sub_self (R0Z.FsStatement.bit (rust.observe adv (failure e adv))))))
+                    abs_zero))
+                (R1Z.PrivacyR1Final.modelError
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                              outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver
+                          R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                        16 / 2 ^ 486 +
+                      R1Z.QueryScanFreshUnion.freshBudget
+                        (8 *
+                            R1Z.GamesR1PBin.n1
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                                  outputs x).toWire
+                              (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                                  outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_OptB_Endpoint.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PV_OptB_Endpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver +
+                          1) +
+                    2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+                  2 * R1Z.ProverCommitFuelMass22.charge)))
+            (LE.le.trans
+              (abs_nonneg
+                (R0Z.mean
+                    (R0Z.FsStatement.realTest (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                      R1Z.PrivacyR1AcctBasis.basis outputs rust adv x w) -
+                  R0Z.mean
+                    (R0Z.HvzkS.idealTestS
+                      (R1Z.ProverCommitReencode16.experiment
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver
+                        8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                        (R1Z.PredicateR1.P_R1
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                          R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                        (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode)
+                      (R1Z.RomObserverBin.observerMap rust observer_program adv) x
+                      (R0Z.RefPayload.simE
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                        R1Z.PrivacyR1AcctBasis.basis outputs x))))
+              (old.left adv w hw)))
+      (Eq.refl signal),
+    old.right⟩
+'R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_Endpoint.privacy_headline_deployed_B' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0

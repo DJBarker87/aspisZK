@@ -1,0 +1,84 @@
+'R1Z.PV_OptB_OffBadJoin.Steps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_OffBadJoin.related_off_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_OffBadJoin.observations_off_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_OffBadJoin.independent_off_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_OffBadJoin.decoder_off_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_BodySync.finish' depends on axioms: [propext]
+'R1Z.PV_OptB_BodySync.finish_related' depends on axioms: [propext]
+'R1Z.PV_OptB_BodySync.attempt_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_BodySync.attempt_entropy_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_BodySync.attempt_entropy_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_BodySync.attempt_entropy_div' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_BodySync.attempt_related_at_same_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_BodySync.body_steps_off_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_BodySync.body_signal_off_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_DeployedOffBad.conditional_off_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_WorldFrames.tapes' does not depend on any axioms
+'R1Z.PV_OptB_WorldFrames.cursors' does not depend on any axioms
+'R1Z.PV_OptB_WorldFrames.file_frame' depends on axioms: [propext]
+'R1Z.PV_OptB_WorldFrames.time_frame' depends on axioms: [propext]
+'R1Z.PV_OptB_WorldFrames.worker_frame' depends on axioms: [propext]
+'R1Z.PV_OptB_WorldFrames.file_cursor' depends on axioms: [propext]
+'R1Z.PV_OptB_WorldFrames.time_cursor' depends on axioms: [propext]
+'R1Z.PV_OptB_WorldFrames.worker_cursor' depends on axioms: [propext]
+'R1Z.PV_OptB_WorldFrames.time_unique' depends on axioms: [propext]
+'R1Z.PV_OptB_WorldFrames.worker_unique' depends on axioms: [propext]
+'R1Z.PV_OptB_WorldFrames.world_ext' depends on axioms: [propext]
+'R1Z.PV_OptB_WorldFrames.flush_tapes' does not depend on any axioms
+'R1Z.PV_OptB_WorldFrames.flush_cursors' does not depend on any axioms
+'R1Z.PV_OptB_FirstFailureOffBad.execute_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_FirstFailureOffBad.signal_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_FirstFailureOffBad.independent_off_bad_on_first_failures' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_OptB_ProjectionBoundary.erased_state_equal' does not depend on any axioms
+'R1Z.PV_OptB_ProjectionBoundary.full_state_differs' does not depend on any axioms
+'R1Z.PV_OptB_ProjectionBoundary.observation_factor_sufficient' does not depend on any axioms
+'R1Z.PV_OptB_ProjectionBoundary.mapR_compose' does not depend on any axioms
+'R1Z.PV_OptB_ProjectionBoundary.projected_observation_sufficient' depends on axioms: [Quot.sound]
+def R1Z.PV_OptB_OffBadJoin.Steps : [inst : ProverRwRngCaller.NativeTypes] →
+  [ProverRwRngCaller.ErasureFns] →
+    {N L C W Public World Coins : Type} →
+      (W → Public) →
+        (W → World → Coins → Prop) →
+          R1Z.ProverRwEffectCallback.Account (R1Z.PV_RunJoin_UnifiedRetry.State N L C) →
+            (W → R1Z.PV_RunJoin_UnifiedRetry.Body (R1Z.PV_RunJoin_UnifiedRetry.State N L C)) →
+              (R1Z.PV_RunJoin_UnifiedRetry.State N L C → R1Z.PV_RunJoin_UnifiedRetry.State N L C → Prop) → Prop :=
+fun [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] {N L C W Public World Coins} pub bad account body
+    R =>
+  ∀ (w u : W),
+    pub w = pub u →
+      ∀ (os : World) (coins : Coins),
+        ¬bad w os coins →
+          ¬bad u os coins →
+            ∀ (i : ℕ) (s t : R1Z.PV_RunJoin_UnifiedRetry.State N L C),
+              i < 8 →
+                R s t →
+                  R1Z.PV_OptB_ControlRelation.Related R (R1Z.PV_RunJoin_UnifiedRetry.attempt account (body w) i s)
+                    (R1Z.PV_RunJoin_UnifiedRetry.attempt account (body u) i t)
+theorem R1Z.PV_OptB_DeployedOffBad.conditional_off_bad : ∀ [ProverRwFull.ExternalTypes]
+  {CommitHandle Aux Coins N L C E Event : Type} (runtime : R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C)
+  (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle)
+  (bad : h.Instance → R1Z.PV_RunJoin_Deployed.World runtime → Unit → Prop)
+  (R : R1Z.PV_RunJoin_UnifiedRetry.State N L C → R1Z.PV_RunJoin_UnifiedRetry.State N L C → Prop)
+  (read : R1Z.PV_RunJoin_UnifiedRetry.State N L C → E) (decode : Aeneas.Std.Result E → Option Event),
+  (∀ (r : R1Z.PV_RunJoin_Deployed.World runtime), R r.state r.state) →
+    (∀ (s t : R1Z.PV_RunJoin_UnifiedRetry.State N L C), R s t → read s = read t) →
+      R1Z.PV_OptB_OffBadJoin.Steps h.public bad runtime.account (runtime.body h x) R →
+        R1Z.PV_OptB_Factorization.IndependentOffBad h.public
+          (fun w r x_1 =>
+            decode (R1Z.PV_OptB_ControlObservation.observation read (R1Z.PV_RunJoin_Deployed.execute runtime h x w r)))
+          bad :=
+fun [ProverRwFull.ExternalTypes] {CommitHandle Aux Coins N L C E Event} runtime h x bad R read decode initial preserved
+    step =>
+  R1Z.PV_OptB_OffBadJoin.independent_off_bad h.public bad runtime.account (runtime.body h x) (fun r x => r.state) R step
+    (fun r x => initial r) read preserved decode
+def R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw : [inst : ProverRwFull.ExternalTypes] →
+  {S : Type} → R1Z.PV_RunJoin_UnifiedRetry.SourceBody S → R1Z.PV_RunJoin_UnifiedRetry.Body S → Prop :=
+fun [ProverRwFull.ExternalTypes] {S} d body =>
+  ∀ (s : S) (secret : R1Z.ProverRwRetryModel.Secret),
+    R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, d.store out.2)) (body secret s) =
+      ProverRwFull.prover.prove_masked_attempt (d.pub s) (d.compiled s) ProverRwFull.transport.Variant.S2 (d.hash s)
+        secret (d.store s)
+exit=0

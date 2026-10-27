@@ -1,0 +1,1342 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_OptB_Endpoint.lean:81:32: error: Application type mismatch: The argument
+  outputs
+has type
+  Statement K CommitHandle → Challenges K → Aux
+but is expected to have type
+  Statement K ?m.49
+in the application
+  realTestB ?m.52 outputs
+theorem R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed : ∀ {CommitHandle Aux : Type}
+  (template : R1Wire K CommitHandle Aux) (outputs : Statement K CommitHandle → Challenges K → Aux)
+  (x : Statement K CommitHandle) (rust : FSExperiments K CommitHandle Aux R1Bat F) [inst : Fintype rust.RealRand]
+  [Nonempty rust.RealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat → List (List UInt8 × OracleAnswer) → OProg),
+  PrivacyR1HeadlineDeployedReal.RustRealRefinement template outputs x rust observer_program →
+    (∀ (adv : rust.Adversary) (w : (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).Instance),
+        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).public w = x.1 →
+          |mean (realTest (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs rust adv x w) -
+                mean
+                  (idealTestS
+                    (ProverCommitReencode16.experiment
+                      (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input)
+                          B outputs x).toWire
+                      (prover base (base.pubBytes x).length
+                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                          (PrivacyR1AcctModel.seed
+                            (wire base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                            PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                      8 eight_pos (P_R1 (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).transport B hB)
+                      (fun h' => VR1 h') ProverCommitReencode16.encode)
+                    (RomObserverBin.observerMap rust observer_program adv) x
+                    (simE (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).transport B outputs x))| ≤
+            modelError
+                      (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input)
+                          B outputs x).toWire
+                      (prover base (base.pubBytes x).length
+                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                          (PrivacyR1AcctModel.seed
+                            (wire base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                            PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                      L₁ L₂ +
+                    16 / 2 ^ 486 +
+                  QueryScanFreshUnion.freshBudget
+                    (8 *
+                        n1
+                          (wire base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                          (prover base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                              (PrivacyR1AcctModel.seed
+                                (wire base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver +
+                      1) +
+                2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+              2 * ProverCommitFuelMass22.charge) ∧
+      modelError
+                    (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                        outputs x).toWire
+                    (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input)
+                        B outputs x
+                        (PrivacyR1AcctModel.seed
+                          (wire base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                          PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                    L₁ L₂ +
+                  16 / 2 ^ 486 +
+                QueryScanFreshUnion.freshBudget
+                  (8 *
+                      n1
+                        (wire base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                        (prover base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                            (PrivacyR1AcctModel.seed
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver +
+                    1) +
+              2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * ProverCommitFuelMass22.charge ≤
+          1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+                QueryScanFreshUnion.freshBudget
+                  (8 *
+                      n1
+                        (wire base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                        (prover base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                            (PrivacyR1AcctModel.seed
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver +
+                    1) +
+              2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * ProverCommitFuelMass22.charge ∧
+        modelError
+                    (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                        outputs x).toWire
+                    (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input)
+                        B outputs x
+                        (PrivacyR1AcctModel.seed
+                          (wire base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                          PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                    L₁ L₂ +
+                  16 / 2 ^ 486 +
+                QueryScanFreshUnion.freshBudget
+                  (8 *
+                      n1
+                        (wire base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                        (prover base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                            (PrivacyR1AcctModel.seed
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver +
+                    1) +
+              2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * ProverCommitFuelMass22.charge <
+          1 / 2 ^ 100 :=
+fun {CommitHandle Aux} template outputs x rust [⋯] [⋯] observer_program refinement =>
+  have model := PrivacyR1HeadlineOwnedClosed.Admitted.FixedObserver.privacy_headline_admitted template outputs x;
+  have caller := ProverCommitOwnedEndpoint.caller_law template PrivacyR1HeadlineDeployedReal.input outputs x;
+  let ⟨hc₁, right✝⟩ :=
+    ProverCommitCallerInstance.budgets
+      (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+          (PrivacyR1AcctModel.seed
+            (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                x).toWire
+            PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+      caller
+  let ⟨hc₂, right✝¹⟩ := right✝
+  let ⟨hs₁, right✝²⟩ := right✝¹
+  let ⟨hs₂, right✝³⟩ := right✝²
+  let ⟨hcount, right✝⁴⟩ := right✝³
+  let ⟨hb₁, hb₂⟩ := right✝⁴
+  have hM :=
+    ProverCommitModelCore16.read_bound
+      (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+          x).toWire
+      (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+          (PrivacyR1AcctModel.seed
+            (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                x).toWire
+            PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+      L₁ L₂ hcount hb₁ hb₂;
+  have hk :=
+    QueryScanFreshNumerics.lazy_budget_le_fresh hM
+      (Nat.succ_le_succ
+        (Nat.zero_le
+          (8 *
+            n1
+              (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                  outputs x).toWire
+              (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                  outputs x
+                  (PrivacyR1AcctModel.seed
+                    (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                        outputs x).toWire
+                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver)));
+  ⟨fun adv w hw =>
+    have hr₀ :=
+      ProverCommitFuelJoin22.test_bound (Classical.choice (refinement adv w hw)) (fun run => bit run.2)
+        (fun x => ⟨bit_nonneg x.2, bit_le_one x.2⟩) (2 ^ 64) fun r =>
+        ProverCommitObserverQueries19.real_bound
+          (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+              x).toWire
+          (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+              x
+              (PrivacyR1AcctModel.seed
+                (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                    outputs x).toWire
+                PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+          8 (P_R1 (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).transport B hB) (fun h' => VR1 h')
+          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+          (ProverCommitReencode16.observer ProverCommitReencode16.encode
+            (RomObserverBin.observerMap rust observer_program adv))
+          x w r;
+    have hscan :=
+      Eq.mp (congrArg (LE.le (8 * scanProbability)) (mul_one_div 8 (2 ^ 486)))
+        (mul_le_mul_of_nonneg_left scan_probability_le
+          (Mathlib.Meta.NormNum.isNat_le_true (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 0))
+            (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 8)) (Eq.refl true)));
+    have hr :=
+      LE.le.trans hr₀
+        (add_le_add
+          (add_le_add
+            (LE.le.trans
+              (ProverCommitModelCore16.real_bad_mass base (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input)
+                B outputs x
+                (PrivacyR1AcctModel.seed
+                  (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                      outputs x).toWire
+                  PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)
+                hc₁ hc₂ w)
+              (add_le_add
+                (le_refl
+                  (QueryScanRealLazyBound.lazyBudget
+                    (8 *
+                      n1
+                        (wire base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                        (prover base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                            (PrivacyR1AcctModel.seed
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver)))
+                hscan))
+            (le_refl (ProverCommitSeedEvent19.budget (2 ^ 64))))
+          (le_refl ProverCommitFuelMass22.charge));
+    let ⟨hpub, hs⟩ := PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises w hw
+    have core :=
+      ProverCommitModelCore16.core_privacy base (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+        x
+        (PrivacyR1AcctModel.seed
+          (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+              x).toWire
+          PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)
+        hB hpub hs ProverCommitSourceDecoder.quotientFibreSize
+        (fun τ =>
+          Eq.mpr
+            (eq_of_heq
+              ((fun α a a' e'_2 a_1 =>
+                  let ⟨⟩ := a'
+                  e'_2)
+                ℕ
+                {e |
+                    quotientDecode
+                        (fun e =>
+                          (prover base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                  (PrivacyR1AcctModel.seed
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver.tapeOf
+                            e.1 e.2)
+                        e =
+                      some τ}.card
+                {e |
+                    quotientDecode
+                        (fun e =>
+                          (prover base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                  (PrivacyR1AcctModel.seed
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver.tapeOf
+                            e.1 e.2)
+                        e =
+                      some τ}.card
+                (eq_of_heq
+                  ((fun α s s' e'_2 =>
+                      let ⟨⟩ := s'
+                      e'_2)
+                    ((Fin
+                          (prover base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                (PrivacyR1AcctModel.seed
+                                  (wire base (base.pubBytes x).length
+                                      (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                  PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver.E₁ →
+                        OracleAnswer) ×
+                      (Fin
+                          (prover base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                (PrivacyR1AcctModel.seed
+                                  (wire base (base.pubBytes x).length
+                                      (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                  PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver.E₂ →
+                        OracleAnswer))
+                    {e |
+                      quotientDecode
+                          (fun e =>
+                            (prover base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                    (PrivacyR1AcctModel.seed
+                                      (wire base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                          x).toWire
+                                      PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver.tapeOf
+                              e.1 e.2)
+                          e =
+                        some τ}
+                    {e |
+                      quotientDecode
+                          (fun e =>
+                            (prover base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                    (PrivacyR1AcctModel.seed
+                                      (wire base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                          x).toWire
+                                      PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver.tapeOf
+                              e.1 e.2)
+                          e =
+                        some τ}
+                    (Finset.ext fun e =>
+                      of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Iff
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Membership.mem
+                                      (Finset.filter_congr fun x_1 a =>
+                                        Iff.of_eq
+                                          (Eq.refl
+                                            (quotientDecode
+                                                (fun e =>
+                                                  (prover base (base.pubBytes x).length
+                                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input)
+                                                          B outputs x
+                                                          (PrivacyR1AcctModel.seed
+                                                            (wire base (base.pubBytes x).length
+                                                                (PhaseWireLog2Bin.honest
+                                                                  PrivacyR1HeadlineDeployedReal.input)
+                                                                B outputs x).toWire
+                                                            PrivacyR1HeadlineDeployedReal.ownedDecode fib
+                                                            opens)).data.tapeOf
+                                                    e.1 e.2)
+                                                x_1 =
+                                              some τ))))
+                                    e)
+                                  PrivacyR1HeadlineDeployedReal.privacy_headline_deployed._simp_1)
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg And (PrivacyR1HeadlineDeployedReal.privacy_headline_deployed._simp_2 e))
+                                    (quotientDecode
+                                        (fun e =>
+                                          (prover base (base.pubBytes x).length
+                                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                                                  outputs x
+                                                  (PrivacyR1AcctModel.seed
+                                                    (wire base (base.pubBytes x).length
+                                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                                                        outputs x).toWire
+                                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).data.tapeOf
+                                            e.1 e.2)
+                                        e =
+                                      some τ))
+                                  (true_and
+                                    (quotientDecode
+                                        (fun e =>
+                                          (prover base (base.pubBytes x).length
+                                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                                                  outputs x
+                                                  (PrivacyR1AcctModel.seed
+                                                    (wire base (base.pubBytes x).length
+                                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                                                        outputs x).toWire
+                                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).data.tapeOf
+                                            e.1 e.2)
+                                        e =
+                                      some τ)))))
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Membership.mem
+                                    (Finset.filter_congr fun x_1 a =>
+                                      Iff.of_eq
+                                        (Eq.refl
+                                          (quotientDecode
+                                              (fun e =>
+                                                (prover base (base.pubBytes x).length
+                                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                                                        outputs x
+                                                        (PrivacyR1AcctModel.seed
+                                                          (wire base (base.pubBytes x).length
+                                                              (PhaseWireLog2Bin.honest
+                                                                PrivacyR1HeadlineDeployedReal.input)
+                                                              B outputs x).toWire
+                                                          PrivacyR1HeadlineDeployedReal.ownedDecode fib
+                                                          opens)).data.tapeOf
+                                                  e.1 e.2)
+                                              x_1 =
+                                            some τ))))
+                                  e)
+                                PrivacyR1HeadlineDeployedReal.privacy_headline_deployed._simp_1)
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg And (PrivacyR1HeadlineDeployedReal.privacy_headline_deployed._simp_2 e))
+                                  (quotientDecode
+                                      (fun e =>
+                                        (prover base (base.pubBytes x).length
+                                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                                x
+                                                (PrivacyR1AcctModel.seed
+                                                  (wire base (base.pubBytes x).length
+                                                      (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                                                      outputs x).toWire
+                                                  PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).data.tapeOf
+                                          e.1 e.2)
+                                      e =
+                                    some τ))
+                                (true_and
+                                  (quotientDecode
+                                      (fun e =>
+                                        (prover base (base.pubBytes x).length
+                                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                                x
+                                                (PrivacyR1AcctModel.seed
+                                                  (wire base (base.pubBytes x).length
+                                                      (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                                                      outputs x).toWire
+                                                  PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).data.tapeOf
+                                          e.1 e.2)
+                                      e =
+                                    some τ)))))
+                          (iff_self
+                            (quotientDecode
+                                (fun e =>
+                                  (prover base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                          (PrivacyR1AcctModel.seed
+                                            (wire base (base.pubBytes x).length
+                                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                                x).toWire
+                                            PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).data.tapeOf
+                                    e.1 e.2)
+                                e =
+                              some τ))))))
+                ProverCommitSourceDecoder.quotientFibreSize))
+            (ProverCommitCallerInstance.fibres
+              (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                  outputs x
+                  (PrivacyR1AcctModel.seed
+                    (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                        outputs x).toWire
+                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+              caller τ))
+        L₁ L₂
+        (ProverCommitCallerInstance.exhaustion
+          (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+              x
+              (PrivacyR1AcctModel.seed
+                (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                    outputs x).toWire
+                PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+          caller)
+        hc₁ hc₂ hs₁ hs₂
+        (PrivacyR1AcctModel.wire_coins template log (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input)
+          outputs x)
+        (PhaseWireLog2Bin.batches PrivacyR1HeadlineDeployedReal.input outputs x template
+          PrivacyR1HeadlineDeployedReal.ownedDecode)
+        (PhaseWireLog2Bin.ordered_log PrivacyR1HeadlineDeployedReal.input outputs x template
+          PrivacyR1HeadlineDeployedReal.ownedDecode)
+        hcount hb₁ hb₂;
+    have mid :=
+      ProverCommitReencode16.privacy_transport
+        (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+            x).toWire
+        (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+            (PrivacyR1AcctModel.seed
+              (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                  outputs x).toWire
+              PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+        8 (of_decide_eq_true (id (Eq.refl true)))
+        (P_R1 (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).transport B hB) (fun h' => VR1 h')
+        ProverCommitReencode16.encode (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) outputs x
+        (simE (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).transport B outputs x)
+        (modelError
+          (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+              x).toWire
+          (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+              x
+              (PrivacyR1AcctModel.seed
+                (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                    outputs x).toWire
+                PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+          L₁ L₂)
+        core;
+    have hmid := mid (RomObserverBin.observerMap rust observer_program adv) w hw;
+    have t₁ :=
+      abs_sub_le (mean (realTest (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs rust adv x w))
+        (mean
+          (realTest (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+            (ProverCommitReencode16.experiment
+              (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                  outputs x).toWire
+              (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                  outputs x
+                  (PrivacyR1AcctModel.seed
+                    (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                        outputs x).toWire
+                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+              8 eight_pos (P_R1 (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).transport B hB)
+              (fun h' => VR1 h') ProverCommitReencode16.encode)
+            (RomObserverBin.observerMap rust observer_program adv) x w))
+        (mean
+          (idealTestS
+            (ProverCommitReencode16.experiment
+              (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                  outputs x).toWire
+              (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                  outputs x
+                  (PrivacyR1AcctModel.seed
+                    (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                        outputs x).toWire
+                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+              8 eight_pos (P_R1 (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).transport B hB)
+              (fun h' => VR1 h') ProverCommitReencode16.encode)
+            (RomObserverBin.observerMap rust observer_program adv) x
+            (simE (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input).transport B outputs x)));
+    have spare :=
+      id
+        (id
+          (le_of_lt
+            (add_pos_of_pos_of_nonneg
+              (add_pos'
+                (div_pos
+                  (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 8))
+                    (Eq.refl (Nat.ble 1 8)))
+                  (pow_pos
+                    (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2))
+                      (Eq.refl (Nat.ble 1 2)))
+                    486))
+                (div_pos
+                  (Nat.cast_pos'.mpr
+                    (pow_pos
+                      (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 2))
+                        (Eq.refl (Nat.ble 1 2)))
+                      64))
+                  (pow_pos
+                    (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2))
+                      (Eq.refl (Nat.ble 1 2)))
+                    256)))
+              (div_nonneg (Nat.cast_nonneg' ProverCommitFuelMass22.count)
+                (pow_nonneg (Nat.cast_nonneg' ProverCommitFuelMass22.p) ProverCommitFuelMass22.k)))));
+    Trans.trans
+      (Trans.trans (Trans.trans (LE.le.trans t₁ (add_le_add hr hmid)) (le_add_of_nonneg_right spare))
+        (Mathlib.Tactic.Ring.of_eq
+          (Mathlib.Tactic.Ring.Common.add_congr
+            (Mathlib.Tactic.Ring.Common.add_congr
+              (Mathlib.Tactic.Ring.Common.add_congr
+                (Mathlib.Tactic.Ring.Common.add_congr
+                  (Mathlib.Tactic.Ring.Common.add_congr
+                    (Mathlib.Tactic.Ring.Common.atom_pf
+                      (QueryScanRealLazyBound.lazyBudget
+                        (8 *
+                          n1
+                            (wire base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                            (prover base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                (PrivacyR1AcctModel.seed
+                                  (wire base (base.pubBytes x).length
+                                      (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                  PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver))
+                      rfl
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              QueryScanRealLazyBound.lazyBudget
+                                      (8 *
+                                        n1
+                                          (wire base (base.pubBytes x).length
+                                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                              x).toWire
+                                          (prover base (base.pubBytes x).length
+                                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                              (PrivacyR1AcctModel.seed
+                                                (wire base (base.pubBytes x).length
+                                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                                                    outputs x).toWire
+                                                PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                                    Nat.rawCast 1 *
+                                  Nat.rawCast 1 =
+                                QueryScanRealLazyBound.lazyBudget
+                                      (8 *
+                                        n1
+                                          (wire base (base.pubBytes x).length
+                                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                              x).toWire
+                                          (prover base (base.pubBytes x).length
+                                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                              (PrivacyR1AcctModel.seed
+                                                (wire base (base.pubBytes x).length
+                                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                                                    outputs x).toWire
+                                                PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                                    Nat.rawCast 1 *
+                                  _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl
+                          (QueryScanRealLazyBound.lazyBudget
+                                (8 *
+                                  n1
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    (prover base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                        (PrivacyR1AcctModel.seed
+                                          (wire base (base.pubBytes x).length
+                                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                              x).toWire
+                                          PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                              Nat.rawCast 1 *
+                            Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.div_congr
+                      (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 8)))
+                      (Mathlib.Tactic.Ring.Common.pow_congr
+                        (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+                        (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 486)))
+                        (Mathlib.Tactic.Ring.Common.pow_add
+                          (Mathlib.Tactic.Ring.Common.single_pow
+                            (Mathlib.Tactic.Ring.Common.pow_prod_atom (Nat.rawCast 2) (Nat.rawCast 486)
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                        (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * _a)
+                                    (Eq.symm rfl)))
+                                (Eq.refl ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1)))))
+                          (Mathlib.Tactic.Ring.Common.pow_zero (Nat.rawCast 2 + 0) rfl)
+                          (Mathlib.Tactic.Ring.Common.add_mul
+                            (Mathlib.Tactic.Ring.Common.mul_add
+                              (Mathlib.Tactic.Ring.Common.mul_pf_left (Nat.rawCast 2 + 0) (Nat.rawCast 486)
+                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                    (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                    (Eq.refl 1))))
+                              (Mathlib.Tactic.Ring.Common.mul_zero
+                                ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1))
+                              (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))
+                            (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))))
+                      (Mathlib.Tactic.Ring.Common.div_pf
+                        (Mathlib.Tactic.Ring.Common.inv_single
+                          (Mathlib.Tactic.Ring.Common.inv_mul (Eq.refl (Nat.rawCast 2 + 0)⁻¹)
+                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                              (Mathlib.Meta.NormNum.IsNNRat.to_isNat
+                                (Mathlib.Meta.NormNum.isNNRat_inv_pos
+                                  (Mathlib.Meta.NormNum.IsNat.to_isNNRat (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)))))
+                            (Eq.symm
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                          (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1))) ▸
+                              Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                    (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                    (Eq.refl 1))))))
+                        (Mathlib.Tactic.Ring.Common.add_mul
+                          (Mathlib.Tactic.Ring.Common.mul_add
+                            (Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 8) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                  (Eq.refl 8))))
+                            (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 8))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0)))
+                          (Mathlib.Tactic.Ring.Common.zero_mul
+                            ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 + 0))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0)))))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                      (QueryScanRealLazyBound.lazyBudget
+                            (8 *
+                              n1
+                                (wire base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                (prover base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                    (PrivacyR1AcctModel.seed
+                                      (wire base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                          x).toWire
+                                      PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                          Nat.rawCast 1 *
+                        Nat.rawCast 1)
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                        ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0))))
+                  (Mathlib.Tactic.Ring.Common.atom_pf (ProverCommitSeedEvent19.budget (2 ^ 64)) rfl
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                              ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * _a)
+                          (Eq.symm rfl)))
+                      (Eq.refl (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                    (QueryScanRealLazyBound.lazyBudget
+                          (8 *
+                            n1
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              (prover base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                  (PrivacyR1AcctModel.seed
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                        Nat.rawCast 1 *
+                      Nat.rawCast 1)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                        (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))
+                (Mathlib.Tactic.Ring.Common.atom_pf ProverCommitFuelMass22.charge rfl
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                            ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * _a)
+                        (Eq.symm rfl)))
+                    (Eq.refl (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                  (QueryScanRealLazyBound.lazyBudget
+                        (8 *
+                          n1
+                            (wire base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                            (prover base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                (PrivacyR1AcctModel.seed
+                                  (wire base (base.pubBytes x).length
+                                      (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                  PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                      Nat.rawCast 1 *
+                    Nat.rawCast 1)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                      (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                        (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))))
+              (Mathlib.Tactic.Ring.Common.atom_pf
+                (modelError
+                  (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                      outputs x).toWire
+                  (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                      outputs x
+                      (PrivacyR1AcctModel.seed
+                        (wire base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                        PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                  L₁ L₂)
+                rfl
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        modelError
+                                (wire base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                (prover base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                    (PrivacyR1AcctModel.seed
+                                      (wire base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                          x).toWire
+                                      PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                                L₁ L₂ ^
+                              Nat.rawCast 1 *
+                            Nat.rawCast 1 =
+                          modelError
+                                (wire base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                (prover base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                    (PrivacyR1AcctModel.seed
+                                      (wire base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                          x).toWire
+                                      PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                                L₁ L₂ ^
+                              Nat.rawCast 1 *
+                            _a)
+                      (Eq.symm rfl)))
+                  (Eq.refl
+                    (modelError
+                          (wire base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                          (prover base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                              (PrivacyR1AcctModel.seed
+                                (wire base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                          L₁ L₂ ^
+                        Nat.rawCast 1 *
+                      Nat.rawCast 1))))
+              (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                (QueryScanRealLazyBound.lazyBudget
+                      (8 *
+                        n1
+                          (wire base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                          (prover base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                              (PrivacyR1AcctModel.seed
+                                (wire base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                    Nat.rawCast 1 *
+                  Nat.rawCast 1)
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                    (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                      (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1)
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                        (modelError
+                                (wire base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                (prover base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                    (PrivacyR1AcctModel.seed
+                                      (wire base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                          x).toWire
+                                      PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                                L₁ L₂ ^
+                              Nat.rawCast 1 *
+                            Nat.rawCast 1 +
+                          0)))))))
+            (Mathlib.Tactic.Ring.Common.add_congr
+              (Mathlib.Tactic.Ring.Common.add_congr
+                (Mathlib.Tactic.Ring.Common.div_congr
+                  (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 8)))
+                  (Mathlib.Tactic.Ring.Common.pow_congr
+                    (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+                    (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 486)))
+                    (Mathlib.Tactic.Ring.Common.pow_add
+                      (Mathlib.Tactic.Ring.Common.single_pow
+                        (Mathlib.Tactic.Ring.Common.pow_prod_atom (Nat.rawCast 2) (Nat.rawCast 486)
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                    (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1)))))
+                      (Mathlib.Tactic.Ring.Common.pow_zero (Nat.rawCast 2 + 0) rfl)
+                      (Mathlib.Tactic.Ring.Common.add_mul
+                        (Mathlib.Tactic.Ring.Common.mul_add
+                          (Mathlib.Tactic.Ring.Common.mul_pf_left (Nat.rawCast 2 + 0) (Nat.rawCast 486)
+                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                (Eq.refl 1))))
+                          (Mathlib.Tactic.Ring.Common.mul_zero ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))
+                        (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                          ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))))
+                  (Mathlib.Tactic.Ring.Common.div_pf
+                    (Mathlib.Tactic.Ring.Common.inv_single
+                      (Mathlib.Tactic.Ring.Common.inv_mul (Eq.refl (Nat.rawCast 2 + 0)⁻¹)
+                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                          (Mathlib.Meta.NormNum.IsNNRat.to_isNat
+                            (Mathlib.Meta.NormNum.isNNRat_inv_pos
+                              (Mathlib.Meta.NormNum.IsNat.to_isNNRat (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)))))
+                        (Eq.symm
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                      (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1))) ▸
+                          Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                (Eq.refl 1))))))
+                    (Mathlib.Tactic.Ring.Common.add_mul
+                      (Mathlib.Tactic.Ring.Common.mul_add
+                        (Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 8)
+                              (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 8))))
+                        (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 8))
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                          ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0)))
+                      (Mathlib.Tactic.Ring.Common.zero_mul
+                        ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 + 0))
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                        ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0)))))
+                (Mathlib.Tactic.Ring.Common.atom_pf (ProverCommitSeedEvent19.budget (2 ^ 64)) rfl
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                            ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * _a)
+                        (Eq.symm rfl)))
+                    (Eq.refl (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                  (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                    (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+              (Mathlib.Tactic.Ring.Common.atom_pf ProverCommitFuelMass22.charge rfl
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                          ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * _a)
+                      (Eq.symm rfl)))
+                  (Eq.refl (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1))))
+              (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                  (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                  (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                    (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))
+            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+              (QueryScanRealLazyBound.lazyBudget
+                    (8 *
+                      n1
+                        (wire base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                        (prover base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                            (PrivacyR1AcctModel.seed
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                  Nat.rawCast 1 *
+                Nat.rawCast 1)
+              (Mathlib.Tactic.Ring.Common.add_pf_add_overlap
+                (Mathlib.Tactic.Ring.Common.add_overlap_pf (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                  (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                    (Mathlib.Meta.NormNum.isNat_add (Eq.refl HAdd.hAdd) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 8)
+                      (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 8) (Eq.refl 16))))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_overlap
+                  (Mathlib.Tactic.Ring.Common.add_overlap_pf (ProverCommitSeedEvent19.budget (2 ^ 64)) (Nat.rawCast 1)
+                    (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                      (Mathlib.Meta.NormNum.isNat_add (Eq.refl HAdd.hAdd) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                        (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 2))))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_overlap
+                    (Mathlib.Tactic.Ring.Common.add_overlap_pf ProverCommitFuelMass22.charge (Nat.rawCast 1)
+                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                        (Mathlib.Meta.NormNum.isNat_add (Eq.refl HAdd.hAdd) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                          (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 2))))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (modelError
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              (prover base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                  (PrivacyR1AcctModel.seed
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                              L₁ L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0)))))))
+          (Mathlib.Tactic.Ring.Common.add_congr
+            (Mathlib.Tactic.Ring.Common.add_congr
+              (Mathlib.Tactic.Ring.Common.add_congr
+                (Mathlib.Tactic.Ring.Common.add_congr
+                  (Mathlib.Tactic.Ring.Common.atom_pf
+                    (modelError
+                      (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input)
+                          B outputs x).toWire
+                      (prover base (base.pubBytes x).length
+                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                          (PrivacyR1AcctModel.seed
+                            (wire base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                            PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                      L₁ L₂)
+                    rfl
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            modelError
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    (prover base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                        (PrivacyR1AcctModel.seed
+                                          (wire base (base.pubBytes x).length
+                                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                              x).toWire
+                                          PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                                    L₁ L₂ ^
+                                  Nat.rawCast 1 *
+                                Nat.rawCast 1 =
+                              modelError
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    (prover base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                        (PrivacyR1AcctModel.seed
+                                          (wire base (base.pubBytes x).length
+                                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                              x).toWire
+                                          PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                                    L₁ L₂ ^
+                                  Nat.rawCast 1 *
+                                _a)
+                          (Eq.symm rfl)))
+                      (Eq.refl
+                        (modelError
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              (prover base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                  (PrivacyR1AcctModel.seed
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                              L₁ L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1))))
+                  (Mathlib.Tactic.Ring.Common.div_congr
+                    (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 16)))
+                    (Mathlib.Tactic.Ring.Common.pow_congr
+                      (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+                      (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 486)))
+                      (Mathlib.Tactic.Ring.Common.pow_add
+                        (Mathlib.Tactic.Ring.Common.single_pow
+                          (Mathlib.Tactic.Ring.Common.pow_prod_atom (Nat.rawCast 2) (Nat.rawCast 486)
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                      (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1)))))
+                        (Mathlib.Tactic.Ring.Common.pow_zero (Nat.rawCast 2 + 0) rfl)
+                        (Mathlib.Tactic.Ring.Common.add_mul
+                          (Mathlib.Tactic.Ring.Common.mul_add
+                            (Mathlib.Tactic.Ring.Common.mul_pf_left (Nat.rawCast 2 + 0) (Nat.rawCast 486)
+                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                  (Eq.refl 1))))
+                            (Mathlib.Tactic.Ring.Common.mul_zero
+                              ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))
+                          (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))))
+                    (Mathlib.Tactic.Ring.Common.div_pf
+                      (Mathlib.Tactic.Ring.Common.inv_single
+                        (Mathlib.Tactic.Ring.Common.inv_mul (Eq.refl (Nat.rawCast 2 + 0)⁻¹)
+                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                            (Mathlib.Meta.NormNum.IsNNRat.to_isNat
+                              (Mathlib.Meta.NormNum.isNNRat_inv_pos
+                                (Mathlib.Meta.NormNum.IsNat.to_isNNRat (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)))))
+                          (Eq.symm
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                        (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * _a)
+                                    (Eq.symm rfl)))
+                                (Eq.refl ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1))) ▸
+                            Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                  (Eq.refl 1))))))
+                      (Mathlib.Tactic.Ring.Common.add_mul
+                        (Mathlib.Tactic.Ring.Common.mul_add
+                          (Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 16) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                (Eq.refl 16))))
+                          (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 16))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16 + 0)))
+                        (Mathlib.Tactic.Ring.Common.zero_mul
+                          ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 + 0))
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                          ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16 + 0)))))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_gt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (modelError
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              (prover base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                  (PrivacyR1AcctModel.seed
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                              L₁ L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0))))
+                (Mathlib.Tactic.Ring.Common.atom_pf
+                  (QueryScanRealLazyBound.lazyBudget
+                    (8 *
+                      n1
+                        (wire base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                        (prover base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                            (PrivacyR1AcctModel.seed
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver))
+                  rfl
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          QueryScanRealLazyBound.lazyBudget
+                                  (8 *
+                                    n1
+                                      (wire base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                          x).toWire
+                                      (prover base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                          (PrivacyR1AcctModel.seed
+                                            (wire base (base.pubBytes x).length
+                                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                                x).toWire
+                                            PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                                Nat.rawCast 1 *
+                              Nat.rawCast 1 =
+                            QueryScanRealLazyBound.lazyBudget
+                                  (8 *
+                                    n1
+                                      (wire base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                          x).toWire
+                                      (prover base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                          (PrivacyR1AcctModel.seed
+                                            (wire base (base.pubBytes x).length
+                                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                                x).toWire
+                                            PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                                Nat.rawCast 1 *
+                              _a)
+                        (Eq.symm rfl)))
+                    (Eq.refl
+                      (QueryScanRealLazyBound.lazyBudget
+                            (8 *
+                              n1
+                                (wire base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                (prover base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                    (PrivacyR1AcctModel.seed
+                                      (wire base (base.pubBytes x).length
+                                          (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                          x).toWire
+                                      PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                          Nat.rawCast 1 *
+                        Nat.rawCast 1))))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                  (QueryScanRealLazyBound.lazyBudget
+                        (8 *
+                          n1
+                            (wire base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                            (prover base (base.pubBytes x).length
+                                (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                (PrivacyR1AcctModel.seed
+                                  (wire base (base.pubBytes x).length
+                                      (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                  PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                      Nat.rawCast 1 *
+                    Nat.rawCast 1)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                    ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16 +
+                      (modelError
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              (prover base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                  (PrivacyR1AcctModel.seed
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                              L₁ L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0)))))
+              (Mathlib.Tactic.Ring.Common.mul_congr
+                (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+                (Mathlib.Tactic.Ring.Common.atom_pf (ProverCommitSeedEvent19.budget (2 ^ 64)) rfl
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                            ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * _a)
+                        (Eq.symm rfl)))
+                    (Eq.refl (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                (Mathlib.Tactic.Ring.Common.add_mul
+                  (Mathlib.Tactic.Ring.Common.mul_add
+                    (Mathlib.Tactic.Ring.Common.mul_pf_right (ProverCommitSeedEvent19.budget (2 ^ 64)) (Nat.rawCast 1)
+                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 2)
+                          (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 2))))
+                    (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 2))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 2 + 0)))
+                  (Mathlib.Tactic.Ring.Common.zero_mul
+                    (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                    (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 2 + 0))))
+              (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                (QueryScanRealLazyBound.lazyBudget
+                      (8 *
+                        n1
+                          (wire base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                          (prover base (base.pubBytes x).length
+                              (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                              (PrivacyR1AcctModel.seed
+                                (wire base (base.pubBytes x).length
+                                    (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                                PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                    Nat.rawCast 1 *
+                  Nat.rawCast 1)
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                    (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 2)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (modelError
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              (prover base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                  (PrivacyR1AcctModel.seed
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                              L₁ L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0))))))
+            (Mathlib.Tactic.Ring.Common.mul_congr
+              (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+              (Mathlib.Tactic.Ring.Common.atom_pf ProverCommitFuelMass22.charge rfl
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                          ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * _a)
+                      (Eq.symm rfl)))
+                  (Eq.refl (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1))))
+              (Mathlib.Tactic.Ring.Common.add_mul
+                (Mathlib.Tactic.Ring.Common.mul_add
+                  (Mathlib.Tactic.Ring.Common.mul_pf_right ProverCommitFuelMass22.charge (Nat.rawCast 1)
+                    (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                      (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 2)
+                        (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 2))))
+                  (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 2))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                    (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 2 + 0)))
+                (Mathlib.Tactic.Ring.Common.zero_mul
+                  (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                  (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 2 + 0))))
+            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+              (QueryScanRealLazyBound.lazyBudget
+                    (8 *
+                      n1
+                        (wire base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                        (prover base (base.pubBytes x).length
+                            (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                            (PrivacyR1AcctModel.seed
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver) ^
+                  Nat.rawCast 1 *
+                Nat.rawCast 1)
+              (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16)
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                  (ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 2)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                    (ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 2)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (modelError
+                              (wire base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x).toWire
+                              (prover base (base.pubBytes x).length
+                                  (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs x
+                                  (PrivacyR1AcctModel.seed
+                                    (wire base (base.pubBytes x).length
+                                        (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B outputs
+                                        x).toWire
+                                    PrivacyR1HeadlineDeployedReal.ownedDecode fib opens)).toProver
+                              L₁ L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0)))))))))
+      (add_le_add
+        (add_le_add
+          (add_le_add
+            (le_refl
+              (modelError
+                  (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest PrivacyR1HeadlineDeployedReal.input) B
+                      outputs x).toWire
+                  (prover base (base.pubBytes x).length (PhaseWireLog2Bin.honest ⋯) ⋯ ⋯ ⋯ ⋯).toProver ⋯ ⋯ +
+                ⋯))
+            ⋯)
+          ⋯)
+        ⋯),
+    ⋯⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_OptB_Endpoint.lean:98:7: error(lean.unknownIdentifier): Unknown constant `privacy_headline_deployed_B`
+'R1Z.PV_OptB_Endpoint.realTestB' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OptB_Endpoint.idealTestSB' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_OptB_Endpoint.lean:101:14: error(lean.unknownIdentifier): Unknown constant `privacy_headline_deployed_B`
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

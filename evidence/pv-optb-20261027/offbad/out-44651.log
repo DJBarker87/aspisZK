@@ -1,0 +1,51 @@
+'R1Z.PV_OptB_WorldFrames.tapes' does not depend on any axioms
+'R1Z.PV_OptB_WorldFrames.cursors' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-optb-20261027/lean-private/R1Z/PV_OptB_WorldFrames.lean:26:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (do
+      let event ← some event
+      if event.request = request then
+          some
+            (event.reply,
+              { entropy := w.entropy, entropyUsed := w.entropyUsed, files := w.files, fileUsed := w.fileUsed + 1,
+                time := w.time, timeUsed := w.timeUsed, workers := w.workers, workerUsed := w.workerUsed })
+        else none) =
+    some (reply, next)
+of `called`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case some
+E File Reply Time Worker : Type
+inst✝ : DecidableEq File
+w next : World E File Reply Time Worker
+request : Request File
+reply : Reply
+event : Event (Request File) Reply
+found : w.files[w.fileUsed]? = some event
+called :
+  (do
+      let event ← some event
+      if event.request = request then
+          some
+            (event.reply,
+              { entropy := w.entropy, entropyUsed := w.entropyUsed, files := w.files, fileUsed := w.fileUsed + 1,
+                time := w.time, timeUsed := w.timeUsed, workers := w.workers, workerUsed := w.workerUsed })
+        else none) =
+    some (reply, next)
+⊢ tapes next = tapes w
+/home/dombarker/project-offloads/codex-pv-optb-20261027/lean-private/R1Z/PV_OptB_WorldFrames.lean:23:29: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [found,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵] at called
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-optb-20261027/lean-private/R1Z/PV_OptB_WorldFrames.lean:25:21: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [found,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵] at called
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_OptB_WorldFrames.file_frame' depends on axioms: [propext, sorryAx]
+exit=1

@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_OptB_SourceStopStep.lean:14:98: error: unsolved goals
+case Rejected
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+S : Type
+entropy : Entropy S
+pub : Pub
+compiled : Compiled
+hash : Hash
+store afterStore : Store
+state next : S
+secret : Secret
+k : Usize
+below : ¬k ≥ prover.ATTEMPT_CAP
+called : entropy.call_mut state k = ok (core.result.Result.Ok secret, next)
+nonretry : verifier.Error.Rejected ≠ verifier.Error.Rejected
+body :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret store =
+    ok (core.result.Result.Err verifier.Error.Rejected, afterStore)
+⊢ (do
+      let i ← lift (k.wrapping_add 1#usize)
+      prover.retry_attempt entropy pub compiled transport.Variant.S2 hash afterStore next i) =
+    ok (core.result.Result.Err verifier.Error.Rejected, afterStore)
+'R1Z.PV_OptB_SourceStopStep.stopped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
