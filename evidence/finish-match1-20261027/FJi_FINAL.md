@@ -35,6 +35,14 @@ Detailed receipts and exact scope are in FJi_ROWS.md.
 | Native L143 | P retained / P retained | Derive every relevant accepted query call from the enclosing SAME two-transaction run; compose backend byte values and selected powers with the literal W/gamma/alpha0/V data and source geometry/fold/comparison so match0 follows in its separately quantified native-local context. |
 | Global F3Y_G_L143 | P retained / P retained | The SAME byte/model/geometry transport and all22 actual-run query joins must be installed in FIr_GlobalOwners2/FIp_GlobalOwners, then composed into the actual deployed top. A local dot value theorem or caller-supplied list of successful calls is not that discharge. |
 
+Next concrete deliverable: derive the indexed source query-call witnesses from
+`Cons_Native.Calls`/the saved-ten and resumed-twelve source executions in the
+original owner context; transport `Port4B_Opening`'s SAME832-byte openings and
+`LiteralMatchingData`'s29 columns into FJi's decoded scalar/tail formula; then
+compose `FIp_FirstMatch.selected`, prepared gamma/alpha0/query identities and
+source geometry to obtain match0. The current Fin22 theorem deliberately
+retains the call-run family instead of pretending this extraction is proved.
+
 L142/L146 and their owners' modules were not edited. L144/L145 were not claimed
 or recounted as removed by this job. Only FJi modules and this receipt directory
 are changed. No model/game/carrier/quantifier/failure-event/metric/constant/trust
@@ -60,8 +68,21 @@ canonical selected powers proved. This is unconditional local fixture
 non-vacuity, not an unconditional fixture of every deployed trust/security
 premise. The unchanged top does not strengthen or replace any old premise.
 
-Validation is still in progress; final budget, indexed-query and audit receipts
-will be recorded before handoff. Every attempt uses the unchanged coherent
+Budget exhausted: **100/100 Lean compiler starts,84 passes/16 failures;
+0/20 Kani.** Every current delivered source has a passing exact-hash receipt.
+The final101-target axiom audit100 passes, standard-only. InstalledPowersQuery098
+joins the SAME installed query and powers-constructor call with the local
+canonical-g premise discharged. TopAudit099 prints the unchanged actual Rc10
+and separate FIr kernel statements and their standard-only axioms; before/after
+statement artifacts and hashes are retained. No FJi deployed theorem is claimed.
+
+Final audit100: exit0, wall2.594013604975771s, peak5630596KiB, swap0,
+revision43ee6808d4 (dirty exact-source hashes in receipt). This is also the
+largest measured RSS of the100 runs. No timeout, memory kill, cap increase or
+unchanged failed-source rerun occurred. Failed elaboration outputs are retained
+and excluded; all16 were corrected by source changes with later passing receipts.
+FJi_validation.json records the complete exact-source check and budget.
+ Every attempt uses the unchanged coherent
 SInt2 host workspace/launchers, one own capped scope, Lean-M7000,
 MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64. No package replay. Successful
 current sources have exact source-hash receipts; failed attempts are retained

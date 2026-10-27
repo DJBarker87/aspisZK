@@ -60,3 +60,7 @@ runs is not derived from the enclosing deployed execution by this packet.
 FJi_MatchingMeaning.value067 and InstalledQuery.value071 join the exact source
 body, not a model acceptance shortcut. Non-vacuity073 uses retained native
 TX2 fixtures and their successful actual dot calls.
+
+Final098 supplies the SAME constructor's canonical g to the installed query
+join. Audit099 confirms unchanged deployed kernels; audit100 checks101 targets
+with standard axioms only. Neither is credited as an L143 premise removal.
