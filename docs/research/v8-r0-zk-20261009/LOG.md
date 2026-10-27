@@ -12215,3 +12215,24 @@ copying, standard axioms) is kept. V184, V233 and V265 remain OPEN; V233 and V26
 pv-alib2 resumes on the same branch with the remaining budget: a non-Copy move reference with zero
 allocations and preserved capacity for V184, then V233 and V265. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D305 (Stream B) 2026-10-27 17:31 UTC: runjoin18 result; source authority for unresolved rebuild modules (ruling (h'')); runjoin19 launched
+
+runjoin18 used its 100-attempt budget (60 passed, 40 failed; standard axioms; no shipped-code
+change). It proves the production two-chunk nullifier loop on both fixtures, both output-pair
+source results, both CopyRecords.append_root results through checked node certificates, all 42
+numeric certificates, and conditional bank-row completeness with zero-index frontier validation.
+Full late_append, the 57-block bank validation, the compiler-return equation, the selected-index
+transition, the deployed public binding and the non-vacuity witness remain open. Endpoint premises
+removed/added/weakened 0/0/0; P = {source public binding, trace}; T unchanged. Branch head
+8c9ec5f63f, pushed; it is merged into the candidate when the runjoin line finishes.
+
+The endpoint axiom audit stayed blocked because AspisR1ProducerRelease47.Funs is listed as needed in
+EJR_inventory.json but has no resolved entry in EJR_final-inventory.json, and the worker correctly
+refused a substitute. The lead found the authoritative record: the prover-commit47 source freeze
+(evidence/prover-commit47-20261022/final-source-freeze.json, revision f6c2399bb7) pins 30 modules,
+including that one, by path and sha256, and all 30 files on research match. Ruling (h'') makes such
+SHA-pinned freeze records the only fallback for needed-but-unresolved modules, requires the full
+import closure to be pinned by one of the two records, and otherwise requires a stop naming the
+module. runjoin19 resumes with that audit, then late_append and the bank, then the compiler-return
+composition. Rows removed outright: 0. Privacy target not yet established.
