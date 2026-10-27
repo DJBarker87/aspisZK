@@ -1,0 +1,127 @@
+--- a/crates/aspis-prover/src/host_forest.rs
++++ b/crates/aspis-prover/src/host_forest.rs
+@@ -343,6 +343,7 @@
+ }
+ pub fn pool_v1_pair_forest_copy_active_row_masks_v1(
+ ) -> Result<[u16; 64], PoolV1PairHidingLayoutErrorV1> {
++    PV_B3_COUNTS[2].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let (rows, len) = pool_v1_pair_forest_copy_active_rows_v1()?;
+     let mut masks = [0u16; 64];
+     let mut i = 0usize;
+@@ -355,6 +356,7 @@
+ }
+ pub fn pool_v1_pair_forest_copy_inactive_row_masks_v1(
+ ) -> Result<[u16; 64], PoolV1PairHidingLayoutErrorV1> {
++    PV_B3_COUNTS[4].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let mut masks = pool_v1_pair_forest_copy_active_row_masks_v1()?;
+     let mut i = 0usize;
+     while i < 64 {
+@@ -567,6 +569,7 @@
+     )
+ }
+ pub fn build_pool_v1_pair_forest_copy_registry_v1() -> Result<Registry, PoolV1PairTraceErrorV1> {
++    PV_B3_COUNTS[3].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let legacy = build_pool_v1_pair_copy_registry_v1()?;
+     let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1()
+         .map_err(|_| PoolV1PairTraceErrorV1::CopyLayout)?;
+@@ -776,6 +779,7 @@
+     lambda: QM31,
+     chi: QM31,
+ ) -> Result<Vec<QM31>, PoolV1PairTraceErrorV1> {
++    PV_B3_COUNTS[6].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let helper = build_pool_v1_pair_forest_copy_helper_v1(trace, append_index, lambda, chi)?;
+     Ok(helper.to_vec())
+ }
+@@ -842,10 +846,18 @@
+ /// Allocation adapters retain the existing host caller interfaces. They are
+ /// outside the Drop-free extraction roots and preserve logical element order.
+ pub fn materialize_active_rows() -> Result<Vec<u16>, PoolV1PairHidingLayoutErrorV1> {
++    PV_B3_COUNTS[1].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let (rows, len) = pool_v1_pair_forest_copy_active_rows_v1()?;
+     Ok(rows[..len].to_vec())
+ }
+ pub fn materialize_mask_cells() -> Result<Vec<TraceCell>, PoolV1PairHidingLayoutErrorV1> {
++    PV_B3_COUNTS[0].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let (cells, len) = pool_v1_pair_forest_relation_free_mask_cells_v1()?;
+     Ok(cells[..len].to_vec())
+ }
++
++pub static PV_B3_COUNTS:[std::sync::atomic::AtomicU64;7]=[const{std::sync::atomic::AtomicU64::new(0)};7];
++pub static PV_B3_PREFIX:[std::sync::atomic::AtomicU64;11]=[const{std::sync::atomic::AtomicU64::new(0)};11];
++pub fn reset_counts(){for n in &PV_B3_COUNTS{n.store(0,std::sync::atomic::Ordering::Relaxed);}for n in &PV_B3_PREFIX{n.store(0,std::sync::atomic::Ordering::Relaxed);}}
++pub fn counts()->[u64;7]{std::array::from_fn(|i|PV_B3_COUNTS[i].load(std::sync::atomic::Ordering::Relaxed))}
++pub fn prefix_counts()->[u64;11]{std::array::from_fn(|i|PV_B3_PREFIX[i].load(std::sync::atomic::Ordering::Relaxed))}
+--- a/crates/aspis-r1-cost-probe/src/host_multilinear.rs
++++ b/crates/aspis-r1-cost-probe/src/host_multilinear.rs
+@@ -44,6 +44,10 @@
+     output
+ }
+ pub fn multilinear_evaluate_qm31(column: &[QM31], point: &[QM31; 10]) -> Option<QM31> {
++    aspis_prover::host_forest::PV_B3_COUNTS[5].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
++    let mut prefix=10usize;while prefix>0 && (point[prefix-1]==QM31::ZERO || point[prefix-1]==QM31::ONE){prefix-=1;}
++    aspis_prover::host_forest::PV_B3_PREFIX[prefix].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
++
+     if column.len() != 1024 {
+         return None;
+     }
+--- a/crates/aspis-r1-cost-probe/src/host_public.rs
++++ b/crates/aspis-r1-cost-probe/src/host_public.rs
+@@ -154,6 +154,7 @@
+     encode_owned(project(public))
+ }
+ pub fn materialize_public_bytes(public: Public<'_>) -> Result<Vec<u8>, Error> {
++    PV_B3_PUBLIC[0].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let (bytes, len) = public_bytes(public)?;
+     Ok(bytes[..len].to_vec())
+ }
+@@ -163,9 +164,19 @@
+     alpha: &[QM31; 10],
+     c: &Challenges,
+ ) -> Result<QM31, Error> {
++    let mut prefix=10usize;while prefix>0 && (alpha[prefix-1]==QM31::ZERO || alpha[prefix-1]==QM31::ONE){prefix-=1;}
++    PV_B3_TERMINAL_PREFIX[prefix].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
++
++    PV_B3_PUBLIC[1].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let p = match public {
+         Public::Transfer(p, t) => crate::host_terminal::r0::Public::Transfer(p, t),
+         Public::Withdrawal(p, t) => crate::host_terminal::r0::Public::Withdrawal(p, t),
+     };
+     p.terminal_qm31(claims, alpha, c)
+ }
++
++pub static PV_B3_PUBLIC:[std::sync::atomic::AtomicU64;2]=[const{std::sync::atomic::AtomicU64::new(0)};2];
++pub static PV_B3_TERMINAL_PREFIX:[std::sync::atomic::AtomicU64;11]=[const{std::sync::atomic::AtomicU64::new(0)};11];
++pub fn reset_counts(){for n in &PV_B3_PUBLIC{n.store(0,std::sync::atomic::Ordering::Relaxed);}for n in &PV_B3_TERMINAL_PREFIX{n.store(0,std::sync::atomic::Ordering::Relaxed);}}
++pub fn counts()->[u64;2]{std::array::from_fn(|i|PV_B3_PUBLIC[i].load(std::sync::atomic::Ordering::Relaxed))}
++pub fn prefix_counts()->[u64;11]{std::array::from_fn(|i|PV_B3_TERMINAL_PREFIX[i].load(std::sync::atomic::Ordering::Relaxed))}
+--- a/crates/aspis-prover/src/host_arithmetic.rs
++++ b/crates/aspis-prover/src/host_arithmetic.rs
+@@ -73,6 +73,10 @@
+     explicit_g: QM31,
+     point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS],
+ ) -> QM31 {
++    let mut prefix=10usize;while prefix>0 && (point[prefix-1]==QM31::ZERO || point[prefix-1]==QM31::ONE){prefix-=1;}
++    PV_B3_MASK_PREFIX[prefix].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
++
++    PV_B3_ARITHMETIC[0].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let (linear, explicit_linear) = selected_mask_linears(point);
+     let mut coefficients = [QM31::ZERO; STATE_ONLY_HIDING_FACTOR_DEGREE + 1];
+     let mut column = 0usize;
+@@ -107,6 +111,7 @@
+     polynomial: &StateOnlySumcheckPolynomial,
+     challenge: QM31,
+ ) -> QM31 {
++    PV_B3_ARITHMETIC[1].fetch_add(1,std::sync::atomic::Ordering::Relaxed);
+     let x2 = challenge.square();
+     let x3 = challenge.mul(x2);
+     let x4 = x2.square();
+@@ -137,3 +142,9 @@
+     }
+     accumulator
+ }
++
++pub static PV_B3_ARITHMETIC:[std::sync::atomic::AtomicU64;2]=[const{std::sync::atomic::AtomicU64::new(0)};2];
++pub static PV_B3_MASK_PREFIX:[std::sync::atomic::AtomicU64;11]=[const{std::sync::atomic::AtomicU64::new(0)};11];
++pub fn reset_counts(){for n in &PV_B3_ARITHMETIC{n.store(0,std::sync::atomic::Ordering::Relaxed);}for n in &PV_B3_MASK_PREFIX{n.store(0,std::sync::atomic::Ordering::Relaxed);}}
++pub fn counts()->[u64;2]{std::array::from_fn(|i|PV_B3_ARITHMETIC[i].load(std::sync::atomic::Ordering::Relaxed))}
++pub fn prefix_counts()->[u64;11]{std::array::from_fn(|i|PV_B3_MASK_PREFIX[i].load(std::sync::atomic::Ordering::Relaxed))}
