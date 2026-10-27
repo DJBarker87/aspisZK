@@ -1,0 +1,20 @@
+# Final report
+
+Branch `codex/pv-extract-20261027`; base7599dff5b2. **Target not yet established.** Sixty Lean compiles exhausted:54passed/6failed; Kani0/0. IDs42400–42460 consumed,42439 preflight-only/uncharged; next unused42461. No admission refusal, cap increase, shared tool/source overwrite, crates/programs change, ELF build, native differential/timing run or wallet/key operation.
+
+## Delivered
+
+1. [Inventory](INVENTORY.md):15 distinct affected callback ops, plus V240 auxiliary tuple translation and the separate V260 shared-loan failure. Full cross-Stream-B branch grep, branch revisions, exact source/borrow patterns and selected graph signatures are retained. Reference-only op36 probes are explicitly distinguished from the shipped generic row.
+2. [Root cause](ROOT-CAUSE.md): pinned Main.ml:745-761 scans all function result types for references before passes; separate Drop guard is independent. Introduced bybb9ec678e2, for unsupported destructor/escaping-reference semantics. Fresh shipped op223 Charon built/optimized succeeds; private no-preflight Aeneas fails at InterpReduceCollapse.ml:1991 in shared-loan context remapping. Other13 non-emitting graph results and2 emitting parameterized graph results are tabulated. No guard-bypassed extraction is used as a row.
+3. [Design](../../design/PV-EXTRACT-20261027.md) and [unapplied patch](route-ii-op223.patch): narrow host-prover-only index leaf/callsite recommended under D187; shared verifier code retains the original; exact source selection argument and all three ELF pins, fixture bytes,1000 whole-prover pairs and quiet timing gates listed. Wider affected functions are individually classified; generic digest/Drop/ownership work is not reduced to iterator rewriting. `git apply --check` passes; source diff under crates/programs is empty.
+4. Feasibility: unchanged pinned Aeneas accepts the proposed index leaf with the preflight enabled. Closed field extraction emits23 functions+3constants, zero opaque functions. All26 declarations compile independently. Seventeen constant/field equivalences through CM31.mul are proved against retained current field source; remaining compatibility drafts are unsubmitted. `R1Z.PV_Ext_IndexBridge.reference` proves candidate control=P6 under the same five explicit arithmetic callbacks. `R1Z.PV_Ext_ClosedCandidate.candidate_reference` proves fresh closed candidate=P6 with its extracted arithmetic. Neither theorem identifies the shipped iterator callback.
+
+## Boundaries and receipts
+
+`PV_Ext_Op223Source.op223_source` is absent; op223/V240 OPEN. V164's `ops.op223 = @ProverRwP6CompressSource.compress _ (PV_CurrentScaleInstall.selected ops)` remains exactly unchanged, as do P_proof_bytes and its reservation equation. Endpoint/deployment premises removed0, added0, changed0. Prover/shipped association, E1/E2, real RunJoin, L1/L2/L3, client proof-account route and full dependency closure remain open. No trust field added.
+
+Final42460 target `R1Z/PV_Ext_ClosedCandidate`:exit0,1.77s,4305060KiB GNU maxRSS,swap0; source revision5900139500b1fc0240ef3f9cc561c078411b7557;47 axiom outputs within propext/Classical.choice/Quot.sound. [FINAL.json](FINAL.json) records every Lean target/exit/wall/RSS/swap/revision/source/dependency hashes/axiom result. Native/OCaml invocations, admission/cgroup limits, logs and output hashes are retained alongside; [receipt interpretation](RECEIPT-CORRECTIONS.md) corrects generic driver phase/revision descriptions. Failed attempts remain evidence, including the heartbeat failure repaired symbolically without raising limits.
+
+Next concrete deliverable: actual applied D187 candidate extraction/source/caller binding followed by ELF-pin, identical-coin fixture,1000-pair differential and timing gates. Route(i) requires a justified shared-loan context invariant repair; deleting the preflight is insufficient. This job stopped because its60-compile budget is exhausted.
+
+Own rebuildable Charon/OCaml caches and stopped build container were removed after hashing; source/inputs/receipts/shared Lean objects retained. Pre-existing untracked `codex-pv-cb2.out.run0` was left untouched.
