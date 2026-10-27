@@ -1,0 +1,9 @@
+# Mandatory obstruction review before attempt70
+
+Written before L030 while inherited restore queue runs. A2 and A3 OPEN; adopted RPx_Deployed.deployed unchanged,83T/0P/13G,L154 parameter. Atomic-family/SAME-witness/shared-nonce/L185=L159 ledger deltaT0/P0/G0/C0, no assumptions removed/added/changed. No game/carrier/failure/metric/trust change.
+
+Decoder totality is checked L005. SAME words and recursive short-circuit driver drafts are uncompiled; no whole-row credit. Exact missing A2: SAME-array raw fold/cohort driver equality, selected advance, all eager transcript digest/error continuations, powersPublic/cached-claim and scratch/error stages, WHOLE narrowed prepare conditional only on CLOSED LPk. A3 follows only after A2, so remains deferred; needs tower multiply/mul_u/canonical transport,SAME powers29/six selections/seven parts/errors/effects,prepared_claim P6 unless LPm merged. No LPm closure found at research eaf6e0a4f1. A6-A8 reserved XRu and untouched.
+
+Missing old caches force private restoration of77 unchanged modules.18 unchanged XRn/XRk objects were snapshotted from retained read-only XRu inputs after exact source SHA and successful-source receipt validation. Shared directories not written. Restoration receives zero proof credit. The actual headline audit is reserved immediately after this unchanged serial dependency queue, through replay objects. Every launch is admitted exit0 AND allowed:true;6G high/8G max/Swap0/Tasks64,-j1-M7000. No timeout/memory kill/cap increase. Ordinary elaboration errors are excluded.
+
+Non-vacuity: universal typed decoder constructs an output; inherited sampler inhabitants to be co-imported. Joint actual-root accepted-run inhabitance remains OPEN. No D188 release extraction credit. Remaining budget must target focused A2 steps and final co-import rather than repeat full manifest.
