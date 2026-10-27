@@ -225,7 +225,7 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
 // ---------- the Wspend⁺ → record map on the Rust side ----------
 
 fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
-           chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
+           chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31, empty: [Digest; 21]) -> (RW, RP) {
     let input = *input;
     let chg = *chg;
     let snapshot = *snapshot;
@@ -286,7 +286,6 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
         { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s22; [w0, w1, w2, w3, w4, w5, w6, w7] },
         { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s23; [w0, w1, w2, w3, w4, w5, w6, w7] },
     ];
-    let empty = pair_empty_roots();
     let [f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19] = snapshot.frontier;
     let [e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, _] = empty;
     let mut w = RW {
@@ -401,7 +400,8 @@ impl CopyRecords {
         snapshot: &PoolV1PairLiveSnapshotV1,
         asset: M31,
     ) -> Self {
-        let (w, p) = records(input, out_value, recipient, change, snapshot, asset);
+        let empty = pair_empty_roots();
+        let (w, p) = records(input, out_value, recipient, change, snapshot, asset, empty);
         Self { w, p }
     }
 

@@ -1331,3 +1331,49 @@ concrete helper closure fails preflight on unsupported pointer constants in
 three poseidon2 functions outside records. Those functions and the extractor
 remain unchanged; see pv-runjoin15-20261027/BLOCKER-D277.md. No accepted
 R_shipped or identification is claimed.
+
+16. D287: hoist empty-root computation to the single caller, verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index a6407c57cf..1f3bea1dcc 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -225,7 +225,7 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
+ // ---------- the Wspend⁺ → record map on the Rust side ----------
+ 
+ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
+-           chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
++           chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31, empty: [Digest; 21]) -> (RW, RP) {
+     let input = *input;
+     let chg = *chg;
+     let snapshot = *snapshot;
+@@ -286,7 +286,6 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+         { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s22; [w0, w1, w2, w3, w4, w5, w6, w7] },
+         { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = s23; [w0, w1, w2, w3, w4, w5, w6, w7] },
+     ];
+-    let empty = pair_empty_roots();
+     let [f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19] = snapshot.frontier;
+     let [e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, _] = empty;
+     let mut w = RW {
+@@ -401,7 +400,8 @@ impl CopyRecords {
+         snapshot: &PoolV1PairLiveSnapshotV1,
+         asset: M31,
+     ) -> Self {
+-        let (w, p) = records(input, out_value, recipient, change, snapshot, asset);
++        let empty = pair_empty_roots();
++        let (w, p) = records(input, out_value, recipient, change, snapshot, asset, empty);
+         Self { w, p }
+     }
+ 
+```
+
+The caller computes the same pair_empty_roots() exactly once and passes the
+21-digest value by value. Digest is [M31; 8] (poseidon2.rs:60); M31
+derives Copy at crates/aspis-core/src/field.rs:22, so the table and its
+fixed arrays are Copy. The moved call crosses only pure, bounded field reads,
+Copy destructuring and word construction in records; these cannot fail.
+No allocation, I/O, hash, helper, other caller, or other function body is
+changed. The caller only computes and passes the table. records contains
+no hash or pair_empty_roots call. The explicit length 21 equals the shipped
+POOL_V1_PAIR_TREE_DEPTH + 1 (20 + 1). Observable new behavior is unchanged.
