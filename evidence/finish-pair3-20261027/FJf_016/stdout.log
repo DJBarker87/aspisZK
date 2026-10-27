@@ -1,0 +1,71 @@
+FJf_PointDone.lean:10:4: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.13
+of sort `Type (?u.13 + 1)` in the application
+  @InitialSeg ↑iter.end
+FJf_PointDone.lean:10:18: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+FJf_PointDone.lean:12:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+points : Points
+k : Usize
+iter : FIo_RangeNext.Range
+factors out : Factors
+run :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (ControlFlow.done factors)
+        | some d => do
+          let i ← FIn_WeightsExtract.TAU.index_usize d
+          let i1 ← lift (Usize.wrapping_mul 2#usize i)
+          let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+          let a ← Array.index_usize points k
+          let a1 ← a.index_usize i2
+          let i3 ← lift (Usize.wrapping_mul 2#usize i)
+          let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+          let b ← a.index_usize i4
+          let q ← FIn_WeightsExtract.field.QM31.ONE.sub a1
+          let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub b
+          let q2 ← q.mul q1
+          let q3 ← a1.mul q1
+          let q4 ← q.mul b
+          let q5 ← a1.mul b
+          let (a2, index_mut_back) ← Array.index_mut_usize factors k
+          let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+          have a4 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize :=
+            index_mut_back a3
+          ok (cont (iter1, a4))) =
+    ok (ControlFlow.done out)
+x✝ :
+  ∃ x,
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok x ∧
+      (let (o, iter1) := x
+        match o with
+        | none => ok (ControlFlow.done factors)
+        | some d => do
+          let i ← FIn_WeightsExtract.TAU.index_usize d
+          let i1 ← lift (Usize.wrapping_mul 2#usize i)
+          let i2 ← lift (Usize.wrapping_sub 9#usize i1)
+          let a ← Array.index_usize points k
+          let a1 ← a.index_usize i2
+          let i3 ← lift (Usize.wrapping_mul 2#usize i)
+          let i4 ← lift (Usize.wrapping_sub 8#usize i3)
+          let b ← a.index_usize i4
+          let q ← FIn_WeightsExtract.field.QM31.ONE.sub a1
+          let q1 ← FIn_WeightsExtract.field.QM31.ONE.sub b
+          let q2 ← q.mul q1
+          let q3 ← a1.mul q1
+          let q4 ← q.mul b
+          let q5 ← a1.mul b
+          let (a2, index_mut_back) ← Array.index_mut_usize factors k
+          let a3 ← a2.update d (Array.make 4#usize [q2, q3, q4, q5] ⋯)
+          have a4 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize :=
+            index_mut_back a3
+          ok (cont (iter1, a4))) =
+        ok (ControlFlow.done out)
+⊢ InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+'Aeneas.Std.ControlFlow.done' does not depend on any axioms

@@ -13,7 +13,7 @@ FJf_DigitValue.value. Full printed axioms in per-attempt receipts use only
 propext/Classical.choice/Quot.sound or subsets. Failed diagnostic axioms with
 sorryAx are excluded; no such source is delivered as a checked result.
 
-15/100 Lean attempts (10 passing, 5 failed), 0/20 Kani. No timeout or memory kill,
+15/100 Lean attempts (9 passing, 6 failed), 0/20 Kani. No timeout or memory kill,
 no changed cap, no package replay. All starts use one admitted scope with
 6G/8G/swap0/tasks64 and Lean -M7000. Each receipt records the exact command,
 source/dependency hashes, revision, exit, wall time, RSS, swap and axiom lines.
