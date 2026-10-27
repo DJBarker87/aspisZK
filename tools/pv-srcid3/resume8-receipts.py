@@ -11,7 +11,7 @@ lines=['# Allocation 8 receipts','','Lean -M7000, MemoryHigh=6G, MemoryMax=8G, M
 for r in a:lines.append(f"| {r['attempt']} | {r['module']} | {r['exit']} | {'standard' if r['accepted'] else 'REJECTED'} | {r['wall']} | {r['peak_rss_kib']} | {r['swaps']} | {r['source_revision'][:10]} | {len(r['axioms'])}/{r['expected_axiom_reports']} |")
 lines+=['',f'Charged Lean attempts: {len(a)}/60. Reservation refusals: {len(refusals)}, uncharged. Next unused ID: '+(e/'resume8-next-id.txt').read_text().strip()+'.','', '## Shared replacements','', 'Each overwritten shared source/object has its preimage under the assigned host job snapshots/resume8-ID. Accepted own object copies are rebuildable caches; no binary is committed. All changed dependent outputs, or exact pending exception reasons, are recorded in the gate JSON.']
 lines+=['','## Kani runs','','Optimized compilation then named CBMC step; 6G/8G/swap0/Tasks64, one scope at a time. Kani has no #print axioms (N/A); exact input hashes and metadata retained.','','| Target | Exit | Wall seconds | Peak RSS KiB | Cgroup peak bytes | Swap | Revision |','| --- | --- | --- | --- | --- | --- | --- | --- |']
-for name in ['srcid8-prefix900','srcid8-prefix01']:
+for name in [json.loads(x)['name'] for x in (e/'resume8-kani-invocations.jsonl').read_text().splitlines()]:
  if not (e/name/'receipt.json').exists():continue
  r=json.loads((e/name/'receipt.json').read_text())
  lines.append(f"| {r['target']} | {r['exit_status']} | {r['wall_seconds']:.6f} | {r['peak_rss_kib']} | {r['cgroup_memory_peak_bytes']} | {r['swaps']} | {r['source_revision']} |")
