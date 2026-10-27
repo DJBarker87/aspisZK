@@ -1,0 +1,115 @@
+FJr_CircleInnerLoop.lean:64:10: error: unsolved goals
+case pos
+k : Usize
+hk : ↑k < 2
+seed : FK
+base : Factors
+iter : FIo_RangeNext.Range
+factors : Factors
+x : SQ
+he : ↑iter.end = 5
+hlo : 1 ≤ ↑iter.start
+hhi : ↑iter.start ≤ 5
+cx : Canon x
+vx : decode x = advance seed (↑iter.start - 1)
+hf : canon factors
+values : ∀ (j d : ℕ) (s : Fin 4), value factors j d ↑s = model seed base (3 + ↑k) (↑iter.start) j d s
+cursor : FIo_RangeNext.Range
+next : Factors
+x' : SQ
+run :
+  FIn_WeightsExtract.weights_new_loop1_loop0.body k (iter, factors, x).1 (iter, factors, x).2.1 (iter, factors, x).2.2 =
+    ok (cont (cursor, next, x'))
+heq : cursor.end = iter.end
+hs : ↑cursor.start = ↑iter.start + 1
+more : ↑iter.start < ↑iter.end
+cx' : Canon x'
+vx' : decode x' = FJd_LoopReference.double (FJd_LoopReference.double (decode x))
+hf' : canon next
+hv :
+  ∀ (j d : ℕ) (s : Fin 4),
+    value next j d ↑s =
+      if 3 + ↑k = j ∧ ↑iter.start = d then FJr_CircleInnerCell.quad (decode x) (FJd_LoopReference.double (decode x)) s
+      else value factors j d ↑s
+j : ℕ
+s : Fin 4
+hj : 3 + ↑k = j
+⊢ FJr_CircleInnerCell.quad (advance seed (↑iter.start - 1)) (FJd_LoopReference.double (advance seed (↑iter.start - 1)))
+      s =
+    if 1 ≤ ↑iter.start ∧ ↑iter.start < ↑iter.start + 1 then
+      FJr_CircleInnerCell.quad (advance seed (↑iter.start - 1))
+        (FJd_LoopReference.double (advance seed (↑iter.start - 1))) s
+    else value base j ↑iter.start ↑s
+FJr_CircleInnerLoop.lean:68:45: error: Application type mismatch: The argument
+  d
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.148
+of sort `Type (?u.148 + 1)` in the application
+  @PrincipalSeg d
+FJr_CircleInnerLoop.lean:68:48: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+FJr_CircleInnerLoop.lean:68:68: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  3 ≤ f ≤ 4
+  2 ≤ e ≤ 5
+  e - g ≥ 2
+where
+ e := ↑↑cursor.start
+ f := ↑j
+ g := ↑d
+FJr_CircleInnerLoop.lean:67:10: error: unsolved goals
+case neg
+k : Usize
+hk : ↑k < 2
+seed : FK
+base : Factors
+iter : FIo_RangeNext.Range
+factors : Factors
+x : SQ
+he : ↑iter.end = 5
+hlo : 1 ≤ ↑iter.start
+hhi : ↑iter.start ≤ 5
+cx : Canon x
+vx : decode x = advance seed (↑iter.start - 1)
+hf : canon factors
+values : ∀ (j d : ℕ) (s : Fin 4), value factors j d ↑s = model seed base (3 + ↑k) (↑iter.start) j d s
+cursor : FIo_RangeNext.Range
+next : Factors
+x' : SQ
+run :
+  FIn_WeightsExtract.weights_new_loop1_loop0.body k (iter, factors, x).1 (iter, factors, x).2.1 (iter, factors, x).2.2 =
+    ok (cont (cursor, next, x'))
+heq : cursor.end = iter.end
+hs : ↑cursor.start = ↑iter.start + 1
+more : ↑iter.start < ↑iter.end
+cx' : Canon x'
+vx' : decode x' = FJd_LoopReference.double (FJd_LoopReference.double (decode x))
+hf' : canon next
+hv :
+  ∀ (j d : ℕ) (s : Fin 4),
+    value next j d ↑s =
+      if 3 + ↑k = j ∧ ↑iter.start = d then FJr_CircleInnerCell.quad (decode x) (FJd_LoopReference.double (decode x)) s
+      else value factors j d ↑s
+j d : ℕ
+s : Fin 4
+hj : 3 + ↑k = j
+hd : ¬↑iter.start = d
+same : d < ↑cursor.start ↔ sorry
+⊢ (if True ∧ 1 ≤ d ∧ d < ↑iter.start then
+      FJr_CircleInnerCell.quad (advance seed (d - 1)) (FJd_LoopReference.double (advance seed (d - 1))) s
+    else value base j d ↑s) =
+    if 3 + ↑k = j ∧ 1 ≤ d ∧ d < ↑cursor.start then
+      FJr_CircleInnerCell.quad (advance seed (d - 1)) (FJd_LoopReference.double (advance seed (d - 1))) s
+    else value base j d ↑s
+FJr_CircleInnerLoop.lean:84:34: error: Application type mismatch: The argument
+  factors
+has type
+  Factors
+but is expected to have type
+  Usize
+in the application
+  value factors
+'AspisR1.FJr_CircleInnerLoop.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJr_CircleInnerLoop.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,19 @@
+FJr_RowTensor.lean:23:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FJj_TensorPrefix.rowValue row ↑2 ↑⟨↑i % 4, s2⟩
+in the target expression
+  FJj_TensorPrefix.rowValue row 2 (↑i % 4) * FJj_TensorPrefix.rowValue row 3 (↑i / 4 % 4) *
+      FJj_TensorPrefix.rowValue row 4 (↑i / 16) =
+    FJj_HighProductInstances.product factors i
+
+row : Std.Array (Std.Array NQ 4#usize) 5#usize
+factors : Fin 5 → Fin 4 → FK
+values : ∀ (d : Fin 5) (s : Fin 4), FJj_TensorPrefix.rowValue row ↑d ↑s = factors d s
+i : Fin 64
+s2 : ↑i % 4 < 4
+s3 : ↑i / 4 % 4 < 4
+s4 : ↑i / 16 < 4
+⊢ FJj_TensorPrefix.rowValue row 2 (↑i % 4) * FJj_TensorPrefix.rowValue row 3 (↑i / 4 % 4) *
+      FJj_TensorPrefix.rowValue row 4 (↑i / 16) =
+    FJj_HighProductInstances.product factors i
+'AspisR1.FJr_RowTensor.high' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJr_RowTensor.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
