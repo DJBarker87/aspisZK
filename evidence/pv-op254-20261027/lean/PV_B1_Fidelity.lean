@@ -16,11 +16,11 @@ theorem restoration {N : Usize} (out : Array W N) (i : Usize) (old value : W)
 #eval (match powers_loop.body (N:=1#usize) aspis_core.field.wide_exact.WideExact.ZERO
     (Array.repeat 1#usize aspis_core.field.wide_exact.WideExact.ZERO)
     aspis_core.field.wide_exact.WideExact.ONE 0#usize with
-  | .ok (.cont (out,_,_)) => out.val.map (fun w => w.c0.c0.a.val)
+  | .ok (.cont (out,_,_)) => out.val.map (fun (w : W) => w.c0.c0.a.val)
   | _ => [])
 #eval (match powers_loop.body (N:=2#usize) aspis_core.field.wide_exact.WideExact.ZERO
     (Array.repeat 2#usize aspis_core.field.wide_exact.WideExact.ZERO)
     aspis_core.field.wide_exact.WideExact.ONE 0#usize with
-  | .ok (.cont (out,_,_)) => out.val.map (fun w => w.c0.c0.a.val)
+  | .ok (.cont (out,_,_)) => out.val.map (fun (w : W) => w.c0.c0.a.val)
   | _ => [])
 end PV_B1_Fidelity

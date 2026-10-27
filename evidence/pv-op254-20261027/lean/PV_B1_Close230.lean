@@ -17,8 +17,8 @@ theorem selected_callback (ops : ExternalFuns) (xs : Slice HQ) :
   op230_source ops xs
 
 theorem nonvacuity (ops : ExternalFuns) (x : HQ) :
-    ∃ y, (selected ops).op230 (⟨List.replicate 1024 x,by simp only [List.length_replicate]; decide⟩ : Slice HQ)=ok (some y) := by
-  let xs : Slice HQ := ⟨List.replicate 1024 x,by simp only [List.length_replicate]; decide⟩
+    ∃ y, (selected ops).op230 (⟨List.replicate 1024 x,by simp only [List.length_replicate]; scalar_tac⟩ : Slice HQ)=ok (some y) := by
+  let xs : Slice HQ := ⟨List.replicate 1024 x,by simp only [List.length_replicate]; scalar_tac⟩
   have h : Slice.len (sliceMap PV_B1_ActualCarrier230.toQ xs)=1024#usize := by
     rw [slice_length]; apply UScalar.eq_of_val_eq
     simp only [Slice.len_val,Slice.length,xs,List.length_replicate]; rfl
