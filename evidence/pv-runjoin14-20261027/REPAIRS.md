@@ -2052,3 +2052,178 @@ no hash, panic, allocation, I/O or other effect. Copy derives remain
 field.rs:22, pair_trace.rs:71, pair_forest_trace.rs:53, payment_relation.rs:88
 and pair_tree_profile.rs:403. Aeneas must extract this local subitem
 concretely; it will never be made opaque or assumed successful.
+
+23. D277, owned local mapper with terminal recipient dispatch, verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index 2e4668487d..be3b0a374e 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -226,78 +226,84 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
+ 
+ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
+            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31, empty: [Digest; 21]) -> (RW, RP) {
+-    fn owned(input: PoolV1PairForestInputNoteWitnessV1, out: u32,
+-        chg: PoolV1OutputNoteWitnessV1, snapshot: PoolV1PairLiveSnapshotV1,
+-        asset: M31, empty: [Digest; 21]) -> (RW, RP) {
++    fn owned(input: PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<PoolV1OutputNoteWitnessV1>,
++               chg: PoolV1OutputNoteWitnessV1, snapshot: PoolV1PairLiveSnapshotV1, asset: M31, empty: [Digest; 21]) -> (RW, RP) {
+         let pair = input.pair;
+-        let membership_index = pair.membership.index;
+-        let directions = input.super_root_directions;
+-        let key = pair.nullifier_key;
+-        let salt = pair.salt;
+-        let first = pair.pair_leaf.first_commitment;
+-        let second = pair.pair_leaf.second_commitment;
+-        let owner = chg.owner_key;
+-        let change_salt = chg.salt;
+-        let siblings = pair.membership.siblings;
+-        let frontier = snapshot.frontier;
+-        let supers = input.super_root_siblings;
+-        let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
+-        let mut w = RW {
+-            input_value: pair.value, output_value: out, change_value: chg.value,
+-            sk: [0u32; 8], salt: [0u32; 8], bits: [0; 24], sibs: [[0; 8]; 24],
+-            pair_first: [0u32; 8], pair_occupied: pair.pair_leaf.second_occupied.0,
+-            pair_second: [0u32; 8], pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
+-            recipient_owner: [0u32; 8], recipient_salt: [0u32; 8],
+-            change_owner: [0u32; 8], change_salt: [0u32; 8],
+-        };
+-        let mut p = RP {
+-            transfer: false, asset: asset.0, next_pair_index: snapshot.next_pair_index,
+-            frontier: [[0; 8]; 20], empty: [[0; 8]; 20],
+-        };
+-        w.bits[0] = u32::from(pair.selected_second);
+-        let mut level = 1;
+-        while level < 21 {
+-            w.bits[level] = ((membership_index >> (level - 1)) & 1) as u32;
++        let mut bits = [0u32; 24];
++        let mut sibs = [[0u32; 8]; 24];
++        let mut level = 0;
++        while level < 24 {
++            bits[level] = if level == 0 { u32::from(pair.selected_second) }
++                else if level <= 20 { (pair.membership.index >> ((level - 1) as u32)) & 1 }
++                else { u32::from(input.super_root_directions[level - 21]) };
++            let mut lane = 0;
++            while lane < 8 {
++                sibs[level][lane] = if level == 0 {
++                    if pair.selected_second { pair.pair_leaf.first_commitment[lane].0 }
++                    else { pair.pair_leaf.second_commitment[lane].0 }
++                } else if level <= 20 { pair.membership.siblings[level-1][lane].0 }
++                else { input.super_root_siblings[level-21][lane].0 };
++                lane += 1;
++            }
+             level += 1;
+         }
+-        w.bits[21] = u32::from(directions[0]);
+-        w.bits[22] = u32::from(directions[1]);
+-        w.bits[23] = u32::from(directions[2]);
+-        let mut j = 0;
+-        while j < 8 {
+-            w.sk[j] = key[j].0;
+-            w.salt[j] = salt[j].0;
+-            w.sibs[0][j] = other[j].0;
+-            w.pair_first[j] = first[j].0;
+-            w.pair_second[j] = second[j].0;
+-            w.change_owner[j] = owner[j].0;
+-            w.change_salt[j] = change_salt[j].0;
+-            let mut l = 0;
+-            while l < 20 {
+-                w.sibs[l + 1][j] = siblings[l][j].0;
+-                p.frontier[l][j] = frontier[l][j].0;
+-                p.empty[l][j] = empty[l][j].0;
+-                l += 1;
++        let mut recipient_owner = ZERO8;
++        let mut recipient_salt = ZERO8;
++        let mut lane = 0;
++        while lane < 8 {
++            if let Some(r) = rec {
++                recipient_owner[lane] = r.owner_key[lane].0;
++                recipient_salt[lane] = r.salt[lane].0;
+             }
+-            let mut l = 0;
+-            while l < 3 {
+-                w.sibs[l + 21][j] = supers[l][j].0;
+-                l += 1;
++            lane += 1;
++        }
++        let mut frontier = [[0u32; 8]; 20];
++        let mut empty_raw = [[0u32; 8]; 20];
++        let mut level = 0;
++        while level < 20 {
++            let mut lane = 0;
++            while lane < 8 {
++                frontier[level][lane] = snapshot.frontier[level][lane].0;
++                empty_raw[level][lane] = empty[level][lane].0;
++                lane += 1;
+             }
+-            j += 1;
++            level += 1;
+         }
++        let w = RW {
++            input_value: pair.value,
++            output_value: out,
++            change_value: chg.value,
++            sk: raw_owned(pair.nullifier_key),
++            salt: raw_owned(pair.salt),
++            bits,
++            sibs,
++            pair_first: raw_owned(pair.pair_leaf.first_commitment),
++            pair_occupied: pair.pair_leaf.second_occupied.0,
++            pair_second: raw_owned(pair.pair_leaf.second_commitment),
++            pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
++            recipient_owner,
++            recipient_salt,
++            change_owner: raw_owned(chg.owner_key),
++            change_salt: raw_owned(chg.salt),
++        };
++        let p = RP {
++            transfer: rec.is_some(),
++            asset: asset.0,
++            next_pair_index: snapshot.next_pair_index,
++            frontier,
++            empty: empty_raw,
++        };
+         (w, p)
+     }
+-    let (mut w, mut p) = owned(*input, out, *chg, *snapshot, asset, empty);
++    
++    
++    fn raw_owned(d: Digest) -> [u32; 8] {
++        [d[0].0, d[1].0, d[2].0, d[3].0, d[4].0, d[5].0, d[6].0, d[7].0]
++    }
++    
+     match rec {
+-        Some(r) => {
+-            let r = *r;
+-            w.recipient_owner = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = r.owner_key; [w0, w1, w2, w3, w4, w5, w6, w7] };
+-            w.recipient_salt = { let [M31(w0), M31(w1), M31(w2), M31(w3), M31(w4), M31(w5), M31(w6), M31(w7)] = r.salt; [w0, w1, w2, w3, w4, w5, w6, w7] };
+-            p.transfer = true;
+-            (w, p)
+-        },
+-        None => (w, p),
++        Some(r) => owned(*input, out, Some(*r), *chg, *snapshot, asset, empty),
++        None => owned(*input, out, None, *chg, *snapshot, asset, empty),
+     }
+ }
+ 
+```
+
+Replay 09 fails in its lexical owned loops at InterpReduceCollapse.ml:1991
+(1.205s); no outside source was changed. Replace that local body with the
+existing read-only records_reference_with_roots algorithm, and raw_owned
+body, both defined lexically inside records. Every local helper is concrete
+and must extract. The root matches rec once and immediately calls owned
+with None or Some(*r), so no optional shared borrow crosses any loop or
+join. This changes no signature, type, existing outside function or caller.
+For each level 0..23 and lane 0..7, bits and sibling words equal the
+prior assignments; the three branch bounds are identical. Recipient owner
+and salt are zero on None and equal r fields on Some; transfer equals
+rec.is_some(). Frontier/empty cover exactly 0..19 x 0..7. raw_owned reads
+the same eight in-bounds words as the former patterns. All loops terminate,
+all arithmetic and indices are bounded, and all private local writes cross
+only pure Copy reads. Return records, panics, allocation (none), and I/O
+(none) are unchanged. ZERO8 is a total zero constant; its reads introduce
+no observable work. Copy derives remain field.rs:22, pair_trace.rs:71,
+pair_forest_trace.rs:53, payment_relation.rs:88, pair_tree_profile.rs:403.
