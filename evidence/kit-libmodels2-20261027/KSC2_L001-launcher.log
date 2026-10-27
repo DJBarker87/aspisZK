@@ -1,0 +1,31 @@
+{"attempt": "KSC2_L001", "exit_status": 1, "wall_seconds": 2.823679754976183, "peak_rss_kib": "2616404", "swaps": "0", "print_axioms": []}
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+def Aeneas.Std.core.iter.traits.iterator.Iterator.collect.default : {Self B Item : Type} →
+  core.iter.traits.iterator.Iterator Self Item → core.iter.traits.collect.FromIterator B Item → Self → Result B :=
+fun {Self B Item} IteratorInst collectFromIteratorInst self =>
+  collectFromIteratorInst.from_iter (core.iter.traits.collect.IntoIterator.Blanket IteratorInst) self
+def Aeneas.Std.core.iter.traits.iterator.Iterator.rev.default : {Self : Type} →
+  Self → Result (core.iter.adapters.rev.Rev Self) :=
+fun {Self} self => ok { iter := self }
+def Aeneas.Std.core.iter.traits.iterator.Iterator.
+...
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+def Aeneas.Std.core.iter.traits.iterator.Iterator.collect.default : {Self B Item : Type} →
+  core.iter.traits.iterator.Iterator Self Item → core.iter.traits.collect.FromIterator B Item → Self → Result B :=
+fun {Self B Item} IteratorInst collectFromIteratorInst self =>
+  collectFromIteratorInst.from_iter (core.iter.traits.collect.IntoIterator.Blanket IteratorInst) self
+def Aeneas.Std.core.iter.traits.iterator.Iterator.rev.default : {Self : Type} →
+  Self → Result (core.iter.adapters.rev.Rev Self) :=
+fun {Self} self => ok { iter := self }
+def Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate.default : {Self : Type} →
+  Self → Result (core.iter.adapters.enumerate.Enumerate Self) :=
+fun {Self} self => ok { iter := self, count := 0#usize }
+def Aeneas.Std.core.iter.traits.iterator.Iterator.step_by.default : {Self : Type} →
+  Self → Usize → Result (core.iter.adapters.step_by.StepBy Self) :=
+fun {Self} self step_by => if ↑step_by = 0 then fail Error.panic else ok { iter := self, step_by := step_by }
+KSC2_generated/KSC2_P7.lean:8:7: error(lean.unknownIdentifier): Unknown constant `core.result.Result.unwrap_or_else`
+KSC2_generated/KSC2_P7.lean:9:7: error(lean.unknownIdentifier): Unknown constant `core.option.Option.ok_or`
+
+Running as unit: run-r159e93cb6f8d4729967912250a9cd48c.scope; invocation ID: f7178c3d23da4009b54c87c01604213c
