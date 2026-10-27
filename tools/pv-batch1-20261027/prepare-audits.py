@@ -10,7 +10,7 @@ groups=[('PV_B1_AuditSource',['PV_B1_SumOriginal','PV_B1_PowersBridge','PV_B1_Po
 rows=[]
 for name,imports in groups:
  names=[q for m in imports for q in queries(m)]
- s='\n'.join('import '+m for m in imports)+'\n-- Frozen dependency closure and standard-axiom audit only.\n'+'\n'.join('#print axioms '+q for q in names)+'\n'
+ s='\n'.join('import '+m for m in imports)+'\nopen Aeneas Aeneas.Std\n-- Frozen dependency closure and standard-axiom audit only.\n'+'\n'.join('#print axioms '+q for q in names)+'\n'
  (D/(name+'.lean')).write_text(s)
  rows.append(dict(module=name,imports=imports,axiom_queries=names,sha256=hashlib.sha256(s.encode()).hexdigest()))
 (E/'audit-manifest.json').write_text(json.dumps(dict(source_modules={m:hashlib.sha256((D/(m+'.lean')).read_bytes()).hexdigest() for m in modules},audits=rows),indent=2)+'\n')

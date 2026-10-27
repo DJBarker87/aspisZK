@@ -5,6 +5,7 @@ import PV_B1_MaskShift
 import PV_B1_MaskCast
 import PV_B1_Shift31
 import PV_B1_Orig258_Op258RowLaw
+open Aeneas Aeneas.Std
 -- Frozen dependency closure and standard-axiom audit only.
 #print axioms PV_B1_SumOriginal.op230_source
 #print axioms PV_B1_SumOriginal.wrong_length
