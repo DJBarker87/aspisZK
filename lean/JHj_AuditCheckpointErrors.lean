@@ -1,0 +1,11 @@
+import JHj_CheckpointPdaError
+import JHj_CheckpointPdaFailure
+import JHj_CheckpointPdaDivergence
+set_option autoImplicit false
+set_option pp.proofs false
+#print AspisR1.JHj_CheckpointPdaError.source
+#print axioms AspisR1.JHj_CheckpointPdaError.source
+#print AspisR1.JHj_CheckpointPdaFailure.source
+#print axioms AspisR1.JHj_CheckpointPdaFailure.source
+#print AspisR1.JHj_CheckpointPdaDivergence.source
+#print axioms AspisR1.JHj_CheckpointPdaDivergence.source

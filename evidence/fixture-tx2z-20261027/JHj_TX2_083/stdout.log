@@ -1,0 +1,46 @@
+theorem AspisR1.JHj_CheckpointPdaError.source : ∀ (ops : AdapterRw.Ops)
+  (verifier_program pool_program : AdapterRw.solana_pubkey.Pubkey) (output_lane : Aeneas.Std.U8)
+  (current_slot : Aeneas.Std.U64)
+  (master_account checkpoint_account lane_account registry_account entry_account :
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+  (val1 : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1)
+  (p : AdapterRw.solana_pubkey.Pubkey)
+  (val4 : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1)
+  (s6 : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)) (error : AdapterRw.solana_pubkey.PubkeyError),
+  ops.op38 s6 pool_program = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error) →
+    AspisR1.JHj_CheckpointPda.run ops verifier_program pool_program output_lane current_slot master_account
+        checkpoint_account lane_account registry_account entry_account val1 p val4 s6 =
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) :=
+⋯
+'AspisR1.JHj_CheckpointPdaError.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHj_CheckpointPdaFailure.source : ∀ (ops : AdapterRw.Ops)
+  (verifier_program pool_program : AdapterRw.solana_pubkey.Pubkey) (output_lane : Aeneas.Std.U8)
+  (current_slot : Aeneas.Std.U64)
+  (master_account checkpoint_account lane_account registry_account entry_account :
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+  (val1 : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1)
+  (p : AdapterRw.solana_pubkey.Pubkey)
+  (val4 : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1)
+  (s6 : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)) (error : Aeneas.Std.Error),
+  ops.op38 s6 pool_program = Aeneas.Std.Result.fail error →
+    AspisR1.JHj_CheckpointPda.run ops verifier_program pool_program output_lane current_slot master_account
+        checkpoint_account lane_account registry_account entry_account val1 p val4 s6 =
+      Aeneas.Std.Result.fail error :=
+⋯
+'AspisR1.JHj_CheckpointPdaFailure.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHj_CheckpointPdaDivergence.source : ∀ (ops : AdapterRw.Ops)
+  (verifier_program pool_program : AdapterRw.solana_pubkey.Pubkey) (output_lane : Aeneas.Std.U8)
+  (current_slot : Aeneas.Std.U64)
+  (master_account checkpoint_account lane_account registry_account entry_account :
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+  (val1 : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1)
+  (p : AdapterRw.solana_pubkey.Pubkey)
+  (val4 : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1)
+  (s6 : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+  ops.op38 s6 pool_program = Aeneas.Std.Result.div →
+    AspisR1.JHj_CheckpointPda.run ops verifier_program pool_program output_lane current_slot master_account
+        checkpoint_account lane_account registry_account entry_account val1 p val4 s6 =
+      Aeneas.Std.Result.div :=
+⋯
+'AspisR1.JHj_CheckpointPdaDivergence.source' depends on axioms: [propext, Classical.choice, Quot.sound]

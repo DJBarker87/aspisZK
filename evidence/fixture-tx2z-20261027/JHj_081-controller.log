@@ -1,0 +1,44 @@
+{"attempt": "JHj_TX2_081", "exit_status": 0, "wall_seconds": 5.397349279024638, "peak_rss_kib": "5411284", "swaps": "0", "print_axioms": ["'AspisR1.JHj_EntryRead.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryDecoded.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryPda.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryProgramdata.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHj_EntryChecks.run' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.JHj_EntryRead.run : AdapterRw.Ops →
+  AdapterRw.solana_pubkey.Pubkey →
+    AdapterRw.solana_pubkey.Pubkey →
+      AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+        AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1 →
+          AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+              Aeneas.Std.U64 →
+                AdapterRw.solana_pubkey.Pubkey →
+                  AdapterRw.solana_pubkey.Pubkey →
+                    AdapterRw.solana_pubkey.Pubkey →
+                      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                        Aeneas.Std.Result
+                          (Aene
+...
+                         let b20 ←
+                                Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8
+                                    val5.programdata_address a10
+                              if b20 = true then
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.core.result.Result.Err
+                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                else
+                                  have a11 := Aeneas.Std.Array.repeat 32#usize 0#u8;
+                                  do
+                                  let b21 ←
+                                    Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8
+                                        val5.expected_upgrade_authority a11
+                                  if b21 = true then
+                                      Aeneas.Std.Result.ok
+                                        (Aeneas.Std.core.result.Result.Err
+                                          AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                    else do
+                                      let b22 ← ops.op29 val5 current_slot
+                                      if b22 = true then Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                        else
+                                          Aeneas.Std.Result.ok
+                                            (Aeneas.Std.core.result.Result.Err
+                                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+'AspisR1.JHj_EntryChecks.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r298b641e9bde408eac86f3db66301a92.scope; invocation ID: 00682379bc2445f391979089965d39fd
+

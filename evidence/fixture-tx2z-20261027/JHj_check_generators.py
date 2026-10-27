@@ -5,7 +5,7 @@ P=Path(__file__).resolve().parent;R=P.parents[1]
 # preserve all current source bytes even if any comparison fails.
 before={p:p.read_bytes() for p in (R/'lean').glob('JHj_*.lean')}
 try:
- for name in ['tails','steps','registry_tails','rejections','field_comparisons','registry_steps']:
+ for name in ['tails','steps','registry_tails','rejections','field_comparisons','registry_steps','audits']:
   subprocess.run([sys.executable,str(P/('JHj_generate_'+name+'.py'))],check=True)
  changed=[str(p.relative_to(R)) for p,b in before.items() if p.read_bytes()!=b]
  assert not changed,changed
@@ -13,4 +13,4 @@ finally:
  for p,b in before.items():
   if p.read_bytes()!=b:p.write_bytes(b)
 (P/'JHj_GENERATOR_CHECK.json').write_text(json.dumps(dict(checked=True,changed=[]),indent=2)+'\n')
-print('All six proof-source generators reproduce their emitted sources')
+print('All seven proof-source generators reproduce their emitted sources')
