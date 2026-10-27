@@ -30,7 +30,7 @@ theorem subtract_bound (x : U32) (hx : x.val < 4294967294) :
     change (U32.wrapping_sub x 2147483647#u32).val < 2147483647
     rw [U32.wrapping_sub_val_eq,UScalar.size]
     simp only [UScalarTy.numBits,show (2147483647#u32).val = 2147483647 from rfl]
-    change (x.val + 4294967296 - 2147483647) % 4294967296 < 2147483647
+    change (x.val + 2147483649) % 4294967296 < 2147483647
     change 2147483647 ≤ x.val at h
     omega
   · rw [if_neg h]
@@ -51,7 +51,7 @@ theorem sub (a b : U32) (ha : Canon a) (hb : Canon b) :
   unfold aspis_core.field.ct.sub
   apply subtract_bound
   rw [core.num.U32.wrapping_sub_val_eq,core.num.U32.wrapping_add_val_eq,UScalar.size]
-  change ((a.val + 2147483647) % 4294967296 + 4294967296 - b.val) % 4294967296 < 4294967294
+  change ((a.val + 2147483647) % 4294967296 + (4294967296 - b.val)) % 4294967296 < 4294967294
   change a.val < 2147483647 at ha
   change b.val < 2147483647 at hb
   omega
