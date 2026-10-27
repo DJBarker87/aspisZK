@@ -34,3 +34,9 @@ All launch admission requires exit0 AND allowed:true, one scope at a time,
 resource reruns. No deployed acceptance fixture is supplied; local state and
 block carriers inhabited; generic theorem has arbitrary finish/error and no
 success hypothesis. Joint accepted deployed-root inhabitance remains OPEN.
+
+Final checkpoint: L098 paired step PASS (including LPk audit). L099/L100 whole
+driver FAIL on ordinary elaboration; exact blockers in XRw_OBLIGATIONS.md.
+100/100 Lean exhausted; no further prover launch. Generic and paired-step
+accepted; all whole-driver candidate facts excluded as a module. Persistent
+104-module cache retained and fully hashed; zero top-premise delta.

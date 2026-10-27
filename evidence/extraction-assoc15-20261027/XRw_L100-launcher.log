@@ -1,0 +1,54 @@
+{"attempt": "XRw_L100", "exit_status": 1, "wall_seconds": 2.449303889996372, "peak_rss_kib": "4779600", "swaps": "0", "print_axioms": ["'XRw_WholeDriver.finish_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRw_WholeDriver.fold_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRw_WholeDriver.guarded_step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRw_WholeDriver.raw_unrolled' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRw_WholeDriver.run_unrolled' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRw_WholeDriver.whole' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRw_generated/XRw_WholeDriver.lean:45:73: error: Ambiguous term
+  inner
+Possible interpretations:
+  XRo_Join_Carriers.inner : (?m.150 → ?m.151) →
+    (?m.152 → ?m.153) → core.result.Result ?m.150 ?m.152 → core.result.Result ?m.151 ?m.153
+  
+  Inner.inner : (𝕜 : Type ?u.71) → {E : Type ?u.70} → [self : Inner 𝕜 E] → E → E → 𝕜
+XRw_generated/XRw_WholeDriver.lean:51:80: error: Application type mismatch: The argument
+  ht
+has type
+  List.take ↑s.accepted_len ↑s.accepted = ↑s.accepted
+but is expected to have type
+  ↑?m.165 = ↑?m.166
+in the application
+  Subtype.ext ht
+XRw_generated/XRw_WholeDriver.lean:57:73: error: Ambiguous term
+  inner
+Possible interpretations:
+  XRo_Join_Carriers.inner : (?m.18
+...
+iverChain.actualQueryWords s (↑blocks)[i] =
+    ok (optionStop pending, sf)
+he :
+  XRv_QueryDriver.step blocks advances (List.take ↑s.accepted_len ↑s.accepted, ↑s.draws, false, old) i =
+    ok (List.take ↑sf.accepted_len ↑sf.accepted, ↑sf.draws, optionStop pending, advance)
+hv : validState sf
+⊢ mapR (XRo_Join_Carriers.inner id error)
+      (List.foldlM (XRv_QueryDriver.step blocks advances)
+          (List.take ↑sf.accepted_len ↑sf.accepted, ↑sf.draws, optionStop pending, advance) rest >>=
+        XRv_QueryDriver.finish) =
+    let (stop, sf) := (optionStop pending, sf)
+    do
+    let advance ← ok advance
+    if stop = true then finish sf advance else run blocks advances rest sf advance
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XRw_WholeDriver.finish_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRw_WholeDriver.fold_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRw_WholeDriver.guarded_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRw_WholeDriver.raw_unrolled' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRw_WholeDriver.run_unrolled' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRw_WholeDriver.whole' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7b7c6c98ddc243c087b4526f2466e9b5.scope; invocation ID: 2916f370d23f4daabe58d90869d1f703
