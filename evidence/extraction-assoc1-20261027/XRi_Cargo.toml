@@ -1,0 +1,22 @@
+[package]
+name = "xri-p6-boundary"
+version = "0.1.0"
+edition = "2021"
+[workspace]
+[lib]
+path = "XRi_lib.rs"
+[features]
+default = ["private-leaf-salts"]
+private-leaf-salts = []
+[dependencies]
+aspis-core = { path = "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core", features=["r0"] }
+aspis-r1-cost-probe = { path = "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-r1-cost-probe", default-features=false, features=["private-leaf-salts"] }
+sha2 = "0.10"
+[profile.dev]
+opt-level = 3
+debug = 0
+overflow-checks = true
+[profile.release]
+opt-level = 3
+debug = 0
+overflow-checks = true

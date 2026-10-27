@@ -37,3 +37,15 @@ elaboration requires real external implementations and correspondence first.
 The empty generated failure list means no compiler ran, not that code passed.
 
 The launcher behaved as designed. No infrastructure is repaired or bypassed.
+
+## First compiler invocation (XRi_L002)
+
+After all Kani scopes ended, the unchanged S2W command runner invoked Lean
+directly once, with pinned Aeneas object hash and raw source bytes, to retain
+the exact import diagnostic. This is the first compile, not an unchanged
+compiler retry or a repaired/bypassed admission barrier. Exit1, wall
+0.271323047s, peak RSS865856KiB, swap0. Missing object
+XRi_objects/XRh_Release/TypesExternal.olean; source Types.lean:3:0.
+No declaration elaborated and no theorem/#print axioms result exists.
+Funs is blocked transitively and not pointlessly invoked. No generator edit,
+external-template adoption, library replacement or launcher source change.
