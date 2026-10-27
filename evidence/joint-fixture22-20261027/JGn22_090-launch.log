@@ -1,0 +1,40 @@
+{"attempt": "JGn22_090", "exit_status": 0, "wall_seconds": 7.880847428983543, "peak_rss_kib": "6181944", "swaps": "0", "print_axioms": ["'AspisR1.JGn_CurrentPreparation.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1CurrentCaller.BorrowedClaimPrepared.NativeBuffers.install : Ops →
+  AspisS1NativeCompact.Ops →
+    AspisR1PublicPreparation.RoundModel.Boundaries → AspisR1PublicPreparation.FinishModel.Boundaries → Ops :=
+fun ops native R B =>
+  closedInstall
+    (S1SemanticInstallation.install
+      { op0 := ops.op0, op1 := @Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4, op5 := ops.op5,
+        op6 := @Ops.op6 ops, op7 := ops.op7, op8 := @Ops.op8 ops, op9 := @Ops.op9 ops,
+        op10 := AspisS1NativeCompact.compact.expand_semantic native, op11 := ops.op11, op12 := ops.op12,
+        op13 := ops.op13, op14 := ops.op14, op15 := ops.op15, op16 := @Ops.op16 ops, op17 := ops.op17, op18 :
+...
+residual => do
+                      let r7 ←
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (Aeneas.Std.core.convert.FromSame verifier.Error) residual
+                      Aeneas.Std.Result.ok (r7, g)
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                  let r5 ←
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.Prepared (Aeneas.Std.core.convert.FromSame verifier.Error) residual
+                  Aeneas.Std.Result.ok (r5, g)
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.Prepared (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+              Aeneas.Std.Result.ok (r4, g)
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+          let r3 ←
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                verifier.Prepared (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+          Aeneas.Std.Result.ok (r3, g)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+            (Aeneas.Std.core.convert.FromSame verifier.Error) residual
+      Aeneas.Std.Result.ok (r2, g)
+'AspisR1.JGn_CurrentPreparation.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r477c1c02b08443e6a55ff4dec9bd8503.scope; invocation ID: d5a490800340498fa0b62bddbb6f5599
