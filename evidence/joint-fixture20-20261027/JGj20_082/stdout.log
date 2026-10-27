@@ -1,0 +1,34 @@
+JGj_InternalTotal.lean:10:99: error: unsolved goals
+s : State
+⊢ (do
+      let q ← Array.index_usize s 0#usize
+      let old_zero ← state_only_poseidon.extension_limbs q
+      let part_sum1 ← state_only_poseidon.internal_linear_lazy_loop0 s (Array.repeat 4#usize 0#u64) 1#usize
+      let full_sum ←
+        array_from_fn_copy 4#usize core.marker.CopyU64
+            state_only_poseidon.internal_linear_lazy.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU64 0#u64
+            (part_sum1, old_zero)
+      let a ←
+        array_from_fn_copy 4#usize core.marker.CopyU64
+            state_only_poseidon.internal_linear_lazy.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeU64 0#u64
+            (part_sum1, old_zero)
+      let q1 ← state_only_poseidon.extension_from_raw_limbs a
+      let a1 ← Array.update s 0#usize q1
+      state_only_poseidon.internal_linear_lazy_loop1 { start := 1#usize, «end» := poseidon2.POSEIDON2_WIDTH } a1
+          full_sum) =
+    do
+    let x ← Array.index_usize s 0#usize
+    let x ← state_only_poseidon.extension_limbs x
+    let x_1 ← state_only_poseidon.internal_linear_lazy_loop0 s (Array.repeat 4#usize 0#u64) 1#usize
+    let x_2 ←
+      array_from_fn_copy 4#usize core.marker.CopyU64
+          state_only_poseidon.internal_linear_lazy.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU64 0#u64 (x_1, x)
+    let x ←
+      array_from_fn_copy 4#usize core.marker.CopyU64
+          state_only_poseidon.internal_linear_lazy.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeU64 0#u64 (x_1, x)
+    let x ← state_only_poseidon.extension_from_raw_limbs x
+    let x ← Array.update s 0#usize x
+    let (s1, full) := (x, x_2)
+      state_only_poseidon.internal_linear_lazy_loop1 { start := 1#usize, «end» := poseidon2.POSEIDON2_WIDTH } s1 full
+'AspisR1.JGj_InternalTotal.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGj_InternalTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
