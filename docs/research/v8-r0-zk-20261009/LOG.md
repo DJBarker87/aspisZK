@@ -10872,3 +10872,23 @@ fixture (transfer, then withdrawal), from the pinned fixture bytes and PV_Src_Ca
 genuine missing fact is to be stated as one exact proposition with its shipped location rather than
 bridged around. Six slots: rw21, cb6, cb7, cblib, srcid7, runjoin11. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D243 (Stream B) 2026-10-27 02:55 UTC: correction to D241: R1NaturalProjection was a wrong-source comparison and a shared-source overwrite by srcid6, now restored
+
+Stream A's resolution: module `R1NaturalProjection` is pinned (lean-semantic-prefix-agreement-20261015/
+import-source-pins.json) to docs/research/100bit-spend-path-20261013/lean/NaturalProjection.lean (sha256
+add9c506d5cb…), which compiles fresh in the current toolchain (rebuild attempt 30200, object 6cf99b13…);
+the file under evidence/lean-natural-projection-20261013/remote-evidence/ (sha 41db583fe503…) is a
+historical artifact, not the source of the current closure. D241's finding "R1NaturalProjection at HEAD
+does not compile" is therefore WITHDRAWN as stated: the remote-evidence copy does not compile, the pinned
+source does; the "stale cached object" flagged by srcid5/6 was the CORRECT object and the comparison
+used the wrong file. Incident: at 02:02 UTC my srcid6 worker copied the remote-evidence variant over
+the shared `aspis-joint-20261019/sources/R1NaturalProjection.lean` (attempts 37102/37260 compiled that
+copy and failed); the shared object was never replaced. Restored at 02:55 UTC by the lead to the add9c5
+content (sha verified; the wrong copy kept under codex-pv-srcid-20261026/ as evidence); Stream A informed;
+no patch applied anywhere. LEAD RULING (h) added to pv-common.txt: resolve module names through the pin
+table; never overwrite a shared source with a different variant; stop and report if the shared source
+differs. pv-srcid7 (launched 02:34 under the superseded D241 wording) will treat the projection cone as an
+exception until it re-reads; its next round closes it with the pinned source. The merge-gate ruling of
+D241 (project vs external provenance) stands. Rows removed outright: 0. Privacy target not yet
+established.
