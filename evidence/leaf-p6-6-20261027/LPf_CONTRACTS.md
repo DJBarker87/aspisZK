@@ -46,3 +46,15 @@ an unused powers draft had a missing M31 registration. It was removed; neither
 failure is a pass, and no unproved powers stub was executed in a credited target.
 K027's checksum source cut reaches no substituted byte writer: its proof is
 independent of the still-open byte-writer caller context.
+
+## Final native status
+
+K028's variable half and K029/K030's fixed offsets0/8 all TIMEOUT. Contextual
+CM31 substitution remains OPEN; the64-weight and whole-checkpoint caller drafts
+are UNRUN. K031's raw coordinate3 contract also TIMEOUT.
+K032 independently checks M31::mul's weaker `result.0<P` postcondition with no
+precondition on either raw u32. This DOES NOT replace the exact product equation;
+that target remains OPEN with its original failed receipts. The final scratch
+M31 annotation is this explicitly bound-only diagnostic contract. Its intended
+powers caller is a canonicality/safety probe only, but G033's infrastructure
+failure prevents even that K033 run. No exact powers value result is inferred.

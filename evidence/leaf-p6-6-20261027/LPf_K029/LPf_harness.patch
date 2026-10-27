@@ -1,0 +1,151 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -46,0 +47,2 @@
++
++#[cfg(kani)] mod LPf_replay;
+--- /dev/null
++++ b/crates/aspis-core/src/field/LPf_contracts.rs
+@@ -0,0 +1,26 @@
++use super::*;
++pub(super) fn LPf_reduce_ref(n:u64)->u32 {
++ let b=2147483648u64;
++ let n=n%b+n/b; let n=n%b+n/b;
++ if n>=u64::from(P){(n-u64::from(P)) as u32}else{n as u32}
++}
++#[kani::proof_for_contract(reduce_u64)]
++fn LPf_reduce_contract(){let n:u64=kani::any();let _=reduce_u64(n);}
++#[kani::proof_for_contract(M31::mul)]
++fn LPf_mul_inline_contract(){let a=M31(kani::any());let b=M31(kani::any());let _=a.mul(b);}
++
++#[kani::proof_for_contract(QM31::write_le_bytes)] #[kani::unwind(18)]
++fn LPf_kbytes_contract(){let x:[u32;4]=kani::any();let k=QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}};let mut out:[u8;16]=kani::any();k.write_le_bytes(&mut out);}
++
++#[kani::proof_for_contract(WideExact::to_le_bytes)] #[kani::unwind(34)]
++fn LPf_ebytes_contract(){let xs:[u32;8]=kani::any();for x in xs{kani::assume(x<P);}let e=WideExact::from_limbs(xs).unwrap();let _=e.to_le_bytes();}
++
++#[kani::proof_for_contract(CM31::write_le_bytes)] #[kani::unwind(10)]
++fn LPf_cbytes_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;8]=kani::any();c.write_le_bytes(&mut out);}
++#[kani::proof_for_contract(QM31::write_le_bytes)] #[kani::stub_verified(CM31::write_le_bytes)] #[kani::unwind(18)]
++fn LPf_kbytes_composed_contract(){let x:[u32;4]=kani::any();let k=QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}};let mut out:[u8;16]=kani::any();k.write_le_bytes(&mut out);}
++
++#[kani::proof_for_contract(M31::to_le_bytes)]
++fn LPf_mbytes_contract(){let x=M31(kani::any());let _=x.to_le_bytes();}
++#[kani::proof_for_contract(CM31::write_le_bytes)] #[kani::stub_verified(M31::to_le_bytes)] #[kani::unwind(10)]
++fn LPf_cbytes_composed_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;8]=kani::any();c.write_le_bytes(&mut out);}
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -30,0 +31 @@
++#[cfg_attr(kani, kani::ensures(|r: &u32| *r == LPf_contracts::LPf_reduce_ref(x) && *r < P))]
+@@ -132,0 +134 @@
++    #[cfg_attr(kani, kani::ensures(|r: &M31| r.0 == LPf_contracts::LPf_reduce_ref(self.0 as u64 * rhs.0 as u64) && r.0 < P))]
+@@ -247,0 +250 @@
++    #[cfg_attr(kani, kani::ensures(|r: &[u8;4]| r[0]==self.0.to_le_bytes()[0] && r[1]==self.0.to_le_bytes()[1] && r[2]==self.0.to_le_bytes()[2] && r[3]==self.0.to_le_bytes()[3]))]
+@@ -423,0 +427,3 @@
++    #[cfg_attr(kani, kani::requires(out.len()==8))]
++    #[cfg_attr(kani, kani::modifies(out.as_mut_ptr().cast::<[u8;8]>()))]
++    #[cfg_attr(kani, kani::ensures(|_: &()| {let b0=self.a.0.to_le_bytes();let b1=self.b.0.to_le_bytes();out[0]==b0[0] && out[1]==b0[1] && out[2]==b0[2] && out[3]==b0[3] && out[4]==b1[0] && out[5]==b1[1] && out[6]==b1[2] && out[7]==b1[3]}))]
+@@ -1027,0 +1034,3 @@
++    #[cfg_attr(kani, kani::requires(out.len()==16))]
++    #[cfg_attr(kani, kani::modifies(out.as_mut_ptr().cast::<[u8;16]>()))]
++    #[cfg_attr(kani, kani::ensures(|_: &()| {let b0=self.c0.a.0.to_le_bytes();let b1=self.c0.b.0.to_le_bytes();out[0]==b0[0] && out[1]==b0[1] && out[2]==b0[2] && out[3]==b0[3] && out[4]==b1[0] && out[5]==b1[1] && out[6]==b1[2] && out[7]==b1[3]}))]
+@@ -3268,0 +3278,2 @@
++
++#[cfg(kani)] #[path="field/LPf_contracts.rs"] mod LPf_contracts;
+--- a/crates/aspis-core/src/field/wide_exact.rs
++++ b/crates/aspis-core/src/field/wide_exact.rs
+@@ -272,0 +273 @@
++    #[cfg_attr(kani, kani::ensures(|r: &[u8;32]| {let limbs=self.to_limbs();let b0=limbs[0].to_le_bytes();let b1=limbs[1].to_le_bytes();let b2=limbs[2].to_le_bytes();let b3=limbs[3].to_le_bytes();let b4=limbs[4].to_le_bytes();let b5=limbs[5].to_le_bytes();let b6=limbs[6].to_le_bytes();let b7=limbs[7].to_le_bytes();r[0]==b0[0] && r[1]==b0[1] && r[2]==b0[2] && r[3]==b0[3] && r[4]==b1[0] && r[5]==b1[1] && r[6]==b1[2] && r[7]==b1[3] && r[8]==b2[0] && r[9]==b2[1] && r[10]==b2[2] && r[11]==b2[3] && r[12]==b3[0] && r[13]==b3[1] && r[14]==b3[2] && r[15]==b3[3] && r[16]==b4[0] && r[17]==b4[1] && r[18]==b4[2] && r[19]==b4[3] && r[20]==b5[0] && r[21]==b5[1] && r[22]==b5[2] && r[23]==b5[3] && r[24]==b6[0] && r[25]==b6[1] && r[26]==b6[2] && r[27]==b6[3] && r[28]==b7[0] && r[29]==b7[1] && r[30]==b7[2] && r[31]==b7[3]}))]
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPf_replay.rs
+@@ -0,0 +1,28 @@
++use aspis_core::field::{WideExact as E,QM31 as K,M31,CM31};
++pub(crate) const P:u32=2147483647;
++pub(crate) fn reduce_ref(n:u64)->u32 {let n=n%2147483648+n/2147483648;let n=n%2147483648+n/2147483648;if n>=u64::from(P){(n-u64::from(P))as u32}else{n as u32}}
++pub(crate) fn raw_ref(x:[u32;4],y:[u32;4])->[u64;4]{
++ let [a,b,c,d]=[u64::from(x[0]),u64::from(x[1]),u64::from(x[2]),u64::from(x[3])];
++ let [e,f,g,h]=[u64::from(y[0]),u64::from(y[1]),u64::from(y[2]),u64::from(y[3])];
++ const PP:u64=2147483647*2147483647;
++ let partial=|x:u64|(x&2147483647).wrapping_add(x>>31u32);
++ let u=partial((c*g).wrapping_add(PP).wrapping_sub(d*h));let v=partial((c*h).wrapping_add(d*g));
++ [(a*e).wrapping_add(PP).wrapping_sub(b*f).wrapping_add(2*u).wrapping_add(3*u64::from(P)).wrapping_sub(v),
++ (a*f).wrapping_add(b*e).wrapping_add(u).wrapping_add(2*v),
++ (a*g).wrapping_add(c*e).wrapping_add(2*PP).wrapping_sub(b*h).wrapping_sub(d*f),
++ (a*h).wrapping_add(b*g).wrapping_add(c*f).wrapping_add(d*e)]
++}
++pub(crate) fn any_e()->E{let xs:[u32;8]=kani::any();for x in xs{kani::assume(x<P);}E::from_limbs(xs).unwrap()}
++pub(crate) fn any_k()->K{let xs:[u32;4]=kani::any();K{c0:CM31{a:M31(xs[0]),b:M31(xs[1])},c1:CM31{a:M31(xs[2]),b:M31(xs[3])}}}
++pub(crate) fn limbs(k:K)->[u32;4]{[k.c0.a.0,k.c0.b.0,k.c1.a.0,k.c1.b.0]}
++
++// Kani0.67 requires the callee proof harness in the caller crate's registry.
++#[kani::proof_for_contract(CM31::write_le_bytes)] #[kani::unwind(10)]
++fn LPf_cbytes_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;8]=kani::any();c.write_le_bytes(&mut out);}
++// Exact QM31 caller allocation: either8-byte half of one16-byte buffer.
++#[kani::proof_for_contract(CM31::write_le_bytes)] #[kani::unwind(18)]
++fn LPf_cbytes_subslice_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;16]=kani::any();let before=out;let half:bool=kani::any();let start=if half{8}else{0};c.write_le_bytes(&mut out[start..start+8]);let at:usize=kani::any();kani::assume(at<16);if at<start||at>=start+8{assert_eq!(out[at],before[at]);}kani::cover!(half);kani::cover!(!half);}
++#[kani::proof_for_contract(CM31::write_le_bytes)] #[kani::unwind(18)]
++fn LPf_cbytes_low16_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;16]=kani::any();let before=out;c.write_le_bytes(&mut out[0..8]);let at:usize=kani::any();kani::assume(at<16);if at>=8{assert_eq!(out[at],before[at]);}kani::cover!(at==15);}
++#[kani::proof_for_contract(CM31::write_le_bytes)] #[kani::unwind(18)]
++fn LPf_cbytes_high16_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;16]=kani::any();let before=out;c.write_le_bytes(&mut out[8..16]);let at:usize=kani::any();kani::assume(at<16);if at<8{assert_eq!(out[at],before[at]);}kani::cover!(at==0);}
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -9,0 +10 @@
++    #[cfg_attr(kani, kani::ensures(|r: &u32| *r == crate::LPf_replay::reduce_ref(old(x)) && *r < P))]
+@@ -63,0 +65,2 @@
++    #[cfg_attr(kani, kani::requires(self.0.iter().all(|x|*x<P) && rhs.0.iter().all(|x|*x<P)))]
++        #[cfg_attr(kani, kani::ensures(|r: &Self| r.0[0] == crate::LPf_replay::reduce_ref(crate::LPf_replay::raw_ref(self.0,rhs.0)[0]) && r.0[0]<P && r.0[1] == crate::LPf_replay::reduce_ref(crate::LPf_replay::raw_ref(self.0,rhs.0)[1]) && r.0[1]<P && r.0[2] == crate::LPf_replay::reduce_ref(crate::LPf_replay::raw_ref(self.0,rhs.0)[2]) && r.0[2]<P && r.0[3] == crate::LPf_replay::reduce_ref(crate::LPf_replay::raw_ref(self.0,rhs.0)[3]) && r.0[3]<P))]
+@@ -81,0 +85,2 @@
++    #[cfg_attr(kani, kani::requires(self.0.iter().all(|x|*x<P) && rhs.0.iter().all(|x|*x<P)))]
++        #[cfg_attr(kani, kani::ensures(|r: &[u64;4]| r[2] == crate::LPf_replay::raw_ref(self.0,rhs.0)[2]))]
+@@ -124,0 +130,11 @@
++    #[cfg(kani)] mod LPf_canonical {
++use super::*;
++fn q()->Q{let xs:[u32;4]=kani::any();for x in xs{kani::assume(x<P);}Q(xs)}
++#[kani::proof_for_contract(reduce)]
++fn LPf_reduce_contract(){let x:u64=kani::any();let _=reduce(x);}
++#[kani::proof_for_contract(Q::raw)] #[kani::unwind(6)]
++fn LPf_raw_coord2_contract(){let a=q();let b=q();let _=a.raw(b);}
++#[kani::proof_for_contract(Q::mul)] #[kani::stub_verified(reduce)] #[kani::unwind(6)]
++fn LPf_qmul_contract(){let a=q();let b=q();let _=a.mul(b);}
++
++}
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -528,0 +529,2 @@
++
++#[cfg(kani)] #[path="LPf_verifier.rs"] mod LPf_verifier;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPf_verifier.rs
+@@ -0,0 +1,33 @@
++// LPf checkpoint stages.
++use super::*;
++use crate::LPf_replay::{any_k,limbs};
++#[derive(Clone,Copy)]struct Checksum<'a>{count:&'a core::cell::Cell<usize>,prefix:&'a[u8],index:usize,answer:[u8;32]}
++impl Digest32 for Checksum<'_>{fn digest(&self,parts:&[&[u8]])->[u8;32]{assert_eq!(self.count.get(),2);assert_eq!(parts.len(),2);assert_eq!(parts[0].len(),22);assert_eq!(parts[0],b"UNPROVED:R1:checkpoint");assert_eq!(parts[1].len(),1736);assert_eq!(parts[1][self.index],self.prefix[self.index]);self.count.set(3);self.answer}}
++// Universal byte projection replaces the previous all-prefix memcmp.
++#[kani::proof] #[kani::unwind(1738)] fn LPf_checksum_projection(){let prefix:[u8;1736]=kani::any();let mut out=Vec::from(prefix);let answer:[u8;32]=kani::any();let at:usize=kani::any();kani::assume(at<1768);let index:usize=kani::any();kani::assume(index<1736);let count=core::cell::Cell::new(2);let hash=Checksum{count:&count,prefix:&prefix,index,answer};let sum=hash.digest(&[b"UNPROVED:R1:checkpoint",&out]);out.extend_from_slice(&sum);assert_eq!(count.get(),3);assert_eq!(out.len(),1768);assert_eq!(out[at],if at<1736{prefix[at]}else{answer[at-1736]});kani::cover!(at==1767);}
++#[kani::proof] #[kani::stub_verified(aspis_core::field::CM31::write_le_bytes)] #[kani::unwind(66)]
++fn LPf_weights64_verified(){let xs:[K;64]=core::array::from_fn(|_|any_k());let mut out=Vec::new();for &x in &xs{put_k(&mut out,x);}let at:usize=kani::any();kani::assume(at<1024);assert_eq!(out.len(),1024);assert_eq!(out[at],limbs(xs[at/16])[(at%16)/4].to_le_bytes()[at%4]);kani::cover!(at==1023);}
++use crate::LPf_replay::any_e;
++use aspis_core::circle::SecureCirclePoint;
++fn inputs()->(Prepared,Accumulator){let p=Prepared{variant:Variant::S2,roots:kani::any(),gamma:any_e(),kappa:any_e(),alpha:[any_e(),any_e()],rho:any_k(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|any_k()),z:core::array::from_fn(|_|SecureCirclePoint{x:any_k(),y:any_k()}),claim:any_e(),state:kani::any()};let mut weights=Vec::with_capacity(64);for _ in 0..64{weights.push(any_k());}let a=Accumulator{weights,rhs:any_e(),power:any_k(),next:kani::any()};(p,a)}
++fn kbyte(k:K,j:usize)->u8{limbs(k)[j/4].to_le_bytes()[j%4]}
++fn ebyte(e:E,j:usize)->u8{e.to_limbs()[j/4].to_le_bytes()[j%4]}
++fn payload_byte(p:&Prepared,a:&Accumulator,answers:&[[u8;32];3],j:usize)->u8{
++ if j<8{b"R1P2CKP2"[j]}else if j<16{[p.variant.tag(),a.next as u8,1,0,0,0,0,0][j-8]}
++ else if j<48{answers[0][j-16]}else if j<80{answers[1][j-48]}else if j<112{p.state[j-80]}
++ else if j<176{p.roots[(j-112)/32][(j-112)%32]}
++ else if j<304{let k=j-176;ebyte([p.gamma,p.kappa,p.alpha[0],p.alpha[1]][k/32],k%32)}
++ else if j<320{kbyte(p.rho,j-304)}
++ else if j<408{let k=j-320;p.queries[k/4].to_le_bytes()[k%4]}
++ else if j<568{let k=j-408;kbyte(p.semantic_alpha[k/16],k%16)}
++ else if j<632{let k=j-568;let z=p.z[k/32];kbyte(if k%32<16{z.x}else{z.y},k%16)}
++ else if j<696{let k=j-632;ebyte([p.claim,a.rhs][k/32],k%32)}
++ else if j<712{kbyte(a.power,j-696)}else{kbyte(a.weights[(j-712)/16],(j-712)%16)}
++}
++#[derive(Clone,Copy)]struct Chronology<'a>{count:&'a core::cell::Cell<usize>,proof:&'a[u8],public:&'a[u8],p:&'a Prepared,a:&'a Accumulator,answers:[[u8;32];3],selected:usize}
++impl Digest32 for Chronology<'_>{fn digest(&self,parts:&[&[u8]])->[u8;32]{let n=self.count.get();assert!(n<3);match n{
++0=>{assert_eq!(parts.len(),1);assert_eq!(parts[0].len(),self.proof.len());assert_eq!(parts[0].as_ptr(),self.proof.as_ptr());},
++1=>{assert_eq!(parts.len(),1);assert_eq!(parts[0].len(),self.public.len());assert_eq!(parts[0].as_ptr(),self.public.as_ptr());},
++2=>{assert_eq!(parts.len(),2);assert_eq!(parts[0],b"UNPROVED:R1:checkpoint");assert_eq!(parts[1].len(),1736);assert_eq!(parts[1][self.selected],payload_byte(self.p,self.a,&self.answers,self.selected));},_=>unreachable!()};self.count.set(n+1);self.answers[n]}}
++#[kani::proof] #[kani::stub_verified(aspis_core::field::CM31::write_le_bytes)] #[kani::unwind(70)]
++fn LPf_checkpoint_chronology(){let(p,a)=inputs();let proof:[u8;3]=kani::any();let public:[u8;5]=kani::any();let answers:[[u8;32];3]=kani::any();let selected:usize=kani::any();kani::assume(selected<1736);let at:usize=kani::any();kani::assume(at<1768);let count=core::cell::Cell::new(0);let hash=Chronology{count:&count,proof:&proof,public:&public,p:&p,a:&a,answers,selected};let out=checkpoint(&p,&a,&proof,&public,hash);assert_eq!(count.get(),3);assert_eq!(out.len(),1768);let expected=if at<1736{payload_byte(&p,&a,&answers,at)}else{answers[2][at-1736]};assert_eq!(out[at],expected);kani::cover!(at==1767);kani::cover!(selected==1735);}

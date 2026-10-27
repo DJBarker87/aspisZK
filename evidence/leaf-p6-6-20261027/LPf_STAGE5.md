@@ -22,3 +22,10 @@ independent32-byte oracle answer, counter2→3, exact label and payload length,
 universal payload-byte projection, all1768 returned bytes and final-byte cover.
 No SHA unwinding or full-prefix memcmp. It is NOT one execution of checkpoint's
 first, second and third digests; chronology/native whole-function join is OPEN.
+
+Final continuation: K028–030 contextual8-in16 writer cases time out; K031 raw
+coordinate3 times out. K032 verifies only result<P for M31.mul, all raw u32
+operands/no precondition. G033 metadata is prefixed by Cargo cache-lock diagnostics
+and the inherited JSON parser fails before K033. Required rule5 stop; no new
+prover/graph retry after that failure. Both leaves and all actual-top premises
+remain unchanged. Final audits/cleanup/handoff are the only subsequent work.

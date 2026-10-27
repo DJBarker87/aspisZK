@@ -1,9 +1,6 @@
 --- a/crates/aspis-r1-cost-probe/src/lib.rs
 +++ b/crates/aspis-r1-cost-probe/src/lib.rs
-@@ -44,3 +44,5 @@
- compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
- #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
- compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
+@@ -46,0 +47,2 @@
 +
 +#[cfg(kani)] mod LPf_replay;
 --- /dev/null
@@ -37,66 +34,27 @@
 +fn LPf_cbytes_composed_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;8]=kani::any();c.write_le_bytes(&mut out);}
 --- a/crates/aspis-core/src/field.rs
 +++ b/crates/aspis-core/src/field.rs
-@@ -28,6 +28,7 @@
- pub const M31_QUARTER: M31 = M31(0x2000_0000);
- 
- #[inline(always)]
+@@ -30,0 +31 @@
 +#[cfg_attr(kani, kani::ensures(|r: &u32| *r == LPf_contracts::LPf_reduce_ref(x) && *r < P))]
- fn reduce_u64(x: u64) -> u32 {
-     // reference_canonical: two mask/shift folds bring any u64 to at most
-     // P+3, then one conditional subtract canonicalizes. Supporting the full
-@@ -130,6 +131,7 @@
-     }
- 
-     #[inline(always)]
+@@ -132,0 +134 @@
 +    #[cfg_attr(kani, kani::ensures(|r: &M31| r.0 == LPf_contracts::LPf_reduce_ref(self.0 as u64 * rhs.0 as u64) && r.0 < P))]
-     pub fn mul(self, rhs: M31) -> M31 {
-         #[cfg(feature = "r0-op-count")]
-         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FMul);
-@@ -245,6 +247,7 @@
-         }
-     }
- 
+@@ -247,0 +250 @@
 +    #[cfg_attr(kani, kani::ensures(|r: &[u8;4]| r[0]==self.0.to_le_bytes()[0] && r[1]==self.0.to_le_bytes()[1] && r[2]==self.0.to_le_bytes()[2] && r[3]==self.0.to_le_bytes()[3]))]
-     pub fn to_le_bytes(self) -> [u8; 4] {
-         self.0.to_le_bytes()
-     }
-@@ -421,6 +424,9 @@
-         Some(CM31 { a, b })
-     }
- 
+@@ -423,0 +427,3 @@
 +    #[cfg_attr(kani, kani::requires(out.len()==8))]
 +    #[cfg_attr(kani, kani::modifies(out.as_mut_ptr().cast::<[u8;8]>()))]
 +    #[cfg_attr(kani, kani::ensures(|_: &()| {let b0=self.a.0.to_le_bytes();let b1=self.b.0.to_le_bytes();out[0]==b0[0] && out[1]==b0[1] && out[2]==b0[2] && out[3]==b0[3] && out[4]==b1[0] && out[5]==b1[1] && out[6]==b1[2] && out[7]==b1[3]}))]
-     pub fn write_le_bytes(self, out: &mut [u8]) {
-         out[0..4].copy_from_slice(&self.a.to_le_bytes());
-         out[4..8].copy_from_slice(&self.b.to_le_bytes());
-@@ -1025,6 +1031,9 @@
-         Some(QM31 { c0, c1 })
-     }
- 
+@@ -1027,0 +1034,3 @@
 +    #[cfg_attr(kani, kani::requires(out.len()==16))]
 +    #[cfg_attr(kani, kani::modifies(out.as_mut_ptr().cast::<[u8;16]>()))]
 +    #[cfg_attr(kani, kani::ensures(|_: &()| {let b0=self.c0.a.0.to_le_bytes();let b1=self.c0.b.0.to_le_bytes();out[0]==b0[0] && out[1]==b0[1] && out[2]==b0[2] && out[3]==b0[3] && out[4]==b1[0] && out[5]==b1[1] && out[6]==b1[2] && out[7]==b1[3]}))]
-     pub fn write_le_bytes(self, out: &mut [u8]) {
-         self.c0.write_le_bytes(&mut out[0..8]);
-         self.c1.write_le_bytes(&mut out[8..16]);
-@@ -3266,3 +3275,5 @@
-     let s = a + P - b;
-     M31(if s >= P { s - P } else { s })
- }
+@@ -3268,0 +3278,2 @@
 +
 +#[cfg(kani)] #[path="field/LPf_contracts.rs"] mod LPf_contracts;
 --- a/crates/aspis-core/src/field/wide_exact.rs
 +++ b/crates/aspis-core/src/field/wide_exact.rs
-@@ -270,6 +270,7 @@
-     }
- 
-     #[inline(always)]
+@@ -272,0 +273 @@
 +    #[cfg_attr(kani, kani::ensures(|r: &[u8;32]| {let limbs=self.to_limbs();let b0=limbs[0].to_le_bytes();let b1=limbs[1].to_le_bytes();let b2=limbs[2].to_le_bytes();let b3=limbs[3].to_le_bytes();let b4=limbs[4].to_le_bytes();let b5=limbs[5].to_le_bytes();let b6=limbs[6].to_le_bytes();let b7=limbs[7].to_le_bytes();r[0]==b0[0] && r[1]==b0[1] && r[2]==b0[2] && r[3]==b0[3] && r[4]==b1[0] && r[5]==b1[1] && r[6]==b1[2] && r[7]==b1[3] && r[8]==b2[0] && r[9]==b2[1] && r[10]==b2[2] && r[11]==b2[3] && r[12]==b3[0] && r[13]==b3[1] && r[14]==b3[2] && r[15]==b3[3] && r[16]==b4[0] && r[17]==b4[1] && r[18]==b4[2] && r[19]==b4[3] && r[20]==b5[0] && r[21]==b5[1] && r[22]==b5[2] && r[23]==b5[3] && r[24]==b6[0] && r[25]==b6[1] && r[26]==b6[2] && r[27]==b6[3] && r[28]==b7[0] && r[29]==b7[1] && r[30]==b7[2] && r[31]==b7[3]}))]
-     pub fn to_le_bytes(self) -> [u8; Self::BYTE_LEN] {
-         let mut bytes = [0; Self::BYTE_LEN];
-         for (chunk, limb) in bytes.chunks_exact_mut(4).zip(self.to_limbs()) {
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/LPf_replay.rs
 @@ -0,0 +1,24 @@
@@ -126,36 +84,15 @@
 +fn LPf_cbytes_subslice_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;16]=kani::any();let before=out;let half:bool=kani::any();let start=if half{8}else{0};c.write_le_bytes(&mut out[start..start+8]);let at:usize=kani::any();kani::assume(at<16);if at<start||at>=start+8{assert_eq!(out[at],before[at]);}kani::cover!(half);kani::cover!(!half);}
 --- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
 +++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
-@@ -7,6 +7,7 @@
-     const ONES:u64=0x0000_0001_0000_0001;
-     #[derive(Clone,Copy,Debug,PartialEq,Eq,Default)]
-     pub struct Q([u32;4]);
+@@ -9,0 +10 @@
 +    #[cfg_attr(kani, kani::ensures(|r: &u32| *r == crate::LPf_replay::reduce_ref(old(x)) && *r < P))]
-     #[inline(always)] pub(crate) fn reduce(mut x:u64)->u32 {
-         x=(x & u64::from(P))+(x>>31u32);
-         x=(x & u64::from(P))+(x>>31u32);
-@@ -61,6 +62,8 @@
-         }
-         /// Benchmark candidate, not an assertion of superiority over staged R19.
-         /// All intermediates are nonnegative and strictly below 2^64.
+@@ -63,0 +65,2 @@
 +    #[cfg_attr(kani, kani::requires(self.0.iter().all(|x|*x<P) && rhs.0.iter().all(|x|*x<P)))]
 +        #[cfg_attr(kani, kani::ensures(|r: &Self| r.0[0] == crate::LPf_replay::reduce_ref(crate::LPf_replay::raw_ref(self.0,rhs.0)[0]) && r.0[0]<P && r.0[1] == crate::LPf_replay::reduce_ref(crate::LPf_replay::raw_ref(self.0,rhs.0)[1]) && r.0[1]<P && r.0[2] == crate::LPf_replay::reduce_ref(crate::LPf_replay::raw_ref(self.0,rhs.0)[2]) && r.0[2]<P && r.0[3] == crate::LPf_replay::reduce_ref(crate::LPf_replay::raw_ref(self.0,rhs.0)[3]) && r.0[3]<P))]
-         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
-             let [a,b,c,d]=[u64::from(self.0[0]),u64::from(self.0[1]),u64::from(self.0[2]),u64::from(self.0[3])];
-             let [e,f,g,h]=[u64::from(rhs.0[0]),u64::from(rhs.0[1]),u64::from(rhs.0[2]),u64::from(rhs.0[3])];
-@@ -79,6 +82,8 @@
-     // its limbs are private, constructors validate, and operations preserve <P.
-     impl Q {
-         #[inline(always)]
+@@ -81,0 +85,2 @@
 +    #[cfg_attr(kani, kani::requires(self.0.iter().all(|x|*x<P) && rhs.0.iter().all(|x|*x<P)))]
 +        #[cfg_attr(kani, kani::ensures(|r: &[u64;4]| r[2] == crate::LPf_replay::raw_ref(self.0,rhs.0)[2]))]
-         fn raw(self,rhs:Self)->[u64;4] {
-             let [a,b,c,d]=[u64::from(self.0[0]),u64::from(self.0[1]),u64::from(self.0[2]),u64::from(self.0[3])];
-             let [e,f,g,h]=[u64::from(rhs.0[0]),u64::from(rhs.0[1]),u64::from(rhs.0[2]),u64::from(rhs.0[3])];
-@@ -122,6 +127,17 @@
-         }
-         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
-     }
+@@ -124,0 +130,11 @@
 +    #[cfg(kani)] mod LPf_canonical {
 +use super::*;
 +fn q()->Q{let xs:[u32;4]=kani::any();for x in xs{kani::assume(x<P);}Q(xs)}
@@ -167,15 +104,9 @@
 +fn LPf_qmul_contract(){let a=q();let b=q();let _=a.mul(b);}
 +
 +}
- }
- 
- 
 --- a/crates/aspis-r1-cost-probe/src/verifier.rs
 +++ b/crates/aspis-r1-cost-probe/src/verifier.rs
-@@ -526,3 +526,5 @@
- #[cfg(feature="audit-eight-way")]
- #[path="eight_way.rs"]
- pub mod eight_way;
+@@ -528,0 +529,2 @@
 +
 +#[cfg(kani)] #[path="LPf_verifier.rs"] mod LPf_verifier;
 --- /dev/null

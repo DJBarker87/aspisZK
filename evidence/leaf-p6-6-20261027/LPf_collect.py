@@ -11,5 +11,5 @@ for p in sorted(E.glob('LPf_K*/receipt.json')):
   path=f[len('LPf_src/'):]
   new=subprocess.run(['ssh',H,'cat '+B+'/'+p.parent.name+'/sources/'+f],capture_output=True,text=True,check=True).stdout
   old=subprocess.run(['git','show',F+':'+path],capture_output=True,text=True)
-  out.append(''.join(difflib.unified_diff(old.stdout.splitlines(True),new.splitlines(True),fromfile='a/'+path if old.returncode==0 else '/dev/null',tofile='b/'+path)))
+  out.append(''.join(difflib.unified_diff(old.stdout.splitlines(True),new.splitlines(True),fromfile='a/'+path if old.returncode==0 else '/dev/null',tofile='b/'+path,n=0)))
  dst.write_text(''.join(out))
