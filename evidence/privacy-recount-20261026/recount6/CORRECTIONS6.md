@@ -46,7 +46,7 @@ removed/added/weakened remain 0/0/0. Target not yet established.
 
 The six specifically requested verdicts are CONFIRM at their stated candidate
 boundaries, with complete statements, hidden carrier/size guards, nonvacuity and
-native-link classes in closure-audit 6.json and closing-source-cones6.json.
+native-link classes in closure-audit6.json and closing-source-cones6.json.
 V233 is bounded P6; V265 and the three B1 rows use structural source links;
 V184 uses structural stdlib semantics plus bounded/native checks. None is a
 whole-machine or deployment closure. All seven new closing laws are absent

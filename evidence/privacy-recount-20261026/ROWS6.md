@@ -1,6 +1,6 @@
 # Recount 6 2026-10-27 (B)
 
-Every row re-derived at pins.json by METHOD6; historical fields and exact scopes preserved. Target not yet established. Import membership is not discharge. Full sources/statements are content-addressed in manifest.json; native-link class and nonvacuity for the six requested closures are in closure-audit 6.json.
+Every row re-derived at pins.json by METHOD6; historical fields and exact scopes preserved. Target not yet established. Import membership is not discharge. Full sources/statements are content-addressed in manifest.json; native-link class and nonvacuity for the six requested closures are in closure-audit6.json.
 
 | Row / class5 →6 / name | Status5 →6 | OPEN bucket | in headline closure? | Derivation, residual and evidence |
 |---|---|---|---|---|
