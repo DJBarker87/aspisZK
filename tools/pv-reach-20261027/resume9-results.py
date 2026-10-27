@@ -11,11 +11,13 @@ for p in sorted(E.glob('receipt-[0-9]*.json')):
   m=re.search(pattern,tim);return int(m[1]) if m else None
  entry=dict(attempt=a,targets=[x['module'] for x in r['modules']],exit=metric(r'Exit status: (\d+)'),wall_seconds=r['wall_seconds'],peak_rss_kib=metric(r'Maximum resident set size \(kbytes\): (\d+)'),aggregate_rss_sample_peak_bytes=r['aggregate_rss_peak_bytes'],swaps=metric(r'Swaps: (\d+)'),swap_peak_bytes=r['swap_peak_bytes'],source_revision=r['source_revision'],accepted=r['accepted'],receipt=p.name,axioms=[line for x in r['modules'] for line in x.get('axioms',[])])
  assert entry['exit'] is not None and entry['peak_rss_kib'] is not None and entry['swaps']==0 and entry['swap_peak_bytes']==0
+ entry['scope_wall']=re.search(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.+)',tim)[1]
  records.append(entry)
  for x in r['modules']:
   assert x.get('exit') is not None,(a,x['module'])
   data=subprocess.check_output(['git','show',x['source']['blob']]);assert hashlib.sha256(data).hexdigest()==x['source']['sha256']
   m=dict(attempt=a,module=x['module'],source_authority=x['source']['authority'],source_path=x['source']['path'],source_revision=x['source']['revision'],source_blob=x['source']['blob'],source_sha256=x['source']['sha256'],object_sha256=x['object_sha256'],exit=x['exit'],wall_seconds=x['wall_seconds'],peak_rss_kib=x['peak_rss_kib'],swaps=x['swaps'],accepted=x['accepted'],axioms=x['axioms'])
+  m['wall']=re.search(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.+)',x['time_log'])[1]
   modules.append(m)
   if x['accepted']:
    assert x['object_sha256'] and 'sorryAx' not in x['output']

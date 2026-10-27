@@ -27,7 +27,7 @@ for root in b.glob('codex-pv-*'):
   dirs[:]=[d for d in dirs if d not in ['target','target-charon','.git','node_modules']]
   for f in files:
    if re.search(r'(?<![0-9])402[0-9]{2}(?![0-9])',f):hits.append(str(pathlib.Path(dp)/f))
-sent=b/'r1-privacy-build-integration-20261019/sent.txt'
+sent=b/'r1-privacy-build-integration-20261019/evidence/sent.txt'
 out['id_preflight']=dict(range=[40200,40299],hits=hits,sent=[s for s in sent.read_text().splitlines() if re.search(r'(?<![0-9])402[0-9]{2}(?![0-9])',s)] if sent.exists() else [])
 print(json.dumps(out,indent=2))
 '''

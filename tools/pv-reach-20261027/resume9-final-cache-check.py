@@ -30,4 +30,6 @@ for retry in range(11):
  with (E/'transport-retries.jsonl').open('a') as f:f.write(json.dumps(dict(operation='final-read-only-cache-check',retry=retry,stderr=r.stderr))+'\n')
  if retry<10:time.sleep(60)
 r.check_returncode();d=json.loads(r.stdout);d.update(accepted_compiled_objects=len(objects),accepted_sources=len(sources),dependency_objects=len(deps),external_objects=len(external),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),scope='current exact fingerprints of this campaign; inherited base is not a newly executed release rebuild')
+d['sent_table_actual_id_hits']=[dict(path=path,line=line,attempt=int(line.split()[2])) for path,lines in d['sent_table_range_check'].items() for line in (lines or []) if len(line.split())>2 and line.split()[1]=='J' and line.split()[2].isdigit() and 40200<=int(line.split()[2])<=40299]
+assert not d['sent_table_actual_id_hits']
 (E/'final-cache-check.json').write_text(json.dumps(d,indent=2)+'\n');print('checked',d['checked'],'mismatches',len(d['mismatches']));assert not d['mismatches']
