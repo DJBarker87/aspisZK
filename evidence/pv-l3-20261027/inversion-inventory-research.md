@@ -1,0 +1,94 @@
+# Inversion inventory — source baseline 9c4bfcc830c09f8d85fd1ed7996f8d9dcf059c84
+
+Entry: `aspis-r1-cost-probe::prover::prove_masked_retrying[_with]` →
+`prove_masked_with_attempt` → `host_semantic::build_with_material` →
+`prove_from_semantics`, with `r1p-check`, private leaf salts and Variant S2.
+This is the deployed-prover route under review, not the older `aspis-prover::prove`.
+Every candidate spelling under crates plus the externally located certificate
+producer is captured in candidates.json, with source hashes. This is a lexical
+cross-check; the reachable families below are a source call-graph review.
+No whole-program compiler call-graph or artifact reachability theorem is claimed.
+
+| Source call(s) | Caller path and operand | Provenance | Initial status |
+|---|---|---|---|
+| crates/aspis-statement/src/logup.rs:200,213 | semantic_oracle.rs:171 helper → pair_forest_trace.rs:636 rows → build_copy_logup_helper; chi minus compressed tuple, only nonzero weight | witness-derived + challenges lambda,chi | OPEN: native static/dynamic slot association and original pole event |
+| crates/aspis-r1-cost-probe/src/host_sumcheck.rs:30 | host_semantic::build_with_helper_mode → prove_sumcheck → interpolate; product over j!=i of i-j for i,j<28 | public, despite witness-derived interpolated values | nonzero algebra obligation; no probabilistic exception needed |
+| crates/aspis-core/src/circle.rs:40 | SemanticTranscript::challenge_reference_circle_point → sampler::circle_sample → secure_ood_circle_point_from_parameter → secure_circle_point_from_parameter; 1+t² | challenge from raw FS answer | zero at ±i, explicit fallback; challenge-input joint law remains L2, not witness operand |
+| crates/aspis-core/src/transcript.rs (circle fallback helper; exact sites in candidates.json) | circle_sample fallback | fixed public parameter selected by row | fixed nonzero argument obligation |
+| crates/aspis-core/src/field.rs:1019,1011,398 | QM31 inv wrapper → try_inv → CM31 norm inv → M31 norm inv | inherited from caller | field norm nonzero at nonzero canonical input; internal zero predicate branches also observed |
+| crates/aspis-core/src/field.rs:213/1004 | base and extension entry kernels | inherited | all reached caller families must discharge preconditions |
+| crates/aspis-core/src/r0/scalar.rs:46,61,63,75,80,92,99 | CodeField M31/CM31/QM31/WideExact inverses; norm descent | inherited | include when called from certificate geometry/reference; NOT infer every generic R0 prover is reached |
+| crates/aspis-core/src/field/wide_exact.rs:155 | inherent WideExact inverse norm | inherited | conditional tower obligation; direct deployed-prover call still to establish |
+
+## Certificate route outside crates
+
+`prover::public_check` → z4/z9e.rs::p_r1_check → public_data, emit,
+convert, extracted_builders, c3/check. These receive R1PublicChallenges only;
+prior transcript/coupling association remains substantive. They do not receive
+compiled witness or semantic columns. C3/build and C3/check have no inversion
+call; certificate inverses are supplied and checked by multiplication.
+
+| Source | Operand / provenance | Source guard or obligation |
+|---|---|---|
+| z4/z9c.rs:42,121 | M31 v[i], challenge-derived matrix pivot | v[i]==0 continues before invm |
+| z4/z9c.rs:42,304 | M31 a[c][c], challenge-derived inverse-matrix pivot | find nonzero row, then swap(c,p); prove selected value retained |
+| z4/z9c.rs:335,336 | fixed 2; alpha[9]-half, challenge-derived | 2 nonzero; half pole returns None/reject, not a witness read |
+| z4/z9b.rs:51,59,108 | fixed 2,4 | nonzero constants |
+| z4/z9b.rs:71–73 | x,y,z or doubles from line_inverse(query,depth), public indices | domain-coordinate nonzero; no witness operand |
+| z4/z9.rs:298,299,316–320 | stored fibre and line x,y,z, public queries | domain-coordinate nonzero |
+| z4/z9.rs:395 | fixed 2 | nonzero constant |
+| z4/z9.rs:832,894 | lane_stage/lane_kernel pivot | historical eliminating gate; deployed emitter uses TagEch, not these functions |
+| z4/probe.rs:530 | fixed 2 in h1_target, historical diagnostic | excluded: public_data/raw_c does not call h1_target |
+| z4/probe.rs:2291,2292 | fixed 2; alpha[9]-half in normalize_d, reached through emit → chain_targets | emit first obtains hinv or rejects; challenge-derived half pole |
+| z4/probe.rs:1282 | interp_weights product for fixed support | excluded from p_r1_check source path; trial/terminal-jet helpers |
+
+## Exclusions and negative edges
+
+`host_commitment::EncodingDomain::encode` calls phi_inverse, which has NO
+inversions; do not confuse it with r0/fold::phi. S2 `Variant::coefficients`
+is a permutation, with NO NaturalBasis inversion. `Weights::new`, round,
+fold and materialize do not invert. `prove_from_semantics` never calls
+r0/prover::prove nor quotient/chord interpolation. The certificate route may
+use generic geometry, but the native quotient prover in r0/prover.rs:258 is
+not an edge from this prover. Its witness-bearing numerator does not make its
+challenge/public line denominator witness-derived in any case.
+
+`logup.rs:137,145,168,179` belong to the main/range helper, not the reached
+copy helper; :364,367,378 are test-only forgery search. Most hits in
+state_only_hiding_rank, r16/r17/v5/v6/v8 rank/proof experiments, core circle_fri
+and examples/tests are alternate protocols or audit-only tests, not this
+S2 route. `state_only_hiding.rs:1445` is in its test module; deployed mask
+material construction has no inversions. Registry construction used here does
+not call atomic_state_only_registry's matrix-elimination helper. Core build.rs
+inverses generate public tables at build time, not a witness execution.
+
+Residual inventory audit: resolve the transitive z4/probe utility reachability
+and every generic function-pointer inverse; lexical absence alone is insufficient.
+
+Review correction: generic Ech::insert (probe.rs:145), circuits (:181), and normalize_d (:2292) are distinct. z9c::emit uses TagEch throughout; the normalize_d edge is reached via chain_targets and must remain. No inverse is in tail_row itself. The generic inverse-bearing transform r0/fold::phi is used by z9b design relations, with public domain coordinates, while the deployed encoder calls its inverse transform.
+
+## Builder/caller envelope and aliases
+
+The prover entry receives an already compiled witness. Expanding the envelope to
+its honest compiler and note constructors adds the following sites. They must not
+be lost by searching only the spelling `try_inv`.
+
+| Source | Reach/provenance | Zero handling/status |
+|---|---|---|
+| crates/aspis-statement/src/pool_v1/pair_tree_profile.rs:221 | two_outputs constructor, second commitment sentinel; witness/coin-derived | explicit sentinel==0 return precedes inversion; local guarded source-reference theorem in PV_Inv_Sentinel; constructor retry/source association remains OPEN |
+| crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs:159,182 | compile_forest_from_copies → merged_banks → Parts/out_rec → inv_r(change digest[7]); witness-derived | total x^(p-2) algorithm has no operand-zero branch; exponent-only branches, u64 remainder latency remains existing L2/L3 work; no zero-boundary exception invented |
+| crates/aspis-core/src/state_only_masked_switch_basis.rs:62,155,247 | inverse_raw during const table construction | public basis constants, no witness-runtime call |
+| crates/aspis-core/src/field.rs:390,396,398 | CM31 inv→inv_with(M31::inv) | includes function-pointer edge to M31 inverse, internal norm nonzero established from nonzero canonical QM31/CM31 input |
+
+Correction to the provisional generic-geometry edge: z9b imports encoder/opening,
+but design_relations implements its own geometry folds. There is no source call
+from this prover/certificate route to `r0/fold::phi`, chord::interpolation_pair,
+r0/prover::prove or inherent WideExact::try_inv. Their generic inverse definitions
+are retained in candidates.json as exclusions; they are not counted as witnessed
+native calls. Their mere presence does not justify a new probabilistic charge.
+The certificate path's actual denominators are M31 geometry, TagEch M31 pivots,
+and the QM31 half difference; this source path has no WideExact inversion call.
+
+This is a conservative source review, not a proved complete compiler-resolved
+call graph. Candidate source rows retain declaration/test/comment hits for an
+auditor to inspect; candidate count is not reachable-call count.

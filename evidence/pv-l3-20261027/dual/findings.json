@@ -1,0 +1,969 @@
+{
+  "artifact_label": "devnet R1 recipe, toolchain unpinned (host default rustc 1.94.1)",
+  "A_sha256": "dc31d28c3eb9a793f9e2a8c81e69611b42aa8c2cace1393845cd554d090c357b",
+  "B_binary": null,
+  "findings": [
+    {
+      "id": "R1",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 216,
+      "source_context": [
+        {
+          "line": 214,
+          "text": "            field_mask_entropy.copy_from_slice(&bytes[..32]);"
+        },
+        {
+          "line": 215,
+          "text": "            leaf_salt_seed.copy_from_slice(&bytes[32..]);"
+        },
+        {
+          "line": 216,
+          "text": "            if *field_mask_entropy != [0; 32] && *leaf_salt_seed != [0; 32] {"
+        },
+        {
+          "line": 217,
+          "text": "                return Ok(Self {"
+        },
+        {
+          "line": 218,
+          "text": "                    mask_nonce,"
+        },
+        {
+          "line": 219,
+          "text": "                    field_mask_entropy,"
+        },
+        {
+          "line": 220,
+          "text": "                    leaf_salt_seed,"
+        }
+      ],
+      "A": [
+        {
+          "address": "0x11839a",
+          "instruction": "je 1183bf <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x13f>"
+        },
+        {
+          "address": "0x1183b9",
+          "instruction": "jne 118460 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x1e0>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V352",
+        "V373"
+      ],
+      "description": "64-byte private seed-zero comparisons short circuit before accepted attempt. Public nonce-zero guard is separately at 0x1182a3. OS-status branches depend on provider status/returned length, not loaded entropy values.",
+      "disposition": "D268 rejection classification retained; joint seed/environment/retry law remains P; failure independence is not assumed."
+    },
+    {
+      "id": "R2",
+      "classification": "secret-dependent branch and secret-dependent address",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 364,
+      "source_context": [
+        {
+          "line": 362,
+          "text": "        for _ in 0..MASK_SAMPLE_RETRY_LIMIT {"
+        },
+        {
+          "line": 363,
+          "text": "            let candidate = self.next_word() & 0x7fff_ffff;"
+        },
+        {
+          "line": 364,
+          "text": "            if candidate < P {"
+        },
+        {
+          "line": 365,
+          "text": "                return Ok(M31(candidate));"
+        },
+        {
+          "line": 366,
+          "text": "            }"
+        },
+        {
+          "line": 367,
+          "text": "        }"
+        },
+        {
+          "line": 368,
+          "text": "        Err(StateOnlyMaskBuildError::MaskSampleExhausted)"
+        }
+      ],
+      "A": [
+        {
+          "address": "0x114b2d",
+          "instruction": "mov eax,DWORD PTR [r14+rdi*1]"
+        },
+        {
+          "address": "0x114b3c",
+          "instruction": "jne 114b7f <aspis_prover::state_only_hiding::SeedExpander::m31+0x11f>"
+        },
+        {
+          "address": "0x114b47",
+          "instruction": "je 114aa0 <aspis_prover::state_only_hiding::SeedExpander::m31+0x40>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V354",
+        "V373"
+      ],
+      "description": "Private candidate rejection, refill branch and rejection-history cursor load. qm31 inlines this four times.",
+      "disposition": "D268 independent rejection-count simulation assessment retained; accepted-mask independence/joint law still P."
+    },
+    {
+      "id": "R3",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "line": 292,
+      "source_context": [
+        {
+          "line": 290,
+          "text": "        for value in sides.iter().flatten() {"
+        },
+        {
+          "line": 291,
+          "text": "            // No early exit: the work done does not depend on where a pole is."
+        },
+        {
+          "line": 292,
+          "text": "            clear &= chi != *value;"
+        },
+        {
+          "line": 293,
+          "text": "        }"
+        },
+        {
+          "line": 294,
+          "text": "    }"
+        },
+        {
+          "line": 295,
+          "text": "    Ok(clear)"
+        },
+        {
+          "line": 296,
+          "text": "}"
+        }
+      ],
+      "A": [
+        {
+          "address": "0xbd6cf",
+          "instruction": "je bd746 <aspis_r1_cost_probe::host_semantic::build_with_material::{{closure}}+0x9b6>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V360",
+        "V373"
+      ],
+      "description": "Final full-QM31 pole verdict controls helper invocation/retry.",
+      "disposition": "D268 poleBad classification retained. This does not cover N1 limb-prefix branches."
+    },
+    {
+      "id": "R4",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-core/src/field.rs",
+      "line": 216,
+      "source_context": [
+        {
+          "line": 214,
+          "text": "        #[cfg(feature = \"r0-op-count\")]"
+        },
+        {
+          "line": 215,
+          "text": "        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FInv);"
+        },
+        {
+          "line": 216,
+          "text": "        assert!(self.0 != 0, \"inverse of zero\");"
+        },
+        {
+          "line": 217,
+          "text": ""
+        },
+        {
+          "line": 218,
+          "text": "        // Build x^(2^k - 1) at k = 2, 4, 8, 16, 24, 28, 29."
+        },
+        {
+          "line": 219,
+          "text": "        // The final exponent is 4*(2^29 - 1) + 1 = 2^31 - 3 = P - 2."
+        },
+        {
+          "line": 220,
+          "text": "        // This takes 38 M31 multiplications instead of the generic binary"
+        }
+      ],
+      "A": [
+        {
+          "address": "0x171742",
+          "instruction": "je 171f2b <aspis_core::field::M31::inv+0x7eb>"
+        },
+        {
+          "address": "0x1729b5",
+          "instruction": "je 172e52 <aspis_core::field::QM31::try_inv+0x4c2>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V373",
+        "V380-inversion",
+        "V371"
+      ],
+      "description": "M31 inv zero branch; QM31 try_inv zero branch. QM31 field source anchor 1007 is separately retained in the existing packet.",
+      "disposition": "D259/D261 inversion containment remains P. Interpolation denominator is public; helper denominator uses witness/challenge and needs nonpole containment."
+    },
+    {
+      "id": "N1",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "line": 292,
+      "source_context": [
+        {
+          "line": 290,
+          "text": "        for value in sides.iter().flatten() {"
+        },
+        {
+          "line": 291,
+          "text": "            // No early exit: the work done does not depend on where a pole is."
+        },
+        {
+          "line": 292,
+          "text": "            clear &= chi != *value;"
+        },
+        {
+          "line": 293,
+          "text": "        }"
+        },
+        {
+          "line": 294,
+          "text": "    }"
+        },
+        {
+          "line": 295,
+          "text": "    Ok(clear)"
+        },
+        {
+          "line": 296,
+          "text": "}"
+        }
+      ],
+      "A": [
+        {
+          "address": "0xbd677",
+          "instruction": "jne bd660 <aspis_r1_cost_probe::host_semantic::build_with_material::{{closure}}+0x8d0>"
+        },
+        {
+          "address": "0xbd6a0",
+          "instruction": "jne bd660 <aspis_r1_cost_probe::host_semantic::build_with_material::{{closure}}+0x8d0>"
+        },
+        {
+          "address": "0xbd6a6",
+          "instruction": "jne bd660 <aspis_r1_cost_probe::host_semantic::build_with_material::{{closure}}+0x8d0>"
+        },
+        {
+          "address": "0xbd6ac",
+          "instruction": "jne bd660 <aspis_r1_cost_probe::host_semantic::build_with_material::{{closure}}+0x8d0>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V357",
+        "V360",
+        "V373"
+      ],
+      "description": "NEW: non-CT no_pole compares private compressed slot limbs to chi with short circuit. Unequal first limb skips the remaining limb loads/comparisons; equal first limb reaches second comparison even when full QM31 inequality holds.",
+      "disposition": "Not the D268 final poleBad verdict: both limb-prefix paths can have full-QM31 inequality. No concrete same-public honest witness pair or distinguishing advantage is proved; separate containment/simulation proof required. No fix made."
+    },
+    {
+      "id": "N2",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 259,
+      "source_context": [
+        {
+          "line": 257,
+          "text": "            .copied()"
+        },
+        {
+          "line": 258,
+          "text": "            .zip(padding)"
+        },
+        {
+          "line": 259,
+          "text": "            .any(|(active, value)| active && *value != QM31::ZERO)"
+        },
+        {
+          "line": 260,
+          "text": "        || padding"
+        },
+        {
+          "line": 261,
+          "text": "            .iter()"
+        },
+        {
+          "line": 262,
+          "text": "            .copied()"
+        },
+        {
+          "line": 263,
+          "text": "            .enumerate()"
+        }
+      ],
+      "A": [
+        {
+          "address": "0x115bab",
+          "instruction": "jne 115bbe <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x4e>"
+        },
+        {
+          "address": "0x115bb1",
+          "instruction": "jne 115bbe <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x4e>"
+        },
+        {
+          "address": "0x115bb7",
+          "instruction": "jne 115bbe <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x4e>"
+        },
+        {
+          "address": "0x115bbc",
+          "instruction": "je 115b90 <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x20>"
+        },
+        {
+          "address": "0x115c71",
+          "instruction": "jne 115bbe <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x4e>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V354",
+        "V360",
+        "V373"
+      ],
+      "description": "NEW: padding active-cell zero checks short circuit on private-material bytes; final inactive sum zero test branches on private-derived sum.",
+      "disposition": "Expected invariant: active padding zero and inactive sum zero. Audit does not prove these for complete caller; not classified as rejection or poleBad. Conditional constant-predicate proof remains P."
+    },
+    {
+      "id": "N3",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "line": 60,
+      "source_context": [
+        {
+          "line": 58,
+          "text": "        if c1"
+        },
+        {
+          "line": 59,
+          "text": "            .iter()"
+        },
+        {
+          "line": 60,
+          "text": "            .any(|v| v.len() != 1024 || v.iter().any(|x| x.0 >= P))"
+        },
+        {
+          "line": 61,
+          "text": "            || d.iter().chain(g).any(|x| {"
+        },
+        {
+          "line": 62,
+          "text": "                QM31::from_le_bytes(&{"
+        },
+        {
+          "line": 63,
+          "text": "                    let mut b = [0; 16];"
+        },
+        {
+          "line": 64,
+          "text": "                    x.write_le_bytes(&mut b);"
+        }
+      ],
+      "A": [
+        {
+          "address": "0xbb1ca",
+          "instruction": "ja bb256 <aspis_r1_cost_probe::host_semantic::build_with_material+0x606>"
+        },
+        {
+          "address": "0xbb1d8",
+          "instruction": "ja bb256 <aspis_r1_cost_probe::host_semantic::build_with_material+0x606>"
+        },
+        {
+          "address": "0xbb1e2",
+          "instruction": "ja bb256 <aspis_r1_cost_probe::host_semantic::build_with_material+0x606>"
+        },
+        {
+          "address": "0xbb1ec",
+          "instruction": "ja bb256 <aspis_r1_cost_probe::host_semantic::build_with_material+0x606>"
+        },
+        {
+          "address": "0xbb202",
+          "instruction": "jbe bb1c2 <aspis_r1_cost_probe::host_semantic::build_with_material+0x572>"
+        },
+        {
+          "address": "0xbb254",
+          "instruction": "je bb2c8 <aspis_r1_cost_probe::host_semantic::build_with_material+0x678>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V357",
+        "V360",
+        "V373"
+      ],
+      "description": "NEW: canonicality checks of masked C1 and D/G limb representations fail early. 0xbb254 consumes D/G validator result.",
+      "disposition": "Canonical constructors should make predicates constant on valid executions; caller-domain proof is needed. Raw-input branch finding is not a demonstrated honest-run leak."
+    },
+    {
+      "id": "N4",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 144,
+      "source_context": [
+        {
+          "line": 142,
+          "text": "        c1_columns_inactive_balanced,"
+        },
+        {
+          "line": 143,
+          "text": "        mask_only_columns_inactive_balanced,"
+        },
+        {
+          "line": 144,
+          "text": "        d_inactive_balanced:inactive_sum_k(&d,&masks)==K::ZERO,"
+        },
+        {
+          "line": 145,
+          "text": "        g_inactive_balanced:inactive_sum_k(&g,&masks)==K::ZERO,"
+        },
+        {
+          "line": 146,
+          "text": "        h1_padding_inactive_balanced:inactive_sum_k(&h1_padding,&masks)==K::ZERO,"
+        },
+        {
+          "line": 147,
+          "text": "        h1_total_balanced:true,"
+        },
+        {
+          "line": 148,
+          "text": "    };"
+        }
+      ],
+      "A": [
+        {
+          "address": "0x99843",
+          "instruction": "jne 9988d <aspis_r1_cost_probe::prover::prove_masked_attempt+0x82d>"
+        },
+        {
+          "address": "0x9984d",
+          "instruction": "jne 9988d <aspis_r1_cost_probe::prover::prove_masked_attempt+0x82d>"
+        },
+        {
+          "address": "0x9985a",
+          "instruction": "jne 99890 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x830>"
+        },
+        {
+          "address": "0x998b8",
+          "instruction": "jne 998da <aspis_r1_cost_probe::prover::prove_masked_attempt+0x87a>"
+        },
+        {
+          "address": "0x998c2",
+          "instruction": "jne 998da <aspis_r1_cost_probe::prover::prove_masked_attempt+0x87a>"
+        },
+        {
+          "address": "0x998cc",
+          "instruction": "jne 998da <aspis_r1_cost_probe::prover::prove_masked_attempt+0x87a>"
+        },
+        {
+          "address": "0x998ff",
+          "instruction": "jne 99996 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x936>"
+        },
+        {
+          "address": "0x9990d",
+          "instruction": "jne 99996 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x936>"
+        },
+        {
+          "address": "0x9991b",
+          "instruction": "jne 99996 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x936>"
+        },
+        {
+          "address": "0x99944",
+          "instruction": "je 99996 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x936>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V354",
+        "V360",
+        "V373"
+      ],
+      "description": "NEW: short-circuit inactive D/G/padding sum tests and aggregate mask-audit branch on private-derived arithmetic.",
+      "disposition": "Balances are intended invariants, requiring caller-domain proof. This finding is separate from seed rejection and poleBad."
+    },
+    {
+      "id": "N5",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "line": 99,
+      "source_context": [
+        {
+          "line": 97,
+          "text": "        .map_err(|_| Error::Public)?;"
+        },
+        {
+          "line": 98,
+          "text": "        let h1: &[QM31; 1024] = h1.as_slice().try_into().map_err(|_| Error::Public)?;"
+        },
+        {
+          "line": 99,
+          "text": "        if state_only_copy_helper_sum(h1) != Some(QM31::ZERO) {"
+        },
+        {
+          "line": 100,
+          "text": "            return Err(Error::Public);"
+        },
+        {
+          "line": 101,
+          "text": "        }"
+        },
+        {
+          "line": 102,
+          "text": "        let c2_root = commitments.c2([h1, g])?;"
+        },
+        {
+          "line": 103,
+          "text": "        let theta = scalar(2, &c2_root, &mut transcript)?;"
+        }
+      ],
+      "A": [
+        {
+          "address": "0xbbb12",
+          "instruction": "jne bbb8c <aspis_r1_cost_probe::host_semantic::build_with_material+0xf3c>"
+        },
+        {
+          "address": "0xbbb1c",
+          "instruction": "je bbb8c <aspis_r1_cost_probe::host_semantic::build_with_material+0xf3c>"
+        },
+        {
+          "address": "0x99ce3",
+          "instruction": "jne 99d11 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xcb1>"
+        },
+        {
+          "address": "0x99ced",
+          "instruction": "jne 99d11 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xcb1>"
+        },
+        {
+          "address": "0x99cf7",
+          "instruction": "jne 99d11 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xcb1>"
+        },
+        {
+          "address": "0x99d01",
+          "instruction": "jne 99d11 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xcb1>"
+        },
+        {
+          "address": "0x99d0f",
+          "instruction": "je 99d49 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xce9>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V357",
+        "V360",
+        "V373"
+      ],
+      "description": "NEW: helper total-zero checks in host semantics and owner, including short-circuit equality/Option checks after helper evaluation.",
+      "disposition": "Expected helperSum invariant needs native association; no failure-mass claim or honest-witness counterexample established."
+    },
+    {
+      "id": "N6",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
+      "line": 64,
+      "source_context": [
+        {
+          "line": 62,
+          "text": "            }"
+        },
+        {
+          "line": 63,
+          "text": "            let polynomial = interpolate(&values);"
+        },
+        {
+          "line": 64,
+          "text": "            if state_only_boundary_sum(&polynomial) != running {"
+        },
+        {
+          "line": 65,
+          "text": "                return Err(Error::Boundary { round });"
+        },
+        {
+          "line": 66,
+          "text": "            }"
+        },
+        {
+          "line": 67,
+          "text": "            let framed = wire::record("
+        },
+        {
+          "line": 68,
+          "text": "                15 + round as u8,"
+        }
+      ],
+      "A": [
+        {
+          "address": "0x9fc4b",
+          "instruction": "jne a004c <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck+0x5cc>"
+        },
+        {
+          "address": "0x9fc5b",
+          "instruction": "jne a004c <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck+0x5cc>"
+        },
+        {
+          "address": "0x9fc6b",
+          "instruction": "jne a004c <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck+0x5cc>"
+        },
+        {
+          "address": "0x9fc7b",
+          "instruction": "jne a004c <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck+0x5cc>"
+        },
+        {
+          "address": "0xa0137",
+          "instruction": "je a0142 <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck+0x6c2>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V357",
+        "V360",
+        "V373"
+      ],
+      "description": "NEW: per-limb boundary equality checks and final terminal equality branch on witness-derived polynomial/oracle values.",
+      "disposition": "Expected valid sumcheck identities require proof. No actual boundary/terminal failure on a valid compiled witness is claimed."
+    },
+    {
+      "id": "N7",
+      "classification": "secret-dependent branch and secret-dependent address",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 16,
+      "source_context": [
+        {
+          "line": 14,
+          "text": " let mut s=String::new();io::stdin().read_to_string(&mut s)?;let q:Value=serde_json::from_str(&s)?;"
+        },
+        {
+          "line": 15,
+          "text": " if q.get(\"action\").is_some(){println!(\"{}\",plan::run(&q)?);return Ok(())}"
+        },
+        {
+          "line": 16,
+          "text": " let keys:Vec<Keypair>=q[\"keys\"].as_array().unwrap().iter().map(|p|{let b:Vec<u8>=serde_json::from_slice(&fs::read(p.as_str().unwrap()).unwrap()).unwrap();Keypair::try_from(b.as_slice()).unwrap()}).collect();"
+        },
+        {
+          "line": 17,
+          "text": " let ixs:Vec<Instruction>=q[\"instructions\"].as_array().unwrap().iter().map(|i|Instruction{program_id:Address::from_str(i[\"program\"].as_str().unwrap()).unwrap(),accounts:i[\"accounts\"].as_array().unwrap().iter().map(|a|AccountMeta{pubkey:Address::from_str(a[0].as_str().unwrap()).unwrap(),is_signer:a[1].as_bool().unwrap(),is_writable:a[2].as_bool().unwrap()}).collect(),data:unhex(i[\"data\"].as_str().unwrap())}).collect();"
+        },
+        {
+          "line": 18,
+          "text": " let conf=TransactionConfig::empty().with_priority_fee(10000).with_compute_unit_limit(1_400_000).with_loaded_accounts_data_size_limit(8*1024*1024).with_heap_size(256*1024);"
+        },
+        {
+          "line": 19,
+          "text": " let m=Message::try_compile_with_config(&keys[0].pubkey(),&ixs,q[\"blockhash\"].as_str().unwrap().parse()?,conf)?;"
+        },
+        {
+          "line": 20,
+          "text": " let refs:Vec<&Keypair>=keys.iter().collect();let tx=VersionedTransaction::try_new(VersionedMessage::V1(m),&refs)?;"
+        }
+      ],
+      "A": [
+        {
+          "address": "0x835ad",
+          "instruction": "movzx ecx,BYTE PTR [r8+rax*1]"
+        },
+        {
+          "address": "0x835bc",
+          "instruction": "jne 835f6 <serde_json::de::Deserializer<R>::parse_integer+0x66>"
+        },
+        {
+          "address": "0x8363c",
+          "instruction": "movzx r11d,BYTE PTR [r8+rax*1]"
+        },
+        {
+          "address": "0x83649",
+          "instruction": "jae 8368a <serde_json::de::Deserializer<R>::parse_integer+0xfa>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V360",
+        "V373",
+        "V396"
+      ],
+      "description": "NEW: signing branch parses private key JSON as Vec<u8>. serde_json integer parser branches on first digit zero and digit-loop termination; subsequent byte offsets depend on decimal widths of prior private bytes.",
+      "disposition": "Signing/storage route, not the action=prove branch. Source serde_json 1.0.151 de.rs:462-507; pinned by standalone Cargo.lock checksum. Key-byte JSON widths vary even for valid key files. No wallet opened or signed; no claim that this is witness leakage. Full-client observer/key-loading policy remains P."
+    },
+    {
+      "id": "N8",
+      "classification": "secret-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+      "line": 170,
+      "source_context": [
+        {
+          "line": 168,
+          "text": "            .map_err(|_| Error::Allocation)?;"
+        },
+        {
+          "line": 169,
+          "text": "        for &l in &lanes {"
+        },
+        {
+          "line": 170,
+          "text": "            if messages[l].iter().any(|x| {"
+        },
+        {
+          "line": 171,
+          "text": "                x.to_limbs()[if l < 26 { 1 } else { 4 }..]"
+        },
+        {
+          "line": 172,
+          "text": "                    .iter()"
+        },
+        {
+          "line": 173,
+          "text": "                    .any(|&d| d != 0)"
+        },
+        {
+          "line": 174,
+          "text": "            }) {"
+        }
+      ],
+      "A": [
+        {
+          "address": "0xb2c64",
+          "instruction": "je b2c58 <aspis_r1_cost_probe::host_commitment::Commitment::new_salted+0x4e8>"
+        },
+        {
+          "address": "0xb2c9a",
+          "instruction": "je b2c8e <aspis_r1_cost_probe::host_commitment::Commitment::new_salted+0x51e>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V359",
+        "V360",
+        "V373"
+      ],
+      "description": "NEW: non-CT commitment WrongField guard tests higher witness-derived message limbs with early exit before encoding.",
+      "disposition": "Expected base/secure field-domain invariant; no valid-message violation established. This family extends N3 with separately resolved commitment PCs."
+    },
+    {
+      "id": "R5",
+      "classification": "secret-dependent branch and secret-dependent address",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 794,
+      "source_context": [
+        {
+          "line": 792,
+          "text": "    }"
+        },
+        {
+          "line": 793,
+          "text": ""
+        },
+        {
+          "line": 794,
+          "text": "    fn m31(&mut self) -> Result<aspis_core::field::M31, StateOnlyMaskBuildError> {"
+        },
+        {
+          "line": 795,
+          "text": "        for _ in 0..16 {"
+        },
+        {
+          "line": 796,
+          "text": "            let candidate = self.next_word() & 0x7fff_ffff;"
+        },
+        {
+          "line": 797,
+          "text": "            if candidate < aspis_core::field::P {"
+        },
+        {
+          "line": 798,
+          "text": "                return Ok(aspis_core::field::M31(candidate));"
+        }
+      ],
+      "A": [
+        {
+          "address": "0x117f27",
+          "instruction": "mov r15d,DWORD PTR [r13+rdi*1+0x0]"
+        },
+        {
+          "address": "0x117f36",
+          "instruction": "jne 117f64 <aspis_prover::state_only_entropy::Profile21SourceExpander::qm31+0x124>"
+        },
+        {
+          "address": "0x118028",
+          "instruction": "jne 118056 <aspis_prover::state_only_entropy::Profile21SourceExpander::qm31+0x216>"
+        },
+        {
+          "address": "0x11810b",
+          "instruction": "jne 118139 <aspis_prover::state_only_entropy::Profile21SourceExpander::qm31+0x2f9>"
+        },
+        {
+          "address": "0x118205",
+          "instruction": "jne 11825f <aspis_prover::state_only_entropy::Profile21SourceExpander::qm31+0x41f>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V353",
+        "V373"
+      ],
+      "description": "Profile21SourceExpander samples D with rejection, history-dependent cursor addressing and four-limb error propagation.",
+      "disposition": "Same D268 rejection-count classification; V353 joint expander law remains P."
+    },
+    {
+      "id": "R6",
+      "classification": "public-data-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
+      "line": 114,
+      "source_context": [
+        {
+          "line": 112,
+          "text": "    let (mut digits, quotient) = low_base_p_digits(block);"
+        },
+        {
+          "line": 113,
+          "text": "    let wrapped = add_small_base_p(&mut digits, quotient + 1);"
+        },
+        {
+          "line": 114,
+          "text": "    if wrapped {"
+        },
+        {
+          "line": 115,
+          "text": "        let wrapped_again = add_small_base_p(&mut digits, 1);"
+        },
+        {
+          "line": 116,
+          "text": "        debug_assert!(!wrapped_again);"
+        },
+        {
+          "line": 117,
+          "text": "    }"
+        },
+        {
+          "line": 118,
+          "text": "    decode8(digits)"
+        }
+      ],
+      "A": [
+        {
+          "address": "0xa1a59",
+          "instruction": "jbe a1aff <aspis_r1_cost_probe::sampler::gamma_sample+0x1ff>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V356",
+        "V373"
+      ],
+      "description": "Gamma carry branch depends on raw Fiat-Shamir block.",
+      "disposition": "D268 public-data assessment retained; rejected-prefix joint trace law still P."
+    },
+    {
+      "id": "R7",
+      "classification": "commitment-data-dependent branch",
+      "source_revision": "5228877938c7e42a1c87aa35f69f9a110ee9a4d6",
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 214,
+      "source_context": [
+        {
+          "line": 212,
+          "text": "        }"
+        },
+        {
+          "line": 213,
+          "text": "        let sentinel = second_commitment[POOL_V1_PAIR_SECOND_SENTINEL_LANE];"
+        },
+        {
+          "line": 214,
+          "text": "        if sentinel == M31::ZERO {"
+        },
+        {
+          "line": 215,
+          "text": "            return Err(PoolV1PairLeafErrorV1::OccupiedSentinelZero);"
+        },
+        {
+          "line": 216,
+          "text": "        }"
+        },
+        {
+          "line": 217,
+          "text": "        let result = Self {"
+        },
+        {
+          "line": 218,
+          "text": "            first_commitment,"
+        }
+      ],
+      "A": [
+        {
+          "address": "0x163d3c",
+          "instruction": "jne 163d5b <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0x9b>"
+        },
+        {
+          "address": "0x163d45",
+          "instruction": "ja 163d5b <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0x9b>"
+        },
+        {
+          "address": "0x163d4e",
+          "instruction": "ja 163d5b <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0x9b>"
+        },
+        {
+          "address": "0x163d59",
+          "instruction": "jbe 163d6d <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0xad>"
+        },
+        {
+          "address": "0x163d6f",
+          "instruction": "je 163e04 <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0x144>"
+        }
+      ],
+      "B": null,
+      "B_reason": "exact locked recipe failed before compilation; no B address exists",
+      "ledger_rows": [
+        "V373",
+        "V380-inversion"
+      ],
+      "description": "Existing F9 domain boundary rechecked in A: canonical commitment checks and nonzero sentinel test.",
+      "disposition": "Retained domain boundary; commitment values are public outputs in this planner. No inverse-boundary discharge claimed."
+    }
+  ]
+}

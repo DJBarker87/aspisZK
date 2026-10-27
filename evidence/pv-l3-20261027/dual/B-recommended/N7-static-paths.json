@@ -1,0 +1,178 @@
+{
+  "kind": "manual symbolic path accounting checked against actual disassembly; not measured timing or dynamic trace",
+  "assumptions": "valid unsigned decimal byte, no whitespace inside token, comma or ] delimiter present; excludes SeqAccess and Keypair validation",
+  "paths": {
+    "1": {
+      "digit_count": 1,
+      "Jcc_executions_in_parse_integer": 10,
+      "PC_sequence": [
+        "8bef3",
+        "8bf0c",
+        "8bf4e",
+        "8bf5d",
+        "8bf99",
+        "8bfdd",
+        "8bfe7",
+        "8bff0",
+        "8bff5",
+        "8c01e"
+      ],
+      "digit_range_exit_outcomes": [
+        "taken"
+      ],
+      "overflow_guard_outcome": "8bf9e taken for each additional valid u8 digit; no overflow path"
+    },
+    "2": {
+      "digit_count": 2,
+      "Jcc_executions_in_parse_integer": 13,
+      "PC_sequence": [
+        "8bef3",
+        "8bf0c",
+        "8bf4e",
+        "8bf5d",
+        "8bf99",
+        "8bf9e",
+        "8bf86",
+        "8bf99",
+        "8bfdd",
+        "8bfe7",
+        "8bff0",
+        "8bff5",
+        "8c01e"
+      ],
+      "digit_range_exit_outcomes": [
+        "not taken",
+        "taken"
+      ],
+      "overflow_guard_outcome": "8bf9e taken for each additional valid u8 digit; no overflow path"
+    },
+    "3": {
+      "digit_count": 3,
+      "Jcc_executions_in_parse_integer": 16,
+      "PC_sequence": [
+        "8bef3",
+        "8bf0c",
+        "8bf4e",
+        "8bf5d",
+        "8bf99",
+        "8bf9e",
+        "8bf86",
+        "8bf99",
+        "8bf9e",
+        "8bf86",
+        "8bf99",
+        "8bfdd",
+        "8bfe7",
+        "8bff0",
+        "8bff5",
+        "8c01e"
+      ],
+      "digit_range_exit_outcomes": [
+        "not taken",
+        "not taken",
+        "taken"
+      ],
+      "overflow_guard_outcome": "8bf9e taken for each additional valid u8 digit; no overflow path"
+    },
+    "zero": {
+      "Jcc_executions_in_parse_integer": 7,
+      "PC_sequence": [
+        "8bef3",
+        "8bf0c",
+        "8bf11",
+        "8bf22",
+        "8c0ec",
+        "8c0f1",
+        "8c0f6"
+      ],
+      "note": "zero special case; next digit is rejected as noncanonical JSON"
+    }
+  },
+  "instructions": [
+    {
+      "address": "0x8bef3",
+      "op": "jae",
+      "args": "8c06c <serde_json::de::Deserializer<R>::parse_integer+0x18c>"
+    },
+    {
+      "address": "0x8bf0c",
+      "op": "jne",
+      "args": "8bf46 <serde_json::de::Deserializer<R>::parse_integer+0x66>"
+    },
+    {
+      "address": "0x8bf11",
+      "op": "jae",
+      "args": "8c10c <serde_json::de::Deserializer<R>::parse_integer+0x22c>"
+    },
+    {
+      "address": "0x8bf22",
+      "op": "jae",
+      "args": "8c0e9 <serde_json::de::Deserializer<R>::parse_integer+0x209>"
+    },
+    {
+      "address": "0x8bf4e",
+      "op": "jae",
+      "args": "8c0de <serde_json::de::Deserializer<R>::parse_integer+0x1fe>"
+    },
+    {
+      "address": "0x8bf5d",
+      "op": "jae",
+      "args": "8bfda <serde_json::de::Deserializer<R>::parse_integer+0xfa>"
+    },
+    {
+      "address": "0x8bf86",
+      "op": "je",
+      "args": "8c017 <serde_json::de::Deserializer<R>::parse_integer+0x137>"
+    },
+    {
+      "address": "0x8bf99",
+      "op": "jae",
+      "args": "8bfda <serde_json::de::Deserializer<R>::parse_integer+0xfa>"
+    },
+    {
+      "address": "0x8bf9e",
+      "op": "jbe",
+      "args": "8bf70 <serde_json::de::Deserializer<R>::parse_integer+0x90>"
+    },
+    {
+      "address": "0x8bfdd",
+      "op": "jae",
+      "args": "8c017 <serde_json::de::Deserializer<R>::parse_integer+0x137>"
+    },
+    {
+      "address": "0x8bfe7",
+      "op": "je",
+      "args": "8c087 <serde_json::de::Deserializer<R>::parse_integer+0x1a7>"
+    },
+    {
+      "address": "0x8bff0",
+      "op": "je",
+      "args": "8bff7 <serde_json::de::Deserializer<R>::parse_integer+0x117>"
+    },
+    {
+      "address": "0x8bff5",
+      "op": "jne",
+      "args": "8c017 <serde_json::de::Deserializer<R>::parse_integer+0x137>"
+    },
+    {
+      "address": "0x8c01e",
+      "op": "je",
+      "args": "8c028 <serde_json::de::Deserializer<R>::parse_integer+0x148>"
+    },
+    {
+      "address": "0x8c0ec",
+      "op": "je",
+      "args": "8c127 <serde_json::de::Deserializer<R>::parse_integer+0x247>"
+    },
+    {
+      "address": "0x8c0f1",
+      "op": "je",
+      "args": "8c0f8 <serde_json::de::Deserializer<R>::parse_integer+0x218>"
+    },
+    {
+      "address": "0x8c0f6",
+      "op": "jne",
+      "args": "8c10c <serde_json::de::Deserializer<R>::parse_integer+0x22c>"
+    }
+  ]
+}

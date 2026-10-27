@@ -1,0 +1,227 @@
+{
+  "binary_sha256": "898005412d46103cfeffe5740f7892ee01d1e3d73a7293338c62e679445b5e67",
+  "findings": [
+    {
+      "id": "R2",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 419,
+      "source_context": [
+        "    }",
+        "",
+        "    fn m31(&mut self) -> Result<M31, StateOnlyMaskBuildError> {",
+        "        let limit=MASK_SAMPLE_RETRY_LIMIT;",
+        "",
+        "        let mut retry=0;"
+      ],
+      "source_sha256": "b02e125623d5a3b8ea97c7f8bf9a3111b9cd3625abf3d7b356e4fbd15aa759e5",
+      "instructions": [
+        {
+          "address": "0x138024",
+          "op": "je",
+          "args": "138060 <aspis_prover::state_only_hiding::SeedExpander::qm31+0x90>"
+        },
+        {
+          "address": "0x13803f",
+          "op": "mov",
+          "args": "r13d,DWORD PTR [r15+rdi*1]"
+        },
+        {
+          "address": "0x13804d",
+          "op": "je",
+          "args": "138106 <aspis_prover::state_only_hiding::SeedExpander::qm31+0x136>"
+        },
+        {
+          "address": "0x138104",
+          "op": "jne",
+          "args": "138114 <aspis_prover::state_only_hiding::SeedExpander::qm31+0x144>"
+        },
+        {
+          "address": "0x138109",
+          "op": "jne",
+          "args": "138020 <aspis_prover::state_only_hiding::SeedExpander::qm31+0x50>"
+        },
+        {
+          "address": "0x13814d",
+          "op": "je",
+          "args": "138208 <aspis_prover::state_only_hiding::SeedExpander::qm31+0x238>"
+        },
+        {
+          "address": "0x13824b",
+          "op": "je",
+          "args": "13830b <aspis_prover::state_only_hiding::SeedExpander::qm31+0x33b>"
+        },
+        {
+          "address": "0x13835b",
+          "op": "je",
+          "args": "138425 <aspis_prover::state_only_hiding::SeedExpander::qm31+0x455>"
+        }
+      ],
+      "classification": "secret candidate rejection and history-dependent refill/cursor addresses",
+      "ledger_rows": [
+        "V354",
+        "V373",
+        "V371"
+      ],
+      "obligation": "D268 rejection-count assessment retained; exact accepted-seed/rejected-prefix joint law remains P"
+    },
+    {
+      "id": "R3",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "line": 326,
+      "source_context": [
+        "        |lambda, chi| {",
+        "            #[cfg(feature = \"r1p-check\")]",
+        "            if !no_pole(compiled, lambda, chi)? {",
+        "                return Err(Error::ActivePole);",
+        "            }",
+        "            build_pool_v1_pair_forest_copy_helper_v1("
+      ],
+      "source_sha256": "12cf92baea4d0f664bbd31355dc7f1fbdd39d30b3f997e688009a499ae80d830",
+      "instructions": [
+        {
+          "address": "0xb5c5c",
+          "op": "call",
+          "args": "bf8f0 <aspis_r1_cost_probe::ct_pole::all_slots_clear>"
+        },
+        {
+          "address": "0xb5a1d",
+          "op": "je",
+          "args": "b5a84 <aspis_r1_cost_probe::host_semantic::build_with_material::{{closure}}+0x534>"
+        }
+      ],
+      "classification": "secret-dependent full pole verdict",
+      "ledger_rows": [
+        "V360",
+        "V373"
+      ],
+      "obligation": "CT scan fixes N1 machine prefix issue; final verdict still charged to poleBad and native containment/joint simulation remains P"
+    },
+    {
+      "id": "R5",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 838,
+      "source_context": [
+        "    }",
+        "",
+        "    fn m31(&mut self) -> Result<aspis_core::field::M31, StateOnlyMaskBuildError> {",
+        "        let mut retry=0;",
+        "        while retry<16 {",
+        "            let candidate=self.next_word() & 0x7fff_ffff;"
+      ],
+      "source_sha256": "e696427450eb2b9061a24ad46dd4b3432d9fc5bae14aba5938840a4e8bc61e34",
+      "instructions": [
+        {
+          "address": "0x13c834",
+          "op": "je",
+          "args": "13c870 <aspis_prover::state_only_entropy::Profile21SourceExpander::qm31+0x90>"
+        },
+        {
+          "address": "0x13c84f",
+          "op": "mov",
+          "args": "r13d,DWORD PTR [r15+rdi*1]"
+        },
+        {
+          "address": "0x13c85d",
+          "op": "je",
+          "args": "13c916 <aspis_prover::state_only_entropy::Profile21SourceExpander::qm31+0x136>"
+        },
+        {
+          "address": "0x13c914",
+          "op": "jne",
+          "args": "13c923 <aspis_prover::state_only_entropy::Profile21SourceExpander::qm31+0x143>"
+        },
+        {
+          "address": "0x13c918",
+          "op": "jne",
+          "args": "13c830 <aspis_prover::state_only_entropy::Profile21SourceExpander::qm31+0x50>"
+        }
+      ],
+      "classification": "private D expander rejection/refill/cursor addresses",
+      "ledger_rows": [
+        "V353",
+        "V373",
+        "V371"
+      ],
+      "obligation": "same rejection-count assessment, independent expansion/caller joint law remains P"
+    },
+    {
+      "id": "R6",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
+      "line": 111,
+      "source_context": [
+        "/// be added to the low digits before the final increment. A carry past digit",
+        "/// seven contributes one more modulo `P^8 - 1`.",
+        "pub fn gamma_sample(block: &[u8; 32]) -> WideExact {",
+        "    let (mut digits, quotient) = low_base_p_digits(block);",
+        "    let wrapped = add_small_base_p(&mut digits, quotient + 1);",
+        "    if wrapped {"
+      ],
+      "source_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "instructions": [
+        {
+          "address": "0xcb544",
+          "op": "jbe",
+          "args": "cb5ea <aspis_r1_cost_probe::sampler::gamma_sample+0x1fa>"
+        }
+      ],
+      "classification": "raw Fiat-Shamir challenge carry branch",
+      "ledger_rows": [
+        "V356",
+        "V373"
+      ],
+      "obligation": "public/challenge-dependent; complete rejected-prefix law still P"
+    },
+    {
+      "id": "R7",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 206,
+      "source_context": [
+        "    /// Build a two-output witness. A zero sentinel is a retry condition for",
+        "    /// note-salt generation, never an empty-slot hash/preimage assumption.",
+        "    pub fn two_outputs(",
+        "        first_commitment: Digest,",
+        "        second_commitment: Digest,",
+        "    ) -> Result<Self, PoolV1PairLeafErrorV1> {"
+      ],
+      "source_sha256": "660f00d91fb08e809b8f00a7e3917d546cf2097e6ea4b59b951e0dc8cc03e7af",
+      "instructions": [
+        {
+          "address": "0x17d09c",
+          "op": "jne",
+          "args": "17d0bb <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0x9b>"
+        },
+        {
+          "address": "0x17d0a5",
+          "op": "ja",
+          "args": "17d0bb <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0x9b>"
+        },
+        {
+          "address": "0x17d0ae",
+          "op": "ja",
+          "args": "17d0bb <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0x9b>"
+        },
+        {
+          "address": "0x17d0b9",
+          "op": "jbe",
+          "args": "17d0cd <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0xad>"
+        },
+        {
+          "address": "0x17d0cf",
+          "op": "je",
+          "args": "17d164 <aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1::two_outputs+0x144>"
+        }
+      ],
+      "classification": "commitment-domain canonicality and nonzero sentinel",
+      "ledger_rows": [
+        "V373",
+        "V380-inversion"
+      ],
+      "obligation": "valid canonical/nonzero commitment boundary and native compiler association retained"
+    }
+  ]
+}

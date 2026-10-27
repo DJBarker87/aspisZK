@@ -1,0 +1,597 @@
+{
+  "label": "recommended recipe pending owner approval; toolchain rustc 1.94.1 unpinned",
+  "binary_sha256": "898005412d46103cfeffe5740f7892ee01d1e3d73a7293338c62e679445b5e67",
+  "findings": [
+    {
+      "id": "N1",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-r1-cost-probe/src/ct_pole.rs",
+      "line": 18,
+      "source_sha256": "f82e5546df39844faea5b797b418b7ae11af23248e1666d050b683a842a38c71",
+      "source_context": [
+        "}",
+        "",
+        "pub(crate) fn all_slots_clear(values: &[[[QM31; 2]; 2]], masks: &[u16; 64], chi: QM31) -> bool {",
+        "    let mut clear = true;",
+        "    for (row, sides) in values.iter().enumerate() {",
+        "        let active = masks[row >> 4] & (1 << (row & 15)) != 0;"
+      ],
+      "instructions": [
+        {
+          "address": "0xbf8f3",
+          "op": "je",
+          "args": "bfa2c <aspis_r1_cost_probe::ct_pole::all_slots_clear+0x13c>"
+        },
+        {
+          "address": "0xbf93e",
+          "op": "je",
+          "args": "bfa2f <aspis_r1_cost_probe::ct_pole::all_slots_clear+0x13f>"
+        },
+        {
+          "address": "0xbf95a",
+          "op": "movdqu",
+          "args": "xmm8,XMMWORD PTR [rdi+r8*1]"
+        },
+        {
+          "address": "0xbf960",
+          "op": "movdqu",
+          "args": "xmm5,XMMWORD PTR [rdi+r8*1+0x10]"
+        },
+        {
+          "address": "0xbf967",
+          "op": "movdqu",
+          "args": "xmm9,XMMWORD PTR [rdi+r8*1+0x20]"
+        },
+        {
+          "address": "0xbf96e",
+          "op": "movdqu",
+          "args": "xmm6,XMMWORD PTR [rdi+r8*1+0x30]"
+        },
+        {
+          "address": "0xbf995",
+          "op": "pcmpeqd",
+          "args": "xmm11,xmm0"
+        },
+        {
+          "address": "0xbf9be",
+          "op": "pcmpeqd",
+          "args": "xmm7,xmm1"
+        },
+        {
+          "address": "0xbf9df",
+          "op": "pcmpeqd",
+          "args": "xmm8,xmm2"
+        },
+        {
+          "address": "0xbf9ed",
+          "op": "pcmpeqd",
+          "args": "xmm5,xmm3"
+        },
+        {
+          "address": "0xbfa13",
+          "op": "cmp",
+          "args": "ecx,0xf"
+        },
+        {
+          "address": "0xbfa16",
+          "op": "sete",
+          "args": "cl"
+        },
+        {
+          "address": "0xbfa19",
+          "op": "and",
+          "args": "al,cl"
+        },
+        {
+          "address": "0xbfa25",
+          "op": "jne",
+          "args": "bf930 <aspis_r1_cost_probe::ct_pole::all_slots_clear+0x40>"
+        },
+        {
+          "address": "0xb5c5c",
+          "op": "call",
+          "args": "bf8f0 <aspis_r1_cost_probe::ct_pole::all_slots_clear>"
+        },
+        {
+          "address": "0xb5a1d",
+          "op": "je",
+          "args": "b5a84 <aspis_r1_cost_probe::host_semantic::build_with_material::{{closure}}+0x534>"
+        }
+      ],
+      "classification": "public geometry branches; secret operands in fixed SIMD compare/reduction; final verdict secret-dependent",
+      "ledger_rows": [
+        "V357",
+        "V360",
+        "V373",
+        "V371"
+      ],
+      "honest_domain_obligation": "No limb-prefix Jcc in this scan. Final pole verdict R3 and source/machine joint law remain P; no whole-program claim."
+    },
+    {
+      "id": "N2",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 303,
+      "source_sha256": "b02e125623d5a3b8ea97c7f8bf9a3111b9cd3625abf3d7b356e4fbd15aa759e5",
+      "source_context": [
+        "    Ok(())",
+        "}",
+        "fn check_h1_padding_active(padding:&[QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<(),StateOnlyMaskBuildError> {",
+        "    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;",
+        "",
+        "    let mut row=0;"
+      ],
+      "instructions": [
+        {
+          "address": "0x13a08b",
+          "op": "jne",
+          "args": "13a065 <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x15>"
+        },
+        {
+          "address": "0x13a091",
+          "op": "jne",
+          "args": "13a065 <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x15>"
+        },
+        {
+          "address": "0x13a097",
+          "op": "jne",
+          "args": "13a065 <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x15>"
+        },
+        {
+          "address": "0x13a09c",
+          "op": "je",
+          "args": "13a070 <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x20>"
+        },
+        {
+          "address": "0x13a149",
+          "op": "jne",
+          "args": "13a065 <aspis_prover::state_only_hiding::apply_h1_padding_mask_for_active+0x15>"
+        }
+      ],
+      "classification": "secret-derived guard branches",
+      "ledger_rows": [
+        "V354",
+        "V360",
+        "V373"
+      ],
+      "honest_domain_obligation": "Expected constant: active padding is all zero (first three JNE false, last JE true); inactive sum is zero (JNE false). Needs construction/caller invariant proof, not proved here."
+    },
+    {
+      "id": "N3",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "line": 144,
+      "source_sha256": "12cf92baea4d0f664bbd31355dc7f1fbdd39d30b3f997e688009a499ae80d830",
+      "source_context": [
+        "}",
+        "",
+        "fn check_semantic_columns(c1:&[Vec<M31>;26],d:&[QM31;1024],g:&[QM31;1024])->Result<(),Error> {",
+        "    check_base_columns(c1)?;",
+        "    check_secure_column(d)?;",
+        "    check_secure_column(g)"
+      ],
+      "instructions": [
+        {
+          "address": "0xb4324",
+          "op": "ja",
+          "args": "b44a8 <aspis_r1_cost_probe::host_semantic::build_with_material+0xe28>"
+        },
+        {
+          "address": "0xb4332",
+          "op": "ja",
+          "args": "b44a8 <aspis_r1_cost_probe::host_semantic::build_with_material+0xe28>"
+        },
+        {
+          "address": "0xb4340",
+          "op": "ja",
+          "args": "b44a8 <aspis_r1_cost_probe::host_semantic::build_with_material+0xe28>"
+        },
+        {
+          "address": "0xb434e",
+          "op": "ja",
+          "args": "b44a8 <aspis_r1_cost_probe::host_semantic::build_with_material+0xe28>"
+        },
+        {
+          "address": "0xb43ba",
+          "op": "je",
+          "args": "b44a8 <aspis_r1_cost_probe::host_semantic::build_with_material+0xe28>"
+        },
+        {
+          "address": "0xb4420",
+          "op": "je",
+          "args": "b44a8 <aspis_r1_cost_probe::host_semantic::build_with_material+0xe28>"
+        }
+      ],
+      "classification": "secret-derived canonicality guard branches",
+      "ledger_rows": [
+        "V357",
+        "V360",
+        "V373"
+      ],
+      "honest_domain_obligation": "Expected constant valid: canonical C1/D/G and fixed shape; JA false and decode-error JE false. Prove canonicality preserved through masking and field arithmetic and binds this caller."
+    },
+    {
+      "id": "N4",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 201,
+      "source_sha256": "ec93e05da16f97724340c17f2b15aee03e0bbf118321f503d13912f758737a4e",
+      "source_context": [
+        "    let g=fixed_k_column(&applied.g);",
+        "    let h1_padding=fixed_k_column(&applied.h1_padding);",
+        "    let audit=audit_masks(&noised_c1.c1,&applied.mask_only_c1,&d,&g,&h1_padding,&masks);",
+        "    if audit.c1_columns_inactive_balanced!=16",
+        "        || audit.mask_only_columns_inactive_balanced!=10",
+        "        || !audit.d_inactive_balanced"
+      ],
+      "instructions": [
+        {
+          "address": "0xa47a2",
+          "op": "jne",
+          "args": "a4486 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x456>"
+        },
+        {
+          "address": "0xa47b1",
+          "op": "jne",
+          "args": "a4486 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x456>"
+        },
+        {
+          "address": "0xa47bf",
+          "op": "je",
+          "args": "a4486 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x456>"
+        },
+        {
+          "address": "0xa47cd",
+          "op": "je",
+          "args": "a4486 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x456>"
+        },
+        {
+          "address": "0xa47db",
+          "op": "je",
+          "args": "a4486 <aspis_r1_cost_probe::prover::prove_masked_attempt+0x456>"
+        },
+        {
+          "address": "0x9d835",
+          "op": "sete",
+          "args": "bl"
+        },
+        {
+          "address": "0x9d8e5",
+          "op": "sete",
+          "args": "bl"
+        },
+        {
+          "address": "0x9dab0",
+          "op": "pcmpeqd",
+          "args": "xmm3,xmm1"
+        },
+        {
+          "address": "0x9dacf",
+          "op": "pcmpeqd",
+          "args": "xmm0,xmm1"
+        },
+        {
+          "address": "0x9daf4",
+          "op": "pcmpeqd",
+          "args": "xmm4,xmm1"
+        }
+      ],
+      "classification": "secret-derived mask audit guards; local comparisons use SETcc/SIMD",
+      "ledger_rows": [
+        "V354",
+        "V360",
+        "V373"
+      ],
+      "honest_domain_obligation": "Expected constant valid: balanced counts 16/10 and D/G/H1 inactive sums zero; all listed owner error branches untaken. Prove balance and compiler inactive-column invariants. Local SIMD comparison does not remove aggregate guard."
+    },
+    {
+      "id": "N5",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "line": 74,
+      "source_sha256": "12cf92baea4d0f664bbd31355dc7f1fbdd39d30b3f997e688009a499ae80d830",
+      "source_context": [
+        "        .map_err(|_| Error::Public)?;",
+        "        if h1.len()!=1024 {return Err(Error::Public);}",
+        "        if state_only_copy_helper_sum(&h1) != Some(QM31::ZERO) {",
+        "            return Err(Error::Public);",
+        "        }",
+        "        let c2_root=commitments.c2(&h1,g)?;"
+      ],
+      "instructions": [
+        {
+          "address": "0xb482c",
+          "op": "jne",
+          "args": "b488c <aspis_r1_cost_probe::host_semantic::build_with_material+0x120c>"
+        },
+        {
+          "address": "0xb4836",
+          "op": "je",
+          "args": "b488c <aspis_r1_cost_probe::host_semantic::build_with_material+0x120c>"
+        },
+        {
+          "address": "0xa4b85",
+          "op": "jne",
+          "args": "a4bb3 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xb83>"
+        },
+        {
+          "address": "0xa4b8f",
+          "op": "jne",
+          "args": "a4bb3 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xb83>"
+        },
+        {
+          "address": "0xa4b99",
+          "op": "jne",
+          "args": "a4bb3 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xb83>"
+        },
+        {
+          "address": "0xa4ba3",
+          "op": "jne",
+          "args": "a4bb3 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xb83>"
+        },
+        {
+          "address": "0xa4bb1",
+          "op": "je",
+          "args": "a4be6 <aspis_r1_cost_probe::prover::prove_masked_attempt+0xbb6>"
+        }
+      ],
+      "classification": "secret-derived helper total/Option guards",
+      "ledger_rows": [
+        "V357",
+        "V360",
+        "V373"
+      ],
+      "honest_domain_obligation": "Expected constant when reached after successful nonpole helper: Some(0), no semantic error; b482c/b4836 false, owner JNE false and final JE true. Native helperSum plus padding/copy-balance association remains P."
+    },
+    {
+      "id": "N6",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
+      "line": 105,
+      "source_sha256": "d42126b787299781e33849e49ed8a866fc850ee7b6385b8df8aacc374aafa186",
+      "source_context": [
+        "            }",
+        "            let polynomial = interpolate(&values);",
+        "            if state_only_boundary_sum(&polynomial) != running {",
+        "                return Err(Error::Boundary { round });",
+        "            }",
+        "            let polynomial_bytes=encode_polynomial(&polynomial);"
+      ],
+      "instructions": [
+        {
+          "address": "0xc2bf0",
+          "op": "jne",
+          "args": "c2d35 <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck_round+0x355>"
+        },
+        {
+          "address": "0xc2bfe",
+          "op": "jne",
+          "args": "c2d35 <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck_round+0x355>"
+        },
+        {
+          "address": "0xc2c0c",
+          "op": "jne",
+          "args": "c2d35 <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck_round+0x355>"
+        },
+        {
+          "address": "0xc2c1a",
+          "op": "jne",
+          "args": "c2d35 <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck_round+0x355>"
+        },
+        {
+          "address": "0xc3122",
+          "op": "je",
+          "args": "c31aa <aspis_r1_cost_probe::host_sumcheck::prove_sumcheck_rounds+0x15a>"
+        }
+      ],
+      "classification": "secret-derived boundary/terminal equality guards",
+      "ledger_rows": [
+        "V357",
+        "V360",
+        "V373"
+      ],
+      "honest_domain_obligation": "Expected constant on valid honest reached sumcheck: boundary equality all JNE false; terminal JE true. Requires native relation/degree/interpolation/oracle correspondence; not proved here."
+    },
+    {
+      "id": "N7",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 16,
+      "source_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "source_context": [
+        " let mut s=String::new();io::stdin().read_to_string(&mut s)?;let q:Value=serde_json::from_str(&s)?;",
+        " if q.get(\"action\").is_some(){println!(\"{}\",plan::run(&q)?);return Ok(())}",
+        " let keys:Vec<Keypair>=q[\"keys\"].as_array().unwrap().iter().map(|p|{let b:Vec<u8>=serde_json::from_slice(&fs::read(p.as_str().unwrap()).unwrap()).unwrap();Keypair::try_from(b.as_slice()).unwrap()}).collect();",
+        " let ixs:Vec<Instruction>=q[\"instructions\"].as_array().unwrap().iter().map(|i|Instruction{program_id:Address::from_str(i[\"program\"].as_str().unwrap()).unwrap(),accounts:i[\"accounts\"].as_array().unwrap().iter().map(|a|AccountMeta{pubkey:Address::from_str(a[0].as_str().unwrap()).unwrap(),is_signer:a[1].as_bool().unwrap(),is_writable:a[2].as_bool().unwrap()}).collect(),data:unhex(i[\"data\"].as_str().unwrap())}).collect();",
+        " let conf=TransactionConfig::empty().with_priority_fee(10000).with_compute_unit_limit(1_400_000).with_loaded_accounts_data_size_limit(8*1024*1024).with_heap_size(256*1024);",
+        " let m=Message::try_compile_with_config(&keys[0].pubkey(),&ixs,q[\"blockhash\"].as_str().unwrap().parse()?,conf)?;"
+      ],
+      "instructions": [
+        {
+          "address": "0x8bf0c",
+          "op": "jne",
+          "args": "8bf46 <serde_json::de::Deserializer<R>::parse_integer+0x66>"
+        },
+        {
+          "address": "0x8bf22",
+          "op": "jae",
+          "args": "8c0e9 <serde_json::de::Deserializer<R>::parse_integer+0x209>"
+        },
+        {
+          "address": "0x8bf4e",
+          "op": "jae",
+          "args": "8c0de <serde_json::de::Deserializer<R>::parse_integer+0x1fe>"
+        },
+        {
+          "address": "0x8bf99",
+          "op": "jae",
+          "args": "8bfda <serde_json::de::Deserializer<R>::parse_integer+0xfa>"
+        },
+        {
+          "address": "0x8bf9e",
+          "op": "jbe",
+          "args": "8bf70 <serde_json::de::Deserializer<R>::parse_integer+0x90>"
+        },
+        {
+          "address": "0x8bf86",
+          "op": "je",
+          "args": "8c017 <serde_json::de::Deserializer<R>::parse_integer+0x137>"
+        },
+        {
+          "address": "0x8df20",
+          "op": "call",
+          "args": "8bee0 <serde_json::de::Deserializer<R>::parse_integer>"
+        },
+        {
+          "address": "0x8dee1",
+          "op": "call",
+          "args": "8bee0 <serde_json::de::Deserializer<R>::parse_integer>"
+        },
+        {
+          "address": "0x8df96",
+          "op": "jae",
+          "args": "8dfc7 <<serde_json::de::SeqAccess<R> as serde_core::de::SeqAccess>::next_element_seed+0x1f7>"
+        }
+      ],
+      "classification": "secret byte decimal digit/zero control and cursor-dependent addresses",
+      "ledger_rows": [
+        "V360",
+        "V373",
+        "V396"
+      ],
+      "honest_domain_obligation": "Not constant on valid decimal key arrays: secret seed bytes 0..31 have widths 1..3. Remaining 32 public-key bytes also parsed. Prove/storage observer binding remains P. Prove action has no JSON private witness fields; note selects deterministic fixture."
+    },
+    {
+      "id": "N8",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+      "line": 356,
+      "source_sha256": "ff5cc5bf6e0232ed7fa92a2a15b0cdb86d2e56a6cb4fda56ef3583a39b79f165",
+      "source_context": [
+        "    Ok(())",
+        "}",
+        "fn validate_zero_tail(limbs:&[u32;8],mut i:usize)->Result<(),Error> {",
+        "    while i<8 {if limbs[i]!=0 {return Err(Error::WrongField);}i+=1;}",
+        "    Ok(())",
+        "}"
+      ],
+      "instructions": [
+        {
+          "address": "0xbab92",
+          "op": "jne",
+          "args": "bacdb <aspis_r1_cost_probe::host_commitment::Commitment::new_salted+0x50b>"
+        },
+        {
+          "address": "0xbaba1",
+          "op": "jne",
+          "args": "bacdb <aspis_r1_cost_probe::host_commitment::Commitment::new_salted+0x50b>"
+        },
+        {
+          "address": "0xbabb0",
+          "op": "jne",
+          "args": "bacdb <aspis_r1_cost_probe::host_commitment::Commitment::new_salted+0x50b>"
+        },
+        {
+          "address": "0xbabc5",
+          "op": "jne",
+          "args": "bacdb <aspis_r1_cost_probe::host_commitment::Commitment::new_salted+0x50b>"
+        }
+      ],
+      "classification": "secret-derived extension-tail guards before public lane partition",
+      "ledger_rows": [
+        "V359",
+        "V360",
+        "V373"
+      ],
+      "honest_domain_obligation": "Expected constant on valid base/secure messages: excluded higher limbs zero; needs native domain proof; CT feature retains early guard branches."
+    },
+    {
+      "id": "R1",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 181,
+      "source_sha256": "e696427450eb2b9061a24ad46dd4b3432d9fc5bae14aba5938840a4e8bc61e34",
+      "source_context": [
+        "    }",
+        "",
+        "    pub fn generate() -> Result<Self, StateOnlyAttemptEntropyError> {",
+        "        for _ in 0..ENTROPY_RETRY_LIMIT {",
+        "            let mut bytes = Zeroizing::new([0u8; 96]);",
+        "            getrandom::fill(bytes.as_mut())?;"
+      ],
+      "instructions": [
+        {
+          "address": "0x13cdce",
+          "op": "je",
+          "args": "13ce06 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate+0x176>"
+        },
+        {
+          "address": "0x13cde7",
+          "op": "je",
+          "args": "13ce06 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate+0x176>"
+        },
+        {
+          "address": "0x13ce00",
+          "op": "jne",
+          "args": "13cead <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate+0x21d>"
+        },
+        {
+          "address": "0x13cd03",
+          "op": "jle",
+          "args": "13cd20 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate+0x90>"
+        },
+        {
+          "address": "0x13cd14",
+          "op": "jne",
+          "args": "13ccf5 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate+0x65>"
+        },
+        {
+          "address": "0x13cd63",
+          "op": "jne",
+          "args": "13ce69 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate+0x1d9>"
+        }
+      ],
+      "classification": "96-byte zero rejection plus OS-status/partial-fill branches",
+      "ledger_rows": [
+        "V352",
+        "V373",
+        "V371"
+      ],
+      "honest_domain_obligation": "96-byte route, including random nonce-zero guard; independent entropy/retry/environment and public failure witness-independence remain P. generate_for_mask_nonce not linked."
+    },
+    {
+      "id": "R4",
+      "source_revision": "1f02f0ecd7f022670d1a967bd31f33ad8aeb8705",
+      "path": "crates/aspis-core/src/field.rs",
+      "line": 213,
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "source_context": [
+        "    /// Multiplicative inverse via a fixed addition chain for `P - 2`.",
+        "    /// Panics on zero.",
+        "    pub fn inv(self) -> M31 {",
+        "        #[cfg(feature = \"r0-op-count\")]",
+        "        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FInv);",
+        "        assert!(self.0 != 0, \"inverse of zero\");"
+      ],
+      "instructions": [
+        {
+          "address": "0x199fd2",
+          "op": "je",
+          "args": "19a82f <aspis_core::field::M31::inv+0x85f>"
+        },
+        {
+          "address": "0x19b338",
+          "op": "je",
+          "args": "19b7e7 <aspis_core::field::QM31::try_inv+0x4d7>"
+        }
+      ],
+      "classification": "secret-derived inverse zero guard",
+      "ledger_rows": [
+        "V373",
+        "V380-inversion",
+        "V371"
+      ],
+      "honest_domain_obligation": "M31 inverse public interpolation denominator versus secret/challenge helper denominator; source containment/nonpole/native zero boundary remains P."
+    }
+  ]
+}
