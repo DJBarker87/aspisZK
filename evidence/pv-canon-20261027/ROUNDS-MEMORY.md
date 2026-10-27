@@ -13,3 +13,12 @@ PV_Canon_Rounds then instantiates that theorem once with the already-proved
 current one-round law. The base branch is kernel reflexivity, not broad simp.
 This isolates the induction from the large closed dictionary and keeps the
 same quantified caller/Result statement. Compile the generic predecessor first.
+
+44341 rejected the generic proof at the default heartbeat limit while reducing
+the terminal branch. 44352 changed the rewrite to target the left/right roots
+explicitly, but its kernel check still reached -M7000 (exit 1). This invalidates
+the proposed normalization fix as a completed proof. The recursive transport
+and current wrapper are archived as unsubmitted drafts. The checked one-round
+transport and exact successful-prefix theorem remain accepted. No full
+recursive caller equation is credited. The small RoundVisit control invariant
+is explicitly a model until associated with the actual recursive Result body.

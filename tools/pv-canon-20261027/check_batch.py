@@ -1,11 +1,11 @@
 """Finite, sequential focused build in one admitted 8G scope; continue only independent targets after errors; never an idle reservation."""
 from pathlib import Path
 import subprocess,json,hashlib,sys,time
-R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-canon-20261027';B='/home/dombarker/project-offloads';D=B+'/codex-pv-canon-20261027';H='dombarker@100.108.41.90';tp=E/'tally.json';t=json.loads(tp.read_text());modules=sys.argv[1:];assert modules and len(modules)<=97-t['lean']
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-canon-20261027';B='/home/dombarker/project-offloads';D=B+'/codex-pv-canon-20261027';H='dombarker@100.108.41.90';tp=E/'tally.json';t=json.loads(tp.read_text());modules=[a for a in sys.argv[1:] if a!='--audit'];audit='--audit' in sys.argv;assert modules and len(modules)<=(100 if audit else 97)-t['lean']
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();plan=[]
 # Only the first ID is consumed by a refusal; the rest are assigned after admission.
 m=modules[0];p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');assert p.name.startswith('PV_Canon_')
-n=t['next_id'];assert n<44497;t['next_id']+=1;t['attempts'].append(dict(id=n,module=m,planned_batch=True))
+n=t['next_id'];assert n<=(44499 if audit else 44496);t['next_id']+=1;t['attempts'].append(dict(id=n,module=m,planned_batch=True))
 plan=[dict(id=n,module=m,sha256=hashlib.sha256(p.read_bytes()).hexdigest())]
 tp.write_text(json.dumps(t,indent=2)+'\n');tag='batch-'+str(n)
 (E/(tag+'-plan.json')).write_text(json.dumps(dict(revision=rev,plan=plan,pending_unassigned=modules[1:]),indent=2)+'\n')
@@ -14,7 +14,7 @@ pre=subprocess.run(['ssh',H,'python3 -'],input=precode,text=True,capture_output=
 if pre.returncode:print(pre.stdout+pre.stderr+'UNCHARGED; wait 180s');raise SystemExit(pre.returncode)
 for m in modules[1:]:
  p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');assert p.name.startswith('PV_Canon_')
- n=t['next_id'];assert n<44497;t['next_id']+=1;t['attempts'].append(dict(id=n,module=m,planned_batch=True));plan.append(dict(id=n,module=m,sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
+ n=t['next_id'];assert n<=(44499 if audit else 44496);t['next_id']+=1;t['attempts'].append(dict(id=n,module=m,planned_batch=True));plan.append(dict(id=n,module=m,sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
 tp.write_text(json.dumps(t,indent=2)+'\n');(E/(tag+'-plan.json')).write_text(json.dumps(dict(revision=rev,plan=plan),indent=2)+'\n')
 for item in plan:
  p=R/'docs/research/v8-r0-zk-20261009/lean'/(item['module']+'.lean');(E/f"{item['id']}-source.lean.txt").write_bytes(p.read_bytes())

@@ -4,7 +4,7 @@ namespace R1Z.PV_Canon
 open Aeneas Aeneas.Std ProverRwFull
  def limbs (q : aspis_core.field.QM31) : List U32 := [q.c0.a,q.c0.b,q.c1.a,q.c1.b]
  theorem quartic_iff_limbs (q : aspis_core.field.QM31) : Q q ↔ ∀ x ∈ limbs q, M x := by
-  simp only [limbs,List.mem_cons,List.not_mem_nil,or_false,forall_eq_or_imp,forall_eq,Q,C]
+  simp only [limbs,List.mem_cons,List.not_mem_nil,or_false,forall_eq_or_imp,forall_eq,Q,C,and_assoc]
  theorem polynomial_iff_limbs (p : Array aspis_core.field.QM31 28#usize) :
     Coeffs p ↔ ∀ x ∈ p.val.flatMap limbs, M x := by
   constructor
