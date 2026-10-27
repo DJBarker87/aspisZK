@@ -11112,3 +11112,24 @@ is authoritative. Launched pv-srcid9 (same branch, IDs 42700-42999, 100 Lean, no
 the 21 source root-parent cells and the root-helper equation in Lean from the pinned mathematical cells,
 the merge gate once Stream A answers, Records from runjoin12 if published. Six slots: cblib, runjoin12,
 optb, extract, inv, srcid9. Rows removed outright: 0. Privacy target not yet established.
+
+## D255 (Stream B) 2026-10-27 07:55 UTC: the three "project gaps" were a wrong-source comparison again; ruling (h) corrected
+
+Stream A: the shared copies of AspisFormal.V6PublishedTheoremInterfaces (80610f3a…), R0P.LogUpChain
+(89e6f147…) and R0P.SemRounds (84cd1819…) byte-match research HEAD files under the selected soundness
+cohort, docs/research/100bit-spend-path-20261013/lean/bridge-selected-current-20261018/accepted-current/…,
+which is where these module names resolve for the env-J closure (rebuild attempts 30037/30159/30161,
+selected at d6dd1ca963). The lead verified all three sha256 prefixes against those files at HEAD and
+found the resolution in evidence/envj-rebuild-20261026/EJR_final-inventory.json. So D254's "three project
+gaps" were not gaps: srcid8 compared against same-named files at other paths (AspisFormal/AspisFormal/…,
+docs/research/v8-r0-sem-proof-20261008/lean/R0P/…). Cause: lead ruling (h) named the 2026-10-15
+import-source-pins.json as the authority, and that table maps these names to the other files: the
+worker followed the ruling correctly; the ruling was wrong. Correction (h') in pv-common.txt: the
+authority is the rebuild's own resolution record (EJR_final-inventory.json and the rebuild2 record); a
+grep hit or the older table is not a resolution. Second same-pattern error today (D243), so a module name
+is never a file identity in Stream B instructions. Merge gate: with the correct resolution, the three are
+expected CLEAN; srcid9 will rewrite MERGE-GATE.md under (h') and, if every project object then matches,
+the lead merges codex/pv-srcid3-20261026. Stream A asked that the accepted-current objects not be
+recompiled or overwritten; if the privacy closure needs the newer variants (e.g. a declaration added in
+6c1455a61e), that is a separate cohort built privately and named to Stream A. Rows removed outright: 0.
+Privacy target not yet established.
