@@ -8,3 +8,5 @@ Exact failed operation:
 `scp -q evidence/extraction-assoc20-20261027/XSb_PredecessorAudit.lean dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-assoc-a6-cache-20261027/XSb_generated/XSb_PredecessorAudit.lean`
 
 No compiler process started. Budget compiler0/100,Kani0/10; one admitted precompiler attempt slot reserved, conservatively1/100 slots if preflights count. Budget is NOT exhausted. Full-budget instruction cannot override the explicit persistent-infrastructure stop. No scope started; actual wall/RSS/swap/axioms for XSb_L001 are null (not zero measurements). No final co-import/root replay, full manifest or final END cache snapshot. The recovered102-object snapshot precedes the failed uploads and is labelled START/recovered only. Persistent cache and any upload partial retained; no cache/key deletion, no own compiler/Rust/Kani process launched.
+
+Retry logs normalize terminal CRLF to LF; diagnostic text is unchanged. Final local statement-hash comparison passed; all79 selected prior cache objects match. No host action followed stop.
