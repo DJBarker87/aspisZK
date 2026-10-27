@@ -24,3 +24,13 @@ finding. No top-premise removal credit.
 All attempts use the existing host admission and launcher, one scope at a time,
 -M7000, MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64. No shipped source,
 other prefix, live worktree, key or artifact changed; ELF rebuild not triggered.
+
+## Retained coefficient and linear inputs
+
+JGd_LinearValue.family0/family16 give exact numeric values of the two mask
+linears on the actual retained round point. JGd_Coefficients.populated/value
+identify all 27 actual populated coefficients using 26 named basis/write
+steps. All source steps and both assembled loop results compile with standard
+axioms only. Attempts through058 are complete. No final mask, terminal gate
+or preparation acceptance is claimed at this checkpoint. Polynomial/power
+modules are generated candidates awaiting focused compilation.
