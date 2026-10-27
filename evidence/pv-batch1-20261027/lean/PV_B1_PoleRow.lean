@@ -21,7 +21,7 @@ theorem side_value (values : Rows) (chi : Q) (clear : Bool) (row side : Usize)
     (hr : Slice.index_usize values row = ok r)
     (hs : Array.index_usize r side = ok pair) :
     two values chi clear row active side = ok (clear && sideTest active chi pair) := by
-  simp only [two,read,hr,hs,PV_B1_ArrayRead.first,PV_B1_ArrayRead.second,
+  simp only [PV_B1_PoleInner.two,PV_B1_PoleInner.read,hr,hs,PV_B1_ArrayRead.first,PV_B1_ArrayRead.second,
     bind_tc_ok,PV_B1_PoleKeep.source,sideTest,Bool.and_assoc] <;> rfl
 
 theorem source (values : Rows) (chi : Q) (clear : Bool) (row : Usize)
