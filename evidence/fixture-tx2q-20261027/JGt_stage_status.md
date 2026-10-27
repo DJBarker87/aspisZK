@@ -1,4 +1,4 @@
-# Current TX2 continuation boundary
+# Interim TX2 boundary — superseded by JGt_TX2_HANDOFF.md
 
 Checked through attempt 008: six successful Lean processes (002–007), two rejected (001,008). The four loop8 native body steps and full loop8 source are established, with only standard axioms. The initial rejected concrete update was replaced by symbolic Array.update_spec. The rejected loop9 step has a newly isolated generic SumStep proposal, not yet compiled.
 
