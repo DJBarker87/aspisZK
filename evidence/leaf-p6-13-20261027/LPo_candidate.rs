@@ -29,3 +29,58 @@ fn range<const PART: usize>() {
 #[kani::proof] #[kani::unwind(10)] fn LPo_round1() { range::<3>(); }
 #[kani::proof] #[kani::unwind(10)] fn LPo_final() { range::<4>(); }
 #[kani::proof] #[kani::unwind(10)] fn LPo_passthrough() { range::<5>(); }
+
+// Unconstrained return abstraction, not an arithmetic contract: every bit-pattern
+// of the returned value is covered. No assumed equality or canonicality.
+fn LPo_any_inactive(_: &[u8]) -> Option<E> {
+    if kani::any() { None } else {
+        let words: [u32; 8] = kani::any();
+        Some(unsafe { core::mem::transmute::<[u32; 8], E>(words) })
+    }
+}
+fn readset<const PART: usize>() {
+    let p: [u8; compact::PROOF_BYTES] = kani::any();
+    let semantic: [u8; compact::LOGICAL_SEMANTIC] = kani::any();
+    let y1: [u8; compact::LOGICAL_Y1] = kani::any();
+    let sn: usize = kani::any(); let yn: usize = kani::any();
+    kani::assume(sn <= semantic.len() && yn <= y1.len());
+    let s = &semantic[..sn]; let y = &y1[..yn]; let sp=s.as_ptr();let yp=y.as_ptr();
+    match wide_view(&p,s,y) {
+        Err(e) => assert_eq!(e,Error::Parse),
+        Ok(v) => {
+            if PART==0 {assert!(matches!(v.variant,Variant::S2));assert_eq!(v.query_bytes.len(),0);}
+            if PART==1 {assert_eq!(v.round0.len(),224);assert!(core::ptr::eq(v.round0.as_ptr(),p[7527..7751].as_ptr()));}
+            if PART==2 {let i:usize=kani::any();kani::assume(i<32);assert_eq!(v.folded_root.unwrap()[i],p[7751+i]);}
+            if PART==3 {assert_eq!(v.round1.len(),224);assert!(core::ptr::eq(v.round1.as_ptr(),p[7783..8007].as_ptr()));}
+            if PART==4 {assert_eq!(v.final_message.len(),2048);assert!(core::ptr::eq(v.final_message.as_ptr(),p[8007..10055].as_ptr()));}
+            if PART==5 {assert_eq!(v.semantic.len(),sn);assert_eq!(v.y1.len(),yn);assert!(core::ptr::eq(v.semantic.as_ptr(),sp));assert!(core::ptr::eq(v.y1.as_ptr(),yp));}
+        }
+    }
+}
+#[kani::proof] #[kani::unwind(2)] #[kani::stub(E::from_le_bytes, LPo_any_inactive)] fn LPo_read_header(){readset::<0>()}
+#[kani::proof] #[kani::unwind(2)] #[kani::stub(E::from_le_bytes, LPo_any_inactive)] fn LPo_read_round0(){readset::<1>()}
+#[kani::proof] #[kani::unwind(2)] #[kani::stub(E::from_le_bytes, LPo_any_inactive)] fn LPo_read_root(){readset::<2>()}
+#[kani::proof] #[kani::unwind(2)] #[kani::stub(E::from_le_bytes, LPo_any_inactive)] fn LPo_read_round1(){readset::<3>()}
+#[kani::proof] #[kani::unwind(2)] #[kani::stub(E::from_le_bytes, LPo_any_inactive)] fn LPo_read_final(){readset::<4>()}
+#[kani::proof] #[kani::unwind(2)] #[kani::stub(E::from_le_bytes, LPo_any_inactive)] fn LPo_read_passthrough(){readset::<5>()}
+
+#[kani::proof] #[kani::unwind(10)]
+fn LPo_decode_words() {
+    let b:[u8;32]=kani::any();
+    let w:[u32;8]=core::array::from_fn(|i| u32::from_le_bytes(b[4*i..4*i+4].try_into().unwrap()));
+    let actual=E::from_le_bytes(&b);
+    let valid=w.iter().all(|&x| x<2147483647);
+    match actual {
+        None=>assert!(!valid),
+        Some(e)=>{assert!(valid);let out=e.to_limbs();let i:usize=kani::any();kani::assume(i<8);assert_eq!(out[i],w[i]);}
+    }
+}
+fn LPo_raw_inactive(b:&[u8])->Option<E> {
+    Some(unsafe{core::mem::transmute::<[u8;32],E>(b.try_into().unwrap())})
+}
+#[kani::proof] #[kani::unwind(2)] #[kani::stub(E::from_le_bytes, LPo_raw_inactive)]
+fn LPo_inactive_copy() {
+    let p:[u8;compact::PROOF_BYTES]=kani::any();let s:[u8;1]=kani::any();let y:[u8;1]=kani::any();
+    let expected=LPo_raw_inactive(&p[7495..7527]).unwrap();
+    let v=wide_view(&p,&s,&y).unwrap();assert_eq!(v.inactive,expected);
+}

@@ -36,7 +36,7 @@ if kind=='kani':
 else:
  src='LPo_generated/'+target+'.lean';obj='LPo_objects/'+target+'.olean'
  cfg['kind']='lean'
- cfg.update(module=target,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R',('LPo_inherited' if kind=='inherited' else 'LPo_generated'),'-o',obj,src],env={'LEAN_PATH':B+'/LPo_objects:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'},deps_fingerprint={'scope':'coherent SInt2 objects plus LPl new modules'},expected_time='single symbolic module; no concrete large numeral normalization')
+ cfg.update(module=target,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','LPo_generated','-o',obj,src],env={'LEAN_PATH':B+'/LPo_objects:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'},deps_fingerprint={'scope':'coherent SInt2 objects plus LPl new modules'},expected_time='single symbolic module; no concrete large numeral normalization')
  r=ssh(f'mkdir -p {B}/LPo_generated {B}/LPo_objects');assert r.returncode==0,r.stderr
  if kind == 'replay':
   R='/home/dombarker/project-offloads/codex-cx-replay-dry-20261026/'

@@ -1,0 +1,51 @@
+import LPo_View
+open Aeneas Aeneas.Std Result LPl_Kit_Release LPl_Kit_FieldExternal
+set_option autoImplicit false
+namespace LPo.View
+
+/-- Exactly the five read ranges of the native call, in execution order. -/
+def Readset (p q : Slice U8) : Prop :=
+  segment p 7495 7527 = segment q 7495 7527 ∧
+  segment p 7527 7751 = segment q 7527 7751 ∧
+  segment p 7751 7783 = segment q 7751 7783 ∧
+  segment p 7783 8007 = segment q 7783 8007 ∧
+  segment p 8007 10055 = segment q 8007 10055
+
+theorem decoded_eq (p q : Slice U8) (h : Readset p q) : decoded p = decoded q := by
+  simp only [decoded, h.1]
+
+theorem rest_eq (p q s y : Slice U8) (hp : 10055 ≤ p.val.length)
+    (hq : 10055 ≤ q.val.length) (h : Readset p q) (x : LPl_Kit_Wide) :
+    rest p s y hp x = rest q s y hq x := by
+  have hr : root p hp = root q hq := by
+    apply Subtype.ext
+    exact congrArg Subtype.val h.2.2.1
+  simp only [rest, hr, h.2.1, h.2.2.2.1, h.2.2.2.2]
+
+theorem product_readset (p q s y : Slice U8) (hp : 10055 ≤ p.val.length)
+    (hq : 10055 ≤ q.val.length) (h : Readset p q) (x : Option LPl_Kit_Wide) :
+    product p s y hp x = product q s y hq x := by
+  cases x with
+  | none => rfl
+  | some x => exact congrArg core.result.Result.Ok (rest_eq p q s y hp hq h x)
+
+/-- All inactive values, both Result arms and every unobserved byte/frame.
+    No selected output or canonicality assumption occurs in the statement. -/
+theorem five_range_readset (p q s y : Slice U8) (hp : 10055 ≤ p.val.length)
+    (hq : 10055 ≤ q.val.length) (h : Readset p q) :
+    verifier.candidate.wide_view p s y = verifier.candidate.wide_view q s y := by
+  rw [model_product p s y hp, model_product q s y hq, decoded_eq p q h,
+    product_readset p q s y hp hq h (decoded q)]
+
+theorem frozen_product (proof semantic y1 : Slice U8)
+    (len : proof.val.length = 57607) :
+    verifier.candidate.wide_view proof semantic y1 =
+      ok (product proof semantic y1 (by omega) (decoded proof)) :=
+  model_product proof semantic y1 (by omega)
+
+#print axioms decoded_eq
+#print axioms rest_eq
+#print axioms product_readset
+#print axioms five_range_readset
+#print axioms frozen_product
+end LPo.View
