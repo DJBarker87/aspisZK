@@ -1,0 +1,42 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0035); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21ByteLengths.lean:11:11: error: Tactic `rfl` failed: The left-hand side
+  (List.map f []).flatten.length
+is not definitionally equal to the right-hand side
+  [].length * n
+
+case nil
+α : Type
+f : α → Bytes
+n : ℕ
+h : ∀ x ∈ [], List.length (f x) = n
+⊢ (List.map f []).flatten.length = [].length * n
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21ByteLengths.lean:15:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b - c ≥ 1
+where
+ a := ↑(xs.length + 1) * ↑n
+ b := ↑n
+ c := ↑xs.length * ↑n
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21ByteLengths.lean:22:52: error: Function expected at
+  List.length_ofFn
+but this term has type
+  (List.ofFn ?m.7).length = ?m.5
+
+Note: Expected a function because this term is being applied to the argument
+  _
+'R1Z.ProverRw21ByteLengths.flatten_length' depends on axioms: [sorryAx]
+'R1Z.ProverRw21ByteLengths.ofFn_flatten_length' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverRw21ByteLengths.wide_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRw21ByteLengths.quarter_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRw21ByteLengths.wides_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRw21ByteLengths.word_length' depends on axioms: [propext]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.57
+	Maximum resident set size (kbytes): 4066220
+	Swaps: 0
+	Exit status: 1

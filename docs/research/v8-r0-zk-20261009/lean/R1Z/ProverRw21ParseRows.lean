@@ -1,0 +1,49 @@
+import R1Z.ProverRw21CompactValues
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21ParseRows
+open ProverCommitCompact43 ProverCommitCompactRows46 ProverCommitCompactSource46
+open ProverCommitPublish43 (Bytes)
+
+structure RowData where
+  shape : Shape
+  frame : Bytes
+  raw : Bytes
+
+def wire (r : RowData) : Bytes := r.frame ++ r.raw
+def model (r : RowData) : Row := ⟨r.frame,r.shape.compact,r.raw,chunks r.raw⟩
+def WellFormed (r : RowData) : Prop := r.frame.length=5 ∧ r.raw.length=r.shape.size
+
+theorem parsed_wire (r : RowData) (rest : Bytes) (h : WellFormed r) :
+    parsed r.shape (wire r ++ rest) = model r := by
+  unfold parsed wire model
+  rcases h with ⟨hf,hr⟩
+  have tf : r.frame.take 5=r.frame := by rw [← hf]; exact List.take_length
+  have df : r.frame.drop 5=[] := by rw [← hf]; exact List.drop_length
+  have tr : r.raw.take r.shape.size=r.raw := by rw [← hr]; exact List.take_length
+  simp only [List.append_assoc,List.take_append,List.drop_append,hf,hr,tf,df,tr,
+    Nat.sub_self,Nat.zero_sub,Nat.sub_zero,List.take_zero,List.nil_append,List.append_nil,
+    List.drop_zero,List.length_nil,List.take_nil]
+
+theorem drop_wire (r : RowData) (rest : Bytes) (h : WellFormed r) :
+    (wire r ++ rest).drop (5+r.shape.size)=rest := by
+  rw [← show (wire r).length=5+r.shape.size by
+    simp only [wire,List.length_append,h.1,h.2]]
+  exact List.drop_left
+
+theorem parse_wire (rs : List RowData) (h : ∀ r∈rs, WellFormed r) :
+    parseRows (rs.map RowData.shape) (rs.map wire).flatten=rs.map model := by
+  induction rs with
+  | nil => rfl
+  | cons r rs ih =>
+    simp only [List.map_cons,List.flatten_cons,parseRows]
+    rw [parsed_wire r _ (h r (List.mem_cons_self ..)),drop_wire r _ (h r (List.mem_cons_self ..)),
+      ih (fun q hq => h q (List.mem_cons_of_mem r hq))]
+
+#print axioms wire
+#print axioms model
+#print axioms WellFormed
+#print axioms parsed_wire
+#print axioms drop_wire
+#print axioms parse_wire
+end R1Z.ProverRw21ParseRows

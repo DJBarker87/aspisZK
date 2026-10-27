@@ -1,0 +1,38 @@
+import R1Z.ProverRw21ByteLengths
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21QueryLengths
+open ProverRw21ProtocolOutput ProverRw21ByteLengths
+
+theorem c1 (o : Opening) : (query o).c1.length=480 := by
+  unfold query
+  apply ofFn_flatten_length (k := 120) |>.trans
+  · intro i
+    simp only [List.length_append,quarter_length]
+    rw [ofFn_flatten_length (k := 4) _ (fun _ => word_length _)]
+  · rfl
+
+theorem c2 (o : Opening) : (query o).c2.length=128 := by
+  unfold query
+  have h := ofFn_flatten_length (fun i : Fin 4 => quarter (o.secure i 0) ++ quarter (o.secure i 1))
+    (fun _ => by simp only [List.length_append,quarter_length]; rfl)
+  exact h
+
+theorem folded (o : Opening) : (query o).folded.length=128 := wides_length _
+
+theorem query_bytes (o : Opening) : (ProverCommitPublish43.queryBytes (query o)).length=832 := by
+  simp only [ProverCommitPublish43.queryBytes,List.length_append,c1,c2,folded]
+  change 480+128+(List.ofFn o.salt1).length+(List.ofFn o.salt2).length+128+(List.ofFn o.saltf).length=832
+  simp only [List.length_ofFn]
+
+theorem all (t : Transcript) :
+    ((List.ofFn (fun i => query (t.openings i))).map ProverCommitPublish43.queryBytes).flatten.length=18304 := by
+  rw [List.map_ofFn]
+  exact ofFn_flatten_length _ (fun i => query_bytes _)
+
+#print axioms c1
+#print axioms c2
+#print axioms folded
+#print axioms query_bytes
+#print axioms all
+end R1Z.ProverRw21QueryLengths

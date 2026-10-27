@@ -1,0 +1,69 @@
+import R1Z.ProverRw21ParseRows
+import R1Z.ProverRw21SemanticLengths
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21SemanticRows
+open ProverRw21ProtocolOutput ProverRw21ParseRows
+open ProverCommitCompact43 ProverCommitCompactSource46 ProverCommitCompactRows46
+open ProverRw21CompactValues ProverCommitValueRange47 ProverRw21CellLists
+open ProverCommitPublish43 (Bytes)
+
+def rowData (s : Semantic) (r : Fin 27) : RowData :=
+  ⟨shape r.val,[tag r.val] ++ word (size r.val),payload s r⟩
+
+theorem formed (s : Semantic) (r : Fin 27) : WellFormed (rowData s r) := by
+  constructor
+  · simp only [rowData,List.length_append,List.length_singleton,ProverRw21ByteLengths.word_length]
+  · exact ProverRw21SemanticLengths.payload_size s r
+
+theorem wire_record (s : Semantic) (r : Fin 27) : wire (rowData s r)=record s r := rfl
+
+theorem data_shapes (s : Semantic) :
+    (List.ofFn (rowData s)).map RowData.shape=shapes := by
+  rw [List.map_ofFn]
+  change List.ofFn (fun r : Fin 27 => shape r.val) = (List.range 27).map shape
+  apply List.ext_getElem
+  · simp only [List.length_ofFn,List.length_map,List.length_range]
+  · intro i hi hj
+    simp only [List.getElem_ofFn,List.getElem_map,List.getElem_range]
+
+theorem parsed_records (s : Semantic) :
+    parseRows shapes (List.ofFn (record s)).flatten=
+      (List.ofFn (rowData s)).map model := by
+  rw [← data_shapes s]
+  have eq : (List.ofFn (rowData s)).map wire=List.ofFn (record s) := by
+    rw [List.map_ofFn]
+    rfl
+  rw [← eq]
+  exact parse_wire _ (by intro r hr; obtain ⟨i,rfl⟩ := List.mem_ofFn.mp hr; exact formed s i)
+
+theorem single_chunks (x : E) : chunks (wide x)=[bytes x] := by
+  change chunks (List.ofFn (bytes x))=[bytes x]
+  rw [← List.append_nil (List.ofFn (bytes x)),chunk_cons]
+  rfl
+
+theorem compact_payload (s : Semantic) (r : Fin 27) (hr : 14≤r.val) :
+    ∀ c∈chunks (payload s r), highZero c := by
+  by_cases h14 : r.val=14
+  · have hp : payload s r=wide (embed s.mask) := by simp [payload,h14]
+    rw [hp,single_chunks]
+    intro c hc
+    rw [List.mem_singleton] at hc
+    subst c
+    exact embedded_high_zero _
+  · by_cases hm : 15≤r.val ∧ r.val≤24
+    · simpa only [payload,show r.val≠2 by omega,if_false,h14,dif_pos hm] using
+        high_zero (s.rounds ⟨r.val-15,by omega⟩)
+    · by_cases h25 : r.val=25
+      · simpa [payload,h25] using high_zero s.claims
+      · have h26 : r.val=26 := by have := r.isLt; omega
+        simpa [payload,h26] using high_zero s.endpoint
+
+#print axioms rowData
+#print axioms formed
+#print axioms wire_record
+#print axioms data_shapes
+#print axioms parsed_records
+#print axioms single_chunks
+#print axioms compact_payload
+end R1Z.ProverRw21SemanticRows

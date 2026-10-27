@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21ParseRows.lean:18:49: error: unsolved goals
+r : RowData
+rest : Bytes
+hf : List.length r.frame = 5
+hr : List.length r.raw = r.shape.size
+⊢ { frame := List.take 5 r.frame ++ List.take (0 - r.shape.size) rest, compact := r.shape.compact,
+      raw :=
+        List.take r.shape.size (List.drop 5 r.frame) ++
+          (List.take (r.shape.size - (List.drop 5 r.frame).length) (List.drop 0 r.raw) ++
+            List.take (r.shape.size - (List.drop 5 r.frame).length - (List.drop 0 r.raw).length)
+              (List.drop (0 - r.shape.size) rest)),
+      cells :=
+        chunks
+          (List.take r.shape.size (List.drop 5 r.frame) ++
+            (List.take (r.shape.size - (List.drop 5 r.frame).length) (List.drop 0 r.raw) ++
+              List.take (r.shape.size - (List.drop 5 r.frame).length - (List.drop 0 r.raw).length)
+                (List.drop (0 - r.shape.size) rest))) } =
+    { frame := r.frame, compact := r.shape.compact, raw := r.raw, cells := chunks r.raw }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21ParseRows.lean:22:4: warning: This simp argument is unused:
+  List.take_length
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵h̵f̵,̵h̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵l̵e̵n̵g̵t̵h̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵[̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲f̲,̲ ̲h̲r̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ List.drop_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21ParseRows.lean:22:65: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵h̵f̵,̵h̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵l̵e̵n̵g̵t̵h̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵[̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲f̲,̲ ̲h̲r̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ List.drop_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21ParseRows.lean:23:4: warning: This simp argument is unused:
+  List.drop_length
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵h̵f̵,̵h̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵l̵e̵n̵g̵t̵h̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵l̵e̵n̵g̵t̵h̵]̵[̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲f̲,̲ ̲h̲r̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRw21ParseRows.wire' does not depend on any axioms
+'R1Z.ProverRw21ParseRows.model' depends on axioms: [propext]
+'R1Z.ProverRw21ParseRows.WellFormed' does not depend on any axioms
+'R1Z.ProverRw21ParseRows.parsed_wire' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverRw21ParseRows.drop_wire' depends on axioms: [propext]
+'R1Z.ProverRw21ParseRows.parse_wire' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

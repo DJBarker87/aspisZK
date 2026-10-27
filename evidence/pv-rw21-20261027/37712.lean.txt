@@ -1,0 +1,27 @@
+import R1Z.ProverRw21ByteLengths
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21SemanticLengths
+open ProverRw21ProtocolOutput ProverRw21ByteLengths ProverCommitCompactRows46
+
+theorem payload_size (s : Semantic) (r : Fin 27) : (payload s r).length=size r.val := by
+  unfold payload size
+  split_ifs <;> (try simp only [List.length_ofFn,wide_length,wides_length,List.length_nil]) <;> omega
+
+theorem record_size (s : Semantic) (r : Fin 27) : (record s r).length=5+size r.val := by
+  simp only [record,List.length_append,List.length_singleton,word_length,payload_size]
+
+theorem logical_length (s : Semantic) : (logical s).length=13831 := by
+  unfold logical
+  rw [List.length_append,List.length_ofFn]
+  have rows : ((List.ofFn (record s)).map List.length).sum=13799 := by
+    rw [List.map_ofFn]
+    simp only [Function.comp_apply,record_size]
+    change ((List.ofFn (fun r : Fin 27 => 5+size r.val))).sum=13799
+    norm_num [List.ofFn_succ,size]
+  rw [List.length_flatten,rows]
+
+#print axioms payload_size
+#print axioms record_size
+#print axioms logical_length
+end R1Z.ProverRw21SemanticLengths

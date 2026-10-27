@@ -1,0 +1,47 @@
+import R1Z.ProverRw21ByteLengths
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21CellLists
+open ProverCommitCompact43 ProverCommitCompactSource46
+open ProverCommitPublish43 (Bytes)
+
+def emit (cs : List Cell) : Bytes := (cs.map List.ofFn).flatten
+
+theorem emit_length (cs : List Cell) : (emit cs).length=cs.length*32 :=
+  ProverRw21ByteLengths.flatten_length _ cs 32 (fun _ _ => List.length_ofFn)
+
+theorem emit_cons (c : Cell) (cs : List Cell) :
+    emit (c::cs)=List.ofFn c ++ emit cs := rfl
+
+theorem emit_nil : emit []=[] := rfl
+
+theorem chunk_cons (c : Cell) (xs : Bytes) :
+    chunks (List.ofFn c ++ xs) = c :: chunks xs := by
+  unfold chunks
+  simp only [List.length_append,List.length_ofFn]
+  rw [show (32+xs.length)/32=xs.length/32+1 by omega,List.range_succ_eq_map]
+  simp only [List.map_cons,List.map_map]
+  congr 1
+  · funext i
+    simp only [Nat.mul_zero,Nat.zero_add,List.getElem?_append,List.length_ofFn]
+    rw [if_pos i.isLt]
+    simp only [List.getElem?_ofFn,dif_pos i.isLt,Option.getD_some]
+  · apply List.map_congr_left
+    intro k hk
+    funext i
+    change ((List.ofFn c ++ xs)[32*(k+1)+i.val]?).getD 0 = (xs[32*k+i.val]?).getD 0
+    rw [List.getElem?_append_right (by rw [List.length_ofFn]; omega),List.length_ofFn]
+    rw [show 32*(k+1)+i.val-32=32*k+i.val by omega]
+
+theorem chunks_emit (cs : List Cell) : chunks (emit cs)=cs := by
+  induction cs with
+  | nil => rfl
+  | cons c cs ih => rw [emit_cons,chunk_cons,ih]
+
+#print axioms emit
+#print axioms emit_length
+#print axioms emit_cons
+#print axioms emit_nil
+#print axioms chunk_cons
+#print axioms chunks_emit
+end R1Z.ProverRw21CellLists

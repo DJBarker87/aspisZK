@@ -14,6 +14,8 @@ q=ssh('test -d '+target+' && test ! -L '+target+' && test -x /home/dombarker/.ca
 q=ssh('mkdir -p '+src+'/tools/prover-rw-20261023/pv-rw21/proof');assert q.returncode==0
 for f in ['Cargo.toml','lib.rs']:
  subprocess.run(['scp',str(r/'tools/prover-rw-20261023/pv-rw21/proof'/f),h+':'+src+'/tools/prover-rw-20261023/pv-rw21/proof/'+f],check=True,capture_output=True)
+q=ssh('cd '+src+' && /home/dombarker/.cargo/bin/cargo metadata --offline --no-deps --format-version 1 --manifest-path tools/prover-rw-20261023/pv-rw21/proof/Cargo.toml');assert q.returncode==0,q.stderr
+(out/'metadata.json').write_text(q.stdout)
 rev=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()
 q=ssh('printf %s '+shlex.quote(rev+'+recorded-proof-inputs')+' > '+src+'/source-revision.txt');assert q.returncode==0
 cmd=['python3','tools/prover-rw-20261023/run-host.py',name,'env','CARGO_TARGET_DIR='+target,'timeout','240','/home/dombarker/.cargo/bin/cargo','kani','--manifest-path','tools/prover-rw-20261023/pv-rw21/proof/Cargo.toml','--lib','--exact','--harness',harness,'--solver','cadical','--output-format','terse','--no-overflow-checks','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions']

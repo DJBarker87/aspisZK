@@ -1,0 +1,36 @@
+import R1Z.ProverRw21ProtocolOutput
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21ByteLengths
+open ProverRw21ProtocolOutput ProverCommitValueRange47
+open ProverCommitPublish43 (Bytes)
+
+theorem flatten_length {α : Type} (f : α → Bytes) (xs : List α) (n : Nat)
+    (h : ∀ x∈xs, (f x).length=n) : (xs.map f).flatten.length=xs.length*n := by
+  induction xs with
+  | nil => simp only [List.map_nil,List.flatten_nil,List.length_nil,Nat.zero_mul]
+  | cons x xs ih =>
+    simp only [List.map_cons,List.flatten_cons,List.length_append,List.length_cons]
+    rw [h x (List.mem_cons_self ..),ih (fun y hy => h y (List.mem_cons_of_mem x hy))]
+    simp only [Nat.add_mul,Nat.one_mul]
+    omega
+
+theorem ofFn_flatten_length {n k : Nat} (f : Fin n → Bytes)
+    (h : ∀ i, (f i).length=k) : (List.ofFn f).flatten.length=n*k := by
+  have eq : List.ofFn f = (List.ofFn id).map f := by rw [List.map_ofFn]; rfl
+  rw [eq,flatten_length f _ k (fun i _ => h i),List.length_ofFn]
+
+theorem wide_length (x : E) : (wide x).length=32 := List.length_ofFn
+theorem quarter_length (x : Q) : (quarter x).length=16 := ProverCommitCompact43.low_length _
+theorem wides_length {n : Nat} (xs : Fin n → E) : (wides xs).length=n*32 :=
+  ofFn_flatten_length _ (fun _ => wide_length _)
+theorem word_length (n : Nat) : (word n).length=4 := by
+  simp only [word,List.length_map,List.length_range]
+
+#print axioms flatten_length
+#print axioms ofFn_flatten_length
+#print axioms wide_length
+#print axioms quarter_length
+#print axioms wides_length
+#print axioms word_length
+end R1Z.ProverRw21ByteLengths
