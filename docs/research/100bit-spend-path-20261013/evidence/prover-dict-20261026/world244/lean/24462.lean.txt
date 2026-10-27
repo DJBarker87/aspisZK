@@ -1,0 +1,38 @@
+import R1Z.PDict_CopyCell244
+set_option autoImplicit false
+namespace R1Z.PDict_CopyCorrect244
+open Aeneas Aeneas.Std Result ControlFlow
+
+/-- All element types and all arrays. The proof uses a symbolic invariant and
+decreasing remaining count; no concrete iteration or callback is normalized. -/
+theorem loop_value {T : Type} (rows : Array T 1024#usize) (index : Usize) :
+    PDict_CopySource244.coefficients.copy_owned_loop rows rows index = .ok rows := by
+  let body := fun state : (Array T 1024#usize) × Usize =>
+    PDict_CopySource244.coefficients.copy_owned_loop.body rows state.1 state.2
+  have main : ∀ n (i : Usize), 1024-i.val=n →
+      Aeneas.Std.loop body (rows,i) = .ok rows := by
+    intro n
+    induction n using Nat.strong_induction_on with
+    | h n ih =>
+      intro i remaining
+      rw [Aeneas.Std.loop.eq_def]
+      dsimp only [body]
+      by_cases small : i.val < 1024
+      · rw [PDict_CopyCell244.cell rows i small]
+        apply ih (1024-(Usize.wrapping_add i 1#usize).val)
+        · rw [PDict_Advance244.value i small]
+          omega
+        · rfl
+      · have large : 1024 ≤ i.val := by omega
+        rw [PDict_CopyCell244.done_cell rows i large]
+  have run := main (1024-index.val) index rfl
+  simpa only [PDict_CopySource244.coefficients.copy_owned_loop,Aeneas.Std.uncurry,
+    body] using run
+
+theorem owned_value {T : Type} (copy : core.marker.Copy T) (rows : Array T 1024#usize) :
+    PDict_CopySource244.coefficients.copy_owned copy rows = .ok rows :=
+  loop_value rows 0#usize
+
+#print axioms loop_value
+#print axioms owned_value
+end R1Z.PDict_CopyCorrect244

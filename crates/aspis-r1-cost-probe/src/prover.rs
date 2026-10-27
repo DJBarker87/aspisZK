@@ -725,3 +725,28 @@ fn derive_private_salt_step(reserved:&ReservedStateOnlyAttemptSecrets,context:St
     salts.push(salt);
     Ok(salts)
 }
+
+#[cfg(kani)]
+mod pdict_rejection_contracts {
+    use super::*;
+    #[kani::proof]
+    fn semantic_rejection_partition() {
+        let e = crate::r1_wire::pdict_error_contracts::arbitrary_error();
+        let expected = match e { SError::ActivePole => Error::Rejected, _ => Error::Semantic };
+        assert_eq!(semantic_error(e),expected);
+    }
+    #[kani::proof]
+    fn mask_rejection_partition() {
+        let tag: u8 = kani::any();
+        kani::assume(tag < 5);
+        let e = match tag {
+            0 => StateOnlyMaskBuildError::ZeroPrivateEntropy,
+            1 => StateOnlyMaskBuildError::ReusedMaskNonce,
+            2 => StateOnlyMaskBuildError::MaskSampleExhausted,
+            3 => StateOnlyMaskBuildError::TraceShape,
+            _ => StateOnlyMaskBuildError::Layout,
+        };
+        let expected = match e { StateOnlyMaskBuildError::MaskSampleExhausted => Error::Rejected, _ => Error::Semantic };
+        assert_eq!(mask_error(e),expected);
+    }
+}

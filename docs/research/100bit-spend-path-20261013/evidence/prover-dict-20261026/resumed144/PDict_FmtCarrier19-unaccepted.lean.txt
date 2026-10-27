@@ -1,0 +1,134 @@
+import R1Z.PDict_FmtCarrier18
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FmtCarrier
+open Aeneas Aeneas.Std ProverRwFull
+
+
+/-- Full symbolic source-function equality for `host_tree.next_level_loop.body`. -/
+theorem erase_304 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_tree.next_level_loop.body (eraseType base) (eraseOps base ops) = @host_tree.next_level_loop.body base ops := by
+  delta host_tree.next_level_loop.body
+  all_goals rfl
+#print axioms erase_304
+
+/-- Full symbolic source-function equality for `host_tree.next_level_loop`. -/
+theorem erase_305 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_tree.next_level_loop (eraseType base) (eraseOps base ops) = @host_tree.next_level_loop base ops := by
+  delta host_tree.next_level_loop
+  try simp only [erase_304 base ops]
+  all_goals rfl
+#print axioms erase_305
+
+/-- Full symbolic source-function equality for `host_tree.next_level`. -/
+theorem erase_306 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_tree.next_level (eraseType base) (eraseOps base ops) = @host_tree.next_level base ops := by
+  delta host_tree.next_level
+  try simp only [erase_305 base ops]
+  all_goals rfl
+#print axioms erase_306
+
+/-- Full symbolic source-function equality for `host_tree.append_levels`. -/
+theorem erase_307 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_tree.append_levels (eraseType base) (eraseOps base ops) = @host_tree.append_levels base ops := by
+  funext H digest hash
+  delta host_tree.append_levels
+  apply fixed_equal
+  funext recur levels depth
+  try simp only [erase_306 base ops]
+  all_goals rfl
+#print axioms erase_307
+
+/-- Full symbolic source-function equality for `host_tree.BinaryTree.new`. -/
+theorem erase_308 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_tree.BinaryTree.new (eraseType base) (eraseOps base ops) = @host_tree.BinaryTree.new base ops := by
+  delta host_tree.BinaryTree.new
+  try simp only [erase_307 base ops]
+  all_goals rfl
+#print axioms erase_308
+
+/-- Full symbolic source-function equality for `host_commitment.Commitment.build`. -/
+theorem erase_309 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_commitment.Commitment.build (eraseType base) (eraseOps base ops) = @host_commitment.Commitment.build base ops := by
+  delta host_commitment.Commitment.build
+  try simp only [erase_59 base ops, erase_258 base ops, erase_272 base ops, erase_303 base ops, erase_308 base ops]
+  all_goals rfl
+#print axioms erase_309
+
+/-- Full symbolic source-function equality for `host_commitment.Commitment.new_salted`. -/
+theorem erase_310 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_commitment.Commitment.new_salted (eraseType base) (eraseOps base ops) = @host_commitment.Commitment.new_salted base ops := by
+  delta host_commitment.Commitment.new_salted
+  try simp only [erase_309 base ops]
+  all_goals rfl
+#print axioms erase_310
+
+/-- Full symbolic source-function equality for `host_tree.BinaryTree.root`. -/
+theorem erase_311 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_tree.BinaryTree.root (eraseType base) (eraseOps base ops) = @host_tree.BinaryTree.root base ops := by
+  delta host_tree.BinaryTree.root
+  all_goals rfl
+#print axioms erase_311
+
+/-- Full symbolic source-function equality for `host_commitment.Commitment.root`. -/
+theorem erase_312 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @host_commitment.Commitment.root (eraseType base) (eraseOps base ops) = @host_commitment.Commitment.root base ops := by
+  delta host_commitment.Commitment.root
+  try simp only [erase_311 base ops]
+  all_goals rfl
+#print axioms erase_312
+
+/-- Full symbolic source-function equality for `prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0_loop0.body`. -/
+theorem erase_313 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0_loop0.body (eraseType base) (eraseOps base ops) = @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0_loop0.body base ops := by
+  delta prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0_loop0.body
+  all_goals rfl
+#print axioms erase_313
+
+/-- Full symbolic source-function equality for `prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0_loop0`. -/
+theorem erase_314 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0_loop0 (eraseType base) (eraseOps base ops) = @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0_loop0 base ops := by
+  delta prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0_loop0
+  try simp only [erase_313 base ops]
+  all_goals rfl
+#print axioms erase_314
+
+/-- Full symbolic source-function equality for `prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0.body`. -/
+theorem erase_315 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0.body (eraseType base) (eraseOps base ops) = @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0.body base ops := by
+  delta prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0.body
+  try simp only [erase_314 base ops]
+  all_goals rfl
+#print axioms erase_315
+
+/-- Full symbolic source-function equality for `prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0`. -/
+theorem erase_316 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0 (eraseType base) (eraseOps base ops) = @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0 base ops := by
+  delta prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0
+  try simp only [erase_315 base ops]
+  all_goals rfl
+#print axioms erase_316
+
+/-- Full symbolic source-function equality for `prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1.body`. -/
+theorem erase_317 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1.body (eraseType base) (eraseOps base ops) = @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1.body base ops := by
+  delta prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1.body
+  all_goals rfl
+#print axioms erase_317
+
+/-- Full symbolic source-function equality for `prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1`. -/
+theorem erase_318 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1 (eraseType base) (eraseOps base ops) = @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1 base ops := by
+  delta prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1
+  try simp only [erase_317 base ops]
+  all_goals rfl
+#print axioms erase_318
+
+/-- Full symbolic source-function equality for `prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1`. -/
+theorem erase_319 (base : ExternalTypes) (ops : @ExternalFuns base) :
+    @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1 (eraseType base) (eraseOps base ops) = @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1 base ops := by
+  delta prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1
+  try simp only [erase_310 base ops, erase_312 base ops, erase_316 base ops, erase_318 base ops]
+  all_goals rfl
+#print axioms erase_319
+end R1Z.PDict_FmtCarrier

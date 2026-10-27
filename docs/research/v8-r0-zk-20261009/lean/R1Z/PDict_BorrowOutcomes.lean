@@ -1,0 +1,35 @@
+import R1Z.PDict_OffpathBorrow
+set_option autoImplicit false
+namespace R1Z.PDict_BorrowOutcomes
+open Aeneas Aeneas.Std Result ProverRwFull
+
+/-- The extracted adapter preserves every callback outcome, not only success. -/
+theorem asMut_exact {T Z : Type} (adapter : core.convert.AsMut Z T)
+    (zero : zeroize.Zeroize Z) (value : Z) :
+    PDict_OffpathBorrow.asMut adapter zero value = adapter.as_mut value := by
+  unfold PDict_OffpathBorrow.asMut
+  cases adapter.as_mut value <;> rfl
+
+theorem asMut_failure {T Z : Type} (adapter : core.convert.AsMut Z T)
+    (zero : zeroize.Zeroize Z) (value : Z) (err : Aeneas.Std.Error)
+    (h : adapter.as_mut value = .fail err) :
+    PDict_OffpathBorrow.asMut adapter zero value = .fail err := by
+  rw [asMut_exact,h]
+
+theorem asMut_divergence {T Z : Type} (adapter : core.convert.AsMut Z T)
+    (zero : zeroize.Zeroize Z) (value : Z)
+    (h : adapter.as_mut value = .div) :
+    PDict_OffpathBorrow.asMut adapter zero value = .div := by
+  rw [asMut_exact,h]
+
+/-- Rebuilding the source mutable loan accepts every replacement value. -/
+theorem derefMut_replacement {Z : Type} (zero : zeroize.Zeroize Z)
+    (value replacement : Z) :
+    (do let (_,back) ← PDict_OffpathBorrow.derefMut zero value
+        .ok (back replacement)) = .ok replacement := rfl
+
+#print axioms asMut_exact
+#print axioms asMut_failure
+#print axioms asMut_divergence
+#print axioms derefMut_replacement
+end R1Z.PDict_BorrowOutcomes

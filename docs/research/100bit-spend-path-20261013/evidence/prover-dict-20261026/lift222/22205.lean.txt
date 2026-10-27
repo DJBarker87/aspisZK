@@ -1,0 +1,58 @@
+import R1Z.PDict_FormatterIOMap
+import R1Z.PDict_ResultTransport
+import Mathlib.Tactic.CasesM
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FallibleTransport
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap PDict_FormatterStoreMap PDict_ResultTransport
+
+theorem bind_congr {A B : Type} (r : Result A) (f g : A → Result B)
+    (h : ∀ a, f a = g a) : (do let a ← r; f a) = (do let a ← r; g a) := by
+  cases r with
+  | ok a => exact h a
+  | fail e => rfl
+  | div => rfl
+#print axioms bind_congr
+
+theorem map_prod {A B C D : Type} (f : C → D) (p : A × B)
+    (g : A → B → Result C) :
+    resultMap f (Prod.rec g p) =
+      Prod.rec (fun a b => resultMap f (g a b)) p := by cases p; rfl
+
+theorem map_result {A B C D : Type} (f : C → D) (r : core.result.Result A B)
+    (g : A → Result C) (h : B → Result C) :
+    resultMap f (core.result.Result.rec g h r) =
+      core.result.Result.rec (fun a => resultMap f (g a)) (fun b => resultMap f (h b)) r := by
+  cases r <;> rfl
+
+theorem map_control {A B C D : Type} (f : C → D) (r : core.ops.control_flow.ControlFlow A B)
+    (g : B → Result C) (h : A → Result C) :
+    resultMap f (core.ops.control_flow.ControlFlow.rec g h r) =
+      core.ops.control_flow.ControlFlow.rec (fun b => resultMap f (g b)) (fun a => resultMap f (h a)) r := by
+  cases r <;> rfl
+
+#print axioms map_prod
+#print axioms map_result
+#print axioms map_control
+
+theorem fallible (b : ExternalTypes) (F : Type) (ops : @ExternalFuns b)
+    (s : @Store b) (sd nonce : Array U8 32#usize) :
+    @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
+      (types b F) (selected b F ops) (store b F s) sd nonce =
+    resultMap (pairStore b F) (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible b ops s sd nonce) := by
+  delta aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
+  have hs :
+      @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk (types b F)
+        (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory (types b F) (store b F s)) none =
+      store b F (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk b
+        (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory b s) none) := rfl
+  rw [hs, PDict_FormatterStorePath.reservation_path]
+  delta aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible.match_1
+  delta aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible.match_2
+  simp only [map_bind, map_prod, map_result, map_control, map_ok, pairStore, PDict_FormatterIOMap.io14, PDict_FormatterIOMap.io15, PDict_FormatterIOMap.io19, PDict_FormatterIOMap.io20, PDict_FormatterIOMap.io21, PDict_FormatterIOMap.io22, PDict_FormatterIOMap.io23, PDict_FormatterIOMap.io24, PDict_FormatterIOMap.io25, PDict_FormatterIOMap.io26, PDict_FormatterIOMap.io27, PDict_FormatterIOMap.io28, PDict_FormatterIOMap.io29, PDict_FormatterIOMap.io30, PDict_FormatterIOMap.io31, PDict_FormatterIOMap.io261, PDict_FormatterIOMap.sync_directory]
+  apply bind_congr
+  intro path
+  trace_state
+
+#print axioms fallible
+end R1Z.PDict_FallibleTransport

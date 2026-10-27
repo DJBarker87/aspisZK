@@ -1,0 +1,442 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtPublishDiagnostic.lean:18:12: error: Tactic `assumption` failed
+
+inst✝ : ExternalTypes
+ops other : ExternalFuns
+variant : transport.Variant
+p : prover.Publication
+⊢ (do
+      let i ← compact.PROOF_BYTES
+      let a ← compact.MAGIC
+      let s ← lift a.to_slice
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i) s
+      let i1 ← variant.tag
+      let s1 ← lift (Array.make 8#usize [i1, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯).to_slice
+      let out2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out1 s1
+      let (r, out3) ← host_compact.compact_semantic p.semantic_bytes.deref out2
+      let r1 ←
+        core.result.Result.map_err prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r2, out4) ← host_compact.compact_values p.y1.deref out3
+          let r3 ←
+            core.result.Result.map_err prover.publish_compact.closure_1.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError
+                r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let a1 ← p.inactive.to_le_bytes
+              let s4 ← lift a1.to_slice
+              let out5 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out4 s4
+              let out6 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out5 p.c0bytes.deref
+              let s6 ← lift p.root.to_slice
+              let out7 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out6 s6
+              let out8 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out7 p.c1bytes.deref
+              let out9 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out8 p.fbytes.deref
+              let right_val ← compact.OFF_OPENINGS
+              massert (out9.len = right_val)
+              let (o, _) := core.option.Option.take p.backend.c1
+                do
+                let cc1 ← core.option.Option.unwrap o
+                let (o1, _) := core.option.Option.take p.backend.c2
+                  do
+                  let cc2 ← core.option.Option.unwrap o1
+                  let out10 ← prover.append_query_openings out9 cc1 cc2 p.queries p.folded_word.deref p.folded_salts
+                  let right_val1 ← compact.OFF_NODES
+                  massert (out10.len = right_val1)
+                  let r4 ← prover.append_node_slots out10 cc1 cc2 p.tree p.queries
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      massert (val.len = i)
+                      Result.ok (core.result.Result.Ok val)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual) =
+    do
+    let i ← compact.PROOF_BYTES
+    let a ← compact.MAGIC
+    let s ← lift a.to_slice
+    let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i) s
+    let i1 ← variant.tag
+    let s1 ← lift (Array.make 8#usize [i1, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯).to_slice
+    let out2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out1 s1
+    let (r, out3) ← host_compact.compact_semantic p.semantic_bytes.deref out2
+    let r1 ←
+      core.result.Result.map_err prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let (r2, out4) ← host_compact.compact_values p.y1.deref out3
+        let r3 ←
+          core.result.Result.map_err prover.publish_compact.closure_1.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError r2
+              ()
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let a1 ← p.inactive.to_le_bytes
+            let s4 ← lift a1.to_slice
+            let out5 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out4 s4
+            let out6 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out5 p.c0bytes.deref
+            let s6 ← lift p.root.to_slice
+            let out7 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out6 s6
+            let out8 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out7 p.c1bytes.deref
+            let out9 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out8 p.fbytes.deref
+            let right_val ← compact.OFF_OPENINGS
+            massert (out9.len = right_val)
+            let (o, _) := core.option.Option.take p.backend.c1
+              do
+              let cc1 ← core.option.Option.unwrap o
+              let (o1, _) := core.option.Option.take p.backend.c2
+                do
+                let cc2 ← core.option.Option.unwrap o1
+                let out10 ← prover.append_query_openings out9 cc1 cc2 p.queries p.folded_word.deref p.folded_salts
+                let right_val1 ← compact.OFF_NODES
+                massert (out10.len = right_val1)
+                let r4 ← prover.append_node_slots out10 cc1 cc2 p.tree p.queries
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    massert (val.len = i)
+                    Result.ok (core.result.Result.Ok val)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+inst✝ : ExternalTypes
+ops other : @ExternalFuns inst✝
+variant : transport.Variant
+p : prover.Publication
+⊢ @Eq (Result (core.result.Result (alloc.vec.Vec U8) verifier.Error))
+    (@Bind.bind Result instBindResult Usize (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+      (@compact.PROOF_BYTES inst✝ (@replace inst✝ ops other)) fun i =>
+      @Bind.bind Result instBindResult
+        (Std.Array U8
+          (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+            aspis_prover.state_only_hiding.state_only_mask_expander_block._proof_1))
+        (core.result.Result (alloc.vec.Vec U8) verifier.Error) (@compact.MAGIC inst✝ (@replace inst✝ ops other))
+        fun a =>
+        @Bind.bind Result instBindResult (Slice U8) (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+          (@lift (Slice U8)
+            (@Array.to_slice U8
+              (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                aspis_prover.state_only_hiding.state_only_mask_expander_block._proof_1)
+              a))
+          fun s =>
+          @Bind.bind Result instBindResult (alloc.vec.Vec U8) (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+            (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i) s) fun out1 =>
+            @Bind.bind Result instBindResult U8 (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+              (@transport.Variant.tag inst✝ (@replace inst✝ ops other) variant) fun i1 =>
+              @Bind.bind Result instBindResult (Slice U8) (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                (@lift (Slice U8)
+                  (@Array.to_slice U8
+                    (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                      aspis_prover.state_only_hiding.state_only_mask_expander_block._proof_1)
+                    (@Array.make U8
+                      (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                        aspis_prover.state_only_hiding.state_only_mask_expander_block._proof_1)
+                      (@List.cons U8 i1
+                        (@List.cons U8
+                          (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                          (@List.cons U8
+                            (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                              aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                            (@List.cons U8
+                              (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                              (@List.cons U8
+                                (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                  aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                                (@List.cons U8
+                                  (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                    aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                                  (@List.cons U8
+                                    (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                      aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                                    (@List.cons U8
+                                      (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                        aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                                      (@List.nil U8)))))))))
+                      ⋯)))
+                fun s1 =>
+                @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                  (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                  (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out1 s1) fun out2 =>
+                  @Bind.bind Result instBindResult
+                    (Prod (core.result.Result Unit compact.CodecError) (alloc.vec.Vec U8))
+                    (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                    (@host_compact.compact_semantic inst✝ ops (@alloc.vec.Vec.deref U8 p.semantic_bytes) out2)
+                    (@uncurry (core.result.Result Unit compact.CodecError) (alloc.vec.Vec U8)
+                      (Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) fun r out3 =>
+                      @Bind.bind Result instBindResult (core.result.Result Unit verifier.Error)
+                        (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                        (@core.result.Result.map_err inst✝ (@replace inst✝ ops other) Unit compact.CodecError
+                          verifier.Error prover.publish_compact.closure
+                          prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError r Unit.unit)
+                        fun r1 =>
+                        @Bind.bind Result instBindResult
+                          (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error)
+                            Unit)
+                          (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                          (@core.result.Result.Insts.CoreOpsTry.branch Unit verifier.Error r1) fun cf =>
+                          prover.publish_compact.match_1
+                            (fun cf => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) cf
+                            (fun a =>
+                              @Bind.bind Result instBindResult
+                                (Prod (core.result.Result Unit compact.CodecError) (alloc.vec.Vec U8))
+                                (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                (host_compact.compact_values (@alloc.vec.Vec.deref U8 p.y1) out3)
+                                (@uncurry (core.result.Result Unit compact.CodecError) (alloc.vec.Vec U8)
+                                  (Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) fun r2 out4 =>
+                                  @Bind.bind Result instBindResult (core.result.Result Unit verifier.Error)
+                                    (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                    (@core.result.Result.map_err inst✝ (@replace inst✝ ops other) Unit
+                                      compact.CodecError verifier.Error prover.publish_compact.closure_1
+                                      prover.publish_compact.closure_1.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError
+                                      r2 Unit.unit)
+                                    fun r3 =>
+                                    @Bind.bind Result instBindResult
+                                      (core.ops.control_flow.ControlFlow
+                                        (core.result.Result core.convert.Infallible verifier.Error) Unit)
+                                      (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                      (@core.result.Result.Insts.CoreOpsTry.branch Unit verifier.Error r3) fun cf1 =>
+                                      prover.publish_compact.match_1
+                                        (fun cf1 => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) cf1
+                                        (fun a =>
+                                          @Bind.bind Result instBindResult
+                                            (Std.Array U8
+                                              (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                                aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1))
+                                            (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                            (@aspis_core.field.wide_exact.WideExact.to_le_bytes inst✝
+                                              (@replace inst✝ ops other) p.inactive)
+                                            fun a1 =>
+                                            @Bind.bind Result instBindResult (Slice U8)
+                                              (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                              (@lift (Slice U8)
+                                                (@Array.to_slice U8
+                                                  (Usize.ofNat
+                                                    (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                                    aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1)
+                                                  a1))
+                                              fun s4 =>
+                                              @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out4 s4)
+                                                fun out5 =>
+                                                @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                  (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                  (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out5
+                                                    (@alloc.vec.Vec.deref U8 p.c0bytes))
+                                                  fun out6 =>
+                                                  @Bind.bind Result instBindResult (Slice U8)
+                                                    (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                    (@lift (Slice U8)
+                                                      (@Array.to_slice U8
+                                                        (Usize.ofNat
+                                                          (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                                          aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1)
+                                                        p.root))
+                                                    fun s6 =>
+                                                    @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                      (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                      (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out6 s6)
+                                                      fun out7 =>
+                                                      @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                        (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                        (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out7
+                                                          (@alloc.vec.Vec.deref U8 p.c1bytes))
+                                                        fun out8 =>
+                                                        @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                          (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                          (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out8
+                                                            (@alloc.vec.Vec.deref U8 p.fbytes))
+                                                          fun out9 =>
+                                                          @Bind.bind Result instBindResult Usize
+                                                            (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                            (@compact.OFF_OPENINGS inst✝ (@replace inst✝ ops other))
+                                                            fun right_val => ⋯)
+                                        fun residual =>
+                                        @core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (alloc.vec.Vec U8) verifier.Error verifier.Error
+                                          (core.convert.FromSame verifier.Error) residual))
+                            fun residual =>
+                            @core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8) verifier.Error verifier.Error (core.convert.FromSame verifier.Error)
+                              residual))
+    (@Bind.bind Result instBindResult Usize (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+      (@compact.PROOF_BYTES inst✝ ops) fun i =>
+      @Bind.bind Result instBindResult
+        (Std.Array U8
+          (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+            aspis_prover.state_only_hiding.state_only_mask_expander_block._proof_1))
+        (core.result.Result (alloc.vec.Vec U8) verifier.Error) (@compact.MAGIC inst✝ ops) fun a =>
+        @Bind.bind Result instBindResult (Slice U8) (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+          (@lift (Slice U8)
+            (@Array.to_slice U8
+              (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                aspis_prover.state_only_hiding.state_only_mask_expander_block._proof_1)
+              a))
+          fun s =>
+          @Bind.bind Result instBindResult (alloc.vec.Vec U8) (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+            (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i) s) fun out1 =>
+            @Bind.bind Result instBindResult U8 (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+              (@transport.Variant.tag inst✝ ops variant) fun i1 =>
+              @Bind.bind Result instBindResult (Slice U8) (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                (@lift (Slice U8)
+                  (@Array.to_slice U8
+                    (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                      aspis_prover.state_only_hiding.state_only_mask_expander_block._proof_1)
+                    (@Array.make U8
+                      (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))
+                        aspis_prover.state_only_hiding.state_only_mask_expander_block._proof_1)
+                      (@List.cons U8 i1
+                        (@List.cons U8
+                          (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                          (@List.cons U8
+                            (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                              aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                            (@List.cons U8
+                              (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                              (@List.cons U8
+                                (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                  aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                                (@List.cons U8
+                                  (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                    aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                                  (@List.cons U8
+                                    (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                      aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                                    (@List.cons U8
+                                      (U8.ofNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                        aspis_prover.state_only_entropy.RESERVATION_MAGIC._proof_8)
+                                      (@List.nil U8)))))))))
+                      ⋯)))
+                fun s1 =>
+                @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                  (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                  (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out1 s1) fun out2 =>
+                  @Bind.bind Result instBindResult
+                    (Prod (core.result.Result Unit compact.CodecError) (alloc.vec.Vec U8))
+                    (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                    (@host_compact.compact_semantic inst✝ ops (@alloc.vec.Vec.deref U8 p.semantic_bytes) out2)
+                    (@uncurry (core.result.Result Unit compact.CodecError) (alloc.vec.Vec U8)
+                      (Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) fun r out3 =>
+                      @Bind.bind Result instBindResult (core.result.Result Unit verifier.Error)
+                        (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                        (@core.result.Result.map_err inst✝ ops Unit compact.CodecError verifier.Error
+                          prover.publish_compact.closure
+                          prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError r Unit.unit)
+                        fun r1 =>
+                        @Bind.bind Result instBindResult
+                          (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error)
+                            Unit)
+                          (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                          (@core.result.Result.Insts.CoreOpsTry.branch Unit verifier.Error r1) fun cf =>
+                          prover.publish_compact.match_1
+                            (fun cf => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) cf
+                            (fun a =>
+                              @Bind.bind Result instBindResult
+                                (Prod (core.result.Result Unit compact.CodecError) (alloc.vec.Vec U8))
+                                (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                (host_compact.compact_values (@alloc.vec.Vec.deref U8 p.y1) out3)
+                                (@uncurry (core.result.Result Unit compact.CodecError) (alloc.vec.Vec U8)
+                                  (Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) fun r2 out4 =>
+                                  @Bind.bind Result instBindResult (core.result.Result Unit verifier.Error)
+                                    (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                    (@core.result.Result.map_err inst✝ ops Unit compact.CodecError verifier.Error
+                                      prover.publish_compact.closure_1
+                                      prover.publish_compact.closure_1.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError
+                                      r2 Unit.unit)
+                                    fun r3 =>
+                                    @Bind.bind Result instBindResult
+                                      (core.ops.control_flow.ControlFlow
+                                        (core.result.Result core.convert.Infallible verifier.Error) Unit)
+                                      (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                      (@core.result.Result.Insts.CoreOpsTry.branch Unit verifier.Error r3) fun cf1 =>
+                                      prover.publish_compact.match_1
+                                        (fun cf1 => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) cf1
+                                        (fun a =>
+                                          @Bind.bind Result instBindResult
+                                            (Std.Array U8
+                                              (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                                aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1))
+                                            (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                            (@aspis_core.field.wide_exact.WideExact.to_le_bytes inst✝ ops p.inactive)
+                                            fun a1 =>
+                                            @Bind.bind Result instBindResult (Slice U8)
+                                              (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                              (@lift (Slice U8)
+                                                (@Array.to_slice U8
+                                                  (Usize.ofNat
+                                                    (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                                    aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1)
+                                                  a1))
+                                              fun s4 =>
+                                              @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out4 s4)
+                                                fun out5 =>
+                                                @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                  (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                  (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out5
+                                                    (@alloc.vec.Vec.deref U8 p.c0bytes))
+                                                  fun out6 =>
+                                                  @Bind.bind Result instBindResult (Slice U8)
+                                                    (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                    (@lift (Slice U8)
+                                                      (@Array.to_slice U8
+                                                        (Usize.ofNat
+                                                          (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                                                          aspis_prover.state_only_entropy.entropy_nonzero32_loop.body._proof_1)
+                                                        p.root))
+                                                    fun s6 =>
+                                                    @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                      (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                      (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out6 s6)
+                                                      fun out7 =>
+                                                      @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                        (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                        (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out7
+                                                          (@alloc.vec.Vec.deref U8 p.c1bytes))
+                                                        fun out8 =>
+                                                        @Bind.bind Result instBindResult (alloc.vec.Vec U8)
+                                                          (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                          (@alloc.vec.Vec.extend_from_slice U8 core.clone.CloneU8 out8
+                                                            (@alloc.vec.Vec.deref U8 p.fbytes))
+                                                          fun out9 =>
+                                                          @Bind.bind Result instBindResult Usize
+                                                            (core.result.Result (alloc.vec.Vec U8) verifier.Error)
+                                                            (@compact.OFF_OPENINGS inst✝ ops) fun right_val => ⋯)
+                                        fun residual =>
+                                        @core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (alloc.vec.Vec U8) verifier.Error verifier.Error
+                                          (core.convert.FromSame verifier.Error) residual))
+                            fun residual =>
+                            @core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8) verifier.Error verifier.Error (core.convert.FromSame verifier.Error)
+                              residual))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtPublishDiagnostic.lean:13:59: warning: This simp argument is unused:
+  erase_419 ops other
+
+Hint: Omit it from the simp argument list.
+  simp only [erase_396 ops other, erase_405 ops other,̵ ̵e̵r̵a̵s̵e̵_̵4̵1̵9̵ ̵o̵p̵s̵ ̵o̵t̵h̵e̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PDict_FmtErase.erase_420' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

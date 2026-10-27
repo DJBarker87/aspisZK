@@ -1,0 +1,284 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_PrepareOpening222.lean:8:103: error: unsolved goals
+base : ExternalTypes
+F : Type
+ops : ExternalFuns
+⊢ (fun variant hash backend sem => do
+      let b ←
+        core.cmp.PartialEq.ne.trait_default transport.Variant.Insts.CoreCmpPartialEqVariant variant transport.Variant.S2
+      if b = true then Result.ok (core.result.Result.Err verifier.Error.Semantic)
+        else do
+          let coefficients ← prover.opening_coefficients variant backend.messages.deref
+          let scp ← sem.z.index_usize 1#usize
+          let we ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.x
+          let we1 ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.y
+          let y1 ← prover.opening_claim_bytes coefficients.deref { x := we, y := we1 }
+          let a ←
+            host_wire.SemanticTranscript.impl.state aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                sem.transcript
+          let transcript ←
+            host_transcript.Transcript.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash a variant
+          let (gamma, transcript1) ←
+            host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript
+                27#u8 y1.deref true
+          let q ← prover.opening_batch coefficients.deref gamma
+          let r ← weights.Weights.new variant sem.alpha sem.z
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          core.ops.control_flow.ControlFlow.rec
+              (fun a => do
+                let inactive ← prover.opening_inactive q.deref a
+                let a1 ← inactive.to_le_bytes
+                let s5 ← lift a1.to_slice
+                let (kappa, transcript2) ←
+                  host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                      transcript1 28#u8 s5 false
+                let r1 ← a.materialize kappa
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                    let c0 ← prover.round q.deref val1.deref
+                    let s8 ← lift c0.to_slice
+                    let c0bytes ← prover.encoded_slice s8
+                    let (alpha0, transcript3) ←
+                      host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                          transcript2 29#u8 c0bytes.deref false
+                    let q1 ← prover.fold q.deref alpha0 false
+                    let w1 ← prover.fold val1.deref alpha0 true
+                    let r2 ←
+                      host_commitment.EncodingDomain.evaluate
+                          aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField backend.domain
+                          q1.deref 0#usize
+                    let r3 ←
+                      core.result.Result.map_err
+                          prover.prepare_opening.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r2 ()
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 =>
+                        Result.ok
+                          (core.result.Result.Ok
+                            { backend := backend, sem := sem, transcript := transcript3, y1 := y1, gamma := gamma,
+                              inactive := inactive, kappa := kappa, alpha0 := alpha0, c0bytes := c0bytes, q1 := q1,
+                              w1 := w1, folded_word := val2 })
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          prover.PreparedOpening (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      prover.PreparedOpening (core.convert.FromSame verifier.Error) residual)
+              (fun residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  prover.PreparedOpening (core.convert.FromSame verifier.Error) residual)
+              cf) =
+    fun variant hash backend sem => do
+    let b ←
+      core.cmp.PartialEq.ne.trait_default transport.Variant.Insts.CoreCmpPartialEqVariant variant transport.Variant.S2
+    if b = true then Result.ok (core.result.Result.Err verifier.Error.Semantic)
+      else do
+        let coefficients ← prover.opening_coefficients variant backend.messages.deref
+        let scp ← sem.z.index_usize 1#usize
+        let we ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.x
+        let we1 ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.y
+        let y1 ← prover.opening_claim_bytes coefficients.deref { x := we, y := we1 }
+        let a ←
+          host_wire.SemanticTranscript.impl.state aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+              sem.transcript
+        let transcript ←
+          host_transcript.Transcript.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash a variant
+        let (gamma, transcript1) ←
+          host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript
+              27#u8 y1.deref true
+        let q ← prover.opening_batch coefficients.deref gamma
+        let r ← weights.Weights.new variant sem.alpha sem.z
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        core.ops.control_flow.ControlFlow.rec
+            (fun a => do
+              let inactive ← prover.opening_inactive q.deref a
+              let a1 ← inactive.to_le_bytes
+              let s5 ← lift a1.to_slice
+              let (kappa, transcript2) ←
+                host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                    transcript1 28#u8 s5 false
+              let r1 ← a.materialize kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let c0 ← prover.round q.deref val1.deref
+                  let s8 ← lift c0.to_slice
+                  let c0bytes ← prover.encoded_slice s8
+                  let (alpha0, transcript3) ←
+                    host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                        transcript2 29#u8 c0bytes.deref false
+                  let q1 ← prover.fold q.deref alpha0 false
+                  let w1 ← prover.fold val1.deref alpha0 true
+                  let r2 ←
+                    host_commitment.EncodingDomain.evaluate
+                        aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField backend.domain q1.deref
+                        0#usize
+                  let r3 ←
+                    core.result.Result.map_err prover.prepare_opening.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        r2 ()
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 =>
+                      Result.ok
+                        (core.result.Result.Ok
+                          { backend := backend, sem := sem, transcript := transcript3, y1 := y1, gamma := gamma,
+                            inactive := inactive, kappa := kappa, alpha0 := alpha0, c0bytes := c0bytes, q1 := q1,
+                            w1 := w1, folded_word := val2 })
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        prover.PreparedOpening (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    prover.PreparedOpening (core.convert.FromSame verifier.Error) residual)
+            (fun residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.PreparedOpening
+                (core.convert.FromSame verifier.Error) residual)
+            cf
+base : ExternalTypes
+F : Type
+ops : ExternalFuns
+⊢ (fun variant hash backend sem => do
+      let b ←
+        core.cmp.PartialEq.ne.trait_default transport.Variant.Insts.CoreCmpPartialEqVariant variant transport.Variant.S2
+      if b = true then Result.ok (core.result.Result.Err verifier.Error.Semantic)
+        else do
+          let coefficients ← prover.opening_coefficients variant backend.messages.deref
+          let scp ← sem.z.index_usize 1#usize
+          let we ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.x
+          let we1 ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.y
+          let y1 ← prover.opening_claim_bytes coefficients.deref { x := we, y := we1 }
+          let a ←
+            host_wire.SemanticTranscript.impl.state aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                sem.transcript
+          let transcript ←
+            host_transcript.Transcript.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash a variant
+          let (gamma, transcript1) ←
+            host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript
+                27#u8 y1.deref true
+          let q ← prover.opening_batch coefficients.deref gamma
+          let r ← weights.Weights.new variant sem.alpha sem.z
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          core.ops.control_flow.ControlFlow.rec
+              (fun a => do
+                let inactive ← prover.opening_inactive q.deref a
+                let a1 ← inactive.to_le_bytes
+                let s5 ← lift a1.to_slice
+                let (kappa, transcript2) ←
+                  host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                      transcript1 28#u8 s5 false
+                let r1 ← a.materialize kappa
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                    let c0 ← prover.round q.deref val1.deref
+                    let s8 ← lift c0.to_slice
+                    let c0bytes ← prover.encoded_slice s8
+                    let (alpha0, transcript3) ←
+                      host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                          transcript2 29#u8 c0bytes.deref false
+                    let q1 ← prover.fold q.deref alpha0 false
+                    let w1 ← prover.fold val1.deref alpha0 true
+                    let r2 ←
+                      host_commitment.EncodingDomain.evaluate
+                          aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField backend.domain
+                          q1.deref 0#usize
+                    let r3 ←
+                      core.result.Result.map_err
+                          prover.prepare_opening.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r2 ()
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 =>
+                        Result.ok
+                          (core.result.Result.Ok
+                            { backend := backend, sem := sem, transcript := transcript3, y1 := y1, gamma := gamma,
+                              inactive := inactive, kappa := kappa, alpha0 := alpha0, c0bytes := c0bytes, q1 := q1,
+                              w1 := w1, folded_word := val2 })
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          prover.PreparedOpening (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      prover.PreparedOpening (core.convert.FromSame verifier.Error) residual)
+              (fun residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  prover.PreparedOpening (core.convert.FromSame verifier.Error) residual)
+              cf) =
+    fun variant hash backend sem => do
+    let b ←
+      core.cmp.PartialEq.ne.trait_default transport.Variant.Insts.CoreCmpPartialEqVariant variant transport.Variant.S2
+    if b = true then Result.ok (core.result.Result.Err verifier.Error.Semantic)
+      else do
+        let coefficients ← prover.opening_coefficients variant backend.messages.deref
+        let scp ← sem.z.index_usize 1#usize
+        let we ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.x
+        let we1 ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.y
+        let y1 ← prover.opening_claim_bytes coefficients.deref { x := we, y := we1 }
+        let a ←
+          host_wire.SemanticTranscript.impl.state aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+              sem.transcript
+        let transcript ←
+          host_transcript.Transcript.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash a variant
+        let (gamma, transcript1) ←
+          host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript
+              27#u8 y1.deref true
+        let q ← prover.opening_batch coefficients.deref gamma
+        let r ← weights.Weights.new variant sem.alpha sem.z
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        core.ops.control_flow.ControlFlow.rec
+            (fun a => do
+              let inactive ← prover.opening_inactive q.deref a
+              let a1 ← inactive.to_le_bytes
+              let s5 ← lift a1.to_slice
+              let (kappa, transcript2) ←
+                host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                    transcript1 28#u8 s5 false
+              let r1 ← a.materialize kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let c0 ← prover.round q.deref val1.deref
+                  let s8 ← lift c0.to_slice
+                  let c0bytes ← prover.encoded_slice s8
+                  let (alpha0, transcript3) ←
+                    host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                        transcript2 29#u8 c0bytes.deref false
+                  let q1 ← prover.fold q.deref alpha0 false
+                  let w1 ← prover.fold val1.deref alpha0 true
+                  let r2 ←
+                    host_commitment.EncodingDomain.evaluate
+                        aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField backend.domain q1.deref
+                        0#usize
+                  let r3 ←
+                    core.result.Result.map_err prover.prepare_opening.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        r2 ()
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 =>
+                      Result.ok
+                        (core.result.Result.Ok
+                          { backend := backend, sem := sem, transcript := transcript3, y1 := y1, gamma := gamma,
+                            inactive := inactive, kappa := kappa, alpha0 := alpha0, c0bytes := c0bytes, q1 := q1,
+                            w1 := w1, folded_word := val2 })
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        prover.PreparedOpening (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    prover.PreparedOpening (core.convert.FromSame verifier.Error) residual)
+            (fun residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.PreparedOpening
+                (core.convert.FromSame verifier.Error) residual)
+            cf
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_PrepareOpening222.lean:11:17: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵en̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵rr̵y̵,̵ ̵e̵r̵ase_59 base F ops, erase_375 base F ops, erase_276 base F ops,
+  ̲  ̲ ̲ ̲erase_376 base F ops, erase_347 base F ops, erase_351 base F ops, erase_355 base F ops,
+  ̲  ̲ ̲ ̲erase_382 base F ops, erase_385 base F ops, erase_388 base F ops, erase_391 base F ops,
+  ̲  ̲ ̲ ̲erase_371 base F ops, erase_361 base F ops]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PDict_Static222.erase_392' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

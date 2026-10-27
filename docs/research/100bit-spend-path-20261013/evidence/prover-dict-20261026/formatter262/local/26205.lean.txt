@@ -1,0 +1,34 @@
+import R1Z.PDict_OwnedSource244
+import R1Z.PDict_Advance244
+set_option autoImplicit false
+namespace R1Z.PDict_OwnedCell262
+open Aeneas Aeneas.Std Result ControlFlow
+abbrev Variant := PDict_OwnedSource244.aspis_r1_cost_probe.transport.Variant
+
+/-- One symbolic extracted cell; the complete row call and bounds are explicit.
+No concrete array or recurrence is unfolded. -/
+theorem cell {T : Type} (variant : Variant) (rows out : Array T 1024#usize)
+    (index source : Usize) (small : index.val < 1024)
+    (sourceBound : source.val < rows.length)
+    (rowCall : PDict_OwnedSource244.row.row variant index = .ok source) :
+    PDict_OwnedSource244.coefficients.owned_loop.body variant rows out index =
+      .ok (.cont (out.set index rows[source], Usize.wrapping_add index 1#usize)) := by
+  have outBound : index.val < out.length := by scalar_tac
+  obtain ⟨value, read, atIndex⟩ := WP.spec_imp_exists (Array.index_usize_spec rows source sourceBound)
+  obtain ⟨next, update, atUpdate⟩ := WP.spec_imp_exists (Array.update_spec out index value outBound)
+  subst value
+  subst next
+  have guard : index < 1024#usize := by scalar_tac
+  simp only [PDict_OwnedSource244.coefficients.owned_loop.body, guard, if_true,
+    rowCall, bind_tc_ok, read, update, Aeneas.Std.lift]
+  rfl
+
+theorem done_cell {T : Type} (variant : Variant) (rows out : Array T 1024#usize)
+    (index : Usize) (large : 1024 ≤ index.val) :
+    PDict_OwnedSource244.coefficients.owned_loop.body variant rows out index = .ok (.done out) := by
+  have guard : ¬ index < 1024#usize := by scalar_tac
+  simp only [PDict_OwnedSource244.coefficients.owned_loop.body, guard, if_false]
+
+#print axioms cell
+#print axioms done_cell
+end R1Z.PDict_OwnedCell262

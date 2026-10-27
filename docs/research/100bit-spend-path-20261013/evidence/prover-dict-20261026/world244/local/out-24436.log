@@ -1,0 +1,23 @@
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_TapeCells244.lean:25:71: error: unsolved goals
+tape : Tape
+operation : U8
+reply : Reply
+small : ↑tape.used < 16
+read : tape.replies.index_usize tape.used = ok reply
+different : reply.operation ≠ operation
+guard : ¬tape.used ≥ 16#usize
+⊢ ↑reply.operation = ↑operation →
+    (do
+        let i ← lift (tape.used.wrapping_add 1#usize)
+        ok { tape := { replies := tape.replies, used := i }, reply := some reply }) =
+      ok { tape := tape, reply := none }
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_TapeCells244.lean:27:50: warning: This simp argument is unused:
+  different
+
+Hint: Omit it from the simp argument list.
+  simp [̵P̵D̵i̵c̵t̵_̵T̵a̵p̵e̵S̵o̵u̵r̵c̵e̵2̵4̵4̵.̵w̵o̵r̵l̵d̵.̵n̵e̵x̵t̵,̵g̵u̵a̵r̵d̵,̵r̵e̵a̵d̵,̵d̵i̵f̵f̵e̵r̵e̵n̵t̵]̵[̲P̲D̲i̲c̲t̲_̲T̲a̲p̲e̲S̲o̲u̲r̲c̲e̲2̲4̲4̲.̲w̲o̲r̲l̲d̲.̲n̲e̲x̲t̲,̲ ̲g̲u̲a̲r̲d̲,̲ ̲r̲e̲a̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PDict_TapeCells244.exhausted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_TapeCells244.matched' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_TapeCells244.mismatched' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

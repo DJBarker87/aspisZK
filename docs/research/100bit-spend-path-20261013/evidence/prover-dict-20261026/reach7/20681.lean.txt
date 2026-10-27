@@ -1,0 +1,24 @@
+import R1Z.PDict_FormatterStorePath
+import R1Z.PDict_ResultTransport
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FormatterReserveFallible
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap PDict_FormatterStoreMap PDict_ResultTransport
+
+theorem fallible (b : ExternalTypes) (F : Type) (ops : @ExternalFuns b)
+    (s : @Store b) (sd nonce : Array U8 32#usize) :
+    @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
+      (types b F) (selected b F ops) (store b F s) sd nonce =
+    resultMap (pairStore b F) (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible b ops s sd nonce) := by
+  delta aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
+  have hs :
+      @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk (types b F)
+        (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory (types b F) (store b F s)) none =
+      store b F (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk b
+        (@aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory b s) none) := rfl
+  rw [hs, PDict_FormatterStorePath.reservation_path]
+  simp only [map_bind]
+  repeat first | rfl | (rw [bind_eq_iff]; intro _ _) | split
+
+#print axioms fallible
+end R1Z.PDict_FormatterReserveFallible

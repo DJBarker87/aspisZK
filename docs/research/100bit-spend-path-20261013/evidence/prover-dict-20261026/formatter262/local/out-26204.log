@@ -1,0 +1,16 @@
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_OwnedCell262.lean:15:84: error: unsolved goals
+T : Type
+variant : Variant
+rows out : Std.Array T 1024#usize
+index source : Usize
+small : ↑index < 1024
+sourceBound : ↑source < rows.length
+rowCall : PDict_OwnedSource244.row.row variant index = ok source
+outBound : ↑index < out.length
+read : rows.index_usize source = ok (↑rows)[↑source]
+update : out.update index (↑rows)[↑source] = ok (out.set index (↑rows)[↑source])
+guard : index < 1024#usize
+⊢ ok (cont (out.set index (↑rows)[↑source], index.wrapping_add 1#usize)) =
+    ok (cont (out.set index rows[source], index.wrapping_add 1#usize))
+'R1Z.PDict_OwnedCell262.cell' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PDict_OwnedCell262.done_cell' depends on axioms: [propext, Classical.choice, Quot.sound]

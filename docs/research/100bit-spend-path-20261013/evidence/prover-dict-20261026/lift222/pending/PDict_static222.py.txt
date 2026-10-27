@@ -1,0 +1,31 @@
+"""Generate candidate transport equations; compilation is the acceptance gate."""
+from pathlib import Path
+import re
+p=Path('docs/research/v8-r0-zk-20261009/lean/R1Z')
+prior='PDict_StoreTransport'
+# Generic trait-valued functions require their named structural maps, not equality.
+skip=set(range(6,12))|set(range(31,37))|{45,50,54,55,56}
+for f in sorted(p.glob('PDict_ReachErase*.lean')):
+ suffix=f.stem.removeprefix('PDict_ReachErase')
+ if suffix in {'17','18','22'}:continue
+ s=f.read_text();parts=re.findall(r'/--[\s\S]*?(?=/--|end R1Z)',s)
+ out=f'''import R1Z.{prior}
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Static222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap
+'''
+ for part in parts:
+  mt=re.search(r'theorem erase_(\d+)',part)
+  if not mt or int(mt[1]) in skip:continue
+  part=re.sub(r'Full symbolic source-function equality','Carrier transport candidate',part)
+  part=part.replace('(ops other : ExternalFuns)', '(base : ExternalTypes) (F : Type) (ops : @ExternalFuns base)')
+  part=re.sub(r'@([\w.]+) _ \(replace ops other\)',r'@\1 (types base F) (selected base F ops)',part)
+  part=re.sub(r'@([\w.]+) _ ops',r'@\1 base ops',part)
+  # Use previously proven function equations, omitting incompatible generic traits.
+  part=re.sub(r'erase_(\d+) ops other',lambda m:f'erase_{m[1]} base F ops' if int(m[1]) not in skip else '',part)
+  part=part.replace('[, ', '[').replace(', , ', ', ').replace(', ]', ']').replace('[]','[]')
+  out+=part
+ name='PDict_Static222_'+suffix
+ out+='end R1Z.PDict_Static222\n'
+ (p/(name+'.lean')).write_text(out);prior=name

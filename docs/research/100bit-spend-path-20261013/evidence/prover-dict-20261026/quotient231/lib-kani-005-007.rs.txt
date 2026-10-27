@@ -1,0 +1,173 @@
+//! Proof-only caller-observable references; no shipped source or ABI overrides.
+#![cfg(kani)]
+#![feature(formatting_options, io_error_more, io_error_uncategorized)]
+use std::io::{Error, ErrorKind};
+use std::fmt::{self, Write, Display};
+/// The native error is observed, then consumed. The byte stream remains part
+/// of this reference even when the reserve continuation requests no message.
+#[derive(Clone, Copy)]
+pub struct ErrorProjection {
+    pub kind: ErrorKind,
+    pub message: &'static str,
+}
+pub fn retry(reference: ErrorProjection) -> bool {
+    reference.kind == ErrorKind::AlreadyExists
+}
+struct ByteObserver { message: &'static str, position: usize, calls: usize, fail: bool }
+impl Write for ByteObserver {
+    fn write_str(&mut self, bytes: &str) -> fmt::Result {
+        assert!(bytes.len() == self.message.len());
+        assert!(bytes.as_bytes()[self.position] == self.message.as_bytes()[self.position]);
+        self.calls += 1;
+        if self.fail { Err(fmt::Error) } else { Ok(()) }
+    }
+}
+fn custom(message: &'static str, kind: ErrorKind) {
+    let reference=ErrorProjection {kind,message};
+    let error=Error::new(kind,message);
+    assert!(error.kind() == reference.kind);
+    assert!((error.kind() == ErrorKind::AlreadyExists) == retry(reference));
+    let position:usize=kani::any();kani::assume(position<message.len());
+    let fail:bool=kani::any();
+    let mut observer=ByteObserver {message,position,calls:0,fail};
+    let outcome=Display::fmt(&error,&mut fmt::Formatter::new(&mut observer,fmt::FormattingOptions::new()));
+    assert!(outcome.is_err()==fail);
+    assert!(observer.calls==1);
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn error_static_message_bytes_kind_retry() {
+    custom("mask nonce ledger path is not a directory",ErrorKind::NotADirectory);
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn error_collision_message_bytes_kind_retry() {
+    custom("collision",ErrorKind::AlreadyExists);
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn error_noncollision_message_bytes_kind_retry() {
+    custom("write failure",ErrorKind::Other);
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn file_flush_live_owner() {
+    use std::os::fd::{FromRawFd,AsRawFd};
+    let fd:i32=kani::any();kani::assume(fd>=0);
+    // Existing-owner value test; ManuallyDrop avoids forging an OS close.
+    let mut file=std::mem::ManuallyDrop::new(unsafe {std::fs::File::from_raw_fd(fd)});
+    assert!(std::io::Write::flush(&mut *file).is_ok());
+    assert!(file.as_raw_fd()==fd);
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn file_open_nul_path_no_world_stub() {
+    let result=std::fs::File::open("\0");
+    match result { Err(error)=>assert!(error.kind()==ErrorKind::InvalidInput),
+        Ok(file)=>{std::mem::forget(file);panic!("NUL opened")} }
+}
+
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn error_static_kind_retry_without_message_consumer() {
+    let kind=ErrorKind::NotADirectory;
+    let reference=ErrorProjection {kind,message:"mask nonce ledger path is not a directory"};
+    let error=Error::new(kind,reference.message);
+    assert!(error.kind()==reference.kind);
+    assert!((error.kind()==ErrorKind::AlreadyExists)==retry(reference));
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn error_simple_retry_projection() {
+    let collision:bool=kani::any();
+    let kind=if collision {ErrorKind::AlreadyExists} else {ErrorKind::Other};
+    let reference=ErrorProjection {kind,message:""};
+    let error=Error::from(kind);
+    assert!(error.kind()==reference.kind);
+    assert!((error.kind()==ErrorKind::AlreadyExists)==retry(reference));
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn error_os_retry_projection() {
+    let code:i32=kani::any();
+    let error=Error::from_raw_os_error(code);
+    assert!((error.kind()==ErrorKind::AlreadyExists)==(code==17));
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn file_open_nonempty_no_world_stub() {
+    // This is a diagnostic for the real OS boundary, deliberately without
+    // a replacement open/open64 implementation or a Kani stub.
+    let result=std::fs::File::open("pdict-world-probe");
+    if let Ok(file)=result {std::mem::forget(file);}
+}
+
+#[path="../proof-remaining/reverse.rs"]
+mod reverse;
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn reverse_bits_all_u32() {
+    let x:u32=kani::any();
+    assert!(x.reverse_bits()==reverse::reverse_reference(x));
+}
+
+fn r0_formatter(index:u8, all_options:bool) {
+    use aspis_core::r0::Error::*;
+    let (error,name)=match index {
+        0=>(IndexOutOfRange,"IndexOutOfRange"),1=>(WrongLength,"WrongLength"),
+        2=>(ZeroDenominator,"ZeroDenominator"),3=>(Allocation,"Allocation"),
+        4=>(NonCanonical,"NonCanonical"),5=>(WrongField,"WrongField"),
+        6=>(InvalidPoints,"InvalidPoints"),7=>(QuotientNotInImage,"QuotientNotInImage"),
+        8=>(RankDeficient,"RankDeficient"),9=>(Parse,"Parse"),
+        10=>(Semantic,"Semantic"),11=>(Schedule,"Schedule"),12=>(Sampler,"Sampler"),
+        13=>(Commitment,"Commitment"),14=>(Authentication,"Authentication"),
+        15=>(V1,"V1"),_=>(V2,"V2")
+    };
+    let position:usize=kani::any();kani::assume(position<name.len());
+    let fail:bool=kani::any();
+    let mut sink=ByteObserver {message:name,position,calls:0,fail};
+    let mut opts=fmt::FormattingOptions::new();
+    if all_options {
+        opts.fill(kani::any::<char>()).width(kani::any::<Option<u16>>())
+            .precision(kani::any::<Option<u16>>()).alternate(kani::any())
+            .sign_aware_zero_pad(kani::any());
+        let sign:u8=kani::any();kani::assume(sign<3);
+        opts.sign(match sign {0=>None,1=>Some(fmt::Sign::Plus),_=>Some(fmt::Sign::Minus)});
+        let align:u8=kani::any();kani::assume(align<4);
+        opts.align(match align {0=>None,1=>Some(fmt::Alignment::Left),2=>Some(fmt::Alignment::Right),_=>Some(fmt::Alignment::Center)});
+        let hex:u8=kani::any();kani::assume(hex<3);
+        opts.debug_as_hex(match hex {0=>None,1=>Some(fmt::DebugAsHex::Lower),_=>Some(fmt::DebugAsHex::Upper)});
+    }
+    let outcome={let mut formatter=fmt::Formatter::new(&mut sink,opts);
+        let r=fmt::Debug::fmt(&error,&mut formatter);
+        assert!(formatter.options()==opts);r};
+    assert!(outcome.is_err()==fail && sink.calls==1);
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn formatter_all_r0_variants_default_options() {
+    let i:u8=kani::any();kani::assume(i<17);r0_formatter(i,false);
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn formatter_all_r0_variants_all_options() {
+    let i:u8=kani::any();kani::assume(i<17);r0_formatter(i,true);
+}
+
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn file_empty_write_all_preserves_owner() {
+    use std::os::fd::{FromRawFd,AsRawFd};
+    let fd:i32=kani::any();kani::assume(fd>=0);
+    let mut file=std::mem::ManuallyDrop::new(unsafe {std::fs::File::from_raw_fd(fd)});
+    assert!(std::io::Write::write_all(&mut *file,&[]).is_ok());
+    assert!(file.as_raw_fd()==fd);
+}
+#[kani::proof]
+#[kani::unwind(4)]
+pub fn file_create_new_mode_nul_no_world_stub() {
+    use std::os::unix::fs::OpenOptionsExt;
+    let result=std::fs::OpenOptions::new().write(true).create_new(true).mode(0o600).open("\0");
+    match result {Err(error)=>assert!(error.kind()==ErrorKind::InvalidInput),
+        Ok(file)=>{std::mem::forget(file);panic!("NUL opened")}}
+}

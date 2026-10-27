@@ -1,0 +1,31 @@
+import R1Z.PDict_Advance244
+set_option autoImplicit false
+namespace R1Z.PDict_CopyCell244
+open Aeneas Aeneas.Std Result ControlFlow
+
+theorem cell {T : Type} (rows : Array T 1024#usize) (index : Usize)
+    (small : index.val < 1024) :
+    PDict_CopySource244.coefficients.copy_owned_loop.body rows rows index =
+      .ok (.cont (rows,Usize.wrapping_add index 1#usize)) := by
+  have bound : index.val < rows.length := by
+    scalar_tac
+  obtain ⟨value,read,atIndex⟩ := WP.spec_imp_exists (Array.index_usize_spec rows index bound)
+  have same : rows.set index value = rows := by
+    rw [atIndex]
+    exact Array.set_getElem_eq rows index bound
+  obtain ⟨out,update,set⟩ := WP.spec_imp_exists (Array.update_spec rows index value bound)
+  have outEq : out = rows := set.trans same
+  subst out
+  have guard : index < 1024#usize := by scalar_tac
+  simp only [PDict_CopySource244.coefficients.copy_owned_loop.body,guard,if_true,
+    read,bind_tc_ok,update,same,Aeneas.Std.lift]
+
+theorem done_cell {T : Type} (rows : Array T 1024#usize) (index : Usize)
+    (large : 1024 ≤ index.val) :
+    PDict_CopySource244.coefficients.copy_owned_loop.body rows rows index = .ok (.done rows) := by
+  have guard : ¬ index < 1024#usize := by scalar_tac
+  simp only [PDict_CopySource244.coefficients.copy_owned_loop.body,guard,if_false]
+
+#print axioms cell
+#print axioms done_cell
+end R1Z.PDict_CopyCell244

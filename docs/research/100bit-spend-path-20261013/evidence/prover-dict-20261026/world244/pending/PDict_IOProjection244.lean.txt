@@ -1,0 +1,25 @@
+import R1Z.PDict_TapeSource244
+set_option autoImplicit false
+namespace R1Z.PDict_IOProjection244
+open Aeneas Aeneas.Std Result
+
+/-- Pure projection of an OS result already received as a value. The native
+counterpart is checked by Kani001/002 without any syscall or C ABI replacement.
+This is not a law for which errno the OS supplies. -/
+theorem retry_exact (errno : I32) :
+    PDict_TapeSource244.world.retry_collision errno = .ok (decide (errno=17#i32)) := rfl
+
+theorem retry_true (errno : I32) :
+    PDict_TapeSource244.world.retry_collision errno = .ok true ↔ errno=17#i32 := by
+  rw [retry_exact]
+  simp only [Result.ok.injEq,decide_eq_true_eq]
+
+theorem retry_false (errno : I32) :
+    PDict_TapeSource244.world.retry_collision errno = .ok false ↔ errno≠17#i32 := by
+  rw [retry_exact]
+  simp only [Result.ok.injEq,decide_eq_false_iff_not]
+
+#print axioms retry_exact
+#print axioms retry_true
+#print axioms retry_false
+end R1Z.PDict_IOProjection244

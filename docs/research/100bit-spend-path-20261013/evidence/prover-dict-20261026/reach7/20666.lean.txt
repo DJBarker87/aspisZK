@@ -1,0 +1,16 @@
+import R1Z.PDict_FormatterStoreMap
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FormatterStorePath
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap PDict_FormatterStoreMap
+
+theorem reservation_path (b : ExternalTypes) (F : Type) (ops : @ExternalFuns b)
+    (s : @Store b) (nonce : Array U8 32#usize) :
+    @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path
+      (types b F) (selected b F ops) (store b F s) nonce =
+    @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path b ops s nonce := by
+  delta aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path
+  rfl
+
+#print axioms reservation_path
+end R1Z.PDict_FormatterStorePath

@@ -1,0 +1,33 @@
+import R1Z.PDict_TapeView244
+set_option autoImplicit false
+namespace R1Z.PDict_TapeCells244
+open Aeneas Aeneas.Std Result
+open PDict_TapeView244
+
+theorem exhausted (tape : Tape) (operation : U8) (large : 16 ≤ tape.used.val) :
+    PDict_TapeSource244.world.next tape operation = .ok ⟨tape,none⟩ := by
+  have guard : tape.used >= 16#usize := by scalar_tac
+  simp only [PDict_TapeSource244.world.next,guard,if_true]
+
+theorem matched (tape : Tape) (operation : U8) (reply : Reply)
+    (small : tape.used.val < 16)
+    (read : Array.index_usize tape.replies tape.used = .ok reply)
+    (same : reply.operation = operation) :
+    PDict_TapeSource244.world.next tape operation =
+      .ok ⟨{tape with used := Usize.wrapping_add tape.used 1#usize},some reply⟩ := by
+  have guard : ¬ tape.used >= 16#usize := by scalar_tac
+  simp [PDict_TapeSource244.world.next,guard,read,same,Aeneas.Std.lift]
+
+theorem mismatched (tape : Tape) (operation : U8) (reply : Reply)
+    (small : tape.used.val < 16)
+    (read : Array.index_usize tape.replies tape.used = .ok reply)
+    (different : reply.operation ≠ operation) :
+    PDict_TapeSource244.world.next tape operation = .ok ⟨tape,none⟩ := by
+  have guard : ¬ tape.used >= 16#usize := by scalar_tac
+  have differentValue : reply.operation.val ≠ operation.val := by scalar_tac
+  simp [PDict_TapeSource244.world.next,guard,read,differentValue]
+
+#print axioms exhausted
+#print axioms matched
+#print axioms mismatched
+end R1Z.PDict_TapeCells244

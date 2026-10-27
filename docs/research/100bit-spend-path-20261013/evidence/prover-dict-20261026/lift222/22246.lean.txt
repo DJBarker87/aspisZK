@@ -1,0 +1,25 @@
+import R1Z.PDict_VecTransport222
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Static222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap
+/-- Pointwise structural transport for `host_semantic.lean_copy_row_values_loop.body`. -/
+theorem erase_246 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    letI : ExternalTypes := base
+    ∀ (trace : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestTraceV1) (lambda : aspis_core.field.QM31) (registry : alloc.vec.Vec
+  aspis_statement.pool_v1.pair_trace.PoolV1PairCopyLinkV1) (count : Std.Usize) (values : alloc.vec.Vec (Array (Array aspis_core.field.QM31 2#usize)
+  2#usize)) (arity : alloc.vec.Vec (Array Std.Usize 2#usize)) (index : Std.Usize),
+    @host_semantic.lean_copy_row_values_loop.body (types base F) (selected base F ops) (PDict_FormatterTypeMaps.trace base F trace) lambda (vecMap (link base F) registry) count values arity index =
+    @host_semantic.lean_copy_row_values_loop.body base ops trace lambda registry count values arity index := by
+  intro trace lambda registry count values arity index
+  delta host_semantic.lean_copy_row_values_loop.body
+  simp only [PDict_VecTransport222.index_map, PDict_ResultTransport.bind_map]
+  split
+  · apply PDict_FallibleTransport.bind_congr
+    intro l
+    simp only [PDict_FormatterTypeMaps.link, erase_245]
+    rfl
+  · rfl
+#print axioms erase_246
+
+end R1Z.PDict_Static222

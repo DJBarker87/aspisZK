@@ -1,0 +1,68 @@
+import R1Z.PDict_RowTotal262
+import R1Z.PDict_OwnedLoop262
+import R1Z.PDict_Tabulate262
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_OwnedTarget262
+open Aeneas Aeneas.Std Result PDict_OwnedPrefix262
+abbrev Variant := PDict_OwnedCell262.Variant
+
+def index (position : Fin 1024) : Usize := Usize.ofNatCore position.val (by
+  have bound := position.isLt
+  rcases System.Platform.numBits_eq with bits | bits <;>
+    simp only [UScalarTy.Usize_numBits_eq, bits] <;> omega)
+
+theorem index_value (position : Fin 1024) : (index position).val = position.val :=
+  Usize.ofNatCore_val_eq _
+
+def source (variant : Variant) (position : Fin 1024) : Usize :=
+  Classical.choose (PDict_RowTotal262.total variant (index position)
+    (by rw [index_value]; exact position.isLt))
+
+theorem source_call (variant : Variant) (position : Fin 1024) :
+    PDict_OwnedSource244.row.row variant (index position) = .ok (source variant position) :=
+  (Classical.choose_spec (PDict_RowTotal262.total variant (index position)
+    (by rw [index_value]; exact position.isLt))).1
+
+theorem source_bound (variant : Variant) (position : Fin 1024) :
+    (source variant position).val < 1024 :=
+  (Classical.choose_spec (PDict_RowTotal262.total variant (index position)
+    (by rw [index_value]; exact position.isLt))).2
+
+def element {T : Type} (variant : Variant) (rows : Array T 1024#usize) (position : Fin 1024) : T :=
+  rows[source variant position]'(by have := source_bound variant position; scalar_tac)
+
+def target {T : Type} (variant : Variant) (rows : Array T 1024#usize) : Array T 1024#usize :=
+  PDict_Tabulate262.tabulate 1024#usize (fun k =>
+    element variant rows ⟨k.val, by have := k.isLt; scalar_tac⟩)
+
+theorem target_coordinate {T : Type} (variant : Variant) (rows : Array T 1024#usize)
+    (i : Usize) (small : i.val < 1024) :
+    coordinate (target variant rows) i small = element variant rows ⟨i.val,small⟩ := by
+  unfold coordinate target
+  apply PDict_Tabulate262.get
+  scalar_tac
+
+theorem row_reads {T : Type} (variant : Variant) (rows : Array T 1024#usize) :
+    PDict_OwnedLoop262.RowReads variant rows (target variant rows) := by
+  intro i small
+  let position : Fin 1024 := ⟨i.val,small⟩
+  have same : index position = i := UScalar.eq_of_val_eq (index_value position)
+  have call := source_call variant position
+  rw [same] at call
+  refine ⟨source variant position, ?_, call, ?_⟩
+  · have := source_bound variant position
+    scalar_tac
+  · rw [target_coordinate]
+    rfl
+
+#print axioms index
+#print axioms index_value
+#print axioms source
+#print axioms source_call
+#print axioms source_bound
+#print axioms element
+#print axioms target
+#print axioms target_coordinate
+#print axioms row_reads
+end R1Z.PDict_OwnedTarget262

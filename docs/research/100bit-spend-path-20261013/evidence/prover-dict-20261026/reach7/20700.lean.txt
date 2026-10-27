@@ -1,0 +1,33 @@
+import R1Z.PDict_OwnedErrorCorrect
+import R1Z.PDict_OwnedErrorObservation
+import R1Z.PDict_FormatterDictionaryMap
+set_option autoImplicit false
+namespace R1Z.PDict_OwnedReferenceBridge
+open Aeneas Aeneas.Std Result ProverRwFull PDict_OwnedErrorCorrect
+
+def carrier : Owned ≃ Kind where
+  toFun := decode
+  invFun := encode
+  left_inv := encode_decode
+  right_inv := decode_encode
+
+/-- Complete source reference observation, all Bool successes and every error
+kind. This is a reference codec theorem, not a universal native vtable law. -/
+theorem observe (r : core.result.Result Bool Owned) :
+    PDict_OwnedErrorSource.owned_error_observe r =
+    .ok (let p := PDict_OwnedErrorObservation.observe
+        (PDict_FormatterDictionaryMap.innerMap decode r)
+      (⟨p.1,p.2⟩ : Observation)) := by
+  cases r <;> rfl
+
+theorem result_roundtrip (r : core.result.Result Bool Owned) :
+    PDict_FormatterDictionaryMap.innerMap encode
+      (PDict_FormatterDictionaryMap.innerMap decode r) = r := by
+  cases r with
+  | Ok b => rfl
+  | Err e => cases e; rfl
+
+#print axioms carrier
+#print axioms observe
+#print axioms result_roundtrip
+end R1Z.PDict_OwnedReferenceBridge

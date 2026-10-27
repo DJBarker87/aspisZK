@@ -1,0 +1,42 @@
+"""Emit explicit pointwise carrier maps from exact extracted signatures."""
+from pathlib import Path
+import re
+p=Path('docs/research/v8-r0-zk-20261009/lean/R1Z');src=Path('docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean').read_text()
+ms=list(re.finditer(r'(?m)^def\s+([\w.]+)\s',src));d={m[1]:src[m.end():src.index(':=',m.end())] for m in ms}
+f=p/'PDict_Static222_15.lean';old=f.read_text();parts=re.findall(r'/--[\s\S]*?(?=/--|end R1Z)',old)
+maps={'aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestTraceV1':'trace', 'aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1':'compilation','aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public':'pub'}
+out=old[:old.index('/--')]
+for part in parts:
+ no=int(re.search(r'theorem erase_(\d+)',part)[1]);name=re.search(r'candidate for `([^`]+)`',part)[1]
+ if no in {241,251}:continue
+ if no not in range(243,251):out+=part;continue
+ h=d[name].strip();bind=[];i=0
+ while i<len(h) and h[i] in '({':
+  start=i;depth=1;i+=1;closer=')' if h[start]=='(' else '}'
+  stack=[closer]
+  while stack:
+   c=h[i]
+   if c in '({[':stack.append({'(':')','{':'}','[':']'}[c])
+   elif c==stack[-1]:stack.pop()
+   i+=1
+  text=h[start:i];names,ty=text[1:-1].split(':',1);bind.append((text,names.strip(),ty.strip(),h[start]=='{'));i+=len(h[i:])-len(h[i:].lstrip())
+ args=[]
+ for text,n,ty,implicit in bind:
+  if ty in maps:arg=f'({maps[ty]} base F {n})'
+  elif 'alloc.vec.Vec' in ty and 'PoolV1PairCopyLinkV1' in ty:arg=f'(vecMap (link base F) {n})'
+  elif ty.startswith('host_semantic.build_with_material.closure '):arg=f'(compilation base F {n}.1, pub base F {n}.2)'
+  else:arg=n
+  args.append(arg)
+ out+=f'''/-- Pointwise structural transport for `{name}`. -/
+theorem erase_{no} (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    letI : ExternalTypes := base
+    ∀ {' '.join(z[0] for z in bind)},
+    @{name} (types base F) (selected base F ops) {' '.join(args)} =
+    @{name} base ops {' '.join(z[1] for z in bind)} := by
+  intro {' '.join(z[1] for z in bind)}
+  delta {name}
+'''
+ deps=re.search(r'try simp only \[([^\]]*)\]',part)
+ simps=(deps[1]+', ') if deps else ''
+ out+=f'  try simp only [{simps}PDict_FormatterTypeMaps.trace, PDict_FormatterTypeMaps.compilation]\n  all_goals rfl\n#print axioms erase_{no}\n\n'
+out+='end R1Z.PDict_Static222\n';f.write_text(out)

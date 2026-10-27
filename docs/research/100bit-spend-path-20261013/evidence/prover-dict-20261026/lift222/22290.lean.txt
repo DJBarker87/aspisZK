@@ -1,0 +1,23 @@
+import R1Z.PDict_Static222_PublicationFrame
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Static222
+open Aeneas Aeneas.Std ProverRwFull PDict_FormatterTypeMaps PDict_FormatterDictionaryMap
+
+
+/-- Full symbolic source-function equality for `prover.prove_from_semantics`. -/
+theorem erase_421 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.prove_from_semantics (types base F) (selected base F ops) = @prover.prove_from_semantics base ops := by
+  delta prover.prove_from_semantics
+  try simp only [erase_341 base F ops, erase_372 base F ops, erase_392 base F ops, erase_420 base F ops]
+  all_goals rfl
+#print axioms erase_421
+
+/-- Full symbolic source-function equality for `prover.semantic_error`. -/
+theorem erase_422 (base : ExternalTypes) (F : Type) (ops : @ExternalFuns base) :
+    @prover.semantic_error (types base F) (selected base F ops) = @prover.semantic_error base ops := by
+  delta prover.semantic_error
+  all_goals rfl
+#print axioms erase_422
+
+end R1Z.PDict_Static222
