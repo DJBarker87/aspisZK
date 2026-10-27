@@ -26,7 +26,5 @@ No positive import-path witness is therefore required. The complete imported
 module headers remain in the raw log. Import presence alone is not treated as
 proof-term reachability, and partial-context absence is not used as evidence.
 
-The existing 180 formatter-family declarations and 85 nonstandard axioms remain
-in the imported source/library corpus. The all-declaration standard-only gate
-therefore remains false for that retained corpus. No generated formatter or
+The retained corpus contains the 180 historical formatter records. Its list of 85 historical nonstandard names classifies freshly as 84 actual native formatter axioms plus the definition Formatter := Unit. The pure definition is reachable; all 84 actual axioms are unreachable. RPz8_FORMATTER-CLASSIFICATION.md records both exact paths and uncached standard-only root audits. The all-declaration standard-only gate remains false for the retained corpus. No generated formatter or
 shared pure matcher is deleted, edited or silently substituted.
