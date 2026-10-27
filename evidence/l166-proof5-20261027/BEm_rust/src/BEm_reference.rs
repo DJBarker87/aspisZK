@@ -307,3 +307,133 @@ fn physical_step(tree:usize) {
 #[kani::proof] #[kani::unwind(481)] fn physical_step_c1(){physical_step(0)}
 #[kani::proof] #[kani::unwind(129)] fn physical_step_c2(){physical_step(1)}
 #[kani::proof] #[kani::unwind(129)] fn physical_step_folded(){physical_step(2)}
+
+fn physical_loop(tree:usize,ordinal:usize) {
+    let (lo,n)=if ordinal==0 {(0,10)} else {(10,12)};
+    let keys:[u64;16]=kani::any();for j in 0..n {kani::assume((keys[j]&255)<n as u64);}
+    let proof:[u8;57607]=kani::any();let replies:[[u8;32];2]=kani::any();
+    let initial:usize=kani::any();kani::assume(initial<1024);
+    let ca=std::cell::Cell::new(initial);let cb=std::cell::Cell::new(initial);
+    let mut ia:[u32;16]=kani::any();let mut va:[[u8;32];16]=kani::any();let mut ib=ia;let mut vb=va;
+    let a=RefCell::new(zero());let b=RefCell::new(zero());
+    let selected:usize=kani::any();let part:usize=kani::any();let byte:usize=kani::any();
+    let ra=shipped::leaf_loop(&proof,keys,lo,n,tree,&mut ia,&mut va,Point{state:&a,backend:Stateful{replies:&replies,cursor:&ca},selected_call:selected,selected_part:part,selected_byte:byte});
+    let rb=leaf_loop(&proof,keys,lo,n,tree,&mut ib,&mut vb,Point{state:&b,backend:Stateful{replies:&replies,cursor:&cb},selected_call:selected,selected_part:part,selected_byte:byte});
+    let si:usize=kani::any();let sb:usize=kani::any();kani::assume(si<16 && sb<32);
+    assert_eq!(ra,rb);assert_eq!(ia[si],ib[si]);assert_eq!(va[si][sb],vb[si][sb]);
+    assert_eq!(ca.get(),cb.get());assert_eq!(*a.borrow(),*b.borrow());
+}
+#[kani::proof] #[kani::unwind(129)] fn physical_loop_c2_0(){physical_loop(1,0)}
+#[kani::proof] #[kani::unwind(129)] fn physical_loop_c2_1(){physical_loop(1,1)}
+#[kani::proof] #[kani::unwind(129)] fn physical_loop_folded_0(){physical_loop(2,0)}
+#[kani::proof] #[kani::unwind(129)] fn physical_loop_folded_1(){physical_loop(2,1)}
+#[kani::proof] #[kani::unwind(481)] fn physical_loop_c1_0(){physical_loop(0,0)}
+#[kani::proof] #[kani::unwind(481)] fn physical_loop_c1_1(){physical_loop(0,1)}
+
+#[kani::proof] #[kani::unwind(65)]
+fn parent_owned_record() {
+    let left:[u8;32]=kani::any();let right:[u8;32]=kani::any();let replies:[[u8;32];2]=kani::any();
+    let initial:usize=kani::any();kani::assume(initial<1024);
+    let ca=std::cell::Cell::new(initial);let cb=std::cell::Cell::new(initial);
+    let log=RefCell::new(Vec::new());let point=RefCell::new(zero());
+    let part:usize=kani::any();let byte:usize=kani::any();
+    let a=multiproof::binary_parent(Recording{backend:Stateful{replies:&replies,cursor:&ca},log:&log},&left,&right);
+    let b=multiproof::binary_parent(Point{state:&point,backend:Stateful{replies:&replies,cursor:&cb},selected_call:0,selected_part:part,selected_byte:byte},&left,&right);
+    assert_eq!(a,b);assert_eq!(ca.get(),cb.get());assert_eq!(log.borrow().len(),1);
+    {
+        let l=log.borrow();let p=point.borrow();
+        assert_eq!(p.calls,1);assert_eq!(l[0].input.len(),3);
+        for j in 0..3 {assert_eq!(l[0].input[j].len(),p.part_lengths[j]);}
+        assert_eq!(l[0].input.get(part).and_then(|p|p.get(byte)).copied(),p.byte);
+        assert_eq!(l[0].returned,p.returned.map(Ok));
+        assert_eq!(l[0].address.len(),65);
+        let expected=if byte==0 {Some(0x12)} else if byte<=32 {left.get(byte-1).copied()} else {right.get(byte.wrapping_sub(33)).copied()};
+        assert_eq!(l[0].address.get(byte).copied(),expected);
+    }
+    std::mem::forget(log);
+}
+
+#[derive(Clone,Copy)]
+struct ParentEntry<'a> {log:&'a RefCell<Vec<Attempt>>,answer:[u8;32],seed:u8,cursor:&'a std::cell::Cell<usize>}
+impl Digest32 for ParentEntry<'_> {
+    fn digest(&self,parts:&[&[u8]])->[u8;32] {
+        let l=self.log.borrow();assert_eq!(l.len(),2);
+        assert_eq!(l[0].address.len(),1);assert_eq!(l[0].address[0],self.seed);
+        assert_eq!(l[0].input.len(),1);assert_eq!(l[0].input[0].len(),1);assert_eq!(l[0].input[0][0],self.seed);
+        assert_eq!(l[0].returned,None);assert_eq!(l[1].returned,None);
+        assert_eq!(l[1].input.len(),parts.len());
+        let p:usize=kani::any();let b:usize=kani::any();
+        assert_eq!(l[1].input.get(p).and_then(|x|x.get(b)).copied(),parts.get(p).and_then(|x|x.get(b)).copied());
+        self.cursor.set(self.cursor.get()+1);self.answer
+    }
+}
+#[kani::proof] #[kani::unwind(65)]
+fn parent_pending_prefix() {
+    let left:[u8;32]=kani::any();let right:[u8;32]=kani::any();let answer:[u8;32]=kani::any();let seed:u8=kani::any();
+    let log=RefCell::new(vec![Attempt{address:vec![seed],input:vec![vec![seed]],returned:None}]);
+    let cursor=std::cell::Cell::new(7);
+    let result=multiproof::binary_parent(Recording{backend:ParentEntry{log:&log,answer,seed,cursor:&cursor},log:&log},&left,&right);
+    assert_eq!(result,answer);assert_eq!(cursor.get(),8);assert_eq!(log.borrow().len(),2);
+    assert_eq!(log.borrow()[0].returned,None);assert_eq!(log.borrow()[1].returned,Some(Ok(answer)));
+    std::mem::forget(log);
+}
+
+fn mixed_sequence(tree:usize) {
+    let q:[u8;832]=kani::any();let sibling:[u8;32]=kani::any();let replies:[[u8;32];2]=kani::any();
+    let initial:usize=kani::any();kani::assume(initial<1024);
+    let ca=std::cell::Cell::new(initial);let cb=std::cell::Cell::new(initial);
+    let log=RefCell::new(Vec::new());let point=RefCell::new(zero());
+    let selected:usize=kani::any();let part:usize=kani::any();let byte:usize=kani::any();
+    let a=Recording{backend:Stateful{replies:&replies,cursor:&ca},log:&log};
+    let b=Point{state:&point,backend:Stateful{replies:&replies,cursor:&cb},selected_call:selected,selected_part:part,selected_byte:byte};
+    let leaf_a=shipped::batch_leaf(a,tree,&q);let leaf_b=leaf(b,tree,&q);
+    let root_a=multiproof::binary_parent(a,&leaf_a,&sibling);let root_b=multiproof::binary_parent(b,&leaf_b,&sibling);
+    assert_eq!(root_a,root_b);assert_eq!(ca.get(),cb.get());assert_eq!(log.borrow().len(),2);
+    {
+        let l=log.borrow();let p=point.borrow();assert_eq!(p.calls,2);
+        if let Some(event)=l.get(selected) {
+            assert_eq!(event.input.len(),3);
+            for i in 0..3 {assert_eq!(event.input[i].len(),p.part_lengths[i]);}
+            assert_eq!(event.input.get(part).and_then(|x|x.get(byte)).copied(),p.byte);
+            assert_eq!(event.returned,p.returned.map(Ok));
+        } else {assert_eq!(p.byte,None);assert_eq!(p.returned,None);assert_eq!(p.part_lengths,[0;3]);}
+    }
+    std::mem::forget(log);
+}
+#[kani::proof] #[kani::unwind(481)] fn mixed_sequence_c1(){mixed_sequence(0)}
+#[kani::proof] #[kani::unwind(129)] fn mixed_sequence_c2(){mixed_sequence(1)}
+#[kani::proof] #[kani::unwind(129)] fn mixed_sequence_folded(){mixed_sequence(2)}
+
+#[kani::proof] #[kani::unwind(689)]
+fn padding_whole_slots() {
+    let data:[u8;5504]=kani::any();let capacity:usize=kani::any();
+    kani::assume(capacity==128 || capacity==146 || capacity==150 || capacity==172);
+    let count:usize=kani::any();kani::assume(count<=capacity);
+    let nodes=&data[..32*capacity];
+    let a=nodes[32*count..].chunks_exact(8).any(|w|u64::from_le_bytes(w.try_into().unwrap())!=0);
+    let mut b=false;
+    for word in nodes[32*count..].chunks_exact(8) {if word.iter().any(|v|*v!=0) {b=true;break;}}
+    assert_eq!(a,b);
+}
+
+#[derive(Clone,Copy)]
+struct Distinct<'a> {cursor:&'a std::cell::Cell<usize>,tail:[u8;31]}
+impl Digest32 for Distinct<'_> {
+    fn digest(&self,_:&[&[u8]])->[u8;32] {
+        let i=self.cursor.get();self.cursor.set(i+1);
+        let mut out=[0u8;32];out[0]=(i%2) as u8;out[1..].copy_from_slice(&self.tail);out
+    }
+}
+fn repeated_query_batch(ordinal:usize) {
+    let proof:[u8;57607]=kani::any();let roots:[[u8;32];3]=kani::any();let query:u32=kani::any();
+    kani::assume(query<(1<<18));let tail:[u8;31]=kani::any();
+    let ca=std::cell::Cell::new(0);let cb=std::cell::Cell::new(0);
+    let a=RefCell::new(zero());let b=RefCell::new(zero());
+    let selected:usize=kani::any();let part:usize=kani::any();let byte:usize=kani::any();
+    let ra=shipped::batch_merkle_values(&proof,[query;22],roots,ordinal,Point{state:&a,backend:Distinct{cursor:&ca,tail},selected_call:selected,selected_part:part,selected_byte:byte});
+    let rb=batch(&proof,[query;22],roots,ordinal,Point{state:&b,backend:Distinct{cursor:&cb,tail},selected_call:selected,selected_part:part,selected_byte:byte});
+    assert_eq!(ra,Err(Error::Merkle));assert_eq!(ra,rb);assert_eq!(ca.get(),2);assert_eq!(cb.get(),2);
+    assert_eq!(*a.borrow(),*b.borrow());
+}
+#[kani::proof] #[kani::unwind(689)] fn repeated_query_batch0(){repeated_query_batch(0)}
+#[kani::proof] #[kani::unwind(689)] fn repeated_query_batch1(){repeated_query_batch(1)}

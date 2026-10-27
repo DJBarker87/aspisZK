@@ -1,0 +1,13 @@
+# Physical gates: partial stage checkpoint
+
+BEm_K01/02/03 verify the literal generated leaf iteration versus the owned reference iteration for C2/folded/C1 respectively. Inputs: arbitrary packed keys; pos<12 and used≤pos; lo0/10; arbitrary832-byte opening and scratch16×32; arbitrary two32-byte replies and initial backend cursor<1024. Bounds129/129/481 include recorder copying and comparison. Every source/reference Result tuple, arbitrary scratch coordinate, backend cursor, and full owned-record input/flat-address/reply coordinate agrees. Source body/cut provenance is checked by BEm_generate.py --check. Full input reconstruction uses the inherited BEl_CoordinateLog/FullLog/SourceRecords theorems, not another extensionality proof.
+
+K04's full leaf-loop C2/batch0 (actual n10) timed out180s during SSA conversion; cgroup peak6737440768bytes; processRSS6563892KiB; swap0. Excluded despite raw exit0/manual summary. It is not repeated. The first loop is split into the K01–03 per-iteration gates, while BEl_BatchLoop/Port4B induction remain read-only predecessors. Concrete Rust-loop/induction association remains OPEN.
+
+K05 checks binary-parent owned-log/coordinate observation, including65-byte concatenated address, with arbitrary32-byte children/replies and stateful cursor. K06 checks real pending entry before backend invocation and retention of an earlier pending prefix entry. K07/08/09 check the actual leaf→binary-parent sequence on C2/folded/C1, every occurrence/part/byte/reply coordinate and backend state. These close missing local parent/mixed-recorder contexts; they do not equate the whole native batch recorder to the source recorder.
+
+All8 local gates passed with exactly one VERIFICATION SUCCESSFUL and no VERIFICATION FAILED; the ninth gate K04 is excluded. Commands, source snapshots/hashes, source revision, exit, wall, RSS, cgroup peak, zero swaps, and cgroup limits are in each receipt. No assumption is installed in Lean for these external certificates.
+
+The first Lean attempt imports ALL33 BEl modules and prints the exact transfer premise, model BothSlots, ARQ conditional account composition and actual Rc10 top, plus standard-axiom audits. This is an inventory, not a new proof or a package replay: BEm_001 exit0/wall2.411381451s/RSS5547812KiB/swap0. Axioms only propext/Classical.choice/Quot.sound. No missing dependency rebuild was needed.
+
+The actual top's source is byte-identical before/after. Recount remains83T/12P/13G/0C actual;89T/16P/13G/0C deployment-inclusive. L166, L159, L181 retained; delta0. Extraction failure/excluded empty output is separately documented in BEm_EXTRACTION.md. No new native association, ModelAgreement or deployment theorem exists yet.

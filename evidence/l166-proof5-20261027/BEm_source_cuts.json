@@ -1,0 +1,99 @@
+{
+  "exact_items": [
+    {
+      "path": "crates/aspis-core/src/digest.rs",
+      "marker": "pub trait Digest32: Copy",
+      "sha256": "608d2b9932fbbfde50fc2008164e7964c7c165dc9b47124de27df914b7d10fcc",
+      "body": "pub trait Digest32: Copy {\n    fn digest(&self, parts: &[&[u8]]) -> [u8; 32];\n}"
+    },
+    {
+      "path": "crates/aspis-core/src/state_only_private_merkle.rs",
+      "marker": "pub fn private_leaf_hash_with_digest<",
+      "sha256": "f19b9d271783676442d5c9ddf6f620cb6e35709060a10cbfd0e8e71e738ee7b0",
+      "body": "pub fn private_leaf_hash_with_digest<H: Digest32>(\n    hash: H,\n    tree_tag: u8,\n    value: &[u8],\n    salt: &[u8; STATE_ONLY_PRIVATE_LEAF_SALT_BYTES],\n) -> [u8; 32] {\n    hash.digest(&[&[DOM_LEAF, tree_tag], value, salt])\n}"
+    },
+    {
+      "path": "crates/aspis-core/src/r0/merkle.rs",
+      "marker": "pub fn parent_with_digest<",
+      "sha256": "9bd7593569263bf429d95910ffcf6ce44241f77b68ace6523047aa7db2b0a418",
+      "body": "pub fn parent_with_digest<H: Digest32>(hash: H, children: &[Digest; 8]) -> Digest {\n    hash.digest(&[\n        &[0x18],\n        &children[0],\n        &children[1],\n        &children[2],\n        &children[3],\n        &children[4],\n        &children[5],\n        &children[6],\n        &children[7],\n    ])\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn opening(",
+      "sha256": "f1553150d5cc530cac778ac2f8dbda9308dd3fd9760312eaad9d91c019f1b3f5",
+      "body": "fn opening(proof: &[u8], i: usize) -> &[u8] {\n    let at = compact::OFF_OPENINGS + i * OPENING;\n    &proof[at..at + OPENING]\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn slot(",
+      "sha256": "50a01a7b2fdd9d8611f2c30ed36d33646c053683fe92546cc99c4503acd03618",
+      "body": "fn slot(proof: &[u8], s: usize) -> &[u8] {\n    &proof[compact::slot_offset(s)..compact::slot_offset(s + 1)]\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn batch_keys(",
+      "sha256": "a9d17181d8b44c73585d26d1cc9c96ed62f9a00f881534b0536cddd9ef826476",
+      "body": "fn batch_keys(queries: &[u32; 22], lo: usize, n: usize, tree: usize) -> [u64; multiproof::MAX_BATCH] {\n    let mut keys = [0u64; multiproof::MAX_BATCH];\n    for j in 0..n {\n        let u = queries[lo + j];\n        let index = if tree == 2 { u / 4 } else { u };\n        keys[j] = (u64::from(index) << 8) | j as u64;\n    }\n    keys\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn sort_batch_keys(",
+      "sha256": "e260ee9fabe1ad1abb3394dc9322033e2bec3c9972c73798ff76a18fdaceb3c1",
+      "body": "fn sort_batch_keys(mut keys: [u64; multiproof::MAX_BATCH], n: usize) -> [u64; multiproof::MAX_BATCH] {\n    for i in 1..n {\n        let mut j = i;\n        while j > 0 && batch_key_at(&keys, j - 1) > batch_key_at(&keys, j) {\n            keys.swap(j - 1, j);\n            j -= 1;\n        }\n    }\n    keys\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn batch_leaf<",
+      "sha256": "33b6355d543fa6f0f38740a0df9eb2f98ed51bde483d882b53400115a7a749d8",
+      "body": "fn batch_leaf<H: Digest32>(hash: H, tree: usize, q: &[u8]) -> [u8; 32] {\n    match tree {\n        0 => {\n            let salt: [u8; 32] = q[608..640].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, merkle::C1_TAG, &q[..480], &salt)\n        }\n        1 => {\n            let salt: [u8; 32] = q[640..672].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, merkle::C2_TAG, &q[480..608], &salt)\n        }\n        _ => {\n            let salt: [u8; 32] = q[800..832].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, 0x72, &q[672..800], &salt)\n        }\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn same_batch_leaf(",
+      "sha256": "de3a045cea8baadbd3c281d717cd75ecb1745a91d4a1826088660c2a4eb3d328",
+      "body": "fn same_batch_leaf(values: &[[u8; 32]; multiproof::MAX_BATCH], index: usize, leaf: [u8; 32]) -> bool {\n    values[index] == leaf\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn same_batch_index(",
+      "sha256": "724c8a8b71839cf9e47e4b76f92f1711b65edffc14436cc74d72fb33ff1cc829",
+      "body": "fn same_batch_index(values: &[u32; multiproof::MAX_BATCH], index: usize, expected: u32) -> bool {\n    values[index] == expected\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn batch_key_at(",
+      "sha256": "7ef2b5732841fa0b8c626f0b4e9e75989d528f51db5fac44c45aba16303f9ed5",
+      "body": "fn batch_key_at(keys: &[u64; multiproof::MAX_BATCH], index: usize) -> u64 {\n    keys[index]\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn batch_merkle_values<",
+      "sha256": "7f987693b80f7534d7e89b47368258c3a4ea2d8f7fe1c47aa682a65f6fc6b529",
+      "body": "fn batch_merkle_values<H: Digest32>(proof: &[u8], queries: [u32; 22], roots: [[u8; 32]; 3], batch: usize, hash: H) -> Result<(), Error> {\n    let mut idx = [0u32; multiproof::MAX_BATCH];\n    let mut val = [[0u8; 32]; multiproof::MAX_BATCH];\n    let [root0, root1, root2] = roots;\n    batch_tree(proof, queries, root0, batch, 0, &mut idx, &mut val, hash)?;\n    batch_tree(proof, queries, root1, batch, 1, &mut idx, &mut val, hash)?;\n    batch_tree(proof, queries, root2, batch, 2, &mut idx, &mut val, hash)?;\n    Ok(())\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn batch_tree<",
+      "sha256": "8fa467e5509f674bf029951b2c9dc6f676dac4518c87e63ca4f95b0a034d3360",
+      "body": "fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {\n    let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };\n    let n = hi - lo;\n    let s = 3 * batch + tree;\n    let keys = sort_batch_keys(batch_keys(&queries, lo, n, tree), n);\n    let mut d = 0;\n    let mut key_position = 0;\n    while key_position < n {\n        let key = batch_key_at(&keys, key_position);\n        key_position += 1;\n        let index = (key >> 8) as u32;\n        let q = opening(proof, lo + (key & 0xff) as usize);\n        let leaf = batch_leaf(hash, tree, q);\n        if d > 0 && same_batch_index(idx, d - 1, index) {\n            if !same_batch_leaf(val, d - 1, leaf) {\n                return Err(Error::Merkle);\n            }\n            continue;\n        }\n        idx[d] = index;\n        val[d] = leaf;\n        d += 1;\n    }\n    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;\n    let nodes = slot(proof, s);\n    // Padding is whole 32-byte words: scan it 8 bytes at a time.\n    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {\n        return Err(Error::Parse);\n    }\n    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {\n        return Err(Error::Merkle);\n    }\n    Ok(())\n}"
+    }
+  ],
+  "full_prefixes": {
+    "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+    "crates/aspis-core/src/r0/merkle.rs": "ad0f32108562607b9454ac911471a8bebe6306ce98c69eed742c8f8f3985c554",
+    "crates/aspis-core/src/state_only_private_merkle.rs": "6f9f030ea3add192358330f8012c81884a1f599e7dcd6b95ca837a5584ecd451"
+  },
+  "substitutions": [
+    "Visibility only: batch helpers pub(crate).",
+    "compact LOGICAL_SEMANTIC replaced with pinned literal 13831; copied constants and slot_offset body.",
+    "Exact minimal Digest32, private leaf hash and eight-child hash bodies; imports re-exported through proof crate alias.",
+    "Proof crate Error has exactly reachable batch errors Merkle/Parse; no other variants used in copied body.",
+    "Module documentation omitted from multiproof prefix; body bytes retained.",
+    "leaf_loop: exact whole leaf while loop, hoist pure key/sort/lo/n setup as inputs, expose Result and d; no other body change.",
+    "leaf_step: exact while iteration, preselected q replaces opening range; key_position/d passed as locals; Err/continue mapped to explicit bool and poststate; no leaf/helper stubs."
+  ],
+  "outputs": {
+    "BEm_rust/src/BEm_frozen.rs": "24adf796dd3b7180bfc65ed2393c6a2fe1834b63dd7b97b8a20a3a169f5b7ba6"
+  }
+}
