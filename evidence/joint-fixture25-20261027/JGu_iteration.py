@@ -4,6 +4,7 @@ for t in range(3):
  ns=f'JGu_LeafIteration{t}'
  imports=''.join(f'import JGu_M{t}LeafSources{j:02}\n' for j in (range(0,10,2) if t==0 else [0]))
  s=imports+f'''import JGu_Keys
+import JGc_TX2_RealLeaves
 import Port4B_KeyDecode
 set_option autoImplicit false
 noncomputable section
@@ -26,9 +27,9 @@ open AspisV8R19.SqueezeOracleBridge
       (MultiproofConeSortOrder.packed JGr_Keys.q 0 {t} i.val))=ok (opening i) := by
   have member : i.val ∈ OraclePortSelectedDraft.batchPositions 0 := List.mem_range.mpr i.isLt
   have decoded := (Port4B_KeyDecode.packed JGr_Keys.q 0 {t} i.val member 0#usize rfl).2
-  have cursor : Port4B_NativeLeaf.openingIndex 0#usize (MultiproofConeSortOrder.packed JGr_Keys.q 0 {t} i.val)=UScalar.ofNat i.val (by scalar_tac) := UScalar.eq_of_val_eq decoded
+  have cursor : Port4B_NativeLeaf.openingIndex 0#usize (MultiproofConeSortOrder.packed JGr_Keys.q 0 {t} i.val)=UScalar.ofNat i.val (by have := i.isLt;scalar_tac) := UScalar.eq_of_val_eq decoded
   have read := JFo_Opening.call (⟨i.val,by have := i.isLt;omega⟩ : Fin 22)
-  have same : JFo_Opening.cursor (⟨i.val,by have := i.isLt;omega⟩ : Fin 22)=UScalar.ofNat i.val (by scalar_tac) := rfl
+  have same : JFo_Opening.cursor (⟨i.val,by have := i.isLt;omega⟩ : Fin 22)=UScalar.ofNat i.val (by have := i.isLt;scalar_tac) := rfl
   rw [same] at read
   rw [cursor]
   exact read
