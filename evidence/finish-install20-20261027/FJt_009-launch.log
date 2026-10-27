@@ -1,0 +1,46 @@
+{"attempt": "FJt_009", "exit_status": 1, "wall_seconds": 4.718932027986739, "peak_rss_kib": "5292048", "swaps": "0", "print_axioms": ["'AspisR1.FJt_PublicLog.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+FJt_PublicLog.lean:36:63: error: Application type mismatch: The argument
+  Eq.symm (congrArg Prod.fst pair)
+has type
+  (PublicInitFrame.frame (AspisR1PublicPreparation.SourceDigestAddresses.rawBytes encoded.deref) root, state).1 =
+    (PublicInitFrame.frame literal.pubBytes r, H (PublicInitFrame.frame literal.pubBytes r)).1
+but is expected to have type
+  PublicInitFrame.frame literal.pubBytes ?m.189 =
+    PublicInitFrame.frame (AspisR1PublicPreparation.SourceDigestAddresses.rawBytes encoded.deref) ?m.190
+in the application
+  F3T_InitFrame.public_bytes literal.pubBytes (AspisR1PublicPreparation.SourceDigestAddresses.rawBytes encoded.deref)
+    ?m.189 ?m.190 (Eq.symm (congrArg Prod.fst pair))
+
+...
+inal.r0.Public.public_bytes
+      (FirstComposition.toRetainedPublic pub) =
+    ok (core.result.Result.Ok encoded)
+r : State
+head :
+  some (PublicInitFrame.frame literal.pubBytes r, H (PublicInitFrame.frame literal.pubBytes r)) =
+    some (PublicInitFrame.frame (AspisR1PublicPreparation.SourceDigestAddresses.rawBytes encoded.deref) root, state)
+c : TranscriptView.Challenge LiteralTranscript.E
+initial :
+  (LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program pf 0 33 (FS.emptyPrefix literal))).2).rounds[0]? =
+    some (TranscriptView.Message.initial r, c)
+bytesEq : bytes r = root0 parsed
+challenge : LiteralTranscript.Challenge
+called : (eval H (F3J_SamplerRun.program pf 0 33 (FS.emptyPrefix literal))).2.rounds[0]? = some (pf 0, challenge)
+erased :
+  (LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program pf 0 33 (FS.emptyPrefix literal))).2).rounds[0]? =
+    some (LiteralTranscript.erase (pf 0), challenge)
+first : LiteralTranscript.erase (pf 0) = TranscriptView.Message.initial r
+sampler :
+  (eval H (F3J_SamplerRun.program pf 0 33 (FS.emptyPrefix literal))).1.head? =
+    some (PublicInitFrame.frame literal.pubBytes r, H (PublicInitFrame.frame literal.pubBytes r))
+pair :
+  (PublicInitFrame.frame literal.pubBytes r, H (PublicInitFrame.frame literal.pubBytes r)) =
+    (PublicInitFrame.frame (AspisR1PublicPreparation.SourceDigestAddresses.rawBytes encoded.deref) root, state)
+⊢ ∃ encoded,
+    AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+          (FirstComposition.toRetainedPublic pub) =
+        ok (core.result.Result.Ok encoded) ∧
+      literal.pubBytes = AspisR1PublicPreparation.SourceDigestAddresses.rawBytes encoded.deref
+'AspisR1.FJt_PublicLog.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7538ed250a7e415583d5801b734b6d86.scope; invocation ID: 4a9790b40ee84f9aad2fe39ce81af841
