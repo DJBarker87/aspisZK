@@ -1,7 +1,9 @@
 """Prepare and launch one lead-authorized topological chunk; no shared writes."""
 import pathlib,json,subprocess,sys,hashlib,shlex,datetime,time,base64
 R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-reach-20261027/resume9';H='/home/dombarker/project-offloads/codex-pv-reach-20261027';host='dombarker@100.108.41.90'
-a=int(sys.argv[1]);idx=int(sys.argv[2]);assert 40200<=a<=40296
+a=int(sys.argv[1]);single=sys.argv[2] if not sys.argv[2].isdigit() else None;idx=int(sys.argv[2]) if single is None else -1;assert 40200<=a<=40299
+assert a<40297 or (single and 'Audit' in single)
+assert sum(1 for p in E.glob('receipt-*.json') if json.loads(p.read_text()).get('modules'))<100
 assert str(R)=='/Users/dominic/ZK/.worktrees/pv-reach' and subprocess.check_output(['git','branch','--show-current'],text=True).strip()=='codex/pv-reach-20261027'
 assert not json.load(open(E/'h4-verification.json'))['mismatches']
 assert not (E/f'used-{a}.json').exists()
@@ -9,13 +11,24 @@ rows=json.load(open(E/'project-closure.json'));mapping={r['module']:r for r in r
 ordered=[r for r in rows if r['module'] in names];assert len(ordered)==200
 assert all(d not in names or next(i for i,r in enumerate(ordered) if r['module']==d)<i for i,r in enumerate(ordered) for d in r['imports'])
 chunks=[ordered[i:i+30] for i in range(0,200,30)]
-rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();selected=chunks[idx];sources={}
+rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();selected=chunks[idx] if single is None else [];sources={}
+if single:
+ import re
+ m=single.replace('/','.');path='docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean'
+ data=subprocess.check_output(['git','show',rev+':'+path]);blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip()
+ imports=re.findall(r'^import\s+(\S+)',data.decode(),re.M)
+ row=dict(module=m,authority='h5',path=path,revision=rev,blob=blob,sha256=hashlib.sha256(data).hexdigest(),imports=imports)
+ assert m not in mapping or mapping[m]['sha256']==row['sha256']
+ mapping[m]=row;selected=[row]
+
 def trans(m,s):
  for d in mapping.get(m,{}).get('imports',[]):
   if d not in s:s.add(d);trans(d,s)
 for row in selected:
  data=subprocess.check_output(['git','show',row['blob']]);assert hashlib.sha256(data).hexdigest()==row['sha256']
- if row['authority']=='h5':assert subprocess.check_output(['git','show',rev+':'+row['path']])==data
+ if row['authority']=='h5':
+  assert subprocess.check_output(['git','show',rev+':'+row['path']])==data
+  row['revision']=rev
  ds=set();trans(row['module'],ds);row['transitive_imports']=sorted(ds);sources[row['module']]=base64.b64encode(data).decode()
 plan=dict(source_revision=rev,chunk_index=idx,modules=selected,caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,lean_M=7000))
 (E/f'plan-{a}.json').write_text(json.dumps(plan,indent=2)+'\n')

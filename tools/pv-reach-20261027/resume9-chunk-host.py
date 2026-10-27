@@ -1,7 +1,7 @@
 """Authorized sequential prerequisite chunk, run inside exactly one capped scope."""
 import pathlib,sys,json,hashlib,subprocess,time,re,os
 H=pathlib.Path('/home/dombarker/project-offloads/codex-pv-reach-20261027');P=H/'lean'
-a=int(sys.argv[1]); assert 40200<=a<=40296
+a=int(sys.argv[1]); assert 40200<=a<=40299
 plan=json.load(open(H/f'evidence/resume9-plan-{a}.json'));E=H/'evidence'/f'resume9-{a}';E.mkdir(exist_ok=True)
 env=json.load(open(P/'J.json')); start=time.monotonic(); records=[]
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
@@ -21,7 +21,7 @@ for row in plan['modules']:
  missing=[d for d,v in deps.items() if v is None]
  if missing:
   records.append(dict(module=m,source=row,exit=None,missing=missing));break
- cmd=['/usr/bin/time','-v','-o',str(E/(rel.replace('/','_')+'-time.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(P/'J.json'),str(P/'objects'),str(P/'sources'),str(obj),str(src),'7000']
+ cmd=['/usr/bin/time','-v','-o',str(E/(rel.replace('/','_')+'-time.log')),'timeout','600','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(P/'J.json'),str(P/'objects'),str(P/'sources'),str(obj),str(src),'7000']
  out=E/(rel.replace('/','_')+'-out.log');s=time.monotonic()
  with out.open('w') as f:
   proc=subprocess.Popen(cmd,stdout=f,stderr=subprocess.STDOUT)
