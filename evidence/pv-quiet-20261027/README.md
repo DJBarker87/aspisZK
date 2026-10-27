@@ -1,6 +1,7 @@
 # D286 op223 timing gate
 
-Preparation in progress. Control c57a344726; integrated candidate 8873306db1.
+Both optimized binaries built successfully outside the quiet window. Preflight
+proof-byte comparison in progress. Control c57a344726; integrated candidate 8873306db1.
 No implementation changes. Five paired fresh processes per side (D216 count),
 coins 100–104, alternating order, both fixtures in each process. Features:
 optimized-terminal,r1p-check,ct-host-prover. Fixed CPU affinity will use all
@@ -13,3 +14,8 @@ D286 authorizes this job to create a one-hour quiet marker and remove it on
 measurement exit; that overrides the older plan/common lifecycle prohibition.
 No marker extension. Retain partial receipts on early stop. No premise is
 removed by preparation or fixture timing; target not yet established.
+
+Build receipts: control build-control-2 (exit 0, 27.840 s, peak RSS 515760 KiB,
+swap 0); candidate build-candidate-2 (exit 0, 37.869 s, peak RSS 566044 KiB,
+swap 0). Binary hashes and sizes are in pin-control.json and pin-candidate.json.
+Initial admission refusals and the missing-export-input failure are retained.
