@@ -21,7 +21,7 @@ theorem source {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Has
       JFx_NativeBytes.proof (encodeState {pre}_TX2_M{t}Root.retainedRoot) {t}#usize hash
       10#usize 12#usize {3+t}#usize (JGk_TX2_ScratchKeys.keys {t})
       (JGk_TX2_Scratch{t}.s12 s).idx (JGk_TX2_Scratch{t}.s12 s).val 12#usize 12#usize=
-        ok (.done ((JGm_TX2_Verify{t}.output s).idx,(JGm_TX2_Verify{t}.output s).val,some (.Ok ()))) := by
+        ok (.done ((JGm_TX2_Verify{t}.output D hash s).idx,(JGm_TX2_Verify{t}.output D hash s).val,some (.Ok ()))) := by
   have frontRead : core.array.Array.index
       (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
       (JGk_TX2_Scratch{t}.s12 s).idx {{«end»:=12#usize}}=ok (JGk_TX2_CountSource.front{t} s) := by
@@ -45,7 +45,7 @@ theorem source {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Has
   have verify : Port4B_Install.leaves.op10 (JGc_TX2_RealLeaves.dictionary D) hash .Two
       (encodeState {pre}_TX2_M{t}Root.retainedRoot)
       (JGk_TX2_Scratch{t}.s12 s).idx (JGk_TX2_Scratch{t}.s12 s).val 12#usize JGm_TX2_Supplied.nodes{t}=
-      ok (true,(JGm_TX2_Verify{t}.output s).idx,(JGm_TX2_Verify{t}.output s).val) := by
+      ok (true,(JGm_TX2_Verify{t}.output D hash s).idx,(JGm_TX2_Verify{t}.output D hash s).val) := by
     change (do let (b,out) ← reference.verify_owned
       (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
       (encodeState {pre}_TX2_M{t}Root.retainedRoot) (JGk_TX2_Scratch{t}.s12 s) JGm_TX2_Supplied.nodes{t}
@@ -77,7 +77,7 @@ theorem loop {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
       JFx_NativeBytes.proof (encodeState {pre}_TX2_M{t}Root.retainedRoot) {t}#usize
       (JGk_TX2_Scratch{t}.s00 s).idx (JGk_TX2_Scratch{t}.s00 s).val hash 10#usize 12#usize {3+t}#usize
       (JGk_TX2_ScratchKeys.keys {t}) 0#usize 0#usize=
-        ok ((JGm_TX2_Verify{t}.output s).idx,(JGm_TX2_Verify{t}.output s).val,some (.Ok ())) := by
+        ok ((JGm_TX2_Verify{t}.output D hash s).idx,(JGm_TX2_Verify{t}.output D hash s).val,some (.Ok ())) := by
   rw [JGk_TX2_Scratch{t}.source]
   conv_lhs =>
     unfold Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
@@ -92,7 +92,7 @@ theorem tree {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
       (Port3_BatchStd.install Port4B_Install.leaves) (JGc_TX2_RealLeaves.dictionary D)
       JFx_NativeBytes.proof JFo_Prepared.value.queries (encodeState {pre}_TX2_M{t}Root.retainedRoot)
       1#usize {t}#usize s.idx s.val hash=
-        ok (.Ok (), (JGm_TX2_Verify{t}.output s).idx,(JGm_TX2_Verify{t}.output s).val) := by
+        ok (.Ok (), (JGm_TX2_Verify{t}.output D hash s).idx,(JGm_TX2_Verify{t}.output D hash s).val) := by
   have splitCount : Usize.wrapping_sub 22#usize 10#usize=12#usize :=
     UScalar.eq_of_val_eq (by simpa only [Port4B_TreeCuts.count,Port4B_TreeCuts.hi,Port4B_TreeCuts.lo,
       show ¬1#usize=0#usize from by decide,if_false] using (Port4B_Bounds.count 1#usize).1)

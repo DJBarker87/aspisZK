@@ -7,19 +7,19 @@ namespace AspisR1.JGm_TX2_Verify0
 open Aeneas Aeneas.Std Result MultiproofConeRef
 open AspisV8R19.SqueezeOracleBridge
 
-def output (s : reference.Scratch) := JGm_TX2_Levels0.s18 (JGk_TX2_Scratch0.s12 s)
+def output {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (s : reference.Scratch) : reference.Scratch := Classical.choose (JGm_TX2_Levels0.on_scratch D hash s)
 
 theorem source {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
     (s : reference.Scratch) :
     reference.verify_owned (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
       (encodeState JGf_TX2_M0Root.retainedRoot) (JGk_TX2_Scratch0.s12 s) JGm_TX2_Supplied.nodes0=
-        ok (true,output s) := by
-  obtain ⟨levels,view⟩ := JGm_TX2_Levels0.on_scratch D hash s
-  have n : (output s).n=1#usize := UScalar.eq_of_val_eq view.size
-  have at_eq : (output s).«at»=5216#usize := UScalar.eq_of_val_eq view.at_eq
-  have index : Array.index_usize (output s).idx 0#usize=ok 0#u32 :=
+        ok (true,output D hash s) := by
+  obtain ⟨levels,view⟩ := Classical.choose_spec (JGm_TX2_Levels0.on_scratch D hash s)
+  have n : (output D hash s).n=1#usize := UScalar.eq_of_val_eq view.size
+  have at_eq : (output D hash s).«at»=5216#usize := UScalar.eq_of_val_eq view.at_eq
+  have index : Array.index_usize (output D hash s).idx 0#usize=ok 0#u32 :=
     JGm_TX2_View.index _ _ _ _ view 0#usize (by decide)
-  have value : Array.index_usize (output s).val 0#usize=ok (encodeState JGf_TX2_M0Roots.value185) :=
+  have value : Array.index_usize (output D hash s).val 0#usize=ok (encodeState JGf_TX2_M0Roots.value185) :=
     JGm_TX2_View.value _ _ _ _ view 0#usize (by decide)
   rw [JGf_TX2_M0Root.value_eq] at value
   have reset : {JGk_TX2_Scratch0.s12 s with «at»:=0#usize}=JGk_TX2_Scratch0.s12 s := rfl
@@ -34,15 +34,15 @@ theorem source {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
     show (12#usize>16#usize)=False from propext (by decide),if_false,if_true,Bool.true_eq,
     JGm_TX2_Valid0.on_scratch,bind_tc_ok,len,modulo,
     show (0#usize!=0#usize)=false from rfl,Bool.false_eq_true,reset,levels]
-  change (do if (output s).n=1#usize then
-               let i ← Array.index_usize (output s).idx 0#usize
+  change (do if (output D hash s).n=1#usize then
+               let i ← Array.index_usize (output D hash s).idx 0#usize
                if i=0#u32 then
-                 let a ← Array.index_usize (output s).val 0#usize
+                 let a ← Array.index_usize (output D hash s).val 0#usize
                  let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a (encodeState JGf_TX2_M0Root.retainedRoot)
-                 if b then ok ((output s).«at»=Slice.len JGm_TX2_Supplied.nodes0,output s)
-                 else ok (false,output s)
-               else ok (false,output s)
-             else ok (false,output s))=_
+                 if b then ok ((output D hash s).«at»=Slice.len JGm_TX2_Supplied.nodes0,output D hash s)
+                 else ok (false,output D hash s)
+               else ok (false,output D hash s)
+             else ok (false,output D hash s))=_
   simp only [n,if_pos rfl,index,value,bind_tc_ok,MultiproofConeLeaf.digest_eq_total,decide_true,
     Bool.true_eq,if_true,at_eq,len]
 #print axioms source
