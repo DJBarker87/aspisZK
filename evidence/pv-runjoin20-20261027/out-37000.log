@@ -1,0 +1,25 @@
+'R1Z.PV_RunJoin_CopyCertificate20.permutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin20-lean/sources/R1Z/PV_RunJoin_CopyCertificate20.lean:56:8: error: Tactic `rfl` failed: The left-hand side
+  0#u32
+is not definitionally equal to the right-hand side
+  BuilderForestAdmissionPort.aspis_core.field.M31.ZERO
+
+case neg
+c : Certificate
+hc : ∀ n < 11, Canonical (c.states (n + 1))
+hm : ∀ n < 11, R0Z.BuilderModel.blockIter (model c) (n + 1) = liftA (c.states (n + 1))
+rounds : Std.Array (Std.Array U32 16#usize) 11#usize
+hr : R0PoseidonCopy.perm_rounds c.pre c.absorption = ok rounds
+hv : ∀ n < 11, (↑rounds)[n]! = c.states (n + 1)
+block : Std.Array U32 256#usize
+hb : R0BlockCopies.write_block c.pre c.absorption rounds = ok block
+hcell : ∀ (k : ℕ), (↑block)[k]! = BlockVal c.pre c.absorption rounds k
+row : ℕ
+hrow : row < 16
+lane : ℕ
+hlane : lane < 16
+hz : ¬row = 0
+hr12 : ¬row < 12
+he : ¬row = 12
+⊢ 0#u32 = BuilderForestAdmissionPort.aspis_core.field.M31.ZERO
+'R1Z.PV_RunJoin_CopyCertificate20.writer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
