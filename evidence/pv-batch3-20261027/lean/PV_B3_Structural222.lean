@@ -40,6 +40,10 @@ theorem prefix_bound {A : Type} (p : A → Bool) (xs : List A) :
   rw [scan_value p xs xs.length (Nat.le_refl _)]
   exact Nat.sub_le _ _
 
+theorem capacity (n : Nat) (h : n ≤ 10) : 2^n ≤ 1024 := by
+  exact Nat.pow_le_pow_right (by decide : 1 ≤ 2) h
+
+#print axioms capacity
 #print axioms take_set_next
 #print axioms scan_value
 #print axioms prefix_bound
