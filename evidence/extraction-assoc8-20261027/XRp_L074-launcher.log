@@ -1,0 +1,54 @@
+{"attempt": "XRp_L074", "exit_status": 1, "wall_seconds": 1.6705579899717122, "peak_rss_kib": "4050952", "swaps": "0", "print_axioms": ["'XRp_SamplerRepeated.callback_state' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'XRp_SamplerRepeated.eight_digits' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRp_generated/XRp_SamplerRepeated.lean:11:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  callback rank i
+in the target expression
+  { FnOnceInst := XRn_Join_Release.sampler.low_base_p_digits.closure_1.Insts.CoreOpsFunctionFnOnceTupleUsizeU32,
+          call_mut := fun c i => do
+            let (v, c, restore) ←
+              XRn_Join_Release.sampler.low_base_p_digits.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut c i
+            ok (v, restore c) }.call_mut
+      rank i =
+    ok (0#u32, rank)
+
+i : Usize
+⊢ { FnOnceInst := XRn_Join_Release.sampler.low_base_p_digits.closure_1.Insts.CoreOpsFunctionFnOnceTupleUsizeU32,
+          call_mut := fun c i => d
+...
+lure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+XRp_generated/XRp_SamplerRepeated.lean:19:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.fromFnList fn 8 0#usize rank
+in the target expression
+  (do
+      let (xs, c) ← core.array.fromFnList fn (↑8#usize) 0#usize rank
+      if h : xs.length = ↑8#usize then ok (⟨xs, h⟩, c) else fail Error.panic) =
+    ok (zeros, rank)
+
+h : core.array.fromFnList fn 8 0#usize rank = ok (List.replicate 8 0#u32, rank)
+⊢ (do
+      let (xs, c) ← core.array.fromFnList fn (↑8#usize) 0#usize rank
+      if h : xs.length = ↑8#usize then ok (⟨xs, h⟩, c) else fail Error.panic) =
+    ok (zeros, rank)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XRp_SamplerRepeated.callback_state' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRp_SamplerRepeated.eight_digits' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r868cc56d0fc74da982a2fe3cab60dbd8.scope; invocation ID: 53906a4af96d4e6fa6615ed15ab0fd57

@@ -1,0 +1,115 @@
+theorem Aeneas.Std.UScalar.wrapping_add_val_eq : ∀ {ty : UScalarTy} (x y : UScalar ty),
+  ↑(x.wrapping_add y) = (↑x + ↑y) % UScalar.size ty :=
+fun {ty} x y =>
+  Eq.mpr (id (congrArg (Eq (x.bv + y.bv).toNat) (congrArg (HMod.hMod (x.bv.toNat + y.bv.toNat)) (UScalar.size_def ty))))
+    (have this := of_eq_true (pow_pos._simp_1 (of_eq_true Nat.ofNat_pos._simp_1) ty.numBits);
+    have this := Decidable.byContradiction fun a => UScalar.wrapping_add_val_eq._proof_1_2 this a;
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (congrFun' (congrArg HMod.hMod (congr (congrArg HAdd.hAdd (UScalar.bv_toNat x)) (UScalar.bv_toNat y)))
+              (2 ^ ty.numBits)))
+          (congrFun' (congrArg HMod.hMod (congr (congrArg HAdd.hAdd (UScalar.bv_toNat x)) (UScalar.bv_toNat y)))
+            (2 ^ ty.numBits)))
+        (eq_self ((↑x + ↑y) % 2 ^ ty.numBits))))
+theorem Aeneas.Std.UScalar.wrapping_sub_val_eq : ∀ {ty : UScalarTy} (x y : UScalar ty),
+  ↑(x.wrapping_sub y) = (↑x + (UScalar.size ty - ↑y)) % UScalar.size ty :=
+fun {ty} x y =>
+  Eq.mpr
+    (id
+      (congrArg (Eq (x.bv - y.bv).toNat)
+        (congr
+          (congrArg HMod.hMod
+            (congrArg (HAdd.hAdd x.bv.toNat) (congrFun' (congrArg HSub.hSub (UScalar.size_def ty)) y.bv.toNat)))
+          (UScalar.size_def ty))))
+    (have this := of_eq_true (pow_pos._simp_1 (of_eq_true Nat.ofNat_pos._simp_1) ty.numBits);
+    have this := Decidable.byContradiction fun a => UScalar.wrapping_sub_val_eq._proof_1_2 this a;
+    Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (congrFun'
+              (congrArg HMod.hMod
+                (congr (congrArg HAdd.hAdd (congrArg (HSub.hSub (2 ^ ty.numBits)) (UScalar.bv_toNat y)))
+                  (UScalar.bv_toNat x)))
+              (2 ^ ty.numBits)))
+          (congrFun'
+            (congrArg HMod.hMod
+              (congr (congrArg HAdd.hAdd (UScalar.bv_toNat x))
+                (congrArg (HSub.hSub (2 ^ ty.numBits)) (UScalar.bv_toNat y))))
+            (2 ^ ty.numBits))))
+      (of_eq_true
+        (Eq.trans
+          (congrArg (Eq ((2 ^ ty.numBits - ↑y + ↑x) % 2 ^ ty.numBits))
+            (congrFun'
+              (congrArg HMod.hMod
+                (Eq.trans
+                  (Mathlib.Tactic.Ring.Common.add_congr
+                    (Mathlib.Tactic.Ring.Common.atom_pf (↑x) rfl
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => ↑x ^ Nat.rawCast 1 * Nat.rawCast 1 = ↑x ^ Nat.rawCast 1 * _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl (↑x ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.atom_pf (2 ^ ty.numBits - ↑y) rfl
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              (2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                (2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl ((2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_gt ((2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero (↑x ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                  (Eq.trans
+                    (Mathlib.Tactic.RingNF.add_assoc_rev ((2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                      (↑x ^ Nat.rawCast 1 * Nat.rawCast 1) 0)
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg HAdd.hAdd
+                          (congr
+                            (congrArg HAdd.hAdd
+                              (Eq.trans
+                                (congr
+                                  (congrArg HMul.hMul
+                                    (Eq.trans
+                                      (congrArg (HPow.hPow (2 ^ ty.numBits - ↑y)) Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                      (pow_one (2 ^ ty.numBits - ↑y))))
+                                  Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                (mul_one (2 ^ ty.numBits - ↑y))))
+                            (Eq.trans
+                              (congr
+                                (congrArg HMul.hMul
+                                  (Eq.trans (congrArg (HPow.hPow ↑x) Mathlib.Tactic.RingNF.nat_rawCast_1) (pow_one ↑x)))
+                                Mathlib.Tactic.RingNF.nat_rawCast_1)
+                              (mul_one ↑x))))
+                        0)
+                      (add_zero (2 ^ ty.numBits - ↑y + ↑x))))))
+              (2 ^ ty.numBits)))
+          (eq_self ((2 ^ ty.numBits - ↑y + ↑x) % 2 ^ ty.numBits)))))
+theorem Aeneas.Std.UScalar.wrapping_mul_val_eq : ∀ {ty : UScalarTy} (x y : UScalar ty),
+  ↑(x.wrapping_mul y) = ↑x * ↑y % UScalar.size ty :=
+fun {ty} x y =>
+  Eq.mpr (id (congrArg (Eq (x.bv * y.bv).toNat) (congrArg (HMod.hMod (x.bv.toNat * y.bv.toNat)) (UScalar.size_def ty))))
+    (have this := of_eq_true (pow_pos._simp_1 (of_eq_true Nat.ofNat_pos._simp_1) ty.numBits);
+    have this := Decidable.byContradiction fun a => UScalar.wrapping_mul_val_eq._proof_1_2 this a;
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (congrFun' (congrArg HMod.hMod (congr (congrArg HMul.hMul (UScalar.bv_toNat x)) (UScalar.bv_toNat y)))
+              (2 ^ ty.numBits)))
+          (congrFun' (congrArg HMod.hMod (congr (congrArg HMul.hMul (UScalar.bv_toNat x)) (UScalar.bv_toNat y)))
+            (2 ^ ty.numBits)))
+        (eq_self (↑x * ↑y % 2 ^ ty.numBits))))
+def Aeneas.Std.U32.wrapping_add : U32 → U32 → U32 :=
+fun x y => UScalar.wrapping_add x y
+def Aeneas.Std.U32.wrapping_sub : U32 → U32 → U32 :=
+UScalar.wrapping_sub
+def Aeneas.Std.UScalar.wrapping_add : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv + y.bv)#uscalar
+def Aeneas.Std.UScalar.wrapping_sub : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv - y.bv)#uscalar
+XRp_generated/XRp_ArithmeticInspect.lean:10:7: error(lean.unknownIdentifier): Unknown constant `AspisR1Qm31ArithmeticProbe.field.QM31.sub`
