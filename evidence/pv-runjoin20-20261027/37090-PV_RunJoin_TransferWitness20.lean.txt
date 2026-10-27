@@ -1,0 +1,32 @@
+import R1Z.PV_RunJoin_PayloadModel20
+import R1Z.PV_RunJoin_FixturePathInputs16
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_TransferWitness20
+open R0Z.WriterRefine R0Z.BuilderModel PV_Src_Forest_PrimitiveArguments PV_RunJoin_ReferenceFixtureResults
+local notation "M" => PV_RunJoin_FixtureRecords.M
+attribute [local irreducible] R0P.nodeCompress R0P.poseidonPermutation
+
+theorem inverse : (541081664 : M) = (1020 : M)⁻¹ := by
+  apply eq_inv_of_mul_eq_one_left
+  norm_num
+#print axioms inverse
+
+theorem source : toModel (K := M) (wordWitness transferWitness) =
+    BuilderSpendRelation.modelWitness (PV_RunJoin_FixtureRecords.witness false) := by
+  unfold toModel BuilderSpendRelation.modelWitness PV_RunJoin_FixtureRecords.witness
+  congr 1
+  · funext i; fin_cases i <;> rfl
+  · funext i; fin_cases i <;> rfl
+  · exact PV_RunJoin_FixturePathInputs16.transfer_path
+  · change _ = AspisR1.SpendRelation.noteCommitment _ _ _ _
+    rw [PV_RunJoin_FixtureHashModel.input_commitment]
+    funext i; fin_cases i <;> rfl
+  · funext i; fin_cases i <;> rfl
+  · exact inverse
+  · funext i; fin_cases i <;> rfl
+  · funext i; fin_cases i <;> rfl
+  · funext i; fin_cases i <;> rfl
+  · funext i; fin_cases i <;> rfl
+#print axioms source
+end R1Z.PV_RunJoin_TransferWitness20
