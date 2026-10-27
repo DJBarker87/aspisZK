@@ -1,0 +1,1244 @@
+import R1Z.PV_RunJoin_OutputPair17
+import R1Z.PV_Src_Forest_AppendArguments
+import R1Z.PV_Src_RootFieldMeaning
+import R1Z.PV_RunJoin_OutputCell4117
+import R1Z.PV_RunJoin_OutputCell4217
+import R1Z.PV_RunJoin_OutputCell4317
+import R1Z.PV_RunJoin_OutputCell4417
+import R1Z.PV_RunJoin_OutputCell4517
+import R1Z.PV_RunJoin_OutputCell4617
+import R1Z.PV_RunJoin_OutputCell4717
+import R1Z.PV_RunJoin_OutputCell4817
+import R1Z.PV_RunJoin_OutputCell4917
+import R1Z.PV_RunJoin_OutputCell5017
+import R1Z.PV_RunJoin_OutputCell5117
+import R1Z.PV_RunJoin_OutputCell5217
+import R1Z.PV_RunJoin_OutputCell5317
+import R1Z.PV_RunJoin_OutputCell5417
+import R1Z.PV_RunJoin_OutputCell5517
+import R1Z.PV_RunJoin_OutputCell5617
+import R1Z.PV_RunJoin_OutputCell5717
+import R1Z.PV_RunJoin_OutputCell5817
+import R1Z.PV_RunJoin_OutputCell5917
+import R1Z.PV_RunJoin_OutputCell6017
+import R1Z.PV_RunJoin_OutputCell6117
+import R1Z.PV_RunJoin_OutputCell6217
+import R1Z.PV_RunJoin_OutputCell6317
+import R1Z.PV_RunJoin_OutputCell6417
+import R1Z.PV_RunJoin_OutputCell6517
+import R1Z.PV_RunJoin_OutputCell6617
+import R1Z.PV_RunJoin_OutputCell6717
+import R1Z.PV_RunJoin_OutputCell6817
+import R1Z.PV_RunJoin_OutputCell6917
+import R1Z.PV_RunJoin_OutputCell7017
+import R1Z.PV_RunJoin_OutputCell7117
+import R1Z.PV_RunJoin_OutputCell7217
+import R1Z.PV_RunJoin_OutputCell7317
+import R1Z.PV_RunJoin_OutputCell7417
+import R1Z.PV_RunJoin_OutputCell7517
+import R1Z.PV_RunJoin_OutputCell7617
+import R1Z.PV_RunJoin_OutputCell7717
+import R1Z.PV_RunJoin_OutputCell7817
+import R1Z.PV_RunJoin_OutputCell7917
+import R1Z.PV_RunJoin_OutputCell8017
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_AppendNative17
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+open PV_RunJoin_ReferenceFixtureResults PV_RunJoin_OutputPair17
+local notation "M" => PV_RunJoin_FixtureRecords.M
+attribute [local irreducible] R0P.nodeCompress R0P.poseidonPermutation
+
+theorem step (w : RW) (p : RP) (n next : Usize) (c sib target : Array U32 8#usize)
+    (hz : next ≠ 0#usize) (hs : Usize.wrapping_sub next 1#usize = n)
+    (hc : app_cur_r w p n = ok c) (hb : app_bit_r p n = ok false)
+    (hsib : app_sib_r p n = ok sib) (hn : node_digest_r c sib = ok target) :
+    app_cur_r w p next = ok target := by
+  rw [app_cur_r,if_neg hz]
+  simp only [lift,bind_tc_ok]
+  rw [hs,hc]
+  simp only [bind_tc_ok]
+  rw [hsib,hb]
+  simp only [bind_tc_ok,ordered_r,Bool.false_eq_true,if_false]
+  exact hn
+#print axioms step
+abbrev transfer0 := transferPair
+def transfer1 : Array U32 8#usize := Array.make 8#usize [1939205616#u32,641788683#u32,1281268521#u32,866499727#u32,385183050#u32,1408789791#u32,1189739305#u32,569851020#u32]
+def transfer2 : Array U32 8#usize := Array.make 8#usize [1133998657#u32,190536997#u32,632216762#u32,2145002820#u32,1218690534#u32,1341831920#u32,1813986794#u32,962659369#u32]
+def transfer3 : Array U32 8#usize := Array.make 8#usize [1061398933#u32,509112012#u32,1799578086#u32,482877258#u32,2025164722#u32,672733548#u32,359961336#u32,1470147015#u32]
+def transfer4 : Array U32 8#usize := Array.make 8#usize [650311058#u32,434968666#u32,41653783#u32,849815005#u32,1944690526#u32,1561873308#u32,545397838#u32,336751789#u32]
+def transfer5 : Array U32 8#usize := Array.make 8#usize [1736209514#u32,234715035#u32,487763438#u32,1135092556#u32,1921147183#u32,568436335#u32,1137697966#u32,357096408#u32]
+def transfer6 : Array U32 8#usize := Array.make 8#usize [874162269#u32,1451641120#u32,2103371390#u32,1001754857#u32,1905791956#u32,1847859879#u32,128353993#u32,1497851806#u32]
+def transfer7 : Array U32 8#usize := Array.make 8#usize [779813195#u32,274765226#u32,1694692007#u32,261106508#u32,380728998#u32,546229929#u32,1098356305#u32,1560230773#u32]
+def transfer8 : Array U32 8#usize := Array.make 8#usize [985515685#u32,670227816#u32,320139735#u32,164221359#u32,586867065#u32,504851391#u32,659699442#u32,1594817757#u32]
+def transfer9 : Array U32 8#usize := Array.make 8#usize [210048012#u32,966687588#u32,869731705#u32,823470673#u32,703197799#u32,1759368079#u32,456367603#u32,772376783#u32]
+def transfer10 : Array U32 8#usize := Array.make 8#usize [1483663627#u32,500119681#u32,2118402728#u32,174107570#u32,654106964#u32,85317403#u32,1579623758#u32,1770549948#u32]
+def transfer11 : Array U32 8#usize := Array.make 8#usize [578338833#u32,1226544375#u32,1719735936#u32,2046596019#u32,1635531819#u32,454303639#u32,1556588950#u32,1520337232#u32]
+def transfer12 : Array U32 8#usize := Array.make 8#usize [1033316416#u32,1871077402#u32,1557962334#u32,322514877#u32,1982083472#u32,813203847#u32,1866642001#u32,508617919#u32]
+def transfer13 : Array U32 8#usize := Array.make 8#usize [1310587138#u32,1547028228#u32,724201667#u32,460418645#u32,1935078033#u32,56710135#u32,329156384#u32,480377036#u32]
+def transfer14 : Array U32 8#usize := Array.make 8#usize [126701447#u32,2048228689#u32,1569040746#u32,816942090#u32,934340682#u32,707737539#u32,1640113194#u32,1531834504#u32]
+def transfer15 : Array U32 8#usize := Array.make 8#usize [2007593611#u32,263026897#u32,269045574#u32,218491882#u32,465723479#u32,2019127874#u32,1644297524#u32,121114825#u32]
+def transfer16 : Array U32 8#usize := Array.make 8#usize [659928130#u32,1737073822#u32,588385416#u32,571209364#u32,294479194#u32,1572976171#u32,358772057#u32,1351134296#u32]
+def transfer17 : Array U32 8#usize := Array.make 8#usize [295651292#u32,1528951695#u32,967845926#u32,1002855730#u32,1691775382#u32,1825776613#u32,369526834#u32,1655898863#u32]
+def transfer18 : Array U32 8#usize := Array.make 8#usize [1660714618#u32,58624303#u32,617770228#u32,599383446#u32,771361068#u32,1834589194#u32,51322319#u32,276611708#u32]
+def transfer19 : Array U32 8#usize := Array.make 8#usize [1186265903#u32,415151008#u32,1902434632#u32,1450931092#u32,922955725#u32,1977809658#u32,160284130#u32,1987330095#u32]
+def transfer20 : Array U32 8#usize := Array.make 8#usize [1915027034#u32,1282510897#u32,1183742216#u32,189326495#u32,737878707#u32,1491662218#u32,555560417#u32,611527247#u32]
+theorem transfer_zero : app_cur_r transferWitness transferPublic 0#usize = ok transfer0 := by
+  rw [app_cur_r]
+  exact transfer_raw
+#print axioms transfer_zero
+theorem transfer_node0 : node_digest_r transfer0 PV_Src_CanonicalRoots.table.val[0]! = ok transfer1 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨0,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer0 = ![1134794151,415789335,111944968,1818281472,628958070,505282998,905808425,2134856457] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[0]! = ![1438900896,782233260,1544844157,891350894,986827501,300047813,266092546,1155026732] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨0,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer1 = ![1939205616,641788683,1281268521,866499727,385183050,1408789791,1189739305,569851020] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_41
+#print axioms transfer_node0
+
+theorem transfer_prefix1 : app_cur_r transferWitness transferPublic 1#usize = ok transfer1 := by
+  apply step _ _ 0#usize _ transfer0 PV_Src_CanonicalRoots.table.val[0]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_zero
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node0
+#print axioms transfer_prefix1
+theorem transfer_node1 : node_digest_r transfer1 PV_Src_CanonicalRoots.table.val[1]! = ok transfer2 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨1,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer1 = ![1939205616,641788683,1281268521,866499727,385183050,1408789791,1189739305,569851020] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[1]! = ![141619947,1448060902,524379093,1944458907,1832113773,579270723,752346270,1038346536] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨1,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer2 = ![1133998657,190536997,632216762,2145002820,1218690534,1341831920,1813986794,962659369] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_42
+#print axioms transfer_node1
+
+theorem transfer_prefix2 : app_cur_r transferWitness transferPublic 2#usize = ok transfer2 := by
+  apply step _ _ 1#usize _ transfer1 PV_Src_CanonicalRoots.table.val[1]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix1
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node1
+#print axioms transfer_prefix2
+theorem transfer_node2 : node_digest_r transfer2 PV_Src_CanonicalRoots.table.val[2]! = ok transfer3 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨2,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer2 = ![1133998657,190536997,632216762,2145002820,1218690534,1341831920,1813986794,962659369] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[2]! = ![1119858538,128294437,939091034,659145897,1933666768,903679201,1182639487,1398246146] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨2,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer3 = ![1061398933,509112012,1799578086,482877258,2025164722,672733548,359961336,1470147015] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_43
+#print axioms transfer_node2
+
+theorem transfer_prefix3 : app_cur_r transferWitness transferPublic 3#usize = ok transfer3 := by
+  apply step _ _ 2#usize _ transfer2 PV_Src_CanonicalRoots.table.val[2]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix2
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node2
+#print axioms transfer_prefix3
+theorem transfer_node3 : node_digest_r transfer3 PV_Src_CanonicalRoots.table.val[3]! = ok transfer4 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨3,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer3 = ![1061398933,509112012,1799578086,482877258,2025164722,672733548,359961336,1470147015] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[3]! = ![1057897051,1132946363,794377079,1971564389,1255722275,926653737,2031728153,2024887573] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨3,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer4 = ![650311058,434968666,41653783,849815005,1944690526,1561873308,545397838,336751789] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_44
+#print axioms transfer_node3
+
+theorem transfer_prefix4 : app_cur_r transferWitness transferPublic 4#usize = ok transfer4 := by
+  apply step _ _ 3#usize _ transfer3 PV_Src_CanonicalRoots.table.val[3]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix3
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node3
+#print axioms transfer_prefix4
+theorem transfer_node4 : node_digest_r transfer4 PV_Src_CanonicalRoots.table.val[4]! = ok transfer5 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨4,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer4 = ![650311058,434968666,41653783,849815005,1944690526,1561873308,545397838,336751789] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[4]! = ![1410054462,673771449,940847521,274330358,1719505495,1690439941,203201419,1855504616] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨4,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer5 = ![1736209514,234715035,487763438,1135092556,1921147183,568436335,1137697966,357096408] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_45
+#print axioms transfer_node4
+
+theorem transfer_prefix5 : app_cur_r transferWitness transferPublic 5#usize = ok transfer5 := by
+  apply step _ _ 4#usize _ transfer4 PV_Src_CanonicalRoots.table.val[4]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix4
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node4
+#print axioms transfer_prefix5
+theorem transfer_node5 : node_digest_r transfer5 PV_Src_CanonicalRoots.table.val[5]! = ok transfer6 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨5,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer5 = ![1736209514,234715035,487763438,1135092556,1921147183,568436335,1137697966,357096408] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[5]! = ![1442759752,1540325866,188964047,101815282,1883549730,1774537487,1306717763,561084592] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨5,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer6 = ![874162269,1451641120,2103371390,1001754857,1905791956,1847859879,128353993,1497851806] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_46
+#print axioms transfer_node5
+
+theorem transfer_prefix6 : app_cur_r transferWitness transferPublic 6#usize = ok transfer6 := by
+  apply step _ _ 5#usize _ transfer5 PV_Src_CanonicalRoots.table.val[5]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix5
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node5
+#print axioms transfer_prefix6
+theorem transfer_node6 : node_digest_r transfer6 PV_Src_CanonicalRoots.table.val[6]! = ok transfer7 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨6,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer6 = ![874162269,1451641120,2103371390,1001754857,1905791956,1847859879,128353993,1497851806] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[6]! = ![244193611,984304317,1467689208,2063463197,1766003332,1300835127,1578947755,745931587] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨6,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer7 = ![779813195,274765226,1694692007,261106508,380728998,546229929,1098356305,1560230773] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_47
+#print axioms transfer_node6
+
+theorem transfer_prefix7 : app_cur_r transferWitness transferPublic 7#usize = ok transfer7 := by
+  apply step _ _ 6#usize _ transfer6 PV_Src_CanonicalRoots.table.val[6]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix6
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node6
+#print axioms transfer_prefix7
+theorem transfer_node7 : node_digest_r transfer7 PV_Src_CanonicalRoots.table.val[7]! = ok transfer8 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨7,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer7 = ![779813195,274765226,1694692007,261106508,380728998,546229929,1098356305,1560230773] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[7]! = ![673192756,38070812,1453532835,1340577407,368420458,1834405704,270061815,711700631] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨7,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer8 = ![985515685,670227816,320139735,164221359,586867065,504851391,659699442,1594817757] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_48
+#print axioms transfer_node7
+
+theorem transfer_prefix8 : app_cur_r transferWitness transferPublic 8#usize = ok transfer8 := by
+  apply step _ _ 7#usize _ transfer7 PV_Src_CanonicalRoots.table.val[7]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix7
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node7
+#print axioms transfer_prefix8
+theorem transfer_node8 : node_digest_r transfer8 PV_Src_CanonicalRoots.table.val[8]! = ok transfer9 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨8,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer8 = ![985515685,670227816,320139735,164221359,586867065,504851391,659699442,1594817757] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[8]! = ![27092219,1272373356,998194489,1458413288,887470405,1204987730,864453460,553704718] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨8,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer9 = ![210048012,966687588,869731705,823470673,703197799,1759368079,456367603,772376783] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_49
+#print axioms transfer_node8
+
+theorem transfer_prefix9 : app_cur_r transferWitness transferPublic 9#usize = ok transfer9 := by
+  apply step _ _ 8#usize _ transfer8 PV_Src_CanonicalRoots.table.val[8]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix8
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node8
+#print axioms transfer_prefix9
+theorem transfer_node9 : node_digest_r transfer9 PV_Src_CanonicalRoots.table.val[9]! = ok transfer10 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨9,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer9 = ![210048012,966687588,869731705,823470673,703197799,1759368079,456367603,772376783] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[9]! = ![1972918328,1234090299,977162835,1704494754,1617603773,1819200880,906453206,1653526885] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨9,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer10 = ![1483663627,500119681,2118402728,174107570,654106964,85317403,1579623758,1770549948] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_50
+#print axioms transfer_node9
+
+theorem transfer_prefix10 : app_cur_r transferWitness transferPublic 10#usize = ok transfer10 := by
+  apply step _ _ 9#usize _ transfer9 PV_Src_CanonicalRoots.table.val[9]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix9
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node9
+#print axioms transfer_prefix10
+theorem transfer_node10 : node_digest_r transfer10 PV_Src_CanonicalRoots.table.val[10]! = ok transfer11 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨10,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer10 = ![1483663627,500119681,2118402728,174107570,654106964,85317403,1579623758,1770549948] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[10]! = ![418360492,472096212,871749117,98906847,2026788776,1504737042,407274798,1800828893] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨10,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer11 = ![578338833,1226544375,1719735936,2046596019,1635531819,454303639,1556588950,1520337232] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_51
+#print axioms transfer_node10
+
+theorem transfer_prefix11 : app_cur_r transferWitness transferPublic 11#usize = ok transfer11 := by
+  apply step _ _ 10#usize _ transfer10 PV_Src_CanonicalRoots.table.val[10]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix10
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node10
+#print axioms transfer_prefix11
+theorem transfer_node11 : node_digest_r transfer11 PV_Src_CanonicalRoots.table.val[11]! = ok transfer12 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨11,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer11 = ![578338833,1226544375,1719735936,2046596019,1635531819,454303639,1556588950,1520337232] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[11]! = ![986339640,660349625,1012157959,454024326,987656904,622864739,1150440730,1280042062] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨11,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer12 = ![1033316416,1871077402,1557962334,322514877,1982083472,813203847,1866642001,508617919] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_52
+#print axioms transfer_node11
+
+theorem transfer_prefix12 : app_cur_r transferWitness transferPublic 12#usize = ok transfer12 := by
+  apply step _ _ 11#usize _ transfer11 PV_Src_CanonicalRoots.table.val[11]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix11
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node11
+#print axioms transfer_prefix12
+theorem transfer_node12 : node_digest_r transfer12 PV_Src_CanonicalRoots.table.val[12]! = ok transfer13 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨12,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer12 = ![1033316416,1871077402,1557962334,322514877,1982083472,813203847,1866642001,508617919] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[12]! = ![2118470693,1706590589,2128512933,167263577,409542414,1323179656,1880070613,2053396184] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨12,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer13 = ![1310587138,1547028228,724201667,460418645,1935078033,56710135,329156384,480377036] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_53
+#print axioms transfer_node12
+
+theorem transfer_prefix13 : app_cur_r transferWitness transferPublic 13#usize = ok transfer13 := by
+  apply step _ _ 12#usize _ transfer12 PV_Src_CanonicalRoots.table.val[12]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix12
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node12
+#print axioms transfer_prefix13
+theorem transfer_node13 : node_digest_r transfer13 PV_Src_CanonicalRoots.table.val[13]! = ok transfer14 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨13,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer13 = ![1310587138,1547028228,724201667,460418645,1935078033,56710135,329156384,480377036] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[13]! = ![260546973,1375125357,1584234519,1097072342,1685367984,1070989054,2113798037,958210542] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨13,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer14 = ![126701447,2048228689,1569040746,816942090,934340682,707737539,1640113194,1531834504] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_54
+#print axioms transfer_node13
+
+theorem transfer_prefix14 : app_cur_r transferWitness transferPublic 14#usize = ok transfer14 := by
+  apply step _ _ 13#usize _ transfer13 PV_Src_CanonicalRoots.table.val[13]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix13
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node13
+#print axioms transfer_prefix14
+theorem transfer_node14 : node_digest_r transfer14 PV_Src_CanonicalRoots.table.val[14]! = ok transfer15 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨14,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer14 = ![126701447,2048228689,1569040746,816942090,934340682,707737539,1640113194,1531834504] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[14]! = ![1239966481,992485427,1397515674,466658549,2071909237,712995354,2047452742,1680224983] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨14,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer15 = ![2007593611,263026897,269045574,218491882,465723479,2019127874,1644297524,121114825] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_55
+#print axioms transfer_node14
+
+theorem transfer_prefix15 : app_cur_r transferWitness transferPublic 15#usize = ok transfer15 := by
+  apply step _ _ 14#usize _ transfer14 PV_Src_CanonicalRoots.table.val[14]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix14
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node14
+#print axioms transfer_prefix15
+theorem transfer_node15 : node_digest_r transfer15 PV_Src_CanonicalRoots.table.val[15]! = ok transfer16 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨15,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer15 = ![2007593611,263026897,269045574,218491882,465723479,2019127874,1644297524,121114825] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[15]! = ![1796237568,1862343136,1954463912,1190686266,364700025,46960257,671215600,1214723477] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨15,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer16 = ![659928130,1737073822,588385416,571209364,294479194,1572976171,358772057,1351134296] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_56
+#print axioms transfer_node15
+
+theorem transfer_prefix16 : app_cur_r transferWitness transferPublic 16#usize = ok transfer16 := by
+  apply step _ _ 15#usize _ transfer15 PV_Src_CanonicalRoots.table.val[15]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix15
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node15
+#print axioms transfer_prefix16
+theorem transfer_node16 : node_digest_r transfer16 PV_Src_CanonicalRoots.table.val[16]! = ok transfer17 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨16,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer16 = ![659928130,1737073822,588385416,571209364,294479194,1572976171,358772057,1351134296] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[16]! = ![1127845264,662862400,84021756,995080286,1419670571,1966281459,837284626,2083375353] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨16,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer17 = ![295651292,1528951695,967845926,1002855730,1691775382,1825776613,369526834,1655898863] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_57
+#print axioms transfer_node16
+
+theorem transfer_prefix17 : app_cur_r transferWitness transferPublic 17#usize = ok transfer17 := by
+  apply step _ _ 16#usize _ transfer16 PV_Src_CanonicalRoots.table.val[16]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix16
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node16
+#print axioms transfer_prefix17
+theorem transfer_node17 : node_digest_r transfer17 PV_Src_CanonicalRoots.table.val[17]! = ok transfer18 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨17,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer17 = ![295651292,1528951695,967845926,1002855730,1691775382,1825776613,369526834,1655898863] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[17]! = ![1321679286,782621548,1415820264,74436574,776350425,323154748,429051705,1299980413] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨17,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer18 = ![1660714618,58624303,617770228,599383446,771361068,1834589194,51322319,276611708] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_58
+#print axioms transfer_node17
+
+theorem transfer_prefix18 : app_cur_r transferWitness transferPublic 18#usize = ok transfer18 := by
+  apply step _ _ 17#usize _ transfer17 PV_Src_CanonicalRoots.table.val[17]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix17
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node17
+#print axioms transfer_prefix18
+theorem transfer_node18 : node_digest_r transfer18 PV_Src_CanonicalRoots.table.val[18]! = ok transfer19 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨18,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer18 = ![1660714618,58624303,617770228,599383446,771361068,1834589194,51322319,276611708] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[18]! = ![1519171444,1235587172,1671492368,1449613582,547369941,1621086153,266860322,450526803] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨18,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer19 = ![1186265903,415151008,1902434632,1450931092,922955725,1977809658,160284130,1987330095] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_59
+#print axioms transfer_node18
+
+theorem transfer_prefix19 : app_cur_r transferWitness transferPublic 19#usize = ok transfer19 := by
+  apply step _ _ 18#usize _ transfer18 PV_Src_CanonicalRoots.table.val[18]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix18
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node18
+#print axioms transfer_prefix19
+theorem transfer_node19 : node_digest_r transfer19 PV_Src_CanonicalRoots.table.val[19]! = ok transfer20 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨19,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) transfer19 = ![1186265903,415151008,1902434632,1450931092,922955725,1977809658,160284130,1987330095] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[19]! = ![19381883,1308966873,251977766,474343397,2069732268,1863820229,152153379,665567443] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨19,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transfer20 = ![1915027034,1282510897,1183742216,189326495,737878707,1491662218,555560417,611527247] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_60
+#print axioms transfer_node19
+
+theorem transfer_prefix20 : app_cur_r transferWitness transferPublic 20#usize = ok transfer20 := by
+  apply step _ _ 19#usize _ transfer19 PV_Src_CanonicalRoots.table.val[19]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact transfer_prefix19
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact transfer_node19
+#print axioms transfer_prefix20
+theorem transfer : CopyRecords.append_root ⟨transferWitness,transferPublic⟩ = ok transfer20 := by
+  rw [CopyRecords.append_root,transfer_prefix20]
+  with_unfolding_all rfl
+#print axioms transfer
+abbrev withdrawal0 := withdrawalPair
+def withdrawal1 : Array U32 8#usize := Array.make 8#usize [609870583#u32,958510084#u32,2094278047#u32,743619649#u32,1992887085#u32,2048705761#u32,118223484#u32,1828066596#u32]
+def withdrawal2 : Array U32 8#usize := Array.make 8#usize [1640108137#u32,330515254#u32,212366917#u32,1785570475#u32,1241175939#u32,132178283#u32,1767391975#u32,136033189#u32]
+def withdrawal3 : Array U32 8#usize := Array.make 8#usize [432585881#u32,1344347431#u32,436199667#u32,1321219941#u32,1344313237#u32,719981873#u32,669780265#u32,1723074008#u32]
+def withdrawal4 : Array U32 8#usize := Array.make 8#usize [1134116828#u32,504509963#u32,1796983347#u32,1413555044#u32,1091344596#u32,1299793962#u32,1007871819#u32,653735563#u32]
+def withdrawal5 : Array U32 8#usize := Array.make 8#usize [779295644#u32,1030234634#u32,105546947#u32,1848021183#u32,1259417564#u32,1402874809#u32,1412830686#u32,1654786357#u32]
+def withdrawal6 : Array U32 8#usize := Array.make 8#usize [641432107#u32,640429421#u32,874903178#u32,930860174#u32,778988106#u32,1148923135#u32,1488375597#u32,266199979#u32]
+def withdrawal7 : Array U32 8#usize := Array.make 8#usize [719727911#u32,1261141874#u32,1037425088#u32,1528290707#u32,696744339#u32,983928879#u32,1739454800#u32,712455604#u32]
+def withdrawal8 : Array U32 8#usize := Array.make 8#usize [844628622#u32,2057670925#u32,2054832692#u32,931597647#u32,1691905484#u32,10140345#u32,2116907504#u32,1823343454#u32]
+def withdrawal9 : Array U32 8#usize := Array.make 8#usize [2054510981#u32,1825804774#u32,418288139#u32,378397545#u32,1185114525#u32,81172068#u32,361707637#u32,1111542572#u32]
+def withdrawal10 : Array U32 8#usize := Array.make 8#usize [1107000820#u32,1338554320#u32,488374647#u32,453509918#u32,222991326#u32,1075792838#u32,352883826#u32,459345458#u32]
+def withdrawal11 : Array U32 8#usize := Array.make 8#usize [2130322641#u32,1665426257#u32,1206815286#u32,1635654730#u32,225199437#u32,982012671#u32,514446081#u32,115798455#u32]
+def withdrawal12 : Array U32 8#usize := Array.make 8#usize [87052585#u32,1514049792#u32,1826519353#u32,387817177#u32,1511331359#u32,351180429#u32,2094192877#u32,1421708941#u32]
+def withdrawal13 : Array U32 8#usize := Array.make 8#usize [1024910236#u32,34897137#u32,119525087#u32,2069845639#u32,34881120#u32,1632903117#u32,1891593814#u32,1830035060#u32]
+def withdrawal14 : Array U32 8#usize := Array.make 8#usize [1669216135#u32,741703000#u32,562283949#u32,1060793623#u32,1378667390#u32,256051405#u32,1303928677#u32,1488857718#u32]
+def withdrawal15 : Array U32 8#usize := Array.make 8#usize [1385985564#u32,1312452205#u32,34748210#u32,2022077470#u32,1837706654#u32,827038403#u32,1892640303#u32,370983584#u32]
+def withdrawal16 : Array U32 8#usize := Array.make 8#usize [475693174#u32,322457381#u32,396535705#u32,1030492646#u32,176446941#u32,912396166#u32,1443369366#u32,2063088540#u32]
+def withdrawal17 : Array U32 8#usize := Array.make 8#usize [223002281#u32,116293184#u32,1618212914#u32,1331700281#u32,2109368512#u32,559795428#u32,204366681#u32,229282374#u32]
+def withdrawal18 : Array U32 8#usize := Array.make 8#usize [204734161#u32,1001842950#u32,1957867491#u32,1426920886#u32,531978693#u32,466210636#u32,1100375901#u32,1136408495#u32]
+def withdrawal19 : Array U32 8#usize := Array.make 8#usize [1898472488#u32,597255419#u32,137386091#u32,1805069421#u32,1817944500#u32,96708207#u32,529143660#u32,294781830#u32]
+def withdrawal20 : Array U32 8#usize := Array.make 8#usize [1292873940#u32,403060133#u32,431852686#u32,2044395979#u32,1025272584#u32,521204804#u32,1571926865#u32,345135516#u32]
+theorem withdrawal_zero : app_cur_r withdrawalWitness withdrawalPublic 0#usize = ok withdrawal0 := by
+  rw [app_cur_r]
+  exact withdrawal_raw
+#print axioms withdrawal_zero
+theorem withdrawal_node0 : node_digest_r withdrawal0 PV_Src_CanonicalRoots.table.val[0]! = ok withdrawal1 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨0,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal0 = ![1635444076,565453809,2007649881,905247732,1187015924,827186728,137720039,588419202] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[0]! = ![1438900896,782233260,1544844157,891350894,986827501,300047813,266092546,1155026732] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨0,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal1 = ![609870583,958510084,2094278047,743619649,1992887085,2048705761,118223484,1828066596] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_61
+#print axioms withdrawal_node0
+
+theorem withdrawal_prefix1 : app_cur_r withdrawalWitness withdrawalPublic 1#usize = ok withdrawal1 := by
+  apply step _ _ 0#usize _ withdrawal0 PV_Src_CanonicalRoots.table.val[0]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_zero
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node0
+#print axioms withdrawal_prefix1
+theorem withdrawal_node1 : node_digest_r withdrawal1 PV_Src_CanonicalRoots.table.val[1]! = ok withdrawal2 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨1,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal1 = ![609870583,958510084,2094278047,743619649,1992887085,2048705761,118223484,1828066596] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[1]! = ![141619947,1448060902,524379093,1944458907,1832113773,579270723,752346270,1038346536] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨1,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal2 = ![1640108137,330515254,212366917,1785570475,1241175939,132178283,1767391975,136033189] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_62
+#print axioms withdrawal_node1
+
+theorem withdrawal_prefix2 : app_cur_r withdrawalWitness withdrawalPublic 2#usize = ok withdrawal2 := by
+  apply step _ _ 1#usize _ withdrawal1 PV_Src_CanonicalRoots.table.val[1]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix1
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node1
+#print axioms withdrawal_prefix2
+theorem withdrawal_node2 : node_digest_r withdrawal2 PV_Src_CanonicalRoots.table.val[2]! = ok withdrawal3 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨2,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal2 = ![1640108137,330515254,212366917,1785570475,1241175939,132178283,1767391975,136033189] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[2]! = ![1119858538,128294437,939091034,659145897,1933666768,903679201,1182639487,1398246146] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨2,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal3 = ![432585881,1344347431,436199667,1321219941,1344313237,719981873,669780265,1723074008] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_63
+#print axioms withdrawal_node2
+
+theorem withdrawal_prefix3 : app_cur_r withdrawalWitness withdrawalPublic 3#usize = ok withdrawal3 := by
+  apply step _ _ 2#usize _ withdrawal2 PV_Src_CanonicalRoots.table.val[2]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix2
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node2
+#print axioms withdrawal_prefix3
+theorem withdrawal_node3 : node_digest_r withdrawal3 PV_Src_CanonicalRoots.table.val[3]! = ok withdrawal4 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨3,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal3 = ![432585881,1344347431,436199667,1321219941,1344313237,719981873,669780265,1723074008] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[3]! = ![1057897051,1132946363,794377079,1971564389,1255722275,926653737,2031728153,2024887573] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨3,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal4 = ![1134116828,504509963,1796983347,1413555044,1091344596,1299793962,1007871819,653735563] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_64
+#print axioms withdrawal_node3
+
+theorem withdrawal_prefix4 : app_cur_r withdrawalWitness withdrawalPublic 4#usize = ok withdrawal4 := by
+  apply step _ _ 3#usize _ withdrawal3 PV_Src_CanonicalRoots.table.val[3]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix3
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node3
+#print axioms withdrawal_prefix4
+theorem withdrawal_node4 : node_digest_r withdrawal4 PV_Src_CanonicalRoots.table.val[4]! = ok withdrawal5 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨4,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal4 = ![1134116828,504509963,1796983347,1413555044,1091344596,1299793962,1007871819,653735563] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[4]! = ![1410054462,673771449,940847521,274330358,1719505495,1690439941,203201419,1855504616] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨4,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal5 = ![779295644,1030234634,105546947,1848021183,1259417564,1402874809,1412830686,1654786357] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_65
+#print axioms withdrawal_node4
+
+theorem withdrawal_prefix5 : app_cur_r withdrawalWitness withdrawalPublic 5#usize = ok withdrawal5 := by
+  apply step _ _ 4#usize _ withdrawal4 PV_Src_CanonicalRoots.table.val[4]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix4
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node4
+#print axioms withdrawal_prefix5
+theorem withdrawal_node5 : node_digest_r withdrawal5 PV_Src_CanonicalRoots.table.val[5]! = ok withdrawal6 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨5,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal5 = ![779295644,1030234634,105546947,1848021183,1259417564,1402874809,1412830686,1654786357] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[5]! = ![1442759752,1540325866,188964047,101815282,1883549730,1774537487,1306717763,561084592] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨5,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal6 = ![641432107,640429421,874903178,930860174,778988106,1148923135,1488375597,266199979] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_66
+#print axioms withdrawal_node5
+
+theorem withdrawal_prefix6 : app_cur_r withdrawalWitness withdrawalPublic 6#usize = ok withdrawal6 := by
+  apply step _ _ 5#usize _ withdrawal5 PV_Src_CanonicalRoots.table.val[5]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix5
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node5
+#print axioms withdrawal_prefix6
+theorem withdrawal_node6 : node_digest_r withdrawal6 PV_Src_CanonicalRoots.table.val[6]! = ok withdrawal7 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨6,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal6 = ![641432107,640429421,874903178,930860174,778988106,1148923135,1488375597,266199979] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[6]! = ![244193611,984304317,1467689208,2063463197,1766003332,1300835127,1578947755,745931587] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨6,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal7 = ![719727911,1261141874,1037425088,1528290707,696744339,983928879,1739454800,712455604] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_67
+#print axioms withdrawal_node6
+
+theorem withdrawal_prefix7 : app_cur_r withdrawalWitness withdrawalPublic 7#usize = ok withdrawal7 := by
+  apply step _ _ 6#usize _ withdrawal6 PV_Src_CanonicalRoots.table.val[6]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix6
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node6
+#print axioms withdrawal_prefix7
+theorem withdrawal_node7 : node_digest_r withdrawal7 PV_Src_CanonicalRoots.table.val[7]! = ok withdrawal8 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨7,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal7 = ![719727911,1261141874,1037425088,1528290707,696744339,983928879,1739454800,712455604] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[7]! = ![673192756,38070812,1453532835,1340577407,368420458,1834405704,270061815,711700631] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨7,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal8 = ![844628622,2057670925,2054832692,931597647,1691905484,10140345,2116907504,1823343454] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_68
+#print axioms withdrawal_node7
+
+theorem withdrawal_prefix8 : app_cur_r withdrawalWitness withdrawalPublic 8#usize = ok withdrawal8 := by
+  apply step _ _ 7#usize _ withdrawal7 PV_Src_CanonicalRoots.table.val[7]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix7
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node7
+#print axioms withdrawal_prefix8
+theorem withdrawal_node8 : node_digest_r withdrawal8 PV_Src_CanonicalRoots.table.val[8]! = ok withdrawal9 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨8,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal8 = ![844628622,2057670925,2054832692,931597647,1691905484,10140345,2116907504,1823343454] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[8]! = ![27092219,1272373356,998194489,1458413288,887470405,1204987730,864453460,553704718] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨8,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal9 = ![2054510981,1825804774,418288139,378397545,1185114525,81172068,361707637,1111542572] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_69
+#print axioms withdrawal_node8
+
+theorem withdrawal_prefix9 : app_cur_r withdrawalWitness withdrawalPublic 9#usize = ok withdrawal9 := by
+  apply step _ _ 8#usize _ withdrawal8 PV_Src_CanonicalRoots.table.val[8]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix8
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node8
+#print axioms withdrawal_prefix9
+theorem withdrawal_node9 : node_digest_r withdrawal9 PV_Src_CanonicalRoots.table.val[9]! = ok withdrawal10 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨9,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal9 = ![2054510981,1825804774,418288139,378397545,1185114525,81172068,361707637,1111542572] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[9]! = ![1972918328,1234090299,977162835,1704494754,1617603773,1819200880,906453206,1653526885] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨9,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal10 = ![1107000820,1338554320,488374647,453509918,222991326,1075792838,352883826,459345458] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_70
+#print axioms withdrawal_node9
+
+theorem withdrawal_prefix10 : app_cur_r withdrawalWitness withdrawalPublic 10#usize = ok withdrawal10 := by
+  apply step _ _ 9#usize _ withdrawal9 PV_Src_CanonicalRoots.table.val[9]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix9
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node9
+#print axioms withdrawal_prefix10
+theorem withdrawal_node10 : node_digest_r withdrawal10 PV_Src_CanonicalRoots.table.val[10]! = ok withdrawal11 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨10,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal10 = ![1107000820,1338554320,488374647,453509918,222991326,1075792838,352883826,459345458] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[10]! = ![418360492,472096212,871749117,98906847,2026788776,1504737042,407274798,1800828893] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨10,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal11 = ![2130322641,1665426257,1206815286,1635654730,225199437,982012671,514446081,115798455] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_71
+#print axioms withdrawal_node10
+
+theorem withdrawal_prefix11 : app_cur_r withdrawalWitness withdrawalPublic 11#usize = ok withdrawal11 := by
+  apply step _ _ 10#usize _ withdrawal10 PV_Src_CanonicalRoots.table.val[10]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix10
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node10
+#print axioms withdrawal_prefix11
+theorem withdrawal_node11 : node_digest_r withdrawal11 PV_Src_CanonicalRoots.table.val[11]! = ok withdrawal12 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨11,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal11 = ![2130322641,1665426257,1206815286,1635654730,225199437,982012671,514446081,115798455] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[11]! = ![986339640,660349625,1012157959,454024326,987656904,622864739,1150440730,1280042062] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨11,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal12 = ![87052585,1514049792,1826519353,387817177,1511331359,351180429,2094192877,1421708941] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_72
+#print axioms withdrawal_node11
+
+theorem withdrawal_prefix12 : app_cur_r withdrawalWitness withdrawalPublic 12#usize = ok withdrawal12 := by
+  apply step _ _ 11#usize _ withdrawal11 PV_Src_CanonicalRoots.table.val[11]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix11
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node11
+#print axioms withdrawal_prefix12
+theorem withdrawal_node12 : node_digest_r withdrawal12 PV_Src_CanonicalRoots.table.val[12]! = ok withdrawal13 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨12,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal12 = ![87052585,1514049792,1826519353,387817177,1511331359,351180429,2094192877,1421708941] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[12]! = ![2118470693,1706590589,2128512933,167263577,409542414,1323179656,1880070613,2053396184] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨12,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal13 = ![1024910236,34897137,119525087,2069845639,34881120,1632903117,1891593814,1830035060] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_73
+#print axioms withdrawal_node12
+
+theorem withdrawal_prefix13 : app_cur_r withdrawalWitness withdrawalPublic 13#usize = ok withdrawal13 := by
+  apply step _ _ 12#usize _ withdrawal12 PV_Src_CanonicalRoots.table.val[12]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix12
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node12
+#print axioms withdrawal_prefix13
+theorem withdrawal_node13 : node_digest_r withdrawal13 PV_Src_CanonicalRoots.table.val[13]! = ok withdrawal14 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨13,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal13 = ![1024910236,34897137,119525087,2069845639,34881120,1632903117,1891593814,1830035060] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[13]! = ![260546973,1375125357,1584234519,1097072342,1685367984,1070989054,2113798037,958210542] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨13,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal14 = ![1669216135,741703000,562283949,1060793623,1378667390,256051405,1303928677,1488857718] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_74
+#print axioms withdrawal_node13
+
+theorem withdrawal_prefix14 : app_cur_r withdrawalWitness withdrawalPublic 14#usize = ok withdrawal14 := by
+  apply step _ _ 13#usize _ withdrawal13 PV_Src_CanonicalRoots.table.val[13]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix13
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node13
+#print axioms withdrawal_prefix14
+theorem withdrawal_node14 : node_digest_r withdrawal14 PV_Src_CanonicalRoots.table.val[14]! = ok withdrawal15 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨14,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal14 = ![1669216135,741703000,562283949,1060793623,1378667390,256051405,1303928677,1488857718] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[14]! = ![1239966481,992485427,1397515674,466658549,2071909237,712995354,2047452742,1680224983] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨14,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal15 = ![1385985564,1312452205,34748210,2022077470,1837706654,827038403,1892640303,370983584] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_75
+#print axioms withdrawal_node14
+
+theorem withdrawal_prefix15 : app_cur_r withdrawalWitness withdrawalPublic 15#usize = ok withdrawal15 := by
+  apply step _ _ 14#usize _ withdrawal14 PV_Src_CanonicalRoots.table.val[14]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix14
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node14
+#print axioms withdrawal_prefix15
+theorem withdrawal_node15 : node_digest_r withdrawal15 PV_Src_CanonicalRoots.table.val[15]! = ok withdrawal16 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨15,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal15 = ![1385985564,1312452205,34748210,2022077470,1837706654,827038403,1892640303,370983584] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[15]! = ![1796237568,1862343136,1954463912,1190686266,364700025,46960257,671215600,1214723477] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨15,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal16 = ![475693174,322457381,396535705,1030492646,176446941,912396166,1443369366,2063088540] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_76
+#print axioms withdrawal_node15
+
+theorem withdrawal_prefix16 : app_cur_r withdrawalWitness withdrawalPublic 16#usize = ok withdrawal16 := by
+  apply step _ _ 15#usize _ withdrawal15 PV_Src_CanonicalRoots.table.val[15]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix15
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node15
+#print axioms withdrawal_prefix16
+theorem withdrawal_node16 : node_digest_r withdrawal16 PV_Src_CanonicalRoots.table.val[16]! = ok withdrawal17 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨16,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal16 = ![475693174,322457381,396535705,1030492646,176446941,912396166,1443369366,2063088540] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[16]! = ![1127845264,662862400,84021756,995080286,1419670571,1966281459,837284626,2083375353] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨16,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal17 = ![223002281,116293184,1618212914,1331700281,2109368512,559795428,204366681,229282374] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_77
+#print axioms withdrawal_node16
+
+theorem withdrawal_prefix17 : app_cur_r withdrawalWitness withdrawalPublic 17#usize = ok withdrawal17 := by
+  apply step _ _ 16#usize _ withdrawal16 PV_Src_CanonicalRoots.table.val[16]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix16
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node16
+#print axioms withdrawal_prefix17
+theorem withdrawal_node17 : node_digest_r withdrawal17 PV_Src_CanonicalRoots.table.val[17]! = ok withdrawal18 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨17,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal17 = ![223002281,116293184,1618212914,1331700281,2109368512,559795428,204366681,229282374] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[17]! = ![1321679286,782621548,1415820264,74436574,776350425,323154748,429051705,1299980413] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨17,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal18 = ![204734161,1001842950,1957867491,1426920886,531978693,466210636,1100375901,1136408495] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_78
+#print axioms withdrawal_node17
+
+theorem withdrawal_prefix18 : app_cur_r withdrawalWitness withdrawalPublic 18#usize = ok withdrawal18 := by
+  apply step _ _ 17#usize _ withdrawal17 PV_Src_CanonicalRoots.table.val[17]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix17
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node17
+#print axioms withdrawal_prefix18
+theorem withdrawal_node18 : node_digest_r withdrawal18 PV_Src_CanonicalRoots.table.val[18]! = ok withdrawal19 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨18,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal18 = ![204734161,1001842950,1957867491,1426920886,531978693,466210636,1100375901,1136408495] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[18]! = ![1519171444,1235587172,1671492368,1449613582,547369941,1621086153,266860322,450526803] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨18,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal19 = ![1898472488,597255419,137386091,1805069421,1817944500,96708207,529143660,294781830] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_79
+#print axioms withdrawal_node18
+
+theorem withdrawal_prefix19 : app_cur_r withdrawalWitness withdrawalPublic 19#usize = ok withdrawal19 := by
+  apply step _ _ 18#usize _ withdrawal18 PV_Src_CanonicalRoots.table.val[18]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix18
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node18
+#print axioms withdrawal_prefix19
+theorem withdrawal_node19 : node_digest_r withdrawal19 PV_Src_CanonicalRoots.table.val[19]! = ok withdrawal20 := by
+  apply PV_RunJoin_NodeValue17.source
+  · exact PV_Src_CanonicalRoots.canonical ⟨19,by decide⟩
+  · intro k hk; interval_cases k <;> decide
+  · have hl : digK (K := M) withdrawal19 = ![1898472488,597255419,137386091,1805069421,1817944500,96708207,529143660,294781830] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_Src_CanonicalRoots.table.val[19]! = ![19381883,1308966873,251977766,474343397,2069732268,1863820229,152153379,665567443] := by
+      rw [PV_Src_RootFieldMeaning.source ⟨19,by decide⟩,PV_RunJoin_RootModel.frozen_literal]
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawal20 = ![1292873940,403060133,431852686,2044395979,1025272584,521204804,1571926865,345135516] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_80
+#print axioms withdrawal_node19
+
+theorem withdrawal_prefix20 : app_cur_r withdrawalWitness withdrawalPublic 20#usize = ok withdrawal20 := by
+  apply step _ _ 19#usize _ withdrawal19 PV_Src_CanonicalRoots.table.val[19]!
+  · decide
+  · apply UScalar.eq_of_val_eq
+    rw [usub _ _ (by simp)]
+    rfl
+  · exact withdrawal_prefix19
+  · rw [PV_Src_Forest_AppendArguments.append_bit _ _ (by decide)]
+    rfl
+  · rw [PV_Src_Forest_AppendArguments.append_sibling _ _ (by decide)]
+    rfl
+  · exact withdrawal_node19
+#print axioms withdrawal_prefix20
+theorem withdrawal : CopyRecords.append_root ⟨withdrawalWitness,withdrawalPublic⟩ = ok withdrawal20 := by
+  rw [CopyRecords.append_root,withdrawal_prefix20]
+  with_unfolding_all rfl
+#print axioms withdrawal
+end R1Z.PV_RunJoin_AppendNative17
