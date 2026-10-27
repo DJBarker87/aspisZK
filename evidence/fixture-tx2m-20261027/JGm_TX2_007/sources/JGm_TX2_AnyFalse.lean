@@ -1,0 +1,34 @@
+import Port4B_AnyFalse
+import Port4B_Install
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGm_TX2_AnyFalse
+open Aeneas Aeneas.Std Result
+
+theorem source (predicate : core.ops.function.FnMut Unit (Slice U8) Bool)
+    (chunks : List (Slice U8)) (remainder : Slice U8)
+    (calls : ∀ chunk∈chunks,predicate.call_mut () chunk=ok (false,())) :
+    Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorChunksExact U8)
+      predicate {chunks:=chunks,remainder:=remainder} ()=
+        ok (false,{chunks:=[],remainder:=remainder}) := by
+  induction chunks with
+  | nil =>
+    unfold Port3_BatchStd.anyDefault
+    rw [Aeneas.Std.loop.eq_def,Port4B_AnyFalse.body_nil]
+    rfl
+  | cons chunk rest ih =>
+    unfold Port3_BatchStd.anyDefault
+    rw [Aeneas.Std.loop.eq_def,Port4B_AnyFalse.body_cons,calls chunk (by simp)]
+    change Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorChunksExact U8)
+      predicate {chunks:=rest,remainder:=remainder} ()=_
+    exact ih (fun c hc => calls c (List.mem_cons_of_mem _ hc))
+#print axioms source
+
+def zero : Slice U8 := ⟨List.replicate 8 0#u8,by decide⟩
+
+theorem predicate {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) :
+    Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool.call_mut
+      (Port3_BatchStd.install Port4B_Install.leaves) D () zero=ok (false,()) := by rfl
+#print axioms predicate
+end AspisR1.JGm_TX2_AnyFalse
+end

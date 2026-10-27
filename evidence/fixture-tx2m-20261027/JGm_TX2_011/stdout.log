@@ -1,0 +1,80 @@
+JGm_TX2_PaddingScan.lean:15:14: error: unsolved goals
+case succ
+n : ℕ
+ih : (List.toChunksExact 8 ⋯ (List.replicate (8 * n) 0#u8)).1 = List.replicate n (List.replicate 8 0#u8)
+⊢ (if h : False then ([], 0#u8 :: List.replicate (8 * n + 7) 0#u8)
+      else
+        (List.replicate 8 0#u8 :: List.replicate n (List.replicate 8 0#u8),
+          (List.toChunksExact 8 ⋯ (List.replicate (8 * n) 0#u8)).2)).1 =
+    List.replicate (n + 1) (List.replicate 8 0#u8)
+JGm_TX2_PaddingScan.lean:17:86: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_replicate, ̲Nat.mul_succ, ̲Nat.not_lt.mpr (by omega : 8 ̲≤ ̲8 ̲* ̲n ̲+ ̲8),̵d̵i̵f̵_̵n̵e̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGm_TX2_PaddingScan.chunk_replicate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGm_TX2_PaddingScan.predicate' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGm_TX2_PaddingScan.lean:48:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ↑c ∈ (List.toChunksExact (↑8#usize) positive _a).1
+Error: Application type mismatch: The argument
+  c
+has type
+  { x // x ∈ (List.toChunksExact (↑8#usize) positive ↑padding).1 }
+but is expected to have type
+  { x // x ∈ (List.toChunksExact (↑8#usize) positive _a).1 }
+in the application
+  ↑c
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case refl
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+padding : Slice U8
+bytes : ↑padding = List.replicate 288 0#u8
+chunk : Slice U8
+positive : ↑8#usize > 0
+mem :
+  chunk ∈
+    {
+        chunks :=
+          List.map
+            (fun x =>
+              match x with
+              | ⟨c, hc⟩ => ⟨c, ⋯⟩)
+            (List.toChunksExact (↑8#usize) positive ↑padding).1.attach,
+        remainder := ⟨(List.toChunksExact (↑8#usize) positive ↑padding).2, ⋯⟩ }.chunks
+chunks :
+  (let result := List.toChunksExact (↑8#usize) positive ↑padding;
+    have sliceChunks :=
+      List.map
+        (fun x =>
+          match x with
+          | ⟨c, hc⟩ => ⟨c, ⋯⟩)
+        result.1.attach;
+    ok { chunks := sliceChunks, remainder := ⟨result.2, ⋯⟩ }) =
+    ok
+      {
+        chunks :=
+          List.map
+            (fun x =>
+              match x with
+              | ⟨c, hc⟩ => ⟨c, ⋯⟩)
+            (List.toChunksExact (↑8#usize) positive ↑padding).1.attach,
+        remainder := ⟨(List.toChunksExact (↑8#usize) positive ↑padding).2, ⋯⟩ }
+c : { x // x ∈ (List.toChunksExact (↑8#usize) positive ↑padding).1 }
+left✝ : c ∈ (List.toChunksExact (↑8#usize) positive ↑padding).1.attach
+eq :
+  (match c with
+    | ⟨c, hc⟩ => ⟨c, ⋯⟩) =
+    chunk
+member : ↑c ∈ (List.toChunksExact (↑8#usize) positive ↑padding).1
+⊢ (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+          (Port3_BatchStd.install Port4B_Install.leaves) D).call_mut
+      () chunk =
+    ok (false, ())
+'AspisR1.JGm_TX2_PaddingScan.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
