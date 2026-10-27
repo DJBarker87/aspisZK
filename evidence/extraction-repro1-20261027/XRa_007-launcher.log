@@ -1,0 +1,40 @@
+Running as unit: run-r424a6ff222de4c8a9ff37cec65179d43.scope; invocation ID: b65608dea26b42de8c00732f9ad94e5a
+{"attempt": "XRa_007", "exit_status": 1, "wall_seconds": 0.8409958069678396, "peak_rss_kib": "62832", "swaps": "0", "print_axioms": "N/A: optimized-aeneas-build"}
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain ['ocamlopt', '-version']
+5.2.1
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain ['dune', '--version']
+3.24.2
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain ['ocamlfind', 'query', 'zarith']
+/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_opam/lib/zarith
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain/charon ['dune', 'build', '--profile', 'release', '-j1', '@install']
+/usr/bin/ld: cannot find -lzstd: No such file or directory
+collect2: error: ld returne
+...
+action-repro1-20261027/XRa_toolchain ['ocamlopt', '-version']
+5.2.1
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain ['dune', '--version']
+3.24.2
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain ['ocamlfind', 'query', 'zarith']
+/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_opam/lib/zarith
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain/charon ['dune', 'build', '--profile', 'release', '-j1', '@install']
+/usr/bin/ld: cannot find -lzstd: No such file or directory
+collect2: error: ld returned 1 exit status
+File "caml_startup", line 1:
+Error: Error during linking (exit code 1)
+-> required by _build/default/.ppx/6871fbbaa206a5631eea363263c39557/ppx.exe
+-> required by
+   _build/default/charon-ml/name_matcher_parser/Parser__mock.ml.pp.mock
+-> required by
+   _build/default/charon-ml/name_matcher_parser/Parser__mock.mli.inferred
+-> required by _build/default/charon-ml/name_matcher_parser/Parser.ml
+-> required by _build/install/default/lib/name_matcher_parser/Parser.ml
+-> required by _build/default/name_matcher_parser.install
+-> required by alias install
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_build_aeneas.py", line 7, in <module>
+    print('COMMAND',str(cwd),cmd,flush=True);subprocess.run(cmd,cwd=cwd,env=env,check=True)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['dune', 'build', '--profile', 'release', '-j1', '@install']' returned non-zero exit status 1.
+

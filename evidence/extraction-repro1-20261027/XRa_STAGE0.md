@@ -1,3 +1,5 @@
+> Superseded source-tree interpretation: see XRa_PIN.md, finding XRa-TOOL-PIN. The archived exact38file audit distinguishes the extended source from the recipe tree.
+
 # XRa provenance recovery preflight
 
 D188-P remains open. Read-only inputs identify Charon cb50ff16b9f1066b8a97dc06da704de2da2fa41c and Aeneas b59d5188c082f704a418c7cb4e52ad69328002d1 PLUS the audited Lean 4.32 patch (5abaafc2…), patched tree 5a843e70672e4139232b2fdcb52a0c1fbd4b1619. The recipe and translation metadata identify the extended tool; unpatched upstream Aeneas is not interchangeable.

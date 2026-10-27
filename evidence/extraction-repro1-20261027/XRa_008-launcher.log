@@ -1,0 +1,43 @@
+Running as unit: run-r92bf52e2ed114b5caf4f5897c6c280ee.scope; invocation ID: f81dc24667e542599e3a0a11d38638bd
+{"attempt": "XRa_008", "exit_status": 1, "wall_seconds": 40.52489784202771, "peak_rss_kib": "286412", "swaps": "0", "print_axioms": "N/A: optimized-aeneas-build"}
+LINK_LIBRARY libzstd.a 6d831b4d3ed03e3ab45995fda09ad60df76cd11a65ffec60f54aec895ea50aca
+LINK_LIBRARY libgmp.a a1c2f1bb9f4e0146aac294661640aeedc14a7e89a33685cd05490516b9f0d647
+965ab4b38d563a546c1435b38fa36248b7ab5e163386acf7ca4e0d73587e673d
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain ['ocamlopt', '-version']
+5.2.1
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain ['dune', '--version']
+3.24.2
+COMMAND /home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_toolchain ['ocamlfind', 'query', 'zarith']
+/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_opam/lib/zarith
+COMMA
+...
+ppx))
+12 |  (libraries zarith menhirLib)
+13 |  (flags
+14 |   ; menhir generates instances of the "unused rec flag" warning
+15 |   (:standard -w -39)))
+/usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/crtbeginT.o: relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
+/usr/bin/ld: failed to set dynamic section sizes: bad value
+collect2: error: ld returned 1 exit status
+File "caml_startup", line 1:
+Error: Error during linking (exit code 1)
+File "charon-ml/src/dune", lines 3-8, characters 0-300:
+3 | (library
+4 |  (name charon) ;; The name as used in the project
+5 |  (public_name charon) ;; The name as revealed to the projects importing this library
+6 |  (preprocess
+7 |   (pps ppx_deriving.show ppx_deriving.ord ppx_deriving.eq visitors.ppx))
+8 |  (libraries yojson zarith easy_logging name_matcher_parser unionFind))
+/usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/crtbeginT.o: relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
+/usr/bin/ld: failed to set dynamic section sizes: bad value
+collect2: error: ld returned 1 exit status
+File "caml_startup", line 1:
+Error: Error during linking (exit code 1)
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_build_aeneas_linklibs.py", line 15, in <module>
+    print('COMMAND',str(cwd),cmd,flush=True);subprocess.run(cmd,cwd=cwd,env=env,check=True)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['dune', 'build', '--profile', 'release', '-j1', '@install']' returned non-zero exit status 1.
+
