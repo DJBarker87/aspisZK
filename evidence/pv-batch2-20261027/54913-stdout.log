@@ -1,0 +1,39 @@
+def Aeneas.Std.UScalar.cast : {src_ty : Aeneas.Std.UScalarTy} →
+  (tgt_ty : Aeneas.Std.UScalarTy) → Aeneas.Std.UScalar src_ty → Aeneas.Std.UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+def Aeneas.Std.U32.wrapping_shl : Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.U32 :=
+fun x s => Aeneas.Std.UScalar.wrapping_shl x s
+def Aeneas.Std.core.num.U32.from_le_bytes : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Aeneas.Std.U32 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map Aeneas.Std.U8.bv ↑a))#uscalar
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_WordInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.eq_of_bv_eq`
+theorem Aeneas.Std.loop.eq_def.{u, v} : ∀ {α : Type u} {β : Type v}
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  Aeneas.Std.loop body x =
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => Aeneas.Std.loop body x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div :=
+fun {α} {β} body x =>
+  id
+    (Eq.trans (congrFun (Lean.Order.fix_eq (Aeneas.Std.loop._proof_1 body)) x)
+      (Eq.refl
+        (match body x with
+        | Aeneas.Std.Result.ok r =>
+          match r with
+          | Aeneas.Std.ControlFlow.cont x =>
+            Lean.Order.fix
+              (fun f x =>
+                match body x with
+                | Aeneas.Std.Result.ok r =>
+                  match r with
+                  | Aeneas.Std.ControlFlow.cont x => f x
+                  | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+              (Aeneas.Std.loop._proof_1 body) x
+          | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+        | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+        | Aeneas.Std.Result.div => Aeneas.Std.Result.div)))

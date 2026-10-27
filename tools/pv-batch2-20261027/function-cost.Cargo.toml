@@ -1,0 +1,18 @@
+[package]
+name = "pv-batch2-function-cost"
+version = "0.1.0"
+edition = "2021"
+[workspace]
+[[bin]]
+name = "pv-batch2-function-cost"
+path = "function-cost.rs"
+[dependencies]
+aspis-core = { path = "../candidate/src/crates/aspis-core", features = ["r0"] }
+aspis-r1-cost-probe = { path = "../candidate/src/crates/aspis-r1-cost-probe", features = ["optimized-terminal", "ct-host-prover"] }
+[profile.release]
+opt-level = 3
+
+[profile.release.package.aspis-r1-cert-check]
+overflow-checks = true
+[profile.release.package.aspis-r1-cert-build]
+overflow-checks = true

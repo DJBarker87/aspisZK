@@ -67,3 +67,5 @@ mod prover_helper_sum;
 
 #[cfg(feature="prover")]
 mod prover_powers;
+#[cfg(feature="prover")] mod host_sampler;
+#[cfg(feature="prover")] mod host_weights;

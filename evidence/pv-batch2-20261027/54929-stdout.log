@@ -1,0 +1,81 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:14:64: error: unsolved goals
+i : Usize
+h : ¬i < 8#usize
+⊢ (match
+      if False then do
+        let check1 ← lift (i.wrapping_add 1#usize)
+        ok (cont check1)
+      else ok (ControlFlow.done ()) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun check1 =>
+            if check1 < 8#usize then do
+              let check1 ← lift (check1.wrapping_add 1#usize)
+              ok (cont check1)
+            else ok (ControlFlow.done ()))
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok ()
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:17:71: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B2_Sampler.host_sampler.low_base_p_digits_loop2.body, ̲h,i̵f̵_̵n̵e̵g̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:17:78: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B2_Sampler.host_sampler.low_base_p_digits_loop2.body, ̲h, ̲if_neg,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:23:33: error: Type mismatch
+  step 1#usize ?m.17
+has type
+  run 1#usize = run (Usize.wrapping_add 1#usize 1#usize)
+but is expected to have type
+  run 1#usize = run 2#usize
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:24:23: error: Type mismatch
+  step 2#usize ?m.27
+has type
+  run 2#usize = run (Usize.wrapping_add 2#usize 1#usize)
+but is expected to have type
+  run 2#usize = run 3#usize
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:25:23: error: Type mismatch
+  step 3#usize ?m.38
+has type
+  run 3#usize = run (Usize.wrapping_add 3#usize 1#usize)
+but is expected to have type
+  run 3#usize = run 4#usize
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:26:23: error: Type mismatch
+  step 4#usize ?m.49
+has type
+  run 4#usize = run (Usize.wrapping_add 4#usize 1#usize)
+but is expected to have type
+  run 4#usize = run 5#usize
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:27:23: error: Type mismatch
+  step 5#usize ?m.60
+has type
+  run 5#usize = run (Usize.wrapping_add 5#usize 1#usize)
+but is expected to have type
+  run 5#usize = run 6#usize
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:28:23: error: Type mismatch
+  step 6#usize ?m.71
+has type
+  run 6#usize = run (Usize.wrapping_add 6#usize 1#usize)
+but is expected to have type
+  run 6#usize = run 7#usize
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_ReleaseCheck.lean:29:23: error: Type mismatch
+  step 7#usize ?m.82
+has type
+  run 7#usize = run (Usize.wrapping_add 7#usize 1#usize)
+but is expected to have type
+  run 7#usize = run 8#usize
+'PV_B2_ReleaseCheck.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_ReleaseCheck.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B2_ReleaseCheck.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

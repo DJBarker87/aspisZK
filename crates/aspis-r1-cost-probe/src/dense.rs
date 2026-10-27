@@ -19,7 +19,7 @@ fn semantic_block(hash:HashFn,state:&mut[u8;32],row:u8,record:&[u8])->[u8;32] {
 fn absorb(hash:HashFn,state:&mut[u8;32],row:u8,b:&[u8]) {*state=hash(&[state,&[0,0xa0+row],&(b.len()as u32).to_le_bytes(),b]);}
 fn scalar(hash:HashFn,state:&mut[u8;32],row:u8,b:&[u8],nonzero:bool)->E {
     absorb(hash,state,row,b);let block=hash(&[state,&[1]]);*state=hash(&[state,&[2]]);
-    let x=if nonzero {sample::gamma_sample(&block)}else{sample::ordinary_sample(&block)};trace::value(4,row as usize,x);x
+    let x=if nonzero {crate::host_sampler::gamma_sample(&block)}else{crate::host_sampler::ordinary_sample(&block)};trace::value(4,row as usize,x);x
 }
 fn queries(hash:HashFn,state:&mut[u8;32],row:u8,b:&[u8])->Result<[u32;22],Error> {
     absorb(hash,state,row,b);let mut out=[0;22];let mut count=0;let mut draws=0;

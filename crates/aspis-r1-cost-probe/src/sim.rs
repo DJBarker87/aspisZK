@@ -34,7 +34,7 @@ use aspis_core::{Digest32,HashFn,circle::SecureCirclePoint,digest::LegacyHashFn,
 use aspis_statement::{multilinear_evaluate_qm31,StateOnlyTraceFoundation,pool_v1::pair_forest_semantic_terminal::r0::Public};
 use aspis_prover::{HOST_HASH,state_only_entropy::StateOnlyAttemptSecrets,
     state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,apply_pool_v1_pair_forest_h1_padding_mask_v1,InMemoryStateOnlyMaskNonceStore}};
-use crate::{compact, multiproof,transport::Variant,verifier::Error,weights::Weights,transcript::Transcript,
+use crate::{compact, multiproof,transport::Variant,verifier::Error,host_weights::Weights,transcript::Transcript,
     r1_wire::{self as wire,Challenges,SemanticTranscript},host_semantic::{extra,point_claims},
     prover::{encoded,fold,round,ATTEMPT_CAP,R1PublicChallenges}};
 
@@ -342,7 +342,8 @@ fn opening(columns:&[Vec<K>;29],tau:&Tape,d:&Drawn,variant:Variant)->Result<View
     let alpha:[K;10]=core::array::from_fn(|i|d.sem[15+i]);
     let w=Weights::new(variant,&alpha,&d.z)?;
     let inactive=(0..1024).fold(E::ZERO,|s,j|s.add(q[j].mul_qm31(w.raw(0,j))));
-    let weights=w.materialize(d.kappa)?;
+    let mut weights=match aspis_core::r0::heap::filled(1024,E::ZERO) { Ok(v)=>v, Err(_)=>return Err(Error::Allocation) };
+    w.materialize(d.kappa,weights.as_mut_slice().try_into().unwrap())?;
     let c0=encoded(round(&q,&weights));
     let q1=fold(&q,d.alpha0,false);let w1=fold(&weights,d.alpha0,true);
     let c1=encoded(round(&q1,&w1));

@@ -4,7 +4,7 @@ use aspis_core::{digest::LegacyHashFn,HashFn,field::{WideExact as E,M31,QM31 as 
 use aspis_statement::pool_v1::{pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1};
 use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1;
 use aspis_prover::{state_only_entropy::{StateOnlyAttemptSecrets,ReservedStateOnlyAttemptSecrets,DurableStateOnlyMaskNonceStore},state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore,StateOnlyMaskBuildError,StateOnlyMaskNonceStore}};
-use crate::{transport::Variant,verifier::{Error},weights::{Weights,QUARTER,PERM},host_transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Commitments},r1_wire::Error as SError};
+use crate::{transport::Variant,verifier::{Error},host_weights::{Weights,QUARTER,PERM},host_transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Commitments},r1_wire::Error as SError};
 /// Host commitment backend. Adopted format (PREREG-PROOF-SIZE-2): salted
 /// leaves under binary trees; there is no unsalted or eight-way commitment.
 pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Option<crate::host_commitment::PrivateSalts>,c2_salts:Option<crate::host_commitment::PrivateSalts>}
@@ -318,7 +318,8 @@ fn prepare_opening(variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantic
     let w=Weights::new(variant,&sem.alpha,&sem.z)?;
     let inactive=opening_inactive(&q,&w);
     let kappa=transcript.scalar(28,&inactive.to_le_bytes(),false);
-    let weights=w.materialize(kappa)?;
+    let mut weights=match aspis_core::r0::heap::filled(1024,E::ZERO) { Ok(v)=>v, Err(_)=>return Err(Error::Allocation) };
+    w.materialize(kappa,weights.as_mut_slice().try_into().unwrap())?;
     let c0=round(&q,&weights);
     let c0bytes=encoded_slice(&c0);
     let alpha0=transcript.scalar(29,&c0bytes,false);

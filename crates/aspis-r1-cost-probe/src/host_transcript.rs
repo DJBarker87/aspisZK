@@ -22,7 +22,7 @@ impl<H: Digest32> Transcript<H> {
     }
     pub fn scalar(&mut self,row:u8,payload:&[u8],nonzero:bool)->E {
         let block=self.block(row,payload);
-        let out=if nonzero {crate::sampler::gamma_sample(&block)} else {crate::sampler::ordinary_sample(&block)};
+        let out=if nonzero {crate::host_sampler::gamma_sample(&block)} else {crate::host_sampler::ordinary_sample(&block)};
         crate::trace::value(4,row as usize,out); out
     }
     /// Final query-residual batching: at most 22 coefficients, so a nonzero

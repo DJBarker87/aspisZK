@@ -1,0 +1,26 @@
+import R1Z.PV_B2_SamplerHelpers
+import R1Z.PV_B2_DecodeResult
+set_option autoImplicit false
+noncomputable section
+namespace PV_B2_GammaCarrier
+open Aeneas Aeneas.Std Result PV_B2_SamplerCarrier
+
+/-- Full Result equality between the unmodified raw gamma emission and its
+native-carrier presentation, for every byte block. This is not copy/original
+native equivalence or the gamma rank law. -/
+theorem source (block : Array U8 32#usize) :
+    mapResult toNative (PV_B2_249.host_sampler.gamma_sample block) =
+      PV_B2_Sampler.host_sampler.gamma_sample block := by
+  unfold PV_B2_249.host_sampler.gamma_sample PV_B2_Sampler.host_sampler.gamma_sample
+  simp only [PV_B2_SamplerHelpers.low,PV_B2_SamplerHelpers.small,map_bind]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  rintro ⟨digits,q⟩ _
+  simp only [lift,bind_tc_ok,map_bind]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  rintro ⟨wrapped,digits1⟩ _
+  simp only [map_bind]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro digits2 _
+  exact PV_B2_DecodeResult.source digits2
+#print axioms source
+end PV_B2_GammaCarrier

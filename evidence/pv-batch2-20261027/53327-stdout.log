@@ -1,0 +1,57 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_GammaCarrier.lean:19:2: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.33 ?m.34 ?m.35).mpr`
+  ?m.33 >>= ?m.34 = ?m.33 >>= ?m.35
+with the goal
+  mapResult toNative
+      (let (digits, quotient) := (digits, q)
+      do
+      let (wrapped, digits1) ← PV_B2_Sampler.host_sampler.add_small_base_p digits (quotient.wrapping_add 1#u32)
+      let digits2 ←
+        if wrapped = true then do
+            let (_, digits3) ← PV_B2_Sampler.host_sampler.add_small_base_p digits1 1#u32
+            ok digits3
+          else ok digits1
+      PV_B2_249.host_sampler.decode8 digits2) =
+    let (digits, quotient) := (digits, q)
+    do
+    let (wrapped, digits1) ← PV_B2_Sampler.host_sampler.add_small_base_p digits (quotient.wrapping_add 1#u32)
+    let digits2 ←
+      if wrapped = true then do
+          let (_, digits3) ← PV_B2_Sampler.host_sampler.add_small_base_p digits1 1#u32
+          ok digits3
+        else ok digits1
+    PV_B2_Sampler.host_sampler.decode8 digits2
+
+Note: The full type of `(bind_eq_iff ?m.33 ?m.34 ?m.35).mpr` is
+  (∀ (v : ?m.31), ?m.33 = ok v → ?m.34 v = ?m.35 v) → ?m.33 >>= ?m.34 = ?m.33 >>= ?m.35
+
+block : Std.Array U8 32#usize
+digits : Std.Array U32 8#usize
+q : U32
+a✝ : PV_B2_Sampler.host_sampler.low_base_p_digits block = ok (digits, q)
+⊢ mapResult toNative
+      (let (digits, quotient) := (digits, q)
+      do
+      let (wrapped, digits1) ← PV_B2_Sampler.host_sampler.add_small_base_p digits (quotient.wrapping_add 1#u32)
+      let digits2 ←
+        if wrapped = true then do
+            let (_, digits3) ← PV_B2_Sampler.host_sampler.add_small_base_p digits1 1#u32
+            ok digits3
+          else ok digits1
+      PV_B2_249.host_sampler.decode8 digits2) =
+    let (digits, quotient) := (digits, q)
+    do
+    let (wrapped, digits1) ← PV_B2_Sampler.host_sampler.add_small_base_p digits (quotient.wrapping_add 1#u32)
+    let digits2 ←
+      if wrapped = true then do
+          let (_, digits3) ← PV_B2_Sampler.host_sampler.add_small_base_p digits1 1#u32
+          ok digits3
+        else ok digits1
+    PV_B2_Sampler.host_sampler.decode8 digits2
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_GammaCarrier.lean:18:29: warning: This simp argument is unused:
+  map_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵a̵p̵_̵b̵i̵n̵d̵]̵[̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B2_GammaCarrier.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

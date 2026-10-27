@@ -1,0 +1,26 @@
+import R1Z.PV_B2_WeightsTotal
+set_option autoImplicit false
+noncomputable section
+namespace PV_B2_ConstructorTotal
+open Aeneas Aeneas.Std Result PV_B2_ArrayTotal
+abbrev K := ProverRwFull.aspis_core.field.QM31
+abbrev Point := ProverRwFull.aspis_core.circle.SecureCirclePoint
+
+theorem source_total (v : ProverRwFull.transport.Variant)
+    (alpha : Array K 10#usize) (z : Array Point 2#usize) :
+    RustOk (PV_B2_WeightsNative.host_weights.Weights.new v alpha z) := by
+  simp only [PV_B2_WeightsNative.host_weights.Weights.new,
+    PV_B2_FieldTotal.QM31_mul,PV_B2_FieldTotal.QM31_add,PV_B2_FieldTotal.QM31_sub,
+    bind_tc_ok]
+  repeat' first
+    | exact ⟨_,rfl⟩
+    | exact read _ _ (by decide)
+    | exact write _ _ _ (by decide)
+    | exact borrow _ _ (by decide)
+    | exact PV_B2_WeightsTotal.points _
+    | exact PV_B2_WeightsTotal.double _
+    | apply PV_B2_ArrayTotal.bind_rust
+    | apply PV_B2_ArrayTotal.bind
+    | (intro x; cases x)
+#print axioms source_total
+end PV_B2_ConstructorTotal
