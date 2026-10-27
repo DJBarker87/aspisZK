@@ -95,9 +95,26 @@ fn materialize_values(weights:Weights,kappa:E,mut out:[E;1024])->[E;1024] {
     }
     out
 }
+// D's frozen order has 89 pads, 390 complementary prefix cells, then identity.
+// Keep the initializer's array loans out of the extraction closure.
+fn host_row(variant:Variant,j:usize)->usize {
+    if let Variant::D=variant {
+        assert!(j<1024);
+        if j<89 { return 16*(j/3)+13+j%3; }
+        if j<479 { let q=j-89; return 16*(q/13)+q%13; }
+        return j;
+    }
+    let mut out=0usize;
+    let mut d=0usize;
+    while d<5 {
+        out|=((j>>((2*d) as u32))&3) << ((2*crate::transport::TAU[d]) as u32);
+        d+=1;
+    }
+    out
+}
 fn raw_value(weights:Weights,kind:usize,j:usize)->K {
         if kind==0 {
-            let r=weights.variant.row(j);
+            let r=host_row(weights.variant,j);
             return if (aspis_core::r0::opening::COPY_ACTIVE_ROW_MASKS[r/16]>>(r%16))&1==0 {K::ONE}else{K::ZERO};
         }
         if kind==4 {
@@ -105,7 +122,7 @@ fn raw_value(weights:Weights,kind:usize,j:usize)->K {
             return K::ZERO;
         }
         if kind>=1 && kind<=3 && weights.variant==Variant::D {
-            let r=weights.variant.row(j);
+            let r=host_row(weights.variant,j);
             return point_raw(weights.points[kind-1],r);
         }
         let k=if kind<4 {kind-1}else{kind-2};
