@@ -2,7 +2,7 @@ import PV_B1_PoleOutcome
 set_option autoImplicit false
 noncomputable section
 namespace PV_B1_PoleFalseLaw
-open Aeneas Aeneas.Std Result PV_B1_Transport
+open Aeneas Aeneas.Std Result
 open PV_B1_258 PV_B1_PoleBody
 theorem false_iff (v : Rows) (m : Array U16 64#usize) (c : Q) :
     all_slots_clear v m c=ok false ↔ v.val.length≤1024 ∧

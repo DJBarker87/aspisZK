@@ -2,7 +2,7 @@ import PV_B1_PowersTotal
 set_option autoImplicit false
 noncomputable section
 namespace PV_B1_OriginalPowersTotal
-open Aeneas Aeneas.Std Result PV_B1_Transport
+open Aeneas Aeneas.Std Result
 open PV_B1_254 PV_B1_PowersControl
 theorem total (N : Usize) (x : W) :
     ∃ y, PV_B1_PowersOriginal.weights.powers N x=ok y := by
