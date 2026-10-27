@@ -1,0 +1,35 @@
+FJf_Raw23.lean:26:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑t1
+in the target expression
+  ↑a * ↑g + ↑c * ↑e + ↑9223372028264841218#u64 = ↑a * ↑g + ↑c * ↑e + 9223372028264841218
+
+a b c d e f g h : U32
+ha : ↑a < 2147483647
+hb : ↑b < 2147483647
+hc : ↑c < 2147483647
+hd : ↑d < 2147483647
+he : ↑e < 2147483647
+hf : ↑f < 2147483647
+hg : ↑g < 2147483647
+hh : ↑h < 2147483647
+bag : ↑a * ↑g ≤ 4611686014132420609
+bce : ↑c * ↑e ≤ 4611686014132420609
+bbh : ↑b * ↑h ≤ 4611686014132420609
+bdf : ↑d * ↑f ≤ 4611686014132420609
+t1 : U64 := add (product a g) (product c e)
+v1 : ↑t1 = ↑a * ↑g + ↑c * ↑e
+t2 : U64 := add t1 9223372028264841218#u64
+⊢ ↑a * ↑g + ↑c * ↑e + ↑9223372028264841218#u64 = ↑a * ↑g + ↑c * ↑e + 9223372028264841218
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (9223372028264841218 ≤ UScalar.cMax UScalarTy.U64)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJf_Raw23.lane2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJf_Raw23.lane3' depends on axioms: [propext, Classical.choice, Quot.sound]
