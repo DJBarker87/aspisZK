@@ -117,3 +117,19 @@ tool and, separately and in isolation, evaluates the newest Aeneas/Charon
 on one minimised reproduction per failure class and, if those pass, on the
 full kit. Evaluation only: no pin changes, nothing it emits is imported or
 cited. Re-pinning D188 to a new translator remains the owner's decision.
+
+## Update 2026-10-27 (XRh_): route C' unblocked; route A not pursued
+
+- With the PINNED tools, the call-closed twelve-leaf release LLBC emitted
+  COMPLETE Types/Funs (exit 0, first attempt; XRh_PINNED-RESULT.md). Route
+  C' proceeds: extraction-assoc1 (XRi_) compiles the emitted definitions in
+  an isolated namespace and proves the association items against them.
+- Route A evaluation (newest published Aeneas nightly-2026.10.27 with its
+  matching Charon): three of five failure classes pass, borrow/value is
+  partial, the Arrow/iterator signature check still fails, and a full
+  no-leaf release extraction emits nothing (five more control-flow
+  limitations). The newer backend needs Lean/Mathlib 4.35 and replaces the
+  inductive Result with an interaction-tree effect type, so old proofs that
+  case-split on ok/fail/div do not transfer. Lead ruling: route A is NOT
+  recommended and NOT requested from the owner; the pinned toolchain stays.
+  Evidence: evidence/extraction-eval1-20261027/XRh_ROUTE-A-EVAL.md.
