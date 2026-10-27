@@ -12127,7 +12127,7 @@ streams are lighter; compressor and QM31 try_inv leaves match the recommended bu
 fast-forwarded to it and the pv-cb worktree removed. Four live slots: runjoin17, batch2b, batch3, d188.
 Rows removed outright: 0. Privacy target not yet established.
 
-## D301 (Stream B) 2026-10-27 16:05 UTC: owner approvals relayed by Stream A (client toolchain pin, D188 narrowing); client rust-toolchain file added to the candidate
+## D301 (Stream B) 2026-10-27 15:43 UTC: owner approvals relayed by Stream A (client toolchain pin, D188 narrowing); client rust-toolchain file added to the candidate
 
 Stream A relayed two owner approvals and Stream B checked them against the security contract's
 "Owner-approved amendment, 2026-10-27 (second)". Item 4 pins the native client build toolchain to
