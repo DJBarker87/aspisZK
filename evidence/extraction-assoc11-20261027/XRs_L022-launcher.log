@@ -1,0 +1,45 @@
+{"attempt": "XRs_L022", "exit_status": 1, "wall_seconds": 1.082626707968302, "peak_rss_kib": "2649216", "swaps": "0", "print_axioms": ["'XRs_AddAssociation.pair_bind' does not depend on any axioms", "'XRs_AddAssociation.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRs_generated/XRs_AddAssociation.lean:25:1: error: Type mismatch: After simplification, term
+  hc
+ has type
+  @Eq (Result (Bool × Std.Array U32 8#usize))
+    (do
+      let x ← loop XRs_AddLoop.ebody ({ slice := digits.to_slice }, id, n)
+      ok (x.1 != 0#u32, digits.from_slice (x.2 { slice := digits.to_slice }).slice))
+    do
+    let p ← loop XRs_AddLoop.ibody (digits, n, UScalar.ofNat 0 ⋯)
+    ok (p.2 != 0#u32, p.1)
+but is expected to have type
+  @Eq (Result (Bool × Std.Array U32 8#usize))
+    (do
+      let p ←
+        loop (fun x => XRn_Join_Release.sampler.add_small_base_p_loop.body x.1 x.2.1 x.2.2)
+            ({ slice := digits.to_slice }, fun im => im, n)
+      ok (p.1 != 0#u32, digit
+...
+XRs_generated/XRs_AddAssociation.lean:25:1: error: Type mismatch: After simplification, term
+  hc
+ has type
+  @Eq (Result (Bool × Std.Array U32 8#usize))
+    (do
+      let x ← loop XRs_AddLoop.ebody ({ slice := digits.to_slice }, id, n)
+      ok (x.1 != 0#u32, digits.from_slice (x.2 { slice := digits.to_slice }).slice))
+    do
+    let p ← loop XRs_AddLoop.ibody (digits, n, UScalar.ofNat 0 ⋯)
+    ok (p.2 != 0#u32, p.1)
+but is expected to have type
+  @Eq (Result (Bool × Std.Array U32 8#usize))
+    (do
+      let p ←
+        loop (fun x => XRn_Join_Release.sampler.add_small_base_p_loop.body x.1 x.2.1 x.2.2)
+            ({ slice := digits.to_slice }, fun im => im, n)
+      ok (p.1 != 0#u32, digits.from_slice (p.2 { slice := digits.to_slice }).slice))
+    do
+    let p ←
+      loop (fun x => AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p_loop.body x.1 x.2.1 x.2.2)
+          (digits, n, 0#usize)
+    ok (p.2 != 0#u32, p.1)
+'XRs_AddAssociation.pair_bind' does not depend on any axioms
+'XRs_AddAssociation.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r73736b2f6bc24ee49cae9dbdb153c265.scope; invocation ID: b016bbfa587241de85be0cf65eea26d5

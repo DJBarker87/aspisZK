@@ -1,0 +1,41 @@
+XRs_generated/XRs_AddLoop.lean:46:104: error: unsolved goals
+seed : Std.Array U32 8#usize
+base : Iter
+hlen : (↑base.slice).length = 8
+n : ℕ
+ih :
+  ∀ (i : ℕ) (bound : i + n = 8) (a : Std.Array U32 8#usize) (back : Back) (c : U32),
+    Good base back a i →
+      loop ebody ({ slice := base.slice, i := i }, back, c) >>= output seed base = loop ibody (a, c, idx i ⋯)
+i : ℕ
+bound : i + (n + 1) = 8
+a : Std.Array U32 8#usize
+back : Back
+c : U32
+g : Good base back a i
+hi : i < 8
+hb : i < (↑base.slice).length
+ha : i < (↑a).length
+hv : (↑base.slice)[i] = (↑a)[i]
+⊢ (do
+      let (d, c') ← step (↑a)[i] c
+      ok (cont ({ slice := base.slice, i := i + 1 }, fun r => back (write r i d), c'))) =
+    do
+    let p ← step (↑a)[i] c
+    ok (cont ({ slice := base.slice, i := i + 1 }, fun r => back (write r i p.1), p.2))
+XRs_generated/XRs_AddLoop.lean:56:4: error: Type mismatch: After simplification, term
+  h
+ has type
+  (do
+      let x ← loop ibody (a, c, idx i ⋯)
+      ok x) =
+    do
+    let x ← step (↑a)[i] c
+    let x ← loop ibody (XRs_AddIndexed.set a i x.1, x.2, idx (i + 1) ⋯)
+    ok x
+but is expected to have type
+  loop ibody (a, c, idx i ⋯) = do
+    let p ← step (↑a)[i] c
+    loop ibody (XRs_AddIndexed.set a i p.1, p.2, idx (i + 1) ⋯)
+'XRs_AddLoop.restored' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRs_AddLoop.join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,69 @@
+XRs_generated/XRs_AddIndexed.lean:33:1: error: Tactic `apply` failed: could not unify the conclusion of `congrArg fun k =>
+  core.convert.num.FromU64U32.from (↑a)[i] + core.convert.num.FromU64U32.from c >>= k`
+  core.convert.num.FromU64U32.from (↑a)[i] + core.convert.num.FromU64U32.from c >>= ?m.148 =
+    core.convert.num.FromU64U32.from (↑a)[i] + core.convert.num.FromU64U32.from c >>= ?m.149
+with the goal
+  (do
+      let i1 ←
+        match a[idx i ⋯]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let sum ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from c
+      let i5 ← sum % core.convert.num.FromU64U32.from 2147483647#u32
+      let digits1 ← a.update (idx i ⋯) (UScalar.cast UScalarTy.U32 i5)
+      let i8 ← sum / core.convert.num.FromU64U32.from 2147483647#u32
+      let i9 ← idx i ⋯ + 1#usize
+      ok (cont (digits1, UScalar.cast UScalarTy.U32 i8, i9))) =
+    do
+    let x ← core.convert.num.FromU64U32.from (↑a)[i] + core.convert.num.FromU64U32.from c
+    let x_1 ← x % core.convert.num.FromU64U32.from 2147483647#u32
+    let x ← x / core.convert.num.FromU64U32.from 2147483647#u32
+    let (d, c') := (UScalar.cast UScalarTy.U32 x_1, UScalar.cast UScalarTy.U32 x)
+      ok (cont (set a i d, c', idx (i + 1) ⋯))
+
+Note: The full type of `congrArg fun k =>
+  core.convert.num.FromU64U32.from (↑a)[i] + core.convert.num.FromU64U32.from c >>= k` is
+  ?m.148 = ?m.149 →
+    core.convert.num.FromU64U32.from (↑a)[i] + core.convert.num.FromU64U32.from c >>= ?m.148 =
+      core.convert.num.FromU64U32.from (↑a)[i] + core.convert.num.FromU64U32.from c >>= ?m.149
+
+a : Std.Array U32 8#usize
+c : U32
+i : ℕ
+h : i < 8
+hi : idx i ⋯ < 8#usize
+ha : i < (↑a).length
+hv : ↑(idx i ⋯) = i
+⊢ (do
+      let i1 ←
+        match a[idx i ⋯]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let sum ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from c
+      let i5 ← sum % core.convert.num.FromU64U32.from 2147483647#u32
+      let digits1 ← a.update (idx i ⋯) (UScalar.cast UScalarTy.U32 i5)
+      let i8 ← sum / core.convert.num.FromU64U32.from 2147483647#u32
+      let i9 ← idx i ⋯ + 1#usize
+      ok (cont (digits1, UScalar.cast UScalarTy.U32 i8, i9))) =
+    do
+    let x ← core.convert.num.FromU64U32.from (↑a)[i] + core.convert.num.FromU64U32.from c
+    let x_1 ← x % core.convert.num.FromU64U32.from 2147483647#u32
+    let x ← x / core.convert.num.FromU64U32.from 2147483647#u32
+    let (d, c') := (UScalar.cast UScalarTy.U32 x_1, UScalar.cast UScalarTy.U32 x)
+      ok (cont (set a i d, c', idx (i + 1) ⋯))
+XRs_generated/XRs_AddIndexed.lean:29:30: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.index_usize,h̵v̵,̵ List.getElem?_eq_getElem ha, bind_tc_ok, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_AddIndexed.lean:29:34: warning: This simp argument is unused:
+  List.getElem?_eq_getElem ha
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵h̵v̵,̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵h̵a̵,̵[̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲h̲v̲,̲ bind_tc_ok, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRs_AddIndexed.write_commute' depends on axioms: [propext]
+'XRs_AddIndexed.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

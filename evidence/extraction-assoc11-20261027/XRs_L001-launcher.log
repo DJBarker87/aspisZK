@@ -1,0 +1,65 @@
+{"attempt": "XRs_L001", "exit_status": 0, "wall_seconds": 1.0079529070062563, "peak_rss_kib": "2645420", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.Ite
+...
+t.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Slice.update.{u} : {α : Type u} → Slice α → Usize → α → Result (Slice α) :=
+fun {α} v i x =>
+  match (↑v)[↑i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+Aeneas.Std.loop.eq_def.{u, v} {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β)) (x : α) :
+  loop body x =
+    match body x with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x => loop body x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div
+List.set_drop.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} :
+  (List.drop i l).set j a = List.drop i (l.set (i + j) a)
+List.drop_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} :
+  List.drop i (l.set j a) = if j < i then List.drop i l else (List.drop i l).set (j - i) a
+
+Running as unit: run-rc3c213233af941389a34271a51a86b8b.scope; invocation ID: 41eca8a55469416b8e51691104848414
