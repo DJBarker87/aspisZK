@@ -1,0 +1,15 @@
+def AspisR1.Port9OR_Batch.code : AspisR1.Port3_NativeBatchBody.Ops →
+  {Hash : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+      Hash →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          AspisR1Stage2.verifier.Prepared →
+            AspisR1.CheckpointBytes5Effect.Digest →
+              Aeneas.Std.Usize →
+                AspisR1.CheckpointBytes5Effect.Code (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun base {Hash} D hash proof p folded which => do
+  let root0 ← AspisR1.CheckpointBytes5Effect.liftResult (p.roots.index_usize 0#usize)
+  let root1 ← AspisR1.CheckpointBytes5Effect.liftResult (p.roots.index_usize 1#usize)
+  AspisR1.Port9OR_Batch.values base D hash proof p.queries (Aeneas.Std.Array.make 3#usize [root0, root1, folded] ⋯)
+      which
+'AspisR1.Port9OR_Batch.code' depends on axioms: [propext, Classical.choice, Quot.sound]

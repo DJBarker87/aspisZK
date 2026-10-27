@@ -1,0 +1,24 @@
+{"attempt": "BEk_054", "exit_status": 0, "wall_seconds": 2.0929579180083238, "peak_rss_kib": "5254668", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_BatchPair.Returning' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.SdkC_BatchPair.Returning : {A : Type} →
+  (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+    (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1.SdkC_Source.Code A → A → Prop :=
+fun {A} hashv H code value =>
+  (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value ∧
+    AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code) =
+        (AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code []).2, Aeneas.Std.Result.ok value) ∧
+      ∀ (a : AspisV8R19.DuplexFrames.Bytes) (d : AspisV8R19.SourceDuplexStep.State),
+        d ≠ H a → (a, d) ∉ AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.
+...
+def AspisR1.SdkC_BatchPair.Returning : {A : Type} →
+  (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+    (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1.SdkC_Source.Code A → A → Prop :=
+fun {A} hashv H code value =>
+  (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value ∧
+    AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code) =
+        (AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code []).2, Aeneas.Std.Result.ok value) ∧
+      ∀ (a : AspisV8R19.DuplexFrames.Bytes) (d : AspisV8R19.SourceDuplexStep.State),
+        d ≠ H a → (a, d) ∉ AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code []).2
+'AspisR1.SdkC_BatchPair.Returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4dd740e756bc46d69349056590fc9eac.scope; invocation ID: 60432ce1cf424f06a44ffd3998ea697e
+

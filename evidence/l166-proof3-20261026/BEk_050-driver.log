@@ -1,0 +1,32 @@
+{"attempt": "BEk_050", "exit_status": 0, "wall_seconds": 2.220941235020291, "peak_rss_kib": "5251944", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_BatchSource.code' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.SdkC_BatchSource.code : {Hash : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+    Hash →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+          Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              Aeneas.Std.Usize →
+                AspisR1.SdkC_Source.Code (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun {Hash} D hash proof queries roots folded which => do
+  let root0 ← AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 0#usize)
+  let root1 ← AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 1#usi
+...
+def AspisR1.SdkC_BatchSource.code : {Hash : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+    Hash →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+          Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              Aeneas.Std.Usize →
+                AspisR1.SdkC_Source.Code (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun {Hash} D hash proof queries roots folded which => do
+  let root0 ← AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 0#usize)
+  let root1 ← AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 1#usize)
+  AspisR1.Port9OR_Batch.values AspisR1.Port4B_Install.leaves D hash proof queries
+      (Aeneas.Std.Array.make 3#usize [root0, root1, folded] ⋯) which
+'AspisR1.SdkC_BatchSource.code' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8ff59960d82a4847ac7385871d9adc91.scope; invocation ID: e48f0d4c90dc4f64be3dc1eba56a29da
+

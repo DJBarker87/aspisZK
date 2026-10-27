@@ -1,0 +1,42 @@
+{"attempt": "BEk_035", "exit_status": 0, "wall_seconds": 2.5350723160081543, "peak_rss_kib": "4376472", "swaps": "0", "print_axioms": ["'AspisR1.S2W_D189Wrappers.second' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.S2W_D189Wrappers.second : {A : Type} →
+  AspisR1.S2W_ExtractionBoundary.Second →
+    AspisR1.S2W_D189Wrappers.Allocator A →
+      AspisR1.S2W_D189Entry.Entry →
+        AspisR1.S2W_ExtractionBoundary.Program →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1.S2W_ExtractionBoundary.Slot →
+              A →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) × A)
+                    AspisR1.AdapterRw.Cuts.PE) :=
+fun {A} native allocator e program data slot state => do
+  let allocated ←
+    AspisR1.S2W_D189Wrappers.reserve allocator
+        (AspisR1.S2W_D189Wrappers.admittedSizes e 7
+...
+def AspisR1.S2W_D189Wrappers.second : {A : Type} →
+  AspisR1.S2W_ExtractionBoundary.Second →
+    AspisR1.S2W_D189Wrappers.Allocator A →
+      AspisR1.S2W_D189Entry.Entry →
+        AspisR1.S2W_ExtractionBoundary.Program →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1.S2W_ExtractionBoundary.Slot →
+              A →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) × A)
+                    AspisR1.AdapterRw.Cuts.PE) :=
+fun {A} native allocator e program data slot state => do
+  let allocated ←
+    AspisR1.S2W_D189Wrappers.reserve allocator
+        (AspisR1.S2W_D189Wrappers.admittedSizes e 7 AspisR1.S2W_D189Wrappers.secondSizes) state
+  let result ← native program (e.second AspisR1.S2W_D189Wrappers.secondSizes) data slot
+  match result with
+    | Aeneas.Std.core.result.Result.Err error => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+    | Aeneas.Std.core.result.Result.Ok PUnit.unit => do
+      let cleaned ← allocator.cleanup allocated
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (e.heap, cleaned))
+'AspisR1.S2W_D189Wrappers.second' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb461000be9ef447890283535c088e018.scope; invocation ID: 91373ab3108c4a268469cd131aec4936
+

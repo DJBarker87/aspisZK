@@ -1,0 +1,17 @@
+theorem AspisR1.Op5T_SamePair.batches : ∀ {F : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (f : AspisR1.S2W_NativeConsolidation.FirstCut) (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+  AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std) accounts1
+      accounts2 saved f s →
+    have sdk := AspisR1.Op5T_SamePair.dictionary adapter ops stage finish B std;
+    have D := AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 sdk;
+    have currentD := AspisS6CurrentFirstInstallation.toDigest D;
+    ∃ p0 root0 p1 root1,
+      AspisR1.Op5T_Install.currentBatch AspisR1.Port4B_Install.leaves currentD f.proof p0 root0 0#usize () =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+        AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D s.proof p1 root1 1#usize () =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) :=
+⋯
+'AspisR1.Op5T_SamePair.batches' depends on axioms: [propext, Classical.choice, Quot.sound]
