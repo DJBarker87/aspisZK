@@ -1,0 +1,1213 @@
+theorem AspisR1.Rc7_Top.deployed : ∀ {W A F CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : AspisR1.DrvC_Installation.Configuration F CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk (AspisR1.Rc5_Install.configuration indexError c reservation)) native1
+                    native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_ByteCarrier.ByteProver)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q0 + Q1) →
+                                        ∀ (runtime : AspisR1.F3T_Runtime.Runtime),
+                                          AspisR1.FGl_PreparedAt.Owners
+                                              (AspisR1.Rc5_Install.configuration indexError c reservation)
+                                              (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed indexError c)
+                                                  reservation).boundaries →
+                                            AspisR1.F3T_Runtime.StoredCarrierBinding
+                                                (AspisR1.Rc5_Install.configuration indexError c reservation) D
+                                                (AspisR1.F3T_Installed.source
+                                                  (AspisR1.Rc5_Install.configuration indexError c reservation) hashv)
+                                                P runtime →
+                                              have select := fun x =>
+                                                AspisR1.P2P_NativeSelection.pair
+                                                  (AspisR1.DrvC_Installation.sdk
+                                                    (AspisR1.Rc5_Install.configuration indexError c reservation))
+                                                  AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                              AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                                  (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                                  AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                                  AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                                AspisR1.DrvC_Implementation.driver
+                                                      (AspisR1.Rc5_Install.configuration indexError c reservation) =
+                                                    AspisR1.DrvC_SourceEntry.source
+                                                      (AspisR1.Rc5_Install.configuration indexError c reservation)
+                                                      hashv ∧
+                                                  AspisR1.DrvC_Installation.sdk
+                                                        (AspisR1.Rc5_Install.configuration indexError c reservation) =
+                                                      AspisR1.SdkD_PairBatches.dictionary
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).adapter
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).currentBase
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).stageBase
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).finish
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).reserved
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).query
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).geometry
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).boundaries
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).std ∧
+                                                    AspisR1.P2P_Result.Outcome L e1 e2 w1 w2
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).adapter
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).currentBase
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).reserved
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).query
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).geometry
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).stageBase
+                                                        (AspisR1.Rc5_Install.configuration indexError c
+                                                            reservation).finish
+                                                        c.boundaries reservation AspisR1.CPH_Program.verifier data1
+                                                        data2 slot saved post1 post2 H
+                                                        (AspisR1.DrvC_Implementation.driver
+                                                          (AspisR1.Rc5_Install.configuration indexError c reservation))
+                                                        prior (p.physicalEvents t) hashv
+                                                        (AspisR1.BinRawByteCollisionTargets.event
+                                                          AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (AspisR1.Hiq_RecordedJoint.program
+                                                              (AspisR1.F3X_Account.program
+                                                                (AspisR1.Rc5_Install.configuration indexError c
+                                                                  reservation)
+                                                                hashv P)
+                                                              AspisR1.F3X_Projection.project select))) ∧
+                                                      (AspisR1.F3X_ModelClaims.Claims
+                                                            (AspisR1.Rc5_Install.configuration indexError c reservation)
+                                                            D P (Q0 + Q1) ∧
+                                                          AspisR1.F3Y_SourceClaims.Claims
+                                                              (AspisR1.Rc5_Install.configuration indexError c
+                                                                reservation)
+                                                              D hashv P (Q0 + Q1) select ∧
+                                                            AspisR1.F3Y_AccountMass.Claims
+                                                                (AspisR1.Rc5_Install.configuration indexError c
+                                                                  reservation)
+                                                                hashv P (Q0 + Q1) select ∧
+                                                              AspisR1.F3T_RuntimeBound.failureModel runtime ≤
+                                                                  AspisR1.F3T_Numeric.total (Q0 + Q1) ∧
+                                                                (Q0 + Q1 ≤ AspisR1.F3U_RangeEdges.maxQueries →
+                                                                    AspisR1.F3T_RuntimeBound.failureModel runtime ≤
+                                                                      (↑Q0 + ↑Q1 + 1) * (1 / 2 ^ 100)) ∧
+                                                                  (Q0 + Q1 = 0 →
+                                                                    AspisR1.F3U_Numeric.margin ≤
+                                                                        1 / 2 ^ 100 -
+                                                                          AspisR1.F3T_RuntimeBound.failureModel
+                                                                            runtime ∧
+                                                                      AspisR1.F3T_RuntimeBound.failureModel runtime <
+                                                                        1 / 2 ^ 100)) ∧
+                                                        (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                            (↑saved).length = 1768 ∧
+                                                              AspisR1.S2W_EntryWriteHistory.payloadBytes
+                                                                    AspisR1.S2W_ReturnedCheckpoint.encode
+                                                                    (post1.payload (e1.heap.accounts 2).1) 1768 =
+                                                                  AspisR1.MultiproofConeCanonical.bytesOf ↑saved ∧
+                                                                post1.ambient = e1.heap.ambient ∧
+                                                                  post1.accounts = e1.heap.accounts ∧
+                                                                    post1.counter = e1.heap.counter ∧
+                                                                      ∀ (cell : ℕ),
+                                                                        cell ≠ (e1.heap.accounts 2).1 →
+                                                                          post1.payload cell = e1.heap.payload cell) ∧
+                                                          AspisR1.Rc2_Events.Facts
+                                                              (AspisR1.Rc5_Install.configuration indexError c
+                                                                reservation)
+                                                              hashv native1 native2 copy allocator
+                                                              AspisR1.CPH_Program.verifier H saved ∧
+                                                            AspisR1.CPH_Protection.Facts p t saved
+                                                                AspisR1.CPH_Program.verifier ∧
+                                                              AspisR1.CPH_Trace.Facts p t u saved native1 native2 copy
+                                                                  allocator AspisR1.CPH_Program.verifier ∧
+                                                                AspisR1.CPH_Recorder.Facts
+                                                                  (AspisR1.Rc5_Install.configuration indexError c
+                                                                    reservation)
+                                                                  hashv native1 native2 copy allocator
+                                                                  AspisR1.CPH_Program.verifier H p t u saved :=
+fun {W A F CoreError Tx} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError reservation native1
+    native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D P Q0 Q1 queries runtime
+    finishOwners binding =>
+  id
+    (let select := fun x =>
+      AspisR1.P2P_NativeSelection.pair
+        (AspisR1.DrvC_Installation.sdk (AspisR1.Rc5_Install.configuration indexError c reservation))
+        AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+    have prepare := AspisR1.F3Y_InstalledLaws.prepare indexError c reservation;
+    have ports := AspisR1.F3Y_InstalledLaws.primitives indexError c reservation;
+    have canonical := AspisR1.F3Y_InstalledLaws.canonical indexError c reservation;
+    have domain := AspisR1.F3Y_InstalledLaws.domain indexError c reservation;
+    have multiply := AspisR1.F3Y_InstalledLaws.multiply indexError c reservation;
+    have one := AspisR1.F3Y_InstalledLaws.one indexError c reservation;
+    have inverse := AspisR1.F3Y_InstalledLaws.inverse indexError c reservation;
+    have security :=
+      AspisR1.FGl_Bound.bound (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed indexError c) reservation)
+        hashv D words P (Q0 + Q1) queries runtime select prepare ports canonical domain multiply one inverse
+        finishOwners binding;
+    have sourceCost :=
+      AspisR1.FGl_Cost.source_cost
+        (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed indexError c) reservation) hashv D words P
+        (Q0 + Q1) queries select prepare ports canonical domain multiply one inverse finishOwners;
+    have accountMass :=
+      AspisR1.F3Y_AccountMass.claims
+        (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed indexError c) reservation) hashv D words P
+        (Q0 + Q1) queries select;
+    ⟨AspisR1.P6C_Extension.boundary hashv sha256 H p1 syscall,
+      ⟨AspisR1.DrvC_SourceEntry.same_program
+          (AspisR1.Rc3_Install.select (AspisR1.Rc5_Install.seed indexError c) reservation) hashv,
+        ⟨AspisR1.DrvC_Installation.aus1_dictionary (AspisR1.Rc5_Install.configuration indexError c reservation),
+          ⟨have original :=
+              AspisR1.Rc7_Native.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c indexError
+                reservation native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1
+                final2 saved post1 post2 accepted1 accepted2 root length prior words p t u actions game
+                RuntimePersistence;
+            have strengthened :=
+              AspisR1.P2P_R6Result.strengthen L e1 e2 w1 w2
+                (AspisR1.Rc5_Install.configuration indexError c reservation).adapter
+                (AspisR1.Rc5_Install.configuration indexError c reservation).currentBase
+                (AspisR1.Rc5_Install.configuration indexError c reservation).reserved
+                (AspisR1.Rc5_Install.configuration indexError c reservation).query
+                (AspisR1.Rc5_Install.configuration indexError c reservation).geometry
+                (AspisR1.Rc5_Install.configuration indexError c reservation).stageBase
+                (AspisR1.Rc5_Install.configuration indexError c reservation).finish c.boundaries reservation
+                AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2 H
+                (AspisR1.DrvC_Implementation.driver (AspisR1.Rc5_Install.configuration indexError c reservation)) prior
+                (p.physicalEvents t) hashv native1 native2 extraction sha256 p1 syscall original;
+            AspisR1.P2P_Release.remove L e1 e2 w1 w2
+              (AspisR1.Rc5_Install.configuration indexError c reservation).adapter
+              (AspisR1.Rc5_Install.configuration indexError c reservation).currentBase
+              (AspisR1.Rc5_Install.configuration indexError c reservation).reserved
+              (AspisR1.Rc5_Install.configuration indexError c reservation).query
+              (AspisR1.Rc5_Install.configuration indexError c reservation).geometry
+              (AspisR1.Rc5_Install.configuration indexError c reservation).stageBase
+              (AspisR1.Rc5_Install.configuration indexError c reservation).finish c.boundaries reservation
+              AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2 H
+              (AspisR1.DrvC_Implementation.driver (AspisR1.Rc5_Install.configuration indexError c reservation)) prior
+              (p.physicalEvents t) hashv
+              (AspisR1.F3X_Account.program (AspisR1.Rc5_Install.configuration indexError c reservation) hashv P)
+              AspisR1.F3X_Projection.project (Q0 + Q1)
+              (AspisR1.F3Y_AccountMass.budget
+                (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed indexError c) reservation) hashv D words P
+                (Q0 + Q1) queries)
+              strengthened,
+            ⟨⟨AspisR1.F3X_ModelClaims.claims (AspisR1.Rc5_Install.configuration indexError c reservation) D P (Q0 + Q1)
+                  queries,
+                ⟨sourceCost,
+                  ⟨accountMass,
+                    ⟨security,
+                      ⟨fun range =>
+                        Eq.mp
+                          (congrArg (LE.le (AspisR1.F3T_RuntimeBound.failureModel runtime))
+                            (congrFun' (congrArg HMul.hMul (congrFun' (congrArg HAdd.hAdd (Nat.cast_add Q0 Q1)) 1))
+                              (1 / 2 ^ 100)))
+                          (LE.le.trans security (AspisR1.F3U_Range.per_attempt (Q0 + Q1) range)),
+                        fun zero =>
+                        AspisR1.F3U_Numeric.runtime_margin (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                          (Eq.mp
+                            (congrArg
+                              (fun _a => AspisR1.F3T_RuntimeBound.failureModel runtime ≤ AspisR1.F3T_Numeric.total _a)
+                              zero)
+                            security)⟩⟩⟩⟩⟩,
+              ⟨AspisR1.PoolT_Write.accepted_verifier_writes_copy
+                  (AspisR1.DrvC_Installation.sdk (AspisR1.Rc5_Install.configuration indexError c reservation)) native1
+                  native2 hashv extraction copy std allocator e1 AspisR1.CPH_Program.verifier data1 state1 final1 saved
+                  post1 accepted1,
+                ⟨AspisR1.Rc2_Events.derive (AspisR1.Rc5_Install.configuration indexError c reservation) hashv native1
+                    native2 extraction copy allocator AspisR1.CPH_Program.verifier sha256 H p1 syscall saved,
+                  ⟨AspisR1.CPH_Protection.derive p t u e1 e2 saved actions
+                      (AspisR1.Rc5_Install.configuration indexError c reservation)
+                      (AspisR1.Rc5_Install.key indexError c reservation) native1 native2 hashv extraction copy std
+                      allocator AspisR1.CPH_Program.verifier game data1 state1 final1 post1 accepted1,
+                    ⟨AspisR1.CPH_Trace.derive game,
+                      AspisR1.CPH_Recorder.physical p t u e1 e2 saved actions
+                        (AspisR1.Rc5_Install.configuration indexError c reservation) native1 native2 hashv extraction
+                        copy allocator AspisR1.CPH_Program.verifier game sha256 H p1 syscall⟩⟩⟩⟩⟩⟩⟩⟩⟩)
+theorem AspisR1.JGi_ClaimFixture.inhabited : ∀ {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (hash : H),
+  have D0 :=
+    AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+      (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D);
+  ∃ expanded pre view gamma kappa powers,
+    AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+          AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+      AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+        AspisS1ValuesOwnedInstallation.expandValues AspisR1.JFw_Y1.stored AspisR1.JFw_Y1.initial =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), AspisR1.JGe_Payload27.value) ∧
+          AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded
+                AspisR1.JGe_Payload27.value =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+            AspisR1ClaimPreparedBridge.powersPublic 29#usize gamma = Aeneas.Std.Result.ok powers ∧
+              (AspisR1.JGe_TerminalCondition.Identified →
+                ∃ sem claim,
+                  AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+                        AspisR1.JGe_Boundaries.value D0 AspisR1.JFs_PublicSerialization.value pre
+                        { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q14Source.ratchet,
+                          hash := hash, next_row := 15#u8 }
+                        AspisR1.JFm_Begin.challenges none =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) ∧
+                    AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries.claim D0 sem
+                        (AspisR1CurrentCaller.InstalledPreparation.retainedView view).y1
+                        (AspisR1CurrentCaller.InstalledPreparation.retainedView view).inactive powers kappa =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claim)) :=
+fun {H} D hash =>
+  id
+    (let ⟨expanded, h✝⟩ := AspisR1.JGg_OpeningFixture.inhabited D hash
+    let ⟨pre, h✝¹⟩ := h✝
+    let ⟨view, h✝²⟩ := h✝¹
+    let ⟨expand, right✝⟩ := h✝²
+    let ⟨parse, right✝¹⟩ := right✝
+    let ⟨yexpand, right✝²⟩ := right✝¹
+    let ⟨wide, right✝³⟩ := right✝²
+    let ⟨variant, right✝⁴⟩ := right✝³
+    let ⟨y1eq, right✝⁵⟩ := right✝⁴
+    let ⟨round0, right✝⁶⟩ := right✝⁵
+    let ⟨root, right✝⁷⟩ := right✝⁶
+    let ⟨round1, right✝⁸⟩ := right✝⁷
+    let ⟨finalMessage, right✝⁹⟩ := right✝⁸
+    let ⟨inactive, right✝¹⁰⟩ := right✝⁹
+    let ⟨calls, finish⟩ := right✝¹⁰
+    let ⟨gamma, h✝³⟩ := calls
+    let ⟨kappa, h✝⁴⟩ := h✝³
+    let ⟨a0, h✝⁵⟩ := h✝⁴
+    let ⟨a1, h✝⁶⟩ := h✝⁵
+    let ⟨rho, h✝⁷⟩ := h✝⁶
+    let ⟨q, h✝⁸⟩ := h✝⁷
+    let ⟨powers, h✝⁹⟩ := h✝⁸
+    let ⟨gc, right✝¹¹⟩ := h✝⁹
+    let ⟨kc, right✝¹²⟩ := right✝¹¹
+    let ⟨a0c, right✝¹³⟩ := right✝¹²
+    let ⟨a1c, right✝¹⁴⟩ := right✝¹³
+    let ⟨rc, right✝¹⁵⟩ := right✝¹⁴
+    let ⟨qc, right✝¹⁶⟩ := right✝¹⁵
+    let ⟨gcanon, right✝¹⁷⟩ := right✝¹⁶
+    let ⟨kcanon, right✝¹⁸⟩ := right✝¹⁷
+    let ⟨a0canon, right✝¹⁹⟩ := right✝¹⁸
+    let ⟨a1canon, powersCall⟩ := right✝¹⁹
+    Exists.intro expanded
+      (Exists.intro pre
+        (Exists.intro view
+          (Exists.intro gamma
+            (Exists.intro kappa
+              (Exists.intro powers
+                ⟨expand,
+                  ⟨parse,
+                    ⟨yexpand,
+                      ⟨wide,
+                        ⟨powersCall, fun identified =>
+                          let ⟨sem, h✝¹⁰⟩ := finish identified
+                          let ⟨finished, right✝²⁰⟩ := h✝¹⁰
+                          let ⟨roots, state⟩ := right✝²⁰
+                          let ⟨claim, claimed⟩ :=
+                            AspisR1.JGi_PreparedClaim.source
+                              (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+                              hash expanded pre sem view gamma kappa powers expand parse finished wide y1eq gcanon
+                              kcanon powersCall
+                          Exists.intro sem (Exists.intro claim ⟨finished, claimed⟩)⟩⟩⟩⟩⟩))))))
+theorem AspisR1.JGi_PreparationFixture.inhabited : ∀ {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (hash : H) (input : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize),
+  AspisR1.JGe_TerminalCondition.Identified →
+    have D0 :=
+      AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+        (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D);
+    ∃ expanded pre view sem out scratch,
+      AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+            AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+        AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+          AspisS1ValuesOwnedInstallation.expandValues AspisR1.JFw_Y1.stored AspisR1.JFw_Y1.initial =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), AspisR1.JGe_Payload27.value) ∧
+            AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded
+                  AspisR1.JGe_Payload27.value =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+              AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+                    AspisR1.JGe_Boundaries.value D0 AspisR1.JFs_PublicSerialization.value pre
+                    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q14Source.ratchet, hash := hash,
+                      next_row := 15#u8 }
+                    AspisR1.JFm_Begin.challenges none =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) ∧
+                AspisR1PublicPreparation.PreparedScratchModel.prepare
+                    AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries D0 sem
+                    (AspisR1CurrentCaller.InstalledPreparation.retainedView view) hash input =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) :=
+fun {H} D hash input identified =>
+  id
+    (let ⟨expanded, h✝⟩ := AspisR1.JGg_OpeningFixture.inhabited D hash
+    let ⟨pre, h✝¹⟩ := h✝
+    let ⟨view, h✝²⟩ := h✝¹
+    let ⟨expand, right✝⟩ := h✝²
+    let ⟨parse, right✝¹⟩ := right✝
+    let ⟨yexpand, right✝²⟩ := right✝¹
+    let ⟨wide, right✝³⟩ := right✝²
+    let ⟨variant, right✝⁴⟩ := right✝³
+    let ⟨y1eq, right✝⁵⟩ := right✝⁴
+    let ⟨round0, right✝⁶⟩ := right✝⁵
+    let ⟨root, right✝⁷⟩ := right✝⁶
+    let ⟨round1, right✝⁸⟩ := right✝⁷
+    let ⟨finalMessage, right✝⁹⟩ := right✝⁸
+    let ⟨inactive, right✝¹⁰⟩ := right✝⁹
+    let ⟨calls, finish⟩ := right✝¹⁰
+    let ⟨gamma, h✝³⟩ := calls
+    let ⟨kappa, h✝⁴⟩ := h✝³
+    let ⟨a0, h✝⁵⟩ := h✝⁴
+    let ⟨a1, h✝⁶⟩ := h✝⁵
+    let ⟨rho, h✝⁷⟩ := h✝⁶
+    let ⟨q, h✝⁸⟩ := h✝⁷
+    let ⟨powers, h✝⁹⟩ := h✝⁸
+    let ⟨gc, right✝¹¹⟩ := h✝⁹
+    let ⟨kc, right✝¹²⟩ := right✝¹¹
+    let ⟨a0c, right✝¹³⟩ := right✝¹²
+    let ⟨a1c, right✝¹⁴⟩ := right✝¹³
+    let ⟨rc, right✝¹⁵⟩ := right✝¹⁴
+    let ⟨qc, right✝¹⁶⟩ := right✝¹⁵
+    let ⟨gcanon, right✝¹⁷⟩ := right✝¹⁶
+    let ⟨kcanon, right✝¹⁸⟩ := right✝¹⁷
+    let ⟨a0canon, right✝¹⁹⟩ := right✝¹⁸
+    let ⟨a1canon, powersCall⟩ := right✝¹⁹
+    let ⟨sem, h✝¹⁰⟩ := finish identified
+    let ⟨finished, right✝²⁰⟩ := h✝¹⁰
+    let ⟨roots, state⟩ := right✝²⁰
+    let ⟨claim, claimed⟩ :=
+      AspisR1.JGi_PreparedClaim.source
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+          (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+        hash expanded pre sem view gamma kappa powers expand parse finished wide y1eq gcanon kcanon powersCall
+    have variant' :=
+      id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                AspisR1CurrentCaller.InstalledPreparation.retainedVariant _a =
+                  AspisR1PublicPreparation.transport.Variant.S2)
+              variant))
+          (Eq.refl
+            (AspisR1CurrentCaller.InstalledPreparation.retainedVariant AspisR1CurrentCaller.transport.Variant.S2)));
+    have seed :=
+      AspisR1.JGg_OpeningSeed.source D hash sem (AspisR1CurrentCaller.InstalledPreparation.retainedView view) state
+        variant';
+    have len1 :=
+      have h := congrArg List.length round1;
+      have hl := AspisR1.JGg_Opening30.length;
+      id
+        (fun hl =>
+          have hr := AspisR1.JGe_View.folded.property;
+          id
+            (Decidable.byContradiction fun a =>
+              AspisR1.JGi_PreparationFixture.inhabited._proof_1 view hl hr
+                (Eq.mp (congrFun' (congrArg Eq List.length_append) (↑AspisR1.JGg_Opening30.payload).length) h) a))
+        hl;
+    let ⟨bytes1, h✝¹¹⟩ := AspisR1.JGi_FoldBuffers.source AspisR1.JGe_View.folded view.round1 len1
+    let ⟨bytes2, h✝¹²⟩ := h✝¹¹
+    let ⟨first, right✝²¹⟩ := h✝¹²
+    let ⟨second, contents⟩ := right✝²¹
+    have buffer := Subtype.ext (Eq.trans contents round1);
+    have rootCall :=
+      id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => Aeneas.Std.core.option.Option.unwrap _a = Aeneas.Std.Result.ok AspisR1.JGe_View.folded)
+              root))
+          (Eq.refl (Aeneas.Std.core.option.Option.unwrap (some AspisR1.JGe_View.folded))));
+    let out :=
+      AspisR1PublicPreparation.PreparedScratchReachability.output sem
+        (AspisR1CurrentCaller.InstalledPreparation.retainedView view) gamma kappa
+        (Aeneas.Std.Array.make 2#usize [a0, a1]
+          (of_eq_true
+            (Eq.trans
+              (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 2
+                    (of_decide_eq_true (id (Eq.refl true))))))
+              (eq_self 2))))
+        rho q claim { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening32.next0, hash := hash };
+    have double :=
+      Exists.intro { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening27.before, hash := hash }
+        (Exists.intro { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening27.next0, hash := hash }
+          (Exists.intro
+            { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening28.next0, hash := hash }
+            (Exists.intro
+              { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening29.next0, hash := hash }
+              (Exists.intro
+                { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening30.next0, hash := hash }
+                (Exists.intro
+                  { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening31.next2, hash := hash }
+                  (Exists.intro
+                    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JGg_Opening32.next0, hash := hash }
+                    (Exists.intro (Aeneas.Std.Array.repeat 32#usize 0#u8)
+                      (Exists.intro AspisR1.JGe_View.folded
+                        (Exists.intro bytes1
+                          (Exists.intro bytes2
+                            (Exists.intro gamma
+                              (Exists.intro kappa
+                                (Exists.intro a0
+                                  (Exists.intro a1
+                                    (Exists.intro rho
+                                      (Exists.intro q
+                                        (Exists.intro claim
+                                          ⟨seed,
+                                            ⟨id
+                                                (Eq.mpr
+                                                  (id
+                                                    (congrArg
+                                                      (fun _a =>
+                                                        AspisR1PublicPreparation.PreparedModel.scalar
+                                                            AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries.sampling
+                                                            (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                                              (AspisR1.F3V_OracleDictionary.current
+                                                                AspisR1.JFp_SHADigest.digest D))
+                                                            {
+                                                              state :=
+                                                                AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                  AspisR1.JGg_Opening27.before,
+                                                              hash := hash }
+                                                            27#u8 _a true =
+                                                          Aeneas.Std.Result.ok
+                                                            (gamma,
+                                                              {
+                                                                state :=
+                                                                  AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                    AspisR1.JGg_Opening27.next0,
+                                                                hash := hash }))
+                                                      y1eq))
+                                                  gc),
+                                              ⟨inactive,
+                                                ⟨kc,
+                                                  ⟨id
+                                                      (Eq.mpr
+                                                        (id
+                                                          (congrArg
+                                                            (fun _a =>
+                                                              AspisR1PublicPreparation.PreparedModel.scalar
+                                                                  AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries.sampling
+                                                                  (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                                                    (AspisR1.F3V_OracleDictionary.current
+                                                                      AspisR1.JFp_SHADigest.digest D))
+                                                                  {
+                                                                    state :=
+                                                                      AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                        AspisR1.JGg_Opening28.next0,
+                                                                    hash := hash }
+                                                                  29#u8 _a false =
+                                                                Aeneas.Std.Result.ok
+                                                                  (a0,
+                                                                    {
+                                                                      state :=
+                                                                        AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                          AspisR1.JGg_Opening29.next0,
+                                                                      hash := hash }))
+                                                            round0))
+                                                        a0c),
+                                                    ⟨rootCall,
+                                                      ⟨first,
+                                                        ⟨second,
+                                                          ⟨Eq.mpr
+                                                              (id
+                                                                (congrArg
+                                                                  (fun _a =>
+                                                                    AspisR1PublicPreparation.PreparedModel.scalar
+                                                                        AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries.sampling
+                                                                        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                                                          (AspisR1.F3V_OracleDictionary.current
+                                                                            AspisR1.JFp_SHADigest.digest D))
+                                                                        {
+                                                                          state :=
+                                                                            AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                              AspisR1.JGg_Opening29.next0,
+                                                                          hash := hash }
+                                                                        30#u8 _a false =
+                                                                      Aeneas.Std.Result.ok
+                                                                        (a1,
+                                                                          {
+                                                                            state :=
+                                                                              AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                                AspisR1.JGg_Opening30.next0,
+                                                                            hash := hash }))
+                                                                  buffer))
+                                                              a1c,
+                                                            ⟨Eq.mpr
+                                                                (id
+                                                                  (congrArg
+                                                                    (fun _a =>
+                                                                      _a
+                                                                          (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                                                            (AspisR1.F3V_OracleDictionary.current
+                                                                              AspisR1.JFp_SHADigest.digest D))
+                                                                          {
+                                                                            state :=
+                                                                              AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                                AspisR1.JGg_Opening30.next0,
+                                                                            hash := hash }
+                                                                          31#u8
+                                                                          (AspisR1CurrentCaller.InstalledPreparation.retainedView
+                                                                              view).final_message =
+                                                                        Aeneas.Std.Result.ok
+                                                                          (Aeneas.Std.core.result.Result.Ok q,
+                                                                            {
+                                                                              state :=
+                                                                                AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                                  AspisR1.JGg_Opening31.next2,
+                                                                              hash := hash }))
+                                                                    AspisR1.JGi_ClosedQueries.source))
+                                                                (id
+                                                                  (Eq.mpr
+                                                                    (id
+                                                                      (congrArg
+                                                                        (fun _a =>
+                                                                          AspisR1PublicPreparation.QueriesModel.queries
+                                                                              AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashQueries
+                                                                              (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                                                                                (AspisR1.F3V_OracleDictionary.current
+                                                                                  AspisR1.JFp_SHADigest.digest D))
+                                                                              {
+                                                                                state :=
+                                                                                  AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                                    AspisR1.JGg_Opening30.next0,
+                                                                                hash := hash }
+                                                                              31#u8 _a =
+                                                                            Aeneas.Std.Result.ok
+                                                                              (Aeneas.Std.core.result.Result.Ok q,
+                                                                                {
+                                                                                  state :=
+                                                                                    AspisV8R19.SqueezeOracleBridge.encodeState
+                                                                                      AspisR1.JGg_Opening31.next2,
+                                                                                  hash := hash }))
+                                                                        finalMessage))
+                                                                    qc)),
+                                                              ⟨rc,
+                                                                ⟨powersCall,
+                                                                  ⟨claimed, rfl⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))))))))))))))));
+    Exists.intro expanded
+      (Exists.intro pre
+        (Exists.intro view
+          (Exists.intro sem
+            (Exists.intro out
+              (Exists.intro powers
+                ⟨expand,
+                  ⟨parse,
+                    ⟨yexpand,
+                      ⟨wide,
+                        ⟨finished,
+                          AspisR1.JGi_PrepareForward.source
+                            AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries
+                            (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                              (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+                            sem (AspisR1CurrentCaller.InstalledPreparation.retainedView view) hash out powers input
+                            variant' double⟩⟩⟩⟩⟩))))))
+theorem AspisR1.JGi_OriginalPreparation.inhabited : ∀ {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (hash : H) (input : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize),
+  AspisR1.JGe_TerminalCondition.Identified →
+    ∃ expanded pre view sem out scratch,
+      AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+            AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+        AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+          AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded
+                AspisR1.JGe_Payload27.value =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+            AspisR1CurrentCaller.BorrowedClaimPrepared.originalNew
+                (AspisR1CurrentCaller.OriginalSerializerInstallation.withOriginalSerializer
+                  AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling)
+                AspisS1M31Embedding.Total.embed (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D)
+                (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem) view hash input =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) :=
+fun {H} D hash input identified =>
+  let ⟨expanded, h✝⟩ :=
+    AspisR1.JGi_PreparationFixture.inhabited D hash
+      (AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedE input) identified
+  let ⟨pre, h✝¹⟩ := h✝
+  let ⟨view, h✝²⟩ := h✝¹
+  let ⟨sem, h✝³⟩ := h✝²
+  let ⟨out, h✝⁴⟩ := h✝³
+  let ⟨scratch, h✝⁵⟩ := h✝⁴
+  let ⟨expand, right✝⟩ := h✝⁵
+  let ⟨parse, right✝¹⟩ := right✝
+  let ⟨yexpand, right✝²⟩ := right✝¹
+  let ⟨wide, right✝³⟩ := right✝²
+  let ⟨finish, prepare⟩ := right✝³
+  Exists.intro expanded
+    (Exists.intro pre
+      (Exists.intro view
+        (Exists.intro sem
+          (Exists.intro (AspisR1CurrentCaller.InstalledPreparation.currentPrepared out)
+            (Exists.intro
+              (AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentE scratch)
+              ⟨expand,
+                ⟨parse,
+                  ⟨wide,
+                    AspisR1.JGi_OriginalPreparation.source
+                      (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D) sem view hash input out
+                      scratch prepare⟩⟩⟩)))))
+theorem AspisR1.JGi_CurrentFixture.inhabited : ∀ {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (hash : H) (input : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize),
+  AspisR1.JGe_TerminalCondition.Identified →
+    ∃ expanded pre view sem out scratch,
+      AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+            AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+        AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+          AspisS1ValuesOwnedInstallation.expandValues AspisR1.JFw_Y1.stored AspisR1.JFw_Y1.initial =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), AspisR1.JGe_Payload27.value) ∧
+            AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded
+                  AspisR1.JGe_Payload27.value =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+              AspisR1CurrentCaller.S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children
+                    AspisR1.JGe_Boundaries.value (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D)
+                    (AspisR1CurrentCaller.FirstComposition.toCurrentPublic AspisR1.JFs_PublicSerialization.value)
+                    expanded hash =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) ∧
+                AspisR1CurrentCaller.BorrowedClaimPrepared.originalNew
+                    (AspisR1CurrentCaller.OriginalSerializerInstallation.withOriginalSerializer
+                      AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling)
+                    AspisS1M31Embedding.Total.embed
+                    (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D) sem view hash input =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) :=
+fun {H} D hash input identified =>
+  let ⟨expanded, h✝⟩ :=
+    AspisR1.JGi_PreparationFixture.inhabited D hash
+      (AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.retainedE input) identified
+  let ⟨pre, h✝¹⟩ := h✝
+  let ⟨view, h✝²⟩ := h✝¹
+  let ⟨sem, h✝³⟩ := h✝²
+  let ⟨out, h✝⁴⟩ := h✝³
+  let ⟨scratch, h✝⁵⟩ := h✝⁴
+  let ⟨expand, right✝⟩ := h✝⁵
+  let ⟨parse, right✝¹⟩ := right✝
+  let ⟨yexpand, right✝²⟩ := right✝¹
+  let ⟨wide, right✝³⟩ := right✝²
+  let ⟨finish, prepare⟩ := right✝³
+  have semantic := AspisR1.JGi_CurrentSemantic.source D hash expanded pre sem expand parse finish;
+  have prepared :=
+    AspisR1.JGi_OriginalPreparation.source (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D) sem
+      view hash input out scratch prepare;
+  Exists.intro expanded
+    (Exists.intro pre
+      (Exists.intro view
+        (Exists.intro (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)
+          (Exists.intro (AspisR1CurrentCaller.InstalledPreparation.currentPrepared out)
+            (Exists.intro
+              (AspisR1ClaimPreparedBridge.mapArray AspisR1CurrentCaller.InstalledPreparation.currentE scratch)
+              ⟨expand, ⟨parse, ⟨yexpand, ⟨wide, ⟨semantic, prepared⟩⟩⟩⟩⟩)))))
+theorem AspisR1.JGi_TX1Ready.inhabited : ∀ {C H : Type} (ops : AspisR1CurrentCaller.Ops)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops C)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (hash : H)
+  (input : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize),
+  AspisR1.JGe_TerminalCondition.Identified →
+    have D0 := AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D;
+    have installed :=
+      AspisR1.WAdm_Execution.actual ops true query geo AspisR1.JGe_Boundaries.value
+        (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ()));
+    ∃ expanded pre view sem out scratch,
+      AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+            AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+        AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+          AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded
+                AspisR1.JGe_Payload27.value =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+            AspisR1CurrentCaller.S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children
+                  AspisR1.JGe_Boundaries.value D0
+                  (AspisR1CurrentCaller.FirstComposition.toCurrentPublic AspisR1.JFs_PublicSerialization.value) expanded
+                  hash =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) ∧
+              AspisR1CurrentCaller.BorrowedClaimPrepared.originalNew
+                    (AspisR1CurrentCaller.OriginalSerializerInstallation.withOriginalSerializer
+                      AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling)
+                    AspisS1M31Embedding.Total.embed D0 sem view hash input =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) ∧
+                AspisR1CurrentCaller.verifier.candidate.tx1 installed D0
+                    (AspisR1CurrentCaller.FirstComposition.toCurrentPublic AspisR1.JFs_PublicSerialization.value)
+                    AspisR1.JFx_NativeBytes.publicInput AspisR1.JFx_NativeBytes.proof 10#usize hash none =
+                  AspisR1.JGi_TX1Control.afterScan installed D0
+                    (AspisR1CurrentCaller.FirstComposition.toCurrentPublic AspisR1.JFs_PublicSerialization.value)
+                    AspisR1.JFx_NativeBytes.publicInput AspisR1.JFx_NativeBytes.proof hash :=
+fun {C H} ops query geo D hash input identified =>
+  id
+    (let ⟨expanded, h✝⟩ := AspisR1.JGi_CurrentFixture.inhabited D hash input identified
+    let ⟨pre, h✝¹⟩ := h✝
+    let ⟨view, h✝²⟩ := h✝¹
+    let ⟨sem, h✝³⟩ := h✝²
+    let ⟨out, h✝⁴⟩ := h✝³
+    let ⟨scratch, h✝⁵⟩ := h✝⁴
+    let ⟨expand, right✝⟩ := h✝⁵
+    let ⟨parse, right✝¹⟩ := right✝
+    let ⟨yexpand, right✝²⟩ := right✝¹
+    let ⟨wide, right✝³⟩ := right✝²
+    let ⟨semantic, prepared⟩ := right✝³
+    Exists.intro expanded
+      (Exists.intro pre
+        (Exists.intro view
+          (Exists.intro sem
+            (Exists.intro out
+              (Exists.intro scratch
+                ⟨expand,
+                  ⟨parse,
+                    ⟨wide,
+                      ⟨semantic,
+                        ⟨prepared,
+                          AspisR1.JGi_TX1Dispatch.writer ops query geo AspisR1.JGe_Boundaries.value
+                            (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ()))
+                            (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D)
+                            (AspisR1CurrentCaller.FirstComposition.toCurrentPublic
+                              AspisR1.JFs_PublicSerialization.value)
+                            AspisR1.JFx_NativeBytes.publicInput hash⟩⟩⟩⟩⟩))))))
+def AspisR1.JGe_TerminalCondition.Identified : Prop :=
+AspisR1.FIq_Terminal.terminal AspisR1.JFs_PublicSerialization.value AspisR1.JFu_ClaimsData.claims
+    AspisR1.JFm_PartialAlpha.a10 AspisR1.JFm_Begin.challenges =
+  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JGd_NumericData.neededTerminal)
+'AspisR1.JGi_ClaimArrays.claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimArrays.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimArrays.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimBody.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimBody.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimRead.row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimRead.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimTotal.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClaimTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_ClosedQueries.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_CurrentFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_CurrentSemantic.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_DotBody.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_DotBody.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_DotOps.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_DotOps.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_DotOps.push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_DotOps.pushCanonical' does not depend on any axioms
+'AspisR1.JGi_DotOps.scalarCanonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_DotTotal.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_DotTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_FieldCell.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_FieldWindows.lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_FieldWindows.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_FieldWindows.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_FinishFields.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_FoldBuffers.clone' depends on axioms: [propext, Quot.sound]
+'AspisR1.JGi_FoldBuffers.extend' depends on axioms: [propext, Quot.sound]
+'AspisR1.JGi_FoldBuffers.mapClone' depends on axioms: [propext, Quot.sound]
+'AspisR1.JGi_FoldBuffers.sliceClone' depends on axioms: [propext, Quot.sound]
+'AspisR1.JGi_FoldBuffers.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_OriginalPreparation.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_OriginalPreparation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Parts.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Parts.update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Parts.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_PrefixCalls.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_PreparationFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_PrepareForward.checked_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_PrepareForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_PrepareReturn.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_PreparedClaim.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_SemanticVerify.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_TX1Control.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_TX1Dispatch.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_TX1Dispatch.writer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_TX1Next.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_TX1Prefix.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_TX1Prefix.writer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_TX1Ready.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1All.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell00.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell01.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell02.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell03.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell04.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell05.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell06.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell07.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell08.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell09.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell10.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell11.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell12.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell13.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell14.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell15.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell16.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell17.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell18.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell19.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell20.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell21.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell22.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell23.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell24.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell25.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell26.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell27.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.word0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.word1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.word2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.word3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.word4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.word5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.word6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGi_Y1Cell28.word7' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Rc7_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CanonicalQRawUnified.Proof.qraw_input_prefix_canonical_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CanonicalQRawUnified.Proof.qraw_input_prefix_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CanonicalQRawUnified.Proof.raw_left_map_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CanonicalQRawUnified.Proof.raw_right_map_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.allRun_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.allRun_true_of_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.checked_q_outer_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.checked_q_success_of_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.dot_via_raw_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.fromLimbsWithAll_outer_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.fromLimbsWithAll_success_of_valid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.from_wide_array_indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.push_ops_checked_q_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.push_ops_continue_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.push_outer_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.push_success_of_valid_scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.push_success_product_update_of_valid_scalar' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S5EbyKPushTotalityV1.qraw_arrays_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5QRawCanonicalProductTotality.u64_canonical_limb_product_total' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S5QRawCheckedProducts.all_checked_products_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5QRawSourceTotality.qraw_total_of_canonical_limbs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5QRawSourceTotality.success_of_trace_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5QRawTotality.pp_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S5QRawTotality.u64_mul_total_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]
