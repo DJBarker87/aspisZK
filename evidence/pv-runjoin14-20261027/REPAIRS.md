@@ -1323,3 +1323,11 @@ other Copy types as previously recorded). Empty-root evaluation and final
 recipient branch remain; field computations may move across pure field
 reads only. Same RW/RP and same panics/aborts; no new allocation or I/O.
 No signature/type/other-function changes.
+
+D277 final source repair: `b10f59dc07f0257f1cf0aecbc29aa1581462bb43`.
+All three final ELFs MATCH at build cohort `16ff321691d1175826b6b046679ee49b4842c46f`;
+see pv-runjoin15-20261027/gate-a.json. No later source change. The final
+concrete helper closure fails preflight on unsupported pointer constants in
+three poseidon2 functions outside records. Those functions and the extractor
+remain unchanged; see pv-runjoin15-20261027/BLOCKER-D277.md. No accepted
+R_shipped or identification is claimed.

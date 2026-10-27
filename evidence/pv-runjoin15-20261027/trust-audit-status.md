@@ -18,3 +18,11 @@ results, not identified shipped facts. Both fixture identifications, general
 identification, compiler-return, selected-i transition, deployed public binding
 and P ∧ T non-vacuity remain open. Gates (b)/(c) remain lead-owned under
 pv-runjoin13-20261027/GATE-PLAN.md.
+
+Final D277 status: all three ELF pins match after the final records repair.
+The concrete helper-closure LLBC fails preflight with five opaque pointer
+constants in permute_optimized_with_trace, external_linear_lazy, and
+internal_linear_lazy. No error-bearing LLBC is supplied to Aeneas; no generated
+external template or stub is installed. The route stops at the outside-records
+boundary. The isolated mapper's marker-expansion timeouts remain unresolved.
+No R_shipped exists and no kernel audit is claimed. Reserved IDs remain unused.

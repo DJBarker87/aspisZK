@@ -56,10 +56,13 @@ if phase=='charon':
  if len(sys.argv)>4:
   old='crate::pool_v1::pair_forest_copy_builder::records_reference::pv_runjoin12_shipped::records_owned'
   cmd[cmd.index(old)]=old.removesuffix('records_owned')+sys.argv[4]
- if len(sys.argv)>3 and sys.argv[3] in ['precise-real-raw-opaque','mono-raw-opaque','optimized-no-storage']:
+ if len(sys.argv)>3 and sys.argv[3] in ['precise-real-raw-opaque','mono-raw-opaque','optimized-no-storage','full-records']:
   cmd[cmd.index('built')]='optimized'
   start=cmd.index('--opaque');end=cmd.index('--start-from');cmd[start:end]=['--opaque','crate::pool_v1::pair_trace::pair_empty_roots','--opaque','crate::pool_v1::pair_forest_copy_builder::raw','--include','aspis_core::field::*']
   cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods','--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp,+DataflowConstProp,+SimplifyLocals-final,+SimplifyCfg-final','--rustc-arg=-Zinline-mir=yes']
+ if len(sys.argv)>3 and sys.argv[3]=='full-records':
+  for child in ['crate::pool_v1::pair_trace::pair_empty_roots','crate::pool_v1::pair_forest_copy_builder::raw']:
+   idx=cmd.index(child);del cmd[idx-1:idx+1]
  if len(sys.argv)>3 and sys.argv[3]=='mono-raw-opaque':cmd[2:2]=['--monomorphize']
  if len(sys.argv)>3 and sys.argv[3]=='optimized-no-storage':
   flag='--rustc-arg=-Zmir-enable-passes=+Inline,+GVN,+CopyProp,+DataflowConstProp,+SimplifyLocals-final,+SimplifyCfg-final'
