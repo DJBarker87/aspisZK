@@ -14,6 +14,8 @@ subprocess.run(['scp','-q',f'{host}:{H}/evidence/{name}-reservation.json',str(E)
 charon='/home/dombarker/project-offloads/s5-charon-selfid-repair-v1/charon-target/release/charon'
 aeneas='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/rng-extractor/candidate-007/main.exe'
 llbc=H+'/evidence/'+(name if phase=='charon' else (sys.argv[3] if len(sys.argv)>3 else 'PV_RunJoin_Records'))+'.llbc'
+if phase=='aeneas' and (E/(pathlib.Path(llbc).name)).is_file():
+ subprocess.run(['scp','-q',str(E/pathlib.Path(llbc).name),f'{host}:{llbc}'],check=True)
 if phase=='charon':
  cmd=[charon,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--opaque','crate','--include','crate::pool_v1::pair_forest_copy_builder::records','--include','crate::pool_v1::pair_forest_copy_builder::raw','--start-from','crate::pool_v1::pair_forest_copy_builder::records','--dest-file',llbc,'--','--manifest-path',H+'/frozen/crates/aspis-statement/Cargo.toml','--offline','--release','--lib','--jobs','4']
  if len(sys.argv)>3 and sys.argv[3] in ['optimized','precise','precise-all','precise-poly']:
