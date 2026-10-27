@@ -1,0 +1,10 @@
+theorem AspisR1.BEi_RecorderCut.source_cut : ∀ {S A : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (code : AspisR1.SdkC_Source.Code A) (state after : S) (before log : AspisR1.SdkC_Source.Log)
+      (value : Aeneas.Std.Result A),
+      AspisR1.BEi_Execution.Executes call code state before value after log →
+        AspisR1.BEi_RecorderCut.issued before log = (AspisR1.SdkC_Source.run hashv code []).2 :=
+⋯
+'AspisR1.BEi_RecorderCut.source_cut' depends on axioms: [propext, Classical.choice, Quot.sound]

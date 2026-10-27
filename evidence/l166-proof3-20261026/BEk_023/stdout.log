@@ -1,0 +1,32 @@
+structure AspisR1.S2W_ExtractionBoundary.AeneasExtraction (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.stage1 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.stage2 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+      (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.digest : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), ops.op43 self parts = hashv parts
+constructor:
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.mk {ops : AdapterRw.Ops}
+    {native1 : AspisR1.S2W_ExtractionBoundary.First} {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest}
+    (stage1 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digest :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        ops.op43 self parts = hashv parts) :
+    AspisR1.S2W_ExtractionBoundary.AeneasExtraction ops native1 native2 hashv
+'AspisR1.S2W_ExtractionBoundary.AeneasExtraction' depends on axioms: [propext, Classical.choice, Quot.sound]

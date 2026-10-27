@@ -1,0 +1,37 @@
+{"attempt": "BEk_099", "exit_status": 0, "wall_seconds": 2.467533308023121, "peak_rss_kib": "5541980", "swaps": "0", "print_axioms": ["'AspisR1.BEk_CutExport.queried' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_LawCompose.trans' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_LawCompose.symm' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_LawFields.accepted_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_LawFields.exact_fields' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_LocalAssociation.of_step_projection' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_Nonvacuity.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_Nonvacuity.step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_OriginalInputs.selected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_OriginalJoin.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_Projection.run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_QueryPrefix.transport' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_ReachedInputs.cuts' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_RecorderIndependence.original' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_Returning.agrees' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_SlotExport.current' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.BEk_SlotExport.stage' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.BEk_CutExport.queried : ∀ {S A E F : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (code : AspisR1.SdkC_Source.Code (Aeneas.Std.core.result.Result A F)) (n : ℕ),
+      AspisR1.GExp_CountLaws.count n code →
+        ∀ (state : S) (before : AspisR1.SdkC_Source.Log) (native : AspisR1.BEh_Scope.Outcome S A E),
+          AspisR1.BEh_Scope.Law native (AspisR1.BEf_Carrier.run call c
+...
+1.SdkC_Source.Digest) (state : S)
+      (before : AspisR1.SdkC_Source.Log) (native : AspisR1.BEh_Scope.Outcome S Unit E),
+      AspisR1.BEh_Scope.Law native
+          (AspisR1.BEf_Carrier.run call (AspisR1.SdkC_BatchSource.currentCode hashv proof p root) state before) →
+        AspisR1.SdkC_BatchPair.Returning hashv H (AspisR1.SdkC_BatchSource.currentCode hashv proof p root)
+            (Aeneas.Std.core.result.Result.Ok ()) →
+          AspisR1.BEj_SlotExport.Prefix hashv H (AspisR1.SdkC_BatchSource.currentCode hashv proof p root) before
+            native.2.2
+'AspisR1.BEk_SlotExport.current' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_SlotExport.stage : ∀ {S E : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+      (p : VTop_Stages.verifier.Prepared) (root : AspisR1.SdkC_Source.Digest) (state : S)
+      (before : AspisR1.SdkC_Source.Log) (native : AspisR1.BEh_Scope.Outcome S Unit E),
+      AspisR1.BEh_Scope.Law native
+          (AspisR1.BEf_Carrier.run call (AspisR1.SdkC_BatchSource.stageCode hashv proof p root) state before) →
+        AspisR1.SdkC_BatchPair.Returning hashv H (AspisR1.SdkC_BatchSource.stageCode hashv proof p root)
+            (Aeneas.Std.core.result.Result.Ok ()) →
+          AspisR1.BEj_SlotExport.Prefix hashv H (AspisR1.SdkC_BatchSource.stageCode hashv proof p root) before
+            native.2.2
+'AspisR1.BEk_SlotExport.stage' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4006368d51a44d7fbce09fde988e77a4.scope; invocation ID: 86cd05875d7644158cdb267cf86dffc4
+

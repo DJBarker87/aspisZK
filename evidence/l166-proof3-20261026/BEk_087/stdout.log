@@ -1,0 +1,13 @@
+theorem AspisR1.ARS_QueryTransport.exact : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (code : AspisR1.SdkC_Source.Code A),
+  AspisR1.ARR_ReturnCoverage.ReturnsOnly (AspisR1.SdkC_Source.run hashv code []).2 →
+    AspisR1.ARS_QueryTransport.Agrees H (AspisR1.SdkC_Source.run hashv code []).2 →
+      (AspisR1.SdkC_Source.run hashv code []).1 =
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).2 ∧
+        AspisR1.SdkC_Source.readLog (AspisR1.SdkC_Source.run hashv code []).2 =
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 ∧
+          AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code []).2 =
+            List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 :=
+⋯
+'AspisR1.ARS_QueryTransport.exact' depends on axioms: [propext, Classical.choice, Quot.sound]

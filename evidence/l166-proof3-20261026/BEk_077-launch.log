@@ -1,0 +1,29 @@
+{"attempt": "BEk_077", "exit_status": 0, "wall_seconds": 2.1831340770004317, "peak_rss_kib": "5271772", "swaps": "0", "print_axioms": ["'AspisR1.BEj_SlotExport.current' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEj_SlotExport.current : ∀ {S E : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1CurrentCaller.verifier.Prepared)
+            (root : AspisR1.SdkC_Source.Digest) (state : S) (before : 
+...
+theorem AspisR1.BEj_SlotExport.current : ∀ {S E : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1CurrentCaller.verifier.Prepared)
+            (root : AspisR1.SdkC_Source.Digest) (state : S) (before : AspisR1.SdkC_Source.Log)
+            (native : AspisR1.BEh_Scope.Outcome S Unit E),
+            AspisR1.BEh_Scope.Law native
+                (AspisR1.BEf_Carrier.run call (AspisR1.SdkC_BatchSource.currentCode hashv proof p root) state before) →
+              AspisR1.BEj_SlotExport.Prefix hashv H (AspisR1.SdkC_BatchSource.currentCode hashv proof p root) before
+                native.2.2 :=
+⋯
+'AspisR1.BEj_SlotExport.current' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r140253f295274a99a8da5c5b4f21cc84.scope; invocation ID: d72d580d0eda447491ca9bfb30a3c47d

@@ -1,0 +1,341 @@
+@AspisR1.BEk_CutExport.queried : ∀ {S A E F : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (code : AspisR1.SdkC_Source.Code (Aeneas.Std.core.result.Result A F)) (n : ℕ),
+      AspisR1.GExp_CountLaws.count n code →
+        ∀ (state : S) (before : AspisR1.SdkC_Source.Log) (native : AspisR1.BEh_Scope.Outcome S A E),
+          AspisR1.BEh_Scope.Law native (AspisR1.BEf_Carrier.run call code state before) →
+            AspisR1.ARS_QueryTransport.Agrees H (AspisR1.SdkC_Source.run hashv code []).2 →
+              native.2.2 = before ++ AspisR1.BEi_RecorderCut.issued before native.2.2 ∧
+                AspisR1.BEi_RecorderCut.issued before native.2.2 = (AspisR1.SdkC_Source.run hashv code []).2 ∧
+                  List.length (AspisR1.BEi_RecorderCut.issued before native.2.2) ≤ n ∧
+                    ∃ remaining,
+                      List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+                        AspisR1.RPx_AttemptPrefix.addresses (AspisR1.BEi_RecorderCut.issued before native.2.2) ++
+                          remaining
+'AspisR1.BEk_CutExport.queried' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_LawCompose.trans : ∀ {S A E F G : Type} (left : AspisR1.BEh_Scope.Outcome S A E)
+  (middle : AspisR1.BEh_Scope.Outcome S A F) (right : AspisR1.BEh_Scope.Outcome S A G),
+  AspisR1.BEh_Scope.Law left middle → AspisR1.BEh_Scope.Law middle right → AspisR1.BEh_Scope.Law left right
+'AspisR1.BEk_LawCompose.trans' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_LawCompose.symm : ∀ {S A E F : Type} (left : AspisR1.BEh_Scope.Outcome S A E)
+  (right : AspisR1.BEh_Scope.Outcome S A F), AspisR1.BEh_Scope.Law left right → AspisR1.BEh_Scope.Law right left
+'AspisR1.BEk_LawCompose.symm' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_LawFields.accepted_eq : ∀ {S A E F : Type} (native : AspisR1.BEh_Scope.Outcome S A E)
+  (source : AspisR1.BEh_Scope.Outcome S A F),
+  AspisR1.BEh_Scope.Law native source →
+    AspisR1.BEg_Observation.accepted native.1 = AspisR1.BEg_Observation.accepted source.1
+'AspisR1.BEk_LawFields.accepted_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_LawFields.exact_fields : ∀ {S A E F : Type} (native : AspisR1.BEh_Scope.Outcome S A E)
+  (source : AspisR1.BEh_Scope.Outcome S A F),
+  AspisR1.BEh_Scope.Law native source ↔
+    AspisR1.BEg_Observation.accepted native.1 = AspisR1.BEg_Observation.accepted source.1 ∧
+      native.2.2 = source.2.2 ∧
+        ∀ (a : A), native.1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a) → native.2.1 = source.2.1
+'AspisR1.BEk_LawFields.exact_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_LocalAssociation.of_step_projection : ∀ {N S : Type} (project : N → S)
+  (nativeCall : AspisR1.SdkC_Source.Parts → N → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × N)
+  (sourceCall : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : N),
+      (nativeCall parts state).1 = (sourceCall parts (project state)).1 ∧
+        project (nativeCall parts state).2 = (sourceCall parts (project state)).2) →
+    ∀ (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+      AspisR1.BEh_Scope.BothSlots (fun input x state => project input.2 = state)
+        (fun input slot state before =>
+          AspisR1.BEk_Projection.outcome project
+            (AspisR1.BEf_Carrier.run nativeCall (AspisR1.BEj_ReifiedBatch.nativeCode hashv input.1 slot) input.2
+              before))
+        fun input slot state before =>
+        AspisR1.BEf_Carrier.run sourceCall (AspisR1.BEj_ReifiedBatch.sourceCode hashv input.1 slot) state before
+'AspisR1.BEk_LocalAssociation.of_step_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.BEk_Nonvacuity.rejected : ∀ (parts : AspisR1.SdkC_Source.Parts) (digest : AspisR1.SdkC_Source.Digest) (n : ℕ)
+  (before : AspisR1.SdkC_Source.Log),
+  have code :=
+    AspisR1.CheckpointBytes5Effect.Code.read parts fun x =>
+      AspisR1.CheckpointBytes5Effect.Code.read parts fun x =>
+        AspisR1.CheckpointBytes5Effect.Code.done (Aeneas.Std.core.result.Result.Err ());
+  have log :=
+    before ++ [{ parts := parts, returned := Aeneas.Std.Result.ok digest }] ++
+      [{ parts := parts, returned := Aeneas.Std.Result.ok digest }];
+  AspisR1.BEh_Scope.Law (Aeneas.Std.Result.fail Aeneas.Std.Error.panic, n + 9, log)
+      (AspisR1.BEf_Carrier.run (AspisR1.BEf_Count.call fun x => Aeneas.Std.Result.ok digest) code n before) ∧
+    AspisR1.BEi_RecorderCut.issued before log =
+      [{ parts := parts, returned := Aeneas.Std.Result.ok digest },
+        { parts := parts, returned := Aeneas.Std.Result.ok digest }]
+'AspisR1.BEk_Nonvacuity.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.BEk_Nonvacuity.step : ∀ (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (parts : AspisR1.SdkC_Source.Parts) (state : ℕ × Bool),
+  (hashv parts, state.1 + 1, !state.2).1 = (AspisR1.BEf_Count.call hashv parts state.1).1 ∧
+    (hashv parts, state.1 + 1, !state.2).2.1 = (AspisR1.BEf_Count.call hashv parts state.1).2
+'AspisR1.BEk_Nonvacuity.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_OriginalInputs.selected : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a native),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv native →
+        AspisR1.S2W_TrustedStd.TrustedStd copy →
+          AspisR1.ARS_AccountReplay.Consistent
+              (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                AspisR1.CPH_Program.verifier a)
+              native H →
+            have cfg := AspisR1.FIp_Install.configuration err c r;
+            Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H) ∧
+              AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.ART_PartialAccount.account cfg hashv copy allocator AspisR1.CPH_Program.verifier a) =
+                  AspisV8R19.MemoizedProgramLaw.eval native
+                    (AspisR1.ART_PartialAccount.account cfg hashv copy allocator AspisR1.CPH_Program.verifier a) ∧
+                ∃ f s,
+                  AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.DrvC_Installation.sdk cfg)
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry.first
+                      ((AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 n.saved n.post1
+                                  n.final1)).2.entry.second
+                        AspisR1.S2W_D189Wrappers.secondSizes)
+                      n.saved f s ∧
+                    ∃ p0 root0 p1 root1,
+                      AspisR1.Op5T_Install.currentBatch AspisR1.Port4B_Install.leaves
+                            (AspisR1.DrvC_Installation.currentDigest cfg) f.proof p0 root0 0#usize () =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                        AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves
+                            (AspisR1.DrvC_Installation.digest cfg) s.proof p1 root1 1#usize () =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.BEk_OriginalInputs.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_OriginalJoin.accepted : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a native),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv native →
+        AspisR1.ARS_AccountReplay.Consistent
+            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+              AspisR1.CPH_Program.verifier a)
+            native H →
+          AspisR1.S2W_TrustedStd.TrustedStd copy →
+            ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (words : AspisR1.CanonicalCutEnrichedTranscript.Words),
+              AspisR1.FIp_GlobalOwners.Owners (AspisR1.FIp_Install.configuration err c r)
+                  (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed err (AspisR1.FIp_Install.select r c))
+                      r).boundaries →
+                ∀ (Q : ℕ),
+                  AspisR1.ART_AdversaryWork.Bound (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                      AspisR1.CPH_Program.verifier a Q →
+                    AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy
+                            allocator AspisR1.CPH_Program.verifier a) =
+                        AspisV8R19.MemoizedProgramLaw.eval native
+                          (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy
+                            allocator AspisR1.CPH_Program.verifier a) ∧
+                      (∀ (V : Type) (observe : AspisR1.GExq_AccountExperiment.Outcome A → ℕ → V),
+                          observe
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv
+                                    copy allocator AspisR1.CPH_Program.verifier a)).2
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r)
+                                      hashv copy allocator AspisR1.CPH_Program.verifier a)).1.length =
+                            observe
+                              (AspisR1.ARS_NativeOutcome.wrappers copy allocator AspisR1.CPH_Program.verifier a native1
+                                native2 native)
+                              (AspisR1.ARS_NativeAccount.attempts (AspisR1.FIp_Install.configuration err c r) hashv copy
+                                allocator AspisR1.CPH_Program.verifier a native)) ∧
+                        (∀ (K : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                            FS.firstReads FS.emptyTable
+                                (AspisV8R19.MemoizedProgramLaw.eval K
+                                    (AspisR1.Hiq_RecordedJoint.program
+                                      (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r)
+                                        hashv copy allocator AspisR1.CPH_Program.verifier a)
+                                      AspisR1.ARQ_Observer.project
+                                      (AspisR1.ARQ_Observer.select (AspisR1.FIp_Install.configuration err c r)
+                                        AspisR1.CPH_Program.verifier))).1 ≤
+                              Q + 2965) ∧
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.F3T_Installed.source (AspisR1.FIp_Install.configuration err c r) hashv
+                                    (AspisR1.F3T_ByteCarrier.input (AspisR1.FIp_Install.configuration err c r)
+                                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)) =
+                                AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.F3_Model.verifier D
+                                    (AspisR1.F3T_ByteCarrier.input (AspisR1.FIp_Install.configuration err c r)
+                                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)) ∧
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.F3T_Charged.projected D
+                                          (AspisR1.F3T_Canon.canon
+                                            (AspisR1.F3T_ByteCarrier.lift (AspisR1.FIp_Install.configuration err c r)
+                                              (AspisR1.SCE_Experiment.submission a))))).2.2 =
+                                  Bool.true ∧
+                                AspisR1.OraclePortRefineJoin.RecoveredInputAgreement
+                                  (AspisR1.ART_PhysicalView.physical (AspisR1.FIp_Install.configuration err c r) hashv
+                                    copy allocator AspisR1.CPH_Program.verifier a H)
+                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.F3T_Charged.projected D
+                                      (AspisR1.F3T_Canon.canon
+                                        (AspisR1.F3T_ByteCarrier.lift (AspisR1.FIp_Install.configuration err c r)
+                                          (AspisR1.SCE_Experiment.submission a))))) ∨
+                            AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv
+                              (Q + 2965)
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.Hiq_RecordedJoint.program
+                                  (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv
+                                    copy allocator AspisR1.CPH_Program.verifier a)
+                                  AspisR1.ARQ_Observer.project
+                                  (AspisR1.ARQ_Observer.select (AspisR1.FIp_Install.configuration err c r)
+                                    AspisR1.CPH_Program.verifier))))
+'AspisR1.BEk_OriginalJoin.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_Projection.run : ∀ {N S A : Type} (project : N → S)
+  (nativeCall : AspisR1.SdkC_Source.Parts → N → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × N)
+  (sourceCall : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : N),
+      (nativeCall parts state).1 = (sourceCall parts (project state)).1 ∧
+        project (nativeCall parts state).2 = (sourceCall parts (project state)).2) →
+    ∀ (code : AspisR1.SdkC_Source.Code A) (state : N) (before : AspisR1.SdkC_Source.Log),
+      AspisR1.BEk_Projection.outcome project (AspisR1.BEf_Carrier.run nativeCall code state before) =
+        AspisR1.BEf_Carrier.run sourceCall code (project state) before
+'AspisR1.BEk_Projection.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_QueryPrefix.transport : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.ARS_QueryTransport.Agrees H (AspisR1.SdkC_Source.run hashv code before).2 →
+    ∃ kept remaining,
+      AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code before).2 =
+          AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+        List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+          kept ++ remaining
+'AspisR1.BEk_QueryPrefix.transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_ReachedInputs.cuts : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2W_TrustedStd.TrustedStd copy →
+    ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry)
+      (id : AspisR1.S2W_ExtractionBoundary.Program) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+      (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+      (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+      AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv →
+        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 id data1 state1 =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+            AspisR1.S2W_D189Wrappers.second native2 allocator e2 id data2 slot state2 =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+              ∃ f s,
+                AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.DrvC_Installation.sdk c) e1.first
+                    (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s ∧
+                  post2 = e2.heap ∧
+                    ∃ p0 root0 p1 root1,
+                      AspisR1.Op5T_Install.currentBatch AspisR1.Port4B_Install.leaves
+                            (AspisR1.DrvC_Installation.currentDigest c) f.proof p0 root0 0#usize () =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                        AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves
+                            (AspisR1.DrvC_Installation.digest c) s.proof p1 root1 1#usize () =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.BEk_ReachedInputs.cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_RecorderIndependence.original : ∀ {W A C Tx S : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A)
+      (native H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a native),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv native →
+        AspisR1.S2W_TrustedStd.TrustedStd copy →
+          AspisR1.ARS_AccountReplay.Consistent
+              (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                AspisR1.CPH_Program.verifier a)
+              native H →
+            ∀ (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S) (state : S)
+              (before : AspisR1.SdkC_Source.Log) (extra : AspisR1.SdkC_Source.Query),
+              have cfg := AspisR1.FIp_Install.configuration err c r;
+              Nonempty (AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H) ∧
+                AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.ART_PartialAccount.account cfg hashv copy allocator AspisR1.CPH_Program.verifier a) =
+                    AspisV8R19.MemoizedProgramLaw.eval native
+                      (AspisR1.ART_PartialAccount.account cfg hashv copy allocator AspisR1.CPH_Program.verifier a) ∧
+                  ∃ f s,
+                    AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.DrvC_Installation.sdk cfg)
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry.first
+                        ((AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 n.saved n.post1
+                                    n.final1)).2.entry.second
+                          AspisR1.S2W_D189Wrappers.secondSizes)
+                        n.saved f s ∧
+                      ∃ p0 root0 p1 root1,
+                        AspisR1.Op5T_Install.currentBatch AspisR1.Port4B_Install.leaves
+                              (AspisR1.DrvC_Installation.currentDigest cfg) f.proof p0 root0 0#usize () =
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                          AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves
+                                (AspisR1.DrvC_Installation.digest cfg) s.proof p1 root1 1#usize () =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                            ∃ other,
+                              other.1 =
+                                  (AspisR1.BEf_Carrier.run call
+                                      (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0) state before).1 ∧
+                                other.2.1 =
+                                    (AspisR1.BEf_Carrier.run call
+                                          (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0) state
+                                          before).2.1 ∧
+                                  ¬AspisR1.BEh_Scope.Law other
+                                      (AspisR1.BEf_Carrier.run call
+                                        (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0) state before)
+'AspisR1.BEk_RecorderIndependence.original' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_Returning.agrees : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (code : AspisR1.SdkC_Source.Code A)
+  (value : A),
+  AspisR1.SdkC_BatchPair.Returning hashv H code value →
+    AspisR1.ARS_QueryTransport.Agrees H (AspisR1.SdkC_Source.run hashv code []).2
+'AspisR1.BEk_Returning.agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_SlotExport.current : ∀ {S E : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+      (p : AspisR1CurrentCaller.verifier.Prepared) (root : AspisR1.SdkC_Source.Digest) (state : S)
+      (before : AspisR1.SdkC_Source.Log) (native : AspisR1.BEh_Scope.Outcome S Unit E),
+      AspisR1.BEh_Scope.Law native
+          (AspisR1.BEf_Carrier.run call (AspisR1.SdkC_BatchSource.currentCode hashv proof p root) state before) →
+        AspisR1.SdkC_BatchPair.Returning hashv H (AspisR1.SdkC_BatchSource.currentCode hashv proof p root)
+            (Aeneas.Std.core.result.Result.Ok ()) →
+          AspisR1.BEj_SlotExport.Prefix hashv H (AspisR1.SdkC_BatchSource.currentCode hashv proof p root) before
+            native.2.2
+'AspisR1.BEk_SlotExport.current' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEk_SlotExport.stage : ∀ {S E : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+      (p : VTop_Stages.verifier.Prepared) (root : AspisR1.SdkC_Source.Digest) (state : S)
+      (before : AspisR1.SdkC_Source.Log) (native : AspisR1.BEh_Scope.Outcome S Unit E),
+      AspisR1.BEh_Scope.Law native
+          (AspisR1.BEf_Carrier.run call (AspisR1.SdkC_BatchSource.stageCode hashv proof p root) state before) →
+        AspisR1.SdkC_BatchPair.Returning hashv H (AspisR1.SdkC_BatchSource.stageCode hashv proof p root)
+            (Aeneas.Std.core.result.Result.Ok ()) →
+          AspisR1.BEj_SlotExport.Prefix hashv H (AspisR1.SdkC_BatchSource.stageCode hashv proof p root) before
+            native.2.2
+'AspisR1.BEk_SlotExport.stage' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,36 @@
+{"attempt": "BEk_037", "exit_status": 0, "wall_seconds": 2.3296682750224136, "peak_rss_kib": "4403408", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_BatchJoin.compose' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port4B_BatchJoin.compose : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) (batch : ℕ) (s0 s1 s2 : MultiproofConeRef.reference.Scratch)
+  (l0 l1 l2 : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)),
+  AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.MultiproofConeP6Batch.batch_tree (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf
+          parsed q batch 0 (nodes batch 0
+...
+theorem AspisR1.Port4B_BatchJoin.compose : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) (batch : ℕ) (s0 s1 s2 : MultiproofConeRef.reference.Scratch)
+  (l0 l1 l2 : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)),
+  AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.MultiproofConeP6Batch.batch_tree (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf
+          parsed q batch 0 (nodes batch 0) AspisR1.Port4B_BatchJoin.initial) =
+      (l0, Bool.true, s0) →
+    AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.MultiproofConeP6Batch.batch_tree (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf
+            parsed q batch 1 (nodes batch 1) s0) =
+        (l1, Bool.true, s1) →
+      AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.MultiproofConeP6Batch.batch_tree (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf
+              parsed q batch 2 (nodes batch 2) s1) =
+          (l2, Bool.true, s2) →
+        AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes batch
+              AspisR1.Port4B_BatchJoin.initial) =
+          (l0 ++ l1 ++ l2, Bool.true) :=
+⋯
+'AspisR1.Port4B_BatchJoin.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re68cd6113ae7470598f1d4fd2b7e713e.scope; invocation ID: 16310ede5bd04acda1eb8ff2c42d5005
+

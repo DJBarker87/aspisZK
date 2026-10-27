@@ -1,0 +1,13 @@
+def AspisR1.BEj_SlotExport.Prefix : (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    {Err : Type} →
+      AspisR1.SdkC_Source.Code (Aeneas.Std.core.result.Result Unit Err) →
+        AspisR1.SdkC_Source.Log → AspisR1.SdkC_Source.Log → Prop :=
+fun hashv H {Err} code before after =>
+  after = before ++ AspisR1.BEi_RecorderCut.issued before after ∧
+    AspisR1.BEi_RecorderCut.issued before after = (AspisR1.SdkC_Source.run hashv code []).2 ∧
+      List.length (AspisR1.BEi_RecorderCut.issued before after) ≤ 900 ∧
+        ∃ remaining,
+          List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+            AspisR1.RPx_AttemptPrefix.addresses (AspisR1.BEi_RecorderCut.issued before after) ++ remaining
+'AspisR1.BEj_SlotExport.Prefix' depends on axioms: [propext, Classical.choice, Quot.sound]

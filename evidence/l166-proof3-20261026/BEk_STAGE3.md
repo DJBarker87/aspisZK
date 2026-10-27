@@ -1,0 +1,11 @@
+# Stage3: original-cylinder composition; local physical cut remains open
+
+`BEk_OriginalInputs.selected` (012) derives ARU_OriginalFactory.original support and exact partial-account replay, then extracts both native-source batch inputs on the FIXED original execution. The native world, response-selected original entries, heaps, allocator states and native outputs are retained. There is no fresh interpreter/law standing in for the original account.
+
+`BEk_OriginalJoin.accepted` (013) composes the original factory, OriginalLaw, Join and Charges: SAME original partial account equality; arbitrary observation of the original wrapper outcome/attempted cost; Q+2965 audited reads; and source/model ordered equality, model acceptance and physical recovery OR the SAME charged original-account collision event. It retains the original owners, work bound, std, bank/game/persistence and queried-cylinder support domain. It does not claim universal coverage of abstract H or specialize the actual root's independent Runtime quantifier.
+
+`BEk_RecorderIndependence.original` (017) proves the local boundary is still absent even with that factory/replay and those derived reached source batch inputs: an independent recorder decoration preserves the exact local Result and final carrier and violates BothSlots' local law. This is a type/interface non-implication, not a native-code counterexample or a second real execution. No source bug or deployment attack is inferred.
+
+`BEk_Returning.agrees` and `BEk_SlotExport.current/stage` consume the existing SdkC/ARU computed source logs to produce BEj's exact per-slot Prefix at the supplied recorder cut, without global P1 at H. This is conditional on the still-open physical local law. It does not convert arbitrary source cuts into physical association. L166 and the actual Rc10 binders remain unchanged; ledger delta0.
+
+Next concrete missing deliverable remains a physical instrumented native cut with its actual recorder and common live carrier projection, extracted from the reached native execution and its allocation/borrow geometry. Then instantiate the conditional step projection and consume the now-available original-cylinder global join. No waiting for ARR/ARQ_Join.Target.

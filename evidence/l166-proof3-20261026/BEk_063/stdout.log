@@ -1,0 +1,8 @@
+def AspisR1.BEh_Scope.AcceptedPath : {S A E F : Type} →
+  AspisR1.BEh_Scope.Outcome S A E → AspisR1.BEh_Scope.Outcome S A F → Prop :=
+fun {S A E F} native source =>
+  (∀ (a : A),
+      native.1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a) ↔
+        source.1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a)) ∧
+    ∀ (a : A), native.1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a) → native.2 = source.2
+'AspisR1.BEh_Scope.AcceptedPath' depends on axioms: [propext, Classical.choice, Quot.sound]

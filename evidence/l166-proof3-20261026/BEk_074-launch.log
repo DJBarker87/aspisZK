@@ -1,0 +1,24 @@
+{"attempt": "BEk_074", "exit_status": 0, "wall_seconds": 2.1253229169524275, "peak_rss_kib": "5270492", "swaps": "0", "print_axioms": ["'AspisR1.BEj_ReifiedBatch.of_steps' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEj_ReifiedBatch.of_steps : ∀ {S : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (input : AspisR1.BEj_ReifiedBatch.Input) (slot : Fin 2) (state after : S) (before log : AspisR1.SdkC_Source.Log)
+  (value : Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)),
+  AspisR1.BEi_Execution.Executes call (AspisR1.BEj_ReifiedBatch.nativeCode hashv input slot) state before value after
+      log →
+    AspisR1.BEh_Scope.Law (value, after, log)
+      (AspisR1.BEf_Carrier.run call (AspisR1.BEj_ReifiedBatch.sourceCode hashv
+...
+theorem AspisR1.BEj_ReifiedBatch.of_steps : ∀ {S : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (input : AspisR1.BEj_ReifiedBatch.Input) (slot : Fin 2) (state after : S) (before log : AspisR1.SdkC_Source.Log)
+  (value : Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)),
+  AspisR1.BEi_Execution.Executes call (AspisR1.BEj_ReifiedBatch.nativeCode hashv input slot) state before value after
+      log →
+    AspisR1.BEh_Scope.Law (value, after, log)
+      (AspisR1.BEf_Carrier.run call (AspisR1.BEj_ReifiedBatch.sourceCode hashv input slot) state before) :=
+⋯
+'AspisR1.BEj_ReifiedBatch.of_steps' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re88b9120b5764fd6a8468151c29d0af7.scope; invocation ID: b56645fa21934343b189c2462b6446e9

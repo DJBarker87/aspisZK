@@ -1,0 +1,33 @@
+{"attempt": "BEk_045", "exit_status": 0, "wall_seconds": 1.9552037550020032, "peak_rss_kib": "4414004", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_Batch.code' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.Port9OR_Batch.code : AspisR1.Port3_NativeBatchBody.Ops →
+  {Hash : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+      Hash →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          AspisR1Stage2.verifier.Prepared →
+            AspisR1.CheckpointBytes5Effect.Digest →
+              Aeneas.Std.Usize →
+                AspisR1.CheckpointBytes5Effect.Code (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun base {Hash} D hash proof p folded which => do
+  let root0 ← AspisR1.CheckpointBytes5Effect.liftResult (p.roots.index_usize 0#usize)
+  let root1 ← AspisR1.CheckpointBytes5Effect.liftResult (p.roots.index_usize 1#usize)
+  AspisR1.Port9OR_Batch.values base
+...
+def AspisR1.Port9OR_Batch.code : AspisR1.Port3_NativeBatchBody.Ops →
+  {Hash : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+      Hash →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          AspisR1Stage2.verifier.Prepared →
+            AspisR1.CheckpointBytes5Effect.Digest →
+              Aeneas.Std.Usize →
+                AspisR1.CheckpointBytes5Effect.Code (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun base {Hash} D hash proof p folded which => do
+  let root0 ← AspisR1.CheckpointBytes5Effect.liftResult (p.roots.index_usize 0#usize)
+  let root1 ← AspisR1.CheckpointBytes5Effect.liftResult (p.roots.index_usize 1#usize)
+  AspisR1.Port9OR_Batch.values base D hash proof p.queries (Aeneas.Std.Array.make 3#usize [root0, root1, folded] ⋯)
+      which
+'AspisR1.Port9OR_Batch.code' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0f8419ea7960418baa165d5d5603f0a3.scope; invocation ID: 2fe83741d39a40d9b320e0af78c31dcd
+

@@ -1,0 +1,50 @@
+{"attempt": "BEk_034", "exit_status": 0, "wall_seconds": 1.96437971299747, "peak_rss_kib": "4385876", "swaps": "0", "print_axioms": ["'AspisR1.S2W_D189Wrappers.first' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.S2W_D189Wrappers.first : {A : Type} →
+  AspisR1.S2W_ExtractionBoundary.First →
+    (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+        ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+      AspisR1.S2W_D189Wrappers.Allocator A →
+        AspisR1.S2W_D189Entry.Entry →
+          AspisR1.S2W_ExtractionBoundary.Program →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              A →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result
+                    (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 ×
+                      AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) × A)
+              
+...
+_D189Entry.Record) →
+        ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+      AspisR1.S2W_D189Wrappers.Allocator A →
+        AspisR1.S2W_D189Entry.Entry →
+          AspisR1.S2W_ExtractionBoundary.Program →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              A →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result
+                    (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 ×
+                      AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) × A)
+                    AspisR1.AdapterRw.Cuts.PE) :=
+fun {A} native copy allocator e program data state => do
+  let allocated ←
+    AspisR1.S2W_D189Wrappers.reserve allocator
+        (AspisR1.S2W_D189Wrappers.admittedSizes e 3 AspisR1.S2W_D189Wrappers.firstSizes) state
+  let result ← native program e.first data
+  match result with
+    | Aeneas.Std.core.result.Result.Err error => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+    | Aeneas.Std.core.result.Result.Ok saved =>
+      match
+        copy (AspisR1.S2Trust.acquire e.heap (e.heap.accounts 2).1 0 0 AspisR1.S2Trust.Kind.exclusive)
+          (e.heap.accounts 2).1
+          (AspisR1.S2W_CommittedCheckpoint.source (AspisR1.S2W_ReturnedCheckpoint.nativeBytes saved)) with
+      | AspisR1.S2W_TrustedStd.Outcome.panic => Aeneas.Std.Result.fail Aeneas.Std.Error.assertionFailure
+      | AspisR1.S2W_TrustedStd.Outcome.returned written => do
+        let cleaned ← allocator.cleanup allocated
+        Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Ok
+              (saved, AspisR1.S2Trust.release written (AspisR1.S2W_WrapperLaws.exclusiveGuard e.heap 2 0 0), cleaned))
+'AspisR1.S2W_D189Wrappers.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r03115a08387a48dfa53bbf2100856525.scope; invocation ID: 5406aa74ade34fe68c4d02de85b5414f
+

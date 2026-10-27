@@ -1,0 +1,9 @@
+theorem AspisR1.ARS_QueryTransport.covered : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (code : AspisR1.SdkC_Source.Code A)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.ARR_ReturnCoverage.ReturnsOnly (AspisR1.SdkC_Source.run hashv code before).2 →
+    AspisR1.ARS_QueryTransport.Agrees H (AspisR1.SdkC_Source.run hashv code before).2 →
+      AspisR1.ARR_OracleCoverage.Covered H hashv code :=
+⋯
+'AspisR1.ARS_QueryTransport.covered' depends on axioms: [propext, Classical.choice, Quot.sound]

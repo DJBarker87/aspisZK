@@ -1,0 +1,21 @@
+{"attempt": "BEk_085", "exit_status": 0, "wall_seconds": 2.277381129038986, "peak_rss_kib": "5268116", "swaps": "0", "print_axioms": ["'AspisR1.ARS_QueryTransport.Agrees' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.ARS_QueryTransport.Agrees : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  AspisR1.SdkC_Source.Log → Prop :=
+fun H log =>
+  ∀ q ∈ log,
+    ∀ (digest : AspisR1.SdkC_Source.Digest),
+      q.returned = Aeneas.Std.Result.ok digest →
+        AspisV8R19.SqueezeOracleBridge.decodeState digest = H (AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+'AspisR1.ARS_QueryTransport.Agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+def AspisR1.ARS_QueryTransport.Agrees : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  AspisR1.SdkC_Source.Log → Prop :=
+fun H log =>
+  ∀ q ∈ log,
+    ∀ (digest : AspisR1.SdkC_Source.Digest),
+      q.returned = Aeneas.Std.Result.ok digest →
+        AspisV8R19.SqueezeOracleBridge.decodeState digest = H (AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+'AspisR1.ARS_QueryTransport.Agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re133695ad1774924bb7297e44923daec.scope; invocation ID: 2b3c91ac19734b17a614076bfdd3f441

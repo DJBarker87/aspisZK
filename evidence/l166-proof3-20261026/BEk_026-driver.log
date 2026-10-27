@@ -1,0 +1,35 @@
+{"attempt": "BEk_026", "exit_status": 0, "wall_seconds": 2.1919153700000606, "peak_rss_kib": "4380732", "swaps": "0", "print_axioms": ["'AspisR1.S2W_ExtractionBoundary.accepted_native_observation' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.S2W_ExtractionBoundary.accepted_native_observation : ∀ (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction ops native1 native2 hashv →
+    ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+      (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      native1 program accounts1 data1 = Aeneas.Std.Result.ok (Ae
+...
+ (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction ops native1 native2 hashv →
+    ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+      (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      native1 program accounts1 data1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+        native2 program accounts2 data2 slot = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+          ∃ firstLog finalLog suffix,
+            AspisR1.S2W_Trace.run ops
+                  (AspisR1.S2W_Outer.stage1_owned ops AspisR1.S2W_Outer.traceEffects program accounts1 data1) [] =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint, firstLog) ∧
+              AspisR1.S2W_Trace.run ops
+                    (AspisR1.S2W_Outer.stage2_owned ops AspisR1.S2W_Outer.traceEffects program accounts2 data2 slot)
+                    firstLog =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), finalLog) ∧
+                AspisR1.S2W_Trace.run ops (AspisR1.S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot)
+                      [] =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint, finalLog) ∧
+                  finalLog = firstLog ++ suffix ∧ ∀ e ∈ finalLog, AspisR1.S2W_TraceFacts.ValidEvent ops e :=
+⋯
+'AspisR1.S2W_ExtractionBoundary.accepted_native_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2011765ca04040b5b35d5a5d9cadd066.scope; invocation ID: 472b3ea543e141018e2a9ccca6dd747c
+
