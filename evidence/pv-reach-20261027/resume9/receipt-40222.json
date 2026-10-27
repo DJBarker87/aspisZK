@@ -1,0 +1,562 @@
+{
+  "attempt": 40222,
+  "source_revision": "a4518f4415051dcba8db0afb7ba853a0c6178343",
+  "plan": {
+    "source_revision": "a4518f4415051dcba8db0afb7ba853a0c6178343",
+    "chunk_index": -1,
+    "modules": [
+      {
+        "module": "R1Z.PV_Src_Forest_InverseResult",
+        "authority": "h5",
+        "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Src_Forest_InverseResult.lean",
+        "revision": "a4518f4415051dcba8db0afb7ba853a0c6178343",
+        "blob": "10552618b8abc22078341e92a7ef22b411767e89",
+        "sha256": "965e6d8ae0a1eff88e22285a4d0fe1d654612c34cac1c77e6a7230c97099ec1d",
+        "imports": [
+          "R1Z.PV_Src_Forest_Inverse"
+        ],
+        "transitive_imports": [
+          "Aeneas.Std",
+          "Aeneas.Tactic.RustAttributes",
+          "Aeneas.Tactic.Solver.ScalarTac",
+          "Mathlib.NumberTheory.LucasPrimality",
+          "Mathlib.Tactic",
+          "Mathlib.Tactic.NormNum.Prime",
+          "Mathlib.Tactic.ReduceModChar",
+          "R0P.Asset",
+          "R0P.Copy",
+          "R0P.CopyConstants",
+          "R0P.Core",
+          "R0P.CoreExt",
+          "R0P.Digest",
+          "R0P.EmptyRoots",
+          "R0P.Occupancy",
+          "R0P.Path",
+          "R0P.Poseidon",
+          "R0P.PoseidonConstants",
+          "R0P.Positive",
+          "R0P.Positivity",
+          "R0P.PositivityChain",
+          "R0P.PositivityWired",
+          "R0P.Schedule",
+          "R0P.Value",
+          "R0Z.BlockRefine",
+          "R0Z.BlockWritersExtracted",
+          "R0Z.BuilderBlocksChain",
+          "R0Z.BuilderBlocksCopy",
+          "R0Z.BuilderBlocksModel",
+          "R0Z.BuilderModel",
+          "R0Z.BuilderModelAux",
+          "R0Z.BuilderModelCopyKinds",
+          "R0Z.BuilderModelCopyMisc",
+          "R0Z.BuilderModelDigest",
+          "R0Z.BuilderModelHash",
+          "R0Z.BuilderWitness",
+          "R0Z.BuilderWitnessMerged",
+          "R0Z.BuilderWitnessTrace",
+          "R0Z.BuilderWitnessTree",
+          "R0Z.M31Prime",
+          "R0Z.NodeRefine",
+          "R0Z.NoteSpongeModel",
+          "R0Z.PoseidonCanon",
+          "R0Z.PoseidonConstLift",
+          "R0Z.PoseidonExtracted",
+          "R0Z.PoseidonInternal",
+          "R0Z.PoseidonRefine",
+          "R0Z.PoseidonRounds",
+          "R0Z.PoseidonTables",
+          "R0Z.ReadBackRefine",
+          "R0Z.SpongeModel",
+          "R0Z.SpongeRefine",
+          "R0Z.WriterRefineAuxBlock",
+          "R0Z.WriterRefineMerge",
+          "R0Z.WriterRefineOcc",
+          "R0Z.WriterRefineOccRow",
+          "R0Z.WriterRefinePath",
+          "R0Z.WriterRefinePathBlock",
+          "R0Z.WriterRefinePathModel",
+          "R0Z.WriterRefineValue",
+          "R0Z.WriterRefineValueBlock",
+          "R0Z.WriterRefineValueModel",
+          "R0Z.WritersExtracted",
+          "R1Z.BuilderAdmissionStd",
+          "R1Z.BuilderForestAdmissionPort",
+          "R1Z.BuilderForestCallbackAdapter",
+          "R1Z.BuilderForestStd",
+          "R1Z.BuilderForestStdPort",
+          "R1Z.BuilderRecordsExtracted",
+          "R1Z.BuilderRecordsFields",
+          "R1Z.BuilderStdCollect",
+          "R1Z.BuilderStdModels",
+          "R1Z.BuilderStdShift",
+          "R1Z.PV_Src_Forest_BankMerge",
+          "R1Z.PV_Src_Forest_Inverse",
+          "R1Z.PV_Src_Forest_PrimitiveArguments",
+          "R1Z.PV_Src_Forest_PrimitiveWriters"
+        ]
+      }
+    ],
+    "caps": {
+      "MemoryHigh": "6G",
+      "MemoryMax": "8G",
+      "MemorySwapMax": 0,
+      "TasksMax": 64,
+      "lean_M": 7000
+    }
+  },
+  "environment": {
+    "ELAN": "elan",
+    "ELAN_HOME": "/home/dombarker/.elan",
+    "ELAN_TOOLCHAIN": "leanprover/lean4:v4.32.0",
+    "LAKE": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+    "LAKE_HOME": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "LEAN": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "LEAN_AR": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/llvm-ar",
+    "LEAN_CC": null,
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects",
+    "LEAN_SRC_PATH": "/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/src/lean/lake",
+    "LEAN_GITHASH": "8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+    "PATH": "/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli/.lake/build/bin:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries/.lake/build/bin:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq/.lake/build/bin:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop/.lake/build/bin:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets/.lake/build/bin:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph/.lake/build/bin:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/bin:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible/.lake/build/bin:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/bin:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/build/bin:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin:/home/dombarker/.elan/bin:/home/dombarker/.elan/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+    "LD_LIBRARY_PATH": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/build/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible/.lake/build/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph/.lake/build/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop/.lake/build/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq/.lake/build/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries/.lake/build/lib:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli/.lake/build/lib"
+  },
+  "modules": [
+    {
+      "module": "R1Z.PV_Src_Forest_InverseResult",
+      "source": {
+        "module": "R1Z.PV_Src_Forest_InverseResult",
+        "authority": "h5",
+        "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Src_Forest_InverseResult.lean",
+        "revision": "a4518f4415051dcba8db0afb7ba853a0c6178343",
+        "blob": "10552618b8abc22078341e92a7ef22b411767e89",
+        "sha256": "965e6d8ae0a1eff88e22285a4d0fe1d654612c34cac1c77e6a7230c97099ec1d",
+        "imports": [
+          "R1Z.PV_Src_Forest_Inverse"
+        ],
+        "transitive_imports": [
+          "Aeneas.Std",
+          "Aeneas.Tactic.RustAttributes",
+          "Aeneas.Tactic.Solver.ScalarTac",
+          "Mathlib.NumberTheory.LucasPrimality",
+          "Mathlib.Tactic",
+          "Mathlib.Tactic.NormNum.Prime",
+          "Mathlib.Tactic.ReduceModChar",
+          "R0P.Asset",
+          "R0P.Copy",
+          "R0P.CopyConstants",
+          "R0P.Core",
+          "R0P.CoreExt",
+          "R0P.Digest",
+          "R0P.EmptyRoots",
+          "R0P.Occupancy",
+          "R0P.Path",
+          "R0P.Poseidon",
+          "R0P.PoseidonConstants",
+          "R0P.Positive",
+          "R0P.Positivity",
+          "R0P.PositivityChain",
+          "R0P.PositivityWired",
+          "R0P.Schedule",
+          "R0P.Value",
+          "R0Z.BlockRefine",
+          "R0Z.BlockWritersExtracted",
+          "R0Z.BuilderBlocksChain",
+          "R0Z.BuilderBlocksCopy",
+          "R0Z.BuilderBlocksModel",
+          "R0Z.BuilderModel",
+          "R0Z.BuilderModelAux",
+          "R0Z.BuilderModelCopyKinds",
+          "R0Z.BuilderModelCopyMisc",
+          "R0Z.BuilderModelDigest",
+          "R0Z.BuilderModelHash",
+          "R0Z.BuilderWitness",
+          "R0Z.BuilderWitnessMerged",
+          "R0Z.BuilderWitnessTrace",
+          "R0Z.BuilderWitnessTree",
+          "R0Z.M31Prime",
+          "R0Z.NodeRefine",
+          "R0Z.NoteSpongeModel",
+          "R0Z.PoseidonCanon",
+          "R0Z.PoseidonConstLift",
+          "R0Z.PoseidonExtracted",
+          "R0Z.PoseidonInternal",
+          "R0Z.PoseidonRefine",
+          "R0Z.PoseidonRounds",
+          "R0Z.PoseidonTables",
+          "R0Z.ReadBackRefine",
+          "R0Z.SpongeModel",
+          "R0Z.SpongeRefine",
+          "R0Z.WriterRefineAuxBlock",
+          "R0Z.WriterRefineMerge",
+          "R0Z.WriterRefineOcc",
+          "R0Z.WriterRefineOccRow",
+          "R0Z.WriterRefinePath",
+          "R0Z.WriterRefinePathBlock",
+          "R0Z.WriterRefinePathModel",
+          "R0Z.WriterRefineValue",
+          "R0Z.WriterRefineValueBlock",
+          "R0Z.WriterRefineValueModel",
+          "R0Z.WritersExtracted",
+          "R1Z.BuilderAdmissionStd",
+          "R1Z.BuilderForestAdmissionPort",
+          "R1Z.BuilderForestCallbackAdapter",
+          "R1Z.BuilderForestStd",
+          "R1Z.BuilderForestStdPort",
+          "R1Z.BuilderRecordsExtracted",
+          "R1Z.BuilderRecordsFields",
+          "R1Z.BuilderStdCollect",
+          "R1Z.BuilderStdModels",
+          "R1Z.BuilderStdShift",
+          "R1Z.PV_Src_Forest_BankMerge",
+          "R1Z.PV_Src_Forest_Inverse",
+          "R1Z.PV_Src_Forest_PrimitiveArguments",
+          "R1Z.PV_Src_Forest_PrimitiveWriters"
+        ]
+      },
+      "command": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-reach-20261027/evidence/resume9-40222/R1Z_PV_Src_Forest_InverseResult-time.log",
+        "timeout",
+        "600",
+        "python3",
+        "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+        "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/J.json",
+        "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects",
+        "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/sources",
+        "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/PV_Src_Forest_InverseResult.olean",
+        "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/sources/R1Z/PV_Src_Forest_InverseResult.lean",
+        "7000"
+      ],
+      "dependencies": {
+        "Aeneas.Std": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/Aeneas/Std.olean",
+          "sha256": "5bb081b67dbf1daa167aa442427cab086efa9effcb5bbfcaf7cd35e2c7a2f72b"
+        },
+        "Aeneas.Tactic.RustAttributes": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/Aeneas/Tactic/RustAttributes.olean",
+          "sha256": "6e00ca0b5a214f4ccad85f0c2b7045804f5edb8508415ffc6a70bf20bc988f06"
+        },
+        "Aeneas.Tactic.Solver.ScalarTac": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/Aeneas/Tactic/Solver/ScalarTac.olean",
+          "sha256": "3c926349ec4fdecacb0e8365ba95e4cdaf13cf987608970d801f0a2691440805"
+        },
+        "Mathlib.NumberTheory.LucasPrimality": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/Mathlib/NumberTheory/LucasPrimality.olean",
+          "sha256": "43ff447cc57fb328d40bffeb2d97481559a018b76a9cf2f6824840242397e399"
+        },
+        "Mathlib.Tactic": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/Mathlib/Tactic.olean",
+          "sha256": "55ee2345729e8a4d379de3bce14ea18b14fbfdc259cf2653fadf4bf3a46876d8"
+        },
+        "Mathlib.Tactic.NormNum.Prime": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/Mathlib/Tactic/NormNum/Prime.olean",
+          "sha256": "8861945e9f040728ad2e931ac8d7ec8aedef3d2e2641dae0d0b8409044b5912b"
+        },
+        "Mathlib.Tactic.ReduceModChar": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/Mathlib/Tactic/ReduceModChar.olean",
+          "sha256": "27f13a5f89b662c376f877d400f53a87b7b3d44301d0a8fb4f4219977578b5b8"
+        },
+        "R0P.Asset": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Asset.olean",
+          "sha256": "a70f06c89eb0fff62c064f7d10d524cee3a0e18b8cae70e2cfc1fcbeb5ba7f21"
+        },
+        "R0P.Copy": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Copy.olean",
+          "sha256": "27ce86c029ecdc1e0aa756bc41c47e0a6e965b5a9d10b9647152f4d8d0c39f4d"
+        },
+        "R0P.CopyConstants": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/CopyConstants.olean",
+          "sha256": "fd18e2fe2152a6674d2dd7476845b7dcc053ce9483b1841c185d7c9eb7604c80"
+        },
+        "R0P.Core": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Core.olean",
+          "sha256": "b2bc01c9d8ab09a3bf9127da6a65ca15aef179b772e37936dca1e39691939064"
+        },
+        "R0P.CoreExt": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/CoreExt.olean",
+          "sha256": "99347ef6a75a35b3eab7ff194cd116057f2572eec3a7bd00b6abf4e00f2a4f42"
+        },
+        "R0P.Digest": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Digest.olean",
+          "sha256": "8eec927b07d6447f3fd122d8a1f9b7939377679be3c518475a3d4f5564028470"
+        },
+        "R0P.EmptyRoots": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/EmptyRoots.olean",
+          "sha256": "2030fc5602225d69b7daa93fc3df34e0582a4b9efdc5072753255f2b587828af"
+        },
+        "R0P.Occupancy": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Occupancy.olean",
+          "sha256": "cfedd66fcb338e99eb76efaf141f047e2336e47bc6299d4fcb429d76ee626a47"
+        },
+        "R0P.Path": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Path.olean",
+          "sha256": "97574ded85c6e108330c3a396c0f8bc265cc63942e328b9cf144c435665810c4"
+        },
+        "R0P.Poseidon": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Poseidon.olean",
+          "sha256": "b9a11e2e61c1d0703f874965d17a8d7e1a93f74a90d5a398833d3007b5f0ac4b"
+        },
+        "R0P.PoseidonConstants": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/PoseidonConstants.olean",
+          "sha256": "e9665151e7c0e91d6d5e04b5c167b50e1ea36ac60b764289e47c066e254c2699"
+        },
+        "R0P.Positive": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Positive.olean",
+          "sha256": "13d07b8e3c0de256198276569cbed864345ce3a46888555d9c82804892fb6673"
+        },
+        "R0P.Positivity": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Positivity.olean",
+          "sha256": "a9ba11b1e7704ce3612b1b9722898458a39a87bc5959115f0a50f426bdc86c59"
+        },
+        "R0P.PositivityChain": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/PositivityChain.olean",
+          "sha256": "315d133b9284f8ff93e0a09e1c3b4ae8d4aaecb28e2b806bbdf2ad5f145791b5"
+        },
+        "R0P.PositivityWired": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/PositivityWired.olean",
+          "sha256": "aeee3ac05ac551527748fbf72c294056368c58969827521b5112afa40456713c"
+        },
+        "R0P.Schedule": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Schedule.olean",
+          "sha256": "1f3b7c61e57bde0475c505bae0acab97701aa94574b4d6fe4936909c15986cfc"
+        },
+        "R0P.Value": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0P/Value.olean",
+          "sha256": "ff19ada674e0e3d7e7f103f27edeae395b5fd9b46a0f6e8c49d2a83e05212964"
+        },
+        "R0Z.BlockRefine": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BlockRefine.olean",
+          "sha256": "dceec8d25af2c001d54e53a4f22ce9810daae774b4cb1165274ce9b0736adeb2"
+        },
+        "R0Z.BlockWritersExtracted": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BlockWritersExtracted.olean",
+          "sha256": "2e99f846b3183feb1aa385c579328d2f4a66717d6e743cc5b2829efbb8c29933"
+        },
+        "R0Z.BuilderBlocksChain": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderBlocksChain.olean",
+          "sha256": "7c277208921945860dcecc41bb5c2d4e17bbdf914036e0a6cf587106cfe6fe16"
+        },
+        "R0Z.BuilderBlocksCopy": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderBlocksCopy.olean",
+          "sha256": "6873de43178dc1e6d69ade357100ca77c2fd7d311965d0eff3d92063339ace1b"
+        },
+        "R0Z.BuilderBlocksModel": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderBlocksModel.olean",
+          "sha256": "b40f82a73f144ef45e0adcb1b06999f2b40b22fff93130173dcf02c7d6c822e4"
+        },
+        "R0Z.BuilderModel": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderModel.olean",
+          "sha256": "703095a413be0999e199996867323ccacd3764be96b88613f4427830f1251804"
+        },
+        "R0Z.BuilderModelAux": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderModelAux.olean",
+          "sha256": "cc348dafc863a6f8cd702edad5438df10833d7fabd85150dae7e490cef3a0751"
+        },
+        "R0Z.BuilderModelCopyKinds": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderModelCopyKinds.olean",
+          "sha256": "08844af4a59ba019680179ec3364b2f14aa2376934cd1357c3b6a644c2c3fb7b"
+        },
+        "R0Z.BuilderModelCopyMisc": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderModelCopyMisc.olean",
+          "sha256": "b70bfd3b7439ba7f88ed7721cd69cd8102a12b87c5519a577ccdceb36f66b96a"
+        },
+        "R0Z.BuilderModelDigest": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderModelDigest.olean",
+          "sha256": "f8ce61799a5edbcb9a30f1c41220c8058b7cfa3a59e7911e4e1d11462cf0286d"
+        },
+        "R0Z.BuilderModelHash": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderModelHash.olean",
+          "sha256": "a627f8818cde55449e72000e62d2977cc933dfe1dc44b1c81d04dcc827b2ef23"
+        },
+        "R0Z.BuilderWitness": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderWitness.olean",
+          "sha256": "2362b53270ce4273623f1eb6c0ba9bc4659add27c0c385ac836956d08d41ad02"
+        },
+        "R0Z.BuilderWitnessMerged": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderWitnessMerged.olean",
+          "sha256": "bf02e4edd8d62be683f355aac502a30f4938c7c971a5f4a8bd7d1ca72a46d8c6"
+        },
+        "R0Z.BuilderWitnessTrace": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderWitnessTrace.olean",
+          "sha256": "84364be92e9e11752bd06cd6d735f7e73696666dbda595ea7c8b7590ae0db0fb"
+        },
+        "R0Z.BuilderWitnessTree": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/BuilderWitnessTree.olean",
+          "sha256": "d6ce36239d01611052e5205060a60310a706f25bdc007fae5a518098a7355d96"
+        },
+        "R0Z.M31Prime": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/M31Prime.olean",
+          "sha256": "010962d6857d5562bd9165491695375864b7e34a6662b8227c11e9bd0fd0072e"
+        },
+        "R0Z.NodeRefine": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/NodeRefine.olean",
+          "sha256": "e9da207c7eff4f765970476910a626964f7b5e4e26cb4a602331788618a491ed"
+        },
+        "R0Z.NoteSpongeModel": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/NoteSpongeModel.olean",
+          "sha256": "feb214cb861ecdb730130333409681dd85fe2a6e93f281f3c17bba6a77e4a500"
+        },
+        "R0Z.PoseidonCanon": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/PoseidonCanon.olean",
+          "sha256": "23f0b4bc41b710ae7c817aacccf454d192df60452c746765dea93834c27393c9"
+        },
+        "R0Z.PoseidonConstLift": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/PoseidonConstLift.olean",
+          "sha256": "cd40e4148933a2be489fe5df9f8c91275c5010db4a06b35f3d878b7d7e252da2"
+        },
+        "R0Z.PoseidonExtracted": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/PoseidonExtracted.olean",
+          "sha256": "fc01465ee4cf862b492980b180f81a1f7a604ecbe1f679f21ddc31f01c5f6fe7"
+        },
+        "R0Z.PoseidonInternal": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/PoseidonInternal.olean",
+          "sha256": "61ae7ac278b4f5ae03b19a3c021a5ebb5ef6169a04df0f03a396b050dd8a0a99"
+        },
+        "R0Z.PoseidonRefine": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/PoseidonRefine.olean",
+          "sha256": "474fb15a37a2bd78f1fadacb1f4cbe6bba7a585e68b7c6a2f5894fc86cb1bdcc"
+        },
+        "R0Z.PoseidonRounds": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/PoseidonRounds.olean",
+          "sha256": "7bbff77eff7cb7c42bbe2d25c3f71c398067cf25ea1772fc7886fe3dd4b45083"
+        },
+        "R0Z.PoseidonTables": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/PoseidonTables.olean",
+          "sha256": "b42ac64bf0e9877a5e1c601711dd25510e71be9ddefd3507953daa3c0cc5ea8e"
+        },
+        "R0Z.ReadBackRefine": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/ReadBackRefine.olean",
+          "sha256": "9cb8e189d238a81a35f4ba4ac316428d2bf1ab29b07fb0b77c10770ae597541d"
+        },
+        "R0Z.SpongeModel": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/SpongeModel.olean",
+          "sha256": "3017e595ea9ea5390228a1d18b5578f1c50966c5e98a839586cf0b27226a5374"
+        },
+        "R0Z.SpongeRefine": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/SpongeRefine.olean",
+          "sha256": "170f47d1efc46f4d2755cdd7f03d8c5864fce08451c1fcf2f7a639d341fc5c6f"
+        },
+        "R0Z.WriterRefineAuxBlock": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefineAuxBlock.olean",
+          "sha256": "3b965b5c2f0a6c8f8b61e4fdd6db10e14be6036b7bc54e52575c87f472a88657"
+        },
+        "R0Z.WriterRefineMerge": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefineMerge.olean",
+          "sha256": "bc9cf980ffd126abb50efac426ab1ca863361a852af026da94209382f6f9b275"
+        },
+        "R0Z.WriterRefineOcc": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefineOcc.olean",
+          "sha256": "c6277cec9eb3a6c3eb4f65cb30b127b778c545c6183cd406ea85f80ae70760a5"
+        },
+        "R0Z.WriterRefineOccRow": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefineOccRow.olean",
+          "sha256": "4d9d28122db5ddbeb9ffa26d5a72b391d5c9b831696a3858810fe603538e3d5a"
+        },
+        "R0Z.WriterRefinePath": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefinePath.olean",
+          "sha256": "45e495886b6280480099fb96e6bde447b1ef85577c0e4eb5239323c6f85fdc27"
+        },
+        "R0Z.WriterRefinePathBlock": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefinePathBlock.olean",
+          "sha256": "006bc97981f76ad53affafac238fb66d0e5a932b5f9dcb97ae3e9cf329fa5965"
+        },
+        "R0Z.WriterRefinePathModel": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefinePathModel.olean",
+          "sha256": "2256ffb7040409e67729f5e95217ecc57285764b491823b8ba9afefbcea135b3"
+        },
+        "R0Z.WriterRefineValue": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefineValue.olean",
+          "sha256": "bce3f5b1270262d4db41a2b5d9c2603eb5ddc37a1f6f52c38e22504dafff0240"
+        },
+        "R0Z.WriterRefineValueBlock": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefineValueBlock.olean",
+          "sha256": "9876d5a9426db9b6a620b5d57dffaa3165cd9e575ed293df2e5308070b574ca9"
+        },
+        "R0Z.WriterRefineValueModel": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WriterRefineValueModel.olean",
+          "sha256": "8e0107a93ca1176f341b314eb63381af04d6649c7f652cfd47325d5e7197fe83"
+        },
+        "R0Z.WritersExtracted": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R0Z/WritersExtracted.olean",
+          "sha256": "dd53df77e7303bc389364db3a8eaa550b66a2a1bdec148104ae7e7d99bc35aee"
+        },
+        "R1Z.BuilderAdmissionStd": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderAdmissionStd.olean",
+          "sha256": "ed1780b6d6bfa5f268b3d8b3f4b042d5dc9c20624f5b9f70dee73b80713cd3b5"
+        },
+        "R1Z.BuilderForestAdmissionPort": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderForestAdmissionPort.olean",
+          "sha256": "52ef0a5c5263985dc651b68fc97840f232ddc0be5614f135e35231a04f63534e"
+        },
+        "R1Z.BuilderForestCallbackAdapter": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderForestCallbackAdapter.olean",
+          "sha256": "3f12987f17609a5096215bd26391ded4a19d95c51bb11dc9799cda405186fe03"
+        },
+        "R1Z.BuilderForestStd": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderForestStd.olean",
+          "sha256": "c4fbe94523850e2c4115e4497ee76961485d85cf3c6f5840f447e7214d67e942"
+        },
+        "R1Z.BuilderForestStdPort": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderForestStdPort.olean",
+          "sha256": "94045d462460547022c2ff4944efbfd1bf39e8a83124911fc33559fd4ea5fe35"
+        },
+        "R1Z.BuilderRecordsExtracted": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderRecordsExtracted.olean",
+          "sha256": "8cdc872067bbf4c82ccfc580aed84c978c6de68694f68da952d00b03f96fe419"
+        },
+        "R1Z.BuilderRecordsFields": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderRecordsFields.olean",
+          "sha256": "f2b3a597d66cd95ec3093c34c69e8e68594f971036a571e8d37a3864689233e9"
+        },
+        "R1Z.BuilderStdCollect": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderStdCollect.olean",
+          "sha256": "068955aead508eff85739803bb55a634a20bbafc7a59e0dc4c0d012e6b1549d5"
+        },
+        "R1Z.BuilderStdModels": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderStdModels.olean",
+          "sha256": "2ed497590692c6e1dc5daa998140e8b2f48a4918661015b40a9fdc05d46d910b"
+        },
+        "R1Z.BuilderStdShift": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/BuilderStdShift.olean",
+          "sha256": "f448fec9756304c56b5f357811e117682c49ff4a1ab582f73419fcccb2cc7890"
+        },
+        "R1Z.PV_Src_Forest_BankMerge": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/PV_Src_Forest_BankMerge.olean",
+          "sha256": "8b0c635a6ec6c0360d7a657143d0343f46e7a526c7e41812dae113f3b38853a9"
+        },
+        "R1Z.PV_Src_Forest_Inverse": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/PV_Src_Forest_Inverse.olean",
+          "sha256": "4d2cb7b9fa5b77e9d087ae5b621733acf0110c6c87431b44083abccd33a277cf"
+        },
+        "R1Z.PV_Src_Forest_PrimitiveArguments": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/PV_Src_Forest_PrimitiveArguments.olean",
+          "sha256": "a8eb67a6964d4a057a6f5287a698024d38163a9a5a707a01586d2b0b439c9e02"
+        },
+        "R1Z.PV_Src_Forest_PrimitiveWriters": {
+          "path": "/home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/PV_Src_Forest_PrimitiveWriters.olean",
+          "sha256": "a865e0a11f0847b7008abe76330436fa6b67557c521c01a5818b7e56be309a31"
+        }
+      },
+      "deps_fingerprint": "c5eecfab645ab1a167b3d9324ad6a166af82839b2ebeb87573903f7c161011c5",
+      "exit": 0,
+      "wall_seconds": 5.014856713998597,
+      "peak_rss_kib": 3825764,
+      "swaps": 0,
+      "object_sha256": "85dce0188960a6cb8e1d1ec727104e8f09ac979cf1aef7647f1bbefc109b69af",
+      "axioms": [
+        "'R1Z.PV_Src_Forest_InverseResult.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "output": "'R1Z.PV_Src_Forest_InverseResult.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+      "time_log": "\tCommand being timed: \"timeout 600 python3 /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py /home/dombarker/project-offloads/codex-pv-reach-20261027/lean/J.json /home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects /home/dombarker/project-offloads/codex-pv-reach-20261027/lean/sources /home/dombarker/project-offloads/codex-pv-reach-20261027/lean/objects/R1Z/PV_Src_Forest_InverseResult.olean /home/dombarker/project-offloads/codex-pv-reach-20261027/lean/sources/R1Z/PV_Src_Forest_InverseResult.lean 7000\"\n\tUser time (seconds): 2.55\n\tSystem time (seconds): 1.69\n\tPercent of CPU this job got: 92%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:04.59\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 3825764\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 2\n\tMinor (reclaiming a frame) page faults: 96048\n\tVoluntary context switches: 182\n\tInvoluntary context switches: 475\n\tSwaps: 0\n\tFile system inputs: 344\n\tFile system outputs: 152\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+      "accepted": true
+    }
+  ],
+  "wall_seconds": 5.166639337025117,
+  "aggregate_rss_peak_bytes": 3910606848,
+  "cgroup_memory_sample_peak_bytes": 392069120,
+  "cgroup_memory_peak_bytes": 404246528,
+  "swap_peak_bytes": 0,
+  "accepted": true
+}
