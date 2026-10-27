@@ -114,3 +114,54 @@ Sibling digests are Copy arrays of M31 (`M31` derives `Clone, Copy` at
 forest Copy justifications remain `pair_trace.rs:71` and
 `pair_forest_trace.rs:53`. No signature, type, other function or file of
 shipped code changes.
+
+5. D277, split the three disjoint level ranges to eliminate sibling branch
+joins (repair 4 still failed at records:239–247, InterpBorrows.ml:2731).
+Verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index bc02764afb..928de21956 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -231,20 +231,19 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+     let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
+     let mut bits = [0u32; 24];
+     let mut sibs = [[0u32; 8]; 24];
+-    let mut level = 0;
++    bits[0] = u32::from(pair.selected_second);
++    sibs[0] = raw(&other);
++    let mut level = 1;
++    while level < 21 {
++        bits[level] = ((pair.membership.index >> (level - 1)) & 1) as u32;
++        let sib = pair.membership.siblings[level - 1];
++        sibs[level] = raw(&sib);
++        level += 1;
++    }
+     while level < 24 {
+-        if level == 0 {
+-            bits[level] = u32::from(pair.selected_second);
+-            sibs[level] = raw(&other);
+-        } else if level <= 20 {
+-            bits[level] = ((pair.membership.index >> (level - 1)) & 1) as u32;
+-            let sib = pair.membership.siblings[level - 1];
+-            sibs[level] = raw(&sib);
+-        } else {
+-            bits[level] = u32::from(input.super_root_directions[level - 21]);
+-            let sib = input.super_root_siblings[level - 21];
+-            sibs[level] = raw(&sib);
+-        }
++        bits[level] = u32::from(input.super_root_directions[level - 21]);
++        let sib = input.super_root_siblings[level - 21];
++        sibs[level] = raw(&sib);
+         level += 1;
+     }
+     let empty = pair_empty_roots();
+```
+
+The write order remains level 0, levels 1..20 ascending, levels 21..23
+ascending. Every bit, sibling expression and raw call is identical at each
+level. Both loops terminate with level 24; arithmetic and all array accesses
+are in bounds, preserving all panic/abort behavior. No allocation, I/O,
+signature, type or other function changes. Copy locations remain
+`field.rs:22`, `pair_trace.rs:71`, `pair_forest_trace.rs:53`.

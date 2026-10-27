@@ -231,20 +231,19 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
     let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
     let mut bits = [0u32; 24];
     let mut sibs = [[0u32; 8]; 24];
-    let mut level = 0;
+    bits[0] = u32::from(pair.selected_second);
+    sibs[0] = raw(&other);
+    let mut level = 1;
+    while level < 21 {
+        bits[level] = ((pair.membership.index >> (level - 1)) & 1) as u32;
+        let sib = pair.membership.siblings[level - 1];
+        sibs[level] = raw(&sib);
+        level += 1;
+    }
     while level < 24 {
-        if level == 0 {
-            bits[level] = u32::from(pair.selected_second);
-            sibs[level] = raw(&other);
-        } else if level <= 20 {
-            bits[level] = ((pair.membership.index >> (level - 1)) & 1) as u32;
-            let sib = pair.membership.siblings[level - 1];
-            sibs[level] = raw(&sib);
-        } else {
-            bits[level] = u32::from(input.super_root_directions[level - 21]);
-            let sib = input.super_root_siblings[level - 21];
-            sibs[level] = raw(&sib);
-        }
+        bits[level] = u32::from(input.super_root_directions[level - 21]);
+        let sib = input.super_root_siblings[level - 21];
+        sibs[level] = raw(&sib);
         level += 1;
     }
     let empty = pair_empty_roots();
