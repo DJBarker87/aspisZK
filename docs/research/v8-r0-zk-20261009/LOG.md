@@ -11899,3 +11899,27 @@ keep production code byte-identical on conflicts, gate (a), re-check PDict_ entr
 classify installed equations versus source laws. Six slots: route2b, batch1b, runjoin17, dudect, dict2
 (five live; the sixth was held for the quiet window and is being refilled). Rows removed outright: 0.
 Privacy target not yet established.
+
+## D290 (Stream B) 2026-10-27 14:15 UTC: dudect harness ready (V374); quiet-window admission fix acknowledged; the measurement window agreed and launched
+
+pv-dudect (`codex/pv-dudect-20261027` from candidate 73070ddd51; no Lean/Kani; crates/ programs/ scripts/
+unchanged; cargo targets deleted, harness binaries kept on the host). An in-process harness
+(tools/pv-dudect/, no release program depends on it) links the candidate's actual kernels: mask m31/qm31
+sampling and rejection, the CT pole scan, M31/QM31 inversion, the op223 compressor, both private-seed
+checks (with zero diagnostics). Instruction equivalence against the recommended devnet_spend build
+(evidence/pv-l3-20261027/dudect/INSTRUCTION-EQUIVALENCE.md): the compressor and QM31::try_inv match;
+M31/pole symbols differ in cold panic metadata and the sampler and scalar/seed-check boundaries differ in
+register allocation, so each result speaks for the harness build, with the matching leaves named.
+Preregistered plan V374-PLAN-v2: one 15-minute window, 1,000,000 calls per class per experiment, CPU
+pinning, dudect cropping, Welch |t| threshold 4.5, fail-closed aborts. Dry run (not a measurement) in
+cycles/call fixed/random: mask m31 452/474, qm31 480/476, rejection diagnostics 76/78 and 100/114, pole
+scan 10,090/10,103, M31 inverse 386/392, QM31 inverse 489/479, compressor 881/963, seed checks ≈ 65-71.
+Stream A's admission fix (their quiet-window block now exits 78 in all five copies, including two
+one-line changes in Stream B host directories, verified; a refusal had been read as admission once,
+outside our timing window) is acknowledged; Stream B ruling (m): admission needs allowed:true AND exit 0;
+exit 78 is wait-and-retry. Stream A agreed the V374 window (cap until = start + 1200 s). Launched
+pv-dudect-run (same branch): verify the harness hash, drain, marker with owner bypass and trap deletion,
+run the plan exactly, per-kernel |t| and verdicts ("no difference detected at this sample size" is not a
+proof of absence; a detected difference is reported as a finding), evidence RESULTS.md. Five live slots:
+route2b, batch1b, runjoin17, dict2, dudect-run. Rows removed outright: 0. Privacy target not yet
+established.
