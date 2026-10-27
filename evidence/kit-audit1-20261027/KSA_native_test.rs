@@ -10,6 +10,21 @@ mod KSA_diagnostic {
         let n=e-1; let y=kit_pow(x,n/2); let z=y.mul(y);
         if n%2==0 {z.mul(x)} else {z}
     }
+    fn ka(a:M31,b:M31)->M31 { let s=a.0.wrapping_add(b.0);M31(if s>=P {s-P}else{s}) }
+    fn ks(a:M31,b:M31)->M31 { let s=a.0.wrapping_add(P).wrapping_sub(b.0);M31(if s>=P{s-P}else{s}) }
+    fn ca(x:CM31,y:CM31)->CM31 {CM31::new(ka(x.a,y.a),ka(x.b,y.b))}
+    fn cs(x:CM31,y:CM31)->CM31 {CM31::new(ks(x.a,y.a),ks(x.b,y.b))}
+    fn cm(x:CM31,y:CM31)->CM31 {
+        let m0=x.a.mul(y.a);let m1=x.b.mul(y.b);
+        let m2=M31::reduce_u64((u64::from(x.a.0)+u64::from(x.b.0))*(u64::from(y.a.0)+u64::from(y.b.0)));
+        CM31::new(ks(m0,m1),ks(ks(m2,m0),m1))
+    }
+    fn km(x:QM31,y:QM31)->QM31 {
+        let m0=cm(x.c0,y.c0);let m1=cm(x.c1,y.c1);
+        let m2=cm(ca(x.c0,x.c1),ca(y.c0,y.c1));
+        let r=CM31::new(ks(ka(m1.a,m1.a),m1.b),ka(m1.a,ka(m1.b,m1.b)));
+        QM31{c0:ca(m0,r),c1:cs(cs(m2,m0),m1)}
+    }
     #[test]
     fn KSA_frozen_differential() {
         std::println!("KSA inv2 native={} kit=2",M31(2).inv().0);
@@ -29,6 +44,27 @@ mod KSA_diagnostic {
             assert_eq!(x.mul_m31(M31(2)),x.add(x));
             assert_eq!(x.mul_qm31(q(2)),x.add(x));
         }
+        let mixed=QM31{c0:CM31::ONE,c1:CM31::ONE};
+        let raw=QM31{c0:CM31::new(M31(u32::MAX),M31::ZERO),c1:CM31::new(M31(u32::MAX),M31::ZERO)};
+        let w=WideExact::from_qm31(mixed);
+        let native=w.mul_qm31(raw);
+        let kit=(km(w.c0(),raw),km(w.c1(),raw));
+        std::println!("KSA mixed noncanonical native={:?} kit={:?}",native.to_limbs(),kit);
+        assert!(native.c0()!=kit.0 || native.c1()!=kit.1);
+        assert_eq!(QM31::from_le_bytes(&[0u8;16]),Some(QM31::ZERO));
+        assert_eq!(QM31::from_le_bytes(&[]),None);
+        assert_eq!(WideExact::from_le_bytes(&[]),None);
+        assert_eq!(WideExact::ZERO.to_le_bytes(),[0u8;32]);
+        assert_eq!(WideExact::ZERO.to_limbs(),[0u32;8]);
+        assert_eq!(<WideExact as super::r0::CodeField>::from_m31(M31(P)),WideExact::ZERO);
+        assert_eq!(M31(1).add(M31(2)),M31(3));
+        assert_eq!(M31(2).sub(M31(1)),M31(1));
+        assert_eq!(M31(2).double(),M31(4));
+        assert_eq!(M31::reduce_u64(2147483648),M31(1));
+        assert_eq!(super::r0::domain::FibreIndex::new(262144),Err(super::r0::Error::IndexOutOfRange));
+        assert_eq!(super::r0::domain::FibreIndex::new(2).unwrap().get(),2);
+        assert_eq!(super::r0::merkle::C1_TAG,113);assert_eq!(super::r0::merkle::C2_TAG,241);
+        std::println!("KSA byte, field, domain and tag fixtures passed");
         // Frozen selected_mask_value, coefficients zero, explicit one, z0=1.
         let mut point=[QM31::ZERO;10];point[0]=QM31::ONE;
         let native=super::state_only_hiding::state_only_selected_mask_value(&[QM31::ZERO;16],&[QM31::ZERO;10],QM31::ONE,&point);

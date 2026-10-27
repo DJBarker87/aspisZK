@@ -40,7 +40,7 @@ Each row is a definition/carrier in the non-emitted files or a changed emitted d
 | XRn_Join_CheckpointModel.lean:44 | `aspis_core.state_only_private_merkle.private_leaf_hash_with_digest` | crates/aspis-core/src/state_only_private_merkle.rs:40 | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_CircleModel.lean:5 | `XRn_Join_qpow` | library model | NO EMITTED BODY in raw Funs | UNFAITHFUL |
 | XRn_Join_CircleModel.lean:14 | `aspis_core.circle.secure_ood_circle_point_from_parameter` | crates/aspis-core/src/circle.rs:55 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_CircleModel.lean:28 | `sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once` | crates/aspis-r1-cost-probe/src/sampler.rs:162 (closure; fallback transcript.rs:89) | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_CircleModel.lean:28 | `sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once` | crates/aspis-r1-cost-probe/src/sampler.rs:122 (closure; aspis-core transcript fallback) | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_DecodeModels.lean:6 | `r1_wire.ValidatedRecord.decode_k` | crates/aspis-r1-cost-probe/src/r1_wire.rs:139 | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_DecodeModels.lean:32 | `r1_semantic.claims` | crates/aspis-r1-cost-probe/src/r1_semantic.rs:42 | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_DecodeModels.lean:49 | `r1_semantic.semantic_boundary` | crates/aspis-r1-cost-probe/src/r1_semantic.rs:81 | NO EMITTED BODY in raw Funs | UNDETERMINED |
@@ -59,24 +59,24 @@ Each row is a definition/carrier in the non-emitted files or a changed emitted d
 | XRn_Join_DotModel.lean:37 | `XRn_Join_powers` | library model | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_DotModel.lean:44 | `XRn_Join_preparedPart` | library model | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_DotModel.lean:75 | `verifier.prepared_claim` | crates/aspis-r1-cost-probe/src/verifier.rs:53 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:5 | `field.M31` | crates/aspis-core/src/field.rs:19 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:6 | `field.CM31` | crates/aspis-core/src/field.rs:19 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:7 | `field.QM31` | crates/aspis-core/src/field.rs:19 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:5 | `field.M31` | library model | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:6 | `field.CM31` | library model | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:7 | `field.QM31` | library model | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_Field.lean:11 | `field.P` | crates/aspis-core/src/field.rs:19 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:12 | `field.M31.add` | crates/aspis-core/src/field.rs:19 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:22 | `field.M31.double` | src/field.rs:183:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:28 | `field.M31.sub` | src/field.rs:94:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:38 | `field.mul_by_r` | src/field.rs:860:0 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:47 | `field.reduce_u64` | src/field.rs:31:0 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:64 | `field.M31.reduce_u64` | src/field.rs:153:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:71 | `field.M31.mul` | src/field.rs:133:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:81 | `field.CM31.mul` | src/field.rs:306:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:105 | `field.CM31.sub` | src/field.rs:289:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:114 | `field.CM31.add` | src/field.rs:281:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:123 | `field.QM31.mul` | src/field.rs:935:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:139 | `field.QM31.sub` | src/field.rs:906:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:148 | `field.QM31.add` | src/field.rs:896:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
-| XRn_Join_Field.lean:156 | `field.wide_exact.mul_u` | src/field/wide_exact.rs:299:0 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:12 | `field.M31.add` | crates/aspis-core/src/field.rs:62 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:22 | `field.M31.double` | crates/aspis-core/src/field.rs:183:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:28 | `field.M31.sub` | crates/aspis-core/src/field.rs:94:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:38 | `field.mul_by_r` | crates/aspis-core/src/field.rs:860:0 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:47 | `field.reduce_u64` | crates/aspis-core/src/field.rs:31:0 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:64 | `field.M31.reduce_u64` | crates/aspis-core/src/field.rs:153:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:71 | `field.M31.mul` | crates/aspis-core/src/field.rs:133:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:81 | `field.CM31.mul` | crates/aspis-core/src/field.rs:306:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:105 | `field.CM31.sub` | crates/aspis-core/src/field.rs:289:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:114 | `field.CM31.add` | crates/aspis-core/src/field.rs:281:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:123 | `field.QM31.mul` | crates/aspis-core/src/field.rs:935:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:139 | `field.QM31.sub` | crates/aspis-core/src/field.rs:906:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:148 | `field.QM31.add` | crates/aspis-core/src/field.rs:896:4 | NO EMITTED BODY in raw Funs | UNDETERMINED |
+| XRn_Join_Field.lean:156 | `field.wide_exact.mul_u` | crates/aspis-core/src/field/wide_exact.rs:299:0 | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_FieldExternal.lean:8 | `oldQ` | library model | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_FieldExternal.lean:10 | `newQ` | library model | NO EMITTED BODY in raw Funs | UNDETERMINED |
 | XRn_Join_FieldExternal.lean:12 | `qzero` | library model | NO EMITTED BODY in raw Funs | UNDETERMINED |

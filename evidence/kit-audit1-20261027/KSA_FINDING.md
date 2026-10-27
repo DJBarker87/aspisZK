@@ -42,3 +42,40 @@ copies, not replacements offered for adoption.
 for the two Windows owners; both print only `propext`. This resolves the
 `Windows.noConfusion` collision without modifying either predecessor.
 The co-import does not itself establish transport of all nominal kit carriers.
+
+## New counterexamples and retained scopes
+
+`KSA_L028` proves the WHOLE kit selected-mask result on zero coefficients,
+explicit one and point `[1,0,...,0]`: first limb `1424173332`. Frozen native
+Rust returns `708712922` (`KSA_R002`/`KSA_R004`). Both other limbs are zero.
+The replacement is `AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value`,
+used by adopted `AspisR1.FIp_SemanticArithmetic.mask`; retain the canonicality
+conditions in `AspisR1.FIp_MaskValue.source`.
+
+`KSA_L029`/`KSA_L034` prove a second exact source discrepancy, now directly
+against emitted `FIo_Native...WideExact.mul_qm31`. Set the wide value's low
+quartic component to `(1,0,1,0)`, high component zero, and the multiplier to
+`(4294967295,0,4294967295,0)`. The kit returns low limbs
+`(3,1,2147483645,0)`; the emitted body and frozen native return `(3,1,2,0)`.
+The kit omits the emitted `canonical_qm31` call. Use the emitted body at
+`lean/FIo_NativeFuns.lean:409`, not another handwritten adapter.
+No claim that this noncanonical operand occurs in an actual verifier run.
+
+`KSA_L031` proves exact complete same-input Dot.push transport to the emitted
+FIo operation for arbitrary accumulator words and operands. Its two new roots
+have standard axioms only. This is positive operation evidence, not a
+whole-prepared-claim, query-history, adoption or artifact proof.
+
+Failed attempts remain excluded: L025 hit the default heartbeat limit; its
+broad simplification was replaced by the symbolic even-spine lemma L027 and
+the focused result L028. L026 was an invalid monadic definitional simplification.
+L032 needed explicit closed reduction for an irreducible byte operation; L034
+passes. No timeout or memory failure was rerun unchanged or at a larger cap.
+
+Rust R001 failed on four missing immutable fixture files; R002 adds precisely
+those frozen files and passes. R003's direct use of native field arithmetic
+on a noncanonical counterpart overflows under the explicitly recorded checked
+optimized profile. This is NOT a source/emission/production defect claim.
+R004 replaces ONLY the diagnostic counterpart with the kit's literal wrapping
+arithmetic and passes, while native WideExact itself remains frozen. Every
+run validates the offline resolved graph against the unchanged frozen lock.

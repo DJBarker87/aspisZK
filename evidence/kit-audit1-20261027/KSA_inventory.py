@@ -68,8 +68,10 @@ for p in sorted(KIT.glob('XRn_Join_*.lean')):
   if n=='aspis_core.r0.heap.filled':rust='crates/aspis-core/src/r0/heap.rs:5'
   if n=='aspis_core.r0.merkle.C1_TAG':rust='crates/aspis-core/src/r0/merkle.rs:15'
   if n=='aspis_core.r0.merkle.C2_TAG':rust='crates/aspis-core/src/r0/merkle.rs:16'
-  if n=='sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once':rust='crates/aspis-r1-cost-probe/src/sampler.rs:162 (closure; fallback transcript.rs:89)'
-  if n.startswith('field.') and not rust:rust='crates/aspis-core/src/field.rs:19'
+  if n=='sampler.circle_sample.closure.Insts.CoreOpsFunctionFnOnceTupleCirclePointErrorSecureCirclePoint.call_once':rust='crates/aspis-r1-cost-probe/src/sampler.rs:122 (closure; aspis-core transcript fallback)'
+  if rust and rust.startswith('src/'):rust='crates/aspis-core/'+rust
+  if n=='field.M31.add':rust='crates/aspis-core/src/field.rs:62'
+  if n=='field.P':rust='crates/aspis-core/src/field.rs:19'
   if n.startswith('aspis_core.field.') and not rust:
    path=Path('crates/aspis-core/src/field/wide_exact.rs') if '.wide_exact.' in n else Path('crates/aspis-core/src/field.rs')
    leaf=n.rsplit('.',1)[-1]
