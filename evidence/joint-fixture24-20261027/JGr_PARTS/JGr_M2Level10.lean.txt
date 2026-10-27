@@ -1,0 +1,241 @@
+import JGr_M2Level09
+import JGc_TX2_M2Root
+import JGr_M2C019
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGr_M2Roots
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open OracleDecisionMultiTree
+def input110 : Bytes := JGc_TX2_HashBytes.bytes JGr_M2.Hash110.message
+def value110 : State := JFp_SHADigest.output JGr_M2.Hash110.result
+theorem cast110_0 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash110.B00.input).map Fin.val=JGr_M2.Hash110.B00.input := by rfl
+#print axioms cast110_0
+theorem tail110 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash110.tail).map Fin.val=JGr_M2.Hash110.tail := by rfl
+#print axioms tail110
+theorem numeric110 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash110.message).map Fin.val=JGr_M2.Hash110.message := by
+  simp only [JGr_M2.Hash110.message,JGr_M2.Hash110.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast110_0,tail110]
+#print axioms numeric110
+theorem hash110 : JFp_SHADigest.digest input110=value110 := by
+  unfold input110 JFp_SHADigest.digest
+  rw [numeric110,JGr_M2.Hash110.checked]
+  rfl
+#print axioms hash110
+theorem address110 : BinMerkle32Path.nodeInput (children value100 (JGc_TX2_HashBytes.state [59,119,73,169,22,234,180,231,182,173,95,170,28,240,254,211,36,169,197,26,155,126,34,120,70,14,2,233,116,165,77,238]))=input110 := by rfl
+#print axioms address110
+def tree110 : Tree := .branch tree100 (.supplied (JGc_TX2_HashBytes.state [59,119,73,169,22,234,180,231,182,173,95,170,28,240,254,211,36,169,197,26,155,126,34,120,70,14,2,233,116,165,77,238]))
+theorem root110 : root JFp_SHADigest.digest tree110=value110 := by
+  rw [tree110,root,root100]
+  exact (congrArg JFp_SHADigest.digest address110).trans hash110
+#print axioms root110
+theorem shape110 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 11 16384=tree110 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 11 16384)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape100 f g inputs siblings]
+  rw [unoccupied f g 10 17408 (by decide),siblings 10 (by decide) 17408 (by decide)]
+  rfl
+#print axioms shape110
+def input111 : Bytes := JGc_TX2_HashBytes.bytes JGr_M2.Hash111.message
+def value111 : State := JFp_SHADigest.output JGr_M2.Hash111.result
+theorem cast111_0 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash111.B00.input).map Fin.val=JGr_M2.Hash111.B00.input := by rfl
+#print axioms cast111_0
+theorem tail111 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash111.tail).map Fin.val=JGr_M2.Hash111.tail := by rfl
+#print axioms tail111
+theorem numeric111 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash111.message).map Fin.val=JGr_M2.Hash111.message := by
+  simp only [JGr_M2.Hash111.message,JGr_M2.Hash111.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast111_0,tail111]
+#print axioms numeric111
+theorem hash111 : JFp_SHADigest.digest input111=value111 := by
+  unfold input111 JFp_SHADigest.digest
+  rw [numeric111,JGr_M2.Hash111.checked]
+  rfl
+#print axioms hash111
+theorem address111 : BinMerkle32Path.nodeInput (children value101 (JGc_TX2_HashBytes.state [155,115,130,156,18,114,181,14,247,172,123,90,64,80,209,183,141,7,129,131,179,236,78,203,48,11,88,165,65,162,198,183]))=input111 := by rfl
+#print axioms address111
+def tree111 : Tree := .branch tree101 (.supplied (JGc_TX2_HashBytes.state [155,115,130,156,18,114,181,14,247,172,123,90,64,80,209,183,141,7,129,131,179,236,78,203,48,11,88,165,65,162,198,183]))
+theorem root111 : root JFp_SHADigest.digest tree111=value111 := by
+  rw [tree111,root,root101]
+  exact (congrArg JFp_SHADigest.digest address111).trans hash111
+#print axioms root111
+theorem shape111 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 11 22528=tree111 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 11 22528)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape101 f g inputs siblings]
+  rw [unoccupied f g 10 23552 (by decide),siblings 10 (by decide) 23552 (by decide)]
+  rfl
+#print axioms shape111
+def input112 : Bytes := JGc_TX2_M2Roots.input137
+def value112 : State := JGc_TX2_M2Roots.value137
+theorem hash112 : JFp_SHADigest.digest input112=value112 := JGc_TX2_M2Roots.hash137
+#print axioms hash112
+theorem address112 : BinMerkle32Path.nodeInput (children value102 (JGc_TX2_HashBytes.state [233,55,27,237,249,242,100,244,152,233,196,144,235,235,188,45,24,60,248,32,79,165,176,201,186,138,207,29,188,87,191,26]))=input112 := by rfl
+#print axioms address112
+def tree112 : Tree := .branch tree102 (.supplied (JGc_TX2_HashBytes.state [233,55,27,237,249,242,100,244,152,233,196,144,235,235,188,45,24,60,248,32,79,165,176,201,186,138,207,29,188,87,191,26]))
+theorem root112 : root JFp_SHADigest.digest tree112=value112 := by
+  rw [tree112,root,root102]
+  exact (congrArg JFp_SHADigest.digest address112).trans hash112
+#print axioms root112
+theorem shape112 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 11 36864=tree112 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 11 36864)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape102 f g inputs siblings]
+  rw [unoccupied f g 10 37888 (by decide),siblings 10 (by decide) 37888 (by decide)]
+  rfl
+#print axioms shape112
+def input113 : Bytes := JGc_TX2_HashBytes.bytes JGr_M2.Hash113.message
+def value113 : State := JFp_SHADigest.output JGr_M2.Hash113.result
+theorem cast113_0 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash113.B00.input).map Fin.val=JGr_M2.Hash113.B00.input := by rfl
+#print axioms cast113_0
+theorem tail113 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash113.tail).map Fin.val=JGr_M2.Hash113.tail := by rfl
+#print axioms tail113
+theorem numeric113 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash113.message).map Fin.val=JGr_M2.Hash113.message := by
+  simp only [JGr_M2.Hash113.message,JGr_M2.Hash113.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast113_0,tail113]
+#print axioms numeric113
+theorem hash113 : JFp_SHADigest.digest input113=value113 := by
+  unfold input113 JFp_SHADigest.digest
+  rw [numeric113,JGr_M2.Hash113.checked]
+  rfl
+#print axioms hash113
+theorem address113 : BinMerkle32Path.nodeInput (children (JGc_TX2_HashBytes.state [21,19,134,173,7,2,210,241,42,75,194,167,15,45,14,161,26,153,154,65,84,193,25,180,34,59,39,191,21,32,25,135]) value103)=input113 := by rfl
+#print axioms address113
+def tree113 : Tree := .branch (.supplied (JGc_TX2_HashBytes.state [21,19,134,173,7,2,210,241,42,75,194,167,15,45,14,161,26,153,154,65,84,193,25,180,34,59,39,191,21,32,25,135])) tree103
+theorem root113 : root JFp_SHADigest.digest tree113=value113 := by
+  rw [tree113,root,root103]
+  exact (congrArg JFp_SHADigest.digest address113).trans hash113
+#print axioms root113
+theorem shape113 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 11 38912=tree113 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 11 38912)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [unoccupied f g 10 38912 (by decide),siblings 10 (by decide) 38912 (by decide)]
+  rw [shape103 f g inputs siblings]
+  rfl
+#print axioms shape113
+def input114 : Bytes := JGc_TX2_M2Roots.input140
+def value114 : State := JGc_TX2_M2Roots.value140
+theorem hash114 : JFp_SHADigest.digest input114=value114 := JGc_TX2_M2Roots.hash140
+#print axioms hash114
+theorem address114 : BinMerkle32Path.nodeInput (children value104 (JGc_TX2_HashBytes.state [186,104,47,209,122,14,221,153,173,57,67,129,86,66,66,233,32,56,115,230,42,38,98,22,111,235,154,246,230,200,89,9]))=input114 := by rfl
+#print axioms address114
+def tree114 : Tree := .branch tree104 (.supplied (JGc_TX2_HashBytes.state [186,104,47,209,122,14,221,153,173,57,67,129,86,66,66,233,32,56,115,230,42,38,98,22,111,235,154,246,230,200,89,9]))
+theorem root114 : root JFp_SHADigest.digest tree114=value114 := by
+  rw [tree114,root,root104]
+  exact (congrArg JFp_SHADigest.digest address114).trans hash114
+#print axioms root114
+theorem shape114 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 11 45056=tree114 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 11 45056)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape104 f g inputs siblings]
+  rw [unoccupied f g 10 46080 (by decide),siblings 10 (by decide) 46080 (by decide)]
+  rfl
+#print axioms shape114
+def input115 : Bytes := JGc_TX2_HashBytes.bytes JGr_M2.Hash115.message
+def value115 : State := JFp_SHADigest.output JGr_M2.Hash115.result
+theorem cast115_0 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash115.B00.input).map Fin.val=JGr_M2.Hash115.B00.input := by rfl
+#print axioms cast115_0
+theorem tail115 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash115.tail).map Fin.val=JGr_M2.Hash115.tail := by rfl
+#print axioms tail115
+theorem numeric115 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash115.message).map Fin.val=JGr_M2.Hash115.message := by
+  simp only [JGr_M2.Hash115.message,JGr_M2.Hash115.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast115_0,tail115]
+#print axioms numeric115
+theorem hash115 : JFp_SHADigest.digest input115=value115 := by
+  unfold input115 JFp_SHADigest.digest
+  rw [numeric115,JGr_M2.Hash115.checked]
+  rfl
+#print axioms hash115
+theorem address115 : BinMerkle32Path.nodeInput (children value105 value106)=input115 := by rfl
+#print axioms address115
+def tree115 : Tree := .branch tree105 tree106
+theorem root115 : root JFp_SHADigest.digest tree115=value115 := by
+  rw [tree115,root,root105,root106]
+  exact (congrArg JFp_SHADigest.digest address115).trans hash115
+#print axioms root115
+theorem shape115 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 11 47104=tree115 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 11 47104)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape105 f g inputs siblings]
+  rw [shape106 f g inputs siblings]
+  rfl
+#print axioms shape115
+def input116 : Bytes := JGc_TX2_HashBytes.bytes JGr_M2.Hash116.message
+def value116 : State := JFp_SHADigest.output JGr_M2.Hash116.result
+theorem cast116_0 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash116.B00.input).map Fin.val=JGr_M2.Hash116.B00.input := by rfl
+#print axioms cast116_0
+theorem tail116 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash116.tail).map Fin.val=JGr_M2.Hash116.tail := by rfl
+#print axioms tail116
+theorem numeric116 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash116.message).map Fin.val=JGr_M2.Hash116.message := by
+  simp only [JGr_M2.Hash116.message,JGr_M2.Hash116.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast116_0,tail116]
+#print axioms numeric116
+theorem hash116 : JFp_SHADigest.digest input116=value116 := by
+  unfold input116 JFp_SHADigest.digest
+  rw [numeric116,JGr_M2.Hash116.checked]
+  rfl
+#print axioms hash116
+theorem address116 : BinMerkle32Path.nodeInput (children (JGc_TX2_HashBytes.state [160,11,21,231,220,161,4,194,145,32,85,167,167,102,254,212,177,251,97,177,99,36,215,15,114,51,84,17,30,107,226,151]) value107)=input116 := by rfl
+#print axioms address116
+def tree116 : Tree := .branch (.supplied (JGc_TX2_HashBytes.state [160,11,21,231,220,161,4,194,145,32,85,167,167,102,254,212,177,251,97,177,99,36,215,15,114,51,84,17,30,107,226,151])) tree107
+theorem root116 : root JFp_SHADigest.digest tree116=value116 := by
+  rw [tree116,root,root107]
+  exact (congrArg JFp_SHADigest.digest address116).trans hash116
+#print axioms root116
+theorem shape116 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 11 51200=tree116 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 11 51200)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [unoccupied f g 10 51200 (by decide),siblings 10 (by decide) 51200 (by decide)]
+  rw [shape107 f g inputs siblings]
+  rfl
+#print axioms shape116
+def input117 : Bytes := JGc_TX2_M2Roots.input141
+def value117 : State := JGc_TX2_M2Roots.value141
+theorem hash117 : JFp_SHADigest.digest input117=value117 := JGc_TX2_M2Roots.hash141
+#print axioms hash117
+theorem address117 : BinMerkle32Path.nodeInput (children value108 (JGc_TX2_HashBytes.state [79,82,178,84,61,147,76,0,223,43,6,169,212,57,122,92,55,118,68,198,170,121,50,188,215,151,199,101,127,208,161,110]))=input117 := by rfl
+#print axioms address117
+def tree117 : Tree := .branch tree108 (.supplied (JGc_TX2_HashBytes.state [79,82,178,84,61,147,76,0,223,43,6,169,212,57,122,92,55,118,68,198,170,121,50,188,215,151,199,101,127,208,161,110]))
+theorem root117 : root JFp_SHADigest.digest tree117=value117 := by
+  rw [tree117,root,root108]
+  exact (congrArg JFp_SHADigest.digest address117).trans hash117
+#print axioms root117
+theorem shape117 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 11 53248=tree117 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 11 53248)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape108 f g inputs siblings]
+  rw [unoccupied f g 10 54272 (by decide),siblings 10 (by decide) 54272 (by decide)]
+  rfl
+#print axioms shape117
+def input118 : Bytes := JGc_TX2_HashBytes.bytes JGr_M2.Hash118.message
+def value118 : State := JFp_SHADigest.output JGr_M2.Hash118.result
+theorem cast118_0 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash118.B00.input).map Fin.val=JGr_M2.Hash118.B00.input := by rfl
+#print axioms cast118_0
+theorem tail118 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash118.tail).map Fin.val=JGr_M2.Hash118.tail := by rfl
+#print axioms tail118
+theorem numeric118 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash118.message).map Fin.val=JGr_M2.Hash118.message := by
+  simp only [JGr_M2.Hash118.message,JGr_M2.Hash118.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast118_0,tail118]
+#print axioms numeric118
+theorem hash118 : JFp_SHADigest.digest input118=value118 := by
+  unfold input118 JFp_SHADigest.digest
+  rw [numeric118,JGr_M2.Hash118.checked]
+  rfl
+#print axioms hash118
+theorem address118 : BinMerkle32Path.nodeInput (children value109 (JGc_TX2_HashBytes.state [113,199,16,24,52,72,40,241,79,147,76,57,246,194,155,42,154,10,38,24,158,221,37,151,184,52,224,109,73,38,75,31]))=input118 := by rfl
+#print axioms address118
+def tree118 : Tree := .branch tree109 (.supplied (JGc_TX2_HashBytes.state [113,199,16,24,52,72,40,241,79,147,76,57,246,194,155,42,154,10,38,24,158,221,37,151,184,52,224,109,73,38,75,31]))
+theorem root118 : root JFp_SHADigest.digest tree118=value118 := by
+  rw [tree118,root,root109]
+  exact (congrArg JFp_SHADigest.digest address118).trans hash118
+#print axioms root118
+theorem shape118 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 11 61440=tree118 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 11 61440)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape109 f g inputs siblings]
+  rw [unoccupied f g 10 62464 (by decide),siblings 10 (by decide) 62464 (by decide)]
+  rfl
+#print axioms shape118
+end AspisR1.JGr_M2Roots
+end
