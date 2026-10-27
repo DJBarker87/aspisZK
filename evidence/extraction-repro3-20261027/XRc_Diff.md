@@ -52,10 +52,20 @@ Funs: 69 cohort-only / 161 release-only / 9 same / 9 different. Missing namespac
 matches are not declared semantic differences. The all-declaration inventory
 is a superset of closure use; fresh proof-term reachability remains unproved.
 
-No XRc_Association.lean is claimed yet: the required complete release definitions
-are missing, and selected cohort Funs does not define Prepared.new or tx1.
-Simply writing oldNew = project newNew would have unresolved actual declarations,
-carrier/dictionary ownership and both Result/error transports. Per common rule 4,
-stop that item and record the obstruction rather than introduce an assumed
-equality. XRc_OBLIGATIONS.md records the remaining statements in prose and their
-ledger families and estimates; it is not a completed typed association artifact.
+XRc_Association.lean now checks ONE exact declaration slice: verifier.Error,
+under a separate XRc_Release namespace, versus the coherent imported cohort
+enum. XRc_ErrorSlice.json pins the source declaration and records that only
+the enclosing namespace changes. Both constructor-preserving maps are explicit;
+verifier_error_association proves they are inverse. XRc_L001: exit 0, 1.174 s,
+2641388 KiB RSS, swap 0; #print axioms reports no axioms. No external template
+or substituted library is imported, and no top imports this helper.
+
+The full requested typed association artifact remains incomplete: selected
+cohort Funs does not define Prepared.new or tx1; required concrete release
+bodies are absent and some extracted carriers are external templates. Simply
+writing oldNew = project newNew would leave actual declarations, ownership,
+dictionaries and both Result/error transports unresolved. Per common rule 4,
+stop those items rather than insert desired equalities as assumptions. The
+remaining obligations are documented in XRc_OBLIGATIONS.md with affected ledger
+families and estimates, but not falsely presented as completed concrete typed
+Props for all declaration pairs.

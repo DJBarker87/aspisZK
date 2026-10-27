@@ -5,6 +5,14 @@ not newly adopted cryptographic assumptions. No listed row is discharged by
 an extraction invocation. The unchanged ledger remains authoritative; the
 links below identify affected families rather than adding ledger rows.
 
+## Checked isolated pair
+
+XRc_Association.VerifierErrorAssociation is proved by
+XRc_Association.verifier_error_association (XRc_L001, no axioms). The release
+enum declaration is copied exactly under XRc_Release; both directions of
+constructor-preserving carrier transport are explicit. This proves no
+function's error mapping/order and removes no ledger/top premise.
+
 ## Required-body availability (blocking)
 
 Pinned LLBC 0814e4ec… contains no body for prepared_claim (240),
