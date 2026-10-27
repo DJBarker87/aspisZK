@@ -44,9 +44,18 @@ e=json.load(open('/home/dombarker/project-offloads/r1-privacy-build-integration-
 '''
 r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
 scp([str(S),f'{host}:{P}/sources/{M}.lean'])
+authority_map={x['module']:x for x in json.loads((E/'project-closure.json').read_text())}
+source_closure=set()
+def add_source_dependencies(name):
+ if name in source_closure:return
+ source_closure.add(name)
+ if name in authority_map:
+  for dep in authority_map[name]['imports']:add_source_dependencies(dep)
+add_source_dependencies(M.replace('/','.'))
+source_closure.discard(M.replace('/','.'))
 code=f'''import pathlib,json,hashlib,re
 e=json.load(open({P!r}+'/J.json'));roots=[pathlib.Path(x) for x in e['LEAN_PATH'].split(':')];d={{}}
-for m in ['Aeneas','Aeneas.Command','AeneasMeta.Extensions','Init.Prelude','Mathlib.Data.List.GetD']+re.findall(r'^import\\s+(\\S+)',pathlib.Path({P!r}+'/sources/{M}.lean').read_text(),re.M):
+for m in {sorted(source_closure)!r}+['Aeneas','Aeneas.Command','AeneasMeta.Extensions','Init.Prelude','Mathlib.Data.List.GetD']+re.findall(r'^import\\s+(\\S+)',pathlib.Path({P!r}+'/sources/{M}.lean').read_text(),re.M):
  q=next((r/pathlib.Path(*m.split('.')).with_suffix('.olean') for r in roots if (r/pathlib.Path(*m.split('.')).with_suffix('.olean')).is_file()),None);d[m]=dict(path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest()) if q else None
 print(json.dumps(d))
 '''
