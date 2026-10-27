@@ -1,0 +1,67 @@
+{"attempt": "LPq_K001", "exit_status": 0, "wall_seconds": 10.775347610993776, "peak_rss_kib": "534444", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-leaf-p6-15-20261027/LPq_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qur
+...
+e()->E{let w:[u32;8]=kani::any();for v in w {kani::assume(v<0x7fff_ffff);}E::from_limbs(w).unwrap()}
+    |    ^^^^^^^^^ help: convert the identifier to snake case: `lpm_any_e`
+
+warning: static variable `LPm_WEIGHT` should have an upper case name
+   --> crates/aspis-r1-cost-probe/src/LPm_verifier.rs:197:12
+    |
+197 | static mut LPm_WEIGHT:[u32;8]=[0;8];
+    |            ^^^^^^^^^^
+    |
+help: convert the identifier to upper case
+    |
+197 - static mut LPm_WEIGHT:[u32;8]=[0;8];
+197 + static mut LPM_WEIGHT:[u32;8]=[0;8];
+    |
+
+warning: static variable `LPm_PART` should have an upper case name
+   --> crates/aspis-r1-cost-probe/src/LPm_verifier.rs:198:12
+    |
+198 | static mut LPm_PART:[u32;8]=[0;8];
+    |            ^^^^^^^^
+    |
+help: convert the identifier to upper case
+    |
+198 - static mut LPm_PART:[u32;8]=[0;8];
+198 + static mut LPM_PART:[u32;8]=[0;8];
+    |
+
+warning: function `LPm_weighted_mul` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/LPm_verifier.rs:199:4
+    |
+199 | fn LPm_weighted_mul(a:E,b:E)->E{
+    |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpm_weighted_mul`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 8.69s
+Checking harness verifier::LPq_verifier::weighted_operands...
+
+VERIFICATION RESULT:
+ ** 0 of 33 failed
+
+ ** 3 of 3 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.1331222s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r253c0c5b220746df9d133516569e8f80.scope; invocation ID: 1e1958d3d0c94a88ac0ab09fcb18c911

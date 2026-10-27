@@ -1,0 +1,29 @@
+//! Operand-only cut of verifier::prepared_claim's final loop.
+//! Deliberately stops before field multiplication; no field stub is installed.
+use super::*;
+#[kani::proof]
+#[kani::unwind(10)]
+fn weighted_operands() {
+    // Every bit pattern is representation-valid: E contains eight u32 words.
+    // This cut performs no field arithmetic and needs no canonicality premise.
+    let k: [E; 7] = unsafe { core::mem::transmute(kani::any::<[u32; 56]>()) };
+    let parts: [E; 7] = unsafe { core::mem::transmute(kani::any::<[u32; 56]>()) };
+    let bk = k;
+    let bp = parts;
+    let i: usize = kani::any();
+    kani::assume(i < 7);
+    crate::trace::value(14, i, parts[i]);
+    let lhs = k[i];
+    let rhs = parts[i];
+    let limb: usize = kani::any();
+    kani::assume(limb < 8);
+    assert_eq!(lhs.to_limbs()[limb], bk[i].to_limbs()[limb]);
+    assert_eq!(rhs.to_limbs()[limb], bp[i].to_limbs()[limb]);
+    let row: usize = kani::any();
+    kani::assume(row < 7);
+    assert_eq!(k[row].to_limbs()[limb], bk[row].to_limbs()[limb]);
+    assert_eq!(parts[row].to_limbs()[limb], bp[row].to_limbs()[limb]);
+    kani::cover!(i == 0);
+    kani::cover!(i == 6);
+    kani::cover!(limb == 7);
+}

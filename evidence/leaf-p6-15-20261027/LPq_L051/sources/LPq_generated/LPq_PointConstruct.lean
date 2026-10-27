@@ -1,0 +1,69 @@
+import LPm_PointLength
+import XRy_ArrayRead
+set_option autoImplicit false
+namespace AspisR1.LPq_PointConstruct
+open Aeneas Aeneas.Std Result LPi_FieldValues LPm_RawPort AspisR1CurrentPreparedClaim
+
+/-- Local read ports, not a supplied loop trace or output equation. The concrete
+semantic and selected-byte decoder domain must establish these ports. -/
+def ReadDomain {H : Type} (sem : r1_semantic.Verified H) (y1 : Slice U8)
+    (g : Array Concrete.E 29#usize) (point : Usize) : Prop :=
+  (∀ l : Usize, l.val<29 → ∃ q : NQ, canonQ q ∧
+    ClaimScalar.read LPm_PointLoop.ops sem y1 point l=ok (qPort q)) ∧
+  (∀ l : Usize, l.val<29 → ∃ v : NE, canonE v ∧
+    Array.index_usize g l=ok (ePort v))
+
+/-- Construct the linked native observations by induction on remaining source
+iterations. Nothing assumes a complete public-fold trace or whole-loop Result. -/
+theorem loop {H : Type} (sem : r1_semantic.Verified H) (y1 : Slice U8)
+    (g : Array Concrete.E 29#usize) (point : Usize)
+    (domain : ReadDomain sem y1 g point) (fuel : Nat)
+    (iter : LPm_PointLoop.Range) (s : Native)
+    (last : iter.end.val=29) (bound : iter.start.val≤29)
+    (remaining : 29-iter.start.val≤fuel)
+    (bounded : LPm_PublicFold.Bounded s iter.start.val) :
+    ∃ xs out, LPm_PointLoop.Trace sem y1 g point iter s xs out := by
+  induction fuel generalizing iter s with
+  | zero =>
+    have stopped : ¬iter.start.val<iter.end.val := by omega
+    obtain ⟨⟨o,iter'⟩,call,shape⟩ := WP.spec_imp_exists
+      (Aeneas.Std.core.iter.range.IteratorRange.next_UScalar_spec
+        (cloneInst := core.clone.CloneUsize) (partialOrdInst := core.cmp.PartialOrdUsize)
+        (by intros; rfl) (by intros; rfl) iter)
+    simp only [stopped,↓reduceIte] at shape
+    obtain ⟨out,finish,_⟩ := LPm_FinishPort.source s
+    exact ⟨[],out,.done iter iter' s out (by rw [shape.1.1] at call; exact call) finish⟩
+  | succ n ih =>
+    obtain ⟨⟨o,iter'⟩,call,shape⟩ := WP.spec_imp_exists
+      (Aeneas.Std.core.iter.range.IteratorRange.next_UScalar_spec
+        (cloneInst := core.clone.CloneUsize) (partialOrdInst := core.cmp.PartialOrdUsize)
+        (by intros; rfl) (by intros; rfl) iter)
+    by_cases active : iter.start.val<iter.end.val
+    · simp only [active,↓reduceIte] at shape
+      have hl : iter.start.val<29 := by omega
+      obtain ⟨q,cq,read⟩ := domain.1 iter.start hl
+      obtain ⟨v,cv,weight⟩ := domain.2 iter.start hl
+      obtain ⟨next,push,bnext,_⟩ := LPm_PublicFold.step s v q iter.start.val hl bounded cv cq
+      have last' : iter'.end.val=29 := by rw [shape.2]; exact last
+      have bound' : iter'.start.val≤29 := by omega
+      have remain' : 29-iter'.start.val≤n := by omega
+      have bn : LPm_PublicFold.Bounded next iter'.start.val := by rw [shape.1.2]; exact bnext
+      obtain ⟨xs,out,tail⟩ := ih iter' next last' bound' remain' bn
+      exact ⟨(v,q)::xs,out,.step iter.start v q
+        (by rw [shape.1.1] at call; exact call) read weight cv cq
+        (by rw [bounded.1]; exact hl) push tail⟩
+    · simp only [active,↓reduceIte] at shape
+      obtain ⟨out,finish,_⟩ := LPm_FinishPort.source s
+      exact ⟨[],out,.done iter iter' s out (by rw [shape.1.1] at call; exact call) finish⟩
+
+theorem from_zero {H : Type} (sem : r1_semantic.Verified H) (y1 : Slice U8)
+    (g : Array Concrete.E 29#usize) (point : Usize)
+    (domain : ReadDomain sem y1 g point) :
+    ∃ xs out, LPm_PointLoop.Trace sem y1 g point
+      {start:=0#usize,«end»:=29#usize} LPm_PublicTwentyNine.zero xs out := by
+  exact loop sem y1 g point domain 29 _ _ rfl (by decide) (by decide)
+    LPm_PublicTwentyNine.initial_bound
+
+#print axioms loop
+#print axioms from_zero
+end AspisR1.LPq_PointConstruct
