@@ -1,0 +1,37 @@
+{
+  "op": 259,
+  "row": "V265",
+  "at_utc": "2026-10-26T21:29:15.390956+00:00",
+  "branch": "codex/pv-cb3-20261026",
+  "revision": "257f7a51d3ba821b3a910c7d4a4e01bba7133555",
+  "pattern": "op259_source",
+  "exit": 1,
+  "matches": [],
+  "decision": "PREPARE; recheck immediately before extraction",
+  "status": "OPEN; wrapper PREPARED only; no extraction or type-check",
+  "complete_existing_signature": "op259 : Array U8 32#usize \u2192 aspis_core.r0_transcript.CircleRow \u2192 Result aspis_core.circle.SecureCirclePoint",
+  "intended_source": "aspis_r1_cost_probe::sampler::circle_sample",
+  "source_span": "sampler.rs121-128",
+  "source_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+  "wrapper_sha256": "b867d2b0fc44d926c5178e3643343fd6517bcfc0212a4c438cfe934b020c4942",
+  "required_cases": [
+    "Every 32-byte block",
+    "Both CircleRow constructors",
+    "Successful parameter map and row-specific fallback point",
+    "Complete outer Aeneas Result, without a desired-output premise"
+  ],
+  "next": "After ops107/109/118, recheck sibling; direct extraction pv_cb_source::circle_sample including sampler and circle/fallback helpers. Prove bijective CircleRow/SecureCirclePoint carriers before exact source law. If extraction fails retain exact error and pursue P6 safe reference; this pure row has no native-effect deferral.",
+  "budget_charged": 0,
+  "prepared_lean": [
+    {
+      "module": "PV_CB_Op259Carriers",
+      "sha256": "d72fc0583c787cb490cdad143de02ebed8b274700894a3267786ec28e371b9a3",
+      "status": "PREPARED, no type-check"
+    },
+    {
+      "module": "PV_CB_Op259Exact",
+      "sha256": "7b5775be173f94a26f9354803a24e0c55f2259b10d39451aa8b56ec34d72c5ee",
+      "status": "PREPARED, no type-check"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,re,hashlib,sys
 root=Path(__file__).resolve().parents[2]
-name=sys.argv[1];assert re.fullmatch(r'[a-z0-9-]+',name)
+name=sys.argv[1];assert re.fullmatch(r'[A-Za-z0-9-]+',name)
 base='/home/dombarker/project-offloads/codex-pv-cb-20261026'
 out=root/'evidence/pv-cb-20261026'/name;out.mkdir(exist_ok=True)
 code='''from pathlib import Path

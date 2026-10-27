@@ -1,5 +1,5 @@
 import R1Z.PV_CB_Op105Funs
-import R1Z.PV_CB_State
+import R1Z.ProverRwFullExternalFuns
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_CB_Op105Exact

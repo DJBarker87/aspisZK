@@ -1,0 +1,23 @@
+{
+  "raw_sha256": {
+    "Types": "79e715819a47e2078f1ac2efb9f86ae5d34556b82aca538bc4a235cbe7609326",
+    "Funs": "881ab576736638fd9ec8005832c7a167c348eb66f5424c79fdbaf3a59d81db6d"
+  },
+  "shift_count_type_adaptations": [
+    {
+      "before": "Std.U64.wrapping_shr x 31#i32",
+      "after": "Std.U64.wrapping_shr x 31#u32"
+    },
+    {
+      "before": "Std.U64.wrapping_shr x1 31#i32",
+      "after": "Std.U64.wrapping_shr x1 31#u32"
+    },
+    {
+      "before": "Std.U64.wrapping_shr exp 1#i32",
+      "after": "Std.U64.wrapping_shr exp 1#u32"
+    }
+  ],
+  "change": "Funs import rewritten to own Types module; nonnegative wrapping_shr literal counts rendered U32 for the pinned backend API, preserving numeric amounts; all other emitted bodies and Types unchanged; no external function template. Additional import of R1Z.PV_CB_OptionDiscriminant supplies the logical None0/Some1 enum tags, matching the existing op71 adapter; no external function, axiom or desired-result premise.",
+  "logical_option_tag_adapter": true,
+  "failed_attempt": "27109: missing Discriminant (Option core.convert.Infallible); replaced by changed import of named generic tag support; no emitted function body changed"
+}
