@@ -66,7 +66,6 @@ theorem bounded (column : Slice Q) (weights : host_multilinear.SparseWeights) :
     simp only [PV_B3_Result.bind_assoc, bind_tc_ok]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     rintro ⟨row,weight⟩ hr
-    dsimp only
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro q hq
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
