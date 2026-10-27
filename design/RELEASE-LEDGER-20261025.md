@@ -236,6 +236,21 @@ execution) stays an open privacy obligation. Authority: owner, 2026-10-27,
 LOG D248 (Stream B) item 6. A change to any pinned file invalidates this pin
 and needs a new owner-approved pin.
 
+**Native client build: recipe of record, toolchain NOT pinned (2026-10-27).**
+The only recorded build of the pinned client route is the devnet R1 run
+([README](../docs/research/100bit-spend-path-20261013/evidence/devnet-r1-20261020/README.md),
+optimized host driver section): `cargo build --manifest-path
+tools/r1-cost-probe/Cargo.toml --release --offline --locked -j 4 --features
+r1p-check --bin devnet_spend`, with `RUSTFLAGS='-C link-arg=-Wl,--threads=4'`
+recorded by the receipt wrapper, using the host's default toolchain
+(`/home/dombarker/.cargo/bin/cargo`; no repo-root rust-toolchain file and no
+recorded rustc/cargo version or target triple). Until an exact toolchain pin is
+approved, "the shipped client binary" is not defined, and any client-binary
+audit (L3 disassembly) must say "toolchain unpinned". Choosing that pin is a
+release-scope decision for the owner. The bundle must also be re-pinned when
+the prover candidate is adopted: the candidate differs from 5228877938 in 26
+pinned files and lacks 6 (Stream B, 2026-10-27).
+
 ## Exact release gates
 
 | Gate | Owner | Required evidence / current disposition |
