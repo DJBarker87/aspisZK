@@ -1,0 +1,62 @@
+{"attempt": "XRp_L057", "exit_status": 1, "wall_seconds": 1.442221333971247, "peak_rss_kib": "2663076", "swaps": "0", "print_axioms": ["'XRp_ReversePass.bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRp_ReversePass.loop_pass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRp_generated/XRp_ReversePass.lean:30:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  loop ?body ?x
+in the target expression
+  (match ok (cont (mk [] ⋯, fun r => back (restore (mk ([] ++ [2147483647#u32]) ⋯) 2147483647#u32 r), 0#u64)) with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ok (0#u64, finish 0 h back)
+
+case zero
+h : 0 ≤ 7
+back : Back
+hp :
+  body (state 0 h) back 0#u64 =
+    ok (cont (mk [] ⋯, fun r => back (restore (mk ([] ++ [2147483647#u32]) ⋯) 2147483647#u32 r), 0#u64))
+⊢ (match ok (cont (mk [] ⋯, fun r => back (restore (mk ([] ++ [2147483647#u32]) ⋯) 2147483647#u32 r), 0#u64)) with
+    
+...
+pression
+  (match ok (cont (mk [] ⋯, fun r => back (restore (mk ([] ++ [2147483647#u32]) ⋯) 2147483647#u32 r), 0#u64)) with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ok (0#u64, finish 0 h back)
+
+case zero
+h : 0 ≤ 7
+back : Back
+hp :
+  body (state 0 h) back 0#u64 =
+    ok (cont (mk [] ⋯, fun r => back (restore (mk ([] ++ [2147483647#u32]) ⋯) 2147483647#u32 r), 0#u64))
+⊢ (match ok (cont (mk [] ⋯, fun r => back (restore (mk ([] ++ [2147483647#u32]) ⋯) 2147483647#u32 r), 0#u64)) with
+    | ok (cont s) => loop step s
+    | ok (done v) => ok v
+    | fail e => fail e
+    | div => div) =
+    ok (0#u64, finish 0 h back)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2147483647 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+XRp_generated/XRp_ReversePass.lean:41:39: warning: This simp argument is unused:
+  List.append_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [̵l̵i̵m̵b̵s̵,̵L̵i̵s̵t̵.̵r̵e̵p̵l̵i̵c̵a̵t̵e̵_̵s̵u̵c̵c̵'̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲l̲i̲m̲b̲s̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲p̲l̲i̲c̲a̲t̲e̲_̲s̲u̲c̲c̲'̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRp_ReversePass.bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRp_ReversePass.loop_pass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6c76536eed294dc5ba10258b197b3b94.scope; invocation ID: c95d9c3556e94d70acc1cf75a5f8004d

@@ -1,0 +1,45 @@
+{"attempt": "XRp_L056", "exit_status": 0, "wall_seconds": 2.120647942996584, "peak_rss_kib": "4722904", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+def Aeneas.Std.Array.to_slice_mut.{u} : {α : Type u} →
+  {n : Usize} → Std.Array α n → Slice α × (Slice α → Std.Array α n) :=
+fun {α} {n} a => (a.to_slice, a.from_slice)
+def Aeneas.Std.core.slice.Slice.iter_mut : {T : Type} →
+  Slice T → Result (core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Slice T)) :=
+fun {T} slice => Result.ok ({ slice := slice }, fun it => it.slice)
+def aspis_core.field.wide_exact.WideExact.to_le_bytes : XRn_Join_Wide → Result (Std.Array U8 32#usize) :=
+fun x =>
+  have bs := XRn_Join_qBytes
+...
+} {n} a => (a.to_slice, a.from_slice)
+def Aeneas.Std.core.slice.Slice.iter_mut : {T : Type} →
+  Slice T → Result (core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Slice T)) :=
+fun {T} slice => Result.ok ({ slice := slice }, fun it => it.slice)
+def aspis_core.field.wide_exact.WideExact.to_le_bytes : XRn_Join_Wide → Result (Std.Array U8 32#usize) :=
+fun x =>
+  have bs := XRn_Join_qBytes (XRn_Join_FieldExternal.newQ x.c0) ++ XRn_Join_qBytes (XRn_Join_FieldExternal.newQ x.c1);
+  if h : bs.length = 32 then Result.ok ⟨bs, h⟩ else Result.fail Error.panic
+def AspisR1LoopPowers.weights.early_powers : (N : Usize) →
+  AspisR1LoopPowers.field.WideExact → Result (Std.Array AspisR1LoopPowers.field.WideExact N) :=
+fun N x =>
+  have out := Array.repeat N AspisR1LoopPowers.field.WideExact.ZERO;
+  AspisR1LoopPowers.weights.early_powers_loop x out AspisR1LoopPowers.field.WideExact.ONE 0#usize
+def AspisR1LoopPowers.weights.early_powers_loop : {N : Usize} →
+  AspisR1LoopPowers.field.WideExact →
+    Std.Array AspisR1LoopPowers.field.WideExact N →
+      AspisR1LoopPowers.field.WideExact → Usize → Result (Std.Array AspisR1LoopPowers.field.WideExact N) :=
+fun {N} x out p i =>
+  loop
+    (fun x_1 =>
+      match x_1 with
+      | (out1, p1, i1) => AspisR1LoopPowers.weights.early_powers_loop.body x out1 p1 i1)
+    (out, p, i)
+def AspisR1LoopPowers.field.WideExact.mul : AspisR1LoopPowers.field.WideExact →
+  AspisR1LoopPowers.field.WideExact → Result AspisR1LoopPowers.field.WideExact :=
+fun x y => do
+  let z ← AspisR1PowersConcreteMul.sourceMul (AspisR1LoopPowers.toOld x) (AspisR1LoopPowers.toOld y)
+  Result.ok (AspisR1LoopPowers.fromOld z)
+def AspisR1ClaimPreparedBridge.mapArray : {A B : Type} → {N : Usize} → (A → B) → Std.Array A N → Std.Array B N :=
+fun {A B} {N} f a => ⟨List.map f ↑a, ⋯⟩
+
+Running as unit: run-ref835fd8217342179a829d545cc30702.scope; invocation ID: 72e6805a67294228b006d7a10792ea3e

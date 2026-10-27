@@ -18,10 +18,12 @@ theorem restores_P : restored (singleton 2147483647#u32) =
     ok ([2147483647#u32],0#u64) := by
   unfold restored body XRn_Join_Release.sampler.low_base_p_digits.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut_loop.body
   unfold aspis_core.field.P
+  have hmax : 0 < Usize.max := by scalar_tac
   simp [XRn_Join_reverseNext,
     core.slice.iter.IterMut.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorMutT.next_back,
     core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back,
-    singleton]
+    singleton, hmax]
+  rfl
 
 #print axioms restores_P
 end XRp_ReverseStep

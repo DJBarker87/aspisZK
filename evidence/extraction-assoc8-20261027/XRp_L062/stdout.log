@@ -1,0 +1,32 @@
+XRp_generated/XRp_DivisionWitness.lean:21:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  finish 7 ?m.131 id (state 7 ?m.135)
+in the target expression
+  (do
+      let __x ← ok (0#u64, finish 7 ⋯ id)
+      match __x with
+        | (rem, back) => do
+          let digit ← lift (UScalar.cast UScalarTy.U32 rem)
+          ok (digit, rank.from_slice (back (state 7 ⋯)).iter.slice, id)) =
+    ok (0#u32, rank, id)
+
+i : Usize
+hcap : (↑(state 7 ⋯).iter.slice ++ limbs 7).length ≤ Usize.max
+⊢ (do
+      let __x ← ok (0#u64, finish 7 ⋯ id)
+      match __x with
+        | (rem, back) => do
+          let digit ← lift (UScalar.cast UScalarTy.U32 rem)
+          ok (digit, rank.from_slice (back (state 7 ⋯)).iter.slice, id)) =
+    ok (0#u32, rank, id)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XRp_DivisionWitness.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
