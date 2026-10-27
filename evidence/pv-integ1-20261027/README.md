@@ -10,7 +10,9 @@ exactly entropy_law, entropy_kernel and observation.
 
 ## Stage 1: verifier artifacts
 
-Pending. Expected default SHA-256
+PASS: all three rebuilt ELFs match the requested pins. See `elf-summary.json`
+and the per-build comparisons/receipts. Default and devnet are 1,563,728 bytes;
+Pool size is recorded in the summary. Confirmed default SHA-256
 `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`;
 devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`;
 Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`.
@@ -19,7 +21,8 @@ barrier checks. Expected work: optimized SBF compilation, not proof generation.
 Source identity is checked byte-for-byte by `source-identity.json`.
 The initial launch failed before compilation because the copied diagnostic
 wrapper lacked execute permission; execute permission was restored for the new
-launch. Reservation refusals and cooldowns are preserved separately.
+launch. Three aggregate-reservation refusals and three-minute cooldowns preceded the
+successful default build. Their admission receipts are preserved separately.
 
 ## Stage 2: client build and route
 
