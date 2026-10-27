@@ -3,7 +3,7 @@ import re
 L=Path(__file__).resolve().parents[2]/'lean'
 orig=(L/'FIs_Caller.lean').read_text()
 head=orig[:orig.index('def Outcome')].replace('namespace AspisR1.FIs_Caller','namespace AspisR1.FJp_ActualCaller')
-head='import FJp_ActualCont\n'+head
+head='import FIs_Caller\nimport FJp_ActualCont\n'+head
 defs=orig[orig.index('def Outcome'):orig.index('theorem strengthen')].replace('FIs_Cont.Outcome','FJp_ActualCont.Outcome')
 sig=orig[orig.index('theorem strengthen'):orig.index('    {Hash :')]
 sig=sig.replace('theorem strengthen {W F CoreError : Type}','theorem strengthen {W C : Type} (err : C) (seed : DrvC_Installation.Configuration FIo_Install.W C)\n    (r : NP6_StdModel.Reservation)')
@@ -37,4 +37,4 @@ body='''    (rootBinding : FJp_RootBinding.Holds f.proof run.root)
 end AspisR1.FJp_ActualCaller
 end
 '''
-(L/'FJp_ActualCaller.lean').write_text(head+defs+sig+cut+extras+body)
+(L/'FJp_ActualCaller.lean').write_text(re.sub(r'\bstd\b','claimsStd',head+defs+sig+cut+extras+body))

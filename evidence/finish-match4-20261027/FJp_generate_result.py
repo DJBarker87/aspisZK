@@ -10,7 +10,7 @@ th=th.replace('theorem strengthen {W F CoreError : Type}','theorem strengthen {W
 a=th.index('    (adapterOps :');b=th.index('    (B :',a);th=th[:a]+th[b:]
 cfg='(FIp_Install.configuration err input r)'
 mp={'adapterOps':cfg+'.adapter','ops':cfg+'.currentBase','reserved':cfg+'.reserved','queryOps':cfg+'.query','geoOps':cfg+'.geometry','stageBase':cfg+'.stageBase','finishOps':cfg+'.finish','seed':'finishSeed'}
-th=re.sub(r'\b('+ '|'.join(mp)+r')\b',lambda m:mp[m[0]],th)
+th=re.sub(r'(?<!\.)\b('+ '|'.join(mp)+r')\b',lambda m:mp[m[0]],th)
 th=th.replace('FinishOps F)','FinishOps FIo_Install.W)')
 needle='    (old : FIs_P2P_Result.Outcome'
 extras='''    (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
