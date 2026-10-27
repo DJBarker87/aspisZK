@@ -1,0 +1,51 @@
+JGa_Reconstruct.lean:18:18: error: Tactic `unfold` failed to unfold `pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut` in
+  pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut
+      c (acc, bit) =
+    ok (out, c)
+'AspisR1.JGa_Reconstruct.cell' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGa_Reconstruct.lean:29:60: error(lean.unknownIdentifier): Unknown constant `List.length_le_length_append_left`
+'AspisR1.JGa_Reconstruct.folded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGa_Reconstruct.lean:40:2: error: too many variable names provided
+JGa_Reconstruct.lean:42:2: error: Tactic `apply` failed: could not unify the conclusion of `folded`
+  ∃ out, fold { slice := slice ?xs ?bound, i := 0 } ?acc ?c = ok out ∧ Canon out
+with the goal
+  ∃ y,
+    (do
+          let i ← core.slice.Slice.iter s
+          let r ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorSliceIter field.QM31)
+                (core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT field.QM31) i
+          let q ← a.index_usize 9#usize
+          core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.fold
+              (core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT field.QM31)
+              pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31
+              r q ()) =
+        ok y ∧
+      Canon y
+
+Note: The full type of `folded` is
+  ∀ (xs : List field.QM31) (bound : xs.length ≤ Usize.max) (acc : field.QM31) (c : Capture),
+    (∀ x ∈ xs, Canon x) → Canon acc → ∃ out, fold { slice := slice xs bound, i := 0 } acc c = ok out ∧ Canon out
+
+a : Std.Array field.QM31 16#usize
+ha : canonical a
+s : Slice field.QM31
+_ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 9#usize } a.to_slice <]
+s_post1 : ↑s = List.slice 0 9 ↑a.to_slice
+s_post2 : s.length = 9
+⊢ ∃ y,
+    (do
+          let i ← core.slice.Slice.iter s
+          let r ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorSliceIter field.QM31)
+                (core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT field.QM31) i
+          let q ← a.index_usize 9#usize
+          core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.fold
+              (core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT field.QM31)
+              pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31
+              r q ()) =
+        ok y ∧
+      Canon y
+'AspisR1.JGa_Reconstruct.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
