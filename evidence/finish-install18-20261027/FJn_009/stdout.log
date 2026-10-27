@@ -1,0 +1,71 @@
+FJn_CopyMaskMap.lean:11:33: error: unsolved goals
+case isTrue
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+low : Fin 16 → K
+m : ℕ
+a : K
+i : Fin 16
+h✝ : (List.filter (fun i => m.testBit ↑i) (List.ofFn fun i => i)).length > 8
+⊢ f a - f (low i) = ?m.22 (f a) i
+
+case isFalse
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+low : Fin 16 → K
+m : ℕ
+a : K
+i : Fin 16
+h✝ : ¬(List.filter (fun i => m.testBit ↑i) (List.ofFn fun i => i)).length > 8
+⊢ f a + f (low i) = ?m.22 (f a) i
+FJn_CopyMaskMap.lean:8:90: error: unsolved goals
+case isTrue
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+low : Fin 16 → K
+m : ℕ
+h✝ : (List.filter (fun i => m.testBit ↑i) (List.ofFn fun i => i)).length > 8
+⊢ List.foldl ?m.22 1 (List.filter (fun i => (m ^^^ 65535).testBit ↑i) (List.ofFn fun i => i)) =
+    List.foldl (fun sum i => sum - f (low i)) 1 (List.filter (fun i => (m ^^^ 65535).testBit ↑i) (List.ofFn fun i => i))
+
+case isFalse
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+low : Fin 16 → K
+m : ℕ
+h✝ : ¬(List.filter (fun i => m.testBit ↑i) (List.ofFn fun i => i)).length > 8
+⊢ List.foldl ?m.22 0 (List.filter (fun i => m.testBit ↑i) (List.ofFn fun i => i)) =
+    List.foldl (fun sum i => sum + f (low i)) 0 (List.filter (fun i => m.testBit ↑i) (List.ofFn fun i => i))
+
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+low : Fin 16 → K
+m : ℕ
+⊢ L → Fin 16 → L
+FJn_CopyMaskMap.lean:19:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : R0P.CopySelectors K
+a : K
+i : Fin 64
+⊢ f
+      (have mask := R0P.copyActiveRowMasks i;
+      if mask ≠ 0 then a + s.high i * R0P.copySelectorMaskSum16 s.low mask else a) =
+    ?m.21 (f a) i
+'AspisR1.FJn_CopyMaskMap.mask' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJn_CopyMaskMap.active' depends on axioms: [propext, sorryAx, Quot.sound]

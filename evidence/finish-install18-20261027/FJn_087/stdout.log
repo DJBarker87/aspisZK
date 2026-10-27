@@ -1,0 +1,42 @@
+theorem AspisR1.ExtractedMaskSemanticBridgeConcrete.current_selected_mask_maps_to_maskValue : ∀
+  (c1 : _private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.C1)
+  (maskOnly : _private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.MaskOnly)
+  (g : _private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.QM)
+  (point :
+    Aeneas.Std.Array _private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.QM
+      10#usize),
+  (∀ (j : Fin 16),
+      _private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM
+        (AspisR1.ExtractedMaskCoefficientStep.c1Cell c1 j)) →
+    (∀ (j : Fin 10),
+        _private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM
+          (AspisR1.ExtractedMaskCoefficientStep.maskCell maskOnly j)) →
+      (∀ (i : ℕ) (hi : i < 10),
+          _private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM
+            (AspisR1.ExtractedMaskLinearLoop.pointAtNat point i hi)) →
+        _private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM g →
+          ∃ out,
+            AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value c1 maskOnly g point =
+                Aeneas.Std.Result.ok out ∧
+              _private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM
+                  out ∧
+                AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide
+                    (_private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.decode
+                      out) =
+                  R0P.Mask.maskValue AspisR1.ExtractedMaskSemanticBridgeConcrete.packBasis
+                    (_private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell
+                      c1)
+                    (_private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell
+                      maskOnly)
+                    (AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide
+                      (_private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.decode
+                        g))
+                    (_private.ExtractedMaskSemanticBridgeConcrete.0.AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint
+                      point) :=
+fun c1 maskOnly g point hc1 hmask hpoint hg =>
+  AspisR1.ExtractedMaskSemanticBridge.current_selected_mask_maps_to_maskValue
+    AspisR1.ExtractedMaskSemanticBridgeConcrete.packBasis AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide
+    AspisR1.ExtractedMaskSemanticBridgeConcrete.basisCompatible c1 maskOnly g point hc1 hmask hpoint hg
+'AspisR1.ExtractedMaskSemanticBridgeConcrete.current_selected_mask_maps_to_maskValue' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

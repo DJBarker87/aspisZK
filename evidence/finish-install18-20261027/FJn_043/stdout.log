@@ -1,0 +1,125 @@
+FJn_CompositionModel.lean:56:4: error: 'change' tactic failed, pattern
+  embed (decoded a i) = embed (FIv_NativeArray.value a ↑i)
+is not definitionally equal to target
+  embed (decoded a i) =
+    (ValueFamilyFieldTransport.mapOpenings embed (FIw_PublicModel.openings { z := a, succ_z := a1, xor12_z := a2 })).z i
+FJn_CompositionModel.lean:60:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun j => embed (decoded sem j)
+in the target expression
+  embed (decode comp) =
+    ExtractedMaskTerminalHorner.composeGroups (embed (decode theta)) (embed (decode copy.residual))
+      (fun i => embed (decoded sem i)) fun i => embed (decoded pos i)
+
+p : SemPub
+claims : Std.Array field.QM31 84#usize
+point : Std.Array field.QM31 10#usize
+lambda chi theta comp g h active : field.QM31
+c1 : Std.Array field.QM31 16#usize
+mask : Std.Array field.QM31 10#usize
+hc : canonical claims
+hp : canonical point
+hlambda : Canon lambda
+hchi : Canon chi
+htheta : Canon theta
+bounds : FJa_PublicBounds.Bounds p
+run : composition p claims point lambda chi theta = ok (core.result.Result.Ok (comp, c1, mask, g, h, active))
+a a1 a2 : Std.Array FIw_CompositionOrigins.NQ 16#usize
+s : pool_v1.pair_forest_copy_terminal.Selectors
+po : state_only_poseidon.StateOnlyPoseidonSelectors
+v : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1
+sem : Std.Array FIw_CompositionOrigins.NQ 24#usize
+pos : Std.Array FIw_CompositionOrigins.NQ 4#usize
+prep : field.PreparedQm31Multiplier
+middle : FIw_CompositionOrigins.NQ
+copy : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledCopyTerminalV1
+it : core.iter.adapters.rev.Rev (FIq_Native.core.array.iter.IntoIter FIw_CompositionOrigins.NQ 24#usize)
+it1 : core.iter.adapters.rev.Rev (FIq_Native.core.array.iter.IntoIter FIw_CompositionOrigins.NQ 4#usize)
+same : c1 = a
+r0 :
+  array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO claims =
+    ok a
+r1 :
+  array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO claims =
+    ok a1
+r2 :
+  array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO claims =
+    ok a2
+rs : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = ok s
+rsp : pool_v1.pair_forest_semantic_terminal.poseidon_selectors s = ok po
+rpo :
+  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected { z := a, succ_z := a1, xor12_z := a2 } po = ok pos
+rsem : pool_v1.pair_forest_semantic_terminal.semantic_packed p { z := a, succ_z := a1, xor12_z := a2 } s = ok sem
+rv : pool_v1.pair_forest_semantic_terminal.copy_variant p.variant = ok v
+rc :
+  pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h s lambda chi p.transition.live_snapshot.next_pair_index
+      v =
+    ok copy
+rp : field.PreparedQm31Multiplier.new theta = ok prep
+rit : it.iter = ↑sem
+rit1 : it1.iter = ↑pos
+rm : pool_v1.pair_forest_semantic_terminal.composition_parts_loop0 it prep copy.residual = ok middle
+rf : pool_v1.pair_forest_semantic_terminal.composition_parts_loop1 it1 prep middle = ok comp
+ra : copy.active = active
+ca : ∀ x ∈ ↑a, Canon x
+ca1 : ∀ x ∈ ↑a1, Canon x
+ca2 : ∀ x ∈ ↑a2, Canon x
+cs : canonical s.high ∧ canonical s.low
+hh : FIr_NativeValue.Canon h
+sv :
+  canonical sem ∧
+    (fun j => embed (decoded sem j)) = fun j =>
+      R0P.pack4 ConcretePackBasis.basis fun i =>
+        R0P.SemSource.scalarLaneAt (SpendDataMap.mapPublic (⇑embed) (FIw_PublicModel.ofPublic p))
+          (ValueFamilyFieldTransport.mapOpenings embed
+            (FIw_PublicModel.openings { z := a, succ_z := a1, xor12_z := a2 }))
+          (fun k => embed (FIw_PublicModel.selector s k)) (4 * ↑j + ↑i)
+pv :
+  canonical pos ∧
+    (fun g => embed (decoded pos g)) = fun g =>
+      ((R0P.poseidonPackedFamily ConcretePackBasis.basis).residuals
+            (SpendDataMap.mapPublic (⇑embed) (FIw_PublicModel.ofPublic p))
+            (ValueFamilyFieldTransport.mapOpenings embed
+              (FIw_PublicModel.openings { z := a, succ_z := a1, xor12_z := a2 }))
+            fun i => embed (FIw_PublicModel.selector s i)).getD
+        (↑g) 0
+cc : Canon copy.residual ∧ Canon copy.active
+cv :
+  (embed (decode copy.residual), embed (decode copy.active)) =
+    R0P.copyEvaluateWithSelectors (fun i => embed (decoded a i)) (embed (decode h))
+      (R0P.copySelectors fun i => embed (FIw_PublicModel.selector s i)) (embed (decode lambda)) (embed (decode chi))
+      (↑p.transition.live_snapshot.next_pair_index) (FJk_CopyDescriptor.variant v)
+hv : Canon comp ∧ decode comp = FIv_CompositionValue.polynomial (decode theta) sem pos copy.residual
+fold :
+  embed (decode comp) =
+    ExtractedMaskTerminalHorner.composeGroups (embed (decode theta)) (embed (decode copy.residual))
+      (fun i => embed (decoded sem i)) fun i => embed (decoded pos i)
+variant : FJk_CopyDescriptor.variant v = (FIw_PublicModel.ofPublic p).variant
+az :
+  (fun i => embed (decoded a i)) =
+    (ValueFamilyFieldTransport.mapOpenings embed (FIw_PublicModel.openings { z := a, succ_z := a1, xor12_z := a2 })).z
+copyV :
+  embed (decode copy.residual) =
+    (R0P.copyEvaluateWithSelectors (fun i => embed (decoded a i)) (embed (decode h))
+        (R0P.copySelectors fun i => embed (FIw_PublicModel.selector s i)) (embed (decode lambda)) (embed (decode chi))
+        (↑p.transition.live_snapshot.next_pair_index) (FIw_PublicModel.ofPublic p).variant).1
+⊢ Canon comp ∧
+    Canon active ∧
+      embed (decode comp) =
+        ∑ i,
+          embed (decode theta) ^ ↑i *
+            R0P.SemSource.laneAt (pub p) (embed (decode lambda)) (embed (decode chi)) ConcretePackBasis.basis
+              (openings claims) (embed (FIv_NativeArray.value claims 26)) (selector point) i
+FJn_CompositionModel.lean:59:13: warning: This simp argument is unused:
+  az
+
+Hint: Omit it from the simp argument list.
+  simp only [a̵z̵,̵variant] at copyV
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJn_CompositionModel.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
