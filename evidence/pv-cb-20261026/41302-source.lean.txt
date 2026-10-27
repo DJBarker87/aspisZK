@@ -1,0 +1,33 @@
+import R1Z.PV_CB_CompressSelectedCanonical
+import R1Z.PV_CB_CompressSelectedEntries
+import R1Z.PV_CB_Op223CanonicalCallsite
+import R1Z.PV_CB_Op223CanonicalDomain
+import R1Z.PV_CB_Op223ForestCallsite
+import R1Z.PV_CB_Op223ForestLocalCallsite
+import R1Z.PV_CB_Op223ForestProducerFuns
+import R1Z.PV_CB_Op223LaneAgreement
+import R1Z.PV_CB_Op223LocalCanonicalCallsite
+import R1Z.PV_CB_Op223ProducedCallsite
+import R1Z.PV_CB_Op223TupleProducerExternal
+import R1Z.PV_CB_Op223TupleProducerFuns
+import R1Z.PV_CB_Op223TupleProducerTypes
+set_option autoImplicit false
+#print axioms PV_CB_ShippedOp223Tuple.pool_v1.pair_forest_trace.tuple_cells
+#print axioms PV_CB_ShippedOp223Tuple.pool_v1.pair_forest_trace.tuple_cells_loop.body
+#print axioms PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.tuple_cells
+#print axioms PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.tuple_cells_loop
+#print axioms PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.tuple_cells_loop.body
+#print axioms R1Z.PV_CB_CompressSelectedCanonical.context
+#print axioms R1Z.PV_CB_CompressSelectedCanonical.reference
+#print axioms R1Z.PV_CB_CompressSelectedEntries.entry61
+#print axioms R1Z.PV_CB_CompressSelectedEntries.entry66
+#print axioms R1Z.PV_CB_CompressSelectedEntries.entry67
+#print axioms R1Z.PV_CB_CompressSelectedEntries.entry69
+#print axioms R1Z.PV_CB_CompressSelectedEntries.entry70
+#print axioms R1Z.PV_CB_Op223CanonicalCallsite.endpoint
+#print axioms R1Z.PV_CB_Op223CanonicalDomain.reference
+#print axioms R1Z.PV_CB_Op223ForestCallsite.endpoint
+#print axioms R1Z.PV_CB_Op223ForestLocalCallsite.endpoint
+#print axioms R1Z.PV_CB_Op223LaneAgreement.join
+#print axioms R1Z.PV_CB_Op223LocalCanonicalCallsite.endpoint
+#print axioms R1Z.PV_CB_Op223ProducedCallsite.endpoint
