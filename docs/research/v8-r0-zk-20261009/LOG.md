@@ -11214,3 +11214,25 @@ from research in the same worktree; IDs 43900-44199, 100 Lean / 6 Kani control o
 the bindings that do not need the selected record, the observation law, or a checked counterexample for
 the owner. Six slots: runjoin12, optb, srcid9, cblib2, op223, inv3. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D260 (Stream B) 2026-10-27 08:50 UTC: source-identification branch merged (merge gate CLEAN); publicCorr source half closed; V403 job launched
+
+pv-srcid9 (`codex/pv-srcid3-20261026`, head 2e8351f033; 100/100 Lean = 78 accepted / 22 rejected drafts, no
+Kani; final audits 42802-42804 exit 0 / ≤1.90 s / ≤4.33 GB / swap 0, 807 standard axiom reports; 6,662
+audited object hashes unchanged; no crates/programs change; no forbidden tokens in branch modules).
+Proved: the 21 SOURCE root-parent cells (0 → 21/21) through the frozen permutation, and the actual
+root-helper equation at the explicit dictionary and the named E_shipped adapter: the publicCorr family's
+SOURCE half is closed (source public-root premise removed in the source-identification instance); the
+deployed snapshot / Records association stays REDUCED; compile_call OPEN; words, admission, row_call
+REDUCED; deployed PV_Src_Premises 5 → 5. MERGE GATE v2 CLEAN under ruling (h'): 1,028 project objects
+with zero gaps (the three D254 "gaps" resolve to the accepted-current cohort), 5,640 external objects
+linked to the toolchain/manifest pins; no Stream A source or object changed. The lead merged
+codex/pv-srcid3-20261026 into research (d0fafc7254, no conflicts) and removed its worktree and branch.
+The merged tools/r1-builder-reference/pv_srcid3.rs is a cfg(kani)-reachable reference module in a tools
+crate that no workspace or shipped crate includes. GitHub warned about large files on push (warning
+only; evidence corpora). The source track now waits on runjoin12's R_shipped. Launched pv-canon
+(`codex/pv-canon-20261027`, research base, IDs 44200-44499, 100 Lean / 6 Kani control only) on V403: every
+M31/CM31/QM31 reaching op121 on the deployed path is canonical (producers inventoried and proved, field
+operations preserve canonicality, composed over the extracted caller), and the op121 row obligation on
+the canonical domain stated exactly. Six slots: runjoin12, optb, cblib2, op223, inv3, canon. Rows removed
+outright: 0. Privacy target not yet established.
