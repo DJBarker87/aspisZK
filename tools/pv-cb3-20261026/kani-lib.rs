@@ -185,3 +185,45 @@ mod checks {
     }
 
 }
+
+// Resume 6: scalar observations avoid builtin memcmp and expose all state.
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod resumed_checks {
+    macro_rules! words_equal { ($a:expr,$b:expr) => {{
+        let a=$a; let b=$b;
+        assert_eq!(a[0],b[0]); assert_eq!(a[1],b[1]);
+        assert_eq!(a[2],b[2]); assert_eq!(a[3],b[3]);
+        assert_eq!(a[4],b[4]); assert_eq!(a[5],b[5]);
+        assert_eq!(a[6],b[6]); assert_eq!(a[7],b[7]);
+    }} }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn words_scalar() {
+        let block:[u8;32]=kani::any();
+        words_equal!(super::source_fragments::words(&block),super::reference_split::words(block));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn pass_scalar() {
+        let rank:[u32;8]=kani::any();
+        let a=super::source_fragments::pass(rank); let b=super::reference_split::pass(rank);
+        words_equal!(a.0,b.0); assert_eq!(a.1,b.1);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn carry_scalar() {
+        let digits:[u32;8]=kani::any(); let add:u32=kani::any();
+        let a=super::source_fragments::carry(digits,add); let b=super::reference_split::carry(digits,add);
+        words_equal!(a.0,b.0); assert_eq!(a.1,b.1);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_scalar() {
+        let block:[u8;32]=kani::any();
+        let a=super::sampler::gamma_sample(&block);let b=super::reference_split::gamma(block);
+        assert_eq!(a.c0().c0.a.0,b.c0().c0.a.0);assert_eq!(a.c0().c0.b.0,b.c0().c0.b.0);
+        assert_eq!(a.c0().c1.a.0,b.c0().c1.a.0);assert_eq!(a.c0().c1.b.0,b.c0().c1.b.0);
+        assert_eq!(a.c1().c0.a.0,b.c1().c0.a.0);assert_eq!(a.c1().c0.b.0,b.c1().c0.b.0);
+        assert_eq!(a.c1().c1.a.0,b.c1().c1.a.0);assert_eq!(a.c1().c1.b.0,b.c1().c1.b.0);
+    }
+}
