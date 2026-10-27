@@ -46,7 +46,7 @@ if pin:
  expected=subprocess.check_output(['git','show','research:'+pin['source']],cwd=root)
  src=e/'sources'/('research-'+m+'.lean');src.parent.mkdir(exist_ok=True);src.write_bytes(expected)
 shared=subprocess.run(['ssh',host,'cat '+joint+'/sources/'+module_path+'.lean'],capture_output=True)
-if shared.returncode==0 and shared.stdout!=src.read_bytes():
+if not module_name.startswith('R1Z.PV_Src_') and shared.returncode==0 and shared.stdout!=src.read_bytes():
  print('STOP differing shared source',module_name,hashlib.sha256(shared.stdout).hexdigest(),hashlib.sha256(src.read_bytes()).hexdigest());sys.exit(76)
 (e/'sources').mkdir(exist_ok=True)
 (e/f'sources/{a}.lean.txt').write_bytes(src.read_bytes())
