@@ -1,4 +1,4 @@
--- h5 resolves the cohort; full private prerequisite build is still pending.
+-- Installed-cohort candidate; h5/h5-prime resolutions recorded in resume7.
 -- This is the installed instance, not the arbitrary ExternalFuns interface.
 import R1Z.PV_CB_CandidateCore
 import R1Z.PV_RE_NoCatchCore
@@ -15,13 +15,9 @@ theorem installed_noCatch (base : ExternalTypes)
         (fun _ => pending) tag values) := by
   constructor
   · intro e
-    change (PV_CB_CandidateDictionary.selected base ops).op84
-      (fun _ => .fail e) tag values = .fail e
     rw [PV_CB_CandidateDictionary.op84]
     rfl
-  · change (PV_CB_CandidateDictionary.selected base ops).op84
-      (fun _ => .div) tag values = .div
-    rw [PV_CB_CandidateDictionary.op84]
+  · rw [PV_CB_CandidateDictionary.op84]
     rfl
 
 #print installed_noCatch
