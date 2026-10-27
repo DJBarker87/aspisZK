@@ -30,3 +30,10 @@ to the requested every-input statement. No predecessor model is edited.
 All accepted laws have #print axioms in their receipts, standard axioms only.
 No passing projection is counted as full Result/state/P6 association. No new
 trust item is introduced.
+
+Additional restricted-domain evidence: XRl_ReverseDomain and XRl_ReverseCursor
+prove exact full modeled reverse equality at cursor zero and cursor preservation
+through next_back/restoration on matching states. XRl_ClosureCapture proves the
+actual emitted mutable closure's returned restoration callback is identity.
+These do not turn the false every-input reverse law into a proved one or supply
+whole caller/native P6. L099 audits all accepted adapter laws together.

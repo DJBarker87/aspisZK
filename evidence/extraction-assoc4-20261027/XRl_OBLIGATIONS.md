@@ -36,3 +36,18 @@ All accepted new theorems have standard-only #print axioms; failed diagnostic
 sorryAx results are excluded. Per-attempt receipt/source snapshots distinguish
 accepted proofs, errors, timeouts and the L081 own dependency-order refusal.
 No shipped file/harness or wallet key changed; ELF rebuild trigger did not fire.
+
+Final additions: XRl_CanonicalConstructors proves canonical new/from_qm31
+outputs; XRl_WideCanonical proves from_limbs canonicality. XRl_InversionBoundary
+proves only zero rejection and the successful exponentiation characterization,
+not the field inverse identity. XRl_CheckpointBytes proves modeled encoding
+sizes; XRl_CheckpointFinalizer proves the isolated final byte-size guard.
+Whole checkpoint-model size projection L097 timed out at heartbeat200000;
+its TX1 consumer is unaccepted. No native/top credit for either candidate.
+
+Final budget:100 allocations (99 compiler invocations:78PASS/21FAIL; one own
+missing-predecessor refusal charged),10 Kani (9PASS/1TIMEOUT),0 extraction.
+No prover invocation is permitted after L100. XRl_Verification.json records
+zero source/dependency consistency errors. L099 audits65 local theorems;
+L100 audits103 externals plus6 emitted entry points, standard-only. This is a
+focused coherent local-model cohort, not a security-top/full release replay.
