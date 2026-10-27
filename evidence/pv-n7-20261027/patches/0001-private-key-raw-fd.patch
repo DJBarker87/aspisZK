@@ -1,12 +1,11 @@
 --- a/tools/r1-cost-probe/src/bin/devnet_spend.rs
 +++ b/tools/r1-cost-probe/src/bin/devnet_spend.rs
-@@ -7,13 +7,28 @@
+@@ -7,13 +7,26 @@
  use solana_signer::Signer;
  use solana_message::{v1::{Message,TransactionConfig},VersionedMessage};
  use solana_transaction::versioned::VersionedTransaction;
 -use std::{io::{self,Read},str::FromStr,fs};
 +use std::{io::{self,Read},str::FromStr};
-+use std::os::fd::{BorrowedFd, FromRawFd, IntoRawFd};
  #[path="devnet_spend/plan.rs"]
  mod plan;
  fn main()->Result<()> {
@@ -17,10 +16,9 @@
 + let count=q["keys"].as_array().unwrap().len();
 + let fd=i32::try_from(q["key_bytes_fd"].as_u64().ok_or_else(||anyhow::anyhow!("missing key byte FD"))?)?;
 + ensure!(fd>2,"key byte FD must be inherited separately from stdio");
-+ // SAFETY: the caller supplies a live inherited descriptor; duplicate it so its
-+ // ownership remains with the caller. No key file is opened or parsed in Rust.
-+ let owned=unsafe{BorrowedFd::borrow_raw(fd)}.try_clone_to_owned()?;
-+ let mut channel=unsafe{std::fs::File::from_raw_fd(owned.into_raw_fd())};
++ // Open the inherited pipe safely; invalid descriptors become public I/O errors.
++ // Linux host client only. No retained key file is opened or parsed in Rust.
++ let mut channel=std::fs::File::open(format!("/proc/self/fd/{fd}"))?;
 + let mut keys=Vec::with_capacity(count);
 + for _ in 0..count {
 +  let mut record=[0u8;64];channel.read_exact(&mut record)?;
