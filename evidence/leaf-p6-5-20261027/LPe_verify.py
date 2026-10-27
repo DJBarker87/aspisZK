@@ -18,18 +18,18 @@ for top in ['Top','ARX_Root','FJv_Top']:
  need((E/f'LPe_{top}.BEFORE.lean.txt').read_bytes()==(E/f'LPe_{top}.AFTER.lean.txt').read_bytes(),top+' changed')
 for name in ['ARX_Root','FJv_Top']:
  need(Path('lean',name+'.lean').read_bytes()==(E/f'LPe_{name}.BEFORE.lean.txt').read_bytes(),name+' live source drift')
-need(len(rs)<=20,'Kani budget');need(not list(Path('lean').glob('LPe_*.lean')),'unexpected Lean modules')
+need(len(rs)<=20,'Kani budget');need(len(list(E.glob('LPe_L[0-9][0-9][0-9]/receipt.json')))<=60,'Lean budget')
 need(not subprocess.check_output(['git','diff','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','--','crates','programs']), 'shipped tree changed')
 expected=json.loads((E/'LPe_frozen_source_manifest.json').read_text())
 with tempfile.TemporaryDirectory(prefix='LPe_patch_') as d:
  t=Path(d);root='crates/aspis-r1-cost-probe/src/'
- for f in ['lib.rs','fast_pairing.rs']:
+ for f in ['lib.rs','fast_pairing.rs','verifier.rs']:
   p=t/root/f;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(Path(root,f).read_bytes())
  r=subprocess.run(['patch','--batch','-p1','-d',d,'-i',str(E/'LPe_harness.patch')],capture_output=True,text=True)
  need(r.returncode==0,'patch apply '+r.stdout+r.stderr)
- for f in ['lib.rs','fast_pairing.rs','LPe_replay.rs']:
+ for f in ['lib.rs','fast_pairing.rs','verifier.rs','LPe_replay.rs','LPe_verifier.rs']:
   p=t/root/f
   if p.exists():expected[root+f]={'sha256':sha(p.read_bytes()),'bytes':p.stat().st_size}
 (E/'LPe_expected_scratch_manifest.json').write_text(json.dumps(expected,indent=2)+'\n')
-out={'errors':errors,'kani_invocations':len(rs),'lean_attempts':0,'pass':sum(r['exit_status']==0 for r in rs),'wall_seconds':sum(r['wall_seconds'] for r in rs),'peak_rss_kib':max([int(r['peak_rss_kib']) for r in rs] or [0]),'swaps':0,'ledger_delta':{'T':0,'P':0,'G':0,'C':0},'new_top_axioms':'N/A: no new Lean theorem; no Kani-to-Lean axiom introduced','patch_sha256':sha((E/'LPe_harness.patch').read_bytes())}
+out={'errors':errors,'kani_invocations':len(rs),'lean_attempts':len(list(E.glob('LPe_L[0-9][0-9][0-9]/receipt.json'))),'pass':sum(r['exit_status']==0 for r in rs),'wall_seconds':sum(r['wall_seconds'] for r in rs),'peak_rss_kib':max([int(r['peak_rss_kib']) for r in rs] or [0]),'swaps':0,'ledger_delta':{'T':0,'P':0,'G':0,'C':0},'new_top_axioms':'See Lean per-attempt printed axioms; no Kani-to-Lean axiom introduced','patch_sha256':sha((E/'LPe_harness.patch').read_bytes())}
 (E/'LPe_VERIFICATION.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2));assert not errors

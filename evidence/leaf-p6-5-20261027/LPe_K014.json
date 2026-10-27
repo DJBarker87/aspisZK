@@ -1,0 +1,48 @@
+{
+  "sources": [
+    "LPe_src/Cargo.lock",
+    "LPe_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "LPe_src/crates/aspis-r1-cost-probe/src/LPe_replay.rs",
+    "LPe_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+  ],
+  "source_revision": "c8dc278c5f4028d718db83f5c7e40e87d9790cb5",
+  "source_tree_dirty": true,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "LPe_K014",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-5-20261027/LPe_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-5-20261027/LPe_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "LPe_replay::LPe_cp_header",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation, then named solver stage cp_header",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "LPe_K014-graph-check.json"
+  },
+  "reservation_retries": 0
+}
