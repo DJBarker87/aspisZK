@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 import re
 R=Path(__file__).resolve().parents[2];P=2147483647
 
@@ -105,4 +106,6 @@ theorem source : FIp_CircleQuery.circle JFq_Alpha0.scalar JGw_Dots{i}.value
 end AspisR1.JHa_Circle{i}
 end
 '''
- (R/f'lean/JHa_Circle{i}.lean').write_text(s)
+ dst=R/f'lean/JHa_Circle{i}.lean'
+ if '--check' in sys.argv: assert dst.read_text()==s,str(dst)
+ else: dst.write_text(s)

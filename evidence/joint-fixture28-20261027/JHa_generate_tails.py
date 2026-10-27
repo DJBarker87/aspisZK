@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 import re
 R=Path(__file__).resolve().parents[2];P=2147483647;M=2**64
 
@@ -117,4 +118,6 @@ theorem source{slot} : JFs_TX2_DotSuffix.tail (JFr_TX2_Windows.array ⟨{i},by d
 #print axioms source{slot}
 '''
  s+=f'end AspisR1.JHa_Tails{i}\nend\n'
- (R/f'lean/JHa_Tails{i}.lean').write_text(s)
+ dst=R/f'lean/JHa_Tails{i}.lean'
+ if '--check' in sys.argv: assert dst.read_text()==s,str(dst)
+ else: dst.write_text(s)

@@ -23,6 +23,8 @@ circle_cache='/home/dombarker/project-offloads/d18-circle-model-repin-v5-2026101
 search_paths=[p for p in cfg['env']['LEAN_PATH'].split(':') if p!=circle_cache]
 search_paths.insert(search_paths.index('/home/dombarker/project-offloads/codex-cx-parse-sem-20261025')+1,circle_cache)
 cfg['env']['LEAN_PATH']=':'.join(search_paths)
+if mod=='JHa_HeadlineAudit':
+ cfg['env']=json.loads((P/'JHa_JGz_TX2_097.json').read_text())['env']
 cfg['command'][-3:]=['-o',mod.replace('.','/')+'.olean',relative_source]
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]

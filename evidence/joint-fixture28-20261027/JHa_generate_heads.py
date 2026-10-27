@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 import re
 R=Path(__file__).resolve().parents[2]
 def limbs(n):
@@ -49,4 +50,6 @@ def data (slot : Fin 4) : JHa_DotContext.Data :=
 #print axioms source{slot}
 '''
  s+=f'end AspisR1.JHa_Heads{i}\nend\n'
- (R/f'lean/JHa_Heads{i}.lean').write_text(s)
+ dst=R/f'lean/JHa_Heads{i}.lean'
+ if '--check' in sys.argv: assert dst.read_text()==s,str(dst)
+ else: dst.write_text(s)

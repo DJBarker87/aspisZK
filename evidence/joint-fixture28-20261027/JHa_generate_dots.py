@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 import re
 R=Path(__file__).resolve().parents[2]
 def nums(s):return list(map(int,re.findall(r'(\d+)#u32',s)))
@@ -48,4 +49,6 @@ theorem source : JGw_Dots{i}.value=value := by
 end AspisR1.JHa_Dots{i}
 end
 '''
- (R/f'lean/JHa_Dots{i}.lean').write_text(s)
+ dst=R/f'lean/JHa_Dots{i}.lean'
+ if '--check' in sys.argv: assert dst.read_text()==s,str(dst)
+ else: dst.write_text(s)
