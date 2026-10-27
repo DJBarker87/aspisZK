@@ -83,3 +83,9 @@ checked theorem yet maps that alternative through the actual ARX consumer.
 The before/after statements and ledger delta remain unchanged.
 
 Attempt098 passes the generic-field actual inverse-read consumer (GeometryInverses.value); attempt099 prints the unchanged ARX statement and retained owner/native predicates. The fresh before/after statement texts are byte-identical. Only standard axioms occur. All four unchecked drafts are archived in FJo_excluded/. No FJo_Top.deployed or premise removal is claimed.
+
+## Final validation and budget
+
+Budget exhausted: **100/100 charged Lean attempts,99 compiler starts,64 passes,35 failed elaborations,one import preflight;0/20 Kani**. No101st compile is authorized. All64 delivered FJo modules have passing exact-source-hash receipts. Final ClosureAudit100 passes, exit0,wall6.726115148048848s,peak5649148KiB,swap0,revision5d298f971fc5609e9e0687391f05f603fa865e89 plus the recorded exact dirty source hash. Its63 printed audits cover all62 new theorem names and ARX_Root.deployed; only propext/Classical.choice/Quot.sound occur. The initial combined predecessor audit001 also passes (120 reports).
+
+FJo_validation.json passes the exact-source/axiom/budget audit; FJo_recount.py verifies the unchanged ledger counts; git diff --check passes. Before/after printed statements are byte-identical using fresh099. All stage commits remain local. No pushed change, native/global L143 removal, FJo_Top.deployed or release-security conclusion is claimed.
