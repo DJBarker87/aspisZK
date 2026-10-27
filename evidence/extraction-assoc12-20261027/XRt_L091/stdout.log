@@ -1,0 +1,37 @@
+XRt_generated/XRt_QueryWords.lean:19:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    UScalar.ofNat (↑_a % 262144) ⋯ =
+      AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord b j)
+Error: Application type mismatch: The argument
+  words._proof_3 b j
+has type
+  ↑(XRn_Join_word (List.take 4 (List.drop (4 * j) ↑b))) % 262144 ≤ UScalar.cMax UScalarTy.U32
+but is expected to have type
+  autoParam (↑_a % 262144 ≤ UScalar.cMax UScalarTy.U32) UScalar.ofNat._auto_1
+in the application
+  UScalar.ofNat (↑_a % 262144) ⋯
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+b : Std.Array U8 32#usize
+out : Std.Array U32 8#usize
+run : AspisR1QueryScanUnrolled.r0_transcript.query_words b = ok out
+j : ℕ
+hj : j ∈ List.range 8
+hj8 : j < 8
+⊢ UScalar.ofNat (↑(XRn_Join_word (List.take 4 (List.drop (4 * j) ↑b))) % 262144) ⋯ =
+    AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord b j)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    b
+  has type
+    Std.Array U8 32#usize
+  but is expected to have type
+    { l // l.length = ↑32#usize }
+  in the application
+    ↑b
+'XRt_QueryWords.same_words' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
