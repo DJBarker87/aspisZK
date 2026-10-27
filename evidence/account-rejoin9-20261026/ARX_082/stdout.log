@@ -1,0 +1,11 @@
+@AspisR1.JFv_SemanticChain.success : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H),
+  AspisR1.JFv_TranscriptTotal.Total D →
+    ∀ (pre : AspisR1PublicPreparation.r1_wire.Prefix) (rows : List Aeneas.Std.U8) (start : ℕ)
+      (t : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+      ↑t.next_row = start →
+        List.map Aeneas.Std.UScalar.val rows = List.range' start rows.length →
+          start + rows.length ≤ 25 →
+            ∃ after qs,
+              AspisR1PublicPreparation.BeginCalls.SemanticRun D pre rows t after qs ∧
+                ∀ q ∈ qs, AspisR1.JFv_RoundArithmetic.Canonical q
+'AspisR1.JFv_SemanticChain.success' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,38 @@
+{"attempt": "ARX_093", "exit_status": 0, "wall_seconds": 2.435856795986183, "peak_rss_kib": "5536112", "swaps": "0", "print_axioms": ["'AspisR1.ARW_Nonvacuity.conditional' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARW_Nonvacuity.conditional : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Experiment.Adversar
+...
+ractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (a : AspisR1.SCE_Experiment.Adversary A),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (native H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARS_Coverage.SupportedEntry L copy allocator c err r native1 native2 hashv a native),
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv native →
+        AspisR1.ARS_AccountReplay.Consistent
+            (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+              AspisR1.CPH_Program.verifier a)
+            native H →
+          (AspisV8R19.MemoizedProgramLaw.eval native (AspisR1.SCE_Experiment.submission a)).2 =
+              { publicBytes := AspisR1.MultiproofConeCanonical.bytesOf AspisR1.JFx_NativeBytes.publicBytes,
+                stored := AspisR1.MultiproofConeCanonical.bytesOf AspisR1.JFx_NativeBytes.proofBytes } →
+            ∃ run,
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.ART_Runtime.runtime (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                        AspisR1.CPH_Program.verifier a)).2 =
+                  Option.some run ∧
+                run.2.2 = Bool.true ∧
+                  run.2.1.stored = AspisR1.MultiproofConeCanonical.bytesOf AspisR1.JFx_NativeBytes.proofBytes ∧
+                    run.2.1.physical.bytes = AspisR1.MultiproofConeCanonical.bytesOf AspisR1.JFx_NativeBytes.publicBytes
+'AspisR1.ARW_Nonvacuity.conditional' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r88b36f0e274849d8a014f0ef383cfd45.scope; invocation ID: 0b5402f184744c51bc94c3709bef7f22

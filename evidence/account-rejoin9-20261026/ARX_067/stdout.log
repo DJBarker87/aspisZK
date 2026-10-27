@@ -1,0 +1,13 @@
+AspisR1.F3T_Cost.accepted_attempt_cost : ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_Experiment.Prover)
+  (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.projected D (AspisR1.F3T_Canon.canon P))).2.2 =
+          Bool.true →
+        (AspisV8R19.OracleResampling.mean fun coins =>
+            ↑(AspisR1.ActualCostedExtractorM10.extractor.eval
+                    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.projected D (AspisR1.F3T_Canon.canon P)))
+                    coins).2.total) ≤
+          ↑(AspisR1.CostedAllocationLedgerM10.params (Q + 1161)).attemptBudget
+'AspisR1.F3T_Cost.accepted_attempt_cost' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -231,3 +231,72 @@ theorem deployed {W A CoreError Tx : Type}
       CPH_Program.verifier H p t u saved ∧
     S6N_Installation.Facts (DrvC_Installation.sdk (FIp_Install.configuration indexError c reservation))
 ```
+
+## Atomic recount
+
+The recount re-enumerates Rc10's atomic leaves/families and keeps
+`L185 = L159` as an alias. `ARX_LEDGER_DELTA.json` records every row.
+
+| Scope | Rc10 before | Proposed ARX after |
+|---|---|---|
+| Actual antecedent | 83T / 12P / 13G / 0C | 83T / 11P / 13G / 0C |
+| Distinct deployment-inclusive | 89T / 16P / 13G / 0C | 89T / 14P / 13G / 0C |
+
+Proposed removals: **L159 (alias L185)** and **L181**, two distinct P rows;
+added 0, reclassified 0. L159's whole-run binding is replaced by proved admitted
+carrier and failure domination rather than being repackaged as a hypothesis.
+L181's experiment/native-prefix association is supplied on the exact admitted
+range, preserving all issued prefixes and zero rejected mass. This credit is
+for the authorised admitted model: it does not establish source-to-ELF
+correspondence, all-world unfiltered ART support, or a coherent release replay.
+The actual adopted Rc10 statement remains unchanged: actual adoption delta 0.
+
+## Conditional non-vacuity and precise fixture waits
+
+`ARX_Nonvacuity.conditional` transports the SAME JFx proof/public bytes on the
+supplied own native tuple/cylinder into an accepted admitted RunView. It does
+not fabricate the missing joint full accepted native pair at FIp's installation.
+The exact existing partial predecessors to compose are:
+
+- `JFm_ChallengeFixture.inhabited`, `JFm_Begin.source`, `JFm_RealTrace.source`,
+  `JFm_Rounds.source`;
+- `JFn_TX2.partial_on_saved`, `JFn_Nonvacuity.inhabited`;
+- `JFr_ArithmeticFixture.inhabited`, `JFr_TX2_Partial.on_saved`,
+  `JFr_TX2_CircleAfterDots.source`;
+- `JFs_PublicFixture.inhabited`, `JFs_PublicDecode.source`,
+  `JFs_PublicValidation.source`, `JFs_ExactSerialization.source`,
+  `JFs_ExactInitialization.source`;
+- `JFu_Installation.extraction`, `JFu_Installation.oracle`,
+  `JFu_AfterstateValidator.source`;
+- `JFv_RuntimeWitness.compatible`, `JFv_SampledFixture.inhabited`,
+  `JFv_ClaimsFixture.inhabited`, `JFv_SemanticCall.success`,
+  `JFv_SemanticChain.success`;
+- `JFw_RealExpansion.inhabited`, `JFw_TypedPrefix.inhabited`,
+  `JFw_Y1.inhabited`.
+
+These are partial predecessor theorems, not a completed real-byte pair theorem.
+In particular JFu's extraction has its own seeded installation, and JFv's
+compatible runtime tuple does not supply the whole installed native pair.
+The remaining task is their same-input/same-installation joint composition,
+including complete TX2 query/batch/finish success. No nonexistent completed
+pair theorem is cited. Conditional non-vacuity is retained as the lead requested.
+
+## Representation implementation detail for review
+
+The admitted runtime is represented as an ordinary causal ROM program with
+an outcome-support decision on its complete recorded cylinder. Its arguments
+are the installed native/library/configuration/adversary parameters. The bank
+tuple, admissions, game and persistence are the *per-execution membership
+witness*, existential inside `permitted`; `on_admitted`/`coverage` take that own
+tuple as their argument. This realizes the admitted-world range within the
+existing `F3T_Runtime.Runtime` type without adding an oracle-aware program
+constructor, an arbitrary measure, a trusted support factory, or a fixed tuple
+promise for every a. It is a noncomputable semantic observer, not a new shipped
+bank admission algorithm. Review the exact definition in the kernel receipts.
+
+`ARX_LawConstants.unchanged` separately checks Q+34 / Q+1161 / Q+2322 /
+Q+2965 on the induced model and admitted account. `ARX_OldClassPoison.differs`
+checks that a pure-choice adversary can have an accepted ART RunView excluded
+from the admitted range. Thus even pure-choice conservativity does not erase
+the declared change of global runtime functional. This fact does not show a
+deployed attack or refute the unfiltered numeric inequality.
