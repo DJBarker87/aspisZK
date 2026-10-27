@@ -114,6 +114,7 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairH
     links = legacy_path_step(links, 17)?;
     links = legacy_path_step(links, 18)?;
     links = legacy_path_step(links, 19)?;
+    links = legacy_path_step(links, 20)?;
 
     links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 0 }, 44, 960));
     links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 1 }, 460, 962));
@@ -198,6 +199,7 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairH
     links = legacy_append_step(links, 17)?;
     links = legacy_append_step(links, 18)?;
     links = legacy_append_step(links, 19)?;
+    links = legacy_append_step(links, 20)?;
 
     if links.len() != POOL_V1_PAIR_COPY_ROW_LINKS_V1 {
         return Err(PoolV1PairHidingLayoutErrorV1::Shape);
