@@ -1,0 +1,558 @@
+theorem AspisR1.FJn_CopyFullValue.value : ∀ (a : Aeneas.Std.Array FIq_Native.field.QM31 16#usize)
+  (h : FIq_Native.field.QM31) (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (lambda chi : FIq_Native.field.QM31) (index : Aeneas.Std.U64)
+  (v : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (copy : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledCopyTerminalV1),
+  AspisR1.FIw_ArrayValue.canonical a →
+    AspisR1.FIv_NativeValue.Canon h →
+      AspisR1.FIw_ArrayValue.canonical s.high →
+        AspisR1.FIw_ArrayValue.canonical s.low →
+          AspisR1.FIv_NativeValue.Canon lambda →
+            AspisR1.FIv_NativeValue.Canon chi →
+              FIq_Native.pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h s lambda chi index v =
+                  Aeneas.Std.Result.ok copy →
+                AspisR1.FIv_NativeValue.Canon copy.residual ∧
+                  AspisR1.FIv_NativeValue.Canon copy.active ∧
+                    (AspisR1.FIv_NativeValue.decode copy.residual, AspisR1.FIv_NativeValue.decode copy.active) =
+                      R0P.copyEvaluateWithSelectors (AspisR1.FIw_ArrayValue.decoded a)
+                        (AspisR1.FIv_NativeValue.decode h) (AspisR1.FIw_CopyEndpoint.modelSelectors s)
+                        (AspisR1.FIv_NativeValue.decode lambda) (AspisR1.FIv_NativeValue.decode chi) (↑index)
+                        (AspisR1.FJk_CopyDescriptor.variant v) :=
+fun a h s lambda chi index v copy ha hh hhigh hlow hlambda hchi run =>
+  let ⟨patterns, h✝⟩ := AspisR1.FJk_CopyRawValue.value a h s lambda chi index v copy ha hh hhigh hlow hlambda hchi run
+  let ⟨rp, right✝⟩ := h✝
+  let ⟨left✝, right✝¹⟩ := right✝
+  let ⟨ra, right✝²⟩ := right✝¹
+  let ⟨ca, right✝³⟩ := right✝²
+  let ⟨cr, cv⟩ := right✝³
+  have pv := AspisR1.FJk_PatternValues.value a lambda patterns ha hlambda rp;
+  have av := AspisR1.FJn_ActiveValue.value s copy.active hhigh hlow ra;
+  have shape :=
+    id
+      (id
+        (id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (have patterns :=
+                      R0P.copyPatternValuesLiteral (AspisR1.FIw_ArrayValue.decoded a)
+                        (AspisR1.FIv_NativeValue.decode lambda);
+                    have initial :=
+                      { producerValues := fun x => 0, producerWeights := fun x => 0, consumerValues := fun x => 0,
+                        consumerWeights := fun x => 0 };
+                    have row :=
+                      List.foldl
+                        (fun row link =>
+                          have weight := R0P.copyLinkWeight link (↑index) (AspisR1.FJk_CopyDescriptor.variant v);
+                          have producer :=
+                            R0P.copyAccumulateEndpoint row.producerValues row.producerWeights link.producer link.tag
+                              weight patterns (AspisR1.FIw_CopyEndpoint.modelSelectors s);
+                          have consumer :=
+                            R0P.copyAccumulateEndpoint row.consumerValues row.consumerWeights link.consumer link.tag
+                              weight patterns (AspisR1.FIw_CopyEndpoint.modelSelectors s);
+                          { producerValues := producer.1, producerWeights := producer.2, consumerValues := consumer.1,
+                            consumerWeights := consumer.2 })
+                        initial R0P.copyLinks;
+                    have active := R0P.copyActiveLiteral (AspisR1.FIw_CopyEndpoint.modelSelectors s);
+                    (active *
+                        R0P.copyResidual row (AspisR1.FIv_NativeValue.decode h) (AspisR1.FIv_NativeValue.decode chi),
+                      active)) =
+                    (R0P.copyActiveLiteral (AspisR1.FIw_CopyEndpoint.modelSelectors s) *
+                        R0P.copyResidual
+                          (List.foldl
+                            (AspisR1.FJk_CopyStep.step (AspisR1.FIw_CopyEndpoint.modelSelectors s) _a (↑index)
+                              (AspisR1.FJk_CopyDescriptor.variant v))
+                            { producerValues := fun x => 0, producerWeights := fun x => 0, consumerValues := fun x => 0,
+                              consumerWeights := fun x => 0 }
+                            R0P.copyLinks)
+                          (AspisR1.FIv_NativeValue.decode h) (AspisR1.FIv_NativeValue.decode chi),
+                      R0P.copyActiveLiteral (AspisR1.FIw_CopyEndpoint.modelSelectors s)))
+                pv.right))
+            (Eq.refl
+              (have patterns :=
+                R0P.copyPatternValuesLiteral (AspisR1.FIw_ArrayValue.decoded a) (AspisR1.FIv_NativeValue.decode lambda);
+              have initial :=
+                { producerValues := fun x => 0, producerWeights := fun x => 0, consumerValues := fun x => 0,
+                  consumerWeights := fun x => 0 };
+              have row :=
+                List.foldl
+                  (fun row link =>
+                    have weight := R0P.copyLinkWeight link (↑index) (AspisR1.FJk_CopyDescriptor.variant v);
+                    have producer :=
+                      R0P.copyAccumulateEndpoint row.producerValues row.producerWeights link.producer link.tag weight
+                        patterns (AspisR1.FIw_CopyEndpoint.modelSelectors s);
+                    have consumer :=
+                      R0P.copyAccumulateEndpoint row.consumerValues row.consumerWeights link.consumer link.tag weight
+                        patterns (AspisR1.FIw_CopyEndpoint.modelSelectors s);
+                    { producerValues := producer.1, producerWeights := producer.2, consumerValues := consumer.1,
+                      consumerWeights := consumer.2 })
+                  initial R0P.copyLinks;
+              have active := R0P.copyActiveLiteral (AspisR1.FIw_CopyEndpoint.modelSelectors s);
+              (active * R0P.copyResidual row (AspisR1.FIv_NativeValue.decode h) (AspisR1.FIv_NativeValue.decode chi),
+                active))))));
+  ⟨cr,
+    ⟨ca,
+      Eq.trans
+        (Prod.ext
+          (Eq.trans cv
+            (congrArg
+              (fun x =>
+                x *
+                  R0P.copyResidual (AspisR1.FJk_CopyFullFold.model s patterns index v)
+                    (AspisR1.FIv_NativeValue.decode h) (AspisR1.FIv_NativeValue.decode chi))
+              av.right))
+          av.right)
+        (Eq.symm shape)⟩⟩
+theorem AspisR1.FJn_CompositionModel.value : ∀ (p : AspisR1.FIw_CompositionOrigins.SemPub)
+  (claims : Aeneas.Std.Array FIq_Native.field.QM31 84#usize) (point : Aeneas.Std.Array FIq_Native.field.QM31 10#usize)
+  (lambda chi theta comp g h active : FIq_Native.field.QM31) (c1 : Aeneas.Std.Array FIq_Native.field.QM31 16#usize)
+  (mask : Aeneas.Std.Array FIq_Native.field.QM31 10#usize),
+  AspisR1.FIw_ArrayValue.canonical claims →
+    AspisR1.FIw_ArrayValue.canonical point →
+      AspisR1.FIv_NativeValue.Canon lambda →
+        AspisR1.FIv_NativeValue.Canon chi →
+          AspisR1.FIv_NativeValue.Canon theta →
+            AspisR1.FJa_PublicBounds.Bounds p →
+              AspisR1.FIw_CompositionOrigins.composition p claims point lambda chi theta =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (comp, c1, mask, g, h, active)) →
+                AspisR1.FIv_NativeValue.Canon comp ∧
+                  AspisR1.FIv_NativeValue.Canon active ∧
+                    AspisR1.FIz_ConcretePack.embed (AspisR1.FIv_NativeValue.decode comp) =
+                      ∑ i,
+                        AspisR1.FIz_ConcretePack.embed (AspisR1.FIv_NativeValue.decode theta) ^ ↑i *
+                          R0P.SemSource.laneAt (AspisR1.FJn_CompositionModel.pub p)
+                            (AspisR1.FIz_ConcretePack.embed (AspisR1.FIv_NativeValue.decode lambda))
+                            (AspisR1.FIz_ConcretePack.embed (AspisR1.FIv_NativeValue.decode chi))
+                            AspisR1.ConcretePackBasis.basis (AspisR1.FJn_CompositionModel.openings claims)
+                            (AspisR1.FIz_ConcretePack.embed (AspisR1.FIv_NativeArray.value claims 26))
+                            (AspisR1.FJn_CompositionModel.selector point) i :=
+fun p claims point lambda chi theta comp g h active c1 mask hc hp hlambda hchi htheta bounds run =>
+  let ⟨a, h✝⟩ := AspisR1.FIw_CompositionOrigins.reached p claims point lambda chi theta comp g h active c1 mask run
+  let ⟨a1, h✝¹⟩ := h✝
+  let ⟨a2, h✝²⟩ := h✝¹
+  let ⟨s, h✝³⟩ := h✝²
+  let ⟨po, h✝⁴⟩ := h✝³
+  let ⟨v, h✝⁵⟩ := h✝⁴
+  let ⟨sem, h✝⁶⟩ := h✝⁵
+  let ⟨pos, h✝⁷⟩ := h✝⁶
+  let ⟨prep, h✝⁸⟩ := h✝⁷
+  let ⟨middle, h✝⁹⟩ := h✝⁸
+  let ⟨copy, h✝¹⁰⟩ := h✝⁹
+  let ⟨it, h✝¹¹⟩ := h✝¹⁰
+  let ⟨it1, h✝¹²⟩ := h✝¹¹
+  let ⟨same, right✝⟩ := h✝¹²
+  let ⟨r0, right✝¹⟩ := right✝
+  let ⟨r1, right✝²⟩ := right✝¹
+  let ⟨r2, right✝³⟩ := right✝²
+  let ⟨rs, right✝⁴⟩ := right✝³
+  let ⟨rsp, right✝⁵⟩ := right✝⁴
+  let ⟨rpo, right✝⁶⟩ := right✝⁵
+  let ⟨rsem, right✝⁷⟩ := right✝⁶
+  let ⟨rv, right✝⁸⟩ := right✝⁷
+  let ⟨rc, right✝⁹⟩ := right✝⁸
+  let ⟨rp, right✝¹⁰⟩ := right✝⁹
+  let ⟨rit, right✝¹¹⟩ := right✝¹⁰
+  let ⟨rit1, right✝¹²⟩ := right✝¹¹
+  let ⟨rm, right✝¹³⟩ := right✝¹²
+  let ⟨rf, ra⟩ := right✝¹³
+  have ca := AspisR1.FIw_OpeningCanonical.z claims a hc r0;
+  have ca1 := AspisR1.FIw_OpeningCanonical.succ claims a1 hc r1;
+  have ca2 := AspisR1.FIw_OpeningCanonical.xor12 claims a2 hc r2;
+  have cs := AspisR1.FJa_BoxedCanonical.value point s hp rs;
+  have hh := AspisR1.FIr_H1Canonical.canonical p claims point lambda chi theta comp g h active c1 mask run hc;
+  have sv :=
+    AspisR1.FJk_SemanticWideOnRun.value p { z := a, succ_z := a1, xor12_z := a2 } s point sem ca ca1 ca2 hp bounds rs
+      rsem;
+  have pv :=
+    AspisR1.FJk_PoseidonWideOnRun.value p { z := a, succ_z := a1, xor12_z := a2 } point s po pos ca ca1 ca2 hp rs rsp
+      rpo;
+  have cc :=
+    AspisR1.FJk_CopyCanonical.value a h s lambda chi p.transition.live_snapshot.next_pair_index v copy ca hh cs.left
+      cs.right hlambda hchi rc;
+  have cv :=
+    AspisR1.FJn_CopyWide.value a h s lambda chi p.transition.live_snapshot.next_pair_index v copy point ca hh hp hlambda
+      hchi rs rc;
+  have hv :=
+    AspisR1.FJk_HornerValue.value sem pos prep theta copy.residual middle comp it it1 htheta cc.left sv.left pv.left rp
+      rit rit1 rm rf;
+  have fold :=
+    Eq.trans (congrArg (⇑AspisR1.FIz_ConcretePack.embed) hv.right)
+      (AspisR1.FJk_CompositionWideFold.value AspisR1.FIz_ConcretePack.embed (AspisR1.FIv_NativeValue.decode theta) sem
+        pos copy.residual);
+  have copyV := AspisR1.FJn_CompositionSeed.value p a a1 a2 h lambda chi point s v copy ca hh hp hlambda hchi rs rv rc;
+  let wp := AspisR1.SpendDataMap.mapPublic (⇑AspisR1.FIz_ConcretePack.embed) (AspisR1.FIw_PublicModel.ofPublic p);
+  let wo :=
+    AspisR1.ValueFamilyFieldTransport.mapOpenings AspisR1.FIz_ConcretePack.embed
+      (AspisR1.FIw_PublicModel.openings { z := a, succ_z := a1, xor12_z := a2 });
+  let ws := fun i => AspisR1.FIz_ConcretePack.embed (AspisR1.FIw_PublicModel.selector s i);
+  let sm := fun j =>
+    R0P.pack4 AspisR1.ConcretePackBasis.basis fun i => R0P.SemSource.scalarLaneAt wp wo ws (4 * ↑j + ↑i);
+  let pm := fun j => ((R0P.poseidonPackedFamily AspisR1.ConcretePackBasis.basis).residuals wp wo ws).getD (↑j) 0;
+  have se := sv.right;
+  have pe := pv.right;
+  have groups := congrArg₂ (fun se po => ⋯) se pe;
+  have seed := congrArg ⋯ copyV;
+  have full := ⋯;
+  ⋯
+theorem AspisR1.FJn_MainTerminal.value : ∀ (pub : AspisR1.FIq_Carriers.Public)
+  (claims : Aeneas.Std.Array (Aeneas.Std.Array AspisR1.FIq_Carriers.MQ 29#usize) 3#usize)
+  (alpha : Aeneas.Std.Array AspisR1.FIq_Carriers.MQ 10#usize) (c : AspisR1PublicPreparation.r1_wire.Challenges)
+  (out : AspisR1.FIq_Carriers.MQ),
+  (∀ row ∈ ↑claims, ∀ x ∈ ↑row, AspisR1.FIp_SemanticValues.Canon x) →
+    (∀ x ∈ ↑alpha, AspisR1.FIp_SemanticValues.Canon x) →
+      (∀ x ∈ ↑c.zc, AspisR1.FIp_SemanticValues.Canon x) →
+        AspisR1.FIp_SemanticValues.Canon c.lambda →
+          AspisR1.FIp_SemanticValues.Canon c.chi →
+            AspisR1.FIp_SemanticValues.Canon c.theta →
+              AspisR1.FIp_SemanticValues.Canon c.mu →
+                AspisR1.FJa_PublicBounds.Bounds (AspisR1.FJa_PublicCopy.native pub) →
+                  AspisR1.FIq_Terminal.terminal pub claims alpha c =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+                    AspisR1.FIp_SemanticValues.Canon out ∧
+                      AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode out) =
+                        R0P.SemSource.terminalValue
+                          (AspisR1.SpendDataMap.mapPublic (⇑AspisR1.FIz_ConcretePack.embed)
+                            (AspisR1.FIw_PublicModel.ofPublic (AspisR1.FJa_PublicCopy.native pub)))
+                          (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.lambda))
+                          (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.chi))
+                          (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.theta))
+                          (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.mu))
+                          (fun i => AspisR1.FIz_ConcretePack.embed (AspisR1.FJn_MainPoint.point c.zc i))
+                          AspisR1.ConcretePackBasis.basis
+                          (fun j l => AspisR1.FIz_ConcretePack.embed (AspisR1.FJn_MainClaims.claims claims j l))
+                          fun i => AspisR1.FIz_ConcretePack.embed (AspisR1.FJn_MainPoint.point alpha i) :=
+fun pub claims alpha c out hc ha hz hl hchi ht hm bounds run =>
+  let ⟨native, h✝⟩ := AspisR1.FIq_Terminal.reached pub claims alpha c out run
+  let ⟨called, same⟩ := h✝
+  have cc := AspisR1.FIr_CarrierCanonical.claims claims hc;
+  have ac := AspisR1.FIr_CarrierCanonical.array alpha ha;
+  have zc := AspisR1.FIr_CarrierCanonical.array c.zc hz;
+  have bound :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => AspisR1.FJa_PublicBounds.Bounds (AspisR1.FJa_PublicCopy.native _a))
+          (AspisR1.FIq_Carriers.public_roundtrip pub)))
+      bounds;
+  have got :=
+    AspisR1.FJn_NativeTerminal.value (AspisR1.FIq_Carriers.toPublic pub)
+      (AspisR1.FIq_Carriers.mapArray (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ) claims)
+      (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ alpha) (AspisR1.FIq_Carriers.toChallenges c) native cc ac
+      zc hl hchi ht hm bound called;
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          AspisR1.FIp_SemanticValues.Canon _a ∧
+            AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode _a) =
+              R0P.SemSource.terminalValue
+                (AspisR1.SpendDataMap.mapPublic (⇑AspisR1.FIz_ConcretePack.embed)
+                  (AspisR1.FIw_PublicModel.ofPublic (AspisR1.FJa_PublicCopy.native pub)))
+                (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.lambda))
+                (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.chi))
+                (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.theta))
+                (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.mu))
+                (fun i => AspisR1.FIz_ConcretePack.embed (AspisR1.FJn_MainPoint.point c.zc i))
+                AspisR1.ConcretePackBasis.basis
+                (fun j l => AspisR1.FIz_ConcretePack.embed (AspisR1.FJn_MainClaims.claims claims j l)) fun i =>
+                AspisR1.FIz_ConcretePack.embed (AspisR1.FJn_MainPoint.point alpha i))
+        (Eq.symm same)))
+    ⟨(AspisR1.FIr_CarrierCanonical.from_canon native).mpr got.left,
+      have ce :=
+        funext fun j =>
+          funext fun l => congrArg (⇑AspisR1.FIz_ConcretePack.embed) (AspisR1.FJn_MainClaims.value claims j l);
+      id
+        (Eq.mp
+          (congrArg (Eq (AspisR1.FIz_ConcretePack.embed (AspisR1.FIv_NativeValue.decode native)))
+            (congr
+              (congr
+                (congrFun'
+                  (congrFun
+                    (congr
+                      (congrFun'
+                        (congrFun'
+                          (congrFun'
+                            (congrFun'
+                              (congrArg R0P.SemSource.terminalValue
+                                (congrArg (AspisR1.SpendDataMap.mapPublic ⇑AspisR1.FIz_ConcretePack.embed)
+                                  (congrArg AspisR1.FIw_PublicModel.ofPublic
+                                    (congrArg AspisR1.FJa_PublicCopy.native
+                                      (AspisR1.FIq_Carriers.public_roundtrip pub)))))
+                              (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.lambda)))
+                            (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.chi)))
+                          (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.theta)))
+                        (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.mu)))
+                      (funext fun i =>
+                        congrArg (⇑AspisR1.FIz_ConcretePack.embed) (congrFun (AspisR1.FJn_MainPoint.value c.zc) i)))
+                    AspisR1.ConcretePackBasis.F)
+                  AspisR1.ConcretePackBasis.basis)
+                ce)
+              (funext fun i =>
+                congrArg (⇑AspisR1.FIz_ConcretePack.embed) (congrFun (AspisR1.FJn_MainPoint.value alpha) i))))
+          got.right)⟩
+theorem AspisR1.FJn_AcceptedChallenges.value : ∀ {H : Type} (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (pub : AspisR1.FIr_AcceptedTerminal.MainPub)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (sem : AspisR1CurrentCaller.r1_semantic.Verified H),
+  AspisR1CurrentCaller.S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children
+        (AspisR1.FIq_Terminal.install B) D pub bytes hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) →
+    ∃ c out,
+      AspisR1.FIq_Terminal.terminal (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub)
+            (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).claims
+            (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).alpha c =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) ∧
+        AspisR1.FIp_SemanticValues.Canon c.lambda ∧
+          AspisR1.FIp_SemanticValues.Canon c.chi ∧
+            AspisR1.FIp_SemanticValues.Canon c.theta ∧
+              AspisR1.FIp_SemanticValues.Canon c.mu ∧
+                AspisR1.FIp_SemanticValues.Canon c.eta ∧ ∀ x ∈ ↑c.zc, AspisR1.FIp_SemanticValues.Canon x :=
+fun {H} B D pub bytes hash sem success =>
+  let ⟨pre, h✝⟩ :=
+    AspisR1CurrentCaller.S1SemanticInstallation.verify_roots AspisS1ExtractedRoundChildren.children
+      (AspisR1.FIq_Terminal.install B) D pub bytes hash sem success
+  let ⟨initial, h✝¹⟩ := h✝
+  let ⟨before, h✝²⟩ := h✝¹
+  let ⟨c, h✝³⟩ := h✝²
+  let ⟨payload, h✝⁴⟩ := h✝³
+  let ⟨root, h✝⁵⟩ := h✝⁴
+  let ⟨parsed, right✝⟩ := h✝⁵
+  let ⟨publicInit, right✝¹⟩ := right✝
+  let ⟨begin, right✝²⟩ := right✝¹
+  let ⟨finish, rest⟩ := right✝²
+  let ⟨running, h✝⁶⟩ :=
+    AspisR1PublicPreparation.FIr_FinishComparison.terminal_comparison_of_finish_success
+      AspisS1ExtractedRoundChildren.children
+      (AspisR1PublicPreparation.S1SemanticRootCopy.install (AspisR1.FIq_Terminal.install B))
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+      (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) pre before c none
+      (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem) finish
+  let ⟨after, h✝⁷⟩ := h✝⁶
+  let ⟨out, h✝⁸⟩ := h✝⁷
+  let ⟨m16, h✝⁹⟩ := h✝⁸
+  let ⟨m10, h✝¹⁰⟩ := h✝⁹
+  let ⟨row0, h✝¹¹⟩ := h✝¹⁰
+  let ⟨q27, h✝¹²⟩ := h✝¹¹
+  let ⟨mask, h✝¹³⟩ := h✝¹²
+  let ⟨prod, h✝¹⁴⟩ := h✝¹³
+  let ⟨sum, h✝¹⁵⟩ := h✝¹⁴
+  let ⟨extra, h✝¹⁶⟩ := h✝¹⁵
+  let ⟨rounds, right✝³⟩ := h✝¹⁶
+  let ⟨called, rest⟩ := right✝³
+  Exists.intro c
+    (Exists.intro out
+      ⟨called,
+        AspisR1.FJn_BeginCanonical.value (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D) pre initial before
+          c begin⟩)
+theorem AspisR1.FJn_CopyNonvacuity.value : ∀ (a : Aeneas.Std.Array FIq_Native.field.QM31 16#usize)
+  (h : FIq_Native.field.QM31) (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (lambda chi : FIq_Native.field.QM31) (index : Aeneas.Std.U64)
+  (v : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1),
+  AspisR1.FIw_ArrayValue.canonical a →
+    AspisR1.FIv_NativeValue.Canon h →
+      AspisR1.FIw_ArrayValue.canonical s.high →
+        AspisR1.FIw_ArrayValue.canonical s.low →
+          AspisR1.FIv_NativeValue.Canon lambda →
+            AspisR1.FIv_NativeValue.Canon chi →
+              ∃ copy,
+                FIq_Native.pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h s lambda chi index v =
+                    Aeneas.Std.Result.ok copy ∧
+                  (AspisR1.FIv_NativeValue.decode copy.residual, AspisR1.FIv_NativeValue.decode copy.active) =
+                    R0P.copyEvaluateWithSelectors (AspisR1.FIw_ArrayValue.decoded a) (AspisR1.FIv_NativeValue.decode h)
+                      (AspisR1.FIw_CopyEndpoint.modelSelectors s) (AspisR1.FIv_NativeValue.decode lambda)
+                      (AspisR1.FIv_NativeValue.decode chi) (↑index) (AspisR1.FJk_CopyDescriptor.variant v) :=
+fun a h s lambda chi index v ha hh hhigh hlow hlambda hchi =>
+  let ⟨copy, h✝⟩ := AspisR1.JGa_Copy.source a h s lambda chi index v ha hh hhigh hlow hlambda hchi
+  let ⟨run, right✝⟩ := h✝
+  let ⟨left✝, right✝¹⟩ := right✝
+  have got := AspisR1.FJn_CopyFullValue.value a h s lambda chi index v copy ha hh hhigh hlow hlambda hchi run;
+  Exists.intro copy ⟨run, got.right.right⟩
+'AspisR1.FJn_MainTerminal.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJn_CopyNonvacuity.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.FJn_AcceptedTerminalValue.value : ∀ (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (ops : AspisR1CurrentCaller.Ops) (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (sem : AspisR1CurrentCaller.r1_semantic.Verified H),
+  AspisR1.FJa_PublicBounds.Bounds
+      (AspisR1.FJa_PublicCopy.native (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub)) →
+    (AspisS1NativeBufferClaimTrace.semanticBase ops
+              (AspisR1.ClaimsUnrolledFinish.install std (AspisR1.FIq_Terminal.install B))).op9
+          D pub bytes hash none =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) →
+      ∃ c out,
+        AspisR1.FIq_Terminal.terminal (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub)
+              (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).claims
+              (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).alpha c =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) ∧
+          AspisR1.FIp_SemanticValues.Canon out ∧
+            AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode out) =
+              R0P.SemSource.terminalValue
+                (AspisR1.SpendDataMap.mapPublic (⇑AspisR1.FIz_ConcretePack.embed)
+                  (AspisR1.FIw_PublicModel.ofPublic
+                    (AspisR1.FJa_PublicCopy.native (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub))))
+                (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.lambda))
+                (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.chi))
+                (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.theta))
+                (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode c.mu))
+                (fun i => AspisR1.FIz_ConcretePack.embed (AspisR1.FJn_MainPoint.point c.zc i))
+                AspisR1.ConcretePackBasis.basis
+                (fun j l =>
+                  AspisR1.FIz_ConcretePack.embed
+                    (AspisR1.FJn_MainClaims.claims (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).claims j
+                      l))
+                fun i =>
+                AspisR1.FIz_ConcretePack.embed
+                  (AspisR1.FJn_MainPoint.point (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).alpha i) :=
+fun std ops B {H} D pub bytes hash sem bounds accepted =>
+  have source := accepted;
+  let ⟨c, h✝⟩ :=
+    AspisR1.FJn_AcceptedChallenges.value (AspisR1.ClaimsUnrolledFinish.install std B) D pub bytes hash sem source
+  let ⟨out, h✝¹⟩ := h✝
+  let ⟨called, right✝⟩ := h✝¹
+  let ⟨hl, right✝¹⟩ := right✝
+  let ⟨hchi, right✝²⟩ := right✝¹
+  let ⟨ht, right✝³⟩ := right✝²
+  let ⟨hm, right✝⁴⟩ := right✝³
+  let ⟨he, hz⟩ := right✝⁴
+  have hc := AspisR1.FJa_ClaimsOnRun.value std ops (AspisR1.FIq_Terminal.install B) D pub bytes hash sem accepted;
+  have ha :=
+    AspisR1.FIr_AlphaCanonical.verified (AspisR1.FIq_Terminal.install (AspisR1.ClaimsUnrolledFinish.install std B)) D
+      pub bytes hash sem source;
+  Exists.intro c
+    (Exists.intro out
+      ⟨called,
+        AspisR1.FJn_MainTerminal.value (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub)
+          (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).claims
+          (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).alpha c out hc ha hz hl hchi ht hm bounds called⟩)
+theorem AspisR1.FJn_MaskedWideValue.value : ∀ (c1 : Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 16#usize)
+  (m : Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 10#usize) (g : AspisR1.FIp_SemanticArithmetic.MQ)
+  (point : Aeneas.Std.Array AspisR1.FIp_SemanticArithmetic.MQ 10#usize)
+  (eta terminal extra mask product sum running : AspisR1.FIp_SemanticArithmetic.MQ),
+  (∀ x ∈ ↑c1, AspisR1.FIp_SemanticValues.Canon x) →
+    (∀ x ∈ ↑m, AspisR1.FIp_SemanticValues.Canon x) →
+      (∀ x ∈ ↑point, AspisR1.FIp_SemanticValues.Canon x) →
+        AspisR1.FIp_SemanticValues.Canon g →
+          AspisR1.FIp_SemanticValues.Canon eta →
+            AspisR1.FIp_SemanticValues.Canon terminal →
+              AspisR1.FIp_SemanticValues.Canon extra →
+                AspisR1.FIp_SemanticArithmetic.mask c1 m g point = Aeneas.Std.Result.ok mask →
+                  AspisR1.FIp_SemanticArithmetic.mul eta terminal = Aeneas.Std.Result.ok product →
+                    AspisR1.FIp_SemanticArithmetic.add mask product = Aeneas.Std.Result.ok sum →
+                      AspisR1.FIp_SemanticArithmetic.add sum extra = Aeneas.Std.Result.ok running →
+                        AspisR1.FIp_SemanticValues.Canon running ∧
+                          AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode running) =
+                            R0P.Mask.maskValue AspisR1.ConcretePackBasis.basis (AspisR1.FJn_MaskWide.cell16 c1)
+                                  (AspisR1.FJn_MaskWide.cell10 m)
+                                  (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode g))
+                                  (AspisR1.FJn_MaskWide.cell10 point) +
+                                AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode eta) *
+                                  AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode terminal) +
+                              AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode extra) :=
+fun c1 m g point eta terminal extra mask product sum running hc hm hp hg he ht hx maskCall multiply add finish =>
+  have maskV := AspisR1.FJn_MaskWide.value c1 m g point mask hc hm hp hg maskCall;
+  have result :=
+    AspisR1.FIr_MaskedArithmetic.value eta terminal extra mask product sum running he ht hx maskV.left multiply add
+      finish;
+  ⟨result.left,
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            AspisR1.FIz_ConcretePack.embed _a =
+              R0P.Mask.maskValue AspisR1.ConcretePackBasis.basis (AspisR1.FJn_MaskWide.cell16 c1)
+                    (AspisR1.FJn_MaskWide.cell10 m)
+                    (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode g))
+                    (AspisR1.FJn_MaskWide.cell10 point) +
+                  AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode eta) *
+                    AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode terminal) +
+                AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode extra))
+          result.right))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                R0P.Mask.maskValue AspisR1.ConcretePackBasis.basis (AspisR1.FJn_MaskWide.cell16 c1)
+                      (AspisR1.FJn_MaskWide.cell10 m)
+                      (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode g))
+                      (AspisR1.FJn_MaskWide.cell10 point) +
+                    AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode eta) *
+                      AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode terminal) +
+                  AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode extra))
+            (map_add AspisR1.FIz_ConcretePack.embed
+              (AspisR1.FIp_SemanticValues.decode mask +
+                AspisR1.FIp_SemanticValues.decode eta * AspisR1.FIp_SemanticValues.decode terminal)
+              (AspisR1.FIp_SemanticValues.decode extra))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a + AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode extra) =
+                  R0P.Mask.maskValue AspisR1.ConcretePackBasis.basis (AspisR1.FJn_MaskWide.cell16 c1)
+                        (AspisR1.FJn_MaskWide.cell10 m)
+                        (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode g))
+                        (AspisR1.FJn_MaskWide.cell10 point) +
+                      AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode eta) *
+                        AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode terminal) +
+                    AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode extra))
+              (map_add AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode mask)
+                (AspisR1.FIp_SemanticValues.decode eta * AspisR1.FIp_SemanticValues.decode terminal))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode mask) + _a +
+                      AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode extra) =
+                    R0P.Mask.maskValue AspisR1.ConcretePackBasis.basis (AspisR1.FJn_MaskWide.cell16 c1)
+                          (AspisR1.FJn_MaskWide.cell10 m)
+                          (AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode g))
+                          (AspisR1.FJn_MaskWide.cell10 point) +
+                        AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode eta) *
+                          AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode terminal) +
+                      AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode extra))
+                (map_mul AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode eta)
+                  (AspisR1.FIp_SemanticValues.decode terminal))))
+            (congrArg
+              (fun v =>
+                v +
+                    AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode eta) *
+                      AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode terminal) +
+                  AspisR1.FIz_ConcretePack.embed (AspisR1.FIp_SemanticValues.decode extra))
+              maskV.right))))⟩
+theorem AspisR1.FJn_TerminalPartsNonvacuity.value : ∀ (p : AspisR1.FIw_CompositionOrigins.SemPub)
+  (claims : Aeneas.Std.Array FIq_Native.field.QM31 84#usize)
+  (point zc : Aeneas.Std.Array FIq_Native.field.QM31 10#usize)
+  (lambda chi theta mu comp g h active : FIq_Native.field.QM31) (c1 : Aeneas.Std.Array FIq_Native.field.QM31 16#usize)
+  (mask : Aeneas.Std.Array FIq_Native.field.QM31 10#usize),
+  AspisR1.FIw_ArrayValue.canonical claims →
+    AspisR1.FIw_ArrayValue.canonical point →
+      AspisR1.FIw_ArrayValue.canonical zc →
+        AspisR1.FIv_NativeValue.Canon lambda →
+          AspisR1.FIv_NativeValue.Canon chi →
+            AspisR1.FIv_NativeValue.Canon theta →
+              AspisR1.FIv_NativeValue.Canon mu →
+                AspisR1.FJa_PublicBounds.Bounds p →
+                  AspisR1.FIw_CompositionOrigins.composition p claims point lambda chi theta =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (comp, c1, mask, g, h, active)) →
+                    ∃ out,
+                      AspisR1.FIr_TerminalTrace.parts p claims point lambda chi theta zc mu =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, c1, mask, g)) ∧
+                        AspisR1.FIv_NativeValue.Canon out ∧
+                          AspisR1.FIz_ConcretePack.embed (AspisR1.FIv_NativeValue.decode out) =
+                            AspisR1.FJn_TerminalModel.model p claims point zc lambda chi theta mu :=
+fun p claims point zc lambda chi theta mu comp g h active c1 mask hc hp hz hl hchi ht hm bounds run =>
+  have cm :=
+    AspisR1.FJn_CompositionModel.value p claims point lambda chi theta comp g h active c1 mask hc hp hl hchi ht bounds
+      run;
+  have hh := AspisR1.FIr_H1Canonical.canonical p claims point lambda chi theta comp g h active c1 mask run hc;
+  let ⟨out, h✝⟩ :=
+    AspisR1.JGa_TerminalParts.source p claims point zc lambda chi theta mu comp c1 mask g h active run hp hz cm.left hm
+      hh cm.right.left
+  let ⟨called, can⟩ := h✝
+  Exists.intro out
+    ⟨called,
+      AspisR1.FJn_TerminalModel.value p claims point zc lambda chi theta mu out c1 mask g hc hp hz hl hchi ht hm bounds
+        called⟩
+'AspisR1.FJn_AcceptedTerminalValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJn_MaskedWideValue.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJn_TerminalPartsNonvacuity.value' depends on axioms: [propext, Classical.choice, Quot.sound]
