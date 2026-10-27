@@ -46,3 +46,10 @@ package imports and explicitly does not claim an exhaustive package-source
 replay. This distinction is part of the merge gate, not hidden by a passing
 FinalAudit. The two cached extraction source variants differ in discriminant
 attribute registration from research; their exact diffs are retained.
+
+At final cleanup, one already-started BankRange client (36213) was found to
+have raced the initial own-retention hook correction. Its shared object matched
+the dependent receipt's recorded object hash; it was copied once into own
+scratch, hash-recorded and cleaned without recompilation. This exception is
+explicit in resume5-late-own-retention.json. The original ten-output supplement
+and this late one-output recovery together cover the early retention gap.
