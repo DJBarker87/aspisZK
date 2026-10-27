@@ -85,3 +85,126 @@ fn NBB_fold_frame() {
     unsafe {assert_eq!(NBB_RAW,before[j]);assert_eq!(row[k],if j==k {NBB_REPLY} else {before[k]});}
     kani::cover!(j==0);kani::cover!(j==3);kani::cover!(j!=k);
 }
+
+// The native continuation after Vec's checked indexed borrow. The Vec borrow
+// itself uses the retained standard-library interpretation; no64-row loop runs.
+fn NBB_push_selected(row:&mut[u64;4],terms:usize,power:K,basis:M31) {
+    let flush=terms&3==3;
+    update_residue_row(row,power,basis,flush);
+}
+#[kani::proof]
+#[kani::stub(super::update_residue_row,NBB_row_reply)]
+fn NBB_push_selected_frame() {
+    let mut row:[u64;4]=kani::any();let before=row;
+    let p:[u32;4]=kani::any();let basis:u32=kani::any();let terms:usize=kani::any();
+    let limb:usize=kani::any();kani::assume(limb<4);
+    let power=K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}};
+    NBB_push_selected(&mut row,terms,power,M31(basis));
+    unsafe {
+        assert_eq!(NBB_CALLS,1);assert_eq!(NBB_OLD[limb],before[limb]);
+        assert_eq!(NBB_POWER[limb],p[limb]);assert_eq!(NBB_BASIS,basis);
+        assert_eq!(NBB_FLUSH,terms&3==3);assert_eq!(row[limb],NBB_OUT[limb]);
+    }
+    kani::cover!(terms&3==3);kani::cover!(terms&3!=3);
+}
+
+// Changed initialization cut after K001: one owned array allocation, no Vec append loop.
+#[kani::proof]
+#[kani::unwind(66)]
+#[kani::stub(super::update_residue_row,NBB_row_reply)]
+fn NBB_push_array_frame() {
+    let raw=Vec::from([
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>(),
+        kani::any::<[u64;4]>()
+    ]);
+    let terms:usize=kani::any();
+    let index:usize=kani::any();kani::assume(index<64);
+    let selected:usize=kani::any();kani::assume(selected<64);
+    let limb:usize=kani::any();kani::assume(limb<4);
+    let before=raw[selected][limb];let old=raw[index][limb];
+    let p:[u32;4]=kani::any();let basis:u32=kani::any();
+    let power=K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}};
+    let mut weights=BatchedWeights{raw,terms};
+    weights.push(index,power,M31(basis));
+    assert_eq!(weights.terms,terms);assert_eq!(weights.raw.len(),64);
+    unsafe {
+        assert_eq!(NBB_CALLS,1);assert_eq!(NBB_OLD[limb],old);
+        assert_eq!(NBB_POWER[limb],p[limb]);assert_eq!(NBB_BASIS,basis);
+        assert_eq!(NBB_FLUSH,terms&3==3);
+        assert_eq!(weights.raw[selected][limb],if selected==index {NBB_OUT[limb]} else {before});
+    }
+    kani::cover!(index==0);kani::cover!(index==63);
+    kani::cover!(selected!=index);kani::cover!(terms&3==3);
+}
+
+#[kani::proof]
+fn NBB_range_step() {
+ let j:usize=kani::any();kani::assume(j<=4);
+ let mut iter=j..4;let out=iter.next();
+ if j<4 {assert_eq!(out,Some(j));assert_eq!(iter.start,j+1);}
+ else {assert!(out.is_none());assert_eq!(iter.start,j);}
+ assert_eq!(iter.end,4);
+ kani::cover!(j==0);kani::cover!(j==3);kani::cover!(j==4);
+}

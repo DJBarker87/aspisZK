@@ -1,6 +1,6 @@
 from NBB_host import *
 import hashlib,difflib
-admit('NBB_SYNC002')
+admit('NBB_SYNC'+str(max([int(p.name.split('-')[0][8:]) for p in E.glob('NBB_SYNC*-reservation.json')]+[0])+1).zfill(3))
 rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 f='crates/aspis-r1-cost-probe/src/verifier.rs'
 original=subprocess.check_output(['git','show',rev+':'+f],text=True)

@@ -1,0 +1,49 @@
+{"attempt": "NBB_K005", "exit_status": 1, "wall_seconds": 94.0728921549744, "peak_rss_kib": "1488756", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+st-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-r1-cost-probe/src/NBB_harness.rs:195:20
+    |
+195 |         assert_eq!(NBB_FLUSH,terms&3==3);
+    |                    ^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBB_range_step` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/NBB_harness.rs:203:4
+    |
+203 | fn NBB_range_step() {
+    |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbb_range_step`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.40s
+Checking harness verifier::NBB_harness::NBB_push_array_frame...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - verifier::NBB_harness::NBB_push_array_frame
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rdb22c4db8cf9453f9a6f51c7ad54acfd.scope; invocation ID: 85d5db5005be4bc6ab904be62780d707

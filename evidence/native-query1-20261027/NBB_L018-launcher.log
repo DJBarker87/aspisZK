@@ -1,0 +1,33 @@
+{"attempt": "NBB_L018", "exit_status": 0, "wall_seconds": 3.115325659979135, "peak_rss_kib": "4397264", "swaps": "0", "print_axioms": []}
+AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (ops : AspisR1.Port3_NativeQueryBody.Ops) (proof : Slice U8)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (g : Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize)
+  (obs : Option (AspisR1Stage2.verifier.Phase → Result Unit)) (geometry : AspisR1Stage2.verifier.QueryGeometry)
+  (pending : AspisR1Stage2.verifier.BatchedWeights) (end1 : Usize) :
+  Result
+    (core.result.Result (AspisR1Stage2.verifier.Accumulator × AspisR1Stage2.verifier.BatchedWeights)
+      AspisR1Stage2.verifier.Error)
+S7OwnedP6Scalar.residue_scalar_owned (raw1 : U64) (limb basis : U32) (flush : Bool) : Result
+...
+AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (ops : AspisR1.Port3_NativeQueryBody.Ops) (proof : Slice U8)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (g : Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize)
+  (obs : Option (AspisR1Stage2.verifier.Phase → Result Unit)) (geometry : AspisR1Stage2.verifier.QueryGeometry)
+  (pending : AspisR1Stage2.verifier.BatchedWeights) (end1 : Usize) :
+  Result
+    (core.result.Result (AspisR1Stage2.verifier.Accumulator × AspisR1Stage2.verifier.BatchedWeights)
+      AspisR1Stage2.verifier.Error)
+S7OwnedP6Scalar.residue_scalar_owned (raw1 : U64) (limb basis : U32) (flush : Bool) : Result U64
+S7OwnedP6RowContract.source_eq_batched_model (row limbs : S7OwnedP6RowContract.Row) (basis terms : ℕ) :
+  S7OwnedP6RowContract.source row limbs basis (decide (terms % 4 = 3)) = fun j =>
+    AspisR1BatchedFoldSourceStep.sourcePush terms (row j) (limbs j * basis)
+AspisR1.Port3_FlushInstall.flush_exact (b : AspisR1.Port3_FlushInstall.BW) (old : Slice AspisR1.Port3_FlushInstall.K)
+  (lengths : (↑old).length ≤ (↑b.raw).length) :
+  AspisR1.Port3_FlushInstall.flush b old =
+    ok
+      (AspisR1.Port3_FlushInstall.fromSlice
+        ⟨List.map S8Kani2FinishReferenceJoin.toFinish
+            ↑(S8JoinFinishExact.output b.raw (AspisR1.Port3_FlushInstall.toWeights old)),
+          ⋯⟩)
+
+Running as unit: run-r59ac61f52cae406f88eb25b7af240a34.scope; invocation ID: 02bfdccc9637485bbb47e4105086ecfc

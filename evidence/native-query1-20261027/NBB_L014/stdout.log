@@ -1,0 +1,54 @@
+NBB_generated/NBB_QueryTrace.lean:42:2: error: unsolved goals
+case neg
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geo : verifier.QueryGeometry
+end1 : Usize
+a : Acc
+b : BW
+done : ¬↑end1 ≤ ↑a.next
+⊢ (match do
+      let state1 ← call proof p a g obs geo b
+      ok (ControlFlow.cont state1) with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if ↑end1 ≤ ↑a.next then ok (ControlFlow.done state1)
+              else do
+                let state1 ← call proof p a g obs geo pending
+                ok (ControlFlow.cont state1)
+            | core.result.Result.Err a => ok (ControlFlow.done state1))
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let x ← call proof p a g obs geo b
+    loop
+        (fun state1 =>
+          match state1 with
+          | core.result.Result.Ok p1 =>
+            let (a, pending) := p1
+            if ↑end1 ≤ ↑a.next then ok (ControlFlow.done state1)
+            else do
+              let state1 ← call proof p a g obs geo pending
+              ok (ControlFlow.cont state1)
+          | core.result.Result.Err a => ok (ControlFlow.done state1))
+        x
+NBB_generated/NBB_QueryTrace.lean:42:55: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp [̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵q̵u̵e̵r̵y̵_̵l̵o̵o̵p̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵d̵o̵n̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲q̲u̲e̲r̲y̲_̲l̲o̲o̲p̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲d̲o̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NBB_QueryTrace.unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBB_QueryTrace.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
