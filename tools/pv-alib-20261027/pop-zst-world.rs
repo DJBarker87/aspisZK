@@ -17,7 +17,7 @@ static DROPS:AtomicUsize=AtomicUsize::new(0);
 struct Z;
 impl Drop for Z {fn drop(&mut self){DROPS.fetch_add(1,Ordering::SeqCst);}}
 fn main(){
- for n in 0..=32 {
+ for n in 0usize..=32 {
   let mut a:Vec<Z>=(0..n).map(|_|Z).collect();
   let mut b:Vec<Z>=(0..n).map(|_|Z).collect();
   let ap=a.as_ptr();let bp=b.as_ptr();

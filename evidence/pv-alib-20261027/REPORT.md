@@ -30,13 +30,39 @@ combined audit 37698; this replay itself emits signature checks only.
 exact cone. This is focused cached candidate evidence, not a full manifest
 or deployed endpoint replay. V232 and SHA-NI semantics remain untouched.
 
-V184 remains OPEN while the native/world and selected bridges are checked.
-No endpoint premise or trust field has changed. Target not yet established.
+V184: native/world/selected candidate bridges now pass focused checks.
+`PV_AL_MoveWorld.source_reference` and `.checked_observation` prove complete
+results and retained buffer, capacity, allocation world, data memory and frame.
+`PV_AL_MoveSelected.native_projection` links the selected op33/consumed callback.
+`PV_AL_MoveClosure.complete`, `.allocation_delta`, `.nonvacuous` combine the
+full observation, zero allocator increments, arbitrary initial history and a
+carrier for every representable generic vector; there is no Copy/Clone bound.
+
+The complete pinned nightly-2026-06-01 stdlib bodies of pop/remove/try_remove
+match `STRUCTURAL-POP-GATE.json`. The native control and source operations are
+interpreted by explicit Lean read/header/raw-copy library semantics; last-index
+bounds and zero-copy count are proved symbolically for all element widths.
+No native/reference or world-equality hypothesis was introduced. This is the
+scoped structural source/library boundary, not unbounded compiler/raw-pointer
+machine refinement. Existing 99-case native and 697-check bounded Kani gates
+are reused. `pop-zst-world-05` adds 33 non-Copy, Drop, zero-sized cases with
+zero allocator/destructor calls during either operation and retained pointers
+and capacity. The initial 04 test compile rejected an ambiguous integer type;
+05 explicitly types the loop index usize. No checked row counterexample.
+
+Focused receipts (all Lean standard axioms, zero swaps; revision dda503c2ed):
+37601 MoveWorld: exit 0, 1.11 s, 2,635,704 KiB.
+37602 MoveSelected: exit 0, 1.10 s, 2,641,956 KiB.
+37603 MoveClosure: exit 0, 1.15 s, 2,636,400 KiB.
+ZST native 05: exit 0, 0.11 s, 121,432 KiB, axioms N/A.
+Final V184 combined audit and cached cone replay are next. Until then, the
+new V184 candidate result is provisional. No endpoint premise or trust field
+changed. Target not yet established.
 
 ID correction: all historical 52700-52775 uses were invalid cross-job reuse;
 their evidence is retained without reruns. Resume3 uses 37600-37699 ONLY,
-with 37697-37699 reserved for audits. 3 of the remaining 25 Lean attempts
-are now spent; 22 Lean attempts and 4 Kani runs remain.
+with 37697-37699 reserved for audits. 6 of the remaining 25 Lean attempts
+are now spent; 19 Lean attempts and 4 Kani runs remain.
 
 ---
 

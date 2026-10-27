@@ -31,7 +31,7 @@ def visit(m):
  rows[m]=x
  imports=re.findall(r'^import\s+(\S+)',s.decode(),re.M);rows[m]['imports']=imports
  for dep in imports:visit(dep)
-for m in ['R1Z.PV_AL_SplitBridge','R1Z.PV_AL_CircleSelected','R1Z.PV_AL_MoveSelected']:visit(m)
+for m in ['R1Z.PV_AL_SplitBridge','R1Z.PV_AL_CircleSelected','R1Z.PV_AL_MoveClosure']:visit(m)
 # Read-only verification of the actual cached-source cohort, without copying sources.
 req={m:x for m,x in rows.items() if 'sha256' in x}
 code='''from pathlib import Path
