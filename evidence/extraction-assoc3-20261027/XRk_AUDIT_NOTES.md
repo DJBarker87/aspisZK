@@ -23,3 +23,11 @@ was then changed to use the iterator's own length representation; L077 passed.
 No runner, admission or monitoring infrastructure was changed or bypassed.
 L075 recorded one aggregate-reservation refusal (48 GiB already reserved),
 waited three minutes, then passed admission at its second barrier invocation.
+
+L098/L099 are a rejected optional adapter-erasure lemma candidate. The theorem
+was not accepted: the proof encounters the subtype/Array transparency boundary
+when simplifying the shared fromFnList result. Its source is retained as
+XRk_AdapterLaws_CANDIDATE.lean.txt and in both attempt snapshots, and no module
+imports it. No adapter erasure/correspondence law or P6 credit is claimed.
+The final allocation L100 is reserved for the batched theorem audit; no prover
+launch is permitted afterward under the conservatively charged 100 budget.

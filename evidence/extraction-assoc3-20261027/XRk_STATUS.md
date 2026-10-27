@@ -1,7 +1,13 @@
-# XRk continuation
+# XRk final status
 
-Target not yet established. Adopted top AspisR1.ARX_Root.deployed.
-Provisioned branch codex/cx-extraction-assoc3-20261027 (request includes older suffix).
-Scope: only XRk_ modules and this evidence directory. Budget 100 Lean, 10 Kani, 0 extraction.
-Stage 1: isolate Types and field definitions by namespace/import renaming; preserve inherited raw Funs failure. Stage 2: external models and adapters. Stage 3: association and bounded checks where well typed.
-No shipped file change, no ELF rebuild trigger. No top premise removal claimed.
+Target not yet established. Adopted top AspisR1.ARX_Root.deployed is unchanged;
+actual-top premise delta0. 103/103 externals defined, all12 leaf models supplied,
+adapted emitted Funs compiled. Five local emitted associations plus additional
+source projections are checked; full QueryGeometryLineInvariant and every native
+P6/byte/effect/top-instance bridge remain OPEN. See XRk_HANDOFF.md and
+XRk_OBLIGATIONS.md for the exact limits.
+
+Budget exhausted:100 conservative Lean launch allocations (98 compiler calls,
+2 refused predecessor launches),10 Kani (8PASS,2TIMEOUT),0 extraction.
+L097/L100 final audits pass with standard axioms only. No further prover run.
+Own caches cleaned, shared workspace/keys/source/artifacts untouched. No push.

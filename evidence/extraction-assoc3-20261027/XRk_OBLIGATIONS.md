@@ -12,8 +12,8 @@ No quantifier, carrier, failure event, conclusion, game, metric or trust change.
 |---|---|---|
 | PreparedScratchProjection | All-outcome scratch projection: accepted scratch equals emitted powers29 of returned gamma; explicit rejection retains old scratch or computed powers. Fail/div return no scratch. | SAME native Result/state, attempted digest chronology, P6/carrier/allocator and actual top instance. |
 | PreparedClaimPowersAssociation | Symbolic emitted powers-loop == reference recurrence; accepted claim supplies seven kappa powers, six ordered modeled scalar-dot parts, and the exact weighted fold. No success premises for those computations are added. | Generic field algebra interpretation, all six source scalar projections, owned-reference P6, actual top instance. |
-| QueryGeometryLineInvariant | Named concrete Prop, unproved. | Actual range/start/line_z/inverse cardinality and all inversion/allocation/error effects. |
-| DotCountProjection | Local accepted-count law proved directly from emitted push (XRk_DotProjection). | Canonical operands derived from arbitrary reached history, four wrapping sums, <=4096 history, source P6. |
+| QueryGeometryLineInvariant | Full named Prop UNPROVED. Iterator measure, source loop start projection, vector-push length and actual empty-loop acceptance are proved. | Mapped-collector/inverse and line_z cardinalities; line-value/inversion laws; native allocation/error effects. |
+| DotCountProjection | Local accepted-count law, derived scalar canonicality, SAME two dot updates, four explicit wrapping-sum cell laws, and limit/invalid-scalar rejection frames are proved. | Canonical operands derived from arbitrary reached history, four wrapping sums, <=4096 history, source P6. |
 | CandidateTx1AcceptedPath | Local accepted-path projection proved: SAME prepare/powers and required split (XRk_Tx1Projection, XRk_Tx1Association). | Native compact proof/public parsing, authentication, expansion and chronological effects. |
 | AcceptedCandidateCheckpoint | Local SAME-Prepared/checkpoint-call projection proved (XRk_Tx1Projection, XRk_Tx1Association). | Native saved-state/physical-byte correspondence, three digests, heap/capacity/ownership/effects. |
 
@@ -33,6 +33,6 @@ Funs compiles. Definition coverage is not refinement evidence.
 ## Non-vacuity
 
 Kani covers witness nonzero sparse multiplication inputs and malformed scalar
-inputs. Local Lean carrier/rejection witnesses are separate. No SAME-witness
+inputs. Local Lean carrier/rejection witnesses and an actual emitted empty geometry-loop accepted run are checked. The latter is not the ten-query TX1 domain. No SAME-witness
 joint inhabitant of all actual-top premises is constructed; no whole-top
 non-vacuity or release security result is claimed.

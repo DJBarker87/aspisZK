@@ -1,0 +1,220 @@
+{"attempt": "XRk_L093", "exit_status": 1, "wall_seconds": 2.4978367220028304, "peak_rss_kib": "2651916", "swaps": "0", "print_axioms": ["'XRk_EmptyGeometry.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRk_generated/XRk_EmptyGeometry.lean:13:40: error: unsolved goals
+start : Usize
+⊢ (match do
+      let (o, iter1) ←
+        if h : 0 < ↑(Usize.ofNatCore [].length ⋯) then
+            ok (some ⟨[], emptySlice._proof_1⟩[0], { slice := ⟨[], emptySlice._proof_1⟩, i := 0 + 1 })
+          else ok (none, { slice := ⟨[], emptySlice._proof_1⟩, i := 0 })
+      match o with
+        | none =>
+          if [].isEmpty = true then
+            ok
+              (ControlFlow.done
+                (core.result.Result.Ok
+                  { start := start, inverses := alloc.vec.Vec.new (Std.Array aspis_core.field.M31 5#usize),
+                    line_z := ⟨[], emptySlice._proof_1⟩ }))
+          else do
+            let (prefixes, product) ← verifier.batch_prefix_products (alloc.vec.Vec.deref ⟨[], emptySlice._proof_1⟩)
+            let suffix_inverse ← aspis_core.field.M31.inv product
+            let m ← aspis_core.field.M31.ZERO
+            let flat_inverse1 ←
+              alloc.vec.Vec.resize aspis_core.field.M31.Insts.CoreCloneClone
+                  (alloc.vec.Vec.with_capacity aspis_core.field.M31 (alloc.vec.Vec.len ⟨[], emptySlice._proof_1⟩))
+                  (alloc.vec.Vec.len ⟨[], emptySlice._proof_1⟩) m
+            let iter2 ←
+              core.ops.range.Range.Insts.CoreIterTraitsIteratorIterator.rev core.iter.range.StepUsize
+                  (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                  { start := 0#usize, «end» := alloc.vec.Vec.len ⟨[], emptySlice._proof_1⟩ }
+            let flat_inverse2 ←
+              verifier.QueryGeometry.for_range_loop0_loop0 iter2 ⟨[], emptySlice._proof_1⟩ prefixes suffix_inverse
+                  flat_inverse1
+            let m1 ←
+              core.ops.range.Range.Insts.CoreIterTraitsIteratorIterator.map core.iter.range.StepUsize
+                  verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                  { start := 0#usize, «end» := alloc.vec.Vec.len ⟨[], emptySlice._proof_1⟩ } flat_inverse2
+            let inverses ←
+              core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.collect
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                  (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+            ok
+                (ControlFlow.done
+                  (core.result.Result.Ok { start := start, inverses := inverses, line_z := ⟨[], emptySlice._proof_1⟩ }))
+        | some query => do
+          let u ← lift (UScalar.cast UScalarTy.Usize query)
+          let r ← aspis_core.r0.domain.FibreIndex.new u
+          let r1 ←
+            core.result.Result.map_err
+                verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let p ← fast_domain.fibre_point val
+              let i ← u / 4#usize
+              let i1 ← i * 4#usize
+              let r2 ← aspis_core.r0.domain.FibreIndex.new i1
+              let r3 ←
+                core.result.Result.map_err
+                    verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError r2 ()
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let line_x ← fast_domain.line_node val1
+                  let i2 ← i * 4#usize
+                  let i3 ← i2 + 3#usize
+                  let r4 ← aspis_core.r0.domain.FibreIndex.new i3
+                  let r5 ←
+                    core.result.Result.map_err
+                        verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError r4 ()
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let line_y ← fast_domain.line_node val2
+                      let m ← aspis_core.field.M31.mul line_x line_x
+                      let m1 ← aspis_core.field.M31.double m
+                      let m2 ← aspis_core.field.M31.ONE
+                      let line_z ← aspis_core.field.M31.sub m1 m2
+                      let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let i4 ← core.slice.Slice.iter s
+                      let (b, _) ←
+                        core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                            verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool i4
+                            ()
+                      if b = true then ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query))
+                        else do
+                          let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                          let flat1 ←
+                            alloc.vec.Vec.extend_from_slice aspis_core.field.M31.Insts.CoreCloneClone
+                                ⟨[], emptySlice._proof_1⟩ s1
+                          let line_z_values1 ← alloc.vec.Vec.push ⟨[], emptySlice._proof_1⟩ line_z
+                          ok (ControlFlow.cont (iter1, line_z_values1, flat1))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r6 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                      ok (ControlFlow.done r6)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (ControlFlow.done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (ControlFlow.done r6) with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ←
+              if h : x.1.i < ↑(Usize.ofNatCore (↑x.1.slice).length ⋯) then
+                  ok (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 })
+                else ok (none, x.1)
+            match o with
+              | none =>
+                if (↑x.2.2).isEmpty = true then
+                  ok
+                    (ControlFlow.done
+                      (core.result.Result.Ok
+                        { start := start, inverses := alloc.vec.Vec.new (Std.Array aspis_core.field.M31 5#usize),
+                          line_z := x.2.1 }))
+                else do
+                  let (prefixes, product) ← verifier.batch_prefix_products x.2.2.deref
+                  let suffix_inverse ← aspis_core.field.M31.inv product
+                  let m ← aspis_core.field.M31.ZERO
+                  let flat_inverse1 ←
+                    alloc.vec.Vec.resize aspis_core.field.M31.Insts.CoreCloneClone
+                        (alloc.vec.Vec.with_capacity aspis_core.field.M31 x.2.2.len) x.2.2.len m
+                  let iter2 ←
+                    core.ops.range.Range.Insts.CoreIterTraitsIteratorIterator.rev core.iter.range.StepUsize
+                        (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                        { start := 0#usize, «end» := x.2.2.len }
+                  let flat_inverse2 ←
+                    verifier.QueryGeometry.for_range_loop0_loop0 iter2 x.2.2 prefixes suffix_inverse flat_inverse1
+                  let m1 ←
+                    core.ops.range.Range.Insts.CoreIterTraitsIteratorIterator.map core.iter.range.StepUsize
+                        verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                        { start := 0#usize, «end» := x.2.1.len } flat_inverse2
+                  let inverses ←
+                    core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.collect
+                        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                        verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                        (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+                  ok
+                      (ControlFlow.done
+                        (core.result.Result.Ok { start := start, inverses := inverses, line_z := x.2.1 }))
+              | some query => do
+                let u ← lift (UScalar.cast UScalarTy.Usize query)
+                let r ← aspis_core.r0.domain.FibreIndex.new u
+                let r1 ←
+                  core.result.Result.map_err
+                      verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let p ← fast_domain.fibre_point val
+                    let i ← u / 4#usize
+                    let i1 ← i * 4#usize
+                    let r2 ← aspis_core.r0.domain.FibreIndex.new i1
+                    let r3 ←
+                      core.result.Result.map_err
+                          verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError r2 ()
+                    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue val1 => do
+                        let line_x ← fast_domain.line_node val1
+                        let i2 ← i * 4#usize
+                        let i3 ← i2 + 3#usize
+                        let r4 ← aspis_core.r0.domain.FibreIndex.new i3
+                        let r5 ←
+                          core.result.Result.map_err
+                              verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError r4
+                              ()
+                        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                        match cf2 with
+                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                            let line_y ← fast_domain.line_node val2
+                            let m ← aspis_core.field.M31.mul line_x line_x
+                            let m1 ← aspis_core.field.M31.double m
+                            let m2 ← aspis_core.field.M31.ONE
+                            let line_z ← aspis_core.field.M31.sub m1 m2
+                            let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                            let i4 ← core.slice.Slice.iter s
+                            let (b, _) ←
+                              core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                                  verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                                  i4 ()
+                            if b = true then ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query))
+                              else do
+                                let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                                let flat1 ←
+                                  alloc.vec.Vec.extend_from_slice aspis_core.field.M31.Insts.CoreCloneClone x.2.2 s1
+                                let line_z_values1 ← x.2.1.push line_z
+                                ok (ControlFlow.cont (iter1, line_z_values1, flat1))
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r6 ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                            ok (ControlFlow.done r6)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r6 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                        ok (ControlFlow.done r6)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r6 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                    ok (ControlFlow.done r6))
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok
+      (core.result.Result.Ok
+        { start := start, inverses := ⟨[], emptySlice._proof_1⟩, line_z := ⟨[], emptySlice._proof_1⟩ })
+'XRk_EmptyGeometry.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
