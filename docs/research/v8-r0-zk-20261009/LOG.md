@@ -11758,3 +11758,28 @@ matching Python writer, disassembly evidence for the decoder, fixture-byte and E
 scratch build, and design/PV-N7-20261027.md, so the owner can decide on a measured change. Six slots:
 cblib4, runjoin16, route2b, integ1, batch1b, n7. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D284 (Stream B) 2026-10-27 13:00 UTC: N7 fix prepared; CORRECTION: N7 is a key-custody side channel, not witness privacy; the pinned client is a devnet harness; recount 5 and an owner decision packet launched
+
+pv-n7 (`codex/pv-n7-20261027` from candidate 0c9dc9a4cc; no committed source change: patch only; six
+capped scopes, swap 0; no Lean/Kani). Inventory (design/PV-N7-20261027.md): the Rust tool CONSTRUCTS its
+fixture witnesses internally; the only private input crossing the Python → devnet_spend boundary is
+each signing key's 32-byte Ed25519 seed inside a 64-byte keypair file (Solana's decimal JSON array).
+CORRECTION to D272: N7 does not leak privacy-witness bytes; it leaks per-byte magnitude of SIGNING-KEY
+seeds, a key-custody side channel, which AGENTS.md §1 keeps distinct from privacy; it is recorded as such
+and not counted against the privacy contract, but remains an owner escalation. Prepared patch
+(evidence/pv-n7-20261027/patches/, 4,951 bytes, two files, +50/−4): Python sends fixed 64-byte raw
+records over an inherited file descriptor; the Rust decoder is eight fixed-offset MOVUPS and RET (no
+conditional branch, no secret-selected address; V371 still applies); public request fields unchanged;
+patched and unpatched executables produce byte-identical transfer and withdrawal proofs, statements and
+signing-transaction bytes on the pinned requests; the three ELF pins are unaffected (client-only change,
+ruling (l) evidence). Residuals stated plainly: Python's own parsing and storage of the keypair before the
+boundary, OS I/O, keypair validation and signing are outside the Rust audit. SCOPE FINDING: the pinned
+client (D162 route, client-pins.json) is a devnet harness that proves FIXTURE witnesses, not a user wallet
+that supplies real witnesses from user notes; "the shipped client" therefore does not yet describe a
+user-facing client: an owner scope question. Launched pv-recount5 (`codex/pv-recount5-20261027`, research
+base, in the pv-l3 worktree; IDs 54200-54299, statement checks only): recount 5 over every branch with
+the side-channel findings classed (N1 fixed by the CT path; N2-N6 L2 obligations; N7 custody), and
+design/PV-OWNER-PACKET-20261027.md listing every decision the privacy target waits on with options,
+evidence and the LOG's recommendations. Six slots: cblib4, runjoin16, route2b, integ1, batch1b,
+recount5. Rows removed outright: 0. Privacy target not yet established.
