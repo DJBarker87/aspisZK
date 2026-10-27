@@ -1,0 +1,64 @@
+{"attempt": "JFy13_016", "exit_status": 1, "wall_seconds": 1.5374424979672767, "peak_rss_kib": "3040060", "swaps": "0", "print_axioms": ["'AspisR1.JFy_SelectorOuter.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFy_SelectorOuter.lean:18:8: error: unsolved goals
+case nil
+N : Usize
+iter : core.slice.iter.Iter NQ
+weights : Std.Array NQ N
+len : Usize
+level : ℕ
+hd : List.drop iter.i ↑iter.slice = []
+hl : ↑len = 2 ^ level
+cap : 2 ^ (level + [].length) ≤ ↑N
+hc : FIw_ArrayValue.canonical weights
+hxs : ∀ x ∈ [], Canon x
+stop : ¬iter.i < (↑iter.slice).length
+⊢ (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok weights
+    | some coordinate => do
+      let prepared ← field.PreparedQm31Multiplier.new coordinate
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.
+...
+ + 1 })
+hdrop : List.drop (iter.i + 1) ↑iter.slice = xs
+hx : Canon x
+p : FIv_PreparedNew.NP
+hp : field.PreparedQm31Multiplier.new x = ok p
+hvalid : ExtractedMaskPreparedState.PreparedFor (FIv_PreparedNew.prepared p) (FIv_NativeArithmetic.qm x)
+innercap : 2 * ↑len ≤ ↑N
+range : ExtractedMaskReverseRange.ReverseRange := { iter := { start := 0#usize, «end» := len } }
+w1 : Std.Array field.QM31 N
+hi : Selectors.expand_loop0_loop0 range weights p = ok w1
+hw1 : FIw_ArrayValue.canonical w1
+len1 : UScalar UScalarTy.Usize
+hm : len * 2#usize = ok len1
+hlen1 : ↑len1 = ↑len * ↑2#usize
+lenval : ↑len1 = 2 ^ (level + 1)
+out : Std.Array field.QM31 N
+tail : Selectors.expand_loop0 { slice := iter.slice, i := iter.i + 1 } w1 len1 = ok out
+hout : FIw_ArrayValue.canonical out
+rev :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := len } =
+    ok range
+⊢ (let (o, iter1) := (some x, { slice := iter.slice, i := iter.i + 1 })
+    match o with
+    | none => ok weights
+    | some coordinate => do
+      let prepared ← field.PreparedQm31Multiplier.new coordinate
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := len }
+      let weights1 ← Selectors.expand_loop0_loop0 iter2 weights prepared
+      let len1 ← len * 2#usize
+      Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+'AspisR1.JFy_SelectorOuter.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r48d6ba2467f4404fa9a9ac70b817ec94.scope; invocation ID: 5a248933ac1e4cd8b0005deeec2d2b4d

@@ -1,0 +1,97 @@
+{"attempt": "JFy13_039", "exit_status": 1, "wall_seconds": 1.8552025329554453, "peak_rss_kib": "3047092", "swaps": "0", "print_axioms": ["'AspisR1.JFy_SelectorRow.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFy_SelectorRow.lean:15:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : Selectors
+row : Usize
+bound : ↑row < 1024
+hh : canonical s.high
+hl : canonical s.low
+⊢ ↑4#i32 < ↑System.Platform.numBits
+JFy_SelectorRow.lean:15:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : Selectors
+row : Usize
+bound : ↑row < 1024
+hh : canonical s.high
+hl : canonical s.low
+i : Usize
+_✝¹ : [> let i ← row >>> 4#i32 <]
+i_post1 : ↑i = ↑row >>> 4
+i_post2 : i.bv = row.bv >>> 4
+q : field.QM31
+_✝ : [> let q ← s.high.index_usize i <]
+q_p
+...
+JFy_SelectorRow.lean:15:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : Selectors
+row : Usize
+bound : ↑row < 1024
+hh : canonical s.high
+hl : canonical s.low
+⊢ ↑4#i32 < ↑System.Platform.numBits
+JFy_SelectorRow.lean:15:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : Selectors
+row : Usize
+bound : ↑row < 1024
+hh : canonical s.high
+hl : canonical s.low
+i : Usize
+_✝¹ : [> let i ← row >>> 4#i32 <]
+i_post1 : ↑i = ↑row >>> 4
+i_post2 : i.bv = row.bv >>> 4
+q : field.QM31
+_✝ : [> let q ← s.high.index_usize i <]
+q_post : q = (↑s.high)[↑i]
+i1 : Usize
+_ : [> let i1 ← lift (row &&& 15#usize) <]
+i1_post1 : ↑i1 = ↑(row &&& 15#usize)
+i1_post2 : i1.bv = row.bv &&& 15#usize.bv
+⊢ ↑i1 < s.low.length
+JFy_SelectorRow.lean:15:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : Selectors
+row : Usize
+bound : ↑row < 1024
+hh : canonical s.high
+hl : canonical s.low
+i : Usize
+_✝² : [> let i ← row >>> 4#i32 <]
+i_post1 : ↑i = ↑row >>> 4
+i_post2 : i.bv = row.bv >>> 4
+q : field.QM31
+_✝¹ : [> let q ← s.high.index_usize i <]
+q_post : q = (↑s.high)[↑i]
+i1 : Usize
+_✝ : [> let i1 ← lift (row &&& 15#usize) <]
+i1_post1 : ↑i1 = ↑(row &&& 15#usize)
+i1_post2 : i1.bv = row.bv &&& 15#usize.bv
+q1 : field.QM31
+_ : [> let q1 ← s.low.index_usize i1 <]
+q1_post : q1 = (↑s.low)[↑i1]
+⊢ q.mul q1 ⦃ out => Canon out ⦄
+'AspisR1.JFy_SelectorRow.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd15734f0c52d400ab2a064bc4dce0106.scope; invocation ID: 34f156a654ed4922bc23f1c52f040ff3
+
