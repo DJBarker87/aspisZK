@@ -1,0 +1,38 @@
+XRw_generated/XRw_GenericDriver.lean:48:8: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  (if false = true then pure s
+    else do
+      let next ← stage s i
+      unrolled stage stopped rest next) =
+    do
+    let init ← if false = true then pure s else stage s i
+    List.foldlM (guarded stage stopped) init rest
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.95} {β : α → Sort ?u.94} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case neg
+M : Type → Type
+inst✝ : Monad M
+S I O : Type
+pure_bind : ∀ (s : S) (k : S → M S), pure s >>= k = k s
+stage : S → I → M S
+stopped : S → Bool
+finish : S → M O
+indices : List I
+s✝ : S
+hold : ∀ (is : List I) (s : S), stopped s = true → List.foldlM (guarded stage stopped) s is = pure s
+i : I
+rest : List I
+ih : ∀ (s : S), unrolled stage stopped rest s = List.foldlM (guarded stage stopped) s rest
+s : S
+hs : ¬stopped s = true
+⊢ (if false = true then pure s
+    else do
+      let next ← stage s i
+      unrolled stage stopped rest next) =
+    do
+    let init ← if false = true then pure s else stage s i
+    List.foldlM (guarded stage stopped) init rest
+'XRw_GenericDriver.first_stop_fold' depends on axioms: [propext, sorryAx]
