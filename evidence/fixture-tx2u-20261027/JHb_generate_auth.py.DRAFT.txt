@@ -1,0 +1,20 @@
+"""Fission only the exact retained authenticate_asq8_accounts continuation.
+No successful decoded master, registry, PDA or lane value is manufactured.
+"""
+from pathlib import Path
+import sys
+R=Path(__file__).resolve().parents[2];P=Path(__file__).resolve().parent
+s=(P/'JHb_AUTH_SOURCE_READONLY.lean.txt').read_text()
+start=s.index('                  | core.ops.control_flow.ControlFlow.Continue val1 =>\n')
+body=[]
+for line in s[start:].splitlines()[1:]:
+ if line.strip() and len(line)-len(line.lstrip())<20:break
+ body.append(line[20:])
+assert body[-1].strip().endswith('residual'),body[-1]
+out=['import JHb_AccountReads','set_option autoImplicit false','noncomputable section','namespace AspisR1.JHb_Authentication','open Aeneas Aeneas.Std Result','open _root_.AdapterRw','def afterMaster (ops : Ops)', '    (verifier_program pool_program : solana_pubkey.Pubkey) (output_lane : U8) (current_slot : U64)', '    (master_account checkpoint_account lane_account registry_account entry_account : r1_pool_adapter.owned.OwnedAccount)', '    (val1 : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1) :', '    Result (core.result.Result r1_pool_adapter.AuthenticatedAsq8Accounts solana_program_error.ProgramError) := do']
+out += ['  '+line for line in body]
+out += ['','def afterRead (ops : Ops)', '    (verifier_program pool_program : solana_pubkey.Pubkey) (output_lane : U8) (current_slot : U64)', '    (master_account checkpoint_account lane_account registry_account entry_account : r1_pool_adapter.owned.OwnedAccount) :', '    Result (core.result.Result r1_pool_adapter.AuthenticatedAsq8Accounts solana_program_error.ProgramError) := do', '  let decoded ← ops.op48 JHb_DataMaster.value', '  match decoded with','  | .Err e=>ok (.Err e)', '  | .Ok master=>afterMaster ops verifier_program pool_program output_lane current_slot', '      master_account checkpoint_account lane_account registry_account entry_account master', '#print axioms afterMaster','#print axioms afterRead','end AspisR1.JHb_Authentication','end']
+p=R/'lean/JHb_Authentication.lean';t='\n'.join(out)+'\n'
+if '--check' in sys.argv:assert p.read_text()==t
+else:p.write_text(t)
+print('checked' if '--check' in sys.argv else 'generated',len(body),'verbatim continuation lines')

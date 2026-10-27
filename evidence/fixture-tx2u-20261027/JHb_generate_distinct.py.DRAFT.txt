@@ -1,0 +1,20 @@
+"""Generate bounded source loop cuts: exactly seven accounts, 21 key checks.
+No proof/public/checkpoint data are normalized or used in the comparisons.
+"""
+from pathlib import Path
+import sys
+R=Path(__file__).resolve().parents[2]
+for i in range(7):
+ name=f'JHb_Distinct{i}'
+ out=['import JHb_DistinctAccounts','set_option autoImplicit false','noncomputable section',f'namespace AspisR1.{name}','open Aeneas Aeneas.Std Result ControlFlow','open _root_.AdapterRw','open JHb_DistinctAccounts', 'attribute [local irreducible] JHb_Header.account JFx_NativeBytes.publicInput JFx_NativeBytes.checkpoint']
+ for j in range(i+1):
+  result=f'cont {(j+1)}#usize' if j<i else 'done none'
+  out += [f'theorem step{j} (base : Ops) :',f'    r1_pool_adapter.owned.require_distinct_accounts_loop0_loop0.body (JHb_KeyStd.install base)',f'      value {i}#usize {j}#usize=ok ({result}) := by rfl',f'#print axioms step{j}']
+ out += ['theorem source (base : Ops) :','    r1_pool_adapter.owned.require_distinct_accounts_loop0_loop0 (JHb_KeyStd.install base)',f'      value {i}#usize 0#usize=ok none := by']
+ for j in range(i+1):
+  out += ['  conv_lhs =>','    unfold r1_pool_adapter.owned.require_distinct_accounts_loop0_loop0','    rw [Aeneas.Std.loop.eq_def]',f'  simp only [step{j},bind_tc_ok]']
+ out += ['#print axioms source',f'end AspisR1.{name}','end']
+ p=R/'lean'/(name+'.lean');s='\n'.join(out)+'\n'
+ if '--check' in sys.argv:assert p.read_text()==s,p
+ else:p.write_text(s)
+print('checked' if '--check' in sys.argv else 'generated','seven finite source-key loop cuts')
