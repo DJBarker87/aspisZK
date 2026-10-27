@@ -10,3 +10,12 @@ The exact dispatcher extraction has_errors=false at Charon (charon-source-sha-di
 
 
 sha-dispatch-inventory.json pins the LLBC and lists the exact transparent dispatcher bodies and Foreign intrinsic symbols, including _mm_sha256rnds2_epu32, _mm_sha256msg1_epu32, _mm_sha256msg2_epu32, __cpuid, __cpuid_count, load/store/shuffle/align/blend/add SIMD primitives. It is not an empty private-root extraction. The development host reports Intel Core Ultra 7 155H (resume-host-cpu.txt), with SHA-NI flags; this observation alone is not a deployed-binary/CPU association.
+
+Third pass: `PV_CBL_SoftBlockSource.source` now proves the complete extracted
+owned soft word-block output for arbitrary state8/input16 arrays against
+sixteen conventional four-round groups, the canonical schedule recurrence,
+all pinned constants and feed-forward. `PV_CBL_SoftBlocks.composed` and
+`PV_CBL_SoftBlocksAppend.source_append` prove symbolic multi-block composition.
+This is neither the byte-loading/unsafe-layout driver nor the x86 dispatcher;
+V231–V238 remain open. Dispatcher measurements and the recommendation to
+retain SHA-NI are in `design/PV-SHA-DISPATCH-20261027.md`.

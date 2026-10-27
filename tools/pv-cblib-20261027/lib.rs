@@ -383,3 +383,77 @@ pub fn string_default_reference(_n:usize)->String {String::default()}
 pub fn string_capacity_bytes_reference(_n:usize)->Vec<u8> {Vec::new()}
 // Borrowed Vec update avoids owned-input unwind destruction.
 pub fn push_bytes_reference(s:&mut Vec<u8>,t:&[u8]) {s.extend_from_slice(t)}
+
+// Field-identical owned carrier for the byte-matched core constructor.
+#[derive(Clone,Copy)]
+pub struct ShaCoreOwned {pub state:[u32;8], pub block_len:u64}
+#[derive(Clone,Copy)]
+pub struct InvalidOutputSizeOwned;
+pub fn sha_core_new_owned(output_size:usize)->Result<ShaCoreOwned,InvalidOutputSizeOwned> {
+    let state = match output_size {
+        28 => [0xc1059ed8,0x367cd507,0x3070dd17,0xf70e5939,0xffc00b31,0x68581511,0x64f98fa7,0xbefa4fa4],
+        32 => [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19],
+        _ => return Err(InvalidOutputSizeOwned),
+    };
+    let block_len = 0;
+    Ok(ShaCoreOwned { state, block_len })
+}
+
+// Fixed SHA-256 padding reference; callback blocks and retained buffer are
+// returned explicitly. It does not replace the shipped digest/loan semantics.
+pub fn sha_pad_owned(mut buffer:[u8;64],pos:usize,suffix:[u8;8])
+    ->([u8;64],Option<[u8;64]>,[u8;64],usize) {
+    buffer[pos]=0x80;
+    let mut i=pos+1;
+    while i<64 {buffer[i]=0;i+=1;}
+    if 64-pos-1<8 {
+        let mut block=[0u8;64];let mut j=0;
+        while j<8 {block[56+j]=suffix[j];j+=1;}
+        (buffer,Some(block),buffer,0)
+    } else {
+        let mut j=0;
+        while j<8 {buffer[56+j]=suffix[j];j+=1;}
+        (buffer,None,buffer,0)
+    }
+}
+
+pub fn sha_pad_zero(mut buffer:[u8;64],pos:usize)->[u8;64] {
+    buffer[pos]=0x80;
+    let mut i=pos+1;
+    while i<64 {buffer[i]=0;i+=1;}
+    buffer
+}
+pub fn sha_pad_suffix(mut buffer:[u8;64],suffix:[u8;8])->[u8;64] {
+    let mut j=0;
+    while j<8 {buffer[56+j]=suffix[j];j+=1;}
+    buffer
+}
+pub fn sha_pad_owned_split(buffer:[u8;64],pos:usize,suffix:[u8;8])
+    ->([u8;64],Option<[u8;64]>,[u8;64],usize) {
+    let head=sha_pad_zero(buffer,pos);
+    if 64-pos-1<8 {
+        let second=sha_pad_suffix([0u8;64],suffix);
+        (head,Some(second),head,0)
+    } else {
+        let first=sha_pad_suffix(head,suffix);
+        (first,None,first,0)
+    }
+}
+
+pub fn sha_pad_suffix8(mut buffer:[u8;64],suffix:[u8;8])->[u8;64] {
+    let [a,b,c,d,e,f,g,h]=suffix;
+    buffer[56]=a;buffer[57]=b;buffer[58]=c;buffer[59]=d;
+    buffer[60]=e;buffer[61]=f;buffer[62]=g;buffer[63]=h;
+    buffer
+}
+pub fn sha_pad_owned_split8(buffer:[u8;64],pos:usize,suffix:[u8;8])
+    ->([u8;64],Option<[u8;64]>,[u8;64],usize) {
+    let head=sha_pad_zero(buffer,pos);
+    if 64-pos-1<8 {
+        let second=sha_pad_suffix8([0u8;64],suffix);
+        (head,Some(second),head,0)
+    } else {
+        let first=sha_pad_suffix8(head,suffix);
+        (first,None,first,0)
+    }
+}

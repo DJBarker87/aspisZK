@@ -12,7 +12,8 @@ No native production source or build changed. No row counterexample found.
 - op31: borrowed Vec byte append extracts to the standard Aeneas
   `Vec.extend_from_slice CloneU8` primitive, no external template. Native valid
   UTF-8 lengths 2+1 passes against that exact byte operation. Generic String
-  representation transport is separate proof work.
+  representation transport now passes (41671/41681), and the seven-law
+  publication passes (41683). Native/unbounded/deployed limits remain.
 - op33: borrowed update avoids structured Drop and extracts, but its
   `Vec.remove` leaf is foreign and absent from the Aeneas library. 41588 rejected;
   no invented remove definition, external template, or row credit. A two-u32

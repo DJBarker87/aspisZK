@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 b=Path(__file__).resolve().parents[2]/'docs/research/v8-r0-zk-20261009/lean/R1Z'
 s='import R1Z.PV_CBL_BlockStage00\nimport R1Z.PV_CBL_BlockValueFactored\nimport R1Z.PV_CBL_FallbackConstantSource\nimport R1Z.PV_CBL_FallbackArray16\n'
 for i in range(16):s+=f'import R1Z.PV_CBL_BlockConstantRead{i:02}\n'
@@ -33,4 +34,6 @@ for i in range(16):
  if i>=4:s+=f'  apply PV_CBL_BlockBindExt.bind_ext\n  intro word{i}\n'
  s+=f'  apply PV_CBL_BlockBindExt.bind_ext\n  intro pair{i}\n  rcases pair{i} with ⟨abef{i},cdgh{i}⟩\n'
 s+='  conv_rhs => unfold PV_CBL_BlockStage16.source PV_CBL_FallbackFeedForward.source\n  conv_rhs => rw [hs0]; simp only [bind_tc_ok]\n#print axioms value\n#print axioms graph\n#print axioms graph_value\n#print axioms source\nend R1Z.PV_CBL_BlockGraph\n'
-(b/'PV_CBL_BlockGraph.lean').write_text(s)
+p=b/'PV_CBL_BlockGraph.lean'
+if '--check' in sys.argv:assert p.read_text()==s
+else:p.write_text(s)

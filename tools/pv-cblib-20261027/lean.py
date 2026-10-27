@@ -6,7 +6,12 @@ out=root/'evidence/pv-cblib-20261027';p=out/'TALLY.json'
 module=sys.argv[1];assert module.startswith('R1Z/PV_CBL_')
 r=json.loads(p.read_text());assert len(r['lean_charged'])<100
 if len(r['lean_charged'])>=97:assert 'Audit' in module or 'Manifest' in module
-attempt=(41797+len(r['lean_charged'])-97 if len(r['lean_charged'])>=97 else r['next_id']);assert 41588<=attempt<=41799 and attempt not in r['used_ids']
+if len(r['lean_charged'])>=97:
+ reserved=[x for x in (41797,41798,41799) if x not in r['used_ids']]
+ remaining=[x for x in range(41588,41797) if x not in r['used_ids']]
+ attempt=(reserved or remaining)[0]
+else:attempt=r['next_id']
+assert 41588<=attempt<=41799 and attempt not in r['used_ids']
 r['used_ids'].append(attempt);r['next_id']=attempt+1;p.write_text(json.dumps(r,indent=2)+'\n')
 source=root/'docs/research/v8-r0-zk-20261009/lean'/f'{module}.lean';assert source.exists()
 (out/f'{attempt}-source.lean.txt').write_text(source.read_text())

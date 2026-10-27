@@ -60,7 +60,11 @@ CPUID behavior as assumed native facts has an explicit trust cost.
 The owner's T is capped at `entropy_law`, `entropy_kernel`, `observation`.
 No fourth field or folded native premise is permitted. Thus an assumed
 intrinsic model is not an acceptable closure under the current contract;
-these facts remain P obligations.
+these facts remain P obligations. The explicit cost is a proof of the SHA/SIMD
+ISA model, memory/alias/alignment behavior, compiler intrinsic lowering,
+CPUID decision and CPU compliance; trusting any of them without proof would
+expand or hide T, which the owner forbids. The existing latency item V371
+does not prove instruction functional correctness.
 
 ## Option C: retain dispatcher and prove both branches
 
