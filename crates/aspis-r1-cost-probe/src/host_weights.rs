@@ -58,43 +58,67 @@ pub fn new(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2])->Result<Weigh
         Ok(Weights {variant,factors,points,extra})
 }
     pub fn raw(&self,kind:usize,j:usize)->K {
-        match kind {
-            0=>if aspis_core::r0::opening::inactive(self.variant.row(j)).unwrap() {K::ONE} else {K::ZERO},
-            4=>if j<56 { self.extra[j/28].pow((j%28) as u64) } else {K::ZERO},
-            1..=3 if self.variant==Variant::D => {
-                let r=self.variant.row(j);
-                { let mut v=K::ONE; let mut b=0usize; while b<10 { v=v.mul(if r&(1usize<<(b as u32))==0 {K::ONE.sub(self.points[kind-1][9-b])}else{self.points[kind-1][9-b]}); b+=1; } v }
-            },
-            _=> {
-                let k=if kind<4 {kind-1}else{kind-2};
-                { let mut v=K::ONE; let mut d=0usize; while d<5 { v=v.mul(self.factors[k][d][(j>>((2*d) as u32))&3]); d+=1; } v }
-            }
+        if kind==0 {
+            return if aspis_core::r0::opening::inactive(self.variant.row(j)).unwrap() {K::ONE} else {K::ZERO};
         }
+        if kind==4 {
+            if j<56 { return self.extra[j/28].pow((j%28) as u64); }
+            return K::ZERO;
+        }
+        if kind>=1 && kind<=3 && self.variant==Variant::D {
+            let r=self.variant.row(j);
+            return point_raw(self.points[kind-1],r);
+        }
+        let k=if kind<4 {kind-1}else{kind-2};
+        tensor_raw(self.factors[k],j)
     }
 
     /// The caller owns allocation and retains Error::Allocation before this kernel.
     pub fn materialize(&self,kappa:E,w:&mut [E;1024])->Result<(),Error> {
-        let kp=powers::<7>(kappa);
+        let kp=crate::prover_powers::powers::<7>(kappa);
         let mut j=0usize;
         while j<1024 {
             let mut v=E::ZERO;
             let mut kind=0usize;
-            while kind<7 { v=v.add(kp[kind].mul_qm31(self.raw(kind,j))); kind+=1; }
+            while kind<7 { v=v.add(mul_qm31(kp[kind],self.raw(kind,j))); kind+=1; }
             w[j]=v; j+=1;
         }
         Ok(())
     }
 }
 
-pub fn powers<const N:usize>(x:E)->[E;N]{
- let mut out=[E::ZERO;N];
- let mut p=E::ONE;
- let mut i=0usize;
- while i<N {
-  out[i]=p;
-  i+=1;
-  if i==N { return out; }
-  p=p.mul(x);
- }
- out
+// Copy values before branch joins: no mutable element loan or restoration.
+fn point_raw(points:[K;10],r:usize)->K {
+    let mut v=K::ONE;
+    let mut b=0usize;
+    while b<10 {
+        let point=points[9-b];
+        let factor=if r&(1usize<<(b as u32))==0 {K::ONE.sub(point)}else{point};
+        v=v.mul(factor);
+        b+=1;
+    }
+    v
+}
+fn tensor_raw(factors:[[K;4];5],j:usize)->K {
+    let mut v=K::ONE;
+    let mut d=0usize;
+    while d<5 {
+        let factor=factors[d][(j>>((2*d) as u32))&3];
+        v=v.mul(factor);
+        d+=1;
+    }
+    v
+}
+// Avoid canonical_qm31's FnOnce closure Drop in the extraction closure.
+// The four reductions are exactly the shipped canonicalization of raw K.
+fn mul_qm31(x:E,rhs:K)->E {
+    use aspis_core::field::{CM31,M31,ct};
+    let rhs=K {
+        c0:CM31 {a:M31(ct::reduce64(rhs.c0.a.0 as u64)),b:M31(ct::reduce64(rhs.c0.b.0 as u64))},
+        c1:CM31 {a:M31(ct::reduce64(rhs.c1.a.0 as u64)),b:M31(ct::reduce64(rhs.c1.b.0 as u64))},
+    };
+    let a=x.c0().mul(rhs);
+    let b=x.c1().mul(rhs);
+    E::from_limbs([a.c0.a.0,a.c0.b.0,a.c1.a.0,a.c1.b.0,
+                   b.c0.a.0,b.c0.b.0,b.c1.a.0,b.c1.b.0]).unwrap()
 }
