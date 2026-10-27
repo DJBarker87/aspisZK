@@ -1,0 +1,23 @@
+LPq_generated/LPq_Decoder.lean:35:76: error: unsolved goals
+b : Slice U8
+i : Usize
+⊢ (do
+      let a ← lift (i.wrapping_mul 32#usize)
+      let a_1 ← lift (i.wrapping_add 1#usize)
+      let a_2 ← lift (a_1.wrapping_mul 32#usize)
+      let a ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b { start := a, «end» := a_2 }
+      let a ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes a
+      core.option.Option.unwrap (Option.map record a)) =
+    do
+    let i1 ← i * 32#usize
+    let i2 ← i + 1#usize
+    let i3 ← i2 * 32#usize
+    let s ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b { start := i1, «end» := i3 }
+    let a ← FIo_Native.aspis_core.field.wide_exact.WideExact.from_le_bytes s
+    core.option.Option.unwrap (Option.map record a)
+'AspisR1.LPq_Decoder.limbs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPq_Decoder.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPq_Decoder.unwrap' does not depend on any axioms
+'AspisR1.LPq_Decoder.field' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LPq_Decoder.claim_field' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
