@@ -1,0 +1,32 @@
+'AspisR1.JGv_PairSum.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGv_Pair.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGv_PairMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGv_PairMeaning.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.JGv_Pair.source : AspisR1.FIo_Install.pair (Aeneas.Std.core.result.Result.Ok ())
+    AspisR1.JGo_TX2_WeightData.value AspisR1.JGo_TX2_FinishPrefix.alphas (AspisR1.JFw_Frames.window 8007 2048)
+    AspisR1.JFo_Prepared.value.kappa =
+  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JGo_TX2_Horner1_6.after)
+AspisR1.JGv_PairMeaning.body : ∀ (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches AspisR1.JFo_Prepared.value AspisR1.JFo_Prepared.accumulator pm am →
+    ∃ a0 a1 p0 p1,
+      (AspisR1.FIo_Install.toSlice AspisR1.JGo_TX2_FinishPrefix.alphas).index_usize 0#usize = Aeneas.Std.Result.ok a0 ∧
+        (AspisR1.FIo_Install.toSlice AspisR1.JGo_TX2_FinishPrefix.alphas).index_usize 1#usize =
+            Aeneas.Std.Result.ok a1 ∧
+          (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toPoint
+                    AspisR1.JFo_Prepared.value.z).index_usize
+                0#usize =
+              Aeneas.Std.Result.ok p0 ∧
+            (AspisR1.FIn_WeightsInstall.mapArray AspisR1.FIn_WeightsInstall.toPoint
+                      AspisR1.JFo_Prepared.value.z).index_usize
+                  1#usize =
+                Aeneas.Std.Result.ok p1 ∧
+              AspisR1.CheckpointBytes5Output.ofE AspisR1.JGo_TX2_Horner1_6.after =
+                AspisR1.RoundPairing.dot
+                  (fun i => AspisR1.FJc_InactiveCoefficientsModel.field (AspisR1.JFw_Frames.window 8007 2048) ↑i)
+                  (AspisR1.RoundPairing.dualFold (AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide a1))
+                    (AspisR1.RoundPairing.dualFold
+                      (AspisR1CurrentWide.Proof.decodeWide (AspisR1.FIo_FieldBridge.wide a0)) fun i =>
+                      ∑ j,
+                        AspisR1.CheckpointBytes5Output.ofE AspisR1.JFo_Prepared.value.kappa ^ ↑j *
+                          AspisR1.FJr_PairRows.rows AspisR1.JFo_Prepared.value.semantic_alpha p0 p1 j i))
