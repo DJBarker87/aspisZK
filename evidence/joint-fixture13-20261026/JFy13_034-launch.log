@@ -1,0 +1,74 @@
+{"attempt": "JFy13_034", "exit_status": 1, "wall_seconds": 1.3866856949753128, "peak_rss_kib": "3046588", "swaps": "0", "print_axioms": ["'AspisR1.JFy_CopyResidual.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFy_CopyResidual.lean:18:35: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+r : CopyRowExtension
+helper chi : field.QM31
+hpv : canonical r.producer_values
+hcv : canonical r.consumer_values
+hpw : canonical r.producer_weights
+hcw : canonical r.consumer_weights
+hh : Canon helper
+hc : Canon chi
+q : field.QM31
+_ : [> let q ← r.producer_values.index_usize 0#usize <]
+q_post : q = (↑r.producer_values)[0]
+⊢ (do
+      let q1 ← chi.sub q
+      let q2 ← r.producer_values.index_usize 1#usize
+      let q3 ← chi.sub q2
+      let q4 ← r.consumer_values.index_usize 0#usize
+      let q5 ← chi.sub q4
+      let q6 ← r.consu
+...
+lmost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+r : CopyRowExtension
+helper chi : field.QM31
+hpv : canonical r.producer_values
+hcv : canonical r.consumer_values
+hpw : canonical r.producer_weights
+hcw : canonical r.consumer_weights
+hh : Canon helper
+hc : Canon chi
+q : field.QM31
+_ : [> let q ← r.producer_values.index_usize 0#usize <]
+q_post : q = (↑r.producer_values)[0]
+⊢ (do
+      let q1 ← chi.sub q
+      let q2 ← r.producer_values.index_usize 1#usize
+      let q3 ← chi.sub q2
+      let q4 ← r.consumer_values.index_usize 0#usize
+      let q5 ← chi.sub q4
+      let q6 ← r.consumer_values.index_usize 1#usize
+      let q7 ← chi.sub q6
+      let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+      let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+      let producer_denominator ← q8.mul q9
+      let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+      let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+      let consumer_denominator ← q10.mul q11
+      let q12 ← r.producer_weights.index_usize 0#usize
+      let q13 ← q12.mul q9
+      let q14 ← r.producer_weights.index_usize 1#usize
+      let q15 ← q14.mul q8
+      let producer_numerator ← q13.add q15
+      let q16 ← r.consumer_weights.index_usize 0#usize
+      let q17 ← q16.mul q11
+      let q18 ← r.consumer_weights.index_usize 1#usize
+      let q19 ← q18.mul q10
+      let consumer_numerator ← q17.add q19
+      let q20 ← helper.mul consumer_denominator
+      let q21 ← q20.add consumer_numerator
+      let q22 ← producer_denominator.mul q21
+      let q23 ← consumer_denominator.mul producer_numerator
+      q22.sub q23) ⦃
+    out => Canon out ⦄
+'AspisR1.JFy_CopyResidual.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7f8283c3fbaa45e3b269ea60c66e85b8.scope; invocation ID: 7ae60ca4b2314442a481335e7b380191

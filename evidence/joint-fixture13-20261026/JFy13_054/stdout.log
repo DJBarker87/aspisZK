@@ -1,0 +1,31 @@
+JFy_PoseidonLowCall.lean:18:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s.local.index_usize i
+in the target expression
+  (let (sum, row) := (acc, i)
+    do
+    let q ← s.local.index_usize row
+    let q1 ← sum.add q
+    ok (q1, s)) =
+    ok (out, s)
+
+s : state_only_poseidon.StateOnlyPoseidonSelectors
+acc : field.QM31
+i : Usize
+hs : canonical s.local
+ha : Canon acc
+hi : ↑i < 16
+q : FIv_NativeArithmetic.NQ
+hq : s.local.index_usize i = ok q
+hqc : Canon q
+out : field.QM31
+ho : acc.add q = ok out
+hoc : Canon out
+right✝ : FIv_NativeValue.decode out = FIv_NativeValue.decode acc + FIv_NativeValue.decode q
+⊢ (let (sum, row) := (acc, i)
+    do
+    let q ← s.local.index_usize row
+    let q1 ← sum.add q
+    ok (q1, s)) =
+    ok (out, s)
+'AspisR1.JFy_PoseidonLowCall.full' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFy_PoseidonLowCall.internal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
