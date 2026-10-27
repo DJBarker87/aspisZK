@@ -1,5 +1,5 @@
 import R1Z.PV_RE_ClientAfter1002
-import R1Z.PV_RE_MaterialCells10
+import R1Z.PV_RE_MaterialCellsB10
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RE_ClientMaterial10
@@ -27,7 +27,7 @@ theorem entered {C : Type} (ops : ExternalFuns)
   apply PV_RE_BindTransportB10.compose _ _ _
     (PV_RE_ClientAfter1002.entered ops entropy pub compiled hash store state state1 secret
       entropy_prefix bytes digest serialization first_hash second_hash store1 h0 private_entropy h1)
-  exact PV_RE_MaterialCells10.entered ops aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore hash binding digest secret.mask_nonce private_entropy
+  exact PV_RE_MaterialCellsB10.entered ops aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore hash binding digest secret.mask_nonce private_entropy
     {statement_digest := digest,mask_nonce := secret.mask_nonce,consumed := false}
 #print axioms entered
 end R1Z.PV_RE_ClientMaterial10

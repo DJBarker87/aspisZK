@@ -27,18 +27,23 @@ theorem success {S : Type} (inst : aspis_prover.state_only_hiding.StateOnlyMaskN
   rw [h0]
   change (aspis_prover.state_only_hiding.derive_state_only_mask_seed_from_entropy_ref hash binding context entropy >>= _) = _
   rw [h1]
+  simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
   change (aspis_prover.state_only_hiding.SeedExpander.new hash seed >>= _) = _
   rw [h2]
   change (aspis_prover.state_only_hiding.first_inactive_row active >>= _) = _
   rw [h3]
   change (aspis_prover.state_only_hiding.sample_mask_cells expander (Slice.len cells) >>= _) = _
   rw [h4]
+  simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
   change (aspis_prover.state_only_hiding.sample_mask_columns expander1 inactive active >>= _) = _
   rw [h5]
+  simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
   change (aspis_prover.state_only_hiding.sample_mask_g expander2 inactive active >>= _) = _
   rw [h6]
+  simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
   change (aspis_prover.state_only_hiding.sample_mask_h1_padding expander3 inactive active >>= _) = _
   rw [h7]
+  simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
   rfl
 #print axioms success
 end R1Z.PV_RE_LayoutSuccess10
