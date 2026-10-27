@@ -187,3 +187,18 @@ exactly why adapters were required to carry proofs. extraction-assoc5
 iterator, or report the site (the adapter would then be replaced, not
 trusted). Also open: the native producer invariant that Dot operands are
 canonical. Geometry cardinalities and Dot-history laws proved.
+
+## Update 2026-10-27 (XRm_): scope ruling for the D188-P2 rows
+
+extraction-assoc5: reverse-adapter cursor-zero domain proved at the sole
+executable site; canonical wide producers; query point/line values;
+same-run compact/TX1/checkpoint model cuts. Every row also listed a "native
+bridge absent" item. Lead ruling (binding, consistent with the owner-approved
+trace-fidelity D188 item): for every TRANSLATED body the pinned extraction of
+the release source IS the shipped semantics, so there is no separate native
+bridge for it. The only native obligations are the twelve opaque leaves'
+P6 bridges (leaf-p6-1, and prepared_claim/checkpoint) and the adapters
+(proved). Each D188-P2 row's real obligation is cohort model definitions =
+emitted release definitions on the same carriers (projection/transport laws
+where the cohort followed the retired path). extraction-assoc6 (XRn_)
+restates the rows under this scope and proves them in order.
