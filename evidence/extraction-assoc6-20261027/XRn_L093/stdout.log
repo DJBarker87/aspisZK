@@ -1,0 +1,49 @@
+XRn_generated/XRn_JoinedGeometry.lean:31:68: error: Application type mismatch: The argument
+  ↑g.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.5
+of sort `Type (?u.5 + 1)` in the application
+  @InitialSeg ↑g.start
+XRn_generated/XRn_JoinedGeometry.lean:31:81: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.4
+XRn_generated/XRn_JoinedGeometry.lean:37:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UScalar.sub i g.start
+in the target expression
+  (do
+      let i ← i - g.start
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array aspis_core.field.M31 5#usize)) g.inverses
+          i) =
+    alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array U32 5#usize)) (cohort g).inverses
+      (i.wrapping_sub (cohort g).start)
+
+g : verifier.QueryGeometry
+i : Usize
+order : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+offset : UScalar UScalarTy.Usize
+checked : UScalar.sub i g.start = ok offset
+value : ↑offset = ↑i - ↑g.start
+wrapped : ↑(i.wrapping_sub g.start) = ↑i - ↑g.start
+same : offset = i.wrapping_sub g.start
+⊢ (do
+      let i ← i - g.start
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array aspis_core.field.M31 5#usize)) g.inverses
+          i) =
+    alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array U32 5#usize)) (cohort g).inverses
+      (i.wrapping_sub (cohort g).start)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XRn_JoinedGeometry.cohort_emitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRn_JoinedGeometry.emitted_cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRn_JoinedGeometry.for_query' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRn_JoinedGeometry.reversed_range' depends on axioms: [propext, Classical.choice, Quot.sound]

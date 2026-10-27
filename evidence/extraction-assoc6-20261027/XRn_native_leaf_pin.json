@@ -1,0 +1,7 @@
+{
+  "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+  "whole_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+  "body_sha256": "c8c91b1c3596b5b7ada202808523249d9e55e4dff02b75a4002093038c45702e",
+  "body": "fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {\n        let k=powers::<7>(kappa);\n        let mut parts=[E::ZERO;7];parts[0]=inactive;\n        for point in 0..6 {\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        }\n        let mut claim=E::ZERO;\n        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}\n        crate::trace::value(14,7,claim);\n        Ok(claim)\n}\n",
+  "scope": "verbatim prepared_claim body with identical imports; isolated after two unrelated whole-file nominal-carrier codegen failures; Dot push/finish stubbed"
+}

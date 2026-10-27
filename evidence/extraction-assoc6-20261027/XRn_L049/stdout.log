@@ -1,0 +1,197 @@
+XRn_generated/XRn_ScratchErasure.lean:13:61: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+old other : Std.Array C.E 29#usize
+⊢ (do
+      let a ← r1_wire.SemanticTranscript.impl.state D sem.transcript
+      let a ← transcript.Transcript.new D hash a v.variant
+      let a ← transcript.Transcript.scalar D a 27#u8 v.y1 true
+      mapR Prod.fst
+          (let (gamma, t1) := a
+          do
+          let a1 ← v.inactive.to_le_bytes
+          let s ← lift a1.to_slice
+          let (kappa, t2) ← transcript.Transcript.scalar D t1 28#u8 s false
+          let (alpha0, t3) ← transcript.Transcript.scalar D t2 29#u8 v.round0 false
+          let i ← v.variant.folds
+          if i = 2#usize then do
+              let i1 ← 32#usize + 224#usize
+              let a2 ← core.option.Option.unwrap v.folded_root
+              let s1 ← lift a2.to_slice
+              let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1
+              let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+              let (we, t4) ← transcript.Transcript.scalar D t3 30#u8 bytes2.deref false
+              let (r, t5) ← transcript.Transcript.queries D t4 31#u8 v.final_message
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let i2 ← 31#u8 + 1#u8
+                  let s3 ← lift (Std.Array.empty U8).to_slice
+                  let (rho, t6) ← transcript.Transcript.scalar_k D t5 i2 s3
+                  let g1 ← weights.powers 29#usize gamma
+                  let r1 ← verifier.prepared_claim D sem v.y1 v.inactive g1 kappa
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 =>
+                      ok
+                        (core.result.Result.Ok
+                            { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                              alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                              semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+                          g1)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r2 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r2, g1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r1 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r1, old)
+            else do
+              let we ← aspis_core.field.wide_exact.WideExact.ZERO
+              let (r, t4) ← transcript.Transcript.queries D t3 30#u8 v.final_message
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let i1 ← 30#u8 + 1#u8
+                  let s1 ← lift (Std.Array.empty U8).to_slice
+                  let (rho, t5) ← transcript.Transcript.scalar_k D t4 i1 s1
+                  let g1 ← weights.powers 29#usize gamma
+                  let r1 ← verifier.prepared_claim D sem v.y1 v.inactive g1 kappa
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 =>
+                      ok
+                        (core.result.Result.Ok
+                            { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                              alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                              semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                          g1)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r2 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                      ok (r2, g1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r1 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r1, old))) =
+    do
+    let a ← r1_wire.SemanticTranscript.impl.state D sem.transcript
+    let a ← transcript.Transcript.new D hash a v.variant
+    let a ← transcript.Transcript.scalar D a 27#u8 v.y1 true
+    mapR Prod.fst
+        (let (gamma, t1) := a
+        do
+        let a1 ← v.inactive.to_le_bytes
+        let s ← lift a1.to_slice
+        let (kappa, t2) ← transcript.Transcript.scalar D t1 28#u8 s false
+        let (alpha0, t3) ← transcript.Transcript.scalar D t2 29#u8 v.round0 false
+        let i ← v.variant.folds
+        if i = 2#usize then do
+            let i1 ← 32#usize + 224#usize
+            let a2 ← core.option.Option.unwrap v.folded_root
+            let s1 ← lift a2.to_slice
+            let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1
+            let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+            let (we, t4) ← transcript.Transcript.scalar D t3 30#u8 bytes2.deref false
+            let (r, t5) ← transcript.Transcript.queries D t4 31#u8 v.final_message
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let i2 ← 31#u8 + 1#u8
+                let s3 ← lift (Std.Array.empty U8).to_slice
+                let (rho, t6) ← transcript.Transcript.scalar_k D t5 i2 s3
+                let g1 ← weights.powers 29#usize gamma
+                let r1 ← verifier.prepared_claim D sem v.y1 v.inactive g1 kappa
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                    ok
+                      (core.result.Result.Ok
+                          { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                            alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                            semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+                        g1)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r2, g1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r1, other)
+          else do
+            let we ← aspis_core.field.wide_exact.WideExact.ZERO
+            let (r, t4) ← transcript.Transcript.queries D t3 30#u8 v.final_message
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let i1 ← 30#u8 + 1#u8
+                let s1 ← lift (Std.Array.empty U8).to_slice
+                let (rho, t5) ← transcript.Transcript.scalar_k D t4 i1 s1
+                let g1 ← weights.powers 29#usize gamma
+                let r1 ← verifier.prepared_claim D sem v.y1 v.inactive g1 kappa
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                    ok
+                      (core.result.Result.Ok
+                          { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                            alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                            semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                        g1)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r2, g1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r1, other))
+XRn_generated/XRn_ScratchErasure.lean:15:22: warning: This simp argument is unused:
+  map_let_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵R̵_̵b̵i̵n̵d̵,̵m̵a̵p̵_̵l̵e̵t̵_̵p̵a̵i̵r̵,̵m̵a̵p̵_̵p̵a̵i̵r̵,̵m̵a̵p̵_̵i̵f̵,̵m̵a̵p̵_̵f̵l̵o̵w̵,̵m̵a̵p̵_̵o̵k̵]̵[̲m̲a̲p̲R̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲_̲p̲a̲i̲r̲,̲ ̲m̲a̲p̲_̲i̲f̲,̲ ̲m̲a̲p̲_̲f̲l̲o̲w̲,̲ ̲m̲a̲p̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRn_generated/XRn_ScratchErasure.lean:15:35: warning: This simp argument is unused:
+  map_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵R̵_̵b̵i̵n̵d̵,̵m̵a̵p̵_̵l̵e̵t̵_̵p̵a̵i̵r̵,̵m̵a̵p̵_̵p̵a̵i̵r̵,̵m̵a̵p̵_̵i̵f̵,̵m̵a̵p̵_̵f̵l̵o̵w̵,̵m̵a̵p̵_̵o̵k̵]̵[̲m̲a̲p̲R̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲_̲l̲e̲t̲_̲p̲a̲i̲r̲,̲ ̲m̲a̲p̲_̲i̲f̲,̲ ̲m̲a̲p̲_̲f̲l̲o̲w̲,̲ ̲m̲a̲p̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRn_generated/XRn_ScratchErasure.lean:15:44: warning: This simp argument is unused:
+  map_if
+
+Hint: Omit it from the simp argument list.
+  simp only [mapR_bind, ̲map_let_pair, ̲map_pair, ̲map_i̵f,̵m̵a̵p̵_̵f̵low, ̲map_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRn_generated/XRn_ScratchErasure.lean:15:51: warning: This simp argument is unused:
+  map_flow
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵R̵_̵b̵i̵n̵d̵,̵m̵a̵p̵_̵l̵e̵t̵_̵p̵a̵i̵r̵,̵m̵a̵p̵_̵p̵a̵i̵r̵,̵m̵a̵p̵_̵i̵f̵,̵m̵a̵p̵_̵f̵l̵o̵w̵,̵m̵a̵p̵_̵o̵k̵]̵[̲m̲a̲p̲R̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲_̲l̲e̲t̲_̲p̲a̲i̲r̲,̲ ̲m̲a̲p̲_̲p̲a̲i̲r̲,̲ ̲m̲a̲p̲_̲i̲f̲,̲ ̲m̲a̲p̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRn_generated/XRn_ScratchErasure.lean:15:60: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [mapR_bind, ̲map_let_pair, ̲map_pair, ̲map_if, ̲map_flow,̵m̵a̵p̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRn_ScratchErasure.erased_independent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,96 @@
+XRn_generated/XRn_PreparedScalars.lean:12:83: error: unsolved goals
+H : Type
+D : C.D H
+t : C.T H
+row : U8
+payload : Slice U8
+nonzero : Bool
+block : Std.Array U8 32#usize
+after : XRk_Release.transcript.Transcript H
+a✝ : XRk_Release.transcript.Transcript.block (ed D) (et t) row payload = ok (block, after)
+⊢ mapR (fun p => (p.1, ct p.2))
+      (let (block, self1) := (block, after)
+      do
+      let out ←
+        if nonzero = true then XRk_Release.sampler.gamma_sample block else XRk_Release.sampler.ordinary_sample block
+      let _ ← lift (UScalar.cast UScalarTy.Usize row)
+      ok (out, self1)) =
+    let (block, self1) := (block, ct after)
+    do
+    let out ←
+      if nonzero = true then XRk_Release.sampler.gamma_sample block else XRk_Release.sampler.ordinary_sample block
+    let _ ← lift (UScalar.cast UScalarTy.Usize row)
+    ok (out, self1)
+XRn_generated/XRn_PreparedScalars.lean:19:21: warning: This simp argument is unused:
+  mapR_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [sampling, ̲mapR̵_b̵i̵n̵d̵,̵m̵a̵p̵_̵ok,
+  ̵  ̵ ̵XRk_Release.trace.value, ̲AspisR1PublicPreparation.trace.value,
+  ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRn_generated/XRn_PreparedScalars.lean:19:31: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [sampling, ̲mapR_bind,m̵a̵p̵_̵o̵k̵,̵
+  ̵  ̵ ̵XRk_Release.trace.value, ̲AspisR1PublicPreparation.trace.value,
+  ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRn_generated/XRn_PreparedScalars.lean:32:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1PublicPreparation.sampler.qm31_sample ?block
+in the target expression
+  mapR (fun p => (cq p.1, ct p.2))
+      (let (a, self1) := (block, after)
+      do
+      let out ← XRk_Release.sampler.qm31_sample a
+      let i ← lift (UScalar.cast UScalarTy.Usize row)
+      let we ← aspis_core.field.wide_exact.WideExact.from_qm31 out
+      XRk_Release.trace.value 4#u16 i we
+      ok (out, self1)) =
+    let (a, self1) := (block, ct after)
+    do
+    let out ← AspisR1PublicPreparation.sampler.qm31_sample a
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    let we ← sampling.fromQm out
+    AspisR1PublicPreparation.trace.value 4#u16 i we
+    ok (out, self1)
+
+H : Type
+D : C.D H
+t : C.T H
+row : U8
+payload : Slice U8
+block : Std.Array U8 32#usize
+after : XRk_Release.transcript.Transcript H
+a✝ : XRk_Release.transcript.Transcript.block (ed D) (et t) row payload = ok (block, after)
+⊢ mapR (fun p => (cq p.1, ct p.2))
+      (let (a, self1) := (block, after)
+      do
+      let out ← XRk_Release.sampler.qm31_sample a
+      let i ← lift (UScalar.cast UScalarTy.Usize row)
+      let we ← aspis_core.field.wide_exact.WideExact.from_qm31 out
+      XRk_Release.trace.value 4#u16 i we
+      ok (out, self1)) =
+    let (a, self1) := (block, ct after)
+    do
+    let out ← AspisR1PublicPreparation.sampler.qm31_sample a
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    let we ← sampling.fromQm out
+    AspisR1PublicPreparation.trace.value 4#u16 i we
+    ok (out, self1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XRn_PreparedScalars.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRn_PreparedScalars.scalar_k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
