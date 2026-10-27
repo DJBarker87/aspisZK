@@ -12250,7 +12250,7 @@ exclusion of every other dictionary entry, and non-vacuity, with native data onl
 association hypotheses (IDs 44200-44499). Rows removed outright: 0. Privacy target not yet
 established.
 
-## D307 (Stream B) 2026-10-27 17:58 UTC: batch 3 merged into the candidate; ID-block overlap corrected; batch3b launched
+## D307 (Stream B) 2026-10-27 17:47 UTC: batch 3 merged into the candidate; ID-block overlap corrected; batch3b launched
 
 batch3 used its 100-attempt budget (84 accepted, 16 rejected; 0 Kani). All three ELF pins match after
 every source stage; the cumulative worst-case cost projection is +1.64%, under the +2% stop; the
@@ -12276,3 +12276,23 @@ a free-block map from a scan of every local and host receipt directory. No run c
 scopes had ended). batch3b resumes in pv-l3 with IDs 36600-36799: op134's row bridge, op117/op121
 universal equality and bridges, then Drop-free copies for the remaining extraction failures. Rows
 removed outright: 0. Privacy target not yet established.
+
+## D308 (Stream B) 2026-10-27 17:53 UTC: runjoin19 result; Aeneas library authority (ruling (h''')); runjoin20 launched
+
+runjoin19 used its 100-attempt budget (76 accepted, 24 rejected; 0 Kani; focused audit 51101 exit 0,
+2.03 s, 4.44 GB peak, no swap, revision 64adb93457, 67 theorem roots with standard axioms only; no
+shipped-code change). It proves late_append for both fixtures (returned root, next index, changed
+frontier, output-pair composition) and a symbolic composition of the bank validation with
+conditional per-block helpers. The 57 concrete block certificates, the compiler-return equation, the
+selected-index transition, the deployed public binding and non-vacuity remain open; endpoint
+premises removed/added/weakened 0/0/0.
+
+The endpoint axiom audit got past the producer module (its Funs and Types hashes verified against
+the commit47 freeze) and stopped, correctly, at the import of the Aeneas library, which ruling (h'')
+had not named. The library is pinned by the same env-J rebuild record, in
+EJR_aeneas-complete-library-pins.json (236 modules with object path, sha256 and imports); ruling
+(h''') makes that file the only authority for library modules. The worker's report quoted recount 3
+counts (376 P / 26 T / 5 C); the current ledger is recount 5 (400 P / 3 T / 4 C, OPEN 93). runjoin20
+resumes with the audit, then the 57 block certificates, then the compiler-return composition.
+Branch pushed (fd42d798ff). The D307 heading time was corrected from 17:58 to 17:47 UTC. Rows removed
+outright: 0. Privacy target not yet established.
