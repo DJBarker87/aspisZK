@@ -7,7 +7,7 @@ and owner-approved game unchanged. S2 and100-bit target not yet established.
 | Leaf | Status |
 |---|---|
 | verifier::echeck | CLOSED on all adopted release inputs (all lengths0..2272,both k); LPl_echeck_LEAF.md. Native step/iterator/decoder, SAME bytes/Result, full induction, uniqueness and non-vacuity; no caller/headline installation claimed. K008/K009 correct the initial928-only domain and cover all adopted caller lengths. No native claim beyond2272. |
-| compact::check_values | OPEN: next priority; join K011 native16-byte decoder and464-byte iterator carriers to complete29-stage model and NonCanonical Result. |
+| compact::check_values | CLOSED on all464-byte adopted caller inputs; LPl_check_values_LEAF.md. Actual decoder/iterator, byte-value join, complete first-error/Boolean model Result, uniqueness and non-vacuity. |
 | validate_record_fields | OPEN: join native local K022 and full3712-byte iterator/enumeration carriers to LPg first-error preservation/full116-stage model. |
 | compact::expand_values | OPEN: full464/928 source/destination window/frame association and29-step native/model output join. |
 | ValidatedRecord::decode_k | OPEN: full record selected-window→N29 loop/output/error Result, validation-token and SAME returned-array join. |
