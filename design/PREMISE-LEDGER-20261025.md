@@ -2937,3 +2937,28 @@ axiom was added; all new theorems use propext/Classical.choice/Quot.sound.
 | ARX_Root.deployed | 83T/11P/13G/0C (unchanged) | **89T/27P/13G/0C** (was 28P) |
 
 Deployed 100-bit target: **not yet established**.
+
+## L143 discharged, 2026-10-27 (finish-match4, FJp_): first actual-antecedent reduction on the adopted root
+
+Native L143 and the global owner law F3Y_G_L143 are REMOVED. New root:
+`AspisR1.FJp_Top.deployed`, identical to `ARX_Root.deployed` except
+`finishOwners : FJp_GlobalOwners.Owners` (FIp_Remaining.Holds' matching
+conjunct dropped; `FJp_GlobalOwners.weaken` proves every old owner instance
+satisfies the new one) and the native `Outcome` chain ending at
+`FJp_Finish.Outcome`, whose `matches_S4_S7 : ∀ j, MatchingSupport.match0 …`
+hypothesis is dropped and instead derived as "same-run matching OR the
+existing charged collision branch" (22 per-query lemmas composed by finite
+induction). Both removed items were hypotheses; the conclusion is unchanged;
+the kernel statement is otherwise byte-identical under exact name
+substitution (evidence/finish-match4-20261027/FJp_statement-check.json);
+axioms propext/Classical.choice/Quot.sound. Lead review: verified the two
+definitions and the weakening lemma directly.
+
+| Root | Actual antecedent | Deployment-inclusive |
+|---|---|---|
+| ARX_Root.deployed (adopted) | 83T/11P/13G | 89T/27P/13G |
+| **FJp_Top.deployed (current proved top)** | **83T/9P/13G** | **89T/25P/13G** |
+
+FJp_Top.deployed is a strengthening of the adopted ARX_Root.deployed (fewer
+hypotheses, same conclusion), so it is the current proved top; later
+removals must be stacked on it. Deployed 100-bit target: not yet established.
