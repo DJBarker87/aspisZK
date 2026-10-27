@@ -1,0 +1,17 @@
+FJj_SuccessorOrder.lean:17:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map ?m.22 (List.reverse ?m.23)
+in the target expression
+  (List.foldl (fun st i => FJd_LoopReference.successorStep z st (FJj_SuccessorModel.index i)) (1, z)
+        (List.range 10).reverse).2 =
+    (List.foldl (FJd_LoopReference.successorStep z) (1, z)
+        (List.map FJj_SuccessorModel.index (List.range 10)).reverse).2
+
+K : Type
+inst✝ : Field K
+z : Fin 10 → K
+⊢ (List.foldl (fun st i => FJd_LoopReference.successorStep z st (FJj_SuccessorModel.index i)) (1, z)
+        (List.range 10).reverse).2 =
+    (List.foldl (FJd_LoopReference.successorStep z) (1, z)
+        (List.map FJj_SuccessorModel.index (List.range 10)).reverse).2
+'AspisR1.FJj_SuccessorOrder.order' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJj_SuccessorOrder.value' depends on axioms: [propext, sorryAx, Quot.sound]

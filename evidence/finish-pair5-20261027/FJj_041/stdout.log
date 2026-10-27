@@ -1,0 +1,35 @@
+FJj_SuccessorFactors.lean:31:2: error: unsolved goals
+case right
+v : FIn_WeightsExtract.FInVariant
+alpha : Std.Array SQ 10#usize
+z : FJf_CircleOuterBody.Z
+hc : FJc_WeightArray.canonical alpha
+points : Std.Array (Std.Array FIn_WeightsExtract.field.QM31 10#usize) 3#usize
+a8 a9 : FIn_WeightsExtract.field.QM31
+f1 f2 : Std.Array (Std.Array (Std.Array FIn_WeightsExtract.field.QM31 4#usize) 5#usize) 5#usize
+hp : FIn_WeightsExtract.state_only_prefix.r0.statement_points alpha = ok points
+h8 : alpha.index_usize 8#usize = ok a8
+h9 : alpha.index_usize 9#usize = ok a9
+hf1 :
+  FIn_WeightsExtract.weights_new_loop0 { start := 0#usize, «end» := 3#usize } points
+      (Array.repeat 5#usize (Array.repeat 5#usize (Array.repeat 4#usize FIn_WeightsExtract.field.QM31.ZERO))) =
+    ok f1
+hf2 : FIn_WeightsExtract.weights_new_loop1 { start := 0#usize, «end» := 2#usize } z f1 = ok f2
+hp0 : points.index_usize 0#usize = ok alpha
+successor : Std.Array SQ 10#usize
+hs : points.index_usize 1#usize = ok successor
+cs : FJc_WeightArray.canonical successor
+vs : FJj_SuccessorStep.decoded successor = R0P.SemSource.successorPoint (FJj_SuccessorStep.decoded alpha)
+second :
+  (∀ (row : FJf_FactorArray.Row), (↑f1)[1]? = some row → FJf_FactorArray.rowCanon row) ∧
+    ∀ (d : Fin 5) (s : Fin 4), FJf_FactorArray.value f1 1 ↑d ↑s = FJf_PointCell.point successor (↑d) s
+frame : ∀ (d s : ℕ), FJf_FactorArray.value f2 1 d s = FJf_FactorArray.value f1 1 d s
+raw : (↑f2)[1]? = (↑f1)[1]?
+run :
+  FIn_WeightsExtract.weights_new v alpha z =
+    ok (core.result.Result.Ok { variant := v, factors := f2, points := points, extra := Array.make 2#usize [a8, a9] ⋯ })
+d : Fin 5
+s : Fin 4
+⊢ FJd_PointReference.pointFactors (R0P.SemSource.successorPoint (FJj_SuccessorStep.decoded alpha)) d s =
+    FJd_PointReference.pointFactors (R0P.SemSource.successorPoint (FJf_ModelPoint.decoded alpha)) d s
+'AspisR1.FJj_SuccessorFactors.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

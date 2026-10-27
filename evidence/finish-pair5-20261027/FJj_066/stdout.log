@@ -1,0 +1,50 @@
+FJj_TensorOuterBody.lean:27:4: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.16
+of sort `Type (?u.16 + 1)` in the application
+  @InitialSeg ↑iter.end
+FJj_TensorOuterBody.lean:27:18: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+FJj_TensorOuterBody.lean:29:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+k n : Usize
+iter : FIo_RangeNext.Range
+self : FIo_Native.weights.Weights
+input out : Slice NQ
+run :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (ControlFlow.done input)
+        | some d => do
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := n }
+          let (self1, output1) ← FIo_Native.weights.Weights.tensor_loop0_loop0 iter2 self k input n d
+          let n1 ← lift (n.wrapping_mul 4#usize)
+          ok (ControlFlow.cont (iter1, self1, output1, n1))) =
+    ok (ControlFlow.done out)
+x✝ :
+  ∃ x,
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok x ∧
+      (let (o, iter1) := x
+        match o with
+        | none => ok (ControlFlow.done input)
+        | some d => do
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := n }
+          let (self1, output1) ← FIo_Native.weights.Weights.tensor_loop0_loop0 iter2 self k input n d
+          let n1 ← lift (n.wrapping_mul 4#usize)
+          ok (ControlFlow.cont (iter1, self1, output1, n1))) =
+        ok (ControlFlow.done out)
+⊢ InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+'AspisR1.FJj_TensorOuterBody.cont' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Aeneas.Std.ControlFlow.done' does not depend on any axioms
