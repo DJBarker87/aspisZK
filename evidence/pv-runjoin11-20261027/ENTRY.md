@@ -1,0 +1,1 @@
+Entry 623a1d3be6; budget 100 Lean, 4 Kani; Env-J 40300–40599. Last three charged Lean attempts reserved for focused trust audit. No IDs consumed yet. Read pv-common rulings (a)–(g), restored flag, root AGENTS and predecessor report/statements/receipts. Stage priority: actual selected record/compiler return/public binding; no L2/trace work before both fixture installations.

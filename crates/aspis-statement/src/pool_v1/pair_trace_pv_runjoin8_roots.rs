@@ -100,3 +100,11 @@ fn source_root_16() { check::<16, 17>(); }
 #[kani::proof]
 #[kani::unwind(33)]
 fn source_root_17() { check::<17, 18>(); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn source_root_18() { check::<18, 19>(); }
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn source_root_19() { check::<19, 20>(); }
