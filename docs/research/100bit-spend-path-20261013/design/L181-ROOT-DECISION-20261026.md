@@ -87,3 +87,10 @@ complete before/after declarations are in
 evidence/account-rejoin9-20261026/ARX_ROOT_COMPARISON.md. recount11 is
 producing the mechanical ledger for both roots and the draft contract
 amendment. Decision requested: adopt ARX_Root.deployed as the headline root.
+
+## Numbers (recount11, 2026-10-27)
+
+Rc10_Top.deployed: actual 83T/12P/13G, deployment-inclusive 89T/16P/13G.
+ARX_Root.deployed: actual 83T/11P/13G, deployment-inclusive 89T/14P/13G.
+Removed: L159/L185, L181. Added atomic premises: none. Draft contract
+amendment: design/SECURITY-CONTRACT-ARX-AMENDMENT-DRAFT-20261027.md.
