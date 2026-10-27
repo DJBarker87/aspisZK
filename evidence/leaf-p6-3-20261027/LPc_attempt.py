@@ -3,6 +3,8 @@ from pathlib import Path
 import subprocess,json,time,sys
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-leaf-p6-3-20261027'
 a,kind,target=sys.argv[1:]
+limit=20 if kind=='kani' else 60
+if int(a.rsplit('_',1)[1][1:])>limit:raise SystemExit('STOP exhausted budget')
 def ssh(s):return subprocess.run(['ssh',H,s],capture_output=True,text=True)
 def collect(n):
  (E/n).parent.mkdir(parents=True,exist_ok=True)
@@ -33,5 +35,8 @@ subprocess.run(['scp','-q',str(E/(a+'.json')),H+':'+B+'/'+a+'.json'],check=True)
 r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 {('S2W_run_host.py' if kind=='kani' else 'S2W_lean_host.py')} {a}.json')
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 for f in ['receipt.json','stdout.log','time.log']:collect(a+'/'+f)
+if kind!='kani':
+ local=Path(next(x['repository_source'] for x in json.loads((E/'LPc_inherited-plan.json').read_text()) if x['module']==target)) if kind=='inherited' else E/(target+'.lean')
+ (E/a/'source.lean.txt').write_bytes(local.read_bytes())
 rc=json.loads((E/a/'receipt.json').read_text());print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','cgroup_memory_peak_bytes','print_axioms']}),flush=True)
 print((E/a/'stdout.log').read_text()[-5000:],flush=True)

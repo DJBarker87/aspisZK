@@ -10,8 +10,8 @@ This is an in-progress ledger. No entire native leaf is CLOSED yet.
 
 | Leaf | Exact open stage |
 |---|---|
-| canonical::Dot::push | K001 fixed cell0 on arbitrary canonical operands timed out. Cells1..3 pending. Raw producer safety and model association remain open. |
-| r1_semantic::claims | Three decode steps pending at offsets0/29/58; actual allocation/pointer writes and Prefix provenance remain open. |
+| canonical::Dot::push | All four fixed cells on arbitrary canonical operands time out (K001/002/003/005). K004 compile failure repaired. Raw producer safety and model association remain open. |
+| r1_semantic::claims | Offset29 whole29 PASS; offsets0/58 early-error classes PASS, first15-canonical late classes TIMEOUT. Actual allocation/pointer writes and Prefix provenance remain open. |
 | verifier::echeck | Four tail-length classes pending; actual928-byte loop/carrier association remains open. |
 | compact::check_values | Actual464-byte native loop and input-carrier installation. |
 | compact::expand_values | Actual464/928-byte stage/frame and29-row versus byte-map composition. |
