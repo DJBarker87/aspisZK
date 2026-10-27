@@ -17,8 +17,11 @@ Accepted new source results (each exact source/object receipt is authoritative):
   callback Result and callback-state change. The named next-result premise
   describes the iterator operation, not an arithmetic correctness assumption.
 
-Finite iterator composition and frozen constant-instance checks are separate
-focused targets; acceptance is recorded only by their exact successful receipts.
+PV_Src_PortConstantInstance.{initial_source,internal_source,final_source} now
+instantiate all three actual frozen constant groups, using accepted finite
+iterator traces and literal constant-canonicality checks. No iterator or
+constant-canonicality premise remains in these three equations. Every callback
+Result and callback-state change is retained.
 The complete hash_fields/sponge-to-parent correspondence and initial plus twenty
 adjacent parent equations remain open. Lean parent cells remain 0 -> 0/21.
 PV_Src_RootCertificate.source_eq is unchanged and still requires all 21 parent
@@ -28,7 +31,10 @@ The full-helper prefix11 comparison, unwind33, was retried once under ruling(i)
 with taskset0-3 and 900s timeout. It timed out at900.003123s, exit124,
 cgroup peak5141737472 bytes, swap0. This is not equality evidence or a checked
 counterexample. Metadata confirms no stubs and no verified stubs. The split
-prefix01 comparison is prepared under cfg(kani); its receipt determines status.
+prefix01 comparison also timed out:180.003633s, exit124, cgroup peak2610020352
+bytes, swap0, unwind33, no stubs. Both Kani runs are spent. Neither timeout
+proves equality. Source/build-input hashes match all193 recorded inputs in
+each exact source commit.
 
 No deployed premise is removed. RunJoin's newly published external P6 gate is
 retained read-only; Records/R_shipped and the installed native compiler return,

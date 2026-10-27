@@ -45,8 +45,24 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 41562 | R1Z/PV_Src_PortInitialRoundStep | 0 | standard | 0:01.84 | 4155852 | 0 | d597d31545 | 1/1 |
 | 41563 | R1Z/PV_Src_PortFinalRoundStep | 0 | standard | 0:01.83 | 4156972 | 0 | d597d31545 | 1/1 |
 | 41564 | R1Z/PV_Src_PortTraceRounds | 0 | standard | 0:01.85 | 4151004 | 0 | d597d31545 | 1/1 |
+| 41566 | R1Z/PV_Src_PortInitialRounds | 0 | standard | 0:01.73 | 4152328 | 0 | d4dec7b254 | 1/1 |
+| 41567 | R1Z/PV_Src_PortFinalRounds | 1 | REJECTED | 0:01.77 | 4125784 | 0 | d4dec7b254 | 0/1 |
+| 41568 | R1Z/PV_Src_PortFinalRounds | 0 | standard | 0:01.93 | 4155216 | 0 | ce2fe5bb96 | 1/1 |
+| 41569 | R1Z/PV_Src_PortInternalRounds | 0 | standard | 0:01.83 | 4162924 | 0 | ce2fe5bb96 | 2/2 |
+| 41570 | R1Z/PV_Src_PortInitialConstants | 1 | REJECTED | 0:02.22 | 4150012 | 0 | ce2fe5bb96 | 1/1 |
+| 41572 | R1Z/PV_Src_PortInitialConstants | 0 | standard | 0:02.01 | 4169464 | 0 | ee3945f7ec | 1/1 |
+| 41573 | R1Z/PV_Src_PortFinalConstants | 0 | standard | 0:02.14 | 4169828 | 0 | ee3945f7ec | 1/1 |
+| 41574 | R1Z/PV_Src_PortInternalConstants | 0 | standard | 0:01.69 | 4149040 | 0 | ee3945f7ec | 1/1 |
+| 41575 | R1Z/PV_Src_PortTraceCanonical | 1 | REJECTED | 0:01.69 | 4133468 | 0 | ee3945f7ec | 2/2 |
+| 41576 | R1Z/PV_Src_PortTraceCanonical | 1 | REJECTED | 0:01.59 | 4132924 | 0 | 988619ec24 | 2/2 |
+| 41577 | R1Z/PV_Src_PortTraceCanonical | 0 | standard | 0:01.92 | 4154040 | 0 | d2db8202e4 | 2/2 |
+| 41579 | R1Z/PV_Src_PortEnumerateTrace | 0 | standard | 0:01.77 | 4107580 | 0 | d2db8202e4 | 1/1 |
+| 41580 | R1Z/PV_Src_PortArrayTrace | 0 | standard | 0:01.74 | 4087500 | 0 | d2db8202e4 | 2/2 |
+| 41581 | R1Z/PV_Src_PortConstantTraces | 0 | standard | 0:01.76 | 4148308 | 0 | d2db8202e4 | 3/3 |
+| 41582 | R1Z/PV_Src_PortEnumerateValues | 0 | standard | 0:01.73 | 4093376 | 0 | cf5cd692b9 | 1/1 |
+| 41584 | R1Z/PV_Src_PortConstantInstance | 0 | standard | 0:01.80 | 4149780 | 0 | cf5cd692b9 | 6/6 |
 
-Charged Lean attempts: 41/60. Reservation refusals: 24, uncharged. Next unused ID: 41566.
+Charged Lean attempts: 57/60. Reservation refusals: 27, uncharged. Next unused ID: 41585.
 
 ## Shared replacements
 
@@ -59,3 +75,4 @@ Optimized compilation then named CBMC step; 6G/8G/swap0/Tasks64, one scope at a 
 | Target | Exit | Wall seconds | Peak RSS KiB | Cgroup peak bytes | Swap | Revision |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | ['timeout', '900', 'taskset', '--cpu-list', '0-3', 'cargo', 'kani', '--no-assertion-reach-checks', '-Z', 'stubbing', '-Z', 'function-contracts', '-Z', 'unstable-options', '-p', 'aspis-statement', '--lib', '-j', '4', '--exact', '--harness', 'pool_v1::pair_forest_copy_builder::records_proofs::empty_roots::pv_srcid7_helper_prefix11', '--output-format', 'terse', '--cbmc-args', '--unwinding-assertions', '--slice-formula'] | 124 | 900.003123 | 15296 | 5141737472 | 0 | cbcac1bd088222f39f08e09506b1e0d5cc003bbe |
+| ['timeout', '180', 'taskset', '--cpu-list', '0-3', 'cargo', 'kani', '--no-assertion-reach-checks', '-Z', 'stubbing', '-Z', 'function-contracts', '-Z', 'unstable-options', '-p', 'aspis-statement', '--lib', '-j', '4', '--exact', '--harness', 'pool_v1::pair_forest_copy_builder::records_proofs::empty_roots::pv_srcid8_helper_prefix01', '--output-format', 'terse', '--cbmc-args', '--unwinding-assertions', '--slice-formula'] | 124 | 180.003633 | 15292 | 2610020352 | 0 | ce2fe5bb961cfc3a610317209040903d081566af |
