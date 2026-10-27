@@ -1,0 +1,47 @@
+{"attempt": "BEm_K12", "exit_status": 0, "wall_seconds": 102.49971474299673, "peak_rss_kib": "2674604", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling bem-batch-observation v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEm_rust)
+warning: unused import: `alloc::vec::Vec`
+  --> src/BEm_frozen.rs:86:5
+   |
+86 | use alloc::vec::Vec;
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` pr
+...
+ject in *queries: SUCCESS
+[shipped::batch_keys.pointer_dereference.5] line 283 dereference failure: pointer outside object bounds in *queries: SUCCESS
+[shipped::batch_keys.pointer_dereference.6] line 283 dereference failure: invalid integer address in *queries: SUCCESS
+[shipped::batch_keys.arithmetic_overflow.1] line 284 attempt to divide by zero: SUCCESS
+[shipped::batch_keys.array_bounds.2] line 285 array 'keys' upper bound in keys[j]: SUCCESS
+[shipped::batch_keys.assertion.3] line 285 index out of bounds: the length is less than or equal to the given index: SUCCESS
+
+src/BEm_frozen.rs function shipped::sort_batch_keys
+[shipped::sort_batch_keys.unreachable.1] line 290 unreachable code: SUCCESS
+[shipped::sort_batch_keys.unwind.1] line 290 unwinding assertion loop 1: SUCCESS
+[shipped::sort_batch_keys.assertion.1] line 292 attempt to subtract with overflow: SUCCESS
+[shipped::sort_batch_keys.unwind.0] line 292 unwinding assertion loop 0: SUCCESS
+[shipped::sort_batch_keys.assertion.2] line 293 attempt to subtract with overflow: SUCCESS
+[shipped::sort_batch_keys.assertion.3] line 294 attempt to subtract with overflow: SUCCESS
+
+src/BEm_reference.rs function BEm_reference::repeated_keys_cut
+[BEm_reference::repeated_keys_cut.arithmetic_overflow.1] line 525 attempt to divide by zero: SUCCESS
+[BEm_reference::repeated_keys_cut.array_bounds.1] line 527 array 'keys' upper bound in keys[at]: SUCCESS
+[BEm_reference::repeated_keys_cut.assertion.1] line 527 index out of bounds: the length is less than or equal to the given index: SUCCESS
+[BEm_reference::repeated_keys_cut.assertion.2] line 527 assertion failed: keys[at] == expected: SUCCESS
+
+** 0 of 111 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r328bb834d9894300ab0035dc04eb76d3.scope; invocation ID: 62f8a5e79ac44a3dbc25fc3a4d6daf6e

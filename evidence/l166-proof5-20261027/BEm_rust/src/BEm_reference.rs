@@ -478,16 +478,26 @@ fn duplicate_parents_retained() {
     std::mem::forget(log);
 }
 
+#[derive(Clone,Copy)]
+struct Tape18<'a> {replies:&'a [[u8;32];18],cursor:&'a std::cell::Cell<usize>}
+impl Digest32 for Tape18<'_> {
+    fn digest(&self,_:&[&[u8]])->[u8;32] {let i=self.cursor.get();self.cursor.set(i+1);self.replies[i%18]}
+}
+#[derive(Clone,Copy)]
+struct Linear18<'a> {replies:&'a [[u8;32];18],cursor:&'a std::cell::Cell<usize>}
+impl Digest32 for Linear18<'_> {
+    fn digest(&self,_:&[&[u8]])->[u8;32] {let i=self.cursor.get();assert!(i<18);self.cursor.set(i+1);self.replies[i]}
+}
 fn unary_verify(short:bool) {
     let index:u32=kani::any();kani::assume(index<(1<<18));let leaf:[u8;32]=kani::any();let root:[u8;32]=kani::any();let bytes:[u8;576]=kani::any();
     let available:usize=if short {kani::any()} else {18};kani::assume(available<=18);if short {kani::assume(available<18);}
     let nodes=&bytes[..available*32];
     let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();idx[0]=index;val[0]=leaf;
-    let replies:[[u8;32];2]=kani::any();let initial:usize=kani::any();kani::assume(initial<1024);
+    let replies:[[u8;32];18]=kani::any();let initial:usize=0;
     let ca=std::cell::Cell::new(initial);let cb=std::cell::Cell::new(initial);
     let a=RefCell::new(zero());let b=RefCell::new(zero());let selected:usize=kani::any();let part:usize=kani::any();let byte:usize=kani::any();
-    let ra=multiproof::verify_in_place(Point{state:&a,backend:Stateful{replies:&replies,cursor:&ca},selected_call:selected,selected_part:part,selected_byte:byte},multiproof::Arity::Two,&root,&mut idx,&mut val,1,nodes);
-    let rb=multiproof::verify(Point{state:&b,backend:Stateful{replies:&replies,cursor:&cb},selected_call:selected,selected_part:part,selected_byte:byte},multiproof::Arity::Two,&root,&[index],&[leaf],nodes);
+    let ra=multiproof::verify_in_place(Point{state:&a,backend:Linear18{replies:&replies,cursor:&ca},selected_call:selected,selected_part:part,selected_byte:byte},multiproof::Arity::Two,&root,&mut idx,&mut val,1,nodes);
+    let rb=multiproof::verify(Point{state:&b,backend:Linear18{replies:&replies,cursor:&cb},selected_call:selected,selected_part:part,selected_byte:byte},multiproof::Arity::Two,&root,&[index],&[leaf],nodes);
     assert_eq!(ra,rb);assert_eq!(*a.borrow(),*b.borrow());assert_eq!(ca.get(),cb.get());
     assert_eq!(a.borrow().calls,available);assert_eq!(ca.get(),initial+available);if short {assert!(!ra);}
 }
@@ -497,12 +507,12 @@ fn unary_verify(short:bool) {
 fn threaded_heads(first_tree:usize) {
     let second_tree=first_tree+1;
     let keys:[u64;16]=kani::any();let pos:usize=kani::any();kani::assume(pos<12);let used:usize=kani::any();kani::assume(used<=pos);
-    let q0:[u8;832]=kani::any();let q1:[u8;832]=kani::any();let replies:[[u8;32];2]=kani::any();
+    let q0:[u8;832]=kani::any();let q1:[u8;832]=kani::any();let replies:[[u8;32];18]=kani::any();
     let mut ia:[u32;16]=kani::any();let mut va:[[u8;32];16]=kani::any();let mut ib=ia;let mut vb=va;
     let initial:usize=kani::any();kani::assume(initial<1024);let ca=std::cell::Cell::new(initial);let cb=std::cell::Cell::new(initial);
     let a=RefCell::new(zero());let b=RefCell::new(zero());let selected:usize=kani::any();let part:usize=kani::any();let byte:usize=kani::any();
-    let ha=Point{state:&a,backend:Stateful{replies:&replies,cursor:&ca},selected_call:selected,selected_part:part,selected_byte:byte};
-    let hb=Point{state:&b,backend:Stateful{replies:&replies,cursor:&cb},selected_call:selected,selected_part:part,selected_byte:byte};
+    let ha=Point{state:&a,backend:Tape18{replies:&replies,cursor:&ca},selected_call:selected,selected_part:part,selected_byte:byte};
+    let hb=Point{state:&b,backend:Tape18{replies:&replies,cursor:&cb},selected_call:selected,selected_part:part,selected_byte:byte};
     let ra=shipped::leaf_step(keys,pos,0,first_tree,&q0,&mut ia,&mut va,used,ha);
     let rb=leaf_step(keys,pos,0,first_tree,&q0,&mut ib,&mut vb,used,hb);assert_eq!(ra,rb);
     let sa=if ra.0 {Some(shipped::leaf_step(keys,0,0,second_tree,&q1,&mut ia,&mut va,0,ha))} else {None};
@@ -525,4 +535,31 @@ fn repeated_keys_cut() {
     let index=if tree==2 {query/4} else {query};
     let expected=if at<n {(u64::from(index)<<8)|at as u64} else {0};
     assert_eq!(keys[at],expected);
+}
+
+// K19 replacement: first inner occupied/sibling hash cut of the actual
+// verify_in_place body; no verifier/helper contract or digest stub.
+#[kani::proof] #[kani::unwind(65)]
+fn physical_parent_group() {
+    let values:[[u8;32];16]=kani::any();let sibling:[u8;32]=kani::any();
+    let index:usize=kani::any();let occupied:bool=kani::any();let left:bool=kani::any();
+    kani::assume(index<16 && (!occupied || index<15));
+    let replies:[[u8;32];2]=kani::any();let initial:usize=kani::any();kani::assume(initial<1024);
+    let ca=std::cell::Cell::new(initial);let cb=std::cell::Cell::new(initial);
+    let a=RefCell::new(Vec::new());let b=RefCell::new(Vec::new());
+    let ha=Recording{backend:Stateful{replies:&replies,cursor:&ca},log:&a};
+    let hb=Recording{backend:Stateful{replies:&replies,cursor:&cb},log:&b};
+    let ra=if occupied {multiproof::BEm_occupied(ha,&values,index)} else {multiproof::BEm_sibling(ha,&values,index,&sibling,left)};
+    let rb=if occupied {multiproof::binary_parent(hb,&values[index],&values[index+1])}
+      else if left {multiproof::binary_parent(hb,&values[index],&sibling)} else {multiproof::binary_parent(hb,&sibling,&values[index])};
+    assert_eq!(ra,rb);assert_eq!(ca.get(),cb.get());assert_eq!(a.borrow().len(),1);assert_eq!(b.borrow().len(),1);
+    let part:usize=kani::any();let byte:usize=kani::any();
+    {
+        let aa=a.borrow();let bb=b.borrow();assert_eq!(aa[0].input.len(),bb[0].input.len());
+        assert_eq!(aa[0].input.get(part).map(|x|x.len()),bb[0].input.get(part).map(|x|x.len()));
+        assert_eq!(aa[0].input.get(part).and_then(|x|x.get(byte)),bb[0].input.get(part).and_then(|x|x.get(byte)));
+        assert_eq!(aa[0].address.len(),bb[0].address.len());assert_eq!(aa[0].address.get(byte),bb[0].address.get(byte));
+        assert_eq!(aa[0].returned,bb[0].returned);
+    }
+    std::mem::forget(a);std::mem::forget(b);
 }

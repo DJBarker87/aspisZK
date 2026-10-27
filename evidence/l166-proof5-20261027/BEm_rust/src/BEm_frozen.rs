@@ -265,6 +265,16 @@ pub fn verify_in_place<H: Digest32>(
     n == 1 && index_at(idx, 0) == 0 && root_matches(val, root) && at == nodes.len()
 }
 
+// Evidence-only access to the unchanged first inner hash helpers.
+#[cfg(kani)]
+pub(crate) fn BEm_occupied<H: Digest32>(hash: H, values: &[[u8;32];MAX_BATCH], index: usize) -> [u8;32] {
+    occupied_binary_parent(hash, values, index)
+}
+#[cfg(kani)]
+pub(crate) fn BEm_sibling<H: Digest32>(hash: H, values: &[[u8;32];MAX_BATCH], index: usize, sibling: &[u8], left: bool) -> [u8;32] {
+    sibling_binary_parent(hash, values, index, sibling, left)
+}
+
 }
 pub mod shipped {
 use crate::{Digest32,compact::{self,OPENING,SPLIT,SLOT_NODES},multiproof::{self,Arity}};
