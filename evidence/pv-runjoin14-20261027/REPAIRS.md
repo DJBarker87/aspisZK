@@ -320,3 +320,49 @@ All literal indices and shifts are within their original bounds; raw and
 pair_empty_roots calls remain unchanged. There is no new panic/abort,
 allocation or I/O; no signature, type or other function changes. Copy
 locations remain field.rs:22, pair_trace.rs:71, pair_forest_trace.rs:53.
+
+7. D277, consume the recipient option once, verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index 31ccec3879..5914874afd 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -280,6 +280,10 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+     bits[23] = u32::from(input.super_root_directions[2]);
+     sibs[23] = raw(&input.super_root_siblings[2]);
+     let empty = pair_empty_roots();
++    let (recipient_owner, recipient_salt, transfer) = match rec {
++        Some(r) => (raw(&r.owner_key), raw(&r.salt), true),
++        None => (ZERO8, ZERO8, false),
++    };
+     let w = RW {
+         input_value: pair.value,
+         output_value: out,
+@@ -292,13 +296,13 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+         pair_occupied: pair.pair_leaf.second_occupied.0,
+         pair_second: raw(&pair.pair_leaf.second_commitment),
+         pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
+-        recipient_owner: match rec { Some(r) => raw(&r.owner_key), None => ZERO8 },
+-        recipient_salt: match rec { Some(r) => raw(&r.salt), None => ZERO8 },
++        recipient_owner,
++        recipient_salt,
+         change_owner: raw(&chg.owner_key),
+         change_salt: raw(&chg.salt),
+     };
+     let p = RP {
+-        transfer: rec.is_some(),
++        transfer,
+         asset: asset.0,
+         next_pair_index: snapshot.next_pair_index,
+         frontier: [
+```
+
+Repair 6 clears loops; Aeneas then rejects the second rec match at
+records:295:42–43, InterpExpansion.ml:290. For Some(r), the same owner
+and salt raw calls produce the same words and transfer=true. For None,
+both are ZERO8 and transfer=false. Both raw calls move before the witness
+record's other raw calls; raw only reads eight fixed in-bounds M31 fields,
+with no panic, abort, allocation, mutation or I/O, so the order is unobservable.
+The empty-root call remains first. No types/signatures/other functions change.
+No new Copy is required; M31 Copy derive remains field.rs:22.
