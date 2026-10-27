@@ -1,0 +1,57 @@
+{"attempt": "JHc29_080", "exit_status": 1, "wall_seconds": 4.831096894980874, "peak_rss_kib": "5203320", "swaps": "0", "print_axioms": ["'AspisR1.JHc_WriterTotal.body_length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHc_WriterTotal.toSlice_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JHc_WriterTotal.code_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JHc_WriterTotal.body_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+JHc_WriterTotal.lean:23:15: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.21 = ?m.21
+but is expected to have type
+  ↑?m.16 = List.map CheckpointBytes5Writer.u8 bs
+in the application
+  ⟨?m.19, rfl⟩
+'AspisR1.JHc_WriterTotal.toSlice_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JHc_WriterTotal.lean:40:84: error: unsolved goals
+H : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 H
+hash : H
+total : ∀ (parts : Slice (Slice U8)), ∃ out, D.digest hash parts = ok out
+p : Prepared
+a : Accumulator
+proof pub : Slice U8
+size : (↑a.weights).length = 64
+varian
+...
+'AspisR1.JHc_WriterTotal.body_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+JHc_WriterTotal.lean:23:15: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.21 = ?m.21
+but is expected to have type
+  ↑?m.16 = List.map CheckpointBytes5Writer.u8 bs
+in the application
+  ⟨?m.19, rfl⟩
+'AspisR1.JHc_WriterTotal.toSlice_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JHc_WriterTotal.lean:40:84: error: unsolved goals
+H : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 H
+hash : H
+total : ∀ (parts : Slice (Slice U8)), ∃ out, D.digest hash parts = ok out
+p : Prepared
+a : Accumulator
+proof pub : Slice U8
+size : (↑a.weights).length = 64
+variant : p.variant = aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2
+next : ↑a.next = 10
+hp : Std.Array U8 32#usize
+hpCall : D.digest hash (singletonParts proof) = ok hp
+hu : Std.Array U8 32#usize
+huCall : D.digest hash (singletonParts pub) = ok hu
+len : List.length (WAdm_SourceBody.body p a hp hu) = 1736
+buf : Slice U8
+bufCall : WAdm_SourceWriter.toSlice (WAdm_SourceBody.body p a hp hu) = ok buf
+bufBytes : ↑buf = List.map CheckpointBytes5Writer.u8 (WAdm_SourceBody.body p a hp hu)
+hc : Std.Array U8 32#usize
+hcCall : D.digest hash (checksumParts buf) = ok hc
+⊢ 1736 + ↑32#usize = 1768
+'AspisR1.JHc_WriterTotal.code_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf4d348b5c2f34dc482f3ce7152cbcd9e.scope; invocation ID: d77a82f7d1a64824bd8ee2d301b7eb34

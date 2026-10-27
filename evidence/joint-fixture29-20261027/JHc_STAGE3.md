@@ -1,0 +1,9 @@
+# Stage3: actual query/flush accumulator reaches returning WAdm op16
+
+`JHc_QueryPost.source` retains cursor10, flushed length64 and arithmetic canonicality from JHa_QueryLoop.suffix. `JHc_WriterContinuation.source` proves the actual continuation passes the returned accumulator with THAT flushed slice to installed op16. `JHc_InstalledWriter.source` derives totality of the actual append-content writer under its size/control guards and mathematical digest, without supplying saved bytes.
+
+`AspisR1.JHc_TX1Candidate.returns` is unconditional on the retained verifier inputs. It returns ONE p/scratch/initial/pending/geometry/out/after/flushed/saved tuple with prepare,batch,query,flush,writer calls, candidate.tx1=Ok(saved), saved length1768, variantS2/cursor10/flushed length64. Actual writer output, not JFv_World.saved, supplies its saved witness. 083:exit0,wall4.157228131021839s,peakRSS7170928KiB,swap0;axioms[propext,Classical.choice,Quot.sound]. This is the installed verifier CHILD, not SDK wrapper accepted1 or a fully instantiated RPx configuration.
+
+`JHc_Ownership` checks the old TX1 tuple. `JHc_CorrectedOwnership` checks JHb's merged corrected tuple's readonly source guards, foreign raw owners, SAME verifier checkpoint snapshot and exact physical proof/public selection. No analogous TX1 Pool-owner contradiction is found. 085 proof passed; its closed-connection receipt transfer was recovered read-only with source-hash validation, not a proof rerun.
+
+85/100 Lean used;79 pass,6 reject;0/10 Kani. Rejected075/076/078/080 diagnostics are retained and get no credit. No timeouts, memory failures, cap increase or unchanged retry. All successful roots print only standard axioms. No shipped/cfg(kani), parameters/features/wire-format, artifact or trust changes. No ELF rebuild trigger. Actual RPx and FJv premise removal remains0; both SDK wrappers and writer saved.val=JFx_NativeBytes.checkpoint.val remain open on the corrected shared bank game.

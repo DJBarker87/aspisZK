@@ -1,0 +1,73 @@
+JHc_QueryPost.lean:64:73: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(Port3_RowsInstall.toBW after).raw).length
+in the target expression
+  64 ≤ (↑after.raw).length
+
+p : verifier.Prepared
+input scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+initial : verifier.Accumulator
+pending : verifier.BatchedWeights
+g : verifier.QueryGeometry
+prepare :
+  verifier.candidate.prepare installed digest (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.proof ()
+      none input =
+    ok (core.result.Result.Ok p, scratch)
+queries : p.queries = JFq_Queries.value
+init : installed.op20 transport.Variant.S2 = ok (core.result.Result.Ok initial)
+pend : installed.op18 initial.weights.deref = ok (core.result.Result.Ok pending)
+geo : installed.op19 p.queries 0#usize 10#usize = ok (core.result.Result.Ok g)
+fields :
+  Tx1Q_Carriers.e p.gamma = JFq_Gamma.scalar ∧
+    Tx1Q_Carriers.e p.kappa = JFq_Kappa.scalar ∧ Tx1Q_Carriers.arr Tx1Q_Carriers.e p.alpha = JFo_Prepared.value.alpha
+rho :
+  Tx1Q_Carriers.k p.rho = JFq_Rho.scalar ∧
+    p.variant = transport.Variant.S2 ∧ p.state = AspisV8R19.SqueezeOracleBridge.encodeState JGg_Opening32.next0
+powers : p.gamma = currentE JHa_GammaSample.value ∧ Tx1Q_Carriers.arr Tx1Q_Carriers.e scratch = JFr_TX2_Powers.value
+geometry : Tx1Q_Carriers.geometry g = JGp_Geometry.value () JGp_Seeds.geometry
+size : (↑(Tx1Q_Carriers.accumulator initial).weights).length = 64
+zero : (Tx1Q_Carriers.accumulator initial).next = 0#usize
+crhs : Port4C_QueryArithmetic.CanonE (Tx1Q_Carriers.accumulator initial).rhs
+cpower : Port3_FlushInstall.Canonical (Tx1Q_Carriers.accumulator initial).power
+history :
+  PushTrace (Port3_PendingInstall.owned (Tx1Q_Carriers.accumulator initial).weights.deref)
+    (Port3_RowsInstall.toBW (Tx1Q_Carriers.pending pending))
+    (S7Kani3CallerTrace.initialSum (Port3_PendingInstall.owned (Tx1Q_Carriers.accumulator initial).weights.deref))
+phase : S7JoinRowsTrace.Progress 0 0 (Port3_RowsInstall.toBW (Tx1Q_Carriers.pending pending))
+crho : Port3_FlushInstall.Canonical (Tx1Q_Carriers.prepared p).rho
+out : AspisR1Stage2.verifier.Accumulator
+after : AspisR1Stage2.verifier.BatchedWeights
+run :
+  Port3_NativeQueryBody.verifier.candidate.query_loop_loop JHa_QueryLoop.ops
+      (core.result.Result.Ok (Tx1Q_Carriers.accumulator initial, Tx1Q_Carriers.pending pending)) JFx_NativeBytes.proof
+      (Tx1Q_Carriers.prepared p) JFr_TX2_Powers.value none (JGp_Geometry.value () JGp_Seeds.geometry) 10#usize =
+    ok (core.result.Result.Ok (out, after))
+weights : out.weights = (Tx1Q_Carriers.accumulator initial).weights
+next : ↑out.next = 10
+cr : Port4C_QueryArithmetic.CanonE out.rhs
+cp : Port3_FlushInstall.Canonical out.power
+sum : S7Kani3CallerTrace.Sum
+trace :
+  PushTrace (Port3_PendingInstall.owned (Tx1Q_Carriers.accumulator initial).weights.deref)
+    (Port3_RowsInstall.toBW after) sum
+progress : S7JoinRowsTrace.Progress 10 0 (Port3_RowsInstall.toBW after)
+nativeQuery :
+  Port3_NativeQueryBody.verifier.candidate.query_loop JHa_QueryLoop.ops JFx_NativeBytes.proof (Tx1Q_Carriers.prepared p)
+      (Tx1Q_Carriers.accumulator initial) JFr_TX2_Powers.value none (JGp_Geometry.value () JGp_Seeds.geometry)
+      (Tx1Q_Carriers.pending pending) 10#usize =
+    ok (core.result.Result.Ok (out, after))
+outSize : (↑out.weights).length = 64
+flushed : Slice Port3_FlushInstall.K
+hflush : Port3_FlushInstall.flush after out.weights.deref = ok flushed
+⊢ 64 ≤ (↑after.raw).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JHc_QueryPost.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

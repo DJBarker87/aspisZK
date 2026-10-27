@@ -1,0 +1,36 @@
+JHc_WriterContinuation.lean:24:89: error: unsolved goals
+p : verifier.Prepared
+scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+initial out : verifier.Accumulator
+pending after : verifier.BatchedWeights
+g : verifier.QueryGeometry
+flushed : Slice aspis_core.field.QM31
+query :
+  installed.op7 JFx_NativeBytes.proof p initial scratch none g pending 10#usize =
+    ok (core.result.Result.Ok (out, after))
+flush : installed.op17 after out.weights.deref = ok flushed
+⊢ (let (a, pending) := (out, after)
+    let (s2, back) := (⟨↑a.weights, ⋯⟩, fun s => ⟨↑s, ⋯⟩)
+    do
+    let s3 ← installed.op17 pending s2
+    let bytes ←
+      installed.op16 digest p { weights := back s3, rhs := a.rhs, power := a.power, next := a.next }
+          JFx_NativeBytes.proof JFx_NativeBytes.publicInput ()
+    verifier.mark none verifier.Phase.CheckpointWrite
+    ok (core.result.Result.Ok bytes)) =
+    do
+    let bytes ←
+      installed.op16 digest p { weights := ⟨↑flushed, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next }
+          JFx_NativeBytes.proof JFx_NativeBytes.publicInput ()
+    verifier.mark none verifier.Phase.CheckpointWrite
+    ok (core.result.Result.Ok bytes)
+JHc_WriterContinuation.lean:26:33: warning: This simp argument is unused:
+  flush
+
+Hint: Omit it from the simp argument list.
+  simp only [JGy_QueryFrontier.afterQuery, ̲query, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵alloc.vec.Vec.deref_mut, ̲lift,f̵l̵u̵s̵h̵,̵ ̲afterFlush]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHc_WriterContinuation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
