@@ -12249,3 +12249,30 @@ import; the worker recorded the deviation without credit. No shipped code change
 exclusion of every other dictionary entry, and non-vacuity, with native data only as named
 association hypotheses (IDs 44200-44499). Rows removed outright: 0. Privacy target not yet
 established.
+
+## D307 (Stream B) 2026-10-27 17:58 UTC: batch 3 merged into the candidate; ID-block overlap corrected; batch3b launched
+
+batch3 used its 100-attempt budget (84 accepted, 16 rejected; 0 Kani). All three ELF pins match after
+every source stage; the cumulative worst-case cost projection is +1.64%, under the +2% stop; the
+transfer and withdrawal proof and public bytes match 37e5e133f8 at fixed coin 0; audits 52997-52999
+pass with standard axioms. It extracts ops 134, 117 and 121 with the unchanged tools and proves
+complete-Result bounded factorizations, field carrier transports and canonicality lemmas; ruling (n)
+inspection and native comparisons pass for those three. Universal original/copy equality and the row
+bridges are not proved, so no row moves. Ops 132, 133, 222 and 228 hit extractor-internal failures,
+224 and 227 preflight refusals, 226 a loan failure.
+
+Merged into the prover candidate (ccd6dfaf90, pushed). Two conflicts: the lib.rs module list (union)
+and host_semantic.rs imports, where batch 1 had localised the helper sum and batch 3 the multilinear
+evaluation and the copy-helper builder; all three prover-local copies were kept and the library
+imports they replace were dropped. The gate example and devnet_spend type-check with recipe
+features. The merged candidate's three-ELF gate and the combined quiet-window timing gate remain to
+run; cumulative projected cost across batches is now the main adoption risk against the ~4% headroom
+(D289).
+
+Correction: the lead gave pv-alib the block 52500-52999 although batch3 already held 52700-52999; the
+lead's free-ID check had read only the host sent.txt files, and the launcher's "already used" test is
+per job directory. pv-alib is now limited to 52500-52699 (audit 52697-52699), and the scratchpad keeps
+a free-block map from a scan of every local and host receipt directory. No run collided (batch3's
+scopes had ended). batch3b resumes in pv-l3 with IDs 36600-36799: op134's row bridge, op117/op121
+universal equality and bridges, then Drop-free copies for the remaining extraction failures. Rows
+removed outright: 0. Privacy target not yet established.
