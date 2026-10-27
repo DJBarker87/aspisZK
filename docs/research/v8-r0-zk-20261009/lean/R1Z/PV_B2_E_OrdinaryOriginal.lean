@@ -48,7 +48,9 @@ theorem copy_equal_original (b : Bytes) :
   have hc := digits_canonical b a hv
   unfold PV_B2_C_Sampler.host_sampler.ordinary_sample original
   rw [← PV_B2_C_LowDigits.source b,hl]
-  simp only [bind_tc_ok,decode_eq a hc]
+  simp only [bind_tc_ok]
+  change PV_B2_C_Sampler.host_sampler.decode8 a = ok (decode a)
+  rw [decode_eq a hc]
   exact PV_B2_C_ArrayDigits.decode a hc
 
 def toNative (v : Raw) : Native :=
