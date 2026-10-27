@@ -243,3 +243,20 @@ mod resume6_pole {
           super::reference::all_slots_clear(&values[..n],&masks,chi));
     }
 }
+
+#[cfg(kani)]
+mod resume6_mask_reference;
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod resume6_mask_gate {
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn mask_source() {
+        let a=aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_row_masks_v1();
+        let b=super::resume6_mask_reference::masks();
+        match (a,b) {
+            (Ok(a),Ok(b))=>{let mut i=0;while i<64 {assert_eq!(a[i],b[i]);i+=1;}},
+            (Err(a),Err(b))=>assert_eq!(a,b),
+            _=>assert!(false),
+        }
+    }
+}

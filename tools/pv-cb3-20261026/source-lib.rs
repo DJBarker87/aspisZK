@@ -87,3 +87,50 @@ pub fn current_raw(w:&current_weights::Weights,kind:usize,j:usize)->aspis_core::
 pub fn vec_empty<T>(v:&alloc::vec::Vec<T>)->bool {v.is_empty()}
 #[cfg(kani)]
 pub fn vec_default<T>()->alloc::vec::Vec<T> {alloc::vec::Vec::default()}
+
+#[cfg(kani)]
+pub mod resume6_weights;
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod resume6_weight_checks {
+    use aspis_core::field::{QM31,CM31,M31,P};
+    use aspis_r1_cost_probe::{weights::Weights,transport::Variant};
+    fn q()->QM31 {let r:[u32;4]=kani::any();QM31{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}}}
+    fn canonical(q:QM31) {kani::assume(q.c0.a.0<P);kani::assume(q.c0.b.0<P);kani::assume(q.c1.a.0<P);kani::assume(q.c1.b.0<P);}
+    fn weights()->Weights {
+        let v:u8=kani::any();kani::assume(v<3);let variant=match v {0=>Variant::S1,1=>Variant::S2,_=>Variant::D};
+        let mut factors=[[[QM31::ZERO;4];5];5];let mut points=[[QM31::ZERO;10];3];
+        for k in 0..5 {for d in 0..5 {for s in 0..4 {factors[k][d][s]=q();}}}
+        for k in 0..3 {for d in 0..10 {points[k][d]=q();}}
+        Weights{variant,factors,points,extra:[q(),q()]}
+    }
+    fn equal(a:QM31,b:QM31) {assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);}
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn zero_kind() {
+        let w=weights();let j:usize=kani::any();kani::assume(j<1024);
+        equal(w.raw(0,j),super::resume6_weights::raw(&w,0,j));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn extra_kind() {
+        let w=weights();canonical(w.extra[0]);canonical(w.extra[1]);let j:usize=kani::any();
+        equal(w.raw(4,j),super::resume6_weights::raw(&w,4,j));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn tensor_kind() {
+        let w=weights();let kind:usize=kani::any();let j:usize=kani::any();
+        kani::assume(kind>=1 && kind<=6 && kind!=4);kani::assume(j<1024);
+        kani::assume(kind>=5 || w.variant!=Variant::D);
+        for k in 0..5 {for d in 0..5 {for s in 0..4 {canonical(w.factors[k][d][s]);}}}
+        equal(w.raw(kind,j),super::resume6_weights::raw(&w,kind,j));
+    }
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn dense_kind() {
+        let w=weights();let kind:usize=kani::any();let j:usize=kani::any();
+        kani::assume(kind>=1 && kind<=3);kani::assume(j<1024);kani::assume(w.variant==Variant::D);
+        for k in 0..3 {for d in 0..10 {canonical(w.points[k][d]);}}
+        equal(w.raw(kind,j),super::resume6_weights::raw(&w,kind,j));
+    }
+}
