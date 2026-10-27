@@ -6,12 +6,12 @@ data=json.loads((R/'evidence/fixture-tx2j-20261027/JGf_MERKLE_PREFLIGHT.json').r
 head='set_option autoImplicit false\nnoncomputable section\nnamespace AspisR1.JGh_TX2_Frontiers\nopen OraclePortSelectedDraft OracleDecisionMultiBuild\n'
 end='end AspisR1.JGh_TX2_Frontiers\nend\n'
 base='import JGh_TX2_NodeViews\nimport JGc_TX2_M2Layout\n'+head
-base+='theorem unoccupied (is : List Nat) (h b : Nat) (no : ¬Occupied is h b) : frontier is h b=[(h,b)] := by\n  cases h <;> simp only [frontier,if_neg no]\n#print axioms unoccupied\n'
+base+='theorem unoccupied (is : List Nat) (h b : Nat) (no : ¬Occupied is h b) : OraclePortSelectedDraft.frontier is h b=[(h,b)] := by\n  cases h <;> simp only [OraclePortSelectedDraft.frontier,if_neg no]\n#print axioms unoccupied\n'
 prev={};streams={}
 for k in [0,2]:
  ro='JGf_TX2_M0Roots' if k==0 else 'JGc_TX2_M2Roots';prev[k]={row['index']:i for i,row in enumerate(data['trees'][k]['hashes'][:12])};streams[k]=[]
  for b,i in prev[k].items():
-  base+=f'def coords{k}_{i:03} : List (Nat×Nat) := []\ntheorem front{k}_{i:03} : frontier {ro}.indices 0 {b}=coords{k}_{i:03} := by\n  rw [frontier,if_pos (by decide : Occupied {ro}.indices 0 {b})]\n#print axioms front{k}_{i:03}\n'
+  base+=f'def coords{k}_{i:03} : List (Nat×Nat) := []\ntheorem front{k}_{i:03} : OraclePortSelectedDraft.frontier {ro}.indices 0 {b}=coords{k}_{i:03} := by\n  rw [OraclePortSelectedDraft.frontier,if_pos (by decide : Occupied {ro}.indices 0 {b})]\n  rfl\n#print axioms front{k}_{i:03}\n'
 files={R/'lean/JGh_TX2_FrontierBase.lean':base+end}
 for h in range(18):
  name=f'JGh_TX2_FrontierHeight{h:02}';last='JGh_TX2_FrontierBase' if h==0 else f'JGh_TX2_FrontierHeight{h-1:02}'
@@ -27,12 +27,13 @@ for h in range(18):
     else:
      parts.append(f'[(\u0020{h},{cb})]');rewrites.append(f'unoccupied {ro}.indices {h} {cb} (by decide)');streams[k].append((h,cb))
    s+=f'def coords{k}_{i:03} : List (Nat×Nat) := '+ '++'.join(parts)+'\n'
-   s+=f'theorem front{k}_{i:03} : frontier {ro}.indices {h+1} {b}=coords{k}_{i:03} := by\n  rw [frontier,if_pos (by decide : Occupied {ro}.indices {h+1} {b})]\n  simp only [Nat.reducePow,Nat.reduceAdd]\n  rw ['+','.join(rewrites)+f']\n  rfl\n#print axioms front{k}_{i:03}\n'
+   s+=f'theorem front{k}_{i:03} : OraclePortSelectedDraft.frontier {ro}.indices {h+1} {b}=coords{k}_{i:03} := by\n  rw [OraclePortSelectedDraft.frontier,if_pos (by decide : Occupied {ro}.indices {h+1} {b})]\n  simp only [Nat.reducePow,Nat.reduceAdd]\n  rw ['+','.join(rewrites)+f']\n  rfl\n#print axioms front{k}_{i:03}\n'
    after[row['index']]=i
   prev[k]=after
  sib=(P/'JGh_UNCHECKED'/f'JGh_TX2_Siblings{h:02}.lean.txt').read_text()
  files[R/'lean'/(name+'.lean')]=f'import {last}\n'+sib[sib.index('set_option'):]+s[len(f'import {last}\n'):]+end
-s='import JGh_TX2_FrontierHeight17\nimport JGh_TX2_FrontierOrder\n'+head
+component=(P/'JGh_UNCHECKED/JGh_TX2_FrontierOrder.lean.txt').read_text()
+s='import JGh_TX2_FrontierHeight17\n'+''.join(line+'\n' for line in component.splitlines() if line.startswith('import '))+component[component.index('set_option'):]+head
 for k in [0,2]:
  ro='JGf_TX2_M0Roots' if k==0 else 'JGc_TX2_M2Roots';last=prev[k][0]
  stream=sorted(streams[k]);literal='['+','.join(f'({h},{b})' for h,b in stream)+']'

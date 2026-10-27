@@ -23,7 +23,7 @@ for kind in range(3):
 files={}
 for h,rows in levels.items():
  name=f'JGh_TX2_Siblings{h:02}'
- s='import JGh_TX2_NodeViews\nimport JGc_TX2_M2Layout\nset_option autoImplicit false\nnoncomputable section\nnamespace AspisR1.'+name+'\nopen Aeneas Aeneas.Std Result\nopen AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep AspisV8R19.SqueezeOracleBridge\n'
+ s='import JGh_TX2_NodeViews\nimport JGc_TX2_M2Layout\nset_option autoImplicit false\nnoncomputable section\nnamespace AspisR1.'+name+'\nopen Aeneas Aeneas.Std Result\nattribute [local irreducible] JFx_NativeBytes.proof JGh_TX2_NodeViews.nodes0 JGh_TX2_NodeViews.nodes1 JGh_TX2_NodeViews.nodes2\nopen AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep AspisV8R19.SqueezeOracleBridge\n'
  for kind,base,cursor,bs,start in rows:
   n=f'k{kind}c{cursor:03}';off=start+32*cursor;ro='JGf_TX2_M0Roots' if kind==0 else 'JGh_TX2_M1Roots' if kind==1 else 'JGc_TX2_M2Roots'
   s+=f'def {n} : Array U8 32#usize := Array.make 32#usize {u8(bs)}\n'
@@ -39,7 +39,7 @@ for h,rows in levels.items():
   s+=f'  rw [←MultiproofConeCountGroups.source_level_eq _ _ (by decide : {ro}.indices{h:02}.Pairwise (·<·))]\n  exact {ro}.level{h:02}\n#print axioms count{k}_frontier\n'
  for kind,base,cursor,bs,start in rows:
   n=f'k{kind}c{cursor:03}';ro='JGf_TX2_M0Roots' if kind==0 else 'JGh_TX2_M1Roots' if kind==1 else 'JGc_TX2_M2Roots'
-  s+=f'theorem {n}_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes{kind} {cursor}={ro}.siblingAt {h} {base} :=\n  (JGh_TX2_NodeViews.read_selected _ _ {n} {n}_selected).trans {n}_decode\n#print axioms {n}_read\n'
+  s+=f'theorem {n}_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes{kind} {cursor}={ro}.siblingAt {h} {base} := by\n  have selected := JGh_TX2_NodeViews.read_selected JGh_TX2_NodeViews.nodes{kind} {cursor} {n} {n}_selected\n  exact selected.trans {n}_decode\n#print axioms {n}_read\n'
  s+=f'end AspisR1.{name}\nend\n'
  files[P/'JGh_UNCHECKED'/(name+'.lean.txt')]=s
 for f,s in files.items():

@@ -4,6 +4,7 @@ set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JGh_TX2_Siblings17
 open Aeneas Aeneas.Std Result
+attribute [local irreducible] JFx_NativeBytes.proof JGh_TX2_NodeViews.nodes0 JGh_TX2_NodeViews.nodes1 JGh_TX2_NodeViews.nodes2
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep AspisV8R19.SqueezeOracleBridge
 def k2c140 : Array U8 32#usize := Array.make 32#usize [220#u8,196#u8,233#u8,115#u8,158#u8,7#u8,124#u8,8#u8,46#u8,188#u8,36#u8,235#u8,198#u8,156#u8,139#u8,68#u8,223#u8,130#u8,204#u8,114#u8,37#u8,155#u8,16#u8,71#u8,174#u8,150#u8,102#u8,35#u8,254#u8,100#u8,134#u8,80#u8]
 theorem k2c140_selected : ((JGh_TX2_NodeViews.nodes2.val).drop 4480).take 32=k2c140.val := by
@@ -24,8 +25,9 @@ theorem count2_frontier : OraclePortFrozenOrder.countLevel JGf_TX2_Count2.indice
   rw [←MultiproofConeCountGroups.source_level_eq _ _ (by decide : JGf_TX2_Count2.indices17.Pairwise (·<·))]
   exact JGf_TX2_Count2.level17
 #print axioms count2_frontier
-theorem k2c140_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes2 140=JGc_TX2_M2Roots.siblingAt 17 131072 :=
-  (JGh_TX2_NodeViews.read_selected _ _ k2c140 k2c140_selected).trans k2c140_decode
+theorem k2c140_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes2 140=JGc_TX2_M2Roots.siblingAt 17 131072 := by
+  have selected := JGh_TX2_NodeViews.read_selected JGh_TX2_NodeViews.nodes2 140 k2c140 k2c140_selected
+  exact selected.trans k2c140_decode
 #print axioms k2c140_read
 end AspisR1.JGh_TX2_Siblings17
 end

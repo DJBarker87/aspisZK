@@ -1,0 +1,34 @@
+import JGf_TX2_Sort
+import JGf_TX2_Count0
+import JGf_TX2_Count2
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGh_TX2_FrontierOrder
+open Aeneas Aeneas.Std Result
+
+def q := Port4B_KeyInstall.queries JFo_Prepared.value.queries
+
+theorem tree0 : (OraclePortFrozenOrder.sortedPositions q 1 0).map
+    (OraclePortSelectedDraft.index q 0)=JGf_TX2_Count0.indices00 := by rfl
+#print axioms tree0
+
+theorem tree1 : (OraclePortFrozenOrder.sortedPositions q 1 1).map
+    (OraclePortSelectedDraft.index q 1)=JGf_TX2_Count0.indices00 := by rfl
+#print axioms tree1
+
+theorem tree2 : (OraclePortFrozenOrder.sortedPositions q 1 2).map
+    (OraclePortSelectedDraft.index q 2)=JGf_TX2_Count2.indices00 := by rfl
+#print axioms tree2
+
+theorem source (kind : Nat) : ∃ out : Array U64 16#usize,
+    Port4B_Install.leaves.op5 (JGf_TX2_Keys.raw kind) 12#usize=ok out ∧
+    Port4B_LeafLoop.KeyStream q 1 kind out 0#usize
+      (OraclePortFrozenOrder.sortedPositions q 1 kind) := by
+  obtain ⟨out,run,_front,_suffix⟩ := JGf_TX2_Sort.source kind
+  refine ⟨out,run,?_⟩
+  exact (Port4B_SortInstall.key_stream Port4B_Install.leaves q 1 kind
+    (JGf_TX2_Keys.raw kind) out 12#usize (by decide) (by decide)
+    (JGf_TX2_Keys.prefix_keys kind) run).2
+#print axioms source
+end AspisR1.JGh_TX2_FrontierOrder
+end

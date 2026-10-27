@@ -1,0 +1,1 @@
+Canonical per-attempt stdout.log, time.log, receipt.json and source snapshots are retained verbatim. Local driver/launch display mirrors have trailing whitespace normalized. Raw075/stdout.log contains a whitespace-only ambiguity-diagnostic line at8; it is retained rather than altering raw evidence. Source/docs whitespace checks exclude raw stdout diagnostics.

@@ -4,6 +4,7 @@ set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JGh_TX2_Siblings14
 open Aeneas Aeneas.Std Result
+attribute [local irreducible] JFx_NativeBytes.proof JGh_TX2_NodeViews.nodes0 JGh_TX2_NodeViews.nodes1 JGh_TX2_NodeViews.nodes2
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep AspisV8R19.SqueezeOracleBridge
 def k0c160 : Array U8 32#usize := Array.make 32#usize [14#u8,249#u8,49#u8,194#u8,64#u8,5#u8,0#u8,211#u8,197#u8,83#u8,60#u8,63#u8,49#u8,164#u8,189#u8,6#u8,250#u8,112#u8,37#u8,238#u8,152#u8,152#u8,223#u8,179#u8,110#u8,114#u8,244#u8,152#u8,9#u8,157#u8,125#u8,189#u8]
 theorem k0c160_selected : ((JGh_TX2_NodeViews.nodes0.val).drop 5120).take 32=k0c160.val := by
@@ -46,14 +47,17 @@ theorem count2_frontier : OraclePortFrozenOrder.countLevel JGf_TX2_Count2.indice
   rw [←MultiproofConeCountGroups.source_level_eq _ _ (by decide : JGf_TX2_Count2.indices14.Pairwise (·<·))]
   exact JGf_TX2_Count2.level14
 #print axioms count2_frontier
-theorem k0c160_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes0 160=JGf_TX2_M0Roots.siblingAt 14 196608 :=
-  (JGh_TX2_NodeViews.read_selected _ _ k0c160 k0c160_selected).trans k0c160_decode
+theorem k0c160_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes0 160=JGf_TX2_M0Roots.siblingAt 14 196608 := by
+  have selected := JGh_TX2_NodeViews.read_selected JGh_TX2_NodeViews.nodes0 160 k0c160 k0c160_selected
+  exact selected.trans k0c160_decode
 #print axioms k0c160_read
-theorem k1c160_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes1 160=JGh_TX2_M1Roots.siblingAt 14 196608 :=
-  (JGh_TX2_NodeViews.read_selected _ _ k1c160 k1c160_selected).trans k1c160_decode
+theorem k1c160_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes1 160=JGh_TX2_M1Roots.siblingAt 14 196608 := by
+  have selected := JGh_TX2_NodeViews.read_selected JGh_TX2_NodeViews.nodes1 160 k1c160 k1c160_selected
+  exact selected.trans k1c160_decode
 #print axioms k1c160_read
-theorem k2c138_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes2 138=JGc_TX2_M2Roots.siblingAt 14 16384 :=
-  (JGh_TX2_NodeViews.read_selected _ _ k2c138 k2c138_selected).trans k2c138_decode
+theorem k2c138_read : JGh_TX2_NodeViews.readCell JGh_TX2_NodeViews.nodes2 138=JGc_TX2_M2Roots.siblingAt 14 16384 := by
+  have selected := JGh_TX2_NodeViews.read_selected JGh_TX2_NodeViews.nodes2 138 k2c138 k2c138_selected
+  exact selected.trans k2c138_decode
 #print axioms k2c138_read
 end AspisR1.JGh_TX2_Siblings14
 end
