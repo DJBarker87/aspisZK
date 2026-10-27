@@ -31,7 +31,8 @@ equality alone does not prove the remaining literal transport obligations.
 Neither proposal is installed here.
 
 Before/after: adopted theorem unchanged, all binders and conclusion identical.
-Ledger method inherited from FJn: actual 83T/11P/13G, combined excluding alias
-89T/14P/13G; removed=[], added=[], delta 0T/0P/0G/0C. Both L146 rows retained.
+Ledger method: actual 83T/11P/13G. FJn's historical combined total
+was 89T/14P/13G; the latest Rc12 ledger expands deployment-only rows and gives
+89T/28P/13G (no deployment alias) before and after this job; removed=[], added=[], delta 0T/0P/0G/0C. Both L146 rows retained.
 Non-vacuity is the inherited conditional fixture only; constant-callback
 separation is an installation witness, not full joint release inhabitance.
