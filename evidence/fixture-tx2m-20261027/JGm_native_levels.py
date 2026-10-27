@@ -131,7 +131,7 @@ attribute [local irreducible] JFx_NativeBytes.proof JGh_TX2_NodeViews.nodes0 JGh
       {count*32}#usize {32*before}#usize {32*c}#usize rfl rfl (by decide)
       (by rw [JGh_TX2_NodeViews.length{t}];decide)
     rw [JGh_TX2_Siblings{h:02}.k{t}c{before:03}_read] at read
-    exact read
+    simpa only [JGm_TX2_Supplied.nodes{t},{pre}_TX2_M{t}Roots.siblingAt] using read
   have selected{w:02} := JGm_TX2_ExternalRun.source
     (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash ({now} s)
     JGm_TX2_Supplied.nodes{t} {i}#usize {w}#usize {ni}#usize {32*c}#usize {32*(count-before)}#usize
@@ -162,7 +162,7 @@ attribute [local irreducible] JFx_NativeBytes.proof JGh_TX2_NodeViews.nodes0 JGh
    w,i,ni=(r[z] for z in ['w','i','ni']);now=f's{w:02}';nxt=f's{w+1:02}'
    lhs=f'reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash ({now} s) JGm_TX2_Supplied.nodes{t} {i}#usize {w}#usize' if j==0 else '_'
    s+=f'''      {lhs} = reference.level_rows (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash ({nxt} s) JGm_TX2_Supplied.nodes{t} {ni}#usize {w+1}#usize :=
-        JGm_TX2_RowControl.step _ _ _ _ _ _ _ _ active{w:02} row{w:02}
+        JGm_TX2_RowControl.step _ _ _ _ _ _ _ _ _ active{w:02} row{w:02}
 '''
   s+=f'''      _ = ok (.Done (output s)) := JGm_TX2_RowControl.done _ _ _ _ _ _ (by
         change (s{last:02} s).n.val≤{len(inds)};rw [v{last:02}.size];decide)
