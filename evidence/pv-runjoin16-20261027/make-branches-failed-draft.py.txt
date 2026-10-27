@@ -1,0 +1,34 @@
+from pathlib import Path
+R=Path(__file__).resolve().parents[2];L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
+g=(L/'PV_RunJoin_GeneralIdentification16.lean').read_text()
+a=g.index('  change (do\n');b=g.index('  cases selected <;> cases rec',a)
+base=g[a:b]
+base=base.replace('  rcases chg with', '  change selected = SELECTED at hselected\n  subst selected\n  rcases chg with')
+steps=g[g.index('    dsimp only [',b):g.index('\ntheorem general',b)]
+steps='\n'.join(x[2:] if x.startswith('  ') else x for x in steps.splitlines())+'\n'
+s='''import R1Z.PV_RunJoin_ArrayShapes16
+import R1Z.PV_RunJoin_RecordsAdapter16
+import R1Z.PV_RunJoin_WithdrawalIdentification16
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_GeneralBranches16
+open Aeneas Aeneas.Std Result BuilderForestAdmissionPort
+open BuilderForestAdmissionPort.pool_v1
+open PV_RunJoin_ArrayShapes16
+'''
+for sel in ['false','true']:
+ for variant in ['none','some']:
+  name=variant+'_'+('first' if sel=='false' else 'second')
+  rec='none' if variant=='none' else '(some recipient)'
+  opt='' if variant=='none' else '    (recipient : payment_relation.PoolV1OutputNoteWitnessV1)\n'
+  s+=f'''\ntheorem {name} (empty : Array (Array U32 8#usize) 21#usize)
+    (i : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
+    (out : U32)
+{opt}    (chg : payment_relation.PoolV1OutputNoteWitnessV1)
+    (snap : pair_tree_profile.PoolV1PairLiveSnapshotV1) (asset : U32)
+    (hselected : i.pair.selected_second = {sel}) :
+    @Records.call (PV_RunJoin_RecordsAdapter16.R_shipped empty) i out {rec} chg snap asset =
+      PV_Src_RecordReference.call empty i out {rec} chg snap asset := by
+'''
+  s+=base.replace('rec.map','REC.map').replace(' i out rec ', ' i out REC ').replace('REC',rec).replace('SELECTED',sel)+steps
+  s+=f'\n#print axioms {name}\n'
+s+='end R1Z.PV_RunJoin_GeneralBranches16\n';(L/'PV_RunJoin_GeneralBranches16.lean').write_text(s)

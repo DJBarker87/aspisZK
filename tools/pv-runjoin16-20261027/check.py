@@ -13,10 +13,10 @@ assert S.is_file();sha=hashlib.sha256(S.read_bytes()).hexdigest()
 (E/f'used-{A}.json').write_text(json.dumps(dict(attempt=A,target=M,utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))+'\n')
 atexit.register(lambda:subprocess.run([sys.executable,str(R/'tools/pv-runjoin16-20261027/tally.py')],stdout=subprocess.DEVNULL))
 def ssh(c):return subprocess.run(['ssh',host,c],capture_output=True,text=True)
-r=ssh(f'python3 {H}/reservation-existing.py {H}/evidence/pv16-reservation-{A}.json > {H}/evidence/pv16-reservation-{A}.log 2>&1\ncat {H}/evidence/pv16-reservation-{A}.log')
+r=ssh(f'python3 {H}/reservation-existing.py {H}/evidence/pv16-reservation-{A}.json > {H}/evidence/pv16-reservation-{A}.log 2>&1\nreservation_status=$?\ncat {H}/evidence/pv16-reservation-{A}.log\nexit $reservation_status')
 (E/f'reservation-{A}.log').write_text(r.stdout+r.stderr)
 admission=json.loads(r.stdout.strip().splitlines()[-1])
-if not admission['allowed']:
+if r.returncode != 0 or not admission['allowed']:
  (E/f'refusal-{A}.json').write_text(json.dumps(admission,indent=2)+'\n');print('REFUSED',admission);sys.exit(78)
 subprocess.run(['scp','-q',f'{host}:{H}/evidence/pv16-reservation-{A}.json',str(E/f'reservation-{A}.json')],check=True)
 code=f'''import pathlib,json,hashlib,re
