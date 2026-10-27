@@ -58,11 +58,20 @@ mod FJe_reference {
     }
     fn any_state() -> [QM31;16] { core::array::from_fn(|_| any_q()) }
 
+    fn assert_q(a:QM31,b:QM31) {
+        assert_eq!(a.c0.a.0,b.c0.a.0); assert_eq!(a.c0.b.0,b.c0.b.0);
+        assert_eq!(a.c1.a.0,b.c1.a.0); assert_eq!(a.c1.b.0,b.c1.b.0);
+    }
+    fn assert_packed(a:[QM31;4],b:[QM31;4]) {
+        for j in 0..4 { assert_q(a[j],b[j]); }
+    }
     #[kani::proof]
     #[kani::unwind(6)]
     fn local_raw_value() {
         let input: [QM31;4] = core::array::from_fn(|_| any_q());
-        assert_eq!(external_local_packed_raw(input),local_raw(input));
+        let a = external_local_packed_raw(input); let b = local_raw(input);
+        assert_eq!(a[0],b[0]); assert_eq!(a[1],b[1]);
+        assert_eq!(a[2],b[2]); assert_eq!(a[3],b[3]);
         kani::cover!(true, "canonical local inputs inhabited");
     }
 
@@ -70,21 +79,21 @@ mod FJe_reference {
     #[kani::unwind(18)]
     fn external_value() {
         let s = any_state();
-        assert_eq!(external_linear_packed(s),external(s));
+        assert_packed(external_linear_packed(s),external(s));
         kani::cover!(true, "canonical external inputs inhabited");
     }
     #[kani::proof]
     #[kani::unwind(18)]
     fn leading_value() {
         let o = StateOnlyPoseidonOpenings {z:any_state(),succ_z:any_state(),xor12_z:any_state()};
-        assert_eq!(leading_pair_packed(&o),leading(&o));
+        assert_packed(leading_pair_packed(&o),leading(&o));
         kani::cover!(true, "canonical leading inputs inhabited");
     }
     #[kani::proof]
     #[kani::unwind(18)]
     fn full_value() {
         let s = any_state(); let l = any_state();
-        assert_eq!(interpolated_full_pair_packed(s,&l),full(s,&l));
+        assert_packed(interpolated_full_pair_packed(s,&l),full(s,&l));
         kani::cover!(true, "canonical full inputs inhabited");
     }
 }
