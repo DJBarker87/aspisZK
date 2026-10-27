@@ -1,0 +1,23 @@
+import Aeneas
+set_option autoImplicit false
+namespace PV_B1_WordZero
+open Aeneas Aeneas.Std
+-- Width-polymorphic: the same facts also discharge the U16 public-mask layer.
+theorem or_zero {ty : UScalarTy} (a b : UScalar ty) :
+    (a ||| b)=UScalar.zero ↔ a=UScalar.zero ∧ b=UScalar.zero := by
+  simp only [UScalar.eq_equiv_bv_eq,UScalar.bv_or,UScalar.zero_bv]
+  exact BitVec.or_eq_zero_iff
+
+theorem xor_zero {ty : UScalarTy} (a b : UScalar ty) : (a ^^^ b)=UScalar.zero ↔ a=b := by
+  simp only [UScalar.eq_equiv_bv_eq,UScalar.bv_xor,UScalar.zero_bv]
+  exact BitVec.xor_eq_zero_iff
+theorem four_or_zero {ty : UScalarTy} (a b c d : UScalar ty) :
+    (((a ||| b) ||| c) ||| d)=UScalar.zero ↔ a=UScalar.zero ∧ b=UScalar.zero ∧ c=UScalar.zero ∧ d=UScalar.zero := by
+  simp only [or_zero,and_assoc]
+theorem xor_self {ty : UScalarTy} (a : UScalar ty) : a ^^^ a=UScalar.zero :=
+  (xor_zero a a).mpr rfl
+#print axioms xor_self
+#print axioms four_or_zero
+#print axioms or_zero
+#print axioms xor_zero
+end PV_B1_WordZero

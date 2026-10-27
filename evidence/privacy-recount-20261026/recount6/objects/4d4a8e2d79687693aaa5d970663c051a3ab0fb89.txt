@@ -1,0 +1,11 @@
+# Native client build toolchain pin, owner-approved 2026-10-27 (security contract,
+# "Owner-approved amendment, 2026-10-27 (second)", item 4; Stream B LOG D270/D301).
+# rustc 1.94.1 (commit e408947bfd200af42db322daf0fadfe7e26d3bd1, 2026-03-25),
+# cargo 1.94.1 (29ea6fb6a), LLVM 21.1.8, target x86_64-unknown-linux-gnu.
+# rustup reads this file from the directory cargo runs in: build the client from
+# tools/r1-cost-probe (cd tools/r1-cost-probe && cargo build --release --offline
+# --locked -j 4 ... --bin devnet_spend), RUSTFLAGS as recorded, no target-cpu change.
+[toolchain]
+channel = "1.94.1"
+targets = ["x86_64-unknown-linux-gnu"]
+profile = "minimal"
