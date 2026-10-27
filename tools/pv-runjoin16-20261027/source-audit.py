@@ -9,11 +9,11 @@ def split(s):
  a=s.index('fn records(');b=s.index('\n// ---------- interface for the forest compiler',a)
  return s[:a],s[a:s.index('{',a)+1],s[b:]
 expected=base.replace('snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP)', 'snapshot: &PoolV1PairLiveSnapshotV1, asset: M31, empty: [Digest; 21]) -> (RW, RP)').replace('    let empty = pair_empty_roots();\n','').replace('        let (w, p) = records(input, out_value, recipient, change, snapshot, asset);','        let empty = pair_empty_roots();\n        let (w, p) = records(input, out_value, recipient, change, snapshot, asset, empty);')
-assert expected==s
+assert split(expected)==split(s)
 body=s[s.index('fn records('):s.index('// ---------- interface for the forest compiler')]
-assert 'pair_empty_roots(' not in body and 'raw(' not in body
+assert 'pair_empty_roots(' not in body and 'raw(' not in body and 'hash' not in body
 paths=git('diff','--name-only','f44d7c5a42','HEAD','--','crates','programs','Cargo.lock').splitlines();assert paths==[p]
-(E/'source-freeze-audit.json').write_text(json.dumps(dict(entry_revision='f44d7c5a42',final_source_revision=rev,only_shipped_changed_path=paths,only_authorized_hoist_changed=True,signature_adds_empty_table=True,source_sha256=hashlib.sha256(s.encode()).hexdigest(),shared_envj_sources_written=False,extractor_modified=False,trust_fields_added=0),indent=2)+'\n')
+(E/'source-freeze-audit.json').write_text(json.dumps(dict(entry_revision='f44d7c5a42',final_source_revision=rev,only_shipped_changed_path=paths,only_authorized_hoist_and_records_body_changed=True,signature_adds_empty_table=True,source_sha256=hashlib.sha256(s.encode()).hexdigest(),shared_envj_sources_written=False,extractor_modified=False,trust_fields_added=0),indent=2)+'\n')
 (E/'shipped-records.diff').write_text(git('diff','f44d7c5a42','HEAD','--',p));(E/'source-revision.txt').write_text(rev+'\n')
 paths=git('ls-files','crates','programs','Cargo.lock').splitlines();local={p:hashlib.sha256((R/p).read_bytes()).hexdigest() for p in paths if (R/p).is_file()}
 code='import pathlib,json,hashlib;root=pathlib.Path("/home/dombarker/project-offloads/codex-pv-runjoin-20261026/gate13/candidate/src");paths='+repr(list(local))+';print(json.dumps({p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths}))'

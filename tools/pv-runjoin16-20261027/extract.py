@@ -82,6 +82,10 @@ if phase=='charon':
   del cmd[idx-1:idx+1]
   cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods']
 
+ if len(sys.argv)>3 and sys.argv[3]=='owned-closure':
+  start=cmd.index('--opaque');end=cmd.index('--start-from');cmd[start:end]=['--include','aspis_core::field::*']
+  cmd[2:2]=['--precise-drops','--desugar-drops','--duplicate-defaulted-methods']
+
  if len(sys.argv)>3 and sys.argv[3]=='abort-records':
   cmd[cmd.index('built')]='optimized'
   start=cmd.index('--opaque');end=cmd.index('--start-from');cmd[start:end]=['--include','aspis_core::field::*']
