@@ -10938,3 +10938,24 @@ extraction of `records`; route B the P6 link through the existing tools/r1-build
 records_reference.rs (Kani shipped = reference, no stubs, bounded; extraction of the reference), recorded
 as a P6 gate; then the identification per fixture, compiler-return and transition equations. Six slots:
 cb6, cb7, cblib, srcid7, cbmid, runjoin12. Rows removed outright: 0. Privacy target not yet established.
+
+## D246 (Stream B) 2026-10-27 03:15 UTC: cb6 exhausted with no new rows; Kani root cause and timeouts; ruling (i); cb8 launched on op223 alone
+
+pv-cb6 (`codex/pv-cb-20261026`, head 148ce95eec; 100/100 Lean = 77 passed / 23 rejected; all 12
+substantive Kani gates timed out at 180 s, no verdict, no counterexample; no crates/programs change; no
+forbidden tokens; joint audit 226 declarations standard axioms, 38404-38406, ≤1.91 s / 4.28 GB / swap 0).
+No row discharged: op223 (V240) OPEN with `CompressCanonical.reference`, its array-domain and tag
+invariants and the compressor caller transport proved but no source association (Aeneas refuses the
+direct extraction; the shipped = reference gates timed out); op117 PARTIAL (split native gates timed
+out); op259/op258 OPEN (circle and pole gates timed out). Kani configuration (KANI-CONFIG.md): the
+post-rebuild failure is rustc codegen `failed to spawn work thread: Os { code: 11, WouldBlock }` inside
+the TasksMax=64 scope (Kani 0.67.0, rustc 1.93.0-nightly 53732d5e0); a dependency-free probe passed;
+mitigation `taskset --cpu-list 0-3` limits compiler fan-out without touching caps. Two scheduling
+deviations recorded (five early gates before the matched reproduction; one Lean/Kani overlap). LEAD
+RULING (i): a 180 s Kani timeout may be retried once at up to 900 s (the launcher's own Lean timeout)
+under the same memory caps and TasksMax with taskset, then split or move to Lean; never a third identical
+run. Launched pv-cb8 (same branch, IDs 41200-41499, 100 Lean / 12 Kani) on op223 alone: 900 s gates,
+then a borrow-free cfg(aeneas_ref) shim as the extraction target if Aeneas still refuses the shipped
+function, publishing `PV_CB_Op223Source.op223_source` under that stable name for rw22; fallback
+op117/op259/op258 under ruling (i). Six slots: cb7, cblib, srcid7, cbmid, runjoin12, cb8. Rows removed
+outright: 0. Privacy target not yet established.
