@@ -1,0 +1,23 @@
+def Aeneas.Std.Usize.wrapping_shl : Aeneas.Std.Usize → Aeneas.Std.U32 → Aeneas.Std.Usize :=
+fun x s => Aeneas.Std.UScalar.wrapping_shl x s
+def Aeneas.Std.UScalar.wrapping_shl : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.U32 → Aeneas.Std.UScalar ty :=
+fun {ty} x s => x.bv.shiftLeft (↑s % ty.numBits)#uscalar
+def Aeneas.Std.UScalar.cast : {src_ty : Aeneas.Std.UScalarTy} →
+  (tgt_ty : Aeneas.Std.UScalarTy) → Aeneas.Std.UScalar src_ty → Aeneas.Std.UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+Aeneas.Std.UScalar.cast_bv_eq
+Aeneas.Std.Usize.wrapping_sub_bv_eq
+Aeneas.Std.UScalar.wrapping_shl_bv_eq
+Aeneas.Std.Usize.eq_equiv_bv_eq
+Aeneas.Std.Usize.wrapping_shr_bv_eq
+Aeneas.Std.UScalar.eq_equiv_bv_eq
+Aeneas.Std.UScalar.wrapping_sub_bv_eq
+Aeneas.Std.Usize.wrapping_shl_bv_eq
+Aeneas.Std.UScalar.wrapping_mul_bv_eq
+Aeneas.Std.Usize.wrapping_add_bv_eq
+Aeneas.Std.UScalar.wrapping_add_bv_eq
+Aeneas.Std.UScalar.hcast_bv_eq
+Aeneas.Std.UScalar.wrapping_shr_bv_eq
+Aeneas.Std.UScalar.cast_fromBool_bv_eq
+Aeneas.Std.Usize.wrapping_mul_bv_eq

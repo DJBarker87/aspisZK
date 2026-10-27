@@ -37,7 +37,7 @@ print(json.dumps(r,sort_keys=True))
 r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True)
 assert r.returncode==0,r.stdout+r.stderr
 deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest()
-assert not any(x.get('sha256')==sha and x.get('deps_fingerprint')==fp for x in t['attempts'])
+assert not any(x.get('charged') and x.get('sha256')==sha and x.get('deps_fingerprint')==fp for x in t['attempts'])
 meta=dict(id=n,module=m,sha256=sha,deps_fingerprint=fp,dependency_objects=deps,
  source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
 t['used_ids'].append(n);t['attempts'].append(meta);tp.write_text(json.dumps(t,indent=2)+'\n')
@@ -46,7 +46,7 @@ r=ssh(f'mkdir -p {D}/runs/{n}; python3 {G}/reservation.py {D}/runs/{n}/admission
 ad=ssh(f'cat {D}/runs/{n}/admission-before.json')
 (E/f'{n}-admission.json').write_text(ad.stdout)
 if r.returncode!=0 or not json.loads(ad.stdout).get('allowed'):
- print('UNCHARGED admission refusal',r.returncode,ad.stdout);sys.exit(78)
+ print('UNCHARGED admission refusal',r.returncode,{k:json.loads(ad.stdout).get(k) for k in ['utc','allowed','error','bounded_reserved_bytes','safe_limit_bytes']});sys.exit(78)
 subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+m+'.lean'],check=True)
 cmd=['timeout','900','python3',B+'/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+m+'.olean',D+'/lean-sources/'+m+'.lean','7000']
 run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',G+'/barrier.py',D+f'/runs/{n}/admission-barrier.json','/usr/bin/time','-v','-o',D+f'/runs/{n}/time.log',*cmd]

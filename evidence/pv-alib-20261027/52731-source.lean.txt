@@ -1,0 +1,37 @@
+import R1Z.PV_CBL_LibraryShapeTypes
+import R1Z.PV_CBL_GenericArrayPower
+import R1Z.PV_CBL_ShaTypes
+import R1Z.ProverRwFullFuns
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_AL_SplitNativeShape
+open ProverRwFull PV_CBL_GenericArrayPower
+set_option autoImplicit false
+
+abbrev Types := PV_CBL_LibraryShapeTypes.selectedTypes
+
+def Size : Nat → Type
+  | 0 => typenum.uint.UInt typenum.uint.UTerm typenum.bit.B1
+  | k+1 => typenum.uint.UInt (Size k) typenum.bit.B0
+
+def nativeTrait (base : ExternalTypes) : (k : Nat) →
+    @generic_array.ArrayLength (Types base) (Size k) U8 (Storage U8 k)
+  | 0 =>
+    typenum.uint.UIntNB1.Insts.Generic_arrayArrayLengthTGenericArrayImplOdd
+      (typenum.uint.UTerm.Insts.Generic_arrayArrayLengthTArrayT0 U8)
+  | k+1 =>
+    typenum.uint.UIntNB0.Insts.Generic_arrayArrayLengthTGenericArrayImplEven
+      (nativeTrait base k)
+
+theorem native_size (base : ExternalTypes) :
+    (nativeTrait base 6).typenummarker_traitsUnsignedInst.USIZE=ok 64#usize := by
+  rfl
+
+theorem consumed_storage (base : ExternalTypes) :
+    PV_CBL_ShaTypes.Blocks (Types base)=
+      Slice (PV_CBL_LibraryShapes.GenericArray U8 (Size 6) (Storage U8 6)) := rfl
+
+#print axioms Size
+#print axioms nativeTrait
+#print axioms native_size
+#print axioms consumed_storage
+end R1Z.PV_AL_SplitNativeShape

@@ -1,0 +1,65 @@
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_RangeStep.lean:9:41: error: Application type mismatch: The argument
+  v
+has type
+  Slice T
+but is expected to have type
+  Slice U8
+in the application
+  PV_AL_SplitFlat.copy_range_loop.body v
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_RangeStep.lean:9:66: error: Application type mismatch: The argument
+  out
+has type
+  alloc.vec.Vec T
+but is expected to have type
+  alloc.vec.Vec U8
+in the application
+  done out
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_RangeStep.lean:16:49: error: Application type mismatch: The argument
+  v
+has type
+  Slice T
+but is expected to have type
+  Slice U8
+in the application
+  PV_AL_SplitFlat.copy_range_loop.body v
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_RangeStep.lean:18:15: error: Type mismatch
+  ↑out ++ [(↑v)[↑i]]
+has type
+  List T
+but is expected to have type
+  List U8
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_RangeStep.lean:18:53: error: unsolved goals
+T : Type
+v : Slice T
+out : alloc.vec.Vec T
+last i : Usize
+h : ↑i < ↑last
+hv : ↑last ≤ (↑v).length
+ho : (↑out).length < Usize.max
+next : alloc.vec.Vec T
+hnext : out.push (↑v)[↑i] = ok next
+he : ↑next = ↑out ++ [(↑v)[↑i]]
+hn : i < last
+⊢ (do
+      let i1 ← sorry.index_usize i
+      let out1 ← sorry.push i1
+      ok (cont (out1, i.wrapping_add 1#usize))) =
+    ok (cont (sorry, i.wrapping_add 1#usize))
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_RangeStep.lean:24:4: warning: This simp argument is unused:
+  PV_CBL_ArrayStep.read v i (by omega)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵A̵L̵_̵S̵p̵l̵i̵t̵F̵l̵a̵t̵.̵c̵o̵p̵y̵_̵r̵a̵n̵g̵e̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵n̵,̵i̵f̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵C̵B̵L̵_̵A̵r̵r̵a̵y̵S̵t̵e̵p̵.̵r̵e̵a̵d̵ ̵v̵ ̵i̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵)̵,̵h̵n̵e̵x̵t̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲P̲V̲_̲A̲L̲_̲S̲p̲l̲i̲t̲F̲l̲a̲t̲.̲c̲o̲p̲y̲_̲r̲a̲n̲g̲e̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_RangeStep.lean:24:41: warning: This simp argument is unused:
+  hnext
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_AL_SplitFlat.copy_range_loop.body, ̲hn, ̲if_true,
+      PV_CBL_ArrayStep.read v i (by omega),h̵n̵e̵x̵t̵,̵ ̲lift, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_AL_RangeStep.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_AL_RangeStep.continuing' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -43,9 +43,58 @@ retained as rejected extraction evidence, never installed or kernel-accepted.
 After: native remove fidelity remains; V184 stays **OPEN**, no closing theorem.
 Work continues on alternative source routes and the other two rows.
 
-## Remaining rows
+## V233 selected split-block law
 
-V233 / op209 and V265 / op259 remain OPEN while their source gates are worked.
-V232 and SHA-NI semantics are untouched. No endpoint premise or T field changed.
-No `crates/` or `programs/` file changed, so no ELF rebuild is claimed; the
-three release pins remain inherited, not freshly checked.
+Before: `ProverRwFull.ExternalFuns.op209`, selected split_blocks source/value
+law for arbitrary sized input slices and link to the consumed callback. CBL's
+fixed soft digest did not supply it.
+
+After: the selected **library-law candidate** is supplied by
+`PV_AL_SplitSelected.native_callback` and `.consumed`, with
+`PV_AL_SplitBridge.source_reference` and `.consumed_reassembles`. Status:
+**OPEN -> CLOSED-ON-CANDIDATE** at this scoped library-law boundary. The complete
+source reference law is `PV_AL_SplitObservation.complete`; it covers arbitrary
+representable slices and arbitrary block sizes, including division-by-zero
+failure. The consumed native 64-byte specialization has no length premise.
+
+The safe Drop-free reference extracts with unchanged pinned tools and has no
+external-function holes. `PV_AL_RangeLoop.source` proves its range-copy loop by
+induction; no concrete long input is kernel-normalized. `PV_AL_BlockCodec` and
+`PV_AL_SplitCarrier` prove exact bytes through the native generic-array storage.
+`PV_AL_SplitNativeShape.consumed_storage` identifies the pre-existing consumed
+block carrier. The native USIZE field is derived from literal typenum size
+expressions, not assumed. Four auxiliary numeric constants/expressions are
+installed (156/178/192/202); no additional ledger-row credit is claimed.
+
+`kani-split64-02` is a no-stub native/reference gate: arbitrary bytes and output
+coordinates, lengths 0–129, unwind 132; 389 checks pass. `native-split-02` checks
+1,026 prefixes through length 1025. `SPLIT-FIDELITY-SCAN.json` records restoration
+and output preservation. The rejected owned temporary-vector extraction and
+initial no_std import error are retained. One overbroad trait-record
+simplification (52735) was stopped after 76.29 s at 2,636,476 KiB, then replaced
+by a projected size recurrence and small scalar proof (52747/52748); no limits
+were raised. Attempts 52753/52755 print standard axioms only.
+
+There are no conclusion-shaped or source-equality hypotheses. Every input
+slice has a concrete successful 64-byte callback result; the native trait and
+its size are constructed and checked. Other callback instantiations retain
+their original operation. This is not an unbounded native-machine refinement
+or a deployed endpoint instance: the bounded P6 gate's scope remains explicit,
+and whole native composition/replay remains separate. No SHA-NI semantics
+claim is made, and V232 is untouched.
+
+## V265 ongoing source attempt
+
+V265 / op259 remains OPEN. A closure-free safe reference was written and
+freshly extracted; its initial arithmetic graph still has two standard-library
+external leaves, so it is not yet a closing theorem. The graph including the
+shipped unwrap_or_else closure fails pinned extraction; the monomorphic
+Drop-desugared alternative fails on a missing function and is retained.
+`native-circle-02` passes 8,708 exact original/reference comparisons (8,582
+accepted-map results; 126 fallbacks, both rows). Further extraction and Lean
+source work continue. No chained-field-arithmetic Kani gate was attempted.
+
+No endpoint premise or T field changed. No `crates/` or `programs/` file changed,
+so no ELF rebuild is claimed; the three release pins remain inherited, not
+freshly checked. The initial `[17,29]` copy-reference counterexample is retained
+and is not relabeled as a row counterexample or a successful gate.

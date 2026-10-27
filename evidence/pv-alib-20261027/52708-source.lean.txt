@@ -1,0 +1,43 @@
+import R1Z.PV_CBL_SplitBounds
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_AL_RangeLists
+set_option autoImplicit false
+
+def segment {T : Type} (xs : List T) (start stop : Nat) : List T :=
+  (xs.drop start).take (stop-start)
+
+theorem length {T : Type} (xs : List T) (start stop : Nat)
+    (ha : start≤stop) (hb : stop≤xs.length) :
+    (segment xs start stop).length=stop-start := by
+  simp only [segment,List.length_take,List.length_drop]
+  exact Nat.min_eq_left (by omega)
+
+theorem zero {T : Type} (xs : List T) (start : Nat) :
+    segment xs start start=[] := by simp [segment]
+
+theorem prefix {T : Type} (xs : List T) (stop : Nat) :
+    segment xs 0 stop=xs.take stop := by simp [segment]
+
+theorem suffix {T : Type} (xs : List T) (start : Nat) :
+    segment xs start xs.length=xs.drop start := by
+  simp [segment,List.take_length]
+
+theorem advance {T : Type} (xs : List T) (start i : Nat)
+    (ha : start≤i) (hi : i<xs.length) :
+    segment xs start i ++ [xs[i]] = segment xs start (i+1) := by
+  have h : i-start<(xs.drop start).length := by simp only [List.length_drop]; omega
+  have e : (xs.drop start)[i-start]=xs[i] := by
+    simp only [List.getElem_drop]
+    congr 1
+    omega
+  have step := List.take_succ_eq_append_getElem h
+  rw [e] at step
+  simpa only [segment,show i+1-start=i-start+1 by omega] using step.symm
+
+#print axioms segment
+#print axioms length
+#print axioms zero
+#print axioms prefix
+#print axioms suffix
+#print axioms advance
+end R1Z.PV_AL_RangeLists
