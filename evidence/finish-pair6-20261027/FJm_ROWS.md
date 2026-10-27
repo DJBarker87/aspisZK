@@ -17,3 +17,5 @@ credit is taken for a local installed part meaning.
 L143 and L146 belong to other workers and were not edited. Native-local
 L144/L145 are outside this L142-only scope. Existing FIr global removals are
 not recounted as new progress against ARX.
+
+Final: budget100/100 Lean,0/20 Kani. Actual ARX83T/11P/13G and deployment-inclusive89T/27P/13G unchanged; delta0T/0P/0G/0C. Root type exactly matches retained Rc12 statement. Audits099/100 pass with standard axioms only. Part2 completed020, Part3 completed042; no complete Part4/PairMeaning/deployed removal.
