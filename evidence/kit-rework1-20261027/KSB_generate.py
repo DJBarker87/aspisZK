@@ -55,5 +55,17 @@ receipt=dict(files=rows, restored_edited_declarations=edits,
     emitted_body_policy='entire raw Funs byte-identical after reversing import/namespace wrappers',
     shipped_function_standins=0, library_fidelity='pending KSC work; no credit claimed',
     status='raw-body candidate; not a successful elaboration or closed kit')
+raw=RAW.read_text(); new=(E/'KSB_Kit_Funs.lean').read_text()
+spans=[]
+for r in inventory['emitted_comparison']:
+    m=re.search(r'(?m)^(?:@\[[^\n]*?\]\s*)*(?:def|abbrev)\s+'+re.escape(r['name'])+r'(?=\s|\{|\()',raw)
+    assert m,r['name']
+    spans.append((m.start(),r['name']))
+spans.sort(); receipt['declaration_bytes']=[]
+for i,(start,name) in enumerate(spans):
+    stop=spans[i+1][0] if i+1<len(spans) else len(raw)
+    span=raw[start:stop]
+    assert span in new,name
+    receipt['declaration_bytes'].append(dict(name=name,raw_start=start,raw_stop=stop,sha256=sha(span.encode()),exact_substring_present=True))
 (E/'KSB_identity.json').write_text(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps(dict(files=len(rows),restored=len(edits),raw_declarations=receipt['raw_funs_declarations'])))

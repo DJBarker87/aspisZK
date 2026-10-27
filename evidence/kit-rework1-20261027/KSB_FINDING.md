@@ -55,3 +55,60 @@ associations, or an explicit permitted dependency boundary. No hand-written
 shipped stand-in, opaque constant or new premise was introduced to conceal
 this obstruction. The whole-kit elaboration item stops here under the
 actual-definitions rule; independent kernel-dependency inspection continues.
+
+## Stage 2: merged-theorem dependency re-check
+
+Three fresh accepted kernel inspections: L005 (`XSf_Audit`, A2 first),
+L006 (`XSe_FinalAudit`, A6-A8), L007 (`XSd_FinalAudit` and inverse/A1 audits).
+They inspect statement AND proof constants, including private/generated
+intermediates. They import the old retained environments to diagnose the old
+claims; they are NOT re-elaborations against KIT2. L005 prints
+`XSf_Closed.prepare` with exactly `[propext, Classical.choice, Quot.sound]`
+and its fully explicit existing statement. No new top theorem is asserted.
+
+**A2 NEEDS-REPROOF**, exact kernel path:
+
+```
+XSf_Closed.prepare
+  → XSf_Closed.narrowed
+  → verifier.candidate.wide_view
+```
+
+The final definition is the removed shipped stand-in at
+`evidence/extraction-assoc6-20261027/XRn_Join_DecodeModels.lean:61`.
+A second exact path passes through `XRy_NarrowPrepare.prepare` to the removed
+`verifier.prepared_claim` at `XRn_Join_DotModel.lean:75`.
+`KSB_A2_dependencies.json` records 17 distinct removed/edited definitions
+reachable from this root, with a path for each, and the recorded constant
+closure. This is not a complete all-owner KIT2 dependency list. The premise
+of job item (3) is false: A2 is NOT restated CLOSED against KIT2.
+
+Selected A6-A8 roots also NEED-REPROOF (all exact paths and source locations
+are in `KSB_selected_roots.json`):
+
+- `XSe_HybridCanonical.source` and `XSe_HybridSaved.source` reach the edited
+  emitted `XRn_Join_Release.verifier.BatchedWeights.finish`.
+- `XSe_NewPhaseSource.source` reaches removed `aspis_core.r0.heap.filled`.
+- `XSe_QueryBasis.source` reaches removed `aspis_core.field.M31.ONE`.
+- `XSe_ValidatorTransport.source` / `XSe_RecordTransport.source` directly use
+  removed `r1_wire.validate_record_fields`; `XSe_ParseFinish.driver` reaches
+  it through the actual parse-record constants.
+
+`KSB_theorem_receipts.jsonl` has one receipt for each of 1,099 XR*/XS* source
+theorem spans, including diagnostics/WIP as an explicit over-approximation.
+343 have exact NEEDS-REPROOF paths to removed stand-ins or edited bodies.
+756 remain BLOCKED/unclassified: 357 have no such path in the inspected
+prefix graphs, 399 lack an inspected accepted current constant. Absence of a
+path is not transfer evidence; no theorem is labelled TRANSFERS or OBSOLETE.
+This is explicitly an INCOMPLETE requested three-way triage, not a claim that
+all merged associations were checked. Original mathematical/diagnostic kit
+statements remain valid within their old scopes. No import-only match is
+promoted to a kernel-use path, and no old proof is labelled refuted merely
+because a statement mentions an edited definition.
+
+Missing legacy private objects prevent simply importing all older diagnostic
+roots; no unchanged cache was rebuilt to infer a transfer while the kit itself
+fails. The exact next deliverable is a permitted emitted dependency closure
+for the missing shipped callees, then library ABI/fidelity completion and
+unchanged proof re-elaboration. The remaining source spans then need actual
+per-theorem transfer or precise reproof/obsolescence decisions.
