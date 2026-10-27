@@ -3,7 +3,7 @@ import pathlib,sys,subprocess,json,hashlib,shlex,time,re,datetime,atexit
 R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-reach-20261027'
 H='/home/dombarker/project-offloads/codex-pv-reach-20261027'; P=H+'/lean';host='dombarker@100.108.41.90'
 A=int(sys.argv[1]);M=sys.argv[2];assert 44000<=A<=44499 and 'PV_RE_' in M
-assert (A>=44497) == ('Audit' in M), 'IDs 44497–44499 reserved for focused audit'
+assert A not in range(44200,44500), 'occupied pv-canon ID region; do not reuse'
 rows=[json.loads(p.read_text()) for p in E.glob('receipt-[0-9]*.json')];charged=sum(r.get('exit') is not None for r in rows)
 assert charged<100 and (charged<97 or 'Audit' in M)
 assert not (E/f'used-{A}.json').exists()
@@ -35,7 +35,7 @@ r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr;deps=json
 assert not any(r.get('source_sha256')==sha and r.get('deps_fingerprint')==fp and r.get('exit') is not None for r in rows),'unchanged input already compiled'
 snapshot=f'{A}-{S.name}.txt';(E/snapshot).write_bytes(S.read_bytes());rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 cmd=['systemd-run','--user','--scope','--quiet','--unit=pvre-lean-'+str(A),'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/pvre-time-{A}.log','timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',P+'/J.json',P+'/objects',P+'/sources',P+'/objects/'+M+'.olean',P+'/sources/'+M+'.lean','7000']
-record=dict(attempt=A,target=M,source_revision=rev,source_sha256=sha,source_snapshot=snapshot,dependencies=deps,deps_fingerprint=fp,command=cmd,reservation=admission,shared_sources_written=False)
+record=dict(attempt=A,target=M,source_revision=rev,source_tree_dirty=bool(subprocess.check_output(['git','--no-optional-locks','status','--porcelain'])),source_sha256=sha,source_snapshot=snapshot,dependencies=deps,deps_fingerprint=fp,command=cmd,reservation=admission,shared_sources_written=False)
 with (E/'launches.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
 print('LAUNCH',A,M,flush=True);start=time.monotonic();r=ssh(shlex.join(cmd)+f' > {H}/evidence/pvre-out-{A}.log 2>&1');record.update(launcher_exit=r.returncode,wall_seconds=time.monotonic()-start)
 for name in ['out','time']:
