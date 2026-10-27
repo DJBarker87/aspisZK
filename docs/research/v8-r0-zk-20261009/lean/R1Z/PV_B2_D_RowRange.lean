@@ -1,4 +1,5 @@
 import R1Z.PV_B2_D_RowSource
+import R1Z.PV_B2_D_ShiftValue
 import R1Z.PV_B2_D_RawHelpersTotal
 import R1Z.PV_B2_C_TableRange
 set_option autoImplicit false
@@ -8,41 +9,51 @@ theorem digit0_bound (j : Usize) : (digit0 j).val < 1024 := by
   have hm := PV_B2_D_RawHelpersTotal.mask_bound (Usize.wrapping_shr j 0#u32)
   change (Usize.wrapping_shr j 0#u32 &&& 3#usize).val < 4 at hm
   unfold digit0
-  simp only [Usize.wrapping_shl,UScalar.wrapping_shl,UScalar.val,U32.ofNat_bv,
-    UScalarTy.numBits,BitVec.toNat_shiftLeft,Nat.shiftLeft_eq]
-  rcases System.Platform.numBits_eq with h | h <;> simp only [h] <;> omega
+  rw [PV_B2_D_ShiftValue.shift_val _ _ (by decide)]
+  rw [show (6#u32).val = 6 from rfl]
+  apply lt_of_le_of_lt (Nat.mod_le _ _)
+  norm_num only [Nat.reducePow]
+  omega
 #print axioms digit0_bound
 theorem digit1_bound (j : Usize) : (digit1 j).val < 1024 := by
   have hm := PV_B2_D_RawHelpersTotal.mask_bound (Usize.wrapping_shr j 2#u32)
   change (Usize.wrapping_shr j 2#u32 &&& 3#usize).val < 4 at hm
   unfold digit1
-  simp only [Usize.wrapping_shl,UScalar.wrapping_shl,UScalar.val,U32.ofNat_bv,
-    UScalarTy.numBits,BitVec.toNat_shiftLeft,Nat.shiftLeft_eq]
-  rcases System.Platform.numBits_eq with h | h <;> simp only [h] <;> omega
+  rw [PV_B2_D_ShiftValue.shift_val _ _ (by decide)]
+  rw [show (8#u32).val = 8 from rfl]
+  apply lt_of_le_of_lt (Nat.mod_le _ _)
+  norm_num only [Nat.reducePow]
+  omega
 #print axioms digit1_bound
 theorem digit2_bound (j : Usize) : (digit2 j).val < 1024 := by
   have hm := PV_B2_D_RawHelpersTotal.mask_bound (Usize.wrapping_shr j 4#u32)
   change (Usize.wrapping_shr j 4#u32 &&& 3#usize).val < 4 at hm
   unfold digit2
-  simp only [Usize.wrapping_shl,UScalar.wrapping_shl,UScalar.val,U32.ofNat_bv,
-    UScalarTy.numBits,BitVec.toNat_shiftLeft,Nat.shiftLeft_eq]
-  rcases System.Platform.numBits_eq with h | h <;> simp only [h] <;> omega
+  rw [PV_B2_D_ShiftValue.shift_val _ _ (by decide)]
+  rw [show (4#u32).val = 4 from rfl]
+  apply lt_of_le_of_lt (Nat.mod_le _ _)
+  norm_num only [Nat.reducePow]
+  omega
 #print axioms digit2_bound
 theorem digit3_bound (j : Usize) : (digit3 j).val < 1024 := by
   have hm := PV_B2_D_RawHelpersTotal.mask_bound (Usize.wrapping_shr j 6#u32)
   change (Usize.wrapping_shr j 6#u32 &&& 3#usize).val < 4 at hm
   unfold digit3
-  simp only [Usize.wrapping_shl,UScalar.wrapping_shl,UScalar.val,U32.ofNat_bv,
-    UScalarTy.numBits,BitVec.toNat_shiftLeft,Nat.shiftLeft_eq]
-  rcases System.Platform.numBits_eq with h | h <;> simp only [h] <;> omega
+  rw [PV_B2_D_ShiftValue.shift_val _ _ (by decide)]
+  rw [show (0#u32).val = 0 from rfl]
+  apply lt_of_le_of_lt (Nat.mod_le _ _)
+  norm_num only [Nat.reducePow]
+  omega
 #print axioms digit3_bound
 theorem digit4_bound (j : Usize) : (digit4 j).val < 1024 := by
   have hm := PV_B2_D_RawHelpersTotal.mask_bound (Usize.wrapping_shr j 8#u32)
   change (Usize.wrapping_shr j 8#u32 &&& 3#usize).val < 4 at hm
   unfold digit4
-  simp only [Usize.wrapping_shl,UScalar.wrapping_shl,UScalar.val,U32.ofNat_bv,
-    UScalarTy.numBits,BitVec.toNat_shiftLeft,Nat.shiftLeft_eq]
-  rcases System.Platform.numBits_eq with h | h <;> simp only [h] <;> omega
+  rw [PV_B2_D_ShiftValue.shift_val _ _ (by decide)]
+  rw [show (2#u32).val = 2 from rfl]
+  apply lt_of_le_of_lt (Nat.mod_le _ _)
+  norm_num only [Nat.reducePow]
+  omega
 #print axioms digit4_bound
 theorem or_bound (a b : Usize) (ha : a.val < 1024) (hb : b.val < 1024) :
     (a ||| b).val < 1024 := by

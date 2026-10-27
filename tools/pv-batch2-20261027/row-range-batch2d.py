@@ -1,6 +1,7 @@
 from pathlib import Path
 import sys
 s='''import R1Z.PV_B2_D_RowSource
+import R1Z.PV_B2_D_ShiftValue
 import R1Z.PV_B2_D_RawHelpersTotal
 import R1Z.PV_B2_C_TableRange
 set_option autoImplicit false
@@ -12,9 +13,11 @@ for d,v in enumerate([3,4,2,0,1]):
   have hm := PV_B2_D_RawHelpersTotal.mask_bound (Usize.wrapping_shr j {2*d}#u32)
   change (Usize.wrapping_shr j {2*d}#u32 &&& 3#usize).val < 4 at hm
   unfold digit{d}
-  simp only [Usize.wrapping_shl,UScalar.wrapping_shl,UScalar.val,U32.ofNat_bv,
-    UScalarTy.numBits,BitVec.toNat_shiftLeft,Nat.shiftLeft_eq]
-  rcases System.Platform.numBits_eq with h | h <;> simp only [h] <;> omega
+  rw [PV_B2_D_ShiftValue.shift_val _ _ (by decide)]
+  rw [show ({2*v}#u32).val = {2*v} from rfl]
+  apply lt_of_le_of_lt (Nat.mod_le _ _)
+  norm_num only [Nat.reducePow]
+  omega
 #print axioms digit{d}_bound
 '''
 s+='''theorem or_bound (a b : Usize) (ha : a.val < 1024) (hb : b.val < 1024) :
