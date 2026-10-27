@@ -2,35 +2,6 @@ from pathlib import Path
 import re,json,hashlib
 r=Path(__file__).resolve().parents[2];p=r/'docs/research/v8-r0-zk-20261009/lean/R1Z';e=r/'evidence/pv-join-20261026/wire'
 items=json.loads((e/'operations.json').read_text())
-req='''import R1Z.PV_Join_Wire_Caller
-import Lean
-set_option autoImplicit false
-namespace R1Z.PV_Join_Wire_Reachability
-open Lean Elab Command
-/-- Read-only declaration graph check: no theorem or trusted implementation. -/
-elab "#wire_require " root:ident laws:str : command => do
-  let env ← getEnv
-  let mut todo := #[root.getId]
-  let mut seen : NameSet := {}
-  while !todo.isEmpty do
-    let name := todo.back!
-    todo := todo.pop
-    unless seen.contains name do
-      seen := seen.insert name
-      if let some info := env.find? name then
-        for dep in info.getUsedConstantsAsSet.toArray do
-          let text := dep.toString
-          if text.startsWith "R1Z." || text.startsWith "_private.R1Z." then
-            todo := todo.push dep
-  let expected := laws.getString.splitOn ","
-  for law in expected do
-    unless seen.contains law.toName do
-      throwError "WIRE MISSING: {law} from {root.getId}"
-  logInfo m!"WIRE VERIFIED {expected.length} source laws in declaration closure of {root.getId}"
-end R1Z.PV_Join_Wire_Reachability
-#wire_require R1Z.PV_Join_Wire_Caller.refinement_of_data "'''+','.join(x['source_law'] for x in items)+'''"
-'''
-# Reachability command is defined and executed in the caller module.
 # Cover all historical modules, retaining inherited statement/axiom inventory.
 old=json.loads((e.parent/'resume5/combined-audit-manifest.json').read_text())
 names=set(old['theorems_or_functions'])
@@ -50,13 +21,17 @@ for k,suffix in enumerate(['A','B']):
  part=names[len(names)*k//2:len(names)*(k+1)//2]
  # All names may be declared in either group. Import the prior combined audit
  # and current caller plus all entries to expose the complete symbol inventory.
- imports=sorted(set(['R1Z.PV_Join_CombinedAudit5','R1Z.PV_Join_Wire_Caller']+['R1Z.'+f.stem for f in group]+[f"R1Z.PV_Join_Wire_Op{x['op']}" for x in items]))
- text=''.join('import '+m+'\n' for m in imports)+'\n'+''.join('#print '+n+'\n#print axioms '+n+'\n' for n in part)
+ imports=sorted(set(['R1Z.PV_Join_CombinedAudit5','R1Z.PV_Join_Wire_FinalAuditA']+['R1Z.'+f.stem for f in group]+[f"R1Z.PV_Join_Wire_Op{x['op']}" for x in items]))
+ 
+ if k==0:
+  imports=[m for m in imports if m!='R1Z.PV_Join_Wire_FinalAuditA']
+ body=(r/'tools/pv-join-20261026/wire-caller.lean.txt').read_text() if k==0 else ''
+ body='\n'.join(l for l in body.splitlines() if not l.startswith('import '))+'\n' if body else ''
+ text=''.join('import '+m+'\n' for m in imports)+'\n'+body+''.join('#print '+n+'\n#print axioms '+n+'\n' for n in part)
  (p/f'PV_Join_Wire_FinalAudit{suffix}.lean').write_text(text)
 text='import R1Z.PV_Join_Wire_FinalAuditA\nimport R1Z.PV_Join_Wire_FinalAuditB\nimport R1Z.PrivacyR1HeadlineDeployedReal\n\n'
 text+=''.join('#print axioms '+n+'\n' for n in names+[head]+[x['source_law'] for x in items])
 text+='#join_closure R1Z.PV_Join_Wire_Caller.refinement_of_data\n'
-text+='#wire_require R1Z.PV_Join_Wire_Caller.refinement_of_data "'+','.join(x['source_law'] for x in items)+'"\n'
 (p/'PV_Join_Wire_CombinedAudit.lean').write_text(text)
 (e/'combined-audit-manifest.json').write_text(json.dumps(dict(modules=[dict(module='R1Z.'+f.stem,sha256=hashlib.sha256(f.read_bytes()).hexdigest()) for f in files],theorems_or_functions=names,consumed_laws=[x['source_law'] for x in items],headline=head,targets=['R1Z.PV_Join_Wire_FinalAuditA','R1Z.PV_Join_Wire_FinalAuditB','R1Z.PV_Join_Wire_CombinedAudit'],kind='one final combined dependency/axiom audit against retained host objects, not a clean release replay'),indent=2)+'\n')
 print(len(files),'PV_Join modules;',len(names),'inherited/new declarations;',len(items),'consumed laws')

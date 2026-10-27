@@ -1,7 +1,7 @@
 from pathlib import Path
 from collections import deque
 import subprocess,json,re,hashlib
-r=Path(__file__).resolve().parents[2];p=r/'docs/research/v8-r0-zk-20261009/lean';e=r/'evidence/pv-join-20261026/wire';rows=json.loads((e/'rows-before.json').read_text());items=json.loads((e/'operations.json').read_text());root='R1Z.PV_Join_Wire_Caller'
+r=Path(__file__).resolve().parents[2];p=r/'docs/research/v8-r0-zk-20261009/lean';e=r/'evidence/pv-join-20261026/wire';rows=json.loads((e/'rows-before.json').read_text());items=json.loads((e/'operations.json').read_text());root='R1Z.PV_Join_Wire_Caller';root_module='R1Z.PV_Join_Wire_FinalAuditA'
 rev=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()
 def file(m):
  f=p/(m.replace('.','/')+'.lean')
@@ -27,13 +27,13 @@ proof=closures.get(root+'.refinement_of_data',[]);before=closures.get('R1Z.PV_Jo
 results=[]
 for row in rows:
  law=row['theorems'][0] if row['theorems'] else None
- chain=path(root,law.rsplit('.',1)[0]) if law else None
+ chain=path(root_module,law.rsplit('.',1)[0]) if law else None
  reason=None if chain else 'V270 is a scoped Formatter inadmissible-axiom diagnostic; Recount 3 names no closing theorem or operation. Native Formatter adequacy remains V269.'
  results.append(dict(**row,after_import='candidate' if chain else 'neither',import_path=chain,reason=reason,proof_consumed=law in proof if law else False,before_proof_consumed=law in before if law else False,path_sources=[dict(module=m,path=str(file(m).relative_to(r)),sha256=hashlib.sha256(file(m).read_bytes()).hexdigest()) for m in chain] if chain else []))
-x=dict(source_revision=rev,consumer=root+'.refinement_of_data',old_consumer='R1Z.PV_Join_AggregateCaller.refinement_of_data',recount3_baseline=dict(candidate=17,neither=10,research=0),rows=results,consumed_laws=proof,before_consumed_laws=before,extra_op51=next(x for x in items if x['op']==51))
+x=dict(source_revision=rev,consumer=root+'.refinement_of_data',consumer_module=root_module,old_consumer='R1Z.PV_Join_AggregateCaller.refinement_of_data',recount3_baseline=dict(candidate=17,neither=10,research=0),rows=results,consumed_laws=proof,before_consumed_laws=before,extra_op51=next(x for x in items if x['op']==51))
 (e/'import-chain.json').write_text(json.dumps(x,indent=2)+'\n')
 s='# Candidate consumer import and application chains\n\nOrganisation of proved facts, not premise discharge. **Target not yet established.**\n\n'
-s+=f'Consumer: `{root}.refinement_of_data`. Source revision: `{rev}`. The historical `PV_Join_AggregateCaller.refinement_of_data` remains unchanged. This new caller is the source-wired extension of its P6 aggregate baseline; the final combined audit covers both.\n\n'
+s+=f'Consumer: `{root}.refinement_of_data`, defined in `{root_module}`. Source revision: `{rev}`. The historical `PV_Join_AggregateCaller.refinement_of_data` remains unchanged. This new caller is the source-wired extension of its P6 aggregate baseline; the final combined audit covers both.\n\n'
 s+='Recount 3 baseline: research/candidate/neither **0/17/10**. After wiring: **0/26/1**, for the same 27 rows. All 26 source-law rows are imported and checked as declaration dependencies; V270 has no closing operation theorem. Extra arbitrary-carrier op51 is consumed but remains OPEN under Recount 3; this work does not reclassify its P6/native obligations.\n\n'
 s+='The new source selection installs the cb4/cb5 exact laws for 84, 105, 107, 109 and 118, the arbitrary-carrier 51 law, and the native carrier needed for 229. It does not prove equality of every new selection to the historical one. No new proposition hypothesis is added: reservation and the full proof/audit data equality remain. Native source/effect/model/release obligations are retained. The research headline imports none of this work; no headline credit is claimed.\n\n'
 s+='Every path below lists **module imports**, followed by its closing declaration. `proof consumed` is separately derived from the compiled declaration graph. Machine-readable source hashes and paths are in `import-chain.json`.\n\n| Row | Recount 3 import | Closing theorem | Consumer import path | Proof consumed |\n|---|---|---|---|---|\n'
