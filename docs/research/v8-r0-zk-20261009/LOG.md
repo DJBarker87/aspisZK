@@ -11471,3 +11471,40 @@ in the reused pv-canon worktree; IDs 51500-51799, 100 Lean / 4 Kani control only
 open callback rows NOT in the extraction-obstruction inventory: ops 226, 227, 228, 230, 250, 251, 252,
 254, 259, by direct extraction with the unchanged tool, recording any new refusal. Six slots: op223,
 cblib3, op134, runjoin13, l3dis3, cb9. Rows removed outright: 0. Privacy target not yet established.
+
+## D272 (Stream B) 2026-10-27 10:40 UTC: L3 audit of the devnet client binary: two material side-channel findings (N1 non-CT pole comparison, N7 decimal JSON parsing of secrets); release-recipe decisions escalated
+
+pv-l3dis3 (`codex/pv-l3-20261026`, head 63b8e1ff76; no Lean, no Kani; five capped scopes sequential;
+cargo targets deleted; no source change). Artifact A (pinned client source 5228877938, devnet R1 recipe,
+host rustc 1.94.1, toolchain unpinned) built: sha256 dc31d28c3eb9a793f9e2a8c81e69611b42aa8c2cace1393845cd554d090c357b.
+Artifact B (candidate 237e135561) failed before compiling: tools/r1-cost-probe/Cargo.lock is stale against
+the candidate's workspace changes and the recipe uses --locked (the candidate's earlier gates built
+through other manifests). The pinned chain draws real entropy (devnet_spend::main → plan::prove →
+RealR1_client::prove_for_proof_accounts → generate_for_mask_nonce); the deterministic fixture constructor
+is compiled in (the tool enables aspis-prover/insecure-spend-fixture) but is not on the chain. New
+findings in A (evidence/pv-l3-20261027/dual/AUDIT.md), lead classification:
+- N1 MATERIAL. host_semantic.rs:292 `clear &= chi != *value` over every active compressed witness slot:
+  the derived QM31 inequality compiles to limb-by-limb short-circuit branches (0xbd6a0/0xbd6a6/0xbd6ac).
+  chi is public, values are witness-derived; the branch path differs whenever a slot's leading limb
+  equals chi's (≈ 2^-31 per active slot, far above the charged poleBad and the 2^-100 target), and then
+  reveals a witness-derived limb and its slot position to a timing observer. The candidate's
+  constant-time replacement crate::ct_pole::all_slots_clear (audited clean in body in D268, V371 caveat)
+  is compiled ONLY with the non-default feature ct-host-prover, which the recipe of record does not
+  enable; the pinned research source has no CT path at all. So the devnet route as built leaks at L3.
+- N7 MATERIAL. devnet_spend.rs:16 parses the request JSON, including private witness/key fields, as
+  decimal integers via serde_json (de.rs:462-507): first-digit and digit-count branches make each
+  secret byte's timing depend on whether it is < 10, < 100 or ≥ 100 (~1.6 bits/byte to a timing
+  observer). Input decoding was never inside the constant-time kernel discipline.
+- N2-N6: guard branches (zero/sum guards state_only_hiding.rs:259-266, canonical-column guards
+  host_semantic.rs:60-68, private balance equalities prover.rs:139-154, helper-sum short circuits,
+  sumcheck boundary checks host_sumcheck.rs:64,75) whose outcome is constant on valid honest runs; each
+  is a correctness obligation on its L2 row (V354/V357/V360), not a leak if the invariant holds.
+Owner escalation (release recipe; Stream A owns the ledger): the release client build must (i) be the
+candidate with ct-host-prover enabled, (ii) not enable insecure-spend-fixture, (iii) use the pinned
+toolchain (D270), and (iv) decode private inputs in constant time (fixed-width encoding, e.g. hex or raw
+bytes, with a constant-time decoder) instead of decimal JSON numbers: a host-client change under D187
+plus the Python orchestration that writes the request. Launched pv-l3dis4 (same branch, IDs
+51800-52099): minimal offline lockfile repair for the tool (registry versions/checksums must not change),
+build B with the recommended recipe (r1p-check + ct-host-prover), audit B side by side with A (N1 removed
+by the CT path? N7 extent; N2-N6 constancy obligations), and the V374 dudect plan for B. Rows removed
+outright: 0. Privacy target not yet established.
