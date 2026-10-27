@@ -20,7 +20,7 @@ for kind,label,nfull,tailmod in [('P','Proof',900,'JGz_ProofNative14'),('U','Pub
  if len(modules)>1:out+=['  rcases hb with '+'|'.join(f'h{i}' for i in range(len(modules)))]
  for i,m in enumerate(modules):
   lengths='JGz_SHAC0Fold.lengths' if kind=='C' and i==0 else m+'.lengths';out += [f'  · exact {lengths} b '+(f'h{i}' if len(modules)>1 else 'hb')]
- out += ['#print axioms lengths',f'theorem checked : hash raw={modules[-1]}.B{last:03}.result := by','  rw [JGz_HashTools.hash_chunks raw chunks padded lengths]','  unfold chunks','  simp only [List.foldl_append]',f'  rw [show initial={modules[0]}.B000.start from rfl]']
+ out += ['#print axioms lengths',f'theorem checked : JFp_SHA256.hash raw={modules[-1]}.B{last:03}.result := by','  rw [JGz_HashTools.hash_chunks raw chunks padded lengths]','  unfold chunks','  simp only [List.foldl_append]',f'  rw [show initial={modules[0]}.B000.start from rfl]']
  for i,m in enumerate(modules):
   if i:out += [f'  rw [show {modules[i-1]}.B{16*i-1:03}.result={m}.B{16*i:03}.start from rfl]']
   folded='JGz_SHAC0Fold.folded' if kind=='C' and i==0 else m+'.folded';out += ['  rw ['+folded+']']

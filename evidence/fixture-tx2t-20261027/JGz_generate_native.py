@@ -8,7 +8,7 @@ for part in range(15):
  out=[f'import JGz_SHAP{g:02}' for g in groups]+[f'import {data}','set_option autoImplicit false',f'namespace AspisR1.{name}','open Aeneas Aeneas.Std']
  bs=[f'JGz_SHAP{b//16:02}.B{b:03}.input' for b in range(first,first+count)]
  out+=['def chunks : List (List Nat) := ['+','.join(bs)+']']
- if part==14:out+=['def tail : List Nat := '+str([int(x) for x in re.findall(r'(\d+)#u8',re.search(r'def c08.*?:=(.*)',(R/'lean'/f'{data}.lean').read_text())[1])]).replace(' ','')]
+ if part==14:out+=['def tail : List Nat := List.replicate 7 0']
  for i,b in enumerate(bs):
   out += [f'theorem cell{i:02} : {b}=({data}.c{2*i:02} ++ {data}.c{2*i+1:02}).map (fun x=>x.val) := by rfl',f'#print axioms cell{i:02}']
  if part==14:out+=['theorem tail_native : '+data+'.c08.map (fun x=>x.val)=tail := by rfl','#print axioms tail_native']
