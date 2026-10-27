@@ -1,0 +1,27 @@
+    (JGe_TerminalCondition.Identified → ∃ verified : r1_semantic.Verified Hash,
+      FinishModel.finish children JGe_Boundaries.value D0 JFs_PublicSerialization.value pre t15
+        JFm_Begin.challenges none=ok (.Ok verified) ∧
+      verified.roots=Array.make 2#usize [JFp_InitBytes.root,JFq_Root1.value] ∧
+      verified.transcript.state=encodeState JFu_Q26Source.ratchet) ∧
+    (∀ (lp fp : Array FIq_Native.field.QM31 4#usize) (ip : Array FIq_Native.field.QM31 16#usize),
+      FIq_Native.state_only_poseidon.leading_pair_packed ⟨a,b,c⟩=ok lp →
+      FIq_Native.state_only_poseidon.interpolated_full_pair_packed a sops.local=ok fp →
+      FIq_Native.state_only_poseidon.interpolated_internal_pair a sops.local=ok ip →
+      FIw_ArrayValue.canonical lp → FIw_ArrayValue.canonical fp → FIw_ArrayValue.canonical ip →
+      ∃ pos comp g out,
+        JFy_PoseidonPrefix.tail ⟨a,b,c⟩ sops leading full internal=ok pos ∧
+        FIw_ArrayValue.canonical pos ∧
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts JFu_PublicSemantic.value selected
+          JFu_TerminalPrefix.alpha JFu_TerminalPrefix.challenges.lambda JFu_TerminalPrefix.challenges.chi
+          JFu_TerminalPrefix.challenges.theta=ok (.Ok (comp,a,m,g,h1,copy.active)) ∧
+        FIv_NativeValue.Canon comp ∧ FIv_NativeValue.Canon g ∧
+        FIv_NativeValue.decode comp=FIv_CompositionValue.polynomial
+          (FIv_NativeValue.decode JFu_TerminalPrefix.challenges.theta) sem pos copy.residual ∧
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31
+          (FIq_Carriers.toPublic JFs_PublicSerialization.value) JFu_TerminalCallback.claims
+          JFu_TerminalPrefix.alpha JFu_TerminalPrefix.challenges=ok (.Ok out) ∧
+        FIv_NativeValue.Canon out ∧
+        FIv_NativeValue.decode out=FIv_TerminalValue.formula
+          (FIv_EqualityValue.weight JFu_TerminalPrefix.challenges.zc JFu_TerminalPrefix.alpha)
+          (FIv_NativeValue.decode comp) (FIv_NativeValue.decode JFu_TerminalPrefix.challenges.mu)
+          (FIv_NativeValue.decode h1) (FIv_NativeValue.decode copy.active))

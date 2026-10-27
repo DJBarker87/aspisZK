@@ -1,0 +1,9 @@
+# Real padding and composed local fixture
+
+095–097 prove all three actual remaining288-byte padding tails are zero, using nine named32-byte source windows and the generic zero-window lemma. 094's only error was a redundant rfl after the size rewrite had solved its goal;095 removes it. The full native chunks_exact/any padding scan is NOT concluded from these byte equations.
+
+098 JGk_TX2_Partial.local_nonvacuity jointly constructs13 explicit fixed-input facts: two actual native-leaf InputLaws, three physical SiblingLaws, two mathematical SHA256 roots on those same inputs, all three installed count returns on the source scratch prefixes and all three zero-padding equations. It assumes none of those local conclusions. This is LOCAL non-vacuity only. on_saved composes it with the inherited SAME1768-byte saved-checkpoint reader, keeping SAME saved bytes and Realizes JFp_SHADigest.digest EXPLICIT.
+
+099 JGk_TX2_ParentWrite.source is a forward equation for the actual extracted write_parent: one native digest call at the proved parent address, exact returned digest, index/2, one simultaneous scratch index/digest write, cursor update and Row.Next return. It reuses write_observed and parent_address. Its visible local hashed equation still needs instantiation at each real parent; no owned binary control/level/verifier/slot/batch success is proved. The uncompiled per-tree call instantiations are archived TEXT ONLY.
+
+Actual BatchGoal, native padding scan, owned binary control/levels/root guards, three-slot batch parent, installed finish, accepted2 and joint pair remain OPEN. No real-byte premise is proved impossible. No successful verifier/slot/batch/finish observation is supplied as a premise. Actual ARX_Root unchanged and delta zero. Full accepted/deployed non-vacuity and100-bit target remain unproved.

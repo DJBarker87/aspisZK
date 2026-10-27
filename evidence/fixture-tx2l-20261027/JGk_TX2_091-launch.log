@@ -1,0 +1,36 @@
+{"attempt": "JGk_TX2_091", "exit_status": 1, "wall_seconds": 6.485975468007382, "peak_rss_kib": "6726128", "swaps": "0", "print_axioms": ["'AspisR1.JGk_TX2_CountSource.raw0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGk_TX2_CountSource.well0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGk_TX2_CountSource.source0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGk_TX2_CountSource.raw1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGk_TX2_CountSource.well1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGk_TX2_CountSource.source1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGk_TX2_CountSource.raw2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGk_TX2_CountSource.well2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGk_TX2_CountSource.source2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGk_TX2_CountSource.lean:13:13: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => List.map UScalar.val ↑⟨_a, ⋯⟩ = JGf_TX2_Count0.indices00
+Error: Application type mismatch: The argument
+  front0._proof_3 s
+has type
+  (List.take 12 ↑(JGk_TX2_Scratch0.s12 s).idx).length ≤ Usize.max
+but is expected to have type
+  _a.length ≤ Usize.max
+in the application
+  ⟨_a, ⋯⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally eq
+...
+ First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+s : MultiproofConeRef.reference.Scratch
+⊢ List.map UScalar.val ↑⟨List.take 12 ↑(JGk_TX2_Scratch2.s12 s).idx, ⋯⟩ = JGf_TX2_Count2.indices00
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (JGk_TX2_Scratch2.s12 s).idx
+  has type
+    Std.Array U32 16#usize
+  but is expected to have type
+    { l // l.length = ↑16#usize }
+  in the application
+    ↑(JGk_TX2_Scratch2.s12 s).idx
+'AspisR1.JGk_TX2_CountSource.raw2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGk_TX2_CountSource.well2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGk_TX2_CountSource.source2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r000dc75dfeee4cccb5a32a8042de6b3b.scope; invocation ID: c7f1b2d6a598428eab3ff92772e0f4ca
