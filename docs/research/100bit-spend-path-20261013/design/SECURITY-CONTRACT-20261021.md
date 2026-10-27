@@ -239,3 +239,37 @@ adversary, failure event, numeric bound and implementation are unchanged.
    private-input decoding (LOG D272) are NOT covered by this approval.
 
 Deployed 100-bit target: not yet established.
+
+## Owner-approved amendment, 2026-10-27 (third): direct native bridges replace the emission route for verifier code
+
+Approved by the owner on 2026-10-27 (owner message, verbatim: "yeah do that"),
+in reply to the lead's proposal to extend the direct native-to-model bridge
+method beyond the 13 opaque leaves. The lead read the message as approval of
+the route change; the owner may narrow it.
+
+1. **Route.** The correspondence between the adopted cohort models (the
+   definitions the soundness proofs reason about) and the deployed code is
+   established, for the verifier code on the reached TX1 and TX2 paths, by
+   DIRECT hybrid native/Kani/Lean P6 bridges from the frozen Rust (revision
+   4bb3b3f5...) to the cohort definition. This is the method of the 13 CLOSED
+   opaque leaves (C3-BIN shared P6 method, Lean-discharged field stubs,
+   loop-iteration rulings). A bridged function needs neither D188 credit nor
+   any library model.
+2. **What it replaces.** For bridged functions, the association rows A0-A8
+   (cohort equals emitted kit) are no longer required. D188 and the A-rows
+   stay available for any function the lead chooses not to bridge, under the
+   narrowed D188 and the 23:00/23:10 UTC kit-method rulings; no credit is
+   taken from them until they close.
+3. **Composition.** Bridges compose by the call structure of the frozen
+   source: a caller's bridge cites its callees' CLOSED bridges, and every
+   callee use must lie within that callee's stated domain. The domain each
+   caller establishes is proved, never assumed.
+4. **Unchanged.** The 100-bit classical per-attempt target, metric,
+   adversary, failure event and numeric bound; the headline
+   RPx_Deployed.deployed and L154's classification; frozen3,
+   RuntimePersistence and the game; the implementation and release pins. The
+   source-to-ELF audit (L188) is still required: native bridges are about the
+   frozen Rust source as compiled by the pinned toolchain for the Kani
+   harnesses, not about the deployed ELF bytes.
+
+Deployed 100-bit target: not yet established.
