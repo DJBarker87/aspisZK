@@ -65,8 +65,8 @@ def visit(m):
  done[m]=dict(authority=a,path=r['path'],git_blob=r.get('git_blob',r.get('blob')),sha256=expected,imports=imports);sources[m]=b.decode()
  for dep in imports:visit(dep)
 
-roots=['R1Z.PV_RunJoin_UniversalPublic22','R1Z.PV_RunJoin_UniversalRecords22','R1Z.PV_RunJoin_UniversalTransition22','R1Z.PV_RunJoin_UniversalBuild22']
+roots=['R1Z.'+p.stem for p in (R/'docs/research/v8-r0-zk-20261009/lean/R1Z').glob('PV_RunJoin_Universal*22.lean')]+['R1Z.PV_RunJoin_PayloadAssociation22']
 for m in roots:visit(m)
 (E/'universal-resolution.json').write_text(json.dumps(dict(head=head,research_revision=rev,resolved=done,unpinned=sorted(missing)),indent=2)+'\n')
-(E/'universal-project-sources.json').write_text(json.dumps(sources)+'\n')
+(E/'universal-project-sources.json').write_text(json.dumps({m:dict(source_sha256=hashlib.sha256(b.encode()).hexdigest(),bytes=len(b.encode())) for m,b in sources.items()},indent=2)+'\n')
 print('Project',len(sources),'h5',sum(r['authority'].startswith('h5') for r in done.values()),'missing',sorted(missing))
