@@ -112,3 +112,11 @@ part of each public fiber. Proved generically: equivalence with a decoder
 `Public → World → Coins → Option Event` agreeing only off bad. Not yet
 proved: the emitted caller's native instance, event-coordinate association,
 or the endogenous joint experiment transport. Endpoint premises removed: 0.
+
+Correction/completion of the event spelling: the earlier auxiliary union is
+named `union` / `AuxiliaryIndependent`; the complete named interface is
+`fullUnion` / `HeadlineIndependent`. It additionally names
+`FsAbortBounds.HitEv` and `FsAbortBounds.CollEv`, the existing `modelError`
+hit/private-collision slots. Their parameters are the existing model coupling
+parameters; there is no fresh event predicate or new charge. The interface
+continues to expose coordinate association rather than assert native laws.

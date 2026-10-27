@@ -117,3 +117,33 @@ endpoint premises removed = 0. The preparatory `OsAvailable` binder was never
 a binder of the original headline. The full native/source outside-bad trace
 agreement, including OS-error worlds, remains open. T remains exactly
 `entropy_law`, `entropy_kernel`, `observation`; no trust item is added.
+
+## D262 continuation (offbad/ receipts)
+
+The adopted condition is `IndependentOffBad`, not the historical all-world
+`Independent`. Same-public admitted witnesses must have the same reached
+failure at fixed world and coins when BOTH runs are outside the existing
+charged union. `PV_OptB_Charged.fullUnion` names the existing hit/collision,
+pole, conservative lazy-read/digest/mask, scan-fresh/parser, seed and fuel
+events explicitly, with coordinate maps into their original spaces. These
+maps are not certified native couplings merely because their types check.
+
+Checked: off `HvzkV.poleBad`, acceptance `P ∧ V(w)` equals public `P`, and
+`firstGood` is the public first-good index. Hence both good witnesses have
+the same retry schedule ON A COMMON CHALLENGE TUPLE. The existing HVZK
+couplings supply challenge coordinates in the mathematical chain; associating
+them with fixed native HOST_HASH, raw coins and every actual OS call still
+requires source proof. No event was enlarged or assigned a new charge.
+
+Checked: actual `UnifiedRetry.attempt` is the classified body after successful
+entropy; it stops on entropy error, backend failure or divergence. Exact
+body-result synchronization (errors and returned public state, successful
+private proof bytes permitted to differ) lifts to attempt synchronization.
+The eight-attempt synchronization theorem then gives `IndependentOffBad`
+conditionally. No native body instance is asserted.
+
+`Runtime.body` remains data. `BodySourceLaw` only projects the result and
+returned store into the extracted body; it does not itself identify all
+OS metadata in the returned public world. This is a P obligation, not T.
+No checked native admitted-source counterexample satisfying step (4) has
+been obtained. No option A conclusion follows from the narrower models.

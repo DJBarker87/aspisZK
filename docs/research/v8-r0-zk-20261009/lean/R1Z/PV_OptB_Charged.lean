@@ -48,12 +48,73 @@ def union (c : Coordinates h W Pr N ab World Coins)
 `h.Instance`; both witnesses share public input, OS world and coins. The
 signal carrier retains family/position/error (and any observed prefix).
 The native HOST_HASH must be fixed in the eventual source interpretation. -/
-abbrev HeadlineIndependent (c : Coordinates h W Pr N ab World Coins)
+abbrev AuxiliaryIndependent (c : Coordinates h W Pr N ab World Coins)
     {Event : Type} (signal : h.Instance → World → Coins → Option Event) : Prop :=
   PV_OptB_Factorization.IndependentOffBad h.public signal
     (union h P V W Pr R N hN B outputs x ab adv c)
 
 #print union
-#print HeadlineIndependent
+#print AuxiliaryIndependent
 #print axioms union
+
+variable (c : Coordinates h W Pr N ab World Coins)
+  (w : h.Instance) (os : World) (coins : Coins)
+theorem off_pole (good : ¬ union h P V W Pr R N hN B outputs x ab adv c w os coins) :
+    ¬ poleBad P h V ab adv x w (c.retry w os coins) := by
+  intro event
+  exact good (Or.inl (event))
+#print axioms off_pole
+theorem off_lazy (good : ¬ union h P V W Pr R N hN B outputs x ab adv c w os coins) :
+    ¬ QueryScanRealLazyBound.lazyBad W Pr R N hN h B outputs x w (c.lazy w os coins) := by
+  intro event
+  exact good (Or.inr (Or.inl (event)))
+#print axioms off_lazy
+theorem off_mask (good : ¬ union h P V W Pr R N hN B outputs x ab adv c w os coins) :
+    ¬ FinalR1PBin.exhQ W Pr R N hN h B outputs x w (c.lazy w os coins) := by
+  intro event
+  exact good (Or.inr (Or.inr (Or.inl (event))))
+#print axioms off_mask
+theorem off_fresh (good : ¬ union h P V W Pr R N hN B outputs x ab adv c w os coins) :
+    ¬ QueryScanRealFreshMass.realFresh W Pr N h B outputs x w (c.real w os coins) := by
+  intro event
+  exact good (Or.inr (Or.inr (Or.inr (Or.inl (event)))))
+#print axioms off_fresh
+theorem off_parser (good : ¬ union h P V W Pr R N hN B outputs x ab adv c w os coins) :
+    ¬ (∃ i, QueryScanRealLazyBound.realBad W Pr N h B outputs x w i (c.real w os coins)) := by
+  intro event
+  exact good (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl (event))))))
+#print axioms off_parser
+theorem off_seed (good : ¬ union h P V W Pr R N hN B outputs x ab adv c w os coins) :
+    ¬ ProverCommitSeedEvent19.seedGuess (c.queries w os coins) (c.seed os coins) := by
+  intro event
+  exact good (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl (event)))))))
+#print axioms off_seed
+theorem off_fuel (good : ¬ union h P V W Pr R N hN B outputs x ab adv c w os coins) :
+    ¬ (∃ j, ProverCommitFuelJoin22.failure j (c.fuel os coins)) := by
+  intro event
+  exact good (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (event)))))))
+#print axioms off_fuel
+
+variable {Core Address : Type} (M q : Nat)
+  (charged : Fin M → Core → Prop) (priv : Fin M → Prop)
+  (qry : Fin q → Core → Address) (addr : Fin M → Core → Address)
+  (core : h.Instance → World → Coins → Core)
+
+/-- Complete named union, including the model's adversary-hit and private
+collision events. Parameters are those supplied by ModelsVR1's existing
+couplings. No event is assigned a new charge. Native coordinate association
+and the coupling laws are still P obligations. -/
+def fullUnion (v : h.Instance) (world : World) (random : Coins) : Prop :=
+  union h P V W Pr R N hN B outputs x ab adv c v world random ∨
+  R0Z.FsAbortBounds.HitEv M q charged qry addr (core v world random) ∨
+  R0Z.FsAbortBounds.CollEv M priv addr (core v world random)
+
+abbrev HeadlineIndependent {Event : Type}
+    (signal : h.Instance → World → Coins → Option Event) : Prop :=
+  PV_OptB_Factorization.IndependentOffBad h.public signal
+    (fullUnion h P V W Pr R N hN B outputs x ab adv c M q charged priv qry addr core)
+
+#print fullUnion
+#print HeadlineIndependent
+#print axioms fullUnion
 end R1Z.PV_OptB_Charged
