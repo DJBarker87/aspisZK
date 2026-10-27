@@ -2,6 +2,11 @@
 from pathlib import Path
 import subprocess,sys,json,hashlib,re,shlex,datetime,time
 E=Path(__file__).resolve().parent;R=E.parents[1];D='/home/dombarker/project-offloads/codex-pv-integ2-20261027';HOST='dombarker@100.108.41.90';T='/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
+for old in (E/'lean-receipts').glob('*/reservation.json'):
+ g=json.loads(old.read_text())
+ if g.get('admitted') is False:
+  remain=datetime.datetime.fromisoformat(g['timestamp_utc']).timestamp()+180-time.time()
+  if remain>0:print(f'LOCAL COOLDOWN HOLD: {remain:.1f}s');sys.exit(78)
 a=int(sys.argv[1]);module=sys.argv[2];src=Path(sys.argv[3]).resolve();tally=json.loads((E/'TALLY.json').read_text())
 assert 54300<=a<=54599 and a not in tally['used_ids'] and tally['lean_charged']<100
 if a>=54597:assert module=='PV_Integ2_CombinedAudit'
@@ -36,7 +41,10 @@ for name in ['out','time','sha']:
  if r.returncode==0:(O/f'{name}.{ext}').write_text(r.stdout)
 if not (O/'out.log').exists():
  (O/'refusal.json').write_text(json.dumps(dict(attempt=a,module=module,charged=False,exit=launch.returncode,reason=launch.stdout+launch.stderr))+'\n');print('launcher refused',a,launch.stdout,flush=True);sys.exit(78)
-out=(O/'out.log').read_text();tm=(O/'time.log').read_text();status=int(re.findall(r'^exit=(\d+)',out,re.M)[-1])
+out=(O/'out.log').read_text()
+if not (O/'time.log').exists():
+ (O/'refusal.json').write_text(json.dumps(dict(attempt=a,module=module,charged=False,reason=out))+'\n');print('scope admission refused',a,flush=True);sys.exit(78)
+tm=(O/'time.log').read_text();status=int(re.findall(r'^exit=(\d+)',out,re.M)[-1])
 axioms=re.findall(r"'[^'\n]+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",out)
 rec=dict(attempt=a,module=module,source=str(src.relative_to(R)),source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),source_revision=revision,deps_fingerprint=fp,exit=status,wall_client_seconds=time.monotonic()-start,axioms=axioms,limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,lean_M=7000),reason='missing retained object' if module!='PV_Integ2_CombinedAudit' else 'one combined publication audit')
 for key,pattern in [('wall',r'Elapsed \(wall clock\) time.*: (.+)'),('peak_RSS_KiB',r'Maximum resident set size \(kbytes\): (\d+)'),('swap',r'Swaps: (\d+)')]:
