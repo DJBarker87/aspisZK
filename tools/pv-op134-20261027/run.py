@@ -45,7 +45,7 @@ elif mode=='aeneas':
  assert ssh(f'mkdir -p {BASE}/op{op}-generated').returncode==0
  args=['timeout','120',PIN+'/aeneas','-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',namespace,'-dest',BASE+'/op'+op+'-generated','-split-files','-emit-json',BASE+'/'+namespace+'.llbc']
 elif mode=='kani':
- tally=json.loads((OUT/'TALLY.json').read_text());assert len(tally['kani_charged'])<10
+ tally=json.loads((OUT/'TALLY.json').read_text());assert len(tally['kani_charged'])<4
  tally['kani_charged'].append(name);save(OUT/'TALLY.json',tally)
  timeout_s=int(extra[1]) if len(extra)>1 else 180
  assert timeout_s in (180,900)

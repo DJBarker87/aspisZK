@@ -40,7 +40,7 @@ The row's immediate host caller is
 crates/aspis-r1-cost-probe/src/host_semantic.rs::no_pole (line 368), mapping
 layout errors to Error::Public; redirect only that prover caller after the
 rewrite and complete Lean equality gate. Also inventory the same prover
-callback in crates/aspis-r1-cost-probe/src/prover.rs::masked_fixture_from_compiled
+callback in crates/aspis-r1-cost-probe/src/prover.rs::prove_masked_with_attempt
 (the call at line 196; preserve Error::Semantic) and prover-side users in
 aspis-prover/src/state_only_entropy.rs and v6_onefold_prover.rs before adoption.
 

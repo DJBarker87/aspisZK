@@ -12,9 +12,11 @@ if state.exists():
  s=json.loads(state.read_text());left=s['retry_after']-time.time()
  if left>0:print('COOLDOWN',left);sys.exit(78)
 a=r['next_id']
+if len(r['lean_charged']) >= 97:
+ a=next(i for i in r['reserved_audit_ids'] if i not in r['used_ids'])
 if a>=50297:assert any(x in module for x in ['Audit','Manifest','Bundle'])
 assert 50000<=a<=50299 and a not in r['used_ids']
-r['used_ids'].append(a);r['next_id']+=1;p.write_text(json.dumps(r,indent=2)+'\n')
+r['used_ids'].append(a);r['next_id']=a+1;p.write_text(json.dumps(r,indent=2)+'\n')
 src=root/'docs/research/v8-r0-zk-20261009/lean'/f'{module}.lean';assert src.exists()
 (out/f'{a}-source.lean.txt').write_text(src.read_text())
 def ssh(s):return subprocess.run(['ssh',host,s],capture_output=True,text=True)

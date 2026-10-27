@@ -9,7 +9,7 @@ src=ssh(f'cat {base}/codex-pv-op134-20261027/sources/{module}.lean');imports=re.
 code='''import json,pathlib,hashlib
 base=pathlib.Path('/home/dombarker/project-offloads')
 env=json.loads((base/'r1-privacy-build-integration-20261019/env/J.json').read_text())
-paths=[str(base/'aspis-joint-20261019/objects')]+env['LEAN_PATH'].split(':')
+paths=[str(base/'codex-pv-op134-20261027/objects')]+env['LEAN_PATH'].split(':')
 r={}
 for imp in %r:
  for p in paths:
