@@ -193,3 +193,36 @@ mod resume8 {
         assert_eq!(native,Ok(raw));
     }
 }
+#[cfg(kani)]
+mod resume8_links {
+    use std::os::unix::ffi::OsStrExt;
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn push_bytes() {
+        let raw:[u8;2]=kani::any();let tail:[u8;1]=kani::any();
+        if let (Ok(mut s),Ok(t))=(String::from_utf8(raw.to_vec()),std::str::from_utf8(&tail)) {
+            let mut reference=raw.to_vec();reference.extend_from_slice(&tail);
+            s.push_str(t);assert_eq!(s.as_bytes(),reference.as_slice());
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(8)]
+    fn join_two() {
+        let a:[u8;2]=kani::any();let b:[u8;2]=kani::any();
+        let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=2 && m<=2);
+        let p=std::path::Path::new(std::ffi::OsStr::from_bytes(&a[..n]));
+        let q=std::path::Path::new(std::ffi::OsStr::from_bytes(&b[..m]));
+        let native=p.join(q);let r=super::join_bytes_reference(&a[..n],&b[..m]);
+        let i:usize=kani::any();
+        assert_eq!(native.as_os_str().as_bytes().len(),r.len());
+        assert_eq!(native.as_os_str().as_bytes().get(i),r.get(i));
+    }
+    #[kani::proof]
+    #[kani::unwind(12)]
+    fn array_reject_three() {
+        let raw:[u32;2]=kani::any();let n:usize=kani::any();kani::assume(n<=2);
+        let v=raw[..n].to_vec();let expected=raw[..n].to_vec();
+        let native:Result<[u32;3],Vec<u32>>=v.try_into();
+        assert_eq!(native,Err(expected));
+    }
+}

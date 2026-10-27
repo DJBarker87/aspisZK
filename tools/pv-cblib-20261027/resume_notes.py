@@ -8,5 +8,5 @@ for a in t['lean_charged']:
 native=[]
 for n in t['kani_charged']:
  r=json.loads((out/n/'collected-receipt.json').read_text());native.append(dict(name=n,**{k:r.get(k) for k in ['harness','exit','wall','peak_rss_kib','swap','source_revision','print_axioms','target']}))
-(out/'RESUME-RECEIPTS.json').write_text(json.dumps(dict(tally=t,lean=rows,kani=native),indent=2)+'\n')
+(out/'RESUME8-RECEIPTS.json').write_text(json.dumps(dict(tally=t,lean=rows,kani=native),indent=2)+'\n')
 print('Lean',len(rows),'Kani',len(native),'next',t['next_id'])
