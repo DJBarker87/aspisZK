@@ -12804,3 +12804,32 @@ the endpoint consumes it and prove each field true or false on the two instances
 a stop and an owner escalation with the minimal statement change (for example restricting the
 quantifier to the honest carrier); the worker must not apply it. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D332 (Stream B) 2026-10-27 23:08 UTC: the raw-carrier source-identification handoff (V152-V154) is unsatisfiable as stated; the endpoint is not vacuous; consumer check before restating on the honest carrier
+
+runjoin25 (10 attempts; standard axioms; peak 5.01 GB; no swap) printed the handoff exactly:
+public_eq : forall w, source.public w = BuilderSource.prover.public (toInstance w);
+build_eq : forall w, source.build w = BuilderSource.prover.build (toInstance w);
+transport_eq : source.transport = BuilderSource.pi. Checked results:
+- On the non-conserving raw instance the public projection equality holds (bad_public_projection),
+  but no record-based canonical map exists there (bad_no_canonical_record, no_raw_record_map).
+- On the cached-variant mutation, V152, V153 and the transport all hold (variant_public_eq,
+  variant_build_eq): neither reads the cached variant.
+- On a further admitted input whose cached semantic columns put 1 in trace cell (0,13), where every
+  canonical merged trace has 0, build_eq is false for every canonical target (build_eq_false), and
+  identification_unsatisfiable proves the raw-carrier premise unsatisfiable; restricting to Admission
+  alone still fails.
+Rows V152-V154, as stated over every w : source.Instance, are therefore unsatisfiable, and the
+recount will reclassify them. The worker also checked that PrivacyR1HeadlineDeployedReal.
+privacy_headline_deployed has no SourceIdentification premise (it fixes the canonical builder and
+assumes RustRealRefinement), so this refutes an intermediate discharge route, not the endpoint;
+the endpoint is not shown vacuous. Stream A's soundness tree does not use SourceIdentification.
+
+Lead ruling: replacing the raw carrier with the honest carrier (semantic Admission plus cached
+payload equal to the actual successful compiler return, with the other explicit guards) is a
+different intermediate theorem, adopted only if every consumer of the handoff instantiates it at
+honest inputs. runjoin26 (remaining 70 attempts) checks every consumer in the endpoint's closure
+first, then, only if all pass, states the honest-carrier version with before/after statements,
+proves the consumers go through, proves the three fields for every honest carrier, and shows both
+fixtures are honest carriers. The owner packet records this as information: the endpoint statement
+is unchanged. Rows removed outright: 0. Privacy target not yet established.
