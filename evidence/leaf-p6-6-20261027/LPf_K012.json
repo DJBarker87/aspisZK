@@ -1,0 +1,57 @@
+{
+  "sources": [
+    "LPf_src/Cargo.lock",
+    "LPf_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "LPf_src/crates/aspis-core/src/field/LPf_contracts.rs",
+    "LPf_src/crates/aspis-core/src/field.rs",
+    "LPf_src/crates/aspis-r1-cost-probe/src/LPf_replay.rs",
+    "LPf_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+    "LPf_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "LPf_src/crates/aspis-r1-cost-probe/src/LPf_verifier.rs"
+  ],
+  "source_revision": "bad35b1c3a5bb12aa5bdebd76df10a7af08c8ee5",
+  "source_tree_dirty": true,
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "LPf_K012",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "fast_pairing::canonical::LPf_canonical::LPf_raw_contract",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation, then named solver stage full:fast_pairing::canonical::LPf_canonical::LPf_raw_contract",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "LPf_K012-graph-check.json"
+  },
+  "reservation_retries": 0
+}

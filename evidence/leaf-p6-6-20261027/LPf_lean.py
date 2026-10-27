@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess,sys,json,time
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 a,local,module=sys.argv[1:];local=Path(local);src='LPf_generated/'+module.replace('.','/')+'.lean';obj='LPf_objects/'+module.replace('.','/')+'.olean'
+assert len(list(E.glob('LPf_L*/receipt.json'))) < 60, 'STOP proof budget exhausted'
 def ssh(s):return subprocess.run(['ssh',H,s],capture_output=True,text=True)
 def get(n):
  (E/n).parent.mkdir(parents=True,exist_ok=True)

@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess,json,time,hashlib,sys,tomllib
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027'
 a=sys.argv[1];n=sys.argv[2]
+assert len(list(E.glob('LPf_K*/receipt.json'))) < 30, 'STOP proof budget exhausted'
 def ssh(s):return subprocess.run(['ssh',H,s],capture_output=True,text=True)
 def get(n):
  (E/n).parent.mkdir(parents=True,exist_ok=True)
@@ -27,7 +28,7 @@ def launch(x):
  for f in ['receipt.json','stdout.log','time.log']:get(x['attempt']+'/'+f)
  rc=json.loads((E/x['attempt']/'receipt.json').read_text());print(x['attempt'],rc['exit_status'],round(rc['wall_seconds'],3),rc['peak_rss_kib'],flush=True);return rc
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();lockhash=hashlib.sha256(Path('Cargo.lock').read_bytes()).hexdigest()
-base=dict(sources=['LPf_src/Cargo.lock','LPf_src/crates/aspis-r1-cost-probe/src/lib.rs','LPf_src/crates/aspis-core/src/field/LPf_contracts.rs','LPf_src/crates/aspis-core/src/field.rs','LPf_src/crates/aspis-r1-cost-probe/src/LPf_replay.rs','LPf_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs','LPf_src/crates/aspis-r1-cost-probe/src/verifier.rs','LPf_src/crates/aspis-r1-cost-probe/src/LPf_verifier.rs'],source_revision=rev,source_tree_dirty=True,env={'TMPDIR':B+'/LPf_tmp','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1'})
+base=dict(sources=['LPf_src/Cargo.lock','LPf_src/crates/aspis-r1-cost-probe/src/lib.rs','LPf_src/crates/aspis-core/src/field/LPf_contracts.rs','LPf_src/crates/aspis-core/src/field.rs','LPf_src/crates/aspis-core/src/field/wide_exact.rs','LPf_src/crates/aspis-r1-cost-probe/src/LPf_replay.rs','LPf_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs','LPf_src/crates/aspis-r1-cost-probe/src/verifier.rs','LPf_src/crates/aspis-r1-cost-probe/src/LPf_verifier.rs'],source_revision=rev,source_tree_dirty=True,env={'TMPDIR':B+'/LPf_tmp','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1'})
 g=a.replace('_K','_G');r=launch(dict(base,attempt=g,kind='metadata',command=['/home/dombarker/.cargo/bin/cargo','metadata','--manifest-path',B+'/LPf_src/Cargo.toml','--locked','--offline','--format-version','1'],timeout=120,expected_time='Frozen dependency graph validation, no solver'))
 assert r['exit_status']==0
 m=json.loads((E/g/'stdout.log').read_text());lock=tomllib.loads(Path('Cargo.lock').read_text());key=lambda p:(p['name'],p['version'],p.get('source'));frozen={key(p):p for p in lock['package']};actual={key(p) for p in m['packages']};nodes={p['id']:p for p in m['resolve']['nodes']};pkgs={p['id']:p for p in m['packages']};errors=[]
@@ -39,8 +40,12 @@ for p in m['packages']:
    z=label.split(' ')
    if z[0]==q['name'] and (len(z)>1 and z[1]==q['version'] or len(z)==1 and len(variants)==1) and (len(z)<3 or z[2].strip('()')==q.get('source')):ok=True
   if not ok:errors.append([key(p),key(q)])
+def normalized_graph(m):
+ k={p['id']:json.dumps([p['name'],p['version'],p.get('source')],separators=(',',':')) for p in m['packages']}
+ return {'packages':sorted(k.values()),'edges':sorted([k[n['id']],sorted(k[d] for d in n['dependencies'])] for n in m['resolve']['nodes'])}
+assert normalized_graph(m)==json.loads((E/'LPf_frozen_graph.json').read_text()),'STOP frozen resolved graph changed'
 before=ssh(f'sha256sum {B}/LPf_src/Cargo.lock').stdout.split()[0]
-check=dict(resolved_packages=len(actual),frozen_packages=len(frozen),new_package_tuples=sorted(actual-set(frozen),key=str),edge_errors=errors,graph_sha256=hashlib.sha256((E/g/'stdout.log').read_bytes()).hexdigest(),lock_before_sha256=before,frozen_lock_sha256=lockhash,package_and_edges_match=not errors and actual<=set(frozen))
+check=dict(exact_frozen_resolved_graph_match=True,frozen_resolved_graph_receipt='LPf_frozen_graph.json',resolved_packages=len(actual),frozen_packages=len(frozen),new_package_tuples=sorted(actual-set(frozen),key=str),edge_errors=errors,graph_sha256=hashlib.sha256((E/g/'stdout.log').read_bytes()).hexdigest(),lock_before_sha256=before,frozen_lock_sha256=lockhash,package_and_edges_match=not errors and actual<=set(frozen))
 (E/(a+'-graph-check.json')).write_text(json.dumps(check,indent=2)+'\n');assert check['package_and_edges_match'] and before==lockhash
 cfg=dict(base,attempt=a,kind='kani',command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+('/LPf_src/crates/aspis-core/Cargo.toml' if n.startswith('core:') else '/LPf_src/crates/aspis-r1-cost-probe/Cargo.toml'),'--target-dir',B+'/LPf_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',(n[5:] if n.startswith(('full:','core:')) else 'LPf_replay::LPf_'+n),'--output-format','terse'],timeout=600,expected_time='Optimized compilation, then named solver stage '+n,deps_fingerprint={'frozen_revision':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','graph_receipt':a+'-graph-check.json'})
 r=launch(cfg);after=ssh(f'sha256sum {B}/LPf_src/Cargo.lock').stdout.split()[0];check['lock_after_sha256']=after;check['lock_unchanged']=after==before;(E/(a+'-graph-check.json')).write_text(json.dumps(check,indent=2)+'\n');assert after==before,'STOP lock changed'
