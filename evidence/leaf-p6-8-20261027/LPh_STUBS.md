@@ -18,3 +18,7 @@ P=2147483647. cm/qm/wide result specs are natural-coordinate projections (`ZMod.
 ## Dot raw boundary
 
 Dot::push calls Q::raw, not the field operations above. The checked theorem AspisR1.FJf_RawReference.source gives the actual FIo_Native Q.raw successful result, in four explicit word expressions. A raw replacement must be paired with that theorem on exactly the same packed operands; field multiplication stubs alone do not replace this obligation. Native/model packed-array association remains distinct from the value theorem.
+
+| Additional replacement | Paired theorem | Domain and consumer result |
+|---|---|---|
+| canonical::LPh_dot::raw_stub (including its ghost output observation) | AspisR1.LPh.Raw.value, L006; inherited FJf_RawReference.source | packed eight U32; stub asserts each <P, established by each caller's checked Q constructor. K004–K007 PASS conditional four coordinate updates. SAME packed-array/source-model carrier installation remains OPEN. |
