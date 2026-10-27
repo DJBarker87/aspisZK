@@ -7,3 +7,7 @@ The replacement follows JGy's symbolic step certificates and factored generic he
 The first attempt to use 130 nested theorem-local lets hit the default recursion-depth limit (JHc29_002). That rejected candidate is archived; no limit was raised. JHc29_003 substitutes the certified literals directly. It passed with a 4,889,528-byte object versus 32,732,032 bytes for JGy_Certs0_00. This is measured representation reduction, not premise-removal or security credit.
 
 JHc_compress.py --check checks exact generated text and records source hashes and import bindings in JHc_COMPRESSION.json. Final composition imports the minimal batch frontier, the installed query/flush theorem, and the actual query continuation; it does not import audit modules or unused tree candidates. Its transitive certificate environment uses the new block interfaces. Actual success of that composition must still be checked; smaller objects alone do not establish it.
+
+## Checked final boundary
+
+The closed composition passed at074, after the root-read statement module was also rebound under JHc_. The initial067 batch rejection exposed that missed old namespace import; no memory retry occurred. 070 checks native batch and installed query/flush imports together, exit0/RSS7118404KiB/swap0. 074 proves the unconditional closed same-preparation batch/query/flush witness. 083 further composes the actual source writer and returns its own saved vector, with no SDK wrapper or retained-byte identity claimed.
