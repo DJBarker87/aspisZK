@@ -60,6 +60,23 @@ mod checks {
         assert_eq!(x.c1.a.0,y.c1.a.0);assert_eq!(x.c1.b.0,y.c1.b.0);
     }
     #[kani::proof]
+    #[kani::unwind(1026)]
+    fn helper_sum1024() {
+        let raw:[[u32;4];1024]=kani::any();let mut h1=[QM31::ZERO;1024];
+        for i in 0..1024 {h1[i]=q(raw[i]);}
+        let n:usize=kani::any();kani::assume(n<=1024);
+        let a=aspis_statement::state_only_semantic::state_only_copy_helper_sum(&h1[..n]);
+        let b=super::reference_p6::helper_sum(&h1[..n]);
+        match (a,b) {
+            (None,None)=>{},
+            (Some(x),Some(y))=>{
+                assert_eq!(x.c0.a.0,y.c0.a.0);assert_eq!(x.c0.b.0,y.c0.b.0);
+                assert_eq!(x.c1.a.0,y.c1.a.0);assert_eq!(x.c1.b.0,y.c1.b.0);
+            },
+            _=>assert!(false),
+        }
+    }
+    #[kani::proof]
     fn pole_equal() {
         let a=q(kani::any());let b=q(kani::any());
         assert_eq!(super::ct_pole::equal(a,b),super::reference::equal(a,b));
@@ -145,4 +162,84 @@ mod checks {
         assert_eq!(read,expected.0);assert_eq!(actual,expected.1);
     }
 
+    // The earlier frame gate used copy_from_slice and produced a Kani/native
+    // discrepancy. This checks the same iterator frame with indexed writes,
+    // matching the sampler's scalar mutation instead of introducing memcpy.
+    #[kani::proof]
+    #[kani::unwind(17)]
+    fn iterator_back_frame_indexed() {
+        let data:[u32;8]=kani::any(); let updates:[u32;8]=kani::any();
+        let remaining:usize=kani::any(); kani::assume(remaining<=8);
+        let last:u32=kani::any(); let mut actual=data; let read;
+        {
+            let mut iter=actual[..remaining].iter_mut();
+            read=iter.next_back().map(|word| {let old=*word; *word=last; old});
+            let rest=iter.into_slice();
+            let n=if remaining==0 {0}else{remaining-1};
+            assert_eq!(rest.len(),n);
+            let mut i=0;
+            while i<n { rest[i]=updates[i]; i+=1; }
+        }
+        let expected=super::reference_split::back_frame(&data,remaining,&updates,last);
+        assert_eq!(read,expected.0); assert_eq!(actual,expected.1);
+    }
+
+}
+
+// Resume 6: scalar observations avoid builtin memcmp and expose all state.
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod resumed_checks {
+    macro_rules! words_equal { ($a:expr,$b:expr) => {{
+        let a=$a; let b=$b;
+        assert_eq!(a[0],b[0]); assert_eq!(a[1],b[1]);
+        assert_eq!(a[2],b[2]); assert_eq!(a[3],b[3]);
+        assert_eq!(a[4],b[4]); assert_eq!(a[5],b[5]);
+        assert_eq!(a[6],b[6]); assert_eq!(a[7],b[7]);
+    }} }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn words_scalar() {
+        let block:[u8;32]=kani::any();
+        words_equal!(super::source_fragments::words(&block),super::reference_split::words(block));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn pass_scalar() {
+        let rank:[u32;8]=kani::any();
+        let a=super::source_fragments::pass(rank); let b=super::reference_split::pass(rank);
+        words_equal!(a.0,b.0); assert_eq!(a.1,b.1);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn carry_scalar() {
+        let digits:[u32;8]=kani::any(); let add:u32=kani::any();
+        let a=super::source_fragments::carry(digits,add); let b=super::reference_split::carry(digits,add);
+        words_equal!(a.0,b.0); assert_eq!(a.1,b.1);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_scalar() {
+        let block:[u8;32]=kani::any();
+        let a=super::sampler::gamma_sample(&block);let b=super::reference_split::gamma(block);
+        assert_eq!(a.c0().c0.a.0,b.c0().c0.a.0);assert_eq!(a.c0().c0.b.0,b.c0().c0.b.0);
+        assert_eq!(a.c0().c1.a.0,b.c0().c1.a.0);assert_eq!(a.c0().c1.b.0,b.c0().c1.b.0);
+        assert_eq!(a.c1().c0.a.0,b.c1().c0.a.0);assert_eq!(a.c1().c0.b.0,b.c1().c0.b.0);
+        assert_eq!(a.c1().c1.a.0,b.c1().c1.a.0);assert_eq!(a.c1().c1.b.0,b.c1().c1.b.0);
+    }
+}
+
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod resume6_pole {
+    use aspis_core::field::{QM31,CM31,M31};
+    fn q(w:[u32;4])->QM31 {QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn canonical1024() {
+        let mut values=[[[QM31::ZERO;2];2];1024];
+        for row in 0..1024 { for side in 0..2 { for slot in 0..2 {values[row][side][slot]=q(kani::any());}}}
+        let masks:[u16;64]=kani::any();let chi=q(kani::any());
+        let n:usize=kani::any();kani::assume(n<=1024);
+        assert_eq!(super::ct_pole::all_slots_clear(&values[..n],&masks,chi),
+          super::reference::all_slots_clear(&values[..n],&masks,chi));
+    }
 }

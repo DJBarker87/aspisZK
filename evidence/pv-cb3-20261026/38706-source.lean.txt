@@ -1,0 +1,26 @@
+import R1Z.PV_CB3_StagedBits
+import R1Z.PV_CB3_MachineFinish
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_CB3_StagedFinishBits
+open Aeneas Aeneas.Std
+open PV_CB3_StagedPacking PV_CB3_StagedBits
+
+def finish (digits : Array U32 8#usize) (high : U32) : Array U32 8#usize :=
+  let first := PV_CB3_StagedMachineCarry.carry digits (U32.wrapping_add high 1#u32)
+  if first.2 then (PV_CB3_StagedMachineCarry.carry first.1 1#u32).1 else first.1
+
+theorem bits_finish (digits : Array U32 8#usize) (high : U32) :
+    bits (finish digits high) = PV_CB3_MachineFinish.finish (bits digits) high.bv := by
+  unfold finish PV_CB3_MachineFinish.finish
+  simp only [carry_overflow]
+  split <;> rename_i h
+  · rw [if_neg]
+    · simp only [carry_bits]
+      rfl
+    · simpa only [bne_iff_ne] using h
+  · rw [if_pos]
+    · exact carry_bits digits (U32.wrapping_add high 1#u32)
+    · simpa only [bne_iff_ne,not_not] using h
+#print axioms bits_finish
+end R1Z.PV_CB3_StagedFinishBits

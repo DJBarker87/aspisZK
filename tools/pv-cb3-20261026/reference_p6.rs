@@ -41,3 +41,10 @@ pub fn boundary_flat(p:&[QM31;28])->QM31 {
  let s=boundary_acc_step(p[27],s);
  QM31{c0:CM31::new(M31::reduce_u64(s.a),M31::reduce_u64(s.b)),c1:CM31::new(M31::reduce_u64(s.c),M31::reduce_u64(s.d))}
 }
+
+pub fn helper_sum(h1:&[QM31])->Option<QM31> {
+ if h1.len()!=1024 {return None;}
+ let mut sum=QM31::ZERO;let mut index=0usize;
+ while index<1024 {sum=sum.add(h1[index]);index+=1;}
+ Some(sum)
+}

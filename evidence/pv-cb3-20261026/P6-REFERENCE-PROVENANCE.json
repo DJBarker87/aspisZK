@@ -17,7 +17,7 @@
   "new_flat_adaptation": "R1Z.PV_CB3_Op51Source.Raw.wide_bytes_flat",
   "adaptation": "Import only current interface and byte-source definitions; retain extracted body byte-for-byte and replace the to_limbs alias with its original named extracted definition.",
   "native_gate": "kani-wide-flat-001/collected-receipt.json",
-  "status": "op51 and op120 current-source native gates and complete Lean source laws passed",
+  "status": "op120 complete source correspondence credited. op51 row credit withdrawn: native construction passes through WideExact::new and covers only its canonical image; Lean equation alone is not a source closure.",
   "lean_receipts": {
     "op51": "24753.json",
     "op120": "24754.json"
@@ -25,5 +25,6 @@
   "boundary_native_gate": "kani-boundary-flat-002/collected-receipt.json",
   "boundary_adaptation": "Retain extracted boundary accumulator and flat body. Bind M31.reduce_u64 to its shipped ct-host-prover ct.reduce64 body copied unchanged from ProverRwSuccessNativePorts; bind CM31.new to its named extracted byte-source constructor; field P is the shipped literal2147483647.",
   "op51_extracted_body_sha256": "29e40e02c9ba43ba2c53ffcedb1ac5f86a07477ec26ad241e300428fc31be9a6",
-  "op120_extracted_body_sha256": "71772fca80b2f2a42e91b3854d8561637aebc6429df6b9fdace70e001df22db9"
+  "op120_extracted_body_sha256": "71772fca80b2f2a42e91b3854d8561637aebc6429df6b9fdace70e001df22db9",
+  "op51_scope_correction": "Raw nondeterministic words are canonicalized by WideExact::new before serialization. An arbitrary extracted-carrier law needs full-field construction in a cfg(kani)-only in-module harness or a direct source proof; no canonicality/output premise may be inserted."
 }

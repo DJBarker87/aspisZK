@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/codex-pv-cb3-20261026/lean-sources/R1Z/PV_CB3_SourcePass.lean:33:4: error: unsolved goals
+case cons.refine_1
+w : U32
+ws high : List U32
+prior : U64
+hp : pass ws = ok (high, prior)
+hv : values high = (PV_CB3_SamplerDivision.divideLE base radix (values ws)).1
+hr : ↑prior = (PV_CB3_SamplerDivision.divideLE base radix (values ws)).2
+bound : ↑prior < base
+q : U32
+r : U64
+hs : PV_CB3_ShippedOp249word.reference_split.word_step w prior = ok (q, r)
+hqv : ↑q = PV_CB3_SamplerWord.dividend ↑prior ↑w / base
+hrv : ↑r = PV_CB3_SamplerWord.dividend ↑prior ↑w % base
+⊢ (let (high, prior) := (high, prior)
+    do
+    let (quotient, remainder) ← PV_CB3_ShippedOp249word.reference_split.word_step w prior
+    ok (quotient :: high, remainder)) =
+    ok (q :: high, r)
+/home/dombarker/project-offloads/codex-pv-cb3-20261026/lean-sources/R1Z/PV_CB3_SourcePass.lean:33:36: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [pass, ̲hp, ̲bind_tc_ok,̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB3_SourcePass.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_SourcePass.canonical_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

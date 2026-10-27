@@ -1,0 +1,13 @@
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_StagedByteWord.lean:9:61: error: unsolved goals
+a b c d : U8
+⊢ ↑((BitVec.setWidth 32 a.bv |||
+          (BitVec.setWidth 32 b.bv |||
+              BitVec.setWidth 32
+                ((BitVec.setWidth 24 c.bv ||| BitVec.setWidth 24 (BitVec.setWidth 16 d.bv <<< 8)) <<< 8)) <<<
+            8)#uscalar) =
+    ↑a + 256 * (↑b + 256 * (↑c + 256 * ↑d))
+'R1Z.PV_CB3_StagedByteWord.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,9 +1,9 @@
 # Callback source-law worklist
 
-Recount-2 baseline → baseline plus this worker: OPEN 110 → 105;
-independent OPEN 51 → 46; CLOSED-ON-CANDIDATE 40 → 45.
+Recount-2 baseline → baseline plus this worker: OPEN 110 → 106;
+independent OPEN 51 → 47; CLOSED-ON-CANDIDATE 40 → 44.
 Other live sibling changes are not folded into these arithmetic counts.
-This worker: 5 ROW-DISCHARGED(candidate). Endpoint premises removed: 0.
+This worker: 4 ROW-DISCHARGED(candidate). Endpoint premises removed: 0.
 No implementation or release pin changed. Target not yet established.
 
 |op|row|status|theorem|receipt|
@@ -14,7 +14,7 @@ No implementation or release pin changed. Target not yet established.
 |251|V258|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op251-001/collected-receipt.json|
 |249|V256|OPEN: extracted skeleton has unresolved library cuts|—|aeneas-source-op249-002/collected-receipt.json|
 |246|V254|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op246Source.op246_source|24701.json|
-|230|V247|OPEN: direct iterator closure obstructed; narrowing/P6 pending|—|aeneas-source-op230-001/collected-receipt.json|
+|230|V247|OPEN: bounded copy-helper native gate timed out|—|kani-helper-sum1024-002/collected-receipt.json|
 |229|V246|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op229Source.op229_source|24705.json|
 |228|V245|OPEN: borrow-processing failure; P6 pending|—|aeneas-source-op228-001/collected-receipt.json|
 |227|V244|OPEN: builtin-copy extraction failure; P6 pending|—|aeneas-source-op227-001/collected-receipt.json|
@@ -34,10 +34,10 @@ No implementation or release pin changed. Target not yet established.
 |134|V230|OPEN|—|—|
 |133|V229|OPEN|—|—|
 |132|V228|OPEN|—|—|
-|121|V220|OPEN: owned loop-free P6 reference under native check|—|kani-polynomial-flat-001/target.json|
+|121|V220|OPEN: native whole/cell gates timed out; extraction refused structured Drop|—|aeneas-source-op121-001/collected-receipt.json|
 |120|V219|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op120Source.op120_source|24754.json|
 |79|V201|OPEN|—|—|
-|51|V195|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op51Source.op51_source|24753.json|
+|51|V195|OPEN: P6 native gate covers canonical constructor image only|R1Z.PV_CB3_Op51Source.op51_source|24753.json|
 |36|V187|OPEN|—|—|
 |35|V186|OPEN|—|—|
 |34|V185|OPEN|—|—|

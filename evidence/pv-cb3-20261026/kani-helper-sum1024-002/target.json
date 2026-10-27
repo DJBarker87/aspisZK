@@ -1,0 +1,41 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_NET_OFFLINE=true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "TMPDIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-helper-sum1024-002/tmp",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "checks::helper_sum1024",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "29de5188030868e63fbd4066b986a1b102467498",
+  "expected_phase": "Retry after required three-minute reservation wait. Arbitrary1024 rawQM31 backing rows, n<=1024; full live n=1024 sum plus smaller false-guard lengths. Longer false-guard lengths require Lean source reasoning; bounded gate alone is not closure. Optimized statement dependency compilation then1024-row unroll/adder elimination; no stubs; safety and unwinding1026 retained; own solver-temp dir.",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A native P6 equivalence gate; extracted reference Lean law still required"
+}

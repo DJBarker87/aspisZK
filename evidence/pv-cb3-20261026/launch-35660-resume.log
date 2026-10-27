@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0000); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+      let digits1 ←
+        if wrapped = true then do
+            let (digits2, _) ← PV_CB3_StagedSource.staged_reference.carry digits 1#u32
+            ok digits2
+          else ok digits
+      let i2 ← digits1.index_usize 0#usize
+      let i3 ← digits1.index_usize 1#usize
+      let i4 ← digits1.index_usize 2#usize
+      let i5 ← digits1.index_usize 3#usize
+      let i6 ← digits1.index_usize 4#usize
+      let i7 ← digits1.index_usize 5#usize
+      let i8 ← digits1.index_usize 6#usize
+      let i9 ← digits1.index_usize 7#usize
+      PV_CB3_StagedSource.aspis_core.field.wide_exact.WideExact.new
+          { c0 := { a := i2, b := i3 }, c1 := { a := i4, b := i5 } }
+          { c0 := { a := i6, b := i7 }, c1 := { a := i8, b := i9 } }) =
+    do
+    let rank0 ← PV_CB3_StagedSource.staged_reference.words block
+    PV_CB3_StagedDecode.decode (pipeline rank0)
+
+Note: The full type of `congrArg fun f => ?m.17` is
+  ?m.12 = ?m.13 → ?m.18 ?m.12 = ?m.18 ?m.13
+
+block : Std.Array U8 32#usize
+⊢ (do
+      let rank0 ← PV_CB3_StagedSource.staged_reference.words block
+      let (rank1, d0) ← PV_CB3_StagedSource.staged_reference.pass rank0
+      let (rank2, d1) ← PV_CB3_StagedSource.staged_reference.pass rank1
+      let (rank3, d2) ← PV_CB3_StagedSource.staged_reference.pass rank2
+      let (rank4, d3) ← PV_CB3_StagedSource.staged_reference.pass rank3
+      let (rank5, d4) ← PV_CB3_StagedSource.staged_reference.pass rank4
+      let (rank6, d5) ← PV_CB3_StagedSource.staged_reference.pass rank5
+      let (rank7, d6) ← PV_CB3_StagedSource.staged_reference.pass rank6
+      let (rank8, d7) ← PV_CB3_StagedSource.staged_reference.pass rank7
+      let i ← rank8.index_usize 0#usize
+      let i1 ← lift (i.wrapping_add 1#u32)
+      let (digits, wrapped) ←
+        PV_CB3_StagedSource.staged_reference.carry (Array.make 8#usize [d0, d1, d2, d3, d4, d5, d6, d7] ⋯) i1
+      let digits1 ←
+        if wrapped = true then do
+            let (digits2, _) ← PV_CB3_StagedSource.staged_reference.carry digits 1#u32
+            ok digits2
+          else ok digits
+      let i2 ← digits1.index_usize 0#usize
+      let i3 ← digits1.index_usize 1#usize
+      let i4 ← digits1.index_usize 2#usize
+      let i5 ← digits1.index_usize 3#usize
+      let i6 ← digits1.index_usize 4#usize
+      let i7 ← digits1.index_usize 5#usize
+      let i8 ← digits1.index_usize 6#usize
+      let i9 ← digits1.index_usize 7#usize
+      PV_CB3_StagedSource.aspis_core.field.wide_exact.WideExact.new
+          { c0 := { a := i2, b := i3 }, c1 := { a := i4, b := i5 } }
+          { c0 := { a := i6, b := i7 }, c1 := { a := i8, b := i9 } }) =
+    do
+    let rank0 ← PV_CB3_StagedSource.staged_reference.words block
+    PV_CB3_StagedDecode.decode (pipeline rank0)
+'R1Z.PV_CB3_StagedKernel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.10
+	Maximum resident set size (kbytes): 2625436
+	Swaps: 0
+	Exit status: 1

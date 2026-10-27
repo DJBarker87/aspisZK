@@ -1,0 +1,34 @@
+R1Z.PV_CB3_CallbackBundle.op51_source : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.wide_exact.WideExact),
+  ProverRwFull.ExternalFuns.op51 x = R1Z.PV_CB3_Op51Source.Raw.wide_bytes_flat x
+'R1Z.PV_CB3_CallbackBundle.op51_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CB3_CallbackBundle.op120_source : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (p : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 28#usize),
+  ProverRwFull.ExternalFuns.op120 p = R1Z.PV_CB3_Op120Source.Raw.boundary_flat p
+'R1Z.PV_CB3_CallbackBundle.op120_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CB3_CallbackBundle.op225_source : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (transfer :
+    ProverRwFull.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 →
+      R1Z.PV_CB3_Op225Coherent.Raw.Transfer)
+  (withdrawal :
+    ProverRwFull.aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 →
+      R1Z.PV_CB3_Op225Coherent.Raw.Withdrawal)
+  (p : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public),
+  ProverRwFull.ExternalFuns.op225 p =
+    R1Z.PV_CB3_TransitionExtracted.transition (R1Z.PV_CB3_Op225Coherent.toRaw transfer withdrawal p)
+'R1Z.PV_CB3_CallbackBundle.op225_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CB3_CallbackBundle.op229_source : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (a b : ProverRwFull.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1),
+  ProverRwFull.ExternalFuns.op229 a b = PV_CB3_ShippedOp229.statement_eq a b
+'R1Z.PV_CB3_CallbackBundle.op229_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CB3_CallbackBundle.op246_source : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  {H : Type} (inst : ProverRwFull.aspis_core.digest.Digest32 H) (hash : H)
+  (left right : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  ProverRwFull.ExternalFuns.op246 inst hash left right =
+    PV_CB3_CoherentOp246.multiproof.binary_parent inst hash left right
+'R1Z.PV_CB3_CallbackBundle.op246_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_SourcePass.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_SourceShape.total_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_SourceABI.array_values_injective' depends on axioms: [propext]
+'R1Z.PV_CB3_MachineGamma.value_formula' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_CB3_GammaBytes.byte_formula' depends on axioms: [propext, Quot.sound]

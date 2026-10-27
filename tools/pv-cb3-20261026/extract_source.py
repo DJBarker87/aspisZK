@@ -6,8 +6,8 @@ op,entry,include=sys.argv[1:4]
 project=sys.argv[6] if len(sys.argv)>6 else ('source-proof' if int(op)>=71 else 'proof')
 base='/home/dombarker/project-offloads/codex-pv-cb3-20261026'
 scanner='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/reservation.py'
-charon='/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon'
-aeneas='/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static'
+charon=base+'/pinned-tools/charon'
+aeneas=base+'/pinned-tools/aeneas'
 def ssh(cmd):return subprocess.run(['ssh','dombarker@100.108.41.90',cmd],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
 for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']):
  name=f'{stage}-source-op{op}-{sys.argv[4] if len(sys.argv)>4 else "001"}';dest=f'{base}/{name}';local=root/'evidence/pv-cb3-20261026'/name

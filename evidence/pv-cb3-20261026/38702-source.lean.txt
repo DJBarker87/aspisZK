@@ -1,0 +1,36 @@
+import R1Z.PV_CB3_StagedMachinePass
+import R1Z.PV_CB3_StagedMachineCarry
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_CB3_StagedBits
+open Aeneas Aeneas.Std Result
+open PV_CB3_StagedPacking
+
+theorem pass_bits (rank : Array U32 8#usize) :
+    bits (PV_CB3_StagedMachinePass.pass rank).1 =
+      (PV_CB3_MachinePass.passLE (bits rank)).1 := by
+  simp only [PV_CB3_StagedMachinePass.pass,bits_pack]
+
+theorem pass_digit (rank : Array U32 8#usize) :
+    (PV_CB3_StagedMachinePass.pass rank).2.bv =
+      (PV_CB3_MachinePass.passLE (bits rank)).2.setWidth 32 := rfl
+
+theorem carry_bits (digits : Array U32 8#usize) (a : U32) :
+    bits (PV_CB3_StagedMachineCarry.carry digits a).1 =
+      (PV_CB3_MachineCarry.carry (bits digits) a.bv).1 := by
+  simp only [PV_CB3_StagedMachineCarry.carry,bits_pack]
+
+theorem carry_overflow (digits : Array U32 8#usize) (a : U32) :
+    (PV_CB3_StagedMachineCarry.carry digits a).2 =
+      ((PV_CB3_MachineCarry.carry (bits digits) a.bv).2 != (0 : BitVec 32)) := by
+  have hz (x : BitVec 32) : ((⟨x⟩ : U32) = 0#u32) ↔ x = 0 := by
+    constructor
+    · exact congrArg UScalar.bv
+    · intro h; subst x; rfl
+  apply Bool.eq_iff_iff.mpr
+  simp only [PV_CB3_StagedMachineCarry.carry,bne_iff_ne,ne_eq,hz]
+#print axioms pass_bits
+#print axioms pass_digit
+#print axioms carry_bits
+#print axioms carry_overflow
+end R1Z.PV_CB3_StagedBits

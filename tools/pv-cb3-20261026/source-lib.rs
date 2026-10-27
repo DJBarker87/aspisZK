@@ -56,3 +56,34 @@ pub fn public_bytes(public:aspis_statement::pool_v1::pair_forest_semantic_termin
 pub fn terminal(public:aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,claims:&[[aspis_core::field::QM31;29];3],alpha:&[aspis_core::field::QM31;10],c:&aspis_core::state_only_prefix::r0::Challenges)->Result<aspis_core::field::QM31,aspis_core::state_only_prefix::r0::Error> {
     public.terminal_qm31(claims,alpha,c)
 }
+
+#[cfg(kani)]
+pub fn evaluate_polynomial(p:&[aspis_core::field::QM31;28],challenge:aspis_core::field::QM31)->aspis_core::field::QM31 {
+ aspis_core::state_only_sumcheck::evaluate_state_only_polynomial(p,challenge)
+}
+// Resume op223: extract the unchanged function as current-crate built MIR.
+#[cfg(kani)]
+#[path = "../source/crates/aspis-statement/src/logup.rs"]
+pub mod logup;
+#[cfg(kani)]
+pub fn compress_tagged_tuple(tag:aspis_core::field::M31,values:&[aspis_core::field::M31],lambda:aspis_core::field::QM31)->aspis_core::field::QM31 {
+    logup::compress_tagged_tuple(tag,values,lambda)
+}
+
+#[cfg(kani)]
+#[path = "../kani-proof/reference_split.rs"]
+pub mod staged_reference;
+
+#[cfg(kani)]
+pub use aspis_r1_cost_probe::{transport,verifier,fast_pairing,trace};
+#[cfg(kani)]
+#[path = "../source/crates/aspis-r1-cost-probe/src/weights.rs"]
+pub mod current_weights;
+#[cfg(kani)]
+pub fn current_raw(w:&current_weights::Weights,kind:usize,j:usize)->aspis_core::field::QM31 {
+    w.raw(kind,j)
+}
+#[cfg(kani)]
+pub fn vec_empty<T>(v:&alloc::vec::Vec<T>)->bool {v.is_empty()}
+#[cfg(kani)]
+pub fn vec_default<T>()->alloc::vec::Vec<T> {alloc::vec::Vec::default()}

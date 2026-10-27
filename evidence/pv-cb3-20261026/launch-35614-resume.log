@@ -1,0 +1,27 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2311); env=J
+slot: /tmp/aspis-r0-lean-slot-2.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB3_StagedWord.lean:33:2: error: 'change' tactic failed, pattern
+  (do
+      let r ← sum d a % PV_CB3_SamplerWordSource.denominator
+      let q ← sum d a / PV_CB3_SamplerWordSource.denominator
+      ok (UScalar.cast UScalarTy.U32 r, UScalar.cast UScalarTy.U32 q)) =
+    ?m.62
+is not definitionally equal to target
+  (do
+      let i4 ←
+        (core.convert.num.FromU64U32.from d).wrapping_add (core.convert.num.FromU64U32.from a) %
+            core.convert.num.FromU64U32.from 2147483647#u32
+      let i7 ←
+        (core.convert.num.FromU64U32.from d).wrapping_add (core.convert.num.FromU64U32.from a) /
+            core.convert.num.FromU64U32.from 2147483647#u32
+      ok (UScalar.cast UScalarTy.U32 i4, UScalar.cast UScalarTy.U32 i7)) =
+    ok (UScalar.cast UScalarTy.U32 r, UScalar.cast UScalarTy.U32 q)
+'R1Z.PV_CB3_StagedWord.word_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_StagedWord.word_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_StagedWord.carry_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.09
+	Maximum resident set size (kbytes): 2621952
+	Swaps: 0
+	Exit status: 1
