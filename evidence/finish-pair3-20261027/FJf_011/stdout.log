@@ -1,0 +1,71 @@
+FJf_FactorArray.lean:27:19: error(lean.unknownIdentifier): Unknown identifier `FJc_ReadSlot.slot`
+FJf_FactorArray.lean:26:40: error: unsolved goals
+f : Factors
+k : Usize
+r : Row
+run : Array.index_usize f k = ok r
+d s : ℕ
+⊢ (match (↑f)[↑k]? with
+    | some r => rowValue r d s
+    | none => 0) =
+    rowValue r d s
+FJf_FactorArray.lean:34:12: error: Tactic `rfl` failed: The left-hand side
+  FJc_WeightArray.value a✝ s
+is not definitionally equal to the right-hand side
+  if ↑i = d then FJc_WeightArray.value x s
+  else
+    match (↑a)[d]? with
+    | some a => FJc_WeightArray.value a s
+    | none => 0
+
+case h_1
+a b : Row
+i : Usize
+x : Std.Array SQ 4#usize
+run : Array.update a i x = ok b
+d s : ℕ
+x✝ : Option (Std.Array SQ 4#usize)
+a✝ : Std.Array SQ 4#usize
+heq✝ : (if ↑i = d then some x else (↑a)[d]?) = some a✝
+⊢ FJc_WeightArray.value a✝ s =
+    if ↑i = d then FJc_WeightArray.value x s
+    else
+      match (↑a)[d]? with
+      | some a => FJc_WeightArray.value a s
+      | none => 0
+FJf_FactorArray.lean:34:12: error: Tactic `rfl` failed: The left-hand side
+  0
+is not definitionally equal to the right-hand side
+  if ↑i = d then FJc_WeightArray.value x s
+  else
+    match (↑a)[d]? with
+    | some a => FJc_WeightArray.value a s
+    | none => 0
+
+case h_2
+a b : Row
+i : Usize
+x : Std.Array SQ 4#usize
+run : Array.update a i x = ok b
+d s : ℕ
+x✝ : Option (Std.Array SQ 4#usize)
+heq✝ : (if ↑i = d then some x else (↑a)[d]?) = none
+⊢ 0 =
+    if ↑i = d then FJc_WeightArray.value x s
+    else
+      match (↑a)[d]? with
+      | some a => FJc_WeightArray.value a s
+      | none => 0
+FJf_FactorArray.lean:39:61: error(lean.unknownIdentifier): Unknown identifier `FJc_ReadSlot.slot`
+FJf_FactorArray.lean:38:81: error: unsolved goals
+f : Factors
+i : Usize
+old x : Row
+run : Array.index_usize f i = ok old
+k d s : ℕ
+⊢ value (Std.Array.set f i x) k d s = if ↑i = k then rowValue x d s else value f k d s
+'AspisR1.FJf_FactorArray.row_read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJf_FactorArray.row_update' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJf_FactorArray.outer_set' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJf_FactorArray.row_update_canon' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FJf_FactorArray.outer_set_canon' depends on axioms: [propext, Classical.choice, Quot.sound]

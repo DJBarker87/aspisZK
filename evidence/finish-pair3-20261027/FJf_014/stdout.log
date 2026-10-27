@@ -1,0 +1,35 @@
+FJf_PointCell.lean:23:62: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ↑cursor.start = ↑iter.start + 1 ∧ ↑iter.start
+FJf_PointCell.lean:23:78: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+FJf_PointCell.lean:27:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+points : Points
+k : Usize
+p : Std.Array SQ 10#usize
+hp : Array.index_usize points k = ok p
+hc : FJc_WeightArray.canonical p
+iter cursor : FIo_RangeNext.Range
+factors next : Factors
+hf : canon factors
+run : FIn_WeightsExtract.weights_new_loop0_loop0.body points k iter factors = ok (cont (cursor, next))
+x✝ :
+  ∃ d tau ia ib p a b row back updated f0 f1 f2 f3,
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some d, cursor) ∧
+      FIn_WeightsExtract.TAU.index_usize d = ok tau ∧
+        ia = Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize tau) ∧
+          ib = Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize tau) ∧
+            Array.index_usize points k = ok p ∧
+              p.index_usize ia = ok a ∧
+                p.index_usize ib = ok b ∧
+                  FJd_SourceFactor.reference a b = ok [f0, f1, f2, f3] ∧
+                    Array.index_mut_usize factors k = ok (row, back) ∧
+                      row.update d (Array.make 4#usize [f0, f1, f2, f3] ⋯) = ok updated ∧ next = back updated
+⊢ PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+FJf_PointCell.lean:63:14: error(lean.unknownIdentifier): Unknown constant `value_step`

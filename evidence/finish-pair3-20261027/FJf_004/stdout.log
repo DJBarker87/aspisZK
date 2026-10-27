@@ -1,0 +1,47 @@
+FJf_ArrayOps.lean:15:38: error: could not synthesize default value for parameter 'h' using tactics
+FJf_ArrayOps.lean:15:38: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+A : Type
+N : Usize
+a : Std.Array A N
+i : Usize
+x : A
+back : A → Std.Array A N
+run : a.index_mut_usize i = ok (x, back)
+v✝ : ?m.11
+⊢ ↑i < Array.size ?m.12
+FJf_ArrayOps.lean:15:38: error: Type mismatch
+  fun v => Array.set ?m.12 (↑i) v ⋯
+has type
+  ?m.11 → _root_.Array ?m.11
+but is expected to have type
+  A → Std.Array A N
+FJf_ArrayOps.lean:22:22: error(lean.invalidField): Invalid field `val`: The environment does not contain `Array.val`, so it is not possible to project the field `val` from an expression
+  Array.set ?m.2 (↑i) x ?m.3
+of type `_root_.Array A`
+FJf_ArrayOps.lean:22:5: error: could not synthesize default value for parameter 'h' using tactics
+FJf_ArrayOps.lean:22:5: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+A : Type
+N : Usize
+a : Std.Array A N
+i : Usize
+x : A
+⊢ ↑i < Array.size ?m.2
+FJf_ArrayOps.lean:22:15: error: Application type mismatch: The argument
+  a
+has type
+  Std.Array A N
+but is expected to have type
+  _root_.Array A
+in the application
+  @Array.set A a
+'AspisR1.FJf_ArrayOps.update_val' depends on axioms: [propext]
+FJf_ArrayOps.lean:25:14: error(lean.unknownIdentifier): Unknown constant `index_mut`
+FJf_ArrayOps.lean:26:14: error(lean.unknownIdentifier): Unknown constant `set_val`
