@@ -12856,3 +12856,23 @@ for every honest input, applies the existing consumers there, says what part of 
 that discharges, and writes the exact meaning of the restriction for the privacy claim: privacy for
 users whose prover inputs are produced by the compiler. That meaning goes to the owner packet as a
 scope statement. Rows removed outright: 0. Privacy target not yet established.
+
+## D334 (Stream B) 2026-10-27 23:25 UTC: Stream A's XRn_Join kit findings do not reach Stream B; ruling (q)
+
+Stream A reported (owner-approved third amendment of 2026-10-27) that it now discharges soundness
+correspondence on the reached TX1/TX2 verifier paths by direct native/Kani/Lean P6 bridges, because
+its kit audit (evidence/kit-audit1-20261027/KSA_FINDING.md) found the worker-assembled XRn_Join kit
+unfaithful: eight hand-written stand-ins for shipped functions (mpow, qpow, M31.inv, circle
+point/closure, selected mask, WideExact.mul_qm31, QM31.from_le_bytes), iterator models nextBackPair
+and reverseNext that repeat a consumed singleton under mixed front/back iteration (confirmed
+natively), 15 edited emitted bodies and about 189 mostly undetermined library models. D188 stays
+narrowed as before.
+
+The lead checked exposure: no module under docs/research/v8-r0-zk-20261009/lean or evidence/pv-*
+imports any XR*-prefixed module on research, on the prover candidate or on the live Stream B
+branches (runjoin, reach, batch2, batch3), and the coherent privacy endpoint closure (669 project
+modules, runjoin21) contains none. Stream B's callback closures rest on their own extractions with
+P6 or structural native links. Ruling (q) forbids importing or copying XR* modules in Stream B and
+allows citing Stream A's 13 closed direct leaf bridges by their committed sources, after the usual
+statement audit, where native correspondence for those functions is needed. Rows removed outright:
+0. Privacy target not yet established.
