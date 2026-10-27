@@ -1,0 +1,46 @@
+JFz_TX2_AccumulationChain.lean:41:4: error: unsolved goals
+case succ.refine_1
+C : Type
+err : C
+geometrySeed : Port3_NativeGeometryBody.Ops C
+seed : Port3_NativeQueryBody.Ops
+n : ℕ
+ih : n ≤ 12 → ∃ a b, updates seed n = ok (a, b) ∧ Invariant n a b
+bound : n + 1 ≤ 12
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+run : updates seed n = ok (a, b)
+weights : a.weights = JFo_Prepared.accumulator.weights
+next : ↑a.next = 10 + n
+crhs : Port4C_QueryArithmetic.CanonE a.rhs
+cpower : Port3_FlushInstall.Canonical a.power
+sum : S7Kani3CallerTrace.Sum
+history : PushTrace JFn_PendingHistory.old (Port3_RowsInstall.toBW b) sum
+phase : Progress n 0 (Port3_RowsInstall.toBW b)
+out : verifier.Accumulator
+after : verifier.BatchedWeights
+sumOut : S7Kani3CallerTrace.Sum
+step :
+  Port3_NativeQueryBody.verifier.accumulate_batched_with_node (JFn_ArrayBuilder.ops seed) JFo_Prepared.value a
+      (JFz_TX2_Nodes.value (query n)) (JFz_TX2_Gates.lineValue (query n)) b =
+    ok (out, after)
+hw : out.weights = JFo_Prepared.accumulator.weights
+hn : ↑out.next = ↑a.next + 1
+cr : Port4C_QueryArithmetic.CanonE out.rhs
+cp : Port3_FlushInstall.Canonical out.power
+ht : PushTrace JFn_PendingHistory.old (Port3_RowsInstall.toBW after) sumOut
+hp : Progress (n + 1) 0 (Port3_RowsInstall.toBW after)
+⊢ (let (a, b) := (a, b)
+    Port3_NativeQueryBody.verifier.accumulate_batched_with_node (JFn_ArrayBuilder.ops seed) JFo_Prepared.value a
+      (JFz_TX2_Nodes.value (query n)) (JFz_TX2_Gates.lineValue (query n)) b) =
+    ok (out, after)
+JFz_TX2_AccumulationChain.lean:41:40: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [updates, ̲run, ̲bind_tc_ok,̵s̵t̵e̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFz_TX2_AccumulationChain.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFz_TX2_AccumulationChain.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFz_TX2_AccumulationChain.twelve' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
