@@ -8,6 +8,11 @@ def call(script,args,label):
   argv=['python3',D+'/'+script,*[actual if x=='{label}' else x for x in args]]
   with (E/(actual+'-driver.log')).open('w') as out:
    r=subprocess.run(['ssh',H,shlex.join(argv)],stdout=out,stderr=subprocess.STDOUT)
+  if r.returncode:
+   raw=subprocess.run(['ssh',H,'cat '+D+'/'+actual+'/admission-barrier.json'],capture_output=True,text=True)
+   if raw.returncode==0 and not json.loads(raw.stdout)['allowed']:
+    (E/(actual+'-barrier-refusal.json')).write_text(json.dumps(dict(raw_exit=r.returncode,classification='reservation refusal; no native command ran',admission=json.loads(raw.stdout)),indent=2)+'\n')
+    r.returncode=78
   print(label,actual,'exit',r.returncode,flush=True)
   if r.returncode==78:
    for _ in range(3):print('reservation cooldown: 60 seconds',flush=True);time.sleep(60)
