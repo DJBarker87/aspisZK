@@ -1,0 +1,206 @@
+Standalone host manifest:
+[package]
+name = "aspis-r1-cu-probe"
+version = "0.1.0"
+edition = "2021"
+publish = false
+default-run = "aspis-r1-cu-probe"
+
+[features]
+r1p-check = ["private-leaf-salts", "aspis-r1-cost-probe/r1p-check"]
+r0-op-count = ["aspis-core/r0-op-count"]
+private-leaf-salts = ["aspis-r1-cost-probe/private-leaf-salts"]
+
+[workspace]
+
+[dependencies]
+anyhow = "1.0.100"
+aspis-core = { path = "../../crates/aspis-core", features = ["r0"] }
+aspis-pool = { path = "../../programs/aspis-pool", features = ["no-entrypoint", "pair-forest-account-evidence", "pair-forest-verifier-lane-invariant-audit"] }
+aspis-prover = { path = "../../crates/aspis-prover", features = ["r0", "insecure-spend-fixture"] }
+aspis-r1-cost-probe = { path = "../../crates/aspis-r1-cost-probe", features = ["prover"] }
+aspis-registry = { path = "../../programs/aspis-registry", features = ["no-entrypoint"] }
+aspis-statement = { path = "../../crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }
+litesvm = "=0.16.0"
+agave-feature-set = "=4.2.1"
+solana-program-runtime = "=4.2.1"
+serde_json = "1"
+sha2 = "=0.10.9"
+solana-account = "=4.3.2"
+solana-address = "=2.6.1"
+solana-compute-budget = "=4.2.1"
+solana-compute-budget-interface = "=3.0.0"
+solana-instruction = "=3.4.0"
+solana-keypair = "=3.1.2"
+solana-message = { version = "=4.4.1", features = ["wincode"] }
+solana-program = "=2.3.0"
+solana-signer = "=3.0.1"
+solana-transaction = { version = "=4.1.5", features = ["wincode"] }
+wincode = "=0.5.5"
+
+[profile.release]
+opt-level = 3
+
+Library module gates:
+//! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+#![no_std]
+extern crate alloc;
+pub mod sampler;
+pub mod semantic_wire;
+pub mod semantic;
+pub mod fast_domain;
+pub mod fast_dots;
+pub mod fast_pairing;
+
+#[cfg(feature = "prover")]
+extern crate std;
+pub mod r1_wire;
+pub mod r1_semantic;
+pub mod trace;
+pub mod transport;
+pub mod weights;
+pub mod transcript;
+pub mod verifier;
+#[cfg(feature = "prover")]
+pub mod prover;
+/// Host client for the selected public proof-account nonce route (D162).
+#[cfg(feature = "r1p-check")]
+#[allow(non_snake_case)]
+pub mod RealR1_client;
+#[cfg(feature = "prover")]
+pub mod dense;
+/// G-sim (LOG D44.3): the explicit R1 simulator simE in the ideal game.
+#[cfg(feature = "r1p-check")]
+pub mod sim;
+
+#[cfg(feature="prover")] mod host_sumcheck;
+#[cfg(feature="prover")] mod host_semantic;
+#[cfg(feature="prover")] mod host_commitment;
+#[cfg(feature="prover")] mod host_tree;
+#[cfg(feature="prover")] mod host_transcript;
+#[cfg(feature="prover")] mod host_wire;
+#[cfg(feature="prover")] mod host_compact;
+
+// Adopted R1 proof format (PREREG-PROOF-SIZE-2, 2026-10-19): compact QM31
+// storage and binary multiproofs. UNPROVED: see PROOF-SIZE-OBLIGATIONS.
+pub mod multiproof;
+pub mod compact;
+
+#[cfg(not(feature="private-leaf-salts"))]
+compile_error!("the adopted R1 proof format is defined over private leaf salts; enable `private-leaf-salts` (a default feature)");
+#[cfg(all(feature="audit-eight-way",feature="prover"))]
+compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+#[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
+
+#[cfg(all(feature = "ct-host-prover", feature = "program-build"))]
+compile_error!("ct-host-prover is host-prover only, incompatible with program-build");
+
+#[cfg(feature = "ct-host-prover")]
+mod ct_pole;
+
+// Fixed public-shape scheduling for the host CT adoption candidate.
+#[cfg(feature="ct-host-prover")]
+pub mod host_work;
+
+#[cfg(all(feature = "prover", feature = "r1p-check"))]
+mod prover_shared;
+
+Release default/devnet manifest:
+[package]
+name = "aspis-r1-cost-probe-program"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+description = "UNPROVED R1 COST PROBE SBF entrypoint"
+[lib]
+crate-type = ["cdylib", "lib"]
+[features]
+default = ["custom-heap"]
+custom-heap = []
+custom-panic = []
+# Internal phase/CU diagnostics are opt-in; release verification has no observer.
+cu-profiling = []
+no-entrypoint = []
+pool-adapter = []
+# Kept for the pinned build command lines; the adopted compact binary-multiproof
+# format (PREREG-PROOF-SIZE-2) is defined over private leaf salts, which the
+# verifier crate now enables by default.
+private-leaf-salts = ["aspis-r1-cost-probe/private-leaf-salts"]
+[dependencies]
+aspis-r1-cost-probe = { path = "../../crates/aspis-r1-cost-probe", features = ["optimized-terminal", "program-build"] }
+aspis-statement = { path = "../../crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }
+solana-program.workspace = true
+aspis-core = { path = "../../crates/aspis-core" }
+
+Pool manifest:
+[package]
+name = "aspis-pool"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+description = "Pool V1 authenticated Solana state-transition program"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+default = []
+no-entrypoint = []
+# Measurement-only entrypoint for the proof-carried pair afterstate.  Release
+# builds do not enable this feature until the real merged 26-C1/3-C2 verifier emits
+# the authenticated ASJA result.
+pair-afterstate-evidence = []
+pair-afterstate-profile = ["pair-afterstate-evidence"]
+# Production-inactive account/PDA/checkpoint/deposit/terminal plumbing for the
+# accepted eight-lane forest candidate. Release builds leave it disabled.
+pair-forest-account-evidence = []
+# Forward the already authenticated registry and entry through the verifier
+# CPI so an audit-only verifier lane-invariant reader can independently root
+# its capability in immutable selected-release configuration.
+pair-forest-verifier-lane-invariant-audit = ["pair-forest-account-evidence"]
+# R1 split verification uses a foreign read-only proof buffer and appends a
+# separate verifier-owned checkpoint to the terminal account list. The default
+# V7 sealed-proof account contract is unchanged.
+r1-split-checkpoint = ["pair-forest-verifier-lane-invariant-audit"]
+# Audit-only direct consumer for a canonical ASR8 already decoded and bound to
+# the selected verifier return program. It avoids reconstructing ASF8 and
+# re-encoding the same ASR8 bytes after the exact field checks.
+pair-forest-direct-result-audit = ["pair-forest-account-evidence"]
+# Instrumented local phase ledger. Logging changes total CU.
+pair-forest-cu-profile-audit = ["pair-forest-account-evidence"]
+pair-forest-history-page-invariant-audit = ["pair-forest-account-evidence"]
+# Exact one-transaction eight-lane release-candidate path measured by the
+# TxV1 combined harness.  This aggregate switch keeps the selected feature
+# set reproducible while the named Rust-to-Lean/Aeneas release gates remain
+# explicit; it is intentionally not part of `default`.
+v7-pair-forest-one-tx-candidate = [
+    "pair-forest-source-result-invariant-audit",
+    "pair-forest-verifier-lane-invariant-audit",
+    "pair-forest-direct-result-audit",
+    "pair-forest-history-page-invariant-audit",
+    "pair-forest-deposit-invariant-audit",
+]
+# Audit-only full 1,880-byte ASF8 top-level transport. It shares the exact
+# account order, registry authentication, ASR8 validation, and settlement path
+# with `pair-forest-account-evidence`.
+pair-forest-full-asf8-audit = ["pair-forest-account-evidence"]
+# Default-off local CU variants backed by the named inductive Pool-write
+# invariant. They are not release features until Rust-to-Lean/Aeneas closure.
+pair-forest-source-invariant-audit = ["pair-forest-account-evidence"]
+pair-forest-source-result-invariant-audit = ["pair-forest-source-invariant-audit"]
+# Deposit-only switch for the same inductive Pool-write invariant. It does not
+# enable the terminal source/result features directly. Following sequential
+# live CU evidence and persisted-state source/formal closure, it is included
+# by the default-off V7 candidate aggregate while remaining absent from
+# `default`.
+pair-forest-deposit-invariant-audit = ["pair-forest-account-evidence"]
+
+[dependencies]
+aspis-core.workspace = true
+aspis-statement = { workspace = true, features = ["pool-v1-kernel"] }
+solana-program.workspace = true
+solana-sdk-ids = "2.2.1"
+
+[dev-dependencies]
+sha2.workspace = true

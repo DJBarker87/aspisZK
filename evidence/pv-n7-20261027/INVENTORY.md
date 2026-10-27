@@ -12,7 +12,10 @@ The request does **not** contain private witness integers. This corrects the tas
 | action, note, withdrawal, genesis, sequence, activation_slot | string / u64 narrowed to u32 note / bool / bool / u64 / u64 | JSON primitives | public fixture and operation selectors |
 | pool, mint, payer, registry, verifier, funding_payer, governance, source, token_owner, destination, checkpoint, public_account, verifier_checkpoint | 32-byte addresses | base58 strings | public |
 | registry_hash, verifier_hash | each 32 bytes | hex strings | public release hashes |
-| lane_bytes, checkpoint_bytes, marker_bytes, candidate_bytes | public account-state byte vectors, ABI length | hex strings | public chain state |
+| lane_bytes | [u8;768] lane state | 1536 hex characters | public chain state |
+| checkpoint_bytes | [u8;192] checkpoint | 384 hex characters | public chain state |
+| marker_bytes | [u8;208] nullifier marker | 416 hex characters | public chain state |
+| candidate_bytes | [u8;688] verified afterstate | 1376 hex characters | public chain state |
 | proof_accounts | exactly eight 32-byte addresses | base58 JSON strings | public; nonce callback uses their raw 32 bytes |
 | proof_dir | filesystem path string | JSON string | public shape/storage metadata; contents sensitive |
 

@@ -15,7 +15,7 @@ for line in body.splitlines():
  m=re.match(r'\s*([0-9a-f]+):\s+((?:[0-9a-f]{2} )+)\s*(.*)',line)
  if m:ins.append(dict(pc=m[1],instruction=m[3]))
 assert not any(re.match(r'(j\w+|call\w*|div|idiv)\b',i['instruction']) for i in ins),ins
-(E/'decoder.json').write_text(json.dumps(dict(binary=pin(B),full_disassembly=pin(H/'full-disassembly.txt'),instructions=ins,classification='clean fixed 64-byte raw record copy: no content predicate, table, Jcc, indirect control transfer, DIV/IDIV; memory offsets fixed relative to input/output pointers. CPU latency V371 retained.',encoding='raw bytes, not hex; no hex decoder required'),indent=2)+'\n')
+(E/'decoder.json').write_text(json.dumps(dict(binary=pin(B),full_disassembly=pin(H/'full-disassembly.txt'),instructions=ins,classification='clean fixed 64-byte raw record copy: no content predicate, table, Jcc, CALL, DIV/IDIV; RET uses the public caller return address; memory offsets fixed relative to input/output pointers. CPU latency V371 retained.',encoding='raw bytes, not hex; no hex decoder required'),indent=2)+'\n')
 # Pin every original build input and prove only the proposed host files differ.
 inputs=json.loads((H/'build-inputs.json').read_text())['files'];changed=[]
 for path,expected in inputs.items():
