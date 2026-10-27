@@ -1,0 +1,44 @@
+Running as unit: run-r5d086d8b972142e4a9fafd679c398e52.scope; invocation ID: afce9c417bd84293938ee04fa77d5c6d
+{"attempt": "XRg_006", "exit_status": 0, "wall_seconds": 130.49985847296193, "peak_rss_kib": "549600", "swaps": "0", "print_axioms": "N/A: charon-nine-leaves"}
+RELEASE_INPUT_PASS 7978
+COMMAND ['/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon', 'cargo', '--preset', 'aeneas', '--mir', 'built', '--sysroot', 'default', '--include', 'core::option::Option', '--include', 'core::result::Result', '--include', 'core::result::_::map_err', '--opaque', 'core::iter::traits::iterator::Iterator::copied', '--include', 'core::cmp::PartialEq::ne', '--duplicate-defaulted-methods', '--start-from', 'crate::verifier::candidate::tx1', '--opaque', 'crate::compact::check_values', '--opaque', 'crate::verifier::echeck', '--opaque', 'crate::compact::expand_values', '--opaque', 'crate::verifier::candidate::wide_view', '--opaque', 'crate::veri
+...
+(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
+   |                ^^^^^^^^
+...
+37 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+42 |         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+47 |         #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 2m 09s
+RESULT {"exit": 0, "wall_seconds": 129.58043569198344, "sampled_cgroup_peak_bytes": 536043520, "stopped": null, "llbc_sha256": "81684dadc174064cea58e00b0df5ff6d57b8b50602c36b6186d9f2ad24c0a9ef", "llbc_bytes": 17038284, "llbc_has_errors": false, "function_declarations": 757, "type_declarations": 133}
+

@@ -1,0 +1,70 @@
+{
+  "attempt": "XRg_K003",
+  "kind": "kani",
+  "sources": [
+    "XRg_Cargo.toml",
+    "XRg_lib.rs",
+    "XRg_reference.rs",
+    "XRg_stages.rs",
+    "XRg_harnesses.rs",
+    "XRg_source_stage_map.json"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro7-20261027/XRg_crate/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro7-20261027/XRg_kani_target",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "XRg_harnesses::XRg_boundary_sparse",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "6efffbebef2d681f908e738a3b46ae8bf880fbd9",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "release_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "functions": "XRg_source_stage_map.json"
+  },
+  "expected_time": "optimized new-leaf bounded stage boundary_sparse; compile then CBMC, general 28-entry association OPEN",
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "reservation_retries": 0,
+  "exit_status": 0,
+  "wall_seconds": 15.065695353026967,
+  "peak_rss_kib": "319040",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r4038adc88a7643bd9c549d1f5550f627.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "395546624",
+  "source_hashes": {
+    "XRg_Cargo.toml": "8f809555524c2afdadcc2241a387fe8aa0a389688af64d530abb0fed7a7e84da",
+    "XRg_lib.rs": "866b451fc710e53973643907f4cce49278301f49bd182395c2c9898a3314c303",
+    "XRg_reference.rs": "950baa1197116c8a3ad539a3161476ad6a58f26c1a5c3f4f06bb3f52c1d86a4c",
+    "XRg_stages.rs": "40cf864fdf9565ce4fc6206c1b47a22eb5808931c32bcc1b41ac125ea57185bf",
+    "XRg_harnesses.rs": "838a8f7487f87240c3421baa6a833f96d27de29f67d4ab7cee49fa2b727fc9bd",
+    "XRg_source_stage_map.json": "4a297b595313cb69a159a7e895b4540297dbde99f728b35644dbbcb061bdbf12"
+  },
+  "print_axioms": "N/A: kani"
+}
