@@ -43,7 +43,7 @@ theorem loop (i : Usize) (hi : i.val ≤ 10) :
   exact bounded i.val i rfl hi
 
 theorem source : host_arithmetic.selected_mask_linears point = ok (Z,Z) := by
-  unfold host_arithmetic.selected_mask_linears
+  unfold host_arithmetic.selected_mask_linears aspis_core.state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS
   rw [loop _ (by decide)]
   simp only [bind_tc_ok,scale3,scale22,scale275,scale150,PV_B3_ZeroArithmetic.add]
 
