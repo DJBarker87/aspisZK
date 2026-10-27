@@ -1,0 +1,44 @@
+'AspisR1.JGp_TX1Initial.zeroCall' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGp_TX1Initial.lean:38:2: error: unsolved goals
+case refine_3
+C H : Type
+base : Ops
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops C
+D : aspis_core.digest.Digest32 H
+hash : H
+p : verifier.Prepared
+scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+prepare :
+  verifier.candidate.prepare (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) (toCurrentPublic JFs_PublicSerialization.value)
+      JFx_NativeBytes.proof hash none (Array.repeat 29#usize zero) =
+    ok (core.result.Result.Ok p, scratch)
+initial : Tx1Q_Carriers.C.A
+pending : Tx1Q_Carriers.C.B
+init : Tx1Q_PrefixInstall.initial true transport.Variant.S2 = ok (core.result.Result.Ok initial)
+pend : Tx1Q_PrefixInstall.newPending true initial.weights.deref = ok (core.result.Result.Ok pending)
+dispatch :
+  verifier.candidate.tx1
+      (WAdm_Execution.actual (JGp_Allocation.base base) true query geo JGe_Boundaries.value
+        (NP6_StdModel.calls (core.result.Result.Ok ())))
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) (toCurrentPublic JFs_PublicSerialization.value)
+      JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize hash none =
+    JGi_TX1Control.afterScan
+      (WAdm_Execution.actual (JGp_Allocation.base base) true query geo JGe_Boundaries.value
+        (NP6_StdModel.calls (core.result.Result.Ok ())))
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) (toCurrentPublic JFs_PublicSerialization.value)
+      JFx_NativeBytes.publicInput JFx_NativeBytes.proof hash
+⊢ (let (r, scratch) := (core.result.Result.Ok p, scratch)
+    match r with
+    | core.result.Result.Ok p =>
+      Tx1Reachability.afterPrepare
+        (WAdm_Execution.actual (JGp_Allocation.base base) true query geo JGe_Boundaries.value
+          (NP6_StdModel.calls (core.result.Result.Ok ())))
+        (F3V_OracleDictionary.current JFp_SHADigest.digest D) JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize
+        hash none p scratch
+    | core.result.Result.Err e => ok (core.result.Result.Err e)) =
+    Tx1Reachability.afterPrepare (JGp_PrepareLayout.installed (JGp_Allocation.base base) query geo)
+      (F3V_OracleDictionary.current JFp_SHADigest.digest D) JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize
+      hash none p scratch
+'AspisR1.JGp_TX1Initial.inhabited' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

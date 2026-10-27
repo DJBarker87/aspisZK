@@ -20,3 +20,7 @@ is WAdm_Execution.actual (JGp_Allocation.base base) true query geo
 JGe_Boundaries.value (NP6_StdModel.calls (.Ok ())). No Prop premise.
 Allocator interpretation is the existing owned OraclePortStdAllocation.filled;
 no native allocator/SBF refinement or accepted1 is asserted.
+
+Stage 2a: JGp_TX1Initial.inhabited (024) constructs one actual prepare,
+the installed accumulator/pending calls, and the exact afterPrepare continuation
+identity on the SAME p/scratch. It asserts no batch/query/flush/writer success.
