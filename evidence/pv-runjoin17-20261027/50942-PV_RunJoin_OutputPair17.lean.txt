@@ -1,0 +1,71 @@
+import R1Z.PV_RunJoin_OutputCell3917
+import R1Z.PV_RunJoin_OutputCell4017
+import R1Z.PV_RunJoin_NodeValue17
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_OutputPair17
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+open PV_RunJoin_ReferenceFixtureResults
+local notation "M" => PV_RunJoin_FixtureRecords.M
+attribute [local irreducible] R0P.nodeCompress
+def transferPair : Array U32 8#usize := Array.make 8#usize [1134794151#u32,415789335#u32,111944968#u32,1818281472#u32,628958070#u32,505282998#u32,905808425#u32,2134856457#u32]
+theorem transfer_node : node_digest_r PV_RunJoin_RecordedTransfer.publicRecord.recipient_commitment PV_RunJoin_RecordedTransfer.publicRecord.change_commitment = ok transferPair := by
+  apply PV_RunJoin_NodeValue17.source
+  · intro j hj; interval_cases j <;> decide
+  · intro j hj; interval_cases j <;> decide
+  · have hl : digK (K := M) PV_RunJoin_RecordedTransfer.publicRecord.recipient_commitment = ![1443258150,390107157,739124880,1925983251,420127778,800761649,949547039,74873928] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) PV_RunJoin_RecordedTransfer.publicRecord.change_commitment = ![109581603,2018382657,1175266929,551563770,389056008,563172097,1431420963,351017421] := by
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) transferPair = ![1134794151,415789335,111944968,1818281472,628958070,505282998,905808425,2134856457] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_39
+#print axioms transfer_node
+
+theorem transfer_raw : out_pair_r transferWitness transferPublic = ok transferPair := by
+  rw [out_pair_r]
+  change (do
+    let r ← recip_dr transferWitness transferPublic
+    let c ← change_dr transferWitness transferPublic
+    node_digest_r r c) = _
+  rw [PV_RunJoin_OutputChecks16.recipient_raw,PV_RunJoin_OutputChecks16.transfer_change_raw]
+  simp only [bind_tc_ok]
+  exact transfer_node
+#print axioms transfer_raw
+
+theorem transfer : CopyRecords.output_pair ⟨transferWitness,transferPublic⟩ = ok transferPair := by
+  rw [CopyRecords.output_pair,transfer_raw]
+  with_unfolding_all rfl
+#print axioms transfer
+def withdrawalPair : Array U32 8#usize := Array.make 8#usize [1635444076#u32,565453809#u32,2007649881#u32,905247732#u32,1187015924#u32,827186728#u32,137720039#u32,588419202#u32]
+theorem withdrawal_node : node_digest_r PV_RunJoin_RecordedWithdrawal.publicRecord.change_commitment ZERO8 = ok withdrawalPair := by
+  apply PV_RunJoin_NodeValue17.source
+  · intro j hj; interval_cases j <;> decide
+  · intro j hj; interval_cases j <;> decide
+  · have hl : digK (K := M) PV_RunJoin_RecordedWithdrawal.publicRecord.change_commitment = ![263935107,2015801952,2126421827,1338328324,66681051,462846977,1805190326,1770497381] := by
+      funext i; fin_cases i <;> rfl
+    have hr : digK (K := M) ZERO8 = ![0,0,0,0,0,0,0,0] := by
+      funext i; fin_cases i <;> rfl
+    have ht : digK (K := M) withdrawalPair = ![1635444076,565453809,2007649881,905247732,1187015924,827186728,137720039,588419202] := by
+      funext i; fin_cases i <;> rfl
+    rw [hl,hr,ht]
+    exact PV_RunJoin_OutputModel16.node_40
+#print axioms withdrawal_node
+
+theorem withdrawal_raw : out_pair_r withdrawalWitness withdrawalPublic = ok withdrawalPair := by
+  rw [out_pair_r]
+  change (do
+    let c ← change_dr withdrawalWitness withdrawalPublic
+    node_digest_r c ZERO8) = _
+  rw [PV_RunJoin_OutputChecks16.withdrawal_change_raw]
+  simp only [bind_tc_ok]
+  exact withdrawal_node
+#print axioms withdrawal_raw
+
+theorem withdrawal : CopyRecords.output_pair ⟨withdrawalWitness,withdrawalPublic⟩ = ok withdrawalPair := by
+  rw [CopyRecords.output_pair,withdrawal_raw]
+  with_unfolding_all rfl
+#print axioms withdrawal
+end R1Z.PV_RunJoin_OutputPair17
