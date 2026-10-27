@@ -12570,3 +12570,32 @@ V152, V153, V154, with the fixtures as non-vacuity instances; a universal step t
 admitted input is a checked counterexample and a stop. The client-scope owner item (V396: the
 shipped client is a devnet fixture harness, not a wallet) is unchanged and stays with the owner.
 Rows removed outright: 0. Privacy target not yet established.
+
+## D321 (Stream B) 2026-10-27 21:43 UTC: V261, V247 and V264 closed on the candidate; pv-op254 merged and retired; recount 6 launched
+
+pv-op254 (76 of 100 attempts; IDs 38500-38599; no Kani; every external object verified under (h4) and
+every project source resolved under (h5) before compiling) closes the three rows batch 1 applied:
+- V261 / op254 powers: PV_B1_254.source and PV_B1_Close254.selected_callback; non-failure for all N;
+  non-vacuity at N=1.
+- V247 / op230 helper sum: PV_B1_230.source and PV_B1_Close230.selected_callback; a Some output on a
+  symbolic 1024-element slice.
+- V264 / op258 all_slots_clear: PV_B1_258.source and PV_B1_Close258.selected_callback; pole
+  verdicts, bounds errors, non-vacuity on 1025 rows.
+PV_B1_ActualInstall.selected fills those three fields in the original ProverRwFull carrier and
+callback signature with the complete extracted implementations, at every declared input including
+raw limbs, oversized slices, errors and divergence; PV_B1_PreservedCallbacks proves the other 259
+fields unchanged. The link to the shipped originals is batch 1's recorded structural binding (the
+route ruling (k) allows). Ruling (n): no mutable borrowed writes in the helper-sum and pole copies;
+the powers copy's index writes are restored (PV_B1_Fidelity.restoration). Native differential:
+6,144 powers pairs, 320 sum pairs, 896 pole values and 128 matching bounds errors (finite
+validation, labelled as such). Combined audit 38597 (309 queries, standard axioms) and focused
+closure replay 38598 pass. No crates/ or programs/ change; inherited ELF pins and fixture gate
+reused. Merged into the prover candidate (03905a5259, pushed); worktree and branch removed.
+
+Six rows have now been reported CLOSED-ON-CANDIDATE since recount 5 (V233, V265, V184, V261, V247,
+V264). They enter the ledger only through a recount, so pv-recount6 (IDs 39200-39299; statement
+checks only) re-derives every row at immutable pins, independently confirms or rejects each of the
+six closures, and updates the owner packet: the client toolchain pin and the D188 narrowing are
+approved; the recipe features and constant-time decoding, N7 custody, SHA-NI, DOITM and client
+scope stay open, with D320's finding that the endpoint's selection is caller-supplied. Deployed
+endpoint premises removed: 0. Privacy target not yet established.
