@@ -47,6 +47,8 @@ for i,row in enumerate(tree['hashes'][:12]):
 #print axioms regroup
 
 theorem address : (flatten (Port4B_LeafCode.input 2#usize (JFo_Opening.value ⟨{pos},by decide⟩))).map Fin.val={hashn}.message := by
+  rw [Port4B_LeafCode.input,if_neg (by decide : ¬2#usize=0#usize),if_neg (by decide : ¬2#usize=1#usize)]
+  simp only [Port4B_LeafCode.parts,flatten,List.flatMap_cons,List.flatMap_nil,List.append_nil]
   change (([AspisV8R19.SqueezeOracleBridge.decodeByte 16#u8,AspisV8R19.SqueezeOracleBridge.decodeByte 114#u8] ++
     (((JFo_Opening.value ⟨{pos},by decide⟩).val.drop 672).take 128).map AspisV8R19.SqueezeOracleBridge.decodeByte ++
     (((JFo_Opening.value ⟨{pos},by decide⟩).val.drop 800).take 32).map AspisV8R19.SqueezeOracleBridge.decodeByte).map Fin.val)={hashn}.message
@@ -71,7 +73,13 @@ end AspisR1.{name}
 end
 '''.replace('JＦp','JFp')
  files[R/'lean'/(name+'.lean')]=s
+paired={}
+for pos in range(10,22,2):
+ texts=[files[R/'lean'/f'JGc_TX2_M2Leaf{k:02}.lean'] for k in [pos,pos+1]]
+ imports=sorted({line for text in texts for line in text.splitlines() if line.startswith('import ')})
+ paired[R/'lean'/f'JGc_TX2_M2LeafSources{pos:02}.lean']='\n'.join(imports)+'\n'+''.join(text[text.index('set_option'):] for text in texts)
+files=paired
 for f,s in files.items():
  if '--check' in sys.argv:assert f.read_text()==s,f
  else:f.write_text(s)
-print('leaf source generator:',len(files),'modules, five32-byte windows/leaf')
+print('leaf source generator:',len(files),'modules, two leaves/module, five32-byte windows/leaf')

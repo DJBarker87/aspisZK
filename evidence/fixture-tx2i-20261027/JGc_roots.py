@@ -17,7 +17,7 @@ def cert(i):
  s+=f'theorem tail{i:03} : (JGc_TX2_HashBytes.bytes {h}.tail).map Fin.val={h}.tail := by rfl\n#print axioms tail{i:03}\n'
  s+=f'theorem numeric{i:03} : (JGc_TX2_HashBytes.bytes {h}.message).map Fin.val={h}.message := by\n'
  s+=f'  simp only [{h}.message,{h}.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,'+','.join(f'cast{i:03}_{j}' for j in range(blocks))+f',tail{i:03}]\n#print axioms numeric{i:03}\n'
- s+=f'theorem hash{i:03} : JFp_SHADigest.digest input{i:03}=value{i:03} := by\n  unfold input{i:03} JFp_SHADigest.digest\n  rw [numeric{i:03},{h}.checked]\n#print axioms hash{i:03}\n'
+ s+=f'theorem hash{i:03} : JFp_SHADigest.digest input{i:03}=value{i:03} := by\n  unfold input{i:03} JFp_SHADigest.digest\n  rw [numeric{i:03},{h}.checked]\n  rfl\n#print axioms hash{i:03}\n'
  return s
 # All messages >=64 use the symbolic head/tail emitter.
 imports=''.join('import '+owner[i]+'\n' for i in range(0,12,2))
@@ -95,6 +95,7 @@ theorem root{i:03} : root JFp_SHADigest.digest tree{i:03}=value{i:03} := by
   s+=f'''theorem shape{i:03} (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
     OracleDecisionMultiBuild.build indices f g {level+1} {base}=tree{i:03} := by
   rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices {level+1} {base})]
+  simp only [Nat.reducePow,Nat.reduceAdd]
 '''
   for side,j in [(0,left),(1,right)]:
    if j is not None:s+=f'  rw [shape{j:03} f g inputs siblings]\n'

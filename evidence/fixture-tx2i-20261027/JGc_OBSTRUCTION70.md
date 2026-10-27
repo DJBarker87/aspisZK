@@ -1,0 +1,11 @@
+# Mandatory attempt70 checkpoint
+
+The actual installed Tx2N_Install.inner.op6 query return and op9 flush are checked (068), composed with the SAME twelve-gate/accumulation chain, retained real proof/public/1768-byte checkpoint and explicit Realizes H reader (015). No successful per-query callback is a premise. All44 folded-tree SHA256 certificate windows are checked (017–060):12 leaves,152 parents,340 blocks. Twelve typed leaf hash/model-root facts and their generic source input shape facts now pass (067).
+
+The first remaining full native call is BatchGoal in JGc_TX2_Obstruction70: Op5T_Install.stageBatch Port4B_Install.leaves D realProof realPrepared realFoldedRoot 1 hash=ok(.Ok()). The complete batch1 call is NOT proved. Trees0/1 hash certificates (840 blocks) and the actual packed-key/leaf/frontier/owned-verify joins are missing. The folded-tree numeric-root/shape composition is being completed; its InputLaw/SiblingLaw must still be inhabited for the actual wire/frontier. Native leaf-byte joins are next. Reader Realizes H covers only its three checkpoint equations and does not supply Merkle hash laws. No false real-byte premise or vacuity finding has been proved.
+
+069 rejected only local shape rewrites at symbolic base+2^height expressions; the permanent generator replacement reduces these small natural additions/powers before applying the named child shape.063's heartbeat failures were replaced by per-block casts (067 passes). No process wall-timeout or memory kill occurred; no limit was raised.
+
+Installed finish, accepted2, the SAME saved-checkpoint accepted pair with TX1, global/source/runtime/deployment joins and full joint non-vacuity remain OPEN. No JGb_ source has merged into this checkout. The100-bit target is not established.
+
+Actual Rc10_Top.deployed BEFORE/AFTER unchanged. Ledger actual83T/12P/13G/0C; combined89T/16P/13G/0C. Removed/added/changed each0T/0P/0G/0C. No common witness, carrier, quantifier, guard, trust item, game field, failure event, installed top or metric changed.070 prints the exact BatchGoal, checked roots, full actual-top type and standard-only axiom audits. Its receipt has exact command/revision/source/dependency hashes/exit/wall/RSS/swap/limits. Budget70/100 Lean,0/10 Kani;30 Lean attempts remain.
