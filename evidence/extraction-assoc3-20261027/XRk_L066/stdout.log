@@ -1,0 +1,16 @@
+XRk_generated/XRk_ClaimTrace.lean:50:6: error: Type mismatch: After simplification, term
+  hparts
+ has type
+  List.foldlM
+      (fun parts point =>
+        match parts with
+        | none => ok none
+        | some parts => do
+          let p ← XRk_preparedPart sem y1 g point
+          ok (Option.map (fun p => parts ++ [p]) p))
+      (some []) (List.range 6) =
+    ok (some partValues)
+but is expected to have type
+  List.foldlM (XRk_CollectLaws.step (XRk_preparedPart sem y1 g)) (some []) (List.range 6) = ok (some partValues)
+'XRk_ClaimTrace.powers_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRk_ClaimTrace.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

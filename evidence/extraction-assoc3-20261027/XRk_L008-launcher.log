@@ -1,0 +1,53 @@
+{"attempt": "XRk_L008", "exit_status": 0, "wall_seconds": 1.2463602729840204, "peak_rss_kib": "2626188", "swaps": "0", "print_axioms": []}
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have
+...
+.IteratorChunksExact.next {T : Type} (self : core.slice.iter.ChunksExact T) :
+  Result (Option (Slice T) × core.slice.iter.ChunksExact T)
+structure Aeneas.Std.core.iter.traits.iterator.Iterator (Self Self_Item : Type) : Type
+number of parameters: 2
+fields:
+  Aeneas.Std.core.iter.traits.iterator.Iterator.next : Self → Result (Option Self_Item × Self)
+  Aeneas.Std.core.iter.traits.iterator.Iterator.step_by : Self →
+      Usize → Result (core.iter.adapters.step_by.StepBy Self) :=
+    core.iter.traits.iterator.Iterator.step_by.default
+  Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate : Self →
+      Result (core.iter.adapters.enumerate.Enumerate Self) :=
+    core.iter.traits.iterator.Iterator.enumerate.default
+  Aeneas.Std.core.iter.traits.iterator.Iterator.take : Self → Usize → Result (core.iter.adapters.take.Take Self) :=
+    core.iter.traits.iterator.Iterator.take.default
+constructor:
+  Aeneas.Std.core.iter.traits.iterator.Iterator.mk {Self Self_Item : Type}
+    (next : Self → Result (Option Self_Item × Self))
+    (step_by : Self → Usize → Result (core.iter.adapters.step_by.StepBy Self))
+    (enumerate : Self → Result (core.iter.adapters.enumerate.Enumerate Self))
+    (take : Self → Usize → Result (core.iter.adapters.take.Take Self)) :
+    core.iter.traits.iterator.Iterator Self Self_Item
+structure Aeneas.Std.core.iter.adapters.step_by.StepBy.{u} (I : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.step_by.StepBy.iter : I
+  Aeneas.Std.core.iter.adapters.step_by.StepBy.step_by : Usize
+constructor:
+  Aeneas.Std.core.iter.adapters.step_by.StepBy.mk.{u} {I : Type u} (iter : I) (step_by : Usize) :
+    core.iter.adapters.step_by.StepBy I
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Usize.max }
+
+Running as unit: run-r7e9376a176c641cd874851a719897822.scope; invocation ID: ba431fb6bbd2429bb43420a507ac71ff

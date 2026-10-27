@@ -1,0 +1,62 @@
+XRk_generated/XRk_AdapterLaws.lean:20:18: error: Tactic `rfl` failed: The left-hand side
+  forget
+    (let (xs, c) := (values, last)
+    if h : xs.length = ↑N then ok (⟨xs, h⟩, c) else fail Error.panic)
+is not definitionally equal to the right-hand side
+  ok ⟨values, h✝⟩
+
+case pos
+T F : Type
+N : Usize
+fn : core.ops.function.FnMut F Usize T
+c : F
+values : List T
+last : F
+h : core.array.fromFnList fn (↑N) 0#usize c = ok (values, last)
+h✝ : values.length = ↑N
+⊢ forget
+      (let (xs, c) := (values, last)
+      if h : xs.length = ↑N then ok (⟨xs, h⟩, c) else fail Error.panic) =
+    ok ⟨values, h✝⟩
+XRk_generated/XRk_AdapterLaws.lean:20:18: error: Tactic `rfl` failed: The left-hand side
+  forget
+    (let (xs, c) := (values, last)
+    if h : xs.length = ↑N then ok (⟨xs, h⟩, c) else fail Error.panic)
+is not definitionally equal to the right-hand side
+  fail Error.panic
+
+case neg
+T F : Type
+N : Usize
+fn : core.ops.function.FnMut F Usize T
+c : F
+values : List T
+last : F
+h : core.array.fromFnList fn (↑N) 0#usize c = ok (values, last)
+h✝ : ¬values.length = ↑N
+⊢ forget
+      (let (xs, c) := (values, last)
+      if h : xs.length = ↑N then ok (⟨xs, h⟩, c) else fail Error.panic) =
+    fail Error.panic
+XRk_generated/XRk_AdapterLaws.lean:15:25: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_fail, ̲forget]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRk_generated/XRk_AdapterLaws.lean:16:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_div, ̲forget]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRk_generated/XRk_AdapterLaws.lean:19:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRk_AdapterLaws.from_fn_projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

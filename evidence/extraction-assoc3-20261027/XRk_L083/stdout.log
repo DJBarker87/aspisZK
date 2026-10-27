@@ -1,0 +1,26 @@
+def Aeneas.Std.alloc.vec.FromIteratorVec.from_iter : {T I IntoIter : Type} →
+  core.iter.traits.collect.IntoIterator I T IntoIter → I → Result (alloc.vec.Vec T) :=
+fun {T I IntoIter} IntoIteratorInst input => do
+  let iter ← IntoIteratorInst.into_iter input
+  let list ← alloc.vec.FromIteratorVec.iterToList IntoIteratorInst.iteratorInst iter []
+  if h : list.length ≤ Usize.max then Result.ok ⟨list, h⟩ else Result.fail Error.panic
+XRk_generated/XRk_CollectionBodyProbe.lean:4:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+XRk_generated/XRk_CollectionBodyProbe.lean:4:13: error: unexpected identifier; expected ':'
+def Aeneas.Std.core.iter.range.UScalarStep : (ty : UScalarTy) →
+  core.clone.Clone (UScalar ty) → core.cmp.PartialOrd (UScalar ty) (UScalar ty) → core.iter.range.Step (UScalar ty) :=
+fun ty cloneInst partialOrdInst =>
+  { cloneInst := cloneInst, partialOrdInst := partialOrdInst,
+    steps_between := core.iter.range.UScalarStep.steps_between,
+    forward_checked := core.iter.range.UScalarStep.forward_checked,
+    backward_checked := core.iter.range.UScalarStep.backward_checked }
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} → alloc.vec.Vec α → α → Result (alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then Result.ok ⟨(↑v).concat x, ⋯⟩
+  else Result.fail Error.maximumSizeExceeded
+@[reducible] def Aeneas.Std.alloc.vec.Vec.len.{u} : {α : Type u} → alloc.vec.Vec α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+@[reducible] def Aeneas.Std.core.iter.traits.collect.IntoIterator.Blanket : {I Item : Type} →
+  core.iter.traits.iterator.Iterator I Item → core.iter.traits.collect.IntoIterator I Item I :=
+fun {I Item} IteratorInst =>
+  { iteratorInst := IteratorInst, into_iter := core.iter.traits.collect.IntoIterator.Blanket.into_iter IteratorInst }

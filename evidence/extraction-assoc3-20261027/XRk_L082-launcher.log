@@ -1,0 +1,41 @@
+{"attempt": "XRk_L082", "exit_status": 1, "wall_seconds": 2.3588269850006327, "peak_rss_kib": "2636780", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.iter.traits.iterator.Iterator.collect.default : {Self B Item : Type} →
+  core.iter.traits.iterator.Iterator Self Item → core.iter.traits.collect.FromIterator B Item → Self → Result B :=
+fun {Self B Item} IteratorInst collectFromIteratorInst self =>
+  collectFromIteratorInst.from_iter (core.iter.traits.collect.IntoIterator.Blanket IteratorInst) self
+@[reducible] def Aeneas.Std.core.iter.traits.collect.FromIteratorVec : (T : Type) →
+  core.iter.traits.collect.FromIterator (alloc.vec.Vec T) T :=
+fun T => { from_iter := fun {I IntoIter} IntoIteratorInst => alloc.vec.FromIteratorVec.from_iter IntoIteratorInst }
+XRk_generated/XRk_CollectionProbe.lean:5:7: error(lean.unknownIden
+...
+orInst) self
+@[reducible] def Aeneas.Std.core.iter.traits.collect.FromIteratorVec : (T : Type) →
+  core.iter.traits.collect.FromIterator (alloc.vec.Vec T) T :=
+fun T => { from_iter := fun {I IntoIter} IntoIteratorInst => alloc.vec.FromIteratorVec.from_iter IntoIteratorInst }
+XRk_generated/XRk_CollectionProbe.lean:5:7: error(lean.unknownIdentifier): Unknown constant `core.iter.traits.collect.FromIteratorVec.from_iter`
+@[reducible] def Aeneas.Std.core.iter.traits.iterator.IteratorRange : {A : Type} →
+  core.iter.range.Step A → core.iter.traits.iterator.Iterator (core.ops.range.Range A) A :=
+fun {A} StepInst => { next := core.iter.range.IteratorRange.next StepInst }
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => Result.fail Error.panic
+        | some n => Result.ok (some range', { start := n, «end» := range.end })
+    else Result.ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize
+structure Aeneas.Std.core.iter.adapters.map.Map.{u, v} (I : Type u) (F : Type v) : Type (max u v)
+number of parameters: 2
+fields:
+  Aeneas.Std.core.iter.adapters.map.Map.iter : I
+  Aeneas.Std.core.iter.adapters.map.Map.f : F
+constructor:
+  Aeneas.Std.core.iter.adapters.map.Map.mk.{u, v} {I : Type u} {F : Type v} (iter : I) (f : F) :
+    core.iter.adapters.map.Map I F
+
+Running as unit: run-rba12168bc8284c899863d9749dedabeb.scope; invocation ID: 9c8d16c34eee48ad98699d8b0208b62e

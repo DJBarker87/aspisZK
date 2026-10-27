@@ -1,0 +1,44 @@
+XRk_generated/XRk_CanonicalScalar.lean:15:2: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+q : aspis_core.field.QM31
+raw : fast_pairing.canonical.Q
+run :
+  (do
+      let o ←
+        do
+          let a ←
+            match ⟨[q.c0.a, q.c0.b, q.c1.a, q.c1.b], ⋯⟩[0#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let b ←
+            match ⟨[q.c0.a, q.c0.b, q.c1.a, q.c1.b], ⋯⟩[1#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let c ←
+            match ⟨[q.c0.a, q.c0.b, q.c1.a, q.c1.b], ⋯⟩[2#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let d ←
+            match ⟨[q.c0.a, q.c0.b, q.c1.a, q.c1.b], ⋯⟩[3#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          if a < fast_pairing.canonical.P then
+              if b < fast_pairing.canonical.P then
+                if c < fast_pairing.canonical.P then
+                  if d < fast_pairing.canonical.P then ok (some ⟨[a, b, c, d], ⋯⟩) else ok none
+                else ok none
+              else ok none
+            else ok none
+      match o with
+        | none => ok (core.result.Result.Err ())
+        | some q => ok (core.result.Result.Ok q)) =
+    ok (core.result.Result.Ok raw)
+⊢ Canonical q
+XRk_generated/XRk_CanonicalScalar.lean:14:42: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲]̲ at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRk_CanonicalScalar.checked' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
