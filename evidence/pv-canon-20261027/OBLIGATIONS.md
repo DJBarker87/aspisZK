@@ -44,3 +44,10 @@ It is not by itself a trace-extraction theorem for the whole recursive caller.
 A full reached-call theorem must show every op121 event supplies those four
 equations and round<10, including the recursive entry starting at round zero.
 Any final report must distinguish those two claims.
+
+`PV_Canon_Deployment.P_NativePrefixBinding` (namespace R1Z.PV_Canon) spells
+out the installed-path obligation without a canonicality field: every native
+op121 event at host_sumcheck.rs:73 must correspond to the exact extracted
+interpolation/semantic/update/read return equations with the same arguments.
+It is a named P premise of the conditional reached-domain transport, not a
+new T item and not a claim that native records association has been proved.

@@ -1,6 +1,7 @@
 import R1Z.PV_Canon_Round
 import R1Z.PV_Canon_CheckedRounds
 import R1Z.PV_Canon_RoundCounter
+import R1Z.PV_Canon_RoundsGeneric
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_Canon
@@ -15,26 +16,9 @@ open Aeneas Aeneas.Std Result ProverRwFull
       (PV_Join_PublicCaller.selected base ops) H F digest oracleInst s output point running round oracle =
     @checked_rounds (PV_Join_PublicCaller.native base)
       (PV_Join_PublicCaller.selected base ops) H F digest oracleInst s output point running round oracle := by
-  letI : ExternalTypes := PV_Join_PublicCaller.native base
-  letI : ExternalFuns := PV_Join_PublicCaller.selected base ops
-  induction n generalizing s output point running round with
-  | zero =>
-    have hz : round=10#usize := UScalar.eq_of_val_eq (by simpa using hn)
-    subst round
-    rw [host_sumcheck.prove_sumcheck_rounds.eq_def,checked_rounds.eq_def]
-    simp only [if_true]
-  | succ n ih =>
-    have hlt : round.val < 10 := by omega
-    have hne : round≠10#usize := by intro h; subst round; change 10 < 10 at hlt; omega
-    rw [host_sumcheck.prove_sumcheck_rounds.eq_def,checked_rounds.eq_def]
-    simp only [hne,if_false]
-    rw [round_checked base ops digest oracleInst s output point running round oracle hlt]
-    apply bind_congr_all; rintro ⟨r,after,bytes⟩
-    cases r with
-    | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-    | Ok pair =>
-      obtain ⟨point1,running1⟩ := pair
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,lift]
-      exact ih after bytes point1 running1 _ (next_round_remaining round n hn)
+  exact rounds_generic (PV_Join_PublicCaller.selected base ops) digest oracleInst
+    (fun s output point running round oracle hr =>
+      round_checked base ops digest oracleInst s output point running round oracle hr)
+    n s output point running round oracle hn
 #print axioms rounds_checked
 end R1Z.PV_Canon

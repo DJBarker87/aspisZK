@@ -7,7 +7,7 @@ open Aeneas Aeneas.Std
   rw [Usize.wrapping_add_val_eq]
   change (round.val+1) % UScalar.size .Usize = round.val+1
   apply Nat.mod_eq_of_lt
-  have size : 10 < UScalar.size .Usize := by rw [UScalar.size_def]; decide
+  have size : 10 < UScalar.size .Usize := (10#usize).hSize
   omega
  theorem next_round_remaining (round : Usize) (n : Nat)
     (hn : round.val + (n+1) = 10) :

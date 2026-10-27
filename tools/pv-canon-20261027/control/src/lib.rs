@@ -43,6 +43,7 @@ mod checks {
         let row = 15 + round as u8;
         assert!((15..=24).contains(&row));
         assert!(round < 10);
+        sampler_word_indices();
     }
     #[kani::proof]
     fn sampler_word_indices() {

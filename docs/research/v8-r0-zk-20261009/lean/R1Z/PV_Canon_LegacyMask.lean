@@ -7,8 +7,9 @@ open Aeneas Aeneas.Std
     M (word &&& 2147483647#u32) := by
   unfold M
   have bound : (word &&& 2147483647#u32).val ≤ 2147483647 := by
-    rw [U32.and_val_eq]
-    exact Nat.and_le_right _ _
+    change (word.bv &&& (2147483647#u32).bv).toNat ≤ 2147483647
+    rw [BitVec.toNat_and]
+    exact Nat.and_le_right
   have ne : (word &&& 2147483647#u32).val ≠ 2147483647 := by
     intro h
     apply accepted

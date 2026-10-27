@@ -49,12 +49,19 @@ theorem round_checked (base : ExternalTypes)
         apply bind_congr_all; intro tagAdd2
         apply bind_congr_success; rintro ⟨sem,after⟩ hs
         cases sem with
-        | Err e =>
-          dsimp only
-          simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+        | Err e => rfl
         | Ok sampled =>
-          dsimp only
-          simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+          change (do
+            let point1 ← Array.update point round sampled
+            let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output (alloc.vec.Vec.deref framed)
+            let read ← Array.index_usize point1 round
+            let value ← aspis_core.state_only_sumcheck.evaluate_state_only_polynomial coefficients read
+            ok (core.result.Result.Ok (point1,value),after,output1)) = (do
+            let point1 ← Array.update point round sampled
+            let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output (alloc.vec.Vec.deref framed)
+            let read ← Array.index_usize point1 round
+            let value ← checked_eval coefficients read
+            ok (core.result.Result.Ok (point1,value),after,output1))
           apply bind_congr_success; intro updated hu
           apply bind_congr_all; intro extended
           apply bind_congr_success; intro read hi

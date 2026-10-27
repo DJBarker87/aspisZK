@@ -19,8 +19,8 @@ if a.returncode:print((O/'reservation.log').read_text());raise SystemExit(a.retu
 cmd=['timeout','180','taskset','--cpu-list','0-3','/home/dombarker/.cargo/bin/cargo','kani','--exact','--harness',HARNESS,'-j','4','--output-format','terse','--cbmc-args','--unwinding-assertions']
 env=os.environ.copy();env.update(PATH='/home/dombarker/.cargo/bin:'+env['PATH'],CARGO_BUILD_JOBS='4',CARGO_PROFILE_DEV_OPT_LEVEL='3',RUSTFLAGS='-C opt-level=3')
 start=time.monotonic();a=subprocess.run(['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(G/'barrier.py'),str(O/'barrier.json'),'/usr/bin/time','-v','-o',str(O/'time.log'),*cmd],cwd=D/'control',env=env,stdout=open(O/'out.log','w'),stderr=subprocess.STDOUT)
-r=dict(target=HARNESS,exit=a.returncode,wall_seconds=time.monotonic()-start,revision=REVISION,phase='optimized tiny control/indexing model, no field arithmetic',print_axioms='N/A Kani',time_log=(O/'time.log').read_text() if (O/'time.log').exists() else None);(O/'receipt.json').write_text(json.dumps(r,indent=2));print((O/'out.log').read_text());print(json.dumps(r))
-'''.replace('DIR',repr(D)).replace('NAME',repr(tag)).replace('HARNESS',repr(name)).replace('REVISION',repr(rev))
+r=dict(target=HARNESS,exit=a.returncode,wall_seconds=time.monotonic()-start,revision=REVISION,source_sha256=SOURCEHASH,phase='optimized tiny control/indexing model, no field arithmetic',print_axioms='N/A Kani',time_log=(O/'time.log').read_text() if (O/'time.log').exists() else None);(O/'receipt.json').write_text(json.dumps(r,indent=2));print((O/'out.log').read_text());print(json.dumps(r))
+'''.replace('DIR',repr(D)).replace('NAME',repr(tag)).replace('HARNESS',repr(name)).replace('REVISION',repr(rev)).replace('SOURCEHASH',repr(hashlib.sha256((R/'tools/pv-canon-20261027/control/src/lib.rs').read_bytes()).hexdigest()))
 a=subprocess.run(['ssh',H,'python3 -'],input=code,text=True,capture_output=True);print(a.stdout+a.stderr);(E/(tag+'-launcher.log')).write_text(a.stdout+a.stderr)
 subprocess.run(['scp','-r',H+':'+D+'/receipts/'+tag,str(E)],stdout=subprocess.DEVNULL)
 r=E/tag/'receipt.json'

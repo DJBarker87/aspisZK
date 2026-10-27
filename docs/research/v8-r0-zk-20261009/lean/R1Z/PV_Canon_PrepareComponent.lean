@@ -8,7 +8,7 @@ def Triple (xs : Array U32 3#usize) : Prop := ∀ x ∈ xs.val, M x
     ∃ z, PrepareComponent () x = .ok z ∧ Triple z := by
   obtain ⟨m,hm,hcm⟩ := current_add x.a x.b hx.1 hx.2
   refine ⟨Array.make 3#usize [x.a,x.b,m],?_,?_⟩
-  · simp only [PrepareComponent,hm,bind_tc_ok]
+  · simp only [PrepareComponent,ProverRwP7CurrentFieldSource.aspis_core.field.PreparedQm31Multiplier.new.closure.Insts.CoreOpsFunctionFnTupleCM31ArrayM313.call,hm,bind_tc_ok]
   · intro v hv
     change v ∈ [x.a,x.b,m] at hv
     simp only [List.mem_cons,List.not_mem_nil,or_false] at hv
