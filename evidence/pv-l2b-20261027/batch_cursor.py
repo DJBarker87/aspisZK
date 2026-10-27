@@ -6,11 +6,13 @@ receipt. No shared launcher, source, object, or reservation code is changed.
 """
 import datetime,hashlib,json,pathlib,re,shlex,subprocess,sys,time
 E=pathlib.Path(__file__).resolve().parent;ROOT=E.parent.parent
+if len((E/'attempts.jsonl').read_text().splitlines())>=100:
+ print('Lean attempt budget exhausted');sys.exit(64)
 JOB='/home/dombarker/project-offloads/codex-pv-l2b-20261027';HOST='dombarker@100.108.41.90'
 T='/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
 RES='/home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservation-existing.py'
 def ssh(cmd):return subprocess.run(['ssh',HOST,cmd],text=True,capture_output=True)
-startid=int(sys.argv[1]);module=sys.argv[2] if len(sys.argv)>2 else 'PV_L2B_Cursor';f=ROOT/'docs/research/v8-r0-zk-20261009/lean'/f'{module}.lean'
+startid=int(sys.argv[1]);gateid=int(sys.argv[4]) if len(sys.argv)>4 else startid;module=sys.argv[2] if len(sys.argv)>2 else 'PV_L2B_Cursor';f=ROOT/'docs/research/v8-r0-zk-20261009/lean'/f'{module}.lean'
 for p in list((E/'receipts').glob('*/reservation.json'))+list((E/'kani').glob('*/reservation.json'))+list(E.glob('batch-*/reservation.json')):
  try:
   x=json.loads(p.read_text())
@@ -18,10 +20,10 @@ for p in list((E/'receipts').glob('*/reservation.json'))+list((E/'kani').glob('*
   t=x.get('utc');stamp=float(t) if isinstance(t,(int,float)) else datetime.datetime.fromisoformat(t).timestamp()
   if time.time()-stamp<(30 if 'error' in x else 180):print('mandatory wait',p);sys.exit(78)
  except (ValueError,TypeError):pass
-gate=E/f'batch-{startid}';gate.mkdir(exist_ok=False)
-r=ssh(f'python3 {RES} {JOB}/reservation-batch-{startid}.json > {JOB}/reservation-batch-{startid}.log 2>&1; cat {JOB}/reservation-batch-{startid}.log')
+gate=E/f'batch-{gateid}';gate.mkdir(exist_ok=False)
+r=ssh(f'python3 {RES} {JOB}/reservation-batch-{gateid}.json > {JOB}/reservation-batch-{gateid}.log 2>&1; cat {JOB}/reservation-batch-{gateid}.log')
 (gate/'preflight.log').write_text(r.stdout+r.stderr)
-x=ssh(f'cat {JOB}/reservation-batch-{startid}.json');(gate/'reservation.json').write_text(x.stdout)
+x=ssh(f'cat {JOB}/reservation-batch-{gateid}.json');(gate/'reservation.json').write_text(x.stdout)
 if not json.loads(x.stdout)['allowed']:print('RESERVATION HOLD');sys.exit(78)
 s=json.loads((E/'progress.json').read_text());q=json.loads((E/'proof-queue.json').read_text())
 rev=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
@@ -40,7 +42,13 @@ while idx<len(q) and q[idx]['module']==module:
  item=q[idx];end='end '+item['namespace']
  text=text.rstrip()[:-len(end)]+item['body']+'\n'+''.join('#print axioms '+n+'\n' for n in item['theorems'])+end+'\n'
  specs.append(dict(attempt=startid+len(specs),module=module,source=text,q_after=idx+1));idx+=1
-assert all(53000<=v['attempt']<53297 for v in specs)
+audit_mode=len(sys.argv)>3 and sys.argv[3]=='with-final-audits'
+if audit_mode:
+ assert startid==53297 and module=='PV_L2B_AuditTrace'
+ for a,m in [(53298,'PV_L2B_AuditStatements'),(53299,'PV_L2B_Manifest')]:
+  p=ROOT/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
+  specs.append(dict(attempt=a,module=m,source=p.read_text(),q_after=idx))
+assert all(53000<=v['attempt']<53297 or (audit_mode and 53297<=v['attempt']<=53299) for v in specs)
 (gate/'manifest.json').write_text(json.dumps(specs)+'\n')
 subprocess.run(['scp','-q',str(gate/'manifest.json'),f'{HOST}:{JOB}/cursor-manifest.json'],check=True)
 code='''import json,pathlib,subprocess,sys,hashlib,re
@@ -76,7 +84,7 @@ for x in specs:
  rec=dict(attempt=a,module=x['module'],target=x['module'],revision=rev,source=str(target_file.relative_to(ROOT)),sha256=hashlib.sha256(x['source'].encode()).hexdigest(),
   exit=int(re.search(r'^exit=(\d+)',out,re.M)[1]),deps_fingerprint=hashlib.sha256((d/'dependencies.json').read_bytes()).hexdigest(),
   axioms=re.findall(r"'[^\n]+(?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",out),
-  caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,lean_M=7000,TasksMax=64),scope='single sequential '+module+' stage; admission '+str(startid))
+  caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,lean_M=7000,TasksMax=64),scope='single sequential '+module+' stage; admission '+str(gateid))
  for k,pat in [('wall',r'Elapsed \(wall clock\) time.*: (.+)'),('peak_RSS_KiB',r'Maximum resident set size \(kbytes\): (\d+)'),('swap',r'Swaps: (\d+)')]:rec[k]=re.search(pat,tm)[1]
  (d/'receipt.json').write_text(json.dumps(rec,indent=2)+'\n')
  with (E/'attempts.jsonl').open('a') as out:out.write(json.dumps(rec)+'\n')

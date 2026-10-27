@@ -7,6 +7,8 @@ HOST='dombarker@100.108.41.90'
 JOB='/home/dombarker/project-offloads/codex-pv-l2b-20261027'
 RES='/home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservation-existing.py'
 harness=sys.argv[1]
+if len(list((E/'kani').glob('*/invocation.json')))>=6:
+ print('Kani run budget exhausted');sys.exit(64)
 for old in list((E/'receipts').glob('*/reservation.json'))+list((E/'kani').glob('*/reservation.json')):
  try:
   gate=json.loads(old.read_text())

@@ -35,7 +35,7 @@ number r of rejects has mass q^r(1-q), 0≤r<16. Independently sample the accept
 value uniformly in [0,P). Each specified accepted value at r has mass
 q^r/(P+1), equal to q^r(1-q)/P. Four scalar samplers run left-to-right for QM31;
 stop on the first failure. Maintain the cumulative consumed-word count n:
-read offset 4(n mod 8), block index floor(n/8); refill before a read when the
+read offset 4(n mod 8), logical block index floor(n/8), hash counter modulo 2^64; refill before a read when the
 source word cursor is 8. Do not resample or hide failed limb prefixes.
 
 Entropy: first test the public nonce; if it is zero, reproduce the immediate error and make no OS draw. Otherwise B=2^256 and z=1/B. Per successful OS fill, first-zero rejection has
@@ -66,3 +66,16 @@ balance_mask_column → balance_m31_copy_inactive. The final dependent cell is
 set to the negative sum of all other inactive entries. There is no need to
 assume a zero inactive sum before this operation. The initial report draft's
 stronger requirement was corrected after inspecting this actual call chain.
+
+## Checked literal scalar projection
+
+`PV_L2B_SourceWords.source_scan` projects a literal UInt32 AND/compare scalar
+control translation to the generic scan; `source_count_relabel` transports
+its consumption count under an explicit accepted-value relabeling. The
+provided raw-word prefix must cover the requested fuel (16 in the caller).
+These are source-helper results; the actual expander stream's E2 law, cursor
+state refinement and native effects remain named obligations. `blockIndex`
+is a logical Nat block ordinal. The Rust counter is u64 wrapping; its hash
+counter is this ordinal modulo 2^64. E2 must preserve the existing finite
+read bound/no-address-repeat argument, rather than assume an infinite fresh
+word stream past counter wrap.

@@ -28,6 +28,15 @@ for p in sorted((E/'kani').glob('*/invocation.json')):
  assert fields['swap']=='0'
  kani.append(dict(harness=r['harness'],exit=0,revision=r['revision'],print_axioms='N/A (Kani)',**fields))
 assert len(kani)<=6
+manifest=E/'focused-manifest.json'
+if manifest.exists():
+ focus=json.loads(manifest.read_text())
+ for pin in focus['proof_sources']:
+  assert hashlib.sha256((ROOT/pin['path']).read_bytes()).hexdigest()==pin['sha256']
+ if {53297,53298,53299} <= {r['attempt'] for r in rows}:
+  audit=(E/'receipts/53297/out.log').read_text()
+  assert all("'"+n+"'" in audit for n in focus['theorems'])
+  assert all(next(r for r in rows if r['attempt']==a)['exit']==0 for a in [53297,53298,53299])
 sources=sorted((ROOT/'docs/research/v8-r0-zk-20261009/lean').glob('PV_L2B_*.lean'))
 for p in sources:
  assert not re.search(r'\b(sorry|admit|native_decide|implemented_by)\b|^axiom\s',p.read_text(),re.M),p

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run one focused existing env-J launcher job, retaining unedited raw receipts."""
+"""Run one focused existing env-J executor, retaining unedited raw receipts."""
 import datetime, hashlib, json, pathlib, re, shlex, subprocess, sys, time
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -10,6 +10,8 @@ T = '/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
 LAUNCH = '/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh'
 RESERVE = '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservation-existing.py'
 attempt, source = int(sys.argv[1]), pathlib.Path(sys.argv[2]).resolve()
+if (HERE/'attempts.jsonl').exists() and len((HERE/'attempts.jsonl').read_text().splitlines())>=100:
+    print('Lean attempt budget exhausted');sys.exit(64)
 assert 53000 <= attempt <= 53299
 assert source.is_relative_to(ROOT) and source.name.startswith('PV_L2B_')
 for old in list((HERE/'receipts').glob('*/reservation.json'))+list((HERE/'kani').glob('*/reservation.json'))+list(HERE.glob('batch-*/reservation.json')):
