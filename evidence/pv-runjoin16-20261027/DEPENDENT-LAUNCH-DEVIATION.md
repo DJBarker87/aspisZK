@@ -1,0 +1,3 @@
+# Dependent launch sequencing deviation
+
+50705 failed in the generic callback composition at a dsimp transparency check. The orchestrated tool call queued dependent50706 before that result was inspected.50706 failed immediately because CallbackPermutation16.olean did not exist (exit1,0.377612708s,193069056bytes RSS,swap0). Both are charged; no rejected proof/object was consumed. This was an avoidable dependent-launch error. The next attempt replaces the dsimp step with the explicit intermediate expressions used by the accepted source predecessor. No resource/option increase or unchanged rerun occurs. No further dependent launch is queued without inspecting its predecessor.

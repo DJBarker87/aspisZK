@@ -1,0 +1,67 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin16-lean/sources/R1Z/PV_RunJoin_CallbackPermutation16.lean:43:2: error: unsolved goals
+case refine_1
+K F : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+callback : core.ops.function.FnMut F poseidon2.Poseidon2RoundTransition Unit
+trace : F
+hc : ∀ (event : poseidon2.Poseidon2RoundTransition), callback.call_mut trace event = ok ((), trace)
+s : State
+first : Std.Array U32 16#usize
+hfirst : R0PoseidonCopy.external_linear s = ok first
+hmeaning : ∀ (i : Fin 16), liftU (↑first)[↑i]! = R0P.poseidonExternalLinear (liftA s) i
+hcan : Canonical first
+sa : State
+ra : U8
+ia : State
+ha :
+  poseidon2.permute_optimized_with_trace_loop0 callback
+      { iter := { slice := poseidon2.EXTERNAL_INITIAL.to_slice, i := 0 }, count := 0#usize } first trace 0#u8 s =
+    ok (sa, trace, ra, ia)
+hca : Canonical (sa, trace, ra, ia).1
+hma :
+  liftA (sa, trace, ra, ia).1 =
+    PV_Src_PortFullMeaning.model (PV_Src_PortEnumerateTrace.pairs (↑poseidon2.EXTERNAL_INITIAL) 0#usize) (liftA first)
+sb : State
+rb : U8
+ib : State
+hb :
+  poseidon2.permute_optimized_with_trace_loop1 callback { iter := ↑poseidon2.INTERNAL, count := 0#usize } sa trace ra
+      ia =
+    ok (sb, trace, rb, ib)
+hcb : Canonical (sb, trace, rb, ib).1
+hmb :
+  liftA (sb, trace, rb, ib).1 =
+    PV_Src_PortInternalMeaning.model (PV_Src_PortEnumerateTrace.pairs (↑poseidon2.INTERNAL) 0#usize) (liftA sa)
+out : State
+ho :
+  poseidon2.permute_optimized_with_trace_loop2 callback
+      { iter := { slice := poseidon2.EXTERNAL_FINAL.to_slice, i := 0 }, count := 0#usize } sb trace rb ib =
+    ok (out, trace)
+hco : Canonical out
+hmo :
+  liftA out =
+    PV_Src_PortFullMeaning.model (PV_Src_PortEnumerateTrace.pairs (↑poseidon2.EXTERNAL_FINAL) 0#usize) (liftA sb)
+⊢ (let (a, t, r, i) := (sa, trace, ra, ia)
+    do
+    let (b, t1, r1, i1) ←
+      poseidon2.permute_optimized_with_trace_loop1 callback { iter := ↑poseidon2.INTERNAL, count := 0#usize } a t r i
+    poseidon2.permute_optimized_with_trace_loop2 callback
+        { iter := { slice := poseidon2.EXTERNAL_FINAL.to_slice, i := 0 }, count := 0#usize } b t1 r1 i1) =
+    ok (out, trace)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin16-lean/sources/R1Z/PV_RunJoin_CallbackPermutation16.lean:44:29: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲ha, ̲hb̵,̵h̵o]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin16-lean/sources/R1Z/PV_RunJoin_CallbackPermutation16.lean:44:32: warning: This simp argument is unused:
+  ho
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲ha, ̲hb,̵h̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CallbackPermutation16.shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CallbackPermutation16.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

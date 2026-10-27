@@ -43,9 +43,14 @@ for label,cells in groups:
 '''
  s+=end;files['PV_RunJoin_Output'+label+'.lean']=s
 receipt=dict(input_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),cells=51,rounds=1173,maximum_recurrence_depth=1,exceptional_shapes='named hi for every node start; each sponge start to be bound by note init/absorb lemmas',next_consumer='PV_RunJoin_OutputValues16 and native compiler recipient/change/output-pair/append checks',files={n:hashlib.sha256(s.encode()).hexdigest() for n,s in files.items()})
+candidate=E/'candidate-certificates'
+if '--check' not in sys.argv:candidate.mkdir(exist_ok=True)
+receipt['destinations']={n:str((candidate/(n+'.txt') if ('Append' in n or 'Pairs' in n) else L/n).relative_to(R)) for n in files}
 for n,s in files.items():
- if '--check' in sys.argv:assert (L/n).read_text()==s,n
- else:(L/n).write_text(s)
+ dest=R/receipt['destinations'][n]
+ if '--check' in sys.argv:assert dest.read_text()==s,n
+ else:dest.write_text(s)
+
 if '--check' in sys.argv:assert json.loads((E/'output-generation.json').read_text())==receipt
 else:(E/'output-generation.json').write_text(json.dumps(receipt,indent=2)+'\n')
 print('output generation/check passed')
