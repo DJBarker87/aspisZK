@@ -136,3 +136,11 @@ not formal cost bounds or protocol security conclusions.
 The stopped condition is the explicit100-attempt budget,not a need to raise
 memory caps. The original three-tree import obstruction is resolved. The next
 worker still needs their own allowed admission and budget; no pending scope.
+
+## Commit record
+
+Proof-stage HEAD 5e5e45ed4d11c4126ce7535fcf133f6c870b1278. Eleven local stage commits are retained.
+JGy_GIT_LOG.txt records the requested full git log range at that HEAD;
+the subsequent documentation-only closeout commit adds this record.
+JGy_CLOSEOUT.json records the final ownership audit against baseline28f4b64645.
+No push; no compile after attempt100.
