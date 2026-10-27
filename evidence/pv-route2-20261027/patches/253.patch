@@ -1,0 +1,16 @@
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -226,11 +226,11 @@
+             4=>if j<56 { self.extra[j/28].pow((j%28) as u64) } else {K::ZERO},
+             1..=3 if self.variant==Variant::D => {
+                 let r=self.variant.row(j);
+-                (0..10).fold(K::ONE,|v,b|v.mul(if r&(1<<b)==0 {K::ONE.sub(self.points[kind-1][9-b])}else{self.points[kind-1][9-b]}))
++                {let mut v=K::ONE;let mut b=0usize;while b<10 {v=v.mul(if r&(1<<b)==0 {K::ONE.sub(self.points[kind-1][9-b])}else{self.points[kind-1][9-b]});b+=1;}v}
+             },
+             _=> {
+                 let k=if kind<4 {kind-1}else{kind-2};
+-                (0..5).fold(K::ONE,|v,d|v.mul(self.factors[k][d][(j>>(2*d))&3]))
++                {let mut v=K::ONE;let mut d=0usize;while d<5 {v=v.mul(self.factors[k][d][(j>>(2*d))&3]);d+=1;}v}
+             }
+         }
+     }

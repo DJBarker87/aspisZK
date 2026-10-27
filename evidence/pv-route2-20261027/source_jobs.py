@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,subprocess,shutil,runpy,sys,os
+D=Path('/home/dombarker/project-offloads/codex-pv-route2-20261027')
+# Reuse the measurement function without executing the probe loop.
+s=(D/'run_host.py').read_text().split('roots=')[0];exec(s)
+jobs={79:('aspis_core::r0::encoder::eval_message','aspis_core::r0::encoder::*'),117:('aspis_core::state_only_hiding::state_only_selected_mask_value','aspis_core::state_only_hiding::*'),121:('aspis_core::state_only_sumcheck::evaluate_state_only_polynomial','aspis_core::state_only_sumcheck::*'),222:('aspis_statement::constraints_v4::multilinear_evaluate_qm31','aspis_statement::constraints_v4::*'),251:('aspis_r1_cost_probe::weights::Weights::materialize','aspis_r1_cost_probe::weights::*'),252:('aspis_r1_cost_probe::weights::Weights::new','aspis_r1_cost_probe::weights::*'),253:('aspis_r1_cost_probe::weights::Weights::raw','aspis_r1_cost_probe::weights::*')}
+jobs.update({132:('aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_relation_free_mask_cells_v1','aspis_statement::pool_v1::pair_forest_hiding::*'),133:('aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_rows_v1','aspis_statement::pool_v1::pair_forest_hiding::*'),134:('aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_row_masks_v1','aspis_statement::pool_v1::pair_forest_hiding::*'),224:('aspis_statement::pool_v1::pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1','aspis_statement::pool_v1::pair_forest_semantic_oracle::*'),228:('aspis_statement::pool_v1::pair_forest_trace::build_pool_v1_pair_forest_copy_registry_v1','aspis_statement::pool_v1::pair_forest_trace::*'),226:('aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public::public_bytes','aspis_statement::pool_v1::pair_forest_semantic_terminal::*'),227:('aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public::terminal_qm31','aspis_statement::pool_v1::pair_forest_semantic_terminal::*')})
+for op in map(int,sys.argv[1:]):
+ # Each variant changes only the task-private source snapshot; restore previous variant first.
+ for path in (D/'source-inputs').glob('*/*/aspis-*/src/**/*.rs'):
+  rel=path.relative_to(D/'source-inputs'/path.relative_to(D/'source-inputs').parts[0]);orig=BASE/'source'/rel
+  if orig.exists():shutil.copyfile(orig,D/'source'/rel)
+ for path in (D/'source-inputs'/str(op)).rglob('*.rs'):shutil.copyfile(path,D/'source'/path.relative_to(D/'source-inputs'/str(op)))
+ root,inc=jobs[op];crate=root.split('::')[0].replace('_','-');suffix=os.environ.get('ATTEMPT','01');llbc=D/f'PV_R2_{op}_{suffix}.llbc'
+ wrappers={253:'pub fn pv_r2_raw(w:&weights::Weights,kind:usize,j:usize)->aspis_core::field::QM31 {w.raw(kind,j)}',251:'pub fn pv_r2_materialize(w:&weights::Weights,k:aspis_core::field::WideExact)->Result<alloc::vec::Vec<aspis_core::field::WideExact>,verifier::Error>{w.materialize(k)}',252:'pub fn pv_r2_new(v:transport::Variant,a:&[aspis_core::field::QM31;10],z:&[aspis_core::circle::SecureCirclePoint;2])->Result<alloc::boxed::Box<weights::Weights>,verifier::Error>{weights::Weights::new(v,a,z)}',226:"pub fn pv_r2_public_bytes(p:pool_v1::pair_forest_semantic_terminal::r0::Public<'_>)->Result<alloc::vec::Vec<u8>,aspis_core::state_only_prefix::r0::Error>{p.public_bytes()}",227:"pub fn pv_r2_terminal(p:pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,claims:&[[aspis_core::field::QM31;29];3],alpha:&[aspis_core::field::QM31;10],c:&aspis_core::state_only_prefix::r0::Challenges)->Result<aspis_core::field::QM31,aspis_core::state_only_prefix::r0::Error>{p.terminal_qm31(claims,alpha,c)}"}
+ # A current-crate wrapper makes method-root coverage explicit. First runs without
+ # wrappers are retained as diagnostics and never counted as row acceptance.
+ lib=D/'source'/'crates'/crate/'src/lib.rs';lib.write_bytes((BASE/'source/crates'/crate/'src/lib.rs').read_bytes())
+ extra=[]
+ if suffix!='01' and op in wrappers:
+  wrapper=wrappers[op];lib.write_text(lib.read_text()+'\n'+wrapper+'\n');fn=wrapper.split('pub fn ')[1].split('(')[0];root='crate::'+fn;extra=['--include',crate.replace('-','_')+'::'+fn]
+
+ cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract','CARGO_TARGET_DIR='+str(D/'source-target'),str(BASE/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from',root,'--include',inc,'--include','aspis_core::field::*',*extra,'--dest-file',str(llbc),'--','--manifest-path',str(D/'source'/'Cargo.toml'),'-p',crate,'--features','r0,ct-host-prover' if crate=='aspis-core' else ('r0,pool-v1-kernel' if crate=='aspis-statement' else 'ct-host-prover'),'--release','--offline','--lib','--jobs','4']
+ if run(f'charon-{op}-{suffix}',cmd,D/'source'):continue
+ out=D/f'generated-{op}-{suffix}';out.mkdir();run(f'aeneas-{op}-{suffix}',['timeout','180','/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools/aeneas','-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',f'PV_R2_{op}','-dest',str(out),'-split-files','-emit-json',str(llbc)])

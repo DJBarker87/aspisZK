@@ -1,0 +1,96 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs
+@@ -103,43 +103,44 @@
+ ) -> Result<([u8; 1024], [u8; 1024]), PoolV1PairHidingLayoutErrorV1> {
+     let mut producers = [0u8; 1024];
+     let mut consumers = [0u8; 1024];
+-    for link in links {
+-        for (row, counts) in [
+-            (usize::from(link.producer_row), &mut producers),
+-            (usize::from(link.consumer_row), &mut consumers),
+-        ] {
+-            if row >= POOL_V1_PAIR_TRACE_ROWS || counts[row] >= 2 {
+-                return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: row as u16 });
+-            }
+-            counts[row] += 1;
+-        }
++    let mut i=0usize;
++    while i<links.len() {
++        let link=links[i];
++        let producer=usize::from(link.producer_row);
++        if producer>=POOL_V1_PAIR_TRACE_ROWS || producers[producer]>=2 {return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity {row:producer as u16});}
++        producers[producer]+=1;
++        let consumer=usize::from(link.consumer_row);
++        if consumer>=POOL_V1_PAIR_TRACE_ROWS || consumers[consumer]>=2 {return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity {row:consumer as u16});}
++        consumers[consumer]+=1;
++        i+=1;
+     }
+     Ok((producers, consumers))
+ }
+ 
+ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
+ ) -> Result<Vec<PoolV1PairCopyRowLinkV1>, PoolV1PairHidingLayoutErrorV1> {
+-    let mut links = build_pool_v1_pair_copy_row_schedule_v1()?
+-        .into_iter()
+-        .filter(|scheduled| {
+-            !matches!(
+-                scheduled.kind,
+-                PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. }
+-                    | PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { .. }
+-                    | PoolV1PairCopyRowLinkKindV1::PrivatePathRight { .. }
+-            )
+-        })
+-        .collect::<Vec<_>>();
++    let legacy=build_pool_v1_pair_copy_row_schedule_v1()?;
++    let mut links=Vec::new();
++    let mut i=0usize;
++    while i<legacy.len() {
++        let scheduled=legacy[i];
++        if !matches!(scheduled.kind,PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent{..}|PoolV1PairCopyRowLinkKindV1::PrivatePathLeft{..}|PoolV1PairCopyRowLinkKindV1::PrivatePathRight{..}) {links.push(scheduled);}
++        i+=1;
++    }
+     // The existing schedule's auxiliary endpoints live in rows 864..975.
+     // Move that complete seven-block region forward by three blocks while
+     // leaving every existing Poseidon endpoint unchanged.
+-    for scheduled in &mut links {
++    let mut i=0usize;
++    while i<links.len() {
++        let mut scheduled=links[i];
+         if usize::from(scheduled.producer_row) >= 54 * POOL_V1_PAIR_TRACE_BLOCK_ROWS {
+             scheduled.producer_row += 3 * POOL_V1_PAIR_TRACE_BLOCK_ROWS as u16;
+         }
+         if usize::from(scheduled.consumer_row) >= 54 * POOL_V1_PAIR_TRACE_BLOCK_ROWS {
+             scheduled.consumer_row += 3 * POOL_V1_PAIR_TRACE_BLOCK_ROWS as u16;
+         }
++            links[i]=scheduled;
++        i+=1;
+     }
+     links.reserve(3 * POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1);
+     for level in 0..POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1 {
+@@ -178,10 +179,9 @@
+ 
+ pub fn pool_v1_pair_forest_copy_active_rows_v1() -> Result<Vec<u16>, PoolV1PairHidingLayoutErrorV1>
+ {
+-    let mut rows = build_pool_v1_pair_forest_copy_row_schedule_v1()?
+-        .into_iter()
+-        .flat_map(|link| [link.producer_row, link.consumer_row])
+-        .collect::<Vec<_>>();
++    let schedule=build_pool_v1_pair_forest_copy_row_schedule_v1()?;
++    let mut rows=Vec::new();let mut i=0usize;
++    while i<schedule.len() {rows.push(schedule[i].producer_row);rows.push(schedule[i].consumer_row);i+=1;}
+     rows.sort_unstable();
+     rows.dedup();
+     Ok(rows)
+@@ -190,9 +190,9 @@
+ pub fn pool_v1_pair_forest_copy_active_row_masks_v1(
+ ) -> Result<[u16; 64], PoolV1PairHidingLayoutErrorV1> {
+     let mut masks = [0u16; 64];
+-    for row in pool_v1_pair_forest_copy_active_rows_v1()? {
+-        masks[usize::from(row) >> 4] |= 1 << (usize::from(row) & 15);
+-    }
++    let rows=pool_v1_pair_forest_copy_active_rows_v1()?;
++    let mut i=0usize;
++    while i<rows.len() {let row=rows[i];masks[usize::from(row)>>4]|=1<<(usize::from(row)&15);i+=1;}
+     Ok(masks)
+ }
+ 
