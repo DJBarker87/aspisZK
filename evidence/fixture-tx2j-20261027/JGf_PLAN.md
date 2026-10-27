@@ -1,0 +1,13 @@
+# TX2 j scope and stage plan
+
+S2 OPEN. Branch actually codex/cx-fixture-tx2j-20261027 (prompt names 20261026 suffix); entry revision 4176bcbe45537e2e9a4c030eb6f5846081ab8d71. Only new JGf_ modules and this evidence directory. No push or merge, other prefix/worktree/candidate/key/shipped-file edit.
+
+Read: repository Security and proof discipline, common/local Lean rules, S2 ownership/lead plan/diagnosis/interface, route B adoption at C3-BIN 2026-10-23 01:20, approved security-contract amendment, SInt2 workspace handoff, JFx/JFs/JGb/JGd and JGc resume handoffs/OBSTRUCTION70. Import predecessors unchanged. d18 v5 before aspis-joint caches. Host launchers/admission unchanged, one capped scope per job, -M7000, 6G high/8G max/swap0/tasks64. 100 Lean maximum, 10 Kani maximum. No package replay.
+
+The inherited eight-block certificate size gives a lower bound of ceil(840/8)=105 new window targets for trees0/1 alone, before root/control/native joins. Keep that size; do not inflate windows to conceal the budget mismatch. First complete tree0 (456 blocks), its symbolic shape/root with explicit leaf/sibling laws. Then spend remaining attempts on tree1 (384 blocks), leaving time for required audit; report actual native BatchGoal still open if not derived. This is an allocation decision within BatchGoal, not completion of the requested accepted2.
+
+All generated SHA round/word/compression and assembly declarations get explicit #print axioms. Per-stage commit; generator --check before launches; only named compression chaining and per-level symbolic sparse shapes, no whole-buffer reduction. Report exact launch target/command, exit, wall, RSS, swap, revision/source/deps hashes, axioms in receipts. A timeout/memory kill requires splitting, never unchanged rerun.
+
+Actual top Rc10_Top.deployed has the inherited 83T/12P/13G/0C (combined 89T/16P/13G/0C) statement. Count quantified law families and conjunction leaves with SAME witnesses/guards/carriers/dictionaries and deployment rows retained. No local honest-fixture helper receives actual-top discharge credit. Freeze/frozen3/game/RuntimePersistence/metric/constants unchanged. Before source retained; final compare against exact same file.
+
+Installed finish, accepted2 with Realizes explicit, joint pair and complete deployed non-vacuity remain dependent on actual BatchGoal. Missing proof is not a vacuity finding. No new vacuity finding at entry. Inherited pins only: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No shipped/cfg(kani) edit triggers ELF rebuild.

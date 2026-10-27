@@ -1,0 +1,36 @@
+{"attempt": "JGf_TX2_086", "exit_status": 0, "wall_seconds": 3.24473705800483, "peak_rss_kib": "6285160", "swaps": "0", "print_axioms": ["'AspisR1.JGf_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.JGf_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+on_saved : ∀ (saved : alloc.vec.Vec U8),
+  ↑saved = ↑JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      JFn_HashBoundary.Realizes JFp_SHADigest.digest →
+        ∀ (querySeed : Port3_NativeQueryBody.Ops) {C : Type} (err : C) (geometrySeed : Port3_NativeGeometryBody.Ops C),
+          (Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary JFp_SHADigest.digest D) ⟨↑saved, ⋯⟩
+                  JFx_NativeBytes.proof JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2 hash =
+                ok (core.result.Result.Ok (JF
+...
+'AspisR1.JGf_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+on_saved : ∀ (saved : alloc.vec.Vec U8),
+  ↑saved = ↑JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      JFn_HashBoundary.Realizes JFp_SHADigest.digest →
+        ∀ (querySeed : Port3_NativeQueryBody.Ops) {C : Type} (err : C) (geometrySeed : Port3_NativeGeometryBody.Ops C),
+          (Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary JFp_SHADigest.digest D) ⟨↑saved, ⋯⟩
+                  JFx_NativeBytes.proof JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2 hash =
+                ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator)) ∧
+              JGc_TX2_QueryFixture.Calls err geometrySeed querySeed ∧
+                JGc_TX2_RealLeaves.Calls (VTop_Checkpoint.digest D) hash ∧
+                  ∃ f g,
+                    JGc_TX2_M2Roots.InputLaw f ∧
+                      JGc_TX2_M2Roots.SiblingLaw g ∧
+                        OracleDecisionMultiTree.root JFp_SHADigest.digest
+                            (OracleDecisionMultiBuild.build JGc_TX2_M2Roots.indices f g 18 0) =
+                          JGc_TX2_M2Root.retainedRoot) ∧
+            ∃ f g,
+              JGf_TX2_M0Roots.InputLaw f ∧
+                JGf_TX2_M0Roots.SiblingLaw g ∧
+                  OracleDecisionMultiTree.root JFp_SHADigest.digest
+                      (OracleDecisionMultiBuild.build JGf_TX2_M0Roots.indices f g 18 0) =
+                    JGf_TX2_M0Root.retainedRoot
+
+Running as unit: run-r96de7161c149404885356c1d016c14a8.scope; invocation ID: f001b1f862624960ad05e4573a1bb6f0
