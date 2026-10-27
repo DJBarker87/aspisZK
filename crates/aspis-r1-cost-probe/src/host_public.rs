@@ -103,7 +103,7 @@ pub fn project(public: Public<'_>) -> OwnedPublic {
                 p.recipient_commitment,
                 p.change_commitment,
                 0,
-                t,
+                *t,
             ),
             Public::Withdrawal(p, t) => (
                 true,
@@ -113,7 +113,7 @@ pub fn project(public: Public<'_>) -> OwnedPublic {
                 [M31::ZERO; 8],
                 p.change_commitment,
                 p.amount,
-                t,
+                *t,
             ),
         };
     let mut out = OwnedPublic {

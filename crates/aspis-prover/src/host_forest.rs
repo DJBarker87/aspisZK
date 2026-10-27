@@ -82,28 +82,13 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairH
 {
     let mut links = Schedule::new();
 
-    let pairs = [
-        (1usize, 2usize),
-        (2, 3),
-        (25, 26),
-        (27, 28),
-        (28, 29),
-        (30, 31),
-        (31, 32),
-    ];
-    let mut pi = 0usize;
-    while pi < 7 {
-        let (from, to) = pairs[pi];
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::SpongeCarry {
-                from: from as u8,
-                to: to as u8,
-            },
-            from * 16 + 11,
-            to * 16,
-        ));
-        pi += 1;
-    }
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 1, to: 2 }, 1 * 16 + 11, 2 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 2, to: 3 }, 2 * 16 + 11, 3 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 25, to: 26 }, 25 * 16 + 11, 26 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 27, to: 28 }, 27 * 16 + 11, 28 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 28, to: 29 }, 28 * 16 + 11, 29 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 30, to: 31 }, 30 * 16 + 11, 31 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 31, to: 32 }, 31 * 16 + 11, 32 * 16));
     links.push(link(PoolV1PairCopyRowLinkKindV1::OwnerOutput, 11, 28));
     links.push(link(PoolV1PairCopyRowLinkKindV1::NullifierKey, 12, 412));
     links.push(link(PoolV1PairCopyRowLinkKindV1::InputSaltHead, 44, 428));
@@ -133,17 +118,9 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairH
         level += 1;
     }
 
-    let values = [(0u8, 44usize, 960usize), (1, 460, 962), (2, 508, 964)];
-    let mut vi = 0usize;
-    while vi < 3 {
-        let (value, source_row, destination_row) = values[vi];
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::ValueSource { value },
-            source_row,
-            destination_row,
-        ));
-        vi += 1;
-    }
+    links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 0 }, 44, 960));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 1 }, 460, 962));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 2 }, 508, 964));
     links.push(link(
         PoolV1PairCopyRowLinkKindV1::ConservationInput,
         960,
@@ -257,12 +234,7 @@ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
     let mut i = 0usize;
     while i < legacy.len {
         let scheduled = schedule_at(&legacy, i);
-        if !matches!(
-            scheduled.kind,
-            PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. }
-                | PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { .. }
-                | PoolV1PairCopyRowLinkKindV1::PrivatePathRight { .. }
-        ) {
+        if !path_kind(scheduled.kind) {
             links.push(scheduled);
         }
         i += 1;
@@ -333,7 +305,7 @@ pub fn pool_v1_pair_forest_copy_active_rows_v1(
     let mut len = 0usize;
     i = 0;
     while i < 1024 {
-        if flags[i] {
+        if flag_at(&flags, i) {
             rows[len] = i as u16;
             len += 1;
         }
@@ -807,11 +779,11 @@ fn tuple_value(trace: &PoolV1PairForestTraceV1, tuple: PoolV1PairCopyTupleV1) ->
         out[i] = match tuple.limbs[i] {
             PoolV1PairTupleLimbV1::Zero => M31::ZERO,
             PoolV1PairTupleLimbV1::Cell { source, offset } => {
-                let columns = match source.bank {
-                    PoolV1PairTraceBankV1::Stable => &trace.stable.c1,
-                    PoolV1PairTraceBankV1::Late => &trace.late,
+                let value = match source.bank {
+                    PoolV1PairTraceBankV1::Stable => trace.stable.c1[source.cell.column as usize][source.cell.row as usize],
+                    PoolV1PairTraceBankV1::Late => trace.late[source.cell.column as usize][source.cell.row as usize],
                 };
-                columns[source.cell.column as usize][source.cell.row as usize].add(offset)
+                value.add(offset)
             }
         };
         i += 1;
@@ -867,7 +839,7 @@ pub fn pool_v1_pair_forest_copy_rows_v1(
     let registry = build_pool_v1_pair_forest_copy_registry_v1()?;
     let mut i = 0usize;
     while i < registry.len {
-        let link = registry.data[i];
+        let link = registry_at(&registry, i);
         let weight = copy_weight(link.weight, append_index, trace.variant);
         let mut side = 0usize;
         while side < 2 {
@@ -876,12 +848,10 @@ pub fn pool_v1_pair_forest_copy_rows_v1(
             } else {
                 link.consumer
             };
-            let row = &mut rows[tuple.row as usize];
-            let (values, weights) = if side == 0 {
-                (&mut row.producer_values, &mut row.producer_weights)
-            } else {
-                (&mut row.consumer_values, &mut row.consumer_weights)
-            };
+            let row_index = tuple.row as usize;
+            let mut row = rows[row_index];
+            let mut weights = if side == 0 { row.producer_weights } else { row.consumer_weights };
+            let mut values = if side == 0 { row.producer_values } else { row.consumer_values };
             let slot = if weights[0] == M31::ZERO {
                 0
             } else if weights[1] == M31::ZERO {
@@ -891,6 +861,14 @@ pub fn pool_v1_pair_forest_copy_rows_v1(
             };
             values[slot] = compress_tuple(link.tag, &tuple_value(trace, tuple), lambda);
             weights[slot] = weight;
+            if side == 0 {
+                row.producer_values = values;
+                row.producer_weights = weights;
+            } else {
+                row.consumer_values = values;
+                row.consumer_weights = weights;
+            }
+            rows[row_index] = row;
             side += 1;
         }
         i += 1;
@@ -1028,3 +1006,6 @@ fn schedule_at(schedule: &Schedule, i: usize) -> PoolV1PairCopyRowLinkV1 {
 fn registry_at(registry: &Registry, i: usize) -> PoolV1PairCopyLinkV1 {
     registry.data[i]
 }
+
+#[inline(never)]
+fn flag_at(flags: &[bool; 1024], i: usize) -> bool { flags[i] }
