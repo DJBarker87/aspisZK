@@ -42,14 +42,16 @@ theorem source {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Has
     MultiproofConeSlices.prefix_total _ _ (by rw [JGh_TX2_NodeViews.length{t}];decide)
   obtain ⟨ce,after,chunks,scan⟩ := JGm_TX2_PaddingCalls.source (JGc_TX2_RealLeaves.dictionary D)
     JGm_TX2_PaddingCalls.padding{t} JGm_TX2_PaddingCalls.bytes{t}
+  simp only [Port3_BatchStd.install] at scan
   have verify : Port4B_Install.leaves.op10 (JGc_TX2_RealLeaves.dictionary D) hash .Two
       (encodeState {pre}_TX2_M{t}Root.retainedRoot)
       (JGk_TX2_Scratch{t}.s12 s).idx (JGk_TX2_Scratch{t}.s12 s).val 12#usize JGm_TX2_Supplied.nodes{t}=
       ok (true,(JGm_TX2_Verify{t}.output D hash s).idx,(JGm_TX2_Verify{t}.output D hash s).val) := by
-    change (do let (b,out) ← reference.verify_owned
-      (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
-      (encodeState {pre}_TX2_M{t}Root.retainedRoot) (JGk_TX2_Scratch{t}.s12 s) JGm_TX2_Supplied.nodes{t}
-               ok (b,out.idx,out.val))=_
+    change (do
+      let (b,out) ← reference.verify_owned
+        (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash
+        (encodeState {pre}_TX2_M{t}Root.retainedRoot) (JGk_TX2_Scratch{t}.s12 s) JGm_TX2_Supplied.nodes{t}
+      ok (b,out.idx,out.val))=_
     rw [JGm_TX2_Verify{t}.source D hash s]
     rfl
   rw [Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body,
@@ -66,8 +68,8 @@ theorem source {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Has
       {3+t}#usize=ok {172 if t<2 else 150}#usize := by rfl
   rw [cap]
   simp only [bind_tc_ok,show ¬{count}#usize>{172 if t<2 else 150}#usize from by decide,if_false,
-    mul,lift,drop,chunks,scan,prefixRead,verify]
-  rfl
+    mul,lift,drop,chunks,scan,prefixRead,verify,Bool.false_eq_true,Bool.true_eq,if_true]
+  all_goals rfl
 #print axioms source
 
 theorem loop {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
@@ -78,12 +80,16 @@ theorem loop {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
       (JGk_TX2_Scratch{t}.s00 s).idx (JGk_TX2_Scratch{t}.s00 s).val hash 10#usize 12#usize {3+t}#usize
       (JGk_TX2_ScratchKeys.keys {t}) 0#usize 0#usize=
         ok ((JGm_TX2_Verify{t}.output D hash s).idx,(JGm_TX2_Verify{t}.output D hash s).val,some (.Ok ())) := by
-  rw [JGk_TX2_Scratch{t}.source]
+  apply (JGk_TX2_Scratch{t}.source D hash (encodeState {pre}_TX2_M{t}Root.retainedRoot) s).trans
+  change Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+      (Port3_BatchStd.install Port4B_Install.leaves) (JGc_TX2_RealLeaves.dictionary D)
+      JFx_NativeBytes.proof (encodeState {pre}_TX2_M{t}Root.retainedRoot) {t}#usize
+      (JGk_TX2_Scratch{t}.s12 s).idx (JGk_TX2_Scratch{t}.s12 s).val hash 10#usize 12#usize {3+t}#usize
+      (JGk_TX2_ScratchKeys.keys {t}) 12#usize 12#usize=_
   conv_lhs =>
     unfold Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
     rw [Aeneas.Std.loop.eq_def]
   simp only [Aeneas.Std.uncurry,source,bind_tc_ok]
-  rfl
 #print axioms loop
 
 theorem tree {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
@@ -94,15 +100,29 @@ theorem tree {{Hash : Type}} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
       1#usize {t}#usize s.idx s.val hash=
         ok (.Ok (), (JGm_TX2_Verify{t}.output D hash s).idx,(JGm_TX2_Verify{t}.output D hash s).val) := by
   have splitCount : Usize.wrapping_sub 22#usize 10#usize=12#usize :=
-    UScalar.eq_of_val_eq (by simpa only [Port4B_TreeCuts.count,Port4B_TreeCuts.hi,Port4B_TreeCuts.lo,
+    UScalar.eq_of_val_eq (by simpa only [show (12#usize).val=12 from rfl,Port4B_TreeCuts.count,Port4B_TreeCuts.hi,Port4B_TreeCuts.lo,
       show ¬1#usize=0#usize from by decide,if_false] using (Port4B_Bounds.count 1#usize).1)
   have slot : Usize.wrapping_add (Usize.wrapping_mul 3#usize 1#usize) {t}#usize={3+t}#usize :=
     UScalar.eq_of_val_eq (Port4B_Bounds.slot 1#usize {t}#usize (by decide) (by decide))
   have lo : (Port3_BatchStd.install Port4B_Install.leaves).op13=ok 10#usize := rfl
   rw [Port3_NativeBatchBody.verifier.candidate.batch_tree,if_neg (by decide : ¬1#usize=0#usize)]
   simp only [lo,bind_tc_ok,lift,splitCount,slot]
-  have build := JGf_TX2_Keys.source {t}#usize (by decide)
-  have sort := JGk_TX2_ScratchKeys.returned {t}
+  change (do
+    let a ← (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries
+      10#usize (Usize.wrapping_sub 22#usize 10#usize) {t}#usize
+    let keys ← (Port3_BatchStd.install Port4B_Install.leaves).op5 a (Usize.wrapping_sub 22#usize 10#usize)
+    let (idx,val,pending) ← Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+      (Port3_BatchStd.install Port4B_Install.leaves) (JGc_TX2_RealLeaves.dictionary D)
+      JFx_NativeBytes.proof (encodeState {pre}_TX2_M{t}Root.retainedRoot) {t}#usize
+      s.idx s.val hash 10#usize (Usize.wrapping_sub 22#usize 10#usize) {3+t}#usize keys 0#usize 0#usize
+    match pending with
+    | none => fail .panic
+    | some r => ok (r,idx,val))=_
+  rw [splitCount]
+  have build : (Port3_BatchStd.install Port4B_Install.leaves).op4 JFo_Prepared.value.queries
+      10#usize 12#usize {t}#usize=ok (JGf_TX2_Keys.raw {t}) := JGf_TX2_Keys.source {t}#usize (by decide)
+  have sort : (Port3_BatchStd.install Port4B_Install.leaves).op5 (JGf_TX2_Keys.raw {t}) 12#usize=
+      ok (JGk_TX2_ScratchKeys.keys {t}) := JGk_TX2_ScratchKeys.returned {t}
   rw [build,bind_tc_ok,sort,bind_tc_ok]
   have run := loop D hash s
   change Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
