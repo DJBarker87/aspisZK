@@ -22,7 +22,7 @@ opaque=[p.replace('crate::aspis_core::','aspis_core::').replace('crate::pool_v1:
 removed=['crate::fast_pairing','crate::verifier::prepared_claim','crate::verifier::_::for_range','crate::verifier::checkpoint']
 assert all(p in opaque for p in removed)
 opaque=[p for p in opaque if p not in removed]
-opaque+=['crate::verifier::compact::check_values','crate::verifier::echeck','crate::verifier::compact::expand_values','crate::verifier::candidate::wide_view']
+opaque+=['crate::compact::check_values','crate::verifier::echeck','crate::compact::expand_values','crate::verifier::candidate::wide_view']
 (B/'XRd_selector_delta.json').write_text(json.dumps({'removed':removed,'added':opaque[-4:],'only_semantic_change':'kit opacity selectors'},indent=2)+'\n')
 assert hashlib.file_digest((O/'XRa_bin/charon-driver').open('rb'),'sha256').hexdigest()=='efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45'
 cmd=[str(charon),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::result::_::map_err','--start-from','crate::verifier::candidate::tx1']
