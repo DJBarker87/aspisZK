@@ -256,7 +256,7 @@ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
     let mut links = Schedule::new();
     let mut i = 0usize;
     while i < legacy.len {
-        let scheduled = legacy.data[i];
+        let scheduled = schedule_at(&legacy, i);
         if !matches!(
             scheduled.kind,
             PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. }
@@ -272,7 +272,7 @@ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
     // leaving every existing Poseidon endpoint unchanged.
     let mut si = 0usize;
     while si < links.len {
-        let mut scheduled = links.data[si];
+        let mut scheduled = schedule_at(&links, si);
         if usize::from(scheduled.producer_row) >= 54 * POOL_V1_PAIR_TRACE_BLOCK_ROWS {
             scheduled.producer_row += 3 * POOL_V1_PAIR_TRACE_BLOCK_ROWS as u16;
         }
@@ -324,7 +324,7 @@ pub fn pool_v1_pair_forest_copy_active_rows_v1(
     let mut flags = [false; 1024];
     let mut i = 0usize;
     while i < schedule.len {
-        let link = schedule.data[i];
+        let link = schedule_at(&schedule, i);
         flags[link.producer_row as usize] = true;
         flags[link.consumer_row as usize] = true;
         i += 1;
@@ -569,12 +569,14 @@ fn aux_tuple(row: usize, start: usize, count: usize) -> PoolV1PairCopyTupleV1 {
     tuple_cells(row, start, count, false)
 }
 pub fn build_pool_v1_pair_copy_registry_v1() -> Result<Registry, PoolV1PairTraceErrorV1> {
-    let rows = build_pool_v1_pair_copy_row_schedule_v1()
-        .map_err(|_| PoolV1PairTraceErrorV1::CopyLayout)?;
+    let rows = match build_pool_v1_pair_copy_row_schedule_v1() {
+        Ok(rows) => rows,
+        Err(_) => return Err(PoolV1PairTraceErrorV1::CopyLayout),
+    };
     let mut output = Registry::new();
     let mut ri = 0usize;
     while ri < rows.len {
-        let scheduled = rows.data[ri];
+        let scheduled = schedule_at(&rows, ri);
         let (producer, consumer, weight) = match scheduled.kind {
             PoolV1PairCopyRowLinkKindV1::SpongeCarry { from, .. } => (
                 tuple_cells(scheduled.producer_row as usize, 0, 16, false),
@@ -733,12 +735,14 @@ fn path_kind(kind: PoolV1PairCopyRowLinkKindV1) -> bool {
 }
 pub fn build_pool_v1_pair_forest_copy_registry_v1() -> Result<Registry, PoolV1PairTraceErrorV1> {
     let legacy = build_pool_v1_pair_copy_registry_v1()?;
-    let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1()
-        .map_err(|_| PoolV1PairTraceErrorV1::CopyLayout)?;
+    let schedule = match build_pool_v1_pair_forest_copy_row_schedule_v1() {
+        Ok(schedule) => schedule,
+        Err(_) => return Err(PoolV1PairTraceErrorV1::CopyLayout),
+    };
     let mut output = Registry::new();
     let mut si = 0usize;
     while si < schedule.len {
-        let scheduled = schedule.data[si];
+        let scheduled = schedule_at(&schedule, si);
         let (producer, consumer, weight) = if path_kind(scheduled.kind) {
             match scheduled.kind {
                 PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. } => (
@@ -762,8 +766,8 @@ pub fn build_pool_v1_pair_forest_copy_registry_v1() -> Result<Registry, PoolV1Pa
             let mut found = None;
             let mut i = 0usize;
             while i < legacy.len && found.is_none() {
-                if legacy.data[i].kind == scheduled.kind {
-                    found = Some(legacy.data[i]);
+                if registry_at(&legacy, i).kind == scheduled.kind {
+                    found = Some(registry_at(&legacy, i));
                 }
                 i += 1;
             }
@@ -1013,4 +1017,14 @@ pub fn materialize_active_rows() -> Result<Vec<u16>, PoolV1PairHidingLayoutError
 pub fn materialize_mask_cells() -> Result<Vec<TraceCell>, PoolV1PairHidingLayoutErrorV1> {
     let (cells, len) = pool_v1_pair_forest_relation_free_mask_cells_v1()?;
     Ok(cells[..len].to_vec())
+}
+
+// Owned read boundaries keep array-element loans out of caller loop joins.
+#[inline(never)]
+fn schedule_at(schedule: &Schedule, i: usize) -> PoolV1PairCopyRowLinkV1 {
+    schedule.data[i]
+}
+#[inline(never)]
+fn registry_at(registry: &Registry, i: usize) -> PoolV1PairCopyLinkV1 {
+    registry.data[i]
 }

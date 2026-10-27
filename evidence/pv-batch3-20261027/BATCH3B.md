@@ -1,0 +1,9 @@
+# Batch3b LOG D316
+
+Start d4251d80303af9ee024a6da046ee5909d4aa631f in the exact assigned worktree and branch. New budget100 Lean /0 Kani, IDs37900–37999; audits37997–37999. Extraction stage at most40 Lean attempts. No merge is necessary: requested predecessor merge already appears in history.
+
+Before any compile: replay manifest from research checked5673 external objects on host, all SHA256 equal. No shared source/object writes. Full object verification retained in batch3b-external-verification.json; manifest is byte-identical to research's authority, not a newly selected cohort.
+
+Design: preserve originals and gated host caller interfaces. Forest read helpers return Copy values so borrowed array elements cannot survive loop joins. Forest row writes use owned row copies and direct assignment, preserving producer-before-consumer and zero-weight slot behavior. Replace closure error adapters with explicit match. Public carrier traversal splits projections/byte sections into owned helpers. Multilinear reads return owned field values; arithmetic order unchanged. Terminal dependency closure must contain no structured Drop or escaping reference helpers before source credit. Every actual source stage requires all three ELF pins and cumulative cost measurement before proceeding. Extraction/tool acceptance is distinct from source equality/rows; no adoption is claimed.
+
+Before/after: all ten rows remain P until named closing theorems and source association are checked. T remains entropy_law/entropy_kernel/observation. No endpoint premise removed. Native differential evidence alone will not be called universal equality.
