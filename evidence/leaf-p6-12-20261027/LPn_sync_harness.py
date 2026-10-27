@@ -11,7 +11,7 @@ with tempfile.TemporaryDirectory(prefix='LPn_harness_') as td:
   subprocess.run(['scp','-q',str(local),H+':'+B+'/LPn_src/crates/aspis-r1-cost-probe/src/'+name],check=True)
 code=f'''from pathlib import Path
 import difflib,json,hashlib
-B=Path('{B}');base=Path('/home/dombarker/project-offloads/codex-cx-leaf-p6-8-20261027/LPh_src');scratch=B/'LPn_src'
+B=Path('{B}');base=Path('/home/dombarker/project-offloads/codex-cx-leaf-p6-10-20261027/LPl_src');scratch=B/'LPn_src'
 for harness in (scratch/'crates/aspis-r1-cost-probe/src').glob('LPn_*.rs'):
  parent=scratch/'crates/aspis-r1-cost-probe/src'/('verifier.rs' if harness.stem=='LPn_echeck' else 'r1_wire.rs' if harness.stem=='LPn_validate' else 'compact.rs')
  if ('mod '+harness.stem) not in parent.read_text():parent.write_text(parent.read_text()+'\\n#[cfg(kani)] mod '+harness.stem+' {{ include!("'+harness.name+'"); }}\\n')
