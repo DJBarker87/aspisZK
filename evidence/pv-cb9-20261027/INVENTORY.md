@@ -42,6 +42,26 @@ Status: REFUSED (OPEN). Direct shipped root `aspis_statement::pool_v1::pair_fore
 
 Receipt: `cb9-op226-aeneas/receipt.json`; full log: `cb9-op226-aeneas/output.log`. No source theorem, no row credit, no counterexample.
 
+### op227 / V244
+
+Status: REFUSED (OPEN). Direct shipped root `aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public::terminal_qm31`.
+
+```text
+   "ProverRwRngExtractor006: fail-closed preflight: escaping reference output requires loan validation; structured Drop requires destructor semantics")
+```
+
+Receipt: `cb9-op227-aeneas/receipt.json`; full log: `cb9-op227-aeneas/output.log`. No source theorem, no row credit, no counterexample.
+
+### op228 / V245
+
+Status: REFUSED (OPEN). Direct shipped root `aspis_statement::pool_v1::pair_forest_trace::build_pool_v1_pair_forest_copy_registry_v1`.
+
+```text
+   "ProverRwRngExtractor006: fail-closed preflight: escaping reference output requires loan validation; structured Drop requires destructor semantics")
+```
+
+Receipt: `cb9-op228-aeneas/receipt.json`; full log: `cb9-op228-aeneas/output.log`. No source theorem, no row credit, no counterexample.
+
 ### op254 / V261
 
 Status: REFUSED (OPEN). Direct shipped root `aspis_r1_cost_probe::weights::powers`.

@@ -5,8 +5,8 @@ Rows discharged: **0**. Four independent OPEN rows requested; eight eligible can
 | op | row | status | theorem | extraction receipt |
 |---|---|---|---|---|
 | 226 | V243 | REFUSED (OPEN) | none | cb9-op226-aeneas/receipt.json |
-| 227 | V244 | queued (OPEN) | none | none |
-| 228 | V245 | queued (OPEN) | none | none |
+| 227 | V244 | REFUSED (OPEN) | none | cb9-op227-aeneas/receipt.json |
+| 228 | V245 | REFUSED (OPEN) | none | cb9-op228-aeneas/receipt.json |
 | 230 | V247 | queued (OPEN) | none | none |
 | 250 | V257 | queued (OPEN) | none | none |
 | 251 | V258 | queued (OPEN) | none | none |
