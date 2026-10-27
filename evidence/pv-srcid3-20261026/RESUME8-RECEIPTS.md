@@ -34,8 +34,19 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 41541 | R1Z/PV_Src_CanonicalFieldEquality | 0 | standard | 0:01.64 | 4138908 | 0 | bc35a5225d | 2/2 |
 | 41542 | R1Z/PV_Src_PortSboxModel | 0 | standard | 0:01.68 | 4143232 | 0 | bc35a5225d | 2/2 |
 | 41543 | R1Z/PV_Src_PortSboxAgreement | 0 | standard | 0:01.80 | 4138932 | 0 | bc35a5225d | 1/1 |
+| 41546 | R1Z/PV_Src_PortFullRoundModel | 0 | standard | 0:01.88 | 4154716 | 0 | 6215637ead | 2/2 |
+| 41548 | R1Z/PV_Src_PortFullRoundCopy | 0 | standard | 0:01.77 | 4141688 | 0 | b73d5c4878 | 2/2 |
+| 41549 | R1Z/PV_Src_PortAddCopy | 0 | standard | 0:01.72 | 4138300 | 0 | b73d5c4878 | 1/1 |
+| 41550 | R1Z/PV_Src_PortInternalRoundCopy | 0 | standard | 0:01.69 | 4152252 | 0 | b73d5c4878 | 1/1 |
+| 41551 | R1Z/PV_Src_PortInternalRoundStep | 1 | REJECTED | 0:01.69 | 4124640 | 0 | b73d5c4878 | 1/1 |
+| 41552 | R1Z/PV_Src_PortInternalRoundStep | 1 | REJECTED | 0:01.64 | 4132060 | 0 | bc714ef07a | 1/1 |
+| 41560 | R1Z/PV_Src_PortInternalRoundStep | 0 | standard | 0:02.67 | 4155308 | 0 | 7f022c679d | 1/1 |
+| 41561 | R1Z/PV_Src_PortInitialRoundStep | 1 | REJECTED | 0:01.62 | 4126436 | 0 | 7f022c679d | 1/1 |
+| 41562 | R1Z/PV_Src_PortInitialRoundStep | 0 | standard | 0:01.84 | 4155852 | 0 | d597d31545 | 1/1 |
+| 41563 | R1Z/PV_Src_PortFinalRoundStep | 0 | standard | 0:01.83 | 4156972 | 0 | d597d31545 | 1/1 |
+| 41564 | R1Z/PV_Src_PortTraceRounds | 0 | standard | 0:01.85 | 4151004 | 0 | d597d31545 | 1/1 |
 
-Charged Lean attempts: 30/60. Reservation refusals: 15, uncharged. Next unused ID: 41545.
+Charged Lean attempts: 41/60. Reservation refusals: 24, uncharged. Next unused ID: 41566.
 
 ## Shared replacements
 
