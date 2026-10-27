@@ -73,7 +73,7 @@ for name in ['stdout.log','stderr.log','time.log']:
  v=subprocess.check_output(['ssh',H,'cat '+D+'/candidate/'+label+'/receipt/'+name],text=True);(E/f'{n}-{name}').write_text(v)
  if name=='stdout.log':
   meta['axiom_output']=v
-  if rec['exit_status']==0:print('\n'.join(line for line in v.splitlines() if 'axioms' in line))
+  if rec['exit_status']==0:print(module,n,'PASS; axiom output retained in receipt')
   else:print(v)
 rec['print_axioms']=[line for line in meta.get('axiom_output','').splitlines() if 'axioms' in line] if rec['exit_status']==0 else 'compile failed; no accepted theorem from this attempt'
 rec['native_wrapper_revision']=rec.pop('source_revision');meta.update(rec)
