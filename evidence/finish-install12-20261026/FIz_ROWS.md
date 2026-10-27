@@ -4,7 +4,7 @@ No source-global/native-local row removed; inherited ledger IDs/scopes retained.
 
 | Row | Checked increment | Remaining blocker |
 |---|---|---|
-| L146 Semantic24 | FIy native coefficients reused; FIz checks schedule/path/occupancy/asset list alignment, selector marginals under mass1, packing linearity, empty-root table/right tweak, digest prefix and frontier increment. | Full digest fold/suffix and packed-family assembly; then actual parser/reader/boxed-selector canonicality and mass1. |
+| L146 Semantic24 | FIy native coefficients reused; FIz_SemanticAlignment.value and FIz_CoefficientsOnRun.on_run check ALL24 native K values against retained scalarLaneAt packing on SAME operands. All six family lists, exact scalar-slot assembly/packing and full digest fold are checked. | Actual parser/reader/boxed-selector canonicality and mass1; WideExact family/public/Y/point transport to the literal endpoint. Native K and WideExact are distinct; direct equality076 was rejected. |
 | L146 parsed bounds | No closure credit. | Same reader claim/point canonicality; boxed expansion high/low canonicality and normalized sums; same parsed public word/asset/amount bounds through FIq_Carriers. |
 | L146 Poseidon | Not opened. | Native07 evaluate_state_only_poseidon_oracle_projected local folds, leading/full/internal/channel/prepared multiplier values on SAME operands. |
 | L146 link | Not opened. | Native13 powers/pattern and Native14 136 links. |

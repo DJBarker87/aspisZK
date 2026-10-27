@@ -17,7 +17,7 @@ paths=cfg['env']['LEAN_PATH'].split(':');paths.insert(1,'/home/dombarker/project
 cfg.update(attempt=attempt,sources=[src.name],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','--no-optional-locks','status','--porcelain'])),expected_time='Focused finish installation proof or statement audit; no arithmetic aggregation')
 # Missing namespace leaf092: retain the already-pinned r4 cache before the
 # partial historical namespace directory; no objects or launcher are changed.
-paths.insert(paths.index('/home/dombarker/project-offloads/aspis-joint-20261019/objects'),'/home/dombarker/project-offloads/codex-cx-prover-commit22-20261021/r4-cache')
+paths.insert(paths.index('/home/dombarker/project-offloads/codex-cx-import-union-20261022/objects'),'/home/dombarker/project-offloads/codex-cx-prover-commit22-20261021/r4-cache')
 paths.append('/home/dombarker/project-offloads/codex-cx-replay-dry-20261026/RPz_objects')
 cfg['env']['LEAN_PATH']=':'.join(paths);cfg['command'][-3:]=['-o',mod+'.olean',src.name]
 (P/(attempt+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')

@@ -17,3 +17,10 @@ direct cross-field equality was rejected, not accepted or weakened silently.
 Raw/combined counts and actual root statements remain unchanged. Delta on
 each original ledger0T/0P/0G/0C. This is a local implementation/value/model
 increment, not native L146 or F3Y_G_L146 discharge.
+
+087 checks FIz_SameComposition.on_run. It imports FIy_PartialRoot.on_run
+and exports the same successful native composition_parts, same gathered
+opening arrays, same boxed selectors and same semantic_packed result, now
+with retained scalarLaneAt packing under the explicit local bounds/mass1.
+No duplicate existential run is used.086 is the retained missing namespace
+leaf failure;087 uses the documented existing-cache ordering correction.
