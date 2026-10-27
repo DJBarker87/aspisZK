@@ -1,0 +1,91 @@
+def Aeneas.Std.Usize.wrapping_shl : Aeneas.Std.Usize → Aeneas.Std.U32 → Aeneas.Std.Usize :=
+fun x s => Aeneas.Std.UScalar.wrapping_shl x s
+def Aeneas.Std.UScalar.wrapping_shl : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.U32 → Aeneas.Std.UScalar ty :=
+fun {ty} x s => x.bv.shiftLeft (↑s % ty.numBits)#uscalar
+def Aeneas.Std.UScalar.cast : {src_ty : Aeneas.Std.UScalarTy} →
+  (tgt_ty : Aeneas.Std.UScalarTy) → Aeneas.Std.UScalar src_ty → Aeneas.Std.UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+Aeneas.Std.UScalar.cast_bv_eq
+Aeneas.Std.Usize.wrapping_sub_bv_eq
+Aeneas.Std.UScalar.wrapping_shl_bv_eq
+Aeneas.Std.Usize.eq_equiv_bv_eq
+Aeneas.Std.Usize.wrapping_shr_bv_eq
+Aeneas.Std.UScalar.eq_equiv_bv_eq
+Aeneas.Std.UScalar.wrapping_sub_bv_eq
+Aeneas.Std.Usize.wrapping_shl_bv_eq
+Aeneas.Std.UScalar.wrapping_mul_bv_eq
+Aeneas.Std.Usize.wrapping_add_bv_eq
+Aeneas.Std.UScalar.wrapping_add_bv_eq
+Aeneas.Std.UScalar.hcast_bv_eq
+Aeneas.Std.UScalar.wrapping_shr_bv_eq
+Aeneas.Std.UScalar.cast_fromBool_bv_eq
+Aeneas.Std.Usize.wrapping_mul_bv_eq
+Aeneas.Std.UScalar.val_or : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty), ↑(x ||| y) = ↑x ||| ↑y
+Aeneas.Std.UScalar.or : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty
+Aeneas.Bvify.Parser.Attr.bvify_hyps_simps: The `bvify_hyps_simps` attribute registers simp lemmas to be used by `bvify` to simplify
+assumptions during its preprocessing phase 
+Aeneas.Std.UScalar.ofNatCore_bv_lt_equiv._simp_1_1 : ∀ {n : ℕ} {x : BitVec n} {y : Fin (2 ^ n)},
+  (x < { toFin := y }) = (x.toFin < y)
+Aeneas.Std.UScalar.ofNatCore_bv : ∀ {ty : Aeneas.Std.UScalarTy} (x : ℕ) (h : x < 2 ^ ty.numBits),
+  (Aeneas.Std.UScalar.ofNatCore x h).bv = BitVec.ofNat ty.numBits x
+Aeneas.Std.UScalar.ofNatCore_bv_lt_equiv._simp_1_2 : ∀ {n x y : ℕ} {hx : x < n} {hy : y < n},
+  (⟨x, hx⟩ < ⟨y, hy⟩) = (x < y)
+Aeneas.Bvify.bvify: The `bvify` (to be read "bv-ify") tactic is used to lift propositions about, e.g., `Nat`, to `BitVec`.
+This tactic is inspired from `zify` which converts propositions about `ℕ` to propositions about `ℤ`.
+
+**Usage**: `bvify <n> [at <loc>]`, where `<n>` is the number of bits to use for the `BitVec`
+representation.
+
+**Example:**
+```lean
+example (x y : U8) (h : x.val < y.val) : x.bv < y.bv := by
+  bvify 8 at h -- turns `h` into: `h : x.bv < y.bv`
+  apply h
+```
+
+**Adding custom lemmas:**
+One can give lemmas to `bvify` by annotating them with the attribute `@[bvify]`,
+or by passing them directly as arguments to the tactic, e.g., `bvify [my_lemma1, my_lemma2]`.
+
+**Remark:**
+This kind of conversions does not come for free and requires some proof obligations to be discharged.
+For instance, one can convert `a < b` into `BitVec.ofNat n a < BitVec.ofNat n b` only when `b < 2^n`
+(`n` is the number of bits used for the `BitVec`).
+
+In case `bvify` fails to lift some inequality, a workaround consists in writing the expected assumption
+with an `have` (e.g., `have h' : BitVec.ofNat n a < BitVec.ofNat n b := ...`), and proving it by using
+`natify`, `simp_scalar` (to get rid of, e.g., the modulos introduced in the conversion) and `simp`.
+Aeneas.Std.UScalar.bv_or : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty), (x ||| y).bv = x.bv ||| y.bv
+Aeneas.Std.UScalar.val_xor : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty), ↑(x ^^^ y) = ↑x ^^^ ↑y
+Aeneas.Bvify.bvifySimpExt: The `bvify` attribute registers simp lemmas to be used by `bvify` 
+Aeneas.Bvify.Parser.Attr.bvify: The `bvify` attribute registers simp lemmas to be used by `bvify` 
+Aeneas.Bvify.Parser.Attr.bvify_proc: Simplification procedure 
+Aeneas.Std.UScalar.bv_xor : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty), (x ^^^ y).bv = x.bv ^^^ y.bv
+Aeneas.Std.UScalar.or_spec : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x ||| y)) fun z => ↑z = ↑(x ||| y) ∧ z.bv = x.bv ||| y.bv
+Aeneas.Std.UScalar.ofNatCore : {ty : Aeneas.Std.UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → Aeneas.Std.UScalar ty
+Aeneas.Bvify.bvifyHypsSimprocExt: Simplification procedure 
+Aeneas.Std.UScalar.mk._flat_ctor : {ty : Aeneas.Std.UScalarTy} → BitVec ty.numBits → Aeneas.Std.UScalar ty
+Aeneas.Bvify.bvifySimprocExt: Simplification procedure 
+Aeneas.Std.UScalar.ofNatCore_val_eq : ∀ {x : ℕ} {ty : Aeneas.Std.UScalarTy} (h : x < 2 ^ ty.numBits),
+  ↑(Aeneas.Std.UScalar.ofNatCore x h) = x
+Aeneas.Std.UScalar.ofNatCore_bv_lt_equiv : ∀ {ty : Aeneas.Std.UScalarTy} (x y : ℕ) (hx : x < 2 ^ ty.numBits)
+  (hy : y < 2 ^ ty.numBits), (Aeneas.Std.UScalar.ofNatCore x hx).bv < (Aeneas.Std.UScalar.ofNatCore y hy).bv ↔ x < y
+Aeneas.Std.UScalar.ofNatCore.eq_1 : ∀ {ty : Aeneas.Std.UScalarTy} (x : ℕ) (h : x < 2 ^ ty.numBits),
+  Aeneas.Std.UScalar.ofNatCore x h = { toFin := ⟨x, h⟩ }#uscalar
+Aeneas.Std.UScalar.ofNatCore.congr_simp : ∀ {ty : Aeneas.Std.UScalarTy} (x x_1 : ℕ) (e_x : x = x_1)
+  (h : x < 2 ^ ty.numBits), Aeneas.Std.UScalar.ofNatCore x h = Aeneas.Std.UScalar.ofNatCore x_1 ⋯
+Aeneas.Std.UScalar.xor : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty
+Aeneas.Std.UScalar.or_spec.mvcgen_spec : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  ⦃⌜True⌝⦄ Aeneas.Std.lift (x ||| y) ⦃Std.Do.PostCond.noThrow fun r => ⌜↑r = ↑(x ||| y) ∧ r.bv = x.bv ||| y.bv⌝⦄
+Aeneas.Std.UScalar.ctorIdx : {ty : Aeneas.Std.UScalarTy} → Aeneas.Std.UScalar ty → ℕ
+Aeneas.Bvify.bvifyHypsSimpExt: The `bvify_hyps_simps` attribute registers simp lemmas to be used by `bvify` to simplify
+assumptions during its preprocessing phase 
+Aeneas.Std.UScalar.xor_spec.mvcgen_spec : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  ⦃⌜True⌝⦄ Aeneas.Std.lift (x ^^^ y) ⦃Std.Do.PostCond.noThrow fun r => ⌜↑r = ↑(x ^^^ y) ∧ r.bv = x.bv ^^^ y.bv⌝⦄
+Aeneas.Bvify.Parser.Attr.bvify_hyps_simps_proc: Simplification procedure 
+Aeneas.Std.UScalar.xor_spec : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x ^^^ y)) fun z => ↑z = ↑(x ^^^ y) ∧ z.bv = x.bv ^^^ y.bv

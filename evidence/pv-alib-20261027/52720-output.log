@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_SplitSource.lean:21:2: error: unsolved goals
+case refine_1
+v : Slice U8
+size : Usize
+hs : ↑size ≠ 0
+q : UScalar UScalarTy.Usize
+hq : v.len / size = ok q
+hqv : ↑q = (↑v).length / ↑size
+consumed : Usize := Usize.wrapping_mul q size
+hc : ↑consumed = (↑v).length / ↑size * ↑size
+hb : ↑consumed ≤ (↑v).length
+blocks : alloc.vec.Vec U8
+hblocks : PV_AL_SplitFlat.copy_range v 0#usize consumed (alloc.vec.Vec.new U8) = ok blocks
+hbv : ↑blocks = PV_AL_RangeLists.segment ↑v ↑0#usize ↑consumed
+tail : alloc.vec.Vec U8
+htail : PV_AL_SplitFlat.copy_range v consumed v.len (alloc.vec.Vec.new U8) = ok tail
+htv : ↑tail = PV_AL_RangeLists.segment ↑v ↑consumed ↑v.len
+⊢ (do
+      let blocks1 ← PV_AL_SplitFlat.copy_range v 0#usize (Usize.wrapping_mul q size) (alloc.vec.Vec.new U8)
+      let tail1 ← PV_AL_SplitFlat.copy_range v (Usize.wrapping_mul q size) v.len (alloc.vec.Vec.new U8)
+      ok (blocks1, tail1)) =
+    ok (blocks, tail)
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_SplitSource.lean:22:4: error: Type mismatch: After simplification, term
+  hbv
+ has type
+  @Eq (List U8) (↑blocks) (PV_AL_RangeLists.segment (↑v) (↑0#usize) ((↑v).length / ↑size * ↑size))
+but is expected to have type
+  @Eq (List U8) (↑blocks) (List.take ((↑v).length / ↑size * ↑size) ↑v)
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_SplitSource.lean:21:71: warning: This simp argument is unused:
+  hblocks
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_AL_SplitFlat.split_flat_reference, ̲hq, ̲lift, ̲bind_tc_ok, ̲hb̵l̵o̵c̵k̵s̵,̵h̵tail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_SplitSource.lean:21:79: warning: This simp argument is unused:
+  htail
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_AL_SplitFlat.split_flat_reference, ̲hq, ̲lift, ̲bind_tc_ok, ̲hblocks,̵h̵t̵a̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_AL_SplitSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

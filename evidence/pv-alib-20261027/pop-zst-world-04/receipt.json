@@ -1,0 +1,39 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-alib-20261027/pop-zst-world-04/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-alib-20261027/pop-zst-world-04/time.log",
+    "sh",
+    "-c",
+    "/home/dombarker/.cargo/bin/rustc +nightly-2026-06-01 -O --edition=2021 /home/dombarker/project-offloads/codex-pv-alib-20261027/reference/pop-zst-world.rs -o /home/dombarker/project-offloads/codex-pv-alib-20261027/reference/pop-zst-world && /home/dombarker/project-offloads/codex-pv-alib-20261027/reference/pop-zst-world"
+  ],
+  "exit": 1,
+  "wall": "0:00.05",
+  "peak_rss_kib": "113536",
+  "swap": "0",
+  "source_revision": "dda503c2edff5d8771a0e9d60e3d6c1fb1881a2b",
+  "expected_phase": "optimized compilation then 33 non-Copy Drop ZST cases",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  }
+}

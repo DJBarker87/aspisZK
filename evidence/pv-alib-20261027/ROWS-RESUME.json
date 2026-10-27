@@ -1,0 +1,52 @@
+[
+  {
+    "id": "V184",
+    "before": "ProverRwFull.ExternalFuns.op33 complete selected callback/value law with explicit allocation world",
+    "after": "MoveLast.source proves complete generic safe-reference value law; MoveMemory.last_copy proves zero byte-copy effect. Native/world/selected bridge awaits complete receipt 52775 and focused compilation.",
+    "status": "OPEN",
+    "theorem": null,
+    "proved_support": [
+      "R1Z.PV_AL_MoveLast.source",
+      "R1Z.PV_AL_MoveMemory.last_copy"
+    ],
+    "native_gate": {
+      "name": "kani-pop-noncopy-01",
+      "bound": 4,
+      "unwind": 6,
+      "stubs": false
+    },
+    "allocation_observation": "pop-move-world-03 native and move reference each zero alloc/realloc/dealloc, 99 non-Copy cases",
+    "nonvacuity": "all generic values, empty and nonempty; Buffer fit is representation invariant, every Vec admits carrier; native/world bridge not credited"
+  },
+  {
+    "id": "V233",
+    "before": "ProverRwFull.ExternalFuns.op209 selected split_blocks callback and consumed link for arbitrary sized byte slices",
+    "after": "selected 64-byte library callback law supplied for every representable byte slice; native whole-machine composition remains separate",
+    "status": "CLOSED-ON-CANDIDATE",
+    "theorem": [
+      "R1Z.PV_AL_SplitSelected.consumed",
+      "R1Z.PV_AL_SplitBridge.source_reference",
+      "R1Z.PV_AL_SplitBridge.consumed_reassembles"
+    ],
+    "native_gate": {
+      "name": "kani-split64-02",
+      "bound": 129,
+      "unwind": 132,
+      "stubs": false
+    },
+    "nonvacuity": "no hypotheses on input length or conclusion; native trait and size are constructed"
+  },
+  {
+    "id": "V265",
+    "before": "ProverRwFull.ExternalFuns.op259 missing native/reference source gate",
+    "after": "selected source callback and complete-Result structural native/reference gate supplied; whole deployed native composition remains separate",
+    "status": "CLOSED-ON-CANDIDATE",
+    "theorem": [
+      "R1Z.PV_AL_CircleNative.source_reference",
+      "R1Z.PV_AL_CircleSelected.native_source",
+      "R1Z.PV_AL_CircleSelected.consumed"
+    ],
+    "gate": "owned safe reference extracted without holes; structural native control transport under ruling (k); no arithmetic Kani",
+    "nonvacuity": "no equality/totality hypotheses; both row constructors have inverse carrier transports"
+  }
+]

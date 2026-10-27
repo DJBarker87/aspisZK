@@ -1,0 +1,49 @@
+import R1Z.PV_AL_TypenumSize
+import R1Z.PV_CBL_GenericArrayPower
+import R1Z.PV_CBL_ShaTypes
+import R1Z.ProverRwFullFuns
+open Aeneas Aeneas.Std Result
+noncomputable section
+namespace R1Z.PV_AL_SplitNativeShape
+open ProverRwFull PV_CBL_GenericArrayPower
+set_option autoImplicit false
+
+abbrev Types := PV_CBL_LibraryShapeTypes.selectedTypes
+
+def Size (base : ExternalTypes) : Nat → Type
+  | 0 => @typenum.uint.UInt (Types base) typenum.uint.UTerm typenum.bit.B1
+  | k+1 => @typenum.uint.UInt (Types base) (Size base k) typenum.bit.B0
+
+def nativeTrait (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
+    (k : Nat) → generic_array.ArrayLength (Size base k) U8 (Storage U8 k) := by
+  letI : ExternalTypes := Types base
+  letI : ExternalFuns := PV_AL_TypenumSize.selected base ops
+  exact fun
+  | 0 =>
+    typenum.uint.UIntNB1.Insts.Generic_arrayArrayLengthTGenericArrayImplOdd
+      (typenum.uint.UTerm.Insts.Generic_arrayArrayLengthTArrayT0 U8)
+  | k+1 =>
+    typenum.uint.UIntNB0.Insts.Generic_arrayArrayLengthTGenericArrayImplEven
+      (nativeTrait base ops k)
+
+theorem native_size (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
+    (nativeTrait base ops 6).typenummarker_traitsUnsignedInst.USIZE=ok 64#usize := by
+  simp only [nativeTrait,PV_AL_TypenumSize.selected,PV_AL_TypenumSize.unsigned,
+    typenum.uint.UIntNB0.Insts.Generic_arrayArrayLengthTGenericArrayImplEven,
+    typenum.uint.UIntNB1.Insts.Generic_arrayArrayLengthTGenericArrayImplOdd,
+    typenum.uint.UTerm.Insts.Generic_arrayArrayLengthTArrayT0,
+    typenum.uint.UInt.Insts.TypenumMarker_traitsUnsigned,
+    typenum.uint.UTerm.Insts.TypenumMarker_traitsUnsigned,
+    typenum.bit.B0.Insts.TypenumMarker_traitsBit,
+    typenum.bit.B1.Insts.TypenumMarker_traitsBit,lift,bind_tc_ok]
+  scalar_tac
+
+theorem consumed_storage (base : ExternalTypes) :
+    PV_CBL_ShaTypes.Blocks (Types base)=
+      Slice (PV_CBL_LibraryShapes.GenericArray U8 (Size base 6) (Storage U8 6)) := rfl
+
+#print axioms Size
+#print axioms nativeTrait
+#print axioms native_size
+#print axioms consumed_storage
+end R1Z.PV_AL_SplitNativeShape

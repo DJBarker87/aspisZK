@@ -1,0 +1,29 @@
+import R1Z.PV_AL_SplitWords
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_AL_SplitSource
+set_option autoImplicit false
+
+theorem source (v : Slice U8) (size : Usize) (hs : size.val ≠ 0) :
+    ∃ blocks tail,
+      PV_AL_SplitFlat.split_flat_reference v size (alloc.vec.Vec.new U8)
+        (alloc.vec.Vec.new U8)=ok (blocks,tail) ∧
+      blocks.val=v.val.take ((v.val.length/size.val)*size.val) ∧
+      tail.val=v.val.drop ((v.val.length/size.val)*size.val) := by
+  obtain ⟨q,hq,hqv⟩ := PV_AL_SplitWords.quotient v size hs
+  let consumed := Usize.wrapping_mul q size
+  have hc : consumed.val=(v.val.length/size.val)*size.val :=
+    PV_AL_SplitWords.consumed v size q hqv
+  have hb : consumed.val ≤ v.val.length := PV_AL_SplitWords.bound v size q hqv
+  obtain ⟨blocks,hblocks,hbv⟩ := PV_AL_RangeSource.empty_initial v 0#usize consumed hb (by simp)
+  obtain ⟨tail,htail,htv⟩ := PV_AL_RangeSource.empty_initial v consumed (Slice.len v)
+    (Nat.le_refl _) hb
+  dsimp only [consumed] at hblocks htail
+  refine ⟨blocks,tail,?_,?_,?_⟩
+  · simp only [PV_AL_SplitFlat.split_flat_reference,hq,lift,bind_tc_ok,hblocks,htail]
+  · change blocks.val=PV_AL_RangeLists.segment v.val 0 consumed.val at hbv
+    simpa only [PV_AL_RangeLists.initial_segment,hc] using hbv
+  · simpa only [show (Slice.len v).val=v.val.length from rfl,
+      PV_AL_RangeLists.suffix,hc] using htv
+
+#print axioms source
+end R1Z.PV_AL_SplitSource

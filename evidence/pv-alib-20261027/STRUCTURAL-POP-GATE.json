@@ -1,0 +1,42 @@
+{
+  "kind": "frozen standard-library source/control association; explicit library primitive interpretation",
+  "stdlib": {
+    "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+    "file_sha256": "a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f"
+  },
+  "functions": {
+    "pop": {
+      "body": "{\n        if self.len == 0 {\n            None\n        } else {\n            unsafe {\n                self.len -= 1;\n                core::hint::assert_unchecked(self.len < self.capacity());\n                Some(ptr::read(self.as_ptr().add(self.len())))\n            }\n        }\n    }",
+      "sha256": "66e2c3275af2b6357f4ddc5afa1e9b1e6856c463f6859aa0a8b08b774324a184",
+      "complete_body_tokens_match": true
+    },
+    "remove": {
+      "body": "{\n        #[cold]\n        #[cfg_attr(not(panic = \"immediate-abort\"), inline(never))]\n        #[track_caller]\n        #[optimize(size)]\n        fn assert_failed(index: usize, len: usize) -> ! {\n            panic!(\"removal index (is {index}) should be < len (is {len})\");\n        }\n\n        match self.try_remove(index) {\n            Some(elem) => elem,\n            None => assert_failed(index, self.len()),\n        }\n    }",
+      "sha256": "b0838f2ce5f69cfcd91833a30309930b4d4424d6ae1ca171f091bbdd8137f7a2",
+      "complete_body_tokens_match": true
+    },
+    "try_remove": {
+      "body": "{\n        let len = self.len();\n        if index >= len {\n            return None;\n        }\n        unsafe {\n            \n            let ret;\n            {\n                \n                let ptr = self.as_mut_ptr().add(index);\n                \n                \n                ret = ptr::read(ptr);\n\n                \n                ptr::copy(ptr.add(1), ptr, len - index - 1);\n            }\n            self.set_len(len - 1);\n            Some(ret)\n        }\n    }",
+      "sha256": "14c11f8afc00f196d78b7c59f0c3381316c9751fc9b53abfb37f38dfc9b1fa11",
+      "complete_body_tokens_match": true
+    }
+  },
+  "reference": {
+    "path": "tools/pv-alib-20261027/move-reference.rs",
+    "sha256": "519a2ffc66444e8e0140b974ada0fdc30ac2d93ae9e73b1db8638f6a94cd1659"
+  },
+  "interpretation": {
+    "pop": "PV_AL_MoveNativeValue.nativeValue: zero guard, decrement, capacity guard, last initialized slot read",
+    "remove_last": "PV_AL_RemoveModel.pop_move_reference with PV_AL_MoveMemory.last_copy; copy count zero from PV_AL_MoveFacts.zero_copy",
+    "world": "PV_AL_MoveWorld.nativeWorld/referenceWorld: read and live-header update; no allocator/destructor call, stable buffer/capacity, zero-length raw copy"
+  },
+  "obligations": {
+    "bounds": "PV_AL_MoveFacts.last_bound; Buffer.fits for capacity assertion",
+    "copy": "PV_AL_MoveMemory.last_copy for all widths, including zero",
+    "nonvacuity": "PV_AL_PopWorld.nonvacuous gives a carrier for every representable input",
+    "native_differential": "existing pop-move-world-03; additional pop-zst-world-04"
+  },
+  "no_allocator_or_destructor_call_in_operations": true,
+  "body_write_classification": "Vec header and raw copy; no iter_mut/get_mut/chunks_mut element restoration continuation. Native raw remove remains unextracted; no D188 raw-pointer credit claimed.",
+  "boundary": "Structural library source law over explicit read/header/copy semantics, supported by bounded Kani and native differential. No unbounded Rust memory-model, compiler, allocator or deployed endpoint refinement claim."
+}

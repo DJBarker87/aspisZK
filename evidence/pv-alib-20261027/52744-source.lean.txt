@@ -1,0 +1,23 @@
+import Aeneas
+#print Aeneas.Std.Usize.wrapping_shl
+#print Aeneas.Std.UScalar.wrapping_shl
+#print Aeneas.Std.UScalar.cast
+open Lean in
+run_cmd do
+  let env ← getEnv
+  for (n,_) in env.constants.toList do
+    let s := n.toString
+    if (s.startsWith "Aeneas.Std.UScalar." || s.startsWith "Aeneas.Std.Usize.") &&
+        (s.endsWith "_bv_eq" || s.endsWith "zero_or" || s.endsWith "or_zero") then
+      logInfo m!"{n}"
+
+open Lean in
+run_cmd do
+  let env ← getEnv
+  for (n,info) in env.constants.toList do
+    let s := n.toString
+    if s.startsWith "Aeneas.Std.UScalar." then
+      if (s.splitOn "or").length > 1 || (s.splitOn "Or").length > 1 then
+        logInfo m!"{n} : {info.type}"
+    if (s.splitOn "bvify").length > 1 || (s.splitOn "Bvify").length > 1 then
+      if let some doc ← findDocString? env n then logInfo m!"{n}: {doc}"

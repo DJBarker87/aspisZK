@@ -1,0 +1,23 @@
+import R1Z.PV_AL_TypenumSize
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_AL_TypenumValue
+set_option autoImplicit false
+
+/-- Project the size recurrence before simplifying any other trait fields. -/
+def value : Nat → Result Usize
+  | 0 => ok ((UScalar.cast .Usize 1#u8) ||| Usize.wrapping_shl 0#usize 1#u32)
+  | k+1 => do
+    let n ← value k
+    ok ((UScalar.cast .Usize 0#u8) ||| Usize.wrapping_shl n 1#u32)
+
+theorem value64 : value 6=ok 64#usize := by
+  simp only [value,bind_tc_ok]
+  congr 1
+  bvify System.Platform.numBits
+  generalize hn : System.Platform.numBits=bits
+  have h : bits=32 ∨ bits=64 := by simpa only [hn] using System.Platform.numBits_eq
+  rcases h with h | h <;> subst bits <;> decide
+
+#print axioms value
+#print axioms value64
+end R1Z.PV_AL_TypenumValue

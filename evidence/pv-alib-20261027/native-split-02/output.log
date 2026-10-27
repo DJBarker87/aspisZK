@@ -1,0 +1,39 @@
+   Compiling block-buffer v0.10.4 (/home/dombarker/project-offloads/codex-pv-alib-20261027/block-buffer-proof)
+warning: unexpected `cfg` condition name: `kani`
+  --> src/sealed.rs:70:11
+   |
+70 | #[cfg(any(kani,test))]
+   |           ^^^^
+   |
+   = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition name: `kani`
+  --> src/sealed.rs:90:11
+   |
+90 |     #[cfg(kani)]
+   |           ^^^^
+   |
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: `block-buffer` (lib test) generated 2 warnings
+    Finished `release` profile [optimized] target(s) in 0.13s
+     Running unittests src/lib.rs (project-offloads/codex-pv-alib-20261027/native-target/release/deps/block_buffer-5429905305fe034b)
+
+running 1 test
+1026 arbitrary-length-prefix native comparisons passed, no SHA-NI claim
+test sealed::pv_alib_checks::split_native_differential ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

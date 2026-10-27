@@ -1,0 +1,22 @@
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_VecInterface.lean:2:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.pop`
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_VecInterface.lean:3:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.remove`
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_VecInterface.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.truncate`
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_VecInterface.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.split_off`
+/home/dombarker/project-offloads/codex-pv-alib-20261027/lean-sources/R1Z/PV_AL_VecInterface.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.swap_remove`
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Aeneas.Std.Usize.max }
+inductive Aeneas.Std.Error : Type
+number of parameters: 0
+constructors:
+Aeneas.Std.Error.assertionFailure : Aeneas.Std.Error
+Aeneas.Std.Error.integerOverflow : Aeneas.Std.Error
+Aeneas.Std.Error.divisionByZero : Aeneas.Std.Error
+Aeneas.Std.Error.arrayOutOfBounds : Aeneas.Std.Error
+Aeneas.Std.Error.maximumSizeExceeded : Aeneas.Std.Error
+Aeneas.Std.Error.panic : Aeneas.Std.Error
+Aeneas.Std.Error.undef : Aeneas.Std.Error
+def Aeneas.Std.UScalar.div : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun {ty} x y =>
+  if (y.bv != 0) = true then Aeneas.Std.Result.ok (x.bv.udiv y.bv#uscalar)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.divisionByZero
