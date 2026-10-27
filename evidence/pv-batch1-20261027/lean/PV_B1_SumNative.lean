@@ -17,7 +17,7 @@ theorem limb_source (a b : U32) :
     aspis_core.field.M31.add a b = ok (limbAdd a b) := by
   simp only [aspis_core.field.M31.add,aspis_core.field.ct.add,
     aspis_core.field.ct.subtract_p,lift,bind_tc_ok,limbAdd,
-    core.num.U32.wrapping_add,core.num.U32.wrapping_sub,U32.wrapping_add,U32.wrapping_sub]
+    core.num.U32.wrapping_add,core.num.U32.wrapping_sub,U32.wrapping_add,U32.wrapping_sub] <;> rfl
 
 theorem add_source (a b : Q) :
     aspis_core.field.QM31.add a b = ok (add a b) := by
