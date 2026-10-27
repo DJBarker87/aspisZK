@@ -1,0 +1,1317 @@
+theorem AspisR1.CheckpointBytes3EDecode.decode_e_identification : ∀ (b : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑b).length = 32 →
+    OraclePortCkptAbi2Extracted.decode_e_spec b =
+      Aeneas.Std.Result.ok
+        (Option.map AspisR1.CheckpointBytes3EDecode.rawE
+          (AspisR1.FoldedLeafCodec.decodeWide (AspisR1.MultiproofConeCanonical.bytesOf ↑b))) :=
+fun b width =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => OraclePortCkptAbi2Extracted.decode_e_spec b = Aeneas.Std.Result.ok _a)
+        (AspisR1.CheckpointBytes3EDecode.fixed_decode b width)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            OraclePortCkptAbi2Extracted.decode_e_spec b =
+              Aeneas.Std.Result.ok do
+                let lo ← _a
+                let hi ←
+                  Option.map AspisR1.CheckpointBytes3KDecode.rawLimbs
+                      (AspisR1.RetainedFieldByteCodec.decodeQM31LE
+                        (AspisR1.StrictWideByteCodec.highBytes (AspisR1.CheckpointBytes3EDecode.fixed32 b width)))
+                some { c0 := lo, c1 := hi })
+          (AspisR1.CheckpointBytes3KDecode.model_shape
+            (AspisR1.StrictWideByteCodec.lowBytes (AspisR1.CheckpointBytes3EDecode.fixed32 b width))
+            (fun j =>
+              AspisR1.CheckpointBytes3EDecode.word32 b width
+                ⟨↑j, Decidable.byContradiction fun a => AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b j a⟩)
+            (AspisR1.CheckpointBytes3EDecode.low_word_model b width))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              OraclePortCkptAbi2Extracted.decode_e_spec b =
+                Aeneas.Std.Result.ok do
+                  let lo ←
+                    if
+                          AspisR1.OraclePortCkptAbi4Decode.Canonical
+                            (AspisR1.CheckpointBytes3ScalarShape.kWords
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑0,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 0 a⟩)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑1,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑2,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 2 a⟩)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑3,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩)) then
+                        some
+                          (AspisR1.CheckpointBytes3ScalarShape.kWords
+                            (AspisR1.CheckpointBytes3EDecode.word32 b width
+                              ⟨↑0,
+                                Decidable.byContradiction fun a =>
+                                  AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 0 a⟩)
+                            (AspisR1.CheckpointBytes3EDecode.word32 b width
+                              ⟨↑1,
+                                Decidable.byContradiction fun a =>
+                                  AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩)
+                            (AspisR1.CheckpointBytes3EDecode.word32 b width
+                              ⟨↑2,
+                                Decidable.byContradiction fun a =>
+                                  AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 2 a⟩)
+                            (AspisR1.CheckpointBytes3EDecode.word32 b width
+                              ⟨↑3,
+                                Decidable.byContradiction fun a =>
+                                  AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩))
+                      else none
+                  let hi ← _a
+                  some { c0 := lo, c1 := hi })
+            (AspisR1.CheckpointBytes3KDecode.model_shape
+              (AspisR1.StrictWideByteCodec.highBytes (AspisR1.CheckpointBytes3EDecode.fixed32 b width))
+              (fun j =>
+                AspisR1.CheckpointBytes3EDecode.word32 b width
+                  ⟨↑j + 4,
+                    Decidable.byContradiction fun a => AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b j a⟩)
+              (AspisR1.CheckpointBytes3EDecode.high_word_model b width))))
+        (have source :=
+          AspisR1.CheckpointBytes3EShape.e_shape b width (AspisR1.CheckpointBytes3EDecode.word32 b width)
+            (Eq.mpr
+              (id
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 0#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑0) 0 (mul_zero 4)
+                              (AspisR1.CheckpointBytes3EDecode.word32._proof_5 b width 0)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑0 + 1) 1
+                            (Eq.trans (congrFun' (congrArg HAdd.hAdd (mul_zero 4)) 1) (zero_add 1))
+                            (AspisR1.CheckpointBytes3EDecode.word32._proof_6 b width 0)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑0 + 2) 2
+                          (Eq.trans (congrFun' (congrArg HAdd.hAdd (mul_zero 4)) 2) (zero_add 2))
+                          (AspisR1.CheckpointBytes3EDecode.word32._proof_7 b width 0)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑0 + 3) 3
+                        (Eq.trans (congrFun' (congrArg HAdd.hAdd (mul_zero 4)) 3) (zero_add 3))
+                        (AspisR1.CheckpointBytes3EDecode.word32._proof_8 b width 0))))))
+              (Eq.mp
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 0#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑0#usize) 0
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                                  (of_decide_eq_true (id (Eq.refl true)))))
+                              (Decidable.byContradiction fun a =>
+                                AspisR1.CheckpointBytes3Word.word_total._proof_1 b 0#usize
+                                  (Eq.mpr (id (congrArg (LE.le (↑0#usize + 4)) width))
+                                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_1)
+                                  a)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑0#usize + 1) 1
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg HAdd.hAdd
+                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                                      (of_decide_eq_true (id (Eq.refl true))))))
+                                1)
+                              (zero_add 1))
+                            (Decidable.byContradiction fun a =>
+                              AspisR1.CheckpointBytes3Word.word_total._proof_2 b 0#usize
+                                (Eq.mpr (id (congrArg (LE.le (↑0#usize + 4)) width))
+                                  AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_1)
+                                a)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑0#usize + 2) 2
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              2)
+                            (zero_add 2))
+                          (Decidable.byContradiction fun a =>
+                            AspisR1.CheckpointBytes3Word.word_total._proof_3 b 0#usize
+                              (Eq.mpr (id (congrArg (LE.le (↑0#usize + 4)) width))
+                                AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_1)
+                              a)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑0#usize + 3) 3
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            3)
+                          (zero_add 3))
+                        (Decidable.byContradiction fun a =>
+                          AspisR1.CheckpointBytes3Word.word_total._proof_4 b 0#usize
+                            (Eq.mpr (id (congrArg (LE.le (↑0#usize + 4)) width))
+                              AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_1)
+                            a)))))
+                (AspisR1.CheckpointBytes3Word.word_total b 0#usize
+                  (Eq.mpr (id (congrArg (LE.le (↑0#usize + 4)) width))
+                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_1))))
+            (Eq.mpr
+              (id
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 4#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑1) 4
+                              (Eq.trans (congrArg (HMul.hMul 4) (Nat.one_mod 6)) (mul_one 4))
+                              (AspisR1.CheckpointBytes3EDecode.word32._proof_5 b width 1)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑1 + 1) 5
+                            (congrFun'
+                              (congrArg HAdd.hAdd (Eq.trans (congrArg (HMul.hMul 4) (Nat.one_mod 6)) (mul_one 4))) 1)
+                            (AspisR1.CheckpointBytes3EDecode.word32._proof_6 b width 1)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑1 + 2) 6
+                          (congrFun'
+                            (congrArg HAdd.hAdd (Eq.trans (congrArg (HMul.hMul 4) (Nat.one_mod 6)) (mul_one 4))) 2)
+                          (AspisR1.CheckpointBytes3EDecode.word32._proof_7 b width 1)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑1 + 3) 7
+                        (congrFun' (congrArg HAdd.hAdd (Eq.trans (congrArg (HMul.hMul 4) (Nat.one_mod 6)) (mul_one 4)))
+                          3)
+                        (AspisR1.CheckpointBytes3EDecode.word32._proof_8 b width 1))))))
+              (Eq.mp
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 4#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑4#usize) 4
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                  (of_decide_eq_true (id (Eq.refl true)))))
+                              (Decidable.byContradiction fun a =>
+                                AspisR1.CheckpointBytes3Word.word_total._proof_1 b 4#usize
+                                  (Eq.mpr (id (congrArg (LE.le (↑4#usize + 4)) width))
+                                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_2)
+                                  a)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑4#usize + 1) 5
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              1)
+                            (Decidable.byContradiction fun a =>
+                              AspisR1.CheckpointBytes3Word.word_total._proof_2 b 4#usize
+                                (Eq.mpr (id (congrArg (LE.le (↑4#usize + 4)) width))
+                                  AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_2)
+                                a)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑4#usize + 2) 6
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            2)
+                          (Decidable.byContradiction fun a =>
+                            AspisR1.CheckpointBytes3Word.word_total._proof_3 b 4#usize
+                              (Eq.mpr (id (congrArg (LE.le (↑4#usize + 4)) width))
+                                AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_2)
+                              a)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑4#usize + 3) 7
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          3)
+                        (Decidable.byContradiction fun a =>
+                          AspisR1.CheckpointBytes3Word.word_total._proof_4 b 4#usize
+                            (Eq.mpr (id (congrArg (LE.le (↑4#usize + 4)) width))
+                              AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_2)
+                            a)))))
+                (AspisR1.CheckpointBytes3Word.word_total b 4#usize
+                  (Eq.mpr (id (congrArg (LE.le (↑4#usize + 4)) width))
+                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_2))))
+            (id
+              (Eq.mp
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 8#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑8#usize) 8
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 8
+                                  (of_decide_eq_true (id (Eq.refl true)))))
+                              (Decidable.byContradiction fun a =>
+                                AspisR1.CheckpointBytes3Word.word_total._proof_1 b 8#usize
+                                  (Eq.mpr (id (congrArg (LE.le (↑8#usize + 4)) width))
+                                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_3)
+                                  a)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑8#usize + 1) 9
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 8
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              1)
+                            (Decidable.byContradiction fun a =>
+                              AspisR1.CheckpointBytes3Word.word_total._proof_2 b 8#usize
+                                (Eq.mpr (id (congrArg (LE.le (↑8#usize + 4)) width))
+                                  AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_3)
+                                a)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑8#usize + 2) 10
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 8
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            2)
+                          (Decidable.byContradiction fun a =>
+                            AspisR1.CheckpointBytes3Word.word_total._proof_3 b 8#usize
+                              (Eq.mpr (id (congrArg (LE.le (↑8#usize + 4)) width))
+                                AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_3)
+                              a)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑8#usize + 3) 11
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 8
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          3)
+                        (Decidable.byContradiction fun a =>
+                          AspisR1.CheckpointBytes3Word.word_total._proof_4 b 8#usize
+                            (Eq.mpr (id (congrArg (LE.le (↑8#usize + 4)) width))
+                              AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_3)
+                            a)))))
+                (AspisR1.CheckpointBytes3Word.word_total b 8#usize
+                  (Eq.mpr (id (congrArg (LE.le (↑8#usize + 4)) width))
+                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_3))))
+            (id
+              (Eq.mp
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 12#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑12#usize) 12
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 12
+                                  (of_decide_eq_true (id (Eq.refl true)))))
+                              (Decidable.byContradiction fun a =>
+                                AspisR1.CheckpointBytes3Word.word_total._proof_1 b 12#usize
+                                  (Eq.mpr (id (congrArg (LE.le (↑12#usize + 4)) width))
+                                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_4)
+                                  a)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑12#usize + 1) 13
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 12
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              1)
+                            (Decidable.byContradiction fun a =>
+                              AspisR1.CheckpointBytes3Word.word_total._proof_2 b 12#usize
+                                (Eq.mpr (id (congrArg (LE.le (↑12#usize + 4)) width))
+                                  AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_4)
+                                a)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑12#usize + 2) 14
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 12
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            2)
+                          (Decidable.byContradiction fun a =>
+                            AspisR1.CheckpointBytes3Word.word_total._proof_3 b 12#usize
+                              (Eq.mpr (id (congrArg (LE.le (↑12#usize + 4)) width))
+                                AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_4)
+                              a)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑12#usize + 3) 15
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 12
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          3)
+                        (Decidable.byContradiction fun a =>
+                          AspisR1.CheckpointBytes3Word.word_total._proof_4 b 12#usize
+                            (Eq.mpr (id (congrArg (LE.le (↑12#usize + 4)) width))
+                              AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_4)
+                            a)))))
+                (AspisR1.CheckpointBytes3Word.word_total b 12#usize
+                  (Eq.mpr (id (congrArg (LE.le (↑12#usize + 4)) width))
+                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_4))))
+            (id
+              (Eq.mp
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 16#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑16#usize) 16
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 16
+                                  (of_decide_eq_true (id (Eq.refl true)))))
+                              (Decidable.byContradiction fun a =>
+                                AspisR1.CheckpointBytes3Word.word_total._proof_1 b 16#usize
+                                  (Eq.mpr (id (congrArg (LE.le (↑16#usize + 4)) width))
+                                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_5)
+                                  a)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑16#usize + 1) 17
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 16
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              1)
+                            (Decidable.byContradiction fun a =>
+                              AspisR1.CheckpointBytes3Word.word_total._proof_2 b 16#usize
+                                (Eq.mpr (id (congrArg (LE.le (↑16#usize + 4)) width))
+                                  AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_5)
+                                a)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑16#usize + 2) 18
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 16
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            2)
+                          (Decidable.byContradiction fun a =>
+                            AspisR1.CheckpointBytes3Word.word_total._proof_3 b 16#usize
+                              (Eq.mpr (id (congrArg (LE.le (↑16#usize + 4)) width))
+                                AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_5)
+                              a)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑16#usize + 3) 19
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 16
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          3)
+                        (Decidable.byContradiction fun a =>
+                          AspisR1.CheckpointBytes3Word.word_total._proof_4 b 16#usize
+                            (Eq.mpr (id (congrArg (LE.le (↑16#usize + 4)) width))
+                              AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_5)
+                            a)))))
+                (AspisR1.CheckpointBytes3Word.word_total b 16#usize
+                  (Eq.mpr (id (congrArg (LE.le (↑16#usize + 4)) width))
+                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_5))))
+            (id
+              (Eq.mp
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 20#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑20#usize) 20
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 20
+                                  (of_decide_eq_true (id (Eq.refl true)))))
+                              (Decidable.byContradiction fun a =>
+                                AspisR1.CheckpointBytes3Word.word_total._proof_1 b 20#usize
+                                  (Eq.mpr (id (congrArg (LE.le (↑20#usize + 4)) width))
+                                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_6)
+                                  a)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑20#usize + 1) 21
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 20
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              1)
+                            (Decidable.byContradiction fun a =>
+                              AspisR1.CheckpointBytes3Word.word_total._proof_2 b 20#usize
+                                (Eq.mpr (id (congrArg (LE.le (↑20#usize + 4)) width))
+                                  AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_6)
+                                a)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑20#usize + 2) 22
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 20
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            2)
+                          (Decidable.byContradiction fun a =>
+                            AspisR1.CheckpointBytes3Word.word_total._proof_3 b 20#usize
+                              (Eq.mpr (id (congrArg (LE.le (↑20#usize + 4)) width))
+                                AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_6)
+                              a)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑20#usize + 3) 23
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 20
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          3)
+                        (Decidable.byContradiction fun a =>
+                          AspisR1.CheckpointBytes3Word.word_total._proof_4 b 20#usize
+                            (Eq.mpr (id (congrArg (LE.le (↑20#usize + 4)) width))
+                              AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_6)
+                            a)))))
+                (AspisR1.CheckpointBytes3Word.word_total b 20#usize
+                  (Eq.mpr (id (congrArg (LE.le (↑20#usize + 4)) width))
+                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_6))))
+            (id
+              (Eq.mp
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 24#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑24#usize) 24
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 24
+                                  (of_decide_eq_true (id (Eq.refl true)))))
+                              (Decidable.byContradiction fun a =>
+                                AspisR1.CheckpointBytes3Word.word_total._proof_1 b 24#usize
+                                  (Eq.mpr (id (congrArg (LE.le (↑24#usize + 4)) width))
+                                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_7)
+                                  a)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑24#usize + 1) 25
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 24
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              1)
+                            (Decidable.byContradiction fun a =>
+                              AspisR1.CheckpointBytes3Word.word_total._proof_2 b 24#usize
+                                (Eq.mpr (id (congrArg (LE.le (↑24#usize + 4)) width))
+                                  AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_7)
+                                a)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑24#usize + 2) 26
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 24
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            2)
+                          (Decidable.byContradiction fun a =>
+                            AspisR1.CheckpointBytes3Word.word_total._proof_3 b 24#usize
+                              (Eq.mpr (id (congrArg (LE.le (↑24#usize + 4)) width))
+                                AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_7)
+                              a)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑24#usize + 3) 27
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 24
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          3)
+                        (Decidable.byContradiction fun a =>
+                          AspisR1.CheckpointBytes3Word.word_total._proof_4 b 24#usize
+                            (Eq.mpr (id (congrArg (LE.le (↑24#usize + 4)) width))
+                              AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_7)
+                            a)))))
+                (AspisR1.CheckpointBytes3Word.word_total b 24#usize
+                  (Eq.mpr (id (congrArg (LE.le (↑24#usize + 4)) width))
+                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_7))))
+            (Eq.mpr
+              (id
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 28#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑7) 28
+                              (congrArg (HMul.hMul 4) (Nat.mod_succ 7))
+                              (AspisR1.CheckpointBytes3EDecode.word32._proof_5 b width 7)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑7 + 1) 29
+                            (congrFun' (congrArg HAdd.hAdd (congrArg (HMul.hMul 4) (Nat.mod_succ 7))) 1)
+                            (AspisR1.CheckpointBytes3EDecode.word32._proof_6 b width 7)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑7 + 2) 30
+                          (congrFun' (congrArg HAdd.hAdd (congrArg (HMul.hMul 4) (Nat.mod_succ 7))) 2)
+                          (AspisR1.CheckpointBytes3EDecode.word32._proof_7 b width 7)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (4 * ↑7 + 3) 31
+                        (congrFun' (congrArg HAdd.hAdd (congrArg (HMul.hMul 4) (Nat.mod_succ 7))) 3)
+                        (AspisR1.CheckpointBytes3EDecode.word32._proof_8 b width 7))))))
+              (Eq.mp
+                (congrArg (Eq (OraclePortCkptAbi2Extracted.word_spec b 28#usize))
+                  (congrArg Aeneas.Std.Result.ok
+                    (congr
+                      (congr
+                        (congr
+                          (congrArg AspisR1.CheckpointBytes3Word.pack
+                            (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑28#usize) 28
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 28
+                                  (of_decide_eq_true (id (Eq.refl true)))))
+                              (Decidable.byContradiction fun a =>
+                                AspisR1.CheckpointBytes3Word.word_total._proof_1 b 28#usize
+                                  (Eq.mpr (id (congrArg (LE.le (↑28#usize + 4)) width))
+                                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_8)
+                                  a)))
+                          (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑28#usize + 1) 29
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 28
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              1)
+                            (Decidable.byContradiction fun a =>
+                              AspisR1.CheckpointBytes3Word.word_total._proof_2 b 28#usize
+                                (Eq.mpr (id (congrArg (LE.le (↑28#usize + 4)) width))
+                                  AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_8)
+                                a)))
+                        (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑28#usize + 2) 30
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 28
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            2)
+                          (Decidable.byContradiction fun a =>
+                            AspisR1.CheckpointBytes3Word.word_total._proof_3 b 28#usize
+                              (Eq.mpr (id (congrArg (LE.le (↑28#usize + 4)) width))
+                                AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_8)
+                              a)))
+                      (GetElem.getElem.congr_simp (↑b) (↑b) (Eq.refl ↑b) (↑28#usize + 3) 31
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 28
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          3)
+                        (Decidable.byContradiction fun a =>
+                          AspisR1.CheckpointBytes3Word.word_total._proof_4 b 28#usize
+                            (Eq.mpr (id (congrArg (LE.le (↑28#usize + 4)) width))
+                              AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_8)
+                            a)))))
+                (AspisR1.CheckpointBytes3Word.word_total b 28#usize
+                  (Eq.mpr (id (congrArg (LE.le (↑28#usize + 4)) width))
+                    AspisR1.CheckpointBytes3EDecode.decode_e_identification._proof_8))));
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a =
+                  Aeneas.Std.Result.ok do
+                    let lo ←
+                      if
+                            AspisR1.OraclePortCkptAbi4Decode.Canonical
+                              (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑0,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 0 a⟩)
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑1,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩)
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑2,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 2 a⟩)
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑3,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩)) then
+                          some
+                            (AspisR1.CheckpointBytes3ScalarShape.kWords
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑0,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 0 a⟩)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑1,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑2,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 2 a⟩)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑3,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩))
+                        else none
+                    let hi ←
+                      if
+                            AspisR1.OraclePortCkptAbi4Decode.Canonical
+                              (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑0 + 4,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩)
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑1 + 4,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩)
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑2 + 4,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 2 a⟩)
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑3 + 4,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩)) then
+                          some
+                            (AspisR1.CheckpointBytes3ScalarShape.kWords
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑0 + 4,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑1 + 4,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑2 + 4,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 2 a⟩)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                ⟨↑3 + 4,
+                                  Decidable.byContradiction fun a =>
+                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩))
+                        else none
+                    some { c0 := lo, c1 := hi })
+              source))
+          (if lo :
+              AspisR1.OraclePortCkptAbi4Decode.Canonical
+                (AspisR1.CheckpointBytes3EShape.eWords (AspisR1.CheckpointBytes3EDecode.word32 b width)).c0 then
+            if hi :
+                AspisR1.OraclePortCkptAbi4Decode.Canonical
+                  (AspisR1.CheckpointBytes3EShape.eWords (AspisR1.CheckpointBytes3EDecode.word32 b width)).c1 then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (ite_cond_eq_true
+                        (Aeneas.Std.Result.ok
+                          (some
+                            (AspisR1.CheckpointBytes3EShape.eWords (AspisR1.CheckpointBytes3EDecode.word32 b width))))
+                        (Aeneas.Std.Result.ok none)
+                        (Eq.trans (congr (congrArg And (eq_true (id (id lo)))) (eq_true (id (id hi))))
+                          (and_self True))))
+                    (congrArg Aeneas.Std.Result.ok
+                      (congr
+                        (congrArg bind
+                          (Eq.trans
+                            (ite_cond_eq_true
+                              (some
+                                (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                  (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                    ⟨↑0,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 0 a⟩)
+                                  (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                    ⟨↑1,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩)
+                                  (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                    ⟨↑2,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 2 a⟩)
+                                  (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                    ⟨↑3,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩)))
+                              none
+                              (Eq.trans
+                                (congrArg AspisR1.OraclePortCkptAbi4Decode.Canonical
+                                  (congr
+                                    (congrFun'
+                                      (congrArg
+                                        (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                          (AspisR1.CheckpointBytes3EDecode.word32 b width 0))
+                                        (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                          ⟨↑1,
+                                            Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩
+                                          1
+                                          (Fin.mk.congr_simp (↑1) 1 (Nat.one_mod 2)
+                                            (Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a))))
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width 2))
+                                    (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                      ⟨↑3,
+                                        Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩
+                                      3
+                                      (Fin.mk.congr_simp (↑3) 3 (Nat.mod_succ 3)
+                                        (Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a)))))
+                                (eq_true (id (id lo)))))
+                            (congrArg some
+                              (congr
+                                (congrFun'
+                                  (congrArg
+                                    (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width 0))
+                                    (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                      ⟨↑1,
+                                        Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩
+                                      1
+                                      (Fin.mk.congr_simp (↑1) 1 (Nat.one_mod 2)
+                                        (Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a))))
+                                  (AspisR1.CheckpointBytes3EDecode.word32 b width 2))
+                                (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                  ⟨↑3,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩
+                                  3
+                                  (Fin.mk.congr_simp (↑3) 3 (Nat.mod_succ 3)
+                                    (Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a)))))))
+                        (funext fun lo =>
+                          congrFun'
+                            (congrArg bind
+                              (Eq.trans
+                                (ite_cond_eq_true
+                                  (some
+                                    (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑0 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑1 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑2 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 2 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑3 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩)))
+                                  none
+                                  (Eq.trans
+                                    (congrArg AspisR1.OraclePortCkptAbi4Decode.Canonical
+                                      (congr
+                                        (congrFun'
+                                          (congr
+                                            (congrArg AspisR1.CheckpointBytes3ScalarShape.kWords
+                                              (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                                ⟨↑0 + 4,
+                                                  Decidable.byContradiction fun a =>
+                                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩
+                                                4
+                                                (Fin.mk.congr_simp (↑0 + 4) 4 (zero_add 4)
+                                                  (Decidable.byContradiction fun a =>
+                                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a))))
+                                            (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                              ⟨↑1 + 4,
+                                                Decidable.byContradiction fun a =>
+                                                  AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩
+                                              5
+                                              (Fin.mk.congr_simp (↑1 + 4) 5
+                                                (congrFun' (congrArg HAdd.hAdd (Nat.one_mod 2)) 4)
+                                                (Decidable.byContradiction fun a =>
+                                                  AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a))))
+                                          (AspisR1.CheckpointBytes3EDecode.word32 b width 6))
+                                        (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                          ⟨↑3 + 4,
+                                            Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩
+                                          7
+                                          (Fin.mk.congr_simp (↑3 + 4) 7
+                                            (congrFun' (congrArg HAdd.hAdd (Nat.mod_succ 3)) 4)
+                                            (Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a)))))
+                                    (eq_true (id (id hi)))))
+                                (congrArg some
+                                  (congr
+                                    (congrFun'
+                                      (congr
+                                        (congrArg AspisR1.CheckpointBytes3ScalarShape.kWords
+                                          (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                            ⟨↑0 + 4,
+                                              Decidable.byContradiction fun a =>
+                                                AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩
+                                            4
+                                            (Fin.mk.congr_simp (↑0 + 4) 4 (zero_add 4)
+                                              (Decidable.byContradiction fun a =>
+                                                AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a))))
+                                        (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                          ⟨↑1 + 4,
+                                            Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩
+                                          5
+                                          (Fin.mk.congr_simp (↑1 + 4) 5
+                                            (congrFun' (congrArg HAdd.hAdd (Nat.one_mod 2)) 4)
+                                            (Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a))))
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width 6))
+                                    (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                      ⟨↑3 + 4,
+                                        Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩
+                                      7
+                                      (Fin.mk.congr_simp (↑3 + 4) 7 (congrFun' (congrArg HAdd.hAdd (Nat.mod_succ 3)) 4)
+                                        (Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a)))))))
+                            fun hi => some { c0 := lo, c1 := hi }))))
+                  (eq_self
+                    (Aeneas.Std.Result.ok
+                      (some
+                        {
+                          c0 :=
+                            AspisR1.CheckpointBytes3ScalarShape.kWords
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 0)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 1)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 2)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 3),
+                          c1 :=
+                            AspisR1.CheckpointBytes3ScalarShape.kWords
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 4)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 5)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 6)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 7) }))))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (ite_cond_eq_false
+                        (Aeneas.Std.Result.ok
+                          (some
+                            (AspisR1.CheckpointBytes3EShape.eWords (AspisR1.CheckpointBytes3EDecode.word32 b width))))
+                        (Aeneas.Std.Result.ok none)
+                        (Eq.trans (congr (congrArg And (eq_true (id (id lo)))) (eq_false (id (id hi))))
+                          (and_false True))))
+                    (congrArg Aeneas.Std.Result.ok
+                      (Eq.trans
+                        (congr
+                          (congrArg bind
+                            (Eq.trans
+                              (ite_cond_eq_true
+                                (some
+                                  (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                    (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                      ⟨↑0,
+                                        Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 0 a⟩)
+                                    (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                      ⟨↑1,
+                                        Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩)
+                                    (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                      ⟨↑2,
+                                        Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 2 a⟩)
+                                    (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                      ⟨↑3,
+                                        Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩)))
+                                none
+                                (Eq.trans
+                                  (congrArg AspisR1.OraclePortCkptAbi4Decode.Canonical
+                                    (congr
+                                      (congrFun'
+                                        (congrArg
+                                          (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                            (AspisR1.CheckpointBytes3EDecode.word32 b width 0))
+                                          (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                            ⟨↑1,
+                                              Decidable.byContradiction fun a =>
+                                                AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩
+                                            1
+                                            (Fin.mk.congr_simp (↑1) 1 (Nat.one_mod 2)
+                                              (Decidable.byContradiction fun a =>
+                                                AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a))))
+                                        (AspisR1.CheckpointBytes3EDecode.word32 b width 2))
+                                      (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                        ⟨↑3,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩
+                                        3
+                                        (Fin.mk.congr_simp (↑3) 3 (Nat.mod_succ 3)
+                                          (Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a)))))
+                                  (eq_true (id (id lo)))))
+                              (congrArg some
+                                (congr
+                                  (congrFun'
+                                    (congrArg
+                                      (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                        (AspisR1.CheckpointBytes3EDecode.word32 b width 0))
+                                      (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                        ⟨↑1,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩
+                                        1
+                                        (Fin.mk.congr_simp (↑1) 1 (Nat.one_mod 2)
+                                          (Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a))))
+                                    (AspisR1.CheckpointBytes3EDecode.word32 b width 2))
+                                  (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                    ⟨↑3,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩
+                                    3
+                                    (Fin.mk.congr_simp (↑3) 3 (Nat.mod_succ 3)
+                                      (Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a)))))))
+                          (funext fun lo =>
+                            congrFun'
+                              (congrArg bind
+                                (ite_cond_eq_false
+                                  (some
+                                    (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑0 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑1 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑2 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 2 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑3 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩)))
+                                  none
+                                  (Eq.trans
+                                    (congrArg AspisR1.OraclePortCkptAbi4Decode.Canonical
+                                      (congr
+                                        (congrFun'
+                                          (congr
+                                            (congrArg AspisR1.CheckpointBytes3ScalarShape.kWords
+                                              (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                                ⟨↑0 + 4,
+                                                  Decidable.byContradiction fun a =>
+                                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩
+                                                4
+                                                (Fin.mk.congr_simp (↑0 + 4) 4 (zero_add 4)
+                                                  (Decidable.byContradiction fun a =>
+                                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a))))
+                                            (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                              ⟨↑1 + 4,
+                                                Decidable.byContradiction fun a =>
+                                                  AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩
+                                              5
+                                              (Fin.mk.congr_simp (↑1 + 4) 5
+                                                (congrFun' (congrArg HAdd.hAdd (Nat.one_mod 2)) 4)
+                                                (Decidable.byContradiction fun a =>
+                                                  AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a))))
+                                          (AspisR1.CheckpointBytes3EDecode.word32 b width 6))
+                                        (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                          ⟨↑3 + 4,
+                                            Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩
+                                          7
+                                          (Fin.mk.congr_simp (↑3 + 4) 7
+                                            (congrFun' (congrArg HAdd.hAdd (Nat.mod_succ 3)) 4)
+                                            (Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a)))))
+                                    (eq_false (id (id hi))))))
+                              fun hi => some { c0 := lo, c1 := hi }))
+                        (Option.bind_fun_none
+                          (some
+                            (AspisR1.CheckpointBytes3ScalarShape.kWords
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 0)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 1)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 2)
+                              (AspisR1.CheckpointBytes3EDecode.word32 b width 3)))))))
+                  (eq_self (Aeneas.Std.Result.ok none)))
+          else
+            if hi :
+                AspisR1.OraclePortCkptAbi4Decode.Canonical
+                  (AspisR1.CheckpointBytes3EShape.eWords (AspisR1.CheckpointBytes3EDecode.word32 b width)).c1 then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (ite_cond_eq_false
+                        (Aeneas.Std.Result.ok
+                          (some
+                            (AspisR1.CheckpointBytes3EShape.eWords (AspisR1.CheckpointBytes3EDecode.word32 b width))))
+                        (Aeneas.Std.Result.ok none)
+                        (Eq.trans (congr (congrArg And (eq_false (id (id lo)))) (eq_true (id (id hi))))
+                          (and_true False))))
+                    (congrArg Aeneas.Std.Result.ok
+                      (congr
+                        (congrArg bind
+                          (ite_cond_eq_false
+                            (some
+                              (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑0,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 0 a⟩)
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑1,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩)
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑2,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 2 a⟩)
+                                (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                  ⟨↑3,
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩)))
+                            none
+                            (Eq.trans
+                              (congrArg AspisR1.OraclePortCkptAbi4Decode.Canonical
+                                (congr
+                                  (congrFun'
+                                    (congrArg
+                                      (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                        (AspisR1.CheckpointBytes3EDecode.word32 b width 0))
+                                      (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                        ⟨↑1,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩
+                                        1
+                                        (Fin.mk.congr_simp (↑1) 1 (Nat.one_mod 2)
+                                          (Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a))))
+                                    (AspisR1.CheckpointBytes3EDecode.word32 b width 2))
+                                  (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                    ⟨↑3,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩
+                                    3
+                                    (Fin.mk.congr_simp (↑3) 3 (Nat.mod_succ 3)
+                                      (Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a)))))
+                              (eq_false (id (id lo))))))
+                        (funext fun lo =>
+                          congrFun'
+                            (congrArg bind
+                              (Eq.trans
+                                (ite_cond_eq_true
+                                  (some
+                                    (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑0 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑1 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑2 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 2 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑3 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩)))
+                                  none
+                                  (Eq.trans
+                                    (congrArg AspisR1.OraclePortCkptAbi4Decode.Canonical
+                                      (congr
+                                        (congrFun'
+                                          (congr
+                                            (congrArg AspisR1.CheckpointBytes3ScalarShape.kWords
+                                              (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                                ⟨↑0 + 4,
+                                                  Decidable.byContradiction fun a =>
+                                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩
+                                                4
+                                                (Fin.mk.congr_simp (↑0 + 4) 4 (zero_add 4)
+                                                  (Decidable.byContradiction fun a =>
+                                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a))))
+                                            (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                              ⟨↑1 + 4,
+                                                Decidable.byContradiction fun a =>
+                                                  AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩
+                                              5
+                                              (Fin.mk.congr_simp (↑1 + 4) 5
+                                                (congrFun' (congrArg HAdd.hAdd (Nat.one_mod 2)) 4)
+                                                (Decidable.byContradiction fun a =>
+                                                  AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a))))
+                                          (AspisR1.CheckpointBytes3EDecode.word32 b width 6))
+                                        (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                          ⟨↑3 + 4,
+                                            Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩
+                                          7
+                                          (Fin.mk.congr_simp (↑3 + 4) 7
+                                            (congrFun' (congrArg HAdd.hAdd (Nat.mod_succ 3)) 4)
+                                            (Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a)))))
+                                    (eq_true (id (id hi)))))
+                                (congrArg some
+                                  (congr
+                                    (congrFun'
+                                      (congr
+                                        (congrArg AspisR1.CheckpointBytes3ScalarShape.kWords
+                                          (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                            ⟨↑0 + 4,
+                                              Decidable.byContradiction fun a =>
+                                                AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩
+                                            4
+                                            (Fin.mk.congr_simp (↑0 + 4) 4 (zero_add 4)
+                                              (Decidable.byContradiction fun a =>
+                                                AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a))))
+                                        (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                          ⟨↑1 + 4,
+                                            Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩
+                                          5
+                                          (Fin.mk.congr_simp (↑1 + 4) 5
+                                            (congrFun' (congrArg HAdd.hAdd (Nat.one_mod 2)) 4)
+                                            (Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a))))
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width 6))
+                                    (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                      ⟨↑3 + 4,
+                                        Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩
+                                      7
+                                      (Fin.mk.congr_simp (↑3 + 4) 7 (congrFun' (congrArg HAdd.hAdd (Nat.mod_succ 3)) 4)
+                                        (Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a)))))))
+                            fun hi => some { c0 := lo, c1 := hi }))))
+                  (eq_self (Aeneas.Std.Result.ok none)))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (ite_cond_eq_false
+                        (Aeneas.Std.Result.ok
+                          (some
+                            (AspisR1.CheckpointBytes3EShape.eWords (AspisR1.CheckpointBytes3EDecode.word32 b width))))
+                        (Aeneas.Std.Result.ok none)
+                        (Eq.trans (congr (congrArg And (eq_false (id (id lo)))) (eq_false (id (id hi))))
+                          (and_self False))))
+                    (congrArg Aeneas.Std.Result.ok
+                      (Eq.trans
+                        (congr
+                          (congrArg bind
+                            (ite_cond_eq_false
+                              (some
+                                (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                  (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                    ⟨↑0,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 0 a⟩)
+                                  (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                    ⟨↑1,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩)
+                                  (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                    ⟨↑2,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 2 a⟩)
+                                  (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                    ⟨↑3,
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩)))
+                              none
+                              (Eq.trans
+                                (congrArg AspisR1.OraclePortCkptAbi4Decode.Canonical
+                                  (congr
+                                    (congrFun'
+                                      (congrArg
+                                        (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                          (AspisR1.CheckpointBytes3EDecode.word32 b width 0))
+                                        (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                          ⟨↑1,
+                                            Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a⟩
+                                          1
+                                          (Fin.mk.congr_simp (↑1) 1 (Nat.one_mod 2)
+                                            (Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 1 a))))
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width 2))
+                                    (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                      ⟨↑3,
+                                        Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a⟩
+                                      3
+                                      (Fin.mk.congr_simp (↑3) 3 (Nat.mod_succ 3)
+                                        (Decidable.byContradiction fun a =>
+                                          AspisR1.CheckpointBytes3EDecode.low_word_model._proof_1 b 3 a)))))
+                                (eq_false (id (id lo))))))
+                          (funext fun lo =>
+                            congrFun'
+                              (congrArg bind
+                                (ite_cond_eq_false
+                                  (some
+                                    (AspisR1.CheckpointBytes3ScalarShape.kWords
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑0 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑1 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑2 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 2 a⟩)
+                                      (AspisR1.CheckpointBytes3EDecode.word32 b width
+                                        ⟨↑3 + 4,
+                                          Decidable.byContradiction fun a =>
+                                            AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩)))
+                                  none
+                                  (Eq.trans
+                                    (congrArg AspisR1.OraclePortCkptAbi4Decode.Canonical
+                                      (congr
+                                        (congrFun'
+                                          (congr
+                                            (congrArg AspisR1.CheckpointBytes3ScalarShape.kWords
+                                              (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                                ⟨↑0 + 4,
+                                                  Decidable.byContradiction fun a =>
+                                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a⟩
+                                                4
+                                                (Fin.mk.congr_simp (↑0 + 4) 4 (zero_add 4)
+                                                  (Decidable.byContradiction fun a =>
+                                                    AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 0 a))))
+                                            (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                              ⟨↑1 + 4,
+                                                Decidable.byContradiction fun a =>
+                                                  AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a⟩
+                                              5
+                                              (Fin.mk.congr_simp (↑1 + 4) 5
+                                                (congrFun' (congrArg HAdd.hAdd (Nat.one_mod 2)) 4)
+                                                (Decidable.byContradiction fun a =>
+                                                  AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 1 a))))
+                                          (AspisR1.CheckpointBytes3EDecode.word32 b width 6))
+                                        (AspisR1.CheckpointBytes3EDecode.word32.congr_simp b b (Eq.refl b) width
+                                          ⟨↑3 + 4,
+                                            Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a⟩
+                                          7
+                                          (Fin.mk.congr_simp (↑3 + 4) 7
+                                            (congrFun' (congrArg HAdd.hAdd (Nat.mod_succ 3)) 4)
+                                            (Decidable.byContradiction fun a =>
+                                              AspisR1.CheckpointBytes3EDecode.high_word_model._proof_1 b 3 a)))))
+                                    (eq_false (id (id hi))))))
+                              fun hi => some { c0 := lo, c1 := hi }))
+                        (Option.bind_fun_none none))))
+                  (eq_self (Aeneas.Std.Result.ok none)))))))
+def AspisR1.CheckpointBytes3EDecode.rawE : AspisR1.OraclePortCheckpointAbiC5.E →
+  OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact :=
+fun x => { c0 := AspisR1.CheckpointBytes3KDecode.rawK x.re, c1 := AspisR1.CheckpointBytes3KDecode.rawK x.im }
+def AspisR1.CheckpointBytes4ReaderFields.sourceE : AspisR1.OraclePortCheckpointAbiC5.E →
+  AspisR1Stage2.aspis_core.field.wide_exact.WideExact :=
+fun x => AspisR1.CheckpointBytes3Namespaces.fromE (AspisR1.CheckpointBytes3EDecode.rawE x)
+def AspisR1.CheckpointBytes3Reader.optionE : Option OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact →
+  Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact AspisR1Stage2.verifier.Error :=
+fun x =>
+  match x with
+  | none => Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint
+  | some x => Aeneas.Std.core.result.Result.Ok (AspisR1.CheckpointBytes3Namespaces.fromE x)

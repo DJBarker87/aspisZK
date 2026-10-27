@@ -1,0 +1,30 @@
+FJl_SliceCopy.lean:19:61: error: unsolved goals
+q : Std.Array U8 608#usize
+slot term : Usize
+v : U32
+run : JFr_TX2_ScalarRead.read q slot term = ok v
+start stop : Usize
+s : Slice U8
+a : Std.Array U8 4#usize
+hs : ↑start = ↑slot * 120 + ↑term * 4
+he : ↑stop = ↑start + 4
+hr :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+      { start := start, «end» := stop } =
+    ok s
+hc : core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s = ok (core.result.Result.Ok a)
+hd : FIp_DotDecode.field.M31.from_le_bytes a = ok (some v)
+hv : v = core.num.U32.from_le_bytes a
+range : ↑s = List.take (↑stop - ↑start) (List.drop ↑start ↑q.to_slice)
+width : ↑stop - ↑start = 4
+⊢ List.take (↑stop - (↑slot * 120 + ↑term * 4)) (List.drop (↑slot * 120 + ↑term * 4) ↑q) =
+    List.take 4 (List.drop (↑slot * 120 + ↑term * 4) ↑q)
+FJl_SliceCopy.lean:25:31: warning: This simp argument is unused:
+  width
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵h̵s̵,̵w̵i̵d̵t̵h̵]̵[̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲h̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJl_SliceCopy.bytes' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJl_SliceCopy.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,58 @@
+FJl_PreparedAlpha.lean:21:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.43[?m.44]?
+in the target expression
+  (match ⟨List.map Tx1Q_Carriers.e ↑(currentPrepared out).alpha, ⋯⟩[0#usize]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (Tx1Q_Carriers.e (currentE (F3L_SourcePrepared.alpha out 0)))
+
+out : verifier.Prepared
+p : OraclePortCompactDraft.Parsed
+v : LiteralOpeningView.View
+q : Fin 22 → Fin 262144
+data : RecordedBinaryExperimentBin.SourceInputs
+numeric :
+  F3L_SourcePrepared.numeric out =
+    OraclePortCheckpointResumeC5.prepared (OraclePortAcceptedContextC6.context p data v) data.data
+      (SelectedChallengeMap.rhoOf data.rho) q
+a0 : AspisR1Stage2.Stage2Finish.E
+read : (Tx1Q_Carriers.prepared (currentPrepared out)).alpha.index_usize 0#usize = ok a0
+h :
+  (F3L_SourcePrepared.numeric out).alpha 0 =
+    (OraclePortCheckpointResumeC5.prepared (OraclePortAcceptedContextC6.context p data v) data.data
+          (SelectedChallengeMap.rhoOf data.rho) q).alpha
+      0
+⊢ (match ⟨List.map Tx1Q_Carriers.e ↑(currentPrepared out).alpha, ⋯⟩[0#usize]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (Tx1Q_Carriers.e (currentE (F3L_SourcePrepared.alpha out 0)))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FJl_PreparedAlpha.lean:21:96: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+FJl_PreparedAlpha.lean:20:6: warning: This simp argument is unused:
+  AspisR1ClaimPreparedBridge.mapArray
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵T̵x̵1̵Q̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵p̵r̵e̵p̵a̵r̵e̵d̵,̵T̵x̵1̵Q̵_̵C̵a̵r̵r̵i̵e̵r̵s̵.̵a̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵C̵l̵a̵i̵m̵P̵r̵e̵p̵a̵r̵e̵d̵B̵r̵i̵d̵g̵e̵.̵m̵a̵p̵A̵r̵r̵a̵y̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵]̵[̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲T̲x̲1̲Q̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲p̲r̲e̲p̲a̲r̲e̲d̲,̲ ̲T̲x̲1̲Q̲_̲C̲a̲r̲r̲i̲e̲r̲s̲.̲a̲r̲r̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJl_PreparedAlpha.lean:20:42: warning: This simp argument is unused:
+  List.getElem?_map
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.index_usize, ̲Tx1Q_Carriers.prepared, ̲Tx1Q_Carriers.arr,
+        AspisR1ClaimPreparedBridge.mapArray,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJl_PreparedAlpha.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
