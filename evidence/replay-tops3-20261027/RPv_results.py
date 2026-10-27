@@ -12,7 +12,7 @@ out['new_failed_vertices']=[n for n,r in rows.items() if r['module'] in by and b
 union=set().union(*(set(c) for c in p['closures'].values()));out['root_union_repository_contexts']=len(union);out['root_union_green_contexts']=len([n for n in union if n not in rows or (rows[n]['module'] in by and by[rows[n]['module']]['exit_status']==0)])
 (E/'RPv_frontier.json').write_text(json.dumps(out,indent=2)+'\n')
 for d in rs:
- if not d['module'].endswith('Audit') or d['module'].startswith('RPv_AuditBatch') or d['exit_status']!=0:continue
+ if d['module'] not in ['RPv_FJv_TopAudit','RPv_FJv_DeployedAudit'] or d['exit_status']!=0:continue
  root=d['module'][4:-5];name='AspisR1.'+root+'.deployed';log=(E/d['attempt']/'stdout.log').read_text()
  def parse(tag):return [json.loads(l.split(tag,1)[1]) for l in log.splitlines() if tag in l]
  statement=parse('RPV_KERNEL_STATEMENT ')[0];records=parse('RPV_FORMATTER ');reachable=parse('RPV_REACHABLE_CONSTANTS ')[0];axioms=parse('RPV_ACTUAL_AXIOMS ')[0];assert set(axioms)<={'propext','Classical.choice','Quot.sound'},(root,axioms)

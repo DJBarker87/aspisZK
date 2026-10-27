@@ -1,0 +1,48 @@
+{"attempt": "RPv_0216", "exit_status": 0, "wall_seconds": 1.2422269389498979, "peak_rss_kib": "3022500", "swaps": "0", "print_axioms": []}
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have
+...
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+def FIq_Native.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter : {T : Type} →
+  {N : Usize} → Std.Array T N → Result (core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Std.Array T N)) :=
+fun {T} {N} a => ok ({ slice := a.to_slice }, fun it => ⟨List.mapIdx (fun i old => (↑it.slice)[i]?.getD old) ↑a, ⋯⟩)
+
+Running as unit: run-r549177dd4dd5470d93227cdd96accb06.scope; invocation ID: 592561b8a4a44a68b7bebd94d69eacaf
