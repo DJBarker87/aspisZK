@@ -30,7 +30,7 @@ elab "#wire_require " root:ident laws:str : command => do
 end R1Z.PV_Join_Wire_Reachability
 #wire_require R1Z.PV_Join_Wire_Caller.refinement_of_data "'''+','.join(x['source_law'] for x in items)+'''"
 '''
-(p/'PV_Join_Wire_Reachability.lean').write_text(req)
+# Reachability command is defined and executed in the caller module.
 # Cover all historical modules, retaining inherited statement/axiom inventory.
 old=json.loads((e.parent/'resume5/combined-audit-manifest.json').read_text())
 names=set(old['theorems_or_functions'])
@@ -50,7 +50,7 @@ for k,suffix in enumerate(['A','B']):
  part=names[len(names)*k//2:len(names)*(k+1)//2]
  # All names may be declared in either group. Import the prior combined audit
  # and current caller plus all entries to expose the complete symbol inventory.
- imports=sorted(set(['R1Z.PV_Join_CombinedAudit5','R1Z.PV_Join_Wire_Reachability']+['R1Z.'+f.stem for f in group]+[f"R1Z.PV_Join_Wire_Op{x['op']}" for x in items]))
+ imports=sorted(set(['R1Z.PV_Join_CombinedAudit5','R1Z.PV_Join_Wire_Caller']+['R1Z.'+f.stem for f in group]+[f"R1Z.PV_Join_Wire_Op{x['op']}" for x in items]))
  text=''.join('import '+m+'\n' for m in imports)+'\n'+''.join('#print '+n+'\n#print axioms '+n+'\n' for n in part)
  (p/f'PV_Join_Wire_FinalAudit{suffix}.lean').write_text(text)
 text='import R1Z.PV_Join_Wire_FinalAuditA\nimport R1Z.PV_Join_Wire_FinalAuditB\nimport R1Z.PrivacyR1HeadlineDeployedReal\n\n'
