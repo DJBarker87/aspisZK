@@ -11133,3 +11133,22 @@ the lead merges codex/pv-srcid3-20261026. Stream A asked that the accepted-curre
 recompiled or overwritten; if the privacy closure needs the newer variants (e.g. a declaration added in
 6c1455a61e), that is a separate cohort built privately and named to Stream A. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D256 (Stream B) 2026-10-27 07:55 UTC: cblib exhausted: four library rows by the P6 route; cblib2 launched
+
+pv-cblib (`codex/pv-cblib-20261027`, head c35956a836; 100/100 Lean, 10/10 Kani with three bounded
+passes, no counterexample; final manifest 39731 exit 0 / 1.05 s / 2.62 GB / swap 0, 185 declarations
+standard axioms; no forbidden tokens). crates/ change: one `#[cfg(kani)] mod pv_cblib_library_checks`
+appended to crates/aspis-r1-cost-probe/src/host_commitment.rs (178 lines, harness-only, excluded from
+release builds; candidate-sibling branch). Rows supplied by the P6 route (owned Rust reference extracted
+by Aeneas; shipped = reference by a no-stub Kani check; dictionary entry = extracted reference by rfl in
+PV_CBL_CallbackBundle): V177 op25 PathBuf deref and V180 op29 PathBuf as_ref (both the identity borrow on
+the frozen PathBuf carrier; std/src/path.rs sha256 14fd4134…), V185 op34 Vec::is_empty and V186 op35
+Vec::default (alloc/src/vec/mod.rs sha256 a9cfdfc0…). Lead review: the laws are P6-route closures, not
+extractions of the shipped library functions; recount 4 must class them as such and judge the bounded
+Kani links (loop-free functions, so the bound is not material) and the PathBuf/Path carrier resolution.
+op32 keeps its allocator-effect deferral. Endpoint premises removed: 0. Launched pv-cblib2 (same branch,
+IDs 43000-43299, 100 Lean / 8 Kani for loop-free links only): remaining std/alloc ops 26/28/30/31/33/36,
+then the SHA-2/digest family V231-V238 in Lean on the extraction of the backend the deployed x86_64
+prover actually compiles (no silent substitution of the soft backend). Six slots: runjoin12, optb,
+extract, inv, srcid9, cblib2. Rows removed outright: 0. Privacy target not yet established.
