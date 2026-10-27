@@ -55,14 +55,14 @@ theorem pre : spongePre {R} {h} = ok c.pre := init
   PV_RunJoin_CertificateExecution20.sponge c {cell}.canon {cell}.models _ _ absorb
 #print axioms step
 
-theorem digest : spongeDigestR c.pre ({R}.schunk {h}) ({R}.sclen {h}) = ok (digest8 (c.states 11)) := by
+theorem digest : spongeDigestR c.pre ({R}.schunk {h}) ({R}.sclen {h}) = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
   rw [spongeDigestR,absorb]
   simp only [bind_tc_ok]
   exact PV_RunJoin_CertificateExecution20.digest c {cell}.canon {cell}.models
 #print axioms digest
 '''
   if h==0:
-   out+=f'''theorem owner : ownerD {W} = ok (digest8 (c.states 11)) := by
+   out+=f'''theorem owner : ownerD {W} = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
   rw [ownerD,init]
   simp only [bind_tc_ok]
   exact digest
