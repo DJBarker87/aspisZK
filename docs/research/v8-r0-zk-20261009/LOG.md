@@ -12892,3 +12892,20 @@ op124, op238), and conditional native success witnesses. V404/V405 stay OPEN. pv
 40400-40499) builds the 152 modules as a dependency build, reusing the runjoin line's verified
 objects under (h6) first, then the coverage and exclusion certificates. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D336 (Stream B) 2026-10-27 23:30 UTC: batch3e result; batch 3 rows to close by the structural route; batch3f launched
+
+batch3e (79 of 85 attempts; no source change: crates/ and programs/ still equal c97270adc2, so its
+ELF pins and +1.906% projection apply) passed op222's same-input native/emission differential, proved
+op134's copy/reference dictionary equality and copy-control refinements for op117 and op121, and
+passed a combined audit and focused closure (standard axioms; 4.07 s; 2.67 GB; no swap). Universal
+original/copy equality and the row bridges remain open; rows closed 0.
+
+Lead direction: close these rows by the route that closed V261, V247, V264 and V265, which ruling (k)
+permits for chained field arithmetic: a script-checked structural binding between each frozen
+original body and its prover-local copy (recorded as a structural argument), the copy's
+complete-Result law from extraction, installation of the selected callback in the original carrier
+with the other fields proved unchanged, non-vacuity, and a same-input native differential labelled
+as finite validation. batch3f (IDs 40500-40599; still no source change) does op134, op222, op117
+(V217) and op121 (V220) in that order, then a combined audit and a focused closure replay. Rows
+removed outright: 0. Privacy target not yet established.
