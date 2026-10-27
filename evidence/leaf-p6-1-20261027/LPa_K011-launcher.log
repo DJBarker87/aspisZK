@@ -1,0 +1,53 @@
+{"attempt": "LPa_K011", "exit_status": 0, "wall_seconds": 43.351593033992685, "peak_rss_kib": "1109320", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+] #[kani::unwind(35)] fn LPa_expand_stage(){
+   |                                       ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpa_expand_stage`
+
+warning: function `LPa_expand_alignment` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPa_compact.rs:29:38
+   |
+29 | #[kani::proof] #[kani::unwind(6)] fn LPa_expand_alignment(){
+   |                                      ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpa_expand_alignment`
+
+warning: function `LPa_expand_indexed_stage` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPa_compact.rs:35:39
+   |
+35 | #[kani::proof] #[kani::unwind(35)] fn LPa_expand_indexed_stage(){
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpa_expand_indexed_stage`
+
+warning: function `LPa_expand_length` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPa_compact.rs:42:38
+   |
+42 | #[kani::proof] #[kani::unwind(6)] fn LPa_expand_length(){
+   |                                      ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpa_expand_length`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.51s
+Checking harness r1_wire::LPa_wire::LPa_decode_stage...
+
+VERIFICATION RESULT:
+ ** 0 of 379 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 36.999527s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r91031ee8d3e048b4bc5431522b4b7654.scope; invocation ID: 8a8a8392c86b4bc8889cda63317af9c7

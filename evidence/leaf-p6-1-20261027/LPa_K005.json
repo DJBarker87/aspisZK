@@ -1,0 +1,59 @@
+{
+  "attempt": "LPa_K005",
+  "kind": "kani",
+  "sources": [
+    "LPa_src/Cargo.toml",
+    "LPa_src/Cargo.lock",
+    "LPa_src/crates/aspis-r1-cost-probe/src/LPa_semantic.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/LPa_compact.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/LPa_candidate.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/LPa_wire.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/LPa_verifier.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/LPa_sampler.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/compact.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/r1_wire.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/sampler.rs",
+    "LPa_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-1-20261027/LPa_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-1-20261027/LPa_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "compact::LPa_compact::LPa_expand_alignment",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "90e1b392e02d41ad1d0375256d6d310b5f265258",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "release_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "boundary": "direct shipped-library stage calls; exact domain documented per harness"
+  },
+  "expected_time": "Optimized Kani compilation followed by one named bounded boundary stage compact::LPa_compact::LPa_expand_alignment",
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "reservation_retries": 0
+}

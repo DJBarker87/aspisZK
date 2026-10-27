@@ -1,0 +1,21 @@
+//! Direct wide_view at actual frozen bounds, arbitrary inactive32-byte stage.
+use super::*;
+#[kani::proof] #[kani::unwind(35)] fn LPa_view_inactive(){
+ let mut proof=[0u8;compact::PROOF_BYTES];let b:[u8;32]=kani::any();
+ proof[compact::OFF_INACTIVE..compact::OFF_ROUND0].copy_from_slice(&b);
+ let semantic=[0u8;super::SEMANTIC_BYTES];let y1=[0u8;29*32];
+ let actual=wide_view(&proof,&semantic,&y1);let inactive=E::from_le_bytes(&b);
+ match (actual,inactive){
+  (Err(e),None)=>assert_eq!(e,Error::Parse),
+  (Ok(v),Some(x))=>{
+   assert_eq!(v.inactive,x);assert_eq!(v.variant,Variant::S2);
+   assert!(core::ptr::eq(v.semantic.as_ptr(),semantic.as_ptr()));assert_eq!(v.semantic.len(),semantic.len());
+   assert!(core::ptr::eq(v.y1.as_ptr(),y1.as_ptr()));assert_eq!(v.y1.len(),y1.len());
+   assert!(core::ptr::eq(v.round0.as_ptr(),proof[compact::OFF_ROUND0..].as_ptr()));assert_eq!(v.round0.len(),224);
+   assert!(core::ptr::eq(v.folded_root.unwrap().as_ptr(),proof[compact::OFF_FOLDED_ROOT..].as_ptr()));
+   assert!(core::ptr::eq(v.round1.as_ptr(),proof[compact::OFF_ROUND1..].as_ptr()));assert_eq!(v.round1.len(),224);
+   assert!(core::ptr::eq(v.final_message.as_ptr(),proof[compact::OFF_FINAL..].as_ptr()));assert_eq!(v.final_message.len(),2048);
+   assert_eq!(v.query_bytes.len(),0);
+  },_=>assert!(false)
+ }
+}
