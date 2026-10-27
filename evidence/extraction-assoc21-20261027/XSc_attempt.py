@@ -8,13 +8,14 @@ def transport(argv, submitted=False):
   r=subprocess.run(argv,capture_output=True,text=True)
   with (E/'XSc_transport.jsonl').open('a') as f:f.write(json.dumps(dict(argv=argv,exit=r.returncode,stderr=r.stderr,retry=retry_transport,submitted=submitted))+'\n')
   if r.returncode!=255:return r
-  if submitted:raise SystemExit('STOP submitted transport lost: recover receipt read-only; never resubmit')
+  if submitted:
+   print('submitted transport lost; wait60 then recover receipt read-only',flush=True);time.sleep(60);return r
   if retry_transport==10:raise SystemExit('STOP transport 10 retries exhausted')
   print('transport wait60',flush=True);time.sleep(60)
-def ssh(s):return transport(['ssh','-o','ConnectTimeout=20',H,s])
+def ssh(s):return transport(['ssh','-o','ConnectTimeout=20','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,s])
 def get(n):
  (E/n).parent.mkdir(parents=True,exist_ok=True)
- r=transport(['scp','-q',H+':'+B+'/'+n,str(E/n)]);r.check_returncode()
+ r=transport(['scp','-q','-o','ConnectTimeout=20','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H+':'+B+'/'+n,str(E/n)]);r.check_returncode()
 for retry in range(11):
  log=a+f'-barrier-{retry}.log';r=ssh(f'python3 /home/dombarker/project-offloads/codex-cx-s2h-20261023/S2H_reservation.py {B}/{a}-reservation.json > {B}/{log} 2>&1');get(log)
  exists=ssh(f'test -f {B}/{a}-reservation.json').returncode==0
@@ -30,9 +31,9 @@ cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/domba
 if len(sys.argv)>4:cfg['env']=json.loads(Path(sys.argv[4]).read_text())
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 r=ssh(f'mkdir -p {B}/{str(Path(src).parent)} {B}/{str(Path(obj).parent)}');assert r.returncode==0,r.stderr
-transport(['scp','-q',str(local),H+':'+B+'/'+src]).check_returncode()
-transport(['scp','-q',str(E/(a+'.json')),H+':'+B+'/'+a+'.json']).check_returncode()
-r=transport(['ssh','-o','ConnectTimeout=20',H,f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py {a}.json'],submitted=True)
+transport(['scp','-q','-o','ConnectTimeout=20','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',str(local),H+':'+B+'/'+src]).check_returncode()
+transport(['scp','-q','-o','ConnectTimeout=20','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',str(E/(a+'.json')),H+':'+B+'/'+a+'.json']).check_returncode()
+r=transport(['ssh','-o','ConnectTimeout=20','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py {a}.json'],submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 for n in ['receipt.json','stdout.log','time.log']:get(a+'/'+n)
 rc=json.loads((E/a/'receipt.json').read_text());print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print((E/a/'stdout.log').read_text()[-2000:])
