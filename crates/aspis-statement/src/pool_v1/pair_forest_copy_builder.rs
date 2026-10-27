@@ -230,7 +230,8 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
     let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
     let mut bits = [0u32; 24];
     let mut sibs = [[0u32; 8]; 24];
-    for level in 0..24 {
+    let mut level = 0;
+    while level < 24 {
         let (bit, sib) = if level == 0 {
             (u32::from(pair.selected_second), other)
         } else if level <= 20 {
@@ -240,6 +241,7 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
         };
         bits[level] = bit;
         sibs[level] = raw(&sib);
+        level += 1;
     }
     let empty = pair_empty_roots();
     let w = RW {
