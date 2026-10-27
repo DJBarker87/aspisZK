@@ -44,3 +44,15 @@ inherited ARX conditional successful fixture and numeric margin remain. No full
 joint release fixture. Actual-root pins freshly match task baseline3daeec0869ce;
 reused complete accepted kernel signature is labelled as inherited. Both L146
 rows remain,zero ledger delta. Existing limits/resources remain unchanged.
+
+## Post-checkpoint progress
+
+070/071 now derive canonical actual challenges and the terminal call from ONE
+accepted source inversion. MainClaims073,MainPoint075,MainDecode077 and
+MainTerminal078 prove the complete FIq_Terminal.terminal body VALUE on its
+original main Public/claims/alpha/Challenges carriers. This is the installed
+body at its actual operands,not the required SAME literal public/Y/challenges
+association. Both L146 rows remain. Scalar mask helper model conversion failed
+at default heartbeat080,then default recursion082/083 despite isolating the
+scalar decode081;this is not an admitted mask value or counterexample. The
+direct Wide bridge is being checked independently,without raising limits.

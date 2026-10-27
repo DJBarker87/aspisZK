@@ -18,8 +18,8 @@ theorem value (c1 : Array MQ 16#usize) (m : Array MQ 10#usize) (g : MQ)
     (add : FIp_SemanticArithmetic.add mask product=ok sum)
     (finish : FIp_SemanticArithmetic.add sum extra=ok running) :
     Canon running ∧ embed (decode running)=
-      R0P.Mask.maskValue ConcretePackBasis.basis (FJn_MaskWide.cell c1) (FJn_MaskWide.cell m)
-        (embed (decode g)) (FJn_MaskWide.cell point)+embed (decode eta)*embed (decode terminal)+embed (decode extra) := by
+      R0P.Mask.maskValue ConcretePackBasis.basis (FJn_MaskWide.cell16 c1) (FJn_MaskWide.cell10 m)
+        (embed (decode g)) (FJn_MaskWide.cell10 point)+embed (decode eta)*embed (decode terminal)+embed (decode extra) := by
   have maskV:=FJn_MaskWide.value c1 m g point mask hc hm hp hg maskCall
   have result:=FIr_MaskedArithmetic.value eta terminal extra mask product sum running he ht hx maskV.1 multiply add finish
   refine ⟨result.1,?_⟩

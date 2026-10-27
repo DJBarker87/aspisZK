@@ -8,6 +8,7 @@ open FIv_NativeValue (Canon)
 open FIw_ArrayValue (canonical)
 open FIw_CompositionOrigins (SemPub composition)
 open FIz_ConcretePack (embed)
+attribute [local irreducible] FJn_TerminalModel.model
 /-- Construct an actual terminal tail from its SAME reached composition,
 then derive the full model value. This is local conditional non-vacuity,
 not an independently assumed terminal success or a full deployed fixture. -/

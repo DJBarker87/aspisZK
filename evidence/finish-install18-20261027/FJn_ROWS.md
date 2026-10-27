@@ -20,3 +20,23 @@ value for every canonical operand. Inherited ARX conditional fixture remains;
 no unconditional complete native pair or joint satisfaction of release premises
 claimed. Further source/main/mask results are listed in the final report when
 checked; draft modules and failed attempts earn no credit.
+
+## Final source-body additions before audits
+
+MainTerminal078 proves the complete installed FIq_Terminal.terminal value on
+original main carriers. AcceptedTerminalValue092 derives claims/alpha/challenge
+canonicality from ONE accepted source call;public Bounds remain explicit locally.
+MaskWide090 proves actual installed mask value;MaskedWideValue094 composes its
+actual source arithmetic tail. MaskC1Gather096/MaskOnlyGather097 derive actual
+mask input-array canonicality. These are NOT the required literal operand
+transport or adopted installation,so neither L146 ledger row is removed.
+
+TerminalPartsNonvacuity093 constructs an actual terminal tail from its SAME
+reached composition,then derives its model value. No independent terminal
+success is assumed. This extends local non-vacuity only;it constructs neither
+a whole accepted byte pair nor joint satisfaction of every release premise.
+
+Unverified scalar helper conversion drafts and uncompiled G helper/audit draft
+are archived as text,not imported or credited. The useful commands from the
+audit draft are included in the final TopStatements target. No changed existing
+proof,shipped source,ELF,key,session A file or other prefix is part of this work.

@@ -1,4 +1,5 @@
 import FJn_MaskInputCanonical
+import FJn_MaskDecode
 import ExtractedMaskSemanticBridgeConcrete
 import FIz_ConcretePack
 set_option autoImplicit false
@@ -7,9 +8,11 @@ namespace AspisR1.FJn_MaskWide
 open Aeneas Aeneas.Std Result
 open FIp_SemanticArithmetic
 open FIz_ConcretePack (embed)
-def cell {N : Usize} (a : Array MQ N) (i : Fin N.val) :=
+def cell16 (a : Array MQ 16#usize) (i : Fin 16) :=
   embed (FIp_SemanticValues.decode (a.val[i.val]'(by rw [a.property];exact i.isLt)))
-attribute [local irreducible] embed
+def cell10 (a : Array MQ 10#usize) (i : Fin 10) :=
+  embed (FIp_SemanticValues.decode (a.val[i.val]'(by rw [a.property];exact i.isLt)))
+attribute [local irreducible] R0P.Mask.maskValue
 /-- The actual installed mask computes the original R0P mask model in Wide. -/
 theorem value (c1 : Array MQ 16#usize) (m : Array MQ 10#usize) (g : MQ)
     (point : Array MQ 10#usize) (out : MQ)
@@ -19,8 +22,8 @@ theorem value (c1 : Array MQ 16#usize) (m : Array MQ 10#usize) (g : MQ)
     (hg : FIp_SemanticValues.Canon g)
     (run : FIp_SemanticArithmetic.mask c1 m g point=ok out) :
     FIp_SemanticValues.Canon out ∧ embed (FIp_SemanticValues.decode out)=
-      R0P.Mask.maskValue ConcretePackBasis.basis (cell c1) (cell m)
-        (embed (FIp_SemanticValues.decode g)) (cell point) := by
+      R0P.Mask.maskValue ConcretePackBasis.basis (cell16 c1) (cell10 m)
+        (embed (FIp_SemanticValues.decode g)) (cell10 point) := by
   have cc : ∀ i : Fin 16,ExtractedMaskCallerModel.CanonicalQM
       (ExtractedMaskCoefficientStep.c1Cell (mapArray c1) i) := by
     intro i;exact FJn_MaskInputCanonical.cell c1 hc i.val (by rw [c1.property];exact i.isLt)
@@ -39,10 +42,17 @@ theorem value (c1 : Array MQ 16#usize) (m : Array MQ 10#usize) (g : MQ)
   cases Result.ok.inj (actual.symm.trans run)
   refine ⟨?_,?_⟩
   · simpa only [FIp_SemanticValues.Canon,FIp_SemanticValues.to_from] using can
-  · simpa only [cell,FIp_SemanticValues.decode,FIp_SemanticValues.to_from,
-      ExtractedMaskSemanticBridgeConcrete.qm31ToWide,ExtractedMaskSemanticBridgeConcrete.packBasis,
-      ExtractedMaskCoefficientStep.c1Cell,ExtractedMaskCoefficientStep.maskCell,
-      ExtractedMaskLinearsExact.decodedPoint,mapArray,List.getElem_map] using val
+  · rw [FJn_MaskDecode.value]
+    have exactValue : embed (ExtractedMaskQM31Exact.decode native)=
+        R0P.Mask.maskValue ConcretePackBasis.basis
+          (fun j=>embed (ExtractedMaskQM31Exact.decode (ExtractedMaskCoefficientStep.c1Cell (mapArray c1) j)))
+          (fun j=>embed (ExtractedMaskQM31Exact.decode (ExtractedMaskCoefficientStep.maskCell (mapArray m) j)))
+          (embed (ExtractedMaskQM31Exact.decode (toProbe g)))
+          (fun j=>embed (ExtractedMaskLinearsExact.decodedPoint (mapArray point) j)) := val
+    unfold cell16 cell10
+    simpa only [FIp_SemanticValues.decode,ExtractedMaskCoefficientStep.c1Cell,
+      ExtractedMaskCoefficientStep.maskCell,ExtractedMaskLinearsExact.decodedPoint,
+      ExtractedMaskLinearLoop.pointAtNat,ExtractedMaskLinears.decode,mapArray,List.getElem_map] using exactValue
 #print axioms value
 end AspisR1.FJn_MaskWide
 end

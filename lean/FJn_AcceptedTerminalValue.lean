@@ -9,17 +9,18 @@ open Aeneas Aeneas.Std Result AspisR1PublicPreparation
 open AspisR1CurrentCaller InstalledPreparation
 open FIz_ConcretePack (embed)
 attribute [local irreducible] R0P.SemSource.terminalValue
+  FJn_MainPoint.point FJn_MainClaims.claims FIw_PublicModel.ofPublic FJa_PublicCopy.native
 /-- Same accepted source call supplies every scalar/claims/point canonicality.
 Only the explicit public word bounds remain locally; literal-frame transport
 is not asserted by this source-value theorem. -/
 theorem value (std : ClaimsUnrolledFinish.StdCalls) (ops : Ops) (B : FinishModel.Boundaries)
     {H : Type} (D : aspis_core.digest.Digest32 H)
     (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
-    (bytes : Slice U8) (hash : H) (sem : r1_semantic.Verified H)
+    (bytes : Slice U8) (hash : H) (sem : AspisR1CurrentCaller.r1_semantic.Verified H)
     (bounds : FJa_PublicBounds.Bounds (FJa_PublicCopy.native (FirstComposition.toRetainedPublic pub)))
     (accepted : (AspisS1NativeBufferClaimTrace.semanticBase ops
       (ClaimsUnrolledFinish.install std (FIq_Terminal.install B))).op9 D pub bytes hash none=ok (.Ok sem)) :
-    ∃ (c : r1_wire.Challenges) (out : AspisR1PublicPreparation.aspis_core.field.QM31),
+    ∃ (c : AspisR1PublicPreparation.r1_wire.Challenges) (out : AspisR1PublicPreparation.aspis_core.field.QM31),
       FIq_Terminal.terminal (FirstComposition.toRetainedPublic pub)
         (retainedSem sem).claims (retainedSem sem).alpha c=ok (.Ok out) ∧
       FIp_SemanticValues.Canon out ∧ embed (FIp_SemanticValues.decode out)=

@@ -1,0 +1,66 @@
+FJn_MaskWide.lean:46:111: error: Tactic `rfl` failed: The left-hand side
+  R0P.Mask.maskValue ConcretePackBasis.basis (cell c1) (cell m)
+    ((algebraMap FIv_NativeValue.K AspisWideTower.WideExact) (ExtractedMaskQM31Exact.decode (toProbe g))) (cell point)
+is not definitionally equal to the right-hand side
+  R0P.Mask.maskValue ConcretePackBasis.basis
+    (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell✝ ⟨List.map toProbe ↑c1, ⋯⟩)
+    (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell✝ ⟨List.map toProbe ↑m, ⋯⟩)
+    ((algebraMap ExtractedMaskSemanticBridgeConcrete.ExactQM ExtractedMaskSemanticBridgeConcrete.K)
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ (toProbe g)))
+    (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint✝ ⟨List.map toProbe ↑point, ⋯⟩)
+
+case e'_3
+c1 : Std.Array MQ 16#usize
+m : Std.Array MQ 10#usize
+g : MQ
+point : Std.Array MQ 10#usize
+hc : ∀ x ∈ ↑c1, FIp_SemanticValues.Canon x
+hm : ∀ x ∈ ↑m, FIp_SemanticValues.Canon x
+hp : ∀ x ∈ ↑point, FIp_SemanticValues.Canon x
+hg : FIp_SemanticValues.Canon g
+cc : ∀ (i : Fin 16), ExtractedMaskCallerModel.CanonicalQM (ExtractedMaskCoefficientStep.c1Cell (mapArray c1) i)
+mc : ∀ (i : Fin 10), ExtractedMaskCallerModel.CanonicalQM (ExtractedMaskCoefficientStep.maskCell (mapArray m) i)
+pc :
+  ∀ (i : ℕ) (hi : i < 10),
+    ExtractedMaskCallerModel.CanonicalQM (ExtractedMaskLinearLoop.pointAtNat (mapArray point) i hi)
+native : AspisR1.ExtractedMaskSemanticBridgeConcrete.QM✝
+called :
+  AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value (mapArray c1) (mapArray m) (toProbe g)
+      (mapArray point) =
+    ok native
+can : AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM✝ native
+val :
+  ExtractedMaskSemanticBridgeConcrete.qm31ToWide (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ native) =
+    R0P.Mask.maskValue ExtractedMaskSemanticBridgeConcrete.packBasis
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell✝ (mapArray c1))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell✝ (mapArray m))
+      (ExtractedMaskSemanticBridgeConcrete.qm31ToWide (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ (toProbe g)))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint✝ (mapArray point))
+actual run : mask c1 m g point = ok (fromProbe native)
+⊢ R0P.Mask.maskValue ConcretePackBasis.basis (cell c1) (cell m)
+      ((algebraMap FIv_NativeValue.K AspisWideTower.WideExact) (ExtractedMaskQM31Exact.decode (toProbe g)))
+      (cell point) =
+    R0P.Mask.maskValue ConcretePackBasis.basis
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell✝ ⟨List.map toProbe ↑c1, ⋯⟩)
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell✝ ⟨List.map toProbe ↑m, ⋯⟩)
+      ((algebraMap ExtractedMaskSemanticBridgeConcrete.ExactQM ExtractedMaskSemanticBridgeConcrete.K)
+        (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ (toProbe g)))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint✝ ⟨List.map toProbe ↑point, ⋯⟩)
+FJn_MaskWide.lean:45:18: warning: This simp argument is unused:
+  cell
+
+Hint: Omit it from the simp argument list.
+  simp only [c̵e̵l̵l̵,̵FIz_ConcretePack.embed, ̲ExtractedMaskSemanticBridgeConcrete.qm31ToWide,
+          ExtractedMaskSemanticBridgeConcrete.packBasis, ̲FIp_SemanticValues.decode, ̲mapArray,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲List.getElem_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJn_MaskWide.lean:46:89: warning: This simp argument is unused:
+  List.getElem_map
+
+Hint: Omit it from the simp argument list.
+  simp only [cell, ̲FIz_ConcretePack.embed, ̲ExtractedMaskSemanticBridgeConcrete.qm31ToWide,
+          ExtractedMaskSemanticBridgeConcrete.packBasis, ̲FIp_SemanticValues.decode, ̲mapArray,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵m̵a̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJn_MaskWide.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
