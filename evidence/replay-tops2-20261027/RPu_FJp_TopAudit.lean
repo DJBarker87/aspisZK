@@ -1,5 +1,6 @@
 import Lean
 import RPu_FJp_Top
+#check @AspisR1.FJp_Top.deployed
 open Lean Elab Command
 set_option pp.deepTerms true
 set_option pp.all true
