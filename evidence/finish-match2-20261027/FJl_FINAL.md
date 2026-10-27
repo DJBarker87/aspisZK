@@ -69,3 +69,28 @@ are EXCLUDED in FJl_excluded/. Two circle attempts and the wrapper reached
 Lean's default200000-heartbeat elaboration limit; no heartbeat/depth/memory
 limit was raised. There was no OS wall-timeout or memory kill. Generic source
 slot values remain checked; neither excluded draft is a delivered theorem.
+
+Final budget: **100/100 charged attempts,98 compiler starts,60 passes,
+38 failed compiles,2 source-import preflights;0/20 Kani**. Every one of the
+60 delivered Lean modules has a passing exact-source-hash receipt. The latest
+source identity/statement audit097 passes: exit0,wall2.9090310409665108s,
+peak5630400KiB,swap0,revisioncf03b47aa9 with exact dirty-source hashes. The
+complete before/after signatures are byte-identical in FJl_before.lean.txt /
+FJl_after.lean.txt and pinned in FJl_before-after.json.
+
+Final combined audit100: exit1,wall2.7935196539619938s,peak5636840KiB,swap0,
+revision9dfebb94c4bf0644060be90c59eb259568dd5b60 (exact dirty source hash in
+receipt). It printed104 standard-only reports, covering ALL80 new theorem
+names plus the22 reused per-index call theorems,Fin22 composition and ARX.
+It then has16 unknown-constant errors because the audit omitted direct imports
+of the eight independent FJi_Grouped and eight FJi_Reduction corollary modules.
+Their previous FJi receipts remain reused evidence; a fresh combined audit
+pass is NOT claimed. The failed diagnostic is archived and excluded from
+lean/. No101st compile is authorized. FJl_validation.json records the full
+source audit and limits. Pure-Python final source validation passes.
+
+FJl_ActualObservations.accepted099 composes every actual query observation
+(opening,inverse,alpha,fold,selected value,comparison) from the enclosing SAME
+accepted run, with both phase-specific arrays preserved. This does not supply
+the missing original-context literal batchedWord/V transport or either owner
+installation. All stage commits are local; no push or merge.

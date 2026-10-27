@@ -5,3 +5,10 @@ hit the default heartbeat limit while unifying the concrete four-slot adapter.
 It was not rerun unchanged. The generic per-slot FJl_SlotLiteral.value (090)
 is checked and applies to every Fin4 slot. The unchecked convenience wrapper
 is excluded; no full four-slot literal-adapter theorem is claimed.
+
+FinalAudit100 is also excluded: all80 new theorem audits print standard-only,
+but16 independent reused grouped/reduction modules were not directly imported.
+The full combined audit exits1 and is not a proof replay pass. Budget is
+exhausted; no unchanged or repaired101st compile was launched.
+CircleCoefficients is an uncompiled suggested generic split, retained only
+as an explicitly unvalidated draft.
