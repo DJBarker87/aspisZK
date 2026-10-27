@@ -15,7 +15,8 @@ def reference (v : alloc.vec.Vec Q) :
 theorem reject (v : alloc.vec.Vec Q) (h : alloc.vec.Vec.len v≠1024#usize) :
     reference v=ok (.Err v) := by
   unfold reference
-  rw [PV_CBL_ArrayQM31.reject _ h,bind_tc_ok]
+  have hr := PV_CBL_ArrayQM31.reject (alloc.vec.Vec.deref v) h
+  simp only [hr,bind_tc_ok]
 
 theorem success (v : alloc.vec.Vec Q) (h : alloc.vec.Vec.len v=1024#usize) :
     ∃ a, reference v=ok (.Ok a) ∧ a.val=v.val := by

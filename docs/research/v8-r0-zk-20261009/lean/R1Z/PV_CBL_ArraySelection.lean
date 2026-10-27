@@ -9,22 +9,34 @@ variable [ExternalTypes]
 
 /-- Candidate shape only: native P6 and the complete extracted wrapper are
 required before this may be published as an op36_source callback law. -/
-def selected (ops : ExternalFuns) : ExternalFuns := by
+def transport {T : Type} (N : Usize) (ht : T = PV_CBL_ArrayQM31.Q)
+    (hn : N = 1024#usize) (v : alloc.vec.Vec T) :
+    Result (core.result.Result (Array T N) (alloc.vec.Vec T)) := by
+  subst T
+  subst N
+  exact PV_CBL_ArrayResult.reference v
+
+@[reducible] def selected (ops : ExternalFuns) : ExternalFuns := by
   classical
-  exact {ops with op36 := fun {T} A N v =>
-    if h : T=PV_CBL_ArrayQM31.Q ∧ N=1024#usize then by
-      rcases h with ⟨ht,hn⟩
-      subst T
-      subst N
-      exact PV_CBL_ArrayResult.reference v
-    else @ExternalFuns.op36 _ ops T A N v}
+  exact {ops with
+    op36 := fun {T} A N v =>
+      dite (T = PV_CBL_ArrayQM31.Q ∧ N = (1024#usize : Usize))
+        (fun h => transport N h.1 h.2 v)
+        (fun _ => @ExternalFuns.op36 _ ops T A N v)}
 
 theorem specialized_shape (ops : ExternalFuns) (A : Type)
     (v : alloc.vec.Vec PV_CBL_ArrayQM31.Q) :
     @ExternalFuns.op36 _ (selected ops) PV_CBL_ArrayQM31.Q A 1024#usize v =
       PV_CBL_ArrayResult.reference v := by
-  simp only [selected,dif_pos (show PV_CBL_ArrayQM31.Q=PV_CBL_ArrayQM31.Q ∧
-    (1024#usize:Usize)=1024#usize from ⟨rfl,rfl⟩)]
+  classical
+  change (dite (PV_CBL_ArrayQM31.Q = PV_CBL_ArrayQM31.Q ∧
+      (1024#usize : Usize) = 1024#usize)
+    (fun h => transport 1024#usize h.1 h.2 v)
+    (fun _ => @ExternalFuns.op36 _ ops PV_CBL_ArrayQM31.Q A 1024#usize v)) =
+      PV_CBL_ArrayResult.reference v
+  exact (dif_pos (show PV_CBL_ArrayQM31.Q = PV_CBL_ArrayQM31.Q ∧
+    (1024#usize : Usize) = 1024#usize from ⟨rfl,rfl⟩)).trans (by rfl)
 
+#print axioms transport
 #print axioms specialized_shape
 end R1Z.PV_CBL_ArraySelection

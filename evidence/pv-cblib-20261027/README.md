@@ -141,3 +141,11 @@ Own queue timing now samples the standing read-only inventory after the required
 The owned direct-index array variant was rejected by Aeneas for reference-output loan validation and structured Drop/destructor semantics (`aeneas-source-op36-owned-opt-direct2-01`); it is not a source law. Manual LibraryShapes/LibraryShapeTypes/GenericArrayFlatten drafts describe byte-pinned Rust fields only; they are not Aeneas extraction or callback source-binding certificates. Additional source files are checked against Cargo.lock .crate archive checksums and matching archive member bytes in additional-library-sources.json.
 
 No new callback row is supplied in this continuation. The canonical endpoint/ledger is unchanged; Native/RunJoin, deployment, E1/E2, L1/L2/L3 and client-route conditions remain retained. The source/reference/toolchain association caveats remain explicit.
+
+## Focused proof freeze before the reserved audits
+
+97/100 Lean attempts and 10/10 Kani runs are charged. All active development modules have current-source successful receipts; the two reserved audit modules are pending. One optional join checked-case draft failed at 39728 and is archived under drafts/ with its exact rejected source and receipt. The failed shared source was moved into the owned host quarantine; no .olean existed. The draft is excluded from the frozen publication manifest and is not a source law or ROW counterexample.
+
+The generic copy loop, full-Result array specification, pop reconstruction, raw-word copy identity, split bounds/recomposition, SHA count/bit-length arithmetic, source-shaped wrappers/buffers and pure Unix join value/overflow specifications passed focused checks. These supporting models do not remove their missing extraction/native bindings. All seven remaining digest/block-buffer extraction probes have precise OPEN-frontier receipts in DIGEST-FRONTIERS.json. Optimized join-reference extraction also requires destructor semantics. The byte-identity helper was freshly extracted and compiled at 39722; it does not establish PathBuf conversion or native join.
+
+The bundle remains four candidate source callbacks (V177/V180/V185/V186). No canonical endpoint/deployment premise was removed, retained premises were not weakened, and no shipped production prefix changed. Target not yet established.

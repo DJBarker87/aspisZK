@@ -16,7 +16,7 @@ theorem success {T : Type} (N : Usize) (copy : core.marker.Copy T)
   have eq : a=target := PV_CBL_ArrayExt.copied_unique a target v hcopy ht
   refine ⟨a,?_,?_⟩
   · rw [PV_CBL_ArrayGuard.correct_length N copy v zero h,ha,bind_tc_ok]
-  · rw [eq]; rfl
+  · rw [eq]
 
 #print axioms success
 end R1Z.PV_CBL_ArraySuccess
