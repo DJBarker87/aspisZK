@@ -10704,3 +10704,20 @@ assumption; the direct extraction route is preferred where it succeeds. No shipp
 pv-join5 (same branch, IDs 38000-38299, 95 Lean / 6 Kani) with this ruling, then reachability, source laws
 for reached entries, and the fixture equations once rw21 publishes ProverRw21ModelInstance. Six slots:
 cb4, cb5, srcid6, runjoin9, rw21, join5. Rows removed outright: 0. Privacy target not yet established.
+
+## D235 (Stream B) 2026-10-27 00:50 UTC: cb4 exhausted: five more candidate source rows (23/73); shared Kani configuration failure; cb6 launched
+
+pv-cb4 (`codex/pv-cb-20261026`, source head 0b0b73a21f, evidence head ff8096896d; 69/69 Lean = 66 passed /
+3 failed with passing corrected replacements; Kani 1 pass then a compiler configuration failure, queue
+stopped, 8 unused; no crates/programs change; no forbidden tokens; final joint audit 27168: 23 source
+laws, 23 joint projections, 18 helpers, standard axioms, exit 0 / 1.72 s / 4.30 GB / swap 0; zero direct
+hash mismatches in the dependency snapshot, cached transitive dependencies reused). ROW-DISCHARGED
+(candidate) 18/73 → 23/73: ops 84 (V203), 105 (V206), 107 (V208), 109 (V210), 118 (V217). op117 PARTIAL,
+op259 obstructed, op223 (V240, the last V164 hypothesis) not yet proved by either callback job. Endpoint
+premises removed: 0. Shared obstruction (AGENTS.md §7): two jobs (cb4, rw20) stopped Kani on the same
+post-rebuild "compiler configuration failure"; cb6 is told to reproduce it on a trivial harness, record
+the exact error/toolchain in KANI-CONFIG.md and fix only its own host-dir configuration, else continue by
+Lean. Launched pv-cb6 (same branch, IDs 38300-38599, 100 Lean / 12 Kani): op223 first under the stable
+name PV_CB_Op223Source.op223_source for rw21, then op117 by split gates, op259, the remaining upward ops;
+P6 references on the canonical domain with the invariant proved at call sites (D234). Six slots: cb5,
+srcid6, runjoin9, rw21, join5, cb6. Rows removed outright: 0. Privacy target not yet established.
