@@ -8,8 +8,8 @@ private abbrev Payload {α : Type} (_ : Result α) := α
 
 /-- The actual entire suffix after the first bind in `prover.append_node_slots`.
 Recursive calls remain the original extracted calls. -/
-def continueAfter (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment) (cc2 : host_commitment.Commitment) (tree : host_tree.BinaryTree) (queries : Array Std.U32 22#usize) (out : Payload (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize)) : Result (core.result.Result (alloc.vec.Vec Std.U8) verifier.Error) := do
-  let r := out
+def continueAfter (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment) (cc2 : host_commitment.Commitment) (tree : host_tree.BinaryTree) (queries : Array Std.U32 22#usize) (pvBoundValue : Payload (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize)) : Result (core.result.Result (alloc.vec.Vec Std.U8) verifier.Error) := do
+  let r := pvBoundValue
   let cf ← core.result.Result.Insts.CoreOpsTry.branch r
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
@@ -55,15 +55,15 @@ def continueAfter (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment
 /-- No branch is discarded; the continuation is named rather than existential. -/
 theorem equation (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment) (cc2 : host_commitment.Commitment) (tree : host_tree.BinaryTree) (queries : Array Std.U32 22#usize) :
     prover.append_node_slots (out := out) (cc1 := cc1) (cc2 := cc2) (tree := tree) (queries := queries) =
-      (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize >>= fun out => continueAfter (out := out) (cc1 := cc1) (cc2 := cc2) (tree := tree) (queries := queries) out) := by
+      (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize >>= fun pvBoundValue => continueAfter (out := out) (cc1 := cc1) (cc2 := cc2) (tree := tree) (queries := queries) pvBoundValue) := by
   rw [prover.append_node_slots]
   rfl
 
 /-- Exact successful transition to the source suffix. The guard is not
 asserted for native fixtures. -/
-theorem success (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment) (cc2 : host_commitment.Commitment) (tree : host_tree.BinaryTree) (queries : Array Std.U32 22#usize) (out : Payload (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize))
-    (h : (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize) = .ok out) :
-    prover.append_node_slots (out := out) (cc1 := cc1) (cc2 := cc2) (tree := tree) (queries := queries) = continueAfter (out := out) (cc1 := cc1) (cc2 := cc2) (tree := tree) (queries := queries) out := by
+theorem success (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment) (cc2 : host_commitment.Commitment) (tree : host_tree.BinaryTree) (queries : Array Std.U32 22#usize) (pvBoundValue : Payload (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize))
+    (h : (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize) = .ok pvBoundValue) :
+    prover.append_node_slots (out := out) (cc1 := cc1) (cc2 := cc2) (tree := tree) (queries := queries) = continueAfter (out := out) (cc1 := cc1) (cc2 := cc2) (tree := tree) (queries := queries) pvBoundValue := by
   rw [equation, h]
   rfl
 

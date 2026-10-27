@@ -8,8 +8,8 @@ private abbrev Payload {α : Type} (_ : Result α) := α
 
 /-- The actual entire suffix after the first bind in `host_commitment.Commitment.fill_opening`.
 Recursive calls remain the original extracted calls. -/
-def continueAfter (self : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex) (out : aspis_core.r0.wire.FibreOpening) (out : Payload (host_commitment.fill_opening_values self u out.values 0#usize)) : Result aspis_core.r0.wire.FibreOpening := do
-  let a := out
+def continueAfter (self : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex) (out : aspis_core.r0.wire.FibreOpening) (pvBoundValue : Payload (host_commitment.fill_opening_values self u out.values 0#usize)) : Result aspis_core.r0.wire.FibreOpening := do
+  let a := pvBoundValue
   let path ← host_commitment.opening_path self.time
   let a1 := Array.repeat 32#usize 0#u8
   let a2 := Array.repeat 7#usize a1
@@ -20,15 +20,15 @@ def continueAfter (self : host_commitment.Commitment) (u : aspis_core.r0.domain.
 /-- No branch is discarded; the continuation is named rather than existential. -/
 theorem equation (self : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex) (out : aspis_core.r0.wire.FibreOpening) :
     host_commitment.Commitment.fill_opening (self := self) (u := u) (out := out) =
-      (host_commitment.fill_opening_values self u out.values 0#usize >>= fun out => continueAfter (self := self) (u := u) (out := out) out) := by
+      (host_commitment.fill_opening_values self u out.values 0#usize >>= fun pvBoundValue => continueAfter (self := self) (u := u) (out := out) pvBoundValue) := by
   rw [host_commitment.Commitment.fill_opening]
   rfl
 
 /-- Exact successful transition to the source suffix. The guard is not
 asserted for native fixtures. -/
-theorem success (self : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex) (out : aspis_core.r0.wire.FibreOpening) (out : Payload (host_commitment.fill_opening_values self u out.values 0#usize))
-    (h : (host_commitment.fill_opening_values self u out.values 0#usize) = .ok out) :
-    host_commitment.Commitment.fill_opening (self := self) (u := u) (out := out) = continueAfter (self := self) (u := u) (out := out) out := by
+theorem success (self : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex) (out : aspis_core.r0.wire.FibreOpening) (pvBoundValue : Payload (host_commitment.fill_opening_values self u out.values 0#usize))
+    (h : (host_commitment.fill_opening_values self u out.values 0#usize) = .ok pvBoundValue) :
+    host_commitment.Commitment.fill_opening (self := self) (u := u) (out := out) = continueAfter (self := self) (u := u) (out := out) pvBoundValue := by
   rw [equation, h]
   rfl
 

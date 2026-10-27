@@ -19,7 +19,11 @@ theorem equation (column : Array aspis_core.field.QM31 1024#usize) :
     host_semantic.check_secure_column (column := column) =
       (host_semantic.check_secure_column_loop column 0#usize >>= fun out => continueAfter (column := column) out) := by
   rw [host_semantic.check_secure_column]
-  rfl
+  generalize firstResult : (host_semantic.check_secure_column_loop column 0#usize) = reply
+  cases reply with
+  | ok value => cases value <;> rfl
+  | fail e => rfl
+  | div => rfl
 
 /-- Exact successful transition to the source suffix. The guard is not
 asserted for native fixtures. -/

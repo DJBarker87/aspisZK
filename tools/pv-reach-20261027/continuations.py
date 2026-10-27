@@ -80,7 +80,18 @@ theorem diverges {bs}
 #print axioms diverges
 end R1Z.{mod}
 '''
- path=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/(mod+'.lean')
+ if 'out' in names:
+  text=text.replace('(out : Payload', '(pvBoundValue : Payload')
+  text=text.replace('  let '+m[1]+' := out\n', '  let '+m[1]+' := pvBoundValue\n')
+  text=text.replace('>>= fun out => continueAfter '+args+' out', '>>= fun pvBoundValue => continueAfter '+args+' pvBoundValue')
+  text=text.replace('= .ok out)', '= .ok pvBoundValue)')
+  text=text.replace('= continueAfter '+args+' out := by', '= continueAfter '+args+' pvBoundValue := by')
+ if re.match(r'\s*match '+re.escape(m[1])+r' with\n  \| none =>',rest):
+  # The Option suffix has a distinct elaborated matcher: split only the
+  # symbolic first Result, never the recursive loop itself.
+  text=text.replace('  rw ['+n+']\n  rfl', '  rw ['+n+']\n  generalize firstResult : ('+expr+') = reply\n  cases reply with\n  | ok value => cases value <;> rfl\n  | fail e => rfl\n  | div => rfl')
+ assert 'h' not in names, (n,'guard name capture')
+ path=(R/'tools/pv-reach-20261027/drafts'/(mod+'.lean.txt')) if ix in {63,64} else R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/(mod+'.lean')
  if '--check' in sys.argv:assert path.read_text()==text,path
  else:path.write_text(text)
  rows.append(dict(module='R1Z/'+mod,function=n,first_expression=expr,sha256=hashlib.sha256(text.encode()).hexdigest(),native_guard_instantiated=False,claim='exact named continuation and Result transitions, not whole-run callback membership'))

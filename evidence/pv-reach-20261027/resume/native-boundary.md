@@ -32,3 +32,17 @@ For both `inputs false` and `inputs true`, actual native compiler success,
 installed records, public association and callback-effect non-vacuity remain
 unproved. No arbitrary abstract dictionary or arbitrary Input witness is
 presented as the actual native fixture.
+
+`PV_RE_ContinuationRetry.whole_client` further substitutes the actual named
+attempt suffix at every retry position. `PV_RE_ShapeControl.transfer` and
+`.withdrawal` specialize this exact equation to the two public constructors.
+Neither theorem assumes admission or claims that an arbitrary constructor
+value is a saved native fixture. No per-fixture membership set follows yet.
+
+`PV_RE_RetryOutcomes` exposes local guard-dependent
+terminal/retry transitions. Their `active`, `h`, and `body`
+hypotheses are ordinary source guards, not named native associations; they
+are not instantiated on saved fixtures and are not used to close V404/V405.
+
+`PV_RE_RetryTerminal`, `PV_RE_Continue063` and `PV_RE_Continue064` remain uncompiled drafts in
+`tools/pv-reach-20261027/drafts/`; no credit is taken for them.

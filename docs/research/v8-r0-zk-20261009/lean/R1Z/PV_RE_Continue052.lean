@@ -8,9 +8,9 @@ private abbrev Payload {α : Type} (_ : Result α) := α
 
 /-- The actual entire suffix after the first bind in `host_compact.compact_semantic_row`.
 Recursive calls remain the original extracted calls. -/
-def continueAfter (logical : Slice Std.U8) (out : alloc.vec.Vec Std.U8) (row : Std.U8) (at1 : Std.Usize) (out : Payload (r1_wire.row_shape row)) : Result ((core.result.Result Std.Usize compact.CodecError) × (alloc.vec.Vec
+def continueAfter (logical : Slice Std.U8) (out : alloc.vec.Vec Std.U8) (row : Std.U8) (at1 : Std.Usize) (pvBoundValue : Payload (r1_wire.row_shape row)) : Result ((core.result.Result Std.Usize compact.CodecError) × (alloc.vec.Vec
     Std.U8)) := do
-  let o := out
+  let o := pvBoundValue
   let r ← core.option.Option.ok_or o compact.CodecError.Length
   let cf ← core.result.Result.Insts.CoreOpsTry.branch r
   match cf with
@@ -59,15 +59,15 @@ def continueAfter (logical : Slice Std.U8) (out : alloc.vec.Vec Std.U8) (row : S
 /-- No branch is discarded; the continuation is named rather than existential. -/
 theorem equation (logical : Slice Std.U8) (out : alloc.vec.Vec Std.U8) (row : Std.U8) (at1 : Std.Usize) :
     host_compact.compact_semantic_row (logical := logical) (out := out) (row := row) (at1 := at1) =
-      (r1_wire.row_shape row >>= fun out => continueAfter (logical := logical) (out := out) (row := row) (at1 := at1) out) := by
+      (r1_wire.row_shape row >>= fun pvBoundValue => continueAfter (logical := logical) (out := out) (row := row) (at1 := at1) pvBoundValue) := by
   rw [host_compact.compact_semantic_row]
   rfl
 
 /-- Exact successful transition to the source suffix. The guard is not
 asserted for native fixtures. -/
-theorem success (logical : Slice Std.U8) (out : alloc.vec.Vec Std.U8) (row : Std.U8) (at1 : Std.Usize) (out : Payload (r1_wire.row_shape row))
-    (h : (r1_wire.row_shape row) = .ok out) :
-    host_compact.compact_semantic_row (logical := logical) (out := out) (row := row) (at1 := at1) = continueAfter (logical := logical) (out := out) (row := row) (at1 := at1) out := by
+theorem success (logical : Slice Std.U8) (out : alloc.vec.Vec Std.U8) (row : Std.U8) (at1 : Std.Usize) (pvBoundValue : Payload (r1_wire.row_shape row))
+    (h : (r1_wire.row_shape row) = .ok pvBoundValue) :
+    host_compact.compact_semantic_row (logical := logical) (out := out) (row := row) (at1 := at1) = continueAfter (logical := logical) (out := out) (row := row) (at1 := at1) pvBoundValue := by
   rw [equation, h]
   rfl
 

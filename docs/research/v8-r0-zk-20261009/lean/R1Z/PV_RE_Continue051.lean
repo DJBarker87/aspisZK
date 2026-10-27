@@ -19,7 +19,11 @@ theorem equation (messages : Slice (Array aspis_core.field.wide_exact.WideExact 
     host_commitment.validate_commitment_lanes (messages := messages) (lanes := lanes) =
       (host_commitment.validate_commitment_lanes_loop messages lanes 0#usize >>= fun out => continueAfter (messages := messages) (lanes := lanes) out) := by
   rw [host_commitment.validate_commitment_lanes]
-  rfl
+  generalize firstResult : (host_commitment.validate_commitment_lanes_loop messages lanes 0#usize) = reply
+  cases reply with
+  | ok value => cases value <;> rfl
+  | fail e => rfl
+  | div => rfl
 
 /-- Exact successful transition to the source suffix. The guard is not
 asserted for native fixtures. -/
