@@ -11364,3 +11364,29 @@ findings per site (clean / secret-dependent branch / secret-dependent address / 
 relies on V371 because DOITM is off), any secret-dependent branch or address reported as a checked
 finding; never a claim of absence of leakage. Six slots: runjoin12, op223, canon, cblib3, op134, l3dis.
 Rows removed outright: 0. Privacy target not yet established.
+
+## D267 (Stream B) 2026-10-27 10:05 UTC: runjoin12 exhausted; the records leaf blocks only on closures; closure-free rewrite adopted as a D187 candidate change; runjoin13 launched
+
+pv-runjoin12 (`codex/pv-runjoin-20261026`, head dd58cab637; 100/100 Lean = 88 kernel successes / 12
+rejected, 12 verification runs; three reserved audits standard axioms; no new crates/programs change
+beyond the existing cfg(kani) child module; no forbidden tokens). R_shipped NOT established. Route A
+(direct extraction of the shipped `records`, byte-identical to ed1c1cef71, sha256 e1315ebd…) fails in
+Aeneas with "missing FnOnce at core/function.rs:250, FunsAnalysis.ml:134" (receipts pv12-records-charon-18,
+pv12-aeneas-25). Route B (Kani shipped = reference) incomplete: only the external-layer and
+raw-conversion helper gates passed; the mapper equality timed out. Proved: both REFERENCE fixture
+equations, all frozen empty-root parent cells and the table recurrence, the fixture input commitment
+through named permutation cells, the nullifier inverse and frozen root words. Lead reading of the source
+(pair_forest_copy_builder.rs:227-270): `records` is pure field shuffling, two closures
+(`rec.map(|r| …).unwrap_or(ZERO8)` and `core::array::from_fn(|l| …)`) and one call to pair_empty_roots();
+the extraction blocker is the closures, the Kani blocker the Poseidon empty-root computation (already
+proved in Lean cell by cell). LEAD DECISION under D187: rewrite THAT ONE FUNCTION closure-free with
+identical semantics (explicit match and an index loop; no other change). Because pool_v1 is compiled into
+the Pool and Registry programs, gate (a), all three ELF pins rebuilt and confirmed, runs FIRST; any pin
+change stops the work and goes to the owner (the builder is witness-side and is expected to be dropped
+from the programs by the linker, which the gate checks rather than assumes). Gates (b) fixture bytes and
+(c) the 1,000-run differential will run once over this change together with the op223 change (D257),
+followed by the quiet-window timing gate. Launched pv-runjoin13 (same branch, IDs 50600-50899, 100 Lean /
+2 Kani): edit, gate (a), extraction with the unchanged tool, R_shipped, the identification per fixture
+and generally, then compiler-return, transition, deployed public binding and non-vacuity. Six slots:
+op223, canon, cblib3, op134, l3dis, runjoin13. Rows removed outright: 0. Privacy target not yet
+established.
