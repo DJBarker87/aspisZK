@@ -13,7 +13,7 @@ if not mod.startswith('JGa_'):
  assert subprocess.check_output(['git','show','HEAD:'+str(source_file.relative_to(R))])==source_file.read_bytes()
 a=f'JGa14_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/joint-fixture12-20261026/JFu12_100/receipt.json').read_text())
-cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='JFu split certificate; block count in JGa_PLAN.json; focused source binding')
+cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,expected_time='Focused JGa symbolic forward source proof; no hash certificate generation (0 blocks)' )
 cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/JFp_Cache:/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects'
 # Select the existing pinned circle namespace before the retired aggregate cache.
 circle_cache='/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects'

@@ -1,0 +1,111 @@
+'AspisR1.JGa_ValueLanes.bits0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGa_ValueLanes.bits1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGa_ValueLanes.bits2' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGa_ValueLanes.lean:56:51: error: unsolved goals
+packed : Std.Array field.QM31 24#usize
+o : state_only_poseidon.StateOnlyPoseidonOpenings
+s : pool_v1.pair_forest_copy_terminal.Selectors
+hp : canonical packed
+hz : canonical o.z
+hb : canonical o.succ_z
+hx : canonical o.xor12_z
+hh : canonical s.high
+hl : canonical s.low
+zero : FIv_NativeValue.Canon field.QM31.ZERO
+zeros : canonical (Array.repeat 33#usize field.QM31.ZERO)
+⊢ (do
+      let value_selectors ←
+        FIq_Native.core.array.Array.map add_value_lanes.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+            (Array.make 3#usize [0#usize, 2#usize, 4#usize] add_value_lanes._proof_3) s
+      let q ← value_selectors.index_usize 0#usize
+      let q1 ← field.QM31.ZERO.add q
+      let q2 ← value_selectors.index_usize 1#usize
+      let q3 ← q1.add q2
+      let q4 ← value_selectors.index_usize 2#usize
+      let range_selector ← q3.add q4
+      let (openings1, range1) ← add_value_lanes_loop0 o (Array.repeat 33#usize field.QM31.ZERO) 0#usize
+      let (openings2, range2) ← add_value_lanes_loop1 openings1 range1 0#usize
+      let (openings3, range3) ← add_value_lanes_loop2 openings2 range2 0#usize
+      let q5 ← reconstruct_10 openings3.z
+      let q6 ← reconstruct_10 openings3.succ_z
+      let i ← 1#u32 <<< 10#i32
+      let q7 ← q6.mul_m31 i
+      let q8 ← q5.add q7
+      let q9 ← reconstruct_10 openings3.xor12_z
+      let i1 ← 1#u32 <<< 20#i32
+      let q10 ← q9.mul_m31 i1
+      let reconstructed ← q8.add q10
+      let q11 ← openings3.z.index_usize 10#usize
+      let q12 ← q11.sub reconstructed
+      let range4 ← range3.update 30#usize q12
+      let q13 ← openings3.succ_z.index_usize 10#usize
+      let range5 ← range4.update 31#usize q13
+      let q14 ← openings3.xor12_z.index_usize 10#usize
+      let range6 ← range5.update 32#usize q14
+      let (iter, into_iter_back) ← MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter range6
+      let (im, back) ← add_value_lanes_loop3 iter (fun im1 => im1) range_selector
+      let packed1 ← add_preweighted packed 49#usize (into_iter_back (back im))
+      let i2 ← 16#usize * VALUE_AUXILIARY_BLOCK
+      let i3 ← i2 + 6#usize
+      let conservation_selector ← s.row i3
+      let q15 ← openings3.z.index_usize 0#usize
+      let q16 ← openings3.z.index_usize 1#usize
+      let q17 ← q15.sub q16
+      let q18 ← openings3.z.index_usize 2#usize
+      let q19 ← q17.sub q18
+      let q20 ← conservation_selector.mul q19
+      let q21 ← openings3.succ_z.index_usize 0#usize
+      let q22 ← openings3.succ_z.index_usize 1#usize
+      let q23 ← q21.sub q22
+      let q24 ← conservation_selector.mul q23
+      add_preweighted packed1 82#usize (Array.make 2#usize [q20, q24] ⋯)) =
+    do
+    let vs ←
+      FIq_Native.core.array.Array.map FIy_ValueSelector.callback (Array.make 3#usize [0#usize, 2#usize, 4#usize] ⋯) s
+    let q ← vs.index_usize 0#usize
+    let q1 ← field.QM31.ZERO.add q
+    let q2 ← vs.index_usize 1#usize
+    let q3 ← q1.add q2
+    let q4 ← vs.index_usize 2#usize
+    let selector ← q3.add q4
+    let (o1, r1) ← add_value_lanes_loop0 o (Array.repeat 33#usize field.QM31.ZERO) 0#usize
+    let (o2, r2) ← add_value_lanes_loop1 o1 r1 0#usize
+    let (o3, r3) ← add_value_lanes_loop2 o2 r2 0#usize
+    let x ← reconstruct_10 o3.z
+    let x_1 ← reconstruct_10 o3.succ_z
+    let x_2 ← 1#u32 <<< 10#i32
+    let x_3 ← x_1.mul_m31 x_2
+    let x ← x.add x_3
+    let x_4 ← reconstruct_10 o3.xor12_z
+    let x_5 ← 1#u32 <<< 20#i32
+    let x_6 ← x_4.mul_m31 x_5
+    let x ← x.add x_6
+    let x_7 ← o3.z.index_usize 10#usize
+    let x ← x_7.sub x
+    let x ← r3.update 30#usize x
+    let x_8 ← o3.succ_z.index_usize 10#usize
+    let x ← x.update 31#usize x_8
+    let x_9 ← o3.xor12_z.index_usize 10#usize
+    let x ← x.update 32#usize x_9
+    let x ← MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter x
+    let r7 ←
+      let (iter, into_back) := x
+        do
+        let (im, back) ← FIy_IteratorTraversal.Loop3 iter (fun im1 => im1) selector
+        ok (into_back (back im))
+    let packed1 ← add_preweighted packed 49#usize r7
+    let i2 ← 16#usize * VALUE_AUXILIARY_BLOCK
+    let i3 ← i2 + 6#usize
+    let conservation_selector ← s.row i3
+    let q15 ← o3.z.index_usize 0#usize
+    let q16 ← o3.z.index_usize 1#usize
+    let q17 ← q15.sub q16
+    let q18 ← o3.z.index_usize 2#usize
+    let q19 ← q17.sub q18
+    let q20 ← conservation_selector.mul q19
+    let q21 ← o3.succ_z.index_usize 0#usize
+    let q22 ← o3.succ_z.index_usize 1#usize
+    let q23 ← q21.sub q22
+    let q24 ← conservation_selector.mul q23
+    add_preweighted packed1 82#usize (Array.make 2#usize [q20, q24] ⋯)
+'AspisR1.JGa_ValueLanes.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

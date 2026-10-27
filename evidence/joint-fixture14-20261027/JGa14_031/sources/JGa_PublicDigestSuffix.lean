@@ -1,0 +1,24 @@
+import JGa_DigestLoop
+import JGa_ArrayProperty
+import FIy_PublicDigestSuffix
+import JFy_FrontierCanonical
+import JFu_TransitionArithmetic
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGa_PublicDigestSuffix
+open Aeneas Aeneas.Std Result WP FIq_Native
+open FIw_ArrayValue (canonical)
+open JFy_PublicCanonical (p)
+
+@[step] theorem source (o : state_only_poseidon.StateOnlyPoseidonOpenings)
+    (s : pool_v1.pair_forest_copy_terminal.Selectors) (d : Array field.QM31 8#usize)
+    (hz : canonical o.z) (hd : canonical d) (hh : canonical s.high) (hl : canonical s.low) :
+    FIy_PublicDigestSuffix.run p o s d p.transition.live_snapshot ⦃ out => canonical out ⦄ := by
+  have hn := JFy_FrontierCanonical.root
+  have hf := JFy_FrontierCanonical.after
+  unfold FIy_PublicDigestSuffix.run
+  rw [JFu_TransitionArithmetic.carry]
+  step* <;> first | assumption | scalar_tac
+#print axioms source
+end AspisR1.JGa_PublicDigestSuffix
+end
