@@ -9,3 +9,5 @@ XRf_001 retains copied as an opaque library declaration rather than excluding it
 XRf_002 changes the documented duplicate-defaulted-methods option, to isolate inherited method binders. Source/tools and six release leaves remain pinned. Passes typecheck, with one synthetic opaque library default. XRf_003 includes that default body, giving exactly six release opaque leaves. XRf_004 then fails on release claims; no output, extraction stopped. See XRf_EXTRACTION_FINDING.md.
 
 Complete before/after actual Rc10_Top source snapshots and ledger-method zero delta are retained. No top premise has been removed, and no joint same-witness top non-vacuity has been proved. The zero/empty local byte models and canonical Kani domains remain satisfiable, without implying top non-vacuity.
+
+All stages terminal: see XRf_HANDOFF.md, XRf_Verification.json and XRf_P6.md. Budgets4/4 extraction,10/10 Kani (all passed),0/100 Lean (blocked on absent emitted carriers). No top premise removed.

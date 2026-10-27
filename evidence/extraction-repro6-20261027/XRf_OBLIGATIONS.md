@@ -39,7 +39,7 @@ not measured runtimes; families overlap and must not be double counted.
 3. **PreparedClaimPowersAssociation.** Old gamma versus successful29-entry
    powers array, six scalar selections, seven parts, kappa powers, Dot bound/
    push/finish, early errors, all ordered effects. Owned safe reference exists.
-   K001 whole, K004 selection-carrier, K00529-powers and K0067-powers time out.
+   XRe_K001 whole, XRe_K004 selection-carrier, XRe_K00529-powers and XRe_K0067-powers time out.
    Lean scalar_selection is only projected six-branch control, not this item.
    Full arithmetic/state/encoding model and per-stage composition remain.
    L139–141/L144–146/L157/L181 and S1.4–10 targets plus arithmetic children.
@@ -56,7 +56,7 @@ not measured runtimes; families overlap and must not be double counted.
 
 6. **BatchedWeightsQueryLoop.** Same query order/accumulator, eager versus
    deferred weights, restoration, failure and state/effect association.
-   LLBC finish/query_loop bodies available. K020 checks only64 serialized
+   LLBC finish/query_loop bodies available. XRe_K020 checks only64 serialized
    K values, not finish arithmetic or this proposition.
    L125/L128/L142–143/L147/L149–150/L157/L181.8–16 targets, overlapping S7/S8.
 
@@ -79,19 +79,19 @@ not measured runtimes; families overlap and must not be double counted.
 
 - prepared_claim: as item3, no whole-body pass;4–10 plus arithmetic targets.
 - checkpoint: two scalar writers, header,roots,22 queries and10 alpha fields
-  have passing local source-stage gates. K02064-weight serialization TIMES OUT;
+  have passing local source-stage gates. XRe_K02064-weight serialization TIMES OUT;
   full model/call/heap composition still required.6–10 remaining targets,
   overlapping item7; this is not whole-function closure.
-- check_values: K008 universally bounded0..31 passes;464 timed out. XRf_K005–K009 prove two-row short-circuit, one-chunk canonicality,
+- check_values: XRe_K008 universally bounded0..31 passes;464 timed out. XRf_K005–XRe_K009 prove two-row short-circuit, one-chunk canonicality,
   rejected-prefix and incomplete-tail stages. Arbitrary-length induction and full
   loop/iterator/canonical byte association still need2–4 targets. Tail behavior retained.
-- expand_values:464/928 timed out;32/64 array assertion unwinding failed; K019
+- expand_values:464/928 timed out;32/64 array assertion unwinding failed; XRe_K019
   PASSES after changing only assertion to arbitrary destination index with SAME32/64 bounds.
-  XRf_K001–K004/K010 add one-row, destination frame, error branches and
+  XRf_K001–XRe_K004/XRe_K010 add one-row, destination frame, error branches and
   two-row composition. Need arbitrary-length induction, full caller bounds,
   overflow/borrow/frame and byte/Result associations;
-  3–6 targets regardless of K019 disposition.
-- echeck: K013 covers0..63 arbitrary bytes and both flags;928/224 timed out.
+  3–6 targets regardless of XRe_K019 disposition.
+- echeck: XRe_K013 covers0..63 arbitrary bytes and both flags;928/224 timed out.
   Need full source loop/carrier association;2–4 targets.
 - wide_view: actual57607/13831/928 harness times out. Borrow/slice/error/field
   association remains unproved in full;2–4 plus caller targets.
