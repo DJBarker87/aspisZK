@@ -1,0 +1,18 @@
+import JGl_WordProof
+import JGl_NumericData
+import FJa_TensorMeaning
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGl_TensorLow1
+open Aeneas Aeneas.Std
+open FIv_NativeValue (decode)
+open FIw_ArrayValue (decoded)
+/-- Eight bounded tensor cells, each a product of at most six coordinates.
+Word-level operations are individually kernel checked. -/
+theorem value (i : Fin 8) :
+    FJa_TensorMeaning.weight (JFu_TerminalPrefix.alpha.val.drop 6 |>.map decode) (8+i.val)=
+      decoded JGl_NumericData.low ⟨8+i.val,by change 8+i.val<16;omega⟩ := by
+  fin_cases i <;> jgl_words
+#print axioms value
+end AspisR1.JGl_TensorLow1
+end

@@ -1,0 +1,92 @@
+JGl_RetainedTerminal.lean:16:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 (FIq_Carriers.toPublic JFs_PublicSerialization.value)
+    JFu_TerminalCallback.claims JFu_TerminalPrefix.alpha JFu_TerminalPrefix.challenges
+in the target expression
+  (do
+      let r ←
+        pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31
+            (FIq_Carriers.toPublic JFs_PublicSerialization.value)
+            (FIq_Carriers.mapArray (FIq_Carriers.mapArray FIq_Carriers.toQ) JFu_ClaimsData.claims)
+            (FIq_Carriers.mapArray FIq_Carriers.toQ JFm_PartialAlpha.a10)
+            (FIq_Carriers.toChallenges JFm_Begin.challenges)
+      match r with
+        | core.result.Result.Ok q => ok (core.result.Result.Ok (FIq_Carriers.fromQ q))
+        | core.result.Result.Err e => ok (core.result.Result.Err (FIq_Terminal.fromError e))) =
+    ok (core.result.Result.Ok (FIq_Carriers.fromQ out))
+
+H : Type
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+hash : H
+selected : Std.Array field.QM31 84#usize
+a b c : Std.Array field.QM31 16#usize
+m : Std.Array field.QM31 10#usize
+s : pool_v1.pair_forest_copy_terminal.Selectors
+sops : state_only_poseidon.StateOnlyPoseidonSelectors
+sem : Std.Array field.QM31 24#usize
+pos : Std.Array field.QM31 4#usize
+comp g h : field.QM31
+copy : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledCopyTerminalV1
+out : field.QM31
+gather :
+  array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO JFu_TerminalCallback.claims =
+    ok selected
+hs : FIw_ArrayValue.canonical selected
+ha : FIw_ArrayValue.canonical a
+hb : FIw_ArrayValue.canonical b
+hc : FIw_ArrayValue.canonical c
+hl : FIw_ArrayValue.canonical sops.local
+block : FIv_NativeValue.Canon sops.block
+sel : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point JFu_TerminalPrefix.alpha = ok s
+ps : pool_v1.pair_forest_semantic_terminal.poseidon_selectors s = ok sops
+runpos :
+  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected { z := a, succ_z := b, xor12_z := c } sops = ok pos
+cpos : FIw_ArrayValue.canonical pos
+vpos : FIw_ArrayValue.decoded pos = FJh_Native07RawValue.model { z := a, succ_z := b, xor12_z := c } sops
+runsem :
+  pool_v1.pair_forest_semantic_terminal.semantic_packed JFu_PublicSemantic.value { z := a, succ_z := b, xor12_z := c }
+      s =
+    ok sem
+csem : FIw_ArrayValue.canonical sem
+vsem :
+  FIw_ArrayValue.decoded sem =
+    FIy_NativeCoefficients.model JFu_PublicSemantic.value { z := a, succ_z := b, xor12_z := c } s
+runh : pool_v1.pair_forest_semantic_terminal.selected_claim selected 0#usize 26#usize = ok h
+runcopy :
+  pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h s JFu_TerminalPrefix.challenges.lambda
+      JFu_TerminalPrefix.challenges.chi JFu_PublicSemantic.value.transition.live_snapshot.next_pair_index
+      pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.PrivateTransfer =
+    ok copy
+runcomp :
+  pool_v1.pair_forest_semantic_terminal.composition_parts JFu_PublicSemantic.value selected JFu_TerminalPrefix.alpha
+      JFu_TerminalPrefix.challenges.lambda JFu_TerminalPrefix.challenges.chi JFu_TerminalPrefix.challenges.theta =
+    ok (core.result.Result.Ok (comp, a, m, g, h, copy.active))
+ccomp : FIv_NativeValue.Canon comp
+cg : FIv_NativeValue.Canon g
+vcomp :
+  FIv_NativeValue.decode comp =
+    FIv_CompositionValue.polynomial (FIv_NativeValue.decode JFu_TerminalPrefix.challenges.theta) sem pos copy.residual
+run :
+  pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 (FIq_Carriers.toPublic JFs_PublicSerialization.value)
+      JFu_TerminalCallback.claims JFu_TerminalPrefix.alpha JFu_TerminalPrefix.challenges =
+    ok (core.result.Result.Ok out)
+cout : FIv_NativeValue.Canon out
+vout :
+  FIv_NativeValue.decode out =
+    FIv_TerminalValue.formula (FIv_EqualityValue.weight JFu_TerminalPrefix.challenges.zc JFu_TerminalPrefix.alpha)
+      (FIv_NativeValue.decode comp) (FIv_NativeValue.decode JFu_TerminalPrefix.challenges.mu) (FIv_NativeValue.decode h)
+      (FIv_NativeValue.decode copy.active)
+⊢ (do
+      let r ←
+        pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31
+            (FIq_Carriers.toPublic JFs_PublicSerialization.value)
+            (FIq_Carriers.mapArray (FIq_Carriers.mapArray FIq_Carriers.toQ) JFu_ClaimsData.claims)
+            (FIq_Carriers.mapArray FIq_Carriers.toQ JFm_PartialAlpha.a10)
+            (FIq_Carriers.toChallenges JFm_Begin.challenges)
+      match r with
+        | core.result.Result.Ok q => ok (core.result.Result.Ok (FIq_Carriers.fromQ q))
+        | core.result.Result.Err e => ok (core.result.Result.Err (FIq_Terminal.fromError e))) =
+    ok (core.result.Result.Ok (FIq_Carriers.fromQ out))
+'AspisR1.JGl_RetainedTerminal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
