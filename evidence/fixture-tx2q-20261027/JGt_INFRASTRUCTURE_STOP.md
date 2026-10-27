@@ -1,0 +1,11 @@
+# Admission failure and mandatory stop
+
+Local-lean.txt rule 5: “Do NOT build or repair build/launcher/monitoring infrastructure. If the launcher or host misbehaves, stop and report the exact error in one paragraph; the lead fixes infrastructure.”
+
+The inherited JGs_TX2_compile.py task wrapper, adapted by prefix to JGt_, treats reservation command exit 0 plus receipt existence as admission, without inspecting the JSON `allowed` field. Attempt JGt_TX2_009 has `allowed:false`, reason `quiet window until 1793111688 (cross-stream timing gate)`, but nevertheless launched the capped SumStep compile. Its reservation JSON and barrier log are preserved. This was not deliberate permission to bypass the quiet window. The defect should have been caught on first inspection; the earlier commentary and stage status incorrectly interpreted this as a held compile. The final record supersedes that interpretation. No conforming-admission claim is made for009 or for the job as a whole.
+
+On discovery at approximately13:40 UTC, the local serial batch driver PID8123 was stopped with SIGTERM. A race had already launched014; it had a true admission receipt and was allowed to finish, then collected read-only. No015 or later process launched.010–014 each have true admission receipts;001–008 also have true receipts.009 is the sole false receipt. The quiet marker was read-only; it was not deleted or edited by this job. The marker was absent in the later read. No infrastructure repair, retry around the refusal or alternative launcher was attempted. The task wrappers are retained as RETIRED text and must not be executed.
+
+Required lead fix: make the inherited admission/runner path reliably refuse `allowed:false`, including quiet-window refusals; only the lead should repair infrastructure. After that fix, resume on the retained sources/objects with the unused86 Lean attempts under a new explicitly cleared work order. Do not replay009 unchanged solely to erase the operational defect: retain its record.
+
+Logical boundary:009 exited0 and printed only standard axioms, so its Lean result is recorded accurately, but its launch violated admission. This operational defect is separate from the proof claim. The ledger and complete acceptance claims remain unchanged/unestablished. No final new-root or top axiom audit was launched after discovery.

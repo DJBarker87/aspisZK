@@ -1,0 +1,39 @@
+import JGt_FinishAfterPair
+import JGo_TX2_Partial
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGt_TX2
+open Aeneas Aeneas.Std Result AspisR1Stage2 AspisR1Stage2.Stage2Finish
+/-- SAME saved bytes, reader, batch, query, flush and the finish continuation
+with its Pair gate removed. The final dot comparison remains unproved. -/
+theorem on_saved (saved : alloc.vec.Vec U8) (same : saved.val=JFx_NativeBytes.checkpoint.val)
+    {C Hash : Type} (base : VTop_Stages.Ops) (seed : FinishOps FIo_Install.W)
+    (err : C) (geometry : Port3_NativeGeometryBody.Ops C) (query : Port3_NativeQueryBody.Ops)
+    (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (realizes : JFn_HashBoundary.Realizes JFp_SHADigest.digest) :
+    Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary JFp_SHADigest.digest D)
+      (⟨saved.val,saved.property⟩ : Slice U8) JFx_NativeBytes.proof JFx_NativeBytes.publicInput .S2 hash=
+        ok (.Ok (JFo_Prepared.value,JFo_Prepared.accumulator)) ∧
+    ∃ a b flushed,
+      Op5T_Install.stageBatch Port4B_Install.leaves
+        (JFn_HashBoundary.dictionary JFp_SHADigest.digest D)
+        JFx_NativeBytes.proof JFo_Prepared.value JGe_View.folded 1#usize hash=ok (.Ok ()) ∧
+      JFz_TX2_AccumulationChain.updates (JGc_TX2_QueryDictionary.input query) 12=ok (a,b) ∧
+      (Tx2N_Install.inner base true (JGc_TX2_InstalledQuery.raw query)).op6
+        JFx_NativeBytes.proof JFo_Prepared.value JFo_Prepared.accumulator JFr_TX2_Powers.value none
+        (JFv_TX2_Geometry.value err geometry) JFo_Pending.value 22#usize=ok (.Ok (a,b)) ∧
+      a.weights=JFo_Prepared.accumulator.weights ∧ a.next=22#usize ∧
+      (Tx2N_Install.inner base true (JGc_TX2_InstalledQuery.raw query)).op9 b a.weights.deref=ok flushed ∧
+      flushed.val.length=64 ∧ (∀ q∈flushed.val,Port3_FlushInstall.Canonical q) ∧
+      ∀ inactive,
+        Port4D_FinishInstall.finish (FIo_Install.finishOps (.Ok ()) seed)
+          (JGo_TX2_FinishPrefix.view inactive) JFo_Prepared.value (JGo_TX2_Partial.writeback a flushed) none=
+        Port3_QueryInstall.result (JGt_FinishAfterPair.remaining (JGo_TX2_Partial.writeback a flushed)) := by
+  have reader := JFn_Resume.on_saved saved same JFp_SHADigest.digest D hash realizes
+  obtain ⟨a,b,flushed,root,batch,updates,call,weights,next,flush,size,canon⟩ :=
+    JGo_TX2_BatchQuery.source base err geometry query D hash
+  exact ⟨reader,a,b,flushed,batch,updates,call,weights,next,flush,size,canon,
+    fun inactive=>JGt_FinishAfterPair.source seed inactive (JGo_TX2_Partial.writeback a flushed)⟩
+#print axioms on_saved
+end AspisR1.JGt_TX2
+end
