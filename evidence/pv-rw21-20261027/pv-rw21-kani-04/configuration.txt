@@ -1,0 +1,46 @@
+cargo-kani 0.67.0
+
+real target directory: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/pv-rw-step/proof/target
+{
+  "queue": [
+    "inherited::gates::step_out_c0a",
+    "inherited::gates::step_out_c0b",
+    "inherited::gates::step_out_c1a",
+    "inherited::gates::step_out_c1b",
+    "inherited::gates::step_power_c0a",
+    "inherited::gates::step_power_c0b",
+    "inherited::gates::step_power_c1a",
+    "inherited::gates::step_power_c1b",
+    "whole::source_p6_arity16",
+    "whole::source_p6_all_suffixes16"
+  ],
+  "budget": 10,
+  "expected_work": "Optimized compilation then named full-width transition or whole arity16 equivalence SAT; no elimination",
+  "timeout_seconds": 240,
+  "solver": "cadical",
+  "no_stubs": true,
+  "unwind": 18,
+  "overflow": "release-matching disabled overflow; memory and unwinding checks retained",
+  "configuration_change": "Use existing real proof/target path via env override, never the dangling global target symlink; new proof manifest and exact harness filters.",
+  "replacement_route_after_timeouts": {
+    "2": "small::source_p6_arity0",
+    "3": "small::source_p6_arity1",
+    "4": "small::source_single_c0a",
+    "5": "small::source_single_c0b",
+    "6": "small::source_single_c1a",
+    "7": "small::source_single_c1b",
+    "8": "small::source_p6_zero_lambda16",
+    "10": "small::source_fission_arity16"
+  },
+  "replacement_reason": "Full dynamic transition and whole arity16 timed out; isolate smaller complete original-source/indexed-reference functions without stubs or stronger assumptions. Each result is restricted to its stated arity; no arbitrary-slice theorem follows.",
+  "fission_reference": "Literal checked generated.rs for-loop with borrowed single-step update, after indexed arity16 timeout; actual original source on the left, no stubs. Requires separate Lean source/context bridge, not an unrestricted source law.",
+  "solver_inventory": "Kani CLI lists bitwuzla,cadical,cvc5,kissat,minisat,z3. No z3/cvc5/bitwuzla executable on PATH. Bundled kissat is present; no solver installation requested.",
+  "solver_by_run": {
+    "4": "kissat",
+    "5": "kissat",
+    "6": "kissat",
+    "7": "kissat",
+    "8": "kissat"
+  },
+  "second_replacement_reason": "The one-limb full-result gate also timed out. Isolate its four arbitrary full-width output coordinates, then the explicitly lambda-zero arity16 control edge. No unchanged failed harness is replayed; no coordinate gate establishes the entire helper."
+}

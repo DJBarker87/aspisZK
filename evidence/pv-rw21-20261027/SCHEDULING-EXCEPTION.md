@@ -13,3 +13,8 @@ The per-attempt inputs, admission receipts, wrapper/time/output logs and
 source snapshots are retained. No cap, launcher or reservation policy was
 changed. Future launches must wait for a terminal `exit_code` result for
 the prior tool session, not merely a successful wait call.
+
+At 02:06:58.743616 UTC, ID 37764 performed an admission scan 157.968422 seconds
+following refusal 37763, 22.031578 seconds short of the required three minutes.
+The scan refused and no capped scope started. This was a scheduling error; the
+next retry is gated on 02:09:58.744 UTC or later. Neither refusal is charged.

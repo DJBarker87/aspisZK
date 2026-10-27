@@ -1,0 +1,33 @@
+import R1Z.ProverRw21Arity16Endpoint
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21Arity16Loop
+open Aeneas Aeneas.Std Result ProverRwFull ProverRw21Arity16Endpoint
+variable [ExternalTypes]
+
+theorem step (ops : ExternalFuns) (f g : Compression) (h : Agree16 f g) :
+    @host_semantic.lean_copy_row_values_loop.body _ {ops with op223 := f} =
+      @host_semantic.lean_copy_row_values_loop.body _ {ops with op223 := g} := by
+  funext trace lambda registry count values arity index
+  unfold host_semantic.lean_copy_row_values_loop.body
+  simp only [ProverRw21Arity16Endpoint.function ops f g h]
+
+theorem loop (ops : ExternalFuns) (f g : Compression) (h : Agree16 f g) :
+    @host_semantic.lean_copy_row_values_loop _ {ops with op223 := f} =
+      @host_semantic.lean_copy_row_values_loop _ {ops with op223 := g} := by
+  funext trace lambda registry values arity count index
+  unfold host_semantic.lean_copy_row_values_loop
+  rw [step ops f g h]
+
+theorem rows (ops : ExternalFuns) (f g : Compression) (h : Agree16 f g) :
+    @host_semantic.lean_copy_row_values _ {ops with op223 := f} =
+      @host_semantic.lean_copy_row_values _ {ops with op223 := g} := by
+  funext trace lambda
+  unfold host_semantic.lean_copy_row_values
+  simp only [loop ops f g h]
+  rfl
+
+#print axioms step
+#print axioms loop
+#print axioms rows
+end R1Z.ProverRw21Arity16Loop

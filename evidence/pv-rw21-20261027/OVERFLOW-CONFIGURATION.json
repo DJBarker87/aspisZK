@@ -1,0 +1,10 @@
+{
+  "finding": "Kani injects -C overflow-checks=on ahead of user RUSTFLAGS. --no-overflow-checks disables CBMC default checks but does not remove the Rust MIR overflow assertion observed at CM31::mul field.rs:314.",
+  "failed_run": "pv-rw21-kani-04",
+  "failure": "attempt to multiply with overflow; no output-equation counterexample classified",
+  "release_profile": "overflow-checks=false",
+  "correction": "Append -C overflow-checks=off in PROVER_RW_RUSTFLAGS, which is passed after the injected on flag. Check actual rebuilt fingerprint after the first corrected run.",
+  "no_source_change": "Frozen Rust remains untouched; no input-range assumption or disabled unwind/memory assertion is added.",
+  "correction_result": "Rejected at run 5: Kani refuses overflow-checks=off. No verification ran. Override removed.",
+  "next": "Explicit canonical-domain and lambda-zero diagnostics only; unrestricted release source law stays open."
+}
