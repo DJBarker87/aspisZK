@@ -1,0 +1,255 @@
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -205,3 +205,5 @@
+ mod LPa_compact;
+ 
+ #[cfg(kani)] mod LPc_compact { include!("LPc_compact.rs"); }
++
++#[cfg(kani)] mod LPg_compact { include!("LPg_compact.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -532,3 +532,5 @@
+ mod LPa_verifier;
+ 
+ #[cfg(kani)] mod LPc_verifier { include!("LPc_verifier.rs"); }
++
++#[cfg(kani)] mod LPg_verifier { include!("LPg_verifier.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -344,3 +344,5 @@
+ mod LPa_candidate;
+ 
+ #[cfg(kani)] mod LPc_candidate { include!("LPc_candidate.rs"); }
++
++#[cfg(kani)] mod LPg_candidate { include!("LPg_candidate.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -854,3 +854,5 @@
+ pub(crate) mod LPa_wire;
+ 
+ #[cfg(kani)] mod LPc_wire { include!("LPc_wire.rs"); }
++
++#[cfg(kani)] mod LPg_r1_wire { include!("LPg_r1_wire.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -6,12 +6,16 @@
+     const MASK:u64=0x7fff_ffff_7fff_ffff;
+     const ONES:u64=0x0000_0001_0000_0001;
+     #[derive(Clone,Copy,Debug,PartialEq,Eq,Default)]
++    #[cfg_attr(kani, derive(kani::Arbitrary))]
+     pub struct Q([u32;4]);
++    #[cfg_attr(kani, kani::ensures(|out: &u32| *out<P))]
+     #[inline(always)] pub(crate) fn reduce(mut x:u64)->u32 {
+         x=(x & u64::from(P))+(x>>31u32);
+         x=(x & u64::from(P))+(x>>31u32);
+         if x>=u64::from(P) {(x-u64::from(P)) as u32}else{x as u32}
+     }
++    #[cfg_attr(kani, kani::requires(a<P && b<P))]
++    #[cfg_attr(kani, kani::ensures(|out: &u32| *out<P && u64::from(*out)==if u64::from(a)+u64::from(b)>=u64::from(P){u64::from(a)+u64::from(b)-u64::from(P)}else{u64::from(a)+u64::from(b)}))]
+     #[inline(always)] pub(crate) fn add(a:u32,b:u32)->u32 {
+         let s=a.wrapping_add(b);if s>=P{s-P}else{s}
+     }
+@@ -34,16 +38,22 @@
+             let [a,b,c,d,e,f,g,h]=value.to_limbs();
+             [Self([a,b,c,d]),Self([e,f,g,h])]
+         }
++        #[cfg_attr(kani, kani::requires(self.0.iter().all(|x| *x<P) && rhs.0.iter().all(|x| *x<P)))]
++        #[cfg_attr(kani, kani::ensures(|out: &Q| LPg_dot::equal(out.0,LPg_dot::ref_add(self,rhs)) && out.0.iter().all(|x| *x<P)))]
+         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+             let a=reduce_pair(pair(self.0[0],self.0[1]).wrapping_add(pair(rhs.0[0],rhs.0[1])));
+             let b=reduce_pair(pair(self.0[2],self.0[3]).wrapping_add(pair(rhs.0[2],rhs.0[3])));
+             Self([a as u32,(a>>32) as u32,b as u32,(b>>32) as u32])
+         }
++        #[cfg_attr(kani, kani::requires(self.0.iter().all(|x| *x<P) && rhs.0.iter().all(|x| *x<P)))]
++        #[cfg_attr(kani, kani::ensures(|out: &Q| LPg_dot::equal(out.0,LPg_dot::ref_sub(self,rhs)) && out.0.iter().all(|x| *x<P)))]
+         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+             let a=reduce_pair(pair(self.0[0],self.0[1]).wrapping_add(MASK).wrapping_sub(pair(rhs.0[0],rhs.0[1])));
+             let b=reduce_pair(pair(self.0[2],self.0[3]).wrapping_add(MASK).wrapping_sub(pair(rhs.0[2],rhs.0[3])));
+             Self([a as u32,(a>>32) as u32,b as u32,(b>>32) as u32])
+         }
++        #[cfg_attr(kani, kani::requires(self.0.iter().all(|x| *x<P)))]
++        #[cfg_attr(kani, kani::ensures(|out: &Q| LPg_dot::equal(out.0,LPg_dot::ref_half(self)) && out.0.iter().all(|x| *x<P)))]
+         #[inline(always)] pub fn half(self)->Self {
+             let h=|x:u32|(x>>1)|((x&1)<<30);
+             let mut out=[0u32;4]; for i in 0..4 {out[i]=h(self.0[i]);} Self(out)
+@@ -79,6 +89,8 @@
+     // its limbs are private, constructors validate, and operations preserve <P.
+     impl Q {
+         #[inline(always)]
++        #[cfg_attr(kani, kani::requires(self.0.iter().all(|x| *x<P) && rhs.0.iter().all(|x| *x<P)))]
++        #[cfg_attr(kani, kani::ensures(|out: &[u64;4]| out[3] == LPg_dot::reference(self,rhs)[3]))]
+         fn raw(self,rhs:Self)->[u64;4] {
+             let [a,b,c,d]=[u64::from(self.0[0]),u64::from(self.0[1]),u64::from(self.0[2]),u64::from(self.0[3])];
+             let [e,f,g,h]=[u64::from(rhs.0[0]),u64::from(rhs.0[1]),u64::from(rhs.0[2]),u64::from(rhs.0[3])];
+@@ -123,6 +135,7 @@
+         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
+ #[cfg(kani)] mod LPa_dot { include!("LPa_dot.rs"); }
++#[cfg(kani)] mod LPg_dot { include!("LPg_dot.rs"); }
+ #[cfg(kani)] mod LPc_dot { include!("LPc_dot.rs"); } }
+ 
+ 
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPg_dot.rs
+@@ -0,0 +1,49 @@
++use super::*;
++pub(super) fn reference(x:Q,y:Q)->[u64;4] {
++ let [a,b,c,d]=x.0.map(u64::from); let [e,f,g,h]=y.0.map(u64::from);
++ let pp=(P as u64)*(P as u64);
++ let u=(c*g).wrapping_add(pp).wrapping_sub(d*h);
++ let v=(c*h).wrapping_add(d*g);
++ let u=(u & P as u64).wrapping_add(u>>31);
++ let v=(v & P as u64).wrapping_add(v>>31);
++ [(a*e).wrapping_add(pp).wrapping_sub(b*f).wrapping_add(2*u).wrapping_add(3*P as u64).wrapping_sub(v),
++ (a*f).wrapping_add(b*e).wrapping_add(u).wrapping_add(2*v),
++ (a*g).wrapping_add(c*e).wrapping_add(2*pp).wrapping_sub(b*h).wrapping_sub(d*f),
++ (a*h).wrapping_add(b*g).wrapping_add(c*f).wrapping_add(d*e)]
++}
++fn operands()->(Q,Q) {let x:[u32;4]=kani::any();let y:[u32;4]=kani::any();
++ kani::assume(x.iter().all(|v|*v<P)&&y.iter().all(|v|*v<P));
++ (Q::from_limbs(x).unwrap(),Q::from_limbs(y).unwrap())}
++#[kani::proof_for_contract(Q::raw)] #[kani::unwind(6)]
++fn LPg_raw_contract(){let (a,b)=operands();a.raw(b);}
++fn cell<const J:usize>() {let (a,b)=operands();let sums:[u64;4]=kani::any();let mut actual=Dot{sums};
++ let raw=reference(a,b); actual.push(a,b);
++ assert_eq!(actual.sums[J],sums[J].wrapping_add((raw[J] & P as u64).wrapping_add(raw[J]>>31)));}
++#[kani::proof] #[kani::stub_verified(Q::raw)] #[kani::unwind(6)] fn LPg_cell0(){cell::<0>()}
++#[kani::proof] #[kani::stub_verified(Q::raw)] #[kani::unwind(6)] fn LPg_cell1(){cell::<1>()}
++#[kani::proof] #[kani::stub_verified(Q::raw)] #[kani::unwind(6)] fn LPg_cell2(){cell::<2>()}
++#[kani::proof] #[kani::stub_verified(Q::raw)] #[kani::unwind(6)] fn LPg_cell3(){cell::<3>()}
++
++pub(super) fn ref_add(x:Q,y:Q)->[u32;4]{core::array::from_fn(|i|{let s=u64::from(x.0[i])+u64::from(y.0[i]);(if s>=P as u64{s-P as u64}else{s})as u32})}
++pub(super) fn ref_sub(x:Q,y:Q)->[u32;4]{core::array::from_fn(|i|{let s=u64::from(x.0[i])+P as u64-u64::from(y.0[i]);(if s>=P as u64{s-P as u64}else{s})as u32})}
++pub(super) fn ref_half(x:Q)->[u32;4]{x.0.map(|a|a/2+(a%2)*1073741824)}
++#[kani::proof_for_contract(reduce)] #[kani::unwind(6)] fn LPg_reduce_contract(){reduce(kani::any());}
++#[kani::proof_for_contract(add)] #[kani::unwind(6)] fn LPg_add_contract(){add(kani::any(),kani::any());}
++#[kani::proof_for_contract(Q::add)] #[kani::unwind(6)] fn LPg_qadd_contract(){let(a,b)=operands();a.add(b);}
++#[kani::proof_for_contract(Q::sub)] #[kani::unwind(6)] fn LPg_qsub_contract(){let(a,b)=operands();a.sub(b);}
++#[kani::proof_for_contract(Q::half)] #[kani::unwind(6)] fn LPg_qhalf_contract(){let(a,b)=operands();a.half();}
++
++pub(super) fn equal(a:[u32;4],b:[u32;4])->bool{a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]}
++
++// Isolated primitive product excerpt; does not replace the actual raw method.
++#[kani::requires(a<P && b<P)]
++#[kani::ensures(|out:&u64| (*out as u128)==(a as u128)*(b as u128))]
++fn LPg_product(a:u32,b:u32)->u64{u64::from(a)*u64::from(b)}
++#[kani::proof_for_contract(LPg_product)] fn LPg_product_contract(){LPg_product(kani::any(),kani::any());}
++#[kani::proof] #[kani::stub_verified(reduce)] #[kani::unwind(6)]
++fn LPg_finish_canonical(){let sums:[u64;4]=kani::any();let q=Dot{sums}.finish();for j in 0..4{assert!(q.0[j]<P);}}
++#[kani::proof] #[kani::unwind(6)] fn LPg_dot_witness(){
++ let nonzero:bool=kani::any();let a=if nonzero{Q::ONE}else{Q::ZERO};let mut d=Dot::new();d.push(a,Q::ONE);let out=d.finish();
++ for j in 0..4{assert_eq!(out.0[j],a.0[j]);}
++ kani::cover!(nonzero);kani::cover!(!nonzero);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPg_verifier.rs
+@@ -0,0 +1,10 @@
++use super::*;
++fn step<const K:bool,const J:usize>() {
++ let b:[u8;32]=kani::any();let prior:bool=kani::any();
++ let x=E::from_le_bytes(&b);let expected=match x {None=>Err(Error::Parse),Some(x)=>if K&&x.c1()!=K::ZERO{Err(Error::Parse)}else{Ok(())}};
++ let native=if prior {echeck(&b,K)}else{Err(Error::Parse)};
++ assert_eq!(native,if prior{expected}else{Err(Error::Parse)});
++ let _=J;
++}
++#[kani::proof] #[kani::unwind(10)] fn LPg_echeck0(){step::<false,0>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_echeck1(){step::<true,0>()}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPg_compact.rs
+@@ -0,0 +1,15 @@
++use super::*;
++#[kani::proof] #[kani::unwind(8)] fn LPg_check_step(){
++ let b:[u8;16]=kani::any();let prior:bool=kani::any();
++ let actual=if prior{check_values(&b)}else{Err(CodecError::NonCanonical)};
++ let expect=if prior&&QM31::from_le_bytes(&b).is_some(){Ok(())}else{Err(CodecError::NonCanonical)};
++ assert_eq!(actual,expect);
++}
++fn expansion<const LO:usize,const HI:usize>(){
++ let b:[u8;16]=kani::any();let mut out:[u8;32]=kani::any();let old=out;
++ let lane:usize=kani::any();kani::assume(lane>=LO&&lane<HI);
++ assert_eq!(expand_values(&b,&mut out),Ok(()));
++ assert_eq!(out[lane],if lane<16{b[lane]}else{0});let _=old;
++}
++#[kani::proof] #[kani::unwind(18)] fn LPg_expand_low(){expansion::<0,16>()}
++#[kani::proof] #[kani::unwind(18)] fn LPg_expand_high(){expansion::<16,32>()}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPg_r1_wire.rs
+@@ -0,0 +1,50 @@
++use super::*;
++#[kani::proof] #[kani::unwind(10)] fn LPg_validate_step(){
++ let b:[u8;32]=kani::any();let row:u8=kani::any();
++ let expected=match WideExact::from_le_bytes(&b){Some(x) if x.c1()==QM31::ZERO=>Ok(()),_=>Err(Error::NonCanonical{row,value:0})};
++ assert_eq!(validate_record_fields(row,&b),expected);
++}
++fn decode_step<const POINT:usize,const LO:usize,const HI:usize>() {
++ let i:usize=kani::any();kani::assume(i>=LO&&i<HI);
++ // A one-value record at an arbitrary absolute offset; original decoder takes N=1.
++ let b:[u8;5+116*32]=kani::any();let row:u8=kani::any();kani::assume(row>=14);
++ let off=POINT+i;let at=5+32*off;
++ let expected=QM31::from_le_bytes(&b[at..at+16]).map(|q|[q]).ok_or(Error::NonCanonical{row,value:off});
++ let got=ValidatedRecord{row,framed:&b}.decode_k::<1>(off);
++ match (got,expected){
++  (Ok([a]),Ok([b]))=>{assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);},
++  (Err(a),Err(b))=>assert_eq!(a,b),_=>panic!("step disagreement")
++ }
++}
++#[kani::proof] #[kani::unwind(10)] fn LPg_decode0_0(){decode_step::<0,0,15>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_decode0_1(){decode_step::<0,15,29>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_decode29_0(){decode_step::<29,0,15>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_decode29_1(){decode_step::<29,15,29>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_decode58_0(){decode_step::<58,0,15>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_decode58_1(){decode_step::<58,15,29>()}
++
++#[kani::proof] #[kani::unwind(10)] fn LPg_decode_invalid_row(){
++ let b:[u8;37]=kani::any();let row:u8=kani::any();kani::assume(row<14);
++ assert_eq!(ValidatedRecord{row,framed:&b}.decode_k::<1>(0),Err(Error::InvalidRow));
++}
++#[kani::proof] #[kani::unwind(10)] fn LPg_decode_offset_overflow(){
++ let b:[u8;37]=kani::any();let row:u8=kani::any();kani::assume(row>=14);let off:usize=kani::any();kani::assume(off>usize::MAX/32);
++ assert_eq!(ValidatedRecord{row,framed:&b}.decode_k::<1>(off),Err(Error::Length{row}));
++}
++#[kani::proof] #[kani::unwind(10)] fn LPg_decode_range_error(){
++ let b:[u8;37]=kani::any();let row:u8=kani::any();kani::assume(row>=14);let off:usize=kani::any();kani::assume(off>=1&&off<=usize::MAX/32);
++ assert_eq!(ValidatedRecord{row,framed:&b}.decode_k::<1>(off),Err(Error::Length{row}));
++}
++
++fn fixed_decode<const OFF:usize>(){
++ let b:[u8;5+116*32]=kani::any();let row:u8=kani::any();kani::assume(row>=14);
++ let expected=QM31::from_le_bytes(&b[5+OFF*32..5+OFF*32+16]);
++ let got=ValidatedRecord{row,framed:&b}.decode_k::<1>(OFF);
++ match (got,expected){
++ (Ok([a]),Some(b))=>{assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);},
++ (Err(a),None)=>assert_eq!(a,Error::NonCanonical{row,value:OFF}),_=>panic!("fixed-index disagreement")}
++}
++#[kani::proof] #[kani::unwind(10)] fn LPg_fixed15(){fixed_decode::<15>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_fixed28(){fixed_decode::<28>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_fixed73(){fixed_decode::<73>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_fixed86(){fixed_decode::<86>()}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPg_candidate.rs
+@@ -0,0 +1,25 @@
++use super::*;
++fn view<const PART:usize>(){
++ let p:[u8;compact::OFF_OPENINGS]=kani::any();let semantic:[u8;0]=kani::any();let y1:[u8;0]=kani::any();
++ let expected=E::from_le_bytes(&p[compact::OFF_INACTIVE..compact::OFF_ROUND0]);
++ let got=wide_view(&p,&semantic,&y1);
++ match (got,expected){
++  (Err(Error::Parse),None)=>{},
++  (Ok(v),Some(x))=>{
++   let a=v.inactive.to_limbs();let b=x.to_limbs();for j in 0..8{assert_eq!(a[j],b[j]);}
++   assert!(core::ptr::eq(v.semantic.as_ptr(),semantic.as_ptr()));assert_eq!(v.semantic.len(),semantic.len());
++   assert!(core::ptr::eq(v.y1.as_ptr(),y1.as_ptr()));assert_eq!(v.y1.len(),y1.len());
++   let (bytes,lo,hi)=match PART{
++    0=>(v.round0,compact::OFF_ROUND0,compact::OFF_FOLDED_ROOT),
++    1=>(v.folded_root.unwrap().as_slice(),compact::OFF_FOLDED_ROOT,compact::OFF_ROUND1),
++    2=>(v.round1,compact::OFF_ROUND1,compact::OFF_FINAL),
++    _=>(v.final_message,compact::OFF_FINAL,compact::OFF_OPENINGS)};
++   assert!(core::ptr::eq(bytes.as_ptr(),p[lo..hi].as_ptr()));assert_eq!(bytes.len(),hi-lo);
++   assert!(v.query_bytes.is_empty());
++  },_=>panic!("native range/decoder disagreement")
++ }
++}
++#[kani::proof] #[kani::unwind(10)] fn LPg_view0(){view::<0>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_view1(){view::<1>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_view2(){view::<2>()}
++#[kani::proof] #[kani::unwind(10)] fn LPg_view3(){view::<3>()}
