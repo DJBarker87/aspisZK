@@ -28,7 +28,7 @@ def run(label,cmd,cwd):
  if r.returncode:raise SystemExit(r.returncode)
 
 op=int(sys.argv[1]);suffix=sys.argv[2]
-file,name={230:('prover_helper_sum.rs','state_only_copy_helper_sum'),254:('weights.rs','powers'),258:('ct_pole.rs','all_slots_clear')}[op]
+file,name={230:('prover_helper_sum.rs','state_only_copy_helper_sum'),254:('prover_powers.rs','powers'),258:('ct_pole.rs','all_slots_clear')}[op]
 src=H/'candidate/src/crates/aspis-r1-cost-probe/src'/file;s=src.read_text()
 code='use aspis_core::field::{QM31, WideExact as E};\n'
 if op==230: code+='const TRACE_ROWS:usize=1024;\n'+function(s,name)
