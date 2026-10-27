@@ -7,3 +7,7 @@ Budget 100 Lean / 6 Kani; IDs 37400–37699, never reused. Final three charged L
 Stage 1 resumes PDict_Static222_13. PDict sources are read-only git-show snapshots pinned in sibling-pins.json. The existing launcher publishes to shared objects; each successful object is also retained in the assigned host lean-objects directory. Shared preimages are backed up per attempt; dependent compiles fingerprint actual import objects. No launcher/environment changes.
 
 Initial status: constructed candidate P {identity, common_public, trace}; deployed installation/compiler/admission/runtime/carrier/observer/release joins open. Counts runtime/boundary 2→2, fields 8→8, residuals 6→6. Both fixture P∧T non-vacuity open. T unchanged (three fields). A/B unadopted.
+
+Stage 2 preparation: JoinedInstallation is an uncompiled draft targeting PV_Join_FixtureInputs at PV_Join_PublicCaller.native. It retains exact source public-input equality as a P premise; it does not assume that abstract witness public equality proves compiler public binding. The joined carrier is not identified with PDict_CodecDictionary.native.
+
+Kani harnesses listed before invocation: source_root_04, source_root_05, source_root_06, source_root_08, source_root_09, source_root_10 under pool_v1::pair_trace::pv_runjoin8_roots. Six new single-cell checks; historical timed-out aggregate unchanged and not rerun. Only the already cfg(kani)-gated child file changes under crates/.
