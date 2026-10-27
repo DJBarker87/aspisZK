@@ -10620,3 +10620,25 @@ prover (Lean unreachability theorems, Kani traces as evidence), source laws for 
 (consuming cb4/cb5 proofs, never duplicating), and the fixture proof-byte equations only once rw20
 publishes the model instance. Six slots: cb4, runjoin8, rw20, cb5, srcid5, join4. Rows removed outright:
 0. Privacy target not yet established.
+
+## D231 (Stream B) 2026-10-27 00:20 UTC: srcid5 exhausted (full audit green but merge gate blocked by a stale cached object); launcher outage; srcid6 launched
+
+pv-srcid5 (`codex/pv-srcid3-20261026`, head 92d3db0b2f; 100/100 Lean all succeeded, 6/6 Kani mapper
+harnesses timed out at 180 s, no counterexample; no crates/programs change; Rust changes cfg(kani)-only per
+the worker, gating to be confirmed by srcid6 since several tools/r1-builder-reference files carry no
+in-file cfg). Missing objects 92 → 0; full audit 132 modules, 579/579 standard axiom reports (final run exit
+0, 2.38 s, 4.23 GB RSS, swap 0); combined canonical private-record/admission bridge validated with its
+public-association join. MERGE GATE BLOCKED: the cached object `R1NaturalProjection` differs materially
+from the research source, so the audit ran against a non-HEAD dependency; the branch stays unmerged.
+Families: compile_call OPEN (pure `Records.call` equation owed), words REDUCED (unstubbed full-mapper
+equality + installed checked selection), publicCorr REDUCED (root-helper equation + deployed snapshot
+association), admission REDUCED (SourceSelectionContract/SelectedAdmission joins), row_call REDUCED
+(InstalledTransport.endpoint_row_call). PV_Src_Premises deployed 5 → 5. Launched pv-srcid6 (same branch,
+IDs 37100-37399, 100 Lean / 4 Kani): recompile every stale closure object from HEAD with dependents, full
+audit, MERGE-GATE.md with per-object source-sha = HEAD-sha evidence; then Records.call, root helper,
+variant-split mapper. Launcher outage 00:03-00:05 UTC: Stream A's codex-run.sh vanished from its
+scratchpad (neither stream deleted it); join4's first two launches started no worker; I reconstructed a
+Stream B copy (pv-codex-run.sh / pv-codex-retry.sh in my scratchpad, same codex exec line) and launched
+join4 with it at 00:05; Stream A restored the original byte-equal at 00:05 and will keep the launcher
+scripts in the repo under evidence. join4 is running normally. Six slots: cb4, runjoin8, rw20, cb5,
+join4, srcid6. Rows removed outright: 0. Privacy target not yet established.
