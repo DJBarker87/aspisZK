@@ -1,6 +1,7 @@
 import FJn_NativeTerminal
 import FJn_MainClaims
 import FJn_MainPoint
+import FJn_MainDecode
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.FJn_MainTerminal
@@ -37,7 +38,7 @@ theorem value (pub : Public) (claims : Array (Array MQ 29#usize) 3#usize)
       (fun j l=>embed (FJn_MainClaims.claims claims j l)) := by
     funext j l;exact congrArg embed (FJn_MainClaims.value claims j l)
   simpa only [FIr_CarrierCanonical.from_value,FJn_NativeCarrierBridge.decode,public_roundtrip,
-    toChallenges,FIr_CarrierCanonical.to_value,FJn_MainPoint.value,ce] using got.2
+    toChallenges,FJn_MainDecode.value,FIr_CarrierCanonical.to_value,FJn_MainPoint.value,ce] using got.2
 #print axioms value
 end AspisR1.FJn_MainTerminal
 end

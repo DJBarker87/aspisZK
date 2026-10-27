@@ -10,7 +10,7 @@ def point (a : Array MQ 10#usize) : Fin 10 → FIv_NativeValue.K := fun i=>
 theorem value (a : Array MQ 10#usize) :
     FIw_ArrayValue.decoded (mapArray toQ a)=point a := by
   funext i
-  unfold FIw_ArrayValue.decoded mapArray point
+  unfold FIw_ArrayValue.decoded FIw_ArrayValue.cells mapArray point
   simp only [List.getElem_map]
   rfl
 #print axioms value
