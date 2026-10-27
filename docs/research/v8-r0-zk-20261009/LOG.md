@@ -11706,3 +11706,32 @@ the backend shift ports cannot fail, op258's CT scan equal to the original verdi
 the fixture-byte gate; op223 stays with pv-op223; differential and timing gates combined later. Six
 slots: op223, cblib4, runjoin16, l2b, route2b, batch1. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D282 (Stream B) 2026-10-27 12:40 UTC: op223 discharges V164's source hypothesis on the candidate and passes ELF, fixture and 1,000-pair gates; merged into the candidate; batch 1 caught a verifier-byte change at gate (a) and is corrected
+
+pv-op223 (`codex/pv-op223-20261027`, final da6decdc6f; 80/100 Lean, no Kani; audits 43597-43599
+standard axioms; implementation revision 6be26e38fd adds the 18-line prover-local index compressor
+crates/aspis-r1-cost-probe/src/prover_shared.rs behind the prover features and redirects the one host call
+in host_semantic.rs; native features optimized-terminal,r1p-check,ct-host-prover). Published
+`PV_Op223_Source.op223_source` (the applied host function's extraction, complete Result, arbitrary
+inputs), the complete-Result bridge to the P6 compressor and `PV_Op223_V164.refinement`: V164's
+hypotheses on the candidate {P_source_p6, reservation, P_proof_bytes} → {reservation, P_proof_bytes}
+(V240 closes on the candidate by EXTRACTION of the applied source). Gates on the pre-rebase base: all
+three ELF pins match; fixed fixtures byte-identical; a fresh 1,000-pair whole-prover differential passed
+1,000/1,000 (600 complete proofs, 100 rejected-prefix pairs, 400 error cases; 12,956 s, peak 622 MB, swap
+0; raw corpus deleted after its sha256 manifest). Timing gate prepared (TIMING-PLAN.md), not run. The lead
+merged the branch into the rebased candidate: codex/cx-prover-rw-20261023 = 0c9dc9a4cc (clean merge; the
+only crates/ delta is the 18 lines). Launched pv-integ1 (`codex/pv-integ1-20261027` from 0c9dc9a4cc in
+the pv-cb worktree; IDs 53900-54199): ELF pins, recommended-recipe devnet_spend with route evidence, the
+fixture-byte gate on the INTEGRATED candidate, the Lean re-check, and the combined differential/timing
+plan. pv-batch1 (`codex/pv-batch1-20261027`) applied ops 230/254/258 and STOPPED at gate (a): default ELF
+46ea9c91b66b40d02f21be23c6a2effeb69dba91ae0e2ab7f50094882c246a22 instead of f8c0ec72… (+48 bytes). Cause:
+`pub mod weights;` in aspis-r1-cost-probe/src/lib.rs is not feature-gated, so weights.rs is compiled into
+programs/r1-cost-probe (the default release ELF), and the "in place" edit of weights::powers (op254)
+changed verifier bytes; the route2 packet's "no production dependency" claim checked only crate edges
+for aspis-verifier/pool/registry. No verifier change is adopted or proposed: LEAD RULING (l) requires a
+module's gate to be shown before any in-place edit and a prover-local copy otherwise; pv-batch1b (same
+branch, IDs 53600-53899 unused) reverts weights.rs, makes op254 a prover-local copy, checks every other
+edited module's gate, re-runs gate (a), then the extraction, source laws and fixture gate. Six slots:
+cblib4, runjoin16, l2b, route2b, integ1, batch1b. Rows removed outright: 0 (V164's source hypothesis is
+gone on the CANDIDATE, which is not yet adopted). Privacy target not yet established.
