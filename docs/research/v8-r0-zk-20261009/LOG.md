@@ -12833,3 +12833,26 @@ first, then, only if all pass, states the honest-carrier version with before/aft
 proves the consumers go through, proves the three fields for every honest carrier, and shows both
 fixtures are honest carriers. The owner packet records this as information: the endpoint statement
 is unchanged. Rows removed outright: 0. Privacy target not yet established.
+
+## D333 (Stream B) 2026-10-27 23:19 UTC: consumer check: generic consumers are true on non-honest inputs; the lead's question was mis-framed; source identification is instantiated at the honest-input family; runjoin27 launched
+
+runjoin26 (6 attempts; standard axioms) defined the diagnostic predicate HonestInput (Admission, the
+actual compiler return equal to i.compiled with both Result layers, Checked, canonical frontier
+words) and showed, on the admitted input whose cached trace.variant alone was altered, that the
+unrestricted SourceIdentification holds (38130) and that BuilderProtocolInstance.join_of_
+identification, BuilderSource.builder_refinement_D46_D51 and PV_Src_Consumer.of_identification all
+return TRUE conclusions there (38133), although the input is not honest. So the generic consumers
+cover non-honest inputs, and D332's prerequisite "every consumer applies the handoff only at honest
+inputs" is false. Both fixtures satisfy every honesty guard.
+
+Lead assessment: D332's question was mis-framed. The consumers are generic over the source family;
+nothing in them needs restricting. What matters is the family at which the discharge route
+instantiates SourceIdentification. For privacy of an honest user the prover's inputs come from the
+compiler (the client receives  from its caller; the honest pipeline produces it; the
+Selection is the honest prover's, D320), so the route instantiates at the honest-input family. The
+raw-family unsatisfiability (D332) stays recorded and does not apply to that family. runjoin27
+(remaining 64 attempts) states SourceIdentification at the honest family, proves its three fields
+for every honest input, applies the existing consumers there, says what part of RustRealRefinement
+that discharges, and writes the exact meaning of the restriction for the privacy claim: privacy for
+users whose prover inputs are produced by the compiler. That meaning goes to the owner packet as a
+scope statement. Rows removed outright: 0. Privacy target not yet established.
