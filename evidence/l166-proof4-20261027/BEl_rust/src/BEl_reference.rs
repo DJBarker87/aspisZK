@@ -9,15 +9,16 @@ struct Attempt {
     address: Vec<u8>,
     input: Vec<Vec<u8>>,
     // None records an attempt whose backend has not returned.
-    returned: Option<Result<[u8;32], core::convert::Infallible>>,
+    returned: Option<Result<[u8;32], ()>>,
 }
 #[derive(Clone,Copy)]
 struct Recording<'a,H:Digest32> { backend:H, log:&'a RefCell<Vec<Attempt>> }
 impl<H:Digest32> Digest32 for Recording<'_,H> {
     fn digest(&self, parts:&[&[u8]])->[u8;32] {
         let position=self.log.borrow().len();
-        let input:Vec<Vec<u8>>=parts.iter().map(|p|p.to_vec()).collect();
-        let address=parts.iter().flat_map(|p|p.iter().copied()).collect();
+        let mut input=Vec::with_capacity(parts.len());
+        let mut address=Vec::new();
+        for part in parts {input.push(part.to_vec());address.extend_from_slice(part);}
         self.log.borrow_mut().push(Attempt {address,input,returned:None});
         let answer=self.backend.digest(parts);
         self.log.borrow_mut()[position].returned=Some(Ok(answer));
@@ -81,7 +82,7 @@ fn check_leaf(tree:usize) {
     let b=leaf(Recording {backend:Reply(answer),log:&reference},tree,&q);
     assert_eq!(a,b); assert_eq!(*original.borrow(),*reference.borrow());
     assert_eq!(original.borrow().len(),1);
-    kani::cover!(original.borrow()[0].returned==Some(Ok(answer)));
+    assert_eq!(original.borrow()[0].returned,Some(Ok(answer)));
 }
 #[kani::proof] #[kani::unwind(835)] fn leaf_c1(){check_leaf(0)}
 #[kani::proof] #[kani::unwind(835)] fn leaf_c2(){check_leaf(1)}
@@ -97,4 +98,99 @@ fn whole_batch() {
     let a=shipped::batch_merkle_values(&proof,queries,roots,ordinal,Recording {backend:Reply(answer),log:&original});
     let b=batch(&proof,queries,roots,ordinal,Recording {backend:Reply(answer),log:&reference});
     assert_eq!(a,b); assert_eq!(*original.borrow(),*reference.borrow());
+}
+
+// A coordinate observation is used only for splitting the recorder-copy loops.
+// Universal equality of these projections reconstructs complete ordered logs;
+// it is NOT itself a whole-batch/physical correspondence certificate.
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]
+struct Coordinate {
+    calls:usize,
+    part_lengths:[usize;3],
+    byte:Option<u8>,
+    returned:Option<[u8;32]>,
+}
+#[derive(Clone,Copy)]
+struct At<'a> {
+    state:&'a RefCell<Coordinate>, selected_call:usize,
+    selected_part:usize, selected_byte:usize, answer:[u8;32],
+}
+impl Digest32 for At<'_> {
+    fn digest(&self,parts:&[&[u8]])->[u8;32] {
+        let mut s=self.state.borrow_mut();
+        if s.calls==self.selected_call {
+            assert_eq!(parts.len(),3);
+            s.part_lengths=[parts[0].len(),parts[1].len(),parts[2].len()];
+            s.byte=parts.get(self.selected_part).and_then(|p|p.get(self.selected_byte)).copied();
+            s.returned=Some(self.answer);
+        }
+        s.calls+=1;
+        self.answer
+    }
+}
+fn zero()->Coordinate {Coordinate {calls:0,part_lengths:[0;3],byte:None,returned:None}}
+fn check_leaf_coordinate(tree:usize) {
+    let q:[u8;832]=kani::any(); let answer:[u8;32]=kani::any();
+    let part:usize=kani::any(); let byte:usize=kani::any(); let selected:usize=kani::any();
+    let a=RefCell::new(zero()); let b=RefCell::new(zero());
+    let original=shipped::batch_leaf(At {state:&a,selected_call:selected,selected_part:part,selected_byte:byte,answer},tree,&q);
+    let reference=leaf(At {state:&b,selected_call:selected,selected_part:part,selected_byte:byte,answer},tree,&q);
+    assert_eq!(original,reference); assert_eq!(*a.borrow(),*b.borrow());
+    assert_eq!(a.borrow().calls,1);
+    if selected==0 && part==1 && byte==0 {assert!(a.borrow().byte.is_some());}
+}
+#[kani::proof] #[kani::unwind(65)] fn leaf_c1_coordinate(){check_leaf_coordinate(0)}
+#[kani::proof] #[kani::unwind(65)] fn leaf_c2_coordinate(){check_leaf_coordinate(1)}
+#[kani::proof] #[kani::unwind(65)] fn leaf_folded_coordinate(){check_leaf_coordinate(2)}
+
+fn leaf_step<H:Digest32>(keys:[u64;16],position:usize,lo:usize,tree:usize,q:&[u8],idx:&mut [u32;16],val:&mut [[u8;32];16],used:usize,hash:H)->(bool,usize,usize,usize) {
+    let key=keys[position]; let index=(key>>8) as u32;
+    let selected=lo+(key&255) as usize;
+    let digest=leaf(hash,tree,q);
+    if used>0 && idx[used-1]==index {
+        (val[used-1]==digest,position+1,selected,used)
+    } else {
+        idx[used]=index;val[used]=digest;
+        (true,position+1,selected,used+1)
+    }
+}
+fn check_leaf_step(tree:usize) {
+    let keys:[u64;16]=kani::any(); let position:usize=kani::any();
+    kani::assume(position<12);
+    let lo:usize=kani::any(); kani::assume(lo==0 || lo==10);
+    let used:usize=kani::any(); kani::assume(used<=position);
+    let mut idx_a:[u32;16]=kani::any(); let mut val_a:[[u8;32];16]=kani::any();
+    let mut idx_b=idx_a;let mut val_b=val_a;
+    let q:[u8;832]=kani::any();let answer:[u8;32]=kani::any();
+    let part:usize=kani::any();let byte:usize=kani::any();let selected:usize=kani::any();
+    let a=RefCell::new(zero());let b=RefCell::new(zero());
+    let ra=shipped::leaf_step(keys,position,lo,tree,&q,&mut idx_a,&mut val_a,used,At{state:&a,selected_call:selected,selected_part:part,selected_byte:byte,answer});
+    let rb=leaf_step(keys,position,lo,tree,&q,&mut idx_b,&mut val_b,used,At{state:&b,selected_call:selected,selected_part:part,selected_byte:byte,answer});
+    assert_eq!(ra,rb);assert_eq!(idx_a,idx_b);assert_eq!(val_a,val_b);
+    assert_eq!(*a.borrow(),*b.borrow());assert_eq!(a.borrow().calls,1);
+}
+#[kani::proof] #[kani::unwind(513)] fn leaf_step_c1(){check_leaf_step(0)}
+#[kani::proof] #[kani::unwind(513)] fn leaf_step_c2(){check_leaf_step(1)}
+#[kani::proof] #[kani::unwind(513)] fn leaf_step_folded(){check_leaf_step(2)}
+
+#[derive(Clone,Copy)]
+struct Tape<'a> {answers:&'a [[u8;32];684],cursor:&'a std::cell::Cell<usize>}
+impl Digest32 for Tape<'_> {
+    fn digest(&self,_:&[&[u8]])->[u8;32] {
+        let index=self.cursor.get();
+        assert!(index<684); self.cursor.set(index+1); self.answers[index]
+    }
+}
+// This is the whole-body target with an arbitrary chronological reply tape.
+// 684 = 3*(12 +18*12), before using the sharper accepted P6 bound.
+#[kani::proof] #[kani::unwind(835)]
+fn whole_batch_tape() {
+    let proof:[u8;57607]=kani::any(); let queries:[u32;22]=kani::any();
+    let roots:[[u8;32];3]=kani::any(); let ordinal:usize=kani::any();kani::assume(ordinal<2);
+    let answers:[[u8;32];684]=kani::any();
+    let ca=std::cell::Cell::new(0);let cb=std::cell::Cell::new(0);
+    let original=RefCell::new(Vec::new());let reference=RefCell::new(Vec::new());
+    let ra=shipped::batch_merkle_values(&proof,queries,roots,ordinal,Recording{backend:Tape{answers:&answers,cursor:&ca},log:&original});
+    let rb=batch(&proof,queries,roots,ordinal,Recording{backend:Tape{answers:&answers,cursor:&cb},log:&reference});
+    assert_eq!(ra,rb);assert_eq!(ca.get(),cb.get());assert_eq!(*original.borrow(),*reference.borrow());
 }

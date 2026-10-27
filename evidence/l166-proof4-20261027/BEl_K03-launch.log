@@ -1,0 +1,40 @@
+{"attempt": "BEl_K03", "exit_status": 1, "wall_seconds": 1.907147363992408, "peak_rss_kib": "281388", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling bel-batch-observation v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEl_rust)
+warning: unused import: `alloc::vec::Vec`
+  --> src/BEl_frozen.rs:86:5
+   |
+86 | use alloc::vec::Vec;
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` pr
+...
+ dereference failure: pointer invalid in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.3] line 138 dereference failure: deallocated dynamic object in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.4] line 138 dereference failure: dead object in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.5] line 138 dereference failure: pointer outside object bounds in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.6] line 138 dereference failure: invalid integer address in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.reachability_check.3] line 138 KANI_CHECK_ID_bel_batch_observation.2b76625444cea9e3::bel_batch_observation_135: SUCCESS
+[BEl_reference::check_leaf_coordinate.cover.1] line 139 [KANI_CHECK_ID_bel_batch_observation.2b76625444cea9e3::bel_batch_observation_136] cover condition: selected==0 && part==1 && byte==0 && a.borrow().byte.is_some(): SUCCESS
+[BEl_reference::check_leaf_coordinate.reachability_check.4] line 139 KANI_CHECK_ID_bel_batch_observation.2b76625444cea9e3::bel_batch_observation_136: SUCCESS
+
+src/BEl_reference.rs function BEl_reference::leaf::<BEl_reference::At<'_>>
+[BEl_reference::leaf::<BEl_reference::At<'_>>.assertion.1] line 39 [KANI_CHECK_ID_bel_batch_observation.2b76625444cea9e3::bel_batch_observation_18] attempt to add with overflow: SUCCESS
+[BEl_reference::leaf::<BEl_reference::At<'_>>.reachability_check.1] line 39 KANI_CHECK_ID_bel_batch_observation.2b76625444cea9e3::bel_batch_observation_18: FAILURE
+
+** 9 of 359 failed (2 iterations)
+VERIFICATION FAILED
+Manual Harness Summary:
+Verification failed for - BEl_reference::leaf_c1_coordinate
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-ra537e8c7cef94f2d8fc6ec004d8f18cd.scope; invocation ID: 9087062bb4fc4d8bbfb2bda23af1f57d

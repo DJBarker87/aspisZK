@@ -364,4 +364,23 @@ pub(crate) fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u
     }
     Ok(())
 }
+pub(crate) fn leaf_step<H:Digest32>(keys:[u64;16],mut key_position:usize,lo:usize,tree:usize,q:&[u8],idx:&mut [u32;16],val:&mut [[u8;32];16],mut d:usize,hash:H)->(bool,usize,usize,usize) {
+        let key = batch_key_at(&keys, key_position);
+        key_position += 1;
+        let index = (key >> 8) as u32;
+        let selected = lo + (key & 0xff) as usize;
+        let leaf = batch_leaf(hash, tree, q);
+        if d > 0 && same_batch_index(idx, d - 1, index) {
+            if !same_batch_leaf(val, d - 1, leaf) {
+                return (false,key_position,selected,d);
+            }
+            return (true,key_position,selected,d);
+        }
+        idx[d] = index;
+        val[d] = leaf;
+        d += 1;
+
+(true,key_position,selected,d)
+}
+
 }
