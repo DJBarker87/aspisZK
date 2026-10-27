@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_SumControl.lean:75:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Src h1 ?m.39 ?m.40
+in the target expression
+  (have i := h1.len;
+    if i = TRACE_ROWS then do
+      let sum ← state_only_copy_helper_sum_loop h1 aspis_core.field.QM31.ZERO 0#usize
+      ok (some sum)
+    else ok none) =
+    do
+    let s ← finite h1 (↑h1.len) aspis_core.field.QM31.ZERO 0#usize
+    ok (some s)
+
+case isTrue
+h1 : Slice Q
+h✝ : h1.len = TRACE_ROWS
+⊢ (have i := h1.len;
+    if i = TRACE_ROWS then do
+      let sum ← state_only_copy_helper_sum_loop h1 aspis_core.field.QM31.ZERO 0#usize
+      ok (some sum)
+    else ok none) =
+    do
+    let s ← finite h1 (↑h1.len) aspis_core.field.QM31.ZERO 0#usize
+    ok (some s)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_SumControl.lean:76:4: error: Tactic `rfl` failed: The left-hand side
+  have i := h1.len;
+  if i = TRACE_ROWS then do
+    let sum ← state_only_copy_helper_sum_loop h1 aspis_core.field.QM31.ZERO 0#usize
+    ok (some sum)
+  else ok none
+is not definitionally equal to the right-hand side
+  ok none
+
+case isFalse
+h1 : Slice Q
+h✝ : ¬h1.len = TRACE_ROWS
+⊢ (have i := h1.len;
+    if i = TRACE_ROWS then do
+      let sum ← state_only_copy_helper_sum_loop h1 aspis_core.field.QM31.ZERO 0#usize
+      ok (some sum)
+    else ok none) =
+    ok none
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_SumControl.lean:75:50: error: 'change' tactic failed, pattern
+  0 + ?m.45 = ?m.47
+is not definitionally equal to target
+  ↑?m.40 + ↑h1.len = ↑h1.len
+'PV_B1_SumControl.source_unfold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B1_SumControl.dispatch_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B1_SumControl.loop_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B1_SumControl.op230_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

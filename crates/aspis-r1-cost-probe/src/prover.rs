@@ -210,7 +210,7 @@ fn prove_masked_with_attempt(
     test_hooks::observe_secrets(hash,reserved.mask_nonce(),&g,c1_salts.as_ref().unwrap().get(0));
     let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts};
     let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,LegacyHashFn(hash),variant).map_err(semantic_error)?;
-    let h1_total_balanced=aspis_statement::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
+    let h1_total_balanced=crate::prover_helper_sum::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
     if !h1_total_balanced { return Err(Error::Semantic); }
     let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
     let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?;
@@ -345,7 +345,7 @@ fn opening_claim_bytes(coefficients:&[Message<E>],z1:Point<E>)->Vec<u8> {
     bytes
 }
 fn opening_batch(coefficients:&[Message<E>],gamma:E)->Vec<E> {
-    let gp=crate::weights::powers::<29>(gamma);
+    let gp=crate::prover_powers::powers::<29>(gamma);
     let mut q=Vec::with_capacity(1024);let mut row=0;
     while row<1024 {let value=opening_row(coefficients,&gp,row);q.push(value);row+=1;}
     q

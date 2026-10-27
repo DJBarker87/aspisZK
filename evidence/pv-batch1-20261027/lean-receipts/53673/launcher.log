@@ -1,0 +1,58 @@
+reservation: populated 15 GiB + 8 GiB; window=0 (London 1441); env=J
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_FieldCM31Total.lean:27:16: error: unsolved goals
+a b : C
+m0 : aspis_core.field.M31
+h0 : a.a.mul b.a = ok m0
+m1 : aspis_core.field.M31
+h1 : a.b.mul b.b = ok m1
+prod : U64 :=
+  ((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)).wrapping_mul
+    ((core.convert.num.FromU64U32.from b.a).wrapping_add (core.convert.num.FromU64U32.from b.b))
+m2 : aspis_core.field.M31
+h2 : aspis_core.field.M31.reduce_u64 prod = ok m2
+m : aspis_core.field.M31
+hm : m0.sub m1 = ok m
+m3 : aspis_core.field.M31
+h3 : m2.sub m0 = ok m3
+m4 : aspis_core.field.M31
+h4 : m3.sub m1 = ok m4
+⊢ (do
+      let m2 ←
+        aspis_core.field.M31.reduce_u64
+            (((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)).wrapping_mul
+              ((core.convert.num.FromU64U32.from b.a).wrapping_add (core.convert.num.FromU64U32.from b.b)))
+      let m3 ← m2.sub m0
+      let m4 ← m3.sub m1
+      ok { a := m, b := m4 }) =
+    ok { a := m, b := m4 }
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_FieldCM31Total.lean:27:78: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_core.field.CM31.mul, ̲lift, ̲bind_tc_ok, ̲h0, ̲h1, ̲h2̵,̵h̵m, ̲h3, ̲h4]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_FieldCM31Total.lean:27:84: warning: This simp argument is unused:
+  h3
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_core.field.CM31.mul, ̲lift, ̲bind_tc_ok, ̲h0, ̲h1, ̲h2, ̲hm, ̲h3̵,̵h̵4]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_FieldCM31Total.lean:27:87: warning: This simp argument is unused:
+  h4
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_core.field.CM31.mul, ̲lift, ̲bind_tc_ok, ̲h0, ̲h1, ̲h2, ̲hm, ̲h3,̵h̵4̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B1_FieldCM31Total.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B1_FieldCM31Total.sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B1_FieldCM31Total.mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B1_FieldCM31Total.mul_by_r' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.03
+	Maximum resident set size (kbytes): 2619804
+	Swaps: 0
+	Exit status: 1

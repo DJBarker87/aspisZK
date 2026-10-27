@@ -196,7 +196,7 @@ fn tape(public_bytes:&[u8],variant:Variant,coins:&mut Coins)->Result<Tape,Error>
     let mut h1=vec![K::ZERO;1024];
     apply_pool_v1_pair_forest_h1_padding_mask_v1(&mut h1,&applied.h1_padding).map_err(|_|Error::Semantic)?;
     if zero.c1.len()!=16||d.len()!=1024||applied.g.len()!=1024
-        || aspis_statement::state_only_copy_helper_sum(&h1)!=Some(K::ZERO) {return Err(Error::Semantic);}
+        || crate::prover_helper_sum::state_only_copy_helper_sum(&h1)!=Some(K::ZERO) {return Err(Error::Semantic);}
     let c1=core::array::from_fn(|i| if i<16 {zero.c1[i].clone()} else {applied.mask_only_c1[i-16].clone()});
     Ok(Tape{c1,h1,g:applied.g.clone(),d})
 }
@@ -337,7 +337,7 @@ fn opening(columns:&[Vec<K>;29],tau:&Tape,d:&Drawn,variant:Variant)->Result<View
     let coefficients:Vec<Message<E>>=messages.iter().map(|m|variant.coefficients(m)).collect();
     let z1=Point{x:E::from_qm31(d.z[1].x),y:E::from_qm31(d.z[1].y)};
     let y1=encoded(coefficients.iter().map(|m|eval_message(m,z1)));
-    let gp=crate::weights::powers::<29>(d.gamma);
+    let gp=crate::prover_powers::powers::<29>(d.gamma);
     let q:Vec<E>=(0..1024).map(|j|(0..29).fold(E::ZERO,|s,l|s.add(gp[l].mul(coefficients[l][j])))).collect();
     let alpha:[K;10]=core::array::from_fn(|i|d.sem[15+i]);
     let w=Weights::new(variant,&alpha,&d.z)?;

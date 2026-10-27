@@ -61,3 +61,9 @@ pub mod host_work;
 
 #[cfg(all(feature = "prover", feature = "r1p-check"))]
 mod prover_shared;
+
+#[cfg(feature="prover")]
+mod prover_helper_sum;
+
+#[cfg(feature="prover")]
+mod prover_powers;

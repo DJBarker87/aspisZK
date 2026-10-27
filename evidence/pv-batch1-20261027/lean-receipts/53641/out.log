@@ -1,0 +1,70 @@
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleRow.lean:24:17: error: Invalid simp theorem: Expected a proposition, but found
+  Rows → Usize → Usize → Usize → Result Q
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleRow.lean:25:66: error: Tactic `rfl` failed: The left-hand side
+  do
+    let a ← PV_B1_PoleInner.read values row side 0#usize
+    let b ← PV_B1_PoleInner.read values row side 1#usize
+    ok (clear && (!(active && decide (chi = a)) && !(active && decide (chi = b))))
+is not definitionally equal to the right-hand side
+  ok
+    (clear &&
+      (!(active && decide (chi = PV_B1_ArrayRead.get2 pair 0)) &&
+        !(active && decide (chi = PV_B1_ArrayRead.get2 pair 1))))
+
+values : Rows
+chi : Q
+clear : Bool
+row side : Usize
+active : Bool
+r : Row
+pair : Pair
+hr : Slice.index_usize values row = ok r
+hs : Array.index_usize r side = ok pair
+⊢ (do
+      let a ← PV_B1_PoleInner.read values row side 0#usize
+      let b ← PV_B1_PoleInner.read values row side 1#usize
+      ok (clear && (!(active && decide (chi = a)) && !(active && decide (chi = b))))) =
+    ok
+      (clear &&
+        (!(active && decide (chi = PV_B1_ArrayRead.get2 pair 0)) &&
+          !(active && decide (chi = PV_B1_ArrayRead.get2 pair 1))))
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleRow.lean:24:22: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵w̵o̵,̵r̵e̵a̵d̵,̵h̵r̵,̵h̵s̵,̵P̵V̵_̵B̵1̵_̵A̵r̵r̵a̵y̵R̵e̵a̵d̵.̵f̵i̵r̵s̵t̵,̵P̵V̵_̵B̵1̵_̵A̵r̵r̵a̵y̵R̵e̵a̵d̵.̵s̵e̵c̵o̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵V̵_̵B̵1̵_̵P̵o̵l̵e̵K̵e̵e̵p̵.̵s̵o̵u̵r̵c̵e̵,̵s̵i̵d̵e̵T̵e̵s̵t̵,̵B̵o̵o̵l̵.̵a̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲t̲w̲o̲,̲ ̲r̲e̲a̲d̲,̲ ̲h̲s̲,̲ ̲P̲V̲_̲B̲1̲_̲A̲r̲r̲a̲y̲R̲e̲a̲d̲.̲f̲i̲r̲s̲t̲,̲ ̲P̲V̲_̲B̲1̲_̲A̲r̲r̲a̲y̲R̲e̲a̲d̲.̲s̲e̲c̲o̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲B̲1̲_̲P̲o̲l̲e̲K̲e̲e̲p̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲s̲i̲d̲e̲T̲e̲s̲t̲,̲ ̲B̲o̲o̲l̲.̲a̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleRow.lean:24:25: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵w̵o̵,̵r̵e̵a̵d̵,̵h̵r̵,̵h̵s̵,̵P̵V̵_̵B̵1̵_̵A̵r̵r̵a̵y̵R̵e̵a̵d̵.̵f̵i̵r̵s̵t̵,̵P̵V̵_̵B̵1̵_̵A̵r̵r̵a̵y̵R̵e̵a̵d̵.̵s̵e̵c̵o̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵V̵_̵B̵1̵_̵P̵o̵l̵e̵K̵e̵e̵p̵.̵s̵o̵u̵r̵c̵e̵,̵s̵i̵d̵e̵T̵e̵s̵t̵,̵B̵o̵o̵l̵.̵a̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲t̲w̲o̲,̲ ̲r̲e̲a̲d̲,̲ ̲h̲r̲,̲ ̲P̲V̲_̲B̲1̲_̲A̲r̲r̲a̲y̲R̲e̲a̲d̲.̲f̲i̲r̲s̲t̲,̲ ̲P̲V̲_̲B̲1̲_̲A̲r̲r̲a̲y̲R̲e̲a̲d̲.̲s̲e̲c̲o̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲B̲1̲_̲P̲o̲l̲e̲K̲e̲e̲p̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲s̲i̲d̲e̲T̲e̲s̲t̲,̲ ̲B̲o̲o̲l̲.̲a̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleRow.lean:24:28: warning: This simp argument is unused:
+  PV_B1_ArrayRead.first
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵w̵o̵,̵r̵e̵a̵d̵,̵h̵r̵,̵h̵s̵,̵P̵V̵_̵B̵1̵_̵A̵r̵r̵a̵y̵R̵e̵a̵d̵.̵f̵i̵r̵s̵t̵,̵P̵V̵_̵B̵1̵_̵A̵r̵r̵a̵y̵R̵e̵a̵d̵.̵s̵e̵c̵o̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵V̵_̵B̵1̵_̵P̵o̵l̵e̵K̵e̵e̵p̵.̵s̵o̵u̵r̵c̵e̵,̵s̵i̵d̵e̵T̵e̵s̵t̵,̵B̵o̵o̵l̵.̵a̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲t̲w̲o̲,̲ ̲r̲e̲a̲d̲,̲ ̲h̲r̲,̲ ̲h̲s̲,̲ ̲P̲V̲_̲B̲1̲_̲A̲r̲r̲a̲y̲R̲e̲a̲d̲.̲s̲e̲c̲o̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲V̲_̲B̲1̲_̲P̲o̲l̲e̲K̲e̲e̲p̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲s̲i̲d̲e̲T̲e̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲a̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_PoleRow.lean:24:50: warning: This simp argument is unused:
+  PV_B1_ArrayRead.second
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵w̵o̵,̵r̵e̵a̵d̵,̵h̵r̵,̵h̵s̵,̵P̵V̵_̵B̵1̵_̵A̵r̵r̵a̵y̵R̵e̵a̵d̵.̵f̵i̵r̵s̵t̵,̵P̵V̵_̵B̵1̵_̵A̵r̵r̵a̵y̵R̵e̵a̵d̵.̵s̵e̵c̵o̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵V̵_̵B̵1̵_̵P̵o̵l̵e̵K̵e̵e̵p̵.̵s̵o̵u̵r̵c̵e̵,̵s̵i̵d̵e̵T̵e̵s̵t̵,̵B̵o̵o̵l̵.̵a̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲t̲w̲o̲,̲ ̲r̲e̲a̲d̲,̲ ̲h̲r̲,̲ ̲h̲s̲,̲ ̲P̲V̲_̲B̲1̲_̲A̲r̲r̲a̲y̲R̲e̲a̲d̲.̲f̲i̲r̲s̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲V̲_̲B̲1̲_̲P̲o̲l̲e̲K̲e̲e̲p̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲s̲i̲d̲e̲T̲e̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲a̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B1_PoleRow.side_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B1_PoleRow.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

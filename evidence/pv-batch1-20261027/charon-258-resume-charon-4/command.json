@@ -1,0 +1,41 @@
+{
+  "command": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "RUSTUP_TOOLCHAIN=nightly-2026-06-01",
+    "RUSTFLAGS=--cfg pv_cb_extract",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-batch1-20261027/charon-target",
+    "/home/dombarker/project-offloads/codex-pv-extract-20261027/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--start-from",
+    "crate::all_slots_clear",
+    "--include",
+    "pv_b1_probe::*",
+    "--include",
+    "aspis_core::field::*",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-pv-batch1-20261027/PV_B1_258.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-batch1-20261027/probes/258/Cargo.toml",
+    "--release",
+    "--offline",
+    "--lib",
+    "--jobs",
+    "4"
+  ],
+  "source_revision": "ccf87ccecd8e0463a53bbedd0fc995837937dac9",
+  "preflight": true,
+  "pins": {
+    "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+    "aeneas": "562e1f51ef9bea84f62793f21b4d6b48f9ae65c61ec72588170b2c3abdc37f19"
+  }
+}

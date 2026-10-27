@@ -1,0 +1,37 @@
+{"attempt": 53689, "module": "PV_B1_HostSumOutcome", "exit": 1, "wall_seconds": 1.5004121899837628, "peak_rss_kib": "2625396", "swap": "0", "charged": true}
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_HostSumOutcome.lean:10:6: error: Ambiguous term
+  op230_source
+Possible interpretations:
+  PV_B1_HostSumSource.op230_source : ∀ (ops : ExternalFuns) (xs : Slice PV_B1_Carrier230.HQ),
+    ExternalFuns.op230 xs = ok (original_row xs)
+  
+  PV_B1_Install.op230_source : ∀ (ops : ExternalFuns) (h1 : Slice HQ),
+    ExternalFuns.op230 h1 =
+      ok (Option.map PV_B1_Carrier230.fromQ (PV_B1_SumOriginal.original_row (sliceMap PV_B1_Carrier230.toQ h1)))
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_HostSumOutcome.lean:9:39: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+xs : Slice HQ
+h : xs.len ≠ 1024#usize
+⊢ ExternalFuns.op230 xs = ok none
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_HostSumOutcome.lean:14:6: error: Ambiguous term
+  op230_source
+Possible interpretations:
+  PV_B1_HostSumSource.op230_source : ∀ (ops : ExternalFuns) (xs : Slice PV_B1_Carrier230.HQ),
+    ExternalFuns.op230 xs = ok (original_row xs)
+  
+  PV_B1_Install.op230_source : ∀ (ops : ExternalFuns) (h1 : Slice HQ),
+    ExternalFuns.op230 h1 =
+      ok (Option.map PV_B1_Carrier230.fromQ (PV_B1_SumOriginal.original_row (sliceMap PV_B1_Carrier230.toQ h1)))
+/home/dombarker/project-offloads/codex-pv-batch1-20261027/lean/PV_B1_HostSumOutcome.lean:13:103: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+xs : Slice HQ
+h : xs.len = 1024#usize
+⊢ ExternalFuns.op230 xs = ok (some (List.foldl PV_B1_HostSumValue.add PV_B1_HostSumValue.zero ↑xs))
+'PV_B1_HostSumOutcome.wrong_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B1_HostSumOutcome.exact_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B1_HostSumOutcome.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+
