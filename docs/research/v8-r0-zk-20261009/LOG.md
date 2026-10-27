@@ -12362,3 +12362,21 @@ in that port's backend-final-manifest.json and input-manifest.json, which descri
 original library objects. Both cohorts therefore derive from identical sources at Aeneas revision
 ccf55459; the object differences come from recompilation only. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D312 (Stream B) 2026-10-27 18:26 UTC: batch2c found a failure-behaviour defect in the op253 copy; repair authorized; batch2d launched
+
+batch2c merged the candidate cleanly, deleted its duplicate powers (powers is now shared once),
+emitted both the op251 and op253 closures without opaque dependencies (op253 type-checks; op251
+function checking pending), and kept all three ELF pins matching across five source revisions. It
+then proved a kernel-checked counterexample to the proposed op253 original/copy equality
+(PV_B2_ErrorCounterexample, standard axioms): for Variant::D, kind=0, j=1024 the frozen Weights::raw
+returns arrayOutOfBounds and the prover-local copy returns assertionFailure. 8 of 100 attempts used;
+one rejected input was repeated by accident and charged. V256-V260 stay OPEN.
+
+Lead assessment: the counterexample is retained. It refutes the copy's fidelity, not a ledger row:
+the copy added an assertion where the frozen code fails through its bounds check, so on that input
+the two differ in error kind. That is a defect of the prover-local copy and is repaired under D187
+route (ii): the copy must return exactly the frozen Result on every input, including the error
+variant, with the three-ELF gate, and the counterexample input becomes an equality theorem. op251
+and op252 are audited for the same pattern. batch2d resumes with 92 attempts. Rows removed outright:
+0. Privacy target not yet established.
