@@ -1,0 +1,60 @@
+import R1Z.ProverCommitM31Ops48
+import R1Z.ProverCommitArrayIndex25
+/-! Derived into private PV_Inv module names for this focused proof; original theorem bodies retained.  Symbolic base-field arrays and exact predecessor read. -/
+set_option autoImplicit false
+namespace R1Z.PV_Inv_IM31Array
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+
+def array (size : Usize) (xs : Nat → U32) : Aeneas.Std.Array U32 size :=
+  ⟨List.ofFn (fun i : Fin size.val => xs i.val),by simp only [List.length_ofFn]⟩
+
+theorem index (size : Usize) (xs : Nat → U32) (i : Usize) (hi : i.val < size.val) :
+    Aeneas.Std.Array.index_usize (array size xs) i=ok (xs i.val) := by
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ hi]
+  simp only [array,List.getElem_ofFn]
+
+theorem update (size : Usize) (xs : Nat → U32) (i : Usize) (hi : i.val < size.val) (z : U32) :
+    Aeneas.Std.Array.update (array size xs) i z=ok (array size (Function.update xs i.val z)) := by
+  have hidx : i.val < (array size xs).val.length := by simp only [array,List.length_ofFn];exact hi
+  obtain ⟨out,hout,hset⟩ := WP.spec_imp_exists (Aeneas.Std.Array.update_spec (array size xs) i z hidx)
+  rw [hout]
+  apply congrArg Result.ok
+  rw [hset]
+  apply Subtype.ext
+  change (array size xs).val.set i.val z=(array size (Function.update xs i.val z)).val
+  apply List.ext_getElem
+  · simp only [List.length_set,array,List.length_ofFn]
+  · intro k hk1 hk2
+    simp only [array,List.getElem_set,List.getElem_ofFn]
+    by_cases h : k=i.val
+    · subst k;simp only [Function.update_self,if_true]
+    · simp only [Ne.symm h,if_false,Function.update_of_ne h]
+
+theorem previous_val (i : Usize) (hi : 0 < i.val) :
+    (Usize.wrapping_sub i 1#usize).val=i.val-1 := by
+  rw [Usize.wrapping_sub_val_eq]
+  have one : (1#usize).val=1 := rfl
+  rw [one]
+  have bound := i.hSize
+  have size : 0 < UScalar.size .Usize := by rw [UScalar.size_def];positivity
+  have shift : i.val+(UScalar.size .Usize-1)=(i.val-1)+UScalar.size .Usize := by omega
+  rw [shift,Nat.add_mod_right,Nat.mod_eq_of_lt (by omega)]
+
+theorem predecessor_value (xs : Nat → U32) (k : Usize) (hk : k.val < 28) :
+    predecessor (array 28#usize xs) k=ok (if k.val=0 then 0#u32 else xs (k.val-1)) := by
+  by_cases hz : k=0#usize
+  · subst k;rw [predecessor]
+    simp only [if_true,field.M31.ZERO,show (0#usize).val=0 from rfl]
+  · have hp : 0 < k.val := by scalar_tac
+    rw [predecessor]
+    simp only [hz,if_false,lift,bind_tc_ok]
+    have hidx : (Usize.wrapping_sub k 1#usize).val < (28#usize).val := by
+      change (Usize.wrapping_sub k 1#usize).val < 28
+      rw [previous_val k hp];omega
+    rw [index 28#usize xs _ hidx,previous_val k hp,if_neg (by omega)]
+
+#print axioms index
+#print axioms update
+#print axioms previous_val
+#print axioms predecessor_value
+end R1Z.PV_Inv_IM31Array

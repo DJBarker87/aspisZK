@@ -37,10 +37,10 @@ call; certificate inverses are supplied and checked by multiplication.
 | z4/z9b.rs:71–73 | x,y,z or doubles from line_inverse(query,depth), public indices | domain-coordinate nonzero; no witness operand |
 | z4/z9.rs:298,299,316–320 | stored fibre and line x,y,z, public queries | domain-coordinate nonzero |
 | z4/z9.rs:395 | fixed 2 | nonzero constant |
-| z4/z9.rs:832,894 | reduced vector pivot, challenge-derived | nonzero selection before inverse; caller reach review required |
-| z4/probe.rs:530 | fixed 2 in raw_c auxiliary algebra | nonzero constant |
-| z4/probe.rs:2291,2292 | fixed 2; alpha[9]-half in tail_row | challenge-derived half pole returns None |
-| z4/probe.rs:1282 | product of differences for fixed interpolation support | public indices; distinguish trial-only callers |
+| z4/z9.rs:832,894 | lane_stage/lane_kernel pivot | historical eliminating gate; deployed emitter uses TagEch, not these functions |
+| z4/probe.rs:530 | fixed 2 in h1_target, historical diagnostic | excluded: public_data/raw_c does not call h1_target |
+| z4/probe.rs:2291,2292 | fixed 2; alpha[9]-half in normalize_d, reached through emit → chain_targets | emit first obtains hinv or rejects; challenge-derived half pole |
+| z4/probe.rs:1282 | interp_weights product for fixed support | excluded from p_r1_check source path; trial/terminal-jet helpers |
 
 ## Exclusions and negative edges
 
@@ -64,3 +64,5 @@ inverses generate public tables at build time, not a witness execution.
 
 Residual inventory audit: resolve the transitive z4/probe utility reachability
 and every generic function-pointer inverse; lexical absence alone is insufficient.
+
+Review correction: generic Ech::insert (probe.rs:145), circuits (:181), and normalize_d (:2292) are distinct. z9c::emit uses TagEch throughout; the normalize_d edge is reached via chain_targets and must remain. No inverse is in tail_row itself. The generic inverse-bearing transform r0/fold::phi is used by z9b design relations, with public domain coordinates, while the deployed encoder calls its inverse transform.
