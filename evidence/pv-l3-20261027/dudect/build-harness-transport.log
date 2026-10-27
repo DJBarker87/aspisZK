@@ -1,0 +1,18 @@
+{"schema": "ProverRwNativeEntropy-reservation-v1", "utc": "2026-10-27T13:48:16.618089+00:00", "requested_bytes": 8589934592, "safe_limit_bytes": 59055800320, "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2", "print_axioms": "N/A: read-only resource gate", "allowed": true, "bounded_reserved_bytes": 25635586048, "projected_reserved_bytes": 34225520640}
+
+Running as unit: run-racafe6860fb6471ba22e7433ea05b595.scope; invocation ID: a382a1740a6841e984e7201234ec7701
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-pv-dudect-20261027/src/tools/pv-dudect/worker.py", line 15, in <module>
+    rec=dict(stage=stage,target=cmd,source_revision='73070ddd512bc4e79edfc0db714fb64dc74e87b8',harness_manifest_sha256=hashlib.sha256((B/'source-manifest.json').read_bytes()).hexdigest(),limits=limits,print_axioms='N/A: no Lean',expected_work='optimized compilation/linking' if stage.startswith('build') else ('tiny dry run; not a measurement' if stage=='dry' else 'static inspection'),rustc=subprocess.check_output([cargo.replace('cargo','rustc'),'-Vv'],text=True),environment={k:env[k] for k in ['RUSTFLAGS','CARGO_TARGET_DIR','CARGO_BUILD_JOBS']})
+                                                                                                                                                                                                                                                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/dombarker/.rustc/bin/rustc'

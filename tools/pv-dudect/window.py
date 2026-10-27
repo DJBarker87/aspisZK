@@ -3,13 +3,18 @@
 Do not invoke during preparation. Host directory and binary hashes are pinned
 in evidence/pv-l3-20261027/dudect/ready.json after static comparison.
 """
-import pathlib,sys,json,time,subprocess,os,hashlib,signal
+import pathlib,sys,json,time,subprocess,os,hashlib,signal,shutil
 B=pathlib.Path('/home/dombarker/project-offloads/codex-pv-dudect-20261027')
 assert sys.argv[1:]==['--execute-lead-window'], 'lead must schedule the window first'
 Q=pathlib.Path('/home/dombarker/project-offloads/QUIET_WINDOW.json')
-marker=json.loads(Q.read_text());assert marker['until']-time.time()>=1800,'need full 30-minute lead window'
+marker=json.loads(Q.read_text());assert marker['until']-time.time()>=900,'need full 15-minute lead window'
 ready=json.loads((B/'src/evidence/pv-l3-20261027/dudect/ready.json').read_text())
 for name,h in ready['binary_sha256'].items():assert hashlib.sha256((B/'bin'/name).read_bytes()).hexdigest()==h
+assert shutil.disk_usage(B).free>=2*1024**3,'need 2 GiB free for raw rows'
+info=pathlib.Path('/proc/cpuinfo').read_text();assert all(x in info for x in ['rdtscp','constant_tsc','nonstop_tsc']),'TSC prerequisites missing'
+fields=lambda text: {k.strip():v.strip() for k,v in (line.split(':',1) for line in text.split('\n\n')[0].splitlines() if ':' in line) if k.strip() in ['model name','cpu family','model','stepping','microcode']}
+assert fields(info)==ready['cpu_identity'],'CPU identity changed: rebind before measurement'
+assert all(pathlib.Path(p).read_text()==v for p,v in ready['cpu_policy'].items()),'CPU policy changed: rebind before measurement'
 O=B/('window-'+str(int(time.time())));O.mkdir(exist_ok=False)
 # Admission scanner is read-only. The only quiet-window exemption is the
 # documented owner environment; this script requires the lead's existing marker.

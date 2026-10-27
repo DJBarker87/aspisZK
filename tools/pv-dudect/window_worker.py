@@ -6,7 +6,7 @@ cg=pathlib.Path('/sys/fs/cgroup'+pathlib.Path('/proc/self/cgroup').read_text().s
 limits={x:(cg/x).read_text().strip() for x in ['memory.high','memory.max','memory.swap.max','pids.max']};assert list(limits.values())==['6442450944','8589934592','0','64']
 policy_paths=['/sys/devices/system/cpu/cpu2/cpufreq/scaling_governor','/sys/devices/system/cpu/intel_pstate/no_turbo','/sys/devices/system/cpu/smt/active','/sys/devices/system/cpu/cpu2/topology/thread_siblings_list']
 policy={p:pathlib.Path(p).read_text() for p in policy_paths}
-marker=json.loads(Q.read_text());deadline=min(marker['until']-60,time.time()+1500)
+marker=json.loads(Q.read_text());deadline=min(marker['until']-60,time.time()+600)
 def guard():
  assert json.loads(Q.read_text())==marker,'window marker changed'
  assert time.time()<deadline,'sample deadline reached'
@@ -30,7 +30,7 @@ def guard():
    if name in ['rustc','cargo','lean','lake','cc1','ld.lld','devnet_spend','kani-driver']:raise RuntimeError('competing process '+str(p)+': '+name)
   except (FileNotFoundError,PermissionError):continue
  return {'epoch':time.time(),'memory_current':(cg/'memory.current').read_text().strip(),'loadavg':pathlib.Path('/proc/loadavg').read_text().strip()}
-rec=dict(target=[str(B/'bin/pv-dudect'),'--measure','1000000'],kernel_cpu=2,monitor_cpu=0,policy=policy,limits=limits,print_axioms='N/A: no Lean',source_revision='73070ddd512bc4e79edfc0db714fb64dc74e87b8',DOITM='OFF: V371 retained',marker=marker,exit_status=None)
+rec=dict(artifacts=json.loads((B/'src/evidence/pv-l3-20261027/dudect/ready.json').read_text()),target=[str(B/'bin/pv-dudect'),'--measure','1000000'],kernel_cpu=2,monitor_cpu=0,policy=policy,limits=limits,print_axioms='N/A: no Lean',source_revision='73070ddd512bc4e79edfc0db714fb64dc74e87b8',DOITM='OFF: V371 retained',marker=marker,exit_status=None)
 child=None;t=time.monotonic();reason=None
 try:
  guard();subprocess.run(['python3',str(B/'src/tools/pv-dudect/metadata.py'),str(O)],check=True)

@@ -24,7 +24,7 @@ impl Outcome for bool {fn outcome(&self)->bool {*self}}
 impl Outcome for M31 {fn outcome(&self)->bool {true}}
 impl Outcome for QM31 {fn outcome(&self)->bool {true}}
 fn epoch()->u64 {SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()}
-fn window()->u64 { let v:serde_json::Value=serde_json::from_slice(&std::fs::read("/home/dombarker/project-offloads/QUIET_WINDOW.json").expect("lead's window marker required")).unwrap(); let until=v["until"].as_u64().unwrap(); assert!(epoch()<until,"window expired"); until }
+fn window()->u64 { let v:serde_json::Value=serde_json::from_slice(&std::fs::read("/home/dombarker/project-offloads/QUIET_WINDOW.json").expect("lead's window marker required")).unwrap(); let until=v["until"].as_f64().expect("numeric until").floor() as u64; assert!(epoch()<until,"window expired"); until }
 fn main() {
  let a:Vec<_>=std::env::args().collect();
  assert!(a.len()==3 && ["--dry-run","--measure"].contains(&a[1].as_str()),"usage: pv-dudect --dry-run 1000 | --measure 1000000");
@@ -69,6 +69,7 @@ fn main() {
   }
   if let Some(w)=out.as_mut(){w.flush().unwrap();}
   println!("{}",serde_json::json!({"family":family,"label":if dry {"not a measurement"} else {"kernel timing samples"},"per_class":n,"valid":count,"migrations":migrations,"outcomes_false_true":outcomes,"mean_cycles":[sum[0] as f64/count[0] as f64,sum[1] as f64/count[1] as f64],"wall_seconds":start.elapsed().as_secs_f64()}));
+  if family.starts_with("mask-") {assert!(outcomes[0][0]==0 && outcomes[1][0]==0,"sampler error: abort, retain rows");}
   assert!(migrations==[0,0],"migration detected: abort, retain raw rows");
  }
  eprintln!("total wall seconds: {}",all.elapsed().as_secs_f64());
