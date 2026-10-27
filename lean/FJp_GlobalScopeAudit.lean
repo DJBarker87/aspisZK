@@ -1,0 +1,12 @@
+import FJp_MatchingLaw
+import FJp_RecoveryBranch
+import FJp_AccountJoin
+import FJp_Conservativity
+import FJp_Nonvacuity
+#print AspisR1.FJp_GlobalOwners.Matching
+#check @AspisR1.FJp_MatchingAt.value
+#check @AspisR1.FJp_MatchingLaw.value
+#check @AspisR1.FJp_RecoveryBranch.accepted
+#check @AspisR1.FJp_AccountJoin.accepted
+#check @AspisR1.FJp_Conservativity.deployed
+#check @AspisR1.FJp_Nonvacuity.owners
