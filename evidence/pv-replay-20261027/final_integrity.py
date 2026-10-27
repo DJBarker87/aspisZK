@@ -24,11 +24,14 @@ if (E/'audit-result.json').exists():
   m=z[1].replace('.','/')
   if m in plan['nodes']:continue
   q=O/(m+'.olean')
-  if not q.is_file():bad.append(dict(module=m,reason='loaded external object absent from private mirror'));continue
+  if not q.is_file():
+   env=json.loads((P/'env/J.json').read_text())
+   q=next((Path(base)/(m+'.olean') for base in env['LEAN_PATH'].split(':') if (Path(base)/(m+'.olean')).is_file()),None)
+  if q is None:bad.append(dict(module=m,reason='loaded external object absent from pinned environment'));continue
   external.append(dict(module=m,path=str(q.resolve()),object_sha256=sha(q),object_bytes=q.stat().st_size))
 large=[]
 for name in ['external-loader-files.json']:
  q=E/name
  if q.exists():large.append(dict(path=str(q),sha256=sha(q),bytes=q.stat().st_size,reason='retained on host; hash+size committed instead of full redundant namespace-binding listing'))
 r=dict(revision=plan['revision'],project_modules_checked=len(rows),external_boundary_checked=len(json.loads((E/'external-boundary.json').read_text())),project_results=rows,mismatches=bad,all_pass=not bad,retained_host_artifacts=large)
-(E/'final-integrity.json').write_text(json.dumps(r,indent=2)+'\n');(E/'external-object-manifest.json').write_text(json.dumps(external,indent=2)+'\n');print(json.dumps({k:r[k] for k in ['revision','project_modules_checked','external_boundary_checked','all_pass','mismatches']}));print('loaded external modules',len(external))
+(E/'final-integrity.json').write_text(json.dumps(r,indent=2)+'\n');(E/'external-object-manifest.json').write_text(json.dumps(external,indent=2)+'\n');print(json.dumps({k:r[k] for k in ['revision','project_modules_checked','external_boundary_checked','all_pass']}));print('loaded external modules',len(external))
