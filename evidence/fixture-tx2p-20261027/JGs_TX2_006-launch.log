@@ -1,0 +1,58 @@
+{"attempt": "JGs_TX2_006", "exit_status": 1, "wall_seconds": 3.154050273995381, "peak_rss_kib": "5944624", "swaps": "0", "print_axioms": ["'AspisR1.JGs_KindForward.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGs_KindForward.lean:40:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  w.tensor idx 2#usize input
+in the target expression
+  (let (s, deref_mut_back) := (input, back)
+    do
+    let s1 ← w.tensor idx 2#usize s
+    let a ← w.factors.index_usize idx
+    let a1 ← a.index_usize 0#usize
+    let scale ← FIo_Native.weights.Weights.scalar_factor a1 ap0
+    let (scratch1, scale1) ←
+      do
+        let a2 ← a.index_usize 1#usize
+        let we ← FIo_Native.weights.Weights.scalar_factor a2 ap1
+        let scale2 ← scale.mul we
+        ok (deref_mut_back s1, scale2)
+    let pair ← FIo_Native.fast_pairing.EbyKDot.new
+    let (r, pair1) ← FIo_Native.weights.push_byte_produ
+...
+ ← w.tensor idx 2#usize s
+    let a ← w.factors.index_usize idx
+    let a1 ← a.index_usize 0#usize
+    let scale ← FIo_Native.weights.Weights.scalar_factor a1 ap0
+    let (scratch1, scale1) ←
+      do
+        let a2 ← a.index_usize 1#usize
+        let we ← FIo_Native.weights.Weights.scalar_factor a2 ap1
+        let scale2 ← scale.mul we
+        ok (deref_mut_back s1, scale2)
+    let pair ← FIo_Native.fast_pairing.EbyKDot.new
+    let (r, pair1) ← FIo_Native.weights.push_byte_products pair f scratch1.deref n
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let we ← pair1.finish
+        let we1 ← scale1.mul we
+        let parts1 ← before.update kind we1
+        ok (core.result.Result.Ok (), scratch1, parts1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame FIo_Native.verifier.Error) residual
+        ok (r1, scratch1, before)) =
+    ok (core.result.Result.Ok (), back tensor, after)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGs_KindForward.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0f65eba788bc4667a82db7f1fd3e5be9.scope; invocation ID: a07a8475b22b4316a7f5eb43a417de25
