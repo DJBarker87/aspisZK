@@ -10601,3 +10601,22 @@ pass found changed were Stream B launcher recompiles of HEAD sources (join2 atte
 36300/36301) and byte-match HEAD. 669 + 501 source entries remain unattempted; no third round unless the
 pv-adopt replay plan names a missing set. Six slots: cb4, runjoin8, rw20, cb5, srcid5, join3. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D230 (Stream B) 2026-10-27 00:05 UTC: join3 exhausted with a green combined audit; join scope narrowed to reachability and source laws; join4 launched
+
+pv-join3 (`codex/pv-join-20261026`, head 1ad24470b8; 100/100 host Lean = 96 passed / 4 failed, IDs
+36500-36599 each used once, no Kani, swap 0, no crates/programs change, no forbidden tokens). Baseline
+audit 36500 failed on a missing object; the recovered audit 36579 passed; the final combined audit 36599
+passed: all 126 PV_Join_* theorems plus the headline, 127 axiom reports standard. Checked: public-caller
+byte/refinement equivalence, explicit fixture-record conversions, selected-fixture ledger source laws, a
+criterion against rw20's independent serialization model. Still OPEN on both fixtures: the independent
+proof-byte equation, the complete model audit/status equation, the whole V163 equality and native
+non-vacuity; execution reachability unknown (no inventory entry yet proved unreachable). Inventory 30 →
+30; endpoint premises removed: 0. Lead decision (AGENTS.md §7, shared obstruction): three join rounds
+stalled on the same missing interface, the concrete protocol-to-model instance, which is rw20's
+deliverable on the candidate branch; join4 (same branch, IDs 36800-37099, 100 Lean / 6 Kani) is narrowed
+to the source side: per-fixture execution reachability of the 30 inventory entries from the extracted
+prover (Lean unreachability theorems, Kani traces as evidence), source laws for reached entries
+(consuming cb4/cb5 proofs, never duplicating), and the fixture proof-byte equations only once rw20
+publishes the model instance. Six slots: cb4, runjoin8, rw20, cb5, srcid5, join4. Rows removed outright:
+0. Privacy target not yet established.
