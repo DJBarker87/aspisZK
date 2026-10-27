@@ -1,0 +1,1057 @@
+@AspisR1.FJu_Top.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (sdk : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e1 w1
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+  (admission2 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e2 w2
+      (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))))
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W CoreError) (indexError : CoreError)
+  (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result.{0} AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+        (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+  (data1 data2 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+  (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.first A native1 copy allocator e1 AspisR1.CPH_Program.verifier data1 state1)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) saved
+            (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post1 final1)))))
+  (accepted2 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.second A native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot state2)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post2 final2))))
+  (root :
+    Aeneas.Std.Array.{0} Aeneas.Std.U8
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+        (@of_decide_eq_true
+          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (@id.{0}
+            (@Eq.{1} Bool
+              (@Decidable.decide
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+              Bool.true)
+            (@Eq.refl.{1} Bool Bool.true)))))
+  (length : Aeneas.Std.U32)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (words : AspisR1.CanonicalCutEnrichedTranscript.Words) (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (actions : List.{0} (AspisR1.CPP_BankState.Action A))
+  (game :
+    @AspisR1.CPH_Game.DeployedPairExecution Tx A p t u e1 e2 saved actions native1 native2 copy allocator
+      AspisR1.CPH_Program.verifier)
+  (RuntimePersistence :
+    @AspisR1.CPR_DataPersistence.TwoTransactionLaw Tx Nat (@AspisR1.CPG_Projection.adjacent Tx A p)
+      (@AspisR1.CPG_Projection.ordinary Tx A p
+        (AspisR1.Hist_Nonvacuity.key
+          (Aeneas.Std.U8.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@of_decide_eq_true
+              (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8))
+              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8))
+              (@id.{0}
+                (@Eq.{1} Bool
+                  (@Decidable.decide
+                    (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8))
+                    (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8)))
+                  Bool.true)
+                (@Eq.refl.{1} Bool Bool.true))))))
+      (@AspisR1.CPG_Projection.before Tx A p) (@AspisR1.CPG_Projection.tentative Tx A p)
+      (@AspisR1.CPG_Projection.success Tx A p) (@AspisR1.CPG_Projection.loaded Tx A p))
+  (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : Nat)
+  (queries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@AspisR1.ARW_Induced.issued A native1 copy allocator AspisR1.CPH_Program.verifier a H))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1))
+  (finishOwners :
+    @AspisR1.FJu_GlobalOwners.Owners AspisR1.FIo_Install.W CoreError
+      (@AspisR1.FIp_Install.configuration CoreError indexError c reservation)
+      (@AspisR1.DrvC_Installation.Configuration.boundaries AspisR1.FIo_Install.W CoreError
+        (@AspisR1.Rc2_Install.configuration AspisR1.FIo_Install.W CoreError
+          (@AspisR1.Rc5_Install.seed AspisR1.FIo_Install.W CoreError indexError
+            (@AspisR1.FIp_Install.select CoreError reservation c))
+          reservation))),
+  have P : AspisR1.F3T_ByteCarrier.ByteProver :=
+    @AspisR1.ARW_Induced.program A native1 copy allocator AspisR1.CPH_Program.verifier a;
+  have runtime : AspisR1.F3T_Runtime.Runtime :=
+    @AspisR1.ARX_AdmittedRuntime.runtime W A CoreError Tx L copy allocator c indexError reservation native1 native2
+      hashv a;
+  have select :
+    AspisR1.F3X_Projection.Output →
+      Prod.{0, 0} AspisR1.R9PoolRuntimeBinding.Inputs AspisR1.R9PoolRuntimeBinding.Inputs :=
+    fun (x : AspisR1.F3X_Projection.Output) =>
+    AspisR1.P2P_NativeSelection.pair
+      (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+        (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+      AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+  And
+    (@AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary Unit (AspisR1.P6C_Extension.dictionary hashv H) Unit.unit H
+      AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.MultiproofConeP6Batch.referenceLeaf)
+    (And
+      (@Eq.{1} AspisR1.OraclePortRuntimeBindingC7.Verifier
+        (@AspisR1.DrvC_Implementation.driver AspisR1.FIo_Install.W CoreError
+          (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+        (@AspisR1.DrvC_SourceEntry.source AspisR1.FIo_Install.W CoreError
+          (@AspisR1.FIp_Install.configuration CoreError indexError c reservation) hashv))
+      (And
+        (@Eq.{2} AdapterRw.Ops
+          (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+            (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+          (@AspisR1.SdkD_PairBatches.dictionary AspisR1.FIo_Install.W CoreError
+            (@AspisR1.DrvC_Installation.Configuration.adapter AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.currentBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.stageBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.finish AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.reserved AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.query AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.geometry AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.boundaries AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.std AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))))
+        (And
+          (@AspisR1.FJu_Result.Outcome W AspisR1.FIo_Install.W CoreError L e1 e2 w1 w2
+            (@AspisR1.DrvC_Installation.Configuration.adapter AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.currentBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.reserved AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.query AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.geometry AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.stageBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (@AspisR1.DrvC_Installation.Configuration.finish AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            (AspisR1.FIp_Install.boundaries
+              (@AspisR1.DrvC_Installation.Configuration.boundaries AspisR1.FIo_Install.W CoreError c))
+            reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2 H
+            (@AspisR1.DrvC_Implementation.driver AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))
+            prior (@AspisR1.CPG_Projection.Observations.physicalEvents Tx A p t) hashv
+            (@AspisR1.BinRawByteCollisionTargets.event
+              (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                AspisR1.F3X_Projection.Output)
+              (@FS2.Duplex.Params.iv AspisR1.SelectedTranscriptParams.Message AspisWideTower.WideExact
+                AspisR1.SelectedTranscriptParams.L AspisR1.SelectedTranscriptParams.params)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                (@OfNat.ofNat.{0} Nat (nat_lit 2965) (instOfNatNat (nat_lit 2965))))
+              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  AspisR1.F3X_Projection.Output)
+                H
+                (@AspisR1.Hiq_RecordedJoint.program AspisR1.F3X_Projection.Output
+                  (@AspisR1.F3X_Account.program AspisR1.FIo_Install.W CoreError
+                    (@AspisR1.FIp_Install.configuration CoreError indexError c reservation) hashv P)
+                  AspisR1.F3X_Projection.project select))))
+          (And
+            (And
+              (@AspisR1.F3X_ModelClaims.Claims AspisR1.FIo_Install.W CoreError
+                (@AspisR1.FIp_Install.configuration CoreError indexError c reservation) D P
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1))
+              (And
+                (@AspisR1.F3Y_SourceClaims.Claims AspisR1.FIo_Install.W CoreError
+                  (@AspisR1.FIp_Install.configuration CoreError indexError c reservation) D hashv P
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1) select)
+                (And
+                  (@AspisR1.F3Y_AccountMass.Claims AspisR1.FIo_Install.W CoreError
+                    (@AspisR1.FIp_Install.configuration CoreError indexError c reservation) hashv P
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1) select)
+                  (And
+                    (@LE.le.{0} Rat Rat.instLE (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                      (AspisR1.F3T_Numeric.total
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)))
+                    (And
+                      (@LE.le.{0} Nat instLENat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                          AspisR1.F3U_RangeEdges.maxQueries →
+                        @LE.le.{0} Rat Rat.instLE (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                          (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+                            (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+                              (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+                                (@Nat.cast.{0} Rat Rat.instNatCast Q0) (@Nat.cast.{0} Rat Rat.instNatCast Q1))
+                              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))))
+                            (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                              (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                                (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                                (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100)))))))
+                      (@Eq.{1} Nat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
+                        And
+                          (@LE.le.{0} Rat Rat.instLE AspisR1.F3U_Numeric.margin
+                            (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+                              (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                                (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                                (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                                  (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                                  (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100)))))
+                              (AspisR1.F3T_RuntimeBound.failureModel runtime)))
+                          (@LT.lt.{0} Rat Rat.instLT (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                            (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                              (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                                (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                                (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100))))))))))))
+            (And
+              (And
+                (@Eq.{1}
+                  (Aeneas.Std.Result.{0}
+                    (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                      AspisR1.AdapterRw.Cuts.PE))
+                  (native1 AspisR1.CPH_Program.verifier (AspisR1.S2W_D189Entry.Entry.first e1) data1)
+                  (@Aeneas.Std.Result.ok.{0}
+                    (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                      AspisR1.AdapterRw.Cuts.PE)
+                    (@Aeneas.Std.core.result.Result.Ok.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                      AspisR1.AdapterRw.Cuts.PE saved)))
+                (And
+                  (@Eq.{1} Nat
+                    (@List.length.{0} Aeneas.Std.U8
+                      (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                        (fun (l : List.{0} Aeneas.Std.U8) =>
+                          @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                        saved))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                  (And
+                    (@Eq.{1} AspisV8R19.DuplexFrames.Bytes
+                      (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                        (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record) post1
+                          (@Prod.fst.{0, 0} Nat Nat
+                            (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                              (AspisR1.S2W_D189Entry.Entry.heap e1)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                      (AspisR1.MultiproofConeCanonical.bytesOf
+                        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                          (fun (l : List.{0} Aeneas.Std.U8) =>
+                            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                          saved)))
+                    (And
+                      (@Eq.{1} (Nat → AspisR1.S2W_D189Entry.Record)
+                        (@AspisR1.S2Trust.Heap.ambient (Nat → AspisR1.S2W_D189Entry.Record) post1)
+                        (@AspisR1.S2Trust.Heap.ambient (Nat → AspisR1.S2W_D189Entry.Record)
+                          (AspisR1.S2W_D189Entry.Entry.heap e1)))
+                      (And
+                        (@Eq.{1} (Nat → Prod.{0, 0} Nat Nat)
+                          (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record) post1)
+                          (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                            (AspisR1.S2W_D189Entry.Entry.heap e1)))
+                        (And
+                          (@Eq.{1} (Nat → Int)
+                            (@AspisR1.S2Trust.Heap.counter (Nat → AspisR1.S2W_D189Entry.Record) post1)
+                            (@AspisR1.S2Trust.Heap.counter (Nat → AspisR1.S2W_D189Entry.Record)
+                              (AspisR1.S2W_D189Entry.Entry.heap e1)))
+                          (∀ (cell : Nat),
+                            @Ne.{1} Nat cell
+                                (@Prod.fst.{0, 0} Nat Nat
+                                  (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                                    (AspisR1.S2W_D189Entry.Entry.heap e1)
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+                              @Eq.{1} AspisR1.S2Trust.Payload
+                                (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record) post1 cell)
+                                (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record)
+                                  (AspisR1.S2W_D189Entry.Entry.heap e1) cell))))))))
+              (And
+                (@AspisR1.Rc2_Events.Facts A AspisR1.FIo_Install.W CoreError
+                  (@AspisR1.FIp_Install.configuration CoreError indexError c reservation) hashv native1 native2 copy
+                  allocator AspisR1.CPH_Program.verifier H saved)
+                (And (@AspisR1.CPH_Protection.Facts Tx A p t saved AspisR1.CPH_Program.verifier)
+                  (And
+                    (@AspisR1.CPH_Trace.Facts Tx A p t u saved native1 native2 copy allocator
+                      AspisR1.CPH_Program.verifier)
+                    (And
+                      (@AspisR1.CPH_Recorder.Facts Tx A AspisR1.FIo_Install.W CoreError
+                        (@AspisR1.FIp_Install.configuration CoreError indexError c reservation) hashv native1 native2
+                        copy allocator AspisR1.CPH_Program.verifier H p t u saved)
+                      (AspisR1.S6N_Installation.Facts
+                        (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+                          (@AspisR1.FIp_Install.configuration CoreError indexError c reservation))))))))))))
+@AspisR1.IDb_Deployed.FJu_Deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (sdk : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e1 w1
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+  (admission2 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e2 w2
+      (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))))
+  (adapter : AdapterRw.Ops) (currentBase : AspisR1CurrentCaller.Ops) (stageBase : VTop_Stages.Ops) (reserved : Bool)
+  (indexError : CoreError) (reservation : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result.{0} AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+        (@AspisR1.FIp_Install.configuration CoreError indexError
+          (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved indexError
+            reservation)
+          reservation))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+  (data1 data2 : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+  (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.first A native1 copy allocator e1 AspisR1.CPH_Program.verifier data1 state1)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) saved
+            (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post1 final1)))))
+  (accepted2 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.second A native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot state2)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post2 final2))))
+  (root :
+    Aeneas.Std.Array.{0} Aeneas.Std.U8
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+        (@of_decide_eq_true
+          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (@id.{0}
+            (@Eq.{1} Bool
+              (@Decidable.decide
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+              Bool.true)
+            (@Eq.refl.{1} Bool Bool.true)))))
+  (length : Aeneas.Std.U32)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (words : AspisR1.CanonicalCutEnrichedTranscript.Words) (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (actions : List.{0} (AspisR1.CPP_BankState.Action A))
+  (game :
+    @AspisR1.CPH_Game.DeployedPairExecution Tx A p t u e1 e2 saved actions native1 native2 copy allocator
+      AspisR1.CPH_Program.verifier)
+  (RuntimePersistence :
+    @AspisR1.CPR_DataPersistence.TwoTransactionLaw Tx Nat (@AspisR1.CPG_Projection.adjacent Tx A p)
+      (@AspisR1.CPG_Projection.ordinary Tx A p
+        (AspisR1.Hist_Nonvacuity.key
+          (Aeneas.Std.U8.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@of_decide_eq_true
+              (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8))
+              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8))
+              (@id.{0}
+                (@Eq.{1} Bool
+                  (@Decidable.decide
+                    (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8))
+                    (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U8)))
+                  Bool.true)
+                (@Eq.refl.{1} Bool Bool.true))))))
+      (@AspisR1.CPG_Projection.before Tx A p) (@AspisR1.CPG_Projection.tentative Tx A p)
+      (@AspisR1.CPG_Projection.success Tx A p) (@AspisR1.CPG_Projection.loaded Tx A p))
+  (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : Nat)
+  (queries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@AspisR1.ARW_Induced.issued A native1 copy allocator AspisR1.CPH_Program.verifier a H))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1))
+  (finishOwners :
+    @AspisR1.FJu_GlobalOwners.Owners AspisR1.FIo_Install.W CoreError
+      (@AspisR1.FIp_Install.configuration CoreError indexError
+        (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved indexError
+          reservation)
+        reservation)
+      (@AspisR1.DrvC_Installation.Configuration.boundaries AspisR1.FIo_Install.W CoreError
+        (@AspisR1.Rc2_Install.configuration AspisR1.FIo_Install.W CoreError
+          (@AspisR1.Rc5_Install.seed AspisR1.FIo_Install.W CoreError indexError
+            (@AspisR1.FIp_Install.select CoreError reservation
+              (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                indexError reservation)))
+          reservation))),
+  have P : AspisR1.F3T_ByteCarrier.ByteProver :=
+    @AspisR1.ARW_Induced.program A native1 copy allocator AspisR1.CPH_Program.verifier a;
+  have runtime : AspisR1.F3T_Runtime.Runtime :=
+    @AspisR1.ARX_AdmittedRuntime.runtime W A CoreError Tx L copy allocator
+      (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved indexError
+        reservation)
+      indexError reservation native1 native2 hashv a;
+  have select :
+    AspisR1.F3X_Projection.Output →
+      Prod.{0, 0} AspisR1.R9PoolRuntimeBinding.Inputs AspisR1.R9PoolRuntimeBinding.Inputs :=
+    fun (x : AspisR1.F3X_Projection.Output) =>
+    AspisR1.P2P_NativeSelection.pair
+      (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+        (@AspisR1.FIp_Install.configuration CoreError indexError
+          (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved indexError
+            reservation)
+          reservation))
+      AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+  And
+    (@AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary Unit (AspisR1.P6C_Extension.dictionary hashv H) Unit.unit H
+      AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.MultiproofConeP6Batch.referenceLeaf)
+    (And
+      (@Eq.{1} AspisR1.OraclePortRuntimeBindingC7.Verifier
+        (@AspisR1.DrvC_Implementation.driver AspisR1.FIo_Install.W CoreError
+          (@AspisR1.FIp_Install.configuration CoreError indexError
+            (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved indexError
+              reservation)
+            reservation))
+        (@AspisR1.DrvC_SourceEntry.source AspisR1.FIo_Install.W CoreError
+          (@AspisR1.FIp_Install.configuration CoreError indexError
+            (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved indexError
+              reservation)
+            reservation)
+          hashv))
+      (And
+        (@Eq.{2} AdapterRw.Ops
+          (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+            (@AspisR1.FIp_Install.configuration CoreError indexError
+              (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                indexError reservation)
+              reservation))
+          (@AspisR1.SdkD_PairBatches.dictionary AspisR1.FIo_Install.W CoreError
+            (@AspisR1.DrvC_Installation.Configuration.adapter AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.currentBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.stageBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.finish AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.reserved AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.query AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.geometry AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.boundaries AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.std AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))))
+        (And
+          (@AspisR1.FJu_Result.Outcome W AspisR1.FIo_Install.W CoreError L e1 e2 w1 w2
+            (@AspisR1.DrvC_Installation.Configuration.adapter AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.currentBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.reserved AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.query AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.geometry AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.stageBase AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (@AspisR1.DrvC_Installation.Configuration.finish AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            (AspisR1.FIp_Install.boundaries
+              (@AspisR1.DrvC_Installation.Configuration.boundaries AspisR1.FIo_Install.W CoreError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)))
+            reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2 H
+            (@AspisR1.DrvC_Implementation.driver AspisR1.FIo_Install.W CoreError
+              (@AspisR1.FIp_Install.configuration CoreError indexError
+                (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                  indexError reservation)
+                reservation))
+            prior (@AspisR1.CPG_Projection.Observations.physicalEvents Tx A p t) hashv
+            (@AspisR1.BinRawByteCollisionTargets.event
+              (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                AspisR1.F3X_Projection.Output)
+              (@FS2.Duplex.Params.iv AspisR1.SelectedTranscriptParams.Message AspisWideTower.WideExact
+                AspisR1.SelectedTranscriptParams.L AspisR1.SelectedTranscriptParams.params)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                (@OfNat.ofNat.{0} Nat (nat_lit 2965) (instOfNatNat (nat_lit 2965))))
+              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                (AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                  AspisR1.F3X_Projection.Output)
+                H
+                (@AspisR1.Hiq_RecordedJoint.program AspisR1.F3X_Projection.Output
+                  (@AspisR1.F3X_Account.program AspisR1.FIo_Install.W CoreError
+                    (@AspisR1.FIp_Install.configuration CoreError indexError
+                      (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                        indexError reservation)
+                      reservation)
+                    hashv P)
+                  AspisR1.F3X_Projection.project select))))
+          (And
+            (And
+              (@AspisR1.F3X_ModelClaims.Claims AspisR1.FIo_Install.W CoreError
+                (@AspisR1.FIp_Install.configuration CoreError indexError
+                  (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                    indexError reservation)
+                  reservation)
+                D P (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1))
+              (And
+                (@AspisR1.F3Y_SourceClaims.Claims AspisR1.FIo_Install.W CoreError
+                  (@AspisR1.FIp_Install.configuration CoreError indexError
+                    (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                      indexError reservation)
+                    reservation)
+                  D hashv P (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1) select)
+                (And
+                  (@AspisR1.F3Y_AccountMass.Claims AspisR1.FIo_Install.W CoreError
+                    (@AspisR1.FIp_Install.configuration CoreError indexError
+                      (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                        indexError reservation)
+                      reservation)
+                    hashv P (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1) select)
+                  (And
+                    (@LE.le.{0} Rat Rat.instLE (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                      (AspisR1.F3T_Numeric.total
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)))
+                    (And
+                      (@LE.le.{0} Nat instLENat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                          AspisR1.F3U_RangeEdges.maxQueries →
+                        @LE.le.{0} Rat Rat.instLE (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                          (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+                            (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+                              (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+                                (@Nat.cast.{0} Rat Rat.instNatCast Q0) (@Nat.cast.{0} Rat Rat.instNatCast Q1))
+                              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1))))
+                            (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                              (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                                (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                                (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100)))))))
+                      (@Eq.{1} Nat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
+                        And
+                          (@LE.le.{0} Rat Rat.instLE AspisR1.F3U_Numeric.margin
+                            (@HSub.hSub.{0, 0, 0} Rat Rat Rat (@instHSub.{0} Rat Rat.instSub)
+                              (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                                (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                                (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                                  (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                                  (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100)))))
+                              (AspisR1.F3T_RuntimeBound.failureModel runtime)))
+                          (@LT.lt.{0} Rat Rat.instLT (AspisR1.F3T_RuntimeBound.failureModel runtime)
+                            (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                              (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                                (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                                (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100))))))))))))
+            (And
+              (And
+                (@Eq.{1}
+                  (Aeneas.Std.Result.{0}
+                    (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                      AspisR1.AdapterRw.Cuts.PE))
+                  (native1 AspisR1.CPH_Program.verifier (AspisR1.S2W_D189Entry.Entry.first e1) data1)
+                  (@Aeneas.Std.Result.ok.{0}
+                    (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                      AspisR1.AdapterRw.Cuts.PE)
+                    (@Aeneas.Std.core.result.Result.Ok.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                      AspisR1.AdapterRw.Cuts.PE saved)))
+                (And
+                  (@Eq.{1} Nat
+                    (@List.length.{0} Aeneas.Std.U8
+                      (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                        (fun (l : List.{0} Aeneas.Std.U8) =>
+                          @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                        saved))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                  (And
+                    (@Eq.{1} AspisV8R19.DuplexFrames.Bytes
+                      (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                        (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record) post1
+                          (@Prod.fst.{0, 0} Nat Nat
+                            (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                              (AspisR1.S2W_D189Entry.Entry.heap e1)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                      (AspisR1.MultiproofConeCanonical.bytesOf
+                        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                          (fun (l : List.{0} Aeneas.Std.U8) =>
+                            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                          saved)))
+                    (And
+                      (@Eq.{1} (Nat → AspisR1.S2W_D189Entry.Record)
+                        (@AspisR1.S2Trust.Heap.ambient (Nat → AspisR1.S2W_D189Entry.Record) post1)
+                        (@AspisR1.S2Trust.Heap.ambient (Nat → AspisR1.S2W_D189Entry.Record)
+                          (AspisR1.S2W_D189Entry.Entry.heap e1)))
+                      (And
+                        (@Eq.{1} (Nat → Prod.{0, 0} Nat Nat)
+                          (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record) post1)
+                          (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                            (AspisR1.S2W_D189Entry.Entry.heap e1)))
+                        (And
+                          (@Eq.{1} (Nat → Int)
+                            (@AspisR1.S2Trust.Heap.counter (Nat → AspisR1.S2W_D189Entry.Record) post1)
+                            (@AspisR1.S2Trust.Heap.counter (Nat → AspisR1.S2W_D189Entry.Record)
+                              (AspisR1.S2W_D189Entry.Entry.heap e1)))
+                          (∀ (cell : Nat),
+                            @Ne.{1} Nat cell
+                                (@Prod.fst.{0, 0} Nat Nat
+                                  (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                                    (AspisR1.S2W_D189Entry.Entry.heap e1)
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+                              @Eq.{1} AspisR1.S2Trust.Payload
+                                (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record) post1 cell)
+                                (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record)
+                                  (AspisR1.S2W_D189Entry.Entry.heap e1) cell))))))))
+              (And
+                (@AspisR1.Rc2_Events.Facts A AspisR1.FIo_Install.W CoreError
+                  (@AspisR1.FIp_Install.configuration CoreError indexError
+                    (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase reserved
+                      indexError reservation)
+                    reservation)
+                  hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H saved)
+                (And (@AspisR1.CPH_Protection.Facts Tx A p t saved AspisR1.CPH_Program.verifier)
+                  (And
+                    (@AspisR1.CPH_Trace.Facts Tx A p t u saved native1 native2 copy allocator
+                      AspisR1.CPH_Program.verifier)
+                    (And
+                      (@AspisR1.CPH_Recorder.Facts Tx A AspisR1.FIo_Install.W CoreError
+                        (@AspisR1.FIp_Install.configuration CoreError indexError
+                          (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase
+                            reserved indexError reservation)
+                          reservation)
+                        hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H p t u saved)
+                      (AspisR1.S6N_Installation.Facts
+                        (@AspisR1.DrvC_Installation.sdk AspisR1.FIo_Install.W CoreError
+                          (@AspisR1.FIp_Install.configuration CoreError indexError
+                            (@AspisR1.IDb_Deployed.deployedConfigurationFull CoreError adapter currentBase stageBase
+                              reserved indexError reservation)
+                            reservation))))))))))))
+def AspisR1.IDb_Deployed.deployedConfigurationFull : {CoreError : Type} →
+  (adapter : AdapterRw.Ops) →
+    (currentBase : AspisR1CurrentCaller.Ops) →
+      (stageBase : VTop_Stages.Ops) →
+        (reserved : Bool) →
+          (indexError : CoreError) →
+            (reservation : AspisR1.NP6_StdModel.Reservation) →
+              AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W CoreError :=
+fun {CoreError : Type} (adapter : AdapterRw.Ops) (currentBase : AspisR1CurrentCaller.Ops) (stageBase : VTop_Stages.Ops)
+    (reserved : Bool) (indexError : CoreError) (reservation : AspisR1.NP6_StdModel.Reservation) =>
+  @AspisR1.FIq_Install.configuration CoreError indexError
+    (@AspisR1.DrvC_Installation.Configuration.mk AspisR1.FIo_Install.W CoreError adapter currentBase stageBase
+      (AspisR1.IDa_Deployed.finish reservation) reserved AspisR1.IDb_Components.query
+      (@AspisR1.IDb_Components.geometry CoreError indexError) (AspisR1.IDa_Deployed.boundaries reservation)
+      (AspisR1.NP6_StdModel.calls reservation))
+    reservation
+structure AspisR1CurrentCaller.Ops : Type 1
+number of parameters: 0
+fields:
+  AspisR1CurrentCaller.Ops.op0 : Aeneas.Std.Result.{0} AspisR1CurrentCaller.aspis_core.field.QM31
+  AspisR1CurrentCaller.Ops.op1 : {T : Type} →
+      (coremarkerCopyInst : Aeneas.Std.core.marker.Copy T) →
+        Aeneas.Std.Usize →
+          T →
+            Aeneas.Std.Result.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} T)
+                AspisR1CurrentCaller.aspis_core.r0.Error)
+  AspisR1CurrentCaller.Ops.op2 : AspisR1CurrentCaller.compact.CodecError →
+      Aeneas.Std.Result.{0} AspisR1CurrentCaller.verifier.Error
+  AspisR1CurrentCaller.Ops.op3 : Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+      Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.transport.Variant
+          AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op4 : Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+      Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op5 : Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+      Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+        Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+          Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.View
+              AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op6 : {H : Type} →
+      (aspis_coredigestDigest32Inst : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) →
+        Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+          AspisR1CurrentCaller.verifier.Prepared →
+            Aeneas.Std.Array.{0} Aeneas.Std.U8
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯) →
+              Aeneas.Std.Usize →
+                H →
+                  Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op7 : Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+      AspisR1CurrentCaller.verifier.Prepared →
+        AspisR1CurrentCaller.verifier.Accumulator →
+          Aeneas.Std.Array.{0} AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29))) ⋯) →
+            Option.{0} (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result.{0} Unit) →
+              AspisR1CurrentCaller.verifier.QueryGeometry →
+                AspisR1CurrentCaller.verifier.BatchedWeights →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Result.{0}
+                      (Aeneas.Std.core.result.Result.{0, 0}
+                        (Prod.{0, 0} AspisR1CurrentCaller.verifier.Accumulator
+                          AspisR1CurrentCaller.verifier.BatchedWeights)
+                        AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op8 : {H : Type} →
+      (aspis_coredigestDigest32Inst : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) →
+        AspisR1CurrentCaller.r1_semantic.Verified H →
+          AspisR1CurrentCaller.verifier.View →
+            H →
+              Aeneas.Std.Array.{0} AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29))) ⋯) →
+                Aeneas.Std.Result.{0}
+                  (Prod.{0, 0}
+                    (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.Prepared
+                      AspisR1CurrentCaller.verifier.Error)
+                    (Aeneas.Std.Array.{0} AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29))) ⋯)))
+  AspisR1CurrentCaller.Ops.op9 : {H : Type} →
+      (aspis_coredigestDigest32Inst : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) →
+        AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+            H →
+              Option.{0} (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result.{0} Unit) →
+                Aeneas.Std.Result.{0}
+                  (Aeneas.Std.core.result.Result.{0, 0} (AspisR1CurrentCaller.r1_semantic.Verified H)
+                    AspisR1CurrentCaller.r1_wire.Error)
+  AspisR1CurrentCaller.Ops.op10 : Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+      Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+        Aeneas.Std.Result.{0}
+          (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1CurrentCaller.compact.CodecError)
+            (Aeneas.Std.Slice.{0} Aeneas.Std.U8))
+  AspisR1CurrentCaller.Ops.op11 : Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+      Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+        Aeneas.Std.Result.{0}
+          (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1CurrentCaller.compact.CodecError)
+            (Aeneas.Std.Slice.{0} Aeneas.Std.U8))
+  AspisR1CurrentCaller.Ops.op12 : Aeneas.Std.Result.{0} Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op13 : Aeneas.Std.Result.{0} Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op14 : Aeneas.Std.Result.{0} Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op15 : Aeneas.Std.Result.{0} Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op16 : {H : Type} →
+      (aspis_coredigestDigest32Inst : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) →
+        AspisR1CurrentCaller.verifier.Prepared →
+          AspisR1CurrentCaller.verifier.Accumulator →
+            Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+              Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+                H → Aeneas.Std.Result.{0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op17 : AspisR1CurrentCaller.verifier.BatchedWeights →
+      Aeneas.Std.Slice.{0} AspisR1CurrentCaller.aspis_core.field.QM31 →
+        Aeneas.Std.Result.{0} (Aeneas.Std.Slice.{0} AspisR1CurrentCaller.aspis_core.field.QM31)
+  AspisR1CurrentCaller.Ops.op18 : Aeneas.Std.Slice.{0} AspisR1CurrentCaller.aspis_core.field.QM31 →
+      Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.BatchedWeights
+          AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op19 : Aeneas.Std.Array.{0} Aeneas.Std.U32
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯) →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.QueryGeometry
+              AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op20 : AspisR1CurrentCaller.transport.Variant →
+      Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.Accumulator
+          AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op21 : Aeneas.Std.Result.{0} Aeneas.Std.Usize
+constructor:
+  AspisR1CurrentCaller.Ops.mk (op0 : Aeneas.Std.Result.{0} AspisR1CurrentCaller.aspis_core.field.QM31)
+    (op1 :
+      {T : Type} →
+        (coremarkerCopyInst : Aeneas.Std.core.marker.Copy T) →
+          Aeneas.Std.Usize →
+            T →
+              Aeneas.Std.Result.{0}
+                (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} T)
+                  AspisR1CurrentCaller.aspis_core.r0.Error))
+    (op2 : AspisR1CurrentCaller.compact.CodecError → Aeneas.Std.Result.{0} AspisR1CurrentCaller.verifier.Error)
+    (op3 :
+      Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+        Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.transport.Variant
+            AspisR1CurrentCaller.verifier.Error))
+    (op4 :
+      Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+        Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1CurrentCaller.verifier.Error))
+    (op5 :
+      Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+        Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+          Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+            Aeneas.Std.Result.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.View
+                AspisR1CurrentCaller.verifier.Error))
+    (op6 :
+      {H : Type} →
+        (aspis_coredigestDigest32Inst : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) →
+          Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+            AspisR1CurrentCaller.verifier.Prepared →
+              Aeneas.Std.Array.{0} Aeneas.Std.U8
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯) →
+                Aeneas.Std.Usize →
+                  H →
+                    Aeneas.Std.Result.{0}
+                      (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1CurrentCaller.verifier.Error))
+    (op7 :
+      Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+        AspisR1CurrentCaller.verifier.Prepared →
+          AspisR1CurrentCaller.verifier.Accumulator →
+            Aeneas.Std.Array.{0} AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29))) ⋯) →
+              Option.{0} (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result.{0} Unit) →
+                AspisR1CurrentCaller.verifier.QueryGeometry →
+                  AspisR1CurrentCaller.verifier.BatchedWeights →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Result.{0}
+                        (Aeneas.Std.core.result.Result.{0, 0}
+                          (Prod.{0, 0} AspisR1CurrentCaller.verifier.Accumulator
+                            AspisR1CurrentCaller.verifier.BatchedWeights)
+                          AspisR1CurrentCaller.verifier.Error))
+    (op8 :
+      {H : Type} →
+        (aspis_coredigestDigest32Inst : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) →
+          AspisR1CurrentCaller.r1_semantic.Verified H →
+            AspisR1CurrentCaller.verifier.View →
+              H →
+                Aeneas.Std.Array.{0} AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29))) ⋯) →
+                  Aeneas.Std.Result.{0}
+                    (Prod.{0, 0}
+                      (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.Prepared
+                        AspisR1CurrentCaller.verifier.Error)
+                      (Aeneas.Std.Array.{0} AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29))) ⋯))))
+    (op9 :
+      {H : Type} →
+        (aspis_coredigestDigest32Inst : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) →
+          AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+            Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+              H →
+                Option.{0} (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result.{0} Unit) →
+                  Aeneas.Std.Result.{0}
+                    (Aeneas.Std.core.result.Result.{0, 0} (AspisR1CurrentCaller.r1_semantic.Verified H)
+                      AspisR1CurrentCaller.r1_wire.Error))
+    (op10 op11 :
+      Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+        Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+          Aeneas.Std.Result.{0}
+            (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1CurrentCaller.compact.CodecError)
+              (Aeneas.Std.Slice.{0} Aeneas.Std.U8)))
+    (op12 op13 op14 op15 : Aeneas.Std.Result.{0} Aeneas.Std.Usize)
+    (op16 :
+      {H : Type} →
+        (aspis_coredigestDigest32Inst : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) →
+          AspisR1CurrentCaller.verifier.Prepared →
+            AspisR1CurrentCaller.verifier.Accumulator →
+              Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+                Aeneas.Std.Slice.{0} Aeneas.Std.U8 →
+                  H → Aeneas.Std.Result.{0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8))
+    (op17 :
+      AspisR1CurrentCaller.verifier.BatchedWeights →
+        Aeneas.Std.Slice.{0} AspisR1CurrentCaller.aspis_core.field.QM31 →
+          Aeneas.Std.Result.{0} (Aeneas.Std.Slice.{0} AspisR1CurrentCaller.aspis_core.field.QM31))
+    (op18 :
+      Aeneas.Std.Slice.{0} AspisR1CurrentCaller.aspis_core.field.QM31 →
+        Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.BatchedWeights
+            AspisR1CurrentCaller.verifier.Error))
+    (op19 :
+      Aeneas.Std.Array.{0} Aeneas.Std.U32
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯) →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.QueryGeometry
+                AspisR1CurrentCaller.verifier.Error))
+    (op20 :
+      AspisR1CurrentCaller.transport.Variant →
+        Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} AspisR1CurrentCaller.verifier.Accumulator
+            AspisR1CurrentCaller.verifier.Error))
+    (op21 : Aeneas.Std.Result.{0} Aeneas.Std.Usize) : AspisR1CurrentCaller.Ops
+def AspisR1.IDb_Components.query : AspisR1.Port3_NativeQueryBody.Ops :=
+AspisR1.Port3_NativeQueryBody.Ops.mk (fun {T F : Type} => @AspisR1.OraclePortStdBuilder.fromFn T F)
+  (fun (q : AspisR1Stage2.aspis_core.field.QM31) =>
+    @Aeneas.Std.Result.ok.{0} AspisR1Stage2.aspis_core.field.wide_exact.WideExact (AspisR1.Port4C_RowStd.fromK q))
+  AspisR1.SAQ_Arithmetic.add AspisR1.SAQ_MixedSource.mulE
+  (@Aeneas.Std.Result.ok.{0} AspisR1Stage2.aspis_core.field.M31
+    (Aeneas.Std.U32.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      AspisR1.IDb_Components.query._proof_1))
+  (@Aeneas.Std.Result.ok.{0} AspisR1Stage2.aspis_core.field.M31
+    (Aeneas.Std.U32.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+      AspisR1.IDb_Components.query._proof_2))
+  AspisR1Qm31ArithmeticProbe.field.M31.sub AspisR1Qm31ArithmeticProbe.field.M31.mul S7Kani3BasisOuter.double
+  AspisR1.SAQ_Arithmetic.mulK
+  (fun (m : AspisR1Stage2.aspis_core.field.M31) =>
+    @Aeneas.Std.Result.ok.{0} AspisR1Stage2.aspis_core.field.wide_exact.WideExact (AspisR1.Port4C_RowStd.fromM m))
+  AspisR1.Port4B_Opening.opening (@Aeneas.Std.Slice.index_usize.{0} AspisR1Stage2.aspis_core.field.QM31)
+  (@Aeneas.Std.Array.index_usize.{0} AspisR1Stage2.aspis_core.field.M31
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))
+      AspisR1.IDb_Components.query._proof_3))
+  AspisR1.Port3_NativeRowFrame.push
+  (fun (x : Aeneas.Std.U16) (x_1 : Aeneas.Std.Usize) (x_2 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact) =>
+    @Aeneas.Std.Result.ok.{0} Unit Unit.unit)
+  AspisR1.SAQ_LineQuery.line AspisR1.FIp_CircleQuery.circle AspisR1.Port5Q1_GeometryBinding.forQuery
+  AspisR1.Port3_QueryStage.mark AspisR1.FIp_DotsAdapter.dots AspisR1.SAQ_Decoder.read AspisR1.FIp_Equality.dictionary
+def AspisR1.IDb_Components.geometry : {C : Type} → (indexError : C) → AspisR1.Port3_NativeGeometryBody.Ops C :=
+fun {C : Type} (indexError : C) =>
+  @AspisR1.Port3_NativeGeometryBody.Ops.mk C (fun {T F : Type} => @AspisR1.OraclePortStdBuilder.fromFn T F)
+    (fun {Self B F Clause0_Item : Type} => @AspisR1.OraclePortStdBuilder.iterMap F Self Clause0_Item B)
+    (fun {T E F O : Type} => @AspisR1.Port4C_GeometryStd.mapError T E F O)
+    (fun {T F : Type} (pred : Aeneas.Std.core.ops.function.FnMut.{0, 0, 0} F T Bool)
+        (it : Aeneas.Std.core.slice.iter.Iter T) (f : F) =>
+      @AspisR1.Port3_BatchStd.anyDefault (Aeneas.Std.core.slice.iter.Iter T) F T
+        (Aeneas.Std.core.iter.traits.iterator.IteratorSliceIter T) pred it f)
+    (fun {T : Type} (x : Type) (v : Aeneas.Std.alloc.vec.Vec.{0} T) =>
+      @Aeneas.Std.Result.ok.{0} Bool
+        (@List.isEmpty.{0} T
+          (@Subtype.val.{1} (List.{0} T)
+            (fun (l : List.{0} T) => @LE.le.{0} Nat instLENat (@List.length.{0} T l) Aeneas.Std.Usize.max) v)))
+    (fun (x y : AspisR1Stage2.aspis_core.field.M31) =>
+      @Aeneas.Std.Result.ok.{0} Bool
+        (@Decidable.decide (@Eq.{1} AspisR1Stage2.aspis_core.field.M31 x y)
+          (Aeneas.Std.instDecidableEqUScalar_1 Aeneas.Std.UScalarTy.U32 x y)))
+    (@Aeneas.Std.Result.ok.{0} AspisR1Stage2.aspis_core.field.M31
+      (Aeneas.Std.U32.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        AspisR1.IDb_Components.query._proof_1))
+    (@Aeneas.Std.Result.ok.{0} AspisR1Stage2.aspis_core.field.M31
+      (Aeneas.Std.U32.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+        AspisR1.IDb_Components.query._proof_2))
+    AspisR1Qm31ArithmeticProbe.field.M31.sub AspisR1Qm31ArithmeticProbe.field.M31.mul
+    AspisR1Qm31ArithmeticProbe.field.M31.double AspisR1.SAQ_Inverse.source (@AspisR1.SAQ_Constructor.fibre C indexError)
+    (AspisR1.Port4C_NativePrefix.verifier.batch_prefix_products
+      (AspisR1.Port4C_NativePrefix.Leaves.mk AspisR1Qm31ArithmeticProbe.field.M31.mul
+        (@Aeneas.Std.Result.ok.{0} Aeneas.Std.U32
+          (Aeneas.Std.U32.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            AspisR1.IDb_Components.query._proof_2))))
+    AspisR1.SAQ_Geometry.line AspisR1.SAQ_Geometry.point fun {B I F Item : Type} =>
+    @AspisR1.Port4C_CollectStd.mapIterator B I F Item
+'AspisR1.FJu_Top.deployed' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.IDb_Deployed.FJu_Deployed' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.IDb_Nonvacuity.conditional' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.IDb_Nonvacuity.owners_equivalent' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
