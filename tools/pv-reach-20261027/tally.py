@@ -2,7 +2,7 @@
 from pathlib import Path
 import json,hashlib,re,subprocess
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-reach-20261027'
-rows=sorted((json.loads(p.read_text()) for p in E.glob('receipt-*.json')),key=lambda x:x['attempt'])
+rows=sorted((json.loads(p.read_text()) for p in E.glob('receipt-[0-9]*.json')),key=lambda x:x['attempt'])
 used=sorted(int(p.stem[5:]) for p in E.glob('used-*.json'))
 assert len(rows)<=100 and len(used)==len(set(used))
 assert all(44000<=i<=44499 for i in used)

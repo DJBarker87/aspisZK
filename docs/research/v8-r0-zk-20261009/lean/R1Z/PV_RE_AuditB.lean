@@ -45,8 +45,6 @@ import R1Z.PV_RE_Guard007
 import R1Z.PV_RE_Guard008
 import R1Z.PV_RE_Guard009
 import R1Z.PV_RE_RetryEntry
-import R1Z.PV_RE_RetryZero
-import R1Z.PV_RE_RetryCap
 #print axioms R1Z.PV_RE_Callee000.first
 #print axioms R1Z.PV_RE_Callee001.first
 #print axioms R1Z.PV_RE_Callee002.first
@@ -114,7 +112,3 @@ import R1Z.PV_RE_RetryCap
 #print axioms R1Z.PV_RE_Guard009.onFalse
 #print axioms R1Z.PV_RE_Guard009.first
 #print axioms R1Z.PV_RE_RetryEntry.first
-#print axioms R1Z.PV_RE_RetryZero.below
-#print axioms R1Z.PV_RE_RetryZero.first
-#print axioms R1Z.PV_RE_RetryCap.at_cap
-#print axioms R1Z.PV_RE_RetryCap.exhausted

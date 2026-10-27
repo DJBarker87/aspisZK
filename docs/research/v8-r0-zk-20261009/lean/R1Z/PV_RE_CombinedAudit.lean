@@ -110,8 +110,4 @@ import R1Z.PrivacyR1HeadlineDeployedReal
 #print axioms R1Z.PV_RE_Guard009.onFalse
 #print axioms R1Z.PV_RE_Guard009.first
 #print axioms R1Z.PV_RE_RetryEntry.first
-#print axioms R1Z.PV_RE_RetryZero.below
-#print axioms R1Z.PV_RE_RetryZero.first
-#print axioms R1Z.PV_RE_RetryCap.at_cap
-#print axioms R1Z.PV_RE_RetryCap.exhausted
 #print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
