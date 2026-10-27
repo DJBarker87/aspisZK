@@ -4,8 +4,8 @@ B=Path(__file__).resolve().parent
 O=Path('/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027')
 a=O/'XRa_bin/aeneas-b59d5188-extended'
 assert hashlib.file_digest(a.open('rb'),'sha256').hexdigest()=='c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958'
-p=B/'XRe_release_candidate_tx1.llbc'
-r=json.loads((B/'XRe_release_candidate_charon_result.json').read_text())
+p=B/'XRe_no_copied_release_candidate_tx1.llbc'
+r=json.loads((B/'XRe_no_copied_release_candidate_charon_result.json').read_text())
 assert r['exit']==0 and r['llbc_has_errors'] is False
 assert hashlib.file_digest(p.open('rb'),'sha256').hexdigest()==r['llbc_sha256']
 cmd=[str(a),'-log','Translate','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','XRe_Release','-dest',str(B/'XRe_generated'),'-subdir','XRe_Release','-split-files','-emit-json',str(p)]

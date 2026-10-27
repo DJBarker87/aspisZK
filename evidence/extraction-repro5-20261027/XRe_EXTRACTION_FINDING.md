@@ -24,3 +24,28 @@ Both artifacts remain host-only. The original 80465ea3 LLBC is unmodified.
 No source/translator/library patch, new trust item, or alternate-file
 substitution. Resource receipts include all required AGENTS fields; swaps0.
 Complete release Types/Funs and association are not delivered by these runs.
+
+## Isolated default method and final pinned-translator failure
+
+Read-only inspection of trait impl68 identifies Iterator::copied as the default
+method with an item-type equality incompatible with IterMut and Enumerate.
+XRe_003 changes only selectors: remove broad includes, exclude that one standard
+library default method. Charon now succeeds, wrapper exit0, has_errors=false:
+8b049f3188cb83227ab485562c755811d33e643fef44a30de5748a3349cae659,
+16981964 bytes. This remains a selector-derived artifact, not a byte-identical
+reproduction of 80465ea3. The original artifact is retained unchanged.
+XRe_llbc_inventory.json records all459 non-null function entries (685 slots),
+with expanded-body and full-name hashes. EXACTLY SIX release-namespace
+functions are opaque, precisely the six approved leaves; no extra release
+leaf is hidden. Foreign library opacity is separately visible in the inventory.
+
+XRe_004 is the fourth/final combined invocation. Pinned Aeneas exit2, before
+emitting any files, at FunsAnalysis.ml:134: function called here missing from
+crate, r1_semantic.rs:83:23–83:49, polynomial.iter().copied().fold(...).
+Thus the selector exclusion fixes Charon's invalid trait references but removes
+a library declaration actually called by the newly exposed semantic boundary.
+A valid has_errors=false flag does not establish complete call closure.
+This is NOT a seventh untranslatable release function; no extra leaf is added.
+No Types/Funs, generated model, or declaration association is claimed.
+No translator/library patch or shipped-source edit is made.
+Extraction budget used4/4 (3 Charon,1 Aeneas); no further invocation permitted.

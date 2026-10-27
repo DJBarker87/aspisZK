@@ -74,3 +74,42 @@ fn echeck_n<const N:usize>(k:bool) {let b:[u8;N]=kani::any();let n:usize=kani::a
  _=>panic!("result mismatch")
  }
 }
+// Exact checkpoint source stages; these do not establish the three digest calls.
+#[kani::proof] #[kani::unwind(20)] fn XRe_checkpoint_header() {
+ let tag:u8=kani::any();let next:usize=kani::any();let mut a=Vec::new();
+ a.extend_from_slice(b"R1P2CKP2");a.extend_from_slice(&[tag,next as u8,1,0,0,0,0,0]);
+ let b=[b'R',b'1',b'P',b'2',b'C',b'K',b'P',b'2',tag,(next&255) as u8,1,0,0,0,0,0];assert_eq!(a.as_slice(),b);
+}
+#[kani::proof] #[kani::unwind(36)] fn XRe_checkpoint_roots() {
+ let roots:[[u8;32];2]=kani::any();let mut a=Vec::new();for root in &roots {a.extend_from_slice(root);}
+ let i:usize=kani::any();kani::assume(i<64);assert_eq!(a.len(),64);assert_eq!(a[i],roots[i/32][i%32]);
+}
+#[kani::proof] #[kani::unwind(26)] fn XRe_checkpoint_queries() {
+ let queries:[u32;22]=kani::any();let mut a=Vec::new();for q in queries {a.extend_from_slice(&q.to_le_bytes());}
+ let i:usize=kani::any();kani::assume(i<88);assert_eq!(a.len(),88);assert_eq!(a[i],((queries[i/4]>>(8*(i%4)))&255) as u8);
+}
+#[kani::proof] #[kani::unwind(36)] fn XRe_checkpoint_semantic_alpha() {
+ let xs:[K;10]=core::array::from_fn(|_|any_k());let mut a=Vec::new();let mut e=Vec::new();
+ for x in xs {let mut b=[0;16];x.write_le_bytes(&mut b);a.extend_from_slice(&b);}
+ for x in xs {XRe_reference_put_k(&mut e,x);}
+ let i:usize=kani::any();kani::assume(i<160);assert_eq!(a.len(),160);assert_eq!(e.len(),160);assert_eq!(a[i],e[i]);
+}
+#[kani::proof] #[kani::unwind(36)] fn XRe_checkpoint_coordinates() {
+ let z=[aspis_core::circle::SecureCirclePoint{x:any_k(),y:any_k()};2];let mut a=Vec::new();let mut e=Vec::new();
+ for z in z {for x in [z.x,z.y] {let mut b=[0;16];x.write_le_bytes(&mut b);a.extend_from_slice(&b);}}
+ for z in z {XRe_reference_put_k(&mut e,z.x);XRe_reference_put_k(&mut e,z.y);}
+ let i:usize=kani::any();kani::assume(i<64);assert_eq!(a.len(),64);assert_eq!(e.len(),64);assert_eq!(a[i],e[i]);
+}
+#[kani::proof] #[kani::unwind(70)] fn XRe_checkpoint_weights() {
+ let xs:[K;64]=core::array::from_fn(|_|any_k());let mut a=Vec::new();let mut e=Vec::new();
+ for &x in &xs {XRe_shipped_put_k(&mut a,x);}
+ for x in xs {XRe_reference_put_k(&mut e,x);}
+ let i:usize=kani::any();kani::assume(i<1024);assert_eq!(a.len(),1024);assert_eq!(e.len(),1024);assert_eq!(a[i],e[i]);
+}
+
+#[kani::proof] #[kani::unwind(35)] fn XRe_expand_values_indexed() {
+ let b:[u8;32]=kani::any();let mut a:[u8;64]=kani::any();let mut e=a;
+ let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=32&&m<=64);
+ let ar=compact::expand_values(&b[..n],&mut a[..m]);let er=XRe_reference_expand_values(&b[..n],&mut e[..m]);assert_eq!(ar,er);
+ let i:usize=kani::any();kani::assume(i<64);assert_eq!(a[i],e[i]);
+}
