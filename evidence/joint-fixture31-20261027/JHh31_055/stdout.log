@@ -1,0 +1,74 @@
+JHh_ChildBridge.lean:49:61: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.candidate.tx1 (DrvC_Installation.currentInstalled (JHe_Natives.configuration base stage))
+    (DrvC_Installation.currentDigest (JHe_Natives.configuration base stage))
+    (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize () none
+in the target expression
+  (do
+      let result ←
+        AspisS6OuterNativeOps.resultMap
+            (AspisS6CurrentCodecInstallation.mapBoth id AspisS6CurrentVerifierCarrier.fromError)
+            (verifier.candidate.tx1 (DrvC_Installation.currentInstalled (JHe_Natives.configuration base stage))
+              (AspisS6CurrentFirstInstallation.toDigest
+                (DrvC_Installation.digest (JHe_Natives.configuration base stage)))
+              (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize
+              () none)
+      AdapterRw.core.result.Result.map_err
+          (BuiltinFnOnce AdapterRw.aspis_r1_cost_probe.verifier.Error AdapterRw.solana_program_error.ProgramError)
+          result (JHe_Natives.sdk base stage).op44) =
+    ok (core.result.Result.Ok saved)
+
+base : AdapterRw.Ops
+stage : VTop_Stages.Ops
+saved : alloc.vec.Vec U8
+returned :
+  verifier.candidate.tx1 installed digest (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.publicInput
+      JFx_NativeBytes.proof 10#usize () none =
+    ok (core.result.Result.Ok saved)
+original :
+  verifier.candidate.tx1
+      (have __src :=
+        WAdm_Execution.actual (JGp_Allocation.base (Op5T_Concrete.current JGp_Seeds.base)) true
+          JHe_PreparedInventory.query JHe_PreparedInventory.geometry JGe_Boundaries.value
+          (NP6_StdModel.calls (core.result.Result.Ok ()));
+      { op0 := __src.op0, op1 := @Ops.op1 __src, op2 := __src.op2, op3 := __src.op3, op4 := __src.op4, op5 := __src.op5,
+        op6 := @Ops.op6 __src, op7 := __src.op7, op8 := @Ops.op8 __src, op9 := @Ops.op9 __src, op10 := __src.op10,
+        op11 := __src.op11, op12 := __src.op12, op13 := __src.op13, op14 := __src.op14, op15 := __src.op15,
+        op16 := fun {H} => Tx1Q_Install.writer, op17 := __src.op17, op18 := __src.op18, op19 := __src.op19,
+        op20 := __src.op20, op21 := __src.op21 })
+      digest (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize
+      () none =
+    ok (core.result.Result.Ok saved)
+call :
+  verifier.candidate.tx1 (DrvC_Installation.currentInstalled (JHe_Natives.configuration base stage))
+      (DrvC_Installation.currentDigest (JHe_Natives.configuration base stage))
+      (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize ()
+      none =
+    ok (core.result.Result.Ok saved)
+semantic :
+  AspisS6CurrentVerifierCarrier.toPublic (S6N_Getters.publicValue JGx_RealStatement.value) =
+    toCurrentPublic JFs_PublicSerialization.value
+⊢ (do
+      let result ←
+        AspisS6OuterNativeOps.resultMap
+            (AspisS6CurrentCodecInstallation.mapBoth id AspisS6CurrentVerifierCarrier.fromError)
+            (verifier.candidate.tx1 (DrvC_Installation.currentInstalled (JHe_Natives.configuration base stage))
+              (AspisS6CurrentFirstInstallation.toDigest
+                (DrvC_Installation.digest (JHe_Natives.configuration base stage)))
+              (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.publicInput JFx_NativeBytes.proof 10#usize
+              () none)
+      AdapterRw.core.result.Result.map_err
+          (BuiltinFnOnce AdapterRw.aspis_r1_cost_probe.verifier.Error AdapterRw.solana_program_error.ProgramError)
+          result (JHe_Natives.sdk base stage).op44) =
+    ok (core.result.Result.Ok saved)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JHh_ChildBridge.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

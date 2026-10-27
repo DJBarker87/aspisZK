@@ -1,0 +1,45 @@
+import JHh_C_Child
+import JHe_TX1Frontier
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHh_TX1
+open Aeneas Aeneas.Std Result
+variable [sha : JHe_SHARealization]
+/-- Selected by the actual installed child return, never supplied as an input. -/
+def saved (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) : alloc.vec.Vec U8 :=
+  Classical.choose (JHh_C_Child.source base stage)
+
+theorem saved_length (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+    (saved base stage).val.length=1768 :=
+  (Classical.choose_spec (JHh_C_Child.source base stage)).2
+#print axioms saved_length
+
+/-- Actual accepted1, on the source-selected output. Its equality to the
+retained checkpoint is NOT asserted by this theorem. -/
+theorem accepted1 (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+    S2W_D189Wrappers.first (JHe_Natives.first base stage) CPH_FixtureData.copy CPH_FixtureData.allocator
+      JHb_World.e1 CPH_Program.verifier JHe_Natives.data1 ()=
+        ok (.Ok (saved base stage,JHe_WrapperReady.post (saved base stage),())) :=
+  JHe_TX1Frontier.wrapper_of_child base stage (saved base stage) (saved_length base stage)
+    (Classical.choose_spec (JHh_C_Child.source base stage)).1
+#print axioms accepted1
+#print saved
+#check @accepted1
+#print accepted1
+
+/-- The installed child and wrapper share exactly the candidate-selected
+saved vector. Retained checkpoint identity is a separate remaining gate. -/
+theorem accepted1_exists (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+    ∃ saved : alloc.vec.Vec U8,
+      saved.val.length=1768 ∧
+      AdapterRw.first_decoded (JHe_Natives.sdk base stage)
+        (S6N_Getters.publicValue JGx_RealStatement.value) JFx_NativeBytes.publicInput
+        JFx_NativeBytes.proof 10#usize=ok (.Ok saved) ∧
+      S2W_D189Wrappers.first (JHe_Natives.first base stage) CPH_FixtureData.copy CPH_FixtureData.allocator
+        JHb_World.e1 CPH_Program.verifier JHe_Natives.data1 ()=
+          ok (.Ok (saved,JHe_WrapperReady.post saved,())) := by
+  obtain ⟨saved,child,size⟩ := JHh_C_Child.source base stage
+  exact ⟨saved,size,child,JHe_TX1Frontier.wrapper_of_child base stage saved size child⟩
+#print axioms accepted1_exists
+end AspisR1.JHh_TX1
+end

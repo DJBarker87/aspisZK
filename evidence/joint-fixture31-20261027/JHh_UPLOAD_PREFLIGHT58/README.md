@@ -1,0 +1,1 @@
+Local fission assertion stopped before creating source. Subsequent scp failed because that local source did not exist. No Lean process or scope was submitted; attempt058 is not charged until the corrected source is actually compiled. No host infrastructure failure or network outage occurred.

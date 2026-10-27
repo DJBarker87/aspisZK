@@ -1,0 +1,18 @@
+import JHh_C_TX1Candidate
+import JHh_ChildBridge
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHh_C_Child
+open Aeneas Aeneas.Std Result
+variable [sha : JHe_SHARealization]
+theorem source (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+    ∃ saved : alloc.vec.Vec U8,
+      AdapterRw.first_decoded (JHe_Natives.sdk base stage)
+        (S6N_Getters.publicValue JGx_RealStatement.value) JFx_NativeBytes.publicInput
+        JFx_NativeBytes.proof 10#usize=ok (.Ok saved) ∧ saved.val.length=1768 := by
+  obtain ⟨p,scratch,initial,out,pending,after,g,flushed,saved,
+    prepare,batch,query,flush,write,returned,length,variant,next,size⟩ := JHh_C_TX1Candidate.returns
+  exact ⟨saved,JHh_ChildBridge.source base stage saved returned,length⟩
+#print axioms source
+end AspisR1.JHh_C_Child
+end
