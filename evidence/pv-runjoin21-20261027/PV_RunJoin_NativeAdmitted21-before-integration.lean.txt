@@ -1,0 +1,25 @@
+import R1Z.PV_RunJoin_NativeFibre21
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_NativeAdmitted21
+open R0Z.WriterRefine
+local notation "M" => PV_RunJoin_FixtureRecords.M
+/-- Admission and trace at the recorded native public, for the original returned payload. -/
+theorem transfer : ∃ w : AspisR1.SpendRelation.Wspend,
+    BuilderSpendRelation.RspendPlus (PV_Src_Public.canonicalPublic PV_RunJoin_RecordedTransfer.publicInput) w ∧
+    ∀ c r, liftU (K := M) (PV_Src_Forest_Columns.read PV_RunJoin_TransferPayload20.output.semantic_c1.c1 c r) =
+      R0Z.BuilderModel.buildModel (PV_Src_Public.canonicalPublic PV_RunJoin_RecordedTransfer.publicInput)
+        (BuilderSpendRelation.modelWitness w) c r := by
+  rw [PV_RunJoin_CanonicalPublic21.transfer]
+  exact PV_RunJoin_AdmittedPayload20.transfer
+#print axioms transfer
+
+theorem withdrawal : ∃ w : AspisR1.SpendRelation.Wspend,
+    BuilderSpendRelation.RspendPlus (PV_Src_Public.canonicalPublic PV_RunJoin_RecordedWithdrawal.publicInput) w ∧
+    ∀ c r, liftU (K := M) (PV_Src_Forest_Columns.read PV_RunJoin_WithdrawalPayload20.output.semantic_c1.c1 c r) =
+      R0Z.BuilderModel.buildModel (PV_Src_Public.canonicalPublic PV_RunJoin_RecordedWithdrawal.publicInput)
+        (BuilderSpendRelation.modelWitness w) c r := by
+  rw [PV_RunJoin_CanonicalPublic21.withdrawal]
+  exact PV_RunJoin_AdmittedPayload20.withdrawal
+#print axioms withdrawal
+end R1Z.PV_RunJoin_NativeAdmitted21

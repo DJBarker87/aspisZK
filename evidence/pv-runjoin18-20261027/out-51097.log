@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankAggregate18.lean:32:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pair_forest_trace.validate_forest_poseidon_block (if True ∧ True then banks.late else banks.stable) block
+in the target expression
+  (if decide (True ∧ True) = true then do
+      let result1 ← pair_forest_trace.validate_forest_poseidon_block banks.late block
+      let block1 ← lift (block.wrapping_add 1#usize)
+      pair_forest_trace.validate_forest_poseidon_rows_loop banks result1 block1
+    else do
+      let result1 ← pair_forest_trace.validate_forest_poseidon_block banks.stable block
+      let block1 ← lift (block.wrapping_add 1#usize)
+      pair_forest_trace.validate_forest_poseidon_rows_loop banks result1 block1) =
+    ok (core.result.Result.Ok ())
+
+case pos
+banks : pair_forest_copy_builder.CopyBanks
+blocks :
+  ∀ (block : Usize),
+    ↑block < 57 →
+      pair_forest_trace.validate_forest_poseidon_block (columns banks block) block = ok (core.result.Result.Ok ())
+remaining : ℕ
+ih :
+  ∀ m < remaining,
+    ∀ (block : Usize),
+      ↑block ≤ 57 →
+        57 - ↑block = m →
+          pair_forest_trace.validate_forest_poseidon_rows_loop banks (core.result.Result.Ok ()) block =
+            ok (core.result.Result.Ok ())
+block : Usize
+hb : ↑block ≤ 57
+hremaining : 57 - ↑block = remaining
+hlt : ↑block < 57
+hc : 34 ≤ ↑block ∧ ↑block < 54
+hp :
+  pair_forest_trace.validate_forest_poseidon_block (if True ∧ True then banks.late else banks.stable) block =
+    ok (core.result.Result.Ok ())
+⊢ (if decide (True ∧ True) = true then do
+      let result1 ← pair_forest_trace.validate_forest_poseidon_block banks.late block
+      let block1 ← lift (block.wrapping_add 1#usize)
+      pair_forest_trace.validate_forest_poseidon_rows_loop banks result1 block1
+    else do
+      let result1 ← pair_forest_trace.validate_forest_poseidon_block banks.stable block
+      let block1 ← lift (block.wrapping_add 1#usize)
+      pair_forest_trace.validate_forest_poseidon_rows_loop banks result1 block1) =
+    ok (core.result.Result.Ok ())
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankAggregate18.lean:29:22: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵c̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲h̲c̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankAggregate18.lean:29:34: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵c̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲h̲c̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankAggregate18.lean:31:30: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵l̵u̵m̵n̵s̵,̵h̵c̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲c̲o̲l̲u̲m̲n̲s̲,̲ ̲h̲c̲]̲ at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_BankAggregate18.lean:38:35: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵c̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲c̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_BankAggregate18.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_BankAggregate18.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

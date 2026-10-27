@@ -1,0 +1,92 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:32:96: error: Ambiguous term
+  usub
+Possible interpretations:
+  R0Z.PoseidonRefine.usub a b h : ↑(a.wrapping_sub b) = ↑a - ↑b
+  
+  R0Z.WriterRefine.usub a b h : ↑(a.wrapping_sub b) = ↑a - ↑b
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:36:30: error: `simp` made no progress
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:33:114: error: unsolved goals
+s : State
+hs : Canonical s
+hc : ↑(↑poseidon2.INTERNAL)[0]! < 2147483647
+hlen : ∀ {α : Type} {n : Usize} (a : Std.Array α n), a.to_slice.len = n
+hadd : Usize.wrapping_add 4#usize 14#usize = 18#usize
+hsub : ∀ (a b : Usize), ↑b ≤ ↑a → ↑(a.wrapping_sub b) = ↑a - ↑b
+⊢ ↑(Usize.wrapping_sub 4#usize 4#usize) = 0
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:37:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len
+in the target expression
+  poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize 4#usize) = ok (↑poseidon2.INTERNAL)[0]!
+
+s : State
+hs : Canonical s
+hc : ↑(↑poseidon2.INTERNAL)[0]! < 2147483647
+hlen : ∀ {α : Type} {n : Usize} (a : Std.Array α n), a.to_slice.len = n
+hadd : Usize.wrapping_add 4#usize 14#usize = 18#usize
+hsub : ∀ (a b : Usize), ↑b ≤ ↑a → ↑(a.wrapping_sub b) = ↑a - ↑b
+hidx : Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len = 0#usize
+⊢ poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize 4#usize) = ok (↑poseidon2.INTERNAL)[0]!
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (14 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len)
+in the target expression
+  (do
+      let constant1 ← poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize 4#usize)
+      let m ← Array.index_usize s 0#usize
+      let m1 ← m.add constant1
+      let m2 ← poseidon2.pow5 m1
+      let state1 ← Array.update s 0#usize m2
+      let state2 ← poseidon2.internal_linear_lazy state1
+      ok (some (), state2)) =
+    do
+    let out ← R0PoseidonCopy.internal_round s (↑poseidon2.INTERNAL)[0]! R0PoseidonCopy.INTERNAL_SHIFTS
+    ok (some (), out)
+
+s : State
+hs : Canonical s
+hc : ↑(↑poseidon2.INTERNAL)[0]! < 2147483647
+hlen : ∀ {α : Type} {n : Usize} (a : Std.Array α n), a.to_slice.len = n
+hadd : Usize.wrapping_add 4#usize 14#usize = 18#usize
+hk :
+  poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize poseidon2.EXTERNAL_INITIAL.to_slice.len) =
+    ok (↑poseidon2.INTERNAL)[0]!
+⊢ (do
+      let constant1 ← poseidon2.INTERNAL.index_usize (Usize.wrapping_sub 4#usize 4#usize)
+      let m ← Array.index_usize s 0#usize
+      let m1 ← m.add constant1
+      let m2 ← poseidon2.pow5 m1
+      let state1 ← Array.update s 0#usize m2
+      let state2 ← poseidon2.internal_linear_lazy state1
+      ok (some (), state2)) =
+    do
+    let out ← R0PoseidonCopy.internal_round s (↑poseidon2.INTERNAL)[0]! R0PoseidonCopy.INTERNAL_SHIFTS
+    ok (some (), out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:19:13: warning: This simp argument is unused:
+  hlen
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵l̵e̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_IndexedRound0419.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

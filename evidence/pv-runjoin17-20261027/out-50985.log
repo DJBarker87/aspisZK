@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_BankRow17.lean:16:2: error: 'change' tactic failed, pattern
+  ok (x != x) = ?m.10
+is not definitionally equal to target
+  core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 x x = ok false
+'R1Z.PV_RunJoin_BankRow17.ne_self' depends on axioms: [sorryAx]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_BankRow17.lean:39:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) (↑columns)[↑iter.start]! (rowIndex block row)
+in the target expression
+  (do
+      let m ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) (↑columns)[↑iter.start]!
+            ((block.wrapping_mul 16#usize).wrapping_add row)
+      let m1 ← Array.index_usize expected iter.start
+      let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m m1
+      if b = true then
+          ok
+            (core.result.Result.Err
+              (pair_trace.PoolV1PairTraceErrorV1.BlockMismatch (UScalar.cast UScalarTy.U8 block)
+                (UScalar.cast UScalarTy.U8 row) (UScalar.cast UScalarTy.U8 iter.start)))
+        else pair_forest_trace.validate_forest_poseidon_row_loop after columns block row expected) =
+    ok (core.result.Result.Ok ())
+
+case pos
+columns : Columns
+block row : Usize
+expected : State
+reads :
+  ∀ (lane : Usize),
+    ↑lane < 16 →
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) (↑columns)[↑lane]! (rowIndex block row) =
+        ok (↑expected)[↑lane]!
+remaining : ℕ
+ih :
+  ∀ m < remaining,
+    ∀ (iter : core.ops.range.Range Usize),
+      iter.end = 16#usize →
+        ↑iter.start ≤ 16 →
+          16 - ↑iter.start = m →
+            pair_forest_trace.validate_forest_poseidon_row_loop iter columns block row expected =
+              ok (core.result.Result.Ok ())
+iter : core.ops.range.Range Usize
+he : iter.end = 16#usize
+hi : ↑iter.start ≤ 16
+hremaining : 16 - ↑iter.start = remaining
+hlt : ↑iter.start < 16
+after : core.ops.range.Range (UScalar UScalarTy.Usize)
+ha : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, after)
+hv : ↑after.start = ↑iter.start + 1
+hend : after.end = iter.end
+⊢ (do
+      let m ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) (↑columns)[↑iter.start]!
+            ((block.wrapping_mul 16#usize).wrapping_add row)
+      let m1 ← Array.index_usize expected iter.start
+      let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m m1
+      if b = true then
+          ok
+            (core.result.Result.Err
+              (pair_trace.PoolV1PairTraceErrorV1.BlockMismatch (UScalar.cast UScalarTy.U8 block)
+                (UScalar.cast UScalarTy.U8 row) (UScalar.cast UScalarTy.U8 iter.start)))
+        else pair_forest_trace.validate_forest_poseidon_row_loop after columns block row expected) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    columns
+  has type
+    Columns
+  but is expected to have type
+    { l // l.length = ↑16#usize }
+  in the application
+    ↑columns
+'R1Z.PV_RunJoin_BankRow17.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_BankRow17.row' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

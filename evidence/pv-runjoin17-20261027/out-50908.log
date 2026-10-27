@@ -1,0 +1,96 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierControl17.lean:13:35: error: Tactic `decide` failed for proposition
+  (↑key).length ≤ Usize.max
+because its `Decidable` instance
+  (↑key).length.decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (↑key).length.ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierControl17.lean:15:36: error: Tactic `decide` failed for proposition
+  (↑salt).length ≤ Usize.max
+because its `Decidable` instance
+  (↑salt).length.decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (↑salt).length.ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierControl17.lean:18:21: error: Tactic `rfl` failed: The left-hand side
+  do
+    let __x ←
+      core.iter.adapters.enumerate.IteratorEnumerate.next
+          (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) keyIter
+    match __x with
+      | (o, iter1) =>
+        match o with
+        | none => ok initial
+        | some p =>
+          match p with
+          | (index, value) => do
+            let m ← Array.index_usize initial index
+            let m1 ← m.add value
+            let a ← Array.update initial index m1
+            poseidon2.hash_fields_with_trace_loop0_loop0 iter1 a
+is not definitionally equal to the right-hand side
+  ok s4_0
+
+⊢ (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) keyIter
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok initial
+          | some p =>
+            match p with
+            | (index, value) => do
+              let m ← Array.index_usize initial index
+              let m1 ← m.add value
+              let a ← Array.update initial index m1
+              poseidon2.hash_fields_with_trace_loop0_loop0 iter1 a) =
+    ok s4_0
+'R1Z.PV_RunJoin_NullifierControl17.absorb_key' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin17-lean/sources/R1Z/PV_RunJoin_NullifierControl17.lean:23:21: error: Tactic `rfl` failed: The left-hand side
+  do
+    let __x ←
+      core.iter.adapters.enumerate.IteratorEnumerate.next
+          (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) saltIter
+    match __x with
+      | (o, iter1) =>
+        match o with
+        | none => ok s4_23
+        | some p =>
+          match p with
+          | (index, value) => do
+            let m ← Array.index_usize s4_23 index
+            let m1 ← m.add value
+            let a ← Array.update s4_23 index m1
+            poseidon2.hash_fields_with_trace_loop0_loop0 iter1 a
+is not definitionally equal to the right-hand side
+  ok s5_0
+
+⊢ (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) saltIter
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok s4_23
+          | some p =>
+            match p with
+            | (index, value) => do
+              let m ← Array.index_usize s4_23 index
+              let m1 ← m.add value
+              let a ← Array.update s4_23 index m1
+              poseidon2.hash_fields_with_trace_loop0_loop0 iter1 a) =
+    ok s5_0
+'R1Z.PV_RunJoin_NullifierControl17.absorb_salt' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

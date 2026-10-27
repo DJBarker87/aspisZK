@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:3:7: error(lean.unknownIdentifier): Unknown constant `UScalar.shiftLeft_spec`
+@[implicit_reducible] def Aeneas.Std.UScalarTy.numBits : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => System.Platform.numBits
+  | UScalarTy.U8 => 8
+  | UScalarTy.U16 => 16
+  | UScalarTy.U32 => 32
+  | UScalarTy.U64 => 64
+  | UScalarTy.U128 => 128
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:5:7: error(lean.unknownIdentifier): Unknown constant `UScalarTy.numBits_pos`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:6:7: error(lean.unknownIdentifier): Unknown constant `UScalarTy.numBits_usize`
+theorem Aeneas.Std.UScalar.div_spec : ∀ {ty : UScalarTy} (x : UScalar ty) {y : UScalar ty},
+  ↑y ≠ 0 → ∃ z, x / y = ok z ∧ ↑z = ↑x / ↑y :=
+fun {ty} x {y} hzero =>
+  match UScalar.div_bv_spec x hzero with
+  | Exists.intro z hz =>
+    of_eq_true
+      (Eq.trans
+        (Eq.trans
+          (congrArg Exists
+            (funext fun z_1 =>
+              congrFun' (congrArg And (Eq.trans (congrFun' (congrArg Eq hz.1) (ok z_1)) (ok.injEq z z_1)))
+                (↑z_1 = ↑x / ↑y)))
+          exists_eq_left'._simp_1)
+        (Eq.trans (congrFun' (congrArg Eq hz.2.1) (↑x / ↑y)) (eq_self (↑x / ↑y))))
+theorem Aeneas.Std.UScalar.rem_spec : ∀ {ty : UScalarTy} (x : UScalar ty) {y : UScalar ty},
+  ↑y ≠ 0 → x % y ⦃ z => ↑z = ↑x % ↑y ⦄ :=
+fun {ty} x {y} hzero => WP.spec_mono (UScalar.rem_bv_spec x hzero) fun x' h => h.left
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:9:7: error(lean.unknownIdentifier): Unknown constant `Usize.shiftLeft`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Usize.shl`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:11:7: error(lean.unknownIdentifier): Unknown constant `U64.div`

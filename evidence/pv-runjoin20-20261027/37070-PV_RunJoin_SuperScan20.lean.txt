@@ -1,0 +1,306 @@
+import R1Z.PV_RunJoin_CompilerChecks17
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_SuperScan20
+open Aeneas Aeneas.Std Result
+open BuilderForestAdmissionPort
+open BuilderForestAdmissionPort.pool_v1
+abbrev WordArray := Array U32 8#usize
+abbrev Outer := core.slice.iter.Iter WordArray
+abbrev Inner := core.slice.iter.Iter U32
+abbrev Flat := BuilderForestStd.Flatten Outer WordArray U32 Inner
+abbrev outerIt := core.iter.traits.iterator.IteratorSliceIter WordArray
+abbrev innerIt := core.iter.traits.iterator.IteratorSliceIter U32
+abbrev convert := SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter U32 8#usize
+abbrev iterator : core.iter.traits.iterator.Iterator Flat U32 :=
+  BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator outerIt convert innerIt
+abbrev predicate := pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+abbrev input := PV_RunJoin_FixtureArguments.witness.super_root_siblings
+
+def initial : Flat := ⟨⟨Array.to_slice input,0⟩,none⟩
+def state (k : Nat) : Flat := if k=0 then initial else
+  ⟨⟨Array.to_slice input,(k-1)/8+1⟩,some ⟨Array.to_slice input.val[(k-1)/8]!, (k-1)%8+1⟩⟩
+def final : Flat := ⟨⟨Array.to_slice input,3⟩,none⟩
+def word (k : Nat) : U32 := input.val[k/8]!.val[k%8]!
+def outer (i : Nat) : Outer := ⟨Array.to_slice input,i⟩
+def inner (b i : Nat) : Inner := ⟨Array.to_slice input.val[b]!,i⟩
+theorem next0 : iterator.next (state 0) = ok (some (word 0),state 1) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 0,none⟩ = ok (some (word 0),⟨outer 1,some (inner 0 1)⟩)
+  rw [BuilderForestStd.flattenNext_open outerIt convert innerIt (outer 0) (outer 1) input.val[0]! (inner 0 0) (by with_unfolding_all rfl) (by with_unfolding_all rfl)]
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 1) (inner 0 0) (inner 0 1) (word 0) (by with_unfolding_all rfl)
+#print axioms next0
+theorem predicate0 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 0) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate0
+theorem next1 : iterator.next (state 1) = ok (some (word 1),state 2) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 1,some (inner 0 1)⟩ = ok (some (word 1),⟨outer 1,some (inner 0 2)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 1) (inner 0 1) (inner 0 2) (word 1) (by with_unfolding_all rfl)
+#print axioms next1
+theorem predicate1 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 1) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate1
+theorem next2 : iterator.next (state 2) = ok (some (word 2),state 3) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 1,some (inner 0 2)⟩ = ok (some (word 2),⟨outer 1,some (inner 0 3)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 1) (inner 0 2) (inner 0 3) (word 2) (by with_unfolding_all rfl)
+#print axioms next2
+theorem predicate2 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 2) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate2
+theorem next3 : iterator.next (state 3) = ok (some (word 3),state 4) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 1,some (inner 0 3)⟩ = ok (some (word 3),⟨outer 1,some (inner 0 4)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 1) (inner 0 3) (inner 0 4) (word 3) (by with_unfolding_all rfl)
+#print axioms next3
+theorem predicate3 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 3) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate3
+theorem next4 : iterator.next (state 4) = ok (some (word 4),state 5) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 1,some (inner 0 4)⟩ = ok (some (word 4),⟨outer 1,some (inner 0 5)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 1) (inner 0 4) (inner 0 5) (word 4) (by with_unfolding_all rfl)
+#print axioms next4
+theorem predicate4 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 4) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate4
+theorem next5 : iterator.next (state 5) = ok (some (word 5),state 6) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 1,some (inner 0 5)⟩ = ok (some (word 5),⟨outer 1,some (inner 0 6)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 1) (inner 0 5) (inner 0 6) (word 5) (by with_unfolding_all rfl)
+#print axioms next5
+theorem predicate5 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 5) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate5
+theorem next6 : iterator.next (state 6) = ok (some (word 6),state 7) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 1,some (inner 0 6)⟩ = ok (some (word 6),⟨outer 1,some (inner 0 7)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 1) (inner 0 6) (inner 0 7) (word 6) (by with_unfolding_all rfl)
+#print axioms next6
+theorem predicate6 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 6) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate6
+theorem next7 : iterator.next (state 7) = ok (some (word 7),state 8) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 1,some (inner 0 7)⟩ = ok (some (word 7),⟨outer 1,some (inner 0 8)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 1) (inner 0 7) (inner 0 8) (word 7) (by with_unfolding_all rfl)
+#print axioms next7
+theorem predicate7 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 7) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate7
+theorem next8 : iterator.next (state 8) = ok (some (word 8),state 9) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 1,some (inner 0 8)⟩ = ok (some (word 8),⟨outer 2,some (inner 1 1)⟩)
+  rw [BuilderForestStd.flattenNext_skip outerIt convert innerIt (outer 1) (inner 0 8) (inner 0 8) (by with_unfolding_all rfl)]
+  rw [BuilderForestStd.flattenNext_open outerIt convert innerIt (outer 1) (outer 2) input.val[1]! (inner 1 0) (by with_unfolding_all rfl) (by with_unfolding_all rfl)]
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 2) (inner 1 0) (inner 1 1) (word 8) (by with_unfolding_all rfl)
+#print axioms next8
+theorem predicate8 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 8) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate8
+theorem next9 : iterator.next (state 9) = ok (some (word 9),state 10) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 2,some (inner 1 1)⟩ = ok (some (word 9),⟨outer 2,some (inner 1 2)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 2) (inner 1 1) (inner 1 2) (word 9) (by with_unfolding_all rfl)
+#print axioms next9
+theorem predicate9 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 9) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate9
+theorem next10 : iterator.next (state 10) = ok (some (word 10),state 11) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 2,some (inner 1 2)⟩ = ok (some (word 10),⟨outer 2,some (inner 1 3)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 2) (inner 1 2) (inner 1 3) (word 10) (by with_unfolding_all rfl)
+#print axioms next10
+theorem predicate10 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 10) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate10
+theorem next11 : iterator.next (state 11) = ok (some (word 11),state 12) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 2,some (inner 1 3)⟩ = ok (some (word 11),⟨outer 2,some (inner 1 4)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 2) (inner 1 3) (inner 1 4) (word 11) (by with_unfolding_all rfl)
+#print axioms next11
+theorem predicate11 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 11) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate11
+theorem next12 : iterator.next (state 12) = ok (some (word 12),state 13) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 2,some (inner 1 4)⟩ = ok (some (word 12),⟨outer 2,some (inner 1 5)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 2) (inner 1 4) (inner 1 5) (word 12) (by with_unfolding_all rfl)
+#print axioms next12
+theorem predicate12 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 12) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate12
+theorem next13 : iterator.next (state 13) = ok (some (word 13),state 14) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 2,some (inner 1 5)⟩ = ok (some (word 13),⟨outer 2,some (inner 1 6)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 2) (inner 1 5) (inner 1 6) (word 13) (by with_unfolding_all rfl)
+#print axioms next13
+theorem predicate13 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 13) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate13
+theorem next14 : iterator.next (state 14) = ok (some (word 14),state 15) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 2,some (inner 1 6)⟩ = ok (some (word 14),⟨outer 2,some (inner 1 7)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 2) (inner 1 6) (inner 1 7) (word 14) (by with_unfolding_all rfl)
+#print axioms next14
+theorem predicate14 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 14) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate14
+theorem next15 : iterator.next (state 15) = ok (some (word 15),state 16) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 2,some (inner 1 7)⟩ = ok (some (word 15),⟨outer 2,some (inner 1 8)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 2) (inner 1 7) (inner 1 8) (word 15) (by with_unfolding_all rfl)
+#print axioms next15
+theorem predicate15 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 15) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate15
+theorem next16 : iterator.next (state 16) = ok (some (word 16),state 17) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 2,some (inner 1 8)⟩ = ok (some (word 16),⟨outer 3,some (inner 2 1)⟩)
+  rw [BuilderForestStd.flattenNext_skip outerIt convert innerIt (outer 2) (inner 1 8) (inner 1 8) (by with_unfolding_all rfl)]
+  rw [BuilderForestStd.flattenNext_open outerIt convert innerIt (outer 2) (outer 3) input.val[2]! (inner 2 0) (by with_unfolding_all rfl) (by with_unfolding_all rfl)]
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 3) (inner 2 0) (inner 2 1) (word 16) (by with_unfolding_all rfl)
+#print axioms next16
+theorem predicate16 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 16) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate16
+theorem next17 : iterator.next (state 17) = ok (some (word 17),state 18) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 3,some (inner 2 1)⟩ = ok (some (word 17),⟨outer 3,some (inner 2 2)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 3) (inner 2 1) (inner 2 2) (word 17) (by with_unfolding_all rfl)
+#print axioms next17
+theorem predicate17 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 17) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate17
+theorem next18 : iterator.next (state 18) = ok (some (word 18),state 19) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 3,some (inner 2 2)⟩ = ok (some (word 18),⟨outer 3,some (inner 2 3)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 3) (inner 2 2) (inner 2 3) (word 18) (by with_unfolding_all rfl)
+#print axioms next18
+theorem predicate18 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 18) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate18
+theorem next19 : iterator.next (state 19) = ok (some (word 19),state 20) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 3,some (inner 2 3)⟩ = ok (some (word 19),⟨outer 3,some (inner 2 4)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 3) (inner 2 3) (inner 2 4) (word 19) (by with_unfolding_all rfl)
+#print axioms next19
+theorem predicate19 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 19) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate19
+theorem next20 : iterator.next (state 20) = ok (some (word 20),state 21) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 3,some (inner 2 4)⟩ = ok (some (word 20),⟨outer 3,some (inner 2 5)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 3) (inner 2 4) (inner 2 5) (word 20) (by with_unfolding_all rfl)
+#print axioms next20
+theorem predicate20 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 20) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate20
+theorem next21 : iterator.next (state 21) = ok (some (word 21),state 22) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 3,some (inner 2 5)⟩ = ok (some (word 21),⟨outer 3,some (inner 2 6)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 3) (inner 2 5) (inner 2 6) (word 21) (by with_unfolding_all rfl)
+#print axioms next21
+theorem predicate21 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 21) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate21
+theorem next22 : iterator.next (state 22) = ok (some (word 22),state 23) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 3,some (inner 2 6)⟩ = ok (some (word 22),⟨outer 3,some (inner 2 7)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 3) (inner 2 6) (inner 2 7) (word 22) (by with_unfolding_all rfl)
+#print axioms next22
+theorem predicate22 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 22) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate22
+theorem next23 : iterator.next (state 23) = ok (some (word 23),state 24) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 3,some (inner 2 7)⟩ = ok (some (word 23),⟨outer 3,some (inner 2 8)⟩)
+  exact BuilderForestStd.flattenNext_yield outerIt convert innerIt (outer 3) (inner 2 7) (inner 2 8) (word 23) (by with_unfolding_all rfl)
+#print axioms next23
+theorem predicate23 : pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut () (word 23) = ok (false,()) := by
+  with_unfolding_all rfl
+#print axioms predicate23
+'theorem done : iterator.next (state 24) = ok (none,final) := by
+  change BuilderForestStd.flattenNext outerIt convert innerIt ⟨outer 3,some (inner 2 8)⟩ = ok (none,⟨outer 3,none⟩)
+  rw [BuilderForestStd.flattenNext_skip outerIt convert innerIt (outer 3) (inner 2 8) (inner 2 8) (by with_unfolding_all rfl)]
+  exact BuilderForestStd.flattenNext_done outerIt convert innerIt (outer 3) (outer 3) (by with_unfolding_all rfl)
+#print axioms done
+
+theorem source : BuilderForestStd.iterAny iterator predicate initial () = ok (false,final) := by
+  change BuilderForestStd.iterAny iterator predicate (state 0) () = _
+  rw [BuilderForestStd.iterAny,next0]
+  simp only [bind_tc_ok]
+  rw [predicate0]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next1]
+  simp only [bind_tc_ok]
+  rw [predicate1]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next2]
+  simp only [bind_tc_ok]
+  rw [predicate2]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next3]
+  simp only [bind_tc_ok]
+  rw [predicate3]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next4]
+  simp only [bind_tc_ok]
+  rw [predicate4]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next5]
+  simp only [bind_tc_ok]
+  rw [predicate5]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next6]
+  simp only [bind_tc_ok]
+  rw [predicate6]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next7]
+  simp only [bind_tc_ok]
+  rw [predicate7]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next8]
+  simp only [bind_tc_ok]
+  rw [predicate8]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next9]
+  simp only [bind_tc_ok]
+  rw [predicate9]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next10]
+  simp only [bind_tc_ok]
+  rw [predicate10]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next11]
+  simp only [bind_tc_ok]
+  rw [predicate11]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next12]
+  simp only [bind_tc_ok]
+  rw [predicate12]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next13]
+  simp only [bind_tc_ok]
+  rw [predicate13]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next14]
+  simp only [bind_tc_ok]
+  rw [predicate14]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next15]
+  simp only [bind_tc_ok]
+  rw [predicate15]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next16]
+  simp only [bind_tc_ok]
+  rw [predicate16]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next17]
+  simp only [bind_tc_ok]
+  rw [predicate17]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next18]
+  simp only [bind_tc_ok]
+  rw [predicate18]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next19]
+  simp only [bind_tc_ok]
+  rw [predicate19]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next20]
+  simp only [bind_tc_ok]
+  rw [predicate20]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next21]
+  simp only [bind_tc_ok]
+  rw [predicate21]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next22]
+  simp only [bind_tc_ok]
+  rw [predicate22]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,next23]
+  simp only [bind_tc_ok]
+  rw [predicate23]
+  simp only [bind_tc_ok,Bool.false_eq_true,if_false]
+  rw [BuilderForestStd.iterAny,done]
+  rfl
+#print axioms source
+end R1Z.PV_RunJoin_SuperScan20

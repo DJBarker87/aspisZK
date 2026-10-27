@@ -1,0 +1,21 @@
+import R1Z.PV_RunJoin_IndexedCopy19
+import R1Z.PV_RunJoin_NullifierPermutation17
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_IndexedResultModel20
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.PoseidonRefine
+open BuilderForestAdmissionPort PV_Src_PortSboxStep
+local instance : ExternalLinear := PV_Src_ExternalReference.dictionary
+
+theorem source (s target : State) (hs : Canonical s) (r : Fin 22)
+    (h : poseidon2.apply_round_by_index s
+      (Usize.ofNatCore r.val (by have := r.isLt;scalar_tac)) = ok (some (),target)) :
+    R0P.poseidonApplyRound r (liftA (K := PV_RunJoin_FixtureRecords.M) s) = liftA target := by
+  obtain ⟨out,ho,hl⟩ := apply_round_lift (K := PV_RunJoin_FixtureRecords.M) s
+    (Usize.ofNatCore r.val (by have := r.isLt;scalar_tac)) (by simpa using r.isLt)
+  have he := PV_RunJoin_IndexedCopy19.source s hs r
+  rw [ho] at he
+  simp only [bind_tc_ok] at he
+  have hout : out = target := (Prod.mk.inj (Result.ok.inj (he.symm.trans h))).2
+  exact hl.symm.trans (congrArg liftA hout)
+#print axioms source
+end R1Z.PV_RunJoin_IndexedResultModel20

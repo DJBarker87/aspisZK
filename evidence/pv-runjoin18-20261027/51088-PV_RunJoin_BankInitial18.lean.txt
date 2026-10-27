@@ -1,0 +1,36 @@
+import R1Z.PV_RunJoin_BankRounds18
+import R1Z.BuilderStdArray
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_BankInitial18
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+open PV_RunJoin_BankRow17
+
+theorem initial (columns : Columns) (base : Usize) (state : State)
+    (reads : ∀ lane : Usize, lane.val < 16 →
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32)
+        columns.val[lane.val]! base = ok state.val[lane.val]!) :
+    BuilderForestStdPort.core.array.from_fn 16#usize
+      pair_forest_trace.validate_forest_poseidon_block.closure.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+      (columns,base) = ok state := by
+  have hc : ∀ lane : Usize, lane.val < (16#usize).val →
+      pair_forest_trace.validate_forest_poseidon_block.closure.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut
+        (columns,base) lane = ok (state.val[lane.val]!, (columns,base)) := by
+    intro lane hl
+    rw [pair_forest_trace.validate_forest_poseidon_block.closure.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut]
+    rw [index_ok_gen columns lane hl]
+    simp only [bind_tc_ok]
+    rw [reads lane hl]
+    rfl
+  have h := BuilderStdModels.fromFn_bounded 16#usize
+    pair_forest_trace.validate_forest_poseidon_block.closure.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+    (fun lane => state.val[lane.val]!) (columns,base) hc
+  change BuilderStdModels.fromFn _ _ _ = _
+  rw [h]
+  congr 1
+  apply BuilderRecordCanonical.array_ext
+  intro j hj
+  change ((BuilderStdModels.indices 16#usize).map (fun lane => state.val[lane.val]!))[j]! = _
+  simp [BuilderStdModels.indices,List.map_ofFn,hj]
+#print axioms initial
+end R1Z.PV_RunJoin_BankInitial18

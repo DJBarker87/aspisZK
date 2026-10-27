@@ -1,0 +1,9 @@
+# Native source scope and writeback inspection
+
+The new proofs concern the same extracted `BuilderForestAdmissionPort` functions and the retained all-argument Records adapter. They do not extend the P6 external-linear association into a new Lean axiom, change a dictionary implementation, or assert complete experiment/observer agreement.
+
+Inspected `compile_forest_from_copies`, `late_append`, `OwnedTree.from_parts`, `OwnedTree.append_one`, and `IncrementalMerkleTreeV1.append_one_with_empty_roots` in the actual imported source. The compiler's discarded `(b6, _)` is the after-iterator of a read-only `iter`/flatten/any scan over super-root sibling words. It is not the backward/restoration continuation of a mutable borrow. `late_append`'s `(next, _)` discards the pure append receipt while retaining the updated tree. The append wrapper maps the returned owned tree to its updated inner tree. `OwnedTree.append_one` consumes the returned frontier update and reconstruction state explicitly. Its loop directly threads updated arrays. These inspected functions contain no discarded mutable-borrow backward/restoration continuation. The new proofs keep arbitrary calls to the inner hash/append loops symbolic; they never normalize a concrete whole run.
+
+This source inspection does not constitute a new native differential or universal Rust/extraction fidelity gate. No Kani or Rust test was run. The previous P6/native fidelity evidence remains at its original scope; the SDY result is used only for its twelve-leaf release Funs overlap under ruling (o), not generalized to other emissions. No new D188 credit is claimed for an uninspected body.
+
+No files under crates/ or programs/ changed. Frozen ELF-pin evidence is reused. Keys, wallets, simulator, observer and trust definitions are untouched.

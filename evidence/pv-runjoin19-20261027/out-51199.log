@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_PartsCells19.lean:26:29: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  912 ≤ b ≤ 1007
+  0 ≤ a ≤ 15
+where
+ a := ↑lane
+ b := ↑row
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_PartsCells19.lean:28:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(tabulate ?m.236 ?m.237))[lane]!
+in the target expression
+  (↑pt.aux)[(row - 1008) * 16 + lane]! =
+    (↑(if row / 16 < 57 then (PV_RunJoin_FixtureBanks19.certificate withdrawal (row / 16)).row (row % 16)
+        else
+          tabulate 16#usize fun lane =>
+            if row - 912 < 96 then (↑pt.path)[(row - 912) * 16 + lane]!
+            else (↑pt.aux)[(row - 912 - 96) * 16 + lane]!))[lane]!
+
+case neg
+pt : Parts
+withdrawal : Bool
+blocks :
+  ∀ b < 57,
+    ∀ row < 16,
+      ∀ lane < 16,
+        (↑(↑pt.blocks)[b]!)[row * 16 + lane]! = (↑((PV_RunJoin_FixtureBanks19.certificate withdrawal b).row row))[lane]!
+lane : ℕ
+hl : lane < 16
+row : ℕ
+hr : row < 1024
+hb : ¬row < 912
+hi : (row / 16 - 57) * 16 + row % 16 = row - 912
+⊢ (↑pt.aux)[(row - 1008) * 16 + lane]! =
+    (↑(if row / 16 < 57 then (PV_RunJoin_FixtureBanks19.certificate withdrawal (row / 16)).row (row % 16)
+        else
+          tabulate 16#usize fun lane =>
+            if row - 912 < 96 then (↑pt.path)[(row - 912) * 16 + lane]!
+            else (↑pt.aux)[(row - 912 - 96) * 16 + lane]!))[lane]!
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    pt.aux
+  has type
+    Std.Array U32 256#usize
+  but is expected to have type
+    { l // l.length = ↑256#usize }
+  in the application
+    ↑pt.aux
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_PartsCells19.lean:28:42: error: Type mismatch: After simplification, term
+  hl
+ has type
+  lane < 16
+but is expected to have type
+  lane < ↑?m.236
+'R1Z.PV_RunJoin_PartsCells19.cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

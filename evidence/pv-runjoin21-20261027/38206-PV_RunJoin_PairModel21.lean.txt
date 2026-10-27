@@ -1,0 +1,36 @@
+import R1Z.PV_RunJoin_PublicCore21
+import R1Z.PV_RunJoin_AppendShape21
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_PairModel21
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_RunJoin_FixtureRecords PV_RunJoin_AppendNative17
+attribute [local irreducible] R0P.nodeCompress R0P.poseidonPermutation
+
+theorem transfer : digK (K := M) transfer0 = outputPair false := by
+  have hr := PV_RunJoin_PublicCore21.transfer_recipient
+  change some (digK (K := M) PV_RunJoin_RecordedTransfer.publicRecord.recipient_commitment) =
+    some (R0P.noteCommitment (digest 300) 600 77 (digest 400)) at hr
+  have hc := PV_RunJoin_PublicCore21.transfer_change
+  change digK (K := M) PV_RunJoin_RecordedTransfer.publicRecord.change_commitment =
+    R0P.noteCommitment (digest 500) 400 77 (digest 600) at hc
+  have h := PV_RunJoin_NodeResult21.field _ _ _
+    (by intro i hi; interval_cases i <;> decide : Canon8 PV_RunJoin_RecordedTransfer.publicRecord.change_commitment)
+    PV_RunJoin_OutputPair17.transfer_node
+  rw [Option.some.inj hr,hc] at h
+  exact h.symm
+#print axioms transfer
+
+theorem withdrawal : digK (K := M) withdrawal0 = outputPair true := by
+  have hc := PV_RunJoin_PublicCore21.withdrawal_change
+  change digK (K := M) PV_RunJoin_RecordedWithdrawal.publicRecord.change_commitment =
+    R0P.noteCommitment (digest 700) 750 77 (digest 800) at hc
+  have h := PV_RunJoin_NodeResult21.field _ _ _
+    (by intro i hi; interval_cases i <;> decide : Canon8 BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.ZERO8)
+    PV_RunJoin_OutputPair17.withdrawal_node
+  have hz : digK (K := M) BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.ZERO8 = fun _ => 0 := by
+    funext i; fin_cases i <;> rfl
+  rw [hc,hz] at h
+  exact h.symm
+#print axioms withdrawal
+end R1Z.PV_RunJoin_PairModel21

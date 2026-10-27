@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedInitial19.lean:15:17: error: Tactic `decide` failed for proposition
+  0#usize < poseidon2.EXTERNAL_INITIAL.to_slice.len
+because its `Decidable` instance
+  0#usize.decLt poseidon2.EXTERNAL_INITIAL.to_slice.len
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, `Nat.decLt`, and `UScalar.decLt`, reduction got stuck at the `Decidable` instance
+  match (↑0#usize).succ.ble ↑poseidon2.EXTERNAL_INITIAL.to_slice.len, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedInitial19.lean:16:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Array.index_usize ?m.49 ?m.50
+in the target expression
+  (do
+      let constants1 ← poseidon2.EXTERNAL_INITIAL.index_usize 0#usize
+      let state1 ←
+        poseidon2.apply_round_by_index_loop0 { start := 0#usize, «end» := poseidon2.POSEIDON2_WIDTH } s constants1
+      let state2 ← poseidon2.external_linear_lazy state1
+      ok (some (), state2)) =
+    do
+    let out ← R0PoseidonCopy.full_round s (↑poseidon2.EXTERNAL_INITIAL)[0]!
+    ok (some (), out)
+
+s : State
+hs : Canonical s
+hc : Canonical (↑poseidon2.EXTERNAL_INITIAL)[0]!
+⊢ (do
+      let constants1 ← poseidon2.EXTERNAL_INITIAL.index_usize 0#usize
+      let state1 ←
+        poseidon2.apply_round_by_index_loop0 { start := 0#usize, «end» := poseidon2.POSEIDON2_WIDTH } s constants1
+      let state2 ← poseidon2.external_linear_lazy state1
+      ok (some (), state2)) =
+    do
+    let out ← R0PoseidonCopy.full_round s (↑poseidon2.EXTERNAL_INITIAL)[0]!
+    ok (some (), out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_IndexedInitial19.round0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

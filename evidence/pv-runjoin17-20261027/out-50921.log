@@ -1,0 +1,149 @@
+@[irreducible] def R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0 : [sourceExternalLinear :
+    R1Z.BuilderForestAdmissionPort.ExternalLinear] →
+  {F : Type} →
+    Aeneas.Std.core.ops.function.FnMut F
+        (Aeneas.Std.Usize × R1Z.BuilderForestAdmissionPort.poseidon2.Poseidon2RoundTransition) Unit →
+      Aeneas.Std.core.iter.adapters.enumerate.Enumerate
+          (R1Z.BuilderForestStdPort.core.slice.iter.Chunks R1Z.BuilderForestAdmissionPort.aspis_core.field.M31) →
+        F →
+          Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize →
+            Aeneas.Std.Result (Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize) :=
+fun [R1Z.BuilderForestAdmissionPort.ExternalLinear] {F}
+    coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst =>
+  Lean.Order.fix
+    (fun f iter trace state => do
+      let __x ←
+        Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next
+            (R1Z.BuilderForestStdPort.core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice
+              R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+            iter
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => Aeneas.Std.Result.ok state
+          | some p =>
+            match p with
+            | (permutation, chunk) => do
+              let i ← Aeneas.Std.core.slice.Slice.iter chunk
+              let iter2 ←
+                Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate.trait_default
+                    (Aeneas.Std.core.iter.traits.iterator.IteratorSliceIter
+                      R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+                    i
+              let state1 ← R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0_loop0 iter2 state
+              let __x ←
+                R1Z.BuilderForestAdmissionPort.poseidon2.permute_optimized_with_trace_threaded
+                    (R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace.closure_1.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+                      coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst)
+                    state1 (trace, permutation)
+              match __x with
+                | (state2, c) =>
+                  match c with
+                  | (trace1, snd) => f iter1 trace1 state2)
+    ⋯
+R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0.eq_1
+  [sourceExternalLinear : R1Z.BuilderForestAdmissionPort.ExternalLinear] {F : Type}
+  (coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst :
+    Aeneas.Std.core.ops.function.FnMut F
+      (Aeneas.Std.Usize × R1Z.BuilderForestAdmissionPort.poseidon2.Poseidon2RoundTransition) Unit)
+  (iter :
+    Aeneas.Std.core.iter.adapters.enumerate.Enumerate
+      (R1Z.BuilderForestStdPort.core.slice.iter.Chunks R1Z.BuilderForestAdmissionPort.aspis_core.field.M31))
+  (trace : F) (state : Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize) :
+  R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0
+      coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst iter trace state =
+    do
+    let __x ←
+      Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next
+          (R1Z.BuilderForestStdPort.core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice
+            R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+          iter
+    match __x with
+      | (o, iter1) =>
+        match o with
+        | none => Aeneas.Std.Result.ok state
+        | some p =>
+          match p with
+          | (permutation, chunk) => do
+            let i ← Aeneas.Std.core.slice.Slice.iter chunk
+            let iter2 ←
+              Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate.trait_default
+                  (Aeneas.Std.core.iter.traits.iterator.IteratorSliceIter
+                    R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+                  i
+            let state1 ← R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0_loop0 iter2 state
+            let __x ←
+              R1Z.BuilderForestAdmissionPort.poseidon2.permute_optimized_with_trace_threaded
+                  (R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace.closure_1.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+                    coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst)
+                  state1 (trace, permutation)
+            match __x with
+              | (state2, c) =>
+                match c with
+                | (trace1, snd) =>
+                  R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0
+                    coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst iter1 trace1 state2
+R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0.eq_def
+  [sourceExternalLinear : R1Z.BuilderForestAdmissionPort.ExternalLinear] {F : Type}
+  (coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst :
+    Aeneas.Std.core.ops.function.FnMut F
+      (Aeneas.Std.Usize × R1Z.BuilderForestAdmissionPort.poseidon2.Poseidon2RoundTransition) Unit)
+  (iter :
+    Aeneas.Std.core.iter.adapters.enumerate.Enumerate
+      (R1Z.BuilderForestStdPort.core.slice.iter.Chunks R1Z.BuilderForestAdmissionPort.aspis_core.field.M31))
+  (trace : F) (state : Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize) :
+  R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0
+      coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst iter trace state =
+    do
+    let __x ←
+      Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next
+          (R1Z.BuilderForestStdPort.core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice
+            R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+          iter
+    match __x with
+      | (o, iter1) =>
+        match o with
+        | none => Aeneas.Std.Result.ok state
+        | some p =>
+          match p with
+          | (permutation, chunk) => do
+            let i ← Aeneas.Std.core.slice.Slice.iter chunk
+            let iter2 ←
+              Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate.trait_default
+                  (Aeneas.Std.core.iter.traits.iterator.IteratorSliceIter
+                    R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+                  i
+            let state1 ← R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0_loop0 iter2 state
+            let __x ←
+              R1Z.BuilderForestAdmissionPort.poseidon2.permute_optimized_with_trace_threaded
+                  (R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace.closure_1.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+                    coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst)
+                  state1 (trace, permutation)
+            match __x with
+              | (state2, c) =>
+                match c with
+                | (trace1, snd) =>
+                  R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0
+                    coreopsfunctionFnMutFPairUsizePoseidon2RoundTransitionTupleInst iter1 trace1 state2
+@[irreducible] def R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0_loop0 : Aeneas.Std.core.iter.adapters.enumerate.Enumerate
+    (Aeneas.Std.core.slice.iter.Iter R1Z.BuilderForestAdmissionPort.aspis_core.field.M31) →
+  Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize →
+    Aeneas.Std.Result (Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize) :=
+Lean.Order.fix
+  (fun f iter state => do
+    let __x ←
+      Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next
+          (Aeneas.Std.core.iter.traits.iterator.IteratorSliceIter R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+          iter
+    match __x with
+      | (o, iter1) =>
+        match o with
+        | none => Aeneas.Std.Result.ok state
+        | some p =>
+          match p with
+          | (index, value) => do
+            let m ← state.index_usize index
+            let m1 ← m.add value
+            let a ← state.update index m1
+            f iter1 a)
+  R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0_loop0._proof_1

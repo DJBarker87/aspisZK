@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ReconstructTransfer1918.lean:12:7: error: `R1Z.PV_RunJoin_Reconstruct18.Frontier` has already been declared
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ReconstructTransfer1918.lean:17:2: error: 'change' tactic failed, pattern
+  (do
+      let p ← format.pool_v1_tree_parent transfer19 (↑PV_Src_CanonicalRoots.table)[19]!
+      incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level_loop
+          { start := 20#usize, «end» := 20#usize } 1#u64 frontier PV_Src_CanonicalRoots.table p) =
+    ?m.25
+is not definitionally equal to target
+  (do
+      let __x ← core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 19#usize, «end» := 20#usize }
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok transfer19
+          | some level => do
+            let i1 ← lift (BuilderStdModels.shift64 1#u64 level)
+            let i2 ← lift (i1 &&& 1#u64)
+            if i2 = 0#u64 then do
+                let a1 ← Array.index_usize PV_Src_CanonicalRoots.table level
+                let node1 ← format.pool_v1_tree_parent transfer19 a1
+                incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level_loop iter1 1#u64 frontier
+                    PV_Src_CanonicalRoots.table node1
+              else do
+                let a1 ← Array.index_usize frontier level
+                let node1 ← format.pool_v1_tree_parent a1 transfer19
+                incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level_loop iter1 1#u64 frontier
+                    PV_Src_CanonicalRoots.table node1) =
+    ok transfer20
+'R1Z.PV_RunJoin_Reconstruct18.transfer_suffix19' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

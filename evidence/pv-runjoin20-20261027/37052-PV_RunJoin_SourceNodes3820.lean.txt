@@ -1,0 +1,843 @@
+import R1Z.PV_RunJoin_NodeExecution20
+import R1Z.PV_RunJoin_SourceSponge0320
+import R1Z.PV_RunJoin_SourceSponge2920
+import R1Z.PV_RunJoin_SourceSponge3220
+import R1Z.PV_RunJoin_ZeroConstructor18
+import R1Z.PV_RunJoin_SourceNodes3420
+import R1Z.PV_RunJoin_CopyGroup4520
+import R1Z.PV_RunJoin_CopyGroup6320
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_SourceNode3820.transfer
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_Src_Forest_PrimitiveArguments PV_RunJoin_ReferenceFixtureResults
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+abbrev c := PV_RunJoin_BankCell4519.certificate
+def left : Array U32 8#usize := Array.make 8#usize [650311058#u32,434968666#u32,41653783#u32,849815005#u32,1944690526#u32,1561873308#u32,545397838#u32,336751789#u32]
+def right : Array U32 8#usize := Array.make 8#usize [1410054462#u32,673771449#u32,940847521#u32,274330358#u32,1719505495#u32,1690439941#u32,203201419#u32,1855504616#u32]
+
+theorem pre : R0BlockCopies.node_pre right = ok c.pre := by
+  apply PV_RunJoin_NodeShape20.pre
+  · intro lane hl
+    interval_cases lane <;> decide
+  · intro lane hl
+    interval_cases lane
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · simp only [show ¬ (15:Nat) < 8 by decide,show (15:Nat) = 15 by rfl,if_false,if_true]
+      have guard : 2147483647 ≤ (right.val[7]!).val + 1095962629 := by
+        change 2147483647 ≤ 1855504616 + 1095962629
+        norm_num
+      rw [if_pos guard]
+      with_unfolding_all rfl
+#print axioms pre
+
+theorem absorb : R0BlockCopies.node_absorb left = ok c.absorption := by
+  apply PV_RunJoin_NodeShape20.absorb
+  intro lane hl
+  interval_cases lane <;> with_unfolding_all rfl
+#print axioms absorb
+
+theorem node : nodeDigestR left right = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  rw [nodeDigestR,pre]
+  simp only [bind_tc_ok]
+  rw [absorb]
+  simp only [bind_tc_ok]
+  exact PV_RunJoin_CertificateExecution20.digest c PV_RunJoin_CopyCell4520.canon PV_RunJoin_CopyCell4520.models
+#print axioms node
+theorem cursor : appCurR (wordWitness transferWitness) (wordPublic transferPublic) 4 = ok (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3720.transfer.c.states 11)) := PV_RunJoin_SourceNode3720.transfer.next
+#print axioms cursor
+theorem empty : PV_Src_CanonicalRoots.table.val[4]! = right := by
+  apply PV_RunJoin_TreeValue16.unique
+  · exact PV_Src_CanonicalRoots.canonical ⟨4,by decide⟩
+  · intro lane hl
+    interval_cases lane <;> decide
+  · have he : digK (K := PV_RunJoin_FixtureRecords.M) PV_Src_CanonicalRoots.table.val[4]! = PV_RunJoin_RootModel.literal ⟨4,by decide⟩ := by
+      with_unfolding_all exact ((PV_Src_RootFieldMeaning.source ⟨4,by decide⟩).trans (PV_RunJoin_RootModel.frozen_literal ⟨4,by decide⟩))
+    have ht : digK (K := PV_RunJoin_FixtureRecords.M) right = PV_RunJoin_RootModel.literal ⟨4,by decide⟩ := by
+      funext lane
+      fin_cases lane <;> with_unfolding_all rfl
+    exact congrFun (he.trans ht.symm)
+#print axioms empty
+theorem ordered : orderedR (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3720.transfer.c.states 11)) (appSibR (wordPublic transferPublic) 4) (appBitR (wordPublic transferPublic) 4) = (left,right) := by
+  change (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3720.transfer.c.states 11),PV_Src_CanonicalRoots.table.val[4]!) = _
+  rw [empty]
+  with_unfolding_all rfl
+#print axioms ordered
+
+theorem children : childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 38 = (left,right) := by
+  change orderedR (okOr (appCurR (wordWitness transferWitness) (wordPublic transferPublic) 4) zero8) (appSibR (wordPublic transferPublic) 4) (appBitR (wordPublic transferPublic) 4) = _
+  rw [cursor,okOr_ok]
+  exact ordered
+#print axioms children
+
+theorem next : appCurR (wordWitness transferWitness) (wordPublic transferPublic) 5 = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  change (do
+    let cur ← appCurR (wordWitness transferWitness) (wordPublic transferPublic) 4
+    let o := orderedR cur (appSibR (wordPublic transferPublic) 4) (appBitR (wordPublic transferPublic) 4)
+    nodeDigestR o.1 o.2) = _
+  rw [cursor]
+  simp only [bind_tc_ok]
+  rw [ordered]
+  exact node
+#print axioms next
+theorem chain : ∃ block, RustWriterChain (wordPublic transferPublic).variant (rustChunks (wordWitness transferWitness) (wordPublic transferPublic)) 38 = ok block ∧
+    ∀ row, row < 16 → ∀ lane, lane < 16 → block.val[row*16+lane]! = (c.row row).val[lane]! := by
+  apply PV_RunJoin_NodeExecution20.chain transferWitness transferPublic 38 c (by decide)
+  · change R0BlockCopies.node_pre (childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 38).2 = _
+    rw [children]
+    exact pre
+  · change R0BlockCopies.node_absorb (childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 38).1 = _
+    rw [children]
+    exact absorb
+  · exact PV_RunJoin_CopyCell4520.writer
+#print axioms chain
+
+theorem rows (pt : Parts) (hp : parts transferWitness transferPublic = ok pt) :
+    ∀ row, row < 16 → ∀ lane, lane < 16 → (pt.blocks.val[38]!).val[row*16+lane]! = (c.row row).val[lane]! :=
+  PV_RunJoin_PartsBlock20.source _ _ 38 (by decide) c chain pt hp
+#print axioms rows
+end R1Z.PV_RunJoin_SourceNode3820.transfer
+namespace R1Z.PV_RunJoin_SourceNode3820.withdrawal
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_Src_Forest_PrimitiveArguments PV_RunJoin_ReferenceFixtureResults
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+abbrev c := PV_RunJoin_BankCell6519.certificate
+def left : Array U32 8#usize := Array.make 8#usize [1134116828#u32,504509963#u32,1796983347#u32,1413555044#u32,1091344596#u32,1299793962#u32,1007871819#u32,653735563#u32]
+def right : Array U32 8#usize := Array.make 8#usize [1410054462#u32,673771449#u32,940847521#u32,274330358#u32,1719505495#u32,1690439941#u32,203201419#u32,1855504616#u32]
+
+theorem pre : R0BlockCopies.node_pre right = ok c.pre := by
+  apply PV_RunJoin_NodeShape20.pre
+  · intro lane hl
+    interval_cases lane <;> decide
+  · intro lane hl
+    interval_cases lane
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · simp only [show ¬ (15:Nat) < 8 by decide,show (15:Nat) = 15 by rfl,if_false,if_true]
+      have guard : 2147483647 ≤ (right.val[7]!).val + 1095962629 := by
+        change 2147483647 ≤ 1855504616 + 1095962629
+        norm_num
+      rw [if_pos guard]
+      with_unfolding_all rfl
+#print axioms pre
+
+theorem absorb : R0BlockCopies.node_absorb left = ok c.absorption := by
+  apply PV_RunJoin_NodeShape20.absorb
+  intro lane hl
+  interval_cases lane <;> with_unfolding_all rfl
+#print axioms absorb
+
+theorem node : nodeDigestR left right = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  rw [nodeDigestR,pre]
+  simp only [bind_tc_ok]
+  rw [absorb]
+  simp only [bind_tc_ok]
+  exact PV_RunJoin_CertificateExecution20.digest c PV_RunJoin_CopyCell6520.canon PV_RunJoin_CopyCell6520.models
+#print axioms node
+theorem cursor : appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 4 = ok (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3720.withdrawal.c.states 11)) := PV_RunJoin_SourceNode3720.withdrawal.next
+#print axioms cursor
+theorem empty : PV_Src_CanonicalRoots.table.val[4]! = right := by
+  apply PV_RunJoin_TreeValue16.unique
+  · exact PV_Src_CanonicalRoots.canonical ⟨4,by decide⟩
+  · intro lane hl
+    interval_cases lane <;> decide
+  · have he : digK (K := PV_RunJoin_FixtureRecords.M) PV_Src_CanonicalRoots.table.val[4]! = PV_RunJoin_RootModel.literal ⟨4,by decide⟩ := by
+      with_unfolding_all exact ((PV_Src_RootFieldMeaning.source ⟨4,by decide⟩).trans (PV_RunJoin_RootModel.frozen_literal ⟨4,by decide⟩))
+    have ht : digK (K := PV_RunJoin_FixtureRecords.M) right = PV_RunJoin_RootModel.literal ⟨4,by decide⟩ := by
+      funext lane
+      fin_cases lane <;> with_unfolding_all rfl
+    exact congrFun (he.trans ht.symm)
+#print axioms empty
+theorem ordered : orderedR (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3720.withdrawal.c.states 11)) (appSibR (wordPublic withdrawalPublic) 4) (appBitR (wordPublic withdrawalPublic) 4) = (left,right) := by
+  change (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3720.withdrawal.c.states 11),PV_Src_CanonicalRoots.table.val[4]!) = _
+  rw [empty]
+  with_unfolding_all rfl
+#print axioms ordered
+
+theorem children : childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 38 = (left,right) := by
+  change orderedR (okOr (appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 4) zero8) (appSibR (wordPublic withdrawalPublic) 4) (appBitR (wordPublic withdrawalPublic) 4) = _
+  rw [cursor,okOr_ok]
+  exact ordered
+#print axioms children
+
+theorem next : appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 5 = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  change (do
+    let cur ← appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 4
+    let o := orderedR cur (appSibR (wordPublic withdrawalPublic) 4) (appBitR (wordPublic withdrawalPublic) 4)
+    nodeDigestR o.1 o.2) = _
+  rw [cursor]
+  simp only [bind_tc_ok]
+  rw [ordered]
+  exact node
+#print axioms next
+theorem chain : ∃ block, RustWriterChain (wordPublic withdrawalPublic).variant (rustChunks (wordWitness withdrawalWitness) (wordPublic withdrawalPublic)) 38 = ok block ∧
+    ∀ row, row < 16 → ∀ lane, lane < 16 → block.val[row*16+lane]! = (c.row row).val[lane]! := by
+  apply PV_RunJoin_NodeExecution20.chain withdrawalWitness withdrawalPublic 38 c (by decide)
+  · change R0BlockCopies.node_pre (childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 38).2 = _
+    rw [children]
+    exact pre
+  · change R0BlockCopies.node_absorb (childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 38).1 = _
+    rw [children]
+    exact absorb
+  · exact PV_RunJoin_CopyCell6520.writer
+#print axioms chain
+
+theorem rows (pt : Parts) (hp : parts withdrawalWitness withdrawalPublic = ok pt) :
+    ∀ row, row < 16 → ∀ lane, lane < 16 → (pt.blocks.val[38]!).val[row*16+lane]! = (c.row row).val[lane]! :=
+  PV_RunJoin_PartsBlock20.source _ _ 38 (by decide) c chain pt hp
+#print axioms rows
+end R1Z.PV_RunJoin_SourceNode3820.withdrawal
+
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_SourceNode3920.transfer
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_Src_Forest_PrimitiveArguments PV_RunJoin_ReferenceFixtureResults
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+abbrev c := PV_RunJoin_BankCell4619.certificate
+def left : Array U32 8#usize := Array.make 8#usize [1736209514#u32,234715035#u32,487763438#u32,1135092556#u32,1921147183#u32,568436335#u32,1137697966#u32,357096408#u32]
+def right : Array U32 8#usize := Array.make 8#usize [1442759752#u32,1540325866#u32,188964047#u32,101815282#u32,1883549730#u32,1774537487#u32,1306717763#u32,561084592#u32]
+
+theorem pre : R0BlockCopies.node_pre right = ok c.pre := by
+  apply PV_RunJoin_NodeShape20.pre
+  · intro lane hl
+    interval_cases lane <;> decide
+  · intro lane hl
+    interval_cases lane
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · simp only [show ¬ (15:Nat) < 8 by decide,show (15:Nat) = 15 by rfl,if_false,if_true]
+      have guard : ¬ 2147483647 ≤ (right.val[7]!).val + 1095962629 := by
+        change ¬ 2147483647 ≤ 561084592 + 1095962629
+        norm_num
+      rw [if_neg guard]
+      with_unfolding_all rfl
+#print axioms pre
+
+theorem absorb : R0BlockCopies.node_absorb left = ok c.absorption := by
+  apply PV_RunJoin_NodeShape20.absorb
+  intro lane hl
+  interval_cases lane <;> with_unfolding_all rfl
+#print axioms absorb
+
+theorem node : nodeDigestR left right = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  rw [nodeDigestR,pre]
+  simp only [bind_tc_ok]
+  rw [absorb]
+  simp only [bind_tc_ok]
+  exact PV_RunJoin_CertificateExecution20.digest c PV_RunJoin_CopyCell4620.canon PV_RunJoin_CopyCell4620.models
+#print axioms node
+theorem cursor : appCurR (wordWitness transferWitness) (wordPublic transferPublic) 5 = ok (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3820.transfer.c.states 11)) := PV_RunJoin_SourceNode3820.transfer.next
+#print axioms cursor
+theorem empty : PV_Src_CanonicalRoots.table.val[5]! = right := by
+  apply PV_RunJoin_TreeValue16.unique
+  · exact PV_Src_CanonicalRoots.canonical ⟨5,by decide⟩
+  · intro lane hl
+    interval_cases lane <;> decide
+  · have he : digK (K := PV_RunJoin_FixtureRecords.M) PV_Src_CanonicalRoots.table.val[5]! = PV_RunJoin_RootModel.literal ⟨5,by decide⟩ := by
+      with_unfolding_all exact ((PV_Src_RootFieldMeaning.source ⟨5,by decide⟩).trans (PV_RunJoin_RootModel.frozen_literal ⟨5,by decide⟩))
+    have ht : digK (K := PV_RunJoin_FixtureRecords.M) right = PV_RunJoin_RootModel.literal ⟨5,by decide⟩ := by
+      funext lane
+      fin_cases lane <;> with_unfolding_all rfl
+    exact congrFun (he.trans ht.symm)
+#print axioms empty
+theorem ordered : orderedR (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3820.transfer.c.states 11)) (appSibR (wordPublic transferPublic) 5) (appBitR (wordPublic transferPublic) 5) = (left,right) := by
+  change (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3820.transfer.c.states 11),PV_Src_CanonicalRoots.table.val[5]!) = _
+  rw [empty]
+  with_unfolding_all rfl
+#print axioms ordered
+
+theorem children : childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 39 = (left,right) := by
+  change orderedR (okOr (appCurR (wordWitness transferWitness) (wordPublic transferPublic) 5) zero8) (appSibR (wordPublic transferPublic) 5) (appBitR (wordPublic transferPublic) 5) = _
+  rw [cursor,okOr_ok]
+  exact ordered
+#print axioms children
+
+theorem next : appCurR (wordWitness transferWitness) (wordPublic transferPublic) 6 = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  change (do
+    let cur ← appCurR (wordWitness transferWitness) (wordPublic transferPublic) 5
+    let o := orderedR cur (appSibR (wordPublic transferPublic) 5) (appBitR (wordPublic transferPublic) 5)
+    nodeDigestR o.1 o.2) = _
+  rw [cursor]
+  simp only [bind_tc_ok]
+  rw [ordered]
+  exact node
+#print axioms next
+theorem chain : ∃ block, RustWriterChain (wordPublic transferPublic).variant (rustChunks (wordWitness transferWitness) (wordPublic transferPublic)) 39 = ok block ∧
+    ∀ row, row < 16 → ∀ lane, lane < 16 → block.val[row*16+lane]! = (c.row row).val[lane]! := by
+  apply PV_RunJoin_NodeExecution20.chain transferWitness transferPublic 39 c (by decide)
+  · change R0BlockCopies.node_pre (childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 39).2 = _
+    rw [children]
+    exact pre
+  · change R0BlockCopies.node_absorb (childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 39).1 = _
+    rw [children]
+    exact absorb
+  · exact PV_RunJoin_CopyCell4620.writer
+#print axioms chain
+
+theorem rows (pt : Parts) (hp : parts transferWitness transferPublic = ok pt) :
+    ∀ row, row < 16 → ∀ lane, lane < 16 → (pt.blocks.val[39]!).val[row*16+lane]! = (c.row row).val[lane]! :=
+  PV_RunJoin_PartsBlock20.source _ _ 39 (by decide) c chain pt hp
+#print axioms rows
+end R1Z.PV_RunJoin_SourceNode3920.transfer
+namespace R1Z.PV_RunJoin_SourceNode3920.withdrawal
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_Src_Forest_PrimitiveArguments PV_RunJoin_ReferenceFixtureResults
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+abbrev c := PV_RunJoin_BankCell6619.certificate
+def left : Array U32 8#usize := Array.make 8#usize [779295644#u32,1030234634#u32,105546947#u32,1848021183#u32,1259417564#u32,1402874809#u32,1412830686#u32,1654786357#u32]
+def right : Array U32 8#usize := Array.make 8#usize [1442759752#u32,1540325866#u32,188964047#u32,101815282#u32,1883549730#u32,1774537487#u32,1306717763#u32,561084592#u32]
+
+theorem pre : R0BlockCopies.node_pre right = ok c.pre := by
+  apply PV_RunJoin_NodeShape20.pre
+  · intro lane hl
+    interval_cases lane <;> decide
+  · intro lane hl
+    interval_cases lane
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · simp only [show ¬ (15:Nat) < 8 by decide,show (15:Nat) = 15 by rfl,if_false,if_true]
+      have guard : ¬ 2147483647 ≤ (right.val[7]!).val + 1095962629 := by
+        change ¬ 2147483647 ≤ 561084592 + 1095962629
+        norm_num
+      rw [if_neg guard]
+      with_unfolding_all rfl
+#print axioms pre
+
+theorem absorb : R0BlockCopies.node_absorb left = ok c.absorption := by
+  apply PV_RunJoin_NodeShape20.absorb
+  intro lane hl
+  interval_cases lane <;> with_unfolding_all rfl
+#print axioms absorb
+
+theorem node : nodeDigestR left right = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  rw [nodeDigestR,pre]
+  simp only [bind_tc_ok]
+  rw [absorb]
+  simp only [bind_tc_ok]
+  exact PV_RunJoin_CertificateExecution20.digest c PV_RunJoin_CopyCell6620.canon PV_RunJoin_CopyCell6620.models
+#print axioms node
+theorem cursor : appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 5 = ok (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3820.withdrawal.c.states 11)) := PV_RunJoin_SourceNode3820.withdrawal.next
+#print axioms cursor
+theorem empty : PV_Src_CanonicalRoots.table.val[5]! = right := by
+  apply PV_RunJoin_TreeValue16.unique
+  · exact PV_Src_CanonicalRoots.canonical ⟨5,by decide⟩
+  · intro lane hl
+    interval_cases lane <;> decide
+  · have he : digK (K := PV_RunJoin_FixtureRecords.M) PV_Src_CanonicalRoots.table.val[5]! = PV_RunJoin_RootModel.literal ⟨5,by decide⟩ := by
+      with_unfolding_all exact ((PV_Src_RootFieldMeaning.source ⟨5,by decide⟩).trans (PV_RunJoin_RootModel.frozen_literal ⟨5,by decide⟩))
+    have ht : digK (K := PV_RunJoin_FixtureRecords.M) right = PV_RunJoin_RootModel.literal ⟨5,by decide⟩ := by
+      funext lane
+      fin_cases lane <;> with_unfolding_all rfl
+    exact congrFun (he.trans ht.symm)
+#print axioms empty
+theorem ordered : orderedR (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3820.withdrawal.c.states 11)) (appSibR (wordPublic withdrawalPublic) 5) (appBitR (wordPublic withdrawalPublic) 5) = (left,right) := by
+  change (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3820.withdrawal.c.states 11),PV_Src_CanonicalRoots.table.val[5]!) = _
+  rw [empty]
+  with_unfolding_all rfl
+#print axioms ordered
+
+theorem children : childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 39 = (left,right) := by
+  change orderedR (okOr (appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 5) zero8) (appSibR (wordPublic withdrawalPublic) 5) (appBitR (wordPublic withdrawalPublic) 5) = _
+  rw [cursor,okOr_ok]
+  exact ordered
+#print axioms children
+
+theorem next : appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 6 = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  change (do
+    let cur ← appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 5
+    let o := orderedR cur (appSibR (wordPublic withdrawalPublic) 5) (appBitR (wordPublic withdrawalPublic) 5)
+    nodeDigestR o.1 o.2) = _
+  rw [cursor]
+  simp only [bind_tc_ok]
+  rw [ordered]
+  exact node
+#print axioms next
+theorem chain : ∃ block, RustWriterChain (wordPublic withdrawalPublic).variant (rustChunks (wordWitness withdrawalWitness) (wordPublic withdrawalPublic)) 39 = ok block ∧
+    ∀ row, row < 16 → ∀ lane, lane < 16 → block.val[row*16+lane]! = (c.row row).val[lane]! := by
+  apply PV_RunJoin_NodeExecution20.chain withdrawalWitness withdrawalPublic 39 c (by decide)
+  · change R0BlockCopies.node_pre (childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 39).2 = _
+    rw [children]
+    exact pre
+  · change R0BlockCopies.node_absorb (childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 39).1 = _
+    rw [children]
+    exact absorb
+  · exact PV_RunJoin_CopyCell6620.writer
+#print axioms chain
+
+theorem rows (pt : Parts) (hp : parts withdrawalWitness withdrawalPublic = ok pt) :
+    ∀ row, row < 16 → ∀ lane, lane < 16 → (pt.blocks.val[39]!).val[row*16+lane]! = (c.row row).val[lane]! :=
+  PV_RunJoin_PartsBlock20.source _ _ 39 (by decide) c chain pt hp
+#print axioms rows
+end R1Z.PV_RunJoin_SourceNode3920.withdrawal
+
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_SourceNode4020.transfer
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_Src_Forest_PrimitiveArguments PV_RunJoin_ReferenceFixtureResults
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+abbrev c := PV_RunJoin_BankCell4719.certificate
+def left : Array U32 8#usize := Array.make 8#usize [874162269#u32,1451641120#u32,2103371390#u32,1001754857#u32,1905791956#u32,1847859879#u32,128353993#u32,1497851806#u32]
+def right : Array U32 8#usize := Array.make 8#usize [244193611#u32,984304317#u32,1467689208#u32,2063463197#u32,1766003332#u32,1300835127#u32,1578947755#u32,745931587#u32]
+
+theorem pre : R0BlockCopies.node_pre right = ok c.pre := by
+  apply PV_RunJoin_NodeShape20.pre
+  · intro lane hl
+    interval_cases lane <;> decide
+  · intro lane hl
+    interval_cases lane
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · simp only [show ¬ (15:Nat) < 8 by decide,show (15:Nat) = 15 by rfl,if_false,if_true]
+      have guard : ¬ 2147483647 ≤ (right.val[7]!).val + 1095962629 := by
+        change ¬ 2147483647 ≤ 745931587 + 1095962629
+        norm_num
+      rw [if_neg guard]
+      with_unfolding_all rfl
+#print axioms pre
+
+theorem absorb : R0BlockCopies.node_absorb left = ok c.absorption := by
+  apply PV_RunJoin_NodeShape20.absorb
+  intro lane hl
+  interval_cases lane <;> with_unfolding_all rfl
+#print axioms absorb
+
+theorem node : nodeDigestR left right = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  rw [nodeDigestR,pre]
+  simp only [bind_tc_ok]
+  rw [absorb]
+  simp only [bind_tc_ok]
+  exact PV_RunJoin_CertificateExecution20.digest c PV_RunJoin_CopyCell4720.canon PV_RunJoin_CopyCell4720.models
+#print axioms node
+theorem cursor : appCurR (wordWitness transferWitness) (wordPublic transferPublic) 6 = ok (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3920.transfer.c.states 11)) := PV_RunJoin_SourceNode3920.transfer.next
+#print axioms cursor
+theorem empty : PV_Src_CanonicalRoots.table.val[6]! = right := by
+  apply PV_RunJoin_TreeValue16.unique
+  · exact PV_Src_CanonicalRoots.canonical ⟨6,by decide⟩
+  · intro lane hl
+    interval_cases lane <;> decide
+  · have he : digK (K := PV_RunJoin_FixtureRecords.M) PV_Src_CanonicalRoots.table.val[6]! = PV_RunJoin_RootModel.literal ⟨6,by decide⟩ := by
+      with_unfolding_all exact ((PV_Src_RootFieldMeaning.source ⟨6,by decide⟩).trans (PV_RunJoin_RootModel.frozen_literal ⟨6,by decide⟩))
+    have ht : digK (K := PV_RunJoin_FixtureRecords.M) right = PV_RunJoin_RootModel.literal ⟨6,by decide⟩ := by
+      funext lane
+      fin_cases lane <;> with_unfolding_all rfl
+    exact congrFun (he.trans ht.symm)
+#print axioms empty
+theorem ordered : orderedR (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3920.transfer.c.states 11)) (appSibR (wordPublic transferPublic) 6) (appBitR (wordPublic transferPublic) 6) = (left,right) := by
+  change (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3920.transfer.c.states 11),PV_Src_CanonicalRoots.table.val[6]!) = _
+  rw [empty]
+  with_unfolding_all rfl
+#print axioms ordered
+
+theorem children : childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 40 = (left,right) := by
+  change orderedR (okOr (appCurR (wordWitness transferWitness) (wordPublic transferPublic) 6) zero8) (appSibR (wordPublic transferPublic) 6) (appBitR (wordPublic transferPublic) 6) = _
+  rw [cursor,okOr_ok]
+  exact ordered
+#print axioms children
+
+theorem next : appCurR (wordWitness transferWitness) (wordPublic transferPublic) 7 = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  change (do
+    let cur ← appCurR (wordWitness transferWitness) (wordPublic transferPublic) 6
+    let o := orderedR cur (appSibR (wordPublic transferPublic) 6) (appBitR (wordPublic transferPublic) 6)
+    nodeDigestR o.1 o.2) = _
+  rw [cursor]
+  simp only [bind_tc_ok]
+  rw [ordered]
+  exact node
+#print axioms next
+theorem chain : ∃ block, RustWriterChain (wordPublic transferPublic).variant (rustChunks (wordWitness transferWitness) (wordPublic transferPublic)) 40 = ok block ∧
+    ∀ row, row < 16 → ∀ lane, lane < 16 → block.val[row*16+lane]! = (c.row row).val[lane]! := by
+  apply PV_RunJoin_NodeExecution20.chain transferWitness transferPublic 40 c (by decide)
+  · change R0BlockCopies.node_pre (childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 40).2 = _
+    rw [children]
+    exact pre
+  · change R0BlockCopies.node_absorb (childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 40).1 = _
+    rw [children]
+    exact absorb
+  · exact PV_RunJoin_CopyCell4720.writer
+#print axioms chain
+
+theorem rows (pt : Parts) (hp : parts transferWitness transferPublic = ok pt) :
+    ∀ row, row < 16 → ∀ lane, lane < 16 → (pt.blocks.val[40]!).val[row*16+lane]! = (c.row row).val[lane]! :=
+  PV_RunJoin_PartsBlock20.source _ _ 40 (by decide) c chain pt hp
+#print axioms rows
+end R1Z.PV_RunJoin_SourceNode4020.transfer
+namespace R1Z.PV_RunJoin_SourceNode4020.withdrawal
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_Src_Forest_PrimitiveArguments PV_RunJoin_ReferenceFixtureResults
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+abbrev c := PV_RunJoin_BankCell6719.certificate
+def left : Array U32 8#usize := Array.make 8#usize [641432107#u32,640429421#u32,874903178#u32,930860174#u32,778988106#u32,1148923135#u32,1488375597#u32,266199979#u32]
+def right : Array U32 8#usize := Array.make 8#usize [244193611#u32,984304317#u32,1467689208#u32,2063463197#u32,1766003332#u32,1300835127#u32,1578947755#u32,745931587#u32]
+
+theorem pre : R0BlockCopies.node_pre right = ok c.pre := by
+  apply PV_RunJoin_NodeShape20.pre
+  · intro lane hl
+    interval_cases lane <;> decide
+  · intro lane hl
+    interval_cases lane
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · simp only [show ¬ (15:Nat) < 8 by decide,show (15:Nat) = 15 by rfl,if_false,if_true]
+      have guard : ¬ 2147483647 ≤ (right.val[7]!).val + 1095962629 := by
+        change ¬ 2147483647 ≤ 745931587 + 1095962629
+        norm_num
+      rw [if_neg guard]
+      with_unfolding_all rfl
+#print axioms pre
+
+theorem absorb : R0BlockCopies.node_absorb left = ok c.absorption := by
+  apply PV_RunJoin_NodeShape20.absorb
+  intro lane hl
+  interval_cases lane <;> with_unfolding_all rfl
+#print axioms absorb
+
+theorem node : nodeDigestR left right = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  rw [nodeDigestR,pre]
+  simp only [bind_tc_ok]
+  rw [absorb]
+  simp only [bind_tc_ok]
+  exact PV_RunJoin_CertificateExecution20.digest c PV_RunJoin_CopyCell6720.canon PV_RunJoin_CopyCell6720.models
+#print axioms node
+theorem cursor : appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 6 = ok (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3920.withdrawal.c.states 11)) := PV_RunJoin_SourceNode3920.withdrawal.next
+#print axioms cursor
+theorem empty : PV_Src_CanonicalRoots.table.val[6]! = right := by
+  apply PV_RunJoin_TreeValue16.unique
+  · exact PV_Src_CanonicalRoots.canonical ⟨6,by decide⟩
+  · intro lane hl
+    interval_cases lane <;> decide
+  · have he : digK (K := PV_RunJoin_FixtureRecords.M) PV_Src_CanonicalRoots.table.val[6]! = PV_RunJoin_RootModel.literal ⟨6,by decide⟩ := by
+      with_unfolding_all exact ((PV_Src_RootFieldMeaning.source ⟨6,by decide⟩).trans (PV_RunJoin_RootModel.frozen_literal ⟨6,by decide⟩))
+    have ht : digK (K := PV_RunJoin_FixtureRecords.M) right = PV_RunJoin_RootModel.literal ⟨6,by decide⟩ := by
+      funext lane
+      fin_cases lane <;> with_unfolding_all rfl
+    exact congrFun (he.trans ht.symm)
+#print axioms empty
+theorem ordered : orderedR (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3920.withdrawal.c.states 11)) (appSibR (wordPublic withdrawalPublic) 6) (appBitR (wordPublic withdrawalPublic) 6) = (left,right) := by
+  change (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode3920.withdrawal.c.states 11),PV_Src_CanonicalRoots.table.val[6]!) = _
+  rw [empty]
+  with_unfolding_all rfl
+#print axioms ordered
+
+theorem children : childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 40 = (left,right) := by
+  change orderedR (okOr (appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 6) zero8) (appSibR (wordPublic withdrawalPublic) 6) (appBitR (wordPublic withdrawalPublic) 6) = _
+  rw [cursor,okOr_ok]
+  exact ordered
+#print axioms children
+
+theorem next : appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 7 = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  change (do
+    let cur ← appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 6
+    let o := orderedR cur (appSibR (wordPublic withdrawalPublic) 6) (appBitR (wordPublic withdrawalPublic) 6)
+    nodeDigestR o.1 o.2) = _
+  rw [cursor]
+  simp only [bind_tc_ok]
+  rw [ordered]
+  exact node
+#print axioms next
+theorem chain : ∃ block, RustWriterChain (wordPublic withdrawalPublic).variant (rustChunks (wordWitness withdrawalWitness) (wordPublic withdrawalPublic)) 40 = ok block ∧
+    ∀ row, row < 16 → ∀ lane, lane < 16 → block.val[row*16+lane]! = (c.row row).val[lane]! := by
+  apply PV_RunJoin_NodeExecution20.chain withdrawalWitness withdrawalPublic 40 c (by decide)
+  · change R0BlockCopies.node_pre (childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 40).2 = _
+    rw [children]
+    exact pre
+  · change R0BlockCopies.node_absorb (childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 40).1 = _
+    rw [children]
+    exact absorb
+  · exact PV_RunJoin_CopyCell6720.writer
+#print axioms chain
+
+theorem rows (pt : Parts) (hp : parts withdrawalWitness withdrawalPublic = ok pt) :
+    ∀ row, row < 16 → ∀ lane, lane < 16 → (pt.blocks.val[40]!).val[row*16+lane]! = (c.row row).val[lane]! :=
+  PV_RunJoin_PartsBlock20.source _ _ 40 (by decide) c chain pt hp
+#print axioms rows
+end R1Z.PV_RunJoin_SourceNode4020.withdrawal
+
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_SourceNode4120.transfer
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_Src_Forest_PrimitiveArguments PV_RunJoin_ReferenceFixtureResults
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+abbrev c := PV_RunJoin_BankCell4819.certificate
+def left : Array U32 8#usize := Array.make 8#usize [779813195#u32,274765226#u32,1694692007#u32,261106508#u32,380728998#u32,546229929#u32,1098356305#u32,1560230773#u32]
+def right : Array U32 8#usize := Array.make 8#usize [673192756#u32,38070812#u32,1453532835#u32,1340577407#u32,368420458#u32,1834405704#u32,270061815#u32,711700631#u32]
+
+theorem pre : R0BlockCopies.node_pre right = ok c.pre := by
+  apply PV_RunJoin_NodeShape20.pre
+  · intro lane hl
+    interval_cases lane <;> decide
+  · intro lane hl
+    interval_cases lane
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · simp only [show ¬ (15:Nat) < 8 by decide,show (15:Nat) = 15 by rfl,if_false,if_true]
+      have guard : ¬ 2147483647 ≤ (right.val[7]!).val + 1095962629 := by
+        change ¬ 2147483647 ≤ 711700631 + 1095962629
+        norm_num
+      rw [if_neg guard]
+      with_unfolding_all rfl
+#print axioms pre
+
+theorem absorb : R0BlockCopies.node_absorb left = ok c.absorption := by
+  apply PV_RunJoin_NodeShape20.absorb
+  intro lane hl
+  interval_cases lane <;> with_unfolding_all rfl
+#print axioms absorb
+
+theorem node : nodeDigestR left right = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  rw [nodeDigestR,pre]
+  simp only [bind_tc_ok]
+  rw [absorb]
+  simp only [bind_tc_ok]
+  exact PV_RunJoin_CertificateExecution20.digest c PV_RunJoin_CopyCell4820.canon PV_RunJoin_CopyCell4820.models
+#print axioms node
+theorem cursor : appCurR (wordWitness transferWitness) (wordPublic transferPublic) 7 = ok (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode4020.transfer.c.states 11)) := PV_RunJoin_SourceNode4020.transfer.next
+#print axioms cursor
+theorem empty : PV_Src_CanonicalRoots.table.val[7]! = right := by
+  apply PV_RunJoin_TreeValue16.unique
+  · exact PV_Src_CanonicalRoots.canonical ⟨7,by decide⟩
+  · intro lane hl
+    interval_cases lane <;> decide
+  · have he : digK (K := PV_RunJoin_FixtureRecords.M) PV_Src_CanonicalRoots.table.val[7]! = PV_RunJoin_RootModel.literal ⟨7,by decide⟩ := by
+      with_unfolding_all exact ((PV_Src_RootFieldMeaning.source ⟨7,by decide⟩).trans (PV_RunJoin_RootModel.frozen_literal ⟨7,by decide⟩))
+    have ht : digK (K := PV_RunJoin_FixtureRecords.M) right = PV_RunJoin_RootModel.literal ⟨7,by decide⟩ := by
+      funext lane
+      fin_cases lane <;> with_unfolding_all rfl
+    exact congrFun (he.trans ht.symm)
+#print axioms empty
+theorem ordered : orderedR (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode4020.transfer.c.states 11)) (appSibR (wordPublic transferPublic) 7) (appBitR (wordPublic transferPublic) 7) = (left,right) := by
+  change (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode4020.transfer.c.states 11),PV_Src_CanonicalRoots.table.val[7]!) = _
+  rw [empty]
+  with_unfolding_all rfl
+#print axioms ordered
+
+theorem children : childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 41 = (left,right) := by
+  change orderedR (okOr (appCurR (wordWitness transferWitness) (wordPublic transferPublic) 7) zero8) (appSibR (wordPublic transferPublic) 7) (appBitR (wordPublic transferPublic) 7) = _
+  rw [cursor,okOr_ok]
+  exact ordered
+#print axioms children
+
+theorem next : appCurR (wordWitness transferWitness) (wordPublic transferPublic) 8 = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  change (do
+    let cur ← appCurR (wordWitness transferWitness) (wordPublic transferPublic) 7
+    let o := orderedR cur (appSibR (wordPublic transferPublic) 7) (appBitR (wordPublic transferPublic) 7)
+    nodeDigestR o.1 o.2) = _
+  rw [cursor]
+  simp only [bind_tc_ok]
+  rw [ordered]
+  exact node
+#print axioms next
+theorem chain : ∃ block, RustWriterChain (wordPublic transferPublic).variant (rustChunks (wordWitness transferWitness) (wordPublic transferPublic)) 41 = ok block ∧
+    ∀ row, row < 16 → ∀ lane, lane < 16 → block.val[row*16+lane]! = (c.row row).val[lane]! := by
+  apply PV_RunJoin_NodeExecution20.chain transferWitness transferPublic 41 c (by decide)
+  · change R0BlockCopies.node_pre (childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 41).2 = _
+    rw [children]
+    exact pre
+  · change R0BlockCopies.node_absorb (childrenOf (wordWitness transferWitness) (wordPublic transferPublic) 41).1 = _
+    rw [children]
+    exact absorb
+  · exact PV_RunJoin_CopyCell4820.writer
+#print axioms chain
+
+theorem rows (pt : Parts) (hp : parts transferWitness transferPublic = ok pt) :
+    ∀ row, row < 16 → ∀ lane, lane < 16 → (pt.blocks.val[41]!).val[row*16+lane]! = (c.row row).val[lane]! :=
+  PV_RunJoin_PartsBlock20.source _ _ 41 (by decide) c chain pt hp
+#print axioms rows
+end R1Z.PV_RunJoin_SourceNode4120.transfer
+namespace R1Z.PV_RunJoin_SourceNode4120.withdrawal
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open PV_Src_Forest_PrimitiveArguments PV_RunJoin_ReferenceFixtureResults
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+abbrev c := PV_RunJoin_BankCell6819.certificate
+def left : Array U32 8#usize := Array.make 8#usize [719727911#u32,1261141874#u32,1037425088#u32,1528290707#u32,696744339#u32,983928879#u32,1739454800#u32,712455604#u32]
+def right : Array U32 8#usize := Array.make 8#usize [673192756#u32,38070812#u32,1453532835#u32,1340577407#u32,368420458#u32,1834405704#u32,270061815#u32,711700631#u32]
+
+theorem pre : R0BlockCopies.node_pre right = ok c.pre := by
+  apply PV_RunJoin_NodeShape20.pre
+  · intro lane hl
+    interval_cases lane <;> decide
+  · intro lane hl
+    interval_cases lane
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · with_unfolding_all rfl
+    · simp only [show ¬ (15:Nat) < 8 by decide,show (15:Nat) = 15 by rfl,if_false,if_true]
+      have guard : ¬ 2147483647 ≤ (right.val[7]!).val + 1095962629 := by
+        change ¬ 2147483647 ≤ 711700631 + 1095962629
+        norm_num
+      rw [if_neg guard]
+      with_unfolding_all rfl
+#print axioms pre
+
+theorem absorb : R0BlockCopies.node_absorb left = ok c.absorption := by
+  apply PV_RunJoin_NodeShape20.absorb
+  intro lane hl
+  interval_cases lane <;> with_unfolding_all rfl
+#print axioms absorb
+
+theorem node : nodeDigestR left right = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  rw [nodeDigestR,pre]
+  simp only [bind_tc_ok]
+  rw [absorb]
+  simp only [bind_tc_ok]
+  exact PV_RunJoin_CertificateExecution20.digest c PV_RunJoin_CopyCell6820.canon PV_RunJoin_CopyCell6820.models
+#print axioms node
+theorem cursor : appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 7 = ok (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode4020.withdrawal.c.states 11)) := PV_RunJoin_SourceNode4020.withdrawal.next
+#print axioms cursor
+theorem empty : PV_Src_CanonicalRoots.table.val[7]! = right := by
+  apply PV_RunJoin_TreeValue16.unique
+  · exact PV_Src_CanonicalRoots.canonical ⟨7,by decide⟩
+  · intro lane hl
+    interval_cases lane <;> decide
+  · have he : digK (K := PV_RunJoin_FixtureRecords.M) PV_Src_CanonicalRoots.table.val[7]! = PV_RunJoin_RootModel.literal ⟨7,by decide⟩ := by
+      with_unfolding_all exact ((PV_Src_RootFieldMeaning.source ⟨7,by decide⟩).trans (PV_RunJoin_RootModel.frozen_literal ⟨7,by decide⟩))
+    have ht : digK (K := PV_RunJoin_FixtureRecords.M) right = PV_RunJoin_RootModel.literal ⟨7,by decide⟩ := by
+      funext lane
+      fin_cases lane <;> with_unfolding_all rfl
+    exact congrFun (he.trans ht.symm)
+#print axioms empty
+theorem ordered : orderedR (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode4020.withdrawal.c.states 11)) (appSibR (wordPublic withdrawalPublic) 7) (appBitR (wordPublic withdrawalPublic) 7) = (left,right) := by
+  change (R0Z.WriterRefine.digest8 (PV_RunJoin_SourceNode4020.withdrawal.c.states 11),PV_Src_CanonicalRoots.table.val[7]!) = _
+  rw [empty]
+  with_unfolding_all rfl
+#print axioms ordered
+
+theorem children : childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 41 = (left,right) := by
+  change orderedR (okOr (appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 7) zero8) (appSibR (wordPublic withdrawalPublic) 7) (appBitR (wordPublic withdrawalPublic) 7) = _
+  rw [cursor,okOr_ok]
+  exact ordered
+#print axioms children
+
+theorem next : appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 8 = ok (R0Z.WriterRefine.digest8 (c.states 11)) := by
+  change (do
+    let cur ← appCurR (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 7
+    let o := orderedR cur (appSibR (wordPublic withdrawalPublic) 7) (appBitR (wordPublic withdrawalPublic) 7)
+    nodeDigestR o.1 o.2) = _
+  rw [cursor]
+  simp only [bind_tc_ok]
+  rw [ordered]
+  exact node
+#print axioms next
+theorem chain : ∃ block, RustWriterChain (wordPublic withdrawalPublic).variant (rustChunks (wordWitness withdrawalWitness) (wordPublic withdrawalPublic)) 41 = ok block ∧
+    ∀ row, row < 16 → ∀ lane, lane < 16 → block.val[row*16+lane]! = (c.row row).val[lane]! := by
+  apply PV_RunJoin_NodeExecution20.chain withdrawalWitness withdrawalPublic 41 c (by decide)
+  · change R0BlockCopies.node_pre (childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 41).2 = _
+    rw [children]
+    exact pre
+  · change R0BlockCopies.node_absorb (childrenOf (wordWitness withdrawalWitness) (wordPublic withdrawalPublic) 41).1 = _
+    rw [children]
+    exact absorb
+  · exact PV_RunJoin_CopyCell6820.writer
+#print axioms chain
+
+theorem rows (pt : Parts) (hp : parts withdrawalWitness withdrawalPublic = ok pt) :
+    ∀ row, row < 16 → ∀ lane, lane < 16 → (pt.blocks.val[41]!).val[row*16+lane]! = (c.row row).val[lane]! :=
+  PV_RunJoin_PartsBlock20.source _ _ 41 (by decide) c chain pt hp
+#print axioms rows
+end R1Z.PV_RunJoin_SourceNode4120.withdrawal

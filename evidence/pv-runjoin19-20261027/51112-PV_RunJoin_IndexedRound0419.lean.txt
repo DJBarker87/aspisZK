@@ -1,0 +1,30 @@
+import R1Z.PV_RunJoin_IndexedSbox19
+import R1Z.PV_RunJoin_IndexedFinalSbox19
+import R1Z.PV_Src_PortInternalRoundCopy
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_IndexedRound0419
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.PoseidonRefine
+open BuilderForestAdmissionPort PV_Src_PortSboxStep
+local instance : ExternalLinear := PV_Src_ExternalReference.dictionary
+
+theorem source (s : State) (hs : Canonical s)
+    (hc : poseidon2.INTERNAL.val[0]!.val < 2147483647) :
+    poseidon2.apply_round_by_index s 4#usize =
+      (do let out ← R0PoseidonCopy.internal_round s poseidon2.INTERNAL.val[0]! R0PoseidonCopy.INTERNAL_SHIFTS
+          ok (some (),out)) := by
+  rw [poseidon2.apply_round_by_index]
+  simp only [lift,bind_tc_ok]
+  rw [if_neg (by with_unfolding_all decide)]
+  try simp only [lift,bind_tc_ok]
+  rw [if_pos (by with_unfolding_all decide)]
+  simp only [lift,bind_tc_ok]
+  have hk : Array.index_usize poseidon2.INTERNAL (Usize.wrapping_sub 4#usize (Slice.len (Array.to_slice poseidon2.EXTERNAL_INITIAL))) = ok poseidon2.INTERNAL.val[0]! := by
+    with_unfolding_all rfl
+  rw [hk]
+  simp only [bind_tc_ok]
+  simp only [← bind_assoc_eq]
+  change (do let b ← PV_Src_PortInternalRoundCopy.run s poseidon2.INTERNAL.val[0]!
+             ok (some (),b)) = _
+  rw [PV_Src_PortInternalRoundCopy.source s _ hs hc]
+#print axioms source
+end R1Z.PV_RunJoin_IndexedRound0419

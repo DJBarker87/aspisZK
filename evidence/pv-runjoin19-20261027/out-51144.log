@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedPair19.lean:25:2: error: unsolved goals
+case pos
+s pre first second : State
+n : Usize
+hn : ↑n < 11
+hp : poseidon2.external_linear_lazy s = ok pre
+hf : poseidon2.apply_round_by_index pre (Usize.wrapping_mul 2#usize n) = ok (some (), first)
+hs : poseidon2.apply_round_by_index first ((Usize.wrapping_mul 2#usize n).wrapping_add 1#usize) = ok (some (), second)
+hd : poseidon2.POSEIDON2_ROUNDS / 2#usize = ok 11#usize
+hz : n = 0#usize
+⊢ (do
+      let cf ← BuilderForestStd.branch (some ())
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let cf1 ← BuilderForestStd.branch (some ())
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (some (first, second))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual) =
+    ok (some (first, second))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedPair19.lean:28:2: error: unsolved goals
+case neg
+s first second : State
+n : Usize
+hn : ↑n < 11
+hs : poseidon2.apply_round_by_index first ((Usize.wrapping_mul 2#usize n).wrapping_add 1#usize) = ok (some (), second)
+hd : poseidon2.POSEIDON2_ROUNDS / 2#usize = ok 11#usize
+hz : ¬n = 0#usize
+hp : ok s = ok s
+hf : poseidon2.apply_round_by_index s (Usize.wrapping_mul 2#usize n) = ok (some (), first)
+⊢ (do
+      let cf ← BuilderForestStd.branch (some ())
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let cf1 ← BuilderForestStd.branch (some ())
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (some (first, second))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            (Std.Array aspis_core.field.M31 16#usize × Std.Array aspis_core.field.M31 16#usize) residual) =
+    ok (some (first, second))
+'R1Z.PV_RunJoin_IndexedPair19.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:19:36: error: Tactic `decide` failed for proposition
+  4#usize < poseidon2.EXTERNAL_INITIAL.to_slice.len.wrapping_add poseidon2.INTERNAL.to_slice.len
+because its `Decidable` instance
+  4#usize.decLt (poseidon2.EXTERNAL_INITIAL.to_slice.len.wrapping_add poseidon2.INTERNAL.to_slice.len)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, `Nat.decLt`, and `UScalar.decLt`, reduction got stuck at the `Decidable` instance
+  match (↑4#usize).succ.ble ↑(poseidon2.EXTERNAL_INITIAL.to_slice.len.wrapping_add poseidon2.INTERNAL.to_slice.len),
+    true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin19-lean/sources/R1Z/PV_RunJoin_IndexedRound0419.lean:20:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_IndexedRound0419.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

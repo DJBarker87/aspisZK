@@ -1,0 +1,210 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin20-lean/sources/R1Z/PV_RunJoin_CompilerTotal20.lean:65:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  BuilderForestStd.iterAny PV_RunJoin_SuperScan20.iterator PV_RunJoin_SuperScan20.predicate
+    PV_RunJoin_SuperScan20.initial ()
+in the target expression
+  ∃ compiled,
+    (do
+          let __x ←
+            BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                  (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+                  (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize)
+                  (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31))
+                pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                { outer := { slice := witness.super_root_siblings.to_slice, i := 0 }, inner := none } ()
+          if __x.1 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+            else do
+              let anchor ← { w := transferWitness, p := transferPublic }.path_digest 24#usize
+              let b8 ←
+                core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                    PV_RunJoin_RecordedTransfer.publicRecord.anchor_root
+              if b8 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                else do
+                  let o ← { w := transferWitness, p := transferPublic }.banks
+                  let r5 ← BuilderForestStdPort.core.option.Option.ok_or o pair_trace.PoolV1PairTraceErrorV1.Shape
+                  let cf3 ←
+                    match r5 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let r6 ← pair_forest_trace.validate_forest_poseidon_rows val2
+                      let cf4 ←
+                        match r6 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          let private_directions ←
+                            BuilderForestStdPort.core.array.from_fn 24#usize
+                                pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                (witness.pair, witness)
+                          let a5 ← pair_trace.value_bits witness.pair.value
+                          let a6 ← pair_trace.value_bits 600#u32
+                          let a7 ← pair_trace.value_bits transferChange.value
+                          ok
+                              (core.result.Result.Ok
+                                {
+                                  trace :=
+                                    { stable := { c1 := val2.stable }, late := val2.late,
+                                      variant := pair_trace.PoolV1PairTraceVariantV1.PrivateTransfer,
+                                      private_directions := private_directions,
+                                      value_bits := Array.make 3#usize [a5, a6, a7] ⋯,
+                                      public_outputs :=
+                                        pair_trace.PoolV1PairTracePublicOutputsV1.PrivateTransfer anchor
+                                          PV_RunJoin_RecordedTransfer.publicRecord.nullifier
+                                          PV_RunJoin_RecordedTransfer.publicRecord.recipient_commitment
+                                          PV_RunJoin_RecordedTransfer.publicRecord.change_commitment
+                                          PV_RunJoin_AppendNative17.transfer0,
+                                      afterstate :=
+                                        PV_RunJoin_LateAppend18.result PV_RunJoin_AppendNative17.transfer0
+                                          PV_RunJoin_AppendNative17.transfer20 },
+                                  semantic_c1 := { c1 := val2.merged },
+                                  public_statement :=
+                                    { live_snapshot := snapshot,
+                                      candidate_afterstate :=
+                                        PV_RunJoin_LateAppend18.result PV_RunJoin_AppendNative17.transfer0
+                                          PV_RunJoin_AppendNative17.transfer20 } })
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                            (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                        (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual) =
+        ok (core.result.Result.Ok compiled) ∧
+      compiled.public_statement =
+        { live_snapshot := snapshot,
+          candidate_afterstate :=
+            PV_RunJoin_LateAppend18.result PV_RunJoin_AppendNative17.transfer0 PV_RunJoin_AppendNative17.transfer20 }
+
+he : PV_RunJoin_OutputPair17.transferPair = PV_RunJoin_AppendNative17.transfer0
+⊢ ∃ compiled,
+    (do
+          let __x ←
+            BuilderForestStdPort.core.iter.traits.iterator.Iterator.any.default
+                (BuilderForestStdPort.core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
+                  (core.iter.traits.iterator.IteratorSliceIter (Std.Array aspis_core.field.M31 8#usize))
+                  (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize)
+                  (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31))
+                pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                { outer := { slice := witness.super_root_siblings.to_slice, i := 0 }, inner := none } ()
+          if __x.1 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+            else do
+              let anchor ← { w := transferWitness, p := transferPublic }.path_digest 24#usize
+              let b8 ←
+                core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                    PV_RunJoin_RecordedTransfer.publicRecord.anchor_root
+              if b8 = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.AnchorMismatch)
+                else do
+                  let o ← { w := transferWitness, p := transferPublic }.banks
+                  let r5 ← BuilderForestStdPort.core.option.Option.ok_or o pair_trace.PoolV1PairTraceErrorV1.Shape
+                  let cf3 ←
+                    match r5 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let r6 ← pair_forest_trace.validate_forest_poseidon_rows val2
+                      let cf4 ←
+                        match r6 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          let private_directions ←
+                            BuilderForestStdPort.core.array.from_fn 24#usize
+                                pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+                                (witness.pair, witness)
+                          let a5 ← pair_trace.value_bits witness.pair.value
+                          let a6 ← pair_trace.value_bits 600#u32
+                          let a7 ← pair_trace.value_bits transferChange.value
+                          ok
+                              (core.result.Result.Ok
+                                {
+                                  trace :=
+                                    { stable := { c1 := val2.stable }, late := val2.late,
+                                      variant := pair_trace.PoolV1PairTraceVariantV1.PrivateTransfer,
+                                      private_directions := private_directions,
+                                      value_bits := Array.make 3#usize [a5, a6, a7] ⋯,
+                                      public_outputs :=
+                                        pair_trace.PoolV1PairTracePublicOutputsV1.PrivateTransfer anchor
+                                          PV_RunJoin_RecordedTransfer.publicRecord.nullifier
+                                          PV_RunJoin_RecordedTransfer.publicRecord.recipient_commitment
+                                          PV_RunJoin_RecordedTransfer.publicRecord.change_commitment
+                                          PV_RunJoin_AppendNative17.transfer0,
+                                      afterstate :=
+                                        PV_RunJoin_LateAppend18.result PV_RunJoin_AppendNative17.transfer0
+                                          PV_RunJoin_AppendNative17.transfer20 },
+                                  semantic_c1 := { c1 := val2.merged },
+                                  public_statement :=
+                                    { live_snapshot := snapshot,
+                                      candidate_afterstate :=
+                                        PV_RunJoin_LateAppend18.result PV_RunJoin_AppendNative17.transfer0
+                                          PV_RunJoin_AppendNative17.transfer20 } })
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                            (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                        (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1) residual) =
+        ok (core.result.Result.Ok compiled) ∧
+      compiled.public_statement =
+        { live_snapshot := snapshot,
+          candidate_afterstate :=
+            PV_RunJoin_LateAppend18.result PV_RunJoin_AppendNative17.transfer0 PV_RunJoin_AppendNative17.transfer20 }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (witness.pair, witness)
+  has type
+    pair_trace.PoolV1PairInputNoteWitnessV1 × pair_forest_trace.PoolV1PairForestInputNoteWitnessV1
+  but is expected to have type
+    pair_forest_trace.compile_forest_from_copies.closure_1
+  in the application
+    BuilderForestStdPort.core.array.from_fn 24#usize
+      pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+      (witness.pair, witness)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin20-lean/sources/R1Z/PV_RunJoin_CompilerTotal20.lean:56:24: warning: This simp argument is unused:
+  BuilderForestStdPort.core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵u̵i̵l̵d̵e̵r̵F̵o̵r̵e̵s̵t̵S̵t̵d̵P̵o̵r̵t̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵B̵u̵i̵l̵d̵e̵r̵A̵d̵m̵i̵s̵s̵i̵o̵n̵S̵t̵d̵.̵m̵a̵p̵E̵r̵r̵,̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲u̲i̲l̲d̲e̲r̲A̲d̲m̲i̲s̲s̲i̲o̲n̲S̲t̲d̲.̲m̲a̲p̲E̲r̲r̲,̲ core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin20-lean/sources/R1Z/PV_RunJoin_CompilerTotal20.lean:56:72: warning: This simp argument is unused:
+  BuilderAdmissionStd.mapErr
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵u̵i̵l̵d̵e̵r̵F̵o̵r̵e̵s̵t̵S̵t̵d̵P̵o̵r̵t̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵B̵u̵i̵l̵d̵e̵r̵A̵d̵m̵i̵s̵s̵i̵o̵n̵S̵t̵d̵.̵m̵a̵p̵E̵r̵r̵,̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲u̲i̲l̲d̲e̲r̲F̲o̲r̲e̲s̲t̲S̲t̲d̲P̲o̲r̲t̲.̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+      core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin20-lean/sources/R1Z/PV_RunJoin_CompilerTotal20.lean:57:4: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵u̵i̵l̵d̵e̵r̵F̵o̵r̵e̵s̵t̵S̵t̵d̵P̵o̵r̵t̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵B̵u̵i̵l̵d̵e̵r̵A̵d̵m̵i̵s̵s̵i̵o̵n̵S̵t̵d̵.̵m̵a̵p̵E̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲u̲i̲l̲d̲e̲r̲F̲o̲r̲e̲s̲t̲S̲t̲d̲P̲o̲r̲t̲.̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲u̲i̲l̲d̲e̲r̲A̲d̲m̲i̲s̲s̲i̲o̲n̲S̲t̲d̲.̲m̲a̲p̲E̲r̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin20-lean/sources/R1Z/PV_RunJoin_CompilerTotal20.lean:63:24: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵l̵i̵f̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵i̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵u̵i̵l̵d̵e̵r̵F̵o̵r̵e̵s̵t̵S̵t̵d̵P̵o̵r̵t̵.̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵.̵f̵l̵a̵t̵t̵e̵n̵.̵d̵e̵f̵a̵u̵l̵t̵,̵B̵u̵i̵l̵d̵e̵r̵F̵o̵r̵e̵s̵t̵S̵t̵d̵.̵f̵l̵a̵t̵t̵e̵n̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲i̲t̲e̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲u̲i̲l̲d̲e̲r̲F̲o̲r̲e̲s̲t̲S̲t̲d̲P̲o̲r̲t̲.̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲t̲r̲a̲i̲t̲s̲.̲i̲t̲e̲r̲a̲t̲o̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲.̲f̲l̲a̲t̲t̲e̲n̲.̲d̲e̲f̲a̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲u̲i̲l̲d̲e̲r̲F̲o̲r̲e̲s̲t̲S̲t̲d̲.̲f̲l̲a̲t̲t̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CompilerTotal20.transfer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

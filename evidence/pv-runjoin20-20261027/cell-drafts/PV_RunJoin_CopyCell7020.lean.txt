@@ -1,0 +1,169 @@
+import R1Z.PV_RunJoin_CopyCertificate20
+import R1Z.PV_RunJoin_BankCells6319
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_CopyCell7020
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.PoseidonRefine
+open PV_RunJoin_CopyCertificate20 PV_RunJoin_BankCertificate19 PV_Src_PortSboxStep
+open PV_RunJoin_OutputModel16
+
+theorem combined : (fun i => if i.val < 8 then (liftA (K := M) PV_RunJoin_BankCell7019.certificate.pre) i +
+    (liftA PV_RunJoin_BankCell7019.certificate.absorption) i else (liftA PV_RunJoin_BankCell7019.certificate.pre) i) = s_70_0 := by
+  funext i
+  fin_cases i <;> with_unfolding_all rfl
+#print axioms combined
+theorem model1 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 1 = s_70_3 := by
+  rw [iter_succ _ 0 (by decide)]
+  rw [iter_zero,trans_zero]
+  change R0P.poseidonLeadingPair (liftA PV_RunJoin_BankCell7019.certificate.pre) (liftA PV_RunJoin_BankCell7019.certificate.absorption) = _
+  rw [R0P.poseidonLeadingPair,combined,round_70_1,round_70_2]
+  exact round_70_3
+#print axioms model1
+theorem model2 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 2 = s_70_5 := by
+  rw [iter_succ _ 1 (by decide)]
+  rw [model1,trans_succ 1 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨3,by decide⟩
+    (R0P.poseidonApplyRound ⟨2,by decide⟩ s_70_3) = _
+  have step2 : R0P.poseidonApplyRound ⟨2,by decide⟩ s_70_3 = s_70_4 :=
+    (ar_init ⟨2,by decide⟩ (by decide) s_70_3).trans round_70_4
+  have step3 : R0P.poseidonApplyRound ⟨3,by decide⟩ s_70_4 = s_70_5 :=
+    (ar_init ⟨3,by decide⟩ (by decide) s_70_4).trans round_70_5
+  exact (congrArg (R0P.poseidonApplyRound ⟨3,by decide⟩) step2).trans step3
+#print axioms model2
+theorem model3 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 3 = s_70_7 := by
+  rw [iter_succ _ 2 (by decide)]
+  rw [model2,trans_succ 2 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨5,by decide⟩
+    (R0P.poseidonApplyRound ⟨4,by decide⟩ s_70_5) = _
+  have step4 : R0P.poseidonApplyRound ⟨4,by decide⟩ s_70_5 = s_70_6 :=
+    (ar_int ⟨4,by decide⟩ (by decide) (by decide) s_70_5).trans round_70_6
+  have step5 : R0P.poseidonApplyRound ⟨5,by decide⟩ s_70_6 = s_70_7 :=
+    (ar_int ⟨5,by decide⟩ (by decide) (by decide) s_70_6).trans round_70_7
+  exact (congrArg (R0P.poseidonApplyRound ⟨5,by decide⟩) step4).trans step5
+#print axioms model3
+theorem model4 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 4 = s_70_9 := by
+  rw [iter_succ _ 3 (by decide)]
+  rw [model3,trans_succ 3 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨7,by decide⟩
+    (R0P.poseidonApplyRound ⟨6,by decide⟩ s_70_7) = _
+  have step6 : R0P.poseidonApplyRound ⟨6,by decide⟩ s_70_7 = s_70_8 :=
+    (ar_int ⟨6,by decide⟩ (by decide) (by decide) s_70_7).trans round_70_8
+  have step7 : R0P.poseidonApplyRound ⟨7,by decide⟩ s_70_8 = s_70_9 :=
+    (ar_int ⟨7,by decide⟩ (by decide) (by decide) s_70_8).trans round_70_9
+  exact (congrArg (R0P.poseidonApplyRound ⟨7,by decide⟩) step6).trans step7
+#print axioms model4
+theorem model5 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 5 = s_70_11 := by
+  rw [iter_succ _ 4 (by decide)]
+  rw [model4,trans_succ 4 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨9,by decide⟩
+    (R0P.poseidonApplyRound ⟨8,by decide⟩ s_70_9) = _
+  have step8 : R0P.poseidonApplyRound ⟨8,by decide⟩ s_70_9 = s_70_10 :=
+    (ar_int ⟨8,by decide⟩ (by decide) (by decide) s_70_9).trans round_70_10
+  have step9 : R0P.poseidonApplyRound ⟨9,by decide⟩ s_70_10 = s_70_11 :=
+    (ar_int ⟨9,by decide⟩ (by decide) (by decide) s_70_10).trans round_70_11
+  exact (congrArg (R0P.poseidonApplyRound ⟨9,by decide⟩) step8).trans step9
+#print axioms model5
+theorem model6 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 6 = s_70_13 := by
+  rw [iter_succ _ 5 (by decide)]
+  rw [model5,trans_succ 5 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨11,by decide⟩
+    (R0P.poseidonApplyRound ⟨10,by decide⟩ s_70_11) = _
+  have step10 : R0P.poseidonApplyRound ⟨10,by decide⟩ s_70_11 = s_70_12 :=
+    (ar_int ⟨10,by decide⟩ (by decide) (by decide) s_70_11).trans round_70_12
+  have step11 : R0P.poseidonApplyRound ⟨11,by decide⟩ s_70_12 = s_70_13 :=
+    (ar_int ⟨11,by decide⟩ (by decide) (by decide) s_70_12).trans round_70_13
+  exact (congrArg (R0P.poseidonApplyRound ⟨11,by decide⟩) step10).trans step11
+#print axioms model6
+theorem model7 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 7 = s_70_15 := by
+  rw [iter_succ _ 6 (by decide)]
+  rw [model6,trans_succ 6 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨13,by decide⟩
+    (R0P.poseidonApplyRound ⟨12,by decide⟩ s_70_13) = _
+  have step12 : R0P.poseidonApplyRound ⟨12,by decide⟩ s_70_13 = s_70_14 :=
+    (ar_int ⟨12,by decide⟩ (by decide) (by decide) s_70_13).trans round_70_14
+  have step13 : R0P.poseidonApplyRound ⟨13,by decide⟩ s_70_14 = s_70_15 :=
+    (ar_int ⟨13,by decide⟩ (by decide) (by decide) s_70_14).trans round_70_15
+  exact (congrArg (R0P.poseidonApplyRound ⟨13,by decide⟩) step12).trans step13
+#print axioms model7
+theorem model8 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 8 = s_70_17 := by
+  rw [iter_succ _ 7 (by decide)]
+  rw [model7,trans_succ 7 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨15,by decide⟩
+    (R0P.poseidonApplyRound ⟨14,by decide⟩ s_70_15) = _
+  have step14 : R0P.poseidonApplyRound ⟨14,by decide⟩ s_70_15 = s_70_16 :=
+    (ar_int ⟨14,by decide⟩ (by decide) (by decide) s_70_15).trans round_70_16
+  have step15 : R0P.poseidonApplyRound ⟨15,by decide⟩ s_70_16 = s_70_17 :=
+    (ar_int ⟨15,by decide⟩ (by decide) (by decide) s_70_16).trans round_70_17
+  exact (congrArg (R0P.poseidonApplyRound ⟨15,by decide⟩) step14).trans step15
+#print axioms model8
+theorem model9 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 9 = s_70_19 := by
+  rw [iter_succ _ 8 (by decide)]
+  rw [model8,trans_succ 8 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨17,by decide⟩
+    (R0P.poseidonApplyRound ⟨16,by decide⟩ s_70_17) = _
+  have step16 : R0P.poseidonApplyRound ⟨16,by decide⟩ s_70_17 = s_70_18 :=
+    (ar_int ⟨16,by decide⟩ (by decide) (by decide) s_70_17).trans round_70_18
+  have step17 : R0P.poseidonApplyRound ⟨17,by decide⟩ s_70_18 = s_70_19 :=
+    (ar_int ⟨17,by decide⟩ (by decide) (by decide) s_70_18).trans round_70_19
+  exact (congrArg (R0P.poseidonApplyRound ⟨17,by decide⟩) step16).trans step17
+#print axioms model9
+theorem model10 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 10 = s_70_21 := by
+  rw [iter_succ _ 9 (by decide)]
+  rw [model9,trans_succ 9 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨19,by decide⟩
+    (R0P.poseidonApplyRound ⟨18,by decide⟩ s_70_19) = _
+  have step18 : R0P.poseidonApplyRound ⟨18,by decide⟩ s_70_19 = s_70_20 :=
+    (ar_fin ⟨18,by decide⟩ (by decide) (by decide) s_70_19).trans round_70_20
+  have step19 : R0P.poseidonApplyRound ⟨19,by decide⟩ s_70_20 = s_70_21 :=
+    (ar_fin ⟨19,by decide⟩ (by decide) (by decide) s_70_20).trans round_70_21
+  exact (congrArg (R0P.poseidonApplyRound ⟨19,by decide⟩) step18).trans step19
+#print axioms model10
+theorem model11 : R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) 11 = s_70_23 := by
+  rw [iter_succ _ 10 (by decide)]
+  rw [model10,trans_succ 10 (by decide) (by decide)]
+  change R0P.poseidonApplyRound ⟨21,by decide⟩
+    (R0P.poseidonApplyRound ⟨20,by decide⟩ s_70_21) = _
+  have step20 : R0P.poseidonApplyRound ⟨20,by decide⟩ s_70_21 = s_70_22 :=
+    (ar_fin ⟨20,by decide⟩ (by decide) (by decide) s_70_21).trans round_70_22
+  have step21 : R0P.poseidonApplyRound ⟨21,by decide⟩ s_70_22 = s_70_23 :=
+    (ar_fin ⟨21,by decide⟩ (by decide) (by decide) s_70_22).trans round_70_23
+  exact (congrArg (R0P.poseidonApplyRound ⟨21,by decide⟩) step20).trans step21
+#print axioms model11
+theorem canon : ∀ n, n < 11 → Canonical (PV_RunJoin_BankCell7019.certificate.states (n+1)) := by
+  intro n hn
+  interval_cases n
+  · exact PV_RunJoin_ValidatorCell7019.canon3
+  · exact PV_RunJoin_ValidatorCell7019.canon5
+  · exact PV_RunJoin_ValidatorCell7019.canon7
+  · exact PV_RunJoin_ValidatorCell7019.canon9
+  · exact PV_RunJoin_ValidatorCell7019.canon11
+  · exact PV_RunJoin_ValidatorCell7019.canon13
+  · exact PV_RunJoin_ValidatorCell7019.canon15
+  · exact PV_RunJoin_ValidatorCell7019.canon17
+  · exact PV_RunJoin_ValidatorCell7019.canon19
+  · exact PV_RunJoin_ValidatorCell7019.canon21
+  · exact PV_RunJoin_ValidatorCell7019.canon23
+#print axioms canon
+theorem models : ∀ n, n < 11 → R0Z.BuilderModel.blockIter (model PV_RunJoin_BankCell7019.certificate) (n+1) =
+    liftA (PV_RunJoin_BankCell7019.certificate.states (n+1)) := by
+  intro n hn
+  interval_cases n
+  · exact model1.trans PV_RunJoin_ValidatorCell7019.lift3.symm
+  · exact model2.trans PV_RunJoin_ValidatorCell7019.lift5.symm
+  · exact model3.trans PV_RunJoin_ValidatorCell7019.lift7.symm
+  · exact model4.trans PV_RunJoin_ValidatorCell7019.lift9.symm
+  · exact model5.trans PV_RunJoin_ValidatorCell7019.lift11.symm
+  · exact model6.trans PV_RunJoin_ValidatorCell7019.lift13.symm
+  · exact model7.trans PV_RunJoin_ValidatorCell7019.lift15.symm
+  · exact model8.trans PV_RunJoin_ValidatorCell7019.lift17.symm
+  · exact model9.trans PV_RunJoin_ValidatorCell7019.lift19.symm
+  · exact model10.trans PV_RunJoin_ValidatorCell7019.lift21.symm
+  · exact model11.trans PV_RunJoin_ValidatorCell7019.lift23.symm
+#print axioms models
+theorem writer : ∃ block, (do
+      let rounds ← R0PoseidonCopy.perm_rounds PV_RunJoin_BankCell7019.certificate.pre PV_RunJoin_BankCell7019.certificate.absorption
+      R0BlockCopies.write_block PV_RunJoin_BankCell7019.certificate.pre PV_RunJoin_BankCell7019.certificate.absorption rounds) = ok block ∧
+      ∀ row, row < 16 → ∀ lane, lane < 16 → block.val[row*16+lane]! = (PV_RunJoin_BankCell7019.certificate.row row).val[lane]! :=
+  PV_RunJoin_CopyCertificate20.writer _ canon models
+#print axioms writer
+end R1Z.PV_RunJoin_CopyCell7020

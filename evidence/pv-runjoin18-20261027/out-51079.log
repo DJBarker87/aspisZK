@@ -1,0 +1,40 @@
+'R1Z.PV_RunJoin_AppendShape18.read_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_AppendShape18.reconstruct' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_AppendShape18.lean:51:4: error: `simp` made no progress
+'R1Z.PV_RunJoin_AppendShape18.history_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_AppendShape18.lean:92:35: error: Application type mismatch: The argument
+  PV_RunJoin_FixtureArguments.snapshot.frontier
+has type
+  Std.Array (Std.Array aspis_core.field.M31 8#usize) 20#usize
+but is expected to have type
+  Std.Array U32 ?m.56
+in the application
+  update_ok PV_RunJoin_FixtureArguments.snapshot.frontier
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_AppendShape18.lean:84:100: error: unsolved goals
+leaf root : Digest
+hr :
+  (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)).reconstruct_nonfull_root_from_level
+      PV_Src_CanonicalRoots.table 0#usize =
+    ok (core.result.Result.Ok root)
+hz : PV_RunJoin_FixtureArguments.snapshot.next_pair_index = 0#u64
+⊢ (do
+      let frontier1 ← PV_RunJoin_FixtureArguments.snapshot.frontier.update 0#usize leaf
+      let r ←
+        { next_leaf_index := U64.wrapping_add 0#u64 1#u64, root := Array.repeat 8#usize aspis_core.field.M31.ZERO,
+                frontier := frontier1 }.reconstruct_nonfull_root_from_level
+            PV_Src_CanonicalRoots.table 0#usize
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let rhlv ← root_history.root_history_location (U64.wrapping_add 0#u64 1#u64)
+          ok
+              (core.result.Result.Ok
+                ({ inner := { next_leaf_index := U64.wrapping_add 0#u64 1#u64, root := val, frontier := frontier1 },
+                    empty := PV_Src_CanonicalRoots.table },
+                  { leaf_index := 0#u64, root_sequence := U64.wrapping_add 0#u64 1#u64, root := val, history := rhlv }))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (incremental_merkle.tree_reference.OwnedTree × incremental_merkle.AppendOneV1)
+            (core.convert.FromSame incremental_merkle.PoolV1TreeError) residual) =
+    ok (core.result.Result.Ok ({ inner := after leaf root, empty := PV_Src_CanonicalRoots.table }, receipt root))
+'R1Z.PV_RunJoin_AppendShape18.append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

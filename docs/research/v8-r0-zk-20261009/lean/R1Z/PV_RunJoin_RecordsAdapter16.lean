@@ -1,7 +1,6 @@
 import R1Z.PV_RunJoin_RecordsFuns16
 import R1Z.PV_RunJoin_ShippedExternal
 import R1Z.PV_Src_RecordDynamic
-import R1Z.PV_Src_RootHelper
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_RecordsAdapter16
 open Aeneas Aeneas.Std Result

@@ -1,0 +1,60 @@
+import R1Z.PV_RunJoin_ZeroValidation17
+import R1Z.PV_Src_RootFieldMeaning
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_ZeroConstructor17
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+local notation "M" => PV_RunJoin_FixtureRecords.M
+local instance : ExternalLinear := PV_Src_ExternalReference.dictionary
+
+theorem root : PV_Src_CanonicalRoots.table.val[20]! = PV_RunJoin_FixtureArguments.snapshot.current_root := by
+  apply PV_RunJoin_TreeValue16.unique
+  · exact PV_Src_CanonicalRoots.canonical ⟨20,by decide⟩
+  · intro j hj; interval_cases j <;> decide
+  · have he : digK (K := M) PV_Src_CanonicalRoots.table.val[20]! = PV_RunJoin_RootModel.literal ⟨20,by decide⟩ := by
+      with_unfolding_all exact ((PV_Src_RootFieldMeaning.source ⟨20,by decide⟩).trans (PV_RunJoin_RootModel.frozen_literal ⟨20,by decide⟩))
+    have ht : digK (K := M) PV_RunJoin_FixtureArguments.snapshot.current_root = PV_RunJoin_RootModel.literal ⟨20,by decide⟩ := by
+      funext i; fin_cases i <;> rfl
+    exact congrFun (he.trans ht.symm)
+#print axioms root
+
+theorem capacity : incremental_merkle.POOL_V1_LEAF_CAPACITY = ok 1048576#u64 := by
+  rw [incremental_merkle.POOL_V1_LEAF_CAPACITY,format.POOL_V1_TREE_DEPTH]
+  with_unfolding_all rfl
+#print axioms capacity
+
+def tree : incremental_merkle.IncrementalMerkleTreeV1 := {
+  next_leaf_index := PV_RunJoin_FixtureArguments.snapshot.next_pair_index
+  root := PV_RunJoin_FixtureArguments.snapshot.current_root
+  frontier := PV_RunJoin_FixtureArguments.snapshot.frontier }
+
+theorem validate : incremental_merkle.tree_reference.validate_owned tree PV_Src_CanonicalRoots.table = ok (.Ok ()) := by
+  rw [incremental_merkle.tree_reference.validate_owned,capacity]
+  change (do
+    let result ← incremental_merkle.tree_reference.validate_owned_loop 0#u64
+      PV_RunJoin_FixtureArguments.snapshot.frontier PV_Src_CanonicalRoots.table (.Ok ()) 0#usize
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch result
+    match cf with
+    | core.ops.control_flow.ControlFlow.Continue _ => do
+      let a ← Array.index_usize PV_Src_CanonicalRoots.table format.POOL_V1_TREE_DEPTH
+      let b ← core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 tree.root a
+      if b then ok (.Ok ()) else ok (.Err incremental_merkle.PoolV1TreeError.RootMismatch)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+        (core.convert.FromSame incremental_merkle.PoolV1TreeError) residual) = _
+  rw [PV_RunJoin_ZeroValidation17.fixture]
+  change (do
+    let a ← Array.index_usize PV_Src_CanonicalRoots.table 20#usize
+    let b ← core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 tree.root a
+    if b then ok (.Ok ()) else ok (.Err incremental_merkle.PoolV1TreeError.RootMismatch)) = _
+  rw [index_ok_gen _ 20#usize (by decide)]
+  simp only [bind_tc_ok]
+  rw [root]
+  change (do
+    let b ← core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 tree.root tree.root
+    if b then ok (.Ok ()) else ok (.Err incremental_merkle.PoolV1TreeError.RootMismatch)) = _
+  rw [PV_RunJoin_ZeroTree17.eq_self]
+  rfl
+#print axioms validate
+end R1Z.PV_RunJoin_ZeroConstructor17

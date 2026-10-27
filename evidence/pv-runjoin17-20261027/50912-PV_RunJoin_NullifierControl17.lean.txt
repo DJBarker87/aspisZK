@@ -1,0 +1,396 @@
+import R1Z.PV_RunJoin_NullifierData17
+import R1Z.PV_RunJoin_FixtureArguments
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_NullifierControl17
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort PV_RunJoin_NullifierData17
+abbrev callback := poseidon2.hash_fields.closure.Insts.CoreOpsFunctionFnMutPairUsizePoseidon2RoundTransitionTuple
+abbrev key := PV_RunJoin_FixtureArguments.witness.pair.nullifier_key
+abbrev salt := PV_RunJoin_FixtureArguments.witness.pair.salt
+def initial : PV_Src_PortSboxStep.State := Array.make 16#usize
+  [0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) :=
+  ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,0#usize⟩,0#usize⟩
+def saltIter : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) :=
+  ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,0#usize⟩,0#usize⟩
+def keyIter0 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,0⟩,0#usize⟩
+def keyState0 : PV_Src_PortSboxStep.State := Array.make 16#usize [0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter1 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,1⟩,1#usize⟩
+def keyState1 : PV_Src_PortSboxStep.State := Array.make 16#usize [11#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter2 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,2⟩,2#usize⟩
+def keyState2 : PV_Src_PortSboxStep.State := Array.make 16#usize [11#u32,28#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter3 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,3⟩,3#usize⟩
+def keyState3 : PV_Src_PortSboxStep.State := Array.make 16#usize [11#u32,28#u32,45#u32,0#u32,0#u32,0#u32,0#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter4 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,4⟩,4#usize⟩
+def keyState4 : PV_Src_PortSboxStep.State := Array.make 16#usize [11#u32,28#u32,45#u32,62#u32,0#u32,0#u32,0#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter5 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,5⟩,5#usize⟩
+def keyState5 : PV_Src_PortSboxStep.State := Array.make 16#usize [11#u32,28#u32,45#u32,62#u32,79#u32,0#u32,0#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter6 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,6⟩,6#usize⟩
+def keyState6 : PV_Src_PortSboxStep.State := Array.make 16#usize [11#u32,28#u32,45#u32,62#u32,79#u32,96#u32,0#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter7 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,7⟩,7#usize⟩
+def keyState7 : PV_Src_PortSboxStep.State := Array.make 16#usize [11#u32,28#u32,45#u32,62#u32,79#u32,96#u32,113#u32,0#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+def keyIter8 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨key.val,by rw [key.property]; scalar_tac⟩,8⟩,8#usize⟩
+def keyState8 : PV_Src_PortSboxStep.State := Array.make 16#usize [11#u32,28#u32,45#u32,62#u32,79#u32,96#u32,113#u32,130#u32,1095958530#u32,16#u32,0#u32,0#u32,0#u32,0#u32,0#u32,0#u32]
+theorem keyNext0 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) keyIter0 = ok (some (0#usize,11#u32),keyIter1) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next keyIter0.iter
+    match o with
+    | none => ok (none,⟨it,0#usize⟩)
+    | some a => do
+      let n ← (0#usize) + 1#usize
+      ok (some (0#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 0 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms keyNext0
+theorem keyNext1 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) keyIter1 = ok (some (1#usize,28#u32),keyIter2) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next keyIter1.iter
+    match o with
+    | none => ok (none,⟨it,1#usize⟩)
+    | some a => do
+      let n ← (1#usize) + 1#usize
+      ok (some (1#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 1 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms keyNext1
+theorem keyNext2 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) keyIter2 = ok (some (2#usize,45#u32),keyIter3) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next keyIter2.iter
+    match o with
+    | none => ok (none,⟨it,2#usize⟩)
+    | some a => do
+      let n ← (2#usize) + 1#usize
+      ok (some (2#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 2 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms keyNext2
+theorem keyNext3 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) keyIter3 = ok (some (3#usize,62#u32),keyIter4) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next keyIter3.iter
+    match o with
+    | none => ok (none,⟨it,3#usize⟩)
+    | some a => do
+      let n ← (3#usize) + 1#usize
+      ok (some (3#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 3 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms keyNext3
+theorem keyNext4 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) keyIter4 = ok (some (4#usize,79#u32),keyIter5) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next keyIter4.iter
+    match o with
+    | none => ok (none,⟨it,4#usize⟩)
+    | some a => do
+      let n ← (4#usize) + 1#usize
+      ok (some (4#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 4 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms keyNext4
+theorem keyNext5 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) keyIter5 = ok (some (5#usize,96#u32),keyIter6) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next keyIter5.iter
+    match o with
+    | none => ok (none,⟨it,5#usize⟩)
+    | some a => do
+      let n ← (5#usize) + 1#usize
+      ok (some (5#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 5 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms keyNext5
+theorem keyNext6 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) keyIter6 = ok (some (6#usize,113#u32),keyIter7) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next keyIter6.iter
+    match o with
+    | none => ok (none,⟨it,6#usize⟩)
+    | some a => do
+      let n ← (6#usize) + 1#usize
+      ok (some (6#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 6 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms keyNext6
+theorem keyNext7 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) keyIter7 = ok (some (7#usize,130#u32),keyIter8) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next keyIter7.iter
+    match o with
+    | none => ok (none,⟨it,7#usize⟩)
+    | some a => do
+      let n ← (7#usize) + 1#usize
+      ok (some (7#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 7 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms keyNext7
+theorem keyNext8 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) keyIter8 = ok (none,keyIter8) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next keyIter8.iter
+    match o with
+    | none => ok (none,⟨it,8#usize⟩)
+    | some a => do
+      let n ← (8#usize) + 1#usize
+      ok (some (8#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_neg (by change ¬ (8 < 8); decide)]
+  with_unfolding_all rfl
+#print axioms keyNext8
+theorem absorb_key : poseidon2.hash_fields_with_trace_loop0_loop0 keyIter initial = ok s4_0 := by
+  change poseidon2.hash_fields_with_trace_loop0_loop0 keyIter0 keyState0 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,keyNext0]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 keyIter1 keyState1 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,keyNext1]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 keyIter2 keyState2 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,keyNext2]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 keyIter3 keyState3 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,keyNext3]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 keyIter4 keyState4 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,keyNext4]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 keyIter5 keyState5 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,keyNext5]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 keyIter6 keyState6 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,keyNext6]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 keyIter7 keyState7 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,keyNext7]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 keyIter8 keyState8 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,keyNext8]
+  with_unfolding_all rfl
+#print axioms absorb_key
+def saltIter0 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,0⟩,0#usize⟩
+def saltState0 : PV_Src_PortSboxStep.State := Array.make 16#usize [1509501854#u32,1054326288#u32,990027500#u32,639862859#u32,434148632#u32,2026900882#u32,821792967#u32,1955070469#u32,2126048206#u32,1654414616#u32,1959107133#u32,943087239#u32,609987601#u32,1346814918#u32,58140128#u32,1000734734#u32]
+def saltIter1 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,1⟩,1#usize⟩
+def saltState1 : PV_Src_PortSboxStep.State := Array.make 16#usize [1509501955#u32,1054326288#u32,990027500#u32,639862859#u32,434148632#u32,2026900882#u32,821792967#u32,1955070469#u32,2126048206#u32,1654414616#u32,1959107133#u32,943087239#u32,609987601#u32,1346814918#u32,58140128#u32,1000734734#u32]
+def saltIter2 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,2⟩,2#usize⟩
+def saltState2 : PV_Src_PortSboxStep.State := Array.make 16#usize [1509501955#u32,1054326406#u32,990027500#u32,639862859#u32,434148632#u32,2026900882#u32,821792967#u32,1955070469#u32,2126048206#u32,1654414616#u32,1959107133#u32,943087239#u32,609987601#u32,1346814918#u32,58140128#u32,1000734734#u32]
+def saltIter3 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,3⟩,3#usize⟩
+def saltState3 : PV_Src_PortSboxStep.State := Array.make 16#usize [1509501955#u32,1054326406#u32,990027635#u32,639862859#u32,434148632#u32,2026900882#u32,821792967#u32,1955070469#u32,2126048206#u32,1654414616#u32,1959107133#u32,943087239#u32,609987601#u32,1346814918#u32,58140128#u32,1000734734#u32]
+def saltIter4 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,4⟩,4#usize⟩
+def saltState4 : PV_Src_PortSboxStep.State := Array.make 16#usize [1509501955#u32,1054326406#u32,990027635#u32,639863011#u32,434148632#u32,2026900882#u32,821792967#u32,1955070469#u32,2126048206#u32,1654414616#u32,1959107133#u32,943087239#u32,609987601#u32,1346814918#u32,58140128#u32,1000734734#u32]
+def saltIter5 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,5⟩,5#usize⟩
+def saltState5 : PV_Src_PortSboxStep.State := Array.make 16#usize [1509501955#u32,1054326406#u32,990027635#u32,639863011#u32,434148801#u32,2026900882#u32,821792967#u32,1955070469#u32,2126048206#u32,1654414616#u32,1959107133#u32,943087239#u32,609987601#u32,1346814918#u32,58140128#u32,1000734734#u32]
+def saltIter6 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,6⟩,6#usize⟩
+def saltState6 : PV_Src_PortSboxStep.State := Array.make 16#usize [1509501955#u32,1054326406#u32,990027635#u32,639863011#u32,434148801#u32,2026901068#u32,821792967#u32,1955070469#u32,2126048206#u32,1654414616#u32,1959107133#u32,943087239#u32,609987601#u32,1346814918#u32,58140128#u32,1000734734#u32]
+def saltIter7 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,7⟩,7#usize⟩
+def saltState7 : PV_Src_PortSboxStep.State := Array.make 16#usize [1509501955#u32,1054326406#u32,990027635#u32,639863011#u32,434148801#u32,2026901068#u32,821793170#u32,1955070469#u32,2126048206#u32,1654414616#u32,1959107133#u32,943087239#u32,609987601#u32,1346814918#u32,58140128#u32,1000734734#u32]
+def saltIter8 : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter U32) := ⟨⟨⟨salt.val,by rw [salt.property]; scalar_tac⟩,8⟩,8#usize⟩
+def saltState8 : PV_Src_PortSboxStep.State := Array.make 16#usize [1509501955#u32,1054326406#u32,990027635#u32,639863011#u32,434148801#u32,2026901068#u32,821793170#u32,1955070689#u32,2126048206#u32,1654414616#u32,1959107133#u32,943087239#u32,609987601#u32,1346814918#u32,58140128#u32,1000734734#u32]
+theorem saltNext0 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) saltIter0 = ok (some (0#usize,101#u32),saltIter1) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next saltIter0.iter
+    match o with
+    | none => ok (none,⟨it,0#usize⟩)
+    | some a => do
+      let n ← (0#usize) + 1#usize
+      ok (some (0#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 0 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms saltNext0
+theorem saltNext1 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) saltIter1 = ok (some (1#usize,118#u32),saltIter2) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next saltIter1.iter
+    match o with
+    | none => ok (none,⟨it,1#usize⟩)
+    | some a => do
+      let n ← (1#usize) + 1#usize
+      ok (some (1#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 1 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms saltNext1
+theorem saltNext2 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) saltIter2 = ok (some (2#usize,135#u32),saltIter3) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next saltIter2.iter
+    match o with
+    | none => ok (none,⟨it,2#usize⟩)
+    | some a => do
+      let n ← (2#usize) + 1#usize
+      ok (some (2#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 2 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms saltNext2
+theorem saltNext3 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) saltIter3 = ok (some (3#usize,152#u32),saltIter4) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next saltIter3.iter
+    match o with
+    | none => ok (none,⟨it,3#usize⟩)
+    | some a => do
+      let n ← (3#usize) + 1#usize
+      ok (some (3#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 3 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms saltNext3
+theorem saltNext4 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) saltIter4 = ok (some (4#usize,169#u32),saltIter5) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next saltIter4.iter
+    match o with
+    | none => ok (none,⟨it,4#usize⟩)
+    | some a => do
+      let n ← (4#usize) + 1#usize
+      ok (some (4#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 4 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms saltNext4
+theorem saltNext5 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) saltIter5 = ok (some (5#usize,186#u32),saltIter6) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next saltIter5.iter
+    match o with
+    | none => ok (none,⟨it,5#usize⟩)
+    | some a => do
+      let n ← (5#usize) + 1#usize
+      ok (some (5#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 5 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms saltNext5
+theorem saltNext6 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) saltIter6 = ok (some (6#usize,203#u32),saltIter7) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next saltIter6.iter
+    match o with
+    | none => ok (none,⟨it,6#usize⟩)
+    | some a => do
+      let n ← (6#usize) + 1#usize
+      ok (some (6#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 6 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms saltNext6
+theorem saltNext7 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) saltIter7 = ok (some (7#usize,220#u32),saltIter8) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next saltIter7.iter
+    match o with
+    | none => ok (none,⟨it,7#usize⟩)
+    | some a => do
+      let n ← (7#usize) + 1#usize
+      ok (some (7#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_pos (by change 7 < 8; decide)]
+  simp only [bind_tc_ok]
+  rw [uadd _ _ (by simp; omega)]
+  with_unfolding_all rfl
+#print axioms saltNext7
+theorem saltNext8 : core.iter.adapters.enumerate.IteratorEnumerate.next
+    (core.iter.traits.iterator.IteratorSliceIter U32) saltIter8 = ok (none,saltIter8) := by
+  unfold core.iter.adapters.enumerate.IteratorEnumerate.next
+  change (do
+    let (o,it) ← core.slice.iter.IteratorSliceIter.next saltIter8.iter
+    match o with
+    | none => ok (none,⟨it,8#usize⟩)
+    | some a => do
+      let n ← (8#usize) + 1#usize
+      ok (some (8#usize,a),⟨it,n⟩)) = _
+  unfold core.slice.iter.IteratorSliceIter.next
+  simp only [Slice.len_val]
+  rw [dif_neg (by change ¬ (8 < 8); decide)]
+  with_unfolding_all rfl
+#print axioms saltNext8
+theorem absorb_salt : poseidon2.hash_fields_with_trace_loop0_loop0 saltIter s4_23 = ok s5_0 := by
+  change poseidon2.hash_fields_with_trace_loop0_loop0 saltIter0 saltState0 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,saltNext0]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 saltIter1 saltState1 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,saltNext1]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 saltIter2 saltState2 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,saltNext2]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 saltIter3 saltState3 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,saltNext3]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 saltIter4 saltState4 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,saltNext4]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 saltIter5 saltState5 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,saltNext5]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 saltIter6 saltState6 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,saltNext6]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 saltIter7 saltState7 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,saltNext7]
+  change poseidon2.hash_fields_with_trace_loop0_loop0 saltIter8 saltState8 = _
+  rw [poseidon2.hash_fields_with_trace_loop0_loop0,saltNext8]
+  with_unfolding_all rfl
+#print axioms absorb_salt
+end R1Z.PV_RunJoin_NullifierControl17

@@ -1,0 +1,30 @@
+def Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next : {I Item : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator I Item →
+    Aeneas.Std.core.iter.adapters.enumerate.Enumerate I →
+      Aeneas.Std.Result (Option (Aeneas.Std.Usize × Item) × Aeneas.Std.core.iter.adapters.enumerate.Enumerate I) :=
+fun {I Item} IteratorInst self => do
+  let __x ← IteratorInst.next self.iter
+  match __x with
+    | (opt, iter') =>
+      match opt with
+      | none => Aeneas.Std.Result.ok (none, { iter := iter', count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        Aeneas.Std.Result.ok (some (self.count, a), { iter := iter', count := count' })
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.Iter T → Aeneas.Std.Result (Option T × Aeneas.Std.core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    Aeneas.Std.Result.ok (some x, it)
+  else Aeneas.Std.Result.ok (none, it)
+def Aeneas.Std.core.slice.Slice.iter : {T : Type} →
+  Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.core.slice.iter.Iter T) :=
+fun {T} s => Aeneas.Std.Result.ok { slice := s, i := 0 }
+def Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate.trait_default : {Self Item : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator Self Item →
+    Self → Aeneas.Std.Result (Aeneas.Std.core.iter.adapters.enumerate.Enumerate Self) :=
+fun {Self Item} _IteratorInst self => Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate.default self
+@[irreducible] def Aeneas.Std.Usize.max : ℕ :=
+Aeneas.Std.wrapped✝.1

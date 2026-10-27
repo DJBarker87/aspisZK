@@ -1,0 +1,91 @@
+'R1Z.PV_RunJoin_LateAppend18.from_parts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LateAppend18.append_tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_LateAppend18.lean:63:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RunJoin_ZeroConstructor18.tree.append_one_with_empty_roots leaf PV_Src_CanonicalRoots.table
+in the target expression
+  (do
+      let r1 ←
+        BuilderAdmissionStd.mapErr (BuiltinFnOnce incremental_merkle.PoolV1TreeError pair_trace.PoolV1PairTraceErrorV1)
+            (core.result.Result.Ok PV_RunJoin_ZeroConstructor18.tree) pair_trace.PoolV1PairTraceErrorV1.TreeCtor
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r2 ← val.append_one_with_empty_roots leaf PV_Src_CanonicalRoots.table
+          let r3 ←
+            BuilderAdmissionStd.mapErr
+                (BuiltinFnOnce incremental_merkle.PoolV1TreeError pair_trace.PoolV1PairTraceErrorV1) r2
+                pair_trace.PoolV1PairTraceErrorV1.TreeCtor
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let a ← records.append_root
+              let b ← core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a val1.1.root
+              if b = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SnapshotBindingMismatch)
+                else
+                  ok
+                    (core.result.Result.Ok
+                      { next_pair_index := val1.1.next_leaf_index, next_root := val1.1.root,
+                        next_frontier := val1.1.frontier })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1)
+            residual) =
+    ok (core.result.Result.Ok (result leaf root))
+
+records : pair_forest_copy_builder.CopyRecords
+leaf root : Digest
+ha :
+  PV_RunJoin_ZeroConstructor18.tree.append_one_with_empty_roots leaf PV_Src_CanonicalRoots.table =
+    ok (core.result.Result.Ok (after leaf root, receipt root))
+hc : records.append_root = ok root
+⊢ (do
+      let r1 ←
+        BuilderAdmissionStd.mapErr (BuiltinFnOnce incremental_merkle.PoolV1TreeError pair_trace.PoolV1PairTraceErrorV1)
+            (core.result.Result.Ok PV_RunJoin_ZeroConstructor18.tree) pair_trace.PoolV1PairTraceErrorV1.TreeCtor
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r2 ← val.append_one_with_empty_roots leaf PV_Src_CanonicalRoots.table
+          let r3 ←
+            BuilderAdmissionStd.mapErr
+                (BuiltinFnOnce incremental_merkle.PoolV1TreeError pair_trace.PoolV1PairTraceErrorV1) r2
+                pair_trace.PoolV1PairTraceErrorV1.TreeCtor
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let a ← records.append_root
+              let b ← core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a val1.1.root
+              if b = true then ok (core.result.Result.Err pair_trace.PoolV1PairTraceErrorV1.SnapshotBindingMismatch)
+                else
+                  ok
+                    (core.result.Result.Ok
+                      { next_pair_index := val1.1.next_leaf_index, next_root := val1.1.root,
+                        next_frontier := val1.1.frontier })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pair_trace.PoolV1PairTraceErrorV1)
+            residual) =
+    ok (core.result.Result.Ok (result leaf root))
+'R1Z.PV_RunJoin_LateAppend18.late' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LateAppend18.transfer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LateAppend18.withdrawal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

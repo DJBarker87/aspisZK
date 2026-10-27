@@ -1,0 +1,36 @@
+import R1Z.PV_RunJoin_ZeroConstructor18
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_OwnedConstructor18
+open Aeneas Aeneas.Std Result
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+local instance : R0Z.WriterRefine.ExternalLinear := PV_Src_ExternalReference.dictionary
+
+def owned : incremental_merkle.tree_reference.OwnedTree := {
+  inner := PV_RunJoin_ZeroConstructor18.tree
+  empty := PV_Src_CanonicalRoots.table }
+
+theorem construct : incremental_merkle.tree_reference.OwnedTree.from_parts
+    PV_RunJoin_FixtureArguments.snapshot.next_pair_index
+    PV_RunJoin_FixtureArguments.snapshot.current_root
+    PV_RunJoin_FixtureArguments.snapshot.frontier PV_Src_CanonicalRoots.table = ok (.Ok owned) := by
+  rw [incremental_merkle.tree_reference.OwnedTree.from_parts]
+  change (do
+    let r ← incremental_merkle.tree_reference.validate_owned PV_RunJoin_ZeroConstructor18.tree PV_Src_CanonicalRoots.table
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+    | core.ops.control_flow.ControlFlow.Continue _ => ok (.Ok owned)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual _
+        (core.convert.FromSame incremental_merkle.PoolV1TreeError) residual) = _
+  rw [PV_RunJoin_ZeroConstructor18.validate]
+  rfl
+#print axioms construct
+
+theorem carry (leaf : Array U32 8#usize) : incremental_merkle.tree_reference.OwnedTree.append_one_loop
+    0#u64 PV_Src_CanonicalRoots.table PV_RunJoin_FixtureArguments.snapshot.frontier leaf 0#usize =
+    ok (PV_RunJoin_FixtureArguments.snapshot.frontier,leaf,0#usize) := by
+  rw [incremental_merkle.tree_reference.OwnedTree.append_one_loop,format.POOL_V1_TREE_DEPTH]
+  with_unfolding_all rfl
+#print axioms carry
+end R1Z.PV_RunJoin_OwnedConstructor18
