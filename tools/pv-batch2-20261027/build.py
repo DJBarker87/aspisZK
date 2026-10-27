@@ -20,7 +20,12 @@ if mode=='devnet':
  ids=json.loads((H/'r1-devnet.template.json').read_text())['programs'];env.update(ASPIS_R1_POOL_PROGRAM_ID=ids['pool'],ASPIS_R1_REGISTRY_PROGRAM_ID=ids['registry'])
 (out/'command.json').write_text(json.dumps(dict(command=cmd,source_revision=rev,env={k:v for k,v in env.items() if k.startswith(('CARGO_','ASPIS_','S10_','RUST'))},precedent='evidence/lowering2-20261026/Low2_build_host.py'),indent=2)+'\n')
 run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3','/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py',str(out/'admission-barrier.json'),'python3',str(runner),str(out/'receipt'),'optimized SBF compilation and diagnostic emission','--','timeout','600',*cmd]
-status=subprocess.run(run,cwd=W/'src',env=env).returncode
+with (out/'scope.log').open('w') as log:
+ status=subprocess.run(run,cwd=W/'src',env=env,stdout=log,stderr=subprocess.STDOUT).returncode
+barrier=out/'admission-barrier.json'
+if barrier.exists() and json.loads(barrier.read_text()).get('allowed') is not True:
+ (out/'refusal-classification.json').write_text(json.dumps(dict(raw_exit=status,classified_exit=78,reason='reservation barrier refused; no command ran'))+'\n')
+ sys.exit(78)
 if status:sys.exit(status)
 a=out/'artifacts'/('aspis_pool.so' if mode=='pool' else 'aspis_r1_cost_probe_program.so')
 pins={'default':'f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4','devnet':'63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299','pool':'121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548'}
