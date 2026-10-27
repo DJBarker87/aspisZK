@@ -1,0 +1,28 @@
+import JGr_M2Level14
+import JGc_TX2_M2Root
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGr_M2Roots
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open OracleDecisionMultiTree
+def input136 : Bytes := JGc_TX2_M2Roots.input161
+def value136 : State := JGc_TX2_M2Roots.value161
+theorem hash136 : JFp_SHADigest.digest input136=value136 := JGc_TX2_M2Roots.hash161
+#print axioms hash136
+theorem address136 : BinMerkle32Path.nodeInput (children value134 value135)=input136 := by rfl
+#print axioms address136
+def tree136 : Tree := .branch tree134 tree135
+theorem root136 : root JFp_SHADigest.digest tree136=value136 := by
+  rw [tree136,root,root134,root135]
+  exact (congrArg JFp_SHADigest.digest address136).trans hash136
+#print axioms root136
+theorem shape136 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 16 0=tree136 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 16 0)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape134 f g inputs siblings]
+  rw [shape135 f g inputs siblings]
+  rfl
+#print axioms shape136
+end AspisR1.JGr_M2Roots
+end

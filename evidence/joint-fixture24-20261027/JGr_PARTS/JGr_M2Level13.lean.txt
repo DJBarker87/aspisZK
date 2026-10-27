@@ -1,0 +1,77 @@
+import JGr_M2Level12
+import JGc_TX2_M2Root
+import JGr_M2C021
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGr_M2Roots
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open OracleDecisionMultiTree
+def input131 : Bytes := JGc_TX2_HashBytes.bytes JGr_M2.Hash131.message
+def value131 : State := JFp_SHADigest.output JGr_M2.Hash131.result
+theorem cast131_0 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash131.B00.input).map Fin.val=JGr_M2.Hash131.B00.input := by rfl
+#print axioms cast131_0
+theorem tail131 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash131.tail).map Fin.val=JGr_M2.Hash131.tail := by rfl
+#print axioms tail131
+theorem numeric131 : (JGc_TX2_HashBytes.bytes JGr_M2.Hash131.message).map Fin.val=JGr_M2.Hash131.message := by
+  simp only [JGr_M2.Hash131.message,JGr_M2.Hash131.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast131_0,tail131]
+#print axioms numeric131
+theorem hash131 : JFp_SHADigest.digest input131=value131 := by
+  unfold input131 JFp_SHADigest.digest
+  rw [numeric131,JGr_M2.Hash131.checked]
+  rfl
+#print axioms hash131
+theorem address131 : BinMerkle32Path.nodeInput (children value126 (JGc_TX2_HashBytes.state [34,112,182,144,67,6,64,238,194,132,59,239,67,247,9,55,180,77,17,67,178,157,110,43,220,71,83,104,67,4,240,73]))=input131 := by rfl
+#print axioms address131
+def tree131 : Tree := .branch tree126 (.supplied (JGc_TX2_HashBytes.state [34,112,182,144,67,6,64,238,194,132,59,239,67,247,9,55,180,77,17,67,178,157,110,43,220,71,83,104,67,4,240,73]))
+theorem root131 : root JFp_SHADigest.digest tree131=value131 := by
+  rw [tree131,root,root126]
+  exact (congrArg JFp_SHADigest.digest address131).trans hash131
+#print axioms root131
+theorem shape131 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 14 16384=tree131 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 14 16384)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape126 f g inputs siblings]
+  rw [unoccupied f g 13 24576 (by decide),siblings 13 (by decide) 24576 (by decide)]
+  rfl
+#print axioms shape131
+def input132 : Bytes := JGc_TX2_M2Roots.input157
+def value132 : State := JGc_TX2_M2Roots.value157
+theorem hash132 : JFp_SHADigest.digest input132=value132 := JGc_TX2_M2Roots.hash157
+#print axioms hash132
+theorem address132 : BinMerkle32Path.nodeInput (children value127 value128)=input132 := by rfl
+#print axioms address132
+def tree132 : Tree := .branch tree127 tree128
+theorem root132 : root JFp_SHADigest.digest tree132=value132 := by
+  rw [tree132,root,root127,root128]
+  exact (congrArg JFp_SHADigest.digest address132).trans hash132
+#print axioms root132
+theorem shape132 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 14 32768=tree132 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 14 32768)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape127 f g inputs siblings]
+  rw [shape128 f g inputs siblings]
+  rfl
+#print axioms shape132
+def input133 : Bytes := JGc_TX2_M2Roots.input158
+def value133 : State := JGc_TX2_M2Roots.value158
+theorem hash133 : JFp_SHADigest.digest input133=value133 := JGc_TX2_M2Roots.hash158
+#print axioms hash133
+theorem address133 : BinMerkle32Path.nodeInput (children value129 value130)=input133 := by rfl
+#print axioms address133
+def tree133 : Tree := .branch tree129 tree130
+theorem root133 : root JFp_SHADigest.digest tree133=value133 := by
+  rw [tree133,root,root129,root130]
+  exact (congrArg JFp_SHADigest.digest address133).trans hash133
+#print axioms root133
+theorem shape133 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 14 49152=tree133 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 14 49152)]
+  simp only [Nat.reducePow,Nat.reduceAdd]
+  rw [shape129 f g inputs siblings]
+  rw [shape130 f g inputs siblings]
+  rfl
+#print axioms shape133
+end AspisR1.JGr_M2Roots
+end
