@@ -47,13 +47,13 @@ theorem selected (c1 : Array Q 16#usize) :
       scatter c1 host_arithmetic.FACTOR_EXPONENTS selectedIndices
         (Array.repeat 27#usize aspis_core.field.QM31.ZERO) := by
   unfold host_arithmetic.selected_coefficients selectedIndices
-  simp only [scatter, PV_B3_Result.bind_assoc, bind_tc_ok]
+  simp only [scatter, PV_B3_Result.bind_assoc, bind_tc_ok] <;> with_unfolding_all rfl
 
 theorem mask_only (coefficients : Coefficients) (mask : Array Q 10#usize) :
     host_arithmetic.mask_only_coefficients coefficients mask =
       scatter mask host_arithmetic.MASK_ONLY_FACTOR_EXPONENTS maskIndices coefficients := by
   unfold host_arithmetic.mask_only_coefficients maskIndices
-  simp only [scatter, PV_B3_Result.bind_assoc, bind_tc_ok]
+  simp only [scatter, PV_B3_Result.bind_assoc, bind_tc_ok] <;> with_unfolding_all rfl
 
 theorem prepared_horner (coefficients : Coefficients) (linear : Q) :
     host_arithmetic.selected_horner coefficients linear =
@@ -63,7 +63,7 @@ theorem prepared_horner (coefficients : Coefficients) (linear : Q) :
           aspis_core.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE
         horner coefficients prepared hornerIndices shared) := by
   unfold host_arithmetic.selected_horner hornerIndices
-  simp only [horner, PV_B3_Result.bind_assoc, bind_tc_ok]
+  simp only [horner, PV_B3_Result.bind_assoc, bind_tc_ok] <;> with_unfolding_all rfl
 
 #print axioms selectedIndices
 #print axioms maskIndices
