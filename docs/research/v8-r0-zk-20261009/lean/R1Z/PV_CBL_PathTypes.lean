@@ -4,17 +4,17 @@ namespace R1Z.PV_CBL_PathTypes
 open ProverRwFull
 set_option autoImplicit false
 
-/-- Unix path views and owned paths are represented by their complete byte
-sequence. Invalid UTF-8 is retained. The native representation relation is
-separate P6 evidence; this is not a filesystem/world interpretation. -/
+/-- A path view is represented by its owned PathBuf carrier. The existing
+opaque PathBuf carrier is retained, with no byte-layout or UTF-8 restriction.
+Native view/owner association is separate P6 evidence, not a world instance. -/
 @[reducible] def selectedTypes (base : ExternalTypes) : ExternalTypes :=
-  { base with op2 := alloc.vec.Vec U8, op4 := alloc.vec.Vec U8 }
+  { base with op2 := base.op4 }
 
 theorem path_carrier (base : ExternalTypes) :
-    @std.path.Path (selectedTypes base) = alloc.vec.Vec U8 := rfl
+    @std.path.Path (selectedTypes base) = @std.path.PathBuf base := rfl
 
 theorem pathbuf_carrier (base : ExternalTypes) :
-    @std.path.PathBuf (selectedTypes base) = alloc.vec.Vec U8 := rfl
+    @std.path.PathBuf (selectedTypes base) = @std.path.PathBuf base := rfl
 
 #print axioms path_carrier
 #print axioms pathbuf_carrier

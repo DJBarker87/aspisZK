@@ -1,0 +1,35 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0439); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_ShaCount.lean:7:2: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+n : Usize
+⊢ ↑(UScalar.cast UScalarTy.U64 n) = ↑n
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_ShaCount.lean:13:2: error: Tactic `rfl` failed: The left-hand side
+  (↑old + ↑n) % UScalar.size UScalarTy.U64
+is not definitionally equal to the right-hand side
+  (↑old + ↑n) % 2 ^ 64
+
+old : U64
+n : Usize
+⊢ (↑old + ↑n) % UScalar.size UScalarTy.U64 = (↑old + ↑n) % 2 ^ 64
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_ShaCount.lean:21:25: error: Application type mismatch: The argument
+  UScalar.hSize old
+has type
+  ↑old < UScalar.size UScalarTy.U64
+but is expected to have type
+  ↑old < 2 ^ 64
+in the application
+  Nat.mod_eq_of_lt (UScalar.hSize old)
+'R1Z.PV_CBL_ShaCount.cast_count' depends on axioms: [sorryAx]
+'R1Z.PV_CBL_ShaCount.wrapping_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_ShaCount.zero_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.06
+	Maximum resident set size (kbytes): 2627548
+	Swaps: 0
+	Exit status: 1

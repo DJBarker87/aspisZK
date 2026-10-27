@@ -64,3 +64,21 @@ pub fn join_bytes_reference(base: &[u8], path: &[u8]) -> Vec<u8> {
     while j<path.len() { out.push(path[j]); j+=1; }
     out
 }
+// Exact native owned carrier for a pure PathBuf view. No layout is exposed.
+pub fn path_owned_reference(p: std::path::PathBuf) -> std::path::PathBuf { p }
+
+pub fn array_qm31_reference(v: &[aspis_core::field::QM31]) -> Option<[aspis_core::field::QM31;1024]> {
+    array_reference(v,aspis_core::field::QM31::ZERO)
+}
+pub fn split_owned_reference(data: &[u8], size: usize) -> (Vec<Vec<u8>>,Vec<u8>) {
+    let count=data.len()/size;
+    let mut blocks=Vec::new();let mut i=0;
+    while i<count {
+        let mut block=Vec::new();let mut j=0;
+        while j<size {block.push(data[i*size+j]);j+=1;}
+        blocks.push(block);i+=1;
+    }
+    let mut tail=Vec::new();let mut k=count*size;
+    while k<data.len() {tail.push(data[k]);k+=1;}
+    (blocks,tail)
+}

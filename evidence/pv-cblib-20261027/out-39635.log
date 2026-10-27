@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_Op208Outcomes.lean:20:22: error: unsolved goals
+base : ExternalTypes
+compress : PV_CBL_Op208Extracted.Compression base
+self : PV_CBL_ShaCore.Core
+blocks : PV_CBL_ShaTypes.Blocks base
+⊢ (do
+      let i1 ← ok (UScalar.cast UScalarTy.U64 (Slice.len blocks))
+      let i2 ← ok (self.block_len.wrapping_add i1)
+      let a ← compress self.state blocks
+      ok { state := a, block_len := i2 }) =
+    match compress self.state blocks with
+    | ok state =>
+      ok { state := state, block_len := self.block_len.wrapping_add (UScalar.cast UScalarTy.U64 (Slice.len blocks)) }
+    | fail e => fail e
+    | div => div
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_Op208Outcomes.lean:21:78: warning: This simp argument is unused:
+  Aeneas.Std.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_CBL_Op208Extracted.update_blocks, nextCount, Aeneas.Std.lift,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CBL_Op208Outcomes.full_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

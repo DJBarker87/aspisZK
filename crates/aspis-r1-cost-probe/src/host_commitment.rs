@@ -430,6 +430,46 @@ mod pv_cblib_library_checks {
         }
         (v,w)
     }
+    fn array_reference(v: &[QM31]) -> Option<[QM31;1024]> {
+        if v.len()!=1024 {return None;}
+        let mut out=[QM31::ZERO;1024];let mut i=0;
+        while i<1024 {out[i]=v[i];i+=1;}
+        Some(out)
+    }
+    fn arbitrary_q() -> QM31 {
+        QM31 {c0:aspis_core::field::CM31 {a:M31(kani::any()),b:M31(kani::any())},
+              c1:aspis_core::field::CM31 {a:M31(kani::any()),b:M31(kani::any())}}
+    }
+    #[kani::proof]
+    #[kani::unwind(1030)]
+    fn op36_exact_qm31() {
+        let success:bool=kani::any();
+        let i:usize=kani::any();
+        if success {
+            let mut input=[QM31::ZERO;1024];
+            for j in 0..1024 {input[j]=arbitrary_q();}
+            let v=Vec::from(input);
+            let reference=array_reference(&v);
+            let native:Result<[QM31;1024],Vec<QM31>>=v.try_into();
+            match (native,reference) {
+                (Ok(a),Some(b)) => assert_eq!(a.get(i),b.get(i)),
+                _ => unreachable!(),
+            }
+        } else {
+            let n:usize=kani::any();kani::assume(n<=2);
+            let values=[arbitrary_q(),arbitrary_q()];let mut v=Vec::new();
+            for j in 0..n {v.push(values[j]);}
+            let reference=array_reference(&v);
+            let native:Result<[QM31;1024],Vec<QM31>>=v.try_into();
+            match (native,reference) {
+                (Err(a),None) => {
+                    assert_eq!(a.len(),n);
+                    assert_eq!(a.get(i),if i<n {Some(&values[i])}else{None});
+                },
+                _ => unreachable!(),
+            }
+        }
+    }
     #[kani::proof]
     fn op35_exact_word() {
         let native = Vec::<Result<Word, Error>>::default();

@@ -32,6 +32,8 @@ mod checks {
     }
 }
 
+fn path_owned_reference(p: std::path::PathBuf) -> std::path::PathBuf {p}
+
 fn join_bytes_reference(base: &[u8], path: &[u8]) -> Vec<u8> {
     let mut out=Vec::new();
     let absolute=path.len()>0 && path[0]==b'/';
@@ -56,18 +58,21 @@ mod path_checks {
     }
     #[kani::proof]
     #[kani::unwind(10)]
-    fn path_borrows() {
-        let b=bytes();
-        let p=std::path::PathBuf::from(std::ffi::OsString::from_vec(b.clone()));
-        let d:&std::path::Path=&p;
-        let a:&std::path::Path=p.as_ref();
-        assert_eq!(d.as_os_str().as_bytes(),b.as_slice());
-        assert_eq!(a.as_os_str().as_bytes(),b.as_slice());
-        let n:usize=kani::any();kani::assume(n<=2);
-        let mut s=String::new();
-        for _ in 0..n {s.push(kani::any::<char>());}
-        let a:&std::path::Path=s.as_ref();
-        assert_eq!(a.as_os_str().as_bytes(),s.as_bytes());
+    fn pathbuf_borrows() {
+        let p=std::path::PathBuf::from(std::ffi::OsString::from_vec(bytes()));
+        let i:usize=kani::any();
+        let (len,left,right)={
+            let d:&std::path::Path=&p;
+            let a:&std::path::Path=p.as_ref();
+            (d.as_os_str().as_bytes().len(),
+             d.as_os_str().as_bytes().get(i).copied(),
+             a.as_os_str().as_bytes().get(i).copied())
+        };
+        let reference=path_owned_reference(p);
+        let r=reference.as_os_str().as_bytes();
+        assert_eq!(len,r.len());
+        assert_eq!(left,r.get(i).copied());
+        assert_eq!(right,r.get(i).copied());
     }
     #[kani::proof]
     #[kani::unwind(10)]

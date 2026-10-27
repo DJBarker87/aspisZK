@@ -5,6 +5,10 @@ root=Path(__file__).resolve().parents[2];stage=sys.argv[1]; variant=sys.argv[2] 
 assert stage in ('charon','aeneas')
 base='/home/dombarker/project-offloads/codex-pv-cblib-20261027';gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy';pinned='/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools'
 entries={
+'op215-mono':('pv_cblib_source::sha_finalize_into','digest::core_api::wrapper::{impl digest::FixedOutput for _}::finalize_into+digest::core_api::wrapper::CoreWrapper','PV_CBL_Op215Mono'),
+'op209-ref-opt':('pv_cblib_source::split_owned_reference','pv_cblib_source::split_owned_reference','PV_CBL_Op209Reference'),
+'op36-qm31-opt':('pv_cblib_source::array_qm31_reference','pv_cblib_source::array_reference+pv_cblib_source::array_qm31_reference','PV_CBL_Op36QM31Reference'),
+'path-owned-opt':('pv_cblib_source::path_owned_reference','pv_cblib_source::path_owned_reference','PV_CBL_PathOwnedReference'),
 'join-ref':('pv_cblib_source::join_bytes_reference','pv_cblib_source::join_bytes_reference','PV_CBL_JoinBytesReference'),
 'op33-owned-opt':('pv_cblib_source::pop_owned_reference','pv_cblib_source::pop_owned_reference','PV_CBL_Op33OwnedReference'),
 'op36-ref-opt':('pv_cblib_source::array_reference','pv_cblib_source::array_reference','PV_CBL_Op36Reference'),
@@ -16,7 +20,7 @@ entries={
 'op217-opt':('pv_cblib_source::sha_default','digest::core_api::wrapper::{impl core::default::Default for _}::default','PV_CBL_Op217Opt'),
 'op219-opt':('pv_cblib_source::sha_finalize_fixed','digest::core_api::ct_variable::{impl digest::core_api::FixedOutputCore for _}::finalize_fixed_core','PV_CBL_Op219Opt'),
 'op35-opt':('pv_cblib_source::vec_default','alloc::vec::{impl core::default::Default for alloc::vec::Vec<_>}::default','PV_CBL_Op35Opt'),
-'op212-opt':('pv_cblib_source::finalize','digest::digest::_::finalize','PV_CBL_Op212Opt'),
+'op212-opt':('pv_cblib_source::finalize','digest::digest::_::finalize+digest::FixedOutput::finalize_fixed','PV_CBL_Op212Opt'),
 'op212':('{impl digest::digest::Digest for _}::finalize','digest::digest::{impl digest::digest::Digest for _}::finalize','PV_CBL_Op212'),
 'op34-ref':('pv_cblib_source::empty_reference','pv_cblib_source::empty_reference','PV_CBL_Op34Reference'),
 'op35-ref':('pv_cblib_source::default_reference','pv_cblib_source::default_reference','PV_CBL_Op35Reference'),
@@ -44,7 +48,7 @@ def ssh(c):return subprocess.run(['ssh','dombarker@100.108.41.90',c],text=True,c
 r=ssh(f'mkdir -p {base}/{name}; python3 {gate}/reservation.py {base}/{name}/admission-before.json > {base}/{name}/reservation.log 2>&1; cat {base}/{name}/reservation.log');(out/'admission-transport.log').write_text(r.stdout+r.stderr)
 if not json.loads(r.stdout)['allowed']:print('REFUSED');sys.exit(78)
 if stage=='charon':
- args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',pinned+'/charon','cargo','--preset','aeneas',*(['--hide-allocator'] if True else []),'--mir',('optimized' if variant.endswith('-opt') else 'built'),'--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,*sum((['--include',x] for x in include.split('+')),[]),*(['--opaque','alloc::vec::Vec','--opaque','alloc::vec::_::new','--opaque','alloc::vec::_::len','--opaque','alloc::vec::_::remove'] if variant in ('op34','op35','op35-opt','op33','op36','op34-ref','op35-ref','op33-ref','op33-owned-opt') else []),'--dest-file',base+'/'+namespace+'.llbc','--','--manifest-path',base+'/source-proof/Cargo.toml','--release','--offline','--lib','--jobs','4']
+ args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',pinned+'/charon','cargo','--preset','aeneas',*(['--hide-allocator'] if True else []),*(['--monomorphize','--precise-drops','--desugar-drops'] if variant.endswith('-mono') else []),'--mir',('optimized' if variant.endswith(('-opt','-mono')) else 'built'),'--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,*sum((['--include',x] for x in include.split('+')),[]),*(['--opaque','alloc::vec::Vec','--opaque','alloc::vec::_::new','--opaque','alloc::vec::_::len','--opaque','alloc::vec::_::remove'] if variant in ('op34','op35','op35-opt','op33','op36','op34-ref','op35-ref','op33-ref','op33-owned-opt') else []),'--dest-file',base+'/'+namespace+'.llbc','--','--manifest-path',base+'/source-proof/Cargo.toml','--release','--offline','--lib','--jobs','4']
 else:
  args=['timeout','120',pinned+'/aeneas','-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',namespace,'-dest',base+'/'+variant+'-generated','-split-files','-emit-json',base+'/'+namespace+'.llbc']
  assert ssh(f'mkdir -p {base}/{variant}-generated').returncode==0
@@ -54,3 +58,4 @@ cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','
 r=ssh(shlex.join(cmd)+f' > {base}/{name}/output.log 2>&1');(out/'transport.log').write_text(r.stdout+r.stderr)
 subprocess.run([sys.executable,str(root/'tools/pv-cblib-20261027/collect_native.py'),name,'source-proof/lib.rs','source-proof/Cargo.toml','kani-proof/lib.rs','kani-proof/reference.rs','kani-proof/Cargo.toml','source-proof/Cargo.lock',namespace+'.llbc',variant+'-generated/Funs.lean',variant+'-generated/Types.lean'],check=True)
 p=out/'collected-receipt.json';r=json.loads(p.read_text());r.update(receipt);p.write_text(json.dumps(r,indent=2)+'\n');print(r['exit'])
+sys.exit(int(r['exit']) if r['exit'] is not None else 78)

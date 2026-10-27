@@ -92,3 +92,30 @@ Rejected follow-on fact attempts 39615/39616 are retained: a scalar-zero
 transport, an unavailable Result.map API, and a redundant final tactic were
 fixed in the source accepted at 39618. Failed diagnostics do not count as
 accepted axioms. The preservation facts pass at 39619, inventory at 39620.
+
+## Three-operation stage: op208, op25, op29
+
+V177/op25 and V180/op29 now have source laws through the complete
+PV_CBL_CallbackBundle.selectedAll carrier/dictionary (39650). Earlier stable
+selected/op34_source/op35_source names are retained, with op34_source_all and
+op35_source_all added for the full carrier. No source name was renamed.
+
+PathBuf P6: kani-pathbuf-borrows-r01 passes all 353 checks: 1.23s wall,
+175380KiB peak RSS, swap0. Native PathBuf bytes have arbitrary length0..4,
+including invalid UTF-8; an arbitrary usize coordinate and lengths establish
+both deref/as_ref byte observations against the actual owned PathBuf identity
+reference. The native/owned input types are actual PathBuf. No layout stub or
+filesystem effect is introduced. The source carrier keeps the existing
+opaque PathBuf and interprets a Path view on that owned carrier.
+
+The combined path_borrows gate timed out at180s and is preserved unchanged.
+It combined Unicode String work and clone/full-slice observations. The
+replacement removes that unrelated String contract and uses coordinate
+observations without clone allocation. Caps/timeout/input-byte bound were
+not raised. Its expired cgroup is gone and no attributable solver temp files
+remain. GNU time's timeout RSS is explicitly incomplete, not a native peak.
+
+V232/op208 remains OPEN: exact source body, carrier, full Result and selection
+shape are compiled through39648, but compress256 is still an explicit missing
+source binding (OP208-FRONTIER.md). No opaque compression parameter is counted
+as row discharge.

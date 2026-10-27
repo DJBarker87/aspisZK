@@ -1,4 +1,5 @@
 import R1Z.PV_CBL_Op35Source
+import R1Z.PV_CBL_PathBorrowSource
 open Aeneas Aeneas.Std Result
 noncomputable section
 namespace R1Z.PV_CBL_CallbackBundle
@@ -18,4 +19,39 @@ theorem op35_source (ops : ExternalFuns) (T : Type) :
     (selected ops).op35 T = PV_CBL_Op35Reference.default_reference T := rfl
 #print axioms op35_source
 #print axioms op34_source
+/-- Full publication carrier for the pure path-view refinements. -/
+abbrev Types (base : ExternalTypes) := PV_CBL_PathTypes.selectedTypes base
+
+@[reducible] def selectedAll (base : ExternalTypes)
+    (ops : @ExternalFuns (Types base)) : @ExternalFuns (Types base) :=
+  @selected (Types base) (PV_CBL_PathBorrowSource.selected base ops)
+
+omit [ExternalTypes] in
+theorem op25_source (base : ExternalTypes) (ops : @ExternalFuns (Types base))
+    (p : @std.path.PathBuf base) :
+    @ExternalFuns.op25 (Types base) (selectedAll base ops) p =
+      PV_CBL_PathOwnedReference.path_owned_reference base p := rfl
+
+omit [ExternalTypes] in
+theorem op29_source (base : ExternalTypes) (ops : @ExternalFuns (Types base))
+    (p : @std.path.PathBuf base) :
+    @ExternalFuns.op29 (Types base) (selectedAll base ops) p =
+      PV_CBL_PathOwnedReference.path_owned_reference base p := rfl
+
+omit [ExternalTypes] in
+theorem op34_source_all (base : ExternalTypes) (ops : @ExternalFuns (Types base))
+    {T : Type} (A : Type) (v : alloc.vec.Vec T) :
+    @ExternalFuns.op34 (Types base) (selectedAll base ops) T A v =
+      PV_CBL_Op34Reference.empty_reference v := rfl
+
+omit [ExternalTypes] in
+theorem op35_source_all (base : ExternalTypes) (ops : @ExternalFuns (Types base))
+    (T : Type) :
+    @ExternalFuns.op35 (Types base) (selectedAll base ops) T =
+      PV_CBL_Op35Reference.default_reference T := rfl
+
+#print axioms op25_source
+#print axioms op29_source
+#print axioms op34_source_all
+#print axioms op35_source_all
 end R1Z.PV_CBL_CallbackBundle

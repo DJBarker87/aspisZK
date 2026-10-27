@@ -2,13 +2,22 @@
 from pathlib import Path
 import subprocess,time,sys,json,datetime
 root=Path(__file__).resolve().parents[2];out=root/'evidence/pv-cblib-20261027'
-# Honor an outstanding refusal before the first queued request.
-refusals=sorted(out.glob('*-refusal.json'),key=lambda p:p.stat().st_mtime)
-if refusals:
- record=json.loads(refusals[-1].read_text())
- body=record.get('output',record.get('reason',''))
- try: utc=json.loads(body)['utc']; instant=datetime.datetime.fromisoformat(utc).timestamp()
- except (ValueError,KeyError,TypeError): instant=refusals[-1].stat().st_mtime
+# Honor the latest refused admission from this job, including native gates.
+refused_admissions=[]
+for path in out.glob('*-refusal.json'):
+ record=json.loads(path.read_text());body=record.get('output',record.get('reason',''))
+ try: data=json.loads(body);instant=datetime.datetime.fromisoformat(data['utc']).timestamp()
+ except (ValueError,KeyError,TypeError): instant=path.stat().st_mtime
+ refused_admissions.append((instant,body))
+for path in out.glob('*/admission-transport.log'):
+ try:data=json.loads(path.read_text())
+ except ValueError:continue
+ if not data.get('allowed',True):refused_admissions.append((datetime.datetime.fromisoformat(data['utc']).timestamp(),json.dumps(data)))
+for path in out.glob('*/collected-receipt.json'):
+ data=json.loads(path.read_text()).get('admissions',{}).get('admission-barrier.json',{})
+ if data and not data.get('allowed',True):refused_admissions.append((datetime.datetime.fromisoformat(data['utc']).timestamp(),json.dumps(data)))
+if refused_admissions:
+ instant,body=max(refused_admissions)
  delay=30 if 'FileNotFoundError' in body else 180
  seconds=max(0,instant+delay-time.time())
  while seconds>0:
