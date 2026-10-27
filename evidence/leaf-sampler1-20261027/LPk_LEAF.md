@@ -21,3 +21,16 @@ Read: root AGENTS security/proof discipline, common/local rules, S2 handoff,
 plan, diagnosis, interface, C3-BIN route B and P6 rulings, owner amendments,
 D188-P3 and SDX finding. Historical statements are superseded by the binding
 owner amendments. No session A live worktree or candidate is edited.
+
+## Stage 1
+`LPk_Step.unique/machine_step/step_join` prove the bounded natural relation,
+uniqueness and machine-model association. `LPk_Cohort.step_result` proves the
+ACTUAL cohort step Result writes the quotient and satisfies that relation.
+`LPk_Cohort.all_blocks` reuses the cohort's eight-limb/eight-digit inductions
+and proves complete successful Results, ordinary digits, final quotient and
+bound 256 on every block. Accepted receipts L003/L004; standard axioms only.
+L001/L002 are rejected proof errors, repaired before acceptance (not timeouts).
+
+K001 stopped at metadata: missing scratch dependency sources, no Kani launch.
+K002 reached compilation and stopped on a missing unchanged include file.
+The frozen include was copied; no dependency or frozen source was modified.
