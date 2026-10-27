@@ -1,0 +1,313 @@
+def AspisR1PublicPreparation.FinishModel.finish : AspisR1PublicPreparation.RoundModel.Boundaries →
+  AspisR1PublicPreparation.FinishModel.Boundaries →
+    {H : Type} →
+      AspisR1PublicPreparation.aspis_core.Digest32 H →
+        AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          AspisR1PublicPreparation.r1_wire.Prefix →
+            AspisR1PublicPreparation.r1_wire.SemanticTranscript H →
+              AspisR1PublicPreparation.r1_wire.Challenges →
+                Option (AspisR1PublicPreparation.verifier.Phase → Aeneas.Std.Result Unit) →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result (AspisR1PublicPreparation.r1_semantic.Verified H)
+                      AspisR1PublicPreparation.r1_wire.Error) :=
+fun R B {H} aspis_coreDigest32Inst public1 prefix1 transcript challenges obs => do
+  let r ← AspisR1PublicPreparation.RoundModel.rounds R aspis_coreDigest32Inst prefix1 transcript
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+      let (running, alpha, transcript1) := val
+      do
+      AspisR1PublicPreparation.VerifyPrefix.mark obs 2#u8
+      let r1 ← B.claims prefix1
+      let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+          let r2 ← B.terminal public1 val1 alpha challenges
+          let r3 ←
+            AspisR1PublicPreparation.core.result.Result.map_err
+                (AspisR1PublicPreparation.FinishModel.closureFn11 aspis_coreDigest32Inst) r2 ()
+          let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf2 with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+              AspisR1PublicPreparation.VerifyPrefix.mark obs 3#u8
+              let a ← B.fromFn 16#usize (AspisR1PublicPreparation.FinishModel.closureFn9 aspis_coreDigest32Inst) val1
+              let a1 ← B.fromFn 10#usize (AspisR1PublicPreparation.FinishModel.closureFn5 aspis_coreDigest32Inst) val1
+              let a2 ← val1.index_usize 0#usize
+              let q ← a2.index_usize 27#usize
+              let mask ← B.mask a a1 q alpha
+              let r4 ← prefix1.validated_record 25#u8
+              let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+              match cf3 with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr => do
+                  let r5 ← R.decode 29#usize vr 87#usize
+                  let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r5
+                  match cf4 with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let q1 ← B.mul challenges.eta val2
+                      let q2 ← B.add mask q1
+                      let q3 ← val3.index_usize 28#usize
+                      let masked_terminal ← B.add q2 q3
+                      let b ←
+                        Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                            AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 running
+                            masked_terminal
+                      if b = true then
+                          Aeneas.Std.Result.ok
+                            (Aeneas.Std.core.result.Result.Err AspisR1PublicPreparation.r1_wire.Error.Terminal)
+                        else do
+                          AspisR1PublicPreparation.VerifyPrefix.mark obs 4#u8
+                          let state_before_z0 ←
+                            AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state aspis_coreDigest32Inst
+                                transcript1
+                          let cf5 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+                          match cf5 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr1 => do
+                              let (r6, transcript2) ←
+                                AspisR1PublicPreparation.FinishModel.circle_validated B aspis_coreDigest32Inst
+                                    transcript1 vr1
+                              let cf6 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r6
+                              match cf6 with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val4 => do
+                                  let r7 ← prefix1.validated_record 26#u8
+                                  let cf7 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7
+                                  match cf7 with
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                      let r8 ← R.decode 29#usize vr2 0#usize
+                                      let cf8 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r8
+                                      match cf8 with
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val5 => do
+                                          let cf9 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7
+                                          match cf9 with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr3 => do
+                                              let (r9, transcript3) ←
+                                                AspisR1PublicPreparation.FinishModel.circle_validated B
+                                                    aspis_coreDigest32Inst transcript2 vr3
+                                              let cf10 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r9
+                                              match cf10 with
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                  AspisR1PublicPreparation.VerifyPrefix.mark obs 5#u8
+                                                  let b1 ← AspisR1PublicPreparation.FinishModel.pointEq val4 val6
+                                                  if b1 = true then
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.result.Result.Err
+                                                          AspisR1PublicPreparation.r1_wire.Error.EqualCirclePoints)
+                                                    else do
+                                                      let r10 ←
+                                                        AspisR1PublicPreparation.FinishModel.payload prefix1 2#u8
+                                                      let cf11 ←
+                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r10
+                                                      match cf11 with
+                                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val7 =>
+                                                          do
+                                                          let r11 ←
+                                                            Aeneas.Std.core.array.TryFromArrayCopySlice.try_from
+                                                                32#usize Aeneas.Std.core.marker.CopyU8 val7
+                                                          let a3 ← B.unwrapRoot r11
+                                                          Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok
+                                                                {
+                                                                  roots :=
+                                                                    Aeneas.Std.Array.make 2#usize [prefix1.c1_root, a3]
+                                                                      ⋯,
+                                                                  challenges := challenges, alpha := alpha,
+                                                                  claims := val1, extra := val3, before_z1 := val5,
+                                                                  state_before_z0 := state_before_z0,
+                                                                  z := Aeneas.Std.Array.make 2#usize [val4, val6] ⋯,
+                                                                  transcript := transcript3 })
+                                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                            (Aeneas.Std.core.convert.FromSame
+                                                              AspisR1PublicPreparation.r1_wire.Error)
+                                                            residual
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                    (Aeneas.Std.core.convert.FromSame
+                                                      AspisR1PublicPreparation.r1_wire.Error)
+                                                    residual
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                (Aeneas.Std.core.convert.FromSame
+                                                  AspisR1PublicPreparation.r1_wire.Error)
+                                                residual
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                            (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                            residual
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                        (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                        residual
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                    (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (AspisR1PublicPreparation.r1_semantic.Verified H)
+                        (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (AspisR1PublicPreparation.r1_semantic.Verified H)
+                    (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (AspisR1PublicPreparation.r1_semantic.Verified H)
+                (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (AspisR1PublicPreparation.r1_semantic.Verified H)
+            (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (AspisR1PublicPreparation.r1_semantic.Verified H)
+        (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+JGe_Inspection.lean:10:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PublicPreparation.FinishModel.finish_after_rounds`
+JGe_Inspection.lean:11:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PublicPreparation.FinishModel.finish_tail`
+def AspisR1PublicPreparation.transcript.Transcript.new : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    H →
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        AspisR1PublicPreparation.transport.Variant →
+          Aeneas.Std.Result (AspisR1PublicPreparation.transcript.Transcript H) :=
+fun {H} aspis_coreDigest32Inst hash semantic_state variant => do
+  let domain ←
+    Aeneas.Std.lift
+        (Aeneas.Std.Array.make 29#usize
+            [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8, 82#u8, 73#u8,
+              86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+            AspisR1PublicPreparation.transcript.Transcript.new._proof_2).to_slice
+  let i ← variant.tag
+  let s ← Aeneas.Std.lift (Aeneas.Std.Array.make 1#usize [i] ⋯).to_slice
+  let s1 ← Aeneas.Std.lift semantic_state.to_slice
+  let s2 ← Aeneas.Std.lift (Aeneas.Std.Array.make 3#usize [domain, s, s1] ⋯).to_slice
+  let a ← aspis_coreDigest32Inst.digest hash s2
+  Aeneas.Std.Result.ok { state := a, hash := hash }
+JGe_Inspection.lean:13:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PublicPreparation.transcript.Transcript.challenge`
+def AspisR1PublicPreparation.PreparedModel.scalar : AspisR1PublicPreparation.PreparedModel.Boundaries →
+  {H : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 H →
+      AspisR1PublicPreparation.transcript.Transcript H →
+        Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Bool →
+              Aeneas.Std.Result
+                (AspisR1PublicPreparation.aspis_core.field.WideExact ×
+                  AspisR1PublicPreparation.transcript.Transcript H) :=
+fun B {H} aspis_coreDigest32Inst self row payload nonzero => do
+  let (block, self1) ← AspisR1PublicPreparation.transcript.Transcript.block aspis_coreDigest32Inst self row payload
+  let out ← if nonzero = true then B.gamma block else B.ordinary block
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize row)
+  AspisR1PublicPreparation.trace.value 4#u16 i out
+  Aeneas.Std.Result.ok (out, self1)
+def AspisR1PublicPreparation.PreparedModel.scalar_k : AspisR1PublicPreparation.PreparedModel.Boundaries →
+  {H : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 H →
+      AspisR1PublicPreparation.transcript.Transcript H →
+        Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Result
+              (AspisR1PublicPreparation.aspis_core.field.QM31 × AspisR1PublicPreparation.transcript.Transcript H) :=
+fun B {H} aspis_coreDigest32Inst self row payload => do
+  let (a, self1) ← AspisR1PublicPreparation.transcript.Transcript.block aspis_coreDigest32Inst self row payload
+  let out ← AspisR1PublicPreparation.sampler.qm31_sample a
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize row)
+  let we ← B.fromQm out
+  AspisR1PublicPreparation.trace.value 4#u16 i we
+  Aeneas.Std.Result.ok (out, self1)
+structure AspisR1PublicPreparation.PreparedModel.Boundaries : Type 1
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.PreparedModel.Boundaries.toBytes : AspisR1PublicPreparation.aspis_core.field.WideExact →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AspisR1PublicPreparation.PreparedModel.Boundaries.fromQm : AspisR1PublicPreparation.aspis_core.field.QM31 →
+      Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.WideExact
+  AspisR1PublicPreparation.PreparedModel.Boundaries.ordinary : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.WideExact
+  AspisR1PublicPreparation.PreparedModel.Boundaries.gamma : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.WideExact
+  AspisR1PublicPreparation.PreparedModel.Boundaries.queries : {H : Type} →
+      AspisR1PublicPreparation.aspis_core.Digest32 H →
+        AspisR1PublicPreparation.transcript.Transcript H →
+          Aeneas.Std.U8 →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+                    AspisR1PublicPreparation.verifier.Error ×
+                  AspisR1PublicPreparation.transcript.Transcript H)
+  AspisR1PublicPreparation.PreparedModel.Boundaries.claim : {H : Type} →
+      AspisR1PublicPreparation.aspis_core.Digest32 H →
+        AspisR1PublicPreparation.r1_semantic.Verified H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1PublicPreparation.aspis_core.field.WideExact →
+              AspisR1PublicPreparation.aspis_core.field.WideExact →
+                AspisR1PublicPreparation.aspis_core.field.WideExact →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.WideExact
+                      AspisR1PublicPreparation.verifier.Error)
+constructor:
+  AspisR1PublicPreparation.PreparedModel.Boundaries.mk
+    (toBytes :
+      AspisR1PublicPreparation.aspis_core.field.WideExact → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (fromQm :
+      AspisR1PublicPreparation.aspis_core.field.QM31 →
+        Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.WideExact)
+    (ordinary gamma :
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.WideExact)
+    (queries :
+      {H : Type} →
+        AspisR1PublicPreparation.aspis_core.Digest32 H →
+          AspisR1PublicPreparation.transcript.Transcript H →
+            Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+                      AspisR1PublicPreparation.verifier.Error ×
+                    AspisR1PublicPreparation.transcript.Transcript H))
+    (claim :
+      {H : Type} →
+        AspisR1PublicPreparation.aspis_core.Digest32 H →
+          AspisR1PublicPreparation.r1_semantic.Verified H →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              AspisR1PublicPreparation.aspis_core.field.WideExact →
+                AspisR1PublicPreparation.aspis_core.field.WideExact →
+                  AspisR1PublicPreparation.aspis_core.field.WideExact →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.WideExact
+                        AspisR1PublicPreparation.verifier.Error)) :
+    AspisR1PublicPreparation.PreparedModel.Boundaries
+JGe_Inspection.lean:17:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentCaller.InstalledPreparation.closedSampling`
+def AspisR1CurrentCaller.OriginalSerializerInstallation.withOriginalSerializer : AspisR1PublicPreparation.PreparedModel.Boundaries →
+  AspisR1PublicPreparation.PreparedModel.Boundaries :=
+fun sampling =>
+  { toBytes := AspisR1CurrentCaller.OriginalSerializerInstallation.sourceBytes, fromQm := sampling.fromQm,
+    ordinary := sampling.ordinary, gamma := sampling.gamma,
+    queries := @AspisR1PublicPreparation.PreparedModel.Boundaries.queries sampling,
+    claim := @AspisR1PublicPreparation.PreparedModel.Boundaries.claim sampling }
+structure AspisR1PublicPreparation.verifier.View : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.verifier.View.variant : AspisR1PublicPreparation.transport.Variant
+  AspisR1PublicPreparation.verifier.View.semantic : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1PublicPreparation.verifier.View.y1 : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1PublicPreparation.verifier.View.inactive : AspisR1PublicPreparation.aspis_core.field.WideExact
+  AspisR1PublicPreparation.verifier.View.round0 : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1PublicPreparation.verifier.View.folded_root : Option (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AspisR1PublicPreparation.verifier.View.round1 : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1PublicPreparation.verifier.View.final_message : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1PublicPreparation.verifier.View.query_bytes : Aeneas.Std.Slice Aeneas.Std.U8
+constructor:
+  AspisR1PublicPreparation.verifier.View.mk (variant : AspisR1PublicPreparation.transport.Variant)
+    (semantic y1 : Aeneas.Std.Slice Aeneas.Std.U8) (inactive : AspisR1PublicPreparation.aspis_core.field.WideExact)
+    (round0 : Aeneas.Std.Slice Aeneas.Std.U8) (folded_root : Option (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (round1 final_message query_bytes : Aeneas.Std.Slice Aeneas.Std.U8) : AspisR1PublicPreparation.verifier.View
+JGe_Inspection.lean:20:7: error(lean.unknownIdentifier): Unknown constant `AspisR1PublicPreparation.FinishModel.finish_roots`
+'AspisR1.JGd_Fixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]

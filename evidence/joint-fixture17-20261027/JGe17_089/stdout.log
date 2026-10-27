@@ -1,0 +1,355 @@
+JGe_Semantic.lean:84:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FinishModel.pointEq JFu_CircleExact.z0 JFu_CircleExact.z1
+in the target expression
+  (let (r9, transcript3) :=
+      (core.result.Result.Ok JFu_CircleExact.z1,
+        { state := encodeState JFu_Q26Source.ratchet, hash := hash, next_row := 27#u8 })
+    do
+    let cf10 ←
+      match r9 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf10 with
+      | core.ops.control_flow.ControlFlow.Continue val6 => do
+        let b1 ← FinishModel.pointEq JFu_CircleExact.z0 val6
+        if b1 = true then ok (core.result.Result.Err r1_wire.Error.EqualCirclePoints)
+          else do
+            let r10 ← FinishModel.payload pre 2#u8
+            let cf11 ←
+              match r10 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf11 with
+              | core.ops.control_flow.ControlFlow.Continue val7 => do
+                let r11 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 val7
+                let a3 ← S1SemanticRootCopy.unwrapRoot r11
+                ok
+                    (core.result.Result.Ok
+                      { roots := Array.make 2#usize [pre.c1_root, a3] ⋯, challenges := JFm_Begin.challenges,
+                        alpha := JFm_PartialAlpha.a10, claims := JFu_ClaimsData.claims, extra := JFu_ClaimsData.a3,
+                        before_z1 := before, state_before_z0 := encodeState JFm_Q24Source.ratchet,
+                        z := Array.make 2#usize [JFu_CircleExact.z0, val6] ⋯, transcript := transcript3 })
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified Hash) (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified Hash)
+          (core.convert.FromSame r1_wire.Error) residual) =
+    ok
+      (core.result.Result.Ok
+        { roots := Array.make 2#usize [pre.c1_root, JFq_Root1.value] ⋯, challenges := JFm_Begin.challenges,
+          alpha := JFm_PartialAlpha.a10, claims := JFu_ClaimsData.claims, extra := JFu_ClaimsData.a3,
+          before_z1 := before, state_before_z0 := encodeState JFm_Q24Source.ratchet,
+          z := Array.make 2#usize [JFu_CircleExact.z0, JFu_CircleExact.z1] ⋯,
+          transcript := { state := encodeState JFu_Q26Source.ratchet, hash := hash, next_row := 27#u8 } })
+
+case refine_1
+Hash : Type
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash
+hash : Hash
+identified : JGe_TerminalCondition.Identified
+expanded y1 : Slice U8
+pre : r1_wire.Prefix
+view : AspisR1CurrentCaller.verifier.View
+claims : ClaimsUnrolledFinish.MainClaims
+cs :
+  List
+    (SourceFull25.Call
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      pre)
+mask : aspis_core.field.QM31
+same : claims = JFu_ClaimsData.claims
+decode : decodeMain 29#usize JFu_Q25Source.record 87#usize = ok (core.result.Result.Ok JFu_ClaimsData.a3)
+gather16 :
+  OraclePortStdBuilder.fromFn 16#usize
+      (FinishModel.closureFn9
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+          (F3V_OracleDictionary.current JFp_SHADigest.digest D)))
+      claims =
+    ok JFu_MaskInputs.c1
+gather10 :
+  OraclePortStdBuilder.fromFn 10#usize
+      (FinishModel.closureFn5
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+          (F3V_OracleDictionary.current JFp_SHADigest.digest D)))
+      claims =
+    ok JFu_MaskInputs.maskOnly
+maskCall :
+  FIp_SemanticArithmetic.mask JFu_MaskInputs.c1 JFu_MaskInputs.maskOnly JFu_MaskInputs.g JFm_PartialAlpha.a10 = ok mask
+maskCanon : FIp_SemanticValues.Canon mask
+expand :
+  compact.expand_semantic nativeValues JFw_RealExpansion.stored JFw_RealExpansion.initial =
+    ok (core.result.Result.Ok (), expanded)
+parse : PrefixAdapter.parseAccepted expanded = ok (core.result.Result.Ok pre)
+yexpand : expandValues JFw_Y1.stored JFw_Y1.initial = ok (core.result.Result.Ok (), y1)
+length : y1.length = 928
+wide :
+  AspisR1CurrentCaller.InstalledPreparation.sourceView JFx_NativeBytes.proof expanded y1 =
+    ok (core.result.Result.Ok view)
+claim :
+  ClaimsUnrolledFinish.claims (NP6_StdModel.calls (core.result.Result.Ok ())) pre = ok (core.result.Result.Ok claims)
+initial :
+  r1_semantic.public_transcript
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      JFs_PublicSerialization.value hash pre.c1_root =
+    ok (core.result.Result.Ok { state := encodeState JFr_SeedBoundary.numeric, hash := hash, next_row := 0#u8 })
+begin :
+  r1_wire.begin
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      pre { state := encodeState JFr_SeedBoundary.numeric, hash := hash, next_row := 0#u8 } =
+    ok
+      (core.result.Result.Ok JFm_Begin.challenges,
+        { state := encodeState JFm_Q14Source.ratchet, hash := hash, next_row := 15#u8 })
+rounds :
+  RoundModel.rounds children
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      pre { state := encodeState JFm_Q14Source.ratchet, hash := hash, next_row := 15#u8 } =
+    ok
+      (core.result.Result.Ok
+        (genToMain JFr_Data09.output, JFm_PartialAlpha.a10,
+          { state := encodeState JFm_Q24Source.ratchet, hash := hash, next_row := 25#u8 }))
+trace :
+  SourceFull25.Trace
+    (AspisR1CurrentCaller.InstalledPreparation.retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D)) pre
+    { state := encodeState JFr_SeedBoundary.numeric, hash := hash, next_row := 0#u8 }
+    { state := encodeState JFm_Q24Source.ratchet, hash := hash, next_row := 25#u8 } cs
+rows : List.map SourceFull25.Call.row cs = JFm_RealTrace.rows
+values : List.map SourceFull25.Call.q cs = JFm_RealTrace.values
+frames : List.map (fun c => c.record.framed) cs = List.take 25 ↑pre.records
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok JFu_Q25Source.record)
+circle25 :
+  FinishModel.circle_validated JGe_Boundaries.value
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JFm_Q24Source.ratchet, hash := hash, next_row := 25#u8 } JFu_Q25Source.record =
+    ok
+      (core.result.Result.Ok JFu_CircleExact.z0,
+        { state := encodeState JFu_Q25Source.ratchet, hash := hash, next_row := 26#u8 })
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok JFu_Q26Source.record)
+circle26 :
+  FinishModel.circle_validated JGe_Boundaries.value
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JFu_Q25Source.ratchet, hash := hash, next_row := 26#u8 } JFu_Q26Source.record =
+    ok
+      (core.result.Result.Ok JFu_CircleExact.z1,
+        { state := encodeState JFu_Q26Source.ratchet, hash := hash, next_row := 27#u8 })
+ineq : FinishModel.pointEq JFu_CircleExact.z0 JFu_CircleExact.z1 = ok false
+canon0 : SAP_CanonicalCarrier.CanonK JFu_CircleExact.z0.x ∧ SAP_CanonicalCarrier.CanonK JFu_CircleExact.z0.y
+canon1 : SAP_CanonicalCarrier.CanonK JFu_CircleExact.z1.x ∧ SAP_CanonicalCarrier.CanonK JFu_CircleExact.z1.y
+claimsCall :
+  ClaimsUnrolledFinish.claims (NP6_StdModel.calls (core.result.Result.Ok ())) pre =
+    ok (core.result.Result.Ok JFu_ClaimsData.claims)
+root : FinishModel.payload pre 2#u8 = ok (core.result.Result.Ok JFq_Root1.value.to_slice)
+first : pre.c1_root = JFp_InitBytes.root
+before : Std.Array MainQM 29#usize
+decoded26 : decodeMain 29#usize JFu_Q26Source.record 0#usize = ok (core.result.Result.Ok before)
+dec25 : children.decode 29#usize JFu_Q25Source.record 87#usize = ok (core.result.Result.Ok JFu_ClaimsData.a3)
+dec26 : children.decode 29#usize JFu_Q26Source.record 0#usize = ok (core.result.Result.Ok before)
+needed :
+  FIq_Terminal.terminal JFs_PublicSerialization.value JFu_ClaimsData.claims JFm_PartialAlpha.a10 JFm_Begin.challenges =
+    ok (core.result.Result.Ok JGd_NumericData.neededTerminal)
+ga :
+  OraclePortStdBuilder.fromFn 16#usize
+      (FinishModel.closureFn9
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+          (F3V_OracleDictionary.current JFp_SHADigest.digest D)))
+      JFu_ClaimsData.claims =
+    ok JFu_MaskInputs.c1
+gb :
+  OraclePortStdBuilder.fromFn 10#usize
+      (FinishModel.closureFn5
+        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+          (F3V_OracleDictionary.current JFp_SHADigest.digest D)))
+      JFu_ClaimsData.claims =
+    ok JFu_MaskInputs.maskOnly
+sem : r1_semantic.Verified Hash :=
+  { roots := Array.make 2#usize [pre.c1_root, JFq_Root1.value] ⋯, challenges := JFm_Begin.challenges,
+    alpha := JFm_PartialAlpha.a10, claims := JFu_ClaimsData.claims, extra := JFu_ClaimsData.a3, before_z1 := before,
+    state_before_z0 := encodeState JFm_Q24Source.ratchet,
+    z := Array.make 2#usize [JFu_CircleExact.z0, JFu_CircleExact.z1] ⋯,
+    transcript := { state := encodeState JFu_Q26Source.ratchet, hash := hash, next_row := 27#u8 } }
+c0 : Array.index_usize JFu_ClaimsData.claims 0#usize = ok JFu_ClaimsData.a0
+g : JFu_ClaimsData.a0.index_usize 27#usize = ok JFu_MaskInputs.g
+eq :
+  core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 JGd_NumericData.running
+      JGd_NumericData.running =
+    ok false
+⊢ (let (r9, transcript3) :=
+      (core.result.Result.Ok JFu_CircleExact.z1,
+        { state := encodeState JFu_Q26Source.ratchet, hash := hash, next_row := 27#u8 })
+    do
+    let cf10 ←
+      match r9 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf10 with
+      | core.ops.control_flow.ControlFlow.Continue val6 => do
+        let b1 ← FinishModel.pointEq JFu_CircleExact.z0 val6
+        if b1 = true then ok (core.result.Result.Err r1_wire.Error.EqualCirclePoints)
+          else do
+            let r10 ← FinishModel.payload pre 2#u8
+            let cf11 ←
+              match r10 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf11 with
+              | core.ops.control_flow.ControlFlow.Continue val7 => do
+                let r11 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 val7
+                let a3 ← S1SemanticRootCopy.unwrapRoot r11
+                ok
+                    (core.result.Result.Ok
+                      { roots := Array.make 2#usize [pre.c1_root, a3] ⋯, challenges := JFm_Begin.challenges,
+                        alpha := JFm_PartialAlpha.a10, claims := JFu_ClaimsData.claims, extra := JFu_ClaimsData.a3,
+                        before_z1 := before, state_before_z0 := encodeState JFm_Q24Source.ratchet,
+                        z := Array.make 2#usize [JFu_CircleExact.z0, val6] ⋯, transcript := transcript3 })
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified Hash) (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified Hash)
+          (core.convert.FromSame r1_wire.Error) residual) =
+    ok
+      (core.result.Result.Ok
+        { roots := Array.make 2#usize [pre.c1_root, JFq_Root1.value] ⋯, challenges := JFm_Begin.challenges,
+          alpha := JFm_PartialAlpha.a10, claims := JFu_ClaimsData.claims, extra := JFu_ClaimsData.a3,
+          before_z1 := before, state_before_z0 := encodeState JFm_Q24Source.ratchet,
+          z := Array.make 2#usize [JFu_CircleExact.z0, JFu_CircleExact.z1] ⋯,
+          transcript := { state := encodeState JFu_Q26Source.ratchet, hash := hash, next_row := 27#u8 } })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (27 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+JGe_Semantic.lean:58:71: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:58:90: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:60:53: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵V̵e̵r̵i̵f̵y̵P̵r̵e̵f̵i̵x̵.̵m̵a̵r̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲V̲e̲r̲i̲f̲y̲P̲r̲e̲f̲i̲x̲.̲m̲a̲r̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:60:96: warning: This simp argument is unused:
+  VerifyPrefix.mark
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵V̵e̵r̵i̵f̵y̵P̵r̵e̵f̵i̵x̵.̵m̵a̵r̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:65:71: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:65:90: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:67:71: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:67:90: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:73:43: warning: This simp argument is unused:
+  VerifyPrefix.mark
+
+Hint: Omit it from the simp argument list.
+  simp only [Bool.false_eq_true, ̲if_false,V̵e̵ ̲ri̵f̵y̵P̵r̵e̵f̵i̵x̵.̵m̵a̵r̵k̵,̵r̵1_wire.SemanticTranscript.impl.state, ̲bind_tc_ok,
+        core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:74:6: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵V̵e̵r̵i̵f̵y̵P̵r̵e̵f̵i̵x̵.̵m̵a̵r̵k̵,̵r̵1̵_̵w̵i̵r̵e̵.̵S̵e̵m̵a̵n̵t̵i̵c̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵i̵m̵p̵l̵.̵s̵t̵a̵t̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲V̲e̲r̲i̲f̲y̲P̲r̲e̲f̲i̲x̲.̲m̲a̲r̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲1̲_̲w̲i̲r̲e̲.̲S̲e̲m̲a̲n̲t̲i̲c̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲i̲m̲p̲l̲.̲s̲t̲a̲t̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:77:90: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:79:71: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:79:90: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:81:71: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:81:90: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:83:26: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵V̵e̵r̵i̵f̵y̵P̵r̵e̵f̵i̵x̵.̵m̵a̵r̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲V̲e̲r̲i̲f̲y̲P̲r̲e̲f̲i̲x̲.̲m̲a̲r̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGe_Semantic.lean:83:69: warning: This simp argument is unused:
+  VerifyPrefix.mark
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵V̵e̵r̵i̵f̵y̵P̵r̵e̵f̵i̵x̵.̵m̵a̵r̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGe_Semantic.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
