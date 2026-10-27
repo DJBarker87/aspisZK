@@ -70,3 +70,10 @@ op26 Path/OsString join allocation/platform owner; op30 String capacity and
 allocation/OOM; op31 growth/reallocation/Drop; op32 Vec reserve capacity and
 allocator failure; op36 Vec-to-array owner transfer/buffer disposal. No value
 or complete-Result law is inferred by these deferrals.
+
+Final extraction update: optimized249/258 and forced219/217/216/215/212,
+133/132 all retain their fail-closed guard receipts. The owned scalar tensor
+field closure (resume6host010) emits18 functions and no opaque functions or
+FunsExternal import. Lean typechecking/binding and native P6 association remain
+open; no row credit. Its callee-free pick4 and complete index/error specification
+are checked at38834/38836. No further gates run after the100/10 budget exhaustion.

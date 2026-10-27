@@ -5,10 +5,10 @@ Worker candidate rows5→5; endpoint premises removed0. Target not established.
 |op|row|status|theorem|receipt|
 |---:|---|---|---|---|
 |258|V264|OPEN: complete reference Result/fold and shipped comparator helper proved; full-loop native association timed out|R1Z.PV_CB3_Op258Staged.op258_reference (reference only)|38711.json;38714.json;38745.json;38769.json;38770.json;38780.json;38783.json;38785.json;38787.json;kani-resume6-pole1024-001/collected-receipt.json|
-|253|V260|OPEN: tensor/extra typed domains proved; owned-loop extraction fails shared-loan cleanup; owned selector extracted, field closure pending|— (support: PV_CB3_WeightsTensorRead.total / WeightsExtraRead.total)|38810.json;38811.json;38812.json;aeneas-source-op253-split-resume6host006/collected-receipt.json;aeneas-source-op253-tensor-ref-resume6host007/collected-receipt.json|
+|253|V260|OPEN: tensor/extra typed domains proved; owned-loop extraction fails shared-loan cleanup; owned selector proved; 18-function field closure emitted, Lean/native association pending|— (support: PV_CB3_WeightsTensorRead.total / WeightsExtraRead.total)|38810.json;38811.json;38812.json;38827.json;38836.json;aeneas-source-op253-split-resume6host006/collected-receipt.json;aeneas-source-op253-tensor-ref-resume6host007/collected-receipt.json|
 |252|V259|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op252-001/collected-receipt.json|
 |251|V258|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op251-001/collected-receipt.json|
-|249|V256|OPEN: complete reference byte-rank/result proved; native eight-limb pass timed out|R1Z.PV_CB3_StagedGammaRank.source / rank (reference only)|38743.json; kani-resume6-pass-001/collected-receipt.json|
+|249|V256|OPEN: reference rank/canonical/nonzero/constructor proved; native eight-limb association timed out|R1Z.PV_CB3_StagedGammaRank.source / rank (reference only)|38743.json;38816.json;38838.json;38839.json;38842.json; kani-resume6-pass-001/collected-receipt.json|
 |246|V254|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op246_source|35701.json; RESUME_FINAL_MANIFEST.json|
 |230|V247|OPEN: bounded copy-helper native gate timed out|—|kani-helper-sum1024-002/collected-receipt.json|
 |229|V246|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_CallbackBundle.op229_source|35701.json; RESUME_FINAL_MANIFEST.json|
@@ -47,3 +47,5 @@ Worker candidate rows5→5; endpoint premises removed0. Target not established.
 |25|V177|OPEN|—|—|
 
 All inherited rows retain their original evidence; no unchanged full regression was rerun. Timeout GNU-time RSS may omit solver descendants; no aggregate RSS is inferred from a parent-only number.
+
+Final validation:100/100 Lean attempts (74pass,26fail),10/10 Kani runs. Rows audit38840 passed; audit38841 stopped at a missing command-only historical object; final replay38842 inlined the original commands and passed382 axiom outputs/372 unique targets. All standard axioms. Source statements and endpoint premises unchanged.
