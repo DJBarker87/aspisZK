@@ -35,3 +35,15 @@ inhabitation, with its real-byte runtime fixture conditional. No joint inhabitan
 of every native/runtime premise is claimed. No carrier, quantifier, failure event,
 work metric, frozen3 or RuntimePersistence trust amendment changes in this job.
 The deployed security target remains **not yet established**.
+
+Complete before/after statement artifacts are pinned by
+RPu_job-evidence-pins.json: finish-match4/FJp_before.lean.txt and
+FJp_after.lean.txt; finish-chain1/FJu_before.lean.txt and FJu_after.lean.txt;
+stack1/FJv_before_top.kernel.lean.txt, FJv_after_top.kernel.lean.txt,
+FJv_before_deployed.kernel.lean.txt and FJv_after_deployed.kernel.lean.txt.
+Fresh complete after-kernel statements use RPu_*_Top.kernel.lean.txt and
+RPu_*_Top.kernel-expr.json only when the actual fresh root audit succeeds.
+Original FJp/FJu structural comparisons are replayed as separate kernel queries;
+they inspect root binders and nested predicate bodies, preserving quantifiers,
+carriers, outputs, success/collision alternatives and the same witnesses.
+FJv_Deployed remains a specialized candidate; this job makes no adoption ruling.

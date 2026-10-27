@@ -53,6 +53,23 @@ No object, binary, ELF or archive is committed. Accepted source objects are a
 continuation cache; own completed query-only objects will be cleaned after the
 final pin and audit checks, with hashes retained.
 
+## FJp complete root checkpoint
+
+RPu_251 freshly compiles AspisR1.FJp_Top.deployed (exit 0, 2.85543083504308 seconds,
+peak RSS 5665764 KiB, swap 0); exact values/revision are in its receipt.
+RPu_252 full kernel/axiom/reachability audit and RPu_253 original-job kernel
+comparison pass. Its 5788-context planned and checked-header closures match
+exactly. RPu_FJp_Top.kernel.lean.txt is the complete untruncated kernel type;
+RPu_FJp_Top.kernel-expr.json is the canonical raw Expr record.
+The historical default #check bytes match exactly; that historical text has
+ellipses and is qualified accordingly in RPu_FJp_Top-statement-comparison.json.
+The complete source statement also matches FJp_after.lean.txt byte-for-byte.
+All three standard axioms only. All 180 formatter records are present and
+unreachable, as are all 84 actual formatter axioms (per-record booleans in
+RPu_FJp_Top-formatter-records.json). The broader retained corpus still contains
+those axioms; this is root unreachability, not an all-corpus standard-only claim.
+Committed as 13978d5595; no premise-removal credit is added by this replay.
+
 ## Final results
 
 Pending final audits; see the live RPu_frontier.json for progress. Missing gates
