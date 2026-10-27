@@ -1,0 +1,51 @@
+Running as unit: run-r1d35415ba06b4b45b02952fdc8584e03.scope; invocation ID: c572c4832d554b9abdd136bcf08bbd51
+{"attempt": "XRg_K004", "exit_status": 0, "wall_seconds": 4.653094723005779, "peak_rss_kib": "287544", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+ze=kani::any();kani::assume(n>=32&&n<=63);assert_eq!(XRg_validate_record_f...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrg_validate_tail`
+
+warning: function `XRg_claims_store` should have a snake case name
+  --> XRg_harnesses.rs:27:4
+   |
+27 | fn XRg_claims_store(){let r=rows();let got=XRg_claims_storage(r).unwrap();let expected=XRg_claims_reference(r).unwrap();let p:usize=...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrg_claims_store`
+
+warning: function `XRg_dot_no_wrap` should have a snake case name
+  --> XRg_harnesses.rs:29:4
+   |
+29 | fn XRg_dot_no_wrap(){let sum:u64=kani::any();let raw:u64=kani::any();kani::assume(sum<4095u64*(1u64<<34));let folded=(raw&2147483647...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrg_dot_no_wrap`
+
+warning: function `XRg_claims_later_error` should have a snake case name
+  --> XRg_harnesses.rs:31:4
+   |
+31 | fn XRg_claims_later_error(){let mut r=rows();let p:usize=kani::any();kani::assume(p==1||p==2);r[p]=Err(Error::NonCanonical{row:25,va...
+   |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrg_claims_later_error`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.42s
+Checking harness XRg_harnesses::XRg_decode_one...
+
+VERIFICATION RESULT:
+ ** 0 of 433 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 3.1535065s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

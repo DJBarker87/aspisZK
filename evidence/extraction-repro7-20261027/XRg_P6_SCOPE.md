@@ -1,6 +1,6 @@
 # New-leaf bounded stage scope
 
-No whole-leaf P6 certificate or release association is claimed. The ten prepared harnesses cover only new leaves; inherited XRd/XRe/XRf results are reused without reproof. All copied excerpts retain exact pinned release behavior with the substitutions in XRg_source_stage_map.json. These are projected source stages, not direct calls to private dependency functions.
+No whole-leaf P6 certificate or release association is claimed. All ten harnesses passed (XRg_KaniSummary.json). The ten harnesses cover only new leaves; inherited XRd/XRe/XRf results are reused without reproof. All copied excerpts retain exact pinned release behavior with the substitutions in XRg_source_stage_map.json. These are projected source stages, not direct calls to private dependency functions.
 
 | Harness | Domain and boundary |
 |---|---|
@@ -17,4 +17,4 @@ No whole-leaf P6 certificate or release association is claimed. The ten prepared
 
 The decoder local record carrier exposes fields only within this evidence crate. Provenance from actual Prefix validated tokens, header consistency, high-half prevalidation, full caller28/29 arrays, arbitrary-length iteration and memory/effect association remain OPEN. The claims stage excludes Prefix lookup and substitutes predecoded rows for private decode calls. Allocation/source/runtime correspondence and arbitrary general rows remain OPEN. Kani allocation success is tool semantics, not a proved arbitrary runtime allocator law. The field-boundary checks are zero/sparse only. Dot's private Q representation, raw-product formula, canonicality, full counter/history and caller binding are OPEN.
 
-No stubs, contracts or shipped edits. Optimized Kani, one capped admitted scope at a time, ten invocations maximum. Non-vacuity: zero bytes/coefficients/sums satisfy every unrestricted model; selected coordinates have p=0,i=0; the injected later error has p=1; tail has n=32. These witnesses do not jointly inhabit actual top premises. All final pass/failure status comes from receipts, not this plan.
+No stubs, contracts or shipped edits. Optimized Kani, one capped admitted scope at a time, ten invocations maximum. Non-vacuity: zero bytes/coefficients/sums satisfy every unrestricted model; selected coordinates have p=0,i=0; the injected later error has p=1; tail has n=32. These witnesses do not jointly inhabit actual top premises. All pass/check/resource details are retained by the ten receipts.
