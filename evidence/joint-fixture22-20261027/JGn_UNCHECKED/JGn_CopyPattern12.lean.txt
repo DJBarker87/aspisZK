@@ -1,0 +1,83 @@
+import JGn_CopyPowers
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGn_CopyPattern12
+open Aeneas Aeneas.Std Result FIq_Native
+open pool_v1.pair_forest_copy_terminal
+
+def start : Result (Usize × field.QM31) :=
+  pattern_values_literal_loop1_loop0 JGl_NumericData.a JGn_CopyPowers.powers
+    0#usize pattern12 field.QM31.ZERO
+def t01 : Result (Usize × field.QM31) := by jgn_tail 1 start
+theorem step01 : start=t01 := by jgn_prefix 1
+#print axioms step01
+def t02 : Result (Usize × field.QM31) := by jgn_tail 2 t01
+theorem step02 : t01=t02 := by jgn_prefix 2
+#print axioms step02
+def t03 : Result (Usize × field.QM31) := by jgn_tail 3 t02
+theorem step03 : t02=t03 := by jgn_prefix 3
+#print axioms step03
+def t04 : Result (Usize × field.QM31) := by jgn_tail 4 t03
+theorem step04 : t03=t04 := by jgn_prefix 4
+#print axioms step04
+def t05 : Result (Usize × field.QM31) := by jgn_tail 5 t04
+theorem step05 : t04=t05 := by jgn_prefix 5
+#print axioms step05
+def t06 : Result (Usize × field.QM31) := by jgn_tail 6 t05
+theorem step06 : t05=t06 := by jgn_prefix 6
+#print axioms step06
+def t07 : Result (Usize × field.QM31) := by jgn_tail 7 t06
+theorem step07 : t06=t07 := by jgn_prefix 7
+#print axioms step07
+def t08 : Result (Usize × field.QM31) := by jgn_tail 8 t07
+theorem step08 : t07=t08 := by jgn_prefix 8
+#print axioms step08
+def t09 : Result (Usize × field.QM31) := by jgn_tail 9 t08
+theorem step09 : t08=t09 := by jgn_prefix 9
+#print axioms step09
+def t10 : Result (Usize × field.QM31) := by jgn_tail 10 t09
+theorem step10 : t09=t10 := by jgn_prefix 10
+#print axioms step10
+def t11 : Result (Usize × field.QM31) := by jgn_tail 11 t10
+theorem step11 : t10=t11 := by jgn_prefix 11
+#print axioms step11
+def t12 : Result (Usize × field.QM31) := by jgn_tail 12 t11
+theorem step12 : t11=t12 := by jgn_prefix 12
+#print axioms step12
+def t13 : Result (Usize × field.QM31) := by jgn_tail 13 t12
+theorem step13 : t12=t13 := by jgn_prefix 13
+#print axioms step13
+def t14 : Result (Usize × field.QM31) := by jgn_tail 14 t13
+theorem step14 : t13=t14 := by jgn_prefix 14
+#print axioms step14
+def t15 : Result (Usize × field.QM31) := by jgn_tail 15 t14
+theorem step15 : t14=t15 := by jgn_prefix 15
+#print axioms step15
+def t16 : Result (Usize × field.QM31) := by jgn_tail 16 t15
+theorem step16 : t15=t16 := by jgn_prefix 16
+#print axioms step16
+def returned : Usize × field.QM31 := by jgn_return t16
+def value : field.QM31 := returned.2
+
+theorem source : start=ok (16#usize,value) := by
+  calc
+    start=t01 := step01
+    _=t02 := step02
+    _=t03 := step03
+    _=t04 := step04
+    _=t05 := step05
+    _=t06 := step06
+    _=t07 := step07
+    _=t08 := step08
+    _=t09 := step09
+    _=t10 := step10
+    _=t11 := step11
+    _=t12 := step12
+    _=t13 := step13
+    _=t14 := step14
+    _=t15 := step15
+    _=t16 := step16
+    _=ok (16#usize,value) := by jgn_eval
+#print axioms source
+end AspisR1.JGn_CopyPattern12
+end

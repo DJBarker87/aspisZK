@@ -1,0 +1,52 @@
+{"attempt": "JGn22_049", "exit_status": 1, "wall_seconds": 6.688022563001141, "peak_rss_kib": "5989552", "swaps": "0", "print_axioms": ["'AspisR1.JGn_CopyPatterns.powersCanonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGn_CopyPatterns.identified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGn_CopyPatterns.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGn_CopyPatterns.powersCanonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGn_CopyPatterns.lean:27:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pattern_values_literal_loop0 JFu_TerminalPrefix.challenges.lambda (Array.repeat 16#usize field.QM31.ZERO)
+    JFu_TerminalPrefix.challenges.lambda 0#usize
+in the target expression
+  (have powers := Array.repeat 16#usize field.QM31.ZERO;
+    do
+    let (powers1, limb) ←
+      pattern_values_literal_loop0 JFu_TerminalPrefix.challenges.lambda powers JFu_TerminalPrefix.challenges.lambda
+          0#usize
+    have result : Std.Array field.QM31 14#usize := Array.repeat 14#usize field.QM31.ZERO
+ 
+...
+_loop0 JFu_TerminalPrefix.challenges.lambda (Array.repeat 16#usize field.QM31.ZERO)
+    JFu_TerminalPrefix.challenges.lambda 0#usize
+in the target expression
+  (have powers := Array.repeat 16#usize field.QM31.ZERO;
+    do
+    let (powers1, limb) ←
+      pattern_values_literal_loop0 JFu_TerminalPrefix.challenges.lambda powers JFu_TerminalPrefix.challenges.lambda
+          0#usize
+    have result : Std.Array field.QM31 14#usize := Array.repeat 14#usize field.QM31.ZERO
+    pattern_values_literal_loop1 JGl_NumericData.a powers1 limb result 0#usize) =
+    ok out
+
+out : Std.Array field.QM31 14#usize
+run :
+  (have powers := Array.repeat 16#usize field.QM31.ZERO;
+    do
+    let (powers1, limb) ←
+      pattern_values_literal_loop0 JFu_TerminalPrefix.challenges.lambda powers JFu_TerminalPrefix.challenges.lambda
+          0#usize
+    have result : Std.Array field.QM31 14#usize := Array.repeat 14#usize field.QM31.ZERO
+    pattern_values_literal_loop1 JGl_NumericData.a powers1 limb result 0#usize) =
+    ok out
+⊢ out = JGn_CopyData.patterns
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (14 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGn_CopyPatterns.identified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGn_CopyPatterns.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rdb453ba4f08840028a7f4cf967ae40b5.scope; invocation ID: c02a2c31bb9d46b5a379e6c0639713c3
