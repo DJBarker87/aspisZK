@@ -11152,3 +11152,33 @@ IDs 43000-43299, 100 Lean / 8 Kani for loop-free links only): remaining std/allo
 then the SHA-2/digest family V231-V238 in Lean on the extraction of the backend the deployed x86_64
 prover actually compiles (no silent substitution of the soft backend). Six slots: runjoin12, optb,
 extract, inv, srcid9, cblib2. Rows removed outright: 0. Privacy target not yet established.
+
+## D257 (Stream B) 2026-10-27 08:00 UTC: extraction obstruction resolved by diagnosis; op223 route (ii) adopted as a D187 candidate change; pv-op223 launched
+
+pv-extract (`codex/pv-extract-20261027`, head 258c685f50; 60/60 Lean = 54 pass / 6 fail, no Kani; final
+42460 exit 0 / 1.77 s / 4.31 GB / swap 0, 47 standard axiom outputs; no crates/programs change; no
+forbidden tokens). Findings (evidence/pv-extract-20261027/INVENTORY.md, ROOT-CAUSE.md): fifteen callback
+ops are refused by the pinned extractor's fail-closed guard (rng-extractor/base/src/Main.ml:745-761,
+which scans all function output types including helpers): 36, 79, 132, 133, 205, 212, 215-217, 219, 222,
+223, 224, 249, 258; op253 has a separate internal shared-loan failure. The guard is not the real
+obstruction: with it removed in a private copy, the pinned Aeneas fails in InterpReduceCollapse.ml:1991
+(shared-borrow abstraction-ID remapping during loop-context matching) and emits no Lean; a fresh Charon
+accepts op223 but Aeneas still emits nothing. Route (i) (repair the extraction) therefore needs an
+Aeneas fix with its own invariant, and the soundness-side translator re-pin was not approved by the owner
+(Stream A, 2026-10-27). Route (ii) works: an index-loop compressor passes the UNCHANGED pinned extractor
+with the guard on (23 functions, 3 constants, zero opaque), and `PV_Ext_ClosedCandidate.candidate_reference`
+proves complete-Result equality to the P6 compressor for arbitrary inputs. LEAD DECISION: adopt route
+(ii) for op223 only, as a candidate change under the owner-approved prover rewrite route D187: the patch
+(evidence/pv-extract-20261027/route-ii-op223.patch, 18 lines) adds a private module in
+crates/aspis-r1-cost-probe behind `prover` and `r1p-check` and redirects the one host call in
+host_semantic::copy_endpoint_values; aspis-core, aspis-statement, programs/ and the shared logup.rs
+function are untouched, so the verifier keeps the original. Adoption still requires: all three ELF pins
+reconfirmed (any difference stops adoption and goes to the owner), byte-identical fixture proofs, ≥1,000
+paired whole-prover differential runs, and the quiet-window timing gate (median < 15 s, ≤ +10%), which
+the lead schedules with Stream A. The other affected ops stay design-only (table in
+design/PV-EXTRACT-20261027.md) until op223 has gone through the whole workflow. Launched pv-op223
+(`codex/pv-op223-20261027` from the extraction branch, reusing the pv-cb worktree; IDs 43300-43599, 100
+Lean, no Kani): apply the patch, extract the applied host function with the unchanged tool, prove
+op223_source and the bridge that discharges V164's P_source_p6, run gates (a)-(c), write the timing plan.
+Six slots: runjoin12, optb, inv, srcid9, cblib2, op223. Rows removed outright: 0. Privacy target not yet
+established.
