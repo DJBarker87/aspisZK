@@ -1,0 +1,280 @@
+diff --git a/crates/aspis-r1-cost-probe/src/dense.rs b/crates/aspis-r1-cost-probe/src/dense.rs
+index facf24689d..04aaa59126 100644
+--- a/crates/aspis-r1-cost-probe/src/dense.rs
++++ b/crates/aspis-r1-cost-probe/src/dense.rs
+@@ -19,7 +19,7 @@ fn semantic_block(hash:HashFn,state:&mut[u8;32],row:u8,record:&[u8])->[u8;32] {
+ fn absorb(hash:HashFn,state:&mut[u8;32],row:u8,b:&[u8]) {*state=hash(&[state,&[0,0xa0+row],&(b.len()as u32).to_le_bytes(),b]);}
+ fn scalar(hash:HashFn,state:&mut[u8;32],row:u8,b:&[u8],nonzero:bool)->E {
+     absorb(hash,state,row,b);let block=hash(&[state,&[1]]);*state=hash(&[state,&[2]]);
+-    let x=if nonzero {sample::gamma_sample(&block)}else{sample::ordinary_sample(&block)};trace::value(4,row as usize,x);x
++    let x=if nonzero {crate::host_sampler::gamma_sample(&block)}else{crate::host_sampler::ordinary_sample(&block)};trace::value(4,row as usize,x);x
+ }
+ fn queries(hash:HashFn,state:&mut[u8;32],row:u8,b:&[u8])->Result<[u32;22],Error> {
+     absorb(hash,state,row,b);let mut out=[0;22];let mut count=0;let mut draws=0;
+diff --git a/crates/aspis-r1-cost-probe/src/host_sampler.rs b/crates/aspis-r1-cost-probe/src/host_sampler.rs
+new file mode 100644
+index 0000000000..cc76579dbb
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/host_sampler.rs
+@@ -0,0 +1,70 @@
++//! Prover-local Drop-free samplers (D187 batch 2).
++use aspis_core::field::{WideExact,P};
++fn low_base_p_digits(block: &[u8; 32]) -> ([u32; 8], u32) {
++    let mut quotient = [0u32; 8];
++    let mut i = 0usize;
++    while i < 8 {
++        quotient[i] = (block[4*i] as u32) | ((block[4*i+1] as u32)<<8u32) | ((block[4*i+2] as u32)<<16u32) | ((block[4*i+3] as u32)<<24u32);
++        i += 1;
++    }
++    let mut digits = [0u32; 8];
++    let mut d = 0usize;
++    while d < 8 {
++        let mut remainder = 0u64;
++        let mut j = 8usize;
++        while j > 0 {
++            j -= 1;
++            let dividend = (remainder << 32u32) | u64::from(quotient[j]);
++            quotient[j] = (dividend / u64::from(P)) as u32;
++            remainder = dividend % u64::from(P);
++        }
++        digits[d] = remainder as u32;
++        d += 1;
++    }
++
++    // After eight divisions, the quotient is at most 256 and fits in u32.
++    let mut check = 1usize;
++    while check < 8 { debug_assert!(quotient[check] == 0); check += 1; }
++    debug_assert!(quotient[0] <= 256);
++    (digits, quotient[0])
++}
++
++fn decode8(digits: [u32; 8]) -> WideExact {
++    WideExact::from_limbs(digits).unwrap()
++}
++
++/// Add a small integer to a base-P digit vector. Returns the carry beyond
++/// the final digit, which is at most one for the values used by the sampler.
++fn add_small_base_p(digits: &mut [u32; 8], mut addend: u32) -> bool {
++    let mut i = 0usize;
++    while i < 8 {
++        let sum = u64::from(digits[i]) + u64::from(addend);
++        digits[i] = (sum % u64::from(P)) as u32;
++        addend = (sum / u64::from(P)) as u32;
++        i += 1;
++    }
++    debug_assert!(addend <= 1);
++    addend != 0
++}
++
++/// `decode8(rank(block) mod P^8)`, byte-for-byte equivalent to the frozen
++/// R0 sampler. The repeated divisions directly produce the low eight digits.
++pub fn ordinary_sample(block: &[u8; 32]) -> WideExact {
++    let (digits, _) = low_base_p_digits(block);
++    decode8(digits)
++}
++
++/// `decode8((rank(block) mod (P^8 - 1)) + 1)`, byte-for-byte equivalent to
++/// the frozen R0 sampler. Since `P^8 ≡ 1 (mod P^8 - 1)`, the high quotient can
++/// be added to the low digits before the final increment. A carry past digit
++/// seven contributes one more modulo `P^8 - 1`.
++pub fn gamma_sample(block: &[u8; 32]) -> WideExact {
++    let (mut digits, quotient) = low_base_p_digits(block);
++    let wrapped = add_small_base_p(&mut digits, quotient + 1);
++    if wrapped {
++        let wrapped_again = add_small_base_p(&mut digits, 1);
++        debug_assert!(!wrapped_again);
++    }
++    decode8(digits)
++}
++
+diff --git a/crates/aspis-r1-cost-probe/src/host_transcript.rs b/crates/aspis-r1-cost-probe/src/host_transcript.rs
+index d8765ec706..eaa1e32338 100644
+--- a/crates/aspis-r1-cost-probe/src/host_transcript.rs
++++ b/crates/aspis-r1-cost-probe/src/host_transcript.rs
+@@ -22,7 +22,7 @@ impl<H: Digest32> Transcript<H> {
+     }
+     pub fn scalar(&mut self,row:u8,payload:&[u8],nonzero:bool)->E {
+         let block=self.block(row,payload);
+-        let out=if nonzero {crate::sampler::gamma_sample(&block)} else {crate::sampler::ordinary_sample(&block)};
++        let out=if nonzero {crate::host_sampler::gamma_sample(&block)} else {crate::host_sampler::ordinary_sample(&block)};
+         crate::trace::value(4,row as usize,out); out
+     }
+     /// Final query-residual batching: at most 22 coefficients, so a nonzero
+diff --git a/crates/aspis-r1-cost-probe/src/host_weights.rs b/crates/aspis-r1-cost-probe/src/host_weights.rs
+new file mode 100644
+index 0000000000..6e111dcd7a
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/host_weights.rs
+@@ -0,0 +1,100 @@
++//! Prover-local fixed-storage weights (D187 batch 2).
++use aspis_core::field::{QM31,QM31 as K,WideExact as E};
++use aspis_core::circle::SecureCirclePoint;
++use crate::{transport::Variant,verifier::Error};
++pub use crate::weights::{QUARTER,PERM};
++pub struct Weights {pub variant:Variant,pub factors:[[[K;4];5];5],pub points:[[K;10];3],pub extra:[K;2]}
++fn double(x:K)->K { x.mul(x).add(x.mul(x)).sub(K::ONE) }
++fn state_only_statement_points(z: &[QM31; 10]) -> [[QM31; 10]; 3] {
++    let mut successor = *z;
++    let mut carry = QM31::ONE;
++    let bit=z[9];let bit_and_carry=bit.mul(carry);successor[9]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let bit=z[8];let bit_and_carry=bit.mul(carry);successor[8]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let bit=z[7];let bit_and_carry=bit.mul(carry);successor[7]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let bit=z[6];let bit_and_carry=bit.mul(carry);successor[6]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let bit=z[5];let bit_and_carry=bit.mul(carry);successor[5]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let bit=z[4];let bit_and_carry=bit.mul(carry);successor[4]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let bit=z[3];let bit_and_carry=bit.mul(carry);successor[3]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let bit=z[2];let bit_and_carry=bit.mul(carry);successor[2]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let bit=z[1];let bit_and_carry=bit.mul(carry);successor[1]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let bit=z[0];let bit_and_carry=bit.mul(carry);successor[0]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
++    let mut absorption = *z;
++    absorption[7] = QM31::ONE.sub(absorption[7]);
++    absorption[6] = QM31::ONE.sub(absorption[6]);
++    [*z, successor, absorption]
++}
++
++impl Weights {
++#[inline(never)]
++pub fn new(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2])->Result<Weights,Error> {
++        let points=state_only_statement_points(alpha);
++        let extra=[alpha[8],alpha[9]];
++        let mut factors=[[[K::ZERO;4];5];5];
++    let a=points[0][3];let b=points[0][2];factors[0][0]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[0][1];let b=points[0][0];factors[0][1]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[0][5];let b=points[0][4];factors[0][2]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[0][9];let b=points[0][8];factors[0][3]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[0][7];let b=points[0][6];factors[0][4]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[1][3];let b=points[1][2];factors[1][0]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[1][1];let b=points[1][0];factors[1][1]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[1][5];let b=points[1][4];factors[1][2]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[1][9];let b=points[1][8];factors[1][3]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[1][7];let b=points[1][6];factors[1][4]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[2][3];let b=points[2][2];factors[2][0]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[2][1];let b=points[2][0];factors[2][1]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[2][5];let b=points[2][4];factors[2][2]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[2][9];let b=points[2][8];factors[2][3]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    let a=points[2][7];let b=points[2][6];factors[2][4]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++    factors[3][0]=[K::ONE,z[0].y,z[0].x,z[0].x.mul(z[0].y)];let mut x=double(z[0].x);
++    let y=double(x);factors[3][1]=[K::ONE,x,y,x.mul(y)];x=double(y);
++    let y=double(x);factors[3][2]=[K::ONE,x,y,x.mul(y)];x=double(y);
++    let y=double(x);factors[3][3]=[K::ONE,x,y,x.mul(y)];x=double(y);
++    let y=double(x);factors[3][4]=[K::ONE,x,y,x.mul(y)];x=double(y);
++    factors[4][0]=[K::ONE,z[1].y,z[1].x,z[1].x.mul(z[1].y)];let mut x=double(z[1].x);
++    let y=double(x);factors[4][1]=[K::ONE,x,y,x.mul(y)];x=double(y);
++    let y=double(x);factors[4][2]=[K::ONE,x,y,x.mul(y)];x=double(y);
++    let y=double(x);factors[4][3]=[K::ONE,x,y,x.mul(y)];x=double(y);
++    let y=double(x);factors[4][4]=[K::ONE,x,y,x.mul(y)];x=double(y);
++        Ok(Weights {variant,factors,points,extra})
++}
++    pub fn raw(&self,kind:usize,j:usize)->K {
++        match kind {
++            0=>if aspis_core::r0::opening::inactive(self.variant.row(j)).unwrap() {K::ONE} else {K::ZERO},
++            4=>if j<56 { self.extra[j/28].pow((j%28) as u64) } else {K::ZERO},
++            1..=3 if self.variant==Variant::D => {
++                let r=self.variant.row(j);
++                { let mut v=K::ONE; let mut b=0usize; while b<10 { v=v.mul(if r&(1usize<<(b as u32))==0 {K::ONE.sub(self.points[kind-1][9-b])}else{self.points[kind-1][9-b]}); b+=1; } v }
++            },
++            _=> {
++                let k=if kind<4 {kind-1}else{kind-2};
++                { let mut v=K::ONE; let mut d=0usize; while d<5 { v=v.mul(self.factors[k][d][(j>>((2*d) as u32))&3]); d+=1; } v }
++            }
++        }
++    }
++
++    /// The caller owns allocation and retains Error::Allocation before this kernel.
++    pub fn materialize(&self,kappa:E,w:&mut [E;1024])->Result<(),Error> {
++        let kp=powers::<7>(kappa);
++        let mut j=0usize;
++        while j<1024 {
++            let mut v=E::ZERO;
++            let mut kind=0usize;
++            while kind<7 { v=v.add(kp[kind].mul_qm31(self.raw(kind,j))); kind+=1; }
++            w[j]=v; j+=1;
++        }
++        Ok(())
++    }
++}
++
++pub fn powers<const N:usize>(x:E)->[E;N]{
++ let mut out=[E::ZERO;N];
++ let mut p=E::ONE;
++ let mut i=0usize;
++ while i<N {
++  out[i]=p;
++  i+=1;
++  if i==N { return out; }
++  p=p.mul(x);
++ }
++ out
++}
+diff --git a/crates/aspis-r1-cost-probe/src/lib.rs b/crates/aspis-r1-cost-probe/src/lib.rs
+index 2e38ff9af2..9d87647937 100644
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -61,3 +61,6 @@ pub mod host_work;
+ 
+ #[cfg(all(feature = "prover", feature = "r1p-check"))]
+ mod prover_shared;
++
++#[cfg(feature="prover")] mod host_sampler;
++#[cfg(feature="prover")] mod host_weights;
+diff --git a/crates/aspis-r1-cost-probe/src/prover.rs b/crates/aspis-r1-cost-probe/src/prover.rs
+index 5f65899f50..3c3dcc20a0 100644
+--- a/crates/aspis-r1-cost-probe/src/prover.rs
++++ b/crates/aspis-r1-cost-probe/src/prover.rs
+@@ -4,7 +4,7 @@ use aspis_core::{digest::LegacyHashFn,HashFn,field::{WideExact as E,M31,QM31 as
+ use aspis_statement::pool_v1::{pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1};
+ use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1;
+ use aspis_prover::{state_only_entropy::{StateOnlyAttemptSecrets,ReservedStateOnlyAttemptSecrets,DurableStateOnlyMaskNonceStore},state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore,StateOnlyMaskBuildError,StateOnlyMaskNonceStore}};
+-use crate::{transport::Variant,verifier::{Error},weights::{Weights,QUARTER,PERM},host_transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Commitments},r1_wire::Error as SError};
++use crate::{transport::Variant,verifier::{Error},host_weights::{Weights,QUARTER,PERM},host_transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Commitments},r1_wire::Error as SError};
+ /// Host commitment backend. Adopted format (PREREG-PROOF-SIZE-2): salted
+ /// leaves under binary trees; there is no unsalted or eight-way commitment.
+ pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Option<crate::host_commitment::PrivateSalts>,c2_salts:Option<crate::host_commitment::PrivateSalts>}
+@@ -318,7 +318,8 @@ fn prepare_opening(variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantic
+     let w=Weights::new(variant,&sem.alpha,&sem.z)?;
+     let inactive=opening_inactive(&q,&w);
+     let kappa=transcript.scalar(28,&inactive.to_le_bytes(),false);
+-    let weights=w.materialize(kappa)?;
++    let mut weights=match aspis_core::r0::heap::filled(1024,E::ZERO) { Ok(v)=>v, Err(_)=>return Err(Error::Allocation) };
++    w.materialize(kappa,weights.as_mut_slice().try_into().unwrap())?;
+     let c0=round(&q,&weights);
+     let c0bytes=encoded_slice(&c0);
+     let alpha0=transcript.scalar(29,&c0bytes,false);
+@@ -345,7 +346,7 @@ fn opening_claim_bytes(coefficients:&[Message<E>],z1:Point<E>)->Vec<u8> {
+     bytes
+ }
+ fn opening_batch(coefficients:&[Message<E>],gamma:E)->Vec<E> {
+-    let gp=crate::weights::powers::<29>(gamma);
++    let gp=crate::host_weights::powers::<29>(gamma);
+     let mut q=Vec::with_capacity(1024);let mut row=0;
+     while row<1024 {let value=opening_row(coefficients,&gp,row);q.push(value);row+=1;}
+     q
+diff --git a/crates/aspis-r1-cost-probe/src/sim.rs b/crates/aspis-r1-cost-probe/src/sim.rs
+index b3a9565717..729784df9d 100644
+--- a/crates/aspis-r1-cost-probe/src/sim.rs
++++ b/crates/aspis-r1-cost-probe/src/sim.rs
+@@ -34,7 +34,7 @@ use aspis_core::{Digest32,HashFn,circle::SecureCirclePoint,digest::LegacyHashFn,
+ use aspis_statement::{multilinear_evaluate_qm31,StateOnlyTraceFoundation,pool_v1::pair_forest_semantic_terminal::r0::Public};
+ use aspis_prover::{HOST_HASH,state_only_entropy::StateOnlyAttemptSecrets,
+     state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,apply_pool_v1_pair_forest_h1_padding_mask_v1,InMemoryStateOnlyMaskNonceStore}};
+-use crate::{compact, multiproof,transport::Variant,verifier::Error,weights::Weights,transcript::Transcript,
++use crate::{compact, multiproof,transport::Variant,verifier::Error,host_weights::Weights,transcript::Transcript,
+     r1_wire::{self as wire,Challenges,SemanticTranscript},host_semantic::{extra,point_claims},
+     prover::{encoded,fold,round,ATTEMPT_CAP,R1PublicChallenges}};
+ 
+@@ -337,12 +337,13 @@ fn opening(columns:&[Vec<K>;29],tau:&Tape,d:&Drawn,variant:Variant)->Result<View
+     let coefficients:Vec<Message<E>>=messages.iter().map(|m|variant.coefficients(m)).collect();
+     let z1=Point{x:E::from_qm31(d.z[1].x),y:E::from_qm31(d.z[1].y)};
+     let y1=encoded(coefficients.iter().map(|m|eval_message(m,z1)));
+-    let gp=crate::weights::powers::<29>(d.gamma);
++    let gp=crate::host_weights::powers::<29>(d.gamma);
+     let q:Vec<E>=(0..1024).map(|j|(0..29).fold(E::ZERO,|s,l|s.add(gp[l].mul(coefficients[l][j])))).collect();
+     let alpha:[K;10]=core::array::from_fn(|i|d.sem[15+i]);
+     let w=Weights::new(variant,&alpha,&d.z)?;
+     let inactive=(0..1024).fold(E::ZERO,|s,j|s.add(q[j].mul_qm31(w.raw(0,j))));
+-    let weights=w.materialize(d.kappa)?;
++    let mut weights=match aspis_core::r0::heap::filled(1024,E::ZERO) { Ok(v)=>v, Err(_)=>return Err(Error::Allocation) };
++    w.materialize(d.kappa,weights.as_mut_slice().try_into().unwrap())?;
+     let c0=encoded(round(&q,&weights));
+     let q1=fold(&q,d.alpha0,false);let w1=fold(&weights,d.alpha0,true);
+     let c1=encoded(round(&q1,&w1));
