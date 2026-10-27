@@ -12037,3 +12037,46 @@ quiet-window gate on the combined candidate decides. Launched pv-batch2b (same b
 counts and a projected cost (stop above +2% of 14.38 s), then extraction, source laws, copy-equals-original
 proofs, the V256-V260 bridges and the fixture gate. Four live slots: batch1b, runjoin17, dudect-diag,
 batch2b. Rows removed outright: 0. Privacy target not yet established.
+
+## D297 (Stream B) 2026-10-27 15:05 UTC: the V374 detection was a harness artifact; batch 3 launched
+
+pv-dudect-diag (`codex/pv-dudect-20261027`, f5ac7ff06f; diagnostic, NOT a V374 measurement; interleaved,
+1,000,000 valid calls per class, zero migrations, zero sampler errors). Max |t| first order / centred
+square: M31 fixed A vs fixed B 2.765 / 2.940; M31 random vs random 1.761 / 1.479; M31 fixed in a FRESH
+buffer vs random 2.373 / 2.546; QM31 fixed A vs fixed B 1.662 / 2.831; QM31 random vs random 1.979 /
+1.685; QM31 fresh-buffer fixed vs random 1.283 / 1.072. With the fixed class prepared like the random class,
+the difference falls below the 4.5 threshold: the D295 detection (|t| 150-233) came from the harness's
+input preparation, not from the seed value. Instruction trace: the only seed-dependent control flow is
+the expected rejection branches (harness M31 0x3775e/0x3780c; candidate scalar 0x13c09d), four QM31
+rejection loops with retry branches, cursor-indexed loads and refill decisions; SHA-256 through HOST_HASH
+showed no additional seed-dependent branch or address in the inspected bodies (libc copy routines remain
+an inspection limit). Not a proof of constant time; the D295 records are retained. Next for V374: make
+fresh-buffer preparation the harness default for all experiments (plan v2.2) and run the qualified
+campaign when both streams are lighter and the host is cooler. The dudect branch (tools/pv-dudect and
+evidence only) was merged into the candidate (37e5e133f8). Launched pv-batch3 (`codex/pv-batch3-20261027`
+from 37e5e133f8, pv-l3 worktree; IDs 52700-52999, a block whose previous owner reported zero compiles):
+route (ii) batch 3 as prover-local Drop-free copies of ops 117, 121, 132-134, 222, 224, 226, 227, 228 (all
+in crates compiled into every release program, so nothing in place), per group: gate (a), a cost
+projection from call counts (stop above +2% cumulative), extraction, source laws, copy-equals-original
+proofs, fixture gate. ID note: the shared sent.txt records only run-joint.sh submissions, so Stream B
+allocates only blocks whose previous job reported zero compiles or fresh blocks.
+
+## D298 (Stream B) 2026-10-27 15:10 UTC: batch 1 complete and merged into the candidate; lead-resolved lib.rs union; integration gate launched
+
+pv-batch1b (`codex/pv-batch1-20261027`, head c9abf274fa; 100/100 Lean, no Kani). weights.rs restored
+byte-identically; op254 is now a prover-gated copy (prover_powers.rs); every edited module's gate
+documented; all three ELF pins MATCH; proved: complete-Result source laws for ops 230/254/258 from the
+extraction of the applied copies, the backend shift-port non-failure lemmas, op230's bridge to its row
+statement, op254 copy = original powers for every input, op258 CT scan verdict = original verdict for
+every input (so N1's removal is behaviour-preserving); optimized devnet_spend and both fixture-byte
+comparisons passed; final 82-module audit 728 axiom queries, standard axioms only. Rows V247, V261 and
+V264 are discharged on the candidate by extraction of the applied source (subject to the combined
+differential and timing gates before adoption). Merge into the candidate (9ff5a4594e): one conflict in
+crates/aspis-r1-cost-probe/src/lib.rs, where op223 and batch 1 each appended independent module
+declarations at the same place; the lead resolved it as the union of the three feature-gated
+declarations (prover_shared; prover_helper_sum; prover_powers), nothing else; branch deleted. Because the
+merged source changed, launched pv-integ3 (`codex/pv-integ3-20261027` from 9ff5a4594e in the pv-cb3
+worktree; IDs 28000-28099 from the replay reserve): ELF pins, the recommended-recipe devnet_spend build
+with route evidence, the fixture-byte gate against 37e5e133f8, the Lean re-check of the op223 and batch-1
+results, and the combined gate plan (op223 + batches 1-3 + records). Four live slots: runjoin17,
+batch2b, batch3, integ3. Rows removed outright: 0. Privacy target not yet established.
