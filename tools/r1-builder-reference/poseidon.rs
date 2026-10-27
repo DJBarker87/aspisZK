@@ -207,3 +207,7 @@ fn external_owned_call_trace_and_outputs() {
     }
     assert_eq!(actual, expected);
 }
+
+#[cfg(kani)]
+#[path = "pv_runjoin12_external.rs"]
+mod pv_runjoin12_external;

@@ -21,7 +21,7 @@ if not admission.get('allowed'):
  (e/f'{name}-refusal-{suffix}.json').write_text(json.dumps(admission,indent=2)+'\n')
  print('RESERVATION REFUSED: '+json.dumps(admission),flush=True);sys.exit(78)
 for ext in ['json','log']:subprocess.run(['scp','-q',f'{host}:{res}.{ext}',str(e/f'{name}-reservation-{suffix}.{ext}')],check=True)
-paths=['tools/r1-builder-reference/records.rs','tools/r1-builder-reference/pv_runjoin12.rs']
+paths=(['tools/r1-builder-reference/poseidon.rs','tools/r1-builder-reference/pv_runjoin12_external.rs'] if 'pv_runjoin12_external' in harness else ['tools/r1-builder-reference/records.rs','tools/r1-builder-reference/pv_runjoin12.rs'])
 for p in paths:subprocess.run(['scp','-q',str(root/p),f'{host}:{frozen}/{p}'],check=True)
 subprocess.run(['scp','-q',str(root/'tools/pv-runjoin12-20261027/kani-receipt.py'),f'{host}:{job}/evidence/pv8-kani-receipt.py'],check=True)
 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
