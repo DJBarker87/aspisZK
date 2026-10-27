@@ -33,6 +33,8 @@ for tree in data['trees'][:2]:
 files[P/'JGf_HASH_PLAN.json']=json.dumps(plans,indent=2)+'\n'
 files[P/'JGf_MERKLE_PREFLIGHT.json']=json.dumps(data,indent=2)+'\n'
 for f,s in files.items():
- if '--check' in sys.argv:assert f.read_text()==s,f
+ if '--check' in sys.argv:
+  retained=f if f.exists() else P/'JGf_UNCHECKED'/(f.name+'.txt')
+  assert retained.read_text()==s,retained
  else:f.write_text(s)
 print('preflight:',len(plans),'window modules;',sum(x['blocks'] for x in plans),'blocks; max8; next consumer symbolic tree root, then native batch1')

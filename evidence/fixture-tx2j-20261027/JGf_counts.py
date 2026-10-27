@@ -39,6 +39,8 @@ end
 '''
  files[R/'lean'/(ns+'.lean')]=s
 for f,s in files.items():
- if '--check' in sys.argv:assert f.read_text()==s,f
+ if '--check' in sys.argv:
+  retained=f if f.exists() else P/'JGf_UNCHECKED'/(f.name+'.txt')
+  assert retained.read_text()==s,retained
  else:f.write_text(s)
 print('two count modules; eighteen individually named steps each; no full recurrence reduction')

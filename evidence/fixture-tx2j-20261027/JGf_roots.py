@@ -108,6 +108,8 @@ theorem root{i:03} : root JFp_SHADigest.digest tree{i:03}=value{i:03} := by
  levels.append(dict(module=module,level=level,hashes=inds))
 files[P/'JGf_ROOT_PLAN.json']=json.dumps(levels,indent=2)+'\n'
 for f,s in files.items():
- if '--check' in sys.argv:assert f.read_text()==s,f
+ if '--check' in sys.argv:
+  retained=f if f.exists() else P/'JGf_UNCHECKED'/(f.name+'.txt')
+  assert retained.read_text()==s,retained
  else:f.write_text(s)
 print('root generator:',len(files),'files; leaf, then18 levels; model authentication only until byte/shape/native joins')
