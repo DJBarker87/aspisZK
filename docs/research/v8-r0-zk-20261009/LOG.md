@@ -12344,3 +12344,21 @@ callback on successful runs; minimality of the reached set by poisoning each mem
 input); then compare with the row definitions again and name what remains. runjoin20 was launched
 under (h''') and may stop on the same mismatch; it is corrected on return. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D311 (Stream B) 2026-10-27 18:25 UTC: Stream A unaffected by the recompiled library objects; one library cohort to be chosen at the final joint replay; source provenance identical
+
+Stream A checked the host: its replay workspace never loads codex-cx-import-union-20261022 and holds
+the original bytes, and its focused jobs resolve these 18 library modules earlier on LEAN_PATH
+(codex-cx-sound-int2-20261025/objects) to the original bytes, so its L187 replays and receipts
+reproduce as recorded. Stream A asked that the objects not be restored, and recorded in C3-BIN that
+the two streams now load different bytes for these 18 modules. Agreed: the single library cohort is
+chosen when both cones are ready for the final joint replay; until then each stream pins the library
+objects it resolves (Stream B: the replay manifest, ruling (h4)).
+
+Source provenance, checked by the lead: the two library sources the env-J rebuild recompiled
+(Aeneas/Std/Core/Fmt.lean 26ac770d…, Aeneas/Std/Array/ArraySlice.lean 8baf9750…) equal the members of
+the committed archive aeneas-lean432-port-20261016/original-source.tar.gz (7f2afc28…) and the entries
+in that port's backend-final-manifest.json and input-manifest.json, which describe the build of the
+original library objects. Both cohorts therefore derive from identical sources at Aeneas revision
+ccf55459; the object differences come from recompilation only. Rows removed outright: 0. Privacy
+target not yet established.
