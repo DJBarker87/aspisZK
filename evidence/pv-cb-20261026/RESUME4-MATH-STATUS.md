@@ -28,9 +28,17 @@ proves canonical sampler output for every32-byte block. These are numerical
 invariant results for the retained extracted/reference paths, not a new native
 source association. The complete Result mask source row remains open.
 
-Compressor constructors/context and canonical slice reads passed38390–38392.
-The generic finite compressor invariant is being repaired after38393; dependent
-CompressCanonical/Array16 drafts remain uncompiled until their own receipts.
+Compressor constructors/context, reads, generic finite loop and source
+reference totality/canonicality, and the exact16-element array specialization
+now pass38390–38397 (rejected38393/38395 retained). Op223TagCanonical.expression,
+value and canonical pass38403 after three rejected literal-unfolding attempts.
+The expression is an extracted cfg harness copy of the two actual shipped
+call-site expressions, importing the real base constant1124073472. It does not
+extract the registry or associate the shipped op223 callback with a reference.
+
+The uncompiled composition draft is preserved only as
+PROPOSED-Op223CanonicalDomain.lean.txt in evidence. It is excluded from the
+focused source manifest and all audit claims.
 
 No old published PV_CB theorem statement is changed. New local input
 invariants and explicit callback-agreement hypotheses are not added to the

@@ -1,0 +1,35 @@
+38395 1 0:01.57
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0248); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_CompressCanonical.lean:19:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ProverRwP6CompressSource.compress ?tag ?values ?lambda
+in the target expression
+  ProverRwP6CompressSource.compress tag values lambda = ok result
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+tag : U32
+values : Slice U32
+lambda : Q
+vt : PV_CB_CanonicalM31.Valid tag
+vv : PV_CB_CompressCanonicalRead.Valid values
+vl : PV_CB_CanonicalTower.Valid lambda
+c : PV_CB_CompressConstructors.C
+hc : PV_CB_CompressConstructors.fromM31 tag = ok c
+vc : PV_CB_CanonicalComplex.Valid c
+q : PV_CB_CompressConstructors.Q
+hq : PV_CB_CompressConstructors.fromCM31 c = ok q
+vq : PV_CB_CanonicalTower.Valid q
+result : ProverRwP6CompressControl.Q
+hresult : ProverRwP6CompressControl.finite values lambda (↑values.len) q lambda 0#usize = ok result
+vresult : PV_CB_CanonicalTower.Valid result
+⊢ ProverRwP6CompressSource.compress tag values lambda = ok result
+'R1Z.PV_CB_CompressCanonical.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_CompressCanonical.of_callbacks' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.57
+	Maximum resident set size (kbytes): 4281684
+	Swaps: 0
+	Exit status: 1
+

@@ -88,3 +88,16 @@ Stopped/failed outputs are rejected, including any error-recovery sorryAx output
 |[38388](38388.json)|R1Z/PV_CB_CanonicalSampler|0|0:01.92|4299956|0|21fd275d99|standard/none|
 |[38389](38389.json)|R1Z/PV_CB_CompressConstructors|1|0:02.24|4279360|0|21fd275d99|REJECTED|
 |[38390](38390.json)|R1Z/PV_CB_CompressConstructors|0|0:02.01|4306092|0|21fd275d99|standard/none|
+|[38391](38391.json)|R1Z/PV_CB_CompressCanonicalContext|0|0:01.73|4303356|0|21fd275d99|standard/none|
+|[38392](38392.json)|R1Z/PV_CB_CompressCanonicalRead|0|0:01.73|4300100|0|21fd275d99|standard/none|
+|[38393](38393.json)|R1Z/PV_CB_CompressCanonicalFinite|1|0:01.73|4284344|0|21fd275d99|REJECTED|
+|[38394](38394.json)|R1Z/PV_CB_CompressCanonicalFinite|0|0:01.78|4307552|0|b823593eb8|standard/none|
+|[38395](38395.json)|R1Z/PV_CB_CompressCanonical|1|0:01.57|4281684|0|b823593eb8|REJECTED|
+|[38396](38396.json)|R1Z/PV_CB_CompressCanonical|0|0:01.68|4307404|0|b823593eb8|standard/none|
+|[38397](38397.json)|R1Z/PV_CB_CompressCanonicalArray16|0|0:01.60|4302228|0|b823593eb8|standard/none|
+|[38398](38398.json)|R1Z/PV_CB_Op223TagTypes|0|0:01.60|2619560|0|b823593eb8|standard/none|
+|[38399](38399.json)|R1Z/PV_CB_Op223TagFuns|0|0:01.10|2627376|0|b823593eb8|standard/none|
+|[38400](38400.json)|R1Z/PV_CB_Op223TagCanonical|1|0:01.63|4282344|0|b823593eb8|REJECTED|
+|[38401](38401.json)|R1Z/PV_CB_Op223TagCanonical|1|0:01.58|4282908|0|b823593eb8|REJECTED|
+|[38402](38402.json)|R1Z/PV_CB_Op223TagCanonical|1|0:01.54|4283572|0|b823593eb8|REJECTED|
+|[38403](38403.json)|R1Z/PV_CB_Op223TagCanonical|0|0:01.64|4304892|0|b823593eb8|standard/none|

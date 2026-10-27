@@ -1,0 +1,21 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0251); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_Op223TagCanonical.lean:18:54: error: Tactic `decide` failed for proposition
+  UScalar.size UScalarTy.U32 = 4294967296
+because its `Decidable` instance
+  instDecidableEqNat (UScalar.size UScalarTy.U32) 4294967296
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqNat` and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h : (UScalar.size UScalarTy.U32).beq 4294967296 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+'R1Z.PV_CB_Op223TagCanonical.expression' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB_Op223TagCanonical.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_Op223TagCanonical.canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.54
+	Maximum resident set size (kbytes): 4283572
+	Swaps: 0
+	Exit status: 1
