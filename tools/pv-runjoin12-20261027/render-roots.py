@@ -38,9 +38,9 @@ for a in range(21):
  files[f'PV_RunJoin_RootModelCell{a:02d}.lean']=text
 text=''.join(f'import R1Z.PV_RunJoin_RootModelCell{a:02d}\n' for a in range(21))+header
 text+='def literal : Fin 21 → Fin 8 → Scalar := !['+','.join(vec(row) for row in roots)+']\n'
-text+='theorem frozen_literal (l : Fin 21) : AppendNode.frozenEmpty (K := Scalar) l = literal l := by\n  fin_cases l <;> funext i <;> fin_cases i <;> rfl\n#print axioms frozen_literal\n'
-text+='theorem initial : nodeCompress (fun _ => (0 : Scalar)) (fun _ => 0) = AppendNode.frozenEmpty 0 := by\n  rw [frozen_literal]\n  exact parent_0\n#print axioms initial\n'
-text+='theorem parents (i : Fin 20) : nodeCompress (AppendNode.frozenEmpty (K := Scalar) i.castSucc) (AppendNode.frozenEmpty i.castSucc) = AppendNode.frozenEmpty i.succ := by\n  rw [frozen_literal,frozen_literal]\n  fin_cases i\n'
+text+='theorem frozen_literal (l : Fin 21) : AspisR1.AppendNode.frozenEmpty (K := Scalar) l = literal l := by\n  unfold AspisR1.AppendNode.frozenEmpty R0P.emptyRootsNat literal\n  fin_cases l <;> funext i <;> fin_cases i <;> rfl\n#print axioms frozen_literal\n'
+text+='theorem initial : nodeCompress (fun _ => (0 : Scalar)) (fun _ => 0) = AspisR1.AppendNode.frozenEmpty 0 := by\n  rw [frozen_literal]\n  have hz : (fun _ : Fin 8 => (0 : Scalar)) = (![0,0,0,0,0,0,0,0] : Fin 8 → Scalar) := by\n    funext i\n    fin_cases i <;> rfl\n  rw [hz]\n  exact parent_0\n#print axioms initial\n'
+text+='theorem parents (i : Fin 20) : nodeCompress (AspisR1.AppendNode.frozenEmpty (K := Scalar) i.castSucc) (AspisR1.AppendNode.frozenEmpty i.castSucc) = AspisR1.AppendNode.frozenEmpty i.succ := by\n  rw [frozen_literal,frozen_literal]\n  fin_cases i\n'
 for a in range(1,21):text+=f'  · exact parent_{a}\n'
 text+='#print axioms parents\nend R1Z.PV_RunJoin_RootModel\n'
 files['PV_RunJoin_RootModelTable.lean']=text
