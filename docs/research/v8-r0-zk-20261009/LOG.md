@@ -12960,3 +12960,17 @@ limitation is a product question. runjoin29 (remaining 57 attempts) proceeds wit
 need: the exact preparation domain with each rejection guard proved, successful preparation implying
 HonestInput, and the resulting coverage sentence; then RustRealRefinement's V038/V045. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D339 (Stream B) 2026-10-27 23:55 UTC: batch2e result; transient admission-barrier error (ruling (p')); batch2f launched
+
+batch2e (78 of 100 attempts: 58 passed, 20 rejected; no crates/ or programs/ change; all 16 generator
+checks pass) fixed the instance-name collision permanently in the generators, so the focused carrier
+union now compiles, and proved unconditional success of the copied op251 kernel including per-cell
+totality. It then stopped, as rule 6 requires, when the shared reservation barrier raised OSError
+[Errno 19] No such device during its read-only cgroup scan for attempt 39887; no compiler started.
+The likely cause is a race in which another scope's cgroup was removed between listing and reading.
+Ruling (p') treats ENODEV or ENOENT from that scan, before any compiler starts, as transient: retry
+the same unlaunched ID after 60 s, at most three times, then stop. batch2f resumes with the
+remaining 22 attempts: universal copy equality and allocation transport for ops 249-253, the
+V256-V260 bridges by the structural route, the fixture-byte gate and the combined audit, finishing
+whole rows before partial ones. Rows removed outright: 0. Privacy target not yet established.
