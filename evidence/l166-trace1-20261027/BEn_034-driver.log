@@ -1,0 +1,45 @@
+{"attempt": "BEn_034", "exit_status": 0, "wall_seconds": 3.6915860089939088, "peak_rss_kib": "5553896", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_BatchStep.verify_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port9OR_BatchStep.verify_source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values) (n : Aeneas.Std.Usize)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_BatchStep.verify root idx val n nodes) =
+    (AspisR1.Port9OR_BatchStep.ops base).op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val n
+      nodes :=
+fun base {Hash} D hash root idx val n nodes =>
+  Eq.mpr
+    (id
+      (congrFun'
+     
+...
+theorem AspisR1.Port9OR_BatchStep.verify_source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values) (n : Aeneas.Std.Usize)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_BatchStep.verify root idx val n nodes) =
+    (AspisR1.Port9OR_BatchStep.ops base).op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val n
+      nodes :=
+fun base {Hash} D hash root idx val n nodes =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (AspisR1.CheckpointBytes5Effect.erase_bind D hash
+              (AspisR1.Port9OR_P6Verify.code root { idx := idx, val := val, n := n, «at» := 0#usize } nodes) fun __x =>
+              Pure.pure (__x.1, __x.2.idx, __x.2.val))
+            (congrFun'
+              (congrArg Bind.bind
+                (AspisR1.Port9OR_P6Verify.source D hash root { idx := idx, val := val, n := n, «at» := 0#usize } nodes))
+              fun a => Aeneas.Std.Result.ok (a.1, a.2.idx, a.2.val))))
+        ((AspisR1.Port9OR_BatchStep.ops base).op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx
+          val n nodes)))
+    (Eq.refl do
+      let a ←
+        MultiproofConeRef.reference.verify_owned (AspisR1.Port9OR_P6Node.digest D) hash root
+            { idx := idx, val := val, n := n, «at» := 0#usize } nodes
+      Aeneas.Std.Result.ok (a.1, a.2.idx, a.2.val))
+'AspisR1.Port9OR_BatchStep.verify_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2a8e7d0428aa4bdbacd673b360735dcf.scope; invocation ID: f743ea9754ec4b38960503b2ee7641df
+

@@ -1,0 +1,22 @@
+theorem AspisR1.ARX_AdmittedRuntime.excludes_poison : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (i : AspisR1.GExq_AccountExperiment.FirstInputs A) (j : AspisR1.GExq_AccountExperiment.SecondInputs A)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.ARX_AdmittedRuntime.runtime L copy allocator c err r native1 native2 hashv
+              (AspisR1.ARV_Constant.adversary i (AspisR1.ARV_Constant.poison j)))).2 =
+        Option.none :=
+fun {W A C Tx} L copy allocator c err r native1 native2 hashv extraction i j H =>
+  AspisR1.ARX_AdmittedRuntime.outside L copy allocator c err r native1 native2 hashv
+    (AspisR1.ARV_Constant.adversary i (AspisR1.ARV_Constant.poison j)) extraction H
+    (AspisR1.ARV_Constant.no_support L copy allocator c err r native1 native2 hashv i j H)
+'AspisR1.ARX_AdmittedRuntime.excludes_poison' depends on axioms: [propext, Classical.choice, Quot.sound]

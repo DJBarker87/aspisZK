@@ -1,0 +1,103 @@
+theorem AspisR1.ARX_Join.accepted : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (words : AspisR1.CanonicalCutEnrichedTranscript.Words),
+          AspisR1.FIp_GlobalOwners.Owners (AspisR1.FIp_Install.configuration err c r)
+              (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed err (AspisR1.FIp_Install.select r c))
+                  r).boundaries →
+            ∀ (Q : ℕ),
+              AspisR1.ART_AdversaryWork.work (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                    AspisR1.CPH_Program.verifier a H ≤
+                  Q →
+                AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.F3T_Installed.source (AspisR1.FIp_Install.configuration err c r) hashv
+                          (AspisR1.F3T_ByteCarrier.input (AspisR1.FIp_Install.configuration err c r)
+                            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)) =
+                      AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.F3_Model.verifier D
+                          (AspisR1.F3T_ByteCarrier.input (AspisR1.FIp_Install.configuration err c r)
+                            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)) ∧
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.F3T_Charged.projected D
+                                (AspisR1.F3T_Canon.canon
+                                  (AspisR1.F3T_ByteCarrier.lift (AspisR1.FIp_Install.configuration err c r)
+                                    (AspisR1.SCE_Experiment.submission a))))).2.2 =
+                        Bool.true ∧
+                      AspisR1.OraclePortRefineJoin.RecoveredInputAgreement
+                        (AspisR1.ART_PhysicalView.physical (AspisR1.FIp_Install.configuration err c r) hashv copy
+                          allocator AspisR1.CPH_Program.verifier a H)
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.F3T_Charged.projected D
+                            (AspisR1.F3T_Canon.canon
+                              (AspisR1.F3T_ByteCarrier.lift (AspisR1.FIp_Install.configuration err c r)
+                                (AspisR1.SCE_Experiment.submission a))))) ∨
+                  AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q + 2965)
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.Hiq_RecordedJoint.program
+                        (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy
+                          allocator AspisR1.CPH_Program.verifier a)
+                        AspisR1.ARQ_Observer.project
+                        (AspisR1.ARQ_Observer.select (AspisR1.FIp_Install.configuration err c r)
+                          AspisR1.CPH_Program.verifier))) :=
+fun {W A C Tx} L copy allocator c err r native1 native2 hashv extraction a H n std D words owners Q bound =>
+  have represented :=
+    AspisR1.ARU_PartialAccepted.accepted L copy allocator c err r native1 native2 hashv extraction a H n;
+  have replies := AspisR1.ARU_Replies.accepted L copy allocator c err r native1 native2 hashv extraction a H n;
+  have source :=
+    AspisR1.ARX_SourceAlternative.accepted L copy allocator c err r native1 native2 hashv extraction a H n std Q bound;
+  Or.casesOn source
+    (fun sourceAccepted =>
+      have branch :=
+        AspisR1.ARX_RecoveryBranch.accepted
+          (AspisR1.Rc2_Install.configuration (AspisR1.Rc5_Install.seed err (AspisR1.FIp_Install.select r c)) r)
+          (AspisR1.FIo_Install.finishOps r c.finish) (Eq.symm (AspisR1.FIo_Nonvacuity.arithmetic_fixed r c.finish))
+          ⟨rfl, ⟨rfl, rfl⟩⟩ hashv D words copy allocator AspisR1.CPH_Program.verifier a Q H bound
+          (AspisR1.F3Y_InstalledLaws.prepare err (AspisR1.FIp_Install.select r c) r)
+          (AspisR1.F3Y_InstalledLaws.primitives err (AspisR1.FIp_Install.select r c) r)
+          (AspisR1.F3Y_InstalledLaws.canonical err (AspisR1.FIp_Install.select r c) r)
+          (AspisR1.F3Y_InstalledLaws.domain err (AspisR1.FIp_Install.select r c) r)
+          (AspisR1.F3Y_InstalledLaws.multiply err (AspisR1.FIp_Install.select r c) r)
+          (AspisR1.F3Y_InstalledLaws.one err (AspisR1.FIp_Install.select r c) r)
+          (AspisR1.F3Y_InstalledLaws.inverse err (AspisR1.FIp_Install.select r c) r) owners
+          (AspisR1.ARQ_Installation.dictionary err c r) represented.right replies.right.right sourceAccepted;
+      Or.casesOn branch
+        (fun h =>
+          let ⟨raw, agreement⟩ := h
+          Or.inl
+            (have physical :=
+              AspisR1.ART_PhysicalView.accepted (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                AspisR1.CPH_Program.verifier a H represented.left;
+            ⟨raw,
+              ⟨AspisR1.ARQ_ModelAccepted.projected D
+                  (AspisR1.F3T_Canon.canon
+                    (AspisR1.F3T_ByteCarrier.lift (AspisR1.FIp_Install.configuration err c r)
+                      (AspisR1.SCE_Experiment.submission a)))
+                  H
+                  (AspisR1.ARQ_ModelAccepted.original (AspisR1.FIp_Install.configuration err c r) D hashv
+                    (AspisR1.SCE_Experiment.submission a) H sourceAccepted raw),
+                Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        AspisR1.OraclePortRefineJoin.RecoveredInputAgreement _a
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.F3T_Charged.projected D
+                              (AspisR1.F3T_Canon.canon
+                                (AspisR1.F3T_ByteCarrier.lift (AspisR1.FIp_Install.configuration err c r)
+                                  (AspisR1.SCE_Experiment.submission a))))))
+                      physical))
+                  agreement⟩⟩))
+        fun collision => Or.inr collision)
+    fun bad => Or.inr bad
+'AspisR1.ARX_Join.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,440 @@
+theorem AspisR1.BEl_PartialRecorder.correspondence : ∀ {S A : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (code : AspisR1.SdkC_Source.Code A) (state : S) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.BEl_PartialRecorder.observation
+      (AspisR1.BEl_PartialRecorder.run call code state (AspisR1.BEl_Recorder.completed before)) =
+    AspisR1.BEf_Carrier.run call code state before :=
+fun {S A} call code state before =>
+  AspisR1.CheckpointBytes5Effect.Code.rec (motive := fun code =>
+    ∀ (state : S) (before : AspisR1.SdkC_Source.Log),
+      AspisR1.BEl_PartialRecorder.observation
+          (AspisR1.BEl_PartialRecorder.run call code state (AspisR1.BEl_Recorder.completed before)) =
+        AspisR1.BEf_Carrier.run call code state before)
+    (fun a state before =>
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (congrArg (Prod.mk (Aeneas.Std.Result.ok a))
+                (congrArg (Prod.mk state) (AspisR1.BEl_PartialRecorder.decode_completed Aeneas.Std.Result.div before))))
+            (Aeneas.Std.Result.ok a, state, before))
+          (eq_self (Aeneas.Std.Result.ok a, state, before))))
+    (fun {B} r k ih state before =>
+      Aeneas.Std.Result.casesOn (motive := fun t =>
+        r = t →
+          AspisR1.BEl_PartialRecorder.observation
+              (AspisR1.BEl_PartialRecorder.run call (AspisR1.CheckpointBytes5Effect.Code.step r k) state
+                (AspisR1.BEl_Recorder.completed before)) =
+            AspisR1.BEf_Carrier.run call (AspisR1.CheckpointBytes5Effect.Code.step r k) state before)
+        r (fun a h => Eq.symm h ▸ ih a state before)
+        (fun e h =>
+          Eq.symm h ▸
+            of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg (Prod.mk (Aeneas.Std.Result.fail e))
+                      (congrArg (Prod.mk state)
+                        (AspisR1.BEl_PartialRecorder.decode_completed (Aeneas.Std.Result.fail e) before))))
+                  (Aeneas.Std.Result.fail e, state, before))
+                (eq_self (Aeneas.Std.Result.fail e, state, before))))
+        (fun h =>
+          Eq.symm h ▸
+            of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg (Prod.mk Aeneas.Std.Result.div)
+                      (congrArg (Prod.mk state)
+                        (AspisR1.BEl_PartialRecorder.decode_completed Aeneas.Std.Result.div before))))
+                  (Aeneas.Std.Result.div, state, before))
+                (eq_self (Aeneas.Std.Result.div, state, before))))
+        (Eq.refl r))
+    (fun parts k ih state before =>
+      let ⟨answer, next, h✝⟩ := call parts state
+      Eq.ndrec (motive := fun x =>
+        call parts state = x →
+          AspisR1.BEl_PartialRecorder.observation
+              (AspisR1.BEl_PartialRecorder.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state
+                (AspisR1.BEl_Recorder.completed before)) =
+            AspisR1.BEf_Carrier.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state before)
+        (fun called =>
+          Aeneas.Std.Result.casesOn (motive := fun t =>
+            answer = t →
+              AspisR1.BEl_PartialRecorder.observation
+                  (AspisR1.BEl_PartialRecorder.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state
+                    (AspisR1.BEl_Recorder.completed before)) =
+                AspisR1.BEf_Carrier.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state before)
+            answer
+            (fun digest h =>
+              Eq.ndrec (motive := fun answer =>
+                call parts state = (answer, next) →
+                  AspisR1.BEl_PartialRecorder.observation
+                      (AspisR1.BEl_PartialRecorder.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state
+                        (AspisR1.BEl_Recorder.completed before)) =
+                    AspisR1.BEf_Carrier.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state before)
+                (fun called =>
+                  Eq.mpr
+                    (id
+                      (congr
+                        (congrArg Eq
+                          (congrArg AspisR1.BEl_PartialRecorder.observation
+                            (Eq.trans
+                              (AspisR1.BEl_PartialRecorder.run.eq_5 call state (AspisR1.BEl_Recorder.completed before)
+                                parts k)
+                              (Eq.trans
+                                (congrArg
+                                  (fun x =>
+                                    match x.1 with
+                                    | Aeneas.Std.Result.ok digest =>
+                                      AspisR1.BEl_PartialRecorder.run call (k digest) (call parts state).2
+                                        (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before) parts
+                                          (Aeneas.Std.Result.ok digest))
+                                    | Aeneas.Std.Result.fail e =>
+                                      (Aeneas.Std.Result.fail e, (call parts state).2,
+                                        AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts)
+                                    | Aeneas.Std.Result.div =>
+                                      (Aeneas.Std.Result.div, (call parts state).2,
+                                        AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts))
+                                  called)
+                                (congrFun'
+                                  (congrArg (AspisR1.BEl_PartialRecorder.run call (k digest))
+                                    (congrArg Prod.snd called))
+                                  (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before) parts
+                                    (Aeneas.Std.Result.ok digest)))))))
+                        (Eq.trans (AspisR1.BEf_Carrier.run.eq_5 call state before parts k)
+                          (Eq.trans
+                            (congrArg
+                              (fun x =>
+                                match x.1 with
+                                | Aeneas.Std.Result.ok digest =>
+                                  AspisR1.BEf_Carrier.run call (k digest) (call parts state).2
+                                    (before ++ [{ parts := parts, returned := (call parts state).1 }])
+                                | Aeneas.Std.Result.fail e =>
+                                  (Aeneas.Std.Result.fail e, (call parts state).2,
+                                    before ++ [{ parts := parts, returned := (call parts state).1 }])
+                                | Aeneas.Std.Result.div =>
+                                  (Aeneas.Std.Result.div, (call parts state).2,
+                                    before ++ [{ parts := parts, returned := (call parts state).1 }]))
+                              called)
+                            (congr (congrArg (AspisR1.BEf_Carrier.run call (k digest)) (congrArg Prod.snd called))
+                              (congrArg (HAppend.hAppend before)
+                                (congrFun'
+                                  (congrArg List.cons
+                                    (congrArg (AspisR1.SdkC_Source.Query.mk parts) (congrArg Prod.fst called)))
+                                  [])))))))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            AspisR1.BEl_PartialRecorder.observation
+                                (AspisR1.BEl_PartialRecorder.run call (k digest) next _a) =
+                              AspisR1.BEf_Carrier.run call (k digest) next
+                                (before ++ [{ parts := parts, returned := Aeneas.Std.Result.ok digest }]))
+                          (Eq.symm (AspisR1.BEl_Recorder.completed_append before parts (Aeneas.Std.Result.ok digest)))))
+                      (ih digest next (before ++ [{ parts := parts, returned := Aeneas.Std.Result.ok digest }]))))
+                (Eq.symm h) called)
+            (fun e h =>
+              Eq.ndrec (motive := fun answer =>
+                call parts state = (answer, next) →
+                  AspisR1.BEl_PartialRecorder.observation
+                      (AspisR1.BEl_PartialRecorder.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state
+                        (AspisR1.BEl_Recorder.completed before)) =
+                    AspisR1.BEf_Carrier.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state before)
+                (fun called =>
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (congr
+                            (congrArg Prod.mk
+                              (congrArg Prod.fst
+                                (Eq.trans
+                                  (AspisR1.BEl_PartialRecorder.run.eq_5 call state
+                                    (AspisR1.BEl_Recorder.completed before) parts k)
+                                  (Eq.trans
+                                    (congrArg
+                                      (fun x =>
+                                        match x.1 with
+                                        | Aeneas.Std.Result.ok digest =>
+                                          AspisR1.BEl_PartialRecorder.run call (k digest) (call parts state).2
+                                            (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before) parts
+                                              (Aeneas.Std.Result.ok digest))
+                                        | Aeneas.Std.Result.fail e =>
+                                          (Aeneas.Std.Result.fail e, (call parts state).2,
+                                            AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts)
+                                        | Aeneas.Std.Result.div =>
+                                          (Aeneas.Std.Result.div, (call parts state).2,
+                                            AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts))
+                                      called)
+                                    (congrArg (Prod.mk (Aeneas.Std.Result.fail e))
+                                      (congrFun' (congrArg Prod.mk (congrArg Prod.snd called))
+                                        (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts)))))))
+                            (congr
+                              (congrArg Prod.mk
+                                (congrArg Prod.fst
+                                  (congrArg Prod.snd
+                                    (Eq.trans
+                                      (AspisR1.BEl_PartialRecorder.run.eq_5 call state
+                                        (AspisR1.BEl_Recorder.completed before) parts k)
+                                      (Eq.trans
+                                        (congrArg
+                                          (fun x =>
+                                            match x.1 with
+                                            | Aeneas.Std.Result.ok digest =>
+                                              AspisR1.BEl_PartialRecorder.run call (k digest) (call parts state).2
+                                                (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before)
+                                                  parts (Aeneas.Std.Result.ok digest))
+                                            | Aeneas.Std.Result.fail e =>
+                                              (Aeneas.Std.Result.fail e, (call parts state).2,
+                                                AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                  parts)
+                                            | Aeneas.Std.Result.div =>
+                                              (Aeneas.Std.Result.div, (call parts state).2,
+                                                AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                  parts))
+                                          called)
+                                        (congrArg (Prod.mk (Aeneas.Std.Result.fail e))
+                                          (congrFun' (congrArg Prod.mk (congrArg Prod.snd called))
+                                            (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                              parts))))))))
+                              (Eq.trans
+                                (congr
+                                  (congrArg AspisR1.BEl_PartialRecorder.decode
+                                    (congrArg
+                                      (fun x =>
+                                        match x.1 with
+                                        | Aeneas.Std.Result.ok v => Aeneas.Std.Result.div
+                                        | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                        | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+                                      (Eq.trans
+                                        (AspisR1.BEl_PartialRecorder.run.eq_5 call state
+                                          (AspisR1.BEl_Recorder.completed before) parts k)
+                                        (Eq.trans
+                                          (congrArg
+                                            (fun x =>
+                                              match x.1 with
+                                              | Aeneas.Std.Result.ok digest =>
+                                                AspisR1.BEl_PartialRecorder.run call (k digest) (call parts state).2
+                                                  (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before)
+                                                    parts (Aeneas.Std.Result.ok digest))
+                                              | Aeneas.Std.Result.fail e =>
+                                                (Aeneas.Std.Result.fail e, (call parts state).2,
+                                                  AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                    parts)
+                                              | Aeneas.Std.Result.div =>
+                                                (Aeneas.Std.Result.div, (call parts state).2,
+                                                  AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                    parts))
+                                            called)
+                                          (congrArg (Prod.mk (Aeneas.Std.Result.fail e))
+                                            (congrFun' (congrArg Prod.mk (congrArg Prod.snd called))
+                                              (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                parts)))))))
+                                  (congrArg Prod.snd
+                                    (congrArg Prod.snd
+                                      (Eq.trans
+                                        (AspisR1.BEl_PartialRecorder.run.eq_5 call state
+                                          (AspisR1.BEl_Recorder.completed before) parts k)
+                                        (Eq.trans
+                                          (congrArg
+                                            (fun x =>
+                                              match x.1 with
+                                              | Aeneas.Std.Result.ok digest =>
+                                                AspisR1.BEl_PartialRecorder.run call (k digest) (call parts state).2
+                                                  (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before)
+                                                    parts (Aeneas.Std.Result.ok digest))
+                                              | Aeneas.Std.Result.fail e =>
+                                                (Aeneas.Std.Result.fail e, (call parts state).2,
+                                                  AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                    parts)
+                                              | Aeneas.Std.Result.div =>
+                                                (Aeneas.Std.Result.div, (call parts state).2,
+                                                  AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                    parts))
+                                            called)
+                                          (congrArg (Prod.mk (Aeneas.Std.Result.fail e))
+                                            (congrFun' (congrArg Prod.mk (congrArg Prod.snd called))
+                                              (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                parts))))))))
+                                (AspisR1.BEl_PartialRecorder.decode_enter (Aeneas.Std.Result.fail e) before parts)))))
+                        (Eq.trans (AspisR1.BEf_Carrier.run.eq_5 call state before parts k)
+                          (Eq.trans
+                            (congrArg
+                              (fun x =>
+                                match x.1 with
+                                | Aeneas.Std.Result.ok digest =>
+                                  AspisR1.BEf_Carrier.run call (k digest) (call parts state).2
+                                    (before ++ [{ parts := parts, returned := (call parts state).1 }])
+                                | Aeneas.Std.Result.fail e =>
+                                  (Aeneas.Std.Result.fail e, (call parts state).2,
+                                    before ++ [{ parts := parts, returned := (call parts state).1 }])
+                                | Aeneas.Std.Result.div =>
+                                  (Aeneas.Std.Result.div, (call parts state).2,
+                                    before ++ [{ parts := parts, returned := (call parts state).1 }]))
+                              called)
+                            (congrArg (Prod.mk (Aeneas.Std.Result.fail e))
+                              (congr (congrArg Prod.mk (congrArg Prod.snd called))
+                                (congrArg (HAppend.hAppend before)
+                                  (congrFun'
+                                    (congrArg List.cons
+                                      (congrArg (AspisR1.SdkC_Source.Query.mk parts) (congrArg Prod.fst called)))
+                                    [])))))))
+                      (eq_self
+                        (Aeneas.Std.Result.fail e, next,
+                          before ++ [{ parts := parts, returned := Aeneas.Std.Result.fail e }]))))
+                (Eq.symm h) called)
+            (fun h =>
+              Eq.ndrec (motive := fun answer =>
+                call parts state = (answer, next) →
+                  AspisR1.BEl_PartialRecorder.observation
+                      (AspisR1.BEl_PartialRecorder.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state
+                        (AspisR1.BEl_Recorder.completed before)) =
+                    AspisR1.BEf_Carrier.run call (AspisR1.CheckpointBytes5Effect.Code.read parts k) state before)
+                (fun called =>
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (congr
+                            (congrArg Prod.mk
+                              (congrArg Prod.fst
+                                (Eq.trans
+                                  (AspisR1.BEl_PartialRecorder.run.eq_5 call state
+                                    (AspisR1.BEl_Recorder.completed before) parts k)
+                                  (Eq.trans
+                                    (congrArg
+                                      (fun x =>
+                                        match x.1 with
+                                        | Aeneas.Std.Result.ok digest =>
+                                          AspisR1.BEl_PartialRecorder.run call (k digest) (call parts state).2
+                                            (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before) parts
+                                              (Aeneas.Std.Result.ok digest))
+                                        | Aeneas.Std.Result.fail e =>
+                                          (Aeneas.Std.Result.fail e, (call parts state).2,
+                                            AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts)
+                                        | Aeneas.Std.Result.div =>
+                                          (Aeneas.Std.Result.div, (call parts state).2,
+                                            AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts))
+                                      called)
+                                    (congrArg (Prod.mk Aeneas.Std.Result.div)
+                                      (congrFun' (congrArg Prod.mk (congrArg Prod.snd called))
+                                        (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts)))))))
+                            (congr
+                              (congrArg Prod.mk
+                                (congrArg Prod.fst
+                                  (congrArg Prod.snd
+                                    (Eq.trans
+                                      (AspisR1.BEl_PartialRecorder.run.eq_5 call state
+                                        (AspisR1.BEl_Recorder.completed before) parts k)
+                                      (Eq.trans
+                                        (congrArg
+                                          (fun x =>
+                                            match x.1 with
+                                            | Aeneas.Std.Result.ok digest =>
+                                              AspisR1.BEl_PartialRecorder.run call (k digest) (call parts state).2
+                                                (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before)
+                                                  parts (Aeneas.Std.Result.ok digest))
+                                            | Aeneas.Std.Result.fail e =>
+                                              (Aeneas.Std.Result.fail e, (call parts state).2,
+                                                AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                  parts)
+                                            | Aeneas.Std.Result.div =>
+                                              (Aeneas.Std.Result.div, (call parts state).2,
+                                                AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                  parts))
+                                          called)
+                                        (congrArg (Prod.mk Aeneas.Std.Result.div)
+                                          (congrFun' (congrArg Prod.mk (congrArg Prod.snd called))
+                                            (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                              parts))))))))
+                              (Eq.trans
+                                (congr
+                                  (congrArg AspisR1.BEl_PartialRecorder.decode
+                                    (congrArg
+                                      (fun x =>
+                                        match x.1 with
+                                        | Aeneas.Std.Result.ok v => Aeneas.Std.Result.div
+                                        | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                        | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+                                      (Eq.trans
+                                        (AspisR1.BEl_PartialRecorder.run.eq_5 call state
+                                          (AspisR1.BEl_Recorder.completed before) parts k)
+                                        (Eq.trans
+                                          (congrArg
+                                            (fun x =>
+                                              match x.1 with
+                                              | Aeneas.Std.Result.ok digest =>
+                                                AspisR1.BEl_PartialRecorder.run call (k digest) (call parts state).2
+                                                  (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before)
+                                                    parts (Aeneas.Std.Result.ok digest))
+                                              | Aeneas.Std.Result.fail e =>
+                                                (Aeneas.Std.Result.fail e, (call parts state).2,
+                                                  AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                    parts)
+                                              | Aeneas.Std.Result.div =>
+                                                (Aeneas.Std.Result.div, (call parts state).2,
+                                                  AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                    parts))
+                                            called)
+                                          (congrArg (Prod.mk Aeneas.Std.Result.div)
+                                            (congrFun' (congrArg Prod.mk (congrArg Prod.snd called))
+                                              (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                parts)))))))
+                                  (congrArg Prod.snd
+                                    (congrArg Prod.snd
+                                      (Eq.trans
+                                        (AspisR1.BEl_PartialRecorder.run.eq_5 call state
+                                          (AspisR1.BEl_Recorder.completed before) parts k)
+                                        (Eq.trans
+                                          (congrArg
+                                            (fun x =>
+                                              match x.1 with
+                                              | Aeneas.Std.Result.ok digest =>
+                                                AspisR1.BEl_PartialRecorder.run call (k digest) (call parts state).2
+                                                  (AspisR1.BEl_Recorder.complete (AspisR1.BEl_Recorder.completed before)
+                                                    parts (Aeneas.Std.Result.ok digest))
+                                              | Aeneas.Std.Result.fail e =>
+                                                (Aeneas.Std.Result.fail e, (call parts state).2,
+                                                  AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                    parts)
+                                              | Aeneas.Std.Result.div =>
+                                                (Aeneas.Std.Result.div, (call parts state).2,
+                                                  AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                    parts))
+                                            called)
+                                          (congrArg (Prod.mk Aeneas.Std.Result.div)
+                                            (congrFun' (congrArg Prod.mk (congrArg Prod.snd called))
+                                              (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before)
+                                                parts))))))))
+                                (AspisR1.BEl_PartialRecorder.decode_enter Aeneas.Std.Result.div before parts)))))
+                        (Eq.trans (AspisR1.BEf_Carrier.run.eq_5 call state before parts k)
+                          (Eq.trans
+                            (congrArg
+                              (fun x =>
+                                match x.1 with
+                                | Aeneas.Std.Result.ok digest =>
+                                  AspisR1.BEf_Carrier.run call (k digest) (call parts state).2
+                                    (before ++ [{ parts := parts, returned := (call parts state).1 }])
+                                | Aeneas.Std.Result.fail e =>
+                                  (Aeneas.Std.Result.fail e, (call parts state).2,
+                                    before ++ [{ parts := parts, returned := (call parts state).1 }])
+                                | Aeneas.Std.Result.div =>
+                                  (Aeneas.Std.Result.div, (call parts state).2,
+                                    before ++ [{ parts := parts, returned := (call parts state).1 }]))
+                              called)
+                            (congrArg (Prod.mk Aeneas.Std.Result.div)
+                              (congr (congrArg Prod.mk (congrArg Prod.snd called))
+                                (congrArg (HAppend.hAppend before)
+                                  (congrFun'
+                                    (congrArg List.cons
+                                      (congrArg (AspisR1.SdkC_Source.Query.mk parts) (congrArg Prod.fst called)))
+                                    [])))))))
+                      (eq_self
+                        (Aeneas.Std.Result.div, next,
+                          before ++ [{ parts := parts, returned := Aeneas.Std.Result.div }]))))
+                (Eq.symm h) called)
+            (Eq.refl answer))
+        (Eq.symm h✝) (Eq.refl (call parts state)))
+    code state before
+'AspisR1.BEl_PartialRecorder.correspondence' depends on axioms: [propext, Classical.choice, Quot.sound]

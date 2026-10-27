@@ -1,0 +1,38 @@
+{"attempt": "BEn_030", "exit_status": 0, "wall_seconds": 3.0188820619951002, "peak_rss_kib": "5557596", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_BatchTree.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port9OR_BatchTree.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D E : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (batch tree : Aeneas.Std.Usize) (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values),
+  AspisR1.CheckpointBytes5Effect.erase E hash
+      (AspisR1.Port9OR_BatchTree.code base D hash proof queries root batch tree idx val) =
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E proof queries
+      root ba
+...
+                          (AspisR1.Port4B_TreeCuts.slot batch tree) keys 0#usize 0#usize =
+                            Aeneas.Std.Result.ok (outIdx, outVal, pending) →
+                          AspisR1.CheckpointBytes5Effect.erase E hash
+                              (match (outIdx, outVal, pending).2.2 with
+                              | Option.none =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                              | Option.some r =>
+                                Pure.pure (r, (outIdx, outVal, pending).1, (outIdx, outVal, pending).2.1)) =
+                            let (outIdx, outVal, pending) := (outIdx, outVal, pending)
+                            match pending with
+                            | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                            | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))
+                        (fun a =>
+                          Eq.refl
+                            (AspisR1.CheckpointBytes5Effect.erase E hash
+                              (match (outIdx, outVal, Option.some val_1).2.2 with
+                              | Option.none =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                              | Option.some r =>
+                                Pure.pure
+                                  (r, (outIdx, outVal, Option.some val_1).1, (outIdx, outVal, Option.some val_1).2.1))))
+                        (Eq.symm h) a✝)
+                    (Eq.refl pending))))))
+'AspisR1.Port9OR_BatchTree.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5f1ceec79bdf4df0954353d80fb5aba1.scope; invocation ID: 4a55ea7ba41c402f8dbd6773a2011ea6

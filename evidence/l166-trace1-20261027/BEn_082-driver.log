@@ -1,0 +1,42 @@
+{"attempt": "BEn_082", "exit_status": 0, "wall_seconds": 2.4003261260222644, "peak_rss_kib": "5553208", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_BatchSource.stage_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.SdkC_BatchSource.stage_source : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : VTop_Stages.aspis_core.digest.Digest32 Unit),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), D.digest () parts = hashv parts) →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+      (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (before : AspisR1.SdkC_Source.Log),
+      (AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_BatchSource.stageCode hashv proof p root) before).1 =
+        AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D proof p root 1#usize () :=
+fun hashv D source proof p root b
+...
+as.Std.Slice Aeneas.Std.U8)), D.digest () parts = hashv parts) →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+      (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (before : AspisR1.SdkC_Source.Log),
+      (AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_BatchSource.stageCode hashv proof p root) before).1 =
+        AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D proof p root 1#usize () :=
+fun hashv D source proof p root before =>
+  let E := { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest };
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D proof p root 1#usize ())
+        (AspisR1.SdkC_Source.erasure_to E () hashv source (AspisR1.SdkC_BatchSource.stageCode hashv proof p root)
+          before)))
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (AspisR1.SdkC_BatchSource.map_erasure E () AspisR1.Op5T_Install.stageError
+                (AspisR1.SdkC_BatchSource.code (AspisR1.SdkC_Source.dictionary hashv) () proof p.queries p.roots root
+                  1#usize))
+              (congrArg (AspisR1.Op5T_Install.mapResult AspisR1.Op5T_Install.stageError)
+                (AspisR1.SdkC_BatchSource.erasure (AspisR1.SdkC_Source.dictionary hashv) E () proof p.queries p.roots
+                  root 1#usize))))
+          (AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves D proof p root 1#usize ())))
+      (Eq.refl
+        (AspisR1.Op5T_Install.mapResult AspisR1.Op5T_Install.stageError
+          (AspisR1.Op5T_Install.body AspisR1.Port4B_Install.leaves E proof p.queries p.roots root 1#usize ()))))
+'AspisR1.SdkC_BatchSource.stage_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rbf0f4c3c9503403babec3cd63317c8a1.scope; invocation ID: 7f3123383c35458c8678f14d461794f0
+

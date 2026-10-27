@@ -1,0 +1,48 @@
+{"attempt": "BEn_044", "exit_status": 0, "wall_seconds": 2.806656922970433, "peak_rss_kib": "5556960", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_P6Node.node_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port9OR_P6Node.node_source : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (i w : Aeneas.Std.Usize),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Node.node s physical i w) =
+    MultiproofConeRef.reference.binary_step (AspisR1.Port9OR_P6Node.digest D) hash s physical i w :=
+fun {Hash} D hash s physical i w =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (AspisR1.CheckpointBytes5Effect.erase.eq_2 D hash Aeneas.Std.U32 (s.idx.index_usize i) fun index =>
+              AspisR1.CheckpointBytes5Ef
+...
+lt.ok (MultiproofConeRef.reference.Row.Stop s)
+                  else do
+                    let b_5 ← s.at + 32#usize
+                    let b_6 ←
+                      Aeneas.Std.core.slice.index.Slice.index
+                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) physical
+                          { start := s.at, «end» := b_5 }
+                    let b_7 ← MultiproofConeRef.reference.read32 b_6
+                    if b &&& 1#u32 = 0#u32 then
+                        MultiproofConeRef.reference.write_parent (AspisR1.Port9OR_P6Node.digest D) hash s b_1 b_7 b_2
+                          b_5 b w
+                      else
+                        MultiproofConeRef.reference.write_parent (AspisR1.Port9OR_P6Node.digest D) hash s b_7 b_1 b_2
+                          b_5 b w
+          else do
+            let b_3 ← physical.len - s.at
+            if b_3 < 32#usize then Aeneas.Std.Result.ok (MultiproofConeRef.reference.Row.Stop s)
+              else do
+                let b_4 ← s.at + 32#usize
+                let b_5 ←
+                  Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) physical
+                      { start := s.at, «end» := b_4 }
+                let b_6 ← MultiproofConeRef.reference.read32 b_5
+                if b &&& 1#u32 = 0#u32 then
+                    MultiproofConeRef.reference.write_parent (AspisR1.Port9OR_P6Node.digest D) hash s b_1 b_6 b_2 b_4 b
+                      w
+                  else
+                    MultiproofConeRef.reference.write_parent (AspisR1.Port9OR_P6Node.digest D) hash s b_6 b_1 b_2 b_4 b
+                      w))
+'AspisR1.Port9OR_P6Node.node_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4de4ba8c2c28433cb45828ac4068405e.scope; invocation ID: 3c6afadda6f14138b6bd650ee2c0d8b7

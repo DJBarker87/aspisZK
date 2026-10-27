@@ -1,0 +1,9 @@
+theorem AspisR1.BEl_LawComposition.trans : ∀ {S A E F G : Type} (left : AspisR1.BEh_Scope.Outcome S A E)
+  (middle : AspisR1.BEh_Scope.Outcome S A F) (right : AspisR1.BEh_Scope.Outcome S A G),
+  AspisR1.BEh_Scope.Law left middle → AspisR1.BEh_Scope.Law middle right → AspisR1.BEh_Scope.Law left right :=
+fun {S A E F G} left middle right first second =>
+  ⟨⟨fun a => Iff.trans (first.left.left a) (second.left.left a), fun a accepted =>
+      Eq.trans (first.left.right a accepted) (second.left.right a ((first.left.left a).mp accepted))⟩,
+    ⟨Iff.trans first.right.left second.right.left, fun rejected =>
+      Eq.trans (first.right.right rejected) (second.right.right (first.right.left.mp rejected))⟩⟩
+'AspisR1.BEl_LawComposition.trans' depends on axioms: [propext, Classical.choice, Quot.sound]

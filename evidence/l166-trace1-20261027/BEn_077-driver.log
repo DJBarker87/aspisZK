@@ -1,0 +1,46 @@
+{"attempt": "BEn_077", "exit_status": 0, "wall_seconds": 2.5872593589592725, "peak_rss_kib": "5552664", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_Source.digest_trace' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.SdkC_Source.digest_trace : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (parts : AspisR1.SdkC_Source.Parts)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_Source.digestCode parts) before =
+    (hashv parts, before ++ [{ parts := parts, returned := hashv parts }]) :=
+fun hashv parts before =>
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    hashv parts = t →
+      AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_Source.digestCode parts) before =
+        (hashv parts, before ++ [{ parts := parts, returned := hashv parts }]))
+    (hashv parts)
+    (fun v h =>
+      Eq.ndrec (motive := fun x =>
+        h
+...
+           (congrArg Eq
+                  (Eq.trans
+                    (AspisR1.SdkC_Source.run.eq_5 hashv before parts fun digest =>
+                      AspisR1.CheckpointBytes5Effect.Code.step (Aeneas.Std.Result.ok digest)
+                        AspisR1.CheckpointBytes5Effect.Code.done)
+                    (Eq.trans
+                      (congrArg
+                        (fun x =>
+                          match x with
+                          | Aeneas.Std.Result.ok digest =>
+                            AspisR1.SdkC_Source.run hashv
+                              (AspisR1.CheckpointBytes5Effect.Code.step (Aeneas.Std.Result.ok digest)
+                                AspisR1.CheckpointBytes5Effect.Code.done)
+                              (before ++ [{ parts := parts, returned := hashv parts }])
+                          | Aeneas.Std.Result.fail e =>
+                            (Aeneas.Std.Result.fail e, before ++ [{ parts := parts, returned := hashv parts }])
+                          | Aeneas.Std.Result.div =>
+                            (Aeneas.Std.Result.div, before ++ [{ parts := parts, returned := hashv parts }]))
+                        h)
+                      (congrArg (Prod.mk Aeneas.Std.Result.div)
+                        (congrArg (HAppend.hAppend before)
+                          (congrFun' (congrArg List.cons (congrArg (AspisR1.SdkC_Source.Query.mk parts) h)) []))))))
+                (Aeneas.Std.Result.div, before ++ [{ parts := parts, returned := Aeneas.Std.Result.div }]))
+              (eq_self (Aeneas.Std.Result.div, before ++ [{ parts := parts, returned := Aeneas.Std.Result.div }]))))
+        (Eq.symm h) (Eq.refl (hashv parts)))
+    (Eq.refl (hashv parts))
+'AspisR1.SdkC_Source.digest_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf69d9589611240a3bbc68c8c5e99f964.scope; invocation ID: 9ea7278a14a342e3aa8295f967ee7fc2
+

@@ -1,0 +1,26 @@
+theorem AspisR1.Port9OR_P6Node.parent_source : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (s : MultiproofConeRef.reference.Scratch) (left right : AspisR1.CheckpointBytes5Effect.Digest)
+  (ni cursor : Aeneas.Std.Usize) (index : Aeneas.Std.U32) (w : Aeneas.Std.Usize),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Node.parent s left right ni cursor index w) =
+    MultiproofConeRef.reference.write_parent (AspisR1.Port9OR_P6Node.digest D) hash s left right ni cursor index w :=
+fun {Hash} D hash s left right ni cursor index w =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (AspisR1.CheckpointBytes5Effect.erase.eq_3 D hash (AspisR1.MultiproofConePhysicalDigest.parts left right)
+              fun digest =>
+              AspisR1.CheckpointBytes5Effect.liftResult
+                (AspisR1.MultiproofConePhysicalProgram.finish s digest ni cursor index w))
+            (congrArg (Bind.bind (D.digest hash (AspisR1.MultiproofConePhysicalDigest.parts left right)))
+              (funext fun b =>
+                AspisR1.CheckpointBytes5Effect.erase_lift D hash
+                  (AspisR1.MultiproofConePhysicalProgram.finish s b ni cursor index w)))))
+        (MultiproofConeRef.reference.write_parent (AspisR1.Port9OR_P6Node.digest D) hash s left right ni cursor index
+          w)))
+    (id
+      (Eq.refl do
+        let b ← D.digest hash (AspisR1.MultiproofConePhysicalDigest.parts left right)
+        AspisR1.MultiproofConePhysicalProgram.finish s b ni cursor index w))
+'AspisR1.Port9OR_P6Node.parent_source' depends on axioms: [propext, Classical.choice, Quot.sound]

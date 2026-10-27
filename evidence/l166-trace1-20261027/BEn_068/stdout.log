@@ -1,0 +1,104 @@
+theorem AspisR1.BEk_ReachedInputs.cuts : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2W_TrustedStd.TrustedStd copy →
+    ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry)
+      (id : AspisR1.S2W_ExtractionBoundary.Program) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+      (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+      (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+      AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv →
+        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 id data1 state1 =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+            AspisR1.S2W_D189Wrappers.second native2 allocator e2 id data2 slot state2 =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+              ∃ f s,
+                AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.DrvC_Installation.sdk c) e1.first
+                    (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s ∧
+                  post2 = e2.heap ∧
+                    ∃ p0 root0 p1 root1,
+                      AspisR1.Op5T_Install.currentBatch AspisR1.Port4B_Install.leaves
+                            (AspisR1.DrvC_Installation.currentDigest c) f.proof p0 root0 0#usize () =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                        AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves
+                            (AspisR1.DrvC_Installation.digest c) s.proof p1 root1 1#usize () =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) :=
+fun {A F C} c copy std allocator e1 e2 id native1 native2 hashv extraction data1 data2 slot state1 state2 final1 final2
+    saved post1 post2 accepted1 accepted2 =>
+  let ⟨owned1, right✝⟩ :=
+    AspisR1.S2W_D189Wrappers.first_accepted native1 copy std allocator e1 id data1 state1 final1 saved post1 accepted1
+  let ⟨owned2, frame⟩ :=
+    AspisR1.S2W_D189Wrappers.second_accepted native2 allocator e2 id data2 slot state2 final2 post2 accepted2
+  let ⟨f, h✝⟩ :=
+    AspisR1.S2W_NativeConsolidation.cuts_of_acceptance (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv
+      (AspisR1.S2W_DigestExtraction.sourceBoundary (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv extraction)
+      id e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data1 data2 slot saved owned1 owned2
+  let ⟨s, pair⟩ := h✝
+  Exists.intro f
+    (Exists.intro s
+      ⟨pair,
+        ⟨frame,
+          have selected := pair;
+          have batches :=
+            AspisR1.Op5T_SamePair.batches c.adapter
+              (AspisR1.Uni_Install.base c.currentBase c.reserved c.query c.geometry)
+              (AspisR1.SdkD_Install.stage c.stageBase c.reserved c.query c.geometry) c.finish c.boundaries c.std
+              e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    AspisR1.S2W_NativeConsolidation.SourceCuts _a e1.first
+                      (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s)
+                  (AspisR1.DrvC_Installation.aus1_dictionary c))
+                selected);
+          Eq.mpr
+            (_root_.id
+              (congrArg Exists
+                (funext fun p0 =>
+                  congrArg Exists
+                    (funext fun root0 =>
+                      congrArg Exists
+                        (funext fun p1 =>
+                          congrArg Exists
+                            (funext fun root1 =>
+                              congr
+                                (congrArg And
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congrFun'
+                                          (congrFun'
+                                            (congrFun'
+                                              (congrFun'
+                                                (congrArg
+                                                  (AspisR1.Op5T_Install.currentBatch AspisR1.Port4B_Install.leaves)
+                                                  (congrArg AspisS6CurrentFirstInstallation.toDigest
+                                                    (congrArg AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                                      (AspisR1.DrvC_Installation.aus1_dictionary c))))
+                                                f.proof)
+                                              p0)
+                                            root0)
+                                          0#usize)
+                                        ()))
+                                    (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))))
+                                (congrFun'
+                                  (congrArg Eq
+                                    (congrFun'
+                                      (congrFun'
+                                        (congrFun'
+                                          (congrFun'
+                                            (congrFun'
+                                              (congrArg (AspisR1.Op5T_Install.stageBatch AspisR1.Port4B_Install.leaves)
+                                                (congrArg AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                                  (AspisR1.DrvC_Installation.aus1_dictionary c)))
+                                              s.proof)
+                                            p1)
+                                          root1)
+                                        1#usize)
+                                      ()))
+                                  (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))))))))
+            batches⟩⟩)
+'AspisR1.BEk_ReachedInputs.cuts' depends on axioms: [propext, Classical.choice, Quot.sound]

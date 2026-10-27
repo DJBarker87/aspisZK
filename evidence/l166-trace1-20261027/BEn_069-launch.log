@@ -1,0 +1,48 @@
+{"attempt": "BEn_069", "exit_status": 0, "wall_seconds": 2.382378334994428, "peak_rss_kib": "5555392", "swaps": "0", "print_axioms": ["'AspisR1.BEk_CutExport.queried' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEk_CutExport.queried : ∀ {S A E F : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  (∀ (parts : AspisR1.SdkC_Source.Parts) (state : S), (call parts state).1 = hashv parts) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (code : AspisR1.SdkC_Source.Code (Aeneas.Std.core.result.Result A F)) (n : ℕ),
+      AspisR1.GExp_CountLaws.count n code →
+        ∀ (state : S) (before : AspisR1.SdkC_Source.Log) (native : AspisR1.BEh_Scope.Outcome S A E),
+          AspisR1.BEh_Scope.Law native (AspisR1.BEf_Carrier.run
+...
+ore native.2.2) ≤ n ∧
+                    ∃ remaining,
+                      List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+                        AspisR1.RPx_AttemptPrefix.addresses (AspisR1.BEi_RecorderCut.issued before native.2.2) ++
+                          remaining :=
+fun {S A E F} call hashv binding H code n count state before native law agrees =>
+  have cut := AspisR1.BEj_LocalExport.cut call hashv binding code state before native law;
+  let ⟨kept, h✝⟩ := AspisR1.BEk_QueryPrefix.transport code hashv H [] agrees
+  let ⟨remaining, h✝¹⟩ := h✝
+  let ⟨same, ideal⟩ := h✝¹
+  have attempted :=
+    have lengths := congrArg List.length ideal;
+    have actual := congrArg List.length same;
+    have bounded := count H;
+    Decidable.byContradiction fun a =>
+      AspisR1.BEk_CutExport.queried._proof_1 hashv H code n kept remaining
+        (Eq.mp (congr (congrArg Eq (List.length_map Prod.fst)) List.length_append) lengths)
+        (Eq.mp
+          (congrFun' (congrArg Eq (List.length_map fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts))
+            kept.length)
+          actual)
+        bounded a;
+  ⟨cut.left,
+    ⟨cut.right.left,
+      ⟨Eq.mpr (id (congrArg (fun _a => List.length _a ≤ n) cut.right.left)) attempted,
+        Exists.intro remaining
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+                    AspisR1.RPx_AttemptPrefix.addresses _a ++ remaining)
+                cut.right.left))
+            (Eq.trans ideal (congrArg (fun x => x ++ remaining) (Eq.symm same))))⟩⟩⟩
+'AspisR1.BEk_CutExport.queried' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc82e1526fff24bf2a417b72c0b74b7f0.scope; invocation ID: 70f19e0d332c459b8949ab4fee4f142d

@@ -1,0 +1,58 @@
+{"attempt": "BEn_059", "exit_status": 0, "wall_seconds": 2.554916047025472, "peak_rss_kib": "5553816", "swaps": "0", "print_axioms": ["'AspisR1.BEl_CodeCongr.bind_run' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEl_CodeCongr.bind_run : ∀ {S A B : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (code : AspisR1.SdkC_Source.Code A) (k : A → AspisR1.SdkC_Source.Code B) (state : S)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call (code >>= k) state before) =
+    AspisR1.BEl_CodeCongr.resumeRun call k
+      (AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call code state before)) :=
+fun {S A B} call code k state before =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          AspisR1.BEl_CodeCongr.observe _a =
+            AspisR1.BEl_CodeCongr.resumeRun call k
+             
+...
+.Digest × S)
+  (code : AspisR1.SdkC_Source.Code A) (k : A → AspisR1.SdkC_Source.Code B) (state : S)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call (code >>= k) state before) =
+    AspisR1.BEl_CodeCongr.resumeRun call k
+      (AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call code state before)) :=
+fun {S A B} call code k state before =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          AspisR1.BEl_CodeCongr.observe _a =
+            AspisR1.BEl_CodeCongr.resumeRun call k
+              (AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call code state before)))
+        (AspisR1.BEf_Bind.run call code k state before)))
+    (let ⟨result, snd✝⟩ := AspisR1.BEf_Carrier.run call code state before
+    let ⟨state, history⟩ := snd✝
+    Aeneas.Std.Result.casesOn (motive := fun t =>
+      result = t →
+        AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Bind.continueRun call k (result, state, history)) =
+          AspisR1.BEl_CodeCongr.resumeRun call k (AspisR1.BEl_CodeCongr.observe (result, state, history)))
+      result
+      (fun v h =>
+        Eq.symm h ▸
+          Eq.refl
+            (AspisR1.BEl_CodeCongr.observe
+              (AspisR1.BEf_Bind.continueRun call k (Aeneas.Std.Result.ok v, state, history))))
+      (fun e h =>
+        Eq.symm h ▸
+          Eq.refl
+            (AspisR1.BEl_CodeCongr.observe
+              (AspisR1.BEf_Bind.continueRun call k (Aeneas.Std.Result.fail e, state, history))))
+      (fun h =>
+        Eq.symm h ▸
+          Eq.refl
+            (AspisR1.BEl_CodeCongr.observe
+              (AspisR1.BEf_Bind.continueRun call k (Aeneas.Std.Result.div, state, history))))
+      (Eq.refl result))
+'AspisR1.BEl_CodeCongr.bind_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rae52c6f1641843228a214c1603988383.scope; invocation ID: f97bb1cc57dd4fbd9aaf60e645d8bd85

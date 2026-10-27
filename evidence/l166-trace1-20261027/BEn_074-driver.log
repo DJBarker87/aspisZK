@@ -1,0 +1,47 @@
+{"attempt": "BEn_074", "exit_status": 0, "wall_seconds": 2.5580111559829675, "peak_rss_kib": "5553872", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_Source.associated' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.SdkC_Source.associated : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) {A : Type}
+  (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log),
+  (∀ q ∈ before, q.returned = hashv q.parts) →
+    ∀ q ∈ (AspisR1.SdkC_Source.run hashv code before).2, q.returned = hashv q.parts :=
+fun hashv {A} code before initial =>
+  AspisR1.CheckpointBytes5Effect.Code.rec (motive := fun code =>
+    ∀ (before : AspisR1.SdkC_Source.Log),
+      (∀ q ∈ before, q.returned = hashv q.parts) →
+        ∀ q ∈ (AspisR1.SdkC_Source.run hashv code before).2, q.returned = hashv q.parts)
+    (fun a before initial => initial)
+    (fun {B} r k ih before init
+...
+                         match x with
+                                    | Aeneas.Std.Result.ok digest =>
+                                      AspisR1.SdkC_Source.run hashv (k digest)
+                                        (before ++ [{ parts := parts, returned := hashv parts }])
+                                    | Aeneas.Std.Result.fail e =>
+                                      (Aeneas.Std.Result.fail e,
+                                        before ++ [{ parts := parts, returned := hashv parts }])
+                                    | Aeneas.Std.Result.div =>
+                                      (Aeneas.Std.Result.div, before ++ [{ parts := parts, returned := hashv parts }]))
+                                  h)
+                                (congrArg (Prod.mk Aeneas.Std.Result.div)
+                                  (congrArg (HAppend.hAppend before)
+                                    (congrFun' (congrArg List.cons (congrArg (AspisR1.SdkC_Source.Query.mk parts) h))
+                                      [])))))))
+                        q)
+                      (Eq.refl (q.returned = hashv q.parts))))
+                (Eq.mp
+                  (forall_congr fun q =>
+                    implies_congr
+                      (congrFun'
+                        (congrArg Membership.mem
+                          (congrArg (HAppend.hAppend before)
+                            (congrFun' (congrArg List.cons (congrArg (AspisR1.SdkC_Source.Query.mk parts) h)) [])))
+                        q)
+                      (Eq.refl (q.returned = hashv q.parts)))
+                  next))
+            (Eq.symm h) (Eq.refl (hashv parts)))
+        (Eq.refl (hashv parts)))
+    code before initial
+'AspisR1.SdkC_Source.associated' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6eccbc1412164091ac56d4824422a1df.scope; invocation ID: a6737eecf4d44481b35ccc6524b9b7e7
+

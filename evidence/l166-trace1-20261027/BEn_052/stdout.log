@@ -1,0 +1,7 @@
+theorem AspisR1.BEl_PartialRecorder.decode_completed : ∀ (stopped : Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.BEl_PartialRecorder.decode stopped (AspisR1.BEl_Recorder.completed before) = before :=
+fun stopped before =>
+  List.rec (Eq.refl (AspisR1.BEl_PartialRecorder.decode stopped (AspisR1.BEl_Recorder.completed [])))
+    (fun query rest ih => id (congrArg (List.cons query) ih)) before
+'AspisR1.BEl_PartialRecorder.decode_completed' depends on axioms: [propext, Classical.choice, Quot.sound]

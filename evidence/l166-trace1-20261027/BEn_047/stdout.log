@@ -1,0 +1,478 @@
+theorem AspisR1.Port4B_LeafCode.address : ∀ (kind : Aeneas.Std.Usize) (o : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind o) =
+    AspisR1.MultiproofConeOpeningAdapters.leafAddress (↑kind) (AspisR1.MultiproofConeCanonical.bytesOf ↑o) :=
+fun kind o =>
+  have zero := { mp := fun h => Eq.symm h ▸ Eq.refl ↑0#usize, mpr := fun h => Aeneas.Std.UScalar.eq_of_val_eq h };
+  have one :=
+    {
+      mp := fun h =>
+        Eq.ndrec (motive := fun kind => (kind = 0#usize ↔ ↑kind = 0) → ↑kind = 1) (fun zero => Eq.refl ↑1#usize)
+          (Eq.symm h) zero,
+      mpr := fun h => Aeneas.Std.UScalar.eq_of_val_eq h };
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (congrArg AspisV8R19.SqueezeOracleBridge.flatten
+                (ite_congr (propext zero)
+                  (fun a =>
+                    Eq.refl
+                      (AspisR1.Port4B_LeafCode.parts 113#u8 (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                        (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize)))
+                  fun a =>
+                  ite_congr (propext one)
+                    (fun a =>
+                      Eq.refl
+                        (AspisR1.Port4B_LeafCode.parts 241#u8 (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                          (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize)))
+                    fun a =>
+                    Eq.refl
+                      (AspisR1.Port4B_LeafCode.parts 114#u8 (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+                        (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize)))))
+            (if ↑kind = 0 then
+              [16, 113] ++ List.take 480 (AspisR1.MultiproofConeCanonical.bytesOf ↑o) ++
+                AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑o) 608 32
+            else
+              if ↑kind = 1 then
+                [16, 241] ++
+                    AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑o) 480 128 ++
+                  AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑o) 640 32
+              else
+                [16, 114] ++
+                    AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑o) 672 128 ++
+                  AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑o) 800 32)))
+        (Decidable.casesOn (instDecidableEqNat (↑kind) 0)
+          (fun h =>
+            Eq.mpr (id (congr (congrArg Eq (congrArg AspisV8R19.SqueezeOracleBridge.flatten (if_neg h))) (if_neg h)))
+              (Decidable.casesOn (instDecidableEqNat (↑kind) 1)
+                (fun h =>
+                  Eq.mpr
+                    (id (congr (congrArg Eq (congrArg AspisV8R19.SqueezeOracleBridge.flatten (if_neg h))) (if_neg h)))
+                    (of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrArg (List.map AspisV8R19.SqueezeOracleBridge.decodeByte)
+                                (Eq.trans
+                                  (Eq.trans
+                                    (congrArg (List.flatMap fun part => ↑part)
+                                      (congrArg Subtype.val
+                                        (Subtype.mk.congr_simp
+                                          [⟨[16#u8, 114#u8], AspisR1.Port4B_LeafCode.parts._proof_4 114#u8⟩,
+                                            AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize,
+                                            AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize]
+                                          [⟨[16#u8, 114#u8], AspisR1.Port4B_LeafCode.parts._proof_4 114#u8⟩,
+                                            ⟨List.take 128 (List.drop 672 ↑o),
+                                              congr
+                                                  (congrArg List.take
+                                                    (congr
+                                                      (congrArg HSub.hSub
+                                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                            800 AspisR1.Port4B_LeafCode.code._proof_10)))
+                                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                          672 AspisR1.Port4B_LeafCode.code._proof_8))))
+                                                  (congrFun'
+                                                    (congrArg List.drop
+                                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                          672 AspisR1.Port4B_LeafCode.code._proof_8)))
+                                                    ↑o) ▸
+                                                AspisR1.MultiproofConeSlices.sub._proof_2 o 672#usize 800#usize⟩,
+                                            ⟨List.take 32 (List.drop 800 ↑o),
+                                              congr
+                                                  (congrArg List.take
+                                                    (congr
+                                                      (congrArg HSub.hSub
+                                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                            832 AspisR1.Port4B_LeafCode.code._proof_11)))
+                                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                          800 AspisR1.Port4B_LeafCode.code._proof_10))))
+                                                  (congrFun'
+                                                    (congrArg List.drop
+                                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                          800 AspisR1.Port4B_LeafCode.code._proof_10)))
+                                                    ↑o) ▸
+                                                AspisR1.MultiproofConeSlices.sub._proof_2 o 800#usize 832#usize⟩]
+                                          (congrArg
+                                            (List.cons ⟨[16#u8, 114#u8], AspisR1.Port4B_LeafCode.parts._proof_4 114#u8⟩)
+                                            (congr
+                                              (congrArg List.cons
+                                                (Subtype.mk.congr_simp
+                                                  (List.take (↑800#usize - ↑672#usize) (List.drop ↑672#usize ↑o))
+                                                  (List.take 128 (List.drop 672 ↑o))
+                                                  (congr
+                                                    (congrArg List.take
+                                                      (congr
+                                                        (congrArg HSub.hSub
+                                                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                            (Aeneas.Std.UScalar.bound_suffices
+                                                              Aeneas.Std.UScalarTy.Usize 800
+                                                              AspisR1.Port4B_LeafCode.code._proof_10)))
+                                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                            672 AspisR1.Port4B_LeafCode.code._proof_8))))
+                                                    (congrFun'
+                                                      (congrArg List.drop
+                                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                            672 AspisR1.Port4B_LeafCode.code._proof_8)))
+                                                      ↑o))
+                                                  (AspisR1.MultiproofConeSlices.sub._proof_2 o 672#usize 800#usize)))
+                                              (congrFun'
+                                                (congrArg List.cons
+                                                  (Subtype.mk.congr_simp
+                                                    (List.take (↑832#usize - ↑800#usize) (List.drop ↑800#usize ↑o))
+                                                    (List.take 32 (List.drop 800 ↑o))
+                                                    (congr
+                                                      (congrArg List.take
+                                                        (congr
+                                                          (congrArg HSub.hSub
+                                                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                              (Aeneas.Std.UScalar.bound_suffices
+                                                                Aeneas.Std.UScalarTy.Usize 832
+                                                                AspisR1.Port4B_LeafCode.code._proof_11)))
+                                                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                            (Aeneas.Std.UScalar.bound_suffices
+                                                              Aeneas.Std.UScalarTy.Usize 800
+                                                              AspisR1.Port4B_LeafCode.code._proof_10))))
+                                                      (congrFun'
+                                                        (congrArg List.drop
+                                                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                            (Aeneas.Std.UScalar.bound_suffices
+                                                              Aeneas.Std.UScalarTy.Usize 800
+                                                              AspisR1.Port4B_LeafCode.code._proof_10)))
+                                                        ↑o))
+                                                    (AspisR1.MultiproofConeSlices.sub._proof_2 o 800#usize 832#usize)))
+                                                [])))
+                                          (AspisR1.Port4B_LeafCode.parts._proof_5 114#u8
+                                            (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+                                            (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize)))))
+                                    List.flatMap_cons)
+                                  (congrArg (HAppend.hAppend [16#u8, 114#u8])
+                                    (Eq.trans List.flatMap_cons
+                                      (congrArg (HAppend.hAppend (List.take 128 (List.drop 672 ↑o)))
+                                        (Eq.trans List.flatMap_cons
+                                          (Eq.trans
+                                            (congrArg (HAppend.hAppend (List.take 32 (List.drop 800 ↑o)))
+                                              List.flatMap_nil)
+                                            (List.append_nil (List.take 32 (List.drop 800 ↑o))))))))))
+                              (congr
+                                (congrArg List.cons
+                                  (Fin.mk.congr_simp (↑16#u8) 16
+                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 16
+                                        AspisR1.Port4B_LeafCode.parts._proof_3))
+                                    (AspisV8R19.SqueezeOracleBridge.decodeByte._proof_1 16#u8)))
+                                (congr
+                                  (congrArg List.cons
+                                    (Fin.mk.congr_simp (↑114#u8) 114
+                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 114
+                                          AspisR1.Port4B_LeafCode.code._proof_9))
+                                      (AspisV8R19.SqueezeOracleBridge.decodeByte._proof_1 114#u8)))
+                                  (Eq.trans List.map_append
+                                    (congr
+                                      (congrArg HAppend.hAppend
+                                        (Eq.trans List.map_take (congrArg (List.take 128) List.map_drop)))
+                                      (Eq.trans List.map_take (congrArg (List.take 32) List.map_drop))))))))
+                          (16 ::
+                            114 ::
+                              (List.take 128 (List.drop 672 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o)) ++
+                                List.take 32 (List.drop 800 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o)))))
+                        (eq_self
+                          (16 ::
+                            114 ::
+                              (List.take 128 (List.drop 672 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o)) ++
+                                List.take 32
+                                  (List.drop 800 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o))))))))
+                fun h =>
+                Eq.mpr
+                  (id (congr (congrArg Eq (congrArg AspisV8R19.SqueezeOracleBridge.flatten (if_pos h))) (if_pos h)))
+                  (of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (congrArg (List.map AspisV8R19.SqueezeOracleBridge.decodeByte)
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrArg (List.flatMap fun part => ↑part)
+                                    (congrArg Subtype.val
+                                      (Subtype.mk.congr_simp
+                                        [⟨[16#u8, 241#u8], AspisR1.Port4B_LeafCode.parts._proof_4 241#u8⟩,
+                                          AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize,
+                                          AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize]
+                                        [⟨[16#u8, 241#u8], AspisR1.Port4B_LeafCode.parts._proof_4 241#u8⟩,
+                                          ⟨List.take 128 (List.drop 480 ↑o),
+                                            congr
+                                                (congrArg List.take
+                                                  (congr
+                                                    (congrArg HSub.hSub
+                                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                          608 AspisR1.Port4B_LeafCode.code._proof_4)))
+                                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 480
+                                                        AspisR1.Port4B_LeafCode.code._proof_3))))
+                                                (congrFun'
+                                                  (congrArg List.drop
+                                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 480
+                                                        AspisR1.Port4B_LeafCode.code._proof_3)))
+                                                  ↑o) ▸
+                                              AspisR1.MultiproofConeSlices.sub._proof_2 o 480#usize 608#usize⟩,
+                                          ⟨List.take 32 (List.drop 640 ↑o),
+                                            congr
+                                                (congrArg List.take
+                                                  (congr
+                                                    (congrArg HSub.hSub
+                                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                          672 AspisR1.Port4B_LeafCode.code._proof_8)))
+                                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 640
+                                                        AspisR1.Port4B_LeafCode.code._proof_5))))
+                                                (congrFun'
+                                                  (congrArg List.drop
+                                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 640
+                                                        AspisR1.Port4B_LeafCode.code._proof_5)))
+                                                  ↑o) ▸
+                                              AspisR1.MultiproofConeSlices.sub._proof_2 o 640#usize 672#usize⟩]
+                                        (congrArg
+                                          (List.cons ⟨[16#u8, 241#u8], AspisR1.Port4B_LeafCode.parts._proof_4 241#u8⟩)
+                                          (congr
+                                            (congrArg List.cons
+                                              (Subtype.mk.congr_simp
+                                                (List.take (↑608#usize - ↑480#usize) (List.drop ↑480#usize ↑o))
+                                                (List.take 128 (List.drop 480 ↑o))
+                                                (congr
+                                                  (congrArg List.take
+                                                    (congr
+                                                      (congrArg HSub.hSub
+                                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                            608 AspisR1.Port4B_LeafCode.code._proof_4)))
+                                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                          480 AspisR1.Port4B_LeafCode.code._proof_3))))
+                                                  (congrFun'
+                                                    (congrArg List.drop
+                                                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                          480 AspisR1.Port4B_LeafCode.code._proof_3)))
+                                                    ↑o))
+                                                (AspisR1.MultiproofConeSlices.sub._proof_2 o 480#usize 608#usize)))
+                                            (congrFun'
+                                              (congrArg List.cons
+                                                (Subtype.mk.congr_simp
+                                                  (List.take (↑672#usize - ↑640#usize) (List.drop ↑640#usize ↑o))
+                                                  (List.take 32 (List.drop 640 ↑o))
+                                                  (congr
+                                                    (congrArg List.take
+                                                      (congr
+                                                        (congrArg HSub.hSub
+                                                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                            (Aeneas.Std.UScalar.bound_suffices
+                                                              Aeneas.Std.UScalarTy.Usize 672
+                                                              AspisR1.Port4B_LeafCode.code._proof_8)))
+                                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                            640 AspisR1.Port4B_LeafCode.code._proof_5))))
+                                                    (congrFun'
+                                                      (congrArg List.drop
+                                                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize
+                                                            640 AspisR1.Port4B_LeafCode.code._proof_5)))
+                                                      ↑o))
+                                                  (AspisR1.MultiproofConeSlices.sub._proof_2 o 640#usize 672#usize)))
+                                              [])))
+                                        (AspisR1.Port4B_LeafCode.parts._proof_5 241#u8
+                                          (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+                                          (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize)))))
+                                  List.flatMap_cons)
+                                (congrArg (HAppend.hAppend [16#u8, 241#u8])
+                                  (Eq.trans List.flatMap_cons
+                                    (congrArg (HAppend.hAppend (List.take 128 (List.drop 480 ↑o)))
+                                      (Eq.trans List.flatMap_cons
+                                        (Eq.trans
+                                          (congrArg (HAppend.hAppend (List.take 32 (List.drop 640 ↑o)))
+                                            List.flatMap_nil)
+                                          (List.append_nil (List.take 32 (List.drop 640 ↑o))))))))))
+                            (congr
+                              (congrArg List.cons
+                                (Fin.mk.congr_simp (↑16#u8) 16
+                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 16
+                                      AspisR1.Port4B_LeafCode.parts._proof_3))
+                                  (AspisV8R19.SqueezeOracleBridge.decodeByte._proof_1 16#u8)))
+                              (congr
+                                (congrArg List.cons
+                                  (Fin.mk.congr_simp (↑241#u8) 241
+                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 241
+                                        AspisR1.Port4B_LeafCode.code._proof_7))
+                                    (AspisV8R19.SqueezeOracleBridge.decodeByte._proof_1 241#u8)))
+                                (Eq.trans List.map_append
+                                  (congr
+                                    (congrArg HAppend.hAppend
+                                      (Eq.trans List.map_take (congrArg (List.take 128) List.map_drop)))
+                                    (Eq.trans List.map_take (congrArg (List.take 32) List.map_drop))))))))
+                        (16 ::
+                          241 ::
+                            (List.take 128 (List.drop 480 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o)) ++
+                              List.take 32 (List.drop 640 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o)))))
+                      (eq_self
+                        (16 ::
+                          241 ::
+                            (List.take 128 (List.drop 480 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o)) ++
+                              List.take 32
+                                (List.drop 640 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o)))))))))
+          fun h =>
+          Eq.mpr (id (congr (congrArg Eq (congrArg AspisV8R19.SqueezeOracleBridge.flatten (if_pos h))) (if_pos h)))
+            (of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrArg (List.map AspisV8R19.SqueezeOracleBridge.decodeByte)
+                        (Eq.trans
+                          (Eq.trans
+                            (congrArg (List.flatMap fun part => ↑part)
+                              (congrArg Subtype.val
+                                (Subtype.mk.congr_simp
+                                  [⟨[16#u8, 113#u8], AspisR1.Port4B_LeafCode.parts._proof_4 113#u8⟩,
+                                    AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize,
+                                    AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize]
+                                  [⟨[16#u8, 113#u8], AspisR1.Port4B_LeafCode.parts._proof_4 113#u8⟩,
+                                    ⟨List.take 480 ↑o,
+                                      congr
+                                          (congrArg List.take
+                                            (Eq.trans
+                                              (congr
+                                                (congrArg HSub.hSub
+                                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 480
+                                                      AspisR1.Port4B_LeafCode.code._proof_3)))
+                                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                                                    AspisR1.Port4B_LeafCode.code._proof_1)))
+                                              (tsub_zero 480)))
+                                          (congrFun'
+                                            (congrArg List.drop
+                                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                                                  AspisR1.Port4B_LeafCode.code._proof_1)))
+                                            ↑o) ▸
+                                        AspisR1.MultiproofConeSlices.sub._proof_2 o 0#usize 480#usize⟩,
+                                    ⟨List.take 32 (List.drop 608 ↑o),
+                                      congr
+                                          (congrArg List.take
+                                            (congr
+                                              (congrArg HSub.hSub
+                                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 640
+                                                    AspisR1.Port4B_LeafCode.code._proof_5)))
+                                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 608
+                                                  AspisR1.Port4B_LeafCode.code._proof_4))))
+                                          (congrFun'
+                                            (congrArg List.drop
+                                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 608
+                                                  AspisR1.Port4B_LeafCode.code._proof_4)))
+                                            ↑o) ▸
+                                        AspisR1.MultiproofConeSlices.sub._proof_2 o 608#usize 640#usize⟩]
+                                  (congrArg (List.cons ⟨[16#u8, 113#u8], AspisR1.Port4B_LeafCode.parts._proof_4 113#u8⟩)
+                                    (congr
+                                      (congrArg List.cons
+                                        (Subtype.mk.congr_simp
+                                          (List.take (↑480#usize - ↑0#usize) (List.drop ↑0#usize ↑o)) (List.take 480 ↑o)
+                                          (congr
+                                            (congrArg List.take
+                                              (Eq.trans
+                                                (congr
+                                                  (congrArg HSub.hSub
+                                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 480
+                                                        AspisR1.Port4B_LeafCode.code._proof_3)))
+                                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                                                      AspisR1.Port4B_LeafCode.code._proof_1)))
+                                                (tsub_zero 480)))
+                                            (congrFun'
+                                              (congrArg List.drop
+                                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                                                    AspisR1.Port4B_LeafCode.code._proof_1)))
+                                              ↑o))
+                                          (AspisR1.MultiproofConeSlices.sub._proof_2 o 0#usize 480#usize)))
+                                      (congrFun'
+                                        (congrArg List.cons
+                                          (Subtype.mk.congr_simp
+                                            (List.take (↑640#usize - ↑608#usize) (List.drop ↑608#usize ↑o))
+                                            (List.take 32 (List.drop 608 ↑o))
+                                            (congr
+                                              (congrArg List.take
+                                                (congr
+                                                  (congrArg HSub.hSub
+                                                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 640
+                                                        AspisR1.Port4B_LeafCode.code._proof_5)))
+                                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 608
+                                                      AspisR1.Port4B_LeafCode.code._proof_4))))
+                                              (congrFun'
+                                                (congrArg List.drop
+                                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 608
+                                                      AspisR1.Port4B_LeafCode.code._proof_4)))
+                                                ↑o))
+                                            (AspisR1.MultiproofConeSlices.sub._proof_2 o 608#usize 640#usize)))
+                                        [])))
+                                  (AspisR1.Port4B_LeafCode.parts._proof_5 113#u8
+                                    (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+                                    (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize)))))
+                            List.flatMap_cons)
+                          (congrArg (HAppend.hAppend [16#u8, 113#u8])
+                            (Eq.trans List.flatMap_cons
+                              (congrArg (HAppend.hAppend (List.take 480 ↑o))
+                                (Eq.trans List.flatMap_cons
+                                  (Eq.trans
+                                    (congrArg (HAppend.hAppend (List.take 32 (List.drop 608 ↑o))) List.flatMap_nil)
+                                    (List.append_nil (List.take 32 (List.drop 608 ↑o))))))))))
+                      (congr
+                        (congrArg List.cons
+                          (Fin.mk.congr_simp (↑16#u8) 16
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 16
+                                AspisR1.Port4B_LeafCode.parts._proof_3))
+                            (AspisV8R19.SqueezeOracleBridge.decodeByte._proof_1 16#u8)))
+                        (congr
+                          (congrArg List.cons
+                            (Fin.mk.congr_simp (↑113#u8) 113
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 113
+                                  AspisR1.Port4B_LeafCode.code._proof_2))
+                              (AspisV8R19.SqueezeOracleBridge.decodeByte._proof_1 113#u8)))
+                          (Eq.trans List.map_append
+                            (congr (congrArg HAppend.hAppend List.map_take)
+                              (Eq.trans List.map_take (congrArg (List.take 32) List.map_drop))))))))
+                  (16 ::
+                    113 ::
+                      (List.take 480 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o) ++
+                        List.take 32 (List.drop 608 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o)))))
+                (eq_self
+                  (16 ::
+                    113 ::
+                      (List.take 480 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o) ++
+                        List.take 32 (List.drop 608 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o))))))))))
+'AspisR1.Port4B_LeafCode.address' depends on axioms: [propext, Classical.choice, Quot.sound]

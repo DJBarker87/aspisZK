@@ -1,0 +1,49 @@
+{"attempt": "BEn_023", "exit_status": 0, "wall_seconds": 2.5157395920250565, "peak_rss_kib": "5553020", "swaps": "0", "print_axioms": ["'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]"]}
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+              Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                H →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Usize →
+                        Aeneas.Std.Array Aeneas.Std.U64 16#usize →
+                          Aeneas.Std.Usize →
+                       
+...
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+              Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                H →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Usize →
+                        Aeneas.Std.Array Aeneas.Std.U64 16#usize →
+                          Aeneas.Std.Usize →
+                            Aeneas.Std.Usize →
+                              Aeneas.Std.Result
+                                (Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                                  Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize ×
+                                    Option (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)) :=
+fun ops {H} aspis_coredigestDigest32Inst proof root tree idx val hash lo n s keys d key_position =>
+  Aeneas.Std.loop
+    (fun x =>
+      match x with
+      | (idx1, val1, d1, key_position1) =>
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops aspis_coredigestDigest32Inst proof
+          root tree hash lo n s keys idx1 val1 d1 key_position1)
+    (idx, val, d, key_position)
+'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+Running as unit: run-rc347adb7814a4bf4b1554293d9dd8e27.scope; invocation ID: 816b39b0c6d8476295ce6362e8724715

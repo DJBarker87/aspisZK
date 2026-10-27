@@ -1,0 +1,338 @@
+theorem AspisR1.Port9OR_BatchLoop.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D E : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize),
+  ↑n < 256 →
+    ∀ (fuel : ℕ) (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values)
+      (d pos : Aeneas.Std.Usize),
+      ↑n - ↑pos + 1 ≤ fuel →
+        AspisR1.CheckpointBytes5Effect.erase E hash
+            (AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel idx val d pos) =
+          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (AspisR1.Port9OR_BatchStep.ops base) E proof
+            root tree idx val hash lo n slot keys d pos :=
+fun base {Hash} D E hash proof root tree lo n slot keys small fuel idx val d pos bound =>
+  Nat.recAux (motive := fun fuel =>
+    ∀ (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values) (d pos : Aeneas.Std.Usize),
+      ↑n - ↑pos + 1 ≤ fuel →
+        AspisR1.CheckpointBytes5Effect.erase E hash
+            (AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel idx val d pos) =
+          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (AspisR1.Port9OR_BatchStep.ops base) E proof
+            root tree idx val hash lo n slot keys d pos)
+    (fun idx val d pos bound =>
+      Classical.byContradiction fun a => AspisR1.Port9OR_BatchLoop.source._proof_1 n pos bound)
+    (fun fuel ih idx val d pos bound =>
+      id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                AspisR1.CheckpointBytes5Effect.erase E hash
+                    (AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys (fuel + 1) idx val d
+                      pos) =
+                  _a)
+              (Aeneas.Std.loop.eq_def
+                (fun x =>
+                  match x with
+                  | (idx1, val1, d1, key_position1) =>
+                    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                      (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx1 val1 d1
+                      key_position1)
+                (idx, val, d, pos))))
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                      (AspisR1.Port9OR_BatchStep.body base E proof root tree hash lo n slot keys idx val d pos)
+                      fun out =>
+                      match out with
+                      | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                      | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                        AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx nextVal
+                          nextD nextPos)
+                    (congrFun'
+                      (congrArg Bind.bind
+                        (AspisR1.Port9OR_BatchStep.source base E hash proof root tree lo n slot keys idx val d pos))
+                      fun a =>
+                      AspisR1.CheckpointBytes5Effect.erase E hash
+                        (match a with
+                        | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                        | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                          AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx nextVal
+                            nextD nextPos))))
+                (match
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                    (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos with
+                | Aeneas.Std.Result.ok r =>
+                  match r with
+                  | Aeneas.Std.ControlFlow.cont x =>
+                    Aeneas.Std.loop
+                      (fun x =>
+                        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                          (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1 x.2.1 x.2.2.1
+                          x.2.2.2)
+                      x
+                  | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                | Aeneas.Std.Result.div => Aeneas.Std.Result.div)))
+            (Aeneas.Std.Result.casesOn (motive := fun t =>
+              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port9OR_BatchStep.ops base)
+                    E proof root tree hash lo n slot keys idx val d pos =
+                  t →
+                (do
+                    let a ←
+                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                          (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos
+                    AspisR1.CheckpointBytes5Effect.erase E hash
+                        (match a with
+                        | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                        | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                          AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx nextVal
+                            nextD nextPos)) =
+                  match
+                    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                      (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos with
+                  | Aeneas.Std.Result.ok r =>
+                    match r with
+                    | Aeneas.Std.ControlFlow.cont x =>
+                      Aeneas.Std.loop
+                        (fun x =>
+                          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                            (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1 x.2.1 x.2.2.1
+                            x.2.2.2)
+                        x
+                    | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                  | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                  | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+              (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos)
+              (fun out h =>
+                Eq.ndrec (motive := fun x =>
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                        (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos =
+                      x →
+                    (do
+                        let a ← x
+                        AspisR1.CheckpointBytes5Effect.erase E hash
+                            (match a with
+                            | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                            | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                              AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx
+                                nextVal nextD nextPos)) =
+                      match x with
+                      | Aeneas.Std.Result.ok r =>
+                        match r with
+                        | Aeneas.Std.ControlFlow.cont x =>
+                          Aeneas.Std.loop
+                            (fun x =>
+                              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1 x.2.1
+                                x.2.2.1 x.2.2.2)
+                            x
+                        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+                  (fun ran =>
+                    Eq.mpr
+                      (id
+                        (congrFun'
+                          (congrArg Eq
+                            (Aeneas.Std.bind_tc_ok out fun y =>
+                              AspisR1.CheckpointBytes5Effect.erase E hash
+                                (match y with
+                                | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                                | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                                  AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx
+                                    nextVal nextD nextPos)))
+                          (match out with
+                          | Aeneas.Std.ControlFlow.cont x =>
+                            Aeneas.Std.loop
+                              (fun x =>
+                                AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                  (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1 x.2.1
+                                  x.2.2.1 x.2.2.2)
+                              x
+                          | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x)))
+                      (Aeneas.Std.ControlFlow.casesOn (motive := fun t =>
+                        out = t →
+                          AspisR1.CheckpointBytes5Effect.erase E hash
+                              (match out with
+                              | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                              | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                                AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx
+                                  nextVal nextD nextPos) =
+                            match out with
+                            | Aeneas.Std.ControlFlow.cont x =>
+                              Aeneas.Std.loop
+                                (fun x =>
+                                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                    (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1 x.2.1
+                                    x.2.2.1 x.2.2.2)
+                                x
+                            | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x)
+                        out
+                        (fun next h =>
+                          Eq.ndrec (motive := fun out =>
+                            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                  (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d
+                                  pos =
+                                Aeneas.Std.Result.ok out →
+                              AspisR1.CheckpointBytes5Effect.erase E hash
+                                  (match out with
+                                  | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                                  | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                                    AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel
+                                      nextIdx nextVal nextD nextPos) =
+                                match out with
+                                | Aeneas.Std.ControlFlow.cont x =>
+                                  Aeneas.Std.loop
+                                    (fun x =>
+                                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                        (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1
+                                        x.2.1 x.2.2.1 x.2.2.2)
+                                    x
+                                | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x)
+                            (fun ran =>
+                              let ⟨nextIdx, snd✝, ran⟩ := next
+                              let ⟨nextVal, snd✝¹, ran⟩ := snd✝
+                              let ⟨nextD, nextPos, ran⟩ := snd✝¹
+                              let ⟨active, nextEq⟩ :=
+                                AspisR1.Port9OR_BatchProgress.advance base E hash proof root tree lo n slot keys idx val
+                                  d pos nextIdx nextVal nextD nextPos ran
+                              have increment :=
+                                AspisR1.Port3_Wrapping.increment pos
+                                  (id
+                                    (fun active =>
+                                      Decidable.byContradiction fun a =>
+                                        AspisR1.Port9OR_BatchLoop.source._proof_6 n small fuel pos active a)
+                                    active);
+                              have nextValue :=
+                                Eq.mpr (id (congrArg (fun _a => ↑_a = ↑pos + 1) nextEq))
+                                  (Eq.mpr (id (congrArg (fun _a => _a = ↑pos + 1) increment)) (Eq.refl (↑pos + 1)));
+                              ih nextIdx nextVal nextD nextPos
+                                (id
+                                  (fun active =>
+                                    Decidable.byContradiction fun a =>
+                                      AspisR1.Port9OR_BatchLoop.source._proof_7 n fuel pos bound nextPos nextValue
+                                        active a)
+                                  active))
+                            (Eq.symm h) ran)
+                        (fun result h =>
+                          Eq.ndrec (motive := fun out =>
+                            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                  (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d
+                                  pos =
+                                Aeneas.Std.Result.ok out →
+                              AspisR1.CheckpointBytes5Effect.erase E hash
+                                  (match out with
+                                  | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                                  | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                                    AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel
+                                      nextIdx nextVal nextD nextPos) =
+                                match out with
+                                | Aeneas.Std.ControlFlow.cont x =>
+                                  Aeneas.Std.loop
+                                    (fun x =>
+                                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                        (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1
+                                        x.2.1 x.2.2.1 x.2.2.2)
+                                    x
+                                | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x)
+                            (fun ran =>
+                              Eq.refl
+                                (AspisR1.CheckpointBytes5Effect.erase E hash
+                                  (match Aeneas.Std.ControlFlow.done result with
+                                  | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                                  | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                                    AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel
+                                      nextIdx nextVal nextD nextPos)))
+                            (Eq.symm h) ran)
+                        (Eq.refl out)))
+                  (Eq.symm h)
+                  (Eq.refl
+                    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                      (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos)))
+              (fun e h =>
+                Eq.ndrec (motive := fun x =>
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                        (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos =
+                      x →
+                    (do
+                        let a ← x
+                        AspisR1.CheckpointBytes5Effect.erase E hash
+                            (match a with
+                            | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                            | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                              AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx
+                                nextVal nextD nextPos)) =
+                      match x with
+                      | Aeneas.Std.Result.ok r =>
+                        match r with
+                        | Aeneas.Std.ControlFlow.cont x =>
+                          Aeneas.Std.loop
+                            (fun x =>
+                              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1 x.2.1
+                                x.2.2.1 x.2.2.2)
+                            x
+                        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+                  (fun ran =>
+                    Eq.refl do
+                      let a ← Aeneas.Std.Result.fail e
+                      AspisR1.CheckpointBytes5Effect.erase E hash
+                          (match a with
+                          | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                          | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                            AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx
+                              nextVal nextD nextPos))
+                  (Eq.symm h)
+                  (Eq.refl
+                    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                      (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos)))
+              (fun h =>
+                Eq.ndrec (motive := fun x =>
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                        (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos =
+                      x →
+                    (do
+                        let a ← x
+                        AspisR1.CheckpointBytes5Effect.erase E hash
+                            (match a with
+                            | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                            | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                              AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx
+                                nextVal nextD nextPos)) =
+                      match x with
+                      | Aeneas.Std.Result.ok r =>
+                        match r with
+                        | Aeneas.Std.ControlFlow.cont x =>
+                          Aeneas.Std.loop
+                            (fun x =>
+                              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys x.1 x.2.1
+                                x.2.2.1 x.2.2.2)
+                            x
+                        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+                  (fun ran =>
+                    Eq.refl do
+                      let a ← Aeneas.Std.Result.div
+                      AspisR1.CheckpointBytes5Effect.erase E hash
+                          (match a with
+                          | Aeneas.Std.ControlFlow.done result => Pure.pure result
+                          | Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                            AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx
+                              nextVal nextD nextPos))
+                  (Eq.symm h)
+                  (Eq.refl
+                    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                      (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos)))
+              (Eq.refl
+                (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                  (AspisR1.Port9OR_BatchStep.ops base) E proof root tree hash lo n slot keys idx val d pos))))))
+    fuel idx val d pos bound
+'AspisR1.Port9OR_BatchLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]

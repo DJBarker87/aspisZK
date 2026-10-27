@@ -1,0 +1,21 @@
+{"attempt": "BEn_062", "exit_status": 0, "wall_seconds": 3.0013984259567223, "peak_rss_kib": "5553076", "swaps": "0", "print_axioms": ["'AspisR1.BEl_LawComposition.trans' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEl_LawComposition.trans : ∀ {S A E F G : Type} (left : AspisR1.BEh_Scope.Outcome S A E)
+  (middle : AspisR1.BEh_Scope.Outcome S A F) (right : AspisR1.BEh_Scope.Outcome S A G),
+  AspisR1.BEh_Scope.Law left middle → AspisR1.BEh_Scope.Law middle right → AspisR1.BEh_Scope.Law left right :=
+fun {S A E F G} left middle right first second =>
+  ⟨⟨fun a => Iff.trans (first.left.left a) (second.left.left a), fun a accepted =>
+      Eq.trans (first.left.right a accepted) (second.left.right a ((first.left.left a).mp accepted))⟩,
+    ⟨Iff.trans first.right.left second.right.left, fun rejected =>
+      Eq.trans (first.right.right rejected) (second.right.right (first.right.left.mp rejected
+...
+theorem AspisR1.BEl_LawComposition.trans : ∀ {S A E F G : Type} (left : AspisR1.BEh_Scope.Outcome S A E)
+  (middle : AspisR1.BEh_Scope.Outcome S A F) (right : AspisR1.BEh_Scope.Outcome S A G),
+  AspisR1.BEh_Scope.Law left middle → AspisR1.BEh_Scope.Law middle right → AspisR1.BEh_Scope.Law left right :=
+fun {S A E F G} left middle right first second =>
+  ⟨⟨fun a => Iff.trans (first.left.left a) (second.left.left a), fun a accepted =>
+      Eq.trans (first.left.right a accepted) (second.left.right a ((first.left.left a).mp accepted))⟩,
+    ⟨Iff.trans first.right.left second.right.left, fun rejected =>
+      Eq.trans (first.right.right rejected) (second.right.right (first.right.left.mp rejected))⟩⟩
+'AspisR1.BEl_LawComposition.trans' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8e864d36584744f994df61a2eaaf6479.scope; invocation ID: 1b05ad82aad14171a11b7443dcadea34

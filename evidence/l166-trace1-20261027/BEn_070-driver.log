@@ -1,0 +1,52 @@
+{"attempt": "BEn_070", "exit_status": 0, "wall_seconds": 2.5371715810033493, "peak_rss_kib": "5551788", "swaps": "0", "print_axioms": ["'AspisR1.BEk_Returning.agrees' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEk_Returning.agrees : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (code : AspisR1.SdkC_Source.Code A)
+  (value : A),
+  AspisR1.SdkC_BatchPair.Returning hashv H code value →
+    AspisR1.ARS_QueryTransport.Agrees H (AspisR1.SdkC_Source.run hashv code []).2 :=
+fun {A} hashv H code value returning q member digest returned =>
+  Decidable.byContradiction fun bad =>
+    returning.right.right (AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+      (AspisV8R19.SqueezeOracleBridge.decodeState digest) bad
+      (List.mem_filterMap.mpr
+        (Exists.intro q
+  
+...
+theorem AspisR1.BEk_Returning.agrees : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (code : AspisR1.SdkC_Source.Code A)
+  (value : A),
+  AspisR1.SdkC_BatchPair.Returning hashv H code value →
+    AspisR1.ARS_QueryTransport.Agrees H (AspisR1.SdkC_Source.run hashv code []).2 :=
+fun {A} hashv H code value returning q member digest returned =>
+  Decidable.byContradiction fun bad =>
+    returning.right.right (AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+      (AspisV8R19.SqueezeOracleBridge.decodeState digest) bad
+      (List.mem_filterMap.mpr
+        (Exists.intro q
+          ⟨member,
+            of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg
+                      (fun x =>
+                        match x with
+                        | Aeneas.Std.Result.ok digest =>
+                          Option.some
+                            (AspisV8R19.SqueezeOracleBridge.flatten q.parts,
+                              AspisV8R19.SqueezeOracleBridge.decodeState digest)
+                        | x => Option.none)
+                      returned))
+                  (Option.some
+                    (AspisV8R19.SqueezeOracleBridge.flatten q.parts,
+                      AspisV8R19.SqueezeOracleBridge.decodeState digest)))
+                (eq_self
+                  (Option.some
+                    (AspisV8R19.SqueezeOracleBridge.flatten q.parts,
+                      AspisV8R19.SqueezeOracleBridge.decodeState digest))))⟩))
+'AspisR1.BEk_Returning.agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc1475e2ef50f4bc0883d236ddbdcbbd2.scope; invocation ID: 1d911519007841fc84561da724d70acc
+

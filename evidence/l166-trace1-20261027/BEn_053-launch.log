@@ -1,0 +1,24 @@
+{"attempt": "BEn_053", "exit_status": 0, "wall_seconds": 2.733709632011596, "peak_rss_kib": "5552576", "swaps": "0", "print_axioms": ["'AspisR1.BEl_PartialRecorder.decode_enter' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEl_PartialRecorder.decode_enter : ∀ (stopped : Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (before : AspisR1.SdkC_Source.Log) (parts : AspisR1.SdkC_Source.Parts),
+  AspisR1.BEl_PartialRecorder.decode stopped
+      (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts) =
+    before ++ [{ parts := parts, returned := stopped }] :=
+fun stopped before parts =>
+  Eq.mpr (id (congrFun' (congrArg Eq List.map_append) (before ++ [{ parts := parts, returned := stopped }])))
+    (congrArg (fun x => x ++ [{ parts := parts, returned := stopped }])
+      (AspisR1.BEl_PartialRecorder.decode_completed stopped before))
+'AspisR1.BEl_PartialRecorder.decode_enter' depends
+...
+theorem AspisR1.BEl_PartialRecorder.decode_enter : ∀ (stopped : Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (before : AspisR1.SdkC_Source.Log) (parts : AspisR1.SdkC_Source.Parts),
+  AspisR1.BEl_PartialRecorder.decode stopped
+      (AspisR1.BEl_Recorder.enter (AspisR1.BEl_Recorder.completed before) parts) =
+    before ++ [{ parts := parts, returned := stopped }] :=
+fun stopped before parts =>
+  Eq.mpr (id (congrFun' (congrArg Eq List.map_append) (before ++ [{ parts := parts, returned := stopped }])))
+    (congrArg (fun x => x ++ [{ parts := parts, returned := stopped }])
+      (AspisR1.BEl_PartialRecorder.decode_completed stopped before))
+'AspisR1.BEl_PartialRecorder.decode_enter' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r172040b792fc4a72afa2e0c4773ca838.scope; invocation ID: ff0778c5f4484e549d9a062b1fe90e5e

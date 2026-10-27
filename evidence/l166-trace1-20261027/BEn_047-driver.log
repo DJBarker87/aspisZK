@@ -1,0 +1,48 @@
+{"attempt": "BEn_047", "exit_status": 0, "wall_seconds": 2.903079912008252, "peak_rss_kib": "5554980", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_LeafCode.address' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port4B_LeafCode.address : ∀ (kind : Aeneas.Std.Usize) (o : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind o) =
+    AspisR1.MultiproofConeOpeningAdapters.leafAddress (↑kind) (AspisR1.MultiproofConeCanonical.bytesOf ↑o) :=
+fun kind o =>
+  have zero := { mp := fun h => Eq.symm h ▸ Eq.refl ↑0#usize, mpr := fun h => Aeneas.Std.UScalar.eq_of_val_eq h };
+  have one :=
+    {
+      mp := fun h =>
+        Eq.ndrec (motive := fun kind => (kind = 0#usize ↔ ↑kind = 0) → ↑kind = 1) (fun zero => Eq.refl ↑1#usize)
+          (Eq.symm h) zero,
+      mpr := fun h => Aeneas.Std.UScalar.eq_of_val_eq h };
+  id
+    (id
+      (Eq.mpr
+   
+...
+↑o))))))))))
+                      (congr
+                        (congrArg List.cons
+                          (Fin.mk.congr_simp (↑16#u8) 16
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 16
+                                AspisR1.Port4B_LeafCode.parts._proof_3))
+                            (AspisV8R19.SqueezeOracleBridge.decodeByte._proof_1 16#u8)))
+                        (congr
+                          (congrArg List.cons
+                            (Fin.mk.congr_simp (↑113#u8) 113
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.U8 113
+                                  AspisR1.Port4B_LeafCode.code._proof_2))
+                              (AspisV8R19.SqueezeOracleBridge.decodeByte._proof_1 113#u8)))
+                          (Eq.trans List.map_append
+                            (congr (congrArg HAppend.hAppend List.map_take)
+                              (Eq.trans List.map_take (congrArg (List.take 32) List.map_drop))))))))
+                  (16 ::
+                    113 ::
+                      (List.take 480 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o) ++
+                        List.take 32 (List.drop 608 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o)))))
+                (eq_self
+                  (16 ::
+                    113 ::
+                      (List.take 480 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o) ++
+                        List.take 32 (List.drop 608 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑o))))))))))
+'AspisR1.Port4B_LeafCode.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4655132b6a8248f1a0f4863f2bf41f00.scope; invocation ID: c61c02b98cac4b75a25bedc7d7f7c13e
+

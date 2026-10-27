@@ -33,3 +33,10 @@ Neither success nor the desired association is in its admission predicate.
 This does not close D188-P2's retired tx1 semantic/preparation/query/finish
 association rows, P7 binary binding, or joint real-byte non-vacuity. Those are
 separate ledger entries. No trust guarantee is claimed for non-extracted code.
+
+Current shipped-cut provenance: BEn_SHIPPED_SOURCE_CHECK.json rechecks all13
+exact BEm source cuts (digest/leaf/parent/opening/slot/keys/sort/batch bodies,
+constants and verifier entry) by literal body presence and SHA-256. These
+checks are source provenance, not a source-to-ELF proof or a fresh extraction.
+The inherited three ELF pins remain unmeasured here. The D188-P2 retained
+transport qualifications are not relabelled as part of L166's local law.

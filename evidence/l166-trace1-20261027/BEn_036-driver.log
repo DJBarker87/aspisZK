@@ -1,0 +1,39 @@
+{"attempt": "BEn_036", "exit_status": 0, "wall_seconds": 3.286862873006612, "peak_rss_kib": "5581544", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_BatchProgress.advance' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port9OR_BatchProgress.advance : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port9OR_BatchStep.Indices)
+  (val : AspisR1.Port9OR_BatchStep.Values) (d pos : Aeneas.Std.Usize) (nextIdx : AspisR1.Port9OR_BatchStep.Indices)
+  (nextVal : AspisR1.Port9OR_BatchStep.Values) (nextD nextPos : Aeneas.Std.Usize),
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port9OR_BatchStep.ops b
+...
+Err AspisR1Stage2.verifier.Error.Merkle)))
+                                else do
+                                  let idx1 ← Aeneas.Std.Array.update idx d index
+                                  let val1 ← Aeneas.Std.Array.update val d leaf
+                                  let d1 ← Aeneas.Std.lift (d.wrapping_add 1#usize)
+                                  Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx1, val1, d1, key_position1))
+                            else do
+                              let idx1 ← Aeneas.Std.Array.update idx d index
+                              let val1 ← Aeneas.Std.Array.update val d leaf
+                              let d1 ← Aeneas.Std.lift (d.wrapping_add 1#usize)
+                              Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx1, val1, d1, key_position1)))
+                        v
+                    | Aeneas.Std.Result.fail v => Aeneas.Std.Result.fail v
+                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div) =
+                    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos)) →
+                  pos < n ∧ nextPos = pos.wrapping_add 1#usize)
+              (fun heq =>
+                id fun ran =>
+                  let ⟨⟩ := Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos))
+                  ran)
+              (Eq.symm h) (Eq.refl ((AspisR1.Port9OR_BatchStep.ops base).op9 keys pos)))
+          (Eq.refl ((AspisR1.Port9OR_BatchStep.ops base).op9 keys pos)) ran)
+      (Eq.mp
+        (congrFun' (congrArg Eq (if_pos h))
+          (Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos))))
+        ran)
+'AspisR1.Port9OR_BatchProgress.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r692b5f19988f406abc26a14ee541991e.scope; invocation ID: dc283e0e24b64020b0620d45a0344cc8
+

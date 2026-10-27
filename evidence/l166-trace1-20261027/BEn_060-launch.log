@@ -1,0 +1,47 @@
+{"attempt": "BEn_060", "exit_status": 0, "wall_seconds": 2.6833950970321894, "peak_rss_kib": "5552984", "swaps": "0", "print_axioms": ["'AspisR1.BEl_CodeCongr.bind_head' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEl_CodeCongr.bind_head : ∀ {S A B : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (left right : AspisR1.SdkC_Source.Code A) (k : A → AspisR1.SdkC_Source.Code B),
+  AspisR1.BEl_CodeCongr.Equivalent call left right → AspisR1.BEl_CodeCongr.Equivalent call (left >>= k) (right >>= k) :=
+fun {S A B} call left right k same state before =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call (right >>= k) state before))
+        (AspisR1.BEl_CodeCongr.bind_run call left k state before)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            AspisR1.BEl_Code
+...
+theorem AspisR1.BEl_CodeCongr.bind_head : ∀ {S A B : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (left right : AspisR1.SdkC_Source.Code A) (k : A → AspisR1.SdkC_Source.Code B),
+  AspisR1.BEl_CodeCongr.Equivalent call left right → AspisR1.BEl_CodeCongr.Equivalent call (left >>= k) (right >>= k) :=
+fun {S A B} call left right k same state before =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call (right >>= k) state before))
+        (AspisR1.BEl_CodeCongr.bind_run call left k state before)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            AspisR1.BEl_CodeCongr.resumeRun call k
+                (AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call left state before)) =
+              _a)
+          (AspisR1.BEl_CodeCongr.bind_run call right k state before)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              AspisR1.BEl_CodeCongr.resumeRun call k _a =
+                AspisR1.BEl_CodeCongr.resumeRun call k
+                  (AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call right state before)))
+            (same state before)))
+        (Eq.refl
+          (AspisR1.BEl_CodeCongr.resumeRun call k
+            (AspisR1.BEl_CodeCongr.observe (AspisR1.BEf_Carrier.run call right state before))))))
+'AspisR1.BEl_CodeCongr.bind_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4c0783d437c44c03bb99c72dd070891c.scope; invocation ID: 8257d4146d744c3aac1f5578acec7c16

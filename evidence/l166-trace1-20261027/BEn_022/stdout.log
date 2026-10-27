@@ -1,0 +1,102 @@
+def AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Usize →
+            H →
+              Aeneas.Std.Usize →
+                Aeneas.Std.Usize →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Array Aeneas.Std.U64 16#usize →
+                      Aeneas.Std.Array Aeneas.Std.U32 16#usize →
+                        Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize →
+                          Aeneas.Std.Usize →
+                            Aeneas.Std.Usize →
+                              Aeneas.Std.Result
+                                (Aeneas.Std.ControlFlow
+                                  (Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                                    Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize ×
+                                      Aeneas.Std.Usize × Aeneas.Std.Usize)
+                                  (Aeneas.Std.Array Aeneas.Std.U32 16#usize ×
+                                    Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize ×
+                                      Option (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error))) :=
+fun ops {H} aspis_coredigestDigest32Inst proof root tree hash lo n s keys idx val d key_position =>
+  if key_position < n then do
+    let key ← ops.op9 keys key_position
+    let key_position1 ← Aeneas.Std.lift (key_position.wrapping_add 1#usize)
+    let i ← Aeneas.Std.lift (key.wrapping_shr 8#u32)
+    let index ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 i)
+    let i1 ← Aeneas.Std.lift (key &&& 255#u64)
+    let i2 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize i1)
+    let i3 ← Aeneas.Std.lift (lo.wrapping_add i2)
+    let q ← ops.op2 proof i3
+    let leaf ← ops.op6 aspis_coredigestDigest32Inst hash tree q
+    if d > 0#usize then do
+        let i4 ← Aeneas.Std.lift (d.wrapping_sub 1#usize)
+        let b ← ops.op8 idx i4 index
+        if b = Bool.true then do
+            let i5 ← Aeneas.Std.lift (d.wrapping_sub 1#usize)
+            let b1 ← ops.op7 val i5 leaf
+            if b1 = Bool.true then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx, val, d, key_position1))
+              else
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.ControlFlow.done
+                    (idx, val, Option.some (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle)))
+          else do
+            let idx1 ← idx.update d index
+            let val1 ← val.update d leaf
+            let d1 ← Aeneas.Std.lift (d.wrapping_add 1#usize)
+            Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx1, val1, d1, key_position1))
+      else do
+        let idx1 ← idx.update d index
+        let val1 ← val.update d leaf
+        let d1 ← Aeneas.Std.lift (d.wrapping_add 1#usize)
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx1, val1, d1, key_position1))
+  else do
+    let s1 ←
+      Aeneas.Std.core.array.Array.index
+          (Aeneas.Std.core.ops.index.IndexSlice
+            (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+          idx { «end» := d }
+    let o ← ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two s1
+    let r ← ops.op1 o AspisR1Stage2.verifier.Error.Merkle
+    let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+        let nodes ← ops.op3 proof s
+        let a ← ops.op12
+        let i ← a.index_usize s
+        if val1 > i then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, Option.none))
+          else do
+            let i1 ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 32#usize val1)
+            let s2 ←
+              Aeneas.Std.core.slice.index.Slice.index
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) nodes { start := i1 }
+            let ce ← Aeneas.Std.core.slice.Slice.chunks_exact s2 8#usize
+            let (b, _) ←
+              ops.op0 (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+                  (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                    ops aspis_coredigestDigest32Inst)
+                  ce ()
+            if b = Bool.true then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, Option.none))
+              else do
+                let i2 ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 32#usize val1)
+                let s3 ←
+                  Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) nodes { «end» := i2 }
+                let (b1, idx1, val2) ←
+                  ops.op10 aspis_coredigestDigest32Inst hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx
+                      val d s3
+                if b1 = Bool.true then
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.ControlFlow.done (idx1, val2, Option.some (Aeneas.Std.core.result.Result.Ok ())))
+                  else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx1, val2, Option.none))
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+        let _ ←
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, Option.none))
+'AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

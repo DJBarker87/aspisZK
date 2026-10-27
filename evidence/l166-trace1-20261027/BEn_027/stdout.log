@@ -1,0 +1,1112 @@
+theorem AspisR1.Port9OR_Batch.values_source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D E : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (roots : Aeneas.Std.Array AspisR1.CheckpointBytes5Effect.Digest 3#usize) (which : Aeneas.Std.Usize),
+  AspisR1.CheckpointBytes5Effect.erase E hash (AspisR1.Port9OR_Batch.values base D hash proof queries roots which) =
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (AspisR1.Port9OR_BatchStep.ops base) E proof
+      queries roots which hash :=
+fun base {Hash} D E hash proof queries roots which =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+              (AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 0#usize)) fun root0 => do
+              let root1 ← AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 1#usize)
+              let root2 ← AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 2#usize)
+              let __x ←
+                AspisR1.Port9OR_BatchTree.code base D hash proof queries root0 which 0#usize
+                    (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                    (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8))
+              let cf ←
+                AspisR1.CheckpointBytes5Effect.liftResult (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+              match cf with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                  let __x ← AspisR1.Port9OR_BatchTree.code base D hash proof queries root1 which 1#usize __x.2.1 __x.2.2
+                  let cf1 ←
+                    AspisR1.CheckpointBytes5Effect.liftResult
+                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                  match cf1 with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                      let __x ←
+                        AspisR1.Port9OR_BatchTree.code base D hash proof queries root2 which 2#usize __x.2.1 __x.2.2
+                      let cf2 ←
+                        AspisR1.CheckpointBytes5Effect.liftResult
+                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                      match cf2 with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                          Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          AspisR1.CheckpointBytes5Effect.liftResult
+                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                      AspisR1.CheckpointBytes5Effect.liftResult
+                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                  AspisR1.CheckpointBytes5Effect.liftResult
+                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual))
+            (congr (congrArg Bind.bind (AspisR1.CheckpointBytes5Effect.erase_lift E hash (roots.index_usize 0#usize)))
+              (funext fun a =>
+                Eq.trans
+                  (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                    (AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 1#usize)) fun root1 => do
+                    let root2 ← AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 2#usize)
+                    let __x ←
+                      AspisR1.Port9OR_BatchTree.code base D hash proof queries a which 0#usize
+                          (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                          (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8))
+                    let cf ←
+                      AspisR1.CheckpointBytes5Effect.liftResult
+                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                    match cf with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                        let __x ←
+                          AspisR1.Port9OR_BatchTree.code base D hash proof queries root1 which 1#usize __x.2.1 __x.2.2
+                        let cf1 ←
+                          AspisR1.CheckpointBytes5Effect.liftResult
+                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                        match cf1 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                            let __x ←
+                              AspisR1.Port9OR_BatchTree.code base D hash proof queries root2 which 2#usize __x.2.1
+                                  __x.2.2
+                            let cf2 ←
+                              AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                            match cf2 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            AspisR1.CheckpointBytes5Effect.liftResult
+                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        AspisR1.CheckpointBytes5Effect.liftResult
+                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual))
+                  (congr
+                    (congrArg Bind.bind (AspisR1.CheckpointBytes5Effect.erase_lift E hash (roots.index_usize 1#usize)))
+                    (funext fun a_1 =>
+                      Eq.trans
+                        (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                          (AspisR1.CheckpointBytes5Effect.liftResult (roots.index_usize 2#usize)) fun root2 => do
+                          let __x ←
+                            AspisR1.Port9OR_BatchTree.code base D hash proof queries a which 0#usize
+                                (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                                (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8))
+                          let cf ←
+                            AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                          match cf with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                              let __x ←
+                                AspisR1.Port9OR_BatchTree.code base D hash proof queries a_1 which 1#usize __x.2.1
+                                    __x.2.2
+                              let cf1 ←
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                              match cf1 with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                  let __x ←
+                                    AspisR1.Port9OR_BatchTree.code base D hash proof queries root2 which 2#usize __x.2.1
+                                        __x.2.2
+                                  let cf2 ←
+                                    AspisR1.CheckpointBytes5Effect.liftResult
+                                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                  match cf2 with
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                      Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                      AspisR1.CheckpointBytes5Effect.liftResult
+                                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual))
+                        (congr
+                          (congrArg Bind.bind
+                            (AspisR1.CheckpointBytes5Effect.erase_lift E hash (roots.index_usize 2#usize)))
+                          (funext fun a_2 =>
+                            Eq.trans
+                              (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                                (AspisR1.Port9OR_BatchTree.code base D hash proof queries a which 0#usize
+                                  (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                                  (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)))
+                                fun __x => do
+                                let cf ←
+                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                match cf with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                    let __x ←
+                                      AspisR1.Port9OR_BatchTree.code base D hash proof queries a_1 which 1#usize __x.2.1
+                                          __x.2.2
+                                    let cf1 ←
+                                      AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                    match cf1 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                        let __x ←
+                                          AspisR1.Port9OR_BatchTree.code base D hash proof queries a_2 which 2#usize
+                                              __x.2.1 __x.2.2
+                                        let cf2 ←
+                                          AspisR1.CheckpointBytes5Effect.liftResult
+                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                        match cf2 with
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                            Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                            AspisR1.CheckpointBytes5Effect.liftResult
+                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                residual)
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                            residual)
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    AspisR1.CheckpointBytes5Effect.liftResult
+                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual))
+                              (congr
+                                (congrArg Bind.bind
+                                  (AspisR1.Port9OR_BatchTree.source base D E hash proof queries a which 0#usize
+                                    (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                                    (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8))))
+                                (funext fun a =>
+                                  Eq.trans
+                                    (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                                      (AspisR1.CheckpointBytes5Effect.liftResult
+                                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1))
+                                      fun cf =>
+                                      match cf with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_3 => do
+                                        let __x ←
+                                          AspisR1.Port9OR_BatchTree.code base D hash proof queries a_1 which 1#usize
+                                              a.2.1 a.2.2
+                                        let cf1 ←
+                                          AspisR1.CheckpointBytes5Effect.liftResult
+                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                        match cf1 with
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                            let __x ←
+                                              AspisR1.Port9OR_BatchTree.code base D hash proof queries a_2 which 2#usize
+                                                  __x.2.1 __x.2.2
+                                            let cf2 ←
+                                              AspisR1.CheckpointBytes5Effect.liftResult
+                                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                            match cf2 with
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                                Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                AspisR1.CheckpointBytes5Effect.liftResult
+                                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                    residual)
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                            AspisR1.CheckpointBytes5Effect.liftResult
+                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                residual)
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                            residual))
+                                    (congrFun'
+                                      (congrArg Bind.bind
+                                        (AspisR1.CheckpointBytes5Effect.erase_lift E hash
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1)))
+                                      fun a_3 =>
+                                      AspisR1.CheckpointBytes5Effect.erase E hash
+                                        (match a_3 with
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_4 => do
+                                          let __x ←
+                                            AspisR1.Port9OR_BatchTree.code base D hash proof queries a_1 which 1#usize
+                                                a.2.1 a.2.2
+                                          let cf1 ←
+                                            AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                          match cf1 with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                              let __x ←
+                                                AspisR1.Port9OR_BatchTree.code base D hash proof queries a_2 which
+                                                    2#usize __x.2.1 __x.2.2
+                                              let cf2 ←
+                                                AspisR1.CheckpointBytes5Effect.liftResult
+                                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                              match cf2 with
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                                  Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      Unit
+                                                      (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                      residual)
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                  residual)
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                          AspisR1.CheckpointBytes5Effect.liftResult
+                                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                              residual)))))))))))))
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (AspisR1.Port9OR_BatchStep.ops base) E
+          proof queries roots which hash)))
+    (id
+      ((Aeneas.Std.bind_eq_iff (roots.index_usize 0#usize)
+            (fun a => do
+              let a_1 ← roots.index_usize 1#usize
+              let a_2 ← roots.index_usize 2#usize
+              let a ←
+                AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E proof
+                    queries a which 0#usize (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                    (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)) hash
+              let a_3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1
+              AspisR1.CheckpointBytes5Effect.erase E hash
+                  (match a_3 with
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_4 => do
+                    let __x ← AspisR1.Port9OR_BatchTree.code base D hash proof queries a_1 which 1#usize a.2.1 a.2.2
+                    let cf1 ←
+                      AspisR1.CheckpointBytes5Effect.liftResult
+                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                    match cf1 with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                        let __x ←
+                          AspisR1.Port9OR_BatchTree.code base D hash proof queries a_2 which 2#usize __x.2.1 __x.2.2
+                        let cf2 ←
+                          AspisR1.CheckpointBytes5Effect.liftResult
+                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                        match cf2 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                            Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            AspisR1.CheckpointBytes5Effect.liftResult
+                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        AspisR1.CheckpointBytes5Effect.liftResult
+                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                    AspisR1.CheckpointBytes5Effect.liftResult
+                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)))
+            fun root0 => do
+            let root1 ← roots.index_usize 1#usize
+            let root2 ← roots.index_usize 2#usize
+            let (r, idx1, val1) ←
+              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E proof
+                  queries root0 which 0#usize (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                  (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)) hash
+            let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                let (r1, idx2, val2) ←
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E
+                      proof queries root1 which 1#usize idx1 val1 hash
+                let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                    let (r2, _, _) ←
+                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E
+                          proof queries root2 which 2#usize idx2 val2 hash
+                    let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                    match cf2 with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual).mpr
+        fun value success =>
+        (Aeneas.Std.bind_eq_iff (roots.index_usize 1#usize)
+              (fun a => do
+                let a_1 ← roots.index_usize 2#usize
+                let a_2 ←
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E
+                      proof queries value which 0#usize (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                      (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)) hash
+                let a_3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a_2.1
+                AspisR1.CheckpointBytes5Effect.erase E hash
+                    (match a_3 with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_4 => do
+                      let __x ← AspisR1.Port9OR_BatchTree.code base D hash proof queries a which 1#usize a_2.2.1 a_2.2.2
+                      let cf1 ←
+                        AspisR1.CheckpointBytes5Effect.liftResult
+                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                      match cf1 with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                          let __x ←
+                            AspisR1.Port9OR_BatchTree.code base D hash proof queries a_1 which 2#usize __x.2.1 __x.2.2
+                          let cf2 ←
+                            AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                          match cf2 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                              Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          AspisR1.CheckpointBytes5Effect.liftResult
+                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                      AspisR1.CheckpointBytes5Effect.liftResult
+                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)))
+              fun root1 => do
+              let root2 ← roots.index_usize 2#usize
+              let (r, idx1, val1) ←
+                AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E proof
+                    queries value which 0#usize (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                    (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)) hash
+              let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                  let (r1, idx2, val2) ←
+                    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E
+                        proof queries root1 which 1#usize idx1 val1 hash
+                  let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf1 with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                      let (r2, _, _) ←
+                        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base)
+                            E proof queries root2 which 2#usize idx2 val2 hash
+                      let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                      match cf2 with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual).mpr
+          fun value_1 success =>
+          (Aeneas.Std.bind_eq_iff (roots.index_usize 2#usize)
+                (fun a => do
+                  let a_1 ←
+                    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E
+                        proof queries value which 0#usize (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                        (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)) hash
+                  let a_2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a_1.1
+                  AspisR1.CheckpointBytes5Effect.erase E hash
+                      (match a_2 with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_3 => do
+                        let __x ←
+                          AspisR1.Port9OR_BatchTree.code base D hash proof queries value_1 which 1#usize a_1.2.1 a_1.2.2
+                        let cf1 ←
+                          AspisR1.CheckpointBytes5Effect.liftResult
+                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                        match cf1 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_4 => do
+                            let __x ←
+                              AspisR1.Port9OR_BatchTree.code base D hash proof queries a which 2#usize __x.2.1 __x.2.2
+                            let cf2 ←
+                              AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                            match cf2 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            AspisR1.CheckpointBytes5Effect.liftResult
+                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        AspisR1.CheckpointBytes5Effect.liftResult
+                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)))
+                fun root2 => do
+                let (r, idx1, val1) ←
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E
+                      proof queries value which 0#usize (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                      (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)) hash
+                let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                    let (r1, idx2, val2) ←
+                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E
+                          proof queries value_1 which 1#usize idx1 val1 hash
+                    let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                    match cf1 with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                        let (r2, _, _) ←
+                          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                              (AspisR1.Port9OR_BatchStep.ops base) E proof queries root2 which 2#usize idx2 val2 hash
+                        let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                        match cf2 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual).mpr
+            fun value_2 success =>
+            (Aeneas.Std.bind_eq_iff
+                  (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E
+                    proof queries value which 0#usize (Aeneas.Std.Array.repeat 16#usize 0#u32)
+                    (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)) hash)
+                  (fun a => do
+                    let a_1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1
+                    AspisR1.CheckpointBytes5Effect.erase E hash
+                        (match a_1 with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_2 => do
+                          let __x ←
+                            AspisR1.Port9OR_BatchTree.code base D hash proof queries value_1 which 1#usize a.2.1 a.2.2
+                          let cf1 ←
+                            AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                          match cf1 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                              let __x ←
+                                AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which 2#usize __x.2.1
+                                    __x.2.2
+                              let cf2 ←
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                              match cf2 with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                  Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          AspisR1.CheckpointBytes5Effect.liftResult
+                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)))
+                  (Aeneas.Std.uncurry fun r =>
+                    Aeneas.Std.uncurry fun idx1 val1 => do
+                      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                          let (r1, idx2, val2) ←
+                            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_1 which 1#usize idx1 val1
+                                hash
+                          let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                          match cf1 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                              let (r2, _, _) ←
+                                AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                    (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_2 which 2#usize idx2 val2
+                                    hash
+                              let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                              match cf2 with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)).mpr
+              fun value_3 success =>
+              (Aeneas.Std.bind_eq_iff (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch value_3.1)
+                    (fun a =>
+                      AspisR1.CheckpointBytes5Effect.erase E hash
+                        (match a with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                          let __x ←
+                            AspisR1.Port9OR_BatchTree.code base D hash proof queries value_1 which 1#usize value_3.2.1
+                                value_3.2.2
+                          let cf1 ←
+                            AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                          match cf1 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                              let __x ←
+                                AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which 2#usize __x.2.1
+                                    __x.2.2
+                              let cf2 ←
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                              match cf2 with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                  Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          AspisR1.CheckpointBytes5Effect.liftResult
+                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)))
+                    fun cf =>
+                    match cf with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                      let (r1, idx2, val2) ←
+                        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base)
+                            E proof queries value_1 which 1#usize value_3.2.1 value_3.2.2 hash
+                      let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                      match cf1 with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                          let (r2, _, _) ←
+                            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_2 which 2#usize idx2 val2
+                                hash
+                          let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                          match cf2 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual).mpr
+                fun value_4 success_1 =>
+                let ⟨fst✝, snd✝, success, success⟩ := value_3
+                let ⟨fst✝¹, snd✝¹, success, success⟩ := snd✝
+                Aeneas.Std.core.ops.control_flow.ControlFlow.casesOn (motive := fun x =>
+                  Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch (fst✝, fst✝¹, snd✝¹).1 =
+                      Aeneas.Std.Result.ok x →
+                    AspisR1.CheckpointBytes5Effect.erase E hash
+                        (match x with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                          let __x ←
+                            AspisR1.Port9OR_BatchTree.code base D hash proof queries value_1 which 1#usize
+                                (fst✝, fst✝¹, snd✝¹).2.1 (fst✝, fst✝¹, snd✝¹).2.2
+                          let cf1 ←
+                            AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                          match cf1 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                              let __x ←
+                                AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which 2#usize __x.2.1
+                                    __x.2.2
+                              let cf2 ←
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                              match cf2 with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                  Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              AspisR1.CheckpointBytes5Effect.liftResult
+                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          AspisR1.CheckpointBytes5Effect.liftResult
+                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)) =
+                      match x with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                        let (r1, idx2, val2) ←
+                          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                              (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_1 which 1#usize
+                              (fst✝, fst✝¹, snd✝¹).2.1 (fst✝, fst✝¹, snd✝¹).2.2 hash
+                        let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                        match cf1 with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                            let (r2, _, _) ←
+                              AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                  (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_2 which 2#usize idx2 val2
+                                  hash
+                            let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                            match cf2 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                  value_4
+                  (fun a success =>
+                    Eq.mpr
+                      (id
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                                (AspisR1.Port9OR_BatchTree.code base D hash proof queries value_1 which 1#usize fst✝¹
+                                  snd✝¹)
+                                fun __x => do
+                                let cf1 ←
+                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                match cf1 with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                    let __x ←
+                                      AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which 2#usize
+                                          __x.2.1 __x.2.2
+                                    let cf2 ←
+                                      AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                    match cf2 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                        Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                            residual)
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    AspisR1.CheckpointBytes5Effect.liftResult
+                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual))
+                              (congr
+                                (congrArg Bind.bind
+                                  (AspisR1.Port9OR_BatchTree.source base D E hash proof queries value_1 which 1#usize
+                                    fst✝¹ snd✝¹))
+                                (funext fun a =>
+                                  Eq.trans
+                                    (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                                      (AspisR1.CheckpointBytes5Effect.liftResult
+                                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1))
+                                      fun cf1 =>
+                                      match cf1 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_1 => do
+                                        let __x ←
+                                          AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which 2#usize
+                                              a.2.1 a.2.2
+                                        let cf2 ←
+                                          AspisR1.CheckpointBytes5Effect.liftResult
+                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                        match cf2 with
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                            Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                            AspisR1.CheckpointBytes5Effect.liftResult
+                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                residual)
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                            residual))
+                                    (congrFun'
+                                      (congrArg Bind.bind
+                                        (AspisR1.CheckpointBytes5Effect.erase_lift E hash
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1)))
+                                      fun a_1 =>
+                                      AspisR1.CheckpointBytes5Effect.erase E hash
+                                        (match a_1 with
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_2 => do
+                                          let __x ←
+                                            AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which
+                                                2#usize a.2.1 a.2.2
+                                          let cf2 ←
+                                            AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                          match cf2 with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                              Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                  residual)
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                          AspisR1.CheckpointBytes5Effect.liftResult
+                                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                              residual)))))))
+                          do
+                          let (r1, idx2, val2) ←
+                            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_1 which 1#usize fst✝¹ snd✝¹
+                                hash
+                          let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                          match cf1 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                              let (r2, _, _) ←
+                                AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                    (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_2 which 2#usize idx2 val2
+                                    hash
+                              let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                              match cf2 with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual))
+                      ((Aeneas.Std.bind_eq_iff
+                            (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                              (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_1 which 1#usize fst✝¹ snd✝¹
+                              hash)
+                            (fun a => do
+                              let a_1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1
+                              AspisR1.CheckpointBytes5Effect.erase E hash
+                                  (match a_1 with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a_2 => do
+                                    let __x ←
+                                      AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which 2#usize
+                                          a.2.1 a.2.2
+                                    let cf2 ←
+                                      AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                    match cf2 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                        Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                            residual)
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    AspisR1.CheckpointBytes5Effect.liftResult
+                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)))
+                            (Aeneas.Std.uncurry fun r1 =>
+                              Aeneas.Std.uncurry fun idx2 val2 => do
+                                let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                                match cf1 with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                    let (r2, _, _) ←
+                                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                          (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_2 which 2#usize
+                                          idx2 val2 hash
+                                    let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                                    match cf2 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                      residual)).mpr
+                        fun value success =>
+                        (Aeneas.Std.bind_eq_iff (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch value.1)
+                              (fun a =>
+                                AspisR1.CheckpointBytes5Effect.erase E hash
+                                  (match a with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                    let __x ←
+                                      AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which 2#usize
+                                          value.2.1 value.2.2
+                                    let cf2 ←
+                                      AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                    match cf2 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                        Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                            residual)
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    AspisR1.CheckpointBytes5Effect.liftResult
+                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)))
+                              fun cf1 =>
+                              match cf1 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                let (r2, _, _) ←
+                                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                      (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_2 which 2#usize
+                                      value.2.1 value.2.2 hash
+                                let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                                match cf2 with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual).mpr
+                          fun value_5 success_2 =>
+                          let ⟨fst✝², snd✝², success, success⟩ := value
+                          let ⟨fst✝³, snd✝³, success, success⟩ := snd✝²
+                          Aeneas.Std.core.ops.control_flow.ControlFlow.casesOn (motive := fun x =>
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch (fst✝², fst✝³, snd✝³).1 =
+                                Aeneas.Std.Result.ok x →
+                              AspisR1.CheckpointBytes5Effect.erase E hash
+                                  (match x with
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                    let __x ←
+                                      AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which 2#usize
+                                          (fst✝², fst✝³, snd✝³).2.1 (fst✝², fst✝³, snd✝³).2.2
+                                    let cf2 ←
+                                      AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                    match cf2 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                        Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        AspisR1.CheckpointBytes5Effect.liftResult
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                            residual)
+                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                    AspisR1.CheckpointBytes5Effect.liftResult
+                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                        residual)) =
+                                match x with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                                  let (r2, _, _) ←
+                                    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                        (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_2 which 2#usize
+                                        (fst✝², fst✝³, snd✝³).2.1 (fst✝², fst✝³, snd✝³).2.2 hash
+                                  let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                                  match cf2 with
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual)
+                            value_5
+                            (fun a success =>
+                              Eq.mpr
+                                (id
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (Eq.trans
+                                        (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                                          (AspisR1.Port9OR_BatchTree.code base D hash proof queries value_2 which
+                                            2#usize fst✝³ snd✝³)
+                                          fun __x => do
+                                          let cf2 ←
+                                            AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                          match cf2 with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                              Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                  residual))
+                                        (congr
+                                          (congrArg Bind.bind
+                                            (AspisR1.Port9OR_BatchTree.source base D E hash proof queries value_2 which
+                                              2#usize fst✝³ snd✝³))
+                                          (funext fun a =>
+                                            Eq.trans
+                                              (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                                                (AspisR1.CheckpointBytes5Effect.liftResult
+                                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1))
+                                                fun cf2 =>
+                                                match cf2 with
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                                  Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                  AspisR1.CheckpointBytes5Effect.liftResult
+                                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      Unit
+                                                      (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                      residual))
+                                              (congrFun'
+                                                (congrArg Bind.bind
+                                                  (AspisR1.CheckpointBytes5Effect.erase_lift E hash
+                                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1)))
+                                                fun a =>
+                                                AspisR1.CheckpointBytes5Effect.erase E hash
+                                                  (match a with
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                                    Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                    AspisR1.CheckpointBytes5Effect.liftResult
+                                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        Unit
+                                                        (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                        residual)))))))
+                                    do
+                                    let (r2, _, _) ←
+                                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                          (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_2 which 2#usize
+                                          fst✝³ snd✝³ hash
+                                    let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                                    match cf2 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                          residual))
+                                ((Aeneas.Std.bind_eq_iff
+                                      (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                        (AspisR1.Port9OR_BatchStep.ops base) E proof queries value_2 which 2#usize fst✝³
+                                        snd✝³ hash)
+                                      (fun a => do
+                                        let a ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch a.1
+                                        AspisR1.CheckpointBytes5Effect.erase E hash
+                                            (match a with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                              Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                  residual)))
+                                      (Aeneas.Std.uncurry fun r2 =>
+                                        Aeneas.Std.uncurry fun _ __1 => do
+                                          let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                                          match cf2 with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                residual)).mpr
+                                  fun value success =>
+                                  (Aeneas.Std.bind_eq_iff
+                                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch value.1)
+                                        (fun a =>
+                                          AspisR1.CheckpointBytes5Effect.erase E hash
+                                            (match a with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                              Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                  residual)))
+                                        fun cf2 =>
+                                        match cf2 with
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                            residual).mpr
+                                    fun value_6 success_3 =>
+                                    let ⟨fst✝⁴, snd✝⁴, success, success⟩ := value
+                                    let ⟨fst✝⁵, snd✝⁵, success, success⟩ := snd✝⁴
+                                    Aeneas.Std.core.ops.control_flow.ControlFlow.casesOn (motive := fun x =>
+                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch (fst✝⁴, fst✝⁵, snd✝⁵).1 =
+                                          Aeneas.Std.Result.ok x →
+                                        AspisR1.CheckpointBytes5Effect.erase E hash
+                                            (match x with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                              Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                  residual)) =
+                                          match x with
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                              residual)
+                                      value_6
+                                      (fun a success =>
+                                        Eq.refl
+                                          (AspisR1.CheckpointBytes5Effect.erase E hash
+                                            (match Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                                              Pure.pure (Aeneas.Std.core.result.Result.Ok ())
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              AspisR1.CheckpointBytes5Effect.liftResult
+                                                (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                  residual))))
+                                      (fun a success =>
+                                        of_eq_true
+                                          (Eq.trans
+                                            (congrFun'
+                                              (congrArg Eq
+                                                (AspisR1.CheckpointBytes5Effect.erase_lift E hash
+                                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                    a)))
+                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) a))
+                                            (eq_self
+                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error)
+                                                a))))
+                                      success))
+                            (fun a success =>
+                              of_eq_true
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (AspisR1.CheckpointBytes5Effect.erase_lift E hash
+                                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) a)))
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) a))
+                                  (eq_self
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) a))))
+                            success))
+                  (fun a success =>
+                    of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (AspisR1.CheckpointBytes5Effect.erase_lift E hash
+                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) a)))
+                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) a))
+                        (eq_self
+                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) a))))
+                  success))
+'AspisR1.Port9OR_Batch.values_source' depends on axioms: [propext, Classical.choice, Quot.sound]

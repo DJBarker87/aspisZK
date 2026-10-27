@@ -1,0 +1,28 @@
+{"attempt": "BEn_065", "exit_status": 0, "wall_seconds": 2.902386548987124, "peak_rss_kib": "5551396", "swaps": "0", "print_axioms": ["'AspisR1.BEh_Scope.logs' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEh_Scope.logs : ∀ {S A E F : Type} (native : AspisR1.BEh_Scope.Outcome S A E)
+  (source : AspisR1.BEh_Scope.Outcome S A F), AspisR1.BEh_Scope.Law native source → native.2.2 = source.2.2 :=
+fun {S A E F} native source law =>
+  Option.casesOn (motive := fun t => AspisR1.BEg_Observation.accepted native.1 = t → native.2.2 = source.2.2)
+    (AspisR1.BEg_Observation.accepted native.1)
+    (fun h =>
+      Eq.ndrec (motive := fun x => AspisR1.BEg_Observation.accepted native.1 = x → native.2.2 = source.2.2)
+        (fun h => law.right.right h) (Eq.symm h) (Eq.refl (AspisR1.BEg_Observation.accepted native.1)))
+    (fun a h =>
+      Eq.ndrec (motive := fun x => AspisR1.BEg_Observation.
+...
+theorem AspisR1.BEh_Scope.logs : ∀ {S A E F : Type} (native : AspisR1.BEh_Scope.Outcome S A E)
+  (source : AspisR1.BEh_Scope.Outcome S A F), AspisR1.BEh_Scope.Law native source → native.2.2 = source.2.2 :=
+fun {S A E F} native source law =>
+  Option.casesOn (motive := fun t => AspisR1.BEg_Observation.accepted native.1 = t → native.2.2 = source.2.2)
+    (AspisR1.BEg_Observation.accepted native.1)
+    (fun h =>
+      Eq.ndrec (motive := fun x => AspisR1.BEg_Observation.accepted native.1 = x → native.2.2 = source.2.2)
+        (fun h => law.right.right h) (Eq.symm h) (Eq.refl (AspisR1.BEg_Observation.accepted native.1)))
+    (fun a h =>
+      Eq.ndrec (motive := fun x => AspisR1.BEg_Observation.accepted native.1 = x → native.2.2 = source.2.2)
+        (fun h => congrArg Prod.snd (law.left.right a ((AspisR1.BEg_Observation.accepted_iff native.1 a).mp h)))
+        (Eq.symm h) (Eq.refl (AspisR1.BEg_Observation.accepted native.1)))
+    (Eq.refl (AspisR1.BEg_Observation.accepted native.1))
+'AspisR1.BEh_Scope.logs' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r97c3267ad478439fbcb8295ccd9b0471.scope; invocation ID: b57d5fb7b56b4facba3890475e87a272

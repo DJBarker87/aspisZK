@@ -1,0 +1,275 @@
+theorem AspisR1.Port9OR_BatchTree.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D E : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (batch tree : Aeneas.Std.Usize) (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values),
+  AspisR1.CheckpointBytes5Effect.erase E hash
+      (AspisR1.Port9OR_BatchTree.code base D hash proof queries root batch tree idx val) =
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port9OR_BatchStep.ops base) E proof queries
+      root batch tree idx val hash :=
+fun base {Hash} D E hash proof queries root batch tree idx val =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          AspisR1.CheckpointBytes5Effect.erase E hash
+              (AspisR1.Port9OR_BatchTree.code base D hash proof queries root batch tree idx val) =
+            _a)
+        (Eq.symm (AspisR1.Port9OR_BatchTree.source_factor base E hash proof queries root batch tree idx val))))
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                    (AspisR1.CheckpointBytes5Effect.liftResult
+                      ((AspisR1.Port9OR_BatchStep.ops base).op4 queries (AspisR1.Port4B_TreeCuts.lo batch)
+                        (AspisR1.Port4B_TreeCuts.count batch) tree))
+                    fun raw => do
+                    let keys ←
+                      AspisR1.CheckpointBytes5Effect.liftResult
+                          ((AspisR1.Port9OR_BatchStep.ops base).op5 raw (AspisR1.Port4B_TreeCuts.count batch))
+                    let __x ←
+                      AspisR1.Port9OR_BatchLoop.code base D hash proof root tree (AspisR1.Port4B_TreeCuts.lo batch)
+                          (AspisR1.Port4B_TreeCuts.count batch) (AspisR1.Port4B_TreeCuts.slot batch tree) keys
+                          (↑(AspisR1.Port4B_TreeCuts.count batch) + 1) idx val 0#usize 0#usize
+                    match __x.2.2 with
+                      | Option.none =>
+                        AspisR1.CheckpointBytes5Effect.liftResult (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                      | Option.some r => Pure.pure (r, __x.1, __x.2.1))
+                  (congr
+                    (congrArg Bind.bind
+                      (AspisR1.CheckpointBytes5Effect.erase_lift E hash
+                        ((AspisR1.Port9OR_BatchStep.ops base).op4 queries (AspisR1.Port4B_TreeCuts.lo batch)
+                          (AspisR1.Port4B_TreeCuts.count batch) tree)))
+                    (funext fun a =>
+                      Eq.trans
+                        (AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                          (AspisR1.CheckpointBytes5Effect.liftResult
+                            ((AspisR1.Port9OR_BatchStep.ops base).op5 a (AspisR1.Port4B_TreeCuts.count batch)))
+                          fun keys => do
+                          let __x ←
+                            AspisR1.Port9OR_BatchLoop.code base D hash proof root tree
+                                (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch)
+                                (AspisR1.Port4B_TreeCuts.slot batch tree) keys
+                                (↑(AspisR1.Port4B_TreeCuts.count batch) + 1) idx val 0#usize 0#usize
+                          match __x.2.2 with
+                            | Option.none =>
+                              AspisR1.CheckpointBytes5Effect.liftResult (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                            | Option.some r => Pure.pure (r, __x.1, __x.2.1))
+                        (congr
+                          (congrArg Bind.bind
+                            (AspisR1.CheckpointBytes5Effect.erase_lift E hash
+                              ((AspisR1.Port9OR_BatchStep.ops base).op5 a (AspisR1.Port4B_TreeCuts.count batch))))
+                          (funext fun a =>
+                            AspisR1.CheckpointBytes5Effect.erase_bind E hash
+                              (AspisR1.Port9OR_BatchLoop.code base D hash proof root tree
+                                (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch)
+                                (AspisR1.Port4B_TreeCuts.slot batch tree) a (↑(AspisR1.Port4B_TreeCuts.count batch) + 1)
+                                idx val 0#usize 0#usize)
+                              fun __x =>
+                              match __x.2.2 with
+                              | Option.none =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                              | Option.some r => Pure.pure (r, __x.1, __x.2.1)))))))
+              do
+              let raw ←
+                (AspisR1.Port9OR_BatchStep.ops base).op4 queries (AspisR1.Port4B_TreeCuts.lo batch)
+                    (AspisR1.Port4B_TreeCuts.count batch) tree
+              let keys ← (AspisR1.Port9OR_BatchStep.ops base).op5 raw (AspisR1.Port4B_TreeCuts.count batch)
+              let (outIdx, outVal, pending) ←
+                AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (AspisR1.Port9OR_BatchStep.ops base) E
+                    proof root tree idx val hash (AspisR1.Port4B_TreeCuts.lo batch)
+                    (AspisR1.Port4B_TreeCuts.count batch) (AspisR1.Port4B_TreeCuts.slot batch tree) keys 0#usize 0#usize
+              match pending with
+                | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal)))
+          (have small :=
+            Eq.mpr (id (congrArg (fun _a => _a < 256) (AspisR1.Port4B_Bounds.count batch).left))
+              (Decidable.casesOn (Aeneas.Std.instDecidableEqUScalar_1 Aeneas.Std.UScalarTy.Usize batch 0#usize)
+                (fun h =>
+                  Eq.mpr (id (congrFun' (congrArg LT.lt (if_neg h)) 256)) (of_decide_eq_true (id (Eq.refl Bool.true))))
+                fun h =>
+                Eq.mpr (id (congrFun' (congrArg LT.lt (if_pos h)) 256)) (of_decide_eq_true (id (Eq.refl Bool.true))));
+          (Aeneas.Std.bind_eq_iff
+                ((AspisR1.Port9OR_BatchStep.ops base).op4 queries (AspisR1.Port4B_TreeCuts.lo batch)
+                  (AspisR1.Port4B_TreeCuts.count batch) tree)
+                (fun a => do
+                  let a ← (AspisR1.Port9OR_BatchStep.ops base).op5 a (AspisR1.Port4B_TreeCuts.count batch)
+                  let a ←
+                    AspisR1.CheckpointBytes5Effect.erase E hash
+                        (AspisR1.Port9OR_BatchLoop.code base D hash proof root tree (AspisR1.Port4B_TreeCuts.lo batch)
+                          (AspisR1.Port4B_TreeCuts.count batch) (AspisR1.Port4B_TreeCuts.slot batch tree) a
+                          (↑(AspisR1.Port4B_TreeCuts.count batch) + 1) idx val 0#usize 0#usize)
+                  AspisR1.CheckpointBytes5Effect.erase E hash
+                      (match a.2.2 with
+                      | Option.none =>
+                        AspisR1.CheckpointBytes5Effect.liftResult (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                      | Option.some r => Pure.pure (r, a.1, a.2.1)))
+                fun raw => do
+                let keys ← (AspisR1.Port9OR_BatchStep.ops base).op5 raw (AspisR1.Port4B_TreeCuts.count batch)
+                let (outIdx, outVal, pending) ←
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (AspisR1.Port9OR_BatchStep.ops base)
+                      E proof root tree idx val hash (AspisR1.Port4B_TreeCuts.lo batch)
+                      (AspisR1.Port4B_TreeCuts.count batch) (AspisR1.Port4B_TreeCuts.slot batch tree) keys 0#usize
+                      0#usize
+                match pending with
+                  | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                  | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal)).mpr
+            fun raw a =>
+            (Aeneas.Std.bind_eq_iff ((AspisR1.Port9OR_BatchStep.ops base).op5 raw (AspisR1.Port4B_TreeCuts.count batch))
+                  (fun a => do
+                    let a ←
+                      AspisR1.CheckpointBytes5Effect.erase E hash
+                          (AspisR1.Port9OR_BatchLoop.code base D hash proof root tree (AspisR1.Port4B_TreeCuts.lo batch)
+                            (AspisR1.Port4B_TreeCuts.count batch) (AspisR1.Port4B_TreeCuts.slot batch tree) a
+                            (↑(AspisR1.Port4B_TreeCuts.count batch) + 1) idx val 0#usize 0#usize)
+                    AspisR1.CheckpointBytes5Effect.erase E hash
+                        (match a.2.2 with
+                        | Option.none =>
+                          AspisR1.CheckpointBytes5Effect.liftResult (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                        | Option.some r => Pure.pure (r, a.1, a.2.1)))
+                  fun keys => do
+                  let (outIdx, outVal, pending) ←
+                    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                        (AspisR1.Port9OR_BatchStep.ops base) E proof root tree idx val hash
+                        (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch)
+                        (AspisR1.Port4B_TreeCuts.slot batch tree) keys 0#usize 0#usize
+                  match pending with
+                    | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                    | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal)).mpr
+              fun keys a =>
+              have loopEq :=
+                AspisR1.Port9OR_BatchLoop.source base D E hash proof root tree (AspisR1.Port4B_TreeCuts.lo batch)
+                  (AspisR1.Port4B_TreeCuts.count batch) (AspisR1.Port4B_TreeCuts.slot batch tree) keys small
+                  (↑(AspisR1.Port4B_TreeCuts.count batch) + 1) idx val 0#usize 0#usize
+                  (of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg LE.le
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (Eq.trans
+                                (congrArg (HSub.hSub ↑(AspisR1.Port4B_TreeCuts.count batch))
+                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                                      (of_decide_eq_true (id (Eq.refl Bool.true))))))
+                                (tsub_zero ↑(AspisR1.Port4B_TreeCuts.count batch))))
+                            1))
+                        (↑(AspisR1.Port4B_TreeCuts.count batch) + 1))
+                      (Std.le_refl._simp_1 (↑(AspisR1.Port4B_TreeCuts.count batch) + 1))));
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (do
+                          let a ← _a
+                          AspisR1.CheckpointBytes5Effect.erase E hash
+                              (match a.2.2 with
+                              | Option.none =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                              | Option.some r => Pure.pure (r, a.1, a.2.1))) =
+                        do
+                        let (outIdx, outVal, pending) ←
+                          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                              (AspisR1.Port9OR_BatchStep.ops base) E proof root tree idx val hash
+                              (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch)
+                              (AspisR1.Port4B_TreeCuts.slot batch tree) keys 0#usize 0#usize
+                        match pending with
+                          | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                          | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))
+                    loopEq))
+                ((Aeneas.Std.bind_eq_iff
+                      (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                        (AspisR1.Port9OR_BatchStep.ops base) E proof root tree idx val hash
+                        (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch)
+                        (AspisR1.Port4B_TreeCuts.slot batch tree) keys 0#usize 0#usize)
+                      (fun a =>
+                        AspisR1.CheckpointBytes5Effect.erase E hash
+                          (match a.2.2 with
+                          | Option.none =>
+                            AspisR1.CheckpointBytes5Effect.liftResult (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                          | Option.some r => Pure.pure (r, a.1, a.2.1)))
+                      (Aeneas.Std.uncurry fun outIdx =>
+                        Aeneas.Std.uncurry fun outVal pending =>
+                          match pending with
+                          | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                          | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))).mpr
+                  fun result a =>
+                  let ⟨outIdx, snd✝, a✝⟩ := result
+                  let ⟨outVal, pending, a✝⟩ := snd✝
+                  Option.casesOn (motive := fun t =>
+                    pending = t →
+                      AspisR1.CheckpointBytes5Effect.erase E hash
+                          (match (outIdx, outVal, pending).2.2 with
+                          | Option.none =>
+                            AspisR1.CheckpointBytes5Effect.liftResult (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                          | Option.some r =>
+                            Pure.pure (r, (outIdx, outVal, pending).1, (outIdx, outVal, pending).2.1)) =
+                        let (outIdx, outVal, pending) := (outIdx, outVal, pending)
+                        match pending with
+                        | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                        | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))
+                    pending
+                    (fun h =>
+                      Eq.ndrec (motive := fun pending =>
+                        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                              (AspisR1.Port9OR_BatchStep.ops base) E proof root tree idx val hash
+                              (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch)
+                              (AspisR1.Port4B_TreeCuts.slot batch tree) keys 0#usize 0#usize =
+                            Aeneas.Std.Result.ok (outIdx, outVal, pending) →
+                          AspisR1.CheckpointBytes5Effect.erase E hash
+                              (match (outIdx, outVal, pending).2.2 with
+                              | Option.none =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                              | Option.some r =>
+                                Pure.pure (r, (outIdx, outVal, pending).1, (outIdx, outVal, pending).2.1)) =
+                            let (outIdx, outVal, pending) := (outIdx, outVal, pending)
+                            match pending with
+                            | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                            | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))
+                        (fun a =>
+                          Eq.refl
+                            (AspisR1.CheckpointBytes5Effect.erase E hash
+                              (match (outIdx, outVal, Option.none).2.2 with
+                              | Option.none =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                              | Option.some r =>
+                                Pure.pure (r, (outIdx, outVal, Option.none).1, (outIdx, outVal, Option.none).2.1))))
+                        (Eq.symm h) a✝)
+                    (fun val_1 h =>
+                      Eq.ndrec (motive := fun pending =>
+                        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                              (AspisR1.Port9OR_BatchStep.ops base) E proof root tree idx val hash
+                              (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch)
+                              (AspisR1.Port4B_TreeCuts.slot batch tree) keys 0#usize 0#usize =
+                            Aeneas.Std.Result.ok (outIdx, outVal, pending) →
+                          AspisR1.CheckpointBytes5Effect.erase E hash
+                              (match (outIdx, outVal, pending).2.2 with
+                              | Option.none =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                              | Option.some r =>
+                                Pure.pure (r, (outIdx, outVal, pending).1, (outIdx, outVal, pending).2.1)) =
+                            let (outIdx, outVal, pending) := (outIdx, outVal, pending)
+                            match pending with
+                            | Option.none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+                            | Option.some r => Aeneas.Std.Result.ok (r, outIdx, outVal))
+                        (fun a =>
+                          Eq.refl
+                            (AspisR1.CheckpointBytes5Effect.erase E hash
+                              (match (outIdx, outVal, Option.some val_1).2.2 with
+                              | Option.none =>
+                                AspisR1.CheckpointBytes5Effect.liftResult
+                                  (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+                              | Option.some r =>
+                                Pure.pure
+                                  (r, (outIdx, outVal, Option.some val_1).1, (outIdx, outVal, Option.some val_1).2.1))))
+                        (Eq.symm h) a✝)
+                    (Eq.refl pending))))))
+'AspisR1.Port9OR_BatchTree.source' depends on axioms: [propext, Classical.choice, Quot.sound]

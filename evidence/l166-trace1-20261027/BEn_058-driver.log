@@ -1,0 +1,25 @@
+{"attempt": "BEn_058", "exit_status": 0, "wall_seconds": 2.838188149034977, "peak_rss_kib": "5553088", "swaps": "0", "print_axioms": ["'AspisR1.BEl_CodeCongr.bind_both' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.BEl_CodeCongr.bind_both : ∀ {S A B : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (left right : AspisR1.SdkC_Source.Code A) (lk rk : A → AspisR1.SdkC_Source.Code B),
+  AspisR1.BEl_CodeCongr.Equivalent call left right →
+    (∀ (a : A), AspisR1.BEl_CodeCongr.Equivalent call (lk a) (rk a)) →
+      AspisR1.BEl_CodeCongr.Equivalent call (left >>= lk) (right >>= rk) :=
+fun {S A B} call left right lk rk heads tails state before =>
+  Eq.trans (AspisR1.BEl_CodeCongr.bind_head call left right lk heads state before)
+    (AspisR1.BEl_CodeCongr.bind_tail call right lk rk tails state before)
+'AspisR1.BEl_CodeCongr.bind_both' depends on
+...
+theorem AspisR1.BEl_CodeCongr.bind_both : ∀ {S A B : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (left right : AspisR1.SdkC_Source.Code A) (lk rk : A → AspisR1.SdkC_Source.Code B),
+  AspisR1.BEl_CodeCongr.Equivalent call left right →
+    (∀ (a : A), AspisR1.BEl_CodeCongr.Equivalent call (lk a) (rk a)) →
+      AspisR1.BEl_CodeCongr.Equivalent call (left >>= lk) (right >>= rk) :=
+fun {S A B} call left right lk rk heads tails state before =>
+  Eq.trans (AspisR1.BEl_CodeCongr.bind_head call left right lk heads state before)
+    (AspisR1.BEl_CodeCongr.bind_tail call right lk rk tails state before)
+'AspisR1.BEl_CodeCongr.bind_both' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf63633871fbd4f07be3255c7cd6d1256.scope; invocation ID: 1334d7772c98479b8b0c6395753eca36
+
