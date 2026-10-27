@@ -1,0 +1,52 @@
+{"attempt": "JGp23_068", "exit_status": 1, "wall_seconds": 7.890738019021228, "peak_rss_kib": "6098840", "swaps": "0", "print_axioms": ["'AspisR1.JGp_PreparedQueries.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGp_PreparedQueries.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (gamma, t1).2
+in the target expression
+  PreparedModel.scalar closedHashBoundaries.sampling D0 t1 28#u8 inactive.to_slice false = ok (kappa, t2)
+
+H : Type
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H
+hash : H
+sem : r1_semantic.Verified H
+view : verifier.View
+out : verifier.Prepared
+input scratch : Std.Array aspis_core.field.WideExact 29#usize
+state : sem.transcript.state = encodeState JFu_Q26Source.ratchet
+variant : view.variant = transport.Variant.S2
+y1 : view.y1 = JGg_Opening27.payload
+inactiveInput :
+  AspisR1CurrentCaller.OriginalSerializerInstallation.sourceBytes view.inac
+...
+false =
+    ok (k, { state := encodeState JGg_Opening28.next0, hash := hash })
+b0c :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening29.before, hash := hash } 29#u8 JGg_Opening29.payload false =
+    ok (b0, { state := encodeState JGg_Opening29.next0, hash := hash })
+b1c :
+  PreparedModel.scalar closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening30.before, hash := hash } 30#u8 JGg_Opening30.payload false =
+    ok (b1, { state := encodeState JGg_Opening30.next0, hash := hash })
+rc :
+  PreparedModel.scalar_k closedHashBoundaries.sampling
+      (retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D))
+      { state := encodeState JGg_Opening32.before, hash := hash } 32#u8 JGg_Opening32.payload =
+    ok (r, { state := encodeState JGg_Opening32.next0, hash := hash })
+seedCall :
+  have D0 := retainedDigest (F3V_OracleDictionary.current JFp_SHADigest.digest D);
+  transcript.Transcript.new D0 hash sem.transcript.state view.variant =
+    ok { state := encodeState JGe_OpeningInit.state, hash := hash }
+seed :
+  transcript.Transcript.new D0 hash sem.transcript.state view.variant =
+    ok { state := encodeState JGe_OpeningInit.state, hash := hash }
+gammaCall :
+  PreparedModel.scalar closedHashBoundaries.sampling D0 { state := encodeState JGe_OpeningInit.state, hash := hash }
+      27#u8 JGg_Opening27.payload true =
+    ok (gamma, t1)
+et1 : (gamma, t1).2 = (g, { state := encodeState JGg_Opening27.next0, hash := hash }).2
+⊢ out.queries = JFq_Queries.value
+'AspisR1.JGp_PreparedQueries.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r06b0b385faeb497494c5eae3142aa18c.scope; invocation ID: ff3f3d9ea7914303b69e068ce6a2af98

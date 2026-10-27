@@ -32,3 +32,13 @@ the actual inverse/collection loops. The array is JFo_Prepared.value.queries;
 linking it to THIS enclosing prepare return remains a separate obligation.
 The 30 numeric inputs come from the pinned 512-entry source tables; all three
 generators check their exact output. No dense elimination was run.
+
+Stage 2c: JGp_CurrentQueries.source (070) proves the actual enclosing prepare
+returns EXACTLY JFq_Queries.value. It inverts the SAME source cuts, identifies
+the real semantic state and mutable Y1, and follows THAT preparation spine
+through source sampler calls, without a saved/prepared identity hypothesis.
+JGp_TX1Geometry.inhabited (074) jointly constructs THAT p/scratch, initial,
+pending and complete geometry on one concrete Op5T/SAQ/WAdm installation.
+All terminal and query-identification guards are proved, no Prop premise.
+The remaining first source body is batch0 authentication, then all query
+arithmetic gates, flush, actual writer and returned writer Vec identity.
