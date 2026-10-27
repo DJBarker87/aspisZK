@@ -72,12 +72,12 @@ theorem op230_source (h1 : Slice Q) :
       else ok none := by
   unfold state_only_copy_helper_sum
   dsimp only
-  by_cases h : Slice.len h1 = TRACE_ROWS
-  · simp only [h,if_true]
-    simpa only [h] using congrArg (fun r : Result Q => do let s ← r; ok (some s))
-      (loop_finite h1 (Slice.len h1).val aspis_core.field.QM31.ZERO 0#usize
-        (by change 0+_= _; omega))
-  · simp only [h,if_false]
+  exact congrArg
+    (fun r : Result Q =>
+      if Slice.len h1 = TRACE_ROWS then
+        (do let s ← r; ok (some s)) else ok none)
+    (loop_finite h1 (Slice.len h1).val aspis_core.field.QM31.ZERO 0#usize
+      (by change 0+_= _; omega))
 #print axioms source_unfold
 #print axioms dispatch_congr
 #print axioms loop_finite
