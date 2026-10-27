@@ -4,7 +4,7 @@ Branch codex/cx-fixture-tx2v-20261027. Local commits only; no push/merge. Only J
 
 ## Stop and operating incident
 
-During070, SSH returned exactly `Connection closed by 100.108.41.90 port 22`. Its per-attempt receipt was not collected. Read-only inspection with ConnectTimeout10 also failed with subprocess.TimeoutExpired after25 seconds. local-lean.txt rule5 requires stopping on host/launcher misbehaviour, so no infrastructure repair or further proof launch is attempted. The module-system trial and grouped new-root/separate headline audits were not reached.
+During070, SSH returned exactly `Connection closed by 100.108.41.90 port 22`. Its per-attempt receipt was not collected; the controller finally returned exit1 with `scp: .../JHd_TX2_070: No such file or directory`. Local controllers are terminal (JHd_LOCAL_STOP_RETURN.json); this does not certify host070 status. Read-only inspection with ConnectTimeout10 also failed with subprocess.TimeoutExpired after25 seconds. local-lean.txt rule5 requires stopping on host/launcher misbehaviour, so no infrastructure repair or further proof launch is attempted. The module-system trial and grouped new-root/separate headline audits were not reached.
 
 A second shell block continued after the70-review receipt-count assertion failed and inadvertently launched071. That proof rejected its whole-record fixed-point rfl. No072 was launched. Possible overlap with070 cannot be excluded: the read-only host process check failed. This is explicitly NOT an all-terminal or one-scope-compliance claim for070/071. The lead must inspect070's receipt/cgroup/process status before resuming. No local task controller remains; task glue is retired as JHd_compile.STOPPED.py.txt.
 
