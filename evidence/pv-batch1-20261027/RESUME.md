@@ -51,3 +51,19 @@ Fingerprint the environment as well as dependencies. The changed environment
 justifies retrying the unchanged small lemma with next unused53601.
 53600 charged1/100: exit1,0.170s outer wall,190948KiB peak RSS,swap0; no
 #print axioms output because import resolution failed before elaboration.
+
+Final audit preparation: ruling(m) is now present in pv-common.txt. The private
+admission helper was hardened to report allowed:true and exit0 together,
+and to honor QUIET_WINDOW; the Lean and evidence-transfer adapters check both.
+The prior helper's admitted boolean and exit were equivalent but the new
+explicit allowed field removes ambiguity. Shared tools were not edited.
+
+After97 charged compiles, final audit staging was refused. A shell sequencing
+error continued to the three audit invocations although their sources had not
+transferred. Each failed the private source-exists assertion BEFORE reservation
+or any Lean/systemd launch. Local IDs53897–53899 are permanently consumed,
+charged0 (launcher tracebacks retained), never reused. No audit scope ran.
+The next unused53701 onward will perform the three audits after the full
+180-second admission wait, under ruling(d)'s fresh-ID rule. Corrected driver
+stops on failed admission/transfer and each failed audit. No source/kernel
+failure or ROW counterexample occurred in this incident.
