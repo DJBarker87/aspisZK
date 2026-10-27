@@ -1,0 +1,8 @@
+import AspisR1SelectedMaskProbe.Funs
+open Aeneas Aeneas.Std
+#check AspisR1SelectedMaskProbe.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31
+#print axioms AspisR1SelectedMaskProbe.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31
+#print AspisR1SelectedMaskProbe.pool_v1.pair_forest_semantic_terminal.r0.Public
+#print AspisR1SelectedMaskProbe.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+#print AspisR1SelectedMaskProbe.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+#print AspisR1SelectedMaskProbe.state_only_prefix.r0.Challenges

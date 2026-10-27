@@ -49,12 +49,12 @@ def core.slice.iter.IterMut.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorM
     {T : Type} (s : core.slice.iter.IterMut T) :
     Result (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) := do
   let (v,r) ← core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back ⟨s.slice,0#usize⟩
-  ok (v,⟨r.slice⟩,fun updated item =>
+  ok (v,{s with slice := r.slice},fun updated item =>
     match item with
     | none => updated
     | some x =>
       if h : (updated.slice.val ++ [x]).length ≤ Usize.max then
-        ⟨⟨updated.slice.val ++ [x],h⟩⟩
+        {updated with slice := ⟨updated.slice.val ++ [x],h⟩}
       else s)
 
 def core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.collect
@@ -62,7 +62,7 @@ def core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.collect
     (fn : core.ops.function.FnMut F T B) (out : core.iter.traits.collect.FromIterator B1 B)
     (s : core.iter.adapters.map.Map I F) : Result B1 :=
   core.iter.traits.iterator.Iterator.collect.default
-    { next := fun s => do
+    { next := fun (s : core.iter.adapters.map.Map I F) => do
         let (v,i) ← it.next s.iter
         match v with
         | none => ok (none,{s with iter := i})

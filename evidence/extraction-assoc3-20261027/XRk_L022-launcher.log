@@ -1,0 +1,40 @@
+{"attempt": "XRk_L022", "exit_status": 0, "wall_seconds": 2.874343919043895, "peak_rss_kib": "2625260", "swaps": "0", "print_axioms": []}
+Aeneas.Std.UScalar.ofNatCore {ty : UScalarTy} (x : ℕ) (h : x < 2 ^ ty.numBits) : UScalar ty
+Aeneas.Std.UScalar.ofNat {ty : UScalarTy} (x : ℕ) (hInBounds : x ≤ UScalar.cMax ty := by decide) : UScalar ty
+def Aeneas.Std.UScalar.cMax : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => UScalar.rMax UScalarTy.U32
+  | x => UScalar.rMax ty
+@[irreducible] def Aeneas.Std.Usize.max : ℕ :=
+wrapped✝.1
+theorem Aeneas.Std.UScalar.hBounds : ∀ {ty : UScalarTy} (x : UScalar ty), ↑x < 2 ^ ty.numBits :=
+fun {ty} x =>
+  let ⟨toFin✝, h✝⟩ := x.bv
+  Eq.ndrec (motive := fun x_1 => x.bv = x_1 → ↑x < 2 ^ ty.numBits)
+    (fun h =>
+      of_eq_true
+        (Eq.trans (congrFun' (congrArg LT.lt (congrArg B
+...
+Aeneas.Std.UScalar.ofNatCore {ty : UScalarTy} (x : ℕ) (h : x < 2 ^ ty.numBits) : UScalar ty
+Aeneas.Std.UScalar.ofNat {ty : UScalarTy} (x : ℕ) (hInBounds : x ≤ UScalar.cMax ty := by decide) : UScalar ty
+def Aeneas.Std.UScalar.cMax : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => UScalar.rMax UScalarTy.U32
+  | x => UScalar.rMax ty
+@[irreducible] def Aeneas.Std.Usize.max : ℕ :=
+wrapped✝.1
+theorem Aeneas.Std.UScalar.hBounds : ∀ {ty : UScalarTy} (x : UScalar ty), ↑x < 2 ^ ty.numBits :=
+fun {ty} x =>
+  let ⟨toFin✝, h✝⟩ := x.bv
+  Eq.ndrec (motive := fun x_1 => x.bv = x_1 → ↑x < 2 ^ ty.numBits)
+    (fun h =>
+      of_eq_true
+        (Eq.trans (congrFun' (congrArg LT.lt (congrArg BitVec.toNat h)) (2 ^ ty.numBits))
+          (UScalar.hBounds._simp_1_2 toFin✝)))
+    (Eq.symm h✝) (Eq.refl x.bv)
+Aeneas.Std.UScalar.hmax {ty : UScalarTy} (x : UScalar ty) : ↑x < 2 ^ ty.numBits
+Aeneas.Std.UScalar.ofNatCore {ty : UScalarTy} (x : ℕ) (h : x < 2 ^ ty.numBits) : UScalar ty
+
+Running as unit: run-rae9c255cddd54a0cbec730f0ca37a412.scope; invocation ID: 5b6924c527974cac982c80f613ea378d
