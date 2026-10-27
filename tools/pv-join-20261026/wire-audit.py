@@ -1,3 +1,5 @@
+# Retained initial-stage generator. Final sources include reviewed proof corrections.
+raise SystemExit('Retired draft generator; use the pinned final source files and combined-audit-manifest.json')
 # Historical partition generator; retired after attempt 39357.
 # The final exact coverage is pinned by wire/combined-audit-manifest.json and
 # the two committed final audit sources. Do not regenerate them from this draft.

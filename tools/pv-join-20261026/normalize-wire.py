@@ -1,3 +1,5 @@
+# Retained initial-stage generator. Final sources include reviewed proof corrections.
+raise SystemExit('Retired draft generator; use the pinned final source files and combined-audit-manifest.json')
 from pathlib import Path
 import json,re
 r=Path(__file__).resolve().parents[2];p=r/'docs/research/v8-r0-zk-20261009/lean/R1Z';e=r/'evidence/pv-join-20261026/wire'

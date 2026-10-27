@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0159); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+        Eq.ndrec (motive := fun x_1 =>
+          inst_1.zeroize x = x_1 →
+            x_1 = do
+              let t ← x_1
+              Aeneas.Std.Result.ok t)
+          (fun h => Eq.refl Aeneas.Std.Result.div) (Eq.symm h) (Eq.refl (inst_1.zeroize x)))
+      (Eq.refl (inst_1.zeroize x)))
+'R1Z.PV_CB_Op130Source.op130_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem R1Z.PV_CB_Op131Source.op131_source : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns) {T Z : Type} (view : Aeneas.Std.core.convert.AsRef Z T)
+  (inst_1 : ProverRwFull.zeroize.Zeroize Z) (x : Z),
+  ProverRwFull.ExternalFuns.op131 view inst_1 x =
+    PV_CB_ShippedOp131.zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref view inst_1 x :=
+fun [ProverRwFull.ExternalTypes] ops {T Z} view inst_1 x => rfl
+'R1Z.PV_CB_Op131Source.op131_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_CB3_Op225Source.op225_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (transfer : R1Z.PV_CB3_Op225Source.Transfer → R1Z.PV_CB3_Op225Source.Raw.Transfer)
+  (withdrawal : R1Z.PV_CB3_Op225Source.Withdrawal → R1Z.PV_CB3_Op225Source.Raw.Withdrawal)
+  (p : R1Z.PV_CB3_Op225Source.Public),
+  ProverRwFull.ExternalFuns.op225 p =
+    R1Z.ProverRwP6TransitionSource.transition (R1Z.PV_CB3_Op225Source.toRaw transfer withdrawal p) :=
+fun [ProverRwFull.ExternalTypes] ops transfer withdrawal p =>
+  ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.casesOn (motive := fun t =>
+    p = t →
+      ProverRwFull.ExternalFuns.op225 p =
+        R1Z.ProverRwP6TransitionSource.transition (R1Z.PV_CB3_Op225Source.toRaw transfer withdrawal p))
+    p
+    (fun a a_1 h =>
+      Eq.symm h ▸
+        Eq.refl
+          (ProverRwFull.ExternalFuns.op225
+            (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Transfer a a_1)))
+    (fun a a_1 h =>
+      Eq.symm h ▸
+        Eq.refl
+          (ProverRwFull.ExternalFuns.op225
+            (ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.Withdrawal a a_1)))
+    (Eq.refl p)
+'R1Z.PV_CB3_Op225Source.op225_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem R1Z.PV_CB_Op229Source.op229_source : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns) (a b : R1Z.PV_CB_Op229Transport.Late base),
+  ProverRwFull.ExternalFuns.op229 a b =
+    R1Z.PV_CB_Op229Source.source (R1Z.PV_CB_Op229Transport.encode base a) (R1Z.PV_CB_Op229Transport.encode base b) :=
+fun base ops a b => rfl
+'R1Z.PV_CB_Op229Source.op229_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_CB3_Op246Source.op246_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  {H : Type} (inst_1 : ProverRwFull.aspis_core.digest.Digest32 H) (hash : H)
+  (left right : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  ProverRwFull.ExternalFuns.op246 inst_1 hash left right =
+    PV_CB3_ShippedOp246.multiproof.binary_parent inst_1 hash left right :=
+fun [ProverRwFull.ExternalTypes] ops {H} inst_1 hash left right =>
+  id (id (Eq.refl (ProverRwFull.ExternalFuns.op246 inst_1 hash left right)))
+'R1Z.PV_CB3_Op246Source.op246_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_CB3_Op51Arbitrary.op51_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.wide_exact.WideExact),
+  ProverRwFull.ExternalFuns.op51 x = R1Z.PV_CB3_Op51Source.Raw.wide_bytes_flat x :=
+fun [ProverRwFull.ExternalTypes] ops x => R1Z.PV_CB3_Op51Source.op51_source ops x
+'R1Z.PV_CB3_Op51Arbitrary.op51_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:09.90
+	Maximum resident set size (kbytes): 4376500
+	Swaps: 0
+	Exit status: 0
