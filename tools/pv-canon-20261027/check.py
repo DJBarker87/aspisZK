@@ -8,15 +8,27 @@ t['next_id']+=1; t['attempts'].append(dict(id=n,module=m));tp.write_text(json.du
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 # A private overlay consumes env-J read-only. Existing reservation/barrier/run2 are reused.
 code='''from pathlib import Path
-import subprocess,json,os,hashlib,time
+import subprocess,json,os,hashlib,time,re
 B=Path('/home/dombarker/project-offloads');D=B/'codex-pv-canon-20261027';N=ATTEMPT;M=MODULE
 O=D/'receipts'/str(N);O.mkdir(parents=True,exist_ok=False)
 G=B/'codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 a=subprocess.run(['python3',str(G/'reservation.py'),str(O/'reservation.json')],stdout=open(O/'reservation.log','w'),stderr=subprocess.STDOUT)
 if a.returncode: print((O/'reservation.log').read_text());raise SystemExit(a.returncode)
-e=json.loads((B/'r1-privacy-build-integration-20261019/env/J.json').read_text()); e['LEAN_PATH']=str(D/'objects')+':'+e['LEAN_PATH'];(D/'env.json').write_text(json.dumps(e))
+e=json.loads((B/'r1-privacy-build-integration-20261019/env/J.json').read_text()); 
+for root in e['LEAN_PATH'].split(':'):
+ for source in Path(root).rglob('*.olean*'):
+  if source.is_file():
+   dest=D/'objects'/source.relative_to(Path(root));dest.parent.mkdir(parents=True,exist_ok=True)
+   if not dest.exists() and not dest.is_symlink(): dest.symlink_to(source)
+e['LEAN_PATH']=str(D/'objects')+':'+e['LEAN_PATH'];(D/'env.json').write_text(json.dumps(e))
 src=D/'sources'/(M+'.lean');obj=D/'objects'/(M+'.olean');obj.parent.mkdir(parents=True,exist_ok=True)
 meta=dict(target=M,attempt=N,revision=REVISION,source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),env='J read-only with private overlay')
+deps={}
+for module in re.findall(r'^import (\S+)',src.read_text(),re.M):
+ for root in e['LEAN_PATH'].split(':'):
+  dep=Path(root)/(module.replace('.','/')+'.olean')
+  if dep.is_file(): deps[module]=dict(path=str(dep.resolve()),sha256=hashlib.sha256(dep.read_bytes()).hexdigest());break
+meta['dependencies']=deps
 start=time.monotonic()
 c=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(G/'barrier.py'),str(O/'barrier.json'),'/usr/bin/time','-v','-o',str(O/'time.log'),'timeout','900','python3',str(B/'aspis-fs-generic-20261006/evidence/run2.py'),str(D/'env.json'),str(D/'objects'),str(D/'sources'),str(obj),str(src),'7000']
 a=subprocess.run(c,stdout=open(O/'out.log','w'),stderr=subprocess.STDOUT)
