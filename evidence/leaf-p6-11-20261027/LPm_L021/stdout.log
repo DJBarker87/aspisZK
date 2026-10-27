@@ -1,0 +1,144 @@
+structure AspisR1CurrentPreparedClaim.ClaimDotOps (D : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1CurrentPreparedClaim.ClaimDotOps.powers : (N : Aeneas.Std.Usize) →
+      AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+        Aeneas.Std.Result (Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact N)
+  AspisR1CurrentPreparedClaim.ClaimDotOps.field : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Usize → Aeneas.Std.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+  AspisR1CurrentPreparedClaim.ClaimDotOps.c0 : AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+      Aeneas.Std.Result AspisR1CurrentPreparedClaim.aspis_core.field.QM31
+  AspisR1CurrentPreparedClaim.ClaimDotOps.newDot : Aeneas.Std.Result D
+  AspisR1CurrentPreparedClaim.ClaimDotOps.pushDot : D →
+      AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+        AspisR1CurrentPreparedClaim.aspis_core.field.QM31 →
+          Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Unit × D)
+  AspisR1CurrentPreparedClaim.ClaimDotOps.finishDot : D →
+      Aeneas.Std.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+constructor:
+  AspisR1CurrentPreparedClaim.ClaimDotOps.mk {D : Type}
+    (powers :
+      (N : Aeneas.Std.Usize) →
+        AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+          Aeneas.Std.Result (Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact N))
+    (field :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Usize → Aeneas.Std.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact)
+    (c0 :
+      AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+        Aeneas.Std.Result AspisR1CurrentPreparedClaim.aspis_core.field.QM31)
+    (newDot : Aeneas.Std.Result D)
+    (pushDot :
+      D →
+        AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+          AspisR1CurrentPreparedClaim.aspis_core.field.QM31 →
+            Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Unit × D))
+    (finishDot : D → Aeneas.Std.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact) :
+    AspisR1CurrentPreparedClaim.ClaimDotOps D
+def AspisR1CurrentPreparedClaim.verifier.prepared_claim : {D : Type} →
+  AspisR1CurrentPreparedClaim.ClaimDotOps D →
+    {H : Type} →
+      AspisR1CurrentPreparedClaim.aspis_core.Digest32 H →
+        AspisR1CurrentPreparedClaim.r1_semantic.Verified H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+              Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 29#usize →
+                AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+                      AspisR1CurrentPreparedClaim.verifier.Error) :=
+fun {D} ops {H} aspis_coreDigest32Inst sem y1 inactive g kappa => do
+  let k ← ops.powers 7#usize kappa
+  have parts : Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 7#usize :=
+    Aeneas.Std.Array.repeat 7#usize AspisR1CurrentPreparedClaim.aspis_core.field.WideExact.ZERO
+  let a ← parts.update 0#usize inactive
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop ops aspis_coreDigest32Inst
+      { start := 0#usize, «end» := 6#usize } sem y1 g k a
+def AspisR1S5ClaimDotConcreteAdapter.concreteOps : AspisR1EbyKPushDotBackend.RawFn →
+  AspisR1CurrentPreparedClaim.ClaimDotOps AspisR1S5ClaimDotConcreteAdapter.PushState :=
+fun rawFn =>
+  { powers := AspisR1CurrentPreparedClaim.ClaimPowers.powers, field := AspisR1CurrentPreparedClaim.ClaimParser.field,
+    c0 := AspisR1CurrentPreparedClaim.ClaimParser.c0, newDot := AspisR1FinishDotConcreteOps.sourceNewDot,
+    pushDot := fun s v q =>
+      AspisR1EbyKPushDotBackend.pushWithDotBackend rawFn s (AspisR1S5ClaimDotConcreteAdapter.toPushWide v)
+        (AspisR1S5ClaimDotConcreteAdapter.toPushQm q),
+    finishDot := fun s => do
+      let out ← AspisR1FinishDotSourceABI.finishFromPush s
+      Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish out) }
+@[reducible] def AspisR1EbyKPushDecodedProductUpdate.QRaw : AspisR1QRawGeneratedPushConnectionV2.GeneratedQ →
+  AspisR1QRawGeneratedPushConnectionV2.GeneratedQ → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U64 4#usize) :=
+AspisR1EbyKPushActualRawCoefficientBounds.QRaw
+theorem AspisR1EbyKPushDotBackend.successful_push_exact_backend : ∀ (rawFn : AspisR1EbyKPushDotBackend.RawFn)
+  (self : AspisR1EbyKPushDotBackend.PushState) (value : AspisR1EbyKPushDotBackend.PushWide)
+  (scalar : AspisR1EbyKPushDotBackend.PushQm) (out : AspisR1EbyKPushDotBackend.PushState),
+  AspisR1EbyKPushDotBackend.pushWithDotBackend rawFn self value scalar =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), out) →
+    ∃ lo hi,
+      rawFn (AspisR1EbyKPushDotBackend.valueLo value) (AspisR1EbyKPushDotBackend.scalarQ scalar) =
+          Aeneas.Std.Result.ok lo ∧
+        rawFn (AspisR1EbyKPushDotBackend.valueHi value) (AspisR1EbyKPushDotBackend.scalarQ scalar) =
+            Aeneas.Std.Result.ok hi ∧
+          out.c0.sums = AspisR1DotPushLocal.Proof.updatedSums self.c0.sums lo ∧
+            out.c1.sums = AspisR1DotPushLocal.Proof.updatedSums self.c1.sums hi ∧
+              self.count < AspisR1EbyKPushExplicitOpsV1.maxTerms ∧
+                ↑out.count = ↑self.count + 1 ∧ ∀ x ∈ ↑(AspisR1EbyKPushDotBackend.scalarQ scalar), ↑x < 2147483647 :=
+fun rawFn self value scalar out hrun =>
+  have hshape :=
+    AspisR1EbyKPushConcreteCheckedQV1.push_concrete_checked_q_success AspisR1EbyKCheckedQConcreteAll.concreteAll
+      (AspisR1EbyKPushDotBackend.dotViaRaw rawFn) self value scalar out hrun;
+  let ⟨d0, h✝⟩ := hshape
+  let ⟨d1, h✝¹⟩ := h✝
+  let ⟨i, h✝²⟩ := h✝¹
+  let ⟨hd0, right✝⟩ := h✝²
+  let ⟨hd1, right✝¹⟩ := right✝
+  let ⟨hout, right✝²⟩ := right✝¹
+  let ⟨hcount, hinc⟩ := right✝²
+  let ⟨lo, h✝³⟩ :=
+    AspisR1EbyKPushDotBackend.dotViaRaw_success rawFn self.c0
+      (AspisR1EbyKPushWideToQ.qFromCoords value.c0.c0.a value.c0.c0.b value.c0.c1.a value.c0.c1.b)
+      (Aeneas.Std.Array.make 4#usize [scalar.c0.a, scalar.c0.b, scalar.c1.a, scalar.c1.b]
+        (of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrFun'
+                  (congrArg HAdd.hAdd
+                    (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                  1))
+              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                  (of_decide_eq_true (id (Eq.refl true))))))
+            (eq_self 4))))
+      d0 hd0
+  let ⟨hlo, hloState⟩ := h✝³
+  let ⟨hi, h✝⁴⟩ :=
+    AspisR1EbyKPushDotBackend.dotViaRaw_success rawFn self.c1
+      (AspisR1EbyKPushWideToQ.qFromCoords value.c1.c0.a value.c1.c0.b value.c1.c1.a value.c1.c1.b)
+      (Aeneas.Std.Array.make 4#usize [scalar.c0.a, scalar.c0.b, scalar.c1.a, scalar.c1.b]
+        (of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrFun'
+                  (congrArg HAdd.hAdd
+                    (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                  1))
+              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                  (of_decide_eq_true (id (Eq.refl true))))))
+            (eq_self 4))))
+      d1 hd1
+  let ⟨hhi, hhiState⟩ := h✝⁴
+  have hcanonical :=
+    AspisR1EbyKPushCheckedScalarCanonical.successful_push_scalar_canonical (AspisR1EbyKPushDotBackend.dotViaRaw rawFn)
+      self value scalar out hrun;
+  Exists.intro lo
+    (Exists.intro hi
+      ⟨hlo,
+        ⟨hhi,
+          ⟨Eq.mpr (id (congrArg (fun _a => _a.c0.sums = AspisR1DotPushLocal.Proof.updatedSums self.c0.sums lo) hout))
+              hloState,
+            ⟨Eq.mpr (id (congrArg (fun _a => _a.c1.sums = AspisR1DotPushLocal.Proof.updatedSums self.c1.sums hi) hout))
+                hhiState,
+              ⟨hcount, ⟨hinc, hcanonical⟩⟩⟩⟩⟩⟩)
+'AspisR1CurrentPreparedClaim.ClaimScalar.body_eq_source' depends on axioms: [propext, Classical.choice, Quot.sound]

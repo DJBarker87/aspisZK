@@ -1,0 +1,8 @@
+import JGi_ClaimTotal
+set_option autoImplicit false
+#print AspisR1CurrentPreparedClaim.ClaimDotOps
+#print AspisR1CurrentPreparedClaim.verifier.prepared_claim
+#print AspisR1S5ClaimDotConcreteAdapter.concreteOps
+#print AspisR1EbyKPushDecodedProductUpdate.QRaw
+#print AspisR1EbyKPushDotBackend.successful_push_exact_backend
+#print axioms AspisR1.JGi_ClaimTotal.source

@@ -1,0 +1,8 @@
+import LPm_UpdatePort
+set_option autoImplicit false
+#check AspisR1DotPushLocal.Proof.push_total_from_raw
+#check AspisR1DotPushLocal.Proof.push_success_raw_and_state
+#check AspisR1DotPushLocal.Proof.push_four_coordinates
+#check AspisR1EbyKPushConcreteCheckedQV1.push_concrete_checked_q_success
+#check AspisR1EbyKPushDotBackend.dotViaRaw_success
+#print AspisR1CurrentPreparedClaim.ClaimParser.fromFinish

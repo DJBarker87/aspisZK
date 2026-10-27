@@ -1,0 +1,63 @@
+{"attempt": "LPm_K015", "exit_status": 1, "wall_seconds": 91.94617668696446, "peak_rss_kib": "1214808", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+^^^^^^ help: convert the identifier to snake case: `lpm_any_e`
+
+warning: static variable `LPm_WEIGHT` should have an upper case name
+   --> crates/aspis-r1-cost-probe/src/LPm_verifier.rs:197:12
+    |
+197 | static mut LPm_WEIGHT:[u32;8]=[0;8];
+    |            ^^^^^^^^^^
+    |
+help: convert the identifier to upper case
+    |
+197 - static mut LPm_WEIGHT:[u32;8]=[0;8];
+197 + static mut LPM_WEIGHT:[u32;8]=[0;8];
+    |
+
+warning: static variable `LPm_PART` should have an upper case name
+   --> crates/aspis-r1-cost-probe/src/LPm_verifier.rs:198:12
+    |
+198 | static mut LPm_PART:[u32;8]=[0;8];
+    |            ^^^^^^^^
+    |
+help: convert the identifier to upper case
+    |
+198 - static mut LPm_PART:[u32;8]=[0;8];
+198 + static mut LPM_PART:[u32;8]=[0;8];
+    |
+
+warning: function `LPm_weighted_mul` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/LPm_verifier.rs:199:4
+    |
+199 | fn LPm_weighted_mul(a:E,b:E)->E{
+    |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpm_weighted_mul`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.88s
+Checking harness verifier::LPm_verifier::weighted_iteration...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - verifier::LPm_verifier::weighted_iteration
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r11cf9f4a811148919254b602cfc7be94.scope; invocation ID: 9bccfa109c474a60b5159d2c019be233

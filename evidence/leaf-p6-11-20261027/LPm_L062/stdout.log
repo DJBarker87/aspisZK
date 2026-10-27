@@ -1,0 +1,23 @@
+def AspisR1DotPushLocal.Proof.updateWord : U64 → U64 → U64 :=
+fun old raw => core.num.U64.wrapping_add old (AspisR1EbyKDotPushActualFoldV2.actualWrappingFold raw)
+def AspisR1EbyKPushDotBackend.dotViaRaw : AspisR1EbyKPushDotBackend.RawFn →
+  AspisR1EbyKPushDotBackend.PushDot →
+    AspisR1EbyKPushDotBackend.PushQ → AspisR1EbyKPushDotBackend.PushQ → Result AspisR1EbyKPushDotBackend.PushDot :=
+fun rawFn self a b => do
+  let out ← AspisR1DotPushLocal.canonical.Dot.push rawFn { sums := self.sums } a b
+  ok { sums := out.sums }
+LPm_generated/LPm_UpdatePort.lean:20:69: error(lean.unknownIdentifier): Unknown constant `List.zipWith_cons`
+LPm_generated/LPm_UpdatePort.lean:21:4: error(lean.unknownIdentifier): Unknown constant `List.zipWith_nil`
+LPm_generated/LPm_UpdatePort.lean:16:66: error: unsolved goals
+s : LPm_PublicState.Dot
+r : LPm_PublicState.Raw
+s0 s1 s2 s3 : U64
+ss : s.sums = Array.make 4#usize [s0, s1, s2, s3] ⋯
+r0 r1 r2 r3 : U64
+rr : r = Array.make 4#usize [r0, r1, r2, r3] ⋯
+⊢ ⟨[AspisR1DotPushLocal.Proof.updateWord s0 r0, AspisR1DotPushLocal.Proof.updateWord s1 r1,
+        AspisR1DotPushLocal.Proof.updateWord s2 r2, AspisR1DotPushLocal.Proof.updateWord s3 r3],
+      ⋯⟩ =
+    ⟨List.zipWith AspisR1DotPushLocal.Proof.updateWord [s0, s1, s2, s3] [r0, r1, r2, r3], ⋯⟩
+'AspisR1.LPm_UpdatePort.word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPm_UpdatePort.sums' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

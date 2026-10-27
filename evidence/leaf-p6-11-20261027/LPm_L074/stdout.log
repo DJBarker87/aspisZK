@@ -1,0 +1,125 @@
+LPm_generated/LPm_PointLoop.lean:55:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.prepared_claim_dot_loop.body ops inst y1 g iter sem point (statePort s)
+in the target expression
+  (match
+      match (iter, sem, point, statePort s) with
+      | (iter1, sem1, point1, dot1) => verifier.prepared_claim_dot_loop.body ops inst y1 g iter1 sem1 point1 dot1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, sem1, point1, dot1) => verifier.prepared_claim_dot_loop.body ops inst y1 g iter1 sem1 point1 dot1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (ePort out))
+
+case done
+H : Type
+inst : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+g : Std.Array Concrete.E 29#usize
+point : Usize
+iter✝ : Range
+s✝ : Native
+xs : List (NE × NQ)
+out✝ : NE
+iter iter' : Range
+s : Native
+out : NE
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter')
+finish : FIo_Native.fast_pairing.EbyKDot.finish s = ok out
+native : FIo_Native.fast_pairing.EbyKDot.finish s = ok out
+model :
+  (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw).finishDot (statePort s) =
+    ok (ePort out)
+body :
+  verifier.prepared_claim_dot_loop.body ops inst y1 g iter sem point (statePort s) =
+    ok (done (core.result.Result.Ok (ePort out)))
+⊢ (match
+      match (iter, sem, point, statePort s) with
+      | (iter1, sem1, point1, dot1) => verifier.prepared_claim_dot_loop.body ops inst y1 g iter1 sem1 point1 dot1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, sem1, point1, dot1) => verifier.prepared_claim_dot_loop.body ops inst y1 g iter1 sem1 point1 dot1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (ePort out))
+LPm_generated/LPm_PointLoop.lean:67:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.prepared_claim_dot_loop.body ops inst y1 g iter sem point (statePort s)
+in the target expression
+  (match
+      match (iter, sem, point, statePort s) with
+      | (iter1, sem1, point1, dot1) => verifier.prepared_claim_dot_loop.body ops inst y1 g iter1 sem1 point1 dot1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, sem1, point1, dot1) => verifier.prepared_claim_dot_loop.body ops inst y1 g iter1 sem1 point1 dot1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (ePort out))
+
+case step
+H : Type
+inst : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+g : Std.Array Concrete.E 29#usize
+point : Usize
+iter✝ : Range
+s✝ : Native
+xs✝ : List (NE × NQ)
+out✝ : NE
+iter iter' : Range
+s s' : Native
+out : NE
+xs : List (NE × NQ)
+l : Usize
+v : NE
+q : NQ
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some l, iter')
+read : ClaimScalar.read ops sem y1 point l = ok (qPort q)
+weight : g.index_usize l = ok (ePort v)
+cv : canonE v
+cq : canonQ q
+count : ↑s.count < 29
+push : FIo_Native.fast_pairing.EbyKDot.push s v q = ok (core.result.Result.Ok (), s')
+tail : Trace sem y1 g point iter' s' xs out
+ih :
+  verifier.prepared_claim_dot_loop ops inst iter' sem y1 g point (statePort s') = ok (core.result.Result.Ok (ePort out))
+model : ops.pushDot (statePort s) (ePort v) (qPort q) = ok (core.result.Result.Ok (), statePort s')
+body :
+  verifier.prepared_claim_dot_loop.body ops inst y1 g iter sem point (statePort s) =
+    ok (cont (iter', sem, point, statePort s'))
+⊢ (match
+      match (iter, sem, point, statePort s) with
+      | (iter1, sem1, point1, dot1) => verifier.prepared_claim_dot_loop.body ops inst y1 g iter1 sem1 point1 dot1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, sem1, point1, dot1) => verifier.prepared_claim_dot_loop.body ops inst y1 g iter1 sem1 point1 dot1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (ePort out))
+'AspisR1.LPm_PointLoop.model_push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LPm_PointLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,80 @@
+{
+  "sources": [
+    "LPm_src/Cargo.lock",
+    "LPm_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/LPi_contracts.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/LPm_verifier.rs",
+    "LPm_src/crates/aspis-core/src/field.rs",
+    "LPm_src/crates/aspis-core/src/field/wide_exact.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+    "LPm_src/crates/aspis-r1-cost-probe/src/verifier.rs"
+  ],
+  "source_revision": "a6cdbb1c60c1f09522fa3823462b0aea38f1d581",
+  "source_tree_dirty": true,
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-leaf-p6-11-20261027/LPm_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "LPm_K002",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-11-20261027/LPm_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-11-20261027/LPm_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::LPm_verifier::weights_write_step",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation, then named solver stage weights_write_step",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "LPm_K002-graph-check.json"
+  },
+  "reservation_retries": 0,
+  "exit_status": 1,
+  "wall_seconds": 93.01003635401139,
+  "peak_rss_kib": "2065532",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rbe4f9e37c11f4936829909d1279d6cfc.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "2455932928",
+  "source_hashes": {
+    "LPm_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "LPm_src/crates/aspis-r1-cost-probe/src/lib.rs": "9bb178f6754acbbedf992b9b326b4f38b2ffca452edce672156ff60d37586a16",
+    "LPm_src/crates/aspis-r1-cost-probe/src/LPi_contracts.rs": "bc925acbe2398efd44d5e9873dd5465a971da87075be33bc55d394ab1f06b7f8",
+    "LPm_src/crates/aspis-r1-cost-probe/src/LPm_verifier.rs": "3131edeeeeb78fb39b8d2b7f18d426695ea130049e0a03c061d02f3d39d03ce2",
+    "LPm_src/crates/aspis-core/src/field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "LPm_src/crates/aspis-core/src/field/wide_exact.rs": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+    "LPm_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+    "LPm_src/crates/aspis-r1-cost-probe/src/verifier.rs": "d1db21cc661b7d02a688e6fe8a29afa3c671cba380761b8e48858eeef195430b"
+  },
+  "print_axioms": "N/A: kani"
+}
