@@ -1,0 +1,47 @@
+{"attempt": "JGi19_001", "exit_status": 0, "wall_seconds": 3.116858037014026, "peak_rss_kib": "6095016", "swaps": "0", "print_axioms": []}
+def AspisR1ClaimPreparedBridge.claimPublic : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_semantic.Verified H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1ClaimPreparedBridge.PE →
+          Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize →
+            AspisR1ClaimPreparedBridge.PE →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1ClaimPreparedBridge.PE AspisR1PublicPreparation.verifier.Error) :=
+fun {H} D sem y1 inactive g kappa => do
+  let r ←
+    AspisR1CurrentPreparedClaim.verifier.prepared_claim
+        (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpda
+...
+t
+                      (Aeneas.Std.core.result.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+                        AspisR1CurrentPreparedClaim.verifier.Error) :=
+fun {D} ops {H} aspis_coreDigest32Inst iter sem y1 g point dot =>
+  Aeneas.Std.loop
+    (fun x =>
+      match x with
+      | (iter1, sem1, point1, dot1) =>
+        AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop.body ops aspis_coreDigest32Inst y1 g iter1 sem1
+          point1 dot1)
+    (iter, sem, point, dot)
+def AspisR1S5ClaimDotConcreteAdapter.concreteOps : AspisR1EbyKPushDotBackend.RawFn →
+  AspisR1CurrentPreparedClaim.ClaimDotOps AspisR1S5ClaimDotConcreteAdapter.PushState :=
+fun rawFn =>
+  { powers := AspisR1CurrentPreparedClaim.ClaimPowers.powers, field := AspisR1CurrentPreparedClaim.ClaimParser.field,
+    c0 := AspisR1CurrentPreparedClaim.ClaimParser.c0, newDot := AspisR1FinishDotConcreteOps.sourceNewDot,
+    pushDot := fun s v q =>
+      AspisR1EbyKPushDotBackend.pushWithDotBackend rawFn s (AspisR1S5ClaimDotConcreteAdapter.toPushWide v)
+        (AspisR1S5ClaimDotConcreteAdapter.toPushQm q),
+    finishDot := fun s => do
+      let out ← AspisR1FinishDotSourceABI.finishFromPush s
+      Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish out) }
+def AspisR1CurrentPreparedClaim.ClaimParser.field : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result AspisR1CurrentPreparedClaim.ClaimParser.E :=
+fun bytes i => do
+  let x ← AspisR1CurrentWide.Proof.finishField bytes i
+  Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x)
+def AspisR1CurrentPreparedClaim.ClaimParser.c0 : AspisR1CurrentPreparedClaim.ClaimParser.E →
+  Aeneas.Std.Result AspisR1CurrentPreparedClaim.aspis_core.field.QM31 :=
+fun x => Aeneas.Std.Result.ok x.c0
+
+Running as unit: run-r0dd0487d568f4c47bacf3aab77e0f9ad.scope; invocation ID: fddd150c9f4a41a8992380787e5644c1

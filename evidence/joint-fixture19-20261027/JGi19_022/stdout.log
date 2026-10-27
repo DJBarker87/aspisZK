@@ -1,0 +1,99 @@
+JGi_FieldCell.lean:28:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑stop - ↑start
+in the target expression
+  List.take (↑stop - 32 * ↑i) (List.drop (32 * ↑i) ↑bytes) = ↑arr
+
+bytes : Slice U8
+i : Usize
+arr : Std.Array U8 32#usize
+fits : 32 * (↑i + 1) ≤ bytes.length
+small : bytes.length ≤ 20000
+selected : List.take 32 (List.drop (32 * ↑i) ↑bytes) = ↑arr
+bounds : ∀ (j : Fin 8), ↑(wordLE arr j) < 2147483647
+start : UScalar UScalarTy.Usize
+mul : i * 32#usize = ok start
+hs : ↑start = ↑i * ↑32#usize
+next : UScalar UScalarTy.Usize
+add : i + 1#usize = ok next
+hn : ↑next = ↑i + ↑1#usize
+stop : UScalar UScalarTy.Usize
+mulStop : next * 32#usize = ok stop
+ht : ↑stop = ↑next * ↑32#usize
+order : start ≤ stop
+bound : ↑stop ≤ bytes.length
+slice : Slice U8
+range : core.slice.index.SliceIndexRangeUsizeSlice.index { start := start, «end» := stop } bytes = ok slice
+contents : ↑slice = List.slice ↑{ start := start, «end» := stop }.start ↑{ start := start, «end» := stop }.end ↑bytes
+size : slice.length = ↑{ start := start, «end» := stop }.end - ↑{ start := start, «end» := stop }.start
+hstart : ↑start = 32 * ↑i
+width : ↑stop - ↑start = 32
+⊢ List.take (↑stop - 32 * ↑i) (List.drop (32 * ↑i) ↑bytes) = ↑arr
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+JGi_FieldCell.lean:36:57: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.slice.index.SliceIndexRangeUsizeSlice.index { start := start, «end» := stop } bytes
+in the target expression
+  (do
+      let x ←
+        do
+          let value ←
+            do
+              let s ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                    { start := start, «end» := stop }
+              let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+              core.option.Option.unwrap o
+          ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+      ok (ClaimParser.fromFinish x)) =
+    ok (ClaimParser.fromFinish (AspisR1CurrentWide.Proof.recordWideToFinish w))
+
+bytes : Slice U8
+i : Usize
+arr : Std.Array U8 32#usize
+fits : 32 * (↑i + 1) ≤ bytes.length
+small : bytes.length ≤ 20000
+selected : List.take 32 (List.drop (32 * ↑i) ↑bytes) = ↑arr
+bounds : ∀ (j : Fin 8), ↑(wordLE arr j) < 2147483647
+start : UScalar UScalarTy.Usize
+mul : i * 32#usize = ok start
+hs : ↑start = ↑i * ↑32#usize
+next : UScalar UScalarTy.Usize
+add : i + 1#usize = ok next
+hn : ↑next = ↑i + ↑1#usize
+stop : UScalar UScalarTy.Usize
+mulStop : next * 32#usize = ok stop
+ht : ↑stop = ↑next * ↑32#usize
+order : start ≤ stop
+bound : ↑stop ≤ bytes.length
+slice : Slice U8
+range : core.slice.index.SliceIndexRangeUsizeSlice.index { start := start, «end» := stop } bytes = ok slice
+contents : ↑slice = List.slice ↑{ start := start, «end» := stop }.start ↑{ start := start, «end» := stop }.end ↑bytes
+size : slice.length = ↑{ start := start, «end» := stop }.end - ↑{ start := start, «end» := stop }.start
+same : slice = arr.to_slice
+w : AspisR1RecordParser.field.wide_exact.WideExact :=
+  ExtractedRecordLimbCanonicality.packed (wordLE arr 0) (wordLE arr 1) (wordLE arr 2) (wordLE arr 3) (wordLE arr 4)
+    (wordLE arr 5) (wordLE arr 6) (wordLE arr 7)
+parser : AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes arr.to_slice = ok (some w)
+⊢ (do
+      let x ←
+        do
+          let value ←
+            do
+              let s ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                    { start := start, «end» := stop }
+              let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+              core.option.Option.unwrap o
+          ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+      ok (ClaimParser.fromFinish x)) =
+    ok (ClaimParser.fromFinish (AspisR1CurrentWide.Proof.recordWideToFinish w))
+'AspisR1.JGi_FieldCell.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,117 @@
+def AspisR1ClaimPreparedBridge.claimPublic : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_semantic.Verified H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1ClaimPreparedBridge.PE →
+          Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize →
+            AspisR1ClaimPreparedBridge.PE →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1ClaimPreparedBridge.PE AspisR1PublicPreparation.verifier.Error) :=
+fun {H} D sem y1 inactive g kappa => do
+  let r ←
+    AspisR1CurrentPreparedClaim.verifier.prepared_claim
+        (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+        (AspisR1ClaimPreparedBridge.toClaimDigest D) (AspisR1ClaimPreparedBridge.toClaimSem sem) y1
+        (AspisR1ClaimPreparedBridge.toClaimE inactive)
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE g)
+        (AspisR1ClaimPreparedBridge.toClaimE kappa)
+  Aeneas.Std.Result.ok
+      (match r with
+      | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok (AspisR1ClaimPreparedBridge.fromClaimE x)
+      | Aeneas.Std.core.result.Result.Err e =>
+        Aeneas.Std.core.result.Result.Err (AspisR1ClaimPreparedBridge.fromClaimError e))
+def AspisR1CurrentPreparedClaim.verifier.prepared_claim : {D : Type} →
+  AspisR1CurrentPreparedClaim.ClaimDotOps D →
+    {H : Type} →
+      AspisR1CurrentPreparedClaim.aspis_core.Digest32 H →
+        AspisR1CurrentPreparedClaim.r1_semantic.Verified H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+              Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 29#usize →
+                AspisR1CurrentPreparedClaim.aspis_core.field.WideExact →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+                      AspisR1CurrentPreparedClaim.verifier.Error) :=
+fun {D} ops {H} aspis_coreDigest32Inst sem y1 inactive g kappa => do
+  let k ← ops.powers 7#usize kappa
+  have parts : Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 7#usize :=
+    Aeneas.Std.Array.repeat 7#usize AspisR1CurrentPreparedClaim.aspis_core.field.WideExact.ZERO
+  let a ← parts.update 0#usize inactive
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop ops aspis_coreDigest32Inst
+      { start := 0#usize, «end» := 6#usize } sem y1 g k a
+def AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop : {D : Type} →
+  AspisR1CurrentPreparedClaim.ClaimDotOps D →
+    {H : Type} →
+      AspisR1CurrentPreparedClaim.aspis_core.Digest32 H →
+        Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+          AspisR1CurrentPreparedClaim.r1_semantic.Verified H →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 29#usize →
+                Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 7#usize →
+                  Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 7#usize →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+                        AspisR1CurrentPreparedClaim.verifier.Error) :=
+fun {D} ops {H} aspis_coreDigest32Inst iter sem y1 g k parts =>
+  Aeneas.Std.loop
+    (fun x =>
+      match x with
+      | (iter1, parts1) =>
+        AspisR1CurrentPreparedClaim.verifier.prepared_claim_loop.body ops aspis_coreDigest32Inst sem y1 g k iter1
+          parts1)
+    (iter, parts)
+def AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot : {D : Type} →
+  AspisR1CurrentPreparedClaim.ClaimDotOps D →
+    {H : Type} →
+      AspisR1CurrentPreparedClaim.aspis_core.Digest32 H →
+        AspisR1CurrentPreparedClaim.r1_semantic.Verified H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 29#usize →
+              Aeneas.Std.Usize →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+                    AspisR1CurrentPreparedClaim.verifier.Error) :=
+fun {D} ops {H} aspis_coreDigest32Inst sem y1 g point => do
+  let dot ← ops.newDot
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop ops aspis_coreDigest32Inst
+      { start := 0#usize, «end» := 29#usize } sem y1 g point dot
+def AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop : {D : Type} →
+  AspisR1CurrentPreparedClaim.ClaimDotOps D →
+    {H : Type} →
+      AspisR1CurrentPreparedClaim.aspis_core.Digest32 H →
+        Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+          AspisR1CurrentPreparedClaim.r1_semantic.Verified H →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Array AspisR1CurrentPreparedClaim.aspis_core.field.WideExact 29#usize →
+                Aeneas.Std.Usize →
+                  D →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result AspisR1CurrentPreparedClaim.aspis_core.field.WideExact
+                        AspisR1CurrentPreparedClaim.verifier.Error) :=
+fun {D} ops {H} aspis_coreDigest32Inst iter sem y1 g point dot =>
+  Aeneas.Std.loop
+    (fun x =>
+      match x with
+      | (iter1, sem1, point1, dot1) =>
+        AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop.body ops aspis_coreDigest32Inst y1 g iter1 sem1
+          point1 dot1)
+    (iter, sem, point, dot)
+def AspisR1S5ClaimDotConcreteAdapter.concreteOps : AspisR1EbyKPushDotBackend.RawFn →
+  AspisR1CurrentPreparedClaim.ClaimDotOps AspisR1S5ClaimDotConcreteAdapter.PushState :=
+fun rawFn =>
+  { powers := AspisR1CurrentPreparedClaim.ClaimPowers.powers, field := AspisR1CurrentPreparedClaim.ClaimParser.field,
+    c0 := AspisR1CurrentPreparedClaim.ClaimParser.c0, newDot := AspisR1FinishDotConcreteOps.sourceNewDot,
+    pushDot := fun s v q =>
+      AspisR1EbyKPushDotBackend.pushWithDotBackend rawFn s (AspisR1S5ClaimDotConcreteAdapter.toPushWide v)
+        (AspisR1S5ClaimDotConcreteAdapter.toPushQm q),
+    finishDot := fun s => do
+      let out ← AspisR1FinishDotSourceABI.finishFromPush s
+      Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish out) }
+def AspisR1CurrentPreparedClaim.ClaimParser.field : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result AspisR1CurrentPreparedClaim.ClaimParser.E :=
+fun bytes i => do
+  let x ← AspisR1CurrentWide.Proof.finishField bytes i
+  Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x)
+def AspisR1CurrentPreparedClaim.ClaimParser.c0 : AspisR1CurrentPreparedClaim.ClaimParser.E →
+  Aeneas.Std.Result AspisR1CurrentPreparedClaim.aspis_core.field.QM31 :=
+fun x => Aeneas.Std.Result.ok x.c0
