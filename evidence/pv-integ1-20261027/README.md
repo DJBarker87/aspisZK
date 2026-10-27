@@ -65,12 +65,27 @@ records were compared. Runtime measurements are evidence metadata, not quiet-win
 compile. This includes the canonical P6 source and ten imported files newly
 present at their canonical paths. Objects are inspected read-only. No shared
 env-J source is installed or overwritten. Assigned IDs 53900–54199, budget
-30 Lean attempts, zero Kani. Focused target re-checks pending. Attempt 53900 exited 1 at a missing
-`PV_Op223_P6Bridge.olean` in the private same-prefix object directory, before
-elaboration. `object-overlay.json` records the replacement environment:
-read-only links to the retained, audited op223 objects, excluding both output
-targets. No old object or shared source is overwritten. IDs 53901 and 53902
-were refused before execution and are uncharged; cooldowns use fresh IDs.
+30 Lean attempts, zero Kani. PASS: `R1Z.PV_Op223_Source.op223_source` (53906) and
+`R1Z.PV_Op223_V164.refinement` (53907) type-check against the integrated-tree
+source and the retained audited import objects. All five printed axiom lists
+contain only `propext`, `Classical.choice`, `Quot.sound`. Exact source hashes,
+dependency object hashes/fingerprints, commands, caps, exits, walls, process and
+cgroup peaks, zero swaps, and axiom output are in the per-ID receipts and
+`lean-summary.json`. This is a focused re-check, not a clean deployment closure
+replay or a privacy endpoint claim.
+
+Budget: **5/30 charged Lean attempts**, **0 Kani**. 53900, 53903 and 53905
+failed before theorem elaboration at missing private overlay imports
+(P6Bridge, Init.Prelude, Aeneas.Command respectively). These are environment
+preflight failures, not theorem counterexamples. Replacements were changed
+private object environments, under the original caps. IDs 53901, 53902 and
+53904 were uncharged admission refusals, with three-minute cooldowns and fresh
+IDs. The retained op223 cache uses directory symlinks; the initial file-only
+copy missed them. `retained-prefix-overlay.json` records preserving those
+links and hash-checking all 231 imported objects in the audit, excluding the
+two rebuilt targets. Earlier overlay records preserve the attempted fixes.
+No shared source or object was overwritten.
+
 
 Changed/new imported files (listed before compiling):
 

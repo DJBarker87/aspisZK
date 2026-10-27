@@ -9,15 +9,20 @@ def b58(b):
  return '1'*(len(b)-len(b.lstrip(b'\0')))+out
 for name in ['sbf-target-verifier','sbf-target-pool','native-target']:
  root=H/name
- if not root.exists():continue
+ if not root.exists():
+  removed.append(dict(path=str(root),status='already removed by preceding partial cleanup'));continue
  assert root.is_dir() and not root.is_symlink()
  for p in root.rglob('*keypair*.json'):
   if not p.is_file():continue
-  raw=p.read_bytes();key=json.loads(raw);assert len(key)==64
+  raw=p.read_bytes();key=json.loads(raw)
+  if not isinstance(key,list):
+   assert '.fingerprint' in p.parts, 'Keep unclassified key-like file: '+str(p)
+   continue
+  assert len(key)==64
   dst=H/'retained-keys'/p.relative_to(H);dst.parent.mkdir(parents=True,exist_ok=True);assert not dst.exists()
   shutil.move(str(p),str(dst));os.chmod(dst,0o600)
   retained.append(dict(path=str(dst),public_key=b58(bytes(key[32:])),sha256=hashlib.sha256(raw).hexdigest(),action='Key moved securely out of rebuildable cargo cache; retained, never destroyed or spent'))
- shutil.rmtree(root);removed.append(str(root))
+ shutil.rmtree(root);removed.append(dict(path=str(root),status='removed by completed cleanup'))
 # SBF output key files are retained in place; record public identifiers only.
 for root in H.glob('build-*/artifacts'):
  for p in root.glob('*keypair*.json'):
