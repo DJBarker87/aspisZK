@@ -1,0 +1,75 @@
+Kani Rust Verifier 0.67.0 (standalone)
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --harness entropy_marker --exact -Z unstable-options --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib -C opt-level=3 -Z mir-opt-level=4 -Z inline-mir=yes -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler /home/dombarker/project-offloads/codex-pv-l2b-20261027/control.rs --out-dir /home/dombarker/project-offloads/codex-pv-l2b-20261027 --crate-name control --crate-type lib`
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.000446982s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.029344456s
+====== Reachability Analysis Result =======
+Total # items: 10
+Total # statements: 61
+Total # expressions: 17
+
+Reachable Items:
+  - function: 10
+
+Statements:
+  - Return: 8
+  - Goto: 6
+  - Call: 10
+  - Ignored: 16
+  - Assert: 3
+  - SwitchInt: 1
+  - Assign: 17
+
+Expressions:
+  - BinaryOp: 7
+  - Use: 7
+  - Repeat: 1
+  - Ref: 1
+  - CheckedBinaryOp: 1
+
+-------------------------------------------
+Finished /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler in 0.15852448s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.symtab.out /home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out`
+Finished goto-cc in 0.16140936s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out --function _RNvCs7bmo52P6UG_7control14entropy_marker -o /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out`
+Finished goto-cc in 0.087720014s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out'
+Finished goto-instrument in 0.088334344s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out'
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out'
+Finished goto-instrument in 0.07242332s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out'
+Finished goto-instrument in 0.057977684s
+Thread 0: Checking harness entropy_marker...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 33 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-pv-l2b-20261027/control__RNvCs7bmo52P6UG_7control14entropy_marker.out --verbosity 9 --json-ui`
+Finished run_cbmc in 0.3832164s
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 12 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.3826171s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+exit=0

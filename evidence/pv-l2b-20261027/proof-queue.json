@@ -531,15 +531,16 @@
     "namespace": "PV_L2B_EntropyTrace"
   },
   {
-    "body": "theorem first_reject_conditional (z : \u211a) (hz : z \u2260 0) (ht : 2-z \u2260 0) : z/(z+(1-z)*z) = 1/(2-z) := by field_simp; ring",
+    "body": "theorem first_reject_conditional (z : \u211a) (hz : z \u2260 0) (ht : 2-z \u2260 0) : z/(z+(1-z)*z) = 1/(2-z) := by\n  rw [show z+(1-z)*z=z*(2-z) by ring]\n  field_simp <;> ring\ntheorem entropy_q_valid (z : \u211a) (hz : 0<z) (hz1 : z\u22641) :\n    0<z+(1-z)*z \u2227 z+(1-z)*z\u22641 := by\n  have hm : 0\u2264(1-z)*z := mul_nonneg (sub_nonneg.mpr hz1) hz.le\n  constructor\n  \u00b7 linarith\n  \u00b7 nlinarith [sq_nonneg (1-z)]",
     "theorems": [
-      "first_reject_conditional"
+      "first_reject_conditional",
+      "entropy_q_valid"
     ],
     "module": "PV_L2B_EntropyTrace",
     "namespace": "PV_L2B_EntropyTrace"
   },
   {
-    "body": "theorem second_reject_conditional (z : \u211a) (hz : z \u2260 0) (ht : 2-z \u2260 0) : ((1-z)*z)/(z+(1-z)*z) = (1-z)/(2-z) := by field_simp; ring",
+    "body": "theorem second_reject_conditional (z : \u211a) (hz : z \u2260 0) (ht : 2-z \u2260 0) : ((1-z)*z)/(z+(1-z)*z) = (1-z)/(2-z) := by\n  rw [show z+(1-z)*z=z*(2-z) by ring]\n  field_simp <;> ring",
     "theorems": [
       "second_reject_conditional"
     ],
@@ -716,9 +717,10 @@
     "namespace": "PV_L2B_Guards"
   },
   {
-    "body": "theorem rejection_cursor_joint {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) :\n    (PV_L2B_Rejection.trace n (xs.map (Option.map f)),\n      PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n (xs.map (Option.map f))).1) =\n    (PV_L2B_Rejection.trace n xs, PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n xs).1) := by\n  rw [PV_L2B_Rejection.trace_relabel,PV_L2B_Rejection.count_map]",
+    "body": "theorem rejection_cursor_joint {A B : Type} (f : A \u2192 B) (n : Nat) (xs : List (Option A)) :\n    (PV_L2B_Rejection.trace n (xs.map (Option.map f)),\n      PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n (xs.map (Option.map f))).1) =\n    (PV_L2B_Rejection.trace n xs, PV_L2B_Cursor.offset (PV_L2B_Rejection.scan n xs).1) := by\n  rw [PV_L2B_Rejection.trace_relabel,PV_L2B_Rejection.count_map]\ntheorem accepted_conditional_uniform (q u p : \u211a) (n : Nat)\n    (hp : p\u22600) (h : u*p=1-q) (hs : PV_L2B_SamplerLaw.success q n\u22600) :\n    PV_L2B_SamplerLaw.valueMass q u n / PV_L2B_SamplerLaw.success q n = 1/p := by\n  rw [PV_L2B_SamplerLaw.uniform_on_success q u p n hp h]\n  field_simp",
     "theorems": [
-      "rejection_cursor_joint"
+      "rejection_cursor_joint",
+      "accepted_conditional_uniform"
     ],
     "module": "PV_L2B_JointTransport",
     "namespace": "PV_L2B_JointTransport",

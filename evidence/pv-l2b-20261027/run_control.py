@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Six bounded, optimized control-only Kani invocations, one scope at a time."""
-import datetime,hashlib,json,pathlib,shlex,subprocess,sys,time
+import datetime,hashlib,json,pathlib,re,shlex,subprocess,sys,time
 E=pathlib.Path(__file__).resolve().parent
 ROOT=E.parent.parent
 HOST='dombarker@100.108.41.90'
@@ -39,5 +39,11 @@ start=time.monotonic();p=ssh('cd '+JOB+' && '+shlex.join(cmd)+f' > {JOB}/kani-{h
 for name,remote in [('out.log',f'{JOB}/kani-{harness}.log'),('time.log',f'{JOB}/kani-{harness}.time')]:
  r=ssh('cat '+remote);(d/name).write_text(r.stdout+r.stderr)
 record['wall_client_seconds']=time.monotonic()-start
+out=(d/'out.log').read_text();timing=(d/'time.log').read_text()
+record['exit']=int(re.search(r'^exit=(\d+)',out,re.M)[1])
+record['caps']={'MemoryHigh':'6G','MemoryMax':'8G','MemorySwapMax':0,'TasksMax':64}
+for key,pattern in [('wall',r'Elapsed \(wall clock\) time.*: (.+)'),('peak_RSS_KiB',r'Maximum resident set size \(kbytes\): (\d+)'),('swap',r'Swaps: (\d+)')]:
+ m=re.search(pattern,timing);record[key]=m[1] if m else None
 (d/'receipt.json').write_text(json.dumps(record,indent=2)+'\n')
 print((d/'out.log').read_text());print((d/'time.log').read_text())
+sys.exit(record['exit'])

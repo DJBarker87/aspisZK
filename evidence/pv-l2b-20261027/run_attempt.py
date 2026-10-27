@@ -12,7 +12,7 @@ RESERVE = '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservatio
 attempt, source = int(sys.argv[1]), pathlib.Path(sys.argv[2]).resolve()
 assert 53000 <= attempt <= 53299
 assert source.is_relative_to(ROOT) and source.name.startswith('PV_L2B_')
-for old in list((HERE/'receipts').glob('*/reservation.json'))+list((HERE/'kani').glob('*/reservation.json')):
+for old in list((HERE/'receipts').glob('*/reservation.json'))+list((HERE/'kani').glob('*/reservation.json'))+list(HERE.glob('batch-*/reservation.json')):
     try:
         gate=json.loads(old.read_text())
         if gate.get('allowed') is not False:continue

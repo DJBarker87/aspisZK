@@ -13,7 +13,7 @@ inputs has been checked. No absence-of-leakage claim is made.
 | V352 entropy | state_only_entropy.rs:211–242 | Public nonzero nonce; IID independent 64-byte OS fills under E1, including status/partial-fill/failure schedule. Zero predicate scans all 32 bytes. First-zero short-circuits the second predicate. OS failure independence remains P under option B. |
 | N2 padding | state_only_hiding.rs:289–309 | 1024-row shape, active padding cells zero; inactive padding sum zero. Generated padding and balance must be associated with actual produced buffers. Public active mask controls the first conjunct. |
 | N3 canonical | host_semantic.rs:144–175 | Every 26×1024 base cell is <P; D/G's four limbs are canonical and byte round-trip parser accepts. Compiler output and every applied-mask arithmetic result must preserve this domain. Successful guard checks alone do not prove it on honest input. |
-| N4 balance | prover.rs:200–208 | 16 noised compiler C1 columns and 10 mask-only columns have inactive sum zero; D/G/H1 padding too. Balancing masks alone is insufficient: the unmasked compiler C1 inactive sums must also be zero. |
+| N4 balance | prover.rs:200–208 | 16 noised compiler C1 columns and 10 mask-only columns have inactive sum zero; D/G/H1 padding too. The caller rebalances the whole noised C1 column after applying masks; no zero-sum premise on the original compiler C1 column is required. Audit and rebalance must use the same inactive-row set and canonical field operations. |
 | N5 helper | host_semantic.rs:74–76; prover.rs:214–215 | Helper length 1024 and copy producer/consumer multiset equality imply total helper sum zero outside inverse failure; padding preserves that sum. The later prover check sees the same column 26. |
 | N6 boundary | host_sumcheck.rs:105–107 | Native oracle equals the semantic low-degree oracle, initial claim is its Boolean-cube sum; interpolation equals the degree≤27 round polynomial; subsequent running claim is its challenge evaluation. |
 | N6 terminal | host_sumcheck.rs:68–70 | After 10 substitutions, native oracle evaluation equals the running polynomial evaluation; no native evaluation error on honest input. |
@@ -51,3 +51,18 @@ These are **ideal IID-coordinate samplers**. Their algebraic laws do not
 identify deterministic SHA with independent words. E1/E2 associations, ROM
 query freshness/collision handling, public requested-cell geometry, complete
 failed-prefix transport and native owner composition remain obligations.
+
+## Public geometry association found by source inspection
+
+`state_only_hiding.rs:159` obtains the public row list and sets its Boolean
+entries. `pair_forest_hiding.rs:190` packs the same row-list generator into
+u16 masks. The prover obtains those masks at prover.rs:196; source D expands
+those masks back to Boolean entries at state_only_entropy.rs:758. This is a
+structural source association, not a machine-checked bit-packing/fold theorem.
+
+All sixteen C1 columns are rebalanced after mask addition:
+apply_mask_material_for_layout → balance_mask_columns →
+balance_mask_column → balance_m31_copy_inactive. The final dependent cell is
+set to the negative sum of all other inactive entries. There is no need to
+assume a zero inactive sum before this operation. The initial report draft's
+stronger requirement was corrected after inspecting this actual call chain.

@@ -288,3 +288,25 @@ second=q[q.index(first)+1]
 second['initial']=first['initial'].replace('end PV_L2B_Cursor',first['body']+'\n#print axioms offset_zero\nend PV_L2B_Cursor')
 q.remove(first)
 pathlib.Path('evidence/pv-l2b-20261027/proof-queue.json').write_text(json.dumps(q,indent=2)+'\n')
+for item in q:
+ if item['theorems']==['first_reject_conditional']:
+  item['body']=item['body'].replace('by field_simp; ring', 'by\n  rw [show z+(1-z)*z=z*(2-z) by ring]\n  field_simp <;> ring')
+  item['body']+='''
+theorem entropy_q_valid (z : ℚ) (hz : 0<z) (hz1 : z≤1) :
+    0<z+(1-z)*z ∧ z+(1-z)*z≤1 := by
+  have hm : 0≤(1-z)*z := mul_nonneg (sub_nonneg.mpr hz1) hz.le
+  constructor
+  · linarith
+  · nlinarith [sq_nonneg (1-z)]'''
+  item['theorems'].append('entropy_q_valid')
+ if item['theorems']==['second_reject_conditional']:
+  item['body']=item['body'].replace('by field_simp; ring', 'by\n  rw [show z+(1-z)*z=z*(2-z) by ring]\n  field_simp <;> ring')
+ if item['theorems']==['rejection_cursor_joint']:
+  item['body']+='''
+theorem accepted_conditional_uniform (q u p : ℚ) (n : Nat)
+    (hp : p≠0) (h : u*p=1-q) (hs : PV_L2B_SamplerLaw.success q n≠0) :
+    PV_L2B_SamplerLaw.valueMass q u n / PV_L2B_SamplerLaw.success q n = 1/p := by
+  rw [PV_L2B_SamplerLaw.uniform_on_success q u p n hp h]
+  field_simp'''
+  item['theorems'].append('accepted_conditional_uniform')
+pathlib.Path('evidence/pv-l2b-20261027/proof-queue.json').write_text(json.dumps(q,indent=2)+'\n')
