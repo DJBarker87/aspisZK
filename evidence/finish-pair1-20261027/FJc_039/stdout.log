@@ -1,0 +1,49 @@
+FJc_FieldOffsets.lean:17:34: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑i * 32 % UScalar.size UScalarTy.Usize
+in the target expression
+  ↑i * ↑32#usize % UScalar.size UScalarTy.Usize = 32 * ↑i
+
+case left
+i : Usize
+hi : ↑i < 64
+size : 4096 ≤ UScalar.size UScalarTy.Usize
+h1 : ↑i + 1 < UScalar.size UScalarTy.Usize
+h2 : ↑i * 32 < UScalar.size UScalarTy.Usize
+h3 : (↑i + 1) * 32 < UScalar.size UScalarTy.Usize
+⊢ ↑i * ↑32#usize % UScalar.size UScalarTy.Usize = 32 * ↑i
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FJc_FieldOffsets.lean:19:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑i + 1) % UScalar.size UScalarTy.Usize
+in the target expression
+  (↑i + ↑1#usize) % UScalar.size UScalarTy.Usize * ↑32#usize % UScalar.size UScalarTy.Usize = 32 * (↑i + 1)
+
+case right
+i : Usize
+hi : ↑i < 64
+size : 4096 ≤ UScalar.size UScalarTy.Usize
+h1 : ↑i + 1 < UScalar.size UScalarTy.Usize
+h2 : ↑i * 32 < UScalar.size UScalarTy.Usize
+h3 : (↑i + 1) * 32 < UScalar.size UScalarTy.Usize
+⊢ (↑i + ↑1#usize) % UScalar.size UScalarTy.Usize * ↑32#usize % UScalar.size UScalarTy.Usize = 32 * (↑i + 1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJc_FieldOffsets.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
