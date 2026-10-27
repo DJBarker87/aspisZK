@@ -52,6 +52,11 @@ use aspis_statement::pool_v1::pool_v1_pair_forest_relation_free_mask_cells_v1;
 #[cfg(feature="prover")]
 use crate::host_forest::materialize_mask_cells as pool_v1_pair_forest_relation_free_mask_cells_v1;
 
+#[cfg(feature="prover")]
+use crate::host_arithmetic::state_only_selected_mask_value;
+#[cfg(not(feature="prover"))]
+use aspis_core::state_only_hiding::state_only_selected_mask_value;
+
 const MASK_SEED_DOMAIN: &[u8] = b"aspis:state-only:private-mask-seed:v1";
 const MASK_EXPAND_DOMAIN: &[u8] = b"aspis:state-only:private-mask-expand:v1";
 const VIEW_DOMAIN: &[u8] = b"aspis:state-only:complete-public-view:v1";

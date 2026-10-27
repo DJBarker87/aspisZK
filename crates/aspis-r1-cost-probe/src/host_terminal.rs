@@ -5,7 +5,7 @@
 
 use aspis_core::{
     field::{qm31_pack_base4, PreparedQm31Multiplier, CM31, M31, QM31},
-    state_only_hiding::{state_only_selected_mask_value, STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS},
+    state_only_hiding::STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
 };
 
 use aspis_statement::{
@@ -21,6 +21,7 @@ use aspis_statement::pool_v1::{
     payment_relation::{PoolV1PrivateTransferPublicV1, PoolV1WithdrawalPublicV1},
 };
 
+use aspis_prover::host_arithmetic::state_only_selected_mask_value;
 use crate::host_copy_terminal::{evaluate_with_selectors,PoolV1PairForestCompiledVariantV1,Selectors};
 
 const DOMAIN_OWNER_KEY:M31=M31(0x4153_0001);

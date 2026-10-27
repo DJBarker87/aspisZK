@@ -1618,3 +1618,6 @@ mod prover_commit_reference;
 
 #[cfg(feature = "prover")]
 pub mod host_forest;
+
+#[cfg(feature="prover")]
+pub mod host_arithmetic;

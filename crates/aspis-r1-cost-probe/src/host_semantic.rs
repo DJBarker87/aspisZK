@@ -223,13 +223,13 @@ fn initial_mask_value(columns:&[Vec<QM31>;29],row:usize)->QM31 {
     let mut i=0;
     while i<16 {let value=columns[i][row];semantic[i]=value;i+=1;}
     i=0;while i<10 {let value=columns[16+i][row];mask_only[i]=value;i+=1;}
-    aspis_core::state_only_hiding::state_only_selected_mask_value(&semantic,&mask_only,columns[27][row],&point)
+    aspis_prover::host_arithmetic::state_only_selected_mask_value(&semantic,&mask_only,columns[27][row],&point)
 }
 fn claim_mask_value(claims:[QM31;29],point:&[QM31;10])->QM31 {
     let mut semantic=[QM31::ZERO;16];let mut mask_only=[QM31::ZERO;10];
     semantic.copy_from_slice(&claims[..16]);
     mask_only.copy_from_slice(&claims[16..26]);
-    aspis_core::state_only_hiding::state_only_selected_mask_value(&semantic,&mask_only,claims[27],point)
+    aspis_prover::host_arithmetic::state_only_selected_mask_value(&semantic,&mask_only,claims[27],point)
 }
 
 fn column_coefficients(column:&[QM31],variant:crate::transport::Variant)->[QM31;1024] {
