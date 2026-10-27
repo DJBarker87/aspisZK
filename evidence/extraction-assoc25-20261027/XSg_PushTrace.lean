@@ -26,7 +26,7 @@ theorem source (old : S8OwnedP6Finish.Weights) (b out : verifier.BatchedWeights)
   simpa only [Nat.lt_irrefl,if_false] using phase i.val row get
  have xp : ∀ k, S7Kani3PhaseInvariant.Phase b.terms.val (x k).val := by
   intro k
-  have mem : x k∈row.val := by rw [shaped];fin_cases k <;> simp [makeRow,x]
+  have mem : x k∈row.val := by rw [shaped];fin_cases k <;> simp [makeRow,x,Array.make]
   exact rawBound (x k) mem
  rw [shaped] at get
  obtain ⟨after,hafter,trace⟩ := XRz_PushReach.source old b sum history i q m x bound get

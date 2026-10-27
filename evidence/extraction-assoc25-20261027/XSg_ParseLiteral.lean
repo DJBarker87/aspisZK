@@ -12,9 +12,9 @@ def stage (bytes : Slice U8) (i : Nat) (s : XRz_ParseFold.State) :
 error, state, stage and final continuation. No separately unrolled driver law. -/
 theorem driver (bytes : Slice U8) (root : Array U8 32#usize) (n i : Nat) (s : XRz_ParseFold.State) :
  (do let out ← XRx_TryDriver.run (stage bytes) i n s
-     match out with | .Err e => ok (.Err e) | .Ok s => XSe_ParseFinish.finish bytes root s)=
+     match out with | .Err e => ok (core.result.Result.Err e : core.result.Result OldPrefix OldError) | .Ok s => XSe_ParseFinish.finish bytes root s)=
  (do let out ← XRx_StageFold.fold (stage bytes) (List.range' i n) (.Ok s)
-     match out with | .Err e => ok (.Err e) | .Ok s => XSe_ParseFinish.finish bytes root s) := by
+     match out with | .Err e => ok (core.result.Result.Err e : core.result.Result OldPrefix OldError) | .Ok s => XSe_ParseFinish.finish bytes root s) := by
  rw [XRx_TryDriver.source]
 #print axioms driver
 end XSg_ParseLiteral

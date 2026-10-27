@@ -1,0 +1,22 @@
+XSg_generated/XSg_ParseLiteral.lean:15:36: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `XRo_Join_Carriers.C.Err`
+  [apply] `XRo_Join_Carriers.E.Err`
+  [apply] `core.result.Result.Err`
+XSg_generated/XSg_ParseLiteral.lean:17:95: error: unsolved goals
+bytes : Slice U8
+root : Std.Array U8 32#usize
+n i : ℕ
+s : XRz_ParseFold.State
+⊢ (do
+      let out ← XRx_StageFold.fold (stage bytes) (List.range' i n) (core.result.Result.Ok s)
+      match out with
+        | core.result.Result.Err e => ok sorry
+        | core.result.Result.Ok s => XSe_ParseFinish.finish bytes root s) =
+    do
+    let out ← XRx_StageFold.fold (stage bytes) (List.range' i n) (core.result.Result.Ok s)
+    match out with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok s => XSe_ParseFinish.finish bytes root s
+'XSg_ParseLiteral.driver' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

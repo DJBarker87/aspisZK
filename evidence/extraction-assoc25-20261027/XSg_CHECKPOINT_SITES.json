@@ -1,0 +1,56 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source_hashes": {
+    "crates/aspis-r1-cost-probe/src/verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+    "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+    "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+    "crates/aspis-r1-cost-probe/src/lib.rs": "b4dcf882810c757beb5eaa105c8320cd9ebb19ae184824277900d6ad2c62d6fd"
+  },
+  "sites": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "line": 288,
+      "source": "    let bytes = checkpoint(&p, &a, proof, public_bytes, hash);",
+      "default_release": true,
+      "status": "OPEN: full S1S7S8StateProvenance not established"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/eight_way.rs",
+      "line": 113,
+      "source": "    let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)",
+      "default_release": false,
+      "status": "EXCLUDED: audit-eight-way cfg; arbitrary k/variant domain differs from checkpoint leaf"
+    }
+  ],
+  "scope": "default frozen release; audit-eight-way is cfg-excluded and forbidden for SBF/program builds",
+  "guards": {
+    "crates/aspis-r1-cost-probe/src/verifier.rs": [
+      {
+        "line": 517,
+        "source": "pub use candidate::{parse_shape,tx1,tx2,tx2_authenticated};"
+      },
+      {
+        "line": 526,
+        "source": "#[cfg(feature=\"audit-eight-way\")]"
+      }
+    ],
+    "crates/aspis-r1-cost-probe/src/lib.rs": [
+      {
+        "line": 43,
+        "source": "#[cfg(all(feature=\"audit-eight-way\",feature=\"prover\"))]"
+      },
+      {
+        "line": 44,
+        "source": "compile_error!(\"`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)\");"
+      },
+      {
+        "line": 45,
+        "source": "#[cfg(all(feature=\"audit-eight-way\",any(target_os=\"solana\",feature=\"program-build\")))]"
+      },
+      {
+        "line": 46,
+        "source": "compile_error!(\"`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)\");"
+      }
+    ]
+  }
+}
