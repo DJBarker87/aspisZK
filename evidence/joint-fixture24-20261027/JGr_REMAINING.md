@@ -39,3 +39,19 @@ native functions, but does not prove those functions accept or share this actual
 returned checkpoint. Current FJu finish-owner native/global terminal/mask
 families and the external query budget remain as the ledger states. Deployment
 observations remain included. JFm_Fixture.inhabited is not established.
+
+The next exact batch consumer, after JGp_BatchInput.source normalises THIS
+preparation, is:
+
+```lean
+Op5T_Install.body Port4B_Install.leaves
+  (⟨JGn_TerminalIdentified.shaDictionary.coremarkerCopyInst,
+    JGr_Geometry.digest.digest⟩ : AspisR1Stage2.aspis_core.digest.Digest32 Unit)
+  JFx_NativeBytes.proof JFo_Prepared.value.queries JFo_Prepared.value.roots
+  JGe_View.folded 0#usize () = ok (.Ok ())
+```
+
+This displayed source target is an OPEN equation, not a new theorem. The
+concrete math-SHA hash adapter and the actual installed query dictionary must
+be kept throughout. Neither successful model roots nor a value-only hash match
+silently supplies the source verifier's state, branch path or ordered reads.

@@ -1,7 +1,7 @@
 from pathlib import Path
 import hashlib,json,subprocess
 P=Path(__file__).resolve().parent;R=P.parents[1]
-records=[];valid={};failed=[]
+records=[];valid={};failed=[];pending=[]
 for n in range(1,101):
  a=f'JGr24_{n:03}';cp=P/(a+'.json');rp=P/a/'receipt.json'
  if not cp.exists():continue
@@ -16,12 +16,12 @@ for n in range(1,101):
      valid[s]=dict(attempt=a,source_sha256=h,print_axioms=d['print_axioms'])
   else:failed.append(n)
  else:
-  d=dict(charged_attempt=n,attempt=a,exit_status='pending or missing receipt',target=cfg['sources'][0]);failed.append(n)
+  d=dict(charged_attempt=n,attempt=a,exit_status='pending or missing receipt',target=cfg['sources'][0]);pending.append(n)
  records.append(d)
 (P/'JGr_ATTEMPTS.jsonl').write_text(''.join(json.dumps(d)+'\n' for d in records))
 (P/'JGr_VALIDATION.json').write_text(json.dumps(valid,indent=2)+'\n')
 actual=[d for d in records if isinstance(d['exit_status'],int)]
-summary=dict(charged_lean_attempts=len(records),lean_processes=len(actual),accepted=sum(d['exit_status']==0 for d in actual),failed_or_rejected=failed,kani_runs=0,wall_seconds=sum(d['wall_seconds'] for d in actual),max_rss_kib=max(int(d['peak_rss_kib']) for d in actual),swaps=sum(int(d['swaps']) for d in actual),validated_final_modules=len(valid),head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip())
+summary=dict(charged_lean_attempts=len(records),lean_processes=len(actual),accepted=sum(d['exit_status']==0 for d in actual),failed_or_rejected=failed,pending_attempts=pending,kani_runs=0,wall_seconds=sum(d['wall_seconds'] for d in actual),max_rss_kib=max(int(d['peak_rss_kib']) for d in actual),swaps=sum(int(d['swaps']) for d in actual),validated_final_modules=len(valid),head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),branch=subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip())
 (P/'JGr_SUMMARY.json').write_text(json.dumps(summary,indent=2)+'\n')
 manifest=[]
 for f in sorted(P.glob('JGr24_*/**/*')):

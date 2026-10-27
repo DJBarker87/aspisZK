@@ -53,3 +53,21 @@ source/dependency/command/exit/wall/RSS/swap/axioms and cgroup limits are retain
 per attempt. MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64, -j1/-M7000.
 One own scope at a time. No package replay, Rust/Kani/SBF run, shipped-source
 change, ELF rebuild trigger, wallet/key operation, merge or push.
+
+## Concrete next native-batch cells
+
+The batch0 source count is138 nodes for trees0/1 and120 for tree2. Physical slot
+capacities are146/146/128; each therefore has256 zero-padding bytes after the
+consumed prefix. These are count/numerical-layout facts, not a proof that the
+native batch control flow consumes those buffers. JGr_Keys.source constructs
+the actual sorted-key read stream; the exact native leaf hashes, duplicate/push
+states, returned scratch prefixes, physical sibling read identities, padding
+scan and complete source verifier call still need composition. Reuse the
+JGm_TX2 native-level/view/terminal proof patterns and JGp opening/slot witnesses;
+reuse the new JGr named hashes instead of generating or reducing SHA again.
+
+The first model root and keys/counts/prebatch stage is committed in60488ff3f7.
+033's recovery sorryAx output has zero credit.034's changed proof passes and
+contains only standard axioms. Source clauses remain on the SAME retained
+preparation at the actual installed query dictionary. No RuntimePersistence,
+game, accepted-observation or syscall assumption is added or removed.
