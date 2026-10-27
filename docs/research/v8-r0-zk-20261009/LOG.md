@@ -11599,3 +11599,21 @@ undecidable hunks stop), port devnet_spend onto the proof-account route with cal
 pins, the recommended-recipe build and the fixture-byte gate, and the re-validation list of candidate
 proofs touched by the merge. Six slots: op223, op134, route2, cblib4, runjoin15, rebase3. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D277 (Stream B) 2026-10-27 11:05 UTC: records range-loop repair passes the ELF gate; next blocker a branch join; authorization widened to any behaviour-preserving restructuring of `records`; runjoin16 launched
+
+pv-runjoin15 (`codex/pv-runjoin-20261026`, head 52a3712f25; 0/100 Lean, 0/2 Kani). 4fd383fc99 rewrites the
+`for level in 0..24` loop as an index while loop; c58e0473ac copies the Copy forest input
+(`let input = *input;`); gate (a): all three ELF pins MATCH; 510 tracked sources match the host snapshot.
+Extraction clears `ub_checks<bool>` and fails at records:238-242 (InterpBorrows.ml:2731) on the join of
+the three branches returning the `(bit, sib)` tuple. Proposal (unapplied): assign bits[level]/sibs[level]
+inside each branch instead of returning a tuple; plainly equivalent (each branch writes the same values to
+the same indices). Lead decision: the pinned Aeneas exposes one borrow/join limitation per repair; since
+the proof is about the function that ships (whatever its form) and behaviour preservation is checked by
+the gates (ELF pins now; fixture bytes and the 1,000-run differential in the combined gate), the
+authorization becomes ANY behaviour-preserving restructuring inside `records` (same (RW, RP) for every
+input, same panics, no new allocation or I/O; signature, types and other functions untouched), each
+change with a written equivalence argument in REPAIRS.md; ELFs re-gated once at the end; a blocker in
+another function (raw, pair_empty_roots) or one not removable behaviour-preservingly stops the route.
+Launched pv-runjoin16 (same branch, IDs 50600-50899 still unused). Six slots: op223, op134, route2,
+cblib4, rebase3, runjoin16. Rows removed outright: 0. Privacy target not yet established.
