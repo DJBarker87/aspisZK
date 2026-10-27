@@ -1,0 +1,58 @@
+{
+  "status": "PRECHECK BLOCKED: required bodies absent from pinned LLBC",
+  "release_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "input_llbc_sha256": "0814e4ec3481bef7fcca9a806ff24c868fdaeae3ed127b1e11a73973077510ba",
+  "aeneas_sha256": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958",
+  "preset": "aeneas",
+  "mir": "built",
+  "features": {
+    "historical": [
+      "r0",
+      "private-leaf-salts"
+    ],
+    "release": [
+      "private-leaf-salts"
+    ],
+    "r0": "enabled by pinned release dependencies"
+  },
+  "roots": [
+    "crate::verifier::candidate::tx1"
+  ],
+  "required_translated": [
+    "candidate::tx1",
+    "candidate::query_loop",
+    "Prepared::new",
+    "prepared_claim",
+    "QueryGeometry::for_range",
+    "fast_pairing::canonical::Dot",
+    "BatchedWeights::finish",
+    "checkpoint"
+  ],
+  "required_opaque_leaves": [
+    "compact::check_values",
+    "verifier::echeck"
+  ],
+  "missing_body_evidence": {
+    "prepared_claim": {
+      "fun_id": 240,
+      "body": "Opaque"
+    },
+    "QueryGeometry::for_range": {
+      "fun_id": 12,
+      "body": "Opaque"
+    },
+    "checkpoint": {
+      "fun_id": 18,
+      "body": "Opaque"
+    },
+    "canonical::Dot": "excluded by inherited crate::fast_pairing opacity; no canonical Dot declaration"
+  },
+  "inherited_command": "evidence/extraction-repro1-20261027/XRa_release_candidate_charon_command.json",
+  "budget": {
+    "Charon_Aeneas": 6,
+    "Lean": 100,
+    "Kani": 0
+  },
+  "no_tool_or_library_change": true,
+  "pending_clarification": "Can pinned Charon rerun on identical source/features with different kit selectors to expose required bodies?"
+}
