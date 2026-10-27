@@ -12201,3 +12201,17 @@ bridges; IDs 52000-52499); pv-alib (bucket-(a) rows V265 circle_sample, V184 Vec
 split_blocks; IDs 52500-52999); pv-reach (bucket-(a) rows V404/V405 per-fixture execution
 reachability over the extracted prover; IDs 44000-44499; no shipped-code change). With runjoin18
 and batch3, five slots are live. Rows removed outright: 0. Privacy target not yet established.
+
+## D304 (Stream B) 2026-10-27 17:20 UTC: pv-alib's V184 counterexample retained; it refutes a proposed reference, not the row; pv-alib resumed
+
+pv-alib stopped after six Lean attempts on a checked counterexample: for the vector [17,29], native
+Vec::pop (pinned nightly 2026-06-01) and the job's own copy reference both return Some(29) and leave
+[17], but native allocates zero times and the copy reference allocates once. This is retained as a
+refutation of that proposed native/reference world equality (AGENTS.md section 7). It is not a
+counterexample to row V184, whose statement is the selected callback law with the allocation/world
+effect as an explicit carrier, so it is not a stop under the job's rules. The job also found that an
+earlier plan wrongly treated `Word` as Copy. Supporting theorem PV_AL_PopLoop.source (prefix
+copying, standard axioms) is kept. V184, V233 and V265 remain OPEN; V233 and V265 were not started.
+pv-alib2 resumes on the same branch with the remaining budget: a non-Copy move reference with zero
+allocations and preserved capacity for V184, then V233 and V265. Rows removed outright: 0. Privacy
+target not yet established.
