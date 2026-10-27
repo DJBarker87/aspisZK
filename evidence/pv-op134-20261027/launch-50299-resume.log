@@ -1,0 +1,37 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 1114); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+R1Z.PV_Op134_ReferenceBundle.op134_reference (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns) :
+  ProverRwFull.ExternalFuns.op134 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok R1Z.PV_Op134_Masks.masks)
+R1Z.PV_Op134_ReferenceBundle.rows_reference (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns) :
+  ∃ result,
+    ProverRwFull.ExternalFuns.op133 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok result) ∧
+      ↑result = R1Z.PV_Op134_RowSpec.rows ∧
+        (↑result).length = 214 ∧
+          (↑result).Nodup ∧
+            List.Pairwise (fun a b => ↑a < ↑b) ↑result ∧
+              ∀ (block : Fin 64) (bit : Fin 16),
+                (↑(↑R1Z.PV_Op134_Masks.masks)[↑block]).testBit ↑bit = true ↔
+                  16 * ↑block + ↑bit ∈ List.map (fun r => ↑r) ↑result
+R1Z.PV_Op134_ReferenceBundle.cells_reference (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns) :
+  ∃ result,
+    ProverRwFull.ExternalFuns.op132 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok result) ∧
+      ↑result = R1Z.PV_CBM_CellsSpec.literals ∧
+        (↑result).length = 3803 ∧
+          (↑result).Nodup ∧
+            ∀ (row column : ℕ),
+              row < 1024 →
+                column < 16 →
+                  R1Z.PV_CBM_InventoryShape.free row column → ∃ c ∈ ↑result, ↑c.row = row ∧ ↑c.column = column
+R1Z.PV_Op134_Inventory.complete (row column : ℕ) (hr : row < 1024) (hc : column < 16)
+  (hf : R1Z.PV_CBM_InventoryShape.free row column) :
+  ∃ c ∈ R1Z.PV_CBM_CellsSpec.literals, ↑c.row = row ∧ ↑c.column = column
+'R1Z.PV_CBM_CallbackBundle.op134_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBM_CallbackBundle.op133_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBM_CallbackBundle.op132_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBM_InventoryCardinality.cardinal' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.44
+	Maximum resident set size (kbytes): 2672788
+	Swaps: 0
+	Exit status: 0

@@ -42,8 +42,13 @@ prover caller redirects and preserved compiled-verifier path.
 
 Also checked: global MaskSpec.bits and ReferenceBundle.cells_reference,
 rows_reference, and op134_reference, universally over the selected base and
-callback dictionary. Pending only: final full new-theorem axioms audit and
-frozen-manifest import audit. Successful per-module receipts, not draft source presence,
+callback dictionary. Final audits both passed at committed proof revision
+60da31b155fd7633e40b0cf944f84db2d2765907: 50297, exit 0, 2.62 s,
+2669572 KiB, zero swaps; 50299, exit 0, 2.44 s, 2672788 KiB, zero swaps.
+The complete new-theorem audit reports only subsets of
+{propext, Classical.choice, Quot.sound}. 50298 was an uncharged reservation
+refusal. The Lean budget is exhausted at 100/100 (93 successful runs and
+seven retained failures), Kani 0/4. No unchecked current Lean module remains. Successful per-module receipts, not draft source presence,
 are authoritative. AUDIT.json is regenerated after completed stages.
 
 ## Premise accounting and scope
@@ -66,7 +71,14 @@ checks 85 reference object identities against latest successful parent
 consumer receipts. This is not a from-source deployment-closure release
 replay; see CACHE.md. Every compile receipt records target, source revision
 and working-source hash, dependency fingerprints, exit, wall, RSS, swaps and
-full axioms output. The final audit revision will pin committed sources.
+full axioms output. The final audits pin the committed proof revision above. RECEIPTS.tsv
+indexes all 100 exact target/exit/wall/RSS/swap/revision/source-hash/axioms
+receipts. FOCUSED-MANIFEST.json pins all 93 source hashes; AUDIT.json confirms
+each matches a successful receipt. This is not a deployment-closure release
+replay. New object hashes and sizes are in OUTPUT-OBJECTS.json; borrowed
+dependency scratch, snapshots and Cargo targets were removed. Only the 93
+new proof outputs remain as a small handoff cache; dependency rehydration
+is required before another Lean invocation.
 
 ## Resource failure and next delivery
 
@@ -81,3 +93,9 @@ Next native delivery: apply the owner-approved prover-only route (ii),
 extract its owned helper with the pinned tools, and prove the complete Result
 shipped/candidate association in Lean. Preserve the original shared statement
 and static compiled-verifier schedules. No arithmetic Kani gate is pending.
+
+Final ID tally: 127 distinct IDs consumed (100 charged, 27 uncharged),
+including all three reserved audit IDs. Next unused assigned ID is 50124,
+but this task has no remaining compile budget. TALLY.json preserves the
+terminal sequential allocator cursor separately; no ID outside the assigned
+range was used. All commits are local and path-limited; no push was made.

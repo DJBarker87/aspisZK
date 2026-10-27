@@ -29,3 +29,10 @@ were hard-linked into the private overlay with no-clobber, so the effective
 first root now supplies the rebuilt dependencies instead of the broken
 historical links. This is object reuse, not a dependency rebuild or a repair
 of shared infrastructure. No symlink in any shared root was changed.
+
+Final cleanup: OUTPUT-OBJECTS.json pins the 93 new proof outputs (SHA-256
+and size). CLEANUP.json records removal of 4,122 borrowed dependency scratch
+links, snapshots, and Cargo targets. Only the small new-output handoff cache
+is retained; it is not self-contained. Rehydrate the imported dependency
+objects from the pinned cohort before Lean resolves the first R1Z root.
+Shared sources, shared objects, and other jobs' caches were not changed.

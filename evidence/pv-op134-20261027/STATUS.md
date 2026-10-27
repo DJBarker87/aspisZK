@@ -15,9 +15,13 @@ Target not yet established. Branch codex/pv-op134-20261027, base 8483406290.
   order, nodup/dedup identity, the complete reference mask value, all eight
   mask-bit chunks, global MaskSpec.bits, and selected ReferenceBundle
   equations for arbitrary base/callback dictionaries.
-* Pending only: the final full new-theorem axioms audit and frozen-manifest
-  import audit. Optional generic transport/indexing drafts are uncompiled
-  text under drafts/ and are not hypotheses of the checked reference facts.
+* Final audits passed: 50297 (new-theorem axioms closure) and 50299
+  (frozen-manifest import and stable-boundary audit), source revision
+  60da31b155fd7633e40b0cf944f84db2d2765907. 50298 was an uncharged
+  reservation refusal. All 93 current Lean modules match successful receipts.
+* Budget exhausted: 100/100 Lean (93 successful, seven failed), 0/4 Kani.
+  Every successful run has zero swaps and only standard axioms. Optional
+  generic transport/indexing drafts remain uncompiled text under drafts/.
 
 Premise accounting: no deployed endpoint premise removed, added, or weakened.
 V230's shipped-source link remains open. The existing op134_reference remains
