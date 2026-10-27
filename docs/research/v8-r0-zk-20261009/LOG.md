@@ -10892,3 +10892,22 @@ differs. pv-srcid7 (launched 02:34 under the superseded D241 wording) will treat
 exception until it re-reads; its next round closes it with the pinned source. The merge-gate ruling of
 D241 (project vs external provenance) stands. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D244 (Stream B) 2026-10-27 02:50 UTC: rw21 exhausted: model-instance serializer published, V164/V163 unchanged; rw slot given to a third callback family (cbmid)
+
+pv-rw21 (`codex/cx-prover-rw-20261023`, head 237e135561; 100/100 Lean = 60 pass / 40 fail, 10/10 Kani =
+2 pass / 6 timeouts / 1 MIR overflow assertion / 1 configuration rejection, no row counterexample; no
+crates/programs change; no forbidden tokens; three final audits 477 declarations standard axioms,
+cached-component replay). Published `R1Z.ProverRw21ModelInstance`: a checked mathematical transcript
+serializer (installed serializer output for bounded arbitrary slices equals its mathematical byte image;
+finite sequence encoding; bounded endpoint/no-pole transport). V164: {P_source_p6} → {P_source_p6} (the
+op223 complete-Result law is not yet available; cb6 holds it). V163: deployed model construction, both
+fixture byte equations and the general equation OPEN: the serializer still awaits the deployed-input
+protocol construction, i.e. the same shared obstruction named in D242 (the actual selected record of the
+deployed caller), now runjoin11's single deliverable. Endpoint premises removed: 0. Lead decision: no
+rw22 until cb6 publishes op223 or runjoin11 publishes the fixture records (AGENTS.md §7); the slot goes to
+pv-cbmid (`codex/pv-cbmid-20261027`, candidate sibling at 237e135561, IDs 40600-40899, 100 Lean / 10
+Kani) on bucket-a rows no live job holds: V228-V230 (pool_v1 pair-forest hiding ops 132-134), V201 (op79
+encoder eval_message), then V239/V241 if cb7 has not reached them; laws via PV_CBM_CallbackBundle. Six
+slots: cb6, cb7, cblib, srcid7, runjoin11, cbmid. Rows removed outright: 0. Privacy target not yet
+established.
