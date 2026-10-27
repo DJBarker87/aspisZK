@@ -1,5 +1,5 @@
-use crate::host_multilinear::multilinear_evaluate_qm31;
 //! UNPROVED COST PROBE. Own D14 semantic prover; original prover unchanged.
+use crate::host_multilinear::multilinear_evaluate_qm31;
 use alloc::vec::Vec;
 use crate::host_forest::materialize_copy_helper as build_pool_v1_pair_forest_copy_helper_v1;
 use aspis_core::{field::{WideExact, M31, QM31, P},Digest32,r0::{domain::Point,encoder::eval_message}};

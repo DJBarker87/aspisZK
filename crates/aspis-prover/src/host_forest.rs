@@ -224,16 +224,17 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairH
     if links.len() != POOL_V1_PAIR_COPY_ROW_LINKS_V1 {
         return Err(PoolV1PairHidingLayoutErrorV1::Shape);
     }
-    endpoint_counts(&links.data[..links.len])?;
+    endpoint_counts(&links.data, links.len)?;
     Ok(links)
 }
 fn endpoint_counts(
-    links: &[PoolV1PairCopyRowLinkV1],
+    links: &[PoolV1PairCopyRowLinkV1; 136],
+    len: usize,
 ) -> Result<([u8; 1024], [u8; 1024]), PoolV1PairHidingLayoutErrorV1> {
     let mut producers = [0u8; 1024];
     let mut consumers = [0u8; 1024];
     let mut i = 0usize;
-    while i < links.len() {
+    while i < len {
         let item = links[i];
         let p = item.producer_row as usize;
         let c = item.consumer_row as usize;
@@ -314,7 +315,7 @@ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
     if links.len() != POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1 {
         return Err(PoolV1PairHidingLayoutErrorV1::Shape);
     }
-    endpoint_counts(&links.data[..links.len])?;
+    endpoint_counts(&links.data, links.len)?;
     Ok(links)
 }
 pub fn pool_v1_pair_forest_copy_active_rows_v1(

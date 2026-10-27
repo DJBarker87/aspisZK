@@ -1,4 +1,3 @@
-use crate::host_multilinear::multilinear_evaluate_qm31;
 //! UNPROVED COST PROBE. G-sim (LOG D44.3): the explicit, witness-free R1
 //! simulator `simE` of R0Z/RefPayload.lean, inside the ideal game of
 //! R1Z/GamesR1.lean (`fsR1.ideal`, design zf1/DESIGN-R1-GAMES.txt §5).
@@ -24,6 +23,7 @@ use crate::host_multilinear::multilinear_evaluate_qm31;
 //! Output: the proof bytes and the programmed table. The R1 verifier is then
 //! run against `programmed_hash`, which answers programmed addresses from
 //! the table and every other address with the real hash.
+use crate::host_multilinear::multilinear_evaluate_qm31;
 use alloc::{collections::{BTreeMap,BTreeSet},vec,vec::Vec};
 use core::cell::RefCell;
 use aspis_core::{Digest32,HashFn,circle::SecureCirclePoint,digest::LegacyHashFn,
