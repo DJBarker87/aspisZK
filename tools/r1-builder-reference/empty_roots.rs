@@ -208,3 +208,24 @@ fn pv_srcid3_empty_roots_full() {
         }
     }
 }
+
+// Allocation 7 isolates the previously timed-out full-helper comparison by
+// asserted output region. Both harnesses execute the actual 21-call helper;
+// CBMC slicing can discard outputs outside the named region. No callee stub.
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid7_helper_prefix11() {
+    let actual = pair_empty_roots();
+    for level in 0..11 {
+        for lane in 0..8 { assert_eq!(actual[level][lane].0, ROOTS[level][lane]); }
+    }
+}
+
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid7_helper_suffix10() {
+    let actual = pair_empty_roots();
+    for level in 11..21 {
+        for lane in 0..8 { assert_eq!(actual[level][lane].0, ROOTS[level][lane]); }
+    }
+}
