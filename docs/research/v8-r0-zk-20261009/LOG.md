@@ -11783,3 +11783,24 @@ the side-channel findings classed (N1 fixed by the CT path; N2-N6 L2 obligations
 design/PV-OWNER-PACKET-20261027.md listing every decision the privacy target waits on with options,
 evidence and the LOG's recommendations. Six slots: cblib4, runjoin16, route2b, integ1, batch1b,
 recount5. Rows removed outright: 0. Privacy target not yet established.
+
+## D285 (Stream B) 2026-10-27 13:15 UTC: cblib4 (library rows 7 → 8; complete extracted soft SHA-256 reference); library track paused on owner decisions; consolidation of siblings into a candidate sibling launched
+
+pv-cblib4 (`codex/pv-cblib-20261027`, head ea4eca5b14; 100/100 Lean = 70 accepted / 30 rejected, 4 Kani
+passes, 11 uncharged admission refusals; audits 52697-52699 standard axioms, manifest 313 imports / 913
+declarations; no crates/programs change in this round). New law: op26 Path::join (bounded P6 link).
+Proved: the complete EXTRACTED owned soft SHA-256 reference: buffer update and its invariant, padding
+content for both block branches, compression, finalisation and digest bytes. Open: V231-V238 on the
+native wrapper loans/callbacks/Drop and the deployment backend link (SHA-NI decision, D273); op33/op36
+reference proofs with native association gaps; op32 deferred. The library track pauses on the SHA-NI
+and extraction-strategy owner decisions. Consolidation: the prover candidate (0c9dc9a4cc) does not yet
+contain most proved sibling work (pv-cb3 91 commits ahead, pv-cb9 96, pv-cbmid 9, pv-op134 18, pv-cblib
+27, pv-join 139, pv-l2b 5, pv-n7 7, pv-route2 27). Two siblings touch shipped crates on old bases and are
+EXCLUDED pending their own review: pv-l3 (aspis-core field/ct files via its pre-rebase merge base) and
+cx-prover-dict (state_only_hiding.rs, prover.rs, r1_wire.rs). Live code-changing branches (runjoin,
+batch1) are excluded too. Launched pv-integ2 (`codex/pv-integ2-20261027` from 0c9dc9a4cc, reusing the
+pv-cblib worktree; IDs 54300-54599, 100 Lean): merge the nine Lean/evidence siblings one by one (shared-
+file or crates conflicts aborted and recorded, never guessed), show every resulting shipped-file change is
+cfg(kani)-only, gate (a), re-check every published bundle against the integrated tree, one combined
+axioms audit with the row table and candidate-closure import paths. Six slots: runjoin16, route2b,
+integ1, batch1b, recount5, integ2. Rows removed outright: 0. Privacy target not yet established.
