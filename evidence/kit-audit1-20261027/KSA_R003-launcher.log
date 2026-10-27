@@ -1,0 +1,57 @@
+{"attempt": "KSA_R003", "exit_status": 101, "wall_seconds": 31.963609371043276, "peak_rss_kib": "808740", "swaps": "0", "print_axioms": "N/A: rust"}
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-assoc-a4-cache-20261027/KSA_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and 
+...
+ --> crates/aspis-core/src/circle_openings.rs:1006:15
+     |
+1006 | pub(crate) fn verify_circle_openings_deferred_canonical<'a>(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `KSA_diagnostic` should have a snake case name
+   --> crates/aspis-core/src/lib.rs:102:5
+    |
+102 | mod KSA_diagnostic {
+    |     ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ksa_diagnostic`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `KSA_frozen_differential` should have a snake case name
+   --> crates/aspis-core/src/lib.rs:113:8
+    |
+113 |     fn KSA_frozen_differential() {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ksa_frozen_differential`
+
+warning: `aspis-core` (lib test) generated 19 warnings (run `cargo fix --lib -p aspis-core --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 31.18s
+     Running unittests src/lib.rs (KSA_target/release/deps/aspis_core-28ebf8857423a1c8)
+
+running 1 test
+KSA inv2 native=1073741824 kit=2
+KSA m31 bytes 0 Some(M31(0))
+KSA m31 bytes 1 Some(M31(1))
+KSA m31 bytes 2 Some(M31(2))
+KSA m31 bytes 2147483646 Some(M31(2147483646))
+KSA m31 bytes 2147483647 None
+KSA m31 bytes 4294967295 None
+
+thread 'KSA_diagnostic::KSA_frozen_differential' (3498155) panicked at crates/aspis-core/src/field.rs:85:21:
+attempt to add with overflow
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test KSA_diagnostic::KSA_frozen_differential ... FAILED
+
+failures:
+
+failures:
+    KSA_diagnostic::KSA_frozen_differential
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 280 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p aspis-core --lib`
+
+Running as unit: run-rf9ff5736dd7842b39b4a1e890c93278d.scope; invocation ID: aad69cf0576b4ecbbf8dd16bcaa40bc0
