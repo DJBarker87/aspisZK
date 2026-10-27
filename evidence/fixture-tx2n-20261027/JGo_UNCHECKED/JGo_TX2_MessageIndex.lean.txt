@@ -1,0 +1,283 @@
+import JGo_TX2_Message00
+import JGo_TX2_Message08
+import JGo_TX2_Message16
+import JGo_TX2_Message24
+import JGo_TX2_Message32
+import JGo_TX2_Message40
+import JGo_TX2_Message48
+import JGo_TX2_Message56
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGo_TX2_MessageIndex
+open Aeneas Aeneas.Std Result
+attribute [local irreducible] JFx_NativeBytes.proof JFw_Frames.window FIn_Primitives.field FIo_Native.weights.field
+
+def index (i : Fin 64) : Usize := UScalar.ofNatCore i.val (by have h:=i.isLt;scalar_tac)
+def value (i : Fin 64) : AspisR1Stage2.Stage2Finish.E := match i.val with
+  | 0 => JGo_TX2_Message00.value00
+  | 1 => JGo_TX2_Message00.value01
+  | 2 => JGo_TX2_Message00.value02
+  | 3 => JGo_TX2_Message00.value03
+  | 4 => JGo_TX2_Message00.value04
+  | 5 => JGo_TX2_Message00.value05
+  | 6 => JGo_TX2_Message00.value06
+  | 7 => JGo_TX2_Message00.value07
+  | 8 => JGo_TX2_Message08.value08
+  | 9 => JGo_TX2_Message08.value09
+  | 10 => JGo_TX2_Message08.value10
+  | 11 => JGo_TX2_Message08.value11
+  | 12 => JGo_TX2_Message08.value12
+  | 13 => JGo_TX2_Message08.value13
+  | 14 => JGo_TX2_Message08.value14
+  | 15 => JGo_TX2_Message08.value15
+  | 16 => JGo_TX2_Message16.value16
+  | 17 => JGo_TX2_Message16.value17
+  | 18 => JGo_TX2_Message16.value18
+  | 19 => JGo_TX2_Message16.value19
+  | 20 => JGo_TX2_Message16.value20
+  | 21 => JGo_TX2_Message16.value21
+  | 22 => JGo_TX2_Message16.value22
+  | 23 => JGo_TX2_Message16.value23
+  | 24 => JGo_TX2_Message24.value24
+  | 25 => JGo_TX2_Message24.value25
+  | 26 => JGo_TX2_Message24.value26
+  | 27 => JGo_TX2_Message24.value27
+  | 28 => JGo_TX2_Message24.value28
+  | 29 => JGo_TX2_Message24.value29
+  | 30 => JGo_TX2_Message24.value30
+  | 31 => JGo_TX2_Message24.value31
+  | 32 => JGo_TX2_Message32.value32
+  | 33 => JGo_TX2_Message32.value33
+  | 34 => JGo_TX2_Message32.value34
+  | 35 => JGo_TX2_Message32.value35
+  | 36 => JGo_TX2_Message32.value36
+  | 37 => JGo_TX2_Message32.value37
+  | 38 => JGo_TX2_Message32.value38
+  | 39 => JGo_TX2_Message32.value39
+  | 40 => JGo_TX2_Message40.value40
+  | 41 => JGo_TX2_Message40.value41
+  | 42 => JGo_TX2_Message40.value42
+  | 43 => JGo_TX2_Message40.value43
+  | 44 => JGo_TX2_Message40.value44
+  | 45 => JGo_TX2_Message40.value45
+  | 46 => JGo_TX2_Message40.value46
+  | 47 => JGo_TX2_Message40.value47
+  | 48 => JGo_TX2_Message48.value48
+  | 49 => JGo_TX2_Message48.value49
+  | 50 => JGo_TX2_Message48.value50
+  | 51 => JGo_TX2_Message48.value51
+  | 52 => JGo_TX2_Message48.value52
+  | 53 => JGo_TX2_Message48.value53
+  | 54 => JGo_TX2_Message48.value54
+  | 55 => JGo_TX2_Message48.value55
+  | 56 => JGo_TX2_Message56.value56
+  | 57 => JGo_TX2_Message56.value57
+  | 58 => JGo_TX2_Message56.value58
+  | 59 => JGo_TX2_Message56.value59
+  | 60 => JGo_TX2_Message56.value60
+  | 61 => JGo_TX2_Message56.value61
+  | 62 => JGo_TX2_Message56.value62
+  | _ => JGo_TX2_Message56.value63
+theorem field (i : Fin 64) : FIn_Primitives.field (JFw_Frames.window 8007 2048) (index i)=ok (value i) := by
+  fin_cases i
+  · exact JGo_TX2_Message00.field00
+  · exact JGo_TX2_Message00.field01
+  · exact JGo_TX2_Message00.field02
+  · exact JGo_TX2_Message00.field03
+  · exact JGo_TX2_Message00.field04
+  · exact JGo_TX2_Message00.field05
+  · exact JGo_TX2_Message00.field06
+  · exact JGo_TX2_Message00.field07
+  · exact JGo_TX2_Message08.field08
+  · exact JGo_TX2_Message08.field09
+  · exact JGo_TX2_Message08.field10
+  · exact JGo_TX2_Message08.field11
+  · exact JGo_TX2_Message08.field12
+  · exact JGo_TX2_Message08.field13
+  · exact JGo_TX2_Message08.field14
+  · exact JGo_TX2_Message08.field15
+  · exact JGo_TX2_Message16.field16
+  · exact JGo_TX2_Message16.field17
+  · exact JGo_TX2_Message16.field18
+  · exact JGo_TX2_Message16.field19
+  · exact JGo_TX2_Message16.field20
+  · exact JGo_TX2_Message16.field21
+  · exact JGo_TX2_Message16.field22
+  · exact JGo_TX2_Message16.field23
+  · exact JGo_TX2_Message24.field24
+  · exact JGo_TX2_Message24.field25
+  · exact JGo_TX2_Message24.field26
+  · exact JGo_TX2_Message24.field27
+  · exact JGo_TX2_Message24.field28
+  · exact JGo_TX2_Message24.field29
+  · exact JGo_TX2_Message24.field30
+  · exact JGo_TX2_Message24.field31
+  · exact JGo_TX2_Message32.field32
+  · exact JGo_TX2_Message32.field33
+  · exact JGo_TX2_Message32.field34
+  · exact JGo_TX2_Message32.field35
+  · exact JGo_TX2_Message32.field36
+  · exact JGo_TX2_Message32.field37
+  · exact JGo_TX2_Message32.field38
+  · exact JGo_TX2_Message32.field39
+  · exact JGo_TX2_Message40.field40
+  · exact JGo_TX2_Message40.field41
+  · exact JGo_TX2_Message40.field42
+  · exact JGo_TX2_Message40.field43
+  · exact JGo_TX2_Message40.field44
+  · exact JGo_TX2_Message40.field45
+  · exact JGo_TX2_Message40.field46
+  · exact JGo_TX2_Message40.field47
+  · exact JGo_TX2_Message48.field48
+  · exact JGo_TX2_Message48.field49
+  · exact JGo_TX2_Message48.field50
+  · exact JGo_TX2_Message48.field51
+  · exact JGo_TX2_Message48.field52
+  · exact JGo_TX2_Message48.field53
+  · exact JGo_TX2_Message48.field54
+  · exact JGo_TX2_Message48.field55
+  · exact JGo_TX2_Message56.field56
+  · exact JGo_TX2_Message56.field57
+  · exact JGo_TX2_Message56.field58
+  · exact JGo_TX2_Message56.field59
+  · exact JGo_TX2_Message56.field60
+  · exact JGo_TX2_Message56.field61
+  · exact JGo_TX2_Message56.field62
+  · exact JGo_TX2_Message56.field63
+#print axioms field
+theorem native (i : Fin 64) : FIo_Native.weights.field (JFw_Frames.window 8007 2048) (index i)=ok (FIo_Install.toE (value i)) := by
+  fin_cases i
+  · exact JGo_TX2_Message00.native_field00
+  · exact JGo_TX2_Message00.native_field01
+  · exact JGo_TX2_Message00.native_field02
+  · exact JGo_TX2_Message00.native_field03
+  · exact JGo_TX2_Message00.native_field04
+  · exact JGo_TX2_Message00.native_field05
+  · exact JGo_TX2_Message00.native_field06
+  · exact JGo_TX2_Message00.native_field07
+  · exact JGo_TX2_Message08.native_field08
+  · exact JGo_TX2_Message08.native_field09
+  · exact JGo_TX2_Message08.native_field10
+  · exact JGo_TX2_Message08.native_field11
+  · exact JGo_TX2_Message08.native_field12
+  · exact JGo_TX2_Message08.native_field13
+  · exact JGo_TX2_Message08.native_field14
+  · exact JGo_TX2_Message08.native_field15
+  · exact JGo_TX2_Message16.native_field16
+  · exact JGo_TX2_Message16.native_field17
+  · exact JGo_TX2_Message16.native_field18
+  · exact JGo_TX2_Message16.native_field19
+  · exact JGo_TX2_Message16.native_field20
+  · exact JGo_TX2_Message16.native_field21
+  · exact JGo_TX2_Message16.native_field22
+  · exact JGo_TX2_Message16.native_field23
+  · exact JGo_TX2_Message24.native_field24
+  · exact JGo_TX2_Message24.native_field25
+  · exact JGo_TX2_Message24.native_field26
+  · exact JGo_TX2_Message24.native_field27
+  · exact JGo_TX2_Message24.native_field28
+  · exact JGo_TX2_Message24.native_field29
+  · exact JGo_TX2_Message24.native_field30
+  · exact JGo_TX2_Message24.native_field31
+  · exact JGo_TX2_Message32.native_field32
+  · exact JGo_TX2_Message32.native_field33
+  · exact JGo_TX2_Message32.native_field34
+  · exact JGo_TX2_Message32.native_field35
+  · exact JGo_TX2_Message32.native_field36
+  · exact JGo_TX2_Message32.native_field37
+  · exact JGo_TX2_Message32.native_field38
+  · exact JGo_TX2_Message32.native_field39
+  · exact JGo_TX2_Message40.native_field40
+  · exact JGo_TX2_Message40.native_field41
+  · exact JGo_TX2_Message40.native_field42
+  · exact JGo_TX2_Message40.native_field43
+  · exact JGo_TX2_Message40.native_field44
+  · exact JGo_TX2_Message40.native_field45
+  · exact JGo_TX2_Message40.native_field46
+  · exact JGo_TX2_Message40.native_field47
+  · exact JGo_TX2_Message48.native_field48
+  · exact JGo_TX2_Message48.native_field49
+  · exact JGo_TX2_Message48.native_field50
+  · exact JGo_TX2_Message48.native_field51
+  · exact JGo_TX2_Message48.native_field52
+  · exact JGo_TX2_Message48.native_field53
+  · exact JGo_TX2_Message48.native_field54
+  · exact JGo_TX2_Message48.native_field55
+  · exact JGo_TX2_Message56.native_field56
+  · exact JGo_TX2_Message56.native_field57
+  · exact JGo_TX2_Message56.native_field58
+  · exact JGo_TX2_Message56.native_field59
+  · exact JGo_TX2_Message56.native_field60
+  · exact JGo_TX2_Message56.native_field61
+  · exact JGo_TX2_Message56.native_field62
+  · exact JGo_TX2_Message56.native_field63
+#print axioms native
+theorem canonical (i : Fin 64) : Port4C_QueryArithmetic.CanonE (value i) := by
+  fin_cases i
+  · exact JGo_TX2_Message00.canonical00
+  · exact JGo_TX2_Message00.canonical01
+  · exact JGo_TX2_Message00.canonical02
+  · exact JGo_TX2_Message00.canonical03
+  · exact JGo_TX2_Message00.canonical04
+  · exact JGo_TX2_Message00.canonical05
+  · exact JGo_TX2_Message00.canonical06
+  · exact JGo_TX2_Message00.canonical07
+  · exact JGo_TX2_Message08.canonical08
+  · exact JGo_TX2_Message08.canonical09
+  · exact JGo_TX2_Message08.canonical10
+  · exact JGo_TX2_Message08.canonical11
+  · exact JGo_TX2_Message08.canonical12
+  · exact JGo_TX2_Message08.canonical13
+  · exact JGo_TX2_Message08.canonical14
+  · exact JGo_TX2_Message08.canonical15
+  · exact JGo_TX2_Message16.canonical16
+  · exact JGo_TX2_Message16.canonical17
+  · exact JGo_TX2_Message16.canonical18
+  · exact JGo_TX2_Message16.canonical19
+  · exact JGo_TX2_Message16.canonical20
+  · exact JGo_TX2_Message16.canonical21
+  · exact JGo_TX2_Message16.canonical22
+  · exact JGo_TX2_Message16.canonical23
+  · exact JGo_TX2_Message24.canonical24
+  · exact JGo_TX2_Message24.canonical25
+  · exact JGo_TX2_Message24.canonical26
+  · exact JGo_TX2_Message24.canonical27
+  · exact JGo_TX2_Message24.canonical28
+  · exact JGo_TX2_Message24.canonical29
+  · exact JGo_TX2_Message24.canonical30
+  · exact JGo_TX2_Message24.canonical31
+  · exact JGo_TX2_Message32.canonical32
+  · exact JGo_TX2_Message32.canonical33
+  · exact JGo_TX2_Message32.canonical34
+  · exact JGo_TX2_Message32.canonical35
+  · exact JGo_TX2_Message32.canonical36
+  · exact JGo_TX2_Message32.canonical37
+  · exact JGo_TX2_Message32.canonical38
+  · exact JGo_TX2_Message32.canonical39
+  · exact JGo_TX2_Message40.canonical40
+  · exact JGo_TX2_Message40.canonical41
+  · exact JGo_TX2_Message40.canonical42
+  · exact JGo_TX2_Message40.canonical43
+  · exact JGo_TX2_Message40.canonical44
+  · exact JGo_TX2_Message40.canonical45
+  · exact JGo_TX2_Message40.canonical46
+  · exact JGo_TX2_Message40.canonical47
+  · exact JGo_TX2_Message48.canonical48
+  · exact JGo_TX2_Message48.canonical49
+  · exact JGo_TX2_Message48.canonical50
+  · exact JGo_TX2_Message48.canonical51
+  · exact JGo_TX2_Message48.canonical52
+  · exact JGo_TX2_Message48.canonical53
+  · exact JGo_TX2_Message48.canonical54
+  · exact JGo_TX2_Message48.canonical55
+  · exact JGo_TX2_Message56.canonical56
+  · exact JGo_TX2_Message56.canonical57
+  · exact JGo_TX2_Message56.canonical58
+  · exact JGo_TX2_Message56.canonical59
+  · exact JGo_TX2_Message56.canonical60
+  · exact JGo_TX2_Message56.canonical61
+  · exact JGo_TX2_Message56.canonical62
+  · exact JGo_TX2_Message56.canonical63
+#print axioms canonical
+end AspisR1.JGo_TX2_MessageIndex
+end

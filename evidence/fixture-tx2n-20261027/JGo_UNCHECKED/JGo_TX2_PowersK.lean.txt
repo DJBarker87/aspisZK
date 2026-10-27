@@ -1,0 +1,114 @@
+import JGo_TX2_LoopChain
+import JGo_TX2_Range
+import FIo_Install
+import JFq_Kappa
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGo_TX2_PowersK
+open Aeneas Aeneas.Std Result ControlFlow
+abbrev E := FIo_Install.NE
+abbrev State := Array E 7#usize × E × Usize
+def x : E := FIo_Install.toE JFq_Kappa.scalar
+def p0 : E := FIo_Native.aspis_core.field.wide_exact.WideExact.ONE
+def p1 : E := ⟨⟨⟨1116662073#u32,1579954339#u32⟩,⟨1176243488#u32,728698552#u32⟩⟩,⟨⟨640606056#u32,1197281433#u32⟩,⟨2141139535#u32,1224613133#u32⟩⟩⟩
+def p2 : E := ⟨⟨⟨194086607#u32,1888419081#u32⟩,⟨1301861674#u32,1187144623#u32⟩⟩,⟨⟨855257644#u32,590989944#u32⟩,⟨1958695353#u32,1064062444#u32⟩⟩⟩
+def p3 : E := ⟨⟨⟨1266306440#u32,1524792638#u32⟩,⟨36588852#u32,1044096672#u32⟩⟩,⟨⟨2018106446#u32,381171209#u32⟩,⟨1489892152#u32,1479239577#u32⟩⟩⟩
+def p4 : E := ⟨⟨⟨2006370403#u32,841359646#u32⟩,⟨376899686#u32,2013808952#u32⟩⟩,⟨⟨1241193111#u32,1543519322#u32⟩,⟨400137173#u32,1242945666#u32⟩⟩⟩
+def p5 : E := ⟨⟨⟨1376226683#u32,1712321640#u32⟩,⟨190663200#u32,1810133619#u32⟩⟩,⟨⟨1051832243#u32,1950132196#u32⟩,⟨483065632#u32,20684665#u32⟩⟩⟩
+def p6 : E := ⟨⟨⟨1669677601#u32,1938847927#u32⟩,⟨2006801723#u32,1268458862#u32⟩⟩,⟨⟨480042823#u32,1027734773#u32⟩,⟨1137142088#u32,282041615#u32⟩⟩⟩
+def a0 : Array E 7#usize := Array.repeat 7#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+def a1 : Array E 7#usize := Array.make 7#usize [p0,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO]
+def a2 : Array E 7#usize := Array.make 7#usize [p0,p1,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO]
+def a3 : Array E 7#usize := Array.make 7#usize [p0,p1,p2,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO]
+def a4 : Array E 7#usize := Array.make 7#usize [p0,p1,p2,p3,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO]
+def a5 : Array E 7#usize := Array.make 7#usize [p0,p1,p2,p3,p4,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO]
+def a6 : Array E 7#usize := Array.make 7#usize [p0,p1,p2,p3,p4,p5,FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO]
+def a7 : Array E 7#usize := Array.make 7#usize [p0,p1,p2,p3,p4,p5,p6]
+theorem step0 : FIo_Native.weights.powers_loop.body x a0 p0 0#usize=ok (.cont (a1,p1,1#usize)) := by
+  have inc : Usize.wrapping_add 0#usize 1#usize=1#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value 0#usize 1#usize (by decide))
+  unfold FIo_Native.weights.powers_loop.body
+  rw [if_pos (by decide : 0#usize<7#usize)]
+  simp only [lift,bind_tc_ok,inc,Aeneas.Std.uncurry]
+  rw [if_neg (by scalar_tac : 1#usize≠7#usize)]
+  with_unfolding_all rfl
+#print axioms step0
+theorem step1 : FIo_Native.weights.powers_loop.body x a1 p1 1#usize=ok (.cont (a2,p2,2#usize)) := by
+  have inc : Usize.wrapping_add 1#usize 1#usize=2#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value 1#usize 1#usize (by decide))
+  unfold FIo_Native.weights.powers_loop.body
+  rw [if_pos (by decide : 1#usize<7#usize)]
+  simp only [lift,bind_tc_ok,inc,Aeneas.Std.uncurry]
+  rw [if_neg (by scalar_tac : 2#usize≠7#usize)]
+  with_unfolding_all rfl
+#print axioms step1
+theorem step2 : FIo_Native.weights.powers_loop.body x a2 p2 2#usize=ok (.cont (a3,p3,3#usize)) := by
+  have inc : Usize.wrapping_add 2#usize 1#usize=3#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value 2#usize 1#usize (by decide))
+  unfold FIo_Native.weights.powers_loop.body
+  rw [if_pos (by decide : 2#usize<7#usize)]
+  simp only [lift,bind_tc_ok,inc,Aeneas.Std.uncurry]
+  rw [if_neg (by scalar_tac : 3#usize≠7#usize)]
+  with_unfolding_all rfl
+#print axioms step2
+theorem step3 : FIo_Native.weights.powers_loop.body x a3 p3 3#usize=ok (.cont (a4,p4,4#usize)) := by
+  have inc : Usize.wrapping_add 3#usize 1#usize=4#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value 3#usize 1#usize (by decide))
+  unfold FIo_Native.weights.powers_loop.body
+  rw [if_pos (by decide : 3#usize<7#usize)]
+  simp only [lift,bind_tc_ok,inc,Aeneas.Std.uncurry]
+  rw [if_neg (by scalar_tac : 4#usize≠7#usize)]
+  with_unfolding_all rfl
+#print axioms step3
+theorem step4 : FIo_Native.weights.powers_loop.body x a4 p4 4#usize=ok (.cont (a5,p5,5#usize)) := by
+  have inc : Usize.wrapping_add 4#usize 1#usize=5#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value 4#usize 1#usize (by decide))
+  unfold FIo_Native.weights.powers_loop.body
+  rw [if_pos (by decide : 4#usize<7#usize)]
+  simp only [lift,bind_tc_ok,inc,Aeneas.Std.uncurry]
+  rw [if_neg (by scalar_tac : 5#usize≠7#usize)]
+  with_unfolding_all rfl
+#print axioms step4
+theorem step5 : FIo_Native.weights.powers_loop.body x a5 p5 5#usize=ok (.cont (a6,p6,6#usize)) := by
+  have inc : Usize.wrapping_add 5#usize 1#usize=6#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value 5#usize 1#usize (by decide))
+  unfold FIo_Native.weights.powers_loop.body
+  rw [if_pos (by decide : 5#usize<7#usize)]
+  simp only [lift,bind_tc_ok,inc,Aeneas.Std.uncurry]
+  rw [if_neg (by scalar_tac : 6#usize≠7#usize)]
+  with_unfolding_all rfl
+#print axioms step5
+theorem step6 : FIo_Native.weights.powers_loop.body x a6 p6 6#usize=ok (.done a7) := by
+  have inc : Usize.wrapping_add 6#usize 1#usize=7#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value 6#usize 1#usize (by decide))
+  unfold FIo_Native.weights.powers_loop.body
+  rw [if_pos (by decide : 6#usize<7#usize)]
+  simp only [lift,bind_tc_ok,inc,Aeneas.Std.uncurry]
+  rw [if_pos rfl]
+  with_unfolding_all rfl
+#print axioms step6
+def states : Nat → State
+  | 0 => (a0,p0,0#usize)
+  | 1 => (a1,p1,1#usize)
+  | 2 => (a2,p2,2#usize)
+  | 3 => (a3,p3,3#usize)
+  | 4 => (a4,p4,4#usize)
+  | 5 => (a5,p5,5#usize)
+  | _ => (a6,p6,6#usize)
+theorem source : FIo_Native.weights.powers 7#usize x=ok a7 := by
+  unfold FIo_Native.weights.powers FIo_Native.weights.powers_loop
+  apply JGo_TX2_LoopChain.source
+    (fun s : State=>match s with | (out,p,i)=>FIo_Native.weights.powers_loop.body x out p i)
+    states 6 a7
+  · intro i hi
+    interval_cases i
+    · exact step0
+    · exact step1
+    · exact step2
+    · exact step3
+    · exact step4
+    · exact step5
+  · exact step6
+#print axioms source
+end AspisR1.JGo_TX2_PowersK
+end

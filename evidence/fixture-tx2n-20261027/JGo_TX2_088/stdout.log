@@ -1,0 +1,195 @@
+JGo_TX2_FinishPrefixTools.lean:37:6: error: Function expected at
+  Unit
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (core.convert.FromSame verifier.Error)
+JGo_TX2_FinishPrefixTools.lean:35:10: error: Function expected at
+  Unit
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (core.convert.FromSame verifier.Error)
+JGo_TX2_FinishPrefixTools.lean:33:16: error(lean.unknownIdentifier): Unknown constant `Unit.Ok`
+
+Note: Inferred this name from the expected resulting type of `.Ok`:
+  Unit
+JGo_TX2_FinishPrefixTools.lean:33:16: error(lean.unknownIdentifier): Unknown constant `PUnit.Ok`
+
+Note: Inferred this name from the expected resulting type of `.Ok`:
+  Unit
+JGo_TX2_FinishPrefixTools.lean:30:32: error(lean.unknownIdentifier): Unknown constant `Unit.Err`
+
+Note: Inferred this name from the expected resulting type of `.Err`:
+  Unit
+JGo_TX2_FinishPrefixTools.lean:30:32: error(lean.unknownIdentifier): Unknown constant `PUnit.Err`
+
+Note: Inferred this name from the expected resulting type of `.Err`:
+  Unit
+JGo_TX2_FinishPrefixTools.lean:27:39: error(lean.unknownIdentifier): Unknown constant `Unit.Err`
+
+Note: Inferred this name from the expected resulting type of `.Err`:
+  Unit
+JGo_TX2_FinishPrefixTools.lean:27:39: error(lean.unknownIdentifier): Unknown constant `PUnit.Err`
+
+Note: Inferred this name from the expected resulting type of `.Err`:
+  Unit
+JGo_TX2_FinishPrefixTools.lean:34:27: error: Type mismatch
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+has type
+  (T : Type) →
+    {E F : Type} →
+      core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F)
+of sort `Type 1` but is expected to have type
+  Result Unit
+of sort `Type`
+JGo_TX2_FinishPrefixTools.lean:18:26: error(lean.unknownIdentifier): Unknown constant `Unit.Err`
+
+Note: Inferred this name from the expected resulting type of `.Err`:
+  Unit
+JGo_TX2_FinishPrefixTools.lean:18:26: error(lean.unknownIdentifier): Unknown constant `PUnit.Err`
+
+Note: Inferred this name from the expected resulting type of `.Err`:
+  Unit
+JGo_TX2_FinishPrefixTools.lean:36:23: error: Type mismatch
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+has type
+  (T : Type) →
+    {E F : Type} →
+      core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F)
+of sort `Type 1` but is expected to have type
+  Result Unit
+of sort `Type`
+JGo_TX2_FinishPrefixTools.lean:62:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r3 ← ops.op2 weights alphas v.final_message p.kappa
+    let cf3 ←
+      match r3 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf3 with
+      | core.ops.control_flow.ControlFlow.Continue val3 => do
+        ops.op0 16#u16 0#usize val3
+        ops.op0 16#u16 1#usize claim1
+        let b ← ops.ne val3 claim1
+        if b = true then ok (core.result.Result.Err verifier.Error.Relation)
+          else do
+            ops.op1 none verifier.Phase.Relation
+            let r4 ← ops.op4 v.final_message a.weights.deref
+            let cf4 ←
+              match r4 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf4 with
+              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                ops.op0 17#u16 0#usize val4
+                ops.op0 17#u16 1#usize a.rhs
+                if (a.next != 22#usize) = true then ok (core.result.Result.Err verifier.Error.Query)
+                  else do
+                    let b1 ← ops.ne val4 a.rhs
+                    if b1 = true then ok (core.result.Result.Err verifier.Error.Query)
+                      else do
+                        ops.op1 none verifier.Phase.Final
+                        ok (core.result.Result.Ok ())
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame verifier.Error) residual
+is not definitionally equal to the right-hand side
+  remaining ops v p a weights alphas claim1
+
+W : Type
+ops : Port3_NativeFinishBody.Ops W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 claim0 claim1 : E
+weights : W
+alphas : Slice E
+read0 : p.alpha.index_usize 0#usize = ok alpha0
+round0 : ops.op5 v.round0 alpha0 p.claim 0#usize = ok (core.result.Result.Ok claim0)
+folds : ops.op6 p.variant = ok 2#usize
+read1 : p.alpha.index_usize 1#usize = ok alpha1
+round1 : ops.op5 v.round1 alpha1 claim0 1#usize = ok (core.result.Result.Ok claim1)
+newWeights : ops.op3 p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+readAlphas :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+⊢ (do
+      let r3 ← ops.op2 weights alphas v.final_message p.kappa
+      let cf3 ←
+        match r3 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf3 with
+        | core.ops.control_flow.ControlFlow.Continue val3 => do
+          ops.op0 16#u16 0#usize val3
+          ops.op0 16#u16 1#usize claim1
+          let b ← ops.ne val3 claim1
+          if b = true then ok (core.result.Result.Err verifier.Error.Relation)
+            else do
+              ops.op1 none verifier.Phase.Relation
+              let r4 ← ops.op4 v.final_message a.weights.deref
+              let cf4 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf4 with
+                | core.ops.control_flow.ControlFlow.Continue val4 => do
+                  ops.op0 17#u16 0#usize val4
+                  ops.op0 17#u16 1#usize a.rhs
+                  if (a.next != 22#usize) = true then ok (core.result.Result.Err verifier.Error.Query)
+                    else do
+                      let b1 ← ops.ne val4 a.rhs
+                      if b1 = true then ok (core.result.Result.Err verifier.Error.Query)
+                        else do
+                          ops.op1 none verifier.Phase.Final
+                          ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    remaining ops v p a weights alphas claim1
+JGo_TX2_FinishPrefixTools.lean:56:67: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGo_TX2_FinishPrefixTools.lean:58:13: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGo_TX2_FinishPrefixTools.lean:58:67: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGo_TX2_FinishPrefixTools.lean:60:13: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGo_TX2_FinishPrefixTools.lean:60:67: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGo_TX2_FinishPrefixTools.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
