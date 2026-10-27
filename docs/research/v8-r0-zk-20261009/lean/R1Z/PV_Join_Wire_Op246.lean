@@ -15,7 +15,9 @@ theorem op246_source (base : ProverRwFull.ExternalTypes)
       PV_CB3_ShippedOp246.multiproof.binary_parent inst hash left right := by
   letI : ProverRwFull.ExternalTypes := PV_Join_Wire_Selection.native base
   intro H inst hash left right
-  exact R1Z.PV_CB3_Op246Source.op246_source ops inst hash left right
+  change PV_CB3_ShippedOp246.multiproof.binary_parent inst hash left right = _
+  rw [← PV_CB3_Op246Source.op246_source ops inst hash left right]
+  exact PV_CB3_Op246Source.op246_source ops inst hash left right
 #print op246_source
 #print axioms op246_source
 end R1Z.PV_Join_Wire_Op246
