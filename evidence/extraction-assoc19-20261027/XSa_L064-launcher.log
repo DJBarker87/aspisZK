@@ -1,0 +1,66 @@
+{"attempt": "XSa_L064", "exit_status": 1, "wall_seconds": 1.79843212896958, "peak_rss_kib": "4773792", "swaps": "0", "print_axioms": ["'XSa_PartRun.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSa_generated/XSa_PartRun.lean:23:3: error: unsolved goals
+case pos
+H : Type
+sem : C.Sem H
+s : Slice U8
+g : Coeff
+point n : ℕ
+ih :
+  ∀ (i : Usize) (a b : Dot),
+    ↑i + n ≤ 29 →
+      XSa_DotRun.run sem s g point n i a b = do
+        let st ← XSa_OptionFold.run (XSa_PartFold.step sem s g point) (List.range' (↑i) n) (a, b)
+        XSa_PartFold.finish st
+i : Usize
+a b : Dot
+bound : ↑i + (n + 1) ≤ 29
+hi : ↑i < 29
+he : XRn_Join_usize ↑i = i
+q : E.Q
+hq : XRy_ClaimSelect.read (es sem) s point ↑i = ok q
+hv : XSa_CheckedQ.valid q = true
+v : C.E
+hval : Array.index_usize g i = ok v
+a' : XRn_Join_Release.fast_pairing.canonical.Dot
+ha : fast_pairing.canonical.Dot.push a (XRn_Join_toQ (eq v.c0)) (XRn_Joi
+...
+XSa_generated/XSa_PartRun.lean:23:3: error: unsolved goals
+case pos
+H : Type
+sem : C.Sem H
+s : Slice U8
+g : Coeff
+point n : ℕ
+ih :
+  ∀ (i : Usize) (a b : Dot),
+    ↑i + n ≤ 29 →
+      XSa_DotRun.run sem s g point n i a b = do
+        let st ← XSa_OptionFold.run (XSa_PartFold.step sem s g point) (List.range' (↑i) n) (a, b)
+        XSa_PartFold.finish st
+i : Usize
+a b : Dot
+bound : ↑i + (n + 1) ≤ 29
+hi : ↑i < 29
+he : XRn_Join_usize ↑i = i
+q : E.Q
+hq : XRy_ClaimSelect.read (es sem) s point ↑i = ok q
+hv : XSa_CheckedQ.valid q = true
+v : C.E
+hval : Array.index_usize g i = ok v
+a' : XRn_Join_Release.fast_pairing.canonical.Dot
+ha : fast_pairing.canonical.Dot.push a (XRn_Join_toQ (eq v.c0)) (XRn_Join_toQ q) = ok a'
+b' : XRn_Join_Release.fast_pairing.canonical.Dot
+hb : fast_pairing.canonical.Dot.push b (XRn_Join_toQ (eq v.c1)) (XRn_Join_toQ q) = ok b'
+j : UScalar UScalarTy.Usize
+ej : i + 1#usize = ok j
+hj : ↑j = ↑i + ↑1#usize
+⊢ (do
+      let st ← XSa_OptionFold.run (XSa_PartFold.step sem s g point) (List.range' (↑i + ↑1#usize) n) (a', b')
+      XSa_PartFold.finish st) =
+    do
+    let st ← XSa_OptionFold.run (XSa_PartFold.step sem s g point) (List.range' (↑i + 1) n) (a', b')
+    XSa_PartFold.finish st
+'XSa_PartRun.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r245bfcddb62046cdb7b6b1103046c020.scope; invocation ID: 22a78ca822ad44e0938186710b0598f0

@@ -1,0 +1,27 @@
+XSa_generated/XSa_ParserLane.lean:27:1: error: 'change' tactic failed, pattern
+  mapR toClaimE (field s n) = do
+    let a ← i * 32#usize
+    let b ← i + 1#usize
+    let c ← b * 32#usize
+    let selected ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s { start := a, «end» := c }
+    let opt ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected
+    let value ← core.option.Option.unwrap opt
+    ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish (AspisR1CurrentWide.Proof.recordWideToFinish value))
+is not definitionally equal to target
+  mapR toClaimE (field s n) = do
+    let x ←
+      do
+        let value ←
+          do
+            let i1 ← XRn_Join_usize n * 32#usize
+            let i2 ← XRn_Join_usize n + 1#usize
+            let i3 ← i2 * 32#usize
+            let s ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s
+                  { start := i1, «end» := i3 }
+            let o ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes s
+            core.option.Option.unwrap o
+        ok (AspisR1CurrentWide.Proof.recordWideToFinish value)
+    ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x)
+'XSa_ParserLane.lane' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

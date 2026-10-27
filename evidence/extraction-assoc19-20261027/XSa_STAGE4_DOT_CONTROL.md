@@ -1,0 +1,7 @@
+# Stage 4: installed Dot carriers, canonical-Q decision, push control
+
+XSa_DotCarriers.new_dot/parser (L016) identify the actual initial state and concrete parser slots. XSa_CheckedQ.checked (L020) gives total exact checked-Q acceptance/rejection and SAME packed words. XSa_QRawTotal.total (L021) reuses JGi_QRawSourceForwardTotalityV1 from the coherent SInt2 root, deriving actual raw return on canonical operands without a supplied successful-call premise. XSa_DotControl.push (L026) gives full Result and SAME state for count rejection, noncanonical-scalar rejection, both ordered Dot calls and checked count increment, parametric in raw backend. It is an adapter, not a closed concrete raw backend instance or whole claim equation.
+
+XSa_RawWrap.wrap/sub/fold_word (L023) supplies tiny symbolic no-wrap adapters, with standard axiom subsets only. Existing native LPn Dot::push P6 remains CLOSED and is cited in stage3; no native leaf is re-proved. The cohort installed raw coefficient/current primitive association and finish still need joins. A2/A3 and actual headline remain unchanged and OPEN.
+
+Every attempt has source/dependency/tool hash, exact target/command/revision/exit/wall/RSS/swap and axioms. L015 was excluded due an invalid introspection print; L017-L019 and L022/L024/L025 are excluded elaboration/tactic failures. No memory kill/timeout/cap increase; no unchanged resource retry. No shipped source or artifact change.

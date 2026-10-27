@@ -1,0 +1,118 @@
+XSa_generated/XSa_DotBody.lean:33:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1CurrentPreparedClaim.ClaimScalar.read ops (toClaimSem sem) s (XRn_Join_usize point) iter.start
+in the target expression
+  (match (some iter.start, iter') with
+    | (o, iter1) =>
+      match o with
+      | none => do
+        let out ← ops.finishDot (state a b iter.start)
+        ok (done (core.result.Result.Ok out))
+      | some l => do
+        let scalar ← AspisR1CurrentPreparedClaim.ClaimScalar.read ops (toClaimSem sem) s (XRn_Join_usize point) l
+        let coeff ← (arr toClaimE g).index_usize l
+        let __x ← ops.pushDot (state a b iter.start) coeff scalar
+        match __x with
+          | (r, dot1) => do
+            let r1 ←
+              AspisR1CurrentPreparedClaim.core.result.Result.map_err
+                  (AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError
+                    D)
+                  r ()
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a =>
+                ok (cont (iter1, toClaimSem sem, XRn_Join_usize point, dot1))
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r2 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      AspisR1CurrentPreparedClaim.Concrete.E
+                      (core.convert.FromSame AspisR1CurrentPreparedClaim.verifier.Error) residual
+                ok (done r2)) =
+    do
+    let q ← XRy_ClaimSelect.read (es sem) s point ↑iter.start
+    let (r, dot1) ← ops.pushDot (state a b iter.start) (toClaimE (cell g iter.start hi)) (toClaimQ (cq q))
+    let r1 ←
+      AspisR1CurrentPreparedClaim.core.result.Result.map_err
+          (AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError D)
+          r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter', toClaimSem sem, XRn_Join_usize point, dot1))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r2 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              AspisR1CurrentPreparedClaim.Concrete.E (core.convert.FromSame AspisR1CurrentPreparedClaim.verifier.Error)
+              residual
+        ok (done r2)
+
+H : Type
+D : AspisR1CurrentPreparedClaim.aspis_core.Digest32 H
+sem : C.Sem H
+s : Slice U8
+g : Coeff
+hg : canonical g
+point : ℕ
+hp : point < 6
+iter iter' : Range
+hi : ↑iter.start < 29
+a b : Dot
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter')
+he : XRn_Join_usize ↑iter.start = iter.start
+hread :
+  mapR (fun q => toClaimQ (cq q)) (XRy_ClaimSelect.read (es sem) s point ↑iter.start) =
+    AspisR1CurrentPreparedClaim.ClaimScalar.read ops (toClaimSem sem) s (XRn_Join_usize point) iter.start
+⊢ (match (some iter.start, iter') with
+    | (o, iter1) =>
+      match o with
+      | none => do
+        let out ← ops.finishDot (state a b iter.start)
+        ok (done (core.result.Result.Ok out))
+      | some l => do
+        let scalar ← AspisR1CurrentPreparedClaim.ClaimScalar.read ops (toClaimSem sem) s (XRn_Join_usize point) l
+        let coeff ← (arr toClaimE g).index_usize l
+        let __x ← ops.pushDot (state a b iter.start) coeff scalar
+        match __x with
+          | (r, dot1) => do
+            let r1 ←
+              AspisR1CurrentPreparedClaim.core.result.Result.map_err
+                  (AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError
+                    D)
+                  r ()
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a =>
+                ok (cont (iter1, toClaimSem sem, XRn_Join_usize point, dot1))
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r2 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      AspisR1CurrentPreparedClaim.Concrete.E
+                      (core.convert.FromSame AspisR1CurrentPreparedClaim.verifier.Error) residual
+                ok (done r2)) =
+    do
+    let q ← XRy_ClaimSelect.read (es sem) s point ↑iter.start
+    let (r, dot1) ← ops.pushDot (state a b iter.start) (toClaimE (cell g iter.start hi)) (toClaimQ (cq q))
+    let r1 ←
+      AspisR1CurrentPreparedClaim.core.result.Result.map_err
+          (AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError D)
+          r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter', toClaimSem sem, XRn_Join_usize point, dot1))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r2 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              AspisR1CurrentPreparedClaim.Concrete.E (core.convert.FromSame AspisR1CurrentPreparedClaim.verifier.Error)
+              residual
+        ok (done r2)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XSa_DotBody.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

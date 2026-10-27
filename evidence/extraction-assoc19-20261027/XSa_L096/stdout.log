@@ -1,0 +1,94 @@
+XSa_generated/XSa_ListClaimRaw.lean:40:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.foldlM
+    (fun parts point =>
+      match parts with
+      | none => ok none
+      | some parts => do
+        let p ← XRn_Join_preparedPart (es sem) s g point
+        ok (Option.map (fun p => parts ++ [p]) p))
+    (some []) (List.range 6)
+in the target expression
+  (mapR (XRo_Join_Carriers.inner id ce) do
+      let parts ←
+        List.foldlM
+            (fun parts point =>
+              match parts with
+              | none => ok none
+              | some parts => do
+                let p ← XRn_Join_preparedPart (es sem) s g point
+                ok (Option.map (fun p => parts ++ [p]) p))
+            (some []) (List.range 6)
+      match parts with
+        | none => ok (core.result.Result.Err XRn_Join_Release.verifier.Error.Parse)
+        | some parts => do
+          let result ←
+            List.foldlM
+                (fun sum x => do
+                  let term ← aspis_core.field.wide_exact.WideExact.mul x.1 x.2
+                  aspis_core.field.wide_exact.WideExact.add sum term)
+                { c0 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero,
+                  c1 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero }
+                (powers.zip (inactive :: parts))
+          ok (core.result.Result.Ok result)) =
+    mapR outcome do
+      let xs ← XSa_OptionFold.run (XSa_PointList.step sem s g) (List.range 6) []
+      finish inactive powers xs
+
+H : Type
+D : C.D H
+sem : C.Sem H
+s : Slice U8
+inactive : C.E
+g : Coeff
+kappa : C.E
+powers : List C.E
+hp : XRn_Join_powers kappa 7 XRy_Powers.one = ok powers
+hstep :
+  (fun parts point =>
+      match parts with
+      | none => ok none
+      | some parts => do
+        let p ← XRn_Join_preparedPart (es sem) s g point
+        ok (Option.map (fun p => parts ++ [p]) p)) =
+    XSa_OptionFold.absorb (XSa_PointList.step sem s g)
+hp' :
+  XRn_Join_powers kappa 7
+      { c0 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qone,
+        c1 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero } =
+    ok powers
+hfold :
+  List.foldlM
+      (fun parts point =>
+        match parts with
+        | none => ok none
+        | some parts => do
+          let p ← XRn_Join_preparedPart (es sem) s g point
+          ok (Option.map (fun p => parts ++ [p]) p))
+      (some []) (List.range 6) =
+    List.foldlM (XSa_OptionFold.absorb (XSa_PointList.step sem s g)) (some []) (List.range 6)
+⊢ (mapR (XRo_Join_Carriers.inner id ce) do
+      let parts ←
+        List.foldlM
+            (fun parts point =>
+              match parts with
+              | none => ok none
+              | some parts => do
+                let p ← XRn_Join_preparedPart (es sem) s g point
+                ok (Option.map (fun p => parts ++ [p]) p))
+            (some []) (List.range 6)
+      match parts with
+        | none => ok (core.result.Result.Err XRn_Join_Release.verifier.Error.Parse)
+        | some parts => do
+          let result ←
+            List.foldlM
+                (fun sum x => do
+                  let term ← aspis_core.field.wide_exact.WideExact.mul x.1 x.2
+                  aspis_core.field.wide_exact.WideExact.add sum term)
+                { c0 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero,
+                  c1 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero }
+                (powers.zip (inactive :: parts))
+          ok (core.result.Result.Ok result)) =
+    mapR outcome do
+      let xs ← XSa_OptionFold.run (XSa_PointList.step sem s g) (List.range 6) []
+      finish inactive powers xs
+'XSa_ListClaimRaw.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

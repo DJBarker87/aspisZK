@@ -1,0 +1,65 @@
+{"attempt": "XSa_L050", "exit_status": 1, "wall_seconds": 1.7162114880047739, "peak_rss_kib": "4757248", "swaps": "0", "print_axioms": ["'XSa_DotDone.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSa_generated/XSa_DotDone.lean:25:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop.body ?ops ?inst ?y1 ?g ?iter ?sem ?point ?dot
+in the target expression
+  (match (iter, toClaimSem sem, XRn_Join_usize point, state a b iter.start) with
+    | (iter1, sem1, point1, dot1) =>
+      AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop.body ops D s (arr toClaimE g) iter1 sem1 point1
+        dot1) =
+    ok (ControlFlow.done (outcome (some out)))
+
+H : Type
+D : AspisR1CurrentPreparedClaim.aspis_core.Digest32 H
+sem : C.Sem H
+s : Slice U8
+g : Coeff
+point : ℕ
+iter : Range
+a b : Dot
+hge : ↑iter.end ≤ ↑iter.s
+...
+et expression
+  (match (iter, toClaimSem sem, XRn_Join_usize point, state a b iter.start) with
+    | (iter1, sem1, point1, dot1) =>
+      AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop.body ops D s (arr toClaimE g) iter1 sem1 point1
+        dot1) =
+    ok (ControlFlow.done (outcome (some out)))
+
+H : Type
+D : AspisR1CurrentPreparedClaim.aspis_core.Digest32 H
+sem : C.Sem H
+s : Slice U8
+g : Coeff
+point : ℕ
+iter : Range
+a b : Dot
+hge : ↑iter.end ≤ ↑iter.start
+out : C.E
+hr : XSa_FinishPair.finish a b = ok out
+hc : XRy_WideMultiply.Canonical out
+ht : ops.finishDot (state a b iter.start) = ok (toClaimE out)
+iter' : core.ops.range.Range (UScalar UScalarTy.Usize)
+right✝ : iter' = iter
+hn :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (none, iter')
+⊢ (match (iter, toClaimSem sem, XRn_Join_usize point, state a b iter.start) with
+    | (iter1, sem1, point1, dot1) =>
+      AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot_loop.body ops D s (arr toClaimE g) iter1 sem1 point1
+        dot1) =
+    ok (ControlFlow.done (outcome (some out)))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'XSa_DotDone.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9592ec2349f549d88a6cbda8b9034c13.scope; invocation ID: 34ac61d9b52145daae8c13d3164aa655

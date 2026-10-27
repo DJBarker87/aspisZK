@@ -1,0 +1,11 @@
+# Execution and admission provenance
+
+Existing XRy_attempt.py was invoked in memory with only the generated-source prefix/path and local evidence __file__ changed to XSa. Existing host S2H_reservation.py, S2W_lean_host.py and S2W_run_host.py were used unchanged. No launcher/monitor/admission/build infrastructure was created or repaired. XSa_verify.py is the unchanged XRy static receipt verifier with its evidence prefix changed; it performs no builds.
+
+L001/L002 used direct invocation of those SAME host runners after receipt transport failures. The exact manual launch shell placed reservation and allowed:true validation before systemd-run with &&, so a scope could start only after BOTH reservation exit0 AND allowed:true. L001's fresh reservation/log and earlier retry exit receipt are retained. L002's reservation/log are retained. Host scope limits and compiler argv are independently recorded in each receipt. File transport used scp, and in-memory tar over ssh for two transfers/receipt fetches; no archive was stored or committed. No other cache was written.
+
+Pre-start transient transports: initial L001 missing log followed rule7 wait30 then reservation retry; L001 upload failed255 twice and succeeded on the third call after30second waits. L039 and L075 admission-log fetch255 each recovered after30seconds before any scope/Lean. An early end-cache/receipt read failed255 and was recovered using read-only fetches after30seconds. Exact retained transport JSON/logs distinguish these from proof errors; there was no resource rerun or infrastructure stop condition of three consecutive transport failures.
+
+Cache start inventories143 retained objects and238 Aeneas directory objects/sidecars. End inventory resolves the full LEAN_PATH including top-level Aeneas.olean (one initially omitted root file), whose hash matches inherited SInt2 manifests. All initially inventoried hashes are unchanged. End196 retained objects consist of the SAME143 plus53 XSa objects. No cache deletion, other-prefix write or shared object rewrite.
+
+Whitespace validation: Lean/Markdown/Python/JSON changes pass git diff --check against the job base. Raw launcher display excerpts preserve their original trailing whitespace and blank EOF lines; they were not normalized or substituted for the exact per-attempt stdout/time/source snapshots.

@@ -1,0 +1,59 @@
+{"attempt": "XSa_L094", "exit_status": 1, "wall_seconds": 1.6465760269784369, "peak_rss_kib": "4762964", "swaps": "0", "print_axioms": ["'XSa_ClaimRaw.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSa_generated/XSa_ClaimRaw.lean:36:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.foldlM (XSa_OptionFold.absorb ?step) (some ?s) ?xs
+in the target expression
+  (mapR (XRo_Join_Carriers.inner id ce) do
+      let parts ←
+        List.foldlM
+            (fun parts point =>
+              match parts with
+              | none => ok none
+              | some parts => do
+                let p ← XRn_Join_preparedPart (es sem) s g point
+                ok (Option.map (fun p => parts ++ [p]) p))
+            (some []) (List.range 6)
+      match parts with
+        | none => ok (core.result.Result.Err XRn_Join_Release.verifier.Error.Parse)
+        | some parts => do
+ 
+...
+
+                let p ← XRn_Join_preparedPart (es sem) s g point
+                ok (Option.map (fun p => parts ++ [p]) p))
+            (some []) (List.range 6)
+      match parts with
+        | none => ok (core.result.Result.Err XRn_Join_Release.verifier.Error.Parse)
+        | some parts => do
+          let result ←
+            List.foldlM
+                (fun sum x => do
+                  let term ← aspis_core.field.wide_exact.WideExact.mul x.1 x.2
+                  aspis_core.field.wide_exact.WideExact.add sum term)
+                { c0 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero,
+                  c1 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero }
+                (ks.zip (inactive :: parts))
+          ok (core.result.Result.Ok result)) =
+    mapR outcome do
+      let xs ← XSa_OptionFold.run (XSa_PointList.step sem s g) (List.range 6) []
+      XSa_PointList.finish inactive ⟨ks, hks⟩ xs
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ⟨ks, hks⟩
+  has type
+    { l // l.length = ↑7#usize }
+  but is expected to have type
+    XSa_PointList.Seven
+  in the application
+    XSa_PointList.finish inactive ⟨ks, hks⟩
+XSa_generated/XSa_ClaimRaw.lean:35:12: warning: This simp argument is unused:
+  hstep
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵s̵t̵e̵p̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSa_ClaimRaw.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4bdbef4ccbe1409dade72a585dcb0a9f.scope; invocation ID: 797baed82c9a44f286718a92b2771f29

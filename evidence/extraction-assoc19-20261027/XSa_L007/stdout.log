@@ -1,0 +1,38 @@
+XSa_generated/XSa_ParserTotal.lean:17:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.80 then ?m.84 else ?m.85
+in the target expression
+  (have xs := List.map (fun i => XRn_Join_word (List.take 4 (List.drop (4 * i) ↑s))) (List.range 8);
+    ok
+      (if (↑s).length = 32 ∧ (xs.all fun x => decide (x < 2147483647#u32)) = true then
+        some
+          { c0 := XRn_Join_FieldExternal.oldQ (XRn_Join_q (List.take 4 xs)),
+            c1 := XRn_Join_FieldExternal.oldQ (XRn_Join_q (List.drop 4 xs)) }
+      else none)) =
+    ok none
+
+case neg
+s : Slice U8
+hl : ¬(↑s).length = 32
+⊢ (have xs := List.map (fun i => XRn_Join_word (List.take 4 (List.drop (4 * i) ↑s))) (List.range 8);
+    ok
+      (if (↑s).length = 32 ∧ (xs.all fun x => decide (x < 2147483647#u32)) = true then
+        some
+          { c0 := XRn_Join_FieldExternal.oldQ (XRn_Join_q (List.take 4 xs)),
+            c1 := XRn_Join_FieldExternal.oldQ (XRn_Join_q (List.drop 4 xs)) }
+      else none)) =
+    ok none
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s
+XSa_generated/XSa_ParserTotal.lean:17:36: error: Invalid projection: Type of
+  h
+is not known; cannot resolve projection `1`
+'XSa_ParserTotal.bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,65 @@
+{"attempt": "XSa_L096", "exit_status": 1, "wall_seconds": 1.7706129659782164, "peak_rss_kib": "4765456", "swaps": "0", "print_axioms": ["'XSa_ListClaimRaw.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSa_generated/XSa_ListClaimRaw.lean:40:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.foldlM
+    (fun parts point =>
+      match parts with
+      | none => ok none
+      | some parts => do
+        let p ← XRn_Join_preparedPart (es sem) s g point
+        ok (Option.map (fun p => parts ++ [p]) p))
+    (some []) (List.range 6)
+in the target expression
+  (mapR (XRo_Join_Carriers.inner id ce) do
+      let parts ←
+        List.foldlM
+            (fun parts point =>
+              match parts with
+              | none => ok none
+              | some parts => do
+                let p ← XRn_Join_preparedPart (es sem) s g point
+                ok (Option.map (fun p 
+...
+intList.step sem s g)
+hp' :
+  XRn_Join_powers kappa 7
+      { c0 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qone,
+        c1 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero } =
+    ok powers
+hfold :
+  List.foldlM
+      (fun parts point =>
+        match parts with
+        | none => ok none
+        | some parts => do
+          let p ← XRn_Join_preparedPart (es sem) s g point
+          ok (Option.map (fun p => parts ++ [p]) p))
+      (some []) (List.range 6) =
+    List.foldlM (XSa_OptionFold.absorb (XSa_PointList.step sem s g)) (some []) (List.range 6)
+⊢ (mapR (XRo_Join_Carriers.inner id ce) do
+      let parts ←
+        List.foldlM
+            (fun parts point =>
+              match parts with
+              | none => ok none
+              | some parts => do
+                let p ← XRn_Join_preparedPart (es sem) s g point
+                ok (Option.map (fun p => parts ++ [p]) p))
+            (some []) (List.range 6)
+      match parts with
+        | none => ok (core.result.Result.Err XRn_Join_Release.verifier.Error.Parse)
+        | some parts => do
+          let result ←
+            List.foldlM
+                (fun sum x => do
+                  let term ← aspis_core.field.wide_exact.WideExact.mul x.1 x.2
+                  aspis_core.field.wide_exact.WideExact.add sum term)
+                { c0 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero,
+                  c1 := XRn_Join_FieldExternal.oldQ XRn_Join_FieldExternal.qzero }
+                (powers.zip (inactive :: parts))
+          ok (core.result.Result.Ok result)) =
+    mapR outcome do
+      let xs ← XSa_OptionFold.run (XSa_PointList.step sem s g) (List.range 6) []
+      finish inactive powers xs
+'XSa_ListClaimRaw.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r23d1b9f6fec44e4b949809f5dda90c4d.scope; invocation ID: 78a841991a084f84b79d18019857f727
