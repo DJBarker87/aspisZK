@@ -1,0 +1,52 @@
+{"attempt": "JGq_TX2_098", "exit_status": 1, "wall_seconds": 8.937609447049908, "peak_rss_kib": "7122364", "swaps": "0", "print_axioms": ["'AspisR1.JGq_PairAfterShared.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGq_PairAfterShared.lean:26:6: error: Function expected at
+  E
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (core.convert.FromSame FIo_Native.verifier.Error)
+JGq_PairAfterShared.lean:24:8: error(lean.unknownIdentifier): Unknown constant `Unit.Ok`
+
+Note: Inferred this name from the expected resulting type of `.Ok`:
+  Unit
+JGq_PairAfterShared.lean:24:8: error(lean.unknownIdentifier): Unknown constant `PUnit.Ok`
+
+Note: Inferred this name from the expected resulting type of `.Ok`:
+  Unit
+JGq_PairAfterShared.lean:25:23: error: Type mismatch
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+has type
+...
+f a libra
+          let sum ←
+            FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 JGq_PowersK.a7
+                FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+          ok (core.result.Result.Ok sum)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+            residual) =
+    do
+    let (r, _, parts) ←
+      FIo_Native.weights.process_regular_kinds w true alpha f 2#usize 64#usize JGq_Powers0.a4 JGq_Powers1.a4 scratch
+          JGq_PairPrefix.initial
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let inactive ← FIo_Native.weights.grouped_inactive_pair w f JGq_Low.a16
+        let lowParts ← (JGq_SharedHigh.write parts).update 0#usize inactive
+        let libra ← FIo_Native.weights.factored_s2_libra_weights JGq_Powers0.a4 JGq_Powers1.a4 w.extra
+        let lastParts ← FIo_Native.weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f lowParts libra
+        let _ ←
+          FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } lastParts JGq_PowersK.a7
+              FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+        ok sorry
+      | core.ops.control_flow.ControlFlow.Break residual => sorry
+    sorry
+'AspisR1.JGq_PairAfterShared.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc599a8e2aba548db86431e8e66892969.scope; invocation ID: 0c0908612ace4781b5067066f12cab30

@@ -24,12 +24,16 @@ def remaining : Result (core.result.Result E FIo_Native.verifier.Error) :=
 theorem native : @FIo_Native.weights.Weights.pair (FIo_Install.allocation (.Ok ()))
     w alpha f kappa=remaining := by
   unfold FIo_Native.weights.Weights.pair
+  dsimp only
   rw [length,divided,bind_tc_ok,folds,expected,bind_tc_ok]
   have different : (64#usize != 64#usize)=false := by decide
   simp only [different,Bool.false_eq_true,ite_false,ite_true]
   rw [read0,bind_tc_ok,JGq_Powers0.source,bind_tc_ok,read1,bind_tc_ok,JGq_Powers1.source,bind_tc_ok,
     filled,bind_tc_ok]
-  rw [JGo_TX2_PairGuard.source,bind_tc_ok]
+  dsimp only
+  have guard : FIo_Native.weights.shared_two_point_guard w 2#usize=ok true := by
+    with_unfolding_all exact JGo_TX2_PairGuard.source
+  rw [guard,bind_tc_ok]
   rfl
 #print axioms native
 
@@ -41,8 +45,13 @@ def adapted : Result (core.result.Result AspisR1Stage2.Stage2Finish.E AspisR1Sta
 
 theorem source : FIo_Install.pair (.Ok ()) JGo_TX2_WeightData.value JGo_TX2_FinishPrefix.alphas
     (JFw_Frames.window 8007 2048) JFo_Prepared.value.kappa=adapted := by
+  have call : @FIo_Native.weights.Weights.pair (FIo_Install.allocation (.Ok ()))
+      (FIo_Install.toWeights JGo_TX2_WeightData.value) (FIo_Install.toSlice JGo_TX2_FinishPrefix.alphas)
+      (JFw_Frames.window 8007 2048) (FIo_Install.toE JFo_Prepared.value.kappa)=remaining := by
+    with_unfolding_all exact native
   unfold FIo_Install.pair adapted
-  rw [native]
+  rw [call]
+  with_unfolding_all rfl
 #print axioms source
 end AspisR1.JGq_PairPrefix
 end

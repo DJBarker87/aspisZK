@@ -22,6 +22,7 @@ for i in range(17):t+=f'def a{i} : Array E 16#usize := Array.make 16#usize ['+',
 out['JGq_LowData']=t+'end AspisR1.JGq_Low\nend\n'
 for i in range(16):
  t=f'''import JGq_LowData
+import JGq_LowTools
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JGq_Low
@@ -34,39 +35,27 @@ theorem scale{i} : FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 prod
 theorem step{i} : FIo_Native.weights.Weights.pair_loop7.body JGq_Powers0.a4 JGq_Powers1.a4
     {{start:={i}#usize,«end»:=16#usize}} a{i}=
     ok (.cont ({{start:={i+1}#usize,«end»:=16#usize}},a{i+1})) := by
-  unfold FIo_Native.weights.Weights.pair_loop7.body
-  rw [JGo_TX2_Range.next {i}#usize 16#usize {i+1}#usize (by decide) (by decide),bind_tc_ok]
-  have read0 : (do
-    let d ← {i}#usize % 4#usize
-    let p ← Array.index_usize FIo_Native.weights.PERM d
-    Array.index_usize JGq_Powers0.a4 p)=ok JGq_Powers0.p{perm[i%4]} := by with_unfolding_all rfl
-  have read1 : (do
-    let d ← {i}#usize / 4#usize
-    let p ← Array.index_usize FIo_Native.weights.PERM d
-    Array.index_usize JGq_Powers1.a4 p)=ok JGq_Powers1.p{perm[i//4]} := by with_unfolding_all rfl
-  have quarter : FIo_Native.aspis_core.field.M31.mul FIo_Native.weights.QUARTER FIo_Native.weights.QUARTER=ok 134217728#u32 := by with_unfolding_all rfl
-  change (do
-    let v0 ← (do
-      let d ← {i}#usize % 4#usize
-      let p ← Array.index_usize FIo_Native.weights.PERM d
-      Array.index_usize JGq_Powers0.a4 p)
-    let v1 ← (do
-      let d ← {i}#usize / 4#usize
-      let p ← Array.index_usize FIo_Native.weights.PERM d
-      Array.index_usize JGq_Powers1.a4 p)
-    let v ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul v0 v1
-    let q ← FIo_Native.aspis_core.field.M31.mul FIo_Native.weights.QUARTER FIo_Native.weights.QUARTER
-    let z ← FIo_Native.aspis_core.field.wide_exact.WideExact.mul_m31 v q
-    let out ← Array.update a{i} {i}#usize z
-    ok (.cont ({{start:={i+1}#usize,«end»:=16#usize}},out)))=_
-  rw [read0,bind_tc_ok,read1,bind_tc_ok,multiply{i},bind_tc_ok,quarter,bind_tc_ok,scale{i},bind_tc_ok]
-  rfl
+  apply JGq_LowTools.step JGq_Powers0.a4 JGq_Powers1.a4
+    {{start:={i}#usize,«end»:=16#usize}} {{start:={i+1}#usize,«end»:=16#usize}}
+    a{i} a{i+1} {i}#usize {i%4}#usize {i//4}#usize {perm[i%4]}#usize {perm[i//4]}#usize
+    JGq_Powers0.p{perm[i%4]} JGq_Powers1.p{perm[i//4]} product{i} c{i} 134217728#u32
+  · exact JGo_TX2_Range.next {i}#usize 16#usize {i+1}#usize (by decide) (by decide)
+  · rfl
+  · with_unfolding_all rfl
+  · rfl
+  · rfl
+  · with_unfolding_all rfl
+  · rfl
+  · exact multiply{i}
+  · with_unfolding_all rfl
+  · exact scale{i}
+  · rfl
 #print axioms step{i}
 end AspisR1.JGq_Low
 end
 ''';out[f'JGq_LowStep{i:02}']=t
 for b in range(4):
- text='import JGq_LowData\n'+''.join(out[f'JGq_LowStep{i:02}'].split('import JGq_LowData\n',1)[1] for i in range(4*b,4*b+4))
+ text='import JGq_LowData\nimport JGq_LowTools\n'+''.join(out[f'JGq_LowStep{i:02}'].split('import JGq_LowTools\n',1)[1] for i in range(4*b,4*b+4))
  out[f'JGq_LowGroup{b}']=text
 for i in range(16):del out[f'JGq_LowStep{i:02}']
 for mod,t in out.items():

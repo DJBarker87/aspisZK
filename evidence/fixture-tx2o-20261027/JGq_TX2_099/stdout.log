@@ -1,0 +1,73 @@
+JGq_PairAfterShared.lean:42:23: error: Tactic `rfl` failed: The left-hand side
+  FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant FIo_Native.transport.Variant.S2
+is not definitionally equal to the right-hand side
+  ok true
+
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO) =
+    ok (w, JGq_Common.a16)
+partials : FIo_Native.weights.shared_partials f JGq_Common.a16 = ok (core.result.Result.Ok JGq_SharedPartials.value)
+high :
+  ∀ (before : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize),
+    FIo_Native.weights.shared_high JGq_SharedPartials.value w JGq_Powers0.a4 JGq_Powers1.a4 before =
+      ok (core.result.Result.Ok (), JGq_SharedHigh.write before)
+powerk : FIo_Native.weights.powers 7#usize kappa = ok JGq_PowersK.a7
+⊢ FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant FIo_Native.transport.Variant.S2 = ok true
+JGq_PairAfterShared.lean:29:55: error: unsolved goals
+common :
+  FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w
+      (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO) =
+    ok (w, JGq_Common.a16)
+partials : FIo_Native.weights.shared_partials f JGq_Common.a16 = ok (core.result.Result.Ok JGq_SharedPartials.value)
+high :
+  ∀ (before : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 7#usize),
+    FIo_Native.weights.shared_high JGq_SharedPartials.value w JGq_Powers0.a4 JGq_Powers1.a4 before =
+      ok (core.result.Result.Ok (), JGq_SharedHigh.write before)
+powerk : FIo_Native.weights.powers 7#usize kappa = ok JGq_PowersK.a7
+variant :
+  FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant FIo_Native.transport.Variant.S2 = ok true
+⊢ (do
+      let (r1, _, parts1) ←
+        FIo_Native.weights.process_regular_kinds w true alpha f 2#usize 64#usize JGq_Powers0.a4 JGq_Powers1.a4 scratch
+            JGq_PairPrefix.initial
+      let cf2 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let we1 ← FIo_Native.weights.grouped_inactive_pair w f JGq_Low.a16
+          let a ← (JGq_SharedHigh.write parts1).update 0#usize we1
+          let libra ← FIo_Native.weights.factored_s2_libra_weights JGq_Powers0.a4 JGq_Powers1.a4 w.extra
+          let parts3 ← FIo_Native.weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+          let sum ←
+            FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 JGq_PowersK.a7
+                FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+          ok (core.result.Result.Ok sum)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+            residual) =
+    do
+    let (r, _, parts) ←
+      FIo_Native.weights.process_regular_kinds w true alpha f 2#usize 64#usize JGq_Powers0.a4 JGq_Powers1.a4 scratch
+          JGq_PairPrefix.initial
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let inactive ← FIo_Native.weights.grouped_inactive_pair w f JGq_Low.a16
+        let lowParts ← (JGq_SharedHigh.write parts).update 0#usize inactive
+        let libra ← FIo_Native.weights.factored_s2_libra_weights JGq_Powers0.a4 JGq_Powers1.a4 w.extra
+        let lastParts ← FIo_Native.weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f lowParts libra
+        let sum ←
+          FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } lastParts JGq_PowersK.a7
+              FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+        ok (core.result.Result.Ok sum)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual E
+          (core.convert.FromSame FIo_Native.verifier.Error) residual
+'AspisR1.JGq_PairAfterShared.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
