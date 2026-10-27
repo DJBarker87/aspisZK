@@ -1,0 +1,1475 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:19:21: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:18:85: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+e : Error
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (fail e), world := world }
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := s.ledger }, signal := Signal.failed e }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:19:24: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲hp,̵h̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:24:21: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:23:85: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned div, world := world }
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := s.ledger }, signal := Signal.diverged }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:24:24: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲hp,̵h̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:29:21: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:28:97: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+input : Slice U8
+resume : Reply → Result Outcome
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.request input resume, world := world }
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := s.ledger }, signal := Signal.request input resume }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:29:24: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲hp,̵h̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:34:21: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:33:94: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+retry : Usize
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.retry retry, world := world }
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := s.ledger }, signal := Signal.entropyFuel retry }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:34:24: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲hp,̵h̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:40:21: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:39:85: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+e : Error
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+hb : prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger = fail e
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := s.ledger }, signal := Signal.failed e }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:40:24: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲hp, ̲he̵,̵h̵b]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:40:27: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲hp, ̲he,̵h̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:46:21: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:45:85: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+hb : prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger = div
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := s.ledger }, signal := Signal.diverged }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:46:24: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲hp, ̲he̵,̵h̵b]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:46:27: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲hp, ̲he,̵h̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:37: error(lean.unknownIdentifier): Unknown identifier `hp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:51:82: error: unsolved goals
+case Parse
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.Parse = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.Parse, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger }, signal := Signal.error verifier.Error.Parse }
+
+case Semantic
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.Semantic = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.Semantic, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger }, signal := Signal.error verifier.Error.Semantic }
+
+case Transcript
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.Transcript = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.Transcript, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger },
+      signal := Signal.error verifier.Error.Transcript }
+
+case Relation
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.Relation = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.Relation, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger }, signal := Signal.error verifier.Error.Relation }
+
+case Merkle
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.Merkle = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.Merkle, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger }, signal := Signal.error verifier.Error.Merkle }
+
+case Query
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.Query = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.Query, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger }, signal := Signal.error verifier.Error.Query }
+
+case Checkpoint
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.Checkpoint = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.Checkpoint, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger },
+      signal := Signal.error verifier.Error.Checkpoint }
+
+case Allocation
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.Allocation = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.Allocation, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger },
+      signal := Signal.error verifier.Error.Allocation }
+
+case AttemptsExhausted
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.AttemptsExhausted = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.AttemptsExhausted, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger },
+      signal := Signal.error verifier.Error.AttemptsExhausted }
+
+case Entropy
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Type
+account : ProverRwEffectCallback.Account N
+pub : Pub
+compiled : Compiled
+hash : Hash
+index : ℕ
+s : State N
+nonce : Std.Array U8 32#usize
+next : N
+world : World
+secret : Secret
+ledger : Store
+he :
+  ProverRwEffectOwner.worldOwner nonce s.entropy =
+    { boundary := ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)), world := world }
+fatal : ¬verifier.Error.Entropy = verifier.Error.Rejected
+hb :
+  prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger =
+    ok (core.result.Result.Err verifier.Error.Entropy, ledger)
+⊢ (match account.call_mut s.policy (ProverCommitRetrySource34.word index) with
+    | fail e => { state := s, signal := Signal.failed e }
+    | div => { state := s, signal := Signal.diverged }
+    | ok (nonce, policy) =>
+      match (ProverRwEffectOwner.worldOwner nonce s.entropy).boundary with
+      | ProverRwEffectTape.Boundary.request input resume =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.request input resume }
+      | ProverRwEffectTape.Boundary.retry k =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.entropyFuel k }
+      | ProverRwEffectTape.Boundary.returned (fail e) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.failed e }
+      | ProverRwEffectTape.Boundary.returned div =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.diverged }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+        {
+          state :=
+            { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy, ledger := s.ledger },
+          signal := Signal.error verifier.Error.Entropy }
+      | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+        match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+        | fail e =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.failed e }
+        | div =>
+          {
+            state :=
+              { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                ledger := s.ledger },
+            signal := Signal.diverged }
+        | ok (status, ledger) =>
+          match status with
+          | core.result.Result.Ok proof =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.published proof (index + 1) }
+          | core.result.Result.Err verifier.Error.Rejected =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.rejected }
+          | core.result.Result.Err e =>
+            {
+              state :=
+                { entropy := (ProverRwEffectOwner.worldOwner nonce s.entropy).world, policy := policy,
+                  ledger := ledger },
+              signal := Signal.error e }) =
+    { state := { entropy := world, policy := next, ledger := ledger }, signal := Signal.error verifier.Error.Entropy }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:40: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp_all only [attempt, ̲hp, ̲he̵,̵h̵b, ̲ne_eq, ̲not_true_eq_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EffectResiduals.lean:52:43: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp_all only [attempt, ̲hp, ̲he,h̵b̵,̵ ̲ne_eq, ̲not_true_eq_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_EffectResiduals.entropy_failed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectResiduals.entropy_diverged' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectResiduals.entropy_request' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectResiduals.entropy_fuel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectResiduals.body_failed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectResiduals.body_diverged' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectResiduals.body_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

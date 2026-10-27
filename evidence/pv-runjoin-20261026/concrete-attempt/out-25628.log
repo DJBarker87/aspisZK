@@ -1,0 +1,162 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EnteredCallback.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  out.2
+in the target expression
+  ok (some (address context.mask_nonce)) = ok ((fun out => out.2.entered) out)
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+schedule : ProverCommitLedger36.Schedule
+unix : Bool
+address : Address
+secret : Secret
+hash : Hash
+binding : Std.Array U8 32#usize
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+s : World
+this : ExternalFuns := ops
+out : PV_RunJoin_ReservationGuards.MaterialStatus × World
+run :
+  (do
+      let (b1, nonce_store1) ←
+        (dictionary ops schedule unix address).reserve s context.statement_digest context.mask_nonce
+      if b1 = true then do
+          let a ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                secret.field_mask_entropy
+          let (r, pre_reserved) ←
+            aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+                aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+                hash binding context a
+                { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              if pre_reserved.consumed = true then do
+                let s ← lift binding.to_slice
+                let a1 ← context.encode
+                let s1 ← lift a1.to_slice
+                let s2 ←
+                  zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                      secret.field_mask_entropy
+                let s3 ←
+                  lift
+                      (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2]
+                          ⋯).to_slice
+                let a2 ← hash s3
+                let source_mask_seed ←
+                  zeroize.Zeroizing.new
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+                let _ ←
+                  zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                      secret.field_mask_entropy
+                ok
+                    (core.result.Result.Ok
+                        ({ mask_nonce := secret.mask_nonce, precommit_binding := binding, reserved_context := context,
+                            leaf_salt_seed := secret.leaf_salt_seed, source_mask_seed := source_mask_seed },
+                          val),
+                      nonce_store1)
+              else
+                ok
+                  (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                    nonce_store1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                      aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                    (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+              ok (r1, nonce_store1)
+        else
+          ok
+            (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+              nonce_store1)) =
+    ok out
+original :
+  ProverRwOuterAfterChecks.afterChecks (dictionary ops schedule unix address) secret hash binding context s = ok out
+accepted : Bool
+after : World
+called :
+  (dictionary ops schedule unix address).reserve s context.statement_digest context.mask_nonce = ok (accepted, after)
+right✝ :
+  (let (b1, nonce_store1) := (accepted, after)
+    if b1 = true then do
+      let a ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            secret.field_mask_entropy
+      let (r, pre_reserved) ←
+        aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+            aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+            hash binding context a
+            { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          if pre_reserved.consumed = true then do
+            let s ← lift binding.to_slice
+            let a1 ← context.encode
+            let s1 ← lift a1.to_slice
+            let s2 ←
+              zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  secret.field_mask_entropy
+            let s3 ←
+              lift
+                  (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2]
+                      ⋯).to_slice
+            let a2 ← hash s3
+            let source_mask_seed ←
+              zeroize.Zeroizing.new
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+            let _ ←
+              zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  secret.field_mask_entropy
+            ok
+                (core.result.Result.Ok
+                    ({ mask_nonce := secret.mask_nonce, precommit_binding := binding, reserved_context := context,
+                        leaf_salt_seed := secret.leaf_salt_seed, source_mask_seed := source_mask_seed },
+                      val),
+                  nonce_store1)
+          else
+            ok
+              (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                nonce_store1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                  aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+          ok (r1, nonce_store1)
+    else
+      ok
+        (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)) =
+    ok out
+state : out.2 = after
+entered : after.entered = some (address context.mask_nonce)
+⊢ ok (some (address context.mask_nonce)) = ok ((fun out => out.2.entered) out)
+'R1Z.PV_RunJoin_EnteredCallback.entered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       69.86 real         1.67 user         6.73 sys
+          2213380096  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              239812  page reclaims
+              313819  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               51609  voluntary context switches
+              382403  involuntary context switches
+           635018725  instructions retired
+           416555734  cycles elapsed
+            12223256  peak memory footprint
+
+exit=1

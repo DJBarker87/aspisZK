@@ -1,0 +1,33 @@
+@R1Z.PV_RunJoin_GuardProjection.guarded : ∀ [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]
+  {S T : Type} (project : S → T) (left : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+  (right : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T)
+  (secret : R1Z.ProverRwRetryModel.Secret) (hash : R1Z.ProverRwRetryModel.Hash)
+  (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext) (s : S),
+  R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+        (left.reserve s context.statement_digest context.mask_nonce) =
+      right.reserve (project s) context.statement_digest context.mask_nonce →
+    R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+        (R1Z.PV_RunJoin_ReservationGuards.guarded left secret hash binding context s) =
+      R1Z.PV_RunJoin_ReservationGuards.guarded right secret hash binding context (project s)
+'R1Z.PV_RunJoin_GuardProjection.guarded' depends on axioms: [propext, Classical.choice, Quot.sound]
+       33.71 real         1.64 user         4.51 sys
+          2503491584  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              374048  page reclaims
+              142206  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               17650  voluntary context switches
+              268710  involuntary context switches
+           376914197  instructions retired
+           213946495  cycles elapsed
+            12469088  peak memory footprint
+
+exit=0

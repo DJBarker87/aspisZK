@@ -1,0 +1,37 @@
+@R1Z.PV_RunJoin_NativePublicReservation.ledger_eq : ∀ {N C : Type} (base : ProverRwFull.ExternalTypes)
+  (ops : R1Z.PV_RunJoin_NativeSelectedInputs.LedgerState base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (a b : R1Z.PV_Src_NativeInput.Input) (secret : R1Z.ProverRwRetryModel.Secret)
+  (s left right : R1Z.PV_RunJoin_NativeSelectedInputs.LedgerState base N C)
+  (leftStatus rightStatus : Aeneas.Std.core.result.Result R1Z.ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+  R1Z.PV_Src_NativeInput.publicInput a = R1Z.PV_Src_NativeInput.publicInput b →
+    R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+          (R1Z.PV_RunJoin_NativeSelectedInputs.ledgerInputs base ops hash a) secret s =
+        Aeneas.Std.Result.ok (leftStatus, left) →
+      R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+            (R1Z.PV_RunJoin_NativeSelectedInputs.ledgerInputs base ops hash b) secret s =
+          Aeneas.Std.Result.ok (rightStatus, right) →
+        left.ledger.model = right.ledger.model
+'R1Z.PV_RunJoin_NativePublicReservation.ledger_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+       17.67 real         1.47 user         2.82 sys
+          3232694272  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              293635  page reclaims
+               63482  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               11963  voluntary context switches
+              127786  involuntary context switches
+           376507642  instructions retired
+           153072735  cycles elapsed
+            11371240  peak memory footprint
+
+exit=0

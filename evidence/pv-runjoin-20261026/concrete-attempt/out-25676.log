@@ -1,0 +1,95 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_OsWorldFrames.lean:20:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (do
+      let event ← some event
+      if event.request = request then
+          some
+            (event.reply,
+              { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+                fileUsed := world.fileUsed + 1, time := world.time, timeUsed := world.timeUsed,
+                workers := world.workers, workerUsed := world.workerUsed })
+        else none) =
+    some (reply, next)
+of `run`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case some
+E File Reply Time Worker : Type
+inst✝ : DecidableEq File
+request : Request File
+world next : World E File Reply Time Worker
+reply : Reply
+event : Event (Request File) Reply
+position : world.files[world.fileUsed]? = some event
+run :
+  (do
+      let event ← some event
+      if event.request = request then
+          some
+            (event.reply,
+              { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+                fileUsed := world.fileUsed + 1, time := world.time, timeUsed := world.timeUsed,
+                workers := world.workers, workerUsed := world.workerUsed })
+        else none) =
+    some (reply, next)
+⊢ next.entropy = world.entropy ∧
+    next.entropyUsed = world.entropyUsed ∧
+      next.time = world.time ∧
+        next.timeUsed = world.timeUsed ∧
+          next.workers = world.workers ∧ next.workerUsed = world.workerUsed ∧ next.fileUsed = world.fileUsed + 1
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_OsWorldFrames.lean:19:24: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [position,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_OsWorldFrames.lean:25:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_OsWorldFrames.time_frame`:
+  [DecidableEq File]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq File] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_OsWorldFrames.lean:35:24: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [position,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_OsWorldFrames.lean:39:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_OsWorldFrames.worker_frame`:
+  [DecidableEq File]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq File] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_OsWorldFrames.lean:49:24: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [position,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_OsWorldFrames.file_frame' depends on axioms: [propext, sorryAx]
+'R1Z.PV_RunJoin_OsWorldFrames.time_frame' depends on axioms: [propext]
+'R1Z.PV_RunJoin_OsWorldFrames.worker_frame' depends on axioms: [propext]
+       36.58 real         1.49 user         4.82 sys
+          2394783744  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              306625  page reclaims
+              175384  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               21182  voluntary context switches
+              284390  involuntary context switches
+           317912412  instructions retired
+           115715541  cycles elapsed
+            11617048  peak memory footprint
+
+exit=1

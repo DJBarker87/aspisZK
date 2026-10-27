@@ -1,0 +1,139 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:96:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Array.update ?v i0 ?x
+in the target expression
+  AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0
+      ((((Std.Array.set state i0 (↑m)[↑0#usize]!).set i1 (↑m)[↑1#usize]!).set i2 (↑m)[↑2#usize]!).set i3
+        (↑m)[↑3#usize]!)
+      (block.wrapping_add 1#usize) =
+    R0PoseidonCopy.ext_groups_loop original
+      ((((Std.Array.set state i0 (↑m)[↑0#usize]!).set i1 (↑m)[↑1#usize]!).set i2 (↑m)[↑2#usize]!).set i3
+        (↑m)[↑3#usize]!)
+      (block.wrapping_add 1#usize)
+
+case pos
+original : State
+remaining : ℕ
+ih :
+  ∀ m < remaining,
+    ∀ (state : State) (block : Usize),
+      ↑block ≤ 4 →
+        Suffix original state block →
+          4 - ↑block = m →
+            AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0 state block =
+              R0PoseidonCopy.ext_groups_loop original state block
+state : State
+block : Usize
+hb : ↑block ≤ 4
+suffix : Suffix original state block
+he : 4 - ↑block = remaining
+hit : ↑block < 4
+hlt : block < 4#usize
+mulcomm : block.wrapping_mul 4#usize = Usize.wrapping_mul 4#usize block
+i0 : Usize := Usize.wrapping_mul 4#usize block
+i1 : Usize := i0.wrapping_add 1#usize
+i2 : Usize := i0.wrapping_add 2#usize
+i3 : Usize := i0.wrapping_add 3#usize
+h0 : ↑i0 = 4 * ↑block
+h1 : ↑i1 = 4 * ↑block + 1
+h2 : ↑i2 = 4 * ↑block + 2
+h3 : ↑i3 = 4 * ↑block + 3
+b0 : ↑i0 < ↑16#usize
+b1 : ↑i1 < ↑16#usize
+b2 : ↑i2 < ↑16#usize
+b3 : ↑i3 < ↑16#usize
+s0 : (↑state)[↑i0]! = (↑original)[↑i0]!
+s1 : (↑state)[↑i1]! = (↑original)[↑i1]!
+s2 : (↑state)[↑i2]! = (↑original)[↑i2]!
+s3 : (↑state)[↑i3]! = (↑original)[↑i3]!
+m : Std.Array AspisBuilderPoseidonReference.aspis_core.field.M31 4#usize
+hm :
+  R0PoseidonCopy.mat4
+      (↑(Array.make 4#usize [(↑original)[↑i0]!, (↑original)[↑i1]!, (↑original)[↑i2]!, (↑original)[↑i3]!] ⋯))[0]!
+      (↑(Array.make 4#usize [(↑original)[↑i0]!, (↑original)[↑i1]!, (↑original)[↑i2]!, (↑original)[↑i3]!] ⋯))[1]!
+      (↑(Array.make 4#usize [(↑original)[↑i0]!, (↑original)[↑i1]!, (↑original)[↑i2]!, (↑original)[↑i3]!] ⋯))[2]!
+      (↑(Array.make 4#usize [(↑original)[↑i0]!, (↑original)[↑i1]!, (↑original)[↑i2]!, (↑original)[↑i3]!] ⋯))[3]! =
+    ok m
+u0 : ∀ (v : State) (x : U32), Array.update v i0 x = ok (Std.Array.set v i0 x)
+u1 : ∀ (v : State) (x : U32), Array.update v i1 x = ok (Std.Array.set v i1 x)
+u2 : ∀ (v : State) (x : U32), Array.update v i2 x = ok (Std.Array.set v i2 x)
+u3 : ∀ (v : State) (x : U32), Array.update v i3 x = ok (Std.Array.set v i3 x)
+⊢ AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0
+      ((((Std.Array.set state i0 (↑m)[↑0#usize]!).set i1 (↑m)[↑1#usize]!).set i2 (↑m)[↑2#usize]!).set i3
+        (↑m)[↑3#usize]!)
+      (block.wrapping_add 1#usize) =
+    R0PoseidonCopy.ext_groups_loop original
+      ((((Std.Array.set state i0 (↑m)[↑0#usize]!).set i1 (↑m)[↑1#usize]!).set i2 (↑m)[↑2#usize]!).set i3
+        (↑m)[↑3#usize]!)
+      (block.wrapping_add 1#usize)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    m
+  has type
+    Std.Array AspisBuilderPoseidonReference.aspis_core.field.M31 4#usize
+  but is expected to have type
+    { l // l.length = ↑4#usize }
+  in the application
+    ↑m
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:63:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:65:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:67:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:69:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:71:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:73:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:75:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:77:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_ExternalBlocksCopy.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ExternalBlocksCopy.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ExternalBlocksCopy.field_entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

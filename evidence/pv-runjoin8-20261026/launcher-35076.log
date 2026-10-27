@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2331); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+          h.public w = x.1 → PV_RunJoin_UnifiedRetry.BodySourceLaw (boundary.sourceBody h x w) (runtime.body h x w)) ∧
+        (∀ (s : State) (k : Aeneas.Std.Usize) (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (next : State),
+            runtime.account.call_mut s k = Aeneas.Std.Result.ok (nonce, next) → next.provider = s.provider) ∧
+          ∀ (w : h.Instance),
+            h.public w = x.1 →
+              ∀ (secret : ProverRwRetryModel.Secret) (s next : State)
+                (status : Aeneas.Std.core.result.Result ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+                runtime.body h x w secret s = Aeneas.Std.Result.ok (status, next) → next.provider = s.provider)
+    (fill :
+      ∀ (p : ProverRwRngCaller.Tape),
+        ↑p.used < (↑p.replies).length →
+          boundary.draw.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8) =
+            ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8))
+    (ledger :
+      ∀ (w : h.Instance),
+        h.public w = x.1 →
+          ∀ (secret : ProverRwRetryModel.Secret) (s next : State)
+            (status : Aeneas.Std.core.result.Result ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+            runtime.body h x w secret s = Aeneas.Std.Result.ok (status, next) →
+              boundary.ledger next =
+                match boundary.reservation secret s with
+                | none => boundary.ledger s
+                | some path =>
+                  (ProverCommitLedger36.reserve boundary.schedule boundary.unix path (boundary.ledger s)).2)
+    (byte_blind :
+      (∀ (secret : ProverRwRetryModel.Secret) (s : State) (kind : ProverCommitEnvironment35.Kind),
+          boundary.fault secret s kind =
+            boundary.schedule (List.length (boundary.ledger s).history) kind (boundary.ledger s).history) ∧
+        (∀ (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+            boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t, rest))) =
+              boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u, rest)))) ∧
+          ∀ (i : Fin 128) (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+            (∀ (j : Fin 128), ↑j < ↑i → t j = u j) → boundary.frame i (t, rest) = boundary.frame i (u, rest))
+    (trace :
+      ∀ (adv : R1Adv K CommitHandle Aux) (w : h.Instance),
+        h.public w = x.1 →
+          ∀ (r : World),
+            (¬∃ i,
+                  ProverCommitFuelJoin22.bad
+                    (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 h B outputs x w)
+                    (queries adv w) i r.coins) →
+              extracted r.coins adv w =
+                (ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+                  h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1) :
+    ProofObligations template outputs x runtime boundary extracted
+'R1Z.PV_RunJoin_TrustEndpoint.complete_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustEndpoint.toPremises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustEndpoint.privacy_headline_deployed_candidate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:12.07
+	Maximum resident set size (kbytes): 4365020
+	Swaps: 0
+	Exit status: 0

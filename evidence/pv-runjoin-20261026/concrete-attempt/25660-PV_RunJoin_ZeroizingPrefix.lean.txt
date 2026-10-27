@@ -1,0 +1,28 @@
+import R1Z.PDict_CodecDictionary
+import R1Z.ProverRwEffectSource
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_ZeroizingPrefix
+open Aeneas Aeneas.Std Result ProverRwFull
+
+/-- Value representation only. No destructor/volatile-store/cleanup effect
+is erased or proved by this carrier definition. -/
+def types (base : ExternalTypes) : ExternalTypes := {base with op3 := fun T => T}
+abbrev native (base : ExternalTypes) := PDict_CodecDictionary.native (types base)
+
+def newValue {Z : Type} (_ : zeroize.Zeroize Z) (z : Z) : Result Z := .ok z
+
+def asMut {T Z : Type} (inst : core.convert.AsMut Z T)
+    (_ : zeroize.Zeroize Z) (value : Z) : Result (T × (T → Z)) :=
+  inst.as_mut value
+
+def selected (base : ExternalTypes) (ops : @ExternalFuns (native base)) :
+    @ExternalFuns (native base) := by
+  letI : ExternalTypes := native base
+  exact {PDict_CodecDictionary.selected (types base) ops with op128 := @newValue,op125 := @asMut}
+
+theorem type_installed (base : ExternalTypes) (Z : Type) :
+    @zeroize.Zeroizing (native base) Z = Z := rfl
+
+#print axioms type_installed
+end R1Z.PV_RunJoin_ZeroizingPrefix

@@ -1,0 +1,37 @@
+import Aeneas.Std
+import Lean.Elab.Tactic
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_BindControl16
+open Aeneas Aeneas.Std Result
+
+theorem congr_bind {α β : Type} (m : Result α) (f g : α → Result β)
+    (h : ∀ x, f x = g x) :
+    (do let x ← m; f x) = (do let x ← m; g x) := by
+  exact congrArg (fun k => m >>= k) (funext h)
+
+#print axioms congr_bind
+
+open Lean Meta Elab Tactic
+private def bindHead (e : Expr) : Bool :=
+  match e.getAppFn.constName? with
+  | some n => n.toString.endsWith ".bind" || n.toString.endsWith ".bind_tc"
+  | none => false
+
+elab "pv_congr_bind16" : tactic => withMainContext do
+  let target ← instantiateMVars (← getMainTarget)
+  unless target.isAppOfArity ``Eq 3 do throwError "expected an equality"
+  let lhs ← whnf target.getAppArgs[1]!
+  let rhs ← whnf target.getAppArgs[2]!
+  unless bindHead lhs && bindHead rhs do throwError "expected two explicit Result bind heads"
+  evalTactic (← `(tactic| apply R1Z.PV_RunJoin_BindControl16.congr_bind))
+  let (vi, next) ← (← getMainGoal).intro1P
+  replaceMainGoal [next]
+  let branches ← next.withContext do
+    let ty ← whnf (← inferType (mkFVar vi))
+    if ty.isAppOfArity ``Prod 2 then
+      return (← next.cases vi).map (·.mvarId)
+    else
+      return #[next]
+  replaceMainGoal branches.toList
+
+end R1Z.PV_RunJoin_BindControl16

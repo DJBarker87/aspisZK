@@ -1,0 +1,49 @@
+{
+  "target": "literal frozen generate_for_mask_nonce source selection with real getrandom/zeroize and process-only seccomp EIO",
+  "source_revision": "92a6c256a6c50a713d1fe356ae87a4908eab07f8",
+  "source_was_uncommitted": true,
+  "source_pins": {
+    "Cargo.toml": {
+      "sha256": "c606d8a02349aad32183f790e50801e62b05fd0cdfdee853436257a20a2c77ac",
+      "bytes": 251
+    },
+    "main.rs": {
+      "sha256": "04b6fa821a4bac302e6fdc99d1df8c8b34cd0f13cda37c5329585f5619a1454f",
+      "bytes": 1242
+    },
+    "selected.rs": {
+      "sha256": "003c228e933c6ac4a2fa4658276a4ffc11eb3e5a4c2f323c5c103282d7acc4fc",
+      "bytes": 1679
+    }
+  },
+  "phases": {
+    "build": {
+      "exit": 0,
+      "metrics": [
+        "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.28",
+        "Maximum resident set size (kbytes): 123156",
+        "Swaps: 0"
+      ]
+    },
+    "run": {
+      "exit": 0,
+      "metrics": [
+        "Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.00",
+        "Maximum resident set size (kbytes): 1936",
+        "Swaps: 0"
+      ]
+    }
+  },
+  "command": "systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 sh /home/dombarker/project-offloads/codex-pv-runjoin-20261026/native-fault/run.sh",
+  "build_command": "cargo build --offline --release -j 4",
+  "print_axioms": "N/A native source-helper observation; separate Lean receipts23404/23405",
+  "caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "kani_runs": 0,
+  "proves_privacy_counterexample": false,
+  "scope": "source helper only; no complete client/artifact/deployment claim"
+}

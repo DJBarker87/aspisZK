@@ -406,3 +406,13 @@ fn pv_src_words_range_counterexample() {
 // Continuation 5: all-field P6 with the actual root helper and no stubs.
 #[path = "pv_srcid3.rs"]
 mod pv_srcid3;
+
+// RunJoin12: fixture-shaped unstubbed shipped/reference association.
+#[path = "pv_runjoin12.rs"]
+mod pv_runjoin12;
+
+#[path = "pv_runjoin12_exact.rs"]
+mod pv_runjoin12_exact;
+
+#[path = "pv_runjoin12_raw.rs"]
+mod pv_runjoin12_raw;

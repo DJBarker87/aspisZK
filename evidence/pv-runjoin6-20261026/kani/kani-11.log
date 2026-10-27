@@ -1,0 +1,123 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+[Kani] Running: `CARGO_ENCODED_RUSTFLAGS="-Coverflow-checks=on-Zunstable-options-Ztrim-diagnostic-paths=no-Zhuman_readable_cgu_names-Zalways-encode-mir--cfg=kani-Zcrate-attr=feature(register_tool)-Zcrate-attr=register_tool(kanitool)--sysroot/home/dombarker/.kani/kani-0.67.0-L/home/dombarker/.kani/kani-0.67.0/lib--externkani--externnoprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib-Cpanic=abort-Csymbol-mangling-version=v0-Zpanic_abort_tests=yes-Zmir-enable-passes=-RemoveStorageMarkers--check-cfg=cfg(kani)-Clinker=echo--kani-compiler-Cllvm-args=--check-version=0.67.0" CARGO_TERM_PROGRESS_WHEN="never" RUSTC="/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler" RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo rustc --target x86_64-unknown-linux-gnu -Zhost-config -Ztarget-applies-to-host --config=host.rustflags=["--cfg=kani_host"] --target-dir /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani --message-format json-diagnostic-rendered-ansi -v -p path+file:///home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani#pv-runjoin-factory-kani@0.0.0 --lib -- "-Cllvm-args=--reachability=harnesses --log-level=info --assertion-reach-checks --harness pv6::native_factory_preserves_nonce --exact"`
+       Fresh libc v0.2.186
+       Fresh cfg-if v1.0.5
+       Fresh getrandom v0.3.4
+       Fresh zeroize v1.9.1
+   Compiling pv-runjoin-factory-kani v0.0.0 (/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani)
+     Running `/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name pv_runjoin_factory_kani --edition=2021 lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debuginfo=2 -C debug-assertions=on --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values())' -C metadata=b7ad671564a8caed -C extra-filename=-1c601bb02a6950d8 --out-dir /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C incremental=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/incremental -L dependency=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/debug/deps --extern getrandom=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/libgetrandom-23da66b4ffdd5586.rmeta --extern libc=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/liblibc-45bb8bf430b7d127.rmeta --extern zeroize=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/libzeroize-1ace1c01030610a4.rmeta '-Cllvm-args=--reachability=harnesses --log-level=info --assertion-reach-checks --harness pv6::native_factory_preserves_nonce --exact' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib' -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0`
+warning: fields `field_mask_entropy` and `leaf_salt_seed` are never read
+  --> selected.rs:14:5
+   |
+12 | pub struct StateOnlyAttemptSecrets {
+   |            ----------------------- fields in this struct
+13 |     mask_nonce: [u8; 32],
+14 |     field_mask_entropy: Zeroizing<[u8; 32]>,
+   |     ^^^^^^^^^^^^^^^^^^
+15 |     leaf_salt_seed: Zeroizing<[u8; 32]>,
+   |     ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.03289642s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.12347797s
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (7)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+warning: Kani currently does not support concurrency. The following constructs will be treated as sequential operations:
+             - atomic_cxchgweak (15)
+             - atomic_load (6)
+             - atomic_store (6)
+         
+
+====== Reachability Analysis Result =======
+Total # items: 628
+Total # statements: 9744
+Total # expressions: 2689
+
+Reachable Items:
+  - function: 624
+  - static item: 4
+
+Statements:
+  - Assert: 178
+  - Goto: 574
+  - Return: 593
+  - Call: 1192
+  - Assign: 2689
+  - Intrinsic: 4
+  - Ignored: 4027
+  - SwitchInt: 384
+  - Drop: 34
+  - Unreachable: 69
+
+Expressions:
+  - Discriminant: 115
+  - Repeat: 9
+  - Cast: 332
+  - Use: 1016
+  - AddressOf: 54
+  - UnaryOp: 107
+  - NullaryOp: 5
+  - CheckedBinaryOp: 103
+  - BinaryOp: 370
+  - Aggregate: 355
+  - Ref: 223
+
+-------------------------------------------
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.42s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.symtab.out /home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out`
+Finished goto-cc in 0.26367828s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out --function _RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce -o /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out`
+Finished goto-cc in 0.21373662s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out'
+Finished goto-instrument in 0.30768466s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out'
+generate function bodies: matched function '__CPROVER_array_copy' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_precondition' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_array_replace' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out'
+Finished goto-instrument in 0.15220265s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out'
+Finished goto-instrument in 0.13291976s
+Thread 0: Checking harness pv6::native_factory_preserves_nonce...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 67 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-pv-runjoin-20261026/factory-kani/target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_runjoin_factory_kani-1c601bb02a6950d8__RNvNtCs6q0fwWLP2Q0_23pv_runjoin_factory_kani3pv630native_factory_preserves_nonce.out --verbosity 9 --json-ui`
+Finished run_cbmc in 0.35537428s
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 476 failed (475 undetermined)
+Failed Checks: call to foreign "C" function `dlsym` is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/2423
+ File: "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.186/src/unix/mod.rs", line 1410, in getrandom::backends::linux_android_with_fallback::init
+
+VERIFICATION:- FAILED
+** WARNING: A Rust construct that is not currently supported by Kani was found to be reachable. Check the results for more details.
+Verification Time: 0.35507724s
+
+Manual Harness Summary:
+Verification failed for - pv6::native_factory_preserves_nonce
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

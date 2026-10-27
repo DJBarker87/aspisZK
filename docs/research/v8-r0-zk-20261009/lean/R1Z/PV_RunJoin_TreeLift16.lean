@@ -1,0 +1,29 @@
+import R1Z.PV_RunJoin_ChunkLift16
+import R1Z.BuilderSemanticBridge
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_TreeLift16
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.BuilderModel
+variable {K : Type} [Field K] [CharP K 0x7fffffff]
+theorem tree (W : RustWitness) (P : RustPublic) (pub : R0P.Public K)
+    (asset : liftU (K := K) P.asset = pub.assetId) (hW : WitnessOk W) : ∀ l, l ≤ 24 → ∃ c, treeCurR W P l = ok c ∧
+    DigestLift c (treeCur (toModel W) (inputLeaf pub (toModel W)) l) ∧ Canon8 c
+  | 0, _ => by
+      obtain ⟨d, hd, hdl, hdc⟩ := noteDigest_lift pub (toModel (K := K) W) (chunksOf W P)
+        (PV_RunJoin_ChunkLift16.chunks W P pub asset hW) 3 (nk 3 (by omega)) (zk _ 3 (by omega))
+      exact ⟨d, hd, hdl, hdc⟩
+  | n + 1, hn => by
+      obtain ⟨c, hc, hcl, hcc⟩ := tree W P pub asset hW n (by omega)
+      have ol := ordered_lift c (W.sibs.val[n]!) _ (digK (K := K) (W.sibs.val[n]!)) (bitB W n) hcl
+        (fun i => rfl) hcc (hW.sibs n (by omega))
+      obtain ⟨d, hd, hdl, hdc⟩ := nodeDigest_lift _ _ _ _ ol.1 ol.2.1 ol.2.2
+      refine ⟨d, ?_, ?_, hdc⟩
+      · show (do let c ← treeCurR W P n; let o := orderedR c (W.sibs.val[n]!) (bitB W n); nodeDigestR o.1 o.2) = _
+        rw [hc]
+        simp only [bind_tc_ok]
+        exact hd
+      · rw [R0Z.WriterRefine.treeCur_succ _ _ n (by omega)]
+        exact hdl
+
+#print axioms tree
+end R1Z.PV_RunJoin_TreeLift16

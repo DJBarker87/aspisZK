@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0124); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+'R1Z.PV_RunJoin_TrustBoundary.outcomes_of_identity' depends on axioms: [propext]
+'R1Z.PV_RunJoin_TrustBoundary.identity_of_outcomes' depends on axioms: [propext]
+'R1Z.PV_RunJoin_TrustBoundary.replayIdentity' depends on axioms: [propext]
+'R1Z.PV_RunJoin_TrustBoundary.model_satisfies' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustBoundary.observation_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustBoundary.initial_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustBoundary.calls_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustBoundary.final_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustBoundary.filesystem_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustBoundary.payload_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustBoundary.event_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustFixtures.satisfies' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustFixtures.both_fibres' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustFixtures.error_is_admitted' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RunJoin_TrustFixtures.error_tag' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RunJoin_TrustSeparation.satisfies' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustSeparation.trace_refinement_is_separate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustSeparation.no_implicit_availability' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustEndpoint.complete_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustEndpoint.toPremises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustEndpoint.privacy_headline_deployed_candidate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_TrustLedger.candidate_proofs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustLedger.privacy_headline_deployed_candidate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_SourceSelectionContract.installed_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SourceSelectionContract.selected_public' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SelectedAdmission.toPremises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NativeSelectedInputs.same_selected_compilation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_NativeSelectedInputs.full_ledger_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_InstalledTransport.endpoint_row_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_InstalledTransport.endpoint_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure R1Z.PV_RunJoin_SourceSelectionContract.Data {CommitHandle : Type} : Type 1
+number of parameters: 1
+fields:
+  R1Z.PV_RunJoin_SourceSelectionContract.Data.selection : R1Z.PV_RunJoin_InstalledFamily.Selection CommitHandle
+  R1Z.PV_RunJoin_SourceSelectionContract.Data.publicBinding : R1Z.PV_RunJoin_InstalledFamily.PublicBinding
+      self.selection
+constructor:
+  R1Z.PV_RunJoin_SourceSelectionContract.Data.mk {CommitHandle : Type}
+    (selection : R1Z.PV_RunJoin_InstalledFamily.Selection CommitHandle)
+    (publicBinding : R1Z.PV_RunJoin_InstalledFamily.PublicBinding selection) :
+    R1Z.PV_RunJoin_SourceSelectionContract.Data
+def R1Z.PV_RunJoin_InstalledFamily.PublicBinding : {CommitHandle : Type} →
+  R1Z.PV_RunJoin_InstalledFamily.Selection CommitHandle → Prop :=
+fun {CommitHandle} selection =>
+  ∀ (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K)
+    (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) (w : h.Instance),
+    h.public w = x.1 →
+      R1Z.PV_Src_NativeInput.publicInput (selection.selected h x w) =
+        R1Z.PV_Src_NativeInput.publicInput (selection.publicRecord x)
+'R1Z.PV_RunJoin_CausalTrustLedger.initial_and_causal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_JoinedInstallation.identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_JoinedInstallation.public_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.69
+	Maximum resident set size (kbytes): 4363828
+	Swaps: 0
+	Exit status: 0

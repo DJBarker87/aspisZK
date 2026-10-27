@@ -1,0 +1,66 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0950); env=J
+slot: /tmp/aspis-r0-lean-slot-2.lock
+            R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+    (observerOracle :
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N L C) →
+            List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+    (ideal :
+      (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+          R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+            R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+        R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+          R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+            R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) :
+    R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C
+structure R1Z.PV_RunJoin_Boundary.Data [ProverRwFull.ExternalTypes] {CommitHandle Aux Coins N L C : Type}
+  (runtime : R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C) (Context Rest : Type) : Type 1
+number of parameters: 10
+fields:
+  R1Z.PV_RunJoin_Boundary.Data.sourceBody : (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        h.Instance → R1Z.PV_RunJoin_UnifiedRetry.SourceBody (R1Z.PV_RunJoin_Deployed.State N L C)
+  R1Z.PV_RunJoin_Boundary.Data.draw : ProverRwRngCaller.Draw64 ProverRwRngCaller.Tape
+  R1Z.PV_RunJoin_Boundary.Data.law : Context → R1Z.ProverCommitPublicNonce40.Raw → ℚ
+  R1Z.PV_RunJoin_Boundary.Data.frame : Fin 128 → (Fin 128 → R1Z.ProverCommitPublicNonce40.Raw) × Rest → Context
+  R1Z.PV_RunJoin_Boundary.Data.coordinates : Coins ≃ (Fin 128 → R1Z.ProverCommitPublicNonce40.Raw) × Rest
+  R1Z.PV_RunJoin_Boundary.Data.nativeWeight : Coins → ℚ
+  R1Z.PV_RunJoin_Boundary.Data.ledger : R1Z.PV_RunJoin_Deployed.State N L C → R1Z.ProverCommitLedger36.State
+  R1Z.PV_RunJoin_Boundary.Data.reservation : R1Z.ProverRwRetryModel.Secret →
+      R1Z.PV_RunJoin_Deployed.State N L C → Option R1Z.ProverCommitLedger36.Path
+  R1Z.PV_RunJoin_Boundary.Data.schedule : R1Z.ProverCommitLedger36.Schedule
+  R1Z.PV_RunJoin_Boundary.Data.unix : Bool
+  R1Z.PV_RunJoin_Boundary.Data.fault : R1Z.ProverRwRetryModel.Secret →
+      R1Z.PV_RunJoin_Deployed.State N L C → R1Z.ProverCommitEnvironment35.Kind → R1Z.ProverCommitLedger36.Action
+constructor:
+  R1Z.PV_RunJoin_Boundary.Data.mk [ProverRwFull.ExternalTypes] {CommitHandle Aux Coins N L C : Type}
+    {runtime : R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C} {Context Rest : Type}
+    (sourceBody :
+      (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          h.Instance → R1Z.PV_RunJoin_UnifiedRetry.SourceBody (R1Z.PV_RunJoin_Deployed.State N L C))
+    (draw : ProverRwRngCaller.Draw64 ProverRwRngCaller.Tape) (law : Context → R1Z.ProverCommitPublicNonce40.Raw → ℚ)
+    (frame : Fin 128 → (Fin 128 → R1Z.ProverCommitPublicNonce40.Raw) × Rest → Context)
+    (coordinates : Coins ≃ (Fin 128 → R1Z.ProverCommitPublicNonce40.Raw) × Rest) (nativeWeight : Coins → ℚ)
+    (ledger : R1Z.PV_RunJoin_Deployed.State N L C → R1Z.ProverCommitLedger36.State)
+    (reservation :
+      R1Z.ProverRwRetryModel.Secret → R1Z.PV_RunJoin_Deployed.State N L C → Option R1Z.ProverCommitLedger36.Path)
+    (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+    (fault :
+      R1Z.ProverRwRetryModel.Secret →
+        R1Z.PV_RunJoin_Deployed.State N L C → R1Z.ProverCommitEnvironment35.Kind → R1Z.ProverCommitLedger36.Action) :
+    R1Z.PV_RunJoin_Boundary.Data runtime Context Rest
+'R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_JoinedCausalHeadline.proofs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_JoinedCausalHeadline.privacy_headline_deployed_candidate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_TrustEndpoint.toPremises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustSeparation.trace_refinement_is_separate' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:05.00
+	Maximum resident set size (kbytes): 4355840
+	Swaps: 0
+	Exit status: 0

@@ -1,0 +1,72 @@
+import R1Z.PV_RunJoin_RootLoop
+import R1Z.PV_Src_CanonicalRoots
+import R1FrozenEmptyRoots
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_RootCanonical
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+open PV_RunJoin_RootLoop
+local notation "F" => ZMod AspisCircleGroupOrder.P
+abbrev model (a : Digest) : Fin 8 → F := fun i => liftU a.val[i.val]!
+
+theorem canonical_injective (a b : Digest) (ha : Canon8 a) (hb : Canon8 b)
+    (same : model a = model b) : a = b := by
+  apply BuilderRecordCanonical.array_ext
+  intro j hj
+  apply UScalar.eq_of_val_eq
+  have h := congrArg (fun d : Fin 8 → F => (d ⟨j,hj⟩).val) same
+  change a.val[j]!.val % 2147483647 = b.val[j]!.val % 2147483647 at h
+  simpa only [Nat.mod_eq_of_lt (ha j hj),Nat.mod_eq_of_lt (hb j hj)] using h
+
+theorem table_model (l : Fin 21) :
+    model PV_Src_CanonicalRoots.table.val[l.val]! =
+      AspisR1.AppendNode.frozenEmpty (K := F) l := by
+  funext i
+  change liftU ((PV_Src_CanonicalRoots.table.val[l.val]!).val[i.val]!) = _
+  rw [PV_Src_CanonicalRoots.at_level,arr8_get _ i.val i.isLt]
+  simp only [model,liftU,PV_Src_CanonicalRoots.word,UScalar.ofNatCore_val_eq,
+    AspisR1.AppendNode.frozenEmpty]
+
+theorem zero_model : model (Array.repeat 8#usize 0#u32) = fun _ => 0 := by
+  funext i
+  simp only [model,Array.repeat, List.getElem!_replicate, i.isLt, if_true,
+    liftU,UScalar.ofNatCore_val_eq,Nat.cast_zero]
+
+/-- Precisely the remaining SOURCE parent refinement, including totality and
+canonical output words. This is a P hypothesis; it is not an OS/toolchain
+trust item and is not asserted proved by the fixed table's field recurrence. -/
+def ParentRefinement [ExternalLinear] : Prop :=
+  ∀ a b : Digest, Canon8 a → Canon8 b →
+    ∃ out, format.pool_v1_tree_parent a b = ok out ∧ Canon8 out ∧
+      model out = R0P.nodeCompress (model a) (model b)
+
+/-- Use the already checked field recurrence symbolically. No concrete
+Poseidon execution, full recurrence reduction or numeric table replay occurs. -/
+theorem source_roots [ExternalLinear] (parent : ParentRefinement) :
+    pair_trace.pair_empty_roots = ok PV_Src_CanonicalRoots.table := by
+  apply PV_RunJoin_RootLoop.roots
+  · have hz : Canon8 (Array.repeat 8#usize 0#u32) := by
+      intro j hj
+      simp only [Array.repeat,List.getElem!_replicate,hj,if_true,UScalar.ofNatCore_val_eq]
+      decide
+    obtain ⟨out,run,canonical,meaning⟩ := parent _ _ hz hz
+    have same : model out = model PV_Src_CanonicalRoots.table.val[0]! := by
+      simp only [meaning,zero_model,table_model]
+      exact AspisR1.FrozenEmptyRoots.initial.symm
+    rw [canonical_injective out _ canonical (PV_Src_CanonicalRoots.canonical 0) same] at run
+    exact run
+  · intro l
+    obtain ⟨out,run,canonical,meaning⟩ := parent _ _
+      (PV_Src_CanonicalRoots.canonical l.castSucc) (PV_Src_CanonicalRoots.canonical l.castSucc)
+    have same : model out = model PV_Src_CanonicalRoots.table.val[l.val+1]! := by
+      simp only [meaning,table_model]
+      exact (AspisR1.FrozenEmptyRoots.successor l).symm
+    rw [canonical_injective out _ canonical (PV_Src_CanonicalRoots.canonical l.succ) same] at run
+    exact run
+
+#print axioms canonical_injective
+#print axioms table_model
+#print axioms zero_model
+#print axioms source_roots
+end R1Z.PV_RunJoin_RootCanonical

@@ -1,0 +1,169 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:19:2: error: unsolved goals
+case this
+CommitHandle Aux : Type
+v : View K₀ CommitHandle Aux Batched.R1Bat
+log : List ProverCommitReencode16.Entry
+nonempty : log ≠ []
+x✝ : Option PhaseWireOrdered16.OrderedChallenges
+ch✝ : PhaseWireOrdered16.OrderedChallenges
+heq✝ : ProverCommitReencode16.recover v log = some ch✝
+empty :
+  (have transcriptLength := TranscriptR1.schedule.length;
+    have openingLength := (PhaseWireLog2Bin.opens ch✝.algebra).length;
+    List.take transcriptLength log ++
+        ProverCommitReencode16.reindex ch✝ (List.take openingLength (List.drop transcriptLength log)) ++
+      List.drop (transcriptLength + openingLength) log) =
+    []
+⊢ ?m.49
+
+case h_2
+CommitHandle Aux : Type
+v : View K₀ CommitHandle Aux Batched.R1Bat
+log : List ProverCommitReencode16.Entry
+nonempty : log ≠ []
+x✝ : Option PhaseWireOrdered16.OrderedChallenges
+ch✝ : PhaseWireOrdered16.OrderedChallenges
+heq✝ : ProverCommitReencode16.recover v log = some ch✝
+empty :
+  (have transcriptLength := TranscriptR1.schedule.length;
+    have openingLength := (PhaseWireLog2Bin.opens ch✝.algebra).length;
+    List.take transcriptLength log ++
+        ProverCommitReencode16.reindex ch✝ (List.take openingLength (List.drop transcriptLength log)) ++
+      List.drop (transcriptLength + openingLength) log) =
+    []
+this : ?m.49
+⊢ False
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:20:17: error: unexpected identifier; expected prec
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:26:57: error: unexpected identifier; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:27:64: error: unexpected token 'variable'; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:41:70: error: unsolved goals
+case this
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+h : HonestProver K
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+H : List UInt8 → OracleAnswer
+secret : SecP
+digest : OracleAnswer
+answers : Pos1 Pr.E₁ Pr.E₂ → OracleAnswer
+empty :
+  List.map
+        (fun j =>
+          (TranscriptR1.addr j
+              (recP W x (view h B outputs x w (chOf W (trOf answers)) (tapeR W Pr answers)) (trOf answers)
+                (rootsOf answers)),
+            H
+              (TranscriptR1.addr j
+                (recP W x (view h B outputs x w (chOf W (trOf answers)) (tapeR W Pr answers)) (trOf answers)
+                  (rootsOf answers)))))
+        TranscriptR1.schedule ++
+      List.map
+        (fun c =>
+          (Pr.caddr h w x secret digest (tapeR W Pr answers) (restOf answers) (chOf W (trOf answers)) (cposOf c),
+            H (Pr.caddr h w x secret digest (tapeR W Pr answers) (restOf answers) (chOf W (trOf answers)) (cposOf c))))
+        (Pr.openList (chOf W (trOf answers))) =
+    []
+⊢ ?m.51
+
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+h : HonestProver K
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+H : List UInt8 → OracleAnswer
+secret : SecP
+digest : OracleAnswer
+answers : Pos1 Pr.E₁ Pr.E₂ → OracleAnswer
+empty :
+  List.map
+        (fun j =>
+          (TranscriptR1.addr j
+              (recP W x (view h B outputs x w (chOf W (trOf answers)) (tapeR W Pr answers)) (trOf answers)
+                (rootsOf answers)),
+            H
+              (TranscriptR1.addr j
+                (recP W x (view h B outputs x w (chOf W (trOf answers)) (tapeR W Pr answers)) (trOf answers)
+                  (rootsOf answers)))))
+        TranscriptR1.schedule ++
+      List.map
+        (fun c =>
+          (Pr.caddr h w x secret digest (tapeR W Pr answers) (restOf answers) (chOf W (trOf answers)) (cposOf c),
+            H (Pr.caddr h w x secret digest (tapeR W Pr answers) (restOf answers) (chOf W (trOf answers)) (cposOf c))))
+        (Pr.openList (chOf W (trOf answers))) =
+    []
+this : ?m.51
+⊢ False
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:44:13: error: unexpected token ':='; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:45:48: error: unexpected token 'have'; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:67:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = false) (realOut W Pr h B outputs x w (W.look r.1) r.2)
+in the target expression
+  (have H := W.look r.1;
+      have out := realOut W Pr h B outputs x w H r.2;
+      match FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = false) out with
+      | none => { disclosed := W.failView, observerOracle := runLog (adv.prog W.failView []) H W.qmax }
+      | some k =>
+        { disclosed := (out k).view,
+          observerOracle := (out k).log ++ runLog (adv.prog (out k).view (out k).log) H W.qmax }).observerOracle ≠
+    []
+
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+N : ℕ
+P : Challenges K → Prop
+Vp : (h : HonestProver K) → Challenges K → h.Instance → Prop
+h : HonestProver K
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+adv : R1Adv K CommitHandle Aux
+x : Statement K CommitHandle
+w : h.Instance
+r : W.Tab × (Fin N → SecP)
+k : Fin N
+selected :
+  FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = false) (realOut W Pr h B outputs x w (W.look r.1) r.2) =
+    some k
+⊢ (have H := W.look r.1;
+      have out := realOut W Pr h B outputs x w H r.2;
+      match FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = false) out with
+      | none => { disclosed := W.failView, observerOracle := runLog (adv.prog W.failView []) H W.qmax }
+      | some k =>
+        { disclosed := (out k).view,
+          observerOracle := (out k).log ++ runLog (adv.prog (out k).view (out k).log) H W.qmax }).observerOracle ≠
+    []
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:69:13: error: unexpected token ':='; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EncodingSupport.lean:71:40: error: unexpected token '#print'; expected ':'
+'R1Z.PV_RunJoin_EncodingSupport.encode_nonempty' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodingSupport.attempt_log_nonempty' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_EncodingSupport.real_success_log_nonempty' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

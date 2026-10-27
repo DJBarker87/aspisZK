@@ -1,0 +1,77 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_BodyFootprint.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  let (r, after) := (material, after)
+  ProverRwBodyStoreSource.afterReserve store pub compiled variant hash context binding secret r after
+in the target expression
+  ProverRwBodyStore.Keeps after
+    (ProverRwBodyStoreSource.afterReserve store pub compiled variant hash context binding secret material after)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+S : Type
+P : S → Prop
+store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S
+pub : Pub
+compiled : Compiled
+variant : transport.Variant
+hash : Hash
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+binding : Std.Array U8 32#usize
+secret : Secret
+s : S
+initial : P s
+callback :
+  ∀ (statement nonce : Std.Array U8 32#usize) (accepted : Bool) (after : S),
+    store.reserve s statement nonce = Result.ok (accepted, after) → P after
+out : core.result.Result (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) verifier.Error × S
+run✝ :
+  (do
+      let (r, after) ←
+        aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+            store secret hash binding context s
+      ProverRwBodyStoreSource.afterReserve store pub compiled variant hash context binding secret r after) =
+    Result.ok out
+material :
+  core.result.Result
+    (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+      aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+    aspis_prover.state_only_hiding.StateOnlyMaskBuildError
+after : S
+reserved :
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1 store
+      secret hash binding context s =
+    Result.ok (material, after)
+run :
+  (let (r, after) := (material, after)
+    ProverRwBodyStoreSource.afterReserve store pub compiled variant hash context binding secret r after) =
+    Result.ok out
+reserved_property :
+  Post (fun out => P out.2)
+    (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+      store secret hash binding context s)
+property : (fun out => P out.2) (material, after)
+kept :
+  ProverRwBodyStore.Keeps after
+    (ProverRwBodyStoreSource.afterReserve store pub compiled variant hash context binding secret material after)
+⊢ P out.2
+'R1Z.PV_RunJoin_BodyFootprint.with_attempt' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_BodyFootprint.caller' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       32.83 real         1.56 user         4.20 sys
+          3077472256  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              135773  page reclaims
+              238014  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               52723  voluntary context switches
+              238728  involuntary context switches
+           611949344  instructions retired
+           299327632  cycles elapsed
+            11584256  peak memory footprint
+
+exit=1

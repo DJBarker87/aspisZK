@@ -1,0 +1,437 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:17:86: error: unsolved goals
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+index : ℕ
+s next : State N L C
+nonce : Std.Array U8 32#usize
+provider : Tape
+error : StateOnlyAttemptEntropyError
+policy : account.call_mut s (ProverCommitRetrySource34.word index) = ok (nonce, next)
+owner :
+  StateOnlyAttemptSecrets.generate_with Tape.Insts.Prover_rw_rng_callerDraw64 nonce next.provider =
+    ok (provider, core.result.Result.Err error)
+⊢ (let (nonce, next) := (nonce, next)
+    do
+    let (provider, status) ←
+      StateOnlyAttemptSecrets.generate_with Tape.Insts.Prover_rw_rng_callerDraw64 nonce next.provider
+    match status with
+      | core.result.Result.Err a =>
+        ok
+          (core.result.Result.Err ProverRwFull.verifier.Error.Entropy,
+            { provider := provider, policy := next.policy, ledger := next.ledger, client := next.client })
+      | core.result.Result.Ok secret =>
+        ok
+          (core.result.Result.Ok (PV_RunJoin_SourceBinding.secret secret),
+            { provider := provider, policy := next.policy, ledger := next.ledger, client := next.client })) =
+    ok
+      (core.result.Result.Err ProverRwFull.verifier.Error.Entropy,
+        { provider := provider, policy := next.policy, ledger := next.ledger, client := next.client })
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:18:28: warning: This simp argument is unused:
+  owner
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵n̵t̵r̵o̵p̵y̵,̵p̵o̵l̵i̵c̵y̵,̵o̵w̵n̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲e̲n̲t̲r̲o̲p̲y̲,̲ ̲p̲o̲l̲i̲c̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:25:117: error: unsolved goals
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+index : ℕ
+s next : State N L C
+nonce : Std.Array U8 32#usize
+provider : Tape
+secret : StateOnlyAttemptSecrets
+policy : account.call_mut s (ProverCommitRetrySource34.word index) = ok (nonce, next)
+owner :
+  StateOnlyAttemptSecrets.generate_with Tape.Insts.Prover_rw_rng_callerDraw64 nonce next.provider =
+    ok (provider, core.result.Result.Ok secret)
+⊢ (let (nonce, next) := (nonce, next)
+    do
+    let (provider, status) ←
+      StateOnlyAttemptSecrets.generate_with Tape.Insts.Prover_rw_rng_callerDraw64 nonce next.provider
+    match status with
+      | core.result.Result.Err a =>
+        ok
+          (core.result.Result.Err ProverRwFull.verifier.Error.Entropy,
+            { provider := provider, policy := next.policy, ledger := next.ledger, client := next.client })
+      | core.result.Result.Ok secret =>
+        ok
+          (core.result.Result.Ok (PV_RunJoin_SourceBinding.secret secret),
+            { provider := provider, policy := next.policy, ledger := next.ledger, client := next.client })) =
+    ok
+      (core.result.Result.Ok (PV_RunJoin_SourceBinding.secret secret),
+        { provider := provider, policy := next.policy, ledger := next.ledger, client := next.client })
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:26:28: warning: This simp argument is unused:
+  owner
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵n̵t̵r̵o̵p̵y̵,̵p̵o̵l̵i̵c̵y̵,̵o̵w̵n̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲e̲n̲t̲r̲o̲p̲y̲,̲ ̲p̲o̲l̲i̲c̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:30:88: error: unsolved goals
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next : State N L C
+error : ProverRwFull.verifier.Error
+he : entropy account index s = ok (core.result.Result.Err error, next)
+⊢ (let (status, next) := (core.result.Result.Err error, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error error), next)
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:36:57: error: unsolved goals
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.retry, final)
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:37:24: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲he,h̵ ̲b,̵b̵ind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:42:62: error: unsolved goals
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+proof : ProverRwRetryModel.Proof
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hb : body secret next = ok (core.result.Result.Ok proof, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.done proof, final)
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:43:24: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [attempt, ̲he,h̵ ̲b,̵b̵ind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:49:89: error: unsolved goals
+case Parse
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.Parse = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Parse, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.Parse), final)
+
+case Semantic
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.Semantic = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Semantic, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.Semantic), final)
+
+case Transcript
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.Transcript = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Transcript, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.Transcript), final)
+
+case Relation
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.Relation = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Relation, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.Relation), final)
+
+case Merkle
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.Merkle = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Merkle, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.Merkle), final)
+
+case Query
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.Query = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Query, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.Query), final)
+
+case Checkpoint
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.Checkpoint = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Checkpoint, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.Checkpoint), final)
+
+case Allocation
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.Allocation = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Allocation, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.Allocation), final)
+
+case AttemptsExhausted
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.AttemptsExhausted = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.AttemptsExhausted, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.AttemptsExhausted), final)
+
+case Entropy
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L C : Type
+account : ProverRwEffectCallback.Account (State N L C)
+body : Body (State N L C)
+index : ℕ
+s next final : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy account index s = ok (core.result.Result.Ok secret, next)
+hf : ¬ProverRwFull.verifier.Error.Entropy = ProverRwFull.verifier.Error.Rejected
+hb : body secret next = ok (core.result.Result.Err ProverRwFull.verifier.Error.Entropy, final)
+⊢ (let (status, next) := (core.result.Result.Ok secret, next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← body secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)) =
+    ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error ProverRwFull.verifier.Error.Entropy), final)
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:50:41: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp_all only [attempt, ̲he̵,̵h̵b, ̲bind_tc_ok, ̲ne_eq, ̲not_true_eq_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_UnifiedPaths.lean:50:44: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp_all only [attempt, ̲he,h̵ ̲b,̵b̵ind_tc_ok, ̲ne_eq, ̲not_true_eq_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_UnifiedPaths.entropy_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_UnifiedPaths.entropy_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_UnifiedPaths.stopped_entropy' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_UnifiedPaths.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_UnifiedPaths.successful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_UnifiedPaths.fatal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_UnifiedPaths.rejected_next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       60.71 real         1.84 user         6.88 sys
+          2440527872  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              184739  page reclaims
+              336087  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               49846  voluntary context switches
+              374397  involuntary context switches
+           380762351  instructions retired
+           150004774  cycles elapsed
+            11256528  peak memory footprint
+
+exit=1

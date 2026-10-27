@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+"""Read-only collection of focused proof receipts; never starts a build."""
+import hashlib, json, pathlib, re, subprocess, sys
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+DEST = pathlib.Path(__file__).resolve().parent
+HOST = 'dombarker@100.108.41.90'
+REMOTE = '/home/dombarker/project-offloads/aspis-joint-20261019'
+T = '/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
+for attempt, module, revision in zip(sys.argv[1::3], sys.argv[2::3], sys.argv[3::3]):
+    local = ROOT / 'docs/research/v8-r0-zk-20261009/lean' / (module + '.lean')
+    snap = DEST / f'{attempt}-{module.split("/")[-1]}.lean.txt'
+    source = snap.read_bytes() if snap.exists() else local.read_bytes()
+    snap.write_bytes(source)
+    logs = {}
+    for kind, remote in [('out',f'{T}/out-{attempt}.log'), ('time',f'{T}/time-{attempt}.log'),
+                         ('sha',f'{T}/sha-{attempt}.txt')]:
+        raw = subprocess.check_output(['ssh',HOST,'cat',remote])
+        (DEST / f'{kind}-{attempt}.log').write_bytes(raw)
+        logs[kind] = raw.decode()
+    digest = hashlib.sha256(source).hexdigest()
+    assert logs['sha'].split()[0] == digest
+    imports = [line.split()[1] for line in source.decode().splitlines() if line.startswith('import ')]
+    dep_hashes = {}
+    for dep in imports:
+        path = dep.replace('.','/')
+        if dep.startswith('Mathlib.'):
+            package = '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib'
+            objects, sources = package + '/.lake/build/lib/lean', package
+        else:
+            objects, sources = REMOTE + '/objects', REMOTE + '/sources'
+        object_pin = subprocess.check_output(['ssh',HOST,'sha256sum',f'{objects}/{path}.olean']).decode().strip()
+        source_pin = subprocess.run(['ssh',HOST,'sha256sum',f'{sources}/{path}.lean'],capture_output=True,text=True)
+        dep_hashes[dep] = [object_pin,source_pin.stdout.strip() if source_pin.returncode == 0 else 'SOURCE NOT PRESENT IN SHARED SOURCE ROOT: ' + f'{sources}/{path}.lean']
+    fingerprint = hashlib.sha256(json.dumps(dep_hashes,sort_keys=True).encode()).hexdigest()
+    axioms = re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)", logs['out'])
+    receipt = dict(attempt=int(attempt),target=module,source_revision=revision,
+        source_sha256=digest,launcher_dependency_fingerprint="none",postrun_direct_dependency_fingerprint=fingerprint,direct_dependencies=dep_hashes,
+        command=f'sh /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh {attempt} {module} J 7000 8',
+        caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=128,LeanM=7000),
+        axioms=axioms,exit=[s for s in logs['out'].splitlines() if s.startswith('exit=')],
+        time=[s.strip() for s in logs['time'].splitlines() if any(k in s for k in ['Elapsed','Maximum resident','Swaps:','Exit status:'])],
+        source_snapshot=snap.name)
+    (DEST / f'receipt-{attempt}.json').write_text(json.dumps(receipt,indent=2)+'\n')

@@ -1,0 +1,30 @@
+@R1Z.PV_RunJoin_NativeSelectedInputs.same_selected_compilation : ∀ {N C : Type} (base : ProverRwFull.ExternalTypes)
+  (ops : R1Z.PV_RunJoin_NativeSelectedInputs.SourceState base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (i : R1Z.PV_Src_NativeInput.Input) (s : R1Z.PV_RunJoin_NativeSelectedInputs.SourceState base N C),
+  (R1Z.PV_RunJoin_NativeSelectedInputs.inputs base ops hash i).compiled s =
+    R1Z.PV_RunJoin_NominalCompiledData.compiled base i.compiled
+'R1Z.PV_RunJoin_NativeSelectedInputs.same_selected_compilation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+       35.63 real         1.55 user         4.76 sys
+          2166669312  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              363818  page reclaims
+              166861  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               16260  voluntary context switches
+              278607  involuntary context switches
+           352774381  instructions retired
+           134309691  cycles elapsed
+            11158248  peak memory footprint
+
+exit=0

@@ -1,0 +1,30 @@
+@R1Z.PV_RunJoin_OsWorld.time_at : ∀ {E File Reply Time Worker : Type}
+  (world : R1Z.PV_RunJoin_OsWorld.World E File Reply Time Worker) (outcome : Time),
+  world.time[world.timeUsed]? = some outcome →
+    R1Z.PV_RunJoin_OsWorld.timeStep world =
+      some
+        (outcome,
+          { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+            fileUsed := world.fileUsed, time := world.time, timeUsed := world.timeUsed + 1, workers := world.workers,
+            workerUsed := world.workerUsed })
+'R1Z.PV_RunJoin_OsWorld.time_at' depends on axioms: [propext]
+        3.26 real         1.13 user         1.17 sys
+          3556376576  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              284111  page reclaims
+                 129  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                9081  voluntary context switches
+                2429  involuntary context switches
+           327215723  instructions retired
+           119394990  cycles elapsed
+            11109072  peak memory footprint
+
+exit=0

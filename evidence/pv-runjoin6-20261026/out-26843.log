@@ -1,0 +1,57 @@
+@R1Z.PV_RunJoin_LedgerBoundaryEffects.fill_field : ∀ [inst : ProverRwFull.ExternalTypes]
+  {CommitHandle Aux Coins N C Context Rest : Type} (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (world : R1Z.PV_RunJoin_CompletedWorld.Data Coins N R1Z.PV_RunJoin_LedgerWorld.World C)
+  (policy : R1Z.ProverRwEffectCallback.Account N)
+  (inputs :
+    (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle → h.Instance → R1Z.PV_RunJoin_LedgerBody.Inputs N C)
+  (common : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle → R1Z.PV_RunJoin_LedgerBody.Inputs N C)
+  (disclosed :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World C) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (oracle :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World C) →
+          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+  (ideal :
+    (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+        R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle)
+  (d :
+    R1Z.PV_RunJoin_Boundary.Data
+      (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal)
+      Context Rest)
+  (p : ProverRwRngCaller.Tape),
+  (R1Z.PV_RunJoin_LedgerBoundary.boundary schedule unix address world policy inputs common disclosed oracle ideal x
+            d).draw.fill
+      p (Aeneas.Std.Array.repeat 64#usize 0#u8) =
+    ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8)
+'R1Z.PV_RunJoin_LedgerBoundaryEffects.fill_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+        8.09 real         1.41 user         1.89 sys
+          3347791872  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              285171  page reclaims
+               10013  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                6791  voluntary context switches
+               43924  involuntary context switches
+           399689977  instructions retired
+           172558784  cycles elapsed
+            11715328  peak memory footprint
+
+exit=0

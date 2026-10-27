@@ -1,0 +1,26 @@
+@R1Z.PV_RunJoin_Follows.continuation : ∀ {A B C : Type} (project : B → A) (final : C → A) (small : Aeneas.Std.Result A)
+  (middle : Aeneas.Std.Result B) (large : B → Aeneas.Std.Result C),
+  R1Z.PV_RunJoin_Follows.Follows project small middle →
+    (∀ (b : B) (c : C), large b = Aeneas.Std.Result.ok c → final c = project b) →
+      R1Z.PV_RunJoin_Follows.Follows final small (middle >>= large)
+'R1Z.PV_RunJoin_Follows.continuation' depends on axioms: [propext]
+       19.99 real         1.51 user         3.01 sys
+          3123429376  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              281512  page reclaims
+               71054  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               13704  voluntary context switches
+              152315  involuntary context switches
+           377769350  instructions retired
+           158281032  cycles elapsed
+            11371264  peak memory footprint
+
+exit=0

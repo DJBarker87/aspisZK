@@ -1,0 +1,16 @@
+{
+  "module": "crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs",
+  "gate": "#[cfg(not(target_os = \"solana\"))]",
+  "gate_source": "crates/aspis-statement/src/pool_v1/mod.rs:21-22",
+  "parent_gate": "crates/aspis-statement/src/lib.rs:24-25: cfg(any(not(target_os = \"solana\"), feature = \"pool-v1-kernel\"))",
+  "default_program_features": [
+    "aspis-r1-cost-probe/optimized-terminal",
+    "aspis-r1-cost-probe/program-build",
+    "aspis-statement/r0",
+    "aspis-statement/pool-v1-kernel"
+  ],
+  "pool_program_features": [
+    "aspis-statement/pool-v1-kernel"
+  ],
+  "conclusion": "The CopyRecords module is excluded on target_os=solana regardless of those features. Gate (a) is nevertheless required after final source change."
+}

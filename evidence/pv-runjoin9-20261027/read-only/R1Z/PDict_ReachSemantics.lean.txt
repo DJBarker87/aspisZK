@@ -1,0 +1,23 @@
+import R1Z.PDict_ReachPublicationFrame
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_ReachErase
+open Aeneas Aeneas.Std ProverRwFull
+variable [ExternalTypes]
+
+/-- Full symbolic source-function equality for `prover.prove_from_semantics`. -/
+theorem erase_421 (ops other : ExternalFuns) :
+    @prover.prove_from_semantics _ (replace ops other) = @prover.prove_from_semantics _ ops := by
+  delta prover.prove_from_semantics
+  try simp only [erase_341 ops other, erase_372 ops other, erase_392 ops other, erase_420 ops other]
+  all_goals rfl
+#print axioms erase_421
+
+/-- Full symbolic source-function equality for `prover.semantic_error`. -/
+theorem erase_422 (ops other : ExternalFuns) :
+    @prover.semantic_error _ (replace ops other) = @prover.semantic_error _ ops := by
+  delta prover.semantic_error
+  all_goals rfl
+#print axioms erase_422
+
+end R1Z.PDict_ReachErase

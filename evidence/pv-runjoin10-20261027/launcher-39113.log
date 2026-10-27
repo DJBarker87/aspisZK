@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0229); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+            modelRows (join.cp.toM s).1.1 R1Z.PV_L2_Premises.Row.v368)
+    (V369 :
+      ∀ (s : join.cp.S),
+        (¬∃ i, R1Z.ProverCommitFuelJoin22.bad old queries i (join.cp.toM s)) →
+          realRows (join.cp.toR s) R1Z.PV_L2_Premises.Row.v369 =
+            modelRows (join.cp.toM s).1.1 R1Z.PV_L2_Premises.Row.v369)
+    (V380_inversion :
+      ∀ (s : join.cp.S),
+        (¬∃ i, R1Z.ProverCommitFuelJoin22.bad old queries i (join.cp.toM s)) →
+          realRows (join.cp.toR s) R1Z.PV_L2_Premises.Row.inversion380 =
+            modelRows (join.cp.toM s).1.1 R1Z.PV_L2_Premises.Row.inversion380) :
+    R1Z.PV_L2_Premises.PV_L2_Premises join realRun modelRun realRows modelRows
+@R1Z.PV_L2_PremisesBound.joint_test_bound : ∀ {R M V Proof Obs : Type} [inst : Fintype R] [inst_1 : Fintype M]
+  [Nonempty M] {runtime : R → V} {model : M → V} {old : Fin 8 → M → Prop}
+  {queries : M → List R1Z.ProverCommitSeedEvent19.Entry}
+  (join : R1Z.ProverCommitFuelJoin22.RunJoin runtime model old queries) (realRun : R → R1Z.PV_L2_F3FullRetry.Run Proof)
+  (modelRun : M → R1Z.PV_L2_F3FullRetry.Run Proof) (realRows : R → R1Z.PV_L2_Premises.Row → Obs)
+  (modelRows : M → R1Z.PV_L2_Premises.Row → Obs),
+  R1Z.PV_L2_Premises.PV_L2_Premises join realRun modelRun realRows modelRows →
+    ∀ (test : V × R1Z.PV_L2_F3FullRetry.Run Proof × (R1Z.PV_L2_Premises.Row → Obs) → ℚ),
+      (∀ (value : V × R1Z.PV_L2_F3FullRetry.Run Proof × (R1Z.PV_L2_Premises.Row → Obs)),
+          0 ≤ test value ∧ test value ≤ 1) →
+        ∀ (q : ℕ),
+          (∀ (m : M), (queries m).length ≤ q) →
+            |(R0Z.mean fun r => test (runtime r, realRun r, realRows r)) -
+                  R0Z.mean fun m => test (model m, modelRun m, modelRows m)| ≤
+              (R0Z.FsAbort.eventMass fun m => ∃ i, old i m) + R1Z.ProverCommitSeedEvent19.budget q +
+                R1Z.ProverCommitFuelMass22.charge
+@R1Z.PV_L2_F3AttemptSource.owner : {K : Type} →
+  [inst : Field K] →
+    [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+      {State Proof : Type} →
+        (ℕ →
+            State →
+              (R1Z.ProverCommitSourceDecoder.Inputs ×
+                  R1Z.SideChannelL1AttemptRecord.Attempt Proof × R1Z.PV_L2_F3AttemptSource.History) ×
+                State) →
+          R1Z.PV_L2_F3FullRetry.Owner State Proof
+'R1Z.PV_L2_Headline.deployed_parser' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_Headline.deployed_source_carrier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_Headline.real_to_lazy_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_Headline.absorption_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_HeadlineJoint.original_refinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_HeadlineJoint.agreement_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_PremisesBound.joint_test_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_Premises.same_coupling' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3AttemptSource.source_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3AttemptSource.owned_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3AttemptSource.complete_l1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6Sharing.cursor_joint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6Sharing.singleton_layer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6Sharing.singleton_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6Sharing.request_depths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6Sharing.payload_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F5Mle.erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6BCond.erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6Half.erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6IdentityRow.erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.64
+	Maximum resident set size (kbytes): 4280312
+	Swaps: 0
+	Exit status: 0

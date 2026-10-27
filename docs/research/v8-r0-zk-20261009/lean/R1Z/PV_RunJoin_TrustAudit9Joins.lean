@@ -1,0 +1,40 @@
+/- Focused exact-statement and axiom audit of accepted source joins. No deployed instance is asserted. -/
+import R1Z.PV_RunJoin_CausalHeadline
+import R1Z.PV_RunJoin_InstalledTrustLedger
+import R1Z.PV_RunJoin_InstalledCausalHeadline
+import R1Z.PV_RunJoin_EndpointSelection
+import R1Z.PV_RunJoin_SelectedSourceReduction
+import R1Z.PV_RunJoin_CallbackInstallation
+import R1Z.PV_RunJoin_JoinedInstallation
+import R1Z.PV_RunJoin_JoinedFamily
+import R1Z.PV_RunJoin_JoinedCausalHeadline
+#print axioms R1Z.PV_RunJoin_InstalledTrustLedger.proofs
+#print axioms R1Z.PV_RunJoin_InstalledTrustLedger.privacy_headline_deployed_candidate
+#print axioms R1Z.PV_RunJoin_InstalledCausalHeadline.proofs
+#print axioms R1Z.PV_RunJoin_InstalledCausalHeadline.privacy_headline_deployed_candidate
+#print axioms R1Z.PV_RunJoin_EndpointSelection.selected_exact
+#print axioms R1Z.PV_RunJoin_EndpointSelection.public_binding
+#print axioms R1Z.PV_RunJoin_EndpointSelection.data
+#print axioms R1Z.PV_RunJoin_EndpointSelection.record_exact
+#print axioms R1Z.PV_RunJoin_SelectedSourceReduction.words_and_public
+#print axioms R1Z.PV_RunJoin_SelectedSourceReduction.remainder
+#print axioms R1Z.PV_RunJoin_CallbackInstallation.op51_source
+#print axioms R1Z.PV_RunJoin_CallbackInstallation.op120_source
+#print axioms R1Z.PV_RunJoin_CallbackInstallation.op246_source
+#print axioms R1Z.PV_RunJoin_CallbackInstallation.map_error
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.identity
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.selected_public
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.public_eq
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.public_roundtrip
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.public_iff
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.common_public
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.installed_identity
+#print axioms R1Z.PV_RunJoin_JoinedFamily.identity
+#print axioms R1Z.PV_RunJoin_JoinedFamily.public_common
+#print axioms R1Z.PV_RunJoin_JoinedCausalHeadline.proofs
+#print axioms R1Z.PV_RunJoin_JoinedCausalHeadline.privacy_headline_deployed_candidate
+#check @R1Z.PV_RunJoin_CausalHeadline.proofs
+#check @R1Z.PV_RunJoin_InstalledCausalHeadline.proofs
+#check @R1Z.PV_RunJoin_JoinedCausalHeadline.proofs
+#check @R1Z.PV_RunJoin_JoinedCausalHeadline.privacy_headline_deployed_candidate
+#check @R1Z.PV_RunJoin_SelectedSourceReduction.remainder

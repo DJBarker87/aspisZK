@@ -1,0 +1,28 @@
+@R1Z.PV_RunJoin_OsTrace.same_complete_prefix : ∀ {E File Reply Time Worker Observation : Type}
+  (decoder : R1Z.PV_RunJoin_OsTrace.Decoder File Reply Time Worker Observation)
+  (left right : R1Z.PV_RunJoin_OsWorld.World E File Reply Time Worker),
+  List.take left.fileUsed left.files = List.take right.fileUsed right.files →
+    List.take left.timeUsed left.time = List.take right.timeUsed right.time →
+      List.take left.workerUsed left.workers = List.take right.workerUsed right.workers →
+        R1Z.PV_RunJoin_OsTrace.observe decoder left = R1Z.PV_RunJoin_OsTrace.observe decoder right
+'R1Z.PV_RunJoin_OsTrace.same_complete_prefix' does not depend on any axioms
+        3.50 real         1.14 user         1.27 sys
+          3452108800  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              277925  page reclaims
+               10821  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   3  voluntary context switches
+               17494  involuntary context switches
+           318117230  instructions retired
+           113813159  cycles elapsed
+            11289320  peak memory footprint
+
+exit=0

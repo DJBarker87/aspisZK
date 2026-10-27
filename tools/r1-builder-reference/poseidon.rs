@@ -233,3 +233,7 @@ fn pv_srcid7_internal_linear_copy() {
     let expected = aspis_r0_poseidon_copy::internal_linear(&raw, &shifts);
     for lane in 0..16 { assert_eq!(actual[lane].0, expected[lane]); }
 }
+
+#[cfg(kani)]
+#[path = "pv_runjoin12_external.rs"]
+mod pv_runjoin12_external;

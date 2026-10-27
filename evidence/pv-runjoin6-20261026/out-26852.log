@@ -1,0 +1,31 @@
+@R1Z.PV_RunJoin_ConsumedEvent.time_append : ∀ {E File Reply Time Worker : Type} [DecidableEq File]
+  (world : R1Z.PV_RunJoin_OsWorld.World E File Reply Time Worker) (outcome : Time),
+  world.time[world.timeUsed]? = some outcome →
+    R1Z.PV_RunJoin_OsTrace.consumed
+        { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files, fileUsed := world.fileUsed,
+          time := world.time, timeUsed := world.timeUsed + 1, workers := world.workers,
+          workerUsed := world.workerUsed } =
+      have __src := R1Z.PV_RunJoin_OsTrace.consumed world;
+      { files := __src.files, times := (R1Z.PV_RunJoin_OsTrace.consumed world).times ++ [outcome],
+        workers := __src.workers }
+'R1Z.PV_RunJoin_ConsumedEvent.time_append' depends on axioms: [propext]
+       26.61 real         1.54 user         3.50 sys
+          3074752512  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              262603  page reclaims
+               59091  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               22479  voluntary context switches
+              201222  involuntary context switches
+           368585138  instructions retired
+           142321856  cycles elapsed
+            11404032  peak memory footprint
+
+exit=0

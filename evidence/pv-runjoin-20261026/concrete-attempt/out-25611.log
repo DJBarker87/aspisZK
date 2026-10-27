@@ -1,0 +1,133 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_ReservationProjection.lean:23:90: error: unsolved goals
+case true
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+S T : Type
+project : S → T
+left : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S
+right : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T
+secret : Secret
+hash : Hash
+binding : Std.Array U8 32#usize
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+s : S
+callback :
+  mapR (fun out => (out.1, project out.2)) (left.reserve s context.statement_digest context.mask_nonce) =
+    right.reserve (project s) context.statement_digest context.mask_nonce
+after : S
+⊢ (mapR (fun out => (out.1, project out.2)) do
+      let a ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            secret.field_mask_entropy
+      let (r, pre_reserved) ←
+        aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+            aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+            hash binding context a
+            { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          if pre_reserved.consumed = true then do
+            let s ← lift binding.to_slice
+            let a1 ← context.encode
+            let s1 ← lift a1.to_slice
+            let s2 ←
+              zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  secret.field_mask_entropy
+            let s3 ←
+              lift
+                  (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2]
+                      ⋯).to_slice
+            let a2 ← hash s3
+            let source_mask_seed ←
+              zeroize.Zeroizing.new
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+            let _ ←
+              zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  secret.field_mask_entropy
+            ok
+                (core.result.Result.Ok
+                    ({ mask_nonce := secret.mask_nonce, precommit_binding := binding, reserved_context := context,
+                        leaf_salt_seed := secret.leaf_salt_seed, source_mask_seed := source_mask_seed },
+                      val),
+                  after)
+          else ok (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce, after)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                  aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+          ok (r1, after)) =
+    do
+    let a ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          secret.field_mask_entropy
+    let (r, pre_reserved) ←
+      aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+          aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+          hash binding context a
+          { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        if pre_reserved.consumed = true then do
+          let s ← lift binding.to_slice
+          let a1 ← context.encode
+          let s1 ← lift a1.to_slice
+          let s2 ←
+            zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                secret.field_mask_entropy
+          let s3 ←
+            lift (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2] ⋯).to_slice
+          let a2 ← hash s3
+          let source_mask_seed ←
+            zeroize.Zeroizing.new
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+          let _ ←
+            zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                secret.field_mask_entropy
+          ok
+              (core.result.Result.Ok
+                  ({ mask_nonce := secret.mask_nonce, precommit_binding := binding, reserved_context := context,
+                      leaf_salt_seed := secret.leaf_salt_seed, source_mask_seed := source_mask_seed },
+                    val),
+                project after)
+        else
+          ok
+            (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+              project after)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+              (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+        ok (r1, project after)
+'R1Z.PV_RunJoin_ReservationProjection.after_checks' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       20.93 real         1.33 user         2.98 sys
+          3396354048  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              198591  page reclaims
+              143651  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               20606  voluntary context switches
+              156919  involuntary context switches
+           316971454  instructions retired
+           113464212  cycles elapsed
+            11190992  peak memory footprint
+
+exit=1

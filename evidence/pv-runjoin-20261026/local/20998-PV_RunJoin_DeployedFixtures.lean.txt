@@ -1,0 +1,41 @@
+import R1Z.PV_RunJoin_CanonicalFixtures
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_DeployedFixtures
+open R0Z.FsStatement PV_RunJoin_CanonicalFixtures
+abbrev Scalar := PrivacyR1AcctBasis.K
+local instance : CharP Scalar 2147483647 :=
+  charP_of_injective_algebraMap (algebraMap (ZMod AspisCircleGroupOrder.P) Scalar).injective
+    AspisCircleGroupOrder.P
+
+def transferX {CommitHandle : Type} (handle : CommitHandle) : R0Z.ZkStatement.Statement Scalar CommitHandle :=
+  (R1J.SpendWitnessMap.mapPub (PV_RunJoin_FixtureRecords.fixturePublic false),handle)
+
+def withdrawalX {CommitHandle : Type} (handle : CommitHandle) : R0Z.ZkStatement.Statement Scalar CommitHandle :=
+  (R1J.SpendWitnessMap.mapPub (PV_RunJoin_FixtureRecords.fixturePublic true),handle)
+
+theorem transfer_public_V047 {CommitHandle : Type} (handle : CommitHandle) :
+    (BuilderSource.prover (K := Scalar)).public transfer = (transferX handle).1 := transfer_public
+
+theorem withdrawal_public_V047 {CommitHandle : Type} (handle : CommitHandle) :
+    (BuilderSource.prover (K := Scalar)).public withdrawal = (withdrawalX handle).1 := withdrawal_public
+
+theorem association {CommitHandle : Type} (a b : CommitHandle) :
+    Association (transferX a) (withdrawalX b) := ⟨rfl,rfl⟩
+
+/-- These concrete fixture statements have actual canonical witnesses. Their
+native public-record/byte association is still a distinct V045 integration
+obligation; no arbitrary deployed x is definitionally identified with them. -/
+theorem fibres {CommitHandle : Type} (a b : CommitHandle) :
+    ∃ wt ww : (BuilderSource.prover (K := Scalar)).Instance,
+      (BuilderSource.prover (K := Scalar)).public wt = (transferX a).1 ∧
+      (BuilderSource.prover (K := Scalar)).public ww = (withdrawalX b).1 :=
+  ⟨transfer,withdrawal,transfer_public_V047 a,withdrawal_public_V047 b⟩
+
+#print axioms transferX
+#print axioms withdrawalX
+#print axioms transfer_public_V047
+#print axioms withdrawal_public_V047
+#print axioms association
+#print axioms fibres
+end R1Z.PV_RunJoin_DeployedFixtures

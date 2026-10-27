@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ParentPermutation.lean:51:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fullSteps callback (fun i => poseidon2.Poseidon2RoundKind.ExternalInitial (UScalar.cast UScalarTy.U8 i)) initials e ()
+    0#u8 s
+in the target expression
+  (do
+      let p ←
+        fullSteps callback (fun i => poseidon2.Poseidon2RoundKind.ExternalInitial (UScalar.cast UScalarTy.U8 i))
+            (PV_RunJoin_EnumerateTrace.labels 0#usize ↑poseidon2.EXTERNAL_INITIAL) e () 0#u8 s
+      let q ←
+        poseidon2.permute_optimized_with_trace_loop1 callback (arrayIter poseidon2.INTERNAL) p.1 p.2.1 p.2.2.1 p.2.2.2
+      let r ←
+        poseidon2.permute_optimized_with_trace_loop2 callback (sliceIter poseidon2.EXTERNAL_FINAL) q.1 q.2.1 q.2.2.1
+            q.2.2.2
+      ok r.1) =
+    run s
+
+s : State
+this : ExternalLinear := PV_Src_ExternalReference.dictionary
+e : Std.Array U32 16#usize
+he : R0PoseidonCopy.external_linear s = ok e
+right✝ : ∀ (i : Fin 16), R0Z.WriterRefine.liftU (↑e)[↑i]! = R0P.poseidonExternalLinear (R0Z.PoseidonRefine.liftA s) i
+hce : Canonical e
+a : State
+ra : U8
+ia : State
+ha :
+  fullSteps callback (fun i => poseidon2.Poseidon2RoundKind.ExternalInitial (UScalar.cast UScalarTy.U8 i)) initials e ()
+      0#u8 s =
+    ok (a, (), ra, ia)
+hpa : full initials e = ok a
+hca : Canonical a
+b : State
+rb : U8
+ib : State
+hb : PV_RunJoin_SourceInternalRounds.steps callback internals a () ra ia = ok (b, (), rb, ib)
+hpb : internal internals a = ok b
+hcb : Canonical b
+h0 :
+  poseidon2.permute_optimized_with_trace_loop0 callback (sliceIter poseidon2.EXTERNAL_INITIAL) e () 0#u8 s =
+    fullSteps callback (fun i => poseidon2.Poseidon2RoundKind.ExternalInitial (UScalar.cast UScalarTy.U8 i))
+      (PV_RunJoin_EnumerateTrace.labels 0#usize ↑poseidon2.EXTERNAL_INITIAL) e () 0#u8 s
+h1 :
+  poseidon2.permute_optimized_with_trace_loop1 callback (arrayIter poseidon2.INTERNAL) a () ra ia =
+    PV_RunJoin_SourceInternalRounds.steps callback (PV_RunJoin_EnumerateTrace.labels 0#usize ↑poseidon2.INTERNAL) a ()
+      ra ia
+h2 :
+  (do
+      let p ← poseidon2.permute_optimized_with_trace_loop2 callback (sliceIter poseidon2.EXTERNAL_FINAL) b () rb ib
+      ok p.1) =
+    full finals b
+⊢ (do
+      let p ←
+        fullSteps callback (fun i => poseidon2.Poseidon2RoundKind.ExternalInitial (UScalar.cast UScalarTy.U8 i))
+            (PV_RunJoin_EnumerateTrace.labels 0#usize ↑poseidon2.EXTERNAL_INITIAL) e () 0#u8 s
+      let q ←
+        poseidon2.permute_optimized_with_trace_loop1 callback (arrayIter poseidon2.INTERNAL) p.1 p.2.1 p.2.2.1 p.2.2.2
+      let r ←
+        poseidon2.permute_optimized_with_trace_loop2 callback (sliceIter poseidon2.EXTERNAL_FINAL) q.1 q.2.1 q.2.2.1
+            q.2.2.2
+      ok r.1) =
+    run s
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_ParentPermutation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

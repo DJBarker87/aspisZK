@@ -1,0 +1,34 @@
+@R1Z.PV_RunJoin_NativePublicReservation.decision_eq : ∀ {N C : Type} (base : ProverRwFull.ExternalTypes)
+  (ops : R1Z.PV_RunJoin_NativeSelectedInputs.LedgerState base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address) (a b : R1Z.PV_Src_NativeInput.Input)
+  (nonce nonce' : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (s : R1Z.PV_RunJoin_NativeSelectedInputs.LedgerState base N C),
+  R1Z.PV_Src_NativeInput.publicInput a = R1Z.PV_Src_NativeInput.publicInput b →
+    nonce = nonce' →
+      R1Z.PV_RunJoin_PublicDecision.decision (R1Z.PDict_CodecDictionary.selected base (ops s)) address
+          (R1Z.PV_RunJoin_NominalPublicData.fromInput base a) ProverRwFull.transport.Variant.S2 hash nonce =
+        R1Z.PV_RunJoin_PublicDecision.decision (R1Z.PDict_CodecDictionary.selected base (ops s)) address
+          (R1Z.PV_RunJoin_NominalPublicData.fromInput base b) ProverRwFull.transport.Variant.S2 hash nonce'
+'R1Z.PV_RunJoin_NativePublicReservation.decision_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+        8.65 real         1.27 user         1.89 sys
+          3497771008  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              257814  page reclaims
+               36395  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               12723  voluntary context switches
+               50349  involuntary context switches
+           371459598  instructions retired
+           140221803  cycles elapsed
+            11141840  peak memory footprint
+
+exit=0

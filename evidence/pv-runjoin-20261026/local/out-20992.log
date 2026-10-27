@@ -1,0 +1,613 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:30:30: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:31:17: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:34:18: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:35:15: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:38:19: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:41:22: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:42:19: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:46:26: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_EffectInventory.lean:47:35: error: Type mismatch
+  inv
+has type
+  contents world = contents s.entropy
+but is expected to have type
+  contents
+      (match ok (nonce, next) with
+          | fail e => { state := s, signal := Signal.failed e }
+          | div => { state := s, signal := Signal.diverged }
+          | ok (nonce, policy) =>
+            have entropy := ProverRwEffectOwner.worldOwner nonce s.entropy;
+            have next := { entropy := entropy.world, policy := policy, ledger := s.ledger };
+            match entropy.boundary with
+            | ProverRwEffectTape.Boundary.request input resume =>
+              { state := next, signal := Signal.request input resume }
+            | ProverRwEffectTape.Boundary.retry k => { state := next, signal := Signal.entropyFuel k }
+            | ProverRwEffectTape.Boundary.returned (fail e) => { state := next, signal := Signal.failed e }
+            | ProverRwEffectTape.Boundary.returned div => { state := next, signal := Signal.diverged }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Err a)) =>
+              { state := next, signal := Signal.error verifier.Error.Entropy }
+            | ProverRwEffectTape.Boundary.returned (ok (core.result.Result.Ok secret)) =>
+              match prover.prove_masked_attempt pub compiled transport.Variant.S2 hash secret s.ledger with
+              | fail e => { state := next, signal := Signal.failed e }
+              | div => { state := next, signal := Signal.diverged }
+              | ok (status, ledger) =>
+                have after := { entropy := entropy.world, policy := policy, ledger := ledger };
+                match status with
+                | core.result.Result.Ok proof => { state := after, signal := Signal.published proof (index + 1) }
+                | core.result.Result.Err verifier.Error.Rejected => { state := after, signal := Signal.rejected }
+                | core.result.Result.Err e => { state := after, signal := Signal.error e }).state.entropy =
+    contents s.entropy
+'R1Z.PV_RunJoin_EffectInventory.contents' depends on axioms: [propext]
+'R1Z.PV_RunJoin_EffectInventory.attempt_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectInventory.run_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EffectInventory.client_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       51.50 real         1.83 user         5.60 sys
+          2229370880  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              160507  page reclaims
+              329511  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               48579  voluntary context switches
+              326233  involuntary context switches
+           420337560  instructions retired
+           200753162  cycles elapsed
+            11584328  peak memory footprint
+
+exit=1

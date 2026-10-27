@@ -1,0 +1,83 @@
+@R1Z.PV_RunJoin_LedgerBoundarySource.source_fields : ∀ [inst : ProverRwFull.ExternalTypes]
+  {CommitHandle Aux Coins N C Context Rest : Type} (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (world : R1Z.PV_RunJoin_CompletedWorld.Data Coins N R1Z.PV_RunJoin_LedgerWorld.World C)
+  (policy : R1Z.ProverRwEffectCallback.Account N)
+  (inputs :
+    (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle → h.Instance → R1Z.PV_RunJoin_LedgerBody.Inputs N C)
+  (common : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle → R1Z.PV_RunJoin_LedgerBody.Inputs N C)
+  (disclosed :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World C) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (oracle :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World C) →
+          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+  (ideal :
+    (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+        R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat),
+  (∀ (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K)
+      (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) (w : h.Instance)
+      (s : R1Z.PV_RunJoin_LedgerBody.State N C), R1Z.PV_RunJoin_MapErrInstalled.Identity ((inputs h x w).ops s)) →
+    ∀ (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle)
+      (d :
+        R1Z.PV_RunJoin_Boundary.Data
+          (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal)
+          Context Rest)
+      (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K),
+      (∀ (w : h.Instance),
+          h.public w = x.1 →
+            R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+              ((R1Z.PV_RunJoin_LedgerBoundary.boundary schedule unix address world policy inputs common disclosed oracle
+                    ideal x d).sourceBody
+                h x w)
+              ((R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle
+                    ideal).body
+                h x w)) ∧
+        (∀ (s : R1Z.PV_RunJoin_UnifiedRetry.State N R1Z.PV_RunJoin_LedgerWorld.World C) (k : Aeneas.Std.Usize)
+            (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+            (next : R1Z.PV_RunJoin_Deployed.State N R1Z.PV_RunJoin_LedgerWorld.World C),
+            (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle
+                        ideal).account.call_mut
+                  s k =
+                Aeneas.Std.Result.ok (nonce, next) →
+              next.provider = s.provider) ∧
+          ∀ (w : h.Instance),
+            h.public w = x.1 →
+              ∀ (secret : R1Z.ProverRwRetryModel.Secret)
+                (s next : R1Z.PV_RunJoin_UnifiedRetry.State N R1Z.PV_RunJoin_LedgerWorld.World C)
+                (status : Aeneas.Std.core.result.Result R1Z.ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+                (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle
+                          ideal).body
+                      h x w secret s =
+                    Aeneas.Std.Result.ok (status, next) →
+                  next.provider = s.provider
+'R1Z.PV_RunJoin_LedgerBoundarySource.source_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+       14.56 real         1.45 user         2.56 sys
+          3287564288  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              270629  page reclaims
+               56202  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               18603  voluntary context switches
+               79351  involuntary context switches
+           381061947  instructions retired
+           158444364  cycles elapsed
+            11862880  peak memory footprint
+
+exit=0

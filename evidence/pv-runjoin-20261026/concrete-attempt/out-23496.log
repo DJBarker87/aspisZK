@@ -1,0 +1,67 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_LedgerBody.lean:56:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((fun out => (out.1, { provider := s.provider, policy := s.policy, ledger := out.2, client := s.client }))
+        raw).2.ledger
+in the target expression
+  (fun out => PV_RunJoin_LedgerWorldInvariant.Invariant schedule unix s.ledger.model out.2) raw
+
+inst✝² : ExternalTypes
+inst✝¹ : ProverRwRngCaller.NativeTypes
+inst✝ : ProverRwRngCaller.ErasureFns
+N C : Type
+schedule : ProverCommitLedger36.Schedule
+unix : Bool
+address : PV_RunJoin_LedgerWorld.Address
+d : Inputs N C
+secret : Secret
+s next : State N C
+status : core.result.Result Proof verifier.Error
+run✝ :
+  (do
+      let value ←
+        PV_RunJoin_GenericSourceCaller.caller (PV_RunJoin_LedgerWorld.dictionary (d.ops s) schedule unix address)
+            (d.pub s) (d.compiled s) transport.Variant.S2 (d.hash s) secret
+            (PV_RunJoin_LedgerWorldInvariant.clear s.ledger)
+      Result.ok
+          ((fun out => (out.1, { provider := s.provider, policy := s.policy, ledger := out.2, client := s.client }))
+            value)) =
+    Result.ok (status, next)
+original : body schedule unix address d secret s = Result.ok (status, next)
+raw : core.result.Result Proof verifier.Error × PV_RunJoin_LedgerWorld.World
+computation :
+  PV_RunJoin_GenericSourceCaller.caller (PV_RunJoin_LedgerWorld.dictionary (d.ops s) schedule unix address) (d.pub s)
+      (d.compiled s) transport.Variant.S2 (d.hash s) secret (PV_RunJoin_LedgerWorldInvariant.clear s.ledger) =
+    Result.ok raw
+run :
+  Result.ok
+      ((fun out => (out.1, { provider := s.provider, policy := s.policy, ledger := out.2, client := s.client })) raw) =
+    Result.ok (status, next)
+invariant : (fun out => PV_RunJoin_LedgerWorldInvariant.Invariant schedule unix s.ledger.model out.2) raw
+same :
+  ((fun out => (out.1, { provider := s.provider, policy := s.policy, ledger := out.2, client := s.client }))
+          raw).2.ledger =
+    (status, next).2.ledger
+⊢ next.ledger.model =
+    match reservation schedule unix address d secret s with
+    | none => s.ledger.model
+    | some path => (ProverCommitLedger36.reserve schedule unix path s.ledger.model).2
+'R1Z.PV_RunJoin_LedgerBody.native_ledger_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       43.17 real         1.64 user         5.37 sys
+          2851782656  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              185724  page reclaims
+              269128  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               69294  voluntary context switches
+              283641  involuntary context switches
+           618485242  instructions retired
+           322300875  cycles elapsed
+            11698944  peak memory footprint
+
+exit=1

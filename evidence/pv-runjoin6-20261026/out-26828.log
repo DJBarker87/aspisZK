@@ -1,0 +1,31 @@
+@R1Z.PV_RunJoin_NativeSelectedInputs.full_ledger_source : ∀ {N C : Type} (base : ProverRwFull.ExternalTypes)
+  (ops : R1Z.PV_RunJoin_NativeSelectedInputs.LedgerState base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (i : R1Z.PV_Src_NativeInput.Input) (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+    (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_RunJoin_NativeSelectedInputs.ledgerInputs base ops hash i))
+    (R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+      (R1Z.PV_RunJoin_NativeSelectedInputs.ledgerInputs base ops hash i))
+'R1Z.PV_RunJoin_NativeSelectedInputs.full_ledger_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+       24.28 real         1.41 user         3.48 sys
+          2767994880  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              331721  page reclaims
+               84954  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                4596  voluntary context switches
+              230626  involuntary context switches
+           315078317  instructions retired
+           111726260  cycles elapsed
+            11076304  peak memory footprint
+
+exit=0

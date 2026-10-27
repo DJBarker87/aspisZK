@@ -1,0 +1,74 @@
+import R1Z.PV_RunJoin_OutputChecks16
+import R1Z.PV_RunJoin_PathChecks16
+import R1Z.PV_RunJoin_Nullifier16
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_CompilerChecks16
+open Aeneas Aeneas.Std Result BuilderForestAdmissionPort
+open BuilderForestAdmissionPort.pool_v1 pair_forest_copy_builder
+open PV_RunJoin_ReferenceFixtureResults
+abbrev transferRecords : CopyRecords := ⟨transferWitness,transferPublic⟩
+abbrev withdrawalRecords : CopyRecords := ⟨withdrawalWitness,withdrawalPublic⟩
+
+theorem transfer_lane : (do
+    let d ← CopyRecords.path_digest transferRecords 21#usize
+    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d PV_RunJoin_FixtureArguments.laneAnchor) = ok false := by
+  rw [PV_RunJoin_PathChecks16.transfer_lane]
+  with_unfolding_all rfl
+#print axioms transfer_lane
+
+theorem transfer_anchor : (do
+    let d ← CopyRecords.path_digest transferRecords 24#usize
+    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d PV_RunJoin_RecordedTransfer.publicRecord.anchor_root) = ok false := by
+  rw [PV_RunJoin_PathChecks16.transfer_anchor]
+  with_unfolding_all rfl
+#print axioms transfer_anchor
+
+theorem transfer_nullifier : (do
+    let d ← CopyRecords.nullifier transferRecords
+    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d PV_RunJoin_RecordedTransfer.publicRecord.nullifier) = ok false := by
+  rw [PV_RunJoin_Nullifier16.transfer]
+  with_unfolding_all rfl
+#print axioms transfer_nullifier
+
+theorem transfer_change : (do
+    let d ← CopyRecords.change transferRecords
+    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d PV_RunJoin_RecordedTransfer.publicRecord.change_commitment) = ok false := by
+  rw [PV_RunJoin_OutputChecks16.transfer_change]
+  with_unfolding_all rfl
+#print axioms transfer_change
+
+theorem transfer_recipient : (do
+    let d ← CopyRecords.recipient transferRecords
+    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d PV_RunJoin_RecordedTransfer.publicRecord.recipient_commitment) = ok false := by
+  rw [PV_RunJoin_OutputChecks16.recipient]
+  with_unfolding_all rfl
+#print axioms transfer_recipient
+
+theorem withdrawal_lane : (do
+    let d ← CopyRecords.path_digest withdrawalRecords 21#usize
+    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d PV_RunJoin_FixtureArguments.laneAnchor) = ok false := by
+  rw [PV_RunJoin_PathChecks16.withdrawal_lane]
+  with_unfolding_all rfl
+#print axioms withdrawal_lane
+
+theorem withdrawal_anchor : (do
+    let d ← CopyRecords.path_digest withdrawalRecords 24#usize
+    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d PV_RunJoin_RecordedWithdrawal.publicRecord.anchor_root) = ok false := by
+  rw [PV_RunJoin_PathChecks16.withdrawal_anchor]
+  with_unfolding_all rfl
+#print axioms withdrawal_anchor
+
+theorem withdrawal_nullifier : (do
+    let d ← CopyRecords.nullifier withdrawalRecords
+    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d PV_RunJoin_RecordedWithdrawal.publicRecord.nullifier) = ok false := by
+  rw [PV_RunJoin_Nullifier16.withdrawal]
+  with_unfolding_all rfl
+#print axioms withdrawal_nullifier
+
+theorem withdrawal_change : (do
+    let d ← CopyRecords.change withdrawalRecords
+    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d PV_RunJoin_RecordedWithdrawal.publicRecord.change_commitment) = ok false := by
+  rw [PV_RunJoin_OutputChecks16.withdrawal_change]
+  with_unfolding_all rfl
+#print axioms withdrawal_change
+end R1Z.PV_RunJoin_CompilerChecks16

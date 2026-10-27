@@ -1,0 +1,33 @@
+def R1Z.PV_RunJoin_OsTrace.consumed : {E File Reply Time Worker : Type} →
+  World E File Reply Time Worker → Prefix File Reply Time Worker :=
+fun {E File Reply Time Worker} world =>
+  { files := List.take world.fileUsed world.files, times := List.take world.timeUsed world.time,
+    workers := List.take world.workerUsed world.workers }
+structure R1Z.PV_RunJoin_OsTrace.Decoder (File Reply Time Worker Observation : Type) : Type
+number of parameters: 5
+fields:
+  R1Z.PV_RunJoin_OsTrace.Decoder.decode : Prefix File Reply Time Worker → Observation
+constructor:
+  R1Z.PV_RunJoin_OsTrace.Decoder.mk {File Reply Time Worker Observation : Type}
+    (decode : Prefix File Reply Time Worker → Observation) : Decoder File Reply Time Worker Observation
+'R1Z.PV_RunJoin_OsTrace.same_complete_prefix' does not depend on any axioms
+       21.71 real         1.41 user         3.37 sys
+          2883878912  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              175165  page reclaims
+              179327  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               15493  voluntary context switches
+              171952  involuntary context switches
+           443315856  instructions retired
+           255127754  cycles elapsed
+            12059488  peak memory footprint
+
+exit=0

@@ -1,0 +1,72 @@
+class R1Z.BuilderForestAdmissionPort.ExternalLinear : Type
+number of parameters: 0
+fields:
+  R1Z.BuilderForestAdmissionPort.ExternalLinear.call : Aeneas.Std.Array
+        R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize →
+      Aeneas.Std.Result (Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize)
+constructor:
+  R1Z.BuilderForestAdmissionPort.ExternalLinear.mk
+    (call :
+      Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize →
+        Aeneas.Std.Result (Aeneas.Std.Array R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 16#usize)) :
+    R1Z.BuilderForestAdmissionPort.ExternalLinear
+class R1Z.BuilderForestAdmissionPort.Records : Type
+number of parameters: 0
+fields:
+  R1Z.BuilderForestAdmissionPort.Records.call : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestInputNoteWitnessV1 →
+      Aeneas.Std.U32 →
+        Option R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1 →
+          R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1 →
+            R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 →
+              R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 →
+                Aeneas.Std.Result
+                  (R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.RW ×
+                    R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.RP)
+constructor:
+  R1Z.BuilderForestAdmissionPort.Records.mk
+    (call :
+      R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestInputNoteWitnessV1 →
+        Aeneas.Std.U32 →
+          Option R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1 →
+            R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1 →
+              R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 →
+                R1Z.BuilderForestAdmissionPort.aspis_core.field.M31 →
+                  Aeneas.Std.Result
+                    (R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.RW ×
+                      R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.RP)) :
+    R1Z.BuilderForestAdmissionPort.Records
+structure R1Z.PV_Src_NativeInput.Input : Type
+number of parameters: 0
+fields:
+  R1Z.PV_Src_NativeInput.Input.request : R1Z.PV_Src_NativeInput.Request
+  R1Z.PV_Src_NativeInput.Input.witness : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestInputNoteWitnessV1
+  R1Z.PV_Src_NativeInput.Input.change : R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1
+  R1Z.PV_Src_NativeInput.Input.laneAnchor : Aeneas.Std.Array Aeneas.Std.U32 8#usize
+  R1Z.PV_Src_NativeInput.Input.snapshot : R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+  R1Z.PV_Src_NativeInput.Input.compiled : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+constructor:
+  R1Z.PV_Src_NativeInput.Input.mk (request : R1Z.PV_Src_NativeInput.Request)
+    (witness : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
+    (change : R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1)
+    (laneAnchor : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+    (snapshot : R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1)
+    (compiled : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1) :
+    R1Z.PV_Src_NativeInput.Input
+def R1Z.PV_Src_NativeInput.run : [R1Z.BuilderForestAdmissionPort.ExternalLinear] →
+  [R1Z.BuilderForestAdmissionPort.Records] →
+    R1Z.PV_Src_NativeInput.Input →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+          R1Z.BuilderForestAdmissionPort.pool_v1.pair_trace.PoolV1PairTraceErrorV1) :=
+fun [R1Z.BuilderForestAdmissionPort.ExternalLinear] [R1Z.BuilderForestAdmissionPort.Records] i =>
+  R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.compile_forest_from_copies i.witness
+    (R1Z.PV_Src_NativeInput.outputValue i.request) (R1Z.PV_Src_NativeInput.recipient i.request) i.change
+    (R1Z.PV_Src_NativeInput.forestPublic i.request) i.laneAnchor i.snapshot
+'R1Z.PV_RunJoin_CompilerPayload.run_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CompilerPayload.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.compile_forest_from_copies' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,39 @@
+@R1Z.PV_RunJoin_ContinuationProjection.after_reserve : ∀ [inst : ProverRwFull.ExternalTypes]
+  [inst_1 : ProverRwFull.ExternalFuns],
+  R1Z.PV_RunJoin_StoreContinuationResidual.MapErrParametric →
+    ∀ {S T : Type} (project : S → T) (left : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+      (right : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T) (pub : R1Z.ProverRwRetryModel.Pub)
+      (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+      (hash : R1Z.ProverRwRetryModel.Hash) (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext)
+      (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (attempt : R1Z.ProverRwRetryModel.Secret)
+      (status :
+        Aeneas.Std.core.result.Result
+          (ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+            ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+          ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskBuildError)
+      (s : S),
+      R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+          (R1Z.ProverRwBodyStoreSource.afterReserve left pub compiled variant hash context binding attempt status s) =
+        R1Z.ProverRwBodyStoreSource.afterReserve right pub compiled variant hash context binding attempt status
+          (project s)
+'R1Z.PV_RunJoin_ContinuationProjection.after_reserve' depends on axioms: [propext, Classical.choice, Quot.sound]
+       21.62 real         1.66 user         2.94 sys
+          3021406208  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              285760  page reclaims
+               43635  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               13778  voluntary context switches
+              138279  involuntary context switches
+           384228519  instructions retired
+           151465417  cycles elapsed
+            11649792  peak memory footprint
+
+exit=0

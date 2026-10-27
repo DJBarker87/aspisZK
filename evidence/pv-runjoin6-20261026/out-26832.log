@@ -1,0 +1,54 @@
+@R1Z.PV_RunJoin_SourceBoundary.native_fill_V336 : ∀ [inst : ProverRwFull.ExternalTypes]
+  {CommitHandle Aux Coins N C Context Rest : Type}
+  (world : R1Z.PV_RunJoin_CompletedWorld.Data Coins N R1Z.ProverRwRetryModel.Store C)
+  (policy : R1Z.ProverRwEffectCallback.Account N)
+  (inputs :
+    (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        h.Instance → R1Z.PV_RunJoin_PureSourceLift.Inputs N C)
+  (disclosed :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.ProverRwRetryModel.Store C) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (oracle :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.ProverRwRetryModel.Store C) →
+          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+  (ideal :
+    (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+        R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (d :
+    R1Z.PV_RunJoin_Boundary.Data (R1Z.PV_RunJoin_SourceConstructor.runtime world policy inputs disclosed oracle ideal)
+      Context Rest)
+  (p : ProverRwRngCaller.Tape),
+  ↑p.used < (↑p.replies).length →
+    (R1Z.PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal d).draw.fill p
+        (Aeneas.Std.Array.repeat 64#usize 0#u8) =
+      ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8)
+'R1Z.PV_RunJoin_SourceBoundary.native_fill_V336' depends on axioms: [propext, Classical.choice, Quot.sound]
+       34.44 real         1.45 user         4.98 sys
+          2380464128  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              287859  page reclaims
+              212302  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               24264  voluntary context switches
+              231398  involuntary context switches
+           393481914  instructions retired
+           191466176  cycles elapsed
+            11862808  peak memory footprint
+
+exit=0

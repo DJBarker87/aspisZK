@@ -1,0 +1,31 @@
+@R1Z.PV_RunJoin_LedgerSourceProjection.caller : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns),
+  R1Z.PV_RunJoin_MapErrInstalled.Identity ops →
+    ∀ (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+      (pub : R1Z.ProverRwRetryModel.Pub) (compiled : R1Z.ProverRwRetryModel.Compiled)
+      (variant : ProverRwFull.transport.Variant) (hash : R1Z.ProverRwRetryModel.Hash)
+      (secret : R1Z.ProverRwRetryModel.Secret) (s : R1Z.PV_RunJoin_LedgerWorld.World),
+      R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, out.2.header))
+          (R1Z.PV_RunJoin_GenericSourceCaller.caller (R1Z.PV_RunJoin_LedgerWorld.dictionary ops schedule unix address)
+            pub compiled variant hash secret s) =
+        ProverRwFull.prover.prove_masked_attempt pub compiled variant hash secret s.header
+'R1Z.PV_RunJoin_LedgerSourceProjection.caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+       14.71 real         1.37 user         2.48 sys
+          3449421824  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              215683  page reclaims
+               87914  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               22580  voluntary context switches
+               95255  involuntary context switches
+           374102314  instructions retired
+           148454986  cycles elapsed
+            11649744  peak memory footprint
+
+exit=0

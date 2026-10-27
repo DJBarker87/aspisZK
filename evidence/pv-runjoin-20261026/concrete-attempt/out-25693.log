@@ -1,0 +1,81 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SelectedAdmission.lean:32:0: warning: Definition `toPremises` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+structure R1Z.PV_RunJoin_SelectedAdmission.Remainder [ExternalLinear] [Records] {CommitHandle : Type}
+  (d : PV_RunJoin_SourceSelectionContract.Data) (x : Statement K CommitHandle) : Prop
+number of parameters: 5
+fields:
+  R1Z.PV_RunJoin_SelectedAdmission.Remainder.compile_call : ∀
+      (w : PV_RunJoin_SourceSelectionContract.endpointHonest.Instance),
+      run ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) =
+        ok (core.result.Result.Ok ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w).compiled)
+  R1Z.PV_RunJoin_SelectedAdmission.Remainder.words : ∀ (w : PV_RunJoin_SourceSelectionContract.endpointHonest.Instance)
+      (records : pair_forest_copy_builder.CopyRecords),
+      newRecords ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) = ok records →
+        WitnessOk (wordWitness records.w)
+  R1Z.PV_RunJoin_SelectedAdmission.Remainder.publicCorr : ∀
+      (w : PV_RunJoin_SourceSelectionContract.endpointHonest.Instance) (records : pair_forest_copy_builder.CopyRecords),
+      newRecords ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) = ok records →
+        PubCorr (wordPublic records.p)
+          (mapPub
+            (PV_Src_Public.canonicalPublic
+              (publicInput ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w))))
+  R1Z.PV_RunJoin_SelectedAdmission.Remainder.admission : ∀
+      (w : PV_RunJoin_SourceSelectionContract.endpointHonest.Instance) (records : pair_forest_copy_builder.CopyRecords),
+      newRecords ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) = ok records →
+        BuilderSpendRelation.RspendPlus
+          (mapPub
+            (PV_Src_Public.canonicalPublic
+              (publicInput ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w))))
+          (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness (wordWitness records.w)))
+constructor:
+  R1Z.PV_RunJoin_SelectedAdmission.Remainder.mk [ExternalLinear] [Records] {CommitHandle : Type}
+    {d : PV_RunJoin_SourceSelectionContract.Data} {x : Statement K CommitHandle}
+    (compile_call :
+      ∀ (w : PV_RunJoin_SourceSelectionContract.endpointHonest.Instance),
+        run ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) =
+          ok (core.result.Result.Ok ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w).compiled))
+    (words :
+      ∀ (w : PV_RunJoin_SourceSelectionContract.endpointHonest.Instance)
+        (records : pair_forest_copy_builder.CopyRecords),
+        newRecords ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) = ok records →
+          WitnessOk (wordWitness records.w))
+    (publicCorr :
+      ∀ (w : PV_RunJoin_SourceSelectionContract.endpointHonest.Instance)
+        (records : pair_forest_copy_builder.CopyRecords),
+        newRecords ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) = ok records →
+          PubCorr (wordPublic records.p)
+            (mapPub
+              (PV_Src_Public.canonicalPublic
+                (publicInput ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w)))))
+    (admission :
+      ∀ (w : PV_RunJoin_SourceSelectionContract.endpointHonest.Instance)
+        (records : pair_forest_copy_builder.CopyRecords),
+        newRecords ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w) = ok records →
+          BuilderSpendRelation.RspendPlus
+            (mapPub
+              (PV_Src_Public.canonicalPublic
+                (publicInput ((fun w => PV_RunJoin_SourceSelectionContract.selectedRecord d x w) w))))
+            (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness (wordWitness records.w)))) :
+    Remainder d x
+'R1Z.PV_RunJoin_SelectedAdmission.toPremises' depends on axioms: [propext, Classical.choice, Quot.sound]
+       39.77 real         1.92 user         4.84 sys
+          2937126912  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              374707  page reclaims
+              148934  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               12989  voluntary context switches
+              294658  involuntary context switches
+           400735409  instructions retired
+           213705781  cycles elapsed
+            12157720  peak memory footprint
+
+exit=0

@@ -1,0 +1,7 @@
+# Fixture runtime/observer installation checklist
+
+Transfer at transferX a / canonical transfer and withdrawal at withdrawalX b / canonical withdrawal remain separate checks, each with T hypothetical. Both P ∧ T non-vacuity are OPEN.
+
+For each fixture the actual selected/returned compiler input and native dictionary association in stage1-obstruction.md remain missing. After those, the required deployed Runtime fields are actual CompletedWorld.Data (provider tape, policy, ledger, body initializer), proof-account Account.call_mut, source-associated retry Body, disclosed decoder, observerOracle decoder and ideal experiment. Required Boundary fields and all five ProofObligations clauses are unchanged. The native/extracted event functions must refer to the same runtime and coupling and preserve initial world, ordered calls, final world, filesystem and complete ROMView payload. P.trace must hold outside the unchanged oldBad/seed/fuel event for every adversary and every witness in the same public fibre.
+
+No existing fixture theorem supplies these data. TrustFixtures.both_fibres proves witness fibres and separate abstract T models; it does not combine deployed P with T. Installing errorWorld or a model-defined observer would not fill this checklist. No runtime is fabricated and no T field is added. Counts remain runtime/boundary 2, fields 8, native residuals 6. Options A/B unadopted. This is an identified missing implementation refinement, not a checked ROW counterexample.

@@ -1,0 +1,43 @@
+@R1Z.PV_RunJoin_FixtureSelectedSources.both_source : ∀ {CommitHandle N C : Type} (base : ProverRwFull.ExternalTypes)
+  (ops : R1Z.PV_RunJoin_NativeSelectedInputs.LedgerState base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (selection : R1Z.PV_RunJoin_InstalledFamily.Selection CommitHandle) (a b : CommitHandle)
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  have transfer :=
+    selection.selected R1Z.BuilderSource.prover (R1Z.PV_RunJoin_DeployedFixtures.transferX a)
+      R1Z.PV_RunJoin_CanonicalFixtures.transfer;
+  have withdrawal :=
+    selection.selected R1Z.BuilderSource.prover (R1Z.PV_RunJoin_DeployedFixtures.withdrawalX b)
+      R1Z.PV_RunJoin_CanonicalFixtures.withdrawal;
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+      (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody
+        (R1Z.PV_RunJoin_NativeSelectedInputs.ledgerInputs base ops hash transfer))
+      (R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+        (R1Z.PV_RunJoin_NativeSelectedInputs.ledgerInputs base ops hash transfer)) ∧
+    R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+      (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody
+        (R1Z.PV_RunJoin_NativeSelectedInputs.ledgerInputs base ops hash withdrawal))
+      (R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+        (R1Z.PV_RunJoin_NativeSelectedInputs.ledgerInputs base ops hash withdrawal))
+'R1Z.PV_RunJoin_FixtureSelectedSources.both_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+       21.86 real         1.38 user         3.36 sys
+          2965159936  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              326907  page reclaims
+               67084  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               14645  voluntary context switches
+              176918  involuntary context switches
+           327481998  instructions retired
+           124094482  cycles elapsed
+            11502312  peak memory footprint
+
+exit=0

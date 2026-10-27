@@ -1,0 +1,35 @@
+@R1Z.PV_RunJoin_BodyProjection.body : ∀ [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns],
+  R1Z.PV_RunJoin_StoreContinuationResidual.MapErrParametric →
+    ∀ {S T : Type} (project : S → T) (left : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+      (right : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T) (pub : R1Z.ProverRwRetryModel.Pub)
+      (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+      (hash : R1Z.ProverRwRetryModel.Hash) (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext)
+      (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (secret : R1Z.ProverRwRetryModel.Secret) (s : S),
+      R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+            (left.reserve s context.statement_digest context.mask_nonce) =
+          right.reserve (project s) context.statement_digest context.mask_nonce →
+        R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+            (ProverRwFull.prover.prove_masked_with_attempt left pub compiled variant hash context binding secret s) =
+          ProverRwFull.prover.prove_masked_with_attempt right pub compiled variant hash context binding secret
+            (project s)
+'R1Z.PV_RunJoin_BodyProjection.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+       24.11 real         1.59 user         3.11 sys
+          3136258048  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              259732  page reclaims
+               50848  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               17592  voluntary context switches
+              163130  involuntary context switches
+           330794775  instructions retired
+           131911505  cycles elapsed
+            11715376  peak memory footprint
+
+exit=0

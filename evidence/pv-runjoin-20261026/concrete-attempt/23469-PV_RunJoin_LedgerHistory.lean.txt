@@ -1,0 +1,22 @@
+import R1Z.ProverCommitLedger36
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_LedgerHistory
+open ProverCommitLedger36
+open ProverCommitEnvironment35 (Kind Outcome)
+
+theorem record_length (kind : Kind) (result : Outcome) (s : State) :
+    (record kind result s).2.history.length = s.history.length + 1 := by
+  simp only [record,List.length_append,List.length_singleton]
+
+theorem inject_length (action : Action) (s : State) :
+    (inject action s).history.length = s.history.length := rfl
+
+theorem ask_length (schedule : Schedule) (kind : Kind) (s : State) :
+    (ask schedule kind s).2.history.length = s.history.length + 1 := by
+  exact record_length kind _ (inject _ s)
+
+#print axioms record_length
+#print axioms inject_length
+#print axioms ask_length
+end R1Z.PV_RunJoin_LedgerHistory

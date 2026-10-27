@@ -1,0 +1,52 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2317); env=J
+slot: /tmp/aspis-r0-lean-slot-2.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalRefinement.lean:43:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PM state 0 ⟨↑i % 4, ⋯⟩
+in the target expression
+  liftU (↑grouped)[↑i]! +
+      (liftU (↑grouped)[↑⟨↑i % 4, ⋯⟩]! + liftU (↑grouped)[↑⟨↑i % 4, ⋯⟩ + 4]! + liftU (↑grouped)[↑⟨↑i % 4, ⋯⟩ + 8]! +
+        liftU (↑grouped)[↑⟨↑i % 4, ⋯⟩ + 12]!) =
+    liftU (↑grouped)[↑i]! +
+      (0 + PM state ⟨0, ⋯⟩ ⟨↑i % 4, ⋯⟩ + PM state ⟨1, ⋯⟩ ⟨↑i % 4, ⋯⟩ + PM state ⟨2, ⋯⟩ ⟨↑i % 4, ⋯⟩ +
+        PM state ⟨3, ⋯⟩ ⟨↑i % 4, ⋯⟩)
+
+case refine_2
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+state : Std.Array U32 16#usize
+grouped : Std.Array AspisBuilderPoseidonReference.aspis_core.field.M31 16#usize
+hgrouped : AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0 state 0#usize = ok grouped
+hG : ∀ (g c : Fin 4), liftU (↑grouped)[4 * ↑g + ↑c]! = PM state g c
+i : Fin 16
+hi : ↑i < 16
+G : liftU (↑grouped)[↑i]! = PM state ⟨↑i / 4, ⋯⟩ ⟨↑i % 4, ⋯⟩
+G0 : liftU (↑grouped)[↑i % 4]! = PM state 0 ⟨↑i % 4, ⋯⟩
+G1 : liftU (↑grouped)[↑i % 4 + 4]! = PM state 1 ⟨↑i % 4, ⋯⟩
+G2 : liftU (↑grouped)[↑i % 4 + 8]! = PM state 2 ⟨↑i % 4, ⋯⟩
+G3 : liftU (↑grouped)[↑i % 4 + 12]! = PM state 3 ⟨↑i % 4, ⋯⟩
+⊢ liftU (↑grouped)[↑i]! +
+      (liftU (↑grouped)[↑⟨↑i % 4, ⋯⟩]! + liftU (↑grouped)[↑⟨↑i % 4, ⋯⟩ + 4]! + liftU (↑grouped)[↑⟨↑i % 4, ⋯⟩ + 8]! +
+        liftU (↑grouped)[↑⟨↑i % 4, ⋯⟩ + 12]!) =
+    liftU (↑grouped)[↑i]! +
+      (0 + PM state ⟨0, ⋯⟩ ⟨↑i % 4, ⋯⟩ + PM state ⟨1, ⋯⟩ ⟨↑i % 4, ⋯⟩ + PM state ⟨2, ⋯⟩ ⟨↑i % 4, ⋯⟩ +
+        PM state ⟨3, ⋯⟩ ⟨↑i % 4, ⋯⟩)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    grouped
+  has type
+    Std.Array AspisBuilderPoseidonReference.aspis_core.field.M31 16#usize
+  but is expected to have type
+    { l // l.length = ↑16#usize }
+  in the application
+    ↑grouped
+'R1Z.PV_RunJoin_ExternalRefinement.owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ExternalRefinement.dictionary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.75
+	Maximum resident set size (kbytes): 4091508
+	Swaps: 0
+	Exit status: 1

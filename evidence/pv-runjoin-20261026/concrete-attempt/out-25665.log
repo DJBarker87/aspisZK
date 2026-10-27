@@ -1,0 +1,44 @@
+def R1Z.PV_RunJoin_LedgerConstructor.runtime : [inst : ProverRwFull.ExternalTypes] →
+  {CommitHandle Aux Coins N C : Type} →
+    ProverCommitLedger36.Schedule →
+      Bool →
+        PV_RunJoin_LedgerWorld.Address →
+          PV_RunJoin_CompletedWorld.Data Coins N PV_RunJoin_LedgerWorld.World C →
+            ProverRwEffectCallback.Account N →
+              ((h : HonestProver K) → Statement K CommitHandle → h.Instance → PV_RunJoin_LedgerBody.Inputs N C) →
+                (R1Adv K CommitHandle Aux →
+                    Statement K CommitHandle →
+                      Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) →
+                        View K CommitHandle Aux R1Bat) →
+                  (R1Adv K CommitHandle Aux →
+                      Statement K CommitHandle →
+                        Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) →
+                          List (Bytes × OracleAnswer)) →
+                    ((Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+                        R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat) →
+                      PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N PV_RunJoin_LedgerWorld.World C :=
+fun [ProverRwFull.ExternalTypes] {CommitHandle Aux Coins N C} schedule unix address world policy inputs disclosed oracle
+    ideal =>
+  { world := world, account := PV_RunJoin_SourceAccount.account policy,
+    body := fun h x w => PV_RunJoin_LedgerBody.body schedule unix address (inputs h x w), disclosed := disclosed,
+    observerOracle := oracle, ideal := ideal }
+       30.49 real         1.49 user         4.15 sys
+          2771468288  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              204916  page reclaims
+              217078  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               32647  voluntary context switches
+              211699  involuntary context switches
+           315986846  instructions retired
+           111635511  cycles elapsed
+            11109072  peak memory footprint
+
+exit=0

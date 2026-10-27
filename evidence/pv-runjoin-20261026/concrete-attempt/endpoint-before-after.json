@@ -1,0 +1,39 @@
+{
+  "before_revision": "92a6c256a6",
+  "endpoint_byte_unchanged": true,
+  "endpoint_sha256": "5a35a8eee0f2fa0dcd2d55a5b412440c6db7bdce8ea7bb3a6ae394f65dd74a37",
+  "reviewed_native_data_parameters": {
+    "before": [
+      "runtime",
+      "boundary"
+    ],
+    "after": [
+      "runtime",
+      "boundary"
+    ],
+    "counts": [
+      2,
+      2
+    ],
+    "scope": "the two native data binders singled out by lead; not all mathematical/typeclass binders"
+  },
+  "prop_fields": {
+    "counts": [
+      8,
+      8
+    ],
+    "retained": {
+      "source_V045": "(∀ w : (h).Instance, (h).public w = x.1 →\n      PV_RunJoin_UnifiedRetry.BodySourceLaw (boundary.sourceBody h x w) (runtime.body h x w)) ∧\n    (∀ (s : State) k nonce next,\n      runtime.account.call_mut s k = .ok (nonce,next) → next.provider = s.provider) ∧\n    (∀ (w : (h).Instance), (h).public w = x.1 → ∀ secret (s next : State) status,\n      runtime.body h x w secret s = .ok (status,next) → next.provider = s.provider)",
+      "E1_V329": "ProverCommitPublicNonce40.E1 boundary.law",
+      "native_fill_V336": "∀ (p : ProverRwRngCaller.Tape), p.used.val < p.replies.val.length →\n    boundary.draw.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8) =\n      ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8)",
+      "native_ledger_V337": "∀ (w : (h).Instance), (h).public w = x.1 →\n    ∀ secret (s next : State) status, runtime.body h x w secret s = .ok (status,next) →\n      boundary.ledger next =\n        match boundary.reservation secret s with\n        | none => boundary.ledger s\n        | some path => (ProverCommitLedger36.reserve boundary.schedule boundary.unix path (boundary.ledger s)).2",
+      "byte_blind_V338": "(∀ secret (s : State) kind,\n      boundary.fault secret s kind = boundary.schedule (boundary.ledger s).history.length kind (boundary.ledger s).history) ∧\n    (∀ t u rest, boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t,rest))) =\n      boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u,rest)))) ∧\n    (∀ (i : Fin 128) (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest), (∀ j : Fin 128, j.val < i.val → t j = u j) →\n      boundary.frame i (t,rest) = boundary.frame i (u,rest))",
+      "kernels_V339": "∀ c, boundary.nativeWeight c =\n    PV_RunJoin_E1Joint.weight 128 boundary.law boundary.frame boundary.coordinates c",
+      "disclosed_V038": "∀ (adv : (rust).Adversary) (w : (h).Instance), (h).public w = x.1 →\n    ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →\n      ((rust).real h B outputs adv x w r).disclosed =\n        ((source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1).disclosed",
+      "observerOracle_V038": "∀ (adv : (rust).Adversary) (w : (h).Instance), (h).public w = x.1 →\n    ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →\n      ((rust).real h B outputs adv x w r).observerOracle =\n        ((source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1).observerOracle"
+    },
+    "removed": [],
+    "added": []
+  },
+  "whole_ledger_rows_closed": []
+}

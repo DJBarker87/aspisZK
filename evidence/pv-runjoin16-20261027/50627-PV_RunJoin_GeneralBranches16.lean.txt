@@ -1,0 +1,139 @@
+import R1Z.PV_RunJoin_ArrayShapes16
+import R1Z.PV_RunJoin_RecordsProgram16
+import R1Z.PV_RunJoin_WithdrawalIdentification16
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_GeneralBranches16
+open Aeneas Aeneas.Std Result BuilderForestAdmissionPort
+open BuilderForestAdmissionPort.pool_v1
+open PV_RunJoin_ArrayShapes16
+
+theorem none_first (empty : Array (Array U32 8#usize) 21#usize)
+    (i : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
+    (out : U32)
+    (chg : payment_relation.PoolV1OutputNoteWitnessV1)
+    (snap : pair_tree_profile.PoolV1PairLiveSnapshotV1) (asset : U32)
+    (hselected : i.pair.selected_second = false) :
+    @Records.call (PV_RunJoin_RecordsAdapter16.R_shipped empty) i out none chg snap asset =
+      PV_Src_RecordReference.call empty i out none chg snap asset := by
+  change (do
+    let (w,p) ← PV_RunJoin_Records.pool_v1.pair_forest_copy_builder.records
+      (PV_RunJoin_RecordsAdapter16.input i) out (none.map PV_RunJoin_RecordsAdapter16.note)
+      (PV_RunJoin_RecordsAdapter16.note chg) (PV_RunJoin_RecordsAdapter16.snapshot snap) asset empty
+    ok (PV_RunJoin_RecordsAdapter16.witness w, PV_RunJoin_RecordsAdapter16.publicRecord p)) = _
+  unfold PV_Src_RecordReference.call
+  rw [BuilderRecordsReference.records]
+  simp only [bind_tc_ok]
+  rcases i with ⟨⟨sk, salt, value, ⟨first, occ, second, inv⟩, selected,
+    ⟨siblings, index⟩⟩, supers, directions⟩
+  change selected = false at hselected
+  subst selected
+  rcases chg with ⟨changeOwner, changeSalt, changeValue⟩
+  rcases snap with ⟨pool, domain, sequence, next, current, frontier⟩
+  rw [shape20 siblings, shape3 supers, shape3 directions, shape20 frontier, shape21 empty]
+  dsimp only [PV_RunJoin_RecordsAdapter16.input, PV_RunJoin_RecordsAdapter16.note,
+    PV_RunJoin_RecordsAdapter16.snapshot]
+  unfold PV_RunJoin_Records.pool_v1.pair_forest_copy_builder.records
+  rw [_root_.PV_RunJoin_RecordsProgram16.source, _root_.PV_RunJoin_RecordsProgram16.projector]
+  unfold _root_.PV_RunJoin_RecordsProgram16.program
+  with_unfolding_all rfl
+
+#print axioms none_first
+
+theorem some_first (empty : Array (Array U32 8#usize) 21#usize)
+    (i : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
+    (out : U32)
+    (recipient : payment_relation.PoolV1OutputNoteWitnessV1)
+    (chg : payment_relation.PoolV1OutputNoteWitnessV1)
+    (snap : pair_tree_profile.PoolV1PairLiveSnapshotV1) (asset : U32)
+    (hselected : i.pair.selected_second = false) :
+    @Records.call (PV_RunJoin_RecordsAdapter16.R_shipped empty) i out (some recipient) chg snap asset =
+      PV_Src_RecordReference.call empty i out (some recipient) chg snap asset := by
+  change (do
+    let (w,p) ← PV_RunJoin_Records.pool_v1.pair_forest_copy_builder.records
+      (PV_RunJoin_RecordsAdapter16.input i) out ((some recipient).map PV_RunJoin_RecordsAdapter16.note)
+      (PV_RunJoin_RecordsAdapter16.note chg) (PV_RunJoin_RecordsAdapter16.snapshot snap) asset empty
+    ok (PV_RunJoin_RecordsAdapter16.witness w, PV_RunJoin_RecordsAdapter16.publicRecord p)) = _
+  unfold PV_Src_RecordReference.call
+  rw [BuilderRecordsReference.records]
+  simp only [bind_tc_ok]
+  rcases i with ⟨⟨sk, salt, value, ⟨first, occ, second, inv⟩, selected,
+    ⟨siblings, index⟩⟩, supers, directions⟩
+  change selected = false at hselected
+  subst selected
+  rcases chg with ⟨changeOwner, changeSalt, changeValue⟩
+  rcases snap with ⟨pool, domain, sequence, next, current, frontier⟩
+  rw [shape20 siblings, shape3 supers, shape3 directions, shape20 frontier, shape21 empty]
+  dsimp only [PV_RunJoin_RecordsAdapter16.input, PV_RunJoin_RecordsAdapter16.note,
+    PV_RunJoin_RecordsAdapter16.snapshot]
+  unfold PV_RunJoin_Records.pool_v1.pair_forest_copy_builder.records
+  rw [_root_.PV_RunJoin_RecordsProgram16.source, _root_.PV_RunJoin_RecordsProgram16.projector]
+  unfold _root_.PV_RunJoin_RecordsProgram16.program
+  with_unfolding_all rfl
+
+#print axioms some_first
+
+theorem none_second (empty : Array (Array U32 8#usize) 21#usize)
+    (i : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
+    (out : U32)
+    (chg : payment_relation.PoolV1OutputNoteWitnessV1)
+    (snap : pair_tree_profile.PoolV1PairLiveSnapshotV1) (asset : U32)
+    (hselected : i.pair.selected_second = true) :
+    @Records.call (PV_RunJoin_RecordsAdapter16.R_shipped empty) i out none chg snap asset =
+      PV_Src_RecordReference.call empty i out none chg snap asset := by
+  change (do
+    let (w,p) ← PV_RunJoin_Records.pool_v1.pair_forest_copy_builder.records
+      (PV_RunJoin_RecordsAdapter16.input i) out (none.map PV_RunJoin_RecordsAdapter16.note)
+      (PV_RunJoin_RecordsAdapter16.note chg) (PV_RunJoin_RecordsAdapter16.snapshot snap) asset empty
+    ok (PV_RunJoin_RecordsAdapter16.witness w, PV_RunJoin_RecordsAdapter16.publicRecord p)) = _
+  unfold PV_Src_RecordReference.call
+  rw [BuilderRecordsReference.records]
+  simp only [bind_tc_ok]
+  rcases i with ⟨⟨sk, salt, value, ⟨first, occ, second, inv⟩, selected,
+    ⟨siblings, index⟩⟩, supers, directions⟩
+  change selected = true at hselected
+  subst selected
+  rcases chg with ⟨changeOwner, changeSalt, changeValue⟩
+  rcases snap with ⟨pool, domain, sequence, next, current, frontier⟩
+  rw [shape20 siblings, shape3 supers, shape3 directions, shape20 frontier, shape21 empty]
+  dsimp only [PV_RunJoin_RecordsAdapter16.input, PV_RunJoin_RecordsAdapter16.note,
+    PV_RunJoin_RecordsAdapter16.snapshot]
+  unfold PV_RunJoin_Records.pool_v1.pair_forest_copy_builder.records
+  rw [_root_.PV_RunJoin_RecordsProgram16.source, _root_.PV_RunJoin_RecordsProgram16.projector]
+  unfold _root_.PV_RunJoin_RecordsProgram16.program
+  with_unfolding_all rfl
+
+#print axioms none_second
+
+theorem some_second (empty : Array (Array U32 8#usize) 21#usize)
+    (i : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
+    (out : U32)
+    (recipient : payment_relation.PoolV1OutputNoteWitnessV1)
+    (chg : payment_relation.PoolV1OutputNoteWitnessV1)
+    (snap : pair_tree_profile.PoolV1PairLiveSnapshotV1) (asset : U32)
+    (hselected : i.pair.selected_second = true) :
+    @Records.call (PV_RunJoin_RecordsAdapter16.R_shipped empty) i out (some recipient) chg snap asset =
+      PV_Src_RecordReference.call empty i out (some recipient) chg snap asset := by
+  change (do
+    let (w,p) ← PV_RunJoin_Records.pool_v1.pair_forest_copy_builder.records
+      (PV_RunJoin_RecordsAdapter16.input i) out ((some recipient).map PV_RunJoin_RecordsAdapter16.note)
+      (PV_RunJoin_RecordsAdapter16.note chg) (PV_RunJoin_RecordsAdapter16.snapshot snap) asset empty
+    ok (PV_RunJoin_RecordsAdapter16.witness w, PV_RunJoin_RecordsAdapter16.publicRecord p)) = _
+  unfold PV_Src_RecordReference.call
+  rw [BuilderRecordsReference.records]
+  simp only [bind_tc_ok]
+  rcases i with ⟨⟨sk, salt, value, ⟨first, occ, second, inv⟩, selected,
+    ⟨siblings, index⟩⟩, supers, directions⟩
+  change selected = true at hselected
+  subst selected
+  rcases chg with ⟨changeOwner, changeSalt, changeValue⟩
+  rcases snap with ⟨pool, domain, sequence, next, current, frontier⟩
+  rw [shape20 siblings, shape3 supers, shape3 directions, shape20 frontier, shape21 empty]
+  dsimp only [PV_RunJoin_RecordsAdapter16.input, PV_RunJoin_RecordsAdapter16.note,
+    PV_RunJoin_RecordsAdapter16.snapshot]
+  unfold PV_RunJoin_Records.pool_v1.pair_forest_copy_builder.records
+  rw [_root_.PV_RunJoin_RecordsProgram16.source, _root_.PV_RunJoin_RecordsProgram16.projector]
+  unfold _root_.PV_RunJoin_RecordsProgram16.program
+  with_unfolding_all rfl
+
+#print axioms some_second
+end R1Z.PV_RunJoin_GeneralBranches16

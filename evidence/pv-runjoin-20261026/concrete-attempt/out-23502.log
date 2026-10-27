@@ -1,0 +1,1104 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:29:119: error: unsolved goals
+case h_1
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+S T : Type
+project : S → T
+left : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S
+right : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T
+pub : ProverRwRetryModel.Pub
+compiled : ProverRwRetryModel.Compiled
+variant : transport.Variant
+hash : ProverRwRetryModel.Hash
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+binding : Std.Array U8 32#usize
+attempt : ProverRwRetryModel.Secret
+status :
+  core.result.Result
+    (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+      aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+    aspis_prover.state_only_hiding.StateOnlyMaskBuildError
+s : S
+x✝ :
+  core.result.Result
+    (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+      aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+    verifier.Error
+fst✝ : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets
+snd✝ : aspis_prover.state_only_hiding.StateOnlyMaskMaterial
+called✝¹ :
+  ExternalFuns.op12 (BuiltinFnOnce aspis_prover.state_only_hiding.StateOnlyMaskBuildError verifier.Error) status
+      prover.mask_error =
+    ok (core.result.Result.Ok (fst✝, snd✝))
+value : aspis_statement.state_only_trace.StateOnlyTraceFoundation
+called✝ :
+  aspis_statement.state_only_trace.StateOnlyTraceFoundation.Insts.CoreCloneClone.clone compiled.semantic_c1 = ok value
+value1 :
+  core.result.Result aspis_prover.state_only_hiding.AppliedStateOnlyMasks
+    aspis_prover.state_only_hiding.StateOnlyMaskBuildError
+value2 : aspis_statement.state_only_trace.StateOnlyTraceFoundation
+called : aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_mask_material_v1 value snd✝ = ok (value1, value2)
+⊢ (do
+      let a ←
+        ExternalFuns.op12
+            {
+              call_once :=
+                prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once
+                  left }
+            value1 ()
+      let a ←
+        match a with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      mapR (fun out => (out.1, project out.2))
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let r4 ← aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1
+            let r5 ←
+              ExternalFuns.op12
+                  {
+                    call_once :=
+                      prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once
+                        left }
+                  r4 ()
+            let cf2 ←
+              match r5 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                let r6 ← fst✝.derive_pool_v1_pair_forest_zero_factor_d hash context
+                let r7 ←
+                  ExternalFuns.op12
+                      (BuiltinFnOnce aspis_prover.state_only_hiding.StateOnlyMaskBuildError verifier.Error) r6
+                      prover.mask_error
+                let cf3 ←
+                  match r7 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf3 with
+                  | core.ops.control_flow.ControlFlow.Continue val3 => do
+                    let r8 ← Array.Insts.CoreConvertTryFromVecVec.try_from Global 1024#usize val3
+                    let r9 ←
+                      ExternalFuns.op12
+                          {
+                            call_once :=
+                              prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once
+                                left }
+                          r8 ()
+                    let cf4 ←
+                      match r9 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf4 with
+                      | core.ops.control_flow.ControlFlow.Continue val4 =>
+                        if (val1.g.len != 1024#usize) = true then ok (core.result.Result.Err verifier.Error.Semantic, s)
+                        else
+                          if (val1.h1_padding.len != 1024#usize) = true then
+                            ok (core.result.Result.Err verifier.Error.Semantic, s)
+                          else do
+                            let g ← prover.fixed_k_column val1.g.deref
+                            let h1_padding ← prover.fixed_k_column val1.h1_padding.deref
+                            let s2 ← lift value2.c1.to_slice
+                            let audit ← prover.audit_masks s2 val1.mask_only_c1 val4 g h1_padding val2
+                            if (audit.c1_columns_inactive_balanced != 16#usize) = true then
+                                ok (core.result.Result.Err verifier.Error.Semantic, s)
+                              else
+                                if (audit.mask_only_columns_inactive_balanced != 10#usize) = true then
+                                  ok (core.result.Result.Err verifier.Error.Semantic, s)
+                                else
+                                  if audit.d_inactive_balanced = true then
+                                    if audit.g_inactive_balanced = true then
+                                      if audit.h1_padding_inactive_balanced = true then do
+                                        let i2 ← aspis_core.r0.merkle.C1_TAG
+                                        let r10 ← prover.derive_private_salts fst✝ context hash i2
+                                        let cf5 ←
+                                          match r10 with
+                                            | core.result.Result.Ok v =>
+                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                            | core.result.Result.Err e =>
+                                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                        match cf5 with
+                                          | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                            let i3 ← aspis_core.r0.merkle.C2_TAG
+                                            let r11 ← prover.derive_private_salts fst✝ context hash i3
+                                            let cf6 ←
+                                              match r11 with
+                                                | core.result.Result.Ok v =>
+                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                | core.result.Result.Err e =>
+                                                  ok
+                                                    (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                            match cf6 with
+                                              | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                let r12 ← host_commitment.EncodingDomain.new
+                                                let r13 ←
+                                                  ExternalFuns.op12
+                                                      {
+                                                        call_once :=
+                                                          prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                                                            left }
+                                                      r12 ()
+                                                let cf7 ←
+                                                  match r13 with
+                                                    | core.result.Result.Ok v =>
+                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                    | core.result.Result.Err e =>
+                                                      ok
+                                                        (core.ops.control_flow.ControlFlow.Break
+                                                          (core.result.Result.Err e))
+                                                match cf7 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                    let we ← aspis_core.field.wide_exact.WideExact.ZERO
+                                                    let v ←
+                                                      alloc.vec.from_elem
+                                                          (core.clone.CloneArray 1024#usize
+                                                            aspis_core.field.wide_exact.WideExact.Insts.CoreCloneClone)
+                                                          (Array.repeat 1024#usize we) 29#usize
+                                                    let (r14, backend) ←
+                                                      host_semantic.build_with_material
+                                                          aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                                                          prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments
+                                                          pub compiled value2 val1.mask_only_c1 val4 g h1_padding
+                                                          { hash := hash, variant := variant, domain := val7,
+                                                            messages := v, c1 := none, c2 := none,
+                                                            c1_salts := some val5, c2_salts := some val6 }
+                                                          hash variant
+                                                    let r15 ←
+                                                      ExternalFuns.op12 (BuiltinFnOnce r1_wire.Error verifier.Error) r14
+                                                          prover.semantic_error
+                                                    let cf8 ←
+                                                      match r15 with
+                                                        | core.result.Result.Ok v =>
+                                                          ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                        | core.result.Result.Err e =>
+                                                          ok
+                                                            (core.ops.control_flow.ControlFlow.Break
+                                                              (core.result.Result.Err e))
+                                                    match cf8 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                                        let v1 ← val8.columns.index_usize 26#usize
+                                                        let o ←
+                                                          aspis_statement.state_only_semantic.state_only_copy_helper_sum
+                                                              v1.deref
+                                                        let q ← aspis_core.field.QM31.ZERO
+                                                        let h1_total_balanced ←
+                                                          core.option.Option.Insts.CoreCmpPartialEqOption.eq
+                                                              aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 o
+                                                              (some q)
+                                                        if h1_total_balanced = true then do
+                                                            let r16 ←
+                                                              prover.prove_from_semantics pub variant hash backend val8
+                                                                  (fst✝, context)
+                                                            let cf9 ←
+                                                              match r16 with
+                                                                | core.result.Result.Ok v =>
+                                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                                | core.result.Result.Err e =>
+                                                                  ok
+                                                                    (core.ops.control_flow.ControlFlow.Break
+                                                                      (core.result.Result.Err e))
+                                                            match cf9 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val9 =>
+                                                                ok
+                                                                  (core.result.Result.Ok
+                                                                      (val9,
+                                                                        {
+                                                                          c1_columns_inactive_balanced :=
+                                                                            audit.c1_columns_inactive_balanced,
+                                                                          mask_only_columns_inactive_balanced :=
+                                                                            audit.mask_only_columns_inactive_balanced,
+                                                                          d_inactive_balanced :=
+                                                                            audit.d_inactive_balanced,
+                                                                          g_inactive_balanced :=
+                                                                            audit.g_inactive_balanced,
+                                                                          h1_padding_inactive_balanced :=
+                                                                            audit.h1_padding_inactive_balanced,
+                                                                          h1_total_balanced := true }),
+                                                                    s)
+                                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                                let r17 ←
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                                      (core.convert.FromSame verifier.Error) residual
+                                                                ok (r17, s)
+                                                          else ok (core.result.Result.Err verifier.Error.Semantic, s)
+                                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                                        let r17 ←
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                              (core.convert.FromSame verifier.Error) residual
+                                                        ok (r17, s)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r17 ←
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                          (core.convert.FromSame verifier.Error) residual
+                                                    ok (r17, s)
+                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                let r17 ←
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                      (core.convert.FromSame verifier.Error) residual
+                                                ok (r17, s)
+                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                            let r17 ←
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                  (core.convert.FromSame verifier.Error) residual
+                                            ok (r17, s)
+                                      else ok (core.result.Result.Err verifier.Error.Semantic, s)
+                                    else ok (core.result.Result.Err verifier.Error.Semantic, s)
+                                  else ok (core.result.Result.Err verifier.Error.Semantic, s)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r17 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                              residual
+                        ok (r17, s)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r17 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                    ok (r17, s)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r17 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                ok (r17, s)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r17 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+            ok (r17, s))) =
+    do
+    let r3 ←
+      ExternalFuns.op12
+          {
+            call_once :=
+              prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once
+                right }
+          value1 ()
+    let cf1 ←
+      match r3 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val1 => do
+        let r4 ← aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1
+        let r5 ←
+          ExternalFuns.op12
+              {
+                call_once :=
+                  prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once
+                    right }
+              r4 ()
+        let cf2 ←
+          match r5 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf2 with
+          | core.ops.control_flow.ControlFlow.Continue val2 => do
+            let r6 ← fst✝.derive_pool_v1_pair_forest_zero_factor_d hash context
+            let r7 ←
+              ExternalFuns.op12 (BuiltinFnOnce aspis_prover.state_only_hiding.StateOnlyMaskBuildError verifier.Error) r6
+                  prover.mask_error
+            let cf3 ←
+              match r7 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue val3 => do
+                let r8 ← Array.Insts.CoreConvertTryFromVecVec.try_from Global 1024#usize val3
+                let r9 ←
+                  ExternalFuns.op12
+                      {
+                        call_once :=
+                          prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once
+                            right }
+                      r8 ()
+                let cf4 ←
+                  match r9 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf4 with
+                  | core.ops.control_flow.ControlFlow.Continue val4 =>
+                    if (val1.g.len != 1024#usize) = true then
+                      ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                    else
+                      if (val1.h1_padding.len != 1024#usize) = true then
+                        ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                      else do
+                        let g ← prover.fixed_k_column val1.g.deref
+                        let h1_padding ← prover.fixed_k_column val1.h1_padding.deref
+                        let s2 ← lift value2.c1.to_slice
+                        let audit ← prover.audit_masks s2 val1.mask_only_c1 val4 g h1_padding val2
+                        if (audit.c1_columns_inactive_balanced != 16#usize) = true then
+                            ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                          else
+                            if (audit.mask_only_columns_inactive_balanced != 10#usize) = true then
+                              ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                            else
+                              if audit.d_inactive_balanced = true then
+                                if audit.g_inactive_balanced = true then
+                                  if audit.h1_padding_inactive_balanced = true then do
+                                    let i2 ← aspis_core.r0.merkle.C1_TAG
+                                    let r10 ← prover.derive_private_salts fst✝ context hash i2
+                                    let cf5 ←
+                                      match r10 with
+                                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                        | core.result.Result.Err e =>
+                                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                    match cf5 with
+                                      | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                        let i3 ← aspis_core.r0.merkle.C2_TAG
+                                        let r11 ← prover.derive_private_salts fst✝ context hash i3
+                                        let cf6 ←
+                                          match r11 with
+                                            | core.result.Result.Ok v =>
+                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                            | core.result.Result.Err e =>
+                                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                        match cf6 with
+                                          | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                            let r12 ← host_commitment.EncodingDomain.new
+                                            let r13 ←
+                                              ExternalFuns.op12
+                                                  {
+                                                    call_once :=
+                                                      prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                                                        right }
+                                                  r12 ()
+                                            let cf7 ←
+                                              match r13 with
+                                                | core.result.Result.Ok v =>
+                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                | core.result.Result.Err e =>
+                                                  ok
+                                                    (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                            match cf7 with
+                                              | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                let we ← aspis_core.field.wide_exact.WideExact.ZERO
+                                                let v ←
+                                                  alloc.vec.from_elem
+                                                      (core.clone.CloneArray 1024#usize
+                                                        aspis_core.field.wide_exact.WideExact.Insts.CoreCloneClone)
+                                                      (Array.repeat 1024#usize we) 29#usize
+                                                let (r14, backend) ←
+                                                  host_semantic.build_with_material
+                                                      aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                                                      prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments
+                                                      pub compiled value2 val1.mask_only_c1 val4 g h1_padding
+                                                      { hash := hash, variant := variant, domain := val7, messages := v,
+                                                        c1 := none, c2 := none, c1_salts := some val5,
+                                                        c2_salts := some val6 }
+                                                      hash variant
+                                                let r15 ←
+                                                  ExternalFuns.op12 (BuiltinFnOnce r1_wire.Error verifier.Error) r14
+                                                      prover.semantic_error
+                                                let cf8 ←
+                                                  match r15 with
+                                                    | core.result.Result.Ok v =>
+                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                    | core.result.Result.Err e =>
+                                                      ok
+                                                        (core.ops.control_flow.ControlFlow.Break
+                                                          (core.result.Result.Err e))
+                                                match cf8 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                                    let v1 ← val8.columns.index_usize 26#usize
+                                                    let o ←
+                                                      aspis_statement.state_only_semantic.state_only_copy_helper_sum
+                                                          v1.deref
+                                                    let q ← aspis_core.field.QM31.ZERO
+                                                    let h1_total_balanced ←
+                                                      core.option.Option.Insts.CoreCmpPartialEqOption.eq
+                                                          aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 o (some q)
+                                                    if h1_total_balanced = true then do
+                                                        let r16 ←
+                                                          prover.prove_from_semantics pub variant hash backend val8
+                                                              (fst✝, context)
+                                                        let cf9 ←
+                                                          match r16 with
+                                                            | core.result.Result.Ok v =>
+                                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                            | core.result.Result.Err e =>
+                                                              ok
+                                                                (core.ops.control_flow.ControlFlow.Break
+                                                                  (core.result.Result.Err e))
+                                                        match cf9 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val9 =>
+                                                            ok
+                                                              (core.result.Result.Ok
+                                                                  (val9,
+                                                                    {
+                                                                      c1_columns_inactive_balanced :=
+                                                                        audit.c1_columns_inactive_balanced,
+                                                                      mask_only_columns_inactive_balanced :=
+                                                                        audit.mask_only_columns_inactive_balanced,
+                                                                      d_inactive_balanced := audit.d_inactive_balanced,
+                                                                      g_inactive_balanced := audit.g_inactive_balanced,
+                                                                      h1_padding_inactive_balanced :=
+                                                                        audit.h1_padding_inactive_balanced,
+                                                                      h1_total_balanced := true }),
+                                                                project s)
+                                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                                            let r17 ←
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                                  (core.convert.FromSame verifier.Error) residual
+                                                            ok (r17, project s)
+                                                      else
+                                                        ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r17 ←
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                          (core.convert.FromSame verifier.Error) residual
+                                                    ok (r17, project s)
+                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                let r17 ←
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                      (core.convert.FromSame verifier.Error) residual
+                                                ok (r17, project s)
+                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                            let r17 ←
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                  (core.convert.FromSame verifier.Error) residual
+                                            ok (r17, project s)
+                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                        let r17 ←
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                              (core.convert.FromSame verifier.Error) residual
+                                        ok (r17, project s)
+                                  else ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                                else ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                              else ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r17 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                    ok (r17, project s)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r17 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                ok (r17, project s)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r17 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+            ok (r17, project s)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r17 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+        ok (r17, project s)
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:31:22: warning: This simp argument is unused:
+  map_if
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, ̲map_i̵f̵,̵m̵a̵p̵_̵ok, ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:31:29: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, ̲map_if,m̵a̵p̵_̵o̵k̵,̵ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:31:36: warning: This simp argument is unused:
+  PV_RunJoin_PairElimination.cases_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, ̲map_if, ̲map_ok,P̵V̵_̵R̵u̵n̵J̵o̵i̵n̵_̵P̵a̵i̵r̵E̵l̵i̵m̵i̵n̵a̵t̵i̵o̵n̵.̵c̵a̵s̵e̵s̵_̵p̵a̵i̵r̵,̵ ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:31:74: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, ̲map_if, ̲map_ok, ̲PV_RunJoin_PairElimination.cases_pair,b̵i̵n̵d̵_̵t̵
+  ̲ ̲ ̲ ̲ ̲c_̵ok̵,̵c̵o̵re.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:33:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, ̲map_if, ̲map_ok, ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure_̵3̵.Insts.CoreOpsFunctionFnOnceTupleE̵r̵r̵o̵r̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵StateOnlyMaskBuildErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:35:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, ̲map_if, ̲map_ok, ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵S̵t̵a̵t̵e̵O̵n̵l̵y̵M̵a̵s̵k̵B̵u̵i̵l̵d̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_o̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:37:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, ̲map_if, ̲map_ok, ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵P̵o̵o̵l̵V̵1̵P̵a̵i̵r̵H̵i̵d̵i̵n̵g̵L̵a̵y̵o̵u̵t̵E̵r̵r̵o̵r̵V̵1̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:39:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [map_bind, ̲map_if, ̲map_ok, ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+       ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+       ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+       ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵2̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵V̵e̵c̵Q̵M̵3̵1̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:46:36: warning: This simp argument is unused:
+  map_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_b̵in̵d̵,̵m̵a̵p̵_̵i̵f, ̲map_ok, ̲PV_RunJoin_PairElimination.cases_pair,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:46:45: warning: This simp argument is unused:
+  map_if
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_i̵f̵,̵m̵a̵p̵_̵ok, ̲PV_RunJoin_PairElimination.cases_pair,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:46:52: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if,m̵a̵p̵_̵o̵k̵,̵ ̲PV_RunJoin_PairElimination.cases_pair,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:46:59: warning: This simp argument is unused:
+  PV_RunJoin_PairElimination.cases_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,P̵V̵_̵R̵u̵n̵J̵o̵i̵n̵_̵P̵a̵i̵r̵E̵l̵i̵m̵i̵n̵a̵t̵i̵o̵n̵.̵c̵a̵s̵e̵s̵_̵p̵a̵i̵r̵,̵ ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:46:97: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair,b̵i̵n̵d̵_̵t̵ ̲c_̵ok̵,̵c̵o̵re.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:46:108: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:46:151: warning: This simp argument is unused:
+  core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:47:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+        p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵3̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵
+  ̵   ̵ ̵ ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:48:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+        p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵3̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵
+  ̵   ̵ ̵ ̵ ̵prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:49:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵S̵t̵a̵t̵e̵O̵n̵l̵y̵M̵a̵s̵k̵B̵u̵i̵l̵d̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵
+  ̵   ̵ ̵ ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:50:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵S̵t̵a̵t̵e̵O̵n̵l̵y̵M̵a̵s̵k̵B̵u̵i̵l̵d̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵
+  ̵   ̵ ̵ ̵ ̵prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:51:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵P̵o̵o̵l̵V̵1̵P̵a̵i̵r̵H̵i̵d̵i̵n̵g̵L̵a̵y̵o̵u̵t̵E̵r̵r̵o̵r̵V̵1̵E̵r̵r̵o̵r̵,̵
+  ̵   ̵ ̵ ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:52:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵P̵o̵o̵l̵V̵1̵P̵a̵i̵r̵H̵i̵d̵i̵n̵g̵L̵a̵y̵o̵u̵t̵E̵r̵r̵o̵r̵V̵1̵E̵r̵r̵o̵r̵,̵
+  ̵   ̵ ̵ ̵ ̵prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:53:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵2̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵V̵e̵c̵Q̵M̵3̵1̵E̵r̵r̵o̵r̵,̵
+  ̵   ̵ ̵ ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:54:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+         ̲ ̲prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+         ̲ ̲prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵2̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵V̵e̵c̵Q̵M̵3̵1̵E̵r̵r̵o̵r̵,̵
+  ̵   ̵ ̵ ̵ ̵prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:55:55: warning: This simp argument is unused:
+  map_if
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_i̵f̵,̵m̵a̵p̵_̵ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:55:69: warning: This simp argument is unused:
+  PV_RunJoin_PairElimination.cases_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,P̵V̵_̵R̵u̵n̵J̵o̵i̵n̵_̵P̵a̵i̵r̵E̵l̵i̵m̵i̵n̵a̵t̵i̵o̵n̵.̵c̵a̵s̵e̵s̵_̵p̵a̵i̵r̵,̵ ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲core.result.Result.map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:55:118: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:55:161: warning: This simp argument is unused:
+  core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:56:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+        p̵c̲o̲ro̵v̵er̵.p̵r̵o̵v̵e̵_̵r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲mas̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵pt̵.̵c̵l̵o̵s̵u̵r̵e̵_3̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵eO̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵rro̵r̵E̵r̵r̵o̵r̵,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:57:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_̵3̵.Insts.CoreOpsFunctionFnOnceTupleE̵r̵r̵o̵r̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵StateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:58:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵cl̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵S̵t̵at̵e̵O̵n̵ly̵M̵a̵s̵k̵B̵u̵i̵ld̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:59:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵S̵t̵a̵t̵e̵O̵n̵l̵y̵M̵a̵s̵k̵B̵u̵i̵l̵d̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_o̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:60:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵cl̵o̵s̵u̵r̵e̵_̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵P̵o̵o̵l̵V̵1̵P̵ai̵r̵H̵i̵d̵i̵n̵g̵L̵a̵y̵o̵u̵t̵E̵r̵r̵o̵r̵V̵1̵E̵r̵r̵o̵r̵.̵c̵a̵ll_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:61:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵P̵o̵o̵l̵V̵1̵P̵a̵i̵r̵H̵i̵d̵i̵n̵g̵L̵a̵y̵o̵u̵t̵E̵r̵r̵o̵r̵V̵1̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:62:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵cl̵o̵s̵u̵r̵e̵_̵2̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵V̵e̵c̵Q̵M̵3̵1̵E̵r̵r̵o̵r̵.̵c̵all_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:63:6: warning: This simp argument is unused:
+  prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_RunJoin_PairElimination.cases_pair, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.map_err,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError,
+        prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError.call_once,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error,
+        prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error.call_once,
+        prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.̵p̵r̵o̵v̵e̵_̵m̵a̵s̵k̵e̵d̵_̵w̵i̵t̵h̵_̵a̵t̵t̵e̵m̵p̵t̵.̵c̵l̵o̵s̵u̵r̵e̵_̵2̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵V̵e̵c̵Q̵M̵3̵1̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_StoreContinuationTransport.after_reserve' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       73.15 real         2.64 user         6.58 sys
+          2864267264  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              149657  page reclaims
+              319345  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               76324  voluntary context switches
+              351469  involuntary context switches
+           625242677  instructions retired
+           343047611  cycles elapsed
+            12174128  peak memory footprint
+
+exit=1

@@ -1488,3 +1488,7 @@ mod tests {
         .unwrap();
     }
 }
+
+#[cfg(kani)]
+#[path = "pair_trace_pv_runjoin8_roots.rs"]
+mod pv_runjoin8_roots;

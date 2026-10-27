@@ -1,0 +1,41 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0051); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EndpointSelection.lean:26:71: error: unsolved goals
+CommitHandle : Type
+selected : Statement K CommitHandle → h.Instance → PV_Src_NativeInput.Input
+publicRecord : Statement K CommitHandle → PV_Src_NativeInput.Input
+x : Statement K CommitHandle
+w : h.Instance
+⊢ (if h : True then selected x w else publicRecord x) = selected x w
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EndpointSelection.lean:28:23: warning: This simp argument is unused:
+  dif_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [selection,̵d̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_EndpointSelection.lean:43:2: error: unsolved goals
+case neg
+CommitHandle : Type
+selected : Statement K CommitHandle → h.Instance → PV_Src_NativeInput.Input
+publicRecord : Statement K CommitHandle → PV_Src_NativeInput.Input
+binding :
+  ∀ (x : Statement K CommitHandle) (w : h.Instance),
+    h.public w = x.1 → PV_Src_NativeInput.publicInput (selected x w) = PV_Src_NativeInput.publicInput (publicRecord x)
+hh : R0Z.JointView.HonestProver K
+x : R0Z.JointView.Statement K CommitHandle
+w : hh.Instance
+hw : hh.public w = x.1
+eq : ¬hh = h
+⊢ PV_Src_NativeInput.publicInput (publicRecord x) =
+    PV_Src_NativeInput.publicInput ((selection selected publicRecord).publicRecord x)
+'R1Z.PV_RunJoin_EndpointSelection.selected_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EndpointSelection.public_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EndpointSelection.data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EndpointSelection.record_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.90
+	Maximum resident set size (kbytes): 4295544
+	Swaps: 0
+	Exit status: 1

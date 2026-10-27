@@ -1,0 +1,31 @@
+@R1Z.PV_RunJoin_InstalledFamily.map_error : ∀ {CommitHandle N C : Type} (base : ProverRwFull.ExternalTypes)
+  (ops : R1Z.PV_RunJoin_NativeSelectedInputs.LedgerState base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (selection : R1Z.PV_RunJoin_InstalledFamily.Selection CommitHandle)
+  (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) (w : h.Instance)
+  (s : R1Z.PV_RunJoin_NativeSelectedInputs.LedgerState base N C),
+  R1Z.PV_RunJoin_MapErrInstalled.Identity ((R1Z.PV_RunJoin_InstalledFamily.inputs base ops hash selection h x w).ops s)
+'R1Z.PV_RunJoin_InstalledFamily.map_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+       26.59 real         1.42 user         4.12 sys
+          2728984576  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              309836  page reclaims
+              180594  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                5750  voluntary context switches
+              197406  involuntary context switches
+           396567595  instructions retired
+           160536354  cycles elapsed
+            11731760  peak memory footprint
+
+exit=0

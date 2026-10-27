@@ -1,0 +1,76 @@
+@R1Z.PV_RunJoin_LedgerEndpoint.toPremises : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [inst : ProverRwFull.ExternalTypes]
+  {N Client Context Rest : Type} [inst_1 : Fintype Rest] (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (world :
+    R1Z.PV_RunJoin_CompletedWorld.Data (R1Z.PV_RunJoin_LedgerEndpoint.ModelCoins template outputs x) N
+      R1Z.PV_RunJoin_LedgerWorld.World Client)
+  (policy : R1Z.ProverRwEffectCallback.Account N)
+  (inputs :
+    (honest : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        honest.Instance → R1Z.PV_RunJoin_LedgerBody.Inputs N Client)
+  (disclosed :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World Client) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (oracle :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World Client) →
+          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+  (ideal :
+    (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+        R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (common : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle → R1Z.PV_RunJoin_LedgerBody.Inputs N Client)
+  (boundaryData :
+    R1Z.PV_RunJoin_Boundary.Data
+      (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal)
+      Context Rest),
+  (∀ (hh : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K)
+      (xx : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) (ww : hh.Instance)
+      (ss : R1Z.PV_RunJoin_LedgerBody.State N Client),
+      R1Z.PV_RunJoin_MapErrInstalled.Identity ((inputs hh xx ww).ops ss)) →
+    (∀ (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_LedgerEndpoint.input).Instance),
+        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_LedgerEndpoint.input).public w = x.1 →
+          ∀ (s : R1Z.PV_RunJoin_Deployed.State N R1Z.PV_RunJoin_LedgerWorld.World Client),
+            (inputs (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_LedgerEndpoint.input) x w).ops s = (common x).ops s ∧
+              (inputs (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_LedgerEndpoint.input) x w).pub s = (common x).pub s ∧
+                (inputs (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_LedgerEndpoint.input) x w).hash s =
+                  (common x).hash s) →
+      R1Z.PV_RunJoin_LedgerEndpoint.Residual template outputs x schedule unix address world policy inputs disclosed
+          oracle ideal common boundaryData →
+        R1Z.PV_RunJoin_Endpoint.PV_RunJoin_Premises template outputs x
+          (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal)
+          (R1Z.PV_RunJoin_LedgerBoundary.boundary schedule unix address world policy inputs common disclosed oracle
+            ideal x boundaryData)
+'R1Z.PV_RunJoin_LedgerEndpoint.toPremises' depends on axioms: [propext, Classical.choice, Quot.sound]
+       33.40 real         1.71 user         4.50 sys
+          2711273472  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              286764  page reclaims
+              184370  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               19521  voluntary context switches
+              219406  involuntary context switches
+           411670873  instructions retired
+           250780269  cycles elapsed
+            12206920  peak memory footprint
+
+exit=0

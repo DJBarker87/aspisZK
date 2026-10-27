@@ -1,0 +1,553 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:33:12: error: unexpected token ':'; expected '=>'
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_StoreContinuationTransport.lean:27:119: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+S T : Type
+project : S → T
+left : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S
+right : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T
+pub : ProverRwRetryModel.Pub
+compiled : ProverRwRetryModel.Compiled
+variant : transport.Variant
+hash : ProverRwRetryModel.Hash
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+binding : Std.Array U8 32#usize
+attempt : ProverRwRetryModel.Secret
+status :
+  core.result.Result
+    (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+      aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+    aspis_prover.state_only_hiding.StateOnlyMaskBuildError
+s : S
+⊢ (do
+      let a ←
+        core.result.Result.map_err (BuiltinFnOnce aspis_prover.state_only_hiding.StateOnlyMaskBuildError verifier.Error)
+            status prover.mask_error
+      let a ←
+        match a with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      mapR (fun out => (out.1, project out.2))
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (reserved, material) := val
+            do
+            let noised_c1 ←
+              aspis_statement.state_only_trace.StateOnlyTraceFoundation.Insts.CoreCloneClone.clone compiled.semantic_c1
+            let (r2, noised_c11) ←
+              aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_mask_material_v1 noised_c1 material
+            let r3 ←
+              core.result.Result.map_err
+                  (prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
+                    left)
+                  r2 ()
+            let cf1 ←
+              match r3 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let r4 ← aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1
+                let r5 ←
+                  core.result.Result.map_err
+                      (prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
+                        left)
+                      r4 ()
+                let cf2 ←
+                  match r5 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    let r6 ← reserved.derive_pool_v1_pair_forest_zero_factor_d hash context
+                    let r7 ←
+                      core.result.Result.map_err
+                          (BuiltinFnOnce aspis_prover.state_only_hiding.StateOnlyMaskBuildError verifier.Error) r6
+                          prover.mask_error
+                    let cf3 ←
+                      match r7 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue val3 => do
+                        let r8 ← Array.Insts.CoreConvertTryFromVecVec.try_from Global 1024#usize val3
+                        let r9 ←
+                          core.result.Result.map_err
+                              (prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error
+                                left)
+                              r8 ()
+                        let cf4 ←
+                          match r9 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue val4 =>
+                            if (val1.g.len != 1024#usize) = true then
+                              ok (core.result.Result.Err verifier.Error.Semantic, s)
+                            else
+                              if (val1.h1_padding.len != 1024#usize) = true then
+                                ok (core.result.Result.Err verifier.Error.Semantic, s)
+                              else do
+                                let g ← prover.fixed_k_column val1.g.deref
+                                let h1_padding ← prover.fixed_k_column val1.h1_padding.deref
+                                let s2 ← lift noised_c11.c1.to_slice
+                                let audit ← prover.audit_masks s2 val1.mask_only_c1 val4 g h1_padding val2
+                                if (audit.c1_columns_inactive_balanced != 16#usize) = true then
+                                    ok (core.result.Result.Err verifier.Error.Semantic, s)
+                                  else
+                                    if (audit.mask_only_columns_inactive_balanced != 10#usize) = true then
+                                      ok (core.result.Result.Err verifier.Error.Semantic, s)
+                                    else
+                                      if audit.d_inactive_balanced = true then
+                                        if audit.g_inactive_balanced = true then
+                                          if audit.h1_padding_inactive_balanced = true then do
+                                            let i2 ← aspis_core.r0.merkle.C1_TAG
+                                            let r10 ← prover.derive_private_salts reserved context hash i2
+                                            let cf5 ←
+                                              match r10 with
+                                                | core.result.Result.Ok v =>
+                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                | core.result.Result.Err e =>
+                                                  ok
+                                                    (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                            match cf5 with
+                                              | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                                let i3 ← aspis_core.r0.merkle.C2_TAG
+                                                let r11 ← prover.derive_private_salts reserved context hash i3
+                                                let cf6 ←
+                                                  match r11 with
+                                                    | core.result.Result.Ok v =>
+                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                    | core.result.Result.Err e =>
+                                                      ok
+                                                        (core.ops.control_flow.ControlFlow.Break
+                                                          (core.result.Result.Err e))
+                                                match cf6 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                    let r12 ← host_commitment.EncodingDomain.new
+                                                    let r13 ←
+                                                      core.result.Result.map_err
+                                                          (prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                            left)
+                                                          r12 ()
+                                                    let cf7 ←
+                                                      match r13 with
+                                                        | core.result.Result.Ok v =>
+                                                          ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                        | core.result.Result.Err e =>
+                                                          ok
+                                                            (core.ops.control_flow.ControlFlow.Break
+                                                              (core.result.Result.Err e))
+                                                    match cf7 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                        let we ← aspis_core.field.wide_exact.WideExact.ZERO
+                                                        let v ←
+                                                          alloc.vec.from_elem
+                                                              (core.clone.CloneArray 1024#usize
+                                                                aspis_core.field.wide_exact.WideExact.Insts.CoreCloneClone)
+                                                              (Array.repeat 1024#usize we) 29#usize
+                                                        let (r14, backend) ←
+                                                          host_semantic.build_with_material
+                                                              aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                                                              prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments
+                                                              pub compiled noised_c11 val1.mask_only_c1 val4 g
+                                                              h1_padding
+                                                              { hash := hash, variant := variant, domain := val7,
+                                                                messages := v, c1 := none, c2 := none,
+                                                                c1_salts := some val5, c2_salts := some val6 }
+                                                              hash variant
+                                                        let r15 ←
+                                                          core.result.Result.map_err
+                                                              (BuiltinFnOnce r1_wire.Error verifier.Error) r14
+                                                              prover.semantic_error
+                                                        let cf8 ←
+                                                          match r15 with
+                                                            | core.result.Result.Ok v =>
+                                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                            | core.result.Result.Err e =>
+                                                              ok
+                                                                (core.ops.control_flow.ControlFlow.Break
+                                                                  (core.result.Result.Err e))
+                                                        match cf8 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                                            let v1 ← val8.columns.index_usize 26#usize
+                                                            let o ←
+                                                              aspis_statement.state_only_semantic.state_only_copy_helper_sum
+                                                                  v1.deref
+                                                            let q ← aspis_core.field.QM31.ZERO
+                                                            let h1_total_balanced ←
+                                                              core.option.Option.Insts.CoreCmpPartialEqOption.eq
+                                                                  aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 o
+                                                                  (some q)
+                                                            if h1_total_balanced = true then do
+                                                                let r16 ←
+                                                                  prover.prove_from_semantics pub variant hash backend
+                                                                      val8 (reserved, context)
+                                                                let cf9 ←
+                                                                  match r16 with
+                                                                    | core.result.Result.Ok v =>
+                                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                                    | core.result.Result.Err e =>
+                                                                      ok
+                                                                        (core.ops.control_flow.ControlFlow.Break
+                                                                          (core.result.Result.Err e))
+                                                                match cf9 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue val9 =>
+                                                                    ok
+                                                                      (core.result.Result.Ok
+                                                                          (val9,
+                                                                            {
+                                                                              c1_columns_inactive_balanced :=
+                                                                                audit.c1_columns_inactive_balanced,
+                                                                              mask_only_columns_inactive_balanced :=
+                                                                                audit.mask_only_columns_inactive_balanced,
+                                                                              d_inactive_balanced :=
+                                                                                audit.d_inactive_balanced,
+                                                                              g_inactive_balanced :=
+                                                                                audit.g_inactive_balanced,
+                                                                              h1_padding_inactive_balanced :=
+                                                                                audit.h1_padding_inactive_balanced,
+                                                                              h1_total_balanced := true }),
+                                                                        s)
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    do
+                                                                    let r17 ←
+                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                                          (core.convert.FromSame verifier.Error)
+                                                                          residual
+                                                                    ok (r17, s)
+                                                              else
+                                                                ok (core.result.Result.Err verifier.Error.Semantic, s)
+                                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                                            let r17 ←
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                                  (core.convert.FromSame verifier.Error) residual
+                                                            ok (r17, s)
+                                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                                        let r17 ←
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                              (core.convert.FromSame verifier.Error) residual
+                                                        ok (r17, s)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r17 ←
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                          (core.convert.FromSame verifier.Error) residual
+                                                    ok (r17, s)
+                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                let r17 ←
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                      (core.convert.FromSame verifier.Error) residual
+                                                ok (r17, s)
+                                          else ok (core.result.Result.Err verifier.Error.Semantic, s)
+                                        else ok (core.result.Result.Err verifier.Error.Semantic, s)
+                                      else ok (core.result.Result.Err verifier.Error.Semantic, s)
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r17 ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                                  residual
+                            ok (r17, s)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r17 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                              residual
+                        ok (r17, s)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r17 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                    ok (r17, s)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r17 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                ok (r17, s)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r17 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+            ok (r17, s))) =
+    do
+    let r1 ←
+      core.result.Result.map_err (BuiltinFnOnce aspis_prover.state_only_hiding.StateOnlyMaskBuildError verifier.Error)
+          status prover.mask_error
+    let cf ←
+      match r1 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        let (reserved, material) := val
+        do
+        let noised_c1 ←
+          aspis_statement.state_only_trace.StateOnlyTraceFoundation.Insts.CoreCloneClone.clone compiled.semantic_c1
+        let (r2, noised_c11) ←
+          aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_mask_material_v1 noised_c1 material
+        let r3 ←
+          core.result.Result.map_err
+              (prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
+                right)
+              r2 ()
+        let cf1 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let r4 ← aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1
+            let r5 ←
+              core.result.Result.map_err
+                  (prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
+                    right)
+                  r4 ()
+            let cf2 ←
+              match r5 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                let r6 ← reserved.derive_pool_v1_pair_forest_zero_factor_d hash context
+                let r7 ←
+                  core.result.Result.map_err
+                      (BuiltinFnOnce aspis_prover.state_only_hiding.StateOnlyMaskBuildError verifier.Error) r6
+                      prover.mask_error
+                let cf3 ←
+                  match r7 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf3 with
+                  | core.ops.control_flow.ControlFlow.Continue val3 => do
+                    let r8 ← Array.Insts.CoreConvertTryFromVecVec.try_from Global 1024#usize val3
+                    let r9 ←
+                      core.result.Result.map_err
+                          (prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error
+                            right)
+                          r8 ()
+                    let cf4 ←
+                      match r9 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf4 with
+                      | core.ops.control_flow.ControlFlow.Continue val4 =>
+                        if (val1.g.len != 1024#usize) = true then
+                          ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                        else
+                          if (val1.h1_padding.len != 1024#usize) = true then
+                            ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                          else do
+                            let g ← prover.fixed_k_column val1.g.deref
+                            let h1_padding ← prover.fixed_k_column val1.h1_padding.deref
+                            let s2 ← lift noised_c11.c1.to_slice
+                            let audit ← prover.audit_masks s2 val1.mask_only_c1 val4 g h1_padding val2
+                            if (audit.c1_columns_inactive_balanced != 16#usize) = true then
+                                ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                              else
+                                if (audit.mask_only_columns_inactive_balanced != 10#usize) = true then
+                                  ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                                else
+                                  if audit.d_inactive_balanced = true then
+                                    if audit.g_inactive_balanced = true then
+                                      if audit.h1_padding_inactive_balanced = true then do
+                                        let i2 ← aspis_core.r0.merkle.C1_TAG
+                                        let r10 ← prover.derive_private_salts reserved context hash i2
+                                        let cf5 ←
+                                          match r10 with
+                                            | core.result.Result.Ok v =>
+                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                            | core.result.Result.Err e =>
+                                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                        match cf5 with
+                                          | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                            let i3 ← aspis_core.r0.merkle.C2_TAG
+                                            let r11 ← prover.derive_private_salts reserved context hash i3
+                                            let cf6 ←
+                                              match r11 with
+                                                | core.result.Result.Ok v =>
+                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                | core.result.Result.Err e =>
+                                                  ok
+                                                    (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                            match cf6 with
+                                              | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                let r12 ← host_commitment.EncodingDomain.new
+                                                let r13 ←
+                                                  core.result.Result.map_err
+                                                      (prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                        right)
+                                                      r12 ()
+                                                let cf7 ←
+                                                  match r13 with
+                                                    | core.result.Result.Ok v =>
+                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                    | core.result.Result.Err e =>
+                                                      ok
+                                                        (core.ops.control_flow.ControlFlow.Break
+                                                          (core.result.Result.Err e))
+                                                match cf7 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                    let we ← aspis_core.field.wide_exact.WideExact.ZERO
+                                                    let v ←
+                                                      alloc.vec.from_elem
+                                                          (core.clone.CloneArray 1024#usize
+                                                            aspis_core.field.wide_exact.WideExact.Insts.CoreCloneClone)
+                                                          (Array.repeat 1024#usize we) 29#usize
+                                                    let (r14, backend) ←
+                                                      host_semantic.build_with_material
+                                                          aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                                                          prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments
+                                                          pub compiled noised_c11 val1.mask_only_c1 val4 g h1_padding
+                                                          { hash := hash, variant := variant, domain := val7,
+                                                            messages := v, c1 := none, c2 := none,
+                                                            c1_salts := some val5, c2_salts := some val6 }
+                                                          hash variant
+                                                    let r15 ←
+                                                      core.result.Result.map_err
+                                                          (BuiltinFnOnce r1_wire.Error verifier.Error) r14
+                                                          prover.semantic_error
+                                                    let cf8 ←
+                                                      match r15 with
+                                                        | core.result.Result.Ok v =>
+                                                          ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                        | core.result.Result.Err e =>
+                                                          ok
+                                                            (core.ops.control_flow.ControlFlow.Break
+                                                              (core.result.Result.Err e))
+                                                    match cf8 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                                        let v1 ← val8.columns.index_usize 26#usize
+                                                        let o ←
+                                                          aspis_statement.state_only_semantic.state_only_copy_helper_sum
+                                                              v1.deref
+                                                        let q ← aspis_core.field.QM31.ZERO
+                                                        let h1_total_balanced ←
+                                                          core.option.Option.Insts.CoreCmpPartialEqOption.eq
+                                                              aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 o
+                                                              (some q)
+                                                        if h1_total_balanced = true then do
+                                                            let r16 ←
+                                                              prover.prove_from_semantics pub variant hash backend val8
+                                                                  (reserved, context)
+                                                            let cf9 ←
+                                                              match r16 with
+                                                                | core.result.Result.Ok v =>
+                                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                                | core.result.Result.Err e =>
+                                                                  ok
+                                                                    (core.ops.control_flow.ControlFlow.Break
+                                                                      (core.result.Result.Err e))
+                                                            match cf9 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val9 =>
+                                                                ok
+                                                                  (core.result.Result.Ok
+                                                                      (val9,
+                                                                        {
+                                                                          c1_columns_inactive_balanced :=
+                                                                            audit.c1_columns_inactive_balanced,
+                                                                          mask_only_columns_inactive_balanced :=
+                                                                            audit.mask_only_columns_inactive_balanced,
+                                                                          d_inactive_balanced :=
+                                                                            audit.d_inactive_balanced,
+                                                                          g_inactive_balanced :=
+                                                                            audit.g_inactive_balanced,
+                                                                          h1_padding_inactive_balanced :=
+                                                                            audit.h1_padding_inactive_balanced,
+                                                                          h1_total_balanced := true }),
+                                                                    project s)
+                                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                                let r17 ←
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                                      (core.convert.FromSame verifier.Error) residual
+                                                                ok (r17, project s)
+                                                          else
+                                                            ok
+                                                              (core.result.Result.Err verifier.Error.Semantic,
+                                                                project s)
+                                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                                        let r17 ←
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                              (core.convert.FromSame verifier.Error) residual
+                                                        ok (r17, project s)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r17 ←
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                          (core.convert.FromSame verifier.Error) residual
+                                                    ok (r17, project s)
+                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                let r17 ←
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                      (core.convert.FromSame verifier.Error) residual
+                                                ok (r17, project s)
+                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                            let r17 ←
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                  (core.convert.FromSame verifier.Error) residual
+                                            ok (r17, project s)
+                                      else ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                                    else ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                                  else ok (core.result.Result.Err verifier.Error.Semantic, project s)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r17 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                              residual
+                        ok (r17, project s)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r17 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                    ok (r17, project s)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r17 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                ok (r17, project s)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r17 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+            ok (r17, project s)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r17 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+        ok (r17, project s)
+'R1Z.PV_RunJoin_StoreContinuationTransport.after_reserve' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       32.54 real         1.83 user         3.99 sys
+          3196190720  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              132480  page reclaims
+              228796  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               49147  voluntary context switches
+              224062  involuntary context switches
+           603818500  instructions retired
+           284941989  cycles elapsed
+            11617000  peak memory footprint
+
+exit=1

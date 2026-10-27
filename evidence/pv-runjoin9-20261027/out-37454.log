@@ -1,0 +1,588 @@
+@R1Z.PV_RunJoin_LedgerConstructor.runtime : [inst : ProverRwFull.ExternalTypes] →
+  {CommitHandle Aux Coins N C : Type} →
+    R1Z.ProverCommitLedger36.Schedule →
+      Bool →
+        R1Z.PV_RunJoin_LedgerWorld.Address →
+          R1Z.PV_RunJoin_CompletedWorld.Data Coins N R1Z.PV_RunJoin_LedgerWorld.World C →
+            R1Z.ProverRwEffectCallback.Account N →
+              ((h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+                  R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                    h.Instance → R1Z.PV_RunJoin_LedgerBody.Inputs N C) →
+                (R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                      Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World C) →
+                        R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                  (R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World C) →
+                          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer)) →
+                    ((R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+                          R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+                            R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                        R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                          R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                            R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                      R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N R1Z.PV_RunJoin_LedgerWorld.World C
+@R1Z.PV_RunJoin_LedgerBoundary.boundary : [inst : ProverRwFull.ExternalTypes] →
+  {CommitHandle Aux Coins N C Context Rest : Type} →
+    (schedule : R1Z.ProverCommitLedger36.Schedule) →
+      (unix : Bool) →
+        (address : R1Z.PV_RunJoin_LedgerWorld.Address) →
+          (world : R1Z.PV_RunJoin_CompletedWorld.Data Coins N R1Z.PV_RunJoin_LedgerWorld.World C) →
+            (policy : R1Z.ProverRwEffectCallback.Account N) →
+              (inputs :
+                  (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+                    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                      h.Instance → R1Z.PV_RunJoin_LedgerBody.Inputs N C) →
+                (R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle → R1Z.PV_RunJoin_LedgerBody.Inputs N C) →
+                  (disclosed :
+                      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                          Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World C) →
+                            R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                    (oracle :
+                        R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                          R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                            Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World C) →
+                              List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer)) →
+                      (ideal :
+                          (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+                              R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+                                R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                            R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                              R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                                R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                          R1Z.PV_RunJoin_Boundary.Data
+                              (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs
+                                disclosed oracle ideal)
+                              Context Rest →
+                            R1Z.PV_RunJoin_Boundary.Data
+                              (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs
+                                disclosed oracle ideal)
+                              Context Rest
+@R1Z.PV_RunJoin_Boundary.Data : [ProverRwFull.ExternalTypes] →
+  {CommitHandle Aux Coins N L C : Type} →
+    R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C → Type → Type → Type 1
+@R1Z.PV_RunJoin_Deployed.rust : {CommitHandle Aux Coins N L C : Type} →
+  R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C →
+    R0Z.FsStatement.FSExperiments R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat R1Z.PrivacyR1AcctBasis.F
+@R1Z.PV_RunJoin_Deployed.observer_program : {CommitHandle Aux Coins N L C : Type} →
+  (runtime : R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C) →
+    (R1Z.PV_RunJoin_Deployed.rust runtime).Adversary →
+      R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat →
+        List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer) → R1Z.GamesR1.OProg
+@R1Z.PV_RunJoin_Deployed.World : {CommitHandle Aux Coins N L C : Type} →
+  R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C → Type
+@R1Z.PV_RunJoin_TrustEndpoint.ProofObligations : {CommitHandle Aux : Type} →
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux) →
+    (outputs :
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux) →
+      (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) →
+        [inst : ProverRwFull.ExternalTypes] →
+          {N Ledger Client Context Rest : Type} →
+            (runtime :
+                R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux
+                  (R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x) N Ledger Client) →
+              R1Z.PV_RunJoin_Boundary.Data runtime Context Rest →
+                (R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x →
+                    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input).Instance →
+                        R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                  Prop
+@R1Z.PV_RunJoin_TrustLedger.RemainingProofs : {CommitHandle Aux : Type} →
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux) →
+    (outputs :
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux) →
+      (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) →
+        [inst : ProverRwFull.ExternalTypes] →
+          {N Client Context Rest : Type} →
+            (schedule : R1Z.ProverCommitLedger36.Schedule) →
+              (unix : Bool) →
+                (address : R1Z.PV_RunJoin_LedgerWorld.Address) →
+                  (world :
+                      R1Z.PV_RunJoin_CompletedWorld.Data (R1Z.PV_RunJoin_TrustLedger.ModelCoins template outputs x) N
+                        R1Z.PV_RunJoin_LedgerWorld.World Client) →
+                    (policy : R1Z.ProverRwEffectCallback.Account N) →
+                      (inputs :
+                          (honest : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+                            R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                              honest.Instance → R1Z.PV_RunJoin_LedgerBody.Inputs N Client) →
+                        (disclosed :
+                            R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                              R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                                Aeneas.Std.Result
+                                    (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World Client) →
+                                  R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                          (oracle :
+                              R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                                R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                                  Aeneas.Std.Result
+                                      (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World Client) →
+                                    List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer)) →
+                            (ideal :
+                                (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+                                    R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+                                      R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                                  R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                                    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                                      R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux
+                                        R1Z.Batched.R1Bat) →
+                              (R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+                                  R1Z.PV_RunJoin_LedgerBody.Inputs N Client) →
+                                R1Z.PV_RunJoin_Boundary.Data
+                                    (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs
+                                      disclosed oracle ideal)
+                                    Context Rest →
+                                  (R1Z.PV_RunJoin_TrustLedger.ModelCoins template outputs x →
+                                      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustLedger.input).Instance →
+                                          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux
+                                            R1Z.Batched.R1Bat) →
+                                    Prop
+@R1Z.PV_RunJoin_TrustLedger.candidate_proofs : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [inst : ProverRwFull.ExternalTypes]
+  {N Client Context Rest : Type} [Fintype Rest] (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (world :
+    R1Z.PV_RunJoin_CompletedWorld.Data (R1Z.PV_RunJoin_TrustLedger.ModelCoins template outputs x) N
+      R1Z.PV_RunJoin_LedgerWorld.World Client)
+  (policy : R1Z.ProverRwEffectCallback.Account N)
+  (inputs :
+    (honest : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        honest.Instance → R1Z.PV_RunJoin_LedgerBody.Inputs N Client)
+  (disclosed :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World Client) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (oracle :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World Client) →
+          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+  (ideal :
+    (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+        R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (common : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle → R1Z.PV_RunJoin_LedgerBody.Inputs N Client)
+  (boundaryData :
+    R1Z.PV_RunJoin_Boundary.Data
+      (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal)
+      Context Rest)
+  (extracted :
+    R1Z.PV_RunJoin_TrustLedger.ModelCoins template outputs x →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustLedger.input).Instance →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat),
+  (∀ (hh : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K)
+      (xx : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) (ww : hh.Instance)
+      (ss : R1Z.PV_RunJoin_LedgerBody.State N Client),
+      R1Z.PV_RunJoin_MapErrInstalled.Identity ((inputs hh xx ww).ops ss)) →
+    (∀ (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustLedger.input).Instance),
+        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustLedger.input).public w = x.1 →
+          ∀ (s : R1Z.PV_RunJoin_Deployed.State N R1Z.PV_RunJoin_LedgerWorld.World Client),
+            (inputs (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustLedger.input) x w).ops s = (common x).ops s ∧
+              (inputs (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustLedger.input) x w).pub s = (common x).pub s ∧
+                (inputs (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustLedger.input) x w).hash s =
+                  (common x).hash s) →
+      R1Z.PV_RunJoin_TrustLedger.RemainingProofs template outputs x schedule unix address world policy inputs disclosed
+          oracle ideal common boundaryData extracted →
+        R1Z.PV_RunJoin_TrustEndpoint.ProofObligations template outputs x
+          (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal)
+          (R1Z.PV_RunJoin_LedgerBoundary.boundary schedule unix address world policy inputs common disclosed oracle
+            ideal x boundaryData)
+          extracted
+@R1Z.PV_RunJoin_TrustEndpoint.trustData : {CommitHandle Aux : Type} →
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux) →
+    (outputs :
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux) →
+      (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) →
+        [inst : ProverRwFull.ExternalTypes] →
+          {N Ledger Client Context Rest : Type} →
+            (runtime :
+                R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux
+                  (R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x) N Ledger Client) →
+              R1Z.PV_RunJoin_Boundary.Data runtime Context Rest →
+                {E File Reply Time Worker : Type} →
+                  (R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x →
+                      R1Z.PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Unit) →
+                    (R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x →
+                        R1Z.PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Unit) →
+                      (R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x →
+                          R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input).Instance →
+                              R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+                        R1Z.PV_RunJoin_TrustBoundary.Data E File Reply Time Worker Context
+                          (R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x) Rest
+                          (R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input).Instance →
+                              R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+@R1Z.PV_RunJoin_TrustEndpoint.privacy_headline_deployed_candidate : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [inst : ProverRwFull.ExternalTypes]
+  {N Ledger Client Context Rest : Type} [inst_1 : Fintype Rest]
+  (runtime :
+    R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux (R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x) N
+      Ledger Client)
+  (boundary : R1Z.PV_RunJoin_Boundary.Data runtime Context Rest) {E File Reply Time Worker : Type} [DecidableEq File]
+  (nativeEvents extractedEvents :
+    R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x →
+      R1Z.PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Unit)
+  (extracted :
+    R1Z.PV_RunJoin_TrustEndpoint.ModelCoins template outputs x →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input).Instance →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat),
+  R1Z.PV_RunJoin_TrustEndpoint.ProofObligations template outputs x runtime boundary extracted →
+    R1Z.PV_RunJoin_TrustItems
+        (R1Z.PV_RunJoin_TrustEndpoint.trustData template outputs x runtime boundary nativeEvents extractedEvents
+          extracted) →
+      (∀ (adv : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+          (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input).Instance),
+          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input).public w = x.1 →
+            |R0Z.mean
+                    (R0Z.FsStatement.realTest (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                      R1Z.PrivacyR1AcctBasis.basis outputs (R1Z.PV_RunJoin_Deployed.rust runtime) adv x w) -
+                  R0Z.mean
+                    (R0Z.HvzkS.idealTestS
+                      (R1Z.ProverCommitReencode16.experiment
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PV_RunJoin_TrustEndpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver
+                        8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                        (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input).transport
+                          R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                        (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode)
+                      (R1Z.RomObserverBin.observerMap (R1Z.PV_RunJoin_Deployed.rust runtime)
+                        (R1Z.PV_RunJoin_Deployed.observer_program runtime) adv)
+                      x
+                      (R0Z.RefPayload.simE (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input).transport
+                        R1Z.PrivacyR1AcctBasis.basis outputs x))| ≤
+              R1Z.PrivacyR1Final.modelError
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PV_RunJoin_TrustEndpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver
+                        R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                      16 / 2 ^ 486 +
+                    R1Z.QueryScanFreshUnion.freshBudget
+                      (8 *
+                          R1Z.GamesR1PBin.n1
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            (R1Z.PhaseProtocolInstanceBin.prover
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x
+                                (R1Z.PrivacyR1AcctModel.seed
+                                  (R1Z.PhaseProtocolInstanceBin.wire
+                                      (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                          x).length
+                                      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                      R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                  R1Z.PV_RunJoin_TrustEndpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                  R1Z.PhaseWireLog2Bin.opens)).toProver +
+                        1) +
+                  2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+                2 * R1Z.ProverCommitFuelMass22.charge) ∧
+        R1Z.PrivacyR1Final.modelError
+                      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                          outputs x).toWire
+                      (R1Z.PhaseProtocolInstanceBin.prover
+                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                          outputs x
+                          (R1Z.PrivacyR1AcctModel.seed
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            R1Z.PV_RunJoin_TrustEndpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                            R1Z.PhaseWireLog2Bin.opens)).toProver
+                      R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                    16 / 2 ^ 486 +
+                  R1Z.QueryScanFreshUnion.freshBudget
+                    (8 *
+                        R1Z.GamesR1PBin.n1
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PV_RunJoin_TrustEndpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver +
+                      1) +
+                2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+              2 * R1Z.ProverCommitFuelMass22.charge ≤
+            1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+                  R1Z.QueryScanFreshUnion.freshBudget
+                    (8 *
+                        R1Z.GamesR1PBin.n1
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PV_RunJoin_TrustEndpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver +
+                      1) +
+                2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+              2 * R1Z.ProverCommitFuelMass22.charge ∧
+          R1Z.PrivacyR1Final.modelError
+                      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                          outputs x).toWire
+                      (R1Z.PhaseProtocolInstanceBin.prover
+                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input) R1Z.PrivacyR1AcctBasis.basis
+                          outputs x
+                          (R1Z.PrivacyR1AcctModel.seed
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            R1Z.PV_RunJoin_TrustEndpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                            R1Z.PhaseWireLog2Bin.opens)).toProver
+                      R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                    16 / 2 ^ 486 +
+                  R1Z.QueryScanFreshUnion.freshBudget
+                    (8 *
+                        R1Z.GamesR1PBin.n1
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_TrustEndpoint.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PV_RunJoin_TrustEndpoint.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver +
+                      1) +
+                2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+              2 * R1Z.ProverCommitFuelMass22.charge <
+            1 / 2 ^ 100
+@R1Z.PV_RunJoin_CausalTrustLedger.initial_and_causal : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [inst : ProverRwFull.ExternalTypes]
+  {N Client Context Rest : Type} [Fintype Rest] (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (coordinates :
+    R1Z.PV_RunJoin_CausalTrustLedger.ModelCoins template outputs x ≃ R1Z.PV_RunJoin_CausalPrefix.Tape × Rest)
+  (replies :
+    R1Z.PV_RunJoin_CausalTrustLedger.ModelCoins template outputs x →
+      Fin 128 →
+        Aeneas.Std.Array Aeneas.Std.U8 64#usize ×
+          Aeneas.Std.core.result.Result Unit ProverRwRngCaller.getrandom.error.Error)
+  (initialPolicy : Rest → N) (initialLedger : Rest → R1Z.PV_RunJoin_LedgerWorld.World) (initialBody : Rest → Client)
+  (policy : R1Z.ProverRwEffectCallback.Account N)
+  (disclosed :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World Client) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (oracle :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.PV_RunJoin_LedgerWorld.World Client) →
+          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+  (ideal :
+    (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+        R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (inputs :
+    (honest : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        honest.Instance → R1Z.PV_RunJoin_LedgerBody.Inputs N Client)
+  (common : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle → R1Z.PV_RunJoin_LedgerBody.Inputs N Client)
+  (boundaryData :
+    R1Z.PV_RunJoin_Boundary.Data
+      (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address
+        (R1Z.PV_RunJoin_CausalPrefix.world coordinates replies initialPolicy initialLedger initialBody) policy inputs
+        disclosed oracle ideal)
+      Context Rest)
+  (produce : (i : Fin 128) → R1Z.PV_RunJoin_CausalPrefix.Prefix i → Rest → Context)
+  (extracted :
+    R1Z.PV_RunJoin_CausalTrustLedger.ModelCoins template outputs x →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input).Instance →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat),
+  (∀ (adv : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+      (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input).Instance),
+      (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input).public w = x.1 →
+        ∀
+          (r :
+            R1Z.PV_RunJoin_Deployed.World
+              (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address
+                (R1Z.PV_RunJoin_CausalPrefix.world coordinates replies initialPolicy initialLedger initialBody) policy
+                inputs disclosed oracle ideal)),
+          (¬∃ i,
+                R1Z.ProverCommitFuelJoin22.bad
+                  (R1Z.QueryScanRealLazyBound.realBad
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          R1Z.PV_RunJoin_CausalTrustLedger.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    8 (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input) R1Z.PrivacyR1AcctBasis.basis
+                    outputs x w)
+                  (R1Z.PrivacyR1HeadlineDeployedReal.realSeedQueries template outputs x
+                    (R1Z.PV_RunJoin_Deployed.rust
+                      (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address
+                        (R1Z.PV_RunJoin_CausalPrefix.world coordinates replies initialPolicy initialLedger initialBody)
+                        policy inputs disclosed oracle ideal))
+                    (R1Z.PV_RunJoin_Deployed.observer_program
+                      (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address
+                        (R1Z.PV_RunJoin_CausalPrefix.world coordinates replies initialPolicy initialLedger initialBody)
+                        policy inputs disclosed oracle ideal))
+                    adv w)
+                  i r.coins) →
+            extracted r.coins adv w =
+              (R1Z.ProverCommitReencode16.experiment
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          R1Z.PV_RunJoin_CausalTrustLedger.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                    (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input).transport
+                      R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                    (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode).real
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PV_RunJoin_CausalTrustLedger.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs
+                (R1Z.RomObserverBin.observerMap
+                  (R1Z.PV_RunJoin_Deployed.rust
+                    (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address
+                      (R1Z.PV_RunJoin_CausalPrefix.world coordinates replies initialPolicy initialLedger initialBody)
+                      policy inputs disclosed oracle ideal))
+                  (R1Z.PV_RunJoin_Deployed.observer_program
+                    (R1Z.PV_RunJoin_LedgerConstructor.runtime schedule unix address
+                      (R1Z.PV_RunJoin_CausalPrefix.world coordinates replies initialPolicy initialLedger initialBody)
+                      policy inputs disclosed oracle ideal))
+                  adv)
+                x w r.coins.1.1) →
+    R1Z.PV_RunJoin_TrustLedger.RemainingProofs template outputs x schedule unix address
+      (R1Z.PV_RunJoin_CausalPrefix.world coordinates replies initialPolicy initialLedger initialBody) policy inputs
+      disclosed oracle ideal common
+      { sourceBody := boundaryData.sourceBody, draw := boundaryData.draw, law := boundaryData.law,
+        frame := R1Z.PV_RunJoin_CausalPrefix.frame produce, coordinates := coordinates,
+        nativeWeight := boundaryData.nativeWeight, ledger := boundaryData.ledger,
+        reservation := boundaryData.reservation, schedule := boundaryData.schedule, unix := boundaryData.unix,
+        fault := boundaryData.fault }
+      extracted
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

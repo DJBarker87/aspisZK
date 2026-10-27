@@ -1,0 +1,195 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:90:6: error: Tactic `apply` failed: could not unify the conclusion of `ih (4 - ↑(block.wrapping_add 1#usize)) ?m.523 ?m.524
+  (block.wrapping_add 1#usize) ?m.528`
+  AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0 ?m.524 (block.wrapping_add 1#usize) =
+    R0PoseidonCopy.ext_groups_loop original ?m.524 (block.wrapping_add 1#usize)
+with the goal
+  (do
+      let state1 ← Array.update state (Usize.wrapping_mul 4#usize block) (↑m)[↑0#usize]!
+      let state2 ← state1.update ((Usize.wrapping_mul 4#usize block).wrapping_add 1#usize) (↑m)[↑1#usize]!
+      let state3 ← state2.update ((Usize.wrapping_mul 4#usize block).wrapping_add 2#usize) (↑m)[↑2#usize]!
+      let a ← state3.update ((Usize.wrapping_mul 4#usize block).wrapping_add 3#usize) (↑m)[↑3#usize]!
+      AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0 a (block.wrapping_add 1#usize)) =
+    do
+    let out1 ← Array.update state (Usize.wrapping_mul 4#usize block) (↑m)[↑0#usize]!
+    let out2 ← out1.update ((Usize.wrapping_mul 4#usize block).wrapping_add 1#usize) (↑m)[↑1#usize]!
+    let out3 ← out2.update ((Usize.wrapping_mul 4#usize block).wrapping_add 2#usize) (↑m)[↑2#usize]!
+    let a ← out3.update ((Usize.wrapping_mul 4#usize block).wrapping_add 3#usize) (↑m)[↑3#usize]!
+    R0PoseidonCopy.ext_groups_loop original a (block.wrapping_add 1#usize)
+
+Note: The full type of `ih (4 - ↑(block.wrapping_add 1#usize)) ?m.523 ?m.524 (block.wrapping_add 1#usize) ?m.528` is
+  Suffix original ?m.524 (block.wrapping_add 1#usize) →
+    4 - ↑(block.wrapping_add 1#usize) = 4 - ↑(block.wrapping_add 1#usize) →
+      AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0 ?m.524
+          (block.wrapping_add 1#usize) =
+        R0PoseidonCopy.ext_groups_loop original ?m.524 (block.wrapping_add 1#usize)
+
+case pos
+original : State
+remaining : ℕ
+ih :
+  ∀ m < remaining,
+    ∀ (state : State) (block : Usize),
+      ↑block ≤ 4 →
+        Suffix original state block →
+          4 - ↑block = m →
+            AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0 state block =
+              R0PoseidonCopy.ext_groups_loop original state block
+state : State
+block : Usize
+hb : ↑block ≤ 4
+suffix : Suffix original state block
+he : 4 - ↑block = remaining
+hit : ↑block < 4
+hlt : block < 4#usize
+mulcomm : block.wrapping_mul 4#usize = Usize.wrapping_mul 4#usize block
+i0 : Usize := Usize.wrapping_mul 4#usize block
+i1 : Usize := i0.wrapping_add 1#usize
+i2 : Usize := i0.wrapping_add 2#usize
+i3 : Usize := i0.wrapping_add 3#usize
+h0 : ↑i0 = 4 * ↑block
+h1 : ↑i1 = 4 * ↑block + 1
+h2 : ↑i2 = 4 * ↑block + 2
+h3 : ↑i3 = 4 * ↑block + 3
+b0 : ↑i0 < ↑16#usize
+b1 : ↑i1 < ↑16#usize
+b2 : ↑i2 < ↑16#usize
+b3 : ↑i3 < ↑16#usize
+s0 : (↑state)[↑i0]! = (↑original)[↑i0]!
+s1 : (↑state)[↑i1]! = (↑original)[↑i1]!
+s2 : (↑state)[↑i2]! = (↑original)[↑i2]!
+s3 : (↑state)[↑i3]! = (↑original)[↑i3]!
+m : Std.Array AspisBuilderPoseidonReference.aspis_core.field.M31 4#usize
+hm :
+  R0PoseidonCopy.mat4
+      (↑(Array.make 4#usize [(↑original)[↑i0]!, (↑original)[↑i1]!, (↑original)[↑i2]!, (↑original)[↑i3]!] ⋯))[0]!
+      (↑(Array.make 4#usize [(↑original)[↑i0]!, (↑original)[↑i1]!, (↑original)[↑i2]!, (↑original)[↑i3]!] ⋯))[1]!
+      (↑(Array.make 4#usize [(↑original)[↑i0]!, (↑original)[↑i1]!, (↑original)[↑i2]!, (↑original)[↑i3]!] ⋯))[2]!
+      (↑(Array.make 4#usize [(↑original)[↑i0]!, (↑original)[↑i1]!, (↑original)[↑i2]!, (↑original)[↑i3]!] ⋯))[3]! =
+    ok m
+u0 : ∀ (v : State) (x : U32), Array.update v i0 x = ok (Std.Array.set v i0 x)
+u1 : ∀ (v : State) (x : U32), Array.update v i1 x = ok (Std.Array.set v i1 x)
+u2 : ∀ (v : State) (x : U32), Array.update v i2 x = ok (Std.Array.set v i2 x)
+u3 : ∀ (v : State) (x : U32), Array.update v i3 x = ok (Std.Array.set v i3 x)
+hn : ↑(block.wrapping_add 1#usize) = ↑block + 1
+⊢ (do
+      let state1 ← Array.update state (Usize.wrapping_mul 4#usize block) (↑m)[↑0#usize]!
+      let state2 ← state1.update ((Usize.wrapping_mul 4#usize block).wrapping_add 1#usize) (↑m)[↑1#usize]!
+      let state3 ← state2.update ((Usize.wrapping_mul 4#usize block).wrapping_add 2#usize) (↑m)[↑2#usize]!
+      let a ← state3.update ((Usize.wrapping_mul 4#usize block).wrapping_add 3#usize) (↑m)[↑3#usize]!
+      AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0 a (block.wrapping_add 1#usize)) =
+    do
+    let out1 ← Array.update state (Usize.wrapping_mul 4#usize block) (↑m)[↑0#usize]!
+    let out2 ← out1.update ((Usize.wrapping_mul 4#usize block).wrapping_add 1#usize) (↑m)[↑1#usize]!
+    let out3 ← out2.update ((Usize.wrapping_mul 4#usize block).wrapping_add 2#usize) (↑m)[↑2#usize]!
+    let a ← out3.update ((Usize.wrapping_mul 4#usize block).wrapping_add 3#usize) (↑m)[↑3#usize]!
+    R0PoseidonCopy.ext_groups_loop original a (block.wrapping_add 1#usize)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:63:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:65:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:67:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:69:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:71:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:73:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:75:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:77:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:88:8: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [index_ok m 0#usize (by decide), ̲index_ok m 1#usize (by decide),
+          index_ok m 2#usize (by decide), ̲index_ok m 3#usize (by decide),
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵,̵bind_tc_ok, ̲u0, ̲u1, ̲u2, ̲u3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:88:24: warning: This simp argument is unused:
+  u0
+
+Hint: Omit it from the simp argument list.
+  simp only [index_ok m 0#usize (by decide), ̲index_ok m 1#usize (by decide),
+          index_ok m 2#usize (by decide), ̲index_ok m 3#usize (by decide),
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵lift, ̲bind_tc_ok, ̲u0̵,̵u̵1, ̲u2,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲u3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:88:27: warning: This simp argument is unused:
+  u1
+
+Hint: Omit it from the simp argument list.
+  simp only [index_ok m 0#usize (by decide), ̲index_ok m 1#usize (by decide),
+          index_ok m 2#usize (by decide), ̲index_ok m 3#usize (by decide),
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵lift, ̲bind_tc_ok, ̲u0, ̲u1̵,̵u̵2,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲u3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:88:30: warning: This simp argument is unused:
+  u2
+
+Hint: Omit it from the simp argument list.
+  simp only [index_ok m 0#usize (by decide), ̲index_ok m 1#usize (by decide),
+          index_ok m 2#usize (by decide), ̲index_ok m 3#usize (by decide),
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵lift, ̲bind_tc_ok, ̲u0, ̲u1,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲u2̵,̵u̵3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_ExternalBlocksCopy.lean:88:33: warning: This simp argument is unused:
+  u3
+
+Hint: Omit it from the simp argument list.
+  simp only [index_ok m 0#usize (by decide), ̲index_ok m 1#usize (by decide),
+          index_ok m 2#usize (by decide), ̲index_ok m 3#usize (by decide),
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵lift, ̲bind_tc_ok, ̲u0, ̲u1,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲u2,̵u̵3̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_ExternalBlocksCopy.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ExternalBlocksCopy.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ExternalBlocksCopy.field_entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

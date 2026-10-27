@@ -1,0 +1,27 @@
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index faacdd1a59..abe6c1e3cb 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -226,11 +226,13 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
+ 
+ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
+            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
++    let input = *input;
+     let pair = input.pair;
+     let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
+     let mut bits = [0u32; 24];
+     let mut sibs = [[0u32; 8]; 24];
+-    for level in 0..24 {
++    let mut level = 0;
++    while level < 24 {
+         let (bit, sib) = if level == 0 {
+             (u32::from(pair.selected_second), other)
+         } else if level <= 20 {
+@@ -240,6 +242,7 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+         };
+         bits[level] = bit;
+         sibs[level] = raw(&sib);
++        level += 1;
+     }
+     let empty = pair_empty_roots();
+     let w = RW {

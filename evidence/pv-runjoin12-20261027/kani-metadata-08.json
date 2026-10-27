@@ -1,0 +1,105 @@
+{
+  "number": 8,
+  "invocation": {
+    "number": 8,
+    "harness": "pool_v1::pair_forest_copy_builder::records_proofs::pv_runjoin12_exact::both_control19",
+    "source_revision": "0a6a5428a8726c578f6076e8da9bdbdb4e8f1a8d",
+    "command": [
+      "systemd-run",
+      "--user",
+      "--scope",
+      "--quiet",
+      "--unit=pv12-runjoin-kani-08",
+      "-p",
+      "MemoryHigh=6G",
+      "-p",
+      "MemoryMax=8G",
+      "-p",
+      "MemorySwapMax=0",
+      "-p",
+      "TasksMax=64",
+      "env",
+      "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin",
+      "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/target",
+      "CARGO_BUILD_JOBS=4",
+      "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+      "RUSTFLAGS=-C opt-level=3 -Z mir-opt-level=4 -Z inline-mir=yes -C link-arg=-Wl,--threads=4",
+      "PV8_SOURCE_DIR=/home/dombarker/project-offloads/codex-pv-runjoin-20261026/frozen",
+      "python3",
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/evidence/pv8-kani-receipt.py",
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/evidence/pv12-runjoin-kani-08",
+      "timeout",
+      "180",
+      "taskset",
+      "--cpu-list",
+      "0-3",
+      "cargo",
+      "kani",
+      "--no-assertion-reach-checks",
+      "-Z",
+      "stubbing",
+      "-Z",
+      "function-contracts",
+      "-Z",
+      "unstable-options",
+      "-p",
+      "aspis-statement",
+      "--lib",
+      "-j",
+      "4",
+      "--exact",
+      "--harness",
+      "pool_v1::pair_forest_copy_builder::records_proofs::pv_runjoin12_exact::both_control19",
+      "--output-format",
+      "terse",
+      "--cbmc-args",
+      "--unwinding-assertions",
+      "--slice-formula"
+    ],
+    "source_sha256": {
+      "tools/r1-builder-reference/records.rs": "e849639b41305d5ada2987e0fee76250553e17c6c7e9b41fb3f8cd270dbcc5ee",
+      "tools/r1-builder-reference/pv_runjoin12_exact.rs": "6adad7f5713f280dcd997a9e7ee50510e15f1e172c5f7f0fea89864d542b2465"
+    },
+    "stubs": [],
+    "expected_time": "optimized compilation then control/indexing-only 19-field fixture comparison; p.empty deliberately not asserted, partial P6 only"
+  },
+  "records": [
+    {
+      "metadata": {
+        "pretty_name": "pool_v1::pair_forest_copy_builder::records_proofs::pv_runjoin12_exact::both_control19",
+        "mangled_name": "_RNvNtNtNtNtCscTz6BOl5pFg_15aspis_statement7pool_v124pair_forest_copy_builder14records_proofs18pv_runjoin12_exact14both_control19",
+        "crate_name": "aspis_statement",
+        "original_file": "crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/pv_runjoin12_exact.rs",
+        "original_start_line": 194,
+        "original_end_line": 194,
+        "goto_file": "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_statement-378edcd30af8c85a__RNvNtNtNtNtCscTz6BOl5pFg_15aspis_statement7pool_v124pair_forest_copy_builder14records_proofs18pv_runjoin12_exact14both_control19.symtab.out",
+        "attributes": {
+          "kind": "Proof",
+          "should_panic": false,
+          "solver": null,
+          "unwind_value": 25,
+          "stubs": [],
+          "verified_stubs": []
+        },
+        "contract": null,
+        "has_loop_contracts": false,
+        "is_automatically_generated": false
+      },
+      "files": {
+        "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_statement-378edcd30af8c85a.kani-metadata.json": {
+          "sha256": "ccdebe1888c86a0e734b43f5cef49df806208b8a88f789fc0bc6056a779a1136",
+          "size": 1309
+        },
+        "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_statement-378edcd30af8c85a__RNvNtNtNtNtCscTz6BOl5pFg_15aspis_statement7pool_v124pair_forest_copy_builder14records_proofs18pv_runjoin12_exact14both_control19.symtab.out": {
+          "sha256": "929a02142a3362314a36a604fe2c0cc93d895df34777c84dcbe56d04d16f4202",
+          "size": 2670639
+        },
+        "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_statement-378edcd30af8c85a__RNvNtNtNtNtCscTz6BOl5pFg_15aspis_statement7pool_v124pair_forest_copy_builder14records_proofs18pv_runjoin12_exact14both_control19.out": {
+          "sha256": "fe328d527f5d270017362ffe8bd1fd532bfc3a31fec0c98537b73bb4d3481f03",
+          "size": 2629174
+        }
+      }
+    }
+  ],
+  "classification": "real metadata and model hashes; inspection does not establish verification"
+}

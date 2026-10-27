@@ -1,0 +1,149 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:66:14: error: type expected, got
+  (h : HonestProver K)
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:104:4: error: typeclass instance problem is stuck
+  Fintype (?m.601 c)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `Fintype` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:114:32: error(lean.unknownIdentifier): Unknown identifier `Residual`
+
+Note: It is not possible to treat `Residual` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:116:68: error(lean.unknownIdentifier): Unknown identifier `inputs`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:116:98: error(lean.unknownIdentifier): Unknown identifier `boundaryData`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:117:78: error(lean.unknownIdentifier): Unknown identifier `inputs`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:117:108: error(lean.unknownIdentifier): Unknown identifier `boundaryData`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:126:17: error(lean.unknownIdentifier): Unknown identifier `Residual`
+
+Note: It is not possible to treat `Residual` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:135:78: error: unknown free variable `_fvar.218258`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:135:86: error: unknown free variable `_fvar.218258`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:135:86: error: unknown free variable `_fvar.218991`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:136:5: error(lean.unknownIdentifier): Unknown identifier `toPremises`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:134:632: error: unsolved goals
+CommitHandle Aux : Type
+template : R1Wire K CommitHandle Aux
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+inst✝ : ProverRwFull.ExternalTypes
+N Client : Type
+world : PV_RunJoin_CompletedWorld.Data (ModelCoins template outputs x) N ProverRwRetryModel.Store Client
+policy : ProverRwEffectCallback.Account N
+disclosed :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store Client) → View K CommitHandle Aux R1Bat
+oracle :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store Client) → List (Bytes × OracleAnswer)
+ideal :
+  (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+    R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat
+remaining : sorry
+⊢ (∀
+      (adv :
+        (PV_RunJoin_Deployed.rust
+            (PV_RunJoin_SourceConstructor.runtime world policy sorry disclosed oracle ideal)).Adversary)
+      (w : h.Instance),
+      h.public w = x.1 →
+        |mean
+                (realTest h B outputs
+                  (PV_RunJoin_Deployed.rust
+                    (PV_RunJoin_SourceConstructor.runtime world policy sorry disclosed oracle ideal))
+                  adv x w) -
+              mean
+                (idealTestS
+                  (ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode)
+                  (RomObserverBin.observerMap
+                    (PV_RunJoin_Deployed.rust
+                      (PV_RunJoin_SourceConstructor.runtime world policy sorry disclosed oracle ideal))
+                    (PV_RunJoin_Deployed.observer_program
+                      (PV_RunJoin_SourceConstructor.runtime world policy sorry disclosed oracle ideal))
+                    adv)
+                  x (simE h.transport B outputs x))| ≤
+          modelError (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    L₁ L₂ +
+                  16 / 2 ^ 486 +
+                QueryScanFreshUnion.freshBudget
+                  (8 *
+                      n1 (wire base (base.pubBytes x).length h B outputs x).toWire
+                        (prover base (base.pubBytes x).length h B outputs x
+                            (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode
+                              fib opens)).toProver +
+                    1) +
+              2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * ProverCommitFuelMass22.charge) ∧
+    modelError (wire base (base.pubBytes x).length h B outputs x).toWire
+                  (prover base (base.pubBytes x).length h B outputs x
+                      (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                        opens)).toProver
+                  L₁ L₂ +
+                16 / 2 ^ 486 +
+              QueryScanFreshUnion.freshBudget
+                (8 *
+                    n1 (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver +
+                  1) +
+            2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+          2 * ProverCommitFuelMass22.charge ≤
+        1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+              QueryScanFreshUnion.freshBudget
+                (8 *
+                    n1 (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver +
+                  1) +
+            2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+          2 * ProverCommitFuelMass22.charge ∧
+      modelError (wire base (base.pubBytes x).length h B outputs x).toWire
+                  (prover base (base.pubBytes x).length h B outputs x
+                      (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                        opens)).toProver
+                  L₁ L₂ +
+                16 / 2 ^ 486 +
+              QueryScanFreshUnion.freshBudget
+                (8 *
+                    n1 (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver +
+                  1) +
+            2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+          2 * ProverCommitFuelMass22.charge <
+        1 / 2 ^ 100
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:138:14: error(lean.unknownIdentifier): Unknown constant `toPremises`
+'R1Z.PV_RunJoin_SourceEndpoint.privacy_headline_from_source_inputs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       47.77 real        10.74 user         4.87 sys
+          2625814528  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              158075  page reclaims
+              309119  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               49624  voluntary context switches
+              288314  involuntary context switches
+           611649798  instructions retired
+           297163538  cycles elapsed
+            11518648  peak memory footprint
+
+exit=1

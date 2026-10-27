@@ -1,0 +1,38 @@
+structure R1Z.PV_RunJoin_InstalledFamily.Selection (CommitHandle : Type) : Type 1
+number of parameters: 1
+fields:
+  R1Z.PV_RunJoin_InstalledFamily.Selection.selected : (h : HonestProver K) →
+      Statement K CommitHandle → h.Instance → PV_Src_NativeInput.Input
+  R1Z.PV_RunJoin_InstalledFamily.Selection.publicRecord : Statement K CommitHandle → PV_Src_NativeInput.Input
+constructor:
+  R1Z.PV_RunJoin_InstalledFamily.Selection.mk {CommitHandle : Type}
+    (selected : (h : HonestProver K) → Statement K CommitHandle → h.Instance → PV_Src_NativeInput.Input)
+    (publicRecord : Statement K CommitHandle → PV_Src_NativeInput.Input) : Selection CommitHandle
+def R1Z.PV_RunJoin_InstalledFamily.PublicBinding : {CommitHandle : Type} → Selection CommitHandle → Prop :=
+fun {CommitHandle} selection =>
+  ∀ (h : HonestProver K) (x : Statement K CommitHandle) (w : h.Instance),
+    h.public w = x.1 →
+      PV_Src_NativeInput.publicInput (selection.selected h x w) =
+        PV_Src_NativeInput.publicInput (selection.publicRecord x)
+'R1Z.PV_RunJoin_InstalledFamily.public_common' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_InstalledFamily.map_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+       46.38 real         1.73 user         5.55 sys
+          2458091520  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              339479  page reclaims
+              196097  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               26593  voluntary context switches
+              400379  involuntary context switches
+           625018464  instructions retired
+           347170198  cycles elapsed
+            11649792  peak memory footprint
+
+exit=0

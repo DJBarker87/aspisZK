@@ -1,0 +1,32 @@
+{
+  "kind": "compile-free shipped-source inspection, not a Lean proof or runtime fixture",
+  "revision": "d124308495294df7c4d30f1557bbff3ba4eab907",
+  "source": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "ec93e05da16f97724340c17f2b15aee03e0bbf118321f503d13912f758737a4e"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "sha256": "e696427450eb2b9061a24ad46dd4b3432d9fc5bae14aba5938840a4e8bc61e34"
+    }
+  ],
+  "target": "RealR1_client::prove_for_proof_accounts",
+  "function_text": "pub fn prove_for_proof_accounts(\n    public: Public<'_>,\n    compiled: &PoolV1PairForestMergedC1CompilationV1,\n    hash: HashFn,\n    nonce_store: &mut DurableStateOnlyMaskNonceStore,\n    mut proof_account: impl FnMut(usize) -> [u8; 32],\n) -> Result<RetriedProof, Error> {\n    prover::prove_masked_retrying_with(public, compiled, Variant::S2, hash, nonce_store, |k| {\n        StateOnlyAttemptSecrets::generate_for_mask_nonce(proof_account(k)).map_err(|_| Error::Entropy)\n    })\n}\n",
+  "findings": [
+    "Exact supplied public, compiled reference, hash and mutable durable ledger are passed to the S2 retry entry.",
+    "The proof-account public key callback is evaluated as the argument before attempt seed generation.",
+    "The adapter receives a compilation; it does not establish compiler success.",
+    "Entropy generation retains getrandom failure propagation and the retry limit; A/B repairs are not assumed."
+  ],
+  "unproved": [
+    "Extracted full caller/observer association at the pinned deployed binary.",
+    "Actual compiler/record/admission installation.",
+    "Complete extracted trace refinement outside the unchanged bad event."
+  ],
+  "keys_created_or_destroyed": false
+}

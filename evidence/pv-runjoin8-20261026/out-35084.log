@@ -1,0 +1,94 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_CausalTrustLedger.lean:111:22: error: don't know how to synthesize placeholder
+context:
+CommitHandle Aux : Type
+template : R1Wire K CommitHandle Aux
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+inst✝¹ : ProverRwFull.ExternalTypes
+N Client Context Rest : Type
+inst✝ : Fintype Rest
+schedule : ProverCommitLedger36.Schedule
+unix : Bool
+address : PV_RunJoin_LedgerWorld.Address
+coordinates : ModelCoins template outputs x ≃ PV_RunJoin_CausalPrefix.Tape × Rest
+replies :
+  ModelCoins template outputs x →
+    Fin 128 →
+      Aeneas.Std.Array Aeneas.Std.U8 64#usize ×
+        Aeneas.Std.core.result.Result Unit ProverRwRngCaller.getrandom.error.Error
+initialPolicy : Rest → N
+initialLedger : Rest → PV_RunJoin_LedgerWorld.World
+initialBody : Rest → Client
+policy : ProverRwEffectCallback.Account N
+disclosed :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) →
+        View K CommitHandle Aux R1Bat
+oracle :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) → List (Bytes × OracleAnswer)
+ideal :
+  (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+    R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat
+inputs : (honest : HonestProver K) → Statement K CommitHandle → honest.Instance → PV_RunJoin_LedgerBody.Inputs N Client
+common : Statement K CommitHandle → PV_RunJoin_LedgerBody.Inputs N Client
+boundaryData :
+  PV_RunJoin_Boundary.Data
+    (PV_RunJoin_LedgerConstructor.runtime schedule unix address
+      (PV_RunJoin_CausalPrefix.world sorry sorry sorry sorry sorry) policy inputs disclosed oracle ideal)
+    Context Rest
+produce : (i : Fin 128) → PV_RunJoin_CausalPrefix.Prefix i → Rest → Context
+extracted : ModelCoins template outputs x → R1Adv K CommitHandle Aux → h.Instance → ROMView K CommitHandle Aux R1Bat
+trace :
+  ∀ (adv : R1Adv K CommitHandle Aux) (w : h.Instance),
+    h.public w = x.1 →
+      ∀ (r : World),
+        (¬∃ i,
+              ProverCommitFuelJoin22.bad
+                (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                  (prover base (base.pubBytes x).length h B outputs x
+                      (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                        opens)).toProver
+                  8 h B outputs x w)
+                (queries adv w) i r.coins) →
+          extracted r.coins adv w =
+            (ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                  (prover base (base.pubBytes x).length h B outputs x
+                      (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                        opens)).toProver
+                  8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+              h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1
+⊢ ∀ (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+    (PV_RunJoin_LedgerBoundary.boundary schedule unix address world policy inputs common disclosed oracle ideal x
+            { sourceBody := boundaryData.sourceBody, draw := boundaryData.draw, law := boundaryData.law,
+              frame := PV_RunJoin_CausalPrefix.frame produce, coordinates := coordinates,
+              nativeWeight := boundaryData.nativeWeight, ledger := boundaryData.ledger,
+              reservation := boundaryData.reservation, schedule := boundaryData.schedule, unix := boundaryData.unix,
+              fault := boundaryData.fault }).ledger
+        (PV_RunJoin_Deployed.initialState runtime
+          ((PV_RunJoin_LedgerBoundary.boundary schedule unix address world policy inputs common disclosed oracle ideal x
+                  { sourceBody := boundaryData.sourceBody, draw := boundaryData.draw, law := boundaryData.law,
+                    frame := PV_RunJoin_CausalPrefix.frame produce, coordinates := coordinates,
+                    nativeWeight := boundaryData.nativeWeight, ledger := boundaryData.ledger,
+                    reservation := boundaryData.reservation, schedule := boundaryData.schedule,
+                    unix := boundaryData.unix, fault := boundaryData.fault }).coordinates.symm
+            (t, rest))) =
+      (PV_RunJoin_LedgerBoundary.boundary schedule unix address world policy inputs common disclosed oracle ideal x
+            { sourceBody := boundaryData.sourceBody, draw := boundaryData.draw, law := boundaryData.law,
+              frame := PV_RunJoin_CausalPrefix.frame produce, coordinates := coordinates,
+              nativeWeight := boundaryData.nativeWeight, ledger := boundaryData.ledger,
+              reservation := boundaryData.reservation, schedule := boundaryData.schedule, unix := boundaryData.unix,
+              fault := boundaryData.fault }).ledger
+        (PV_RunJoin_Deployed.initialState runtime
+          ((PV_RunJoin_LedgerBoundary.boundary schedule unix address world policy inputs common disclosed oracle ideal x
+                  { sourceBody := boundaryData.sourceBody, draw := boundaryData.draw, law := boundaryData.law,
+                    frame := PV_RunJoin_CausalPrefix.frame produce, coordinates := coordinates,
+                    nativeWeight := boundaryData.nativeWeight, ledger := boundaryData.ledger,
+                    reservation := boundaryData.reservation, schedule := boundaryData.schedule,
+                    unix := boundaryData.unix, fault := boundaryData.fault }).coordinates.symm
+            (u, rest)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_CausalTrustLedger.lean:121:14: error(lean.unknownIdentifier): Unknown constant `initial_and_causal`
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

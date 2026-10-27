@@ -1,0 +1,13 @@
+import R1Z.PV_Src_NativeInput
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+#print ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+#print R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+#print ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+#print ProverRwFull.aspis_statement.state_only_trace.StateOnlyTraceFoundation
+#print ProverRwFull.aspis_core.field.M31
+#print R1Z.PV_Src_NativeInput.Input
+#print ProverRwFull.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+#print R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+
+#print ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestTraceV1

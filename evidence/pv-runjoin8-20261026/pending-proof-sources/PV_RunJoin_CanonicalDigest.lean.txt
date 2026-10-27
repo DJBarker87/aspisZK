@@ -1,0 +1,31 @@
+import R1Z.PV_Src_CanonicalRoots
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_CanonicalDigest
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.BuilderModel R1J.SpendWitnessMap
+abbrev Digest := Array U32 8#usize
+abbrev model (a : Digest) : Fin 8 → F := fun i => liftU a.val[i.val]!
+
+/-- Canonicality makes the existing lossless word decoder injective on a
+whole source digest. No concrete permutation is evaluated. -/
+theorem injective (a b : Digest) (ha : Canon8 a) (hb : Canon8 b)
+    (same : model a = model b) : a = b := by
+  apply BuilderRecordCanonical.array_ext
+  intro j hj
+  have h := congrArg (fun d : Fin 8 → F => w32 (d ⟨j,by simpa using hj⟩)) same
+  change w32 (liftU a.val[j]!) = w32 (liftU b.val[j]!) at h
+  rw [BuilderRecordCanonical.word_roundtrip _ (ha j (by simpa using hj)),
+    BuilderRecordCanonical.word_roundtrip _ (hb j (by simpa using hj))] at h
+  exact h
+
+theorem table_model (l : Fin 21) :
+    model PV_Src_CanonicalRoots.table.val[l.val]! =
+      fun lane => (R0P.emptyRootsNat l lane : F) := by
+  funext lane
+  change liftU ((PV_Src_CanonicalRoots.table.val[l.val]!).val[lane.val]!) = _
+  rw [PV_Src_CanonicalRoots.at_level,arr8_get _ lane.val lane.isLt]
+  simp only [liftU,PV_Src_CanonicalRoots.word,UScalar.ofNatCore_val_eq]
+
+#print axioms injective
+#print axioms table_model
+end R1Z.PV_RunJoin_CanonicalDigest

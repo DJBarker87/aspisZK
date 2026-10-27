@@ -1,0 +1,172 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_LedgerEndpoint.lean:114:17: error: unexpected token 'h'; expected '(', '[', '_', '{', '⦃' or identifier
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_LedgerEndpoint.lean:115:53: error: unexpected identifier; expected 'lemma'
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_LedgerEndpoint.lean:130:14: error(lean.unknownIdentifier): Unknown constant `toPremises`
+structure R1Z.PV_RunJoin_LedgerEndpoint.Residual {CommitHandle Aux : Type} (template : R1Wire K CommitHandle Aux)
+  (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) [ProverRwFull.ExternalTypes]
+  {N Client Context Rest : Type} [Fintype Rest] (schedule : ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : PV_RunJoin_LedgerWorld.Address)
+  (world : PV_RunJoin_CompletedWorld.Data (ModelCoins template outputs x) N PV_RunJoin_LedgerWorld.World Client)
+  (policy : ProverRwEffectCallback.Account N)
+  (inputs :
+    (honest : HonestProver K) → Statement K CommitHandle → honest.Instance → PV_RunJoin_LedgerBody.Inputs N Client)
+  (disclosed :
+    R1Adv K CommitHandle Aux →
+      Statement K CommitHandle →
+        Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) →
+          View K CommitHandle Aux R1Bat)
+  (oracle :
+    R1Adv K CommitHandle Aux →
+      Statement K CommitHandle →
+        Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) →
+          List (Bytes × OracleAnswer))
+  (ideal :
+    (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+      R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat)
+  (common : Statement K CommitHandle → PV_RunJoin_LedgerBody.Inputs N Client)
+  (boundaryData : PV_RunJoin_Boundary.Data runtime Context Rest) : Prop
+number of parameters: 22
+fields:
+  R1Z.PV_RunJoin_LedgerEndpoint.Residual.E1_V329 : ProverCommitPublicNonce40.E1 boundary.law
+  R1Z.PV_RunJoin_LedgerEndpoint.Residual.byte_blind_V338 : (∀ (secret : ProverRwRetryModel.Secret) (s : State)
+        (kind : ProverCommitEnvironment35.Kind),
+        boundary.fault secret s kind =
+          boundary.schedule (List.length (boundary.ledger s).history) kind (boundary.ledger s).history) ∧
+      (∀ (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+          boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t, rest))) =
+            boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u, rest)))) ∧
+        ∀ (i : Fin 128) (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+          (∀ (j : Fin 128), ↑j < ↑i → t j = u j) → boundary.frame i (t, rest) = boundary.frame i (u, rest)
+  R1Z.PV_RunJoin_LedgerEndpoint.Residual.kernels_V339 : ∀ (c : ModelCoins template outputs x),
+      boundary.nativeWeight c = PV_RunJoin_E1Joint.weight 128 boundary.law boundary.frame boundary.coordinates c
+  R1Z.PV_RunJoin_LedgerEndpoint.Residual.disclosed_V038 : ∀ (adv : rust.Adversary) (w : h.Instance),
+      h.public w = x.1 →
+        ∀ (r : World),
+          (¬∃ i,
+                ProverCommitFuelJoin22.bad
+                  (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    8 h B outputs x w)
+                  (queries adv w) i r.coins) →
+            (rust.real h B outputs adv x w r).disclosed =
+              ((ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+                  h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1).disclosed
+  R1Z.PV_RunJoin_LedgerEndpoint.Residual.observerOracle_V038 : ∀ (adv : rust.Adversary) (w : h.Instance),
+      h.public w = x.1 →
+        ∀ (r : World),
+          (¬∃ i,
+                ProverCommitFuelJoin22.bad
+                  (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    8 h B outputs x w)
+                  (queries adv w) i r.coins) →
+            (rust.real h B outputs adv x w r).observerOracle =
+              ((ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+                  h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1).observerOracle
+constructor:
+  R1Z.PV_RunJoin_LedgerEndpoint.Residual.mk {CommitHandle Aux : Type} {template : R1Wire K CommitHandle Aux}
+    {outputs : Statement K CommitHandle → Challenges K → Aux} {x : Statement K CommitHandle}
+    [ProverRwFull.ExternalTypes] {N Client Context Rest : Type} [Fintype Rest]
+    {schedule : ProverCommitLedger36.Schedule} {unix : Bool} {address : PV_RunJoin_LedgerWorld.Address}
+    {world : PV_RunJoin_CompletedWorld.Data (ModelCoins template outputs x) N PV_RunJoin_LedgerWorld.World Client}
+    {policy : ProverRwEffectCallback.Account N}
+    {inputs :
+      (honest : HonestProver K) → Statement K CommitHandle → honest.Instance → PV_RunJoin_LedgerBody.Inputs N Client}
+    {disclosed :
+      R1Adv K CommitHandle Aux →
+        Statement K CommitHandle →
+          Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) →
+            View K CommitHandle Aux R1Bat}
+    {oracle :
+      R1Adv K CommitHandle Aux →
+        Statement K CommitHandle →
+          Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) →
+            List (Bytes × OracleAnswer)}
+    {ideal :
+      (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+        R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat}
+    {common : Statement K CommitHandle → PV_RunJoin_LedgerBody.Inputs N Client}
+    {boundaryData : PV_RunJoin_Boundary.Data runtime Context Rest} (E1_V329 : ProverCommitPublicNonce40.E1 boundary.law)
+    (byte_blind_V338 :
+      (∀ (secret : ProverRwRetryModel.Secret) (s : State) (kind : ProverCommitEnvironment35.Kind),
+          boundary.fault secret s kind =
+            boundary.schedule (List.length (boundary.ledger s).history) kind (boundary.ledger s).history) ∧
+        (∀ (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+            boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t, rest))) =
+              boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u, rest)))) ∧
+          ∀ (i : Fin 128) (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+            (∀ (j : Fin 128), ↑j < ↑i → t j = u j) → boundary.frame i (t, rest) = boundary.frame i (u, rest))
+    (kernels_V339 :
+      ∀ (c : ModelCoins template outputs x),
+        boundary.nativeWeight c = PV_RunJoin_E1Joint.weight 128 boundary.law boundary.frame boundary.coordinates c)
+    (disclosed_V038 :
+      ∀ (adv : rust.Adversary) (w : h.Instance),
+        h.public w = x.1 →
+          ∀ (r : World),
+            (¬∃ i,
+                  ProverCommitFuelJoin22.bad
+                    (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 h B outputs x w)
+                    (queries adv w) i r.coins) →
+              (rust.real h B outputs adv x w r).disclosed =
+                ((ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                        (prover base (base.pubBytes x).length h B outputs x
+                            (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode
+                              fib opens)).toProver
+                        8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+                    h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1).disclosed)
+    (observerOracle_V038 :
+      ∀ (adv : rust.Adversary) (w : h.Instance),
+        h.public w = x.1 →
+          ∀ (r : World),
+            (¬∃ i,
+                  ProverCommitFuelJoin22.bad
+                    (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 h B outputs x w)
+                    (queries adv w) i r.coins) →
+              (rust.real h B outputs adv x w r).observerOracle =
+                ((ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                        (prover base (base.pubBytes x).length h B outputs x
+                            (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode
+                              fib opens)).toProver
+                        8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+                    h B outputs (RomObserverBin.observerMap rust observer_program adv) x w
+                    r.coins.1.1).observerOracle) :
+    Residual template outputs x schedule unix address world policy inputs disclosed oracle ideal common boundaryData
+       50.40 real        11.80 user         5.38 sys
+          2596519936  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              380150  page reclaims
+              180734  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               25985  voluntary context switches
+              347136  involuntary context switches
+           515858666  instructions retired
+           301311332  cycles elapsed
+            12403552  peak memory footprint
+
+exit=1

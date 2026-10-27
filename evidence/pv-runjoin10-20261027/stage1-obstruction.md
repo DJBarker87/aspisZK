@@ -1,0 +1,19 @@
+# Same-record compiler and deployment facts
+
+Read-only source pins are sibling-pins.json. PackedPublic proves complete public preservation by normalized/path-packed representation. PackedRecords supplies the exact canonical private record and reference-record admission conditional on semantic public association. These are candidate source facts; no deployed P row is removed.
+
+The exact remaining execution fact for each SAME actual selected input i is:
+`@PV_Src_NativeInput.run actualExternal actualRecords i = .ok (.Ok i.compiled)`.
+Neither Checked nor PackedSelection constructs the returned compilation: compiled, snapshot, laneAnchor and context fields are parameters in CheckedCanonical.Data. PackedSelection.select copies compiled and snapshot unchanged. CanonicalPrivateRecord.admission retains semantic public equality and uses a supplied reference-root table. FrozenInput.external/records are owned P6 reference dictionaries, not a proved equality to deployed dictionaries. No replacement of actualExternal/actualRecords is licensed by these theorems.
+
+The exact fixed-endpoint binding remains:
+`∀ w, h.public w = x.1 → PV_Src_NativeInput.publicInput (selected.selected h x w) = PV_Src_NativeInput.publicInput (selected.publicRecord x)`.
+The full returned public_statement transition is retained on both sides. An abstract public fibre or Checked representation does not fix that transition. No arbitrary compiler payload is called the actual selected/returned payload.
+
+A sufficient canonical-reference transition equality is only a candidate condition: PublicRecords.transition sets candidate_afterstate.next_pair_index to zero, while the semantic projection omits that field. It must not be installed as an actual deployment fact or used to claim non-vacuity. Actual complete public binding needs equality of the genuine returned transitions across the same public fibre, not equality to this convenient reference transition.
+
+Read-only caller inspection: `crates/aspis-r1-cost-probe/src/RealR1_client.rs:prove_for_proof_accounts` takes `public: Public` and `compiled: &PoolV1PairForestMergedC1CompilationV1` as arguments. It calls the proof-account retry route but does not construct the compiler inputs or return a compilation. Its fixture test supplies those arguments from `Fixture`. Therefore the D162 route alone does not specify the missing semantic-witness-to-native-selected-record family. The actual pre-caller compiler construction and returned-transition/public association must be installed at those supplied arguments. This source observation is not a valid-spend counterexample.
+
+The pinned srcid6 handoff retains all five deployed source premises. Its dynamic mapper equality checks timed out and its source/object provenance attestations remain open. DynamicAdmission.selected supplies conditional admission through the dynamic pure dictionary; it does not prove its equality to the shipped mapper. No deployment discharge is inferred from the branch's canonical reference proofs.
+
+The actual retained caller tests invoke `aspis_prover::r0_fixture::prepare(withdrawal)`. Its snapshot is pool bytes [1;32], domain [5;32], sequence/index 0, current_root empty[20], frontier empty[0..20). It constructs the transfer fixture through prepare_v7_pair_forest_transfer_fixture_v1 and then calls the private-transfer compiler again with the same fixture inputs. Withdrawal uses value 250, change value 750, destination [6;32], and sets common.lane_transition to the returned compiled.public_statement. Exact source hashes are in actual-fixture-source-pins.json. The roots are computed by 21 real source parent calls; 19/21 are covered once the six new Kani leaves pass, leaving cells 18 and 19. These bounded constant-cell checks do not prove success of the complete compiler, the dynamic mapper, or the whole semantic fixture-to-source record join. The callback/ledger/observer runtime remains independently required.
