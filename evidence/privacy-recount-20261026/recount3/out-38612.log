@@ -1,0 +1,249 @@
+@R1Z.PV_Src_NativeIdentification.existence : ∀ {K : Type} [inst : Field K] [Fintype K] [DecidableEq K]
+  [@Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  [inst_5 : R1Z.BuilderForestAdmissionPort.ExternalLinear] [inst_6 : R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  {inputs : I → R1Z.PV_Src_NativeInput.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))},
+  @R1Z.PV_Src_NativeIdentification.PV_Src_Premises K inst inst_4 inst_5 inst_6 I inputs transport →
+    ∀ (i : I),
+      ∃ records banks,
+        And
+          (@Eq (Aeneas.Std.Result R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords)
+            (@R1Z.PV_Src_NativeInput.newRecords inst_6 (inputs i))
+            (@Aeneas.Std.Result.ok R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords records))
+          (And
+            (@Eq (Aeneas.Std.Result (Option R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyBanks))
+              records.banks
+              (@Aeneas.Std.Result.ok (Option R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyBanks)
+                (@some R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyBanks banks)))
+            (@Eq
+              (Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+              (inputs i).compiled.semantic_c1.c1 banks.merged))
+'R1Z.PV_Src_NativeIdentification.existence' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_NativeIdentification.record_facts : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K]
+  [inst_2 : DecidableEq K]
+  [inst_3 :
+    @Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  [inst_5 : R1Z.BuilderForestAdmissionPort.ExternalLinear] [inst_6 : R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  {inputs : I → R1Z.PV_Src_NativeInput.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+  (p : @R1Z.PV_Src_NativeIdentification.PV_Src_Premises K inst inst_4 inst_5 inst_6 I inputs transport) (i : I),
+  ∃ banks,
+    And
+      (@Eq (Aeneas.Std.Result R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords)
+        (@R1Z.PV_Src_NativeInput.newRecords inst_6 (inputs i))
+        (@Aeneas.Std.Result.ok R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords
+          (@R1Z.PV_Src_NativeIdentification.records K inst inst_1 inst_2 inst_3 inst_4 inst_5 inst_6 I inputs transport
+            p i)))
+      (And
+        (@Eq (Aeneas.Std.Result (Option R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyBanks))
+          (@R1Z.PV_Src_NativeIdentification.records K inst inst_1 inst_2 inst_3 inst_4 inst_5 inst_6 I inputs transport
+              p i).banks
+          (@Aeneas.Std.Result.ok (Option R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyBanks)
+            (@some R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyBanks banks)))
+        (@Eq
+          (Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+          (inputs i).compiled.semantic_c1.c1 banks.merged))
+'R1Z.PV_Src_NativeIdentification.record_facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_NativeIdentification.records_success : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K]
+  [inst_2 : DecidableEq K]
+  [inst_3 :
+    @Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  [inst_5 : R1Z.BuilderForestAdmissionPort.ExternalLinear] [inst_6 : R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  {inputs : I → R1Z.PV_Src_NativeInput.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+  (p : @R1Z.PV_Src_NativeIdentification.PV_Src_Premises K inst inst_4 inst_5 inst_6 I inputs transport) (i : I),
+  @Eq (Aeneas.Std.Result R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords)
+    (@R1Z.PV_Src_NativeInput.newRecords inst_6 (inputs i))
+    (@Aeneas.Std.Result.ok R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords
+      (@R1Z.PV_Src_NativeIdentification.records K inst inst_1 inst_2 inst_3 inst_4 inst_5 inst_6 I inputs transport p
+        i))
+'R1Z.PV_Src_NativeIdentification.records_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_NativeIdentification.banks_success : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K]
+  [inst_2 : DecidableEq K]
+  [inst_3 :
+    @Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  [inst_5 : R1Z.BuilderForestAdmissionPort.ExternalLinear] [inst_6 : R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  {inputs : I → R1Z.PV_Src_NativeInput.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+  (p : @R1Z.PV_Src_NativeIdentification.PV_Src_Premises K inst inst_4 inst_5 inst_6 I inputs transport) (i : I),
+  @Eq (Aeneas.Std.Result (Option R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyBanks))
+    (@R1Z.PV_Src_NativeIdentification.records K inst inst_1 inst_2 inst_3 inst_4 inst_5 inst_6 I inputs transport p
+        i).banks
+    (@Aeneas.Std.Result.ok (Option R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyBanks)
+      (@some R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyBanks
+        (@R1Z.PV_Src_NativeIdentification.banks K inst inst_1 inst_2 inst_3 inst_4 inst_5 inst_6 I inputs transport p
+          i)))
+'R1Z.PV_Src_NativeIdentification.banks_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_NativeIdentification.compiled_columns : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K]
+  [inst_2 : DecidableEq K]
+  [inst_3 :
+    @Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  [inst_5 : R1Z.BuilderForestAdmissionPort.ExternalLinear] [inst_6 : R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  {inputs : I → R1Z.PV_Src_NativeInput.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+  (p : @R1Z.PV_Src_NativeIdentification.PV_Src_Premises K inst inst_4 inst_5 inst_6 I inputs transport) (i : I),
+  @Eq
+    (Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec R1Z.BuilderForestAdmissionPort.aspis_core.field.M31)
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+    (inputs i).compiled.semantic_c1.c1
+    (@R1Z.PV_Src_NativeIdentification.banks K inst inst_1 inst_2 inst_3 inst_4 inst_5 inst_6 I inputs transport p
+        i).merged
+'R1Z.PV_Src_NativeIdentification.compiled_columns' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_NativeIdentification.public_eq : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] [inst_2 : DecidableEq K]
+  [inst_3 :
+    @Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  [inst_5 : R1Z.BuilderForestAdmissionPort.ExternalLinear] [inst_6 : R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  {inputs : I → R1Z.PV_Src_NativeInput.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+  (p : @R1Z.PV_Src_NativeIdentification.PV_Src_Premises K inst inst_4 inst_5 inst_6 I inputs transport) (i : I),
+  @Eq (R0P.Public K)
+    (@R0Z.ZkStatement.HonestProver.public K (@R1Z.PV_Src_NativeIdentification.prover K inst inst_4 I inputs transport)
+      i)
+    (@R0Z.ZkStatement.HonestProver.public K (@R1Z.BuilderSource.prover K inst inst_4)
+      (@R1Z.PV_Src_NativeIdentification.toInstance K inst inst_1 inst_2 inst_3 inst_4 inst_5 inst_6 I inputs transport p
+        i))
+'R1Z.PV_Src_NativeIdentification.public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_NativeIdentification.build_eq : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] [inst_2 : DecidableEq K]
+  [inst_3 :
+    @Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  [inst_5 : R1Z.BuilderForestAdmissionPort.ExternalLinear] [inst_6 : R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  {inputs : I → R1Z.PV_Src_NativeInput.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+  (p : @R1Z.PV_Src_NativeIdentification.PV_Src_Premises K inst inst_4 inst_5 inst_6 I inputs transport) (i : I),
+  @Eq (R0P.Trace K)
+    (@R0Z.ZkStatement.HonestProver.build K (@R1Z.PV_Src_NativeIdentification.prover K inst inst_4 I inputs transport) i)
+    (@R0Z.ZkStatement.HonestProver.build K (@R1Z.BuilderSource.prover K inst inst_4)
+      (@R1Z.PV_Src_NativeIdentification.toInstance K inst inst_1 inst_2 inst_3 inst_4 inst_5 inst_6 I inputs transport p
+        i))
+'R1Z.PV_Src_NativeIdentification.build_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_NativeIdentification.transport_eq : ∀ {K : Type} [inst : Field K] [Fintype K] [DecidableEq K]
+  [@Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  [inst_5 : R1Z.BuilderForestAdmissionPort.ExternalLinear] [inst_6 : R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  {inputs : I → R1Z.PV_Src_NativeInput.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))},
+  @R1Z.PV_Src_NativeIdentification.PV_Src_Premises K inst inst_4 inst_5 inst_6 I inputs transport →
+    @Eq
+      (Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+        (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024)))))
+      (@R0Z.ZkStatement.HonestProver.transport K
+        (@R1Z.PV_Src_NativeIdentification.prover K inst inst_4 I inputs transport))
+      R1Z.BuilderSource.π
+'R1Z.PV_Src_NativeIdentification.transport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_Src_NativeIdentification.identification : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K]
+  [inst_2 : DecidableEq K]
+  [inst_3 :
+    @Algebra (ZMod AspisCircleGroupOrder.P) K
+      (@Semifield.toCommSemiring (ZMod AspisCircleGroupOrder.P)
+        (@Field.toSemifield (ZMod AspisCircleGroupOrder.P)
+          (@ZMod.instField AspisCircleGroupOrder.P AspisCircleGroupOrder.instFactPrimeP)))
+      (@DivisionSemiring.toSemiring K (@Semifield.toDivisionSemiring K (@Field.toSemifield K inst)))]
+  [inst_4 :
+    @CharP K
+      (@AddGroupWithOne.toAddMonoidWithOne K
+        (@Ring.toAddGroupWithOne K (@DivisionRing.toRing K (@Field.toDivisionRing K inst))))
+      (@OfNat.ofNat Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))]
+  [inst_5 : R1Z.BuilderForestAdmissionPort.ExternalLinear] [inst_6 : R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  {inputs : I → R1Z.PV_Src_NativeInput.Input}
+  {transport :
+    Equiv (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))
+      (Fin (@OfNat.ofNat Nat (nat_lit 1024) (instOfNatNat (nat_lit 1024))))}
+  (p : @R1Z.PV_Src_NativeIdentification.PV_Src_Premises K inst inst_4 inst_5 inst_6 I inputs transport),
+  @R1Z.BuilderSource.SourceIdentification K inst inst_4
+    (@R1Z.PV_Src_NativeIdentification.prover K inst inst_4 I inputs transport)
+    (@R1Z.PV_Src_NativeIdentification.toInstance K inst inst_1 inst_2 inst_3 inst_4 inst_5 inst_6
+      (@R0Z.ZkStatement.HonestProver.Instance K
+        (@R1Z.PV_Src_NativeIdentification.prover K inst inst_4 I inputs transport))
+      inputs transport p)
+'R1Z.PV_Src_NativeIdentification.identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

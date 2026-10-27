@@ -1,0 +1,60 @@
+@R1Z.ProverRw19AssemblyCallerIff.criterion : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : @ProverRwFull.ExternalFuns inst),
+  @Eq
+      (ProverRwFull.aspis_core.field.M31 →
+        Aeneas.Std.Slice ProverRwFull.aspis_core.field.M31 →
+          ProverRwFull.aspis_core.field.QM31 → Aeneas.Std.Result ProverRwFull.aspis_core.field.QM31)
+      (@ProverRwFull.ExternalFuns.op223 inst ops)
+      (@R1Z.ProverRwP6CompressSource.compress inst (@R1Z.PV_CurrentScaleInstall.selected inst ops)) →
+    ∀ {S : Type} (store : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+      (pub : @ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public inst)
+      (compiled : @ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 inst)
+      (v : ProverRwFull.transport.Variant)
+      (hash :
+        Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+          Aeneas.Std.Result
+            (Aeneas.Std.Array Aeneas.Std.U8
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯)))
+      (binding digest :
+        Aeneas.Std.Array Aeneas.Std.U8
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯))
+      (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S) (accepted : Bool),
+      @Eq (Aeneas.Std.Result (Prod Bool S))
+          (@ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore.reserve S store s digest
+            attempt.mask_nonce)
+          (@Aeneas.Std.Result.ok (Prod Bool S) (@Prod.mk Bool S accepted after)) →
+        ∀ (fields : R1Z.ProverCommitFront46.Fields) (queries : List R1Z.ProverCommitPublish43.QueryParts)
+          (slots : List R1Z.ProverCommitPublish43.Slot),
+          Iff
+            (@Eq
+              (Aeneas.Std.Result
+                (Prod
+                  (Aeneas.Std.core.result.Result
+                    (Prod (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.prover.MaskedFixtureAudit)
+                    ProverRwFull.verifier.Error)
+                  S))
+              (@R1Z.ProverRwP6BodyStore.execute inst (@R1Z.ProverRw18ContextJoin.original inst ops) S store pub compiled
+                v hash binding digest attempt s)
+              (@R1Z.ProverRwBodyCandidateData.withState R1Z.ProverRw19AuditValue.Status S after
+                (R1Z.ProverRw19MathematicalAssembly.output fields queries slots)))
+            (@Eq
+              (Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.verifier.Error))
+              (@R1Z.PV_RW_DataProduct.observe
+                (Aeneas.Std.core.result.Result
+                  (Prod (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.prover.MaskedFixtureAudit)
+                  ProverRwFull.verifier.Error)
+                (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.verifier.Error)
+                (@R1Z.PV_RW_DataProduct.first (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                  ProverRwFull.prover.MaskedFixtureAudit ProverRwFull.verifier.Error)
+                (@R1Z.ProverRwBodyDataCriterion.data
+                  (Aeneas.Std.core.result.Result
+                    (Prod (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) ProverRwFull.prover.MaskedFixtureAudit)
+                    ProverRwFull.verifier.Error)
+                  S
+                  (@R1Z.ProverRwP6BodyStore.execute inst (@R1Z.PV_RW_CombinedBodyData.closed inst ops) S store pub
+                    compiled v hash binding digest attempt s)))
+              (R1Z.ProverRw19MathematicalAssembly.proofBytes fields queries slots))
+'R1Z.ProverRw19AssemblyCallerIff.criterion' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
