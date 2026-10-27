@@ -39,7 +39,9 @@ theorem source (s : Array U32 16#usize)
     rw [show 4*3+i.val%4=12+i.val%4 by omega] at G3
     simp only [UScalar.ofNatCore_val_eq]
     rw [← G,← G0,← G1,← G2,← G3]
-    unfold liftN
+    have hv : (Usize.ofNatCore (i.val%4) (by have hm := Nat.mod_lt i.val (show 0<4 by decide);scalar_tac)).val = i.val%4 := by
+      scalar_tac
+    simp only [liftN,hv,Nat.add_comm]
     ring
 
 #print axioms source

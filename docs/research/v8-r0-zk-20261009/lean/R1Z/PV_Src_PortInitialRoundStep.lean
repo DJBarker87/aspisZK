@@ -25,14 +25,15 @@ theorem source {F : Type}
           (U8.wrapping_add round 1#u8) out) := by
   rw [poseidon2.permute_optimized_with_trace_loop0,hn]
   simp only [bind_tc_ok,lift]
-  change (do
-    let out ← PV_Src_PortFullRoundModel.initial s c
+  have he := congrArg (fun body : Result State => do
+    let out ← body
     let (_,trace1) ← callback.call_mut trace
       ({round,kind := poseidon2.Poseidon2RoundKind.ExternalInitial (UScalar.cast .U8 index),
         input,output := out} : poseidon2.Poseidon2RoundTransition)
     poseidon2.permute_optimized_with_trace_loop0 (sourceExternalLinear := PV_Src_ExternalReference.dictionary) callback after out trace1
-      (U8.wrapping_add round 1#u8) out) = _
-  rw [PV_Src_PortFullRoundCopy.initial s c hs hc]
+      (U8.wrapping_add round 1#u8) out)
+    (PV_Src_PortFullRoundCopy.initial s c hs hc)
+  simpa only [PV_Src_PortFullRoundModel.initial,bind_assoc_eq,lift,bind_tc_ok] using he
 
 #print axioms source
 end R1Z.PV_Src_PortInitialRoundStep

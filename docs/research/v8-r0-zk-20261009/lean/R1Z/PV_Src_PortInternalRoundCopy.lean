@@ -27,7 +27,7 @@ theorem source (s : State) (c : U32) (hs : Canonical s) (hc : c.val < 2147483647
     rw [← PV_Src_PortMultiply.power];exact hb
   rw [run,R0PoseidonCopy.internal_round]
   simp only [index_ok s 0#usize (by decide),bind_tc_ok,ha,ha',hb,hb',
-    update_ok s 0#usize b (by decide)]
+    update_ok s 0#usize b (by decide),UScalar.ofNatCore_val_eq]
   exact PV_Src_PortInternalCopy.source (s.set 0#usize b)
     (canonical_set s 0#usize (by decide) b hcb hs)
 
