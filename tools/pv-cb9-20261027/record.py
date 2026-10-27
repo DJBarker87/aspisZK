@@ -6,6 +6,7 @@ rows=[]; additions=[]
 for op,row in [(226,243),(227,244),(228,245),(230,247),(250,257),(251,258),(252,259),(254,261),(259,265)]:
  if op==259: rows.append(f'| {op} | V{row} | SKIP(sibling) | PV_CB_Op259Exact.op259_source | op259-siblings.txt |');continue
  d=p/f'cb9-op{op}-aeneas'; c=p/f'cb9-op{op}-charon'
+ if op==252 and (p/'cb9-op252current-aeneas/receipt.json').exists():d=p/'cb9-op252current-aeneas'
  if (d/'receipt.json').exists():
   r=json.loads((d/'receipt.json').read_text());log=(d/'output.log').read_text(); clean=re.sub(r'\x1b\[[0-9;]*m','',log)
   errs=[x for x in clean.splitlines() if any(s in x for s in ['[Error','Source:','Compiler source:','fail-closed preflight:'])]
