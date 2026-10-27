@@ -69,3 +69,46 @@ remaining body-step synchronization P premise; it does not discharge it.
 No original premise is removed. No T field, simulator change, observer
 restriction or enlarged numerical bound has been introduced. Stage 3 is
 unfulfilled, and the privacy target is not yet established.
+
+## D262 continuation: adopted off-bad condition
+
+The earlier all-world `PV_OptB_Factorization.Independent` condition is
+superseded for option B. It is retained as a historical definition; it is
+not required by the adopted condition. New declaration (private overlay,
+module `R1Z.PV_OptB_OffBad`):
+
+```
+IndependentOffBad pub signal bad :=
+  ∀ w u, pub w = pub u → ∀ os coins,
+    ¬ bad w os coins → ¬ bad u os coins →
+    signal w os coins = signal u os coins
+```
+
+`w,u` range over the honest prover's admitted `Instance`. `os` and `coins`
+are literally common inputs. `signal` must be the reached observation:
+`none`, or exact call family/position/error and any observed prefix. The
+fixed native HOST_HASH belongs to the interpretation, not a witness-selected
+oracle. Neither `simE` nor the full observer changes.
+
+`PV_OptB_Charged` spells the existing event names on explicit coordinates:
+`HvzkV.poleBad`, `QueryScanRealLazyBound.lazyBad` (the conservative
+honest-read collision/digest exception), `FinalR1PBin.exhQ` (mask exhaustion
+or digest hit), `QueryScanRealFreshMass.realFresh`,
+`QueryScanRealLazyBound.realBad` (parser/scan failure),
+`ProverCommitSeedEvent19.seedGuess`, and `ProverCommitFuelJoin22.failure`.
+These are existing events, with existing allowances only. There is no
+OS-unavailability bad event and no new probability charge. The coordinates
+into their different coupling spaces are data; their common native
+interpretation is still a proof obligation. An abstract event union on
+arbitrary maps is not a certified native union or a new mass theorem.
+
+The source's public `P_R1` failure and mask exhaustion can also produce
+`Rejected` (`prover.rs:169–184,345–347`). Thus the usable off-pole fact is
+`P ∧ V(w) ↔ P`; it does not assert that no public rejection occurs. This is
+the exact `HvzkS.hybrid_ideal_leS`/`HvzkV.firstGood_congr` route.
+
+Before: all-world fiberwise independence; after: independence on the good
+part of each public fiber. Proved generically: equivalence with a decoder
+`Public → World → Coins → Option Event` agreeing only off bad. Not yet
+proved: the emitted caller's native instance, event-coordinate association,
+or the endogenous joint experiment transport. Endpoint premises removed: 0.
