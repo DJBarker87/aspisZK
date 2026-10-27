@@ -1,0 +1,41 @@
+{"attempt": "JGq_TX2_070", "exit_status": 0, "wall_seconds": 11.474249523947947, "peak_rss_kib": "7166888", "swaps": "0", "print_axioms": ["'AspisR1.JGq_Powers0.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Powers1.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_PowersK.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Common.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Partial.source0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Partial.source1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Partial.source2' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGq_Partial.source3' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.FJp_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.JGq_Powers0.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Powers1.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_PowersK.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Common.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.source0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.source1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.source2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGq_Partial.source3' depends on axioms: [propext, Classical.choice, Quot.
+...
+trol_flow.ControlFlow.Continue pair => do
+      ops.op0 16#u16 0#usize pair
+      ops.op0 16#u16 1#usize lastClaim
+      let different ← ops.ne pair lastClaim
+      if different = true then
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+        else do
+          ops.op1 none AspisR1Stage2.verifier.Phase.Relation
+          let r4 ← ops.op4 v.final_message a.weights.deref
+          let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+          match cf4 with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue dot => do
+              ops.op0 17#u16 0#usize dot
+              ops.op0 17#u16 1#usize a.rhs
+              if (a.next != 22#usize) = true then
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query)
+                else do
+                  let different ← ops.ne dot a.rhs
+                  if different = true then
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query)
+                    else do
+                      ops.op1 none AspisR1Stage2.verifier.Phase.Final
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+        (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+
+Running as unit: run-r7b02168db1244c03b579dd1653ec88d7.scope; invocation ID: 8ae4927237284cb186696611d5da71cc

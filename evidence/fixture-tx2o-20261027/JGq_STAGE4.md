@@ -1,0 +1,9 @@
+# Complete actual shared Pair branch helpers
+
+071 JGq_SharedPartials.source composes all four native partials into the actual shared_partials parent. 075/076 compute both complete native scalar_factor folds and quarter scalings. 078/079 compute both actual high_dot returns, including their four native raw pushes and native finish. 081 JGq_SharedHigh.source computes the COMPLETE shared_high call for arbitrary earlier regular parts, with the SAME installed w, real-byte partials and alpha power arrays. Its exact returned parts are (before.set1 value0).set3 value2; the actual mutable-index back function and update are derived from their std specs. No earlier regular success is a hypothesis of this helper theorem.
+
+070's composed current-root audit passed: exit0,wall11.474249523947947s,RSS7166888KiB,swap0,standard axioms only; complete FJp kernel statement retained in stdout. 082 computes the actual Pair entry shape, expected size64 after two folds, both alpha reads and concrete64-cell scratch allocation using the inherited FJm_Filled theorem. The powers, guard, byte windows, JGo prefix and all FJr meanings remain imported unchanged.
+
+072/073/074 were ordinary iterator-control conversion errors: named projections, undetermined dotted constructors and eta conversion between tuple-pattern and projection functions. The correction makes the state explicit, uses the actual call lemma and native eta equality, and closes transparent bind/zero conversions. 080 had a redundant dsimp that reported no progress; 081 removes it. Raw failed sources and recovery prints remain excluded. No timeout/memory kill, cap increase or resource rerun occurred.
+
+This is local actual-source helper non-vacuity; it does not establish a complete producing Pair or either accepted wrapper. No real-byte vacuity finding. The actual top and ledger delta remain unchanged. All exact source hashes and per-attempt metrics/axioms are in JGq_VALIDATION.json and the receipts.
