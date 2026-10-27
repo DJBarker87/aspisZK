@@ -26,11 +26,26 @@ theorem rows_reference (base : ExternalTypes)
   obtain ⟨result,hr,hv⟩ := PV_Op134_RowSpec.callback
   refine ⟨result,?_,hv,?_,?_,?_,?_⟩
   · rw [PV_CBM_CallbackBundle.op133_reference,hr]
-  · rw [hv]; exact PV_Op134_RowSpec.length
-  · rw [hv]; exact PV_Op134_RowOrder.nodup
-  · rw [hv]; exact PV_Op134_RowOrder.sorted
-  · rw [hv]; exact PV_Op134_MaskSpec.bits
+  · simpa only [hv] using PV_Op134_RowSpec.length
+  · simpa only [hv] using PV_Op134_RowOrder.nodup
+  · simpa only [hv] using PV_Op134_RowOrder.sorted
+  · simpa only [hv] using PV_Op134_MaskSpec.bits
 
+theorem cells_reference (base : ExternalTypes)
+    (ops : @ExternalFuns (PV_CBM_CallbackBundle.Types base)) :
+    ∃ result : alloc.vec.Vec PV_Op134_Order.Cell,
+      @ExternalFuns.op132 (PV_CBM_CallbackBundle.Types base)
+        (PV_CBM_CallbackBundle.selected base ops) = ok (.Ok result) ∧
+      result.val = PV_CBM_CellsSpec.literals ∧ result.val.length = 3803 ∧
+      result.val.Nodup ∧
+      (∀ row column : Nat, row < 1024 → column < 16 →
+        PV_CBM_InventoryShape.free row column →
+        ∃ c ∈ result.val, c.row.val = row ∧ c.column.val = column) := by
+  obtain ⟨result,hr,hv,hl,hn,_,hc⟩ := PV_Op134_InventoryCallback.callback
+  refine ⟨result,?_,hv,hl,hn,hc⟩
+  rw [PV_CBM_CallbackBundle.op132_reference,hr]
+
+#print axioms cells_reference
 #print axioms op134_reference
 #print axioms rows_reference
 end

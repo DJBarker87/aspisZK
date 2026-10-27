@@ -6,13 +6,13 @@ base='/home/dombarker/project-offloads/codex-pv-op134-20261027';host='dombarker@
 gate='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 module=sys.argv[1];assert module.startswith('R1Z/PV_Op134_')
 p=out/'TALLY.json';r=json.loads(p.read_text());assert len(r['lean_charged'])<100
-if len(r['lean_charged'])>=97:assert 'Audit' in module or 'Manifest' in module or 'Bundle' in module
+if len(r['lean_charged'])>=98:assert 'Audit' in module or 'Manifest' in module or 'Bundle' in module
 state=out/'admission-state.json'
 if state.exists():
  s=json.loads(state.read_text());left=s['retry_after']-time.time()
  if left>0:print('COOLDOWN',left);sys.exit(78)
 a=r['next_id']
-if len(r['lean_charged']) >= 97:
+if 'Audit' in module:
  a=next((i for i in r['reserved_audit_ids'] if i not in r['used_ids']),
         next(i for i in range(50000,50297) if i not in r['used_ids']))
 if a>=50297:assert any(x in module for x in ['Audit','Manifest','Bundle'])

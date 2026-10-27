@@ -11,8 +11,10 @@ Target not yet established. Branch codex/pv-op134-20261027, base 8483406290.
   PV_Op134_Inventory.ordered_bounds/nodup/complete; the complete Result
   PV_Op134_InventoryCallback.callback. The 3,803-cell reference inventory is
   now proved bounded, unique, free, and complete over the 1024 x 16 grid.
-* Draft/queued: row materialization/order/dedup, bitwise masks/rows equality,
-  reference bundle, dedup/OR and indexing lemmas. Do not count drafts as
+* Also checked: complete Result row materialization (214 rows), row-order,
+  nodup/dedup, the complete reference mask value, and MaskBits0.
+* Draft/queued: the remaining mask-bit chunks, mask composition, and selected
+  reference bundle. Optional generic transport/indexing drafts are deferred. Do not count drafts as
   checked evidence. Per-module JSON receipts supersede this interim list.
 
 Premise accounting: no deployed endpoint premise removed, added, or weakened.

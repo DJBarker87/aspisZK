@@ -9,6 +9,7 @@ mods=sorted(lean.glob('PV_Op134_*.lean'))
 reference='''import R1Z.PV_Op134_ReferenceBundle
 #print axioms R1Z.PV_Op134_ReferenceBundle.op134_reference
 #print axioms R1Z.PV_Op134_ReferenceBundle.rows_reference
+#print axioms R1Z.PV_Op134_ReferenceBundle.cells_reference
 #print axioms R1Z.PV_Op134_InventoryCallback.callback
 '''
 closure=''.join('import R1Z.'+p.stem+'\n' for p in mods)

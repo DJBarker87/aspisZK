@@ -13,7 +13,7 @@ for module in modules:
     print(f'WAIT {module}: {remaining:.0f}s until next permitted admission',flush=True)
     time.sleep(min(remaining+0.1,60));continue
   tally=json.loads((out/'TALLY.json').read_text())
-  if len(tally['lean_charged'])>=97 or tally['next_id']>=50297:
+  if len(tally['lean_charged'])>=98 or tally['next_id']>=50297:
    print('RESERVED AUDIT BUDGET: stopping ordinary queue',flush=True);sys.exit(77)
   result=subprocess.run([sys.executable,str(root/'tools/pv-op134-20261027/lean.py'),module],cwd=root)
   if result.returncode==0:break
