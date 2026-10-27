@@ -257,31 +257,7 @@ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
 
     let mut level = 0usize;
     while level < POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1 {
-        let auxiliary = pool_v1_pair_forest_path_base_row_v1(level)
-            .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
-        let target_block = pool_v1_pair_forest_membership_hash_block_v1(level)
-            .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
-        let previous_block = if level == 0 {
-            3
-        } else {
-            pool_v1_pair_forest_membership_hash_block_v1(level - 1)
-                .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?
-        };
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { level: level as u8 },
-            previous_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 11,
-            auxiliary,
-        ));
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { level: level as u8 },
-            auxiliary + 1,
-            target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 12,
-        ));
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::PrivatePathRight { level: level as u8 },
-            auxiliary + 1,
-            target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS,
-        ));
+        links = append_forest_level(links, level)?;
         level += 1;
     }
     if links.len() != POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1 {
@@ -1009,3 +985,33 @@ fn registry_at(registry: &Registry, i: usize) -> PoolV1PairCopyLinkV1 {
 
 #[inline(never)]
 fn flag_at(flags: &[bool; 1024], i: usize) -> bool { flags[i] }
+
+#[inline(never)]
+fn append_forest_level(mut links: Schedule, level: usize) -> Result<Schedule, PoolV1PairHidingLayoutErrorV1> {
+    let auxiliary = pool_v1_pair_forest_path_base_row_v1(level)
+        .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
+    let target_block = pool_v1_pair_forest_membership_hash_block_v1(level)
+        .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
+    let previous_block = if level == 0 {
+        3
+    } else {
+        pool_v1_pair_forest_membership_hash_block_v1(level - 1)
+        .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?
+    };
+    links.push(link(
+        PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { level: level as u8 },
+        previous_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 11,
+        auxiliary,
+    ));
+    links.push(link(
+        PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { level: level as u8 },
+        auxiliary + 1,
+        target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 12,
+    ));
+    links.push(link(
+        PoolV1PairCopyRowLinkKindV1::PrivatePathRight { level: level as u8 },
+        auxiliary + 1,
+        target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS,
+    ));
+    Ok(links)
+}

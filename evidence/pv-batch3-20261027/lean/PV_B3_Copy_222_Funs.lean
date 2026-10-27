@@ -41,11 +41,11 @@ def aspis_core.field.ct.subtract_p (x : Std.U32) : Result Std.U32 := do
 def aspis_core.field.ct.reduce64 (x : Std.U64) : Result Std.U32 := do
   let i ← lift (UScalar.cast .U64 aspis_core.field.P)
   let i1 ← lift (x &&& i)
-  let i2 ← lift (Std.U64.wrapping_shr x 31#i32)
+  let i2 ← lift (Std.U64.wrapping_shr x 31#u32)
   let x1 ← lift (Std.U64.wrapping_add i1 i2)
   let i3 ← lift (UScalar.cast .U64 aspis_core.field.P)
   let i4 ← lift (x1 &&& i3)
-  let i5 ← lift (Std.U64.wrapping_shr x1 31#i32)
+  let i5 ← lift (Std.U64.wrapping_shr x1 31#u32)
   let x2 ← lift (Std.U64.wrapping_add i4 i5)
   let i6 ← lift (UScalar.cast .U32 x2)
   aspis_core.field.ct.subtract_p i6
@@ -403,7 +403,7 @@ def host_multilinear.sparse_eq_weights_loop2_loop0.body
   then
     let i ← lift (Std.Usize.wrapping_sub prefix_len 1#usize)
     let i1 ← lift (Std.Usize.wrapping_sub i coordinate)
-    let i2 ← lift (Std.Usize.wrapping_shr prefix1 i1)
+    let i2 ← lift (Std.Usize.wrapping_shr prefix1 (UScalar.cast .U32 i1))
     let bit ← lift (i2 &&& 1#usize)
     let q ←
       if bit = 0#usize
@@ -447,7 +447,7 @@ def host_multilinear.sparse_eq_weights_loop2.body
   := do
   if prefix1 < i
   then
-    let i1 ← lift (Std.Usize.wrapping_shl prefix1 trailing_boolean)
+    let i1 ← lift (Std.Usize.wrapping_shl prefix1 (UScalar.cast .U32 trailing_boolean))
     let row ← lift (i1 ||| suffix)
     let weight ←
       host_multilinear.sparse_eq_weights_loop2_loop0 point prefix_len prefix1
@@ -485,7 +485,7 @@ def host_multilinear.sparse_eq_weights
   let suffix ←
     host_multilinear.sparse_eq_weights_loop1 point 0#usize prefix_len
   let a := Array.repeat 1024#usize (0#usize, aspis_core.field.QM31.ZERO)
-  let i ← lift (Std.Usize.wrapping_shl 1#usize prefix_len)
+  let i ← lift (Std.Usize.wrapping_shl 1#usize (UScalar.cast .U32 prefix_len))
   let a1 ←
     host_multilinear.sparse_eq_weights_loop2 point prefix_len trailing_boolean
       suffix a i 0#usize

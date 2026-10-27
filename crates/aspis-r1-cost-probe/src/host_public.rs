@@ -129,21 +129,52 @@ pub fn project(public: Public<'_>) -> OwnedPublic {
         next_root: [0; 8],
         next_frontier: [[0; 8]; 20],
     };
-    let mut i = 0usize;
-    while i < 8 {
-        out.anchor[i] = anchor[i].0;
-        out.nullifier[i] = nullifier[i].0;
-        out.recipient[i] = recipient[i].0;
-        out.change[i] = change[i].0;
-        out.next_root[i] = transition.candidate_afterstate.next_root[i].0;
-        i += 1;
-    }
+    out.anchor[0] = anchor[0].0;
+    out.nullifier[0] = nullifier[0].0;
+    out.recipient[0] = recipient[0].0;
+    out.change[0] = change[0].0;
+    out.next_root[0] = transition.candidate_afterstate.next_root[0].0;
+    out.anchor[1] = anchor[1].0;
+    out.nullifier[1] = nullifier[1].0;
+    out.recipient[1] = recipient[1].0;
+    out.change[1] = change[1].0;
+    out.next_root[1] = transition.candidate_afterstate.next_root[1].0;
+    out.anchor[2] = anchor[2].0;
+    out.nullifier[2] = nullifier[2].0;
+    out.recipient[2] = recipient[2].0;
+    out.change[2] = change[2].0;
+    out.next_root[2] = transition.candidate_afterstate.next_root[2].0;
+    out.anchor[3] = anchor[3].0;
+    out.nullifier[3] = nullifier[3].0;
+    out.recipient[3] = recipient[3].0;
+    out.change[3] = change[3].0;
+    out.next_root[3] = transition.candidate_afterstate.next_root[3].0;
+    out.anchor[4] = anchor[4].0;
+    out.nullifier[4] = nullifier[4].0;
+    out.recipient[4] = recipient[4].0;
+    out.change[4] = change[4].0;
+    out.next_root[4] = transition.candidate_afterstate.next_root[4].0;
+    out.anchor[5] = anchor[5].0;
+    out.nullifier[5] = nullifier[5].0;
+    out.recipient[5] = recipient[5].0;
+    out.change[5] = change[5].0;
+    out.next_root[5] = transition.candidate_afterstate.next_root[5].0;
+    out.anchor[6] = anchor[6].0;
+    out.nullifier[6] = nullifier[6].0;
+    out.recipient[6] = recipient[6].0;
+    out.change[6] = change[6].0;
+    out.next_root[6] = transition.candidate_afterstate.next_root[6].0;
+    out.anchor[7] = anchor[7].0;
+    out.nullifier[7] = nullifier[7].0;
+    out.recipient[7] = recipient[7].0;
+    out.change[7] = change[7].0;
+    out.next_root[7] = transition.candidate_afterstate.next_root[7].0;
     let mut level = 0usize;
     while level < 20 {
         let mut i = 0usize;
         while i < 8 {
-            out.frontier[level][i] = transition.live_snapshot.frontier[level][i].0;
-            out.next_frontier[level][i] = transition.candidate_afterstate.next_frontier[level][i].0;
+            out.frontier[level][i] = frontier_word(&transition.live_snapshot.frontier, level, i);
+            out.next_frontier[level][i] = frontier_word(&transition.candidate_afterstate.next_frontier, level, i);
             i += 1;
         }
         level += 1;
@@ -169,3 +200,6 @@ pub fn terminal_qm31(
     };
     p.terminal_qm31(claims, alpha, c)
 }
+
+#[inline(never)]
+fn frontier_word(frontier: &[[M31; 8]; 20], level: usize, i: usize) -> u32 { frontier[level][i].0 }

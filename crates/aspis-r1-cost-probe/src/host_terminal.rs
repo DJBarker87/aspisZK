@@ -102,7 +102,7 @@ enum CompiledVariant {
 }
 
 #[derive(Clone, Copy)]
-struct SemanticPublic<'a> {
+struct SemanticPublic {
     variant: CompiledVariant,
     pool: [u8; 32],
     deployment_domain: [u8; 32],
@@ -112,7 +112,7 @@ struct SemanticPublic<'a> {
     recipient: Option<Digest>,
     change: Digest,
     withdrawal_amount: Option<u32>,
-    transition: &'a PoolV1PairLatePublicStatementV1,
+    transition: PoolV1PairLatePublicStatementV1,
 }
 
 #[inline(always)]
@@ -215,7 +215,7 @@ fn empty_root(level: usize) -> Digest {
 }
 
 fn validate_transition(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
 ) -> Result<(), PoolV1PairForestSemanticTerminalErrorV1> {
     let source = public.transition.live_snapshot;
     let after = public.transition.candidate_afterstate;
@@ -276,7 +276,7 @@ fn initial_variant_selectors(
 }
 
 fn semantic_initial_and_absorption(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> ([QM31; 16], [QM31; 16]) {
@@ -418,7 +418,7 @@ fn add_digest_binding(
 #[inline(never)]
 fn add_schedule_lanes(
     packed: &mut [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1],
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) {
@@ -566,7 +566,7 @@ fn variant_expected_output(variant: CompiledVariant) -> M31 {
 #[inline(never)]
 fn add_occupancy_lanes(
     packed: &mut [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1],
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) {
@@ -644,7 +644,7 @@ fn occupancy_lanes_factored(
 #[inline(never)]
 #[cfg(any(test, not(feature = "optimized-terminal")))]
 fn public_digest_lanes(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS] {
@@ -769,7 +769,7 @@ fn add_digest_binding_packed(
 ))]
 #[inline(never)]
 fn public_digest_packed_row_major(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS / 4] {
@@ -1061,7 +1061,7 @@ fn optional_carry_packed_selector_tensor(
 ))]
 #[inline(never)]
 fn public_digest_packed_selector_tensor(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS / 4] {
@@ -1145,7 +1145,7 @@ fn public_digest_packed_selector_tensor(
 #[cfg(any(test, feature = "optimized-terminal"))]
 #[inline(always)]
 fn public_digest_packed(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS / 4] {
@@ -1178,7 +1178,7 @@ fn scalar_lanes(
 }
 
 fn semantic_packed(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1] {
@@ -1247,7 +1247,7 @@ fn equality_value(left: &[QM31; 10], right: &[QM31; 10]) -> QM31 {
 
 #[allow(clippy::type_complexity)]
 fn composition_parts(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
     point: &[QM31; 10],
     lambda: QM31,
@@ -1317,7 +1317,7 @@ fn composition_parts(
 }
 
 fn terminal_parts(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
     point: &[QM31; 10],
     lambda: QM31,
@@ -1346,7 +1346,7 @@ fn terminal_parts(
 fn private_public<'a>(
     public: &PoolV1PrivateTransferPublicV1,
     transition: &'a PoolV1PairLatePublicStatementV1,
-) -> SemanticPublic<'a> {
+) -> SemanticPublic {
     SemanticPublic {
         variant: CompiledVariant::PrivateTransfer,
         pool: public.pool,
@@ -1357,14 +1357,14 @@ fn private_public<'a>(
         recipient: Some(public.recipient_commitment),
         change: public.change_commitment,
         withdrawal_amount: None,
-        transition,
+        transition: *transition,
     }
 }
 
 fn withdrawal_public<'a>(
     public: &PoolV1WithdrawalPublicV1,
     transition: &'a PoolV1PairLatePublicStatementV1,
-) -> SemanticPublic<'a> {
+) -> SemanticPublic {
     SemanticPublic {
         variant: CompiledVariant::Withdrawal,
         pool: public.pool,
@@ -1375,7 +1375,7 @@ fn withdrawal_public<'a>(
         recipient: None,
         change: public.change_commitment,
         withdrawal_amount: Some(public.amount),
-        transition,
+        transition: *transition,
     }
 }
 
@@ -1493,14 +1493,14 @@ pub mod r0 {
         ),
     }
     impl<'a> Public<'a> {
-        fn semantic(self) -> SemanticPublic<'a> {
+        fn semantic(self) -> SemanticPublic {
             match self {
                 Self::Transfer(public, transition) => private_public(public, transition),
                 Self::Withdrawal(public, transition) => withdrawal_public(public, transition),
             }
         }
         pub fn transition(self) -> &'a PoolV1PairLatePublicStatementV1 {
-            self.semantic().transition
+            match self { Self::Transfer(_, t) | Self::Withdrawal(_, t) => t }
         }
         /// SPEC §9 declaration order. Pool/domain/sequence and source current
         /// root are not fields of R0P.Public and are not silently hashed here.
