@@ -12396,3 +12396,17 @@ manifest, which pins 5,673 external objects. The (h4) scope is extended to every
 with hash verification before the first compile. runjoin21 resumes with the audit, the block
 identification and the compiler-return composition (IDs 37000-37099). Rows removed outright: 0.
 Privacy target not yet established.
+
+## D314 (Stream B) 2026-10-27 18:48 UTC: pv-reach4 result; pv-reach5 launched
+
+pv-reach4 verified all 236 library hashes under ruling (h4) and reused its 33 earlier checks without
+recompiling them. It proves bind absorption (no-catch) locally for all 74 named source suffixes,
+whole-client dictionary congruence, seven poisoned-result invariance laws, and unconditional failure
+when the op233 entry is poisoned. Whole-run invocation composition, the actual reached sets,
+admitted-input invocation exclusions and concrete minimality witnesses remain open; the listed 255
+fields are an over-approximation, not a claimed reached set. V404/V405 stay OPEN; branch pushed
+(da5920c79b). pv-reach5 follows the worker's own five-step plan: a coverage certificate for every
+callback occurrence (each opaque higher-order boundary justified by its own lemma), exclusion by
+poisoning on actual invocations, native success witnesses conditional on the named V163/V167
+associations, a proved minimal reached set per shape, then comparison with the row records (IDs
+37300-37399). Rows removed outright: 0. Privacy target not yet established.
