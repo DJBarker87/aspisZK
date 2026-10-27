@@ -27,7 +27,7 @@ reverses names/imports to KSB's raw restoration. No emitted body was repaired.
 `KSD_emitted_closure.json` inventories every102 external-template declaration:
 59 shipped names and43 library names. Template SHA256 matches the pinned
 XRh_pinned_outputs_01.json (5b8c458d...). The generated-header search scans
-2,243 tracked text files and records exact candidate paths/span hashes.
+2,243 repository text files and records exact candidate paths/span hashes.
 Candidates are NOT admitted: headers and existing compile receipts do not
 prove emission at the frozen source revision. Open candidate/provenance and
 nominal-carrier obligations remain explicit for each shipped dependency.
