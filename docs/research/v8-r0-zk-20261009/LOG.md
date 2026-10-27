@@ -11283,3 +11283,24 @@ pv-optb2 (same branch, IDs 44600-44899, 100 Lean / 4 Kani control only): state I
 only existing events, prove it for the emitted retry body, derive the B headline, or stop on that
 counterexample. Six slots: runjoin12, cblib2, op223, canon, recount4, optb2. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D263 (Stream B) 2026-10-27 09:20 UTC: cblib2 exhausted (library rows 4 → 5); SHA-2 rows reduced to the dispatcher question; cblib3 launched
+
+pv-cblib2 (`codex/pv-cblib-20261027`, head 7aebfd030c; 100/100 Lean, 8/8 Kani = 6 bounded passes / 2
+timeouts, no counterexample; final audits 43098-43100 exit 0, ≤8.00 s / 2.63 GB / swap 0, manifest of 151
+modules / 506 declarations standard axioms; no forbidden tokens). crates/ change: 71 lines in two further
+top-level `#[cfg(kani)]` modules of crates/aspis-r1-cost-probe/src/host_commitment.rs (verified: the
+file's only additions are three cfg(kani) modules at lines 376-623; excluded from release builds). New
+row by the P6 route: V179 op28 String as_ref Path (`PV_CBL_CallbackBundle.op28_source`; native gate
+covers valid UTF-8 strings of length 2 with arbitrary byte index; recount 4 to judge the bound). SHA-2:
+the extracted SOFT backend's round/schedule helpers, feed-forward addition and whole-block totality are
+proved in Lean (no SHA Kani gate, ruling (k)); the block-value composition and the link to the backend
+the deployed x86 prover actually runs remain open: the pinned sha2 dispatches at runtime to SHA-NI
+instructions (cpufeatures), which are not extractable and could enter only as a trust item, which the
+owner capped (D248). Launched pv-cblib3 (same branch, IDs 41588-41799 = the never-used tail of srcid8's
+range): the remaining std/alloc rows 26/30/31/33/36, the soft block composition and V231-V238 on the soft
+backend, and design/PV-SHA-DISPATCH-20261027.md with measured options (a soft-backend prover build under
+D187 with the projected timing cost; a Lean model of SHA-NI and what it would trust; others) and a
+recommendation, without changing the build. Env-J: Stream B's 40000-44999 is nearly allocated; a further
+range was requested from Stream A. Six slots: runjoin12, op223, canon, recount4, optb2, cblib3. Rows
+removed outright: 0. Privacy target not yet established.
