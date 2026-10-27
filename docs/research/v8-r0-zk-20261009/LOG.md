@@ -12126,3 +12126,25 @@ twelve experiments, four sanity controls first; harness sha256 dfd5222a…; one 
 streams are lighter; compressor and QM31 try_inv leaves match the recommended build); the candidate was
 fast-forwarded to it and the pv-cb worktree removed. Four live slots: runjoin17, batch2b, batch3, d188.
 Rows removed outright: 0. Privacy target not yet established.
+
+## D301 (Stream B) 2026-10-27 16:05 UTC: owner approvals relayed by Stream A (client toolchain pin, D188 narrowing); client rust-toolchain file added to the candidate
+
+Stream A relayed two owner approvals and Stream B checked them against the security contract's
+"Owner-approved amendment, 2026-10-27 (second)". Item 4 pins the native client build toolchain to
+rustc/cargo 1.94.1 (rustc e408947bfd200af42db322daf0fadfe7e26d3bd1, cargo 29ea6fb6a), LLVM 21.1.8,
+x86_64-unknown-linux-gnu, the recorded RUSTFLAGS and no target-cpu change, as recommended in D270.
+Item 3 narrows D188 in the same sense as lead ruling (n). Items 1 and 2 are soundness matters
+(headline RPx_Deployed.deployed; L154 as a statement parameter) and are recorded by Stream A.
+
+The rust-toolchain file is added on the prover candidate, not on research, at
+`tools/r1-cost-probe/rust-toolchain.toml` (candidate commit ff50df39a8, pushed). It is client-scoped:
+rustup reads it only when cargo runs inside tools/r1-cost-probe, so the default, devnet and Pool
+program builds, which run from the repository root and the programs/ tree, are unaffected and no ELF
+rebuild is needed (no path under crates/ or programs/ changed). The pin is re-confirmed at candidate
+adoption, as the amendment requires. The recommended client recipe drops the "toolchain unpinned"
+label for builds made from that directory.
+
+Not covered by the approval and still open in the owner packet: the release recipe's features
+(ct-host-prover on, insecure-spend-fixture off) and constant-time private-input decoding (D272), the
+N7 custody patch, the SHA-NI trust item versus the soft backend, DOITM, and the client's scope (a devnet
+fixture harness, not a wallet). Rows removed outright: 0. Privacy target not yet established.
