@@ -43,7 +43,7 @@ theorem consumer {F : Subfield K} (B : PackBasis F) :
 /-- The actual public-fibre consumer returns its conclusions at w=(),
 whose cached full payload provably is not the successful compiler return. -/
 theorem consumer_at_nonhonest {F : Subfield K} (B : PackBasis F) :
-    (R0Z.ZkStatement.PublicBase F x.1 ∧ BuilderSoundOn (source («K» := K)) B x) ∧
+    (PublicBase F x.1 ∧ BuilderSoundOn (source («K» := K)) B x) ∧
     ¬ HonestInput («K» := K) (inputs ()) :=
   ⟨consumer B () matching_public,not_honest⟩
 #print axioms consumer_at_nonhonest
