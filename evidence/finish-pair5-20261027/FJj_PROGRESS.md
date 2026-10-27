@@ -45,3 +45,14 @@ cuts. Both pass with standard axioms. This new provenance extends the old
 trace; the FJg arithmetic lemmas are imported unchanged. Failed011–015,
 017–018 are retained diagnostics (allocation binder, tuple/bind reduction,
 then explicit existential cut selection); none is counted as a proof.
+
+Part2 stage2: SuccessorCell022 checks each actual arithmetic/update step;
+SuccessorLoop028 checks the entire descending native loop and canonicality.
+SuccessorLiteral034 proves the symbolic reference equals the literal
+R0P.SemSource.successorPoint, using a remaining-coordinate invariant and the
+literal succCarry recurrence (no concrete field/list evaluation).
+SuccessorCut029 / SuccessorPoint039 select the actual returned point.
+PointAdvance036 / PointSecond038 check the actual second constructor row and
+its canonicality; SuccessorFactors042 carries them through later circle writes.
+All accepted axioms standard. Failed candidates retained in per-attempt snapshots.
+Native arithmetic guards, frozen source, top/game/failure event remain unchanged.

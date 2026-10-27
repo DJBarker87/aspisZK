@@ -1,0 +1,112 @@
+FJj_SuccessorCell.lean:20:12: error: Tactic `rfl` failed: The left-hand side
+  decode x✝
+is not definitionally equal to the right-hand side
+  if ↑i = j then decode x
+  else
+    match (↑p)[j]? with
+    | some x => decode x
+    | none => 0
+
+case h_1
+p out : Std.Array SQ 10#usize
+i : Usize
+x : SQ
+run : p.update i x = ok out
+j : ℕ
+x✝¹ : Option SQ
+x✝ : SQ
+heq✝ : (if ↑i = j then some x else (↑p)[j]?) = some x✝
+⊢ decode x✝ =
+    if ↑i = j then decode x
+    else
+      match (↑p)[j]? with
+      | some x => decode x
+      | none => 0
+FJj_SuccessorCell.lean:20:12: error: Tactic `rfl` failed: The left-hand side
+  0
+is not definitionally equal to the right-hand side
+  if ↑i = j then decode x
+  else
+    match (↑p)[j]? with
+    | some x => decode x
+    | none => 0
+
+case h_2
+p out : Std.Array SQ 10#usize
+i : Usize
+x : SQ
+run : p.update i x = ok out
+j : ℕ
+x✝ : Option SQ
+heq✝ : (if ↑i = j then some x else (↑p)[j]?) = none
+⊢ 0 =
+    if ↑i = j then decode x
+    else
+      match (↑p)[j]? with
+      | some x => decode x
+      | none => 0
+FJj_SuccessorCell.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  next iter
+in the target expression
+  (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter
+      match o with
+        | none => ok (done p)
+        | some coordinate => do
+          let bit ← z.index_usize coordinate
+          let bit_and_carry ← bit.mul carry
+          let q ← bit.add carry
+          let q1 ← bit_and_carry.add bit_and_carry
+          let q2 ← q.sub q1
+          let a ← p.update coordinate q2
+          ok (cont (iter1, a, bit_and_carry))) =
+    ok (cont (cursor, out, carryOut))
+
+z p out : Std.Array SQ 10#usize
+carry carryOut : SQ
+iter cursor : Rev
+i : Usize
+hz : FJc_WeightArray.canonical z
+hp : FJc_WeightArray.canonical p
+hc : Canon carry
+hn : next iter = ok (some i, cursor)
+run :
+  (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter
+      match o with
+        | none => ok (done p)
+        | some coordinate => do
+          let bit ← z.index_usize coordinate
+          let bit_and_carry ← bit.mul carry
+          let q ← bit.add carry
+          let q1 ← bit_and_carry.add bit_and_carry
+          let q2 ← q.sub q1
+          let a ← p.update coordinate q2
+          ok (cont (iter1, a, bit_and_carry))) =
+    ok (cont (cursor, out, carryOut))
+⊢ FJc_WeightArray.canonical out ∧
+    Canon carryOut ∧
+      decode carryOut = FJc_WeightArray.value z ↑i * decode carry ∧
+        ∀ (j : ℕ),
+          FJc_WeightArray.value out j =
+            if ↑i = j then
+              FJc_WeightArray.value z ↑i + decode carry -
+                (FJc_WeightArray.value z ↑i * decode carry + FJc_WeightArray.value z ↑i * decode carry)
+            else FJc_WeightArray.value p j
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJj_SuccessorCell.update' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJj_SuccessorCell.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

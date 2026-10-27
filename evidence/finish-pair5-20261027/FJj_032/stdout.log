@@ -1,0 +1,31 @@
+FJj_SuccessorLiteralStep.lean:43:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if _a then R0P.SemSource.successorPoint z j else z j) = if e ≤ ↑j then R0P.SemSource.successorPoint z j else z j
+Error: Application type mismatch: The argument
+  (e + 1).decLe ↑j
+has type
+  Decidable (e + 1 ≤ ↑j)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite K _a ((e + 1).decLe ↑j)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+K : Type
+inst✝ : Field K
+z : Fin 10 → K
+e : ℕ
+he : e < 10
+idx : FJj_SuccessorModel.index e = ⟨e, he⟩
+j : Fin 10
+hj : ¬j = ⟨e, he⟩
+jn : ↑j ≠ e
+eq : e + 1 ≤ ↑j ↔ e ≤ ↑j
+⊢ (if e + 1 ≤ ↑j then R0P.SemSource.successorPoint z j else z j) =
+    if e ≤ ↑j then R0P.SemSource.successorPoint z j else z j
+'AspisR1.FJj_SuccessorLiteralStep.carry' depends on axioms: [propext, Quot.sound]
+'AspisR1.FJj_SuccessorLiteralStep.value' depends on axioms: [propext, sorryAx, Quot.sound]

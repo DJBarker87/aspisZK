@@ -1,0 +1,147 @@
+FJj_SuccessorLoop.lean:25:80: error(lean.unknownIdentifier): Unknown identifier `he`
+FJj_SuccessorLoop.lean:32:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+    (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (cursor 0#usize)
+in the target expression
+  (match
+      match (cursor 0#usize, p, carry) with
+      | (iter1, successor1, carry1) => do
+        let (o, iter1) ←
+          core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+              (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter1
+        match o with
+          | none => ok (done successor1)
+          | some coordinate => do
+            let bit ← z.index_usize coordinate
+            let bit_and_carry ← bit.mul carry1
+            let q ← bit.add carry1
+            let q1 ← bit_and_carry.add bit_and_carry
+            let q2 ← q.sub q1
+            let a ← successor1.update coordinate q2
+            ok (cont (iter1, a, bit_and_carry)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, successor1, carry1) => do
+              let (o, iter1) ←
+                core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+                    (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter1
+              match o with
+                | none => ok (done successor1)
+                | some coordinate => do
+                  let bit ← z.index_usize coordinate
+                  let bit_and_carry ← bit.mul carry1
+                  let q ← bit.add carry1
+                  let q1 ← bit_and_carry.add bit_and_carry
+                  let q2 ← q.sub q1
+                  let a ← successor1.update coordinate q2
+                  ok (cont (iter1, a, bit_and_carry)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+
+case pos
+z out : Std.Array SQ 10#usize
+hz : FJc_WeightArray.canonical z
+p : Std.Array SQ 10#usize
+carry : SQ
+hp : FJc_WeightArray.canonical p
+hc : Canon carry
+bound : ↑0#usize ≤ 10
+run :
+  (match
+      match (cursor 0#usize, p, carry) with
+      | (iter1, successor1, carry1) => do
+        let (o, iter1) ←
+          core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+              (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter1
+        match o with
+          | none => ok (done successor1)
+          | some coordinate => do
+            let bit ← z.index_usize coordinate
+            let bit_and_carry ← bit.mul carry1
+            let q ← bit.add carry1
+            let q1 ← bit_and_carry.add bit_and_carry
+            let q2 ← q.sub q1
+            let a ← successor1.update coordinate q2
+            ok (cont (iter1, a, bit_and_carry)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, successor1, carry1) => do
+              let (o, iter1) ←
+                core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+                    (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter1
+              match o with
+                | none => ok (done successor1)
+                | some coordinate => do
+                  let bit ← z.index_usize coordinate
+                  let bit_and_carry ← bit.mul carry1
+                  let q ← bit.add carry1
+                  let q1 ← bit_and_carry.add bit_and_carry
+                  let q2 ← q.sub q1
+                  let a ← successor1.update coordinate q2
+                  ok (cont (iter1, a, bit_and_carry)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+ih :
+  ∀ m < ↑0#usize,
+    ∀ (p : Std.Array SQ 10#usize) (carry : SQ) (e : Usize),
+      ↑e ≤ 10 →
+        FJc_WeightArray.canonical p →
+          Canon carry →
+            FIn_WeightsExtract.state_only_prefix.state_only_statement_points_loop (cursor e) z p carry = ok out →
+              ↑e = m →
+                FJc_WeightArray.canonical out ∧
+                  decoded out = (FJj_SuccessorModel.eval (decoded z) m (decode carry, decoded p)).2
+hn : ↑0#usize = 0
+hs :
+  core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (cursor 0#usize) =
+    ok (none, cursor 0#usize)
+⊢ FJc_WeightArray.canonical out ∧
+    decoded out = (FJj_SuccessorModel.eval (decoded z) ↑0#usize (decode carry, decoded p)).2
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FJj_SuccessorLoop.lean:40:34: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [hb,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJj_SuccessorLoop.lean:41:29: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [hb,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJj_SuccessorLoop.lean:45:22: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hb,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJj_SuccessorLoop.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
