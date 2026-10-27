@@ -26,7 +26,7 @@ theorem observe_injective (x y : List U32 × Nat × Bool)
  have he := values_injective xs ys hp
  exact congrArg₂ Prod.mk he (congrArg₂ Prod.mk hd hb)
 
-theorem same_block (b : Array U8 32#usize) (s : CurrentScan) (valid : validState s) :
+theorem same_block (b : Array U8 32#usize) (s : Query31ExplicitScanBody.CurrentScan) (valid : validState s) :
  ∃ sf pending,
  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s b =
    ok (optionStop pending,sf) ∧

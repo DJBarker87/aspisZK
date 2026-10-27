@@ -7,10 +7,16 @@ open XRv_QueryDriver
 
 theorem index {T : Type} (a : Array T 8#usize) (i : Nat) (hi : i<8) :
  Array.index_usize a (XRn_Join_usize i) = ok (a.val[i]'(by have h : a.val.length=8 := a.property; omega)) := by
- have hb : i < UScalar.cMax .Usize+1 := by have h : 8 ≤ UScalar.cMax .Usize := by scalar_tac; omega
+ have hb : i < UScalar.cMax .Usize+1 := by
+   have h : 8 ≤ UScalar.cMax .Usize := by scalar_tac
+   omega
  have hv : (XRn_Join_usize i).val = i := by change i % (UScalar.cMax .Usize+1) = i; exact Nat.mod_eq_of_lt hb
+ have hidx : i < a.val.length := by have h : a.val.length=8 := a.property; omega
  unfold Array.index_usize
- simp only [hv,List.getElem?_eq_getElem]
+ change (match a.val[(XRn_Join_usize i).val]? with
+   | none => fail Error.arrayOutOfBounds
+   | some x => ok x) = _
+ rw [hv,List.getElem?_eq_getElem hidx]
 
 theorem step_total (blocks advances : Array (Array U8 32#usize) 8#usize)
  (s : State) (i : Nat) (hi : i<8) : ∃ out, step blocks advances s i = ok out := by
@@ -34,19 +40,12 @@ theorem fold_total (blocks advances : Array (Array U8 32#usize) 8#usize)
    rw [List.foldlM_cons,hn,bind_tc_ok]
    exact ho
 
-theorem total (blocks advances : Array (Array U8 32#usize) 8#usize) :
+theorem total (blocks advances : Blocks) :
  ∃ out, aspis_core.r0_transcript.queries_from_pairs blocks advances = ok out := by
  obtain ⟨out,ho⟩ := fold_total blocks advances (List.range 8) (fun i hi => List.mem_range.mp hi)
    ([],0,false,advances.val[7]?.getD (Array.repeat 32#usize 0#u8))
- rcases out with ⟨a,d,stop,state⟩
- unfold aspis_core.r0_transcript.queries_from_pairs
- change (do
-   let (accepted,_,_,selected) ← (List.range 8).foldlM (step blocks advances)
-     ([],0,false,advances.val[7]?.getD (Array.repeat 32#usize 0#u8))
-   dite (accepted.length=22)
-    (fun h => ok (.Ok (⟨accepted,h⟩,selected)))
-    (fun _ => ok (.Err (.DrawLimitExhausted (XRn_Join_usize accepted.length) 64#usize)))) = _
- rw [ho,bind_tc_ok]
+ rw [driver,short_circuit,ho,bind_tc_ok]
+ unfold finish
  split <;> exact ⟨_,rfl⟩
 
 #print axioms index

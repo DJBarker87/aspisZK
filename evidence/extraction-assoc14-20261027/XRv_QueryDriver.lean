@@ -3,6 +3,8 @@ open Aeneas Aeneas.Std Result
 open XRn_Join_Release
 set_option autoImplicit false
 namespace XRv_QueryDriver
+abbrev Block := Array U8 32#usize
+abbrev Blocks := Array Block 8#usize
 abbrev State := List U32 × Nat × Bool × Array U8 32#usize
 
 def step (blocks advances : Array (Array U8 32#usize) 8#usize)
@@ -43,15 +45,19 @@ theorem short_circuit (blocks advances : Array (Array U8 32#usize) 8#usize)
      rw [stopped]
      rfl
 
-theorem driver (blocks advances : Array (Array U8 32#usize) 8#usize) :
- aspis_core.r0_transcript.queries_from_pairs blocks advances = (do
-  let (accepted,_,_,state) ← drive blocks advances (List.range 8)
-   ([],0,false,advances.val[7]?.getD (Array.repeat 32#usize 0#u8))
-  dite (accepted.length = 22)
-   (fun h => ok (.Ok (⟨accepted,h⟩,state)))
-   (fun _ => ok (.Err (.DrawLimitExhausted (XRn_Join_usize accepted.length) 64#usize)))) := by
- rw [short_circuit]
- rfl
+def finish (s : State) :
+ Result (core.result.Result (Array U32 22#usize × Array U8 32#usize)
+   aspis_core.transcript.QuerySampleError) :=
+ if h : s.1.length = 22 then ok (.Ok (⟨s.1,h⟩,s.2.2.2))
+ else ok (.Err (.DrawLimitExhausted (XRn_Join_usize s.1.length) 64#usize))
+
+theorem driver (blocks advances : Blocks) :
+ aspis_core.r0_transcript.queries_from_pairs blocks advances =
+ (drive blocks advances (List.range 8)
+   ([],0,false,advances.val[7]?.getD (Array.repeat 32#usize 0#u8)) >>= finish) := by
+ exact (congrArg (fun m : Result State => m >>= finish)
+   (short_circuit blocks advances (List.range 8)
+    ([],0,false,advances.val[7]?.getD (Array.repeat 32#usize 0#u8)))).symm
 
 #print axioms stopped
 #print axioms short_circuit
