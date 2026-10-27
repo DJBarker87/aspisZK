@@ -1,0 +1,54 @@
+{"attempt": "FJo_074", "exit_status": 1, "wall_seconds": 4.579444507020526, "peak_rss_kib": "5404244", "swaps": "0", "print_axioms": ["'AspisR1.FJo_WriterAlpha0.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+FJo_WriterAlpha0.lean:26:52: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    OraclePortCheckpointAbiC5.encodeE (OraclePortCkptAbi5Codec.exactE _a ⋯) =
+      OraclePortCheckpointAbiC5.encodeE (CheckpointBytes5Output.ofE alpha)
+Error: Application type mismatch: The argument
+  index
+has type
+  (↑(CheckpointBytes3Namespaces.toPrepared p).alpha)[0] = CheckpointBytes3Namespaces.toE alpha
+but is expected to have type
+  _a = CheckpointBytes3Namespaces.toE alpha
+in the application
+  congrArg (fun _a => CanonicalWide _a) index
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. S
+...
+ : aspis_core.field.wide_exact.WideExact
+read : p.alpha.index_usize 0#usize = ok alpha
+canonical : CanonicalWide (CheckpointBytes3Namespaces.toE alpha)
+run : Port3_CheckpointInstall.writer D p a proof pub hash = ok saved
+hp hu hc : Std.Array U8 32#usize
+source :
+  ↑saved =
+    ↑(CheckpointBytes5Writer.finish (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu hc)
+encoded :
+  bytesOf ↑saved =
+    CheckpointBytesDecodeC5.sourceBody (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu ++
+      AspisV8R19.SourceDuplexStep.bytes (CheckpointBytesDigest.stateOf hc)
+bodyLength :
+  List.length
+      (CheckpointBytesDecodeC5.sourceBody (CheckpointBytes3Namespaces.toPrepared p)
+        (CheckpointBytes3Namespaces.toAccumulator a) hp hu) =
+    1736
+index : (↑(CheckpointBytes3Namespaces.toPrepared p).alpha)[0] = CheckpointBytes3Namespaces.toE alpha
+⊢ OraclePortCheckpointAbiC5.encodeE
+      (OraclePortCkptAbi5Codec.exactE (↑(CheckpointBytes3Namespaces.toPrepared p).alpha)[0] ⋯) =
+    OraclePortCheckpointAbiC5.encodeE (CheckpointBytes5Output.ofE alpha)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJo_WriterAlpha0.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9d0e0dd6373a49a28fc9b2ba4c52ac29.scope; invocation ID: a7d270065cd2427e8a2a8af73666bf65
+
