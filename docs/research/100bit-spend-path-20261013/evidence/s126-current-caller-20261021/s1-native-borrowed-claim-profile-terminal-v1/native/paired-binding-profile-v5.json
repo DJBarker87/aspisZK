@@ -1,0 +1,20 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "release_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "original_verifier_sha256": "45c11c8112f22c8ed04c7092ea5976e7b899f25321e7d6f6f48a9401945d8d4f",
+  "original_claim": "fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {\n        let k=powers::<7>(kappa);\n        let mut parts=[E::ZERO;7];parts[0]=inactive;\n        for point in 0..6 {\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        }\n        let mut claim=E::ZERO;\n        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}\n        crate::trace::value(14,7,claim);\n        Ok(claim)\n}",
+  "reference_sha256": "dc591583e805711bd22cb487148c4293559f8926f5c0fb5800361fe071493d4f",
+  "proof_sha256": "a559bfae59cf8c9bdecb449ef2b61678f241f9f5f0af2b826700dd24e8c21122",
+  "actual_native_body_unchanged": true,
+  "current_freeze_core_updates": {
+    "crates/aspis-core/src/state_only_prefix.rs": {
+      "before_sha256": "e9fa838650266890a16f74e7c5757a565a882668c42b6980a78b758b31a02f18",
+      "after_sha256": "31c2cd269efadc9b41d77bb841c7728e11e7494b443dbfea4b1e804795c11d0f"
+    }
+  },
+  "proof_mode": "one-pass characteristic profile",
+  "reference_changes": "Borrow private scalar/push/sum arrays; retain complete original borrowed public ABI and owned Dot state.",
+  "leaf_boundary": "Common ordered normal-return tape for full push/finish/field/mul/add carriers; all first rejection ordinals0..174. Field records exact slice pointer/length/index. No UF recursion or by-value arrays per inner iteration.",
+  "remaining": "Actual leaf installation, native panic/abort/allocation/runtime/SDK/oracle/release association and extracted-reference join remain explicit.",
+  "profile_cases": "six first-rejection rows and complete success, same partition as original NativePrepared certificate"
+}

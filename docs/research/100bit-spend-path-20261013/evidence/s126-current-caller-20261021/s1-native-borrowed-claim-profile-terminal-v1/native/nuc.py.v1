@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""Exact whole claim pairing:4GiB cap, fresh admission, no swap."""
+from pathlib import Path
+import os,sys,json,hashlib,subprocess,time,resource,signal,re
+W=Path(__file__).resolve().parent
+CASE=sys.argv[1];assert CASE in ['positive','negative']
+G=2**30;CAP=4*G;HIGH=3584*2**20
+UNIT='aspis-s126-borrowed-claim-'+CASE+'-'+W.name.rsplit('-',1)[1]
+A=W/('run-'+CASE);A.mkdir(exist_ok='--inside' in sys.argv)
+def sha(p):
+ with p.open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
+def save(n,v):(A/n).write_text(json.dumps(v,indent=2)+'\n')
+def inventory():
+ root=Path('/sys/fs/cgroup');rows=[];size=0
+ def read(p):
+  nonlocal size
+  with p.open('rb')as f:data=f.read(131073)
+  assert len(data)<=131072
+  size+=len(data);assert size<=8*2**20
+  return data.decode().strip()
+ def walk(p):
+  assert len(rows)<8192
+  row={'path':str(p.relative_to(root))}
+  for n in ['cgroup.events','memory.max','memory.current','memory.swap.max']:
+   if (p/n).exists():row[n]=read(p/n)
+  rows.append(row)
+  for q in sorted(p.iterdir()):
+   if q.is_dir():assert not q.is_symlink();walk(q)
+ walk(root)
+ mem={}
+ for line in read(Path('/proc/meminfo')).splitlines():
+  k,v=line.split(':',1);words=v.split()
+  if len(words)==2 and words[1]=='kB':mem[k]=int(words[0])*1024
+ finite=[r for r in rows if 'populated 1' in r.get('cgroup.events','')and r.get('memory.max','max')!='max']
+ reserved=sum(int(r['memory.max'])for r in finite)
+ # Whole-host counters charge uncapped populations too. No subtraction,
+ # process-name filtering or slab discount; overlaps deliberately overcharge.
+ fields=['AnonPages','Shmem','Unevictable','Slab','KernelStack','PageTables','Dirty','Writeback']
+ charge=sum(mem[k]for k in fields)
+ own=any(r['path'].endswith(UNIT+'.scope')for r in finite)
+ extra=0 if own else CAP
+ limit=min(57*G,mem['MemTotal']-5*G)
+ committed_current=sum(min(int(r['memory.current']),int(r['memory.max'])) for r in finite)
+ headroom=reserved+extra-committed_current
+ # Keep >=5GiB physical OS budget and1GiB additional free reserve after
+ # ALL unused finite caps. Stream tool hashes; other reservations untouched.
+ free_reserve=G
+ admitted=reserved+extra<limit and mem['MemAvailable']>=headroom+free_reserve
+ return dict(time=time.time(),groups=rows,memory=mem,finite_reserved_bytes=reserved,
+  host_counter_fields=fields,host_counter_charge_bytes=charge,additional_bytes=extra,
+  own_scope_included=own,limit_bytes=limit,admitted=admitted,
+  capped_current_bytes=committed_current,remaining_capped_headroom_bytes=headroom,
+  additional_free_reserve_bytes=free_reserve,
+  qualification='All populated finite MemoryMax values plus new scope below min57GiB/MemTotal-5GiB. MemAvailable covers ALL unused finite cap headroom plus recorded additional free reserve. Paired claim4GiB scope uses streaming hashes. Other caps untouched. Snapshot, not a lifetime bound on future uncapped growth.')
+
+if '--inside'not in sys.argv:
+ original=resource.getrlimit(resource.RLIMIT_AS);resource.setrlimit(resource.RLIMIT_AS,(512*2**20,original[1]));signal.alarm(40)
+ inv=inventory();save('admission-before-scope.json',inv)
+ if not inv['admitted']:raise SystemExit('Fresh admission denied; no compiler/verifier launched')
+ signal.alarm(0);resource.setrlimit(resource.RLIMIT_AS,original)
+ command=['systemd-run','--user','--scope','--unit='+UNIT,'-p','MemoryHigh='+str(HIGH),'-p','MemoryMax='+str(CAP),'-p','MemorySwapMax=0','-p','RuntimeMaxSec=420','-p','TasksMax=64','python3','-I','-S','-B',str(W/'nuc.py'),CASE,'--inside']
+ save('launch.json',{'command':command,'runner_sha256':sha(W/'nuc.py')})
+ status=subprocess.call(command);save('outer-terminal.json',{'exit_status':status,'time':time.time()});raise SystemExit(status)
+cg=Path('/sys/fs/cgroup')/Path('/proc/self/cgroup').read_text().strip().split('::',1)[1].lstrip('/')
+assert (cg/'memory.max').read_text().strip()==str(CAP)and(cg/'memory.high').read_text().strip()==str(HIGH)
+assert (cg/'memory.swap.max').read_text().strip()=='0';(cg/'memory.oom.group').write_text('1')
+plan=json.loads((W/'plan.json').read_text())
+def sources():return {p:sha(W/p)for p in plan['files']}
+before=sources();assert before==plan['files']
+K=Path('/home/dombarker/.kani/kani-0.67.0')
+assert (K/'rustc-version').read_text().strip()=='rustc 1.93.0-nightly (53732d5e0 2025-11-20)'
+paths=[p for p in(K/'bin').iterdir()if p.is_file()]+[K/'rustc-version',K/'toolchain/bin/rustc',K/'toolchain/bin/cargo']
+paths+=[p for p in(K/'lib').glob('*')if p.is_file()]
+paths+=[p for p in(K/'toolchain/lib').glob('*.so*')if p.is_file()]
+paths+=[p for p in(K/'toolchain/lib/rustlib/x86_64-unknown-linux-gnu/lib').glob('*')if p.is_file()]
+tp={str(p):sha(p)for p in paths}
+env=dict(os.environ);env.update(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(W/'target'),RUSTFLAGS='-C opt-level=3 -Z mir-opt-level=0 -C overflow-checks=yes -C link-arg=-Wl,--threads=1')
+for key in ['RUSTC_WRAPPER','RUSTC_WORKSPACE_WRAPPER','CARGO_ENCODED_RUSTFLAGS','RUSTC_BOOTSTRAP']:env.pop(key,None)
+metadata=[str(K/'toolchain/bin/cargo'),'metadata','--manifest-path',str(W/'min/Cargo.toml'),'--offline','--locked','--format-version','1']
+q=subprocess.run(metadata,cwd=W,env=dict(env,RUSTC=str(K/'toolchain/bin/rustc')),capture_output=True,text=True,timeout=20)
+(A/'metadata.stdout.json').write_text(q.stdout);(A/'metadata.stderr.log').write_text(q.stderr);assert q.returncode==0,q.stderr
+packages=json.loads(q.stdout)['packages'];assert len(packages)==2
+assert all(p['source']is None and Path(p['manifest_path']).is_relative_to(W)for p in packages)
+harness='verifier::proofs::'+('complete_original_matches_borrowed_reference'if CASE=='positive'else'accepted_result_negative_control')
+base=['/home/dombarker/.cargo/bin/cargo','kani','--manifest-path',str(W/'min/Cargo.toml'),'--lib','--exact','--harness',harness,'--solver','cadical','--no-assertion-reach-checks','-j','1','-Z','unstable-options','-Z','stubbing','--verbose','--output-format','terse','--harness-timeout','300','--keep-temps']
+for phase in ['compile','verify']:
+ inv=inventory();save(phase+'-admission.json',inv);assert inv['admitted']and inv['own_scope_included']
+ command=base+(['--only-codegen']if phase=='compile'else[])
+ save(phase+'-input.json',{'schema':'focused-extractor-proof-packet-v1','command':command,'source_pins':before,'tool_pins':tp,'metadata_command':metadata,'environment':{k:env[k]for k in ['CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','RUSTFLAGS']},'expected_time':'Optimized source compilation followed by one whole-claim control pairing with shared normal-return tapes; no native field arithmetic, proof generation, extraction or Lean replay.'})
+ start=time.monotonic()
+ with(A/(phase+'-stdout.log')).open('w')as out,(A/(phase+'-time.log')).open('w')as err:
+  status=subprocess.call(['/usr/bin/time','-v','timeout','--signal=TERM','--kill-after=5s','350s',*command],cwd=W,env=env,stdout=out,stderr=err)
+ timing=(A/(phase+'-time.log')).read_text()
+ def metric(label):
+  match=re.search(label+r':\s*(\d+)',timing);return int(match[1])if match else None
+ receipt={'schema':'focused-extractor-proof-packet-v1','command':command,'exit_status':status,'wall_seconds':time.monotonic()-start,'peak_rss_kib':metric(r'Maximum resident set size \(kbytes\)'),'swaps':metric('Swaps'),'source_unchanged':sources()==before,'tools_unchanged':all(sha(Path(p))==h for p,h in tp.items()),'cgroup':{k:(cg/k).read_text().strip()for k in ['memory.max','memory.high','memory.swap.max','memory.peak','memory.events']},'print_axioms':'N/A: native Rust/Kani source-control check'}
+ save(phase+'-receipt.json',receipt)
+ assert receipt['source_unchanged']and receipt['tools_unchanged']
+ if status:raise SystemExit(status)
+save('terminal.json',{'exit_status':0,'time':time.time()})
