@@ -11,7 +11,7 @@ ad=json.loads((E/(a+'-reservation.json')).read_text());(E/(a+'-admission.json'))
 if r.returncode or not ad['allowed']:raise SystemExit('WAIT admission refused; no submission')
 if a=='KSA_R001':subprocess.run(['python3',str(E/'KSA_native_prepare.py')],check=True)
 else:
- if a in ['KSA_R003','KSA_R004','KSA_R005']:
+ if a in ['KSA_R003','KSA_R004','KSA_R005','KSA_R006']:
   subprocess.run(['scp','-q',str(E/'KSA_native_test.rs'),H+':'+B+'/KSA_native_test.rs'],check=True)
   body="from pathlib import Path\np=Path("+repr(B+'/KSA_src/crates/aspis-core/src/lib.rs')+")\ns=p.read_text().split('\\n#[cfg(test)]\\nmod KSA_diagnostic')[0]\np.write_text(s+Path("+repr(B+'/KSA_native_test.rs')+").read_text())\n"
   rr=ssh("python3 - <<'PYHOST'\n"+body+"PYHOST");assert rr.returncode==0,rr.stderr

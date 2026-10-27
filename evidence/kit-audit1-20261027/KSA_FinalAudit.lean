@@ -1,6 +1,7 @@
 import KSA_Mask
 import KSA_MixedCompare
 import KSA_SmallFields
+import KSA_QmDecode
 -- Import the nominally isolated Dot bridge in a separate environment:
 -- its checked KSA_L031 receipt is the audit for that endpoint.
 #print axioms KSA.inverse_mismatch
@@ -12,3 +13,6 @@ import KSA_SmallFields
 #print axioms KSA.mixed_value
 #print axioms KSA.emitted_mixed_value
 #print axioms KSA.mixed_mismatch
+
+#print axioms KSA.emitted_qm_short
+#print axioms KSA.qm_short_mismatch

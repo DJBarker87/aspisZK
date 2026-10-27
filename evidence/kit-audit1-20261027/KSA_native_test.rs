@@ -52,7 +52,9 @@ mod KSA_diagnostic {
         std::println!("KSA mixed noncanonical native={:?} kit={:?}",native.to_limbs(),kit);
         assert!(native.c0()!=kit.0 || native.c1()!=kit.1);
         assert_eq!(QM31::from_le_bytes(&[0u8;16]),Some(QM31::ZERO));
-        assert_eq!(QM31::from_le_bytes(&[]),None);
+        assert!(std::panic::catch_unwind(||QM31::from_le_bytes(&[])).is_err());
+        assert_eq!(QM31::from_le_bytes(&[0u8;17]),Some(QM31::ZERO));
+        std::println!("KSA QM31 empty native=panic kit=none; 17 zero bytes native=some zero kit=none");
         assert_eq!(WideExact::from_le_bytes(&[]),None);
         assert_eq!(WideExact::ZERO.to_le_bytes(),[0u8;32]);
         assert_eq!(WideExact::ZERO.to_limbs(),[0u32;8]);

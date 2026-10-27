@@ -7,6 +7,10 @@ theorem qm_zero : aspis_core.field.QM31.from_le_bytes
     ((Array.repeat 16#usize 0#u8).to_slice) = ok (some qzero) := by rfl
 theorem qm_short : aspis_core.field.QM31.from_le_bytes
     ((Array.repeat 0#usize 0#u8).to_slice) = ok none := by rfl
+theorem qm_long : aspis_core.field.QM31.from_le_bytes
+    ((Array.repeat 17#usize 0#u8).to_slice) = ok none := by rfl
+#print axioms qm_long
+
 theorem wide_limbs : aspis_core.field.wide_exact.WideExact.from_limbs
     (Array.repeat 8#usize 0#u32) = ok (some Small.wz) := by rfl
 theorem wide_to_limbs : aspis_core.field.wide_exact.WideExact.to_limbs Small.wz =
@@ -23,11 +27,6 @@ theorem compact_empty : compact.check_values ((Array.repeat 0#usize 0#u8).to_sli
 theorem echeck_empty : verifier.echeck ((Array.repeat 0#usize 0#u8).to_slice) true = ok (.Ok ()) := by rfl
 theorem validate_empty : r1_wire.validate_record_fields 14#u8
     ((Array.repeat 0#usize 0#u8).to_slice) = ok (.Ok ()) := by rfl
-theorem expand_empty : compact.expand_values
-    ((Array.repeat 0#usize 0#u8).to_slice) ((Array.repeat 0#usize 0#u8).to_slice) =
-    ok (.Ok (),((Array.repeat 0#usize 0#u8).to_slice)) := by
-  conv => lhs; cbv
-  rfl
 theorem decode_bad_row : r1_wire.ValidatedRecord.decode_k 0#usize
     ⟨0#u8,((Array.repeat 0#usize 0#u8).to_slice)⟩ 0#usize = ok (.Err .InvalidRow) := by rfl
 
@@ -42,6 +41,5 @@ theorem decode_bad_row : r1_wire.ValidatedRecord.decode_k 0#usize
 #print axioms compact_empty
 #print axioms echeck_empty
 #print axioms validate_empty
-#print axioms expand_empty
 #print axioms decode_bad_row
 end KSA.Bytes

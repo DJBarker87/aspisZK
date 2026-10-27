@@ -1,6 +1,6 @@
 # Theorems that use a refuted stand-in
 
-43 explicit merged source theorems in the queried XR environment have a statement/proof path to one of the seven UNFAITHFUL definitions. Paths include statements, so a rejected-branch theorem may mention a whole function without executing its bad branch. Diagnostic refutations are listed too, and remain valid counterexample theorems.
+43 explicit merged source theorems in the queried XR environment have a statement/proof path to one of the eight UNFAITHFUL definitions. Paths include statements, so a rejected-branch theorem may mention a whole function without executing its bad branch. Diagnostic refutations are listed too, and remain valid counterexample theorems.
 
 | Theorem | Source | Refuted definition |
 |---|---|---|

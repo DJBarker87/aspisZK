@@ -2,6 +2,7 @@ from pathlib import Path
 import json,collections
 E=Path(__file__).resolve().parent;p=E/'KSA_inventory.json';d=json.loads(p.read_text())
 bad={
+ 'aspis_core.field.QM31.from_le_bytes':('KSA_L038/039 short/long kit probes; KSA_R005/006 native short panic and ignored suffix','AspisR1.FIp_DotDecode.field.QM31.from_le_bytes, lean/FIp_DotDecode.lean:103; adopted emitted-body decoder used by FJi_DecodeQM31.'),
  'XRn_Join_mpow':('KSA_L002 / XSd_InverseShape.inverse_spine','Replace inverse consumers with AspisR1.SAQ_Inverse.source or the adopted R72 fixed inverse chain; do not repair this helper.'),
  'XRn_Join_qpow':('KSA_L002 generic exponent-two; KSA_L027/028 degree26','Use emitted FIo_Native.aspis_core.field.QM31.pow for u64 powers; for inversion use adopted R72 QM31.try_inv; use emitted selected-mask power26 chain.'),
  'aspis_core.field.M31.inv':('KSA_L002 inverse mismatch; KSA_R002 inverse2','AspisR1.SAQ_Inverse.source / AspisR1M31Inverse.field.M31.inv; adopted R72 inverse chain.'),
@@ -16,7 +17,7 @@ for r in d['rows']:
  r['native_checks']='No fresh differential of this definition; UNDETERMINED'
  r['replacement']='Emitted or adopted body; association still required.'
  if r['name'] in bad and Path(r['file']).stem.startswith('XRn_Join_'):
-  r['verdict']='UNFAITHFUL';r['reason']=bad[r['name']][0];r['replacement']=bad[r['name']][1];r['native_checks']='KSA_R002 or KSA_R004 (see failure matrix)'
+  r['verdict']='UNFAITHFUL';r['reason']=bad[r['name']][0];r['replacement']=bad[r['name']][1];r['native_checks']='KSA_R002, KSA_R004 or KSA_R006 (see failure matrix)'
  if r['name'] in ['aspis_core.field.M31.from_le_bytes']:
   r['kernel_checks']='KSA_L002 zero/P probes';r['native_checks']='KSA_R002 six boundary words; equality holds on tested inputs'
  if r['name'].startswith('aspis_core.field.wide_exact.WideExact.') and r['name'].rsplit('.',1)[-1] in ['from_limbs','to_limbs','from_le_bytes','to_le_bytes','from_qm31','mul_qm31','mul_m31','add']:
@@ -24,6 +25,10 @@ for r in d['rows']:
  if r['name'] in ['oldQ','newQ']:r['kernel_checks']='KSA_L002 KSA.carrier_roundtrip, universal record roundtrip'
  if r['name']=='fast_pairing.canonical.Dot.push':
   r['verdict']='FAITHFUL';r['reason']='KSA_L031 transports the complete same-input emitted push for all input words and arbitrary sums; source/artifact trust retained.';r['kernel_checks']='KSA_L031 KSA.dot_native, universal emitted-body result';r['native_checks']='Retained LPn_Dot_push_LEAF native/Kani scope; no unchanged rerun'
+ for name,th in [('aspis_core.field.QM31.from_le_bytes','qm_zero/qm_short/qm_long'),('aspis_core.field.wide_exact.WideExact.from_limbs','wide_limbs'),('aspis_core.field.wide_exact.WideExact.to_limbs','wide_to_limbs'),('aspis_core.field.wide_exact.WideExact.from_le_bytes','wide_bytes/wide_short'),('aspis_core.field.wide_exact.WideExact.to_le_bytes','wide_to_bytes'),('aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31','from_m31_p'),('compact.check_values','compact_empty'),('verifier.echeck','echeck_empty'),('r1_wire.validate_record_fields','validate_empty'),('r1_wire.ValidatedRecord.decode_k','decode_bad_row')]:
+  if r['name']==name and Path(r['file']).stem.startswith('XRn_Join_'):r['kernel_checks']='KSA_L038/039 KSA.Bytes.'+th
+ for name,packet in [('compact.check_values','LPl_check_values'),('verifier.echeck','LPl_echeck'),('compact.expand_values','LPl_expand_values'),('r1_wire.validate_record_fields','LPl_validate_record_fields'),('r1_wire.ValidatedRecord.decode_k','LPn_decode_k'),('r1_semantic.claims','LPn_claims'),('verifier.prepared_claim','LPm_prepared_claim'),('verifier.checkpoint','LPm_checkpoint'),('r1_semantic.semantic_boundary','LPo_semantic_boundary'),('verifier.candidate.wide_view','LPo_wide_view')]:
+  if r['name']==name:r['native_checks']='Retained '+packet+'_LEAF.md native gate, original domain only; no fresh gate or universal association inferred'
 # Small probes do not certify universal source fidelity, so remain UNDETERMINED unless a complete adopted-body theorem is separately identified.
 p.write_text(json.dumps(d,indent=2)+'\n')
 lines=['# Stand-in inventory','',f"Raw release `{d['raw']['path']}`, SHA256 `{d['raw']['sha256']}`.",'',f"{len(d['rows'])} declarations: all definitions/carriers in non-emitted kit files, 15 edited Funs declarations, and XRo/XSd successor adapters. Unchanged emitted Types are excluded. `KSA_inventory.json` retains full source hashes, candidate paths, emitted-body text comparisons, and per-row validation/replacement status.",'','FAITHFUL is reserved for a complete scoped association, not a passing fixture. UNDETERMINED includes untested definitions and adapters whose whole source/effects/carrier law remains open. Native tiny-field fixtures are not a whole verifier proof.','', '| File:line | Definition | Shipped counterpart or model | Raw comparison | Verdict | Kernel check | Native check |','|---|---|---|---|---|---|---|']

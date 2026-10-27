@@ -22,12 +22,12 @@ def clean(s):
  return ''.join(out)
 def decls(p):
  s=p.read_text();c=clean(s)
- matches=list(re.finditer(r'(?m)^(?:(?:private|protected|noncomputable|partial|unsafe)\s+)*(def|abbrev|structure|inductive|theorem|lemma|opaque)\s+([^\s{(:]+)',c))
+ matches=list(re.finditer(r'(?m)^(?:@\[[^\n]*?\]\s*)*(?:(?:private|protected|noncomputable|partial|unsafe)\s+)*(def|abbrev|structure|inductive|theorem|lemma|opaque)\s+([^\s{(:]+)',c))
  out=[]
  for i,m in enumerate(matches):
   stop=matches[i+1].start() if i+1<len(matches) else len(s)
-  part=c[m.start():stop];part=re.split(r'(?m)^\s*(?:end\b|namespace\b|#print\b|@\[)',part)[0].strip()
-  before=s[:m.start()];meta=re.findall(r"Source: '([^']+)', lines ([0-9:]+)-([0-9:]+)",before[-1600:])
+  part=c[m.start(1):stop];part=re.split(r'(?m)^\s*(?:end\b|namespace\b|#print\b|@\[)',part)[0].strip()
+  before=s[:m.start(1)];meta=re.findall(r"Source: '([^']+)', lines ([0-9:]+)-([0-9:]+)",before[-1600:])
   out.append(dict(name=m[2],kind=m[1],line=before.count('\n')+1,text=part,source=(meta[-1] if meta else None)))
  return out
 raw={r['name']:r for r in decls(RAW)}
