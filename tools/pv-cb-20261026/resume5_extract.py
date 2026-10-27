@@ -6,7 +6,7 @@ op,entry,include=sys.argv[1:4]
 project=sys.argv[6] if len(sys.argv)>6 else ('source-proof' if int(op)>=71 else 'proof')
 mir=sys.argv[7] if len(sys.argv)>7 else 'built'
 assert mir in ['built','optimized']
-opaque=sys.argv[8].split('+') if len(sys.argv)>8 else []
+opaque=[p for p in sys.argv[8].split('+') if p] if len(sys.argv)>8 else []
 base='/home/dombarker/project-offloads/codex-pv-cb-20261026'
 scanner='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/reservation.py'
 charon=base+'/pinned-tools/charon'
