@@ -437,3 +437,92 @@ fn repeated_query_batch(ordinal:usize) {
 }
 #[kani::proof] #[kani::unwind(689)] fn repeated_query_batch0(){repeated_query_batch(0)}
 #[kani::proof] #[kani::unwind(689)] fn repeated_query_batch1(){repeated_query_batch(1)}
+
+fn prefixed_leaf(tree:usize) {
+    let q:[u8;832]=kani::any();let seed:u8=kani::any();let old_reply:Option<Result<[u8;32],()>>=if kani::any() {None} else {Some(Ok(kani::any()))};
+    let log=RefCell::new(vec![Attempt{address:vec![seed],input:vec![vec![seed]],returned:old_reply}]);
+    let answer:[u8;32]=kani::any();let out=shipped::batch_leaf(Recording{backend:Reply(answer),log:&log},tree,&q);
+    assert_eq!(out,answer);
+    let p:usize=kani::any();let j:usize=kani::any();
+    {
+        let l=log.borrow();assert_eq!(l.len(),2);
+        assert_eq!(l[0].address.len(),1);assert_eq!(l[0].address[0],seed);assert_eq!(l[0].input.len(),1);assert_eq!(l[0].input[0].len(),1);assert_eq!(l[0].input[0][0],seed);assert_eq!(l[0].returned,old_reply);
+        assert_eq!(l[1].returned,Some(Ok(answer)));assert_eq!(l[1].input.len(),3);
+        let tag=if tree==0 {0x71} else if tree==1 {0xf1} else {0x72};
+        let header=[0x10,tag];
+        let (vs,ve,ss)=if tree==0 {(0,480,608)} else if tree==1 {(480,608,640)} else {(672,800,800)};
+        let expected:[&[u8];3]=[&header,&q[vs..ve],&q[ss..ss+32]];
+        assert_eq!(l[1].input.get(p).map(|x|x.len()),expected.get(p).map(|x|x.len()));
+        assert_eq!(l[1].input.get(p).and_then(|x|x.get(j)).copied(),expected.get(p).and_then(|x|x.get(j)).copied());
+    }
+    std::mem::forget(log);
+}
+#[kani::proof] #[kani::unwind(481)] fn prefixed_leaf_c1(){prefixed_leaf(0)}
+#[kani::proof] #[kani::unwind(129)] fn prefixed_leaf_c2(){prefixed_leaf(1)}
+#[kani::proof] #[kani::unwind(129)] fn prefixed_leaf_folded(){prefixed_leaf(2)}
+
+#[kani::proof] #[kani::unwind(65)]
+fn duplicate_parents_retained() {
+    let left:[u8;32]=kani::any();let right:[u8;32]=kani::any();let replies:[[u8;32];2]=kani::any();let log=RefCell::new(Vec::new());let cursor=std::cell::Cell::new(0);
+    let hash=Recording{backend:Stateful{replies:&replies,cursor:&cursor},log:&log};
+    let first=multiproof::binary_parent(hash,&left,&right);let second=multiproof::binary_parent(hash,&left,&right);
+    assert_eq!(first,replies[0]);assert_eq!(second,replies[1]);assert_eq!(cursor.get(),2);
+    let p:usize=kani::any();let b:usize=kani::any();
+    {
+        let l=log.borrow();assert_eq!(l.len(),2);
+        assert_eq!(l[0].returned,Some(Ok(replies[0])));assert_eq!(l[1].returned,Some(Ok(replies[1])));
+        assert_eq!(l[0].input.get(p).map(|x|x.len()),l[1].input.get(p).map(|x|x.len()));
+        assert_eq!(l[0].input.get(p).and_then(|x|x.get(b)),l[1].input.get(p).and_then(|x|x.get(b)));
+        assert_eq!(l[0].address.len(),l[1].address.len());assert_eq!(l[0].address.get(b),l[1].address.get(b));
+    }
+    std::mem::forget(log);
+}
+
+fn unary_verify(short:bool) {
+    let index:u32=kani::any();kani::assume(index<(1<<18));let leaf:[u8;32]=kani::any();let root:[u8;32]=kani::any();let bytes:[u8;576]=kani::any();
+    let available:usize=if short {kani::any()} else {18};kani::assume(available<=18);if short {kani::assume(available<18);}
+    let nodes=&bytes[..available*32];
+    let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();idx[0]=index;val[0]=leaf;
+    let replies:[[u8;32];2]=kani::any();let initial:usize=kani::any();kani::assume(initial<1024);
+    let ca=std::cell::Cell::new(initial);let cb=std::cell::Cell::new(initial);
+    let a=RefCell::new(zero());let b=RefCell::new(zero());let selected:usize=kani::any();let part:usize=kani::any();let byte:usize=kani::any();
+    let ra=multiproof::verify_in_place(Point{state:&a,backend:Stateful{replies:&replies,cursor:&ca},selected_call:selected,selected_part:part,selected_byte:byte},multiproof::Arity::Two,&root,&mut idx,&mut val,1,nodes);
+    let rb=multiproof::verify(Point{state:&b,backend:Stateful{replies:&replies,cursor:&cb},selected_call:selected,selected_part:part,selected_byte:byte},multiproof::Arity::Two,&root,&[index],&[leaf],nodes);
+    assert_eq!(ra,rb);assert_eq!(*a.borrow(),*b.borrow());assert_eq!(ca.get(),cb.get());
+    assert_eq!(a.borrow().calls,available);assert_eq!(ca.get(),initial+available);if short {assert!(!ra);}
+}
+#[kani::proof] #[kani::unwind(33)] fn unary_verify_full(){unary_verify(false)}
+#[kani::proof] #[kani::unwind(33)] fn unary_verify_short(){unary_verify(true)}
+
+fn threaded_heads(first_tree:usize) {
+    let second_tree=first_tree+1;
+    let keys:[u64;16]=kani::any();let pos:usize=kani::any();kani::assume(pos<12);let used:usize=kani::any();kani::assume(used<=pos);
+    let q0:[u8;832]=kani::any();let q1:[u8;832]=kani::any();let replies:[[u8;32];2]=kani::any();
+    let mut ia:[u32;16]=kani::any();let mut va:[[u8;32];16]=kani::any();let mut ib=ia;let mut vb=va;
+    let initial:usize=kani::any();kani::assume(initial<1024);let ca=std::cell::Cell::new(initial);let cb=std::cell::Cell::new(initial);
+    let a=RefCell::new(zero());let b=RefCell::new(zero());let selected:usize=kani::any();let part:usize=kani::any();let byte:usize=kani::any();
+    let ha=Point{state:&a,backend:Stateful{replies:&replies,cursor:&ca},selected_call:selected,selected_part:part,selected_byte:byte};
+    let hb=Point{state:&b,backend:Stateful{replies:&replies,cursor:&cb},selected_call:selected,selected_part:part,selected_byte:byte};
+    let ra=shipped::leaf_step(keys,pos,0,first_tree,&q0,&mut ia,&mut va,used,ha);
+    let rb=leaf_step(keys,pos,0,first_tree,&q0,&mut ib,&mut vb,used,hb);assert_eq!(ra,rb);
+    let sa=if ra.0 {Some(shipped::leaf_step(keys,0,0,second_tree,&q1,&mut ia,&mut va,0,ha))} else {None};
+    let sb=if rb.0 {Some(leaf_step(keys,0,0,second_tree,&q1,&mut ib,&mut vb,0,hb))} else {None};
+    assert_eq!(sa,sb);assert_eq!(ca.get(),cb.get());assert_eq!(*a.borrow(),*b.borrow());
+    let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<16 && j<32);
+    assert_eq!(ia[i],ib[i]);assert_eq!(va[i][j],vb[i][j]);
+}
+#[kani::proof] #[kani::unwind(481)] fn threaded_heads_c1_c2(){threaded_heads(0)}
+#[kani::proof] #[kani::unwind(129)] fn threaded_heads_c2_folded(){threaded_heads(1)}
+
+// Replacement for timed-out repeated-query batch: split its FIRST inner
+// key/sort loop; no hash, node-count or verifier stub is introduced.
+#[kani::proof] #[kani::unwind(13)]
+fn repeated_keys_cut() {
+    let query:u32=kani::any();let ordinal:usize=kani::any();let tree:usize=kani::any();
+    kani::assume(ordinal<2 && tree<3);let (lo,n)=if ordinal==0 {(0,10)} else {(10,12)};
+    let keys=shipped::sort_batch_keys(shipped::batch_keys(&[query;22],lo,n,tree),n);
+    let at:usize=kani::any();kani::assume(at<16);
+    let index=if tree==2 {query/4} else {query};
+    let expected=if at<n {(u64::from(index)<<8)|at as u64} else {0};
+    assert_eq!(keys[at],expected);
+}
