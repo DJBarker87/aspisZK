@@ -206,3 +206,28 @@ qualified timing. On admission refusal wait three minutes and use a fresh
 receipt label, up to ten retries; never bypass the barrier or raise caps.
 No unchanged invalidated timing rerun. Retain all keys securely; remove only
 this cycle's cargo targets and raw corpus after evidence collection.
+
+## Cleanup, scope and final disposition
+
+All three job-owned Cargo targets and the private Lean object overlay/cache
+were removed after collecting receipts and object pins. `cleanup.json` retains
+three SBF keypairs in their artifact directories at mode 0600 and records their
+public keys. No wallet key was deleted, deployed, spent or refunded. The first
+cleanup stopped on a Cargo `.fingerprint` JSON whose filename contained
+`keypair`; `cleanup-preflight-failure.json` records the classification fix and
+`final-cleanup.json` confirms no Cargo targets remain. No shared source/object,
+root checkout, other worktree, or other job's artifact was modified.
+
+All changes in this branch are confined to `evidence/pv-integ1-20261027/` and
+`tools/pv-integ1-20261027/`. Implementation and Lean proof source bytes remain
+those of `0c9dc9a4cc`. No forbidden proof primitive or new axiom was introduced.
+Before and after this task, V164 still requires the reservation equation and
+`P_proof_bytes`; this task removes no privacy theorem premise and adds no trust
+item. Formal source-to-model, E1/E2, real RunJoin, OS-failure independence,
+L1/L2/L3 and endpoint/deployment closure obligations are retained unchanged.
+
+The successful runs and earlier setup/admission failures are all retained;
+no ELF mismatch or deterministic fixture disagreement occurred. Raw timing
+metadata is explicitly unequal, as explained in stage 3. The only next-cycle
+work proposed here is the combined differential and lead-coordinated quiet
+window above. **Neither was executed. Target not yet established.**
