@@ -1,0 +1,171 @@
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -203,3 +203,5 @@
+ #[cfg(kani)]
+ #[path = "LPa_compact.rs"]
+ mod LPa_compact;
++
++#[cfg(kani)] mod LPc_compact { include!("LPc_compact.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -530,3 +530,5 @@
+ #[cfg(kani)]
+ #[path = "LPa_verifier.rs"]
+ mod LPa_verifier;
++
++#[cfg(kani)] mod LPc_verifier { include!("LPc_verifier.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -342,3 +342,5 @@
+ #[cfg(kani)]
+ #[path = "LPa_candidate.rs"]
+ mod LPa_candidate;
++
++#[cfg(kani)] mod LPc_candidate { include!("LPc_candidate.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -852,3 +852,5 @@
+ #[cfg(kani)]
+ #[path = "LPa_wire.rs"]
+ pub(crate) mod LPa_wire;
++
++#[cfg(kani)] mod LPc_wire { include!("LPc_wire.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -122,7 +122,8 @@
+         }
+         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
+-#[cfg(kani)] mod LPa_dot { include!("LPa_dot.rs"); } }
++#[cfg(kani)] mod LPa_dot { include!("LPa_dot.rs"); }
++#[cfg(kani)] mod LPc_dot { include!("LPc_dot.rs"); } }
+ 
+ 
+ use aspis_core::field::{CM31, QM31, WideExact as E};
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPc_dot.rs
+@@ -0,0 +1,13 @@
++use super::*;
++fn cell<const J:usize>() {
++ let x:[u32;4]=kani::any(); let y:[u32;4]=kani::any();
++ kani::assume(x.iter().all(|v|*v<P));kani::assume(y.iter().all(|v|*v<P));
++ let a=Q::from_limbs(x).unwrap();let b=Q::from_limbs(y).unwrap();
++ let sums:[u64;4]=kani::any();let mut actual=Dot{sums};
++ let raw=a.raw(b);actual.push(a,b);
++ assert_eq!(actual.sums[J],sums[J].wrapping_add((raw[J]%(1u64<<31)).wrapping_add(raw[J]/(1u64<<31))));
++}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell0(){cell::<0>()}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell1(){cell::<1>()}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell2(){cell::<2>()}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell3(){cell::<3>()}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPc_wire.rs
+@@ -0,0 +1,43 @@
++use super::*;
++// Each claim call is checked separately; no allocator/child stub is installed.
++fn decode<const POINT:usize>() {
++ let b:[u8;5+116*32]=kani::any();
++ let record=ValidatedRecord{row:25,framed:&b};
++ let actual=record.decode_k::<29>(POINT*29);
++ let mut expected=Ok([QM31::ZERO;29]);
++ let mut out=[QM31::ZERO;29];
++ for i in 0..29 {
++  let at=5+32*(POINT*29+i);
++  match QM31::from_le_bytes(&b[at..at+16]) {
++   Some(q)=>out[i]=q,
++   None=>{expected=Err(Error::NonCanonical{row:25,value:POINT*29+i});break;}
++  }
++ }
++ if expected.is_ok(){expected=Ok(out);}
++ assert_eq!(actual,expected);
++}
++#[kani::proof] #[kani::unwind(32)] fn LPc_claim_decode0(){decode::<0>()}
++#[kani::proof] #[kani::unwind(32)] fn LPc_claim_decode1(){decode::<1>()}
++#[kani::proof] #[kani::unwind(32)] fn LPc_claim_decode2(){decode::<2>()}
++
++#[kani::proof] #[kani::unwind(120)] fn LPc_validate116(){
++ let b:[u8;3712]=kani::any();let row:u8=kani::any();let mut expected=Ok(());
++ 'outer:for i in 0..116{for j in 0..8{
++  let x=u32::from_le_bytes(b[32*i+4*j..32*i+4*j+4].try_into().unwrap());
++  if x>=0x7fff_ffff||(j>=4&&x!=0){expected=Err(Error::NonCanonical{row,value:i});break 'outer;}
++ }}assert_eq!(validate_record_fields(row,&b),expected);
++}
++#[kani::proof] #[kani::unwind(10)] fn LPc_decode_reached1(){
++ let b:[u8;5+116*32]=kani::any();let point:usize=kani::any();kani::assume(point<3);
++ let offset=point*29;let at=5+offset*32;
++ let expected=QM31::from_le_bytes(&b[at..at+16]).map(|x|[x]).ok_or(Error::NonCanonical{row:25,value:offset});
++ assert_eq!(ValidatedRecord{row:25,framed:&b}.decode_k::<1>(offset),expected);
++}
++// Canonical producer at the actual semantic_round input shape (rows15..24).
++#[kani::proof] #[kani::unwind(32)] fn LPc_boundary_producer(){
++ let b:[u8;5+28*32]=kani::any();let row:u8=kani::any();kani::assume(row>=15&&row<=24);
++ if let Ok(out)= (ValidatedRecord{row,framed:&b}).decode_k::<28>(0){
++  let i:usize=kani::any();kani::assume(i<28);let q=out[i];
++  assert!(q.c0.a.0<2147483647&&q.c0.b.0<2147483647&&q.c1.a.0<2147483647&&q.c1.b.0<2147483647);
++ }
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPc_verifier.rs
+@@ -0,0 +1,10 @@
++use super::*;
++fn tail<const LO:usize,const HI:usize>() {
++ let b:[u8;63]=kani::any();let n:usize=kani::any();kani::assume(n>=LO&&n<=HI);
++ let k:bool=kani::any();
++ assert_eq!(echeck(&b[..n],k),if n<32{Ok(())}else{echeck(&b[..32],k)});
++}
++#[kani::proof] #[kani::unwind(10)] fn LPc_tail0(){tail::<0,15>()}
++#[kani::proof] #[kani::unwind(10)] fn LPc_tail1(){tail::<16,31>()}
++#[kani::proof] #[kani::unwind(10)] fn LPc_tail2(){tail::<32,47>()}
++#[kani::proof] #[kani::unwind(10)] fn LPc_tail3(){tail::<48,63>()}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPc_compact.rs
+@@ -0,0 +1,25 @@
++use super::*;
++fn expansion<const CASE:usize>() {
++ let b:[u8;464]=kani::any();let mut o:[u8;928]=kani::any();let before=o;
++ let i:usize=kani::any();kani::assume(i<29);
++ assert_eq!(expand_values(&b[16*i..16*i+16],&mut o[32*i..32*i+32]),Ok(()));
++ let j:usize=kani::any();kani::assume(j<928);
++ match CASE {
++  0=>{kani::assume(j>=32*i&&j<32*i+16);assert_eq!(o[j],b[16*i+j-32*i]);}
++  1=>{kani::assume(j>=32*i+16&&j<32*i+32);assert_eq!(o[j],0);}
++  2=>{kani::assume(j<32*i);assert_eq!(o[j],before[j]);}
++  _=>{kani::assume(j>=32*i+32);assert_eq!(o[j],before[j]);}
++ }
++}
++#[kani::proof] #[kani::unwind(35)] fn LPc_expand0(){expansion::<0>()}
++#[kani::proof] #[kani::unwind(35)] fn LPc_expand1(){expansion::<1>()}
++#[kani::proof] #[kani::unwind(35)] fn LPc_expand2(){expansion::<2>()}
++#[kani::proof] #[kani::unwind(35)] fn LPc_expand3(){expansion::<3>()}
++
++#[kani::proof] #[kani::unwind(32)] fn LPc_check464(){
++ let b:[u8;464]=kani::any();let mut expected=Ok(());
++ for i in 0..29{for j in 0..4{
++  let n=u32::from_le_bytes(b[16*i+4*j..16*i+4*j+4].try_into().unwrap());
++  if n>=0x7fff_ffff{expected=Err(CodecError::NonCanonical);}
++ }}assert_eq!(check_values(&b),expected);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPc_candidate.rs
+@@ -0,0 +1,21 @@
++// Direct wide_view at actual frozen bounds, arbitrary inactive32-byte stage.
++use super::*;
++#[kani::proof] #[kani::unwind(35)] fn LPc_view_frame(){
++ let mut proof:[u8;compact::PROOF_BYTES]=kani::any();let b=[0u8;32];
++ proof[compact::OFF_INACTIVE..compact::OFF_ROUND0].copy_from_slice(&b);
++ let semantic:[u8;super::SEMANTIC_BYTES]=kani::any();let y1:[u8;29*32]=kani::any();
++ let actual=wide_view(&proof,&semantic,&y1);let inactive=E::from_le_bytes(&b);
++ match (actual,inactive){
++  (Err(e),None)=>assert_eq!(e,Error::Parse),
++  (Ok(v),Some(x))=>{
++   assert_eq!(v.inactive,x);assert_eq!(v.variant,Variant::S2);
++   assert!(core::ptr::eq(v.semantic.as_ptr(),semantic.as_ptr()));assert_eq!(v.semantic.len(),semantic.len());
++   assert!(core::ptr::eq(v.y1.as_ptr(),y1.as_ptr()));assert_eq!(v.y1.len(),y1.len());
++   assert!(core::ptr::eq(v.round0.as_ptr(),proof[compact::OFF_ROUND0..].as_ptr()));assert_eq!(v.round0.len(),224);
++   assert!(core::ptr::eq(v.folded_root.unwrap().as_ptr(),proof[compact::OFF_FOLDED_ROOT..].as_ptr()));
++   assert!(core::ptr::eq(v.round1.as_ptr(),proof[compact::OFF_ROUND1..].as_ptr()));assert_eq!(v.round1.len(),224);
++   assert!(core::ptr::eq(v.final_message.as_ptr(),proof[compact::OFF_FINAL..].as_ptr()));assert_eq!(v.final_message.len(),2048);
++   assert_eq!(v.query_bytes.len(),0);
++  },_=>assert!(false)
++ }
++}

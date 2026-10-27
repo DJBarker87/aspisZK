@@ -1,0 +1,81 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -530,3 +530,5 @@
+ #[cfg(kani)]
+ #[path = "LPa_verifier.rs"]
+ mod LPa_verifier;
++
++#[cfg(kani)] mod LPc_verifier { include!("LPc_verifier.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -852,3 +852,5 @@
+ #[cfg(kani)]
+ #[path = "LPa_wire.rs"]
+ pub(crate) mod LPa_wire;
++
++#[cfg(kani)] mod LPc_wire { include!("LPc_wire.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -122,7 +122,8 @@
+         }
+         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
+-#[cfg(kani)] mod LPa_dot { include!("LPa_dot.rs"); } }
++#[cfg(kani)] mod LPa_dot { include!("LPa_dot.rs"); }
++#[cfg(kani)] mod LPc_dot { include!("LPc_dot.rs"); } }
+ 
+ 
+ use aspis_core::field::{CM31, QM31, WideExact as E};
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPc_dot.rs
+@@ -0,0 +1,13 @@
++use super::*;
++fn cell<const J:usize>() {
++ let x:[u32;4]=kani::any(); let y:[u32;4]=kani::any();
++ kani::assume(x.iter().all(|v|*v<P));kani::assume(y.iter().all(|v|*v<P));
++ let a=Q::from_limbs(x).unwrap();let b=Q::from_limbs(y).unwrap();
++ let sums:[u64;4]=kani::any();let mut actual=Dot{sums};
++ let raw=a.raw(b);actual.push(a,b);
++ assert_eq!(actual.sums[J],sums[J].wrapping_add((raw[J]%(1u64<<31)).wrapping_add(raw[J]/(1u64<<31))));
++}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell0(){cell::<0>()}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell1(){cell::<1>()}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell2(){cell::<2>()}
++#[kani::proof] #[kani::unwind(6)] fn LPc_dot_cell3(){cell::<3>()}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPc_wire.rs
+@@ -0,0 +1,21 @@
++use super::*;
++// Each claim call is checked separately; no allocator/child stub is installed.
++fn decode<const POINT:usize>() {
++ let b:[u8;5+116*32]=kani::any();
++ let record=ValidatedRecord{row:25,framed:&b};
++ let actual=record.decode_k::<29>(POINT*29);
++ let mut expected=Ok([QM31::ZERO;29]);
++ let mut out=[QM31::ZERO;29];
++ for i in 0..29 {
++  let at=5+32*(POINT*29+i);
++  match QM31::from_le_bytes(&b[at..at+16]) {
++   Some(q)=>out[i]=q,
++   None=>{expected=Err(Error::NonCanonical{row:25,value:POINT*29+i});break;}
++  }
++ }
++ if expected.is_ok(){expected=Ok(out);}
++ assert_eq!(actual,expected);
++}
++#[kani::proof] #[kani::unwind(32)] fn LPc_claim_decode0(){decode::<0>()}
++#[kani::proof] #[kani::unwind(32)] fn LPc_claim_decode1(){decode::<1>()}
++#[kani::proof] #[kani::unwind(32)] fn LPc_claim_decode2(){decode::<2>()}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPc_verifier.rs
+@@ -0,0 +1,10 @@
++use super::*;
++fn tail<const LO:usize,const HI:usize>() {
++ let b:[u8;63]=kani::any();let n:usize=kani::any();kani::assume(n>=LO&&n<=HI);
++ let k:bool=kani::any();
++ assert_eq!(echeck(&b[..n],k),if n<32{Ok(())}else{echeck(&b[..32],k)});
++}
++#[kani::proof] #[kani::unwind(10)] fn LPc_tail0(){tail::<0,15>()}
++#[kani::proof] #[kani::unwind(10)] fn LPc_tail1(){tail::<16,31>()}
++#[kani::proof] #[kani::unwind(10)] fn LPc_tail2(){tail::<32,47>()}
++#[kani::proof] #[kani::unwind(10)] fn LPc_tail3(){tail::<48,63>()}
