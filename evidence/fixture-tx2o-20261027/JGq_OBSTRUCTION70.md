@@ -1,0 +1,11 @@
+# Mandatory attempt070 review
+
+The actual root remains FJp_Top.deployed, byte-identical to entry. Baseline actual83T/9P/13G/0C and distinct deployment-inclusive89T/26P/13G/0C are unchanged; actual-top removed/added/changed each0T/0P/0G/0C. See JGq_LEDGER_DELTA.json. No quantified owner family or accepted wrapper was discharged by a fixed-input helper.
+
+Checked before the review: native powers4/4/7 on real checkpoint alphas/kappa; all16 installed-weight common writes; the four-lane canonical accumulator's symbolic closed source return; all64 actual final-message EbyK pushes on those common coefficients; the complete four native partial_dot returns (subject to their exact passing receipts). JGo's existing reader, batch/query/flush, rounds, weights and all final message reads remain imported unchanged. 070 audits the strongest current closure, actual FJp statement and axioms.
+
+No real-byte premise has been proved false/uninhabitable. No final Pair/gate, dot comparison, finish or wrapper success is an input to a new acceptance claim. No accepted2 or joint accepted-pair theorem is claimed. FJr_BodyPairMeaning.value is conditional on a producing Pair execution and does not construct one. JGp_/FJs_ modules are absent from this branch; other workers/worktrees are not edited or silently imported.
+
+The actual forward Pair still needs regular kinds2/5/6 on the SAME scratch/parts, the shared-high return (in progress), inactive reduction, Libra weights/write, final sum and Pair comparison. The native low dual array is still being computed. JGo's finish parent additionally retains the actual dot on the SAME query-returned accumulator and flushed weights, the next check and final equality. Then full finish, the actual TX2 wrapper with Realizes explicit, TX1 accepted1/SAME saved1768 bytes and the runtime/frozen3/game/persistence/admissions join remain open. Missing source returns are proof obligations, not cryptographic assumptions.
+
+Failures so far are retained ordinary syntax/type/transparency/control errors. No timeout/memory kill, cap increase, unchanged resource rerun, broad whole-buffer reduction, package replay, shipped edit, ELF rebuild trigger, Rust/Kani/SBF, wallet/key operation or push. Continue within the remaining100-process budget on actual Pair calls and exact remaining control. Keep the last attempt for the composed audit.

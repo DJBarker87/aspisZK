@@ -7,7 +7,7 @@ for attempt in sorted(P.glob('JGq_TX2_[0-9][0-9][0-9]')):
  if not receipt.exists():continue
  d=json.loads(receipt.read_text());stdout=(attempt/'stdout.log').read_text()
  row={k:d.get(k) for k in ['attempt','command','sources','source_revision','source_tree_dirty','source_hashes','deps_fingerprint','exit_status','wall_seconds','peak_rss_kib','swaps','cgroup','limits','cgroup_memory_peak_bytes','print_axioms']}
- row['errors']=[line for line in stdout.splitlines() if 'error:' in line]
+ row['errors']=[line for line in stdout.splitlines() if re.search(r'error(?::|\()',line)]
  row['receipt']=str(receipt.relative_to(R));records.append(row)
  if d['exit_status']==0:
   assert 'sorryAx' not in stdout

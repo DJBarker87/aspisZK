@@ -40,8 +40,10 @@ open Aeneas Aeneas.Std Result ControlFlow
  for j in range(4):
   s+=f'''theorem push{tag}_{j} : FIo_Native.fast_pairing.EbyKDot.push d{tag}_{j}
     JGq_Partial.value{j} c{tag}_{j}=ok (.Ok (),d{tag}_{j+1}) := by
+  have inc : Usize.wrapping_add d{tag}_{j}.count 1#usize={j+1}#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value d{tag}_{j}.count 1#usize (by decide))
   simp only [FIo_Native.fast_pairing.EbyKDot.push,
-    FIo_Native.fast_pairing.canonical.Dot.push,JGq_DotLoop.source]
+    FIo_Native.fast_pairing.canonical.Dot.push,JGq_DotLoop.source,inc]
   with_unfolding_all rfl
 #print axioms push{tag}_{j}
 '''
@@ -78,13 +80,13 @@ theorem source{tag} : FIo_Native.weights.high_dot JGq_SharedPartials.value row{t
     interval_cases i
 '''
  for j in range(4):s+=f'    · exact step{tag}_{j}\n'
- s+=f'''  · unfold FIo_Native.weights.high_dot_loop.body
+ s+=f'''  · change FIo_Native.weights.high_dot_loop.body JGq_SharedPartials.value row{tag}
+        {{start:=4#usize,«end»:=4#usize}} d{tag}_4=ok (.done (.Ok high{tag}))
+    unfold FIo_Native.weights.high_dot_loop.body
     have stop : core.iter.range.IteratorRange.next core.iter.range.StepUsize
         ({{start:=4#usize,«end»:=4#usize}} : core.ops.range.Range Usize)=ok (none,{{start:=4#usize,«end»:=4#usize}}) := by with_unfolding_all rfl
     rw [stop,bind_tc_ok]
-    change (do
-      let x ← FIo_Native.fast_pairing.EbyKDot.finish d{tag}_4
-      ok (.done (.Ok x)))=_
+    simp only [Aeneas.Std.uncurry]
     rw [finish{tag},bind_tc_ok]
 #print axioms source{tag}
 end AspisR1.JGq_High

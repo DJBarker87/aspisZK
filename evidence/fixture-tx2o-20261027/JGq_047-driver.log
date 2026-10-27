@@ -1,0 +1,58 @@
+{"attempt": "JGq_TX2_047", "exit_status": 1, "wall_seconds": 4.693118388007861, "peak_rss_kib": "5932348", "swaps": "0", "print_axioms": ["'AspisR1.JGq_Partial.push0_0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_Partial.push0_1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_Partial.push0_2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGq_Partial.push0_3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGq_PartialPush0_0.lean:11:21: error: Tactic `rfl` failed: The left-hand side
+  if d0_0.count ≥ FIo_Native.fast_pairing.MAX_TERMS then ok (core.result.Result.Err (), d0_0)
+  else do
+    let a ← FIo_Native.fast_pairing.canonical.Q.from_wide (FIo_Install.toE JGo_TX2_Message00.value00)
+    let value_c0 ← a.index_usize 0#usize
+    let value_c1 ← a.index_usize 1#usize
+    let r ← FIo_Native.fast_pairing.checked_q JGq_Common.c0
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let d ←
+          do
+            let raw1 ← value_c0.raw val
+            ok (JGq_DotLoop.a d0_0.c0 raw1 4)
+        let d1 ←
+     
+...
+            ok (JGq_DotLoop.a d0_3.c1 raw1 4)
+        let i ← lift (d0_3.count.wrapping_add 1#usize)
+        ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame Unit) residual
+        ok (r1, d0_3)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok (), d0_4)
+
+⊢ (if d0_3.count ≥ FIo_Native.fast_pairing.MAX_TERMS then ok (core.result.Result.Err (), d0_3)
+    else do
+      let a ← FIo_Native.fast_pairing.canonical.Q.from_wide (FIo_Install.toE JGo_TX2_Message00.value03)
+      let value_c0 ← a.index_usize 0#usize
+      let value_c1 ← a.index_usize 1#usize
+      let r ← FIo_Native.fast_pairing.checked_q JGq_Common.c3
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let d ←
+            do
+              let raw1 ← value_c0.raw val
+              ok (JGq_DotLoop.a d0_3.c0 raw1 4)
+          let d1 ←
+            do
+              let raw1 ← value_c1.raw val
+              ok (JGq_DotLoop.a d0_3.c1 raw1 4)
+          let i ← lift (d0_3.count.wrapping_add 1#usize)
+          ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame Unit) residual
+          ok (r1, d0_3)) =
+    ok (core.result.Result.Ok (), d0_4)
+'AspisR1.JGq_Partial.push0_3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc0abb10502c04ce987b15ecba0479866.scope; invocation ID: babc52708a854cbab0e57485a1390d5f
+

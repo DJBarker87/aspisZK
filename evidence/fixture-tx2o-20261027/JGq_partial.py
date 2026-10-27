@@ -51,8 +51,10 @@ attribute [local irreducible] JFw_Frames.window
    i=16*s+j;owner=f'JGo_TX2_Message{(i//8)*8:02}';v=f'FIo_Install.toE {owner}.value{i:02}'
    t+=f'''theorem push{s}_{j} : FIo_Native.fast_pairing.EbyKDot.push d{s}_{j}
     ({v}) JGq_Common.c{j}=ok (.Ok (),d{s}_{j+1}) := by
+  have inc : Usize.wrapping_add d{s}_{j}.count 1#usize={j+1}#usize :=
+    UScalar.eq_of_val_eq (Port3_Wrapping.wrap_add_value d{s}_{j}.count 1#usize (by decide))
   simp only [FIo_Native.fast_pairing.EbyKDot.push,
-    FIo_Native.fast_pairing.canonical.Dot.push,JGq_DotLoop.source]
+    FIo_Native.fast_pairing.canonical.Dot.push,JGq_DotLoop.source,inc]
   with_unfolding_all rfl
 #print axioms push{s}_{j}
 '''

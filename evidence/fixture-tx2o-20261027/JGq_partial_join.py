@@ -46,13 +46,13 @@ theorem source{s} : FIo_Native.weights.partial_dot f JGq_Common.a16 {s}#usize=ok
     interval_cases i
 '''
  for j in range(16):t+=f'    · exact step{s}_{j}\n'
- t+=f'''  · unfold FIo_Native.weights.partial_dot_loop.body
+ t+=f'''  · change FIo_Native.weights.partial_dot_loop.body f JGq_Common.a16 {s}#usize
+        {{start:=16#usize,«end»:=16#usize}} d{s}_16=ok (.done (.Ok value{s}))
+    unfold FIo_Native.weights.partial_dot_loop.body
     have stop : core.iter.range.IteratorRange.next core.iter.range.StepUsize
         ({{start:=16#usize,«end»:=16#usize}} : core.ops.range.Range Usize)=ok (none,{{start:=16#usize,«end»:=16#usize}}) := by with_unfolding_all rfl
     rw [stop,bind_tc_ok]
-    change (do
-      let x ← FIo_Native.fast_pairing.EbyKDot.finish d{s}_16
-      ok (.done (.Ok x)))=_
+    simp only [Aeneas.Std.uncurry]
     rw [finish{s},bind_tc_ok]
 #print axioms source{s}
 end AspisR1.JGq_Partial

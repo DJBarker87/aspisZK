@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 R=Path(__file__).resolve().parents[2]
-s='\n'.join(f'import JGq_LowStep{i:02}' for i in range(16))+'''
+s='\n'.join(f'import JGq_LowGroup{i}' for i in range(4))+'''
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JGq_Low

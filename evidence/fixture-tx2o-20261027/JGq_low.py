@@ -65,6 +65,10 @@ theorem step{i} : FIo_Native.weights.Weights.pair_loop7.body JGq_Powers0.a4 JGq_
 end AspisR1.JGq_Low
 end
 ''';out[f'JGq_LowStep{i:02}']=t
+for b in range(4):
+ text='import JGq_LowData\n'+''.join(out[f'JGq_LowStep{i:02}'].split('import JGq_LowData\n',1)[1] for i in range(4*b,4*b+4))
+ out[f'JGq_LowGroup{b}']=text
+for i in range(16):del out[f'JGq_LowStep{i:02}']
 for mod,t in out.items():
  p=R/'lean'/(mod+'.lean')
  if '--check' in sys.argv:assert p.read_text()==t
