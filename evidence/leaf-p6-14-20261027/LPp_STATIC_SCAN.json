@@ -1,0 +1,161 @@
+{
+  "scope": "selected source helper bodies; lexical pattern scan plus manual inspection of exact bodies. No translator-wide correctness claim.",
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "all_selected_bodies_clear": true,
+  "bodies": [
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "line": 47,
+      "name": "square_n",
+      "body_sha256": "8207614dc3c1844c20aacb32bef100e48c528d3971f0bcbfb53e3db0904f9348",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn square_n(mut value: M31, count: usize) -> M31 {\n    for _ in 0..count {\n        value = value.mul(value);\n    }\n    value\n}"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "line": 213,
+      "name": "inv",
+      "body_sha256": "30b3245272146ef8ef8c2685c6f50f984ef7cf7cf6f666513b76f9139587bec8",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn inv(self) -> M31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FInv);\n        assert!(self.0 != 0, \"inverse of zero\");\n\n        // Build x^(2^k - 1) at k = 2, 4, 8, 16, 24, 28, 29.\n        // The final exponent is 4*(2^29 - 1) + 1 = 2^31 - 3 = P - 2.\n        // This takes 38 M31 multiplications instead of the generic binary\n        // exponentiation's 61 for this fixed exponent.\n        let t2 = self.mul(self).mul(self);\n        let t4 = square_n(t2, 2).mul(t2);\n        let t8 = square_n(t4, 4).mul(t4);\n        let t16 = square_n(t8, 8).mul(t8);\n        let t24 = square_n(t16, 8).mul(t8);\n        let t28 = square_n(t24, 4).mul(t4);\n        let t29 = t28.mul(t28).mul(self);\n        let t30 = t29.mul(t29);\n        t30.mul(t30).mul(self)\n    }"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "line": 390,
+      "name": "inv",
+      "body_sha256": "a28a6ee6b435fe813c65308d0e51fbbe4c1d01a45201080707b35680dceb1580",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn inv(self) -> CM31 {\n        self.inv_with(M31::inv)\n    }"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "line": 396,
+      "name": "inv_with",
+      "body_sha256": "11549b0973bb2b9b8423ff99a7a0a5755b56adb9187df5cd6f9d2de81dec5d92",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn inv_with(self, inverse: fn(M31) -> M31) -> CM31 {\n        let norm = self.a.mul(self.a).add(self.b.mul(self.b));\n        let inv_norm = inverse(norm);\n        CM31 {\n            a: self.a.mul(inv_norm),\n            b: self.b.neg().mul(inv_norm),\n        }\n    }"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "line": 1004,
+      "name": "try_inv",
+      "body_sha256": "d1dd63f4844b62b0b9260bb6cba3bad5ac12c5e39874b2e174f7f9773bd344c1",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn try_inv(self) -> Option<QM31> {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KInv);\n        if self.is_zero() {\n            return None;\n        }\n        let norm = self.c0.square().sub(mul_by_r(self.c1.square()));\n        let inverse_norm = norm.inv();\n        Some(QM31 {\n            c0: self.c0.mul(inverse_norm),\n            c1: self.c1.neg().mul(inverse_norm),\n        })\n    }"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "line": 1018,
+      "name": "inv",
+      "body_sha256": "b30da8672b7ffdcb9b9604f5e32f94bb84b7b85deba7b8e6595b3d44cea41ea3",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn inv(self) -> QM31 {\n        self.try_inv().expect(\"cannot invert zero in QM31\")\n    }"
+    },
+    {
+      "path": "crates/aspis-core/src/circle.rs",
+      "line": 34,
+      "name": "secure_circle_point_from_parameter",
+      "body_sha256": "727429b0cbfb6fb286963e00fff85ba82d855b73ead586fbf3883aeefa2c3d6e",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn secure_circle_point_from_parameter(\n    parameter: QM31,\n) -> Result<SecureCirclePoint, CirclePointError> {\n    let square = parameter.square();\n    let inverse_denominator = QM31::ONE\n        .add(square)\n        .try_inv()\n        .ok_or(CirclePointError::SingularParameter)?;\n    Ok(SecureCirclePoint {\n        x: QM31::ONE.sub(square).mul(inverse_denominator),\n        y: parameter.add(parameter).mul(inverse_denominator),\n    })\n}"
+    },
+    {
+      "path": "crates/aspis-core/src/circle.rs",
+      "line": 55,
+      "name": "secure_ood_circle_point_from_parameter",
+      "body_sha256": "688ce0298506802bad03b70e36dbde49dfa68ed487389dcf185b94742fa5ffd5",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn secure_ood_circle_point_from_parameter(\n    parameter: QM31,\n) -> Result<SecureCirclePoint, CirclePointError> {\n    // Check the singularity first so `t = \u00b1i` has the precise algebraic error\n    // even though those two roots also lie in CM31.\n    let point = secure_circle_point_from_parameter(parameter)?;\n    if parameter.c1 == CM31::ZERO {\n        return Err(CirclePointError::ParameterInCm31Subfield);\n    }\n    Ok(point)\n}"
+    },
+    {
+      "path": "crates/aspis-core/src/transcript.rs",
+      "line": 286,
+      "name": "circle_fallback_point",
+      "body_sha256": "317e3f44463fcc04074801d50e44814af73b0a0ce4c3d16507ed3f2e80fd7bab",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn circle_fallback_point(sample: usize) -> SecureCirclePoint {\n    let parameter = CIRCLE_FALLBACK_PARAMETERS[sample % 2];\n    match secure_ood_circle_point_from_parameter(parameter) {\n        Ok(point) => point,\n        // Unreachable: `c1 = 1 \u2260 0` for both parameters.\n        Err(_) => SecureCirclePoint {\n            x: QM31::ONE,\n            y: QM31::ZERO,\n        },\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-core/src/transcript.rs",
+      "line": 508,
+      "name": "challenge_reference_circle_point",
+      "body_sha256": "96a4968108523bea3debe8b58777abc8a1aa179b37c8412b961b78d7b785f899",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn challenge_reference_circle_point(\n        &mut self,\n        sample: usize,\n    ) -> Result<SecureCirclePoint, ChallengeSampleExhausted> {\n        let parameter = self.challenge_qm31()?;\n        Ok(secure_ood_circle_point_from_parameter(parameter)\n            .unwrap_or_else(|_| circle_fallback_point(sample)))\n    }"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
+      "line": 121,
+      "name": "circle_sample",
+      "body_sha256": "10a9702c4631305e5daa94d7b879abfdc75ffac81d9dcb6125b3eb992ad01bd7",
+      "dropped_restoration_risk_patterns": {
+        "iter_mut": false,
+        "get_mut": false,
+        "index_mut": false,
+        "from_fn": false,
+        "\\.iter\\(": false
+      },
+      "body": "fn circle_sample(block: &[u8; 32], row: CircleRow) -> SecureCirclePoint {\n    secure_ood_circle_point_from_parameter(qm31_sample(block)).unwrap_or_else(|_| {\n        aspis_core::transcript::circle_fallback_point(match row {\n            CircleRow::First => 0,\n            CircleRow::Second => 1,\n        })\n    })\n}"
+    }
+  ]
+}

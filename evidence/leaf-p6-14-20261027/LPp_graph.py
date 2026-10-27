@@ -1,9 +1,17 @@
 from pathlib import Path
-import subprocess,json,tomllib,hashlib
+import subprocess,json,tomllib,hashlib,time
 E=Path(__file__).resolve().parent
 H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-leaf-p6-14-20261027'
 def check(a):
- r=subprocess.run(['ssh',H,f'cd {B}/LPp_src && CARGO_NET_OFFLINE=true /home/dombarker/.cargo/bin/cargo metadata --locked --offline --format-version 1'],capture_output=True,text=True)
+ for retry in range(11):
+  try:
+   r=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,f'cd {B}/LPp_src && CARGO_NET_OFFLINE=true /home/dombarker/.cargo/bin/cargo metadata --locked --offline --format-version 1'],capture_output=True,text=True,timeout=60)
+  except subprocess.TimeoutExpired:
+   r=subprocess.CompletedProcess([],255,'','Own metadata transport timeout60; no compiler submission')
+  with (E/'LPp_TRANSPORT.jsonl').open('a') as log:log.write(json.dumps({'step':'metadata','attempt':a,'retry':retry,'exit':r.returncode,'stderr':r.stderr})+'\n')
+  if r.returncode!=255:break
+  if retry==10:raise SystemExit('STOP persistent graph transport')
+  print('metadata transport wait60',retry,flush=True);time.sleep(60)
  (E/(a+'-graph.stderr')).write_text(r.stderr)
  assert r.returncode==0,r.stderr
  m=json.loads(r.stdout);lock=tomllib.loads(subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:Cargo.lock'],text=True));key=lambda p:(p['name'],p['version'],p.get('source'))
