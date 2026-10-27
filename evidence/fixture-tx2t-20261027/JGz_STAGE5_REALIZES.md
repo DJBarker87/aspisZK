@@ -1,0 +1,11 @@
+# Stage 5: complete exact mathematical SHA realization
+
+`JGz_Realizes.source : JFn_HashBoundary.Realizes JFp_SHADigest.digest` is UNCONDITIONAL. It closes all three exact reader equations on the retained real bytes, with no oracle parameter or supplied digest observation. ProofDigest.native/source are defined in the same JGz_Realizes module, which imports the checked PublicDigest and ChecksumDigest roots. Downstream should import JGz_Realizes.
+
+901 proof blocks plus30 public plus28 checksum blocks are individually checked. All15 proof-native byte glues, the proof padding/length facts and57-group SHA join pass. Raw proof57607, physical public1880 and checkpoint prefix1736 plus22-byte domain stay distinct. The result is for the SAME JFp mathematical SHA world used by the inherited TX2 computations, not an arbitrary lookup oracle, successful native stub or native/syscall/ELF refinement.
+
+087 and092 rejected a membership split in the final join;092 also rejected a duplicated local reducibility annotation.090 used explicit append elimination but exposed Lean's left-associative append nesting.091 normalizes only that append structure, uses explicit membership eliminators and sets each local opacity once; it PASSES. No unsafe reducibility override or new heartbeat/depth option was used. These rejected modules receive zero proof credit; all outputs/source snapshots are retained.
+
+095 combines the final proof digest equation, the Realizes conjunction and grouped root axiom audit. PASS:exit0,wall3.3437836930388585s,peakRSS6042836KiB,swap0. Its six complete axiom lines contain only propext,Classical.choice,Quot.sound. Source revision and exact hashes/fingerprints/command/cgroup are in095/receipt.json. The optional parameterized verifier application and standalone audit prototypes remain archived uncompiled; no claim is made that those files were checked.
+
+The inherited JGx_AdoptedStage.source and JGx_StdTX2.accepted2 statements are unchanged. Their named Realizes condition is now inhabited by this closed fact. Actual ASQ8 validation and source emit_result success on one real SDK execution are still NOT constructed. The retained account-owner obstruction remains. No JGz_TX2.accepted2 or joint pair is delivered, and actual-top premise removal remains ZERO.

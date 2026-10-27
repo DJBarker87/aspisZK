@@ -36,6 +36,13 @@ theorem source : JFn_HashBoundary.Realizes JFp_SHADigest.digest :=
 #print axioms source
 end AspisR1.JGz_Realizes
 '''
+# Keep the final proof digest and Realizes conjunction in one small root group.
+proofpath=R/'lean/JGz_ProofDigest.lean'
+proof=files.pop(proofpath)
+proof='import JGz_PublicDigest\nimport JGz_ChecksumDigest\n'+proof
+thin=files[R/'lean/JGz_Realizes.lean']
+thin='\n'.join(line for line in thin.splitlines() if not line.startswith('import '))+'\n'
+files[R/'lean/JGz_Realizes.lean']=proof+'\n'+thin+'\n#print axioms AspisR1.JGz_PublicDigest.source\n#print axioms AspisR1.JGz_ChecksumDigest.source\n#print axioms AspisR1.JGz_ProofDigest.source\n#print AspisR1.JGz_Realizes.source\n'
 for p,s in files.items():
  if '--check' in sys.argv:assert p.read_text()==s,p
  else:p.write_text(s)
