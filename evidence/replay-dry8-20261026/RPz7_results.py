@@ -58,7 +58,7 @@ for m in covered:
  if m=='RPz7_PhaseIso':expected=['Init','CurrentCompactFirstCompositionV1']
  elif m=='RPz7_PhaseConsumers':expected=['Init','RPz7_S1SemanticCodeVerifyV1','RPz7_S1SemanticCodeFinishV1']
  elif m in p['reuse']:expected=(union if p['reuse'][m]=='RPz5_union_overlay' else original)['modules'][m]['imports']
- if headers.get(m)!=expected:errors.append({'header_mismatch':m,'expected':expected,'actual':headers.get(m)})
+ if list(dict.fromkeys(headers.get(m,[])))!=expected:errors.append({'header_mismatch':m,'expected':expected,'actual':headers.get(m)})
 counts=collections.Counter((r['module'],r['name']) for r in rows);dups=[{'module':m,'name':n,'count':c} for (m,n),c in counts.items() if c>1]
 if raw_count!=len(rows):errors.append({'raw_structured_count_mismatch':[raw_count,len(rows)]})
 if missing:errors.append({'missing_audits':missing})

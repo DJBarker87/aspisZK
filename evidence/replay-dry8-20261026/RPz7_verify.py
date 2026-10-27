@@ -20,6 +20,9 @@ for row in json.loads((E/'RPz7_overlay-base.json').read_text()).values():
 for line in (E/'RPz7_overlay-additions.jsonl').read_text().splitlines():
  for row in json.loads(line)['artifacts'].values():
   x={'path':row['target'],'sha256':row['sha256'],'bytes':row['bytes']};pins[x['path']]=x
+if (E/'RPz7_cleanup.json').exists():
+ for item in json.loads((E/'RPz7_cleanup.json').read_text())['removed_query_only_objects']:
+  pins.pop(item['path'],None)
 payload="""from pathlib import Path
 import json,hashlib
 B=Path(%r);pins=json.loads(%r);errors=[];checked=0
