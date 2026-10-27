@@ -89,3 +89,14 @@ next recount.
   extraction-repro5 (XRe_) is running it.
 - Route A (translator fix and re-pin) remains the fallback and needs the
   owner's approval; it is not recommended while C' is open.
+
+## Update 2026-10-27 (XRe_/XRf_): seventh untranslatable body; convergence protocol
+
+- The six-leaf kit was not call-closed (a library call, Iterator::copied,
+  had been excluded); XRf_ fixed that (1,545 call sites, no missing
+  callees). The pinned Aeneas then failed on a SEVENTH release body,
+  r1_semantic::claims. Kani stages for the compact leaves pass (10/10).
+- Ruling: extraction-repro7 converges the leaf set in one job (12
+  invocations, add-leaf-and-retry). If the leaf count passes ten before
+  emission, the job also writes the route-A case (translator upgrade and
+  D188 re-pin) for the owner. Each leaf is a P6 obligation and a ledger row.
