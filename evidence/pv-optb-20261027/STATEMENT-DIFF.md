@@ -58,3 +58,14 @@ complete native/source agreement on OS-error worlds, hidden in RunJoin's
 outside-bad equality / V038 trace obligations. Stage 3 must replace that
 agreement by a proved public-failure-aware agreement, not retain an impossible
 old agreement while claiming closure. The capped trust list is unchanged.
+
+## Continuation outcome
+
+The B statement remains the separate fixed-public-signal theorem described
+above. The resumed investigation has not proved its signal is the endogenous
+failure signal of the extracted deployed caller on every admitted witness.
+The conditional `PV_OptB_DeployedSignal.conditional_independence` exposes the
+remaining body-step synchronization P premise; it does not discharge it.
+No original premise is removed. No T field, simulator change, observer
+restriction or enlarged numerical bound has been introduced. Stage 3 is
+unfulfilled, and the privacy target is not yet established.

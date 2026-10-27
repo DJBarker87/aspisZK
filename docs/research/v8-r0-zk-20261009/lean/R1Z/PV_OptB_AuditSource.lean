@@ -1,0 +1,37 @@
+import R1Z.PV_OptB_FullCallerDifference
+import R1Z.PV_OptB_ReservationBackend
+import R1Z.PV_OptB_ReservationFailure
+import R1Z.PV_OptB_ReservationObservation
+import R1Z.PV_OptB_SourceConditionalDifference
+import R1Z.PV_OptB_SourceEntropyStep
+import R1Z.PV_OptB_SourceEntry
+import R1Z.PV_OptB_SourceErrorSignal
+import R1Z.PV_OptB_SourceFirstFailure
+import R1Z.PV_OptB_SourcePoleBoundary
+import R1Z.PV_OptB_SourcePoleClosure
+import R1Z.PV_OptB_SourceRetryStep
+import R1Z.PV_OptB_SourceSecondFailure
+import R1Z.PV_OptB_SourceSemanticMap
+import R1Z.PV_OptB_SourceStopStep
+import R1Z.PV_OptB_SourceSuccessStep
+set_option autoImplicit false
+
+#print axioms R1Z.PV_OptB_FullCallerDifference.conditional
+#print axioms R1Z.PV_OptB_ReservationBackend.failed
+#print axioms R1Z.PV_OptB_ReservationBackend.diverged
+#print axioms R1Z.PV_OptB_ReservationFailure.prefix_error
+#print axioms R1Z.PV_OptB_ReservationObservation.prefix_observation
+#print axioms R1Z.PV_OptB_SourceConditionalDifference.semantic_vs_second_entropy
+#print axioms R1Z.PV_OptB_SourceEntropyStep.callback_error
+#print axioms R1Z.PV_OptB_SourceEntry.entry
+#print axioms R1Z.PV_OptB_SourceErrorSignal.success_vs_second_entropy
+#print axioms R1Z.PV_OptB_SourceFirstFailure.first_callback_error
+#print axioms R1Z.PV_OptB_SourceFirstFailure.first_callback_observation
+#print axioms R1Z.PV_OptB_SourcePoleBoundary.scanned
+#print axioms R1Z.PV_OptB_SourcePoleClosure.pole_error
+#print axioms R1Z.PV_OptB_SourceRetryStep.rejected
+#print axioms R1Z.PV_OptB_SourceSecondFailure.second_callback_error
+#print axioms R1Z.PV_OptB_SourceSemanticMap.rejected_of_active_pole
+#print axioms R1Z.PV_OptB_SourceSemanticMap.semantic_of_other
+#print axioms R1Z.PV_OptB_SourceStopStep.stopped
+#print axioms R1Z.PV_OptB_SourceSuccessStep.succeeded

@@ -1,0 +1,29 @@
+import R1Z.PV_OptB_ControlObservation
+import R1Z.PV_OptB_ControlRelation
+import R1Z.PV_OptB_DeployedSignal
+import R1Z.PV_OptB_Endpoint
+import R1Z.PV_OptB_Factorization
+import R1Z.PV_OptB_FirstWorldSignal
+import R1Z.PV_OptB_OsDeterminism
+import R1Z.PV_OptB_RunJoinControl
+import R1Z.PV_OptB_RunJoinSignal
+import R1Z.PV_OptB_RuntimeFirstDraw
+set_option autoImplicit false
+
+#print axioms R1Z.PV_OptB_ControlObservation.observation_equal
+#print axioms R1Z.PV_OptB_ControlRelation.run_related
+#print axioms R1Z.PV_OptB_DeployedSignal.conditional_independence
+#print axioms R1Z.PV_OptB_Endpoint.privacy_headline_deployed_B
+#print axioms R1Z.PV_OptB_Factorization.independent_of_public_decoder
+#print axioms R1Z.PV_OptB_Factorization.public_decoder_of_independent
+#print axioms R1Z.PV_OptB_Factorization.no_public_decoder_of_difference
+#print axioms R1Z.PV_OptB_FirstWorldSignal.independent_on_first_failures
+#print axioms R1Z.PV_OptB_OsDeterminism.file_unique
+#print axioms R1Z.PV_OptB_OsDeterminism.entropy_unique
+#print axioms R1Z.PV_OptB_RunJoinControl.client_related
+#print axioms R1Z.PV_OptB_RunJoinSignal.independent
+#print axioms R1Z.PV_OptB_RuntimeFirstDraw.execute_failure
+
+#print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+#print R1Z.PV_OptB_DeployedSignal.conditional_independence
+#print R1Z.PV_OptB_Endpoint.privacy_headline_deployed_B

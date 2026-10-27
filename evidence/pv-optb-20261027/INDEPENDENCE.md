@@ -81,3 +81,39 @@ The actual emitted retry and entropy steps also check (41837, 41839, 41853,
 41854): Rejected recurses; a callback error stops at the entered position;
 a non-Rejected body error exits before the next callback. Body outcomes are
 explicit hypotheses, not facts asserted about admitted witnesses.
+
+## Final-stage status and explicit boundaries
+
+`PV_OptB_ChallengeDifference.different` gives admitted, same-public builders
+and a common, well-typed challenge with opposite `VR1` verdicts. It does NOT
+assert `P_R1` on that challenge or realize its oracle execution in the frozen
+native caller. The generic decoder obstruction and that admitted pair must
+not be promoted to a reached-failure counterexample. Specialized direct
+no-decoder statement elaborations hit the default heartbeat limit; the final
+file keeps the generic obstruction, with no raised limit.
+
+`PV_OptB_FullCallerDifference.conditional` is for the literal extracted
+`RealR1_client.prove_for_proof_accounts`, not a substituted retry body. Its
+actual body outcomes remain hypotheses. `PV_OptB_DeployedSignal` proves a
+sufficient synchronization rule for the actual effect-interpreted
+`PV_RunJoin_Deployed.execute`. The per-step relation is still a P obligation;
+no instance is installed. It retains exact terminal errors and an arbitrary
+full public-state observation. It changes no endpoint observer or simulator.
+
+Attempt 41893 found the historical `PV_RunJoin_OsFailure` object missing;
+its source is also absent from the rebuilt shared source tree. No shared
+module was overwritten. The first-draw statement/proof was restated in the
+assigned `PV_OptB_RuntimeFirstDraw` module, consuming the existing read-only
+FaultAudit and Deployed definitions. Source SHA and derivation are in that
+module. It checks in 41894 with standard axioms.
+
+D215 witness-independence for ALL reached getrandom/filesystem failures is
+still OPEN. There is no checked admitted-source counterexample satisfying the
+requested stop condition. Therefore option A is not concluded, the conditional
+B adoption is not certified, and stage 3 has not been claimed.
+
+Premises before/after: the original `RustRealRefinement` is retained; original
+endpoint premises removed = 0. The preparatory `OsAvailable` binder was never
+a binder of the original headline. The full native/source outside-bad trace
+agreement, including OS-error worlds, remains open. T remains exactly
+`entropy_law`, `entropy_kernel`, `observation`; no trust item is added.
