@@ -46,3 +46,13 @@ checks. `analyze.py DIRECTORY` performs the preregistered offline analysis.
 The future **lead-only** command is in `V374-PLAN-v2.md`. Neither this package
 nor any preparation command creates, modifies or deletes `QUIET_WINDOW.json`.
 DOITM stays OFF (V371). No timing result establishes constant time or privacy.
+
+The separate `src/bin/diagnostic.rs` binary implements the D295 artifact
+controls: **diagnostic, not a V374 measurement**. It refuses an existing quiet
+marker, pregenerates all inputs, copies every class through a common fresh
+buffer and interleaves six balanced pairs in one run. Build it with
+`cargo build --release --offline --locked -j 4 --bin diagnostic` under the
+normal admitted caps. `diagnose.py build|controls|analysis|trace` launches
+sequential task-local scopes and requires both exit 0 and `allowed:true` from
+admission. It never requests or writes a quiet marker. This does not change
+the original `--measure` preregistration. See `dudect/DIAGNOSIS.md` in the evidence.
