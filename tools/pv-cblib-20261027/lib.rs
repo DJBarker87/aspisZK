@@ -375,3 +375,11 @@ pub fn pop_retained_reference<T>(mut v:Vec<T>)->(Option<T>,Vec<T>) {
     let out=if n==0 {None} else {Some(v.remove(n-1))};
     (out,v)
 }
+
+// Separate default route to the empty String value.
+pub fn string_default_reference(_n:usize)->String {String::default()}
+
+// Owned byte representation reference for the pure empty String observation.
+pub fn string_capacity_bytes_reference(_n:usize)->Vec<u8> {Vec::new()}
+// Borrowed Vec update avoids owned-input unwind destruction.
+pub fn push_bytes_reference(s:&mut Vec<u8>,t:&[u8]) {s.extend_from_slice(t)}

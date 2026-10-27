@@ -1,6 +1,6 @@
 # Library row table
 
-Candidate source callback laws supplied: **0 → 5** (V177/V179/V180/V185/V186), through `PV_CBL_CallbackBundle`. Native P6 bounds and the distinct extraction/Kani toolchains remain explicit. The canonical recount and endpoint are not edited here; RunJoin/deployment integration remains open. Target not yet established.
+Candidate source callback laws supplied: **5 → 6** (V177/V179/V180/V185/V186), through `PV_CBL_CallbackBundle`. Native P6 bounds and the distinct extraction/Kani toolchains remain explicit. The canonical recount and endpoint are not edited here; RunJoin/deployment integration remains open. Target not yet established.
 
 | op | row | route | status | theorem | crate/version; source hash | receipt |
 |---|---|---|---|---|---|---|
@@ -16,7 +16,7 @@ Candidate source callback laws supplied: **0 → 5** (V177/V179/V180/V185/V186),
 | 26 | V178 | P6 | OPEN; split no-stub P6 passes lengths 0–1; reference Drop frontier retained | — | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | resume-join-one-byte-01; aeneas-source-join-mut-opt-resume-01 |
 | 28 | V179 | P6 | SOURCE LAW SUPPLIED; P6 valid UTF-8 length 2, arbitrary byte index | R1Z.PV_CBL_CallbackBundle.op28_source | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | 43000/43001/43004/43005; resume-string-path-01; route P6 |
 | 29 | V180 | P6 | SOURCE LAW SUPPLIED; P6 bounded native check | R1Z.PV_CBL_CallbackBundle.op29_source | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | 39647/39648/39650; kani-pathbuf-borrows-r01 |
-| 30 | V181 | P6 | OPEN; split capacity gate passes n≤4; direct extraction Z.Overflow, reference String.new external remains | — | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | resume-string-capacity-01; aeneas-source-op30-opt-resume-01; charon-source-op30-ref-new-opt-resume-01 (invalid LLBC) |
+| 30 | V181 | P6 | SOURCE LAW SUPPLIED; empty-byte carrier adapter; native n≤4; allocation/deployed association retained | R1Z.PV_CBL_CapacitySource.op30_source | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | 41592/41594/41596; resume8-capacity-r01; op30-bytes-opt-resume8; earlier direct extraction rejected |
 | 31 | V182 | P6 | OPEN; split native append gate passes; exact extraction needs loan validation | — | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | resume-string-push-r01; aeneas-source-op31-opt-resume31-01 |
 | 32 | V183 | native-effect deferral | DEFER(pv-runjoin): recoverable native allocation effects | NATIVE-EFFECTS.md | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | — |
 | 33 | V184 | P6 | OPEN; retained-owned reference still structured Drop; error empty/singleton native check passes | — | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | resume-pop-errors-r01; resume-pop-single-r01 (timeout); aeneas-source-op33-retain-opt-resume-pop-retain-01 |
@@ -27,3 +27,12 @@ Candidate source callback laws supplied: **0 → 5** (V177/V179/V180/V185/V186),
 Std/alloc source corpus: rustc **1.98.0-nightly (14210df0e, 2026-05-31)**, toolchain nightly-2026-06-01. Kani gates use their separately pinned rustc **1.93.0-nightly (53732d5e0)**; no deployed std/ELF association is inferred. Cargo library rows use the versions in the file column. Full source SHA-256 values above are retained.
 
 Resume 2026-10-27: supplied rows **4 → 5**, adding V179/op28 through `StringTypes`/`selectedString`; `op28_source_all` and the four `opN_source_string` laws coexist. All prior publication names persist. The native op28 gate covers valid UTF-8 strings of length 2 and arbitrary byte index; no unbounded or deployed-toolchain association is inferred. Final audits: 43098, 43099, 43100; all standard axioms only. Full resume metrics: RESUME-RECEIPTS.json. SHA-BACKEND.md names the exact dispatched/foreign symbols and the fallback-only scope.
+
+Third pass: op30 uses an extracted safe empty-byte reference and a checked
+empty-only String representation adapter. Native P6 proves contents agree
+and capacity≥request for n≤4. This adds a bounded candidate value law, not
+allocation-effect, deployed-toolchain, endpoint, or side-channel closure.
+Op31 safe borrowed byte append extracted with no external template; its
+String representation transport is pending. Op33 borrowed extraction passes
+but calls missing `Vec.remove`; 41588 is rejected and gives no row credit.
+Op26 and op36 loan frontiers, and op32 allocator-effect deferral, remain.

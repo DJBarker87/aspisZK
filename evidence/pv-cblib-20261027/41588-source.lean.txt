@@ -1,0 +1,22 @@
+-- Exact generated body; Types is empty; audit external Global/remove below.
+import Aeneas
+open Aeneas Aeneas.Std Result
+namespace PV_CBL_PopBorrowReference
+/-- [pv_cblib_source::pop_reference]:
+    Source: 'lib.rs', lines 16:0-18:1
+    Visibility: public -/
+def pop_reference
+  {T : Type} (v : alloc.vec.Vec T) :
+  Result ((Option T) × (alloc.vec.Vec T))
+  := do
+  let i := alloc.vec.Vec.len v
+  if i = 0#usize
+  then ok (none, v)
+  else
+    let i1 := alloc.vec.Vec.len v
+    let i2 ← lift (Std.Usize.wrapping_sub i1 1#usize)
+    let (t, v1) ← alloc.vec.Vec.remove Global v i2
+    ok (some t, v1)
+
+#print axioms pop_reference
+end PV_CBL_PopBorrowReference

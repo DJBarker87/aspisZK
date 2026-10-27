@@ -163,3 +163,33 @@ mod join_split {
         assert_eq!(native.as_os_str().as_bytes().get(i),reference.get(i));
     }
 }
+
+#[cfg(kani)]
+mod resume8 {
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn capacity_bytes() {
+        let n:usize=kani::any();kani::assume(n<=4);
+        let native=String::with_capacity(n);
+        let reference=Vec::<u8>::new();
+        assert_eq!(native.as_bytes(),reference.as_slice());
+        assert!(native.capacity()>=n);
+    }
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn pop_u32() {
+        let n:usize=kani::any();kani::assume(n<=2);
+        let raw:[u32;2]=kani::any();
+        let mut v=raw[..n].to_vec();let mut r=raw[..n].to_vec();
+        let native=v.pop();
+        let reference=if r.len()==0 {None} else {Some(r.remove(r.len()-1))};
+        assert_eq!(native,reference);assert_eq!(v,r);
+    }
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn array_u32_two() {
+        let raw:[u32;2]=kani::any();let v=raw.to_vec();
+        let native:Result<[u32;2],Vec<u32>>=v.try_into();
+        assert_eq!(native,Ok(raw));
+    }
+}
