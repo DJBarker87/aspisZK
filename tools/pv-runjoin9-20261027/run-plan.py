@@ -12,7 +12,9 @@ for row in plan[start:start+count]:
  for retry in range(11):
   assert attempt<=37699
   charged=sum(json.loads(p.read_text()).get('exit') is not None for p in e.glob('receipt-*.json'))
-  assert charged<97,'Last three attempts reserved for focused audit'
+  audit=row['module'].startswith('R1Z.PV_RunJoin_TrustAudit9')
+  assert charged<(100 if audit else 97),'Last three attempts reserved for focused audit'
+  assert not audit or charged>=97,'Focused audits run only in the final three attempts'
   r=subprocess.run([sys.executable,str(root/'tools/pv-runjoin9-20261027/check.py'),str(attempt),row['module'].replace('.','/'),row['source']],capture_output=True,text=True)
   print('\n'.join(s for s in r.stdout.splitlines() if s.startswith(('LAUNCH','RECEIPT','RESERVATION'))),flush=True)
   used=attempt;attempt+=1
