@@ -94,27 +94,29 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairH
     links.push(link(PoolV1PairCopyRowLinkKindV1::InputSaltHead, 44, 428));
     links.push(link(PoolV1PairCopyRowLinkKindV1::InputSaltTail, 60, 428));
 
-    links = legacy_path_step(links, 0)?;
-    links = legacy_path_step(links, 1)?;
-    links = legacy_path_step(links, 2)?;
-    links = legacy_path_step(links, 3)?;
-    links = legacy_path_step(links, 4)?;
-    links = legacy_path_step(links, 5)?;
-    links = legacy_path_step(links, 6)?;
-    links = legacy_path_step(links, 7)?;
-    links = legacy_path_step(links, 8)?;
-    links = legacy_path_step(links, 9)?;
-    links = legacy_path_step(links, 10)?;
-    links = legacy_path_step(links, 11)?;
-    links = legacy_path_step(links, 12)?;
-    links = legacy_path_step(links, 13)?;
-    links = legacy_path_step(links, 14)?;
-    links = legacy_path_step(links, 15)?;
-    links = legacy_path_step(links, 16)?;
-    links = legacy_path_step(links, 17)?;
-    links = legacy_path_step(links, 18)?;
-    links = legacy_path_step(links, 19)?;
-    links = legacy_path_step(links, 20)?;
+    let mut level = 0usize;
+    while level < POOL_V1_PAIR_PRIVATE_DIRECTIONS {
+        let aux =
+            pool_v1_pair_path_base_row_v1(level).ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
+        let previous_output = (3 + level) * 16 + 11;
+        let target_block = 4 + level;
+        links.push(link(
+            PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { level: level as u8 },
+            previous_output,
+            aux,
+        ));
+        links.push(link(
+            PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { level: level as u8 },
+            aux + 1,
+            target_block * 16 + 12,
+        ));
+        links.push(link(
+            PoolV1PairCopyRowLinkKindV1::PrivatePathRight { level: level as u8 },
+            aux + 1,
+            target_block * 16,
+        ));
+        level += 1;
+    }
 
     links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 0 }, 44, 960));
     links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 1 }, 460, 962));
@@ -179,27 +181,22 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairH
         33 * 16,
     ));
 
-    links = legacy_append_step(links, 0)?;
-    links = legacy_append_step(links, 1)?;
-    links = legacy_append_step(links, 2)?;
-    links = legacy_append_step(links, 3)?;
-    links = legacy_append_step(links, 4)?;
-    links = legacy_append_step(links, 5)?;
-    links = legacy_append_step(links, 6)?;
-    links = legacy_append_step(links, 7)?;
-    links = legacy_append_step(links, 8)?;
-    links = legacy_append_step(links, 9)?;
-    links = legacy_append_step(links, 10)?;
-    links = legacy_append_step(links, 11)?;
-    links = legacy_append_step(links, 12)?;
-    links = legacy_append_step(links, 13)?;
-    links = legacy_append_step(links, 14)?;
-    links = legacy_append_step(links, 15)?;
-    links = legacy_append_step(links, 16)?;
-    links = legacy_append_step(links, 17)?;
-    links = legacy_append_step(links, 18)?;
-    links = legacy_append_step(links, 19)?;
-    links = legacy_append_step(links, 20)?;
+    let mut level = 0usize;
+    while level < 20usize {
+        let previous_output = (33 + level) * 16 + 11;
+        let target_block = 34 + level;
+        links.push(link(
+            PoolV1PairCopyRowLinkKindV1::AppendCurrentLeft { level: level as u8 },
+            previous_output,
+            target_block * 16 + 12,
+        ));
+        links.push(link(
+            PoolV1PairCopyRowLinkKindV1::AppendCurrentRight { level: level as u8 },
+            previous_output,
+            target_block * 16,
+        ));
+        level += 1;
+    }
 
     if links.len() != POOL_V1_PAIR_COPY_ROW_LINKS_V1 {
         return Err(PoolV1PairHidingLayoutErrorV1::Shape);
@@ -1034,47 +1031,6 @@ fn append_forest_level(mut links: Schedule, level: usize) -> Result<Schedule, Po
         PoolV1PairCopyRowLinkKindV1::PrivatePathRight { level: level as u8 },
         auxiliary + 1,
         target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS,
-    ));
-    Ok(links)
-}
-
-#[inline(always)]
-fn legacy_path_step(mut links: Schedule, level: usize) -> Result<Schedule, PoolV1PairHidingLayoutErrorV1> {
-    let aux =
-        pool_v1_pair_path_base_row_v1(level).ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
-    let previous_output = (3 + level) * 16 + 11;
-    let target_block = 4 + level;
-    links.push(link(
-        PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { level: level as u8 },
-        previous_output,
-        aux,
-    ));
-    links.push(link(
-        PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { level: level as u8 },
-        aux + 1,
-        target_block * 16 + 12,
-    ));
-    links.push(link(
-        PoolV1PairCopyRowLinkKindV1::PrivatePathRight { level: level as u8 },
-        aux + 1,
-        target_block * 16,
-    ));
-    Ok(links)
-}
-
-#[inline(always)]
-fn legacy_append_step(mut links: Schedule, level: usize) -> Result<Schedule, PoolV1PairHidingLayoutErrorV1> {
-    let previous_output = (33 + level) * 16 + 11;
-    let target_block = 34 + level;
-    links.push(link(
-        PoolV1PairCopyRowLinkKindV1::AppendCurrentLeft { level: level as u8 },
-        previous_output,
-        target_block * 16 + 12,
-    ));
-    links.push(link(
-        PoolV1PairCopyRowLinkKindV1::AppendCurrentRight { level: level as u8 },
-        previous_output,
-        target_block * 16,
     ));
     Ok(links)
 }
