@@ -1,0 +1,38 @@
+{
+  "source_and_structured_evidence_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "2683d6e78d",
+      "HEAD",
+      "--",
+      "*.lean",
+      "*.py",
+      "*.json",
+      "*.md",
+      "*.txt",
+      "*.jsonl"
+    ],
+    "cwd": "evidence/replay-tops1-20261027",
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "full_staged_diff_check": {
+    "exit": 2,
+    "findings": [
+      {
+        "path": "RPt_211-launcher.log",
+        "line": 13,
+        "finding": "trailing whitespace on captured whitespace-only line"
+      },
+      {
+        "path": "RPt_toolchain-pin-console.log",
+        "line": 2,
+        "finding": "new blank line at EOF"
+      }
+    ]
+  },
+  "decision": "Retain original captured log bytes; no proof/source whitespace finding. Receipt/source/object hash checks remain green."
+}
