@@ -1,0 +1,82 @@
+{
+  "sources": [
+    "LPf_src/Cargo.lock",
+    "LPf_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "LPf_src/crates/aspis-core/src/field/LPf_contracts.rs",
+    "LPf_src/crates/aspis-core/src/field.rs",
+    "LPf_src/crates/aspis-core/src/field/wide_exact.rs",
+    "LPf_src/crates/aspis-r1-cost-probe/src/LPf_replay.rs",
+    "LPf_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+    "LPf_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "LPf_src/crates/aspis-r1-cost-probe/src/LPf_verifier.rs"
+  ],
+  "source_revision": "2b43affbb8d2181126bf1fa6a330c845a3a0e65c",
+  "source_tree_dirty": true,
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "LPf_K023",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-leaf-p6-6-20261027/LPf_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "field::LPf_contracts::LPf_kbytes_contract",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation, then named solver stage core:field::LPf_contracts::LPf_kbytes_contract",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "LPf_K023-graph-check.json"
+  },
+  "reservation_retries": 0,
+  "exit_status": 1,
+  "wall_seconds": 96.86523934098659,
+  "peak_rss_kib": "4913412",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rc9a066aa433b43239305be5fe0024b94.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "5165375488",
+  "source_hashes": {
+    "LPf_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "LPf_src/crates/aspis-r1-cost-probe/src/lib.rs": "00403cd1c7c7b310836e12d1ef278de44b36d5d2566cd1e7e5eb3ff780c0a82a",
+    "LPf_src/crates/aspis-core/src/field/LPf_contracts.rs": "890f1b9c508dc00951858dbeb9bac8bbefdb51ea213fc1e9c11919ae35ee2be9",
+    "LPf_src/crates/aspis-core/src/field.rs": "d49e8edc83b272b7899ce7fc4887faf77dfc7d3f2a773652746ea9014e9d6b62",
+    "LPf_src/crates/aspis-core/src/field/wide_exact.rs": "6f32d9d9a8071b61c8e9ae326e56a547ce5d6e724a84a7d0003c4bc3790e50b1",
+    "LPf_src/crates/aspis-r1-cost-probe/src/LPf_replay.rs": "83c11e9830db2073a9c9e07f5d2c1d22ade3c42834fec0987144beaba8f8fd03",
+    "LPf_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5486a2ab7012c872ef2d5cd494d40ebea5a968bfed87576fe6a4fc1f328dd44b",
+    "LPf_src/crates/aspis-r1-cost-probe/src/verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+    "LPf_src/crates/aspis-r1-cost-probe/src/LPf_verifier.rs": "d0735dde09ebc1ea3fb07a9b4811a4d43766bbb083e2c273484a24a70776147c"
+  },
+  "print_axioms": "N/A: kani"
+}

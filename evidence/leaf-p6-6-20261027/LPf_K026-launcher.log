@@ -1,0 +1,48 @@
+{"attempt": "LPf_K026", "exit_status": 1, "wall_seconds": 94.0457320229616, "peak_rss_kib": "2300768", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ates/aspis-r1-cost-probe/src/LPf_verifier.rs:9:4
+  |
+9 | fn LPf_weights64_verified(){let xs:[K;64]=core::array::from_fn(|_|any_k());let mut out=Vec::new();for &x in &xs{put_k(&mut out,x);}le...
+  |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_weights64_verified`
+
+warning: function `LPf_checkpoint_chronology` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPf_verifier.rs:33:4
+   |
+33 | fn LPf_checkpoint_chronology(){let(p,a)=inputs();let proof:[u8;3]=kani::any();let public:[u8;5]=kani::any();let answers:[[u8;32];3]=...
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_checkpoint_chronology`
+
+warning: function `LPf_cbytes_contract` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPf_replay.rs:21:4
+   |
+21 | fn LPf_cbytes_contract(){let x:[u32;2]=kani::any();let c=CM31{a:M31(x[0]),b:M31(x[1])};let mut out:[u8;8]=kani::any();c.write_le_byt...
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpf_cbytes_contract`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.26s
+Checking harness LPf_replay::LPf_cbytes_contract...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - LPf_replay::LPf_cbytes_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r97e57d9e719d4b23bd77b58a72053e15.scope; invocation ID: b65d58cd24764864a99656370640889b

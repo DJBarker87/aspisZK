@@ -29,3 +29,20 @@ it does not weaken the target or increase resource/timeout limits.
 A future bound-only M31::mul contract/powers canonicality probe, if run, must be
 labelled only as safety/canonicality. It cannot replace the exact multiplication,
 powers value law, semantic fold or prepared_claim join.
+
+## Allocation-context qualification
+
+K015/K018/K022's concrete harness output is an owned `[u8;8]` array. Those
+receipts are **not** silently promoted to every possible backing allocation for
+an eight-byte slice. K026's caller-crate registration of the same root8 harness
+times out. The native QM31 caller passes offsets0 and8 of an owned16-byte buffer;
+K028 therefore checks those actual subslice contexts and the untouched half.
+No whole caller receipt is credited before that contextual obligation is settled.
+The annotations' length precondition alone does not erase this proof-domain gap.
+
+K024 fails before verification because cross-crate verified substitution needs a
+caller-crate proof_for_contract registration. K025 also fails before verification:
+an unused powers draft had a missing M31 registration. It was removed; neither
+failure is a pass, and no unproved powers stub was executed in a credited target.
+K027's checksum source cut reaches no substituted byte writer: its proof is
+independent of the still-open byte-writer caller context.
