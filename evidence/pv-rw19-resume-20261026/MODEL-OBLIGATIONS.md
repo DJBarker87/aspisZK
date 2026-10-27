@@ -1,43 +1,62 @@
-# Exact residuals while gated
+# Checked residual obligations after the resume
 
-All thirteen rw19 modules are drafts, including the nine inherited modules.
-
-V164 before: `ProverRw18ContextJoin.callback` takes
-`source_law : ops.op223 = extracted` and
-`context_identity : extracted = @ProverRw18ContextCompression.compress _ (PV_CurrentScaleInstall.selected ops)`.
-Checked after: unchanged. The P6 draft proves context identity for the concrete
-retained extraction; its consumer keeps exactly
-`P_source_p6 : ops.op223 = @ProverRwP6CompressSource.compress _ (PV_CurrentScaleInstall.selected ops)`.
-Neither an unconstrained dictionary nor a bounded native test supplies this
-universal function equality. No original-helper extraction is asserted.
-
-V163 before: `ProverRw18ContextDataIff.criterion` requires the independent
-whole-model result and both observation equalities. Checked after: unchanged.
-For a canonical audit the audit equation follows from the byte equation,
-including rejection, failure and divergence; it is not separately assumed.
-The original-caller criterion leaves the following exact right-hand side:
+V164 before (`ProverRw18ContextJoin.callback`):
 
 ```lean
-PV_RW_DataProduct.observe PV_RW_DataProduct.first
-  (ProverRwBodyDataCriterion.data
-    (ProverRwP6BodyStore.execute (ProverRw18ContextJoin.original ops)
-      store pub compiled v hash binding digest attempt s)) = modelBytes
+source_law : ops.op223 = extracted
+context_identity : extracted =
+  @ProverRw18ContextCompression.compress _ (PV_CurrentScaleInstall.selected ops)
 ```
 
-This is `P_proof_bytes`, still OPEN, with precisely the theorem's input
-quantifiers and `reservation` equation; it is not hidden in a structure.
-`modelBytes` must come from the mathematical deployed-caller model. No choice
-of source output as that function is permitted.
+V164 after, for the concrete retained owned P6 extraction, in the checked
+`ProverRw19P6Join.callback` and `.dictionaries`:
 
-The independent mathematical assembly adapter uses
-`ProverCommitFront46.referenceProof fields queries slots`, preserving its
-errors and both length guards. Its inputs still require construction from the
-mathematical protocol for the deployed caller; it is a serialization model,
-not the complete mathematical instance. In particular it supplies neither
-release fixture's whole-model equation, nor the general byte equation.
+```lean
+P_source_p6 : ops.op223 =
+  @ProverRwP6CompressSource.compress _ (PV_CurrentScaleInstall.selected ops)
+```
 
-Next focused validation order: P6ContextIdentity, P6Join, P6Caller;
-AuditValue, AuditSource, AuditData, AuditCaller; CanonicalAuditRefinement,
-P6DataIff; CanonicalAuditCriterion, OriginalAuditCriterion; AssemblyLength,
-MathematicalAssembly. Audit and manifest only after these targets are green.
-No frozen manifest changes while these sources remain unchecked.
+`ProverRw19P6ContextIdentity.identity` supplies the second equation; it is no
+longer assumed in this consumer. The formerly arbitrary `extracted` argument is
+specialized to the concrete P6 reference. No original whole-helper extraction
+or shipped-to-P6 function law is asserted. Published rw18 statements remain stable.
+The latest read-only cb3 search at `80ef4e8e3daa17e1966559bd69fb946eb5eeaf07`
+found no op223 theorem. V164 remains REDUCED, not closed.
+
+V163 remains OPEN. Before, `ProverRw18ContextDataIff.criterion` required the
+concrete whole-model instance and both observation equations. After, the
+checked `ProverRw19AssemblyCallerIff.criterion` supplies the exact conditional
+criterion for an independently assembled mathematical output, with no audit
+observation premise. Its single residual byte equation is:
+
+```lean
+P_proof_bytes :
+  PV_RW_DataProduct.observe PV_RW_DataProduct.first
+    (ProverRwBodyDataCriterion.data
+      (ProverRwP6BodyStore.execute (PV_RW_CombinedBodyData.closed ops)
+        store pub compiled v hash binding digest attempt s)) =
+    ProverRw19MathematicalAssembly.proofBytes fields queries slots
+```
+
+The full theorem retains `P_source_p6` above and the unchanged state equation:
+
+```lean
+reservation : store.«reserve» s digest attempt.mask_nonce = ok (accepted,after)
+```
+
+The arbitrary input quantifiers and both Result layers are preserved. Error,
+failure and divergence are included. The independent preparation wrapper also
+preserves all verifier errors, failure and divergence, but its mathematical
+preparation function for the deployed caller is **not constructed**. Fields,
+query parts and node slots are data, not structures containing assumed laws.
+No model is defined by projecting the actual source result.
+
+Neither full release fixture's byte equation nor the general byte equation is
+proved. Thus this model-family specialization is not closure of the original
+whole-model criterion. No privacy headline premise has been removed or weakened.
+
+The auxiliary `P_proof_size : compact.PROOF_BYTES = ok size` is retained in
+generic publication/body length theorems, then discharged for the installed
+original and closed dictionaries. `ProverRw19SelectedBodyLength.original`
+proves successful original-caller proofs have 57,607 bytes without that premise.
+A length invariant is not proof-byte correspondence.
