@@ -1,0 +1,47 @@
+{"attempt": "XRz_L058", "exit_status": 1, "wall_seconds": 1.1200087900506333, "peak_rss_kib": "2648820", "swaps": "0", "print_axioms": ["'XRz_RecordAt.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRz_generated/XRz_RecordAt.lean:21:1: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  mapR (inner id error)
+      (let (_, i) := (tag, size)
+      do
+      let length ← 5#usize + i
+      let i1 ← offset + length
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+      let r ← core.option.Option.ok_or o1 (r1_wire.Error.Length row)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← r1_wire.parse_record row val
+          let cf1 ← core.result.Result.Insts.
+...
+ntrolFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    let (_, i) := (tag, size)
+    do
+    let length ← 5#usize + i
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or o1 (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+'XRz_RecordAt.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rbfdc1ccbb5fe40be91de4dc70aa82b18.scope; invocation ID: 0b33f74336234899bca5bd0444ac4142

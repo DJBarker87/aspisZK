@@ -1,0 +1,101 @@
+XRz_generated/XRz_RecordAt.lean:21:1: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  mapR (inner id error)
+      (let (_, i) := (tag, size)
+      do
+      let length ← 5#usize + i
+      let i1 ← offset + length
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+      let r ← core.option.Option.ok_or o1 (r1_wire.Error.Length row)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← r1_wire.parse_record row val
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    let (_, i) := (tag, size)
+    do
+    let length ← 5#usize + i
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or o1 (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.19} {β : α → Sort ?u.18} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case e_a
+row : U8
+bytes : Slice U8
+offset : Usize
+fields :
+  ∀ (payload : Slice U8),
+    mapR (inner id error) (r1_wire.validate_record_fields row payload) =
+      AspisR1PrefixAggregateParser.r1_wire.validate_record_fields row payload
+shape : Option (U8 × Usize)
+tag : U8
+size : Usize
+⊢ mapR (inner id error)
+      (let (_, i) := (tag, size)
+      do
+      let length ← 5#usize + i
+      let i1 ← offset + length
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+      let r ← core.option.Option.ok_or o1 (r1_wire.Error.Length row)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← r1_wire.parse_record row val
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    let (_, i) := (tag, size)
+    do
+    let length ← 5#usize + i
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or o1 (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+'XRz_RecordAt.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

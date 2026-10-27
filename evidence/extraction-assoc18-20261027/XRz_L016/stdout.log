@@ -1,0 +1,96 @@
+XRz_generated/XRz_FinishLoop.lean:18:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.BatchedWeights.finish_loop.body b { iter := { slice := w, i := ↑i }, count := i } back
+in the target expression
+  (match
+      match ({ iter := { slice := w, i := ↑i }, count := i }, back) with
+      | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok fun t => back (fill f (↑i) 0 t)
+
+case zero
+b : verifier.BatchedWeights
+w : Slice Q
+f : ℕ → Q
+values : ∀ (i : Usize), ↑i < w.length → b.value i = ok (f ↑i)
+i : Usize
+back : Back
+len : w.length = ↑i + 0
+⊢ (match
+      match ({ iter := { slice := w, i := ↑i }, count := i }, back) with
+      | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok fun t => back (fill f (↑i) 0 t)
+XRz_generated/XRz_FinishLoop.lean:23:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.BatchedWeights.finish_loop.body b { iter := { slice := w, i := ↑i }, count := i } back
+in the target expression
+  (match
+      match ({ iter := { slice := w, i := ↑i }, count := i }, back) with
+      | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok fun t => back (fill f (↑i) (n + 1) t)
+
+case succ
+b : verifier.BatchedWeights
+w : Slice Q
+f : ℕ → Q
+values : ∀ (i : Usize), ↑i < w.length → b.value i = ok (f ↑i)
+n : ℕ
+ih :
+  ∀ (i : Usize) (back : Back),
+    w.length = ↑i + n →
+      verifier.BatchedWeights.finish_loop { iter := { slice := w, i := ↑i }, count := i } back b =
+        ok fun t => back (fill f (↑i) n t)
+i : Usize
+back : Back
+len : w.length = ↑i + (n + 1)
+next : Usize
+hnext : ↑next = ↑i + 1
+hbody :
+  verifier.BatchedWeights.finish_loop.body b { iter := { slice := w, i := ↑i }, count := i } back =
+    ok (cont ({ iter := { slice := w, i := ↑i + 1 }, count := next }, fun t => back (put (↑i) (f ↑i) t)))
+⊢ (match
+      match ({ iter := { slice := w, i := ↑i }, count := i }, back) with
+      | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, back1) => verifier.BatchedWeights.finish_loop.body b iter1 back1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok fun t => back (fill f (↑i) (n + 1) t)
+'XRz_FinishLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
