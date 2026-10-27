@@ -42,3 +42,19 @@ changing recorded values. No Copy premise is required for this loop repair;
 repair 1's Copy derive remains `pair_trace.rs:71`. No other function, signature,
 or type changed. Diagnostic extraction must determine whether this is the last
 source repair; all three ELFs will then be rebuilt once.
+
+3. D275 kind (i), inside `records` only, verbatim:
+
+```diff
++    let input = *input;
+     let pair = input.pair;
+```
+
+Replace the shared parameter borrow's uses with an identical entry copy;
+`PoolV1PairForestInputNoteWitnessV1` derives `Clone, Copy` at
+`crates/aspis-statement/src/pool_v1/pair_forest_trace.rs:53` (type at 54).
+All field accesses now use that immutable copy. No argument needs a new `&`:
+only field values are read from `input`. The signature remains unchanged.
+This targets the next shared-loan failure in the loop branch at records:237–241,
+`InterpBorrows.ml:2731`, recorded by `pv14-records-aeneas-02`. No body, bounds,
+iteration order, output, other function, signature, or type changes.
