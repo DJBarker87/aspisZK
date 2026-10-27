@@ -11,7 +11,10 @@ theorem call (input : pair_forest_trace.PoolV1PairForestInputNoteWitnessV1)
     (s : pair_tree_profile.PoolV1PairLiveSnapshotV1) (asset : U32) :
     @PV_Src_RecordDynamic.call PV_Src_ExternalReference.dictionary input out rec chg s asset =
       PV_Src_RecordReference.call PV_Src_CanonicalRoots.table input out rec chg s asset := by
-  rw [PV_Src_RecordDynamic.call,PV_Src_RootHelper.source]
+  change (do
+    let empty ← @pair_trace.pair_empty_roots PV_Src_ExternalReference.dictionary
+    PV_Src_RecordReference.call empty input out rec chg s asset) = _
+  rw [PV_Src_RootHelper.source]
   rfl
 
 #print axioms call

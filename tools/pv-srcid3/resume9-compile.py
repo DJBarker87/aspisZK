@@ -67,6 +67,8 @@ if os.environ.get('PV_SRCID9_CLOSURE')=='1':
  for own_src in (root/'docs/research/v8-r0-zk-20261009/lean/R1Z').glob('PV_Src_*.lean'):
   own_module='R1Z.'+own_src.stem
   if own_module not in edges:edges[own_module]=['Init']+re.findall(r'^import (\S+)',own_src.read_text(),re.M)
+ for pin in json.loads((e/'resume9-model-pins.json').read_text()):
+  edges[pin['module']]=['Init']+pin['imports']
  seen=set()
  def visit_dep(x):
   if x in seen:return

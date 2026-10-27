@@ -10,7 +10,7 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
 theorem source {I : Type} (data : I → PV_Src_FrozenInput.Data (K := K))
     (transport : Fin 1024 ≃ Fin 1024) (core : Core data transport) :
     BuilderSource.SourceIdentification
-      (@PV_Src_NativeIdentification.prover K _ _ _ _ _ external records I
+      (PV_Src_NativeIdentification.prover (K := K)
         (fun i => PV_Src_FrozenInput.input (data i)) transport)
       (PV_Src_NativeIdentification.toInstance (PV_Src_RootDynamicPremises.source data transport core)) :=
   PV_Src_NativeIdentification.identification (PV_Src_RootDynamicPremises.source data transport core)
