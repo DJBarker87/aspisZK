@@ -12,7 +12,7 @@ for op in [205,212,215,216,217,219]:meta[op]=dict(batch=3,form='concrete owned S
 op=int(sys.argv[1]);key=sys.argv[2];src=D/'probes'/f'{op}.rs';m=meta[op];m.update(op=op,key=key,source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),source_lines=len(src.read_text().splitlines()),source_bytes=src.stat().st_size)
 O=next((p for p in sorted(D.glob(f'aeneas-{key}*')) if (p/'time.log').exists()),D/f'aeneas-{key}');receipt=O/'receipt.json'
 if receipt.exists():
- r=json.loads(receipt.read_text());m['extractor']=r;m['extraction_status']='accepted' if r['exit']==0 else 'refused';m['error']=(O/'output.log').read_text() if r['exit'] else None
+ r=json.loads(receipt.read_text());m['extractor']=r;m['extraction_status']='accepted' if r['exit']==0 else ('timed_out' if r['exit']==124 else 'refused');m['error']=(O/'output.log').read_text() if r['exit'] else None
 else:m['extraction_status']='admission hold'
 checks=[]
 for p in (D/'lean-receipts').glob('*/receipt.json') if (D/'lean-receipts').exists() else []:
