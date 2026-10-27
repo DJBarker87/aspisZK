@@ -1,0 +1,68 @@
+{"attempt": "JGa14_007", "exit_status": 1, "wall_seconds": 1.449219545989763, "peak_rss_kib": "3025836", "swaps": "0", "print_axioms": ["'AspisR1.JGa_ValueScale.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGa_ValueScale.lean:23:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  back ?im
+in the target expression
+  ∃ out,
+    (let (im, back) := (im, back)
+        ok ⟨List.mapIdx (fun i old => (↑(back im).slice)[i]?.getD old) ↑a, ⋯⟩) =
+        ok out ∧
+      ↑out = List.ofFn fun i => v ↑i
+
+a : Std.Array field.QM31 33#usize
+selector : field.QM31
+ha : canonical a
+hs : Canon selector
+iter : IterMut := { slice := a.to_slice }
+v : ℕ → QM
+hv :
+  ∀ (j : ℕ) (hj : j < 33),
+    Canon (v j) ∧
+      FIv_NativeValue.decode (v j) = FIv_NativeValue.decode selector * FIv_NativeValue.decode (↑iter.slice)[j]
+im : core.slice.iter.IterMut field.QM31
+back : core.slice.iter.IterMut field.
+...
+  back ?im
+in the target expression
+  ∃ out,
+    (let (im, back) := (im, back)
+        ok ⟨List.mapIdx (fun i old => (↑(back im).slice)[i]?.getD old) ↑a, ⋯⟩) =
+        ok out ∧
+      ↑out = List.ofFn fun i => v ↑i
+
+a : Std.Array field.QM31 33#usize
+selector : field.QM31
+ha : canonical a
+hs : Canon selector
+iter : IterMut := { slice := a.to_slice }
+v : ℕ → QM
+hv :
+  ∀ (j : ℕ) (hj : j < 33),
+    Canon (v j) ∧
+      FIv_NativeValue.decode (v j) = FIv_NativeValue.decode selector * FIv_NativeValue.decode (↑iter.slice)[j]
+im : core.slice.iter.IterMut field.QM31
+back : core.slice.iter.IterMut field.QM31 → core.slice.iter.IterMut field.QM31
+call : Loop3 iter id selector = ok (im, back)
+hslice : im.slice = iter.slice
+hi : im.i = 33
+hback : ∀ (im : core.slice.iter.IterMut field.QM31), back im = id (deferredWrites v 0 33 im)
+hlen : (↑im.slice).length = 33
+readback : List.mapIdx (fun i old => (↑(deferredWrites v 0 33 im).slice)[i]?.getD old) ↑a = List.ofFn fun i => v ↑i
+⊢ ∃ out,
+    (let (im, back) := (im, back)
+        ok ⟨List.mapIdx (fun i old => (↑(back im).slice)[i]?.getD old) ↑a, ⋯⟩) =
+        ok out ∧
+      ↑out = List.ofFn fun i => v ↑i
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (33 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGa_ValueScale.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r78c09986a1dd41ca8f2f116b4b475982.scope; invocation ID: a813628b32ae40e695c6e9305b531b2f

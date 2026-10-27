@@ -1,0 +1,44 @@
+JGa_PublicDigest.lean:20:52: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIy_FrontierLoopStep.loop { start := 0#usize, «end» := 20#usize } o.z s d p.transition.live_snapshot
+in the target expression
+  (do
+      let (middle, src) ←
+        pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop { start := 0#usize, «end» := 20#usize } o.z s d
+            p.transition.live_snapshot
+      FIy_PublicDigestSuffix.run p o s middle src) =
+    ok out
+
+o : state_only_poseidon.StateOnlyPoseidonOpenings
+s : pool_v1.pair_forest_copy_terminal.Selectors
+hz : canonical o.z
+hh : canonical s.high
+hl : canonical s.low
+d : Std.Array FIv_NativeArithmetic.NQ 8#usize
+hd : FIy_PublicDigestPrefix.run p o s = ok d
+hdc : canonical d
+middle : Std.Array field.QM31 8#usize
+hm :
+  FIy_FrontierLoopStep.loop { start := 0#usize, «end» := 20#usize } o.z s d p.transition.live_snapshot =
+    ok (middle, p.transition.live_snapshot)
+hmc : canonical middle
+out : Std.Array FIv_NativeArithmetic.NQ 8#usize
+ho : FIy_PublicDigestSuffix.run p o s middle p.transition.live_snapshot = ok out
+hoc : canonical out
+⊢ (do
+      let (middle, src) ←
+        pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop { start := 0#usize, «end» := 20#usize } o.z s d
+            p.transition.live_snapshot
+      FIy_PublicDigestSuffix.run p o s middle src) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JGa_PublicDigest.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,47 @@
+{"attempt": "JGa14_004", "exit_status": 1, "wall_seconds": 1.3104873549891636, "peak_rss_kib": "3023908", "swaps": "0", "print_axioms": ["'AspisR1.JGa_ValueScale.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGa_ValueScale.lean:22:59: error: unexpected identifier; expected ')', ',' or ':'
+JGa_ValueScale.lean:22:18: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+JGa_ValueScale.lean:13:65: error: unsolved goals
+a : Std.Array field.QM31 33#usize
+selector : field.QM31
+ha : canonical a
+hs : Canon selector
+iter : IterMut := { slice := a.to_slice }
+v : ℕ → QM
+hv :
+  ∀ (j : ℕ) (hj : j < 33),
+    Canon (v j) ∧
+      FIv_NativeValue.decode (v j) = FIv_NativeValue.decode selector * FIv_NativeValue.decode (↑iter.slice)[j]
+im : core.slice.iter.IterMut field.QM31
+
+...
+JGa_ValueScale.lean:22:59: error: unexpected identifier; expected ')', ',' or ':'
+JGa_ValueScale.lean:22:18: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+JGa_ValueScale.lean:13:65: error: unsolved goals
+a : Std.Array field.QM31 33#usize
+selector : field.QM31
+ha : canonical a
+hs : Canon selector
+iter : IterMut := { slice := a.to_slice }
+v : ℕ → QM
+hv :
+  ∀ (j : ℕ) (hj : j < 33),
+    Canon (v j) ∧
+      FIv_NativeValue.decode (v j) = FIv_NativeValue.decode selector * FIv_NativeValue.decode (↑iter.slice)[j]
+im : core.slice.iter.IterMut field.QM31
+back : core.slice.iter.IterMut field.QM31 → core.slice.iter.IterMut field.QM31
+call : Loop3 iter id selector = ok (im, back)
+hslice : im.slice = iter.slice
+hi : im.i = 33
+hback : ∀ (im : core.slice.iter.IterMut field.QM31), back im = id (deferredWrites v 0 33 im)
+hlen : (↑im.slice).length = 33
+readback : List.mapIdx (fun i old => (↑(deferredWrites v 0 33 im).slice)[i]?.getD old) ↑a = List.ofFn fun i => v ↑i
+spec : ∃ out, FIy_ScaleReadback.run a selector = ok out ∧ ↑out = List.ofFn fun i => v ↑i
+⊢ FIy_ScaleReadback.run a selector ⦃ out => canonical out ⦄
+'AspisR1.JGa_ValueScale.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rcd13d23ba9bf4afebee90dfad9dbe983.scope; invocation ID: a969aa01721846c9b02d7e698a02c780

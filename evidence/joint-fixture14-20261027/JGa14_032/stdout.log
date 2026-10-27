@@ -1,0 +1,43 @@
+JGa_FrontierStep.lean:19:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+level : Usize
+a : Std.Array field.QM31 16#usize
+s : Selectors
+d : Std.Array field.QM31 8#usize
+src : Snapshot
+hi : ↑level < 20
+ha : canonical a
+hd : canonical d
+hh : canonical s.high
+hl : canonical s.low
+hf : ∀ row ∈ ↑src.frontier, ∀ x ∈ ↑row, ↑x < FIw_ScalarArithmetic.P
+block : Usize
+_✝⁵ : [> let block ← 34#usize + level <]
+block_post : ↑block = 34 + ↑level
+i : U64
+_✝⁴ : [> let i ← src.next_pair_index >>> level <]
+i_post1 : ↑i = ↑src.next_pair_index >>> ↑level
+i_post2 : i.bv = src.next_pair_index.bv >>> ↑level
+i1 : U64
+_✝³ : [> let i1 ← lift (i &&& 1#u64) <]
+i1_post1 : ↑i1 = ↑(i &&& 1#u64)
+i1_post2 : i1.bv = i.bv &&& 1#u64.bv
+h✝ : ¬i1 = 0#u64
+i2 : Usize
+_✝² : [> let i2 ← block * 16#usize <]
+i2_post : ↑i2 = ↑block * 16
+i3 : Usize
+_✝¹ : [> let i3 ← i2 + 12#usize <]
+i3_post : ↑i3 = ↑i2 + 12
+q : field.QM31
+_✝ : [> let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3 <]
+q_post : FIv_NativeValue.Canon q
+a1 : Std.Array U32 8#usize
+_ : [> let a1 ← src.frontier.index_usize level <]
+a1_post : a1 = (↑src.frontier)[↑level]
+⊢ ∀ x ∈ ↑a1, ↑x < FIw_ScalarArithmetic.P
+'AspisR1.JGa_FrontierStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

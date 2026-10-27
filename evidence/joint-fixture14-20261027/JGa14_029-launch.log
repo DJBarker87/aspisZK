@@ -1,0 +1,65 @@
+{"attempt": "JGa14_029", "exit_status": 1, "wall_seconds": 3.6639502680045553, "peak_rss_kib": "5463960", "swaps": "0", "print_axioms": ["'AspisR1.JGa_ValueLanes.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGa_ValueLanes.lean:23:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+packed : Std.Array field.QM31 24#usize
+o : state_only_poseidon.StateOnlyPoseidonOpenings
+s : pool_v1.pair_forest_copy_terminal.Selectors
+hp : canonical packed
+hz : canonical o.z
+hb : canonical o.succ_z
+hx : canonical o.xor12_z
+hh : canonical s.high
+hl : canonical s.low
+zero : FIv_NativeValue.Canon field.QM31.ZERO
+zeros : canonical (Array.repeat 33#usize field.QM31.ZERO)
+value_selectors : Std.Array field.QM31 3#usize
+_✝²⁴ :
+  [> let value_selectors ←
+    FIq_Native.core.array.Array.map add_value_lanes.closure.Insts.CoreOpsFunctionFn
+...
+t q11 ← openings3.z.index_usize 10#usize <]
+q11_post : FIv_NativeValue.Canon q11
+q12 : field.QM31
+_✝⁴ : [> let q12 ← q11.sub reconstructed <]
+q12_post : FIv_NativeValue.Canon q12
+range4 : Std.Array field.QM31 33#usize
+_✝³ : [> let range4 ← range3.update 30#usize q12 <]
+range4_post : canonical range4
+q13 : field.QM31
+_✝² : [> let q13 ← openings3.succ_z.index_usize 10#usize <]
+q13_post : FIv_NativeValue.Canon q13
+range5 : Std.Array field.QM31 33#usize
+_✝¹ : [> let range5 ← range4.update 31#usize q13 <]
+range5_post : canonical range5
+q14 : field.QM31
+_✝ : [> let q14 ← openings3.xor12_z.index_usize 10#usize <]
+q14_post : FIv_NativeValue.Canon q14
+range6 : Std.Array field.QM31 33#usize
+_ : [> let range6 ← range5.update 32#usize q14 <]
+range6_post : canonical range6
+⊢ (do
+      let (iter, into_iter_back) ← MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter range6
+      let (im, back) ← add_value_lanes_loop3 iter (fun im1 => im1) range_selector
+      let packed1 ← add_preweighted packed 49#usize (into_iter_back (back im))
+      let i2 ← 16#usize * VALUE_AUXILIARY_BLOCK
+      let i3 ← i2 + 6#usize
+      let conservation_selector ← s.row i3
+      let q15 ← openings3.z.index_usize 0#usize
+      let q16 ← openings3.z.index_usize 1#usize
+      let q17 ← q15.sub q16
+      let q18 ← openings3.z.index_usize 2#usize
+      let q19 ← q17.sub q18
+      let q20 ← conservation_selector.mul q19
+      let q21 ← openings3.succ_z.index_usize 0#usize
+      let q22 ← openings3.succ_z.index_usize 1#usize
+      let q23 ← q21.sub q22
+      let q24 ← conservation_selector.mul q23
+      add_preweighted packed1 82#usize (Array.make 2#usize [q20, q24] ⋯)) ⦃
+    out => canonical out ⦄
+'AspisR1.JGa_ValueLanes.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb72fdc2fb72d4d71b0b450ed801f1d29.scope; invocation ID: f2c6c328d2034e9fbe7e763b7c91d68d

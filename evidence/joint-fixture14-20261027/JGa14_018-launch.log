@@ -1,0 +1,66 @@
+{"attempt": "JGa14_018", "exit_status": 1, "wall_seconds": 2.6648205940146, "peak_rss_kib": "5460992", "swaps": "0", "print_axioms": ["'AspisR1.JGa_ValueLanes.bits0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGa_ValueLanes.bits1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGa_ValueLanes.bits2' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JGa_ValueLanes.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JGa_ValueLanes.bits0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGa_ValueLanes.bits1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JGa_ValueLanes.bits2' depends on axioms: [propext, Classical.choice, Quot.sound]
+JGa_ValueLanes.lean:56:51: error: unsolved goals
+packed : Std.Array field.QM31 24#usize
+o : state_only_poseidon.StateOnlyPoseidonOpenings
+s : pool_v1.pair_forest_copy_terminal.Selectors
+hp : canonical packed
+hz : canonical o.z
+hb : canonical o.succ_z
+hx : canonical o.xor12_z
+hh : canonical s.high
+hl : canonical s.low
+zero : FIv_NativeValue.Canon field.QM31.ZERO
+zeros : canonical (Array.repeat 33#usize field.QM31.ZERO)
+⊢ (do
+  
+...
+ize 1#usize
+    let q3 ← q1.add q2
+    let q4 ← vs.index_usize 2#usize
+    let selector ← q3.add q4
+    let (o1, r1) ← add_value_lanes_loop0 o (Array.repeat 33#usize field.QM31.ZERO) 0#usize
+    let (o2, r2) ← add_value_lanes_loop1 o1 r1 0#usize
+    let (o3, r3) ← add_value_lanes_loop2 o2 r2 0#usize
+    let x ← reconstruct_10 o3.z
+    let x_1 ← reconstruct_10 o3.succ_z
+    let x_2 ← 1#u32 <<< 10#i32
+    let x_3 ← x_1.mul_m31 x_2
+    let x ← x.add x_3
+    let x_4 ← reconstruct_10 o3.xor12_z
+    let x_5 ← 1#u32 <<< 20#i32
+    let x_6 ← x_4.mul_m31 x_5
+    let x ← x.add x_6
+    let x_7 ← o3.z.index_usize 10#usize
+    let x ← x_7.sub x
+    let x ← r3.update 30#usize x
+    let x_8 ← o3.succ_z.index_usize 10#usize
+    let x ← x.update 31#usize x_8
+    let x_9 ← o3.xor12_z.index_usize 10#usize
+    let x ← x.update 32#usize x_9
+    let x ← MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter x
+    let r7 ←
+      let (iter, into_back) := x
+        do
+        let (im, back) ← FIy_IteratorTraversal.Loop3 iter (fun im1 => im1) selector
+        ok (into_back (back im))
+    let packed1 ← add_preweighted packed 49#usize r7
+    let i2 ← 16#usize * VALUE_AUXILIARY_BLOCK
+    let i3 ← i2 + 6#usize
+    let conservation_selector ← s.row i3
+    let q15 ← o3.z.index_usize 0#usize
+    let q16 ← o3.z.index_usize 1#usize
+    let q17 ← q15.sub q16
+    let q18 ← o3.z.index_usize 2#usize
+    let q19 ← q17.sub q18
+    let q20 ← conservation_selector.mul q19
+    let q21 ← o3.succ_z.index_usize 0#usize
+    let q22 ← o3.succ_z.index_usize 1#usize
+    let q23 ← q21.sub q22
+    let q24 ← conservation_selector.mul q23
+    add_preweighted packed1 82#usize (Array.make 2#usize [q20, q24] ⋯)
+'AspisR1.JGa_ValueLanes.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r18fe94a5f8b343839f9c7e7f138b4756.scope; invocation ID: b25dc9abf58a4bdfb6bb916654dc7f96
