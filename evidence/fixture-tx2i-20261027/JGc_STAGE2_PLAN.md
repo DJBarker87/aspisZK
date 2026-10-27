@@ -1,0 +1,7 @@
+# Stage2 arithmetic/authentication sizing
+
+Numerical preflight only: batch1 consumes163/163/141 sibling digests from fixed slots172/172/150. All padding is zero, all three SHA256 roots match their retained checkpoint/proof roots. Folded root is the actual compact OFF_FOLDED_ROOT7751, not9991 (corrected preflight assumption). Root0/1 are the checkpoint offsets112/144.
+
+Full batch1 requires536 hash calls and1180 SHA256 compression blocks. At inherited maximum8 blocks/module this exceeds the85 attempts remaining after the complete query join, before source/control compositions. Folded tree2 alone has12 leaf calls and152 parent calls,340 blocks in44 bounded modules. The work order therefore remains in stage2: compute these certificates, compose the indexed tree, bind the actual retained leaf windows. Other two trees, complete installed batch1, finish, accepted2 and joint accepted pair remain open unless subsequently closed. No certificate or model root earns actual-top ledger removal.
+
+The named-root composition includes explicit InputLaw and SiblingLaw for binding the sparse source tree to the generated literals. These are implementation input facts, not cryptographic assumptions. They will remain open until discharged from actual retained wire queries/frontier. The model trees retain the actual18-level binary shape and domain bytes0x10/0x72 (leaf) and0x12 (parent). The finite model oracle used by the reader is still distinct from the concrete mathematical SHA256 used by these hash certificates. Full joint non-vacuity has not been shown.

@@ -1,0 +1,7 @@
+# Rejected padding shape and permanent replacement
+
+016 compiled all six named compression blocks successfully, then rejected the two leaf hash padding equalities at the default recursion-depth limit. The inherited small-message branch used rfl over162 bytes and a192-byte padded buffer. This is not a counterexample or hash mismatch. Rejected recovery sorryAx output is retained and receives no credit.
+
+017 changes the emitter selection permanently: messages of64 bytes or more use the inherited symbolic head/tail padding construction, named block lengths and block-list theorem. No whole hash recurrence or padded buffer is reduced; primitive64-round compression facts remain named. 017 passes. No depth/heartbeat/cgroup limit was raised, and no timed-out or memory-killed source was rerun unchanged.
+
+The folded tree needs12 leaf hashes plus152 parents:340 compression blocks in44 modules, maximum8 per module. Full batch1 is1180 blocks. Python hashlib preflight matches all three pinned roots; the earlier local preflight used the wrong presumed folded-root offset9991 and was corrected to the actual compact OFF_FOLDED_ROOT=7751, as confirmed by R22Stage2LeafTotal. No false real-byte premise or vacuity finding follows from that preflight indexing error. Native node count consumes163,163,141 siblings; the fixed slot capacities172,172,150 include zero padding. The preflight now verifies those padding bytes rather than requiring capacity=consumption.

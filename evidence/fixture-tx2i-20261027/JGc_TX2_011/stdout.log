@@ -1,0 +1,94 @@
+JGc_TX2_LoopStep.lean:17:4: error: Ambiguous term
+  dite_false
+Possible interpretations:
+  _root_.dite_false : dite False ?m.44 ?m.45 = ?m.45 not_false
+  
+  Aeneas.dite_false : dite False ?m.44 ?m.45 = ?m.45 ⋯
+JGc_TX2_LoopStep.lean:18:2: error: Tactic `rfl` failed: The left-hand side
+  match
+    let (a, pending) := (a, b)
+    if a.next ≥ end1 then ok (ControlFlow.done (core.result.Result.Ok (a, b)))
+    else do
+      let state1 ← verifier.candidate.query_values ops proof p a g none geometry pending
+      ok (ControlFlow.cont state1) with
+  | ok r =>
+    match r with
+    | ControlFlow.cont x =>
+      loop
+        (fun state1 =>
+          match state1 with
+          | core.result.Result.Ok p1 =>
+            let (a, pending) := p1
+            if a.next ≥ end1 then ok (ControlFlow.done state1)
+            else do
+              let state1 ← verifier.candidate.query_values ops proof p a g none geometry pending
+              ok (ControlFlow.cont state1)
+          | core.result.Result.Err a => ok (ControlFlow.done state1))
+        x
+    | ControlFlow.done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  Port3_NativeQueryBody.verifier.candidate.query_loop ops proof p a1 g none geometry b1 end1
+
+ops : Ops
+proof : Slice U8
+p : verifier.Prepared
+a a1 : verifier.Accumulator
+g : Std.Array SAQ_WideABI.E 29#usize
+geometry : verifier.QueryGeometry
+b b1 : verifier.BatchedWeights
+end1 : Usize
+active : ↑a.next < ↑end1
+call : verifier.candidate.query_values ops proof p a g none geometry b = ok (core.result.Result.Ok (a1, b1))
+⊢ (match
+      let (a, pending) := (a, b)
+      if a.next ≥ end1 then ok (ControlFlow.done (core.result.Result.Ok (a, b)))
+      else do
+        let state1 ← verifier.candidate.query_values ops proof p a g none geometry pending
+        ok (ControlFlow.cont state1) with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if a.next ≥ end1 then ok (ControlFlow.done state1)
+              else do
+                let state1 ← verifier.candidate.query_values ops proof p a g none geometry pending
+                ok (ControlFlow.cont state1)
+            | core.result.Result.Err a => ok (ControlFlow.done state1))
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    Port3_NativeQueryBody.verifier.candidate.query_loop ops proof p a1 g none geometry b1 end1
+JGc_TX2_LoopStep.lean:16:75: warning: This simp argument is unused:
+  show ¬end1.val ≤ a.next.val from by omega
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵3̵_̵N̵a̵t̵i̵v̵e̵Q̵u̵e̵r̵y̵B̵o̵d̵y̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵q̵u̵e̵r̵y̵_̵l̵o̵o̵p̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵s̵h̵o̵w̵ ̵¬̵e̵n̵d̵1̵.̵v̵a̵l̵≤̵a̵.̵n̵e̵x̵t̵.̵v̵a̵l̵ ̵f̵r̵o̵m̵ ̵b̵y̵ ̵o̵m̵e̵g̵a̵,̵
+  ̵ ̵ ̵ ̵ ̵d̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵c̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲P̲o̲r̲t̲3̲_̲N̲a̲t̲i̲v̲e̲Q̲u̲e̲r̲y̲B̲o̲d̲y̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲q̲u̲e̲r̲y̲_̲l̲o̲o̲p̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲d̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲a̲l̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGc_TX2_LoopStep.lean:17:15: warning: This simp argument is unused:
+  call
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵3̵_̵N̵a̵t̵i̵v̵e̵Q̵u̵e̵r̵y̵B̵o̵d̵y̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵q̵u̵e̵r̵y̵_̵l̵o̵o̵p̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵s̵h̵o̵w̵ ̵¬̵e̵n̵d̵1̵.̵v̵a̵l̵≤̵a̵.̵n̵e̵x̵t̵.̵v̵a̵l̵[̲P̲o̲r̲t̲3̲_̲N̲a̲t̲i̲v̲e̲Q̲u̲e̲r̲y̲B̲o̲d̲y̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲q̲u̲e̲r̲y̲_̲l̲o̲o̲p̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲¬̲e̲n̲d̲1̲.̲v̲a̲l̲ ̲≤̲ ̲a̲.̲n̲e̲x̲t̲.̲v̲a̲l̲ from by omega, d̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵c̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵d̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGc_TX2_LoopStep.lean:17:20: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵3̵_̵N̵a̵t̵i̵v̵e̵Q̵u̵e̵r̵y̵B̵o̵d̵y̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵q̵u̵e̵r̵y̵_̵l̵o̵o̵p̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵s̵h̵o̵w̵ ̵¬̵e̵n̵d̵1̵.̵v̵a̵l̵≤̵a̵.̵n̵e̵x̵t̵.̵v̵a̵l̵[̲P̲o̲r̲t̲3̲_̲N̲a̲t̲i̲v̲e̲Q̲u̲e̲r̲y̲B̲o̲d̲y̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲q̲u̲e̲r̲y̲_̲l̲o̲o̲p̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲¬̲e̲n̲d̲1̲.̲v̲a̲l̲ ̲≤̲ ̲a̲.̲n̲e̲x̲t̲.̲v̲a̲l̲ from by omega, d̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵c̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵d̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲a̲l̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGc_TX2_LoopStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JGc_TX2_LoopStep.done' depends on axioms: [propext, Classical.choice, Quot.sound]

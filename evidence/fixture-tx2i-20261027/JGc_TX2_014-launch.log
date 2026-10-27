@@ -1,0 +1,46 @@
+{"attempt": "JGc_TX2_014", "exit_status": 0, "wall_seconds": 2.569309249985963, "peak_rss_kib": "5740516", "swaps": "0", "print_axioms": ["'AspisR1.JGc_TX2_QueryLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.JGc_TX2_QueryLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JGc_TX2_QueryLoop.source : ∀ {C : Type} (err : C) (geometrySeed : Port3_NativeGeometryBody.Ops C)
+  (seed : Port3_NativeQueryBody.Ops),
+  ∃ a b flushed,
+    JFz_TX2_AccumulationChain.updates (JGc_TX2_QueryDictionary.input seed) 12 = ok (a, b) ∧
+      Port3_QueryStage.query (JFr_TX2_DotsBinding.ops seed) JFx_NativeBytes.proof JFo_Prepared.value
+            JFo_Prepared.accumulator JFr_TX2_Powers.value none (JFv_TX2_Geometry.value err geometrySeed)
+            JFo_Pending.value 22#usize =
+          ok (core.result.Result.Ok (a, b)) ∧
+        a.weights = JFo_Prepared.accumulator.weights
+...
+✝¹
+  let ⟨run, right✝⟩ := h✝²
+  let ⟨weights, right✝¹⟩ := right✝
+  let ⟨next, right✝²⟩ := right✝¹
+  let ⟨flush, right✝³⟩ := right✝²
+  let ⟨size, canon⟩ := right✝³
+  Exists.intro a
+    (Exists.intro b
+      (Exists.intro flushed
+        ⟨run,
+          ⟨(Port3_QueryInstall.success_iff
+                  (Port3_NativeQueryBody.verifier.candidate.query_loop
+                    (Port3_QueryStage.release (JFr_TX2_DotsBinding.ops seed)) JFx_NativeBytes.proof JFo_Prepared.value
+                    JFo_Prepared.accumulator JFr_TX2_Powers.value (Port3_QueryInstall.observer none)
+                    (JFv_TX2_Geometry.value err geometrySeed) JFo_Pending.value 22#usize)
+                  (a, b)).mpr
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      Port3_NativeQueryBody.verifier.candidate.query_loop _a JFx_NativeBytes.proof JFo_Prepared.value
+                          JFo_Prepared.accumulator JFr_TX2_Powers.value (Port3_QueryInstall.observer none)
+                          (JFv_TX2_Geometry.value err geometrySeed) JFo_Pending.value 22#usize =
+                        ok (core.result.Result.Ok (a, b)))
+                    (JGc_TX2_QueryDictionary.release seed)))
+                (Eq.trans
+                  (JGc_TX2_LoopPrefix.source err geometrySeed seed 12
+                    (Decidable.byContradiction fun a => source._proof_1 flushed a) a b run)
+                  (JGc_TX2_LoopStep.done (JGc_TX2_QueryDictionary.ops seed) JFx_NativeBytes.proof JFo_Prepared.value a
+                    JFr_TX2_Powers.value (JFv_TX2_Geometry.value err geometrySeed) b 22#usize
+                    (Eq.mpr (id (congrArg (fun _a => ↑_a = ↑22#usize) next)) (Eq.refl ↑22#usize))))),
+            ⟨weights, ⟨next, ⟨flush, ⟨size, canon⟩⟩⟩⟩⟩⟩))
+
+Running as unit: run-ra0353b1c8b064c89a4d0e5eacc3931ba.scope; invocation ID: 0e92b266fd5f482389daafdece35293a
