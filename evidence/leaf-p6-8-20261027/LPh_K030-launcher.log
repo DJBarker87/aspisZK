@@ -1,0 +1,46 @@
+{"attempt": "LPh_K030", "exit_status": 1, "wall_seconds": 13.112931378011126, "peak_rss_kib": "354480", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+.rs function verifier::candidate::LPg_candidate::view::<1> line 17 thread 0
+----------------------------------------------------
+  var_59=p!0@1 + 7751 (00000000 00000010 00000000 00000000 00000000 00000000 00011110 01000111)
+
+State 2300 file crates/aspis-r1-cost-probe/src/LPg_candidate.rs function verifier::candidate::LPg_candidate::view::<1> line 17 thread 0
+----------------------------------------------------
+  a=p!0@1 + 7751 (00000000 00000010 00000000 00000000 00000000 00000000 00011110 01000111)
+
+State 2301 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs function core::ptr::eq::<u8> line 2411 thread 0
+----------------------------------------------------
+  var_0=TRUE (00000001)
+
+State 2302 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs function core::ptr::eq::<u8> line 2412 thread 0
+----------------------------------------------------
+  goto_symex$$return_value$$_RINvNtCsci0VKyKEi6N_4core3ptr2eqhECs1GU5KHMolKr_19aspis_r1_cost_probe=TRUE (00000001)
+
+State 2304 file crates/aspis-r1-cost-probe/src/LPg_candidate.rs function verifier::candidate::LPg_candidate::view::<1> line 17 thread 0
+----------------------------------------------------
+  var_58=TRUE (00000001)
+
+Violated property:
+  file crates/aspis-r1-cost-probe/src/LPg_candidate.rs function verifier::candidate::LPg_candidate::view::<1> line 17 thread 0
+  KANI_CHECK_ID_aspis_r1_cost_probe.13b5395805766875::aspis_r1_cost_probe_216
+  FALSE
+
+
+
+** 37 of 360 failed (5 iterations)
+VERIFICATION FAILED
+Manual Harness Summary:
+Verification failed for - verifier::candidate::LPg_candidate::LPg_view1
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r11b318b4687243f49cca9e0598d1fb9c.scope; invocation ID: 5192f57186c14fedbc45b129c9a5ddb2
