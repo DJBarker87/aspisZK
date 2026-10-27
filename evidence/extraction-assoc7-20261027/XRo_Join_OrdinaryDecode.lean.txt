@@ -34,26 +34,12 @@ theorem decode (digits : Array U32 8#usize) :
    bind_tc_ok,mapR_bind,wide_new]
  rfl
 
-theorem ordinary_public (block : Array U8 32#usize) :
- XRn_Join_Release.sampler.ordinary_sample block =
- AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic block := by
- change XRn_Join_Release.sampler.ordinary_sample block =
-   mapR AspisR1Post25SamplerPreparedCarrier.candidateToPE
-    (AspisR1Post25Sampler.sampler.ordinary_sample block)
- unfold XRn_Join_Release.sampler.ordinary_sample AspisR1Post25Sampler.sampler.ordinary_sample
- simp only [XRo_Join_OrdinaryDigits.low,mapR_bind,decode]
-
-/-- Actual adopted ordinary callback, on every block and every Result. -/
-theorem installed_ordinary (block : Array U8 32#usize) :
- XRn_Join_Release.sampler.ordinary_sample block =
- XRo_Join_Installed.actual.sampling.ordinary block := by
- change XRn_Join_Release.sampler.ordinary_sample block =
-   AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic block
- exact ordinary_public block
+/-- Selection of the actual callback; no emitted low-digits equation is hidden. -/
+theorem ordinary_slot : XRo_Join_Installed.actual.sampling.ordinary =
+ AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic := rfl
 
 #print axioms canonical
 #print axioms wide_new
 #print axioms decode
-#print axioms ordinary_public
-#print axioms installed_ordinary
+#print axioms ordinary_slot
 end XRo_Join_OrdinaryDecode

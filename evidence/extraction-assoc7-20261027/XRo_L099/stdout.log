@@ -1,0 +1,94 @@
+def XRo_Join_Installed.actual : AspisR1PublicPreparation.PreparedScratchModel.Boundaries :=
+AspisR1ClaimPreparedBridge.concreteBoundaries
+  (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries
+    (AspisR1CurrentCaller.OriginalSerializerInstallation.withOriginalSerializer
+      AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling)
+    AspisS1M31Embedding.Total.embed)
+def AspisR1CurrentCaller.BorrowedClaimPrepared.closedSampling : AspisR1PublicPreparation.PreparedModel.Boundaries :=
+{ toBytes := AspisR1CurrentCaller.OriginalSerializerInstallation.sourceBytes,
+  fromQm := AspisR1PublicPreparation.PreparedFromQmSourceBridge.fromQmSource,
+  ordinary := AspisR1Post25SamplerOrdinaryCallbackV2.candidateOrdinaryPublic,
+  gamma := AspisR1ClaimPreparedBridge.candidateGammaPublic,
+  queries := fun {H} digest transcript row payload =>
+    AspisR1PublicPreparation.QueriesModel.queries
+      (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+        AspisS1M31Embedding.Total.embed)
+      digest transcript row payload,
+  claim := fun {H} => AspisR1CurrentCaller.BorrowedClaimPrepared.legacyReference }
+def AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries : AspisR1PublicPreparation.PreparedModel.Boundaries →
+  (AspisR1PublicPreparation.aspis_core.field.M31 →
+      Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.WideExact) →
+    AspisR1PublicPreparation.PreparedModel.Boundaries :=
+fun sampling embed =>
+  AspisR1PublicPreparation.PreparedFromQmSourceBridge.withSourceFromQm
+    (AspisR1ClaimPreparedBridge.CurrentQueryRho.withConcreteQueries
+      (AspisR1ClaimPreparedBridge.withCandidateSamplers sampling) embed)
+def AspisR1ClaimPreparedBridge.powersPublic : (N : Aeneas.Std.Usize) →
+  AspisR1ClaimPreparedBridge.PE → Aeneas.Std.Result (Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE N) :=
+fun N x => do
+  let ys ← AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x)
+  Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys)
+def AspisR1ClaimPreparedBridge.claimPublic : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_semantic.Verified H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1ClaimPreparedBridge.PE →
+          Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize →
+            AspisR1ClaimPreparedBridge.PE →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1ClaimPreparedBridge.PE AspisR1PublicPreparation.verifier.Error) :=
+fun {H} D sem y1 inactive g kappa => do
+  let r ←
+    AspisR1CurrentPreparedClaim.verifier.prepared_claim
+        (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+        (AspisR1ClaimPreparedBridge.toClaimDigest D) (AspisR1ClaimPreparedBridge.toClaimSem sem) y1
+        (AspisR1ClaimPreparedBridge.toClaimE inactive)
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE g)
+        (AspisR1ClaimPreparedBridge.toClaimE kappa)
+  Aeneas.Std.Result.ok
+      (match r with
+      | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok (AspisR1ClaimPreparedBridge.fromClaimE x)
+      | Aeneas.Std.core.result.Result.Err e =>
+        Aeneas.Std.core.result.Result.Err (AspisR1ClaimPreparedBridge.fromClaimError e))
+def AspisR1ClaimPreparedBridge.OriginalPayloadClaimMeaning : {H : Type} →
+  AspisR1PublicPreparation.r1_semantic.Verified H →
+    Aeneas.Std.Slice Aeneas.Std.U8 →
+      AspisR1CurrentPreparedClaim.Concrete.E →
+        AspisR1CurrentPreparedClaim.Concrete.E →
+          AspisR1CurrentPreparedClaim.Concrete.E →
+            AspisR1CurrentPreparedClaim.Concrete.E →
+              Aeneas.Std.Array AspisR1CurrentPreparedClaim.Concrete.E 29#usize → Prop :=
+fun {H} sem y1 inactive gamma kappa out g =>
+  ∃ final,
+    AspisR1CurrentPreparedClaim.cell final 0#usize AspisR1ClaimPreparedBridge.OriginalPayloadClaimMeaning._proof_1 =
+        inactive ∧
+      (∀ (point : Aeneas.Std.Usize),
+          ↑point < 6 →
+            ∃ i value,
+              ∃ (hi : ↑i < 7),
+                ∃ xs,
+                  point + 1#usize = Aeneas.Std.Result.ok i ∧
+                    AspisR1CurrentPreparedClaim.cell final i hi = value ∧
+                      xs.length = 29 ∧
+                        (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                          (∀ t ∈ xs,
+                              AspisR1ClaimPreparedBridge.PublicSelectedSource sem y1 point t.1
+                                  (AspisR1ClaimPreparedBridge.fromClaimQ t.2.2) ∧
+                                AspisR1CurrentPreparedClaim.ClaimScalar.read
+                                      (AspisR1S5ClaimDotConcreteAdapter.concreteOps
+                                        AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                      (AspisR1ClaimPreparedBridge.toClaimSem sem) y1 point t.1 =
+                                    Aeneas.Std.Result.ok t.2.2 ∧
+                                  g.index_usize t.1 = Aeneas.Std.Result.ok t.2.1 ∧
+                                    AspisR1CurrentPreparedClaim.Concrete.decode t.2.1 =
+                                      AspisR1CurrentPreparedClaim.Concrete.decode gamma ^ ↑t.1) ∧
+                            AspisR1CurrentPreparedClaim.Concrete.decode value =
+                              (List.map
+                                  (fun t =>
+                                    AspisR1CurrentPreparedClaim.Concrete.decode gamma ^ ↑t.1 *
+                                      AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                                  xs).sum) ∧
+        AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+          AspisR1CurrentPreparedClaim.Concrete.decode out =
+            AspisR1CurrentPreparedClaim.ClaimParts.kappaPolynomial kappa final
+'XRo_Join_Installed.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
