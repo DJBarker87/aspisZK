@@ -7,7 +7,7 @@ variable [ExternalTypes]
 abbrev Context := aspis_core.state_only_hiding.StateOnlyHidingContext
 abbrev Hash := Slice (Slice U8) → Result (Array U8 32#usize)
 
-/-- The source-selected layout leaves admit the actual material-cell callback.
+/-- The source-selected layout leaves reach the actual material-cell callback.
 The callback's entire continuation, including all inner errors, is retained. -/
 theorem prefix (ops : ExternalFuns) {S : Type}
     (inst : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
