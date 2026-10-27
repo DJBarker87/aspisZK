@@ -1,0 +1,26 @@
+XRk_generated/XRk_PowersLoop.lean:25:50: error: Application type mismatch: The argument
+  run
+has type
+  (match
+      match (a, p, i) with
+      | (out1, p1, i1) => weights.powers_loop.body x out1 p1 i1 with
+    | ok r =>
+      match r with
+      | cont x_1 =>
+        loop
+          (fun x_2 =>
+            match x_2 with
+            | (out1, p1, i1) => weights.powers_loop.body x out1 p1 i1)
+          x_1
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok r
+but is expected to have type
+  (do
+      let x ← ?m.120
+      ?m.121 x) =
+    ok ?m.122
+in the application
+  bind_success ?m.120 ?m.121 ?m.122 run
+'XRk_PowersLoop.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

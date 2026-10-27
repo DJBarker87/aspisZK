@@ -1,4 +1,4 @@
-import XRk_TerminalModel
+import XRk_Funs
 #print axioms Slice.Insts.CoreCmpPartialEqArray.ne
 #print axioms Slice.Insts.CoreCmpPartialEqArray.eq
 #print axioms core.array.from_fn
@@ -102,3 +102,10 @@ import XRk_TerminalModel
 #print axioms r1_semantic.claims
 #print axioms compact.expand_values
 #print axioms verifier.checkpoint
+
+#print axioms XRk_Release.verifier.Prepared.new
+#print axioms XRk_Release.weights.powers
+#print axioms XRk_Release.fast_pairing.EbyKDot.push
+#print axioms XRk_Release.verifier.QueryGeometry.for_range
+#print axioms XRk_Release.verifier.candidate.prepare
+#print axioms XRk_Release.verifier.candidate.tx1
