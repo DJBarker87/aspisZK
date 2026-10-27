@@ -1,0 +1,38 @@
+{"attempt": "JHg_TX2_093", "exit_status": 1, "wall_seconds": 2.370899569010362, "peak_rss_kib": "5429500", "swaps": "0", "print_axioms": ["'AspisR1.JHg_Reconstruction.target' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHg_Reconstruction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.JHg_Reconstruction.target' depends on axioms: [propext, Classical.choice, Quot.sound]
+JHg_Reconstruction.lean:31:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JHf_Carrier.fromPoolV1PairForestTerminalStatementV1 (JHf_Carrier.toPoolV1PairForestTerminalStatementV1 ?v)
+in the target expression
+  (match core.result.Result.Ok (JHf_Carrier.toPoolV1PairForestTerminalStatementV1 JGx_RealStatement.value) with
+    | core.result.Result.Ok statement =>
+      ok (core.result.Result.Ok (JHf_Carrier.fromPoolV1PairForestTerminalStatementV1 statement))
+    | core.result.Result.Err error => ok (core.result.Result.Err (JHf_ProgramErrorCarrier.fromRaw error))) =
+    ok
+...
+econstruction.target' depends on axioms: [propext, Classical.choice, Quot.sound]
+JHg_Reconstruction.lean:31:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JHf_Carrier.fromPoolV1PairForestTerminalStatementV1 (JHf_Carrier.toPoolV1PairForestTerminalStatementV1 ?v)
+in the target expression
+  (match core.result.Result.Ok (JHf_Carrier.toPoolV1PairForestTerminalStatementV1 JGx_RealStatement.value) with
+    | core.result.Result.Ok statement =>
+      ok (core.result.Result.Ok (JHf_Carrier.fromPoolV1PairForestTerminalStatementV1 statement))
+    | core.result.Result.Err error => ok (core.result.Result.Err (JHf_ProgramErrorCarrier.fromRaw error))) =
+    ok (core.result.Result.Ok JGx_RealStatement.value)
+
+validated :
+  validate_pool_v1_pair_forest_terminal_statement_v1
+      (PoolV1PairForestTerminalStatementV1.PrivateTransfer JHg_RawCommon.common JHg_RawPrefix.payment) =
+    ok (core.result.Result.Ok ())
+raw :
+  reconstruct_asq8_statement (JHf_Carrier.toRequest JHd_RequestCarrier.actual)
+      (JHf_Carrier.toAuthenticatedAsq8Accounts JHg_AccountValues.value)
+      (JHf_Carrier.toPoolV1PairVerifiedAfterstateV1 JHd_ScanValue.candidate) =
+    ok (core.result.Result.Ok (JHf_Carrier.toPoolV1PairForestTerminalStatementV1 JGx_RealStatement.value))
+⊢ (match core.result.Result.Ok (JHf_Carrier.toPoolV1PairForestTerminalStatementV1 JGx_RealStatement.value) with
+    | core.result.Result.Ok statement =>
+      ok (core.result.Result.Ok (JHf_Carrier.fromPoolV1PairForestTerminalStatementV1 statement))
+    | core.result.Result.Err error => ok (core.result.Result.Err (JHf_ProgramErrorCarrier.fromRaw error))) =
+    ok (core.result.Result.Ok JGx_RealStatement.value)
+'AspisR1.JHg_Reconstruction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6d3d6f813e9644239ae881c1037681b6.scope; invocation ID: 79e4ec999a7442e599af9386150945fd

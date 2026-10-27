@@ -1,0 +1,38 @@
+'AspisR1.JHg_ProofRead.data' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHg_Validation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHg_InstalledValidation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHg_InstalledValidation.source : ∀ {C : Type}
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (slot : Aeneas.Std.U64)
+  (authenticated : AdapterRw.r1_pool_adapter.AuthenticatedAsq8Accounts),
+  AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts
+        (AspisR1.DrvC_Installation.sdk (AspisR1.JHf_Configuration.value c err)) AspisR1.CPH_Program.verifier
+        (AspisR1.JHg_World.e2.second AspisR1.S2W_D189Wrappers.secondSizes) AspisR1.JHb_Programs.pool 3#u8 slot =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok authenticated) →
+    (AspisR1.DrvC_Installation.sdk (AspisR1.JHf_Configuration.value c err)).op52 AspisR1.JHd_RequestCarrier.actual
+          authenticated AspisR1.JHd_ScanValue.candidate =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JGx_RealStatement.value) →
+      AdapterRw.r1_pool_adapter.owned.validate_asq8
+          (AspisR1.DrvC_Installation.sdk (AspisR1.JHf_Configuration.value c err)) AspisR1.CPH_Program.verifier
+          (AspisR1.JHg_World.e2.second AspisR1.S2W_D189Wrappers.secondSizes) AspisR1.JHb_DataRequest.value
+          (Aeneas.Std.core.result.Result.Ok slot) =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JGx_Validated.value) :=
+fun {C} c err slot authenticated authentication reconstruction =>
+  have source :=
+    AspisR1.JHg_Validation.source (AspisR1.DrvC_Installation.sdk (AspisR1.JHf_Configuration.value c err)) slot
+      authenticated;
+  Eq.mp
+    (congrArg
+      (fun _a =>
+        AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts _a AspisR1.CPH_Program.verifier
+              (AspisR1.JHg_World.e2.second AspisR1.S2W_D189Wrappers.secondSizes) AspisR1.JHb_Programs.pool 3#u8 slot =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok authenticated) →
+          _a.op51 AspisR1.JHb_Header.account =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JHd_ScanValue.value) →
+            _a.op52 AspisR1.JHd_RequestCarrier.actual authenticated AspisR1.JHd_ScanValue.candidate =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JGx_RealStatement.value) →
+              AdapterRw.r1_pool_adapter.owned.validate_asq8 _a AspisR1.CPH_Program.verifier
+                  (AspisR1.JHg_World.e2.second AspisR1.S2W_D189Wrappers.secondSizes) AspisR1.JHb_DataRequest.value
+                  (Aeneas.Std.core.result.Result.Ok slot) =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JGx_Validated.value))
+      (AspisR1.JHf_ReferenceFixed.source c err))
+    source authentication (AspisR1.JHf_Configuration.scan c err) reconstruction
