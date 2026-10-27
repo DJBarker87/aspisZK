@@ -1,0 +1,48 @@
+{"attempt": "XSa_L025", "exit_status": 1, "wall_seconds": 1.9050092640100047, "peak_rss_kib": "4757144", "swaps": "0", "print_axioms": ["'XSa_DotControl.push' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSa_generated/XSa_DotControl.lean:30:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1EbyKCheckedQAllParamV1.checkedQWithAll AspisR1EbyKCheckedQConcreteAll.concreteAll (XSa_CheckedQ.scalar ?q)
+in the target expression
+  (do
+      let value_c0 ←
+        match
+            ⟨[⟨[(AspisR1S5ClaimDotConcreteAdapter.toPushWide (toClaimE v)).c0.c0.a,
+                      (AspisR1S5ClaimDotConcreteAdapter.toPushWide (toClaimE v)).c0.c0.b,
+                      (AspisR1S5ClaimDotConcreteAdapter.toPushWide (toClaimE v)).c0.c1.a,
+                      (AspisR1S5ClaimDotConcreteAdapter.toPushWide (toClaimE v)).c0.c1.b],
+                    ⋯⟩,
+                  ⟨[(Aspi
+...
+ol_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame Unit) residual
+          ok (r1, { c0 := { sums := a.sums }, c1 := { sums := b.sums }, count := count })) =
+    if XSa_CheckedQ.valid q = true then do
+      let lo ← AspisR1EbyKPushDotBackend.dotViaRaw raw { sums := a.sums } (XRn_Join_toQ (eq v.c0)) (XRn_Join_toQ q)
+      let hi ← AspisR1EbyKPushDotBackend.dotViaRaw raw { sums := b.sums } (XRn_Join_toQ (eq v.c1)) (XRn_Join_toQ q)
+      let next ← count + 1#usize
+      ok (core.result.Result.Ok (), { c0 := lo, c1 := hi, count := next })
+    else ok (core.result.Result.Err (), { c0 := { sums := a.sums }, c1 := { sums := b.sums }, count := count })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array AspisR1EbyKPushExplicitOpsV1.Q 2#usize
+  but is expected to have type
+    { l // l.length = ↑2#usize }
+  in the application
+    ↑a
+XSa_generated/XSa_DotControl.lean:29:69: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1EbyKPushWideToQ.pairFromCoords,
+  ̵  ̵ ̵ ̵ ̵AspisR1EbyKPushWideToQ.qFromCoords,
+  ̲ ̲ ̲ ̲ ̲ ̲Array.index_usize, ̲Array.make,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XSa_DotControl.push' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5c5fd781374b44e5af493d64bdb44c04.scope; invocation ID: 94069c595c5945c5b9c36078412025b2

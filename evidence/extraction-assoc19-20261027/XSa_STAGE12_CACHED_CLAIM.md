@@ -1,0 +1,7 @@
+# Stage 12: canonical-input cachedClaim equality
+
+XSa_CachedClaim.claim PASSED L100: full Result equality of raw cachedClaim and installed actual.claim on the SAME D,sem,y1,inactive,g,kappa. Explicit local hypotheses: eight canonical limbs of inactive and kappa, and canonical SAME g[0..28]. No successful run, independently chosen output, whole claim equality, opaque callback law or new trust is a premise. Standard axioms only. L099 failed only the generated initialization let normalization; L100 adds that normalization and passes. This is a new source change, not an unchanged retry.
+
+Budget100/100 Lean exhausted; all further proof launches stopped. Kani0/10; native leaves and lock graph were unchanged. Full narrowed prepare and reached inactive/kappa/scratch binding were NOT compiled; A2 is OPEN, A3 native P6 remains LPm OPEN, A0-A8 each OPEN. Actual adopted RPx_Deployed headline before/after identical; ledger delta0. No frozen D188 extraction credit or release conclusion.
+
+Exact final statement/dependency/resource/axioms/source-revision evidence: XSa_CachedClaim.lean, XSa_L100/{receipt.json,stdout.log,time.log,sources/}, XSa_RESULT.json. Read XSa_HANDOFF.md for remaining deliverable, canonicality-domain caveat, cache retention and non-vacuity. Verification has zero errors,53 accepted modules/70 top-theorem audits,100 actual processes,53PASS/47FAIL. Failed prints excluded. No shipped or existing proved file changed, no ELF rebuild trigger, no keys/cleanup, no push/merge.

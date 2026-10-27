@@ -1,0 +1,49 @@
+{"attempt": "XSa_L029", "exit_status": 1, "wall_seconds": 1.8383275260566734, "peak_rss_kib": "4759788", "swaps": "0", "print_axioms": ["'XSa_RawModel.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSa_generated/XSa_RawModel.lean:31:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  XRn_Join_partial (XRn_Join_sub64 (XRn_Join_wrap64 (C * G + 2147483647 * 2147483647)) (D * H))
+in the target expression
+  [XRn_Join_sub64
+        (XRn_Join_wrap64
+          (XRn_Join_sub64 (XRn_Join_wrap64 (A * E + 2147483647 * 2147483647)) (B * F) +
+              2 *
+                XRn_Join_partial
+                  (XRn_Join_sub64
+                    (XRn_Join_wrap64
+                      (↑((↑(XRn_Join_toQ a))[2]?.getD 0#u32) * ↑((↑(XRn_Join_toQ b))[2]?.getD 0#u32) +
+                        2147483647 * 2147483647))
+                    (↑((↑(XRn_Join_toQ a))[3]?.getD 0#u32) * 
+...
+toQ b))[2]?.getD 0#u32)))),
+      XRn_Join_wrap64
+        (A * F + B * E +
+            XRn_Join_partial
+              (XRn_Join_sub64
+                (XRn_Join_wrap64
+                  (↑((↑(XRn_Join_toQ a))[2]?.getD 0#u32) * ↑((↑(XRn_Join_toQ b))[2]?.getD 0#u32) +
+                    2147483647 * 2147483647))
+                (↑((↑(XRn_Join_toQ a))[3]?.getD 0#u32) * ↑((↑(XRn_Join_toQ b))[3]?.getD 0#u32))) +
+          2 *
+            XRn_Join_partial
+              (XRn_Join_wrap64
+                (↑((↑(XRn_Join_toQ a))[2]?.getD 0#u32) * ↑((↑(XRn_Join_toQ b))[3]?.getD 0#u32) +
+                  ↑((↑(XRn_Join_toQ a))[3]?.getD 0#u32) * ↑((↑(XRn_Join_toQ b))[2]?.getD 0#u32)))),
+      XRn_Join_sub64 (XRn_Join_sub64 (XRn_Join_wrap64 (A * G + C * E + 2 * (2147483647 * 2147483647))) (B * H)) (D * F),
+      XRn_Join_wrap64 (A * H + B * G + C * F + D * E)] =
+    [rawC0 ↑a.c0.a ↑a.c0.b ↑a.c1.a ↑a.c1.b ↑b.c0.a ↑b.c0.b ↑b.c1.a ↑b.c1.b,
+      rawC1 ↑a.c0.a ↑a.c0.b ↑a.c1.a ↑a.c1.b ↑b.c0.a ↑b.c0.b ↑b.c1.a ↑b.c1.b,
+      rawC2 ↑a.c0.a ↑a.c0.b ↑a.c1.a ↑a.c1.b ↑b.c0.a ↑b.c0.b ↑b.c1.a ↑b.c1.b,
+      rawC3 ↑a.c0.a ↑a.c0.b ↑a.c1.a ↑a.c1.b ↑b.c0.a ↑b.c0.b ↑b.c1.a ↑b.c1.b]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    XRn_Join_toQ a
+  has type
+    XRn_Join_Release.fast_pairing.canonical.Q
+  but is expected to have type
+    { l // l.length = ↑4#usize }
+  in the application
+    ↑(XRn_Join_toQ a)
+'XSa_RawModel.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r048da91c7fb741b1bf9e8db0e7eac0d0.scope; invocation ID: 4bb1d195b1354ce08569d1c16926592a

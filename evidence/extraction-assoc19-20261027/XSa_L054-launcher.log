@@ -1,0 +1,55 @@
+{"attempt": "XSa_L054", "exit_status": 1, "wall_seconds": 1.9121034829877317, "peak_rss_kib": "4763224", "swaps": "0", "print_axioms": ["'XSa_DotBody.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XSa_generated/XSa_DotBody.lean:26:23: error: unsolved goals
+H : Type
+D : AspisR1CurrentPreparedClaim.aspis_core.Digest32 H
+sem : C.Sem H
+s : Slice U8
+g : Coeff
+hg : canonical g
+point : ℕ
+hp : point < 6
+iter iter' : Range
+hi : ↑iter.start < 29
+a b : Dot
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter')
+he : XRn_Join_usize ↑iter.start = iter.start
+hread :
+  mapR (fun q => toClaimQ (cq q)) (XRy_ClaimSelect.read (es sem) s point ↑iter.start) =
+    AspisR1CurrentPreparedClaim.ClaimScalar.read ops (toClaimSem sem) s (XRn_Join_usize point) iter.start
+q : XRn_Join_Release.aspis_core.field.QM31
+⊢ (do
+      let __x ← ops.pushDot (state a b iter.start)
+...
+ b iter.start) (toClaimE (cell g iter.start hi)) (toClaimQ (cq q))
+      let r1 ←
+        AspisR1CurrentPreparedClaim.core.result.Result.map_err
+            (AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError
+              D)
+            __x.1 ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter', toClaimSem sem, XRn_Join_usize point, __x.2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR1CurrentPreparedClaim.Concrete.E
+                (core.convert.FromSame AspisR1CurrentPreparedClaim.verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (r, dot1) ← ops.pushDot (state a b iter.start) (toClaimE (cell g iter.start hi)) (toClaimQ (cq q))
+    let r1 ←
+      AspisR1CurrentPreparedClaim.core.result.Result.map_err
+          (AspisR1CurrentPreparedClaim.verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError D)
+          r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter', toClaimSem sem, XRn_Join_usize point, dot1))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r2 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              AspisR1CurrentPreparedClaim.Concrete.E (core.convert.FromSame AspisR1CurrentPreparedClaim.verifier.Error)
+              residual
+        ok (done r2)
+'XSa_DotBody.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfef610f0e1d54d378377b2d1b1778d7f.scope; invocation ID: dd1b34d24573424a96d80bf637b03ad2
