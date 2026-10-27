@@ -1,0 +1,1 @@
+001 rejected: kernel excessive memory consumption in step0; scalar mul/add printed standard axioms, step0 recovery placeholder excluded. Replacement: generic symbolic Array.update_spec step8, instantiated one cell at a time. No cap increase or unchanged retry.
