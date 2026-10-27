@@ -39,6 +39,8 @@ if mode=='charon':
  entry='pv_cbm_source::'+entries[op]
  include=('pv_cbm_source::reference_multilinear::*' if op=='222ref' else 'pv_cbm_source::reference_encoder::*' if op=='79ref' else 'pv_cbm_source::constraints_v4::*' if op=='222' else 'pv_cbm_source::pool_v1::oracle::*' if op=='224' else 'pv_cbm_source::reference::*' if (op.endswith('ref') or op.endswith('fill')) else 'pv_cbm_source::pool_v1::hiding::*') if op!='79' else 'pv_cbm_source::r0::encoder::eval_message'
  args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={BASE}/charon-target',PIN+'/charon','cargo','--preset','aeneas','--mir','built','--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,'--include',include,'--dest-file',BASE+'/'+namespace+'.llbc','--','--manifest-path',BASE+'/source-proof/Cargo.toml','--release','--offline','--lib','--jobs','4']
+ if op=='79ref':
+  at=args.index('--dest-file');args[at:at]=['--include','pv_cbm_source::r0::basis::*']
 elif mode=='aeneas':
  assert ssh(f'mkdir -p {BASE}/op{op}-generated').returncode==0
  args=['timeout','120',PIN+'/aeneas','-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',namespace,'-dest',BASE+'/op'+op+'-generated','-split-files','-emit-json',BASE+'/'+namespace+'.llbc']

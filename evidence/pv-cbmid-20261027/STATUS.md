@@ -4,7 +4,7 @@ Branch codex/pv-cbmid-20261027, candidate base 237e13556180d2ce0320a2760f89b35b5
 
 | op | row | status | theorem | receipt |
 |---|---|---|---|---|
-|132|V228|Direct Aeneas refused references/structured Drop; mutable-output owned reference extracted. Chunk proofs in progress; complete native equality pending.|reference prerequisites only|aeneas-op132-001/receipt.json; aeneas-op132fill-001/receipt.json; numbered chunk receipts|
+|132|V228|Direct Aeneas refused references/structured Drop; mutable-output owned reference extracted. All60 chunks and reference composition passed; complete native equality pending.|PV_CBM_CallbackBundle.op132_reference; CellsSpec.callback (reference prerequisites only)|40738.json;40739.json; aeneas-op132-001/receipt.json; aeneas-op132fill-001/receipt.json; numbered chunk receipts|
 |133|V229|Direct Aeneas refused references/structured Drop. Mutable-output reference prepared; native equality pending.|none|aeneas-op133-001/receipt.json|
 |134|V230|Owned reference extracted and selected. Complete native equality timed out at180s and permitted900s retry; no verdict.|PV_CBM_CallbackBundle.op134_reference (not a source law)|aeneas-op134ref-001/receipt.json; kani-masks-001/receipt.json; kani-masks-900-001/receipt.json|
 |79|V201|Built MIR extracted, direct Aeneas refused references/structured Drop. Indexed reference and canonical QM31 harness prepared. Actual QM31/WideExact caller invariant remains open.|none|aeneas-op79-001/receipt.json|
@@ -22,3 +22,5 @@ Cache provenance: cb3/lean-objects was absent; no cache copy claimed. PROVENANCE
 Masks900 timeout: no third identical run. GNU-time parent RSS is incomplete for killed descendants; retained snapshot measured CBMC VmHWM6699344KiB, cgroup peak6873858048 bytes, swap0. TEN-MINUTE-REVIEW.json explicitly records its late physical snapshot; it is not represented as an exact600s measurement.
 
 Next deliverable: complete inventory composition, remaining native comparisons/extractions, and one final bundle audit within the100 Lean/10 Kani budgets. P6 association requires complete shipped/reference equality and actual canonical caller invariants; prepared partial-domain tests do not satisfy that requirement.
+
+Checked composition stage: all60 literal chunks, exact fill definition40732, complete Result wrapper40733, selected callbacks40735, generic composition lemmas40737, revised CellsSpec40738 and bundle40739 passed. CellsSpec records success, length3803 and all-free membership. It does not prove shipped equality or uniqueness/completeness of this inventory. Failed40736 is retained as replaced by symbolic append/length/capacity reasoning; no caps/limits raised. Current checkpoint94/100 Lean,3/10 Kani. All82 live modules match passing source-hash receipts.
