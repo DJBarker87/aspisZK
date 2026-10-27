@@ -1,0 +1,13 @@
+# Dependency boundary and certificate representation
+
+JHa_092 imported both the retained three-tree certificate cone and the TX1 challenge/query cone; -M7000 rejected it. It has not been rerun. Lean4.32's module/private-import facility cannot import the legacy non-module objects (already established in JGy_007); wrapping an unchanged legacy import would not remove the dependency. No such wrapper is claimed as a boundary.
+
+The replacement follows JGy's symbolic step certificates and factored generic helpers. The exported SHA block interface retains `input`, `start`, `result`, `checked`; numeric round registers/schedules are substituted into the checked proof and no longer exported as 130 declarations per block. Each application still checks ONE primitive word-schedule equation and ONE primitive round equation via JGy_FoldStep.step, then applies its symbolic compression lemma. No full hash is normalized. Original tree consumer proof bodies are reproduced under JHc_ names, changing only namespace/import bindings, and reuse JGy_LightCore/LightPadding and the existing canonical carriers. Dot/gate/line/query-loop arithmetic is imported unchanged.
+
+The first attempt to use 130 nested theorem-local lets hit the default recursion-depth limit (JHc29_002). That rejected candidate is archived; no limit was raised. JHc29_003 substitutes the certified literals directly. It passed with a 4,889,528-byte object versus 32,732,032 bytes for JGy_Certs0_00. This is measured representation reduction, not premise-removal or security credit.
+
+JHc_compress.py --check checks exact generated text and records source hashes and import bindings in JHc_COMPRESSION.json. Final composition imports the minimal batch frontier, the installed query/flush theorem, and the actual query continuation; it does not import audit modules or unused tree candidates. Its transitive certificate environment uses the new block interfaces. Actual success of that composition must still be checked; smaller objects alone do not establish it.
+
+## Checked final boundary
+
+The closed composition passed at074, after the root-read statement module was also rebound under JHc_. The initial067 batch rejection exposed that missed old namespace import; no memory retry occurred. 070 checks native batch and installed query/flush imports together, exit0/RSS7118404KiB/swap0. 074 proves the unconditional closed same-preparation batch/query/flush witness. 083 further composes the actual source writer and returns its own saved vector, with no SDK wrapper or retained-byte identity claimed.

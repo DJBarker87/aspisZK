@@ -1,0 +1,25 @@
+import JGx_Configuration
+import JFs_PublicDecode
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHc_SdkDecode
+open Aeneas Aeneas.Std Result DrvC_Installation
+
+def statement : AspisS6CurrentCodecInstallation.Statement :=
+  AspisS6CurrentAdapterCarrier.fromPoolV1PairForestTerminalStatementV1 JFs_PublicValue.value
+
+/-- The actual installed SDK decoder on the retained physical public bytes.
+No decoder-success callback is supplied. This is only the TX1 child decode,
+not the enclosing native stage1 acceptance. -/
+theorem source {C : Type} (c : Configuration FIo_Install.W C) (err : C) :
+    (DrvC_Installation.sdk (JGx_Configuration.value c err)).op47 JFx_NativeBytes.publicInput=
+      ok (.Ok statement) := by
+  change AspisS6CurrentCodecInstallation.decode JFx_NativeBytes.publicInput=_
+  unfold AspisS6CurrentCodecInstallation.decode
+  rw [AspisS6CurrentCodecInstallation.boxed_eq]
+  unfold AspisS6CurrentCodecInstallation.boxOps AspisS6CurrentCodecInstallation.rawDecoder
+  rw [JFs_PublicDecode.source]
+  rfl
+#print axioms source
+end AspisR1.JHc_SdkDecode
+end

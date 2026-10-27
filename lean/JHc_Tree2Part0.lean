@@ -1,0 +1,458 @@
+import JGc_TX2_HashBytes
+import OracleDecisionMultiBuild
+import JHc_Certs2_00
+import JHc_Certs2_01
+import JGc_TX2_ByteAppend
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHc_Gr_M2Roots
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open OracleDecisionMultiTree
+def indices : List Nat := [23374,36882,54205,61474,52342,48079,16398,45964,48273,39953]
+def bases (height : Nat) : List Nat := match height with
+  | 0 => [16399,23375,36883,39952,45965,48078,48272,52343,54204,61475]
+  | 1 => [16396,23372,36880,39954,45966,48076,48274,52340,54206,61472]
+  | 2 => [16392,23368,36884,39956,45960,48072,48276,52336,54200,61476]
+  | 3 => [16384,23360,36888,39960,45952,48064,48280,52344,54192,61480]
+  | 4 => [16400,23376,36864,39936,45968,48080,48256,52320,54176,61488]
+  | 5 => [16416,23392,36896,39968,45984,48096,48288,52288,54144,61440]
+  | 6 => [16448,23296,36928,40000,46016,48000,48320,52224,54208,61504]
+  | 7 => [16512,23424,36992,40064,45824,47872,48128,52352,54016,61568]
+  | 8 => [16640,23040,37120,40192,45568,47616,48384,52480,53760,61696]
+  | 9 => [16896,22528,37376,40448,45056,47104,48640,52736,53248,61952]
+  | 10 => [17408,23552,37888,38912,46080,51200,54272,62464]
+  | 11 => [18432,20480,49152,55296,63488]
+  | 12 => [32768,40960,57344]
+  | 13 => [24576]
+  | 14 => [0]
+  | 15 => []
+  | 16 => [65536]
+  | 17 => [131072]
+  | _ => []
+def siblingAt (height base : Nat) : State := match height with
+  | 0 => match base with
+    | 16399 => JGc_TX2_HashBytes.state [59,19,2,0,169,92,95,200,80,218,215,254,63,229,202,59,255,62,34,152,178,252,191,0,154,18,160,100,127,195,236,140]
+    | 23375 => JGc_TX2_HashBytes.state [157,250,64,85,13,19,77,148,29,212,154,20,167,121,250,170,228,41,109,0,8,18,69,253,189,146,93,22,157,14,22,87]
+    | 36883 => JGc_TX2_HashBytes.state [200,118,125,216,76,197,168,252,66,166,175,172,159,132,202,150,238,183,109,182,215,230,204,48,38,187,56,127,4,148,156,91]
+    | 39952 => JGc_TX2_HashBytes.state [212,242,126,73,163,36,230,105,69,72,183,184,38,238,26,19,12,17,111,26,165,123,45,242,32,167,200,96,233,228,57,69]
+    | 45965 => JGc_TX2_HashBytes.state [82,191,91,24,205,192,231,67,121,98,110,223,12,88,203,10,225,19,214,220,215,156,248,27,81,185,96,114,168,9,78,14]
+    | 48078 => JGc_TX2_HashBytes.state [133,193,193,242,18,135,93,234,189,30,36,64,27,220,184,7,144,101,221,10,71,70,1,222,233,39,21,21,157,144,185,165]
+    | 48272 => JGc_TX2_HashBytes.state [98,207,122,12,13,116,247,26,12,101,199,43,169,75,183,42,84,151,241,175,190,14,219,79,255,20,41,230,147,83,213,218]
+    | 52343 => JGc_TX2_HashBytes.state [80,151,219,68,228,150,38,180,212,171,144,75,12,109,31,147,55,20,109,143,198,101,8,244,28,178,249,159,227,18,96,225]
+    | 54204 => JGc_TX2_HashBytes.state [52,8,95,13,105,245,56,139,100,239,201,233,12,0,102,84,64,208,206,160,240,46,2,104,110,111,39,205,28,111,190,253]
+    | 61475 => JGc_TX2_HashBytes.state [58,245,80,88,37,211,128,187,23,227,240,163,220,232,101,152,153,152,109,88,252,196,25,246,154,119,211,100,33,86,172,156]
+    | _ => JGc_TX2_HashBytes.state []
+  | 1 => match base with
+    | 16396 => JGc_TX2_HashBytes.state [179,57,66,105,91,88,148,117,98,202,23,143,65,232,228,202,11,120,180,169,158,103,229,95,32,200,194,222,112,210,131,3]
+    | 23372 => JGc_TX2_HashBytes.state [107,125,164,219,26,17,227,219,9,238,70,117,237,24,14,190,244,82,156,147,101,254,180,116,45,28,98,62,32,57,198,231]
+    | 36880 => JGc_TX2_HashBytes.state [47,141,216,252,197,166,70,210,81,178,177,38,252,245,63,138,90,15,229,137,148,184,253,55,25,241,20,143,57,249,114,136]
+    | 39954 => JGc_TX2_HashBytes.state [149,82,100,53,22,189,226,92,234,12,68,130,93,161,194,244,133,5,197,140,65,188,52,164,91,170,182,75,33,104,183,190]
+    | 45966 => JGc_TX2_HashBytes.state [153,116,202,141,139,28,14,167,146,44,161,154,154,150,133,164,1,97,251,129,67,238,209,205,47,38,121,56,63,172,240,59]
+    | 48076 => JGc_TX2_HashBytes.state [59,32,195,3,19,154,209,61,43,191,156,113,54,238,181,159,13,241,5,114,216,99,9,206,156,21,132,19,133,169,28,149]
+    | 48274 => JGc_TX2_HashBytes.state [160,150,74,176,230,87,55,149,137,239,129,40,128,128,155,164,228,20,84,10,90,170,136,112,178,54,174,236,18,211,106,20]
+    | 52340 => JGc_TX2_HashBytes.state [228,12,216,182,13,245,17,244,56,172,67,209,165,228,216,245,36,207,219,252,76,56,80,233,32,172,129,152,94,206,186,32]
+    | 54206 => JGc_TX2_HashBytes.state [188,221,111,216,18,217,30,136,2,223,90,61,66,1,162,238,11,64,13,125,84,37,35,58,104,178,136,54,100,76,168,41]
+    | 61472 => JGc_TX2_HashBytes.state [41,72,84,86,132,77,231,158,173,214,235,170,124,62,85,192,227,36,17,210,21,206,189,190,89,89,69,162,196,143,89,105]
+    | _ => JGc_TX2_HashBytes.state []
+  | 2 => match base with
+    | 16392 => JGc_TX2_HashBytes.state [194,245,184,247,117,235,145,13,126,50,69,25,98,255,22,215,181,195,177,122,110,168,180,137,116,143,124,181,73,28,5,69]
+    | 23368 => JGc_TX2_HashBytes.state [254,249,253,171,105,7,200,164,192,146,148,22,234,243,156,193,204,205,200,27,131,103,94,225,10,168,70,82,231,124,252,35]
+    | 36884 => JGc_TX2_HashBytes.state [186,93,169,162,221,9,97,47,195,23,151,178,51,170,82,124,130,6,105,43,70,227,136,131,203,240,135,148,160,124,113,200]
+    | 39956 => JGc_TX2_HashBytes.state [117,14,241,103,80,121,161,108,21,104,179,229,107,125,84,31,189,134,142,185,135,253,55,234,139,89,193,114,221,115,46,128]
+    | 45960 => JGc_TX2_HashBytes.state [252,199,160,112,92,68,47,54,9,188,58,105,45,11,24,100,63,52,109,70,105,61,240,30,194,73,210,110,30,137,146,5]
+    | 48072 => JGc_TX2_HashBytes.state [235,50,176,191,189,100,44,247,120,2,40,116,130,231,48,6,150,118,123,187,248,252,9,165,185,26,191,183,209,65,102,221]
+    | 48276 => JGc_TX2_HashBytes.state [220,245,95,204,173,38,219,209,33,203,132,173,44,78,7,132,64,185,24,223,162,215,156,66,211,174,245,196,96,216,230,66]
+    | 52336 => JGc_TX2_HashBytes.state [106,76,243,247,175,186,175,214,242,19,159,62,63,228,244,231,157,110,252,193,106,75,125,234,209,149,240,59,55,204,191,128]
+    | 54200 => JGc_TX2_HashBytes.state [236,64,23,201,253,208,86,58,10,82,89,203,137,84,53,121,112,94,44,47,16,0,83,247,169,8,40,153,151,170,22,238]
+    | 61476 => JGc_TX2_HashBytes.state [202,189,29,169,70,123,183,226,47,76,15,140,170,67,27,238,204,183,171,51,116,132,60,183,181,124,58,4,43,84,219,250]
+    | _ => JGc_TX2_HashBytes.state []
+  | 3 => match base with
+    | 16384 => JGc_TX2_HashBytes.state [249,97,95,72,195,239,230,133,231,204,195,159,197,242,53,210,181,126,161,238,155,106,151,110,88,108,146,232,8,121,248,62]
+    | 23360 => JGc_TX2_HashBytes.state [179,62,84,67,145,245,19,145,0,76,183,216,254,164,78,100,235,197,149,22,181,176,111,192,90,35,170,224,190,165,169,130]
+    | 36888 => JGc_TX2_HashBytes.state [169,21,194,86,169,83,68,57,145,59,224,82,4,255,183,95,137,88,198,233,243,230,177,89,132,186,175,162,5,209,79,171]
+    | 39960 => JGc_TX2_HashBytes.state [249,125,104,173,124,225,131,121,245,201,10,19,165,30,103,92,67,162,190,80,0,142,172,114,183,72,182,186,237,7,60,125]
+    | 45952 => JGc_TX2_HashBytes.state [195,11,91,13,242,157,237,14,230,48,53,152,68,28,146,173,39,23,72,54,22,225,121,215,107,229,54,60,170,68,238,72]
+    | 48064 => JGc_TX2_HashBytes.state [179,112,196,108,44,160,62,125,194,38,29,185,108,215,4,140,11,246,68,159,82,31,45,80,100,31,239,92,243,120,250,219]
+    | 48280 => JGc_TX2_HashBytes.state [62,167,250,165,65,31,182,78,176,251,194,75,161,83,115,3,81,118,25,197,64,0,255,47,232,78,185,56,42,93,69,86]
+    | 52344 => JGc_TX2_HashBytes.state [57,54,77,49,101,42,95,108,7,193,128,156,160,108,172,205,176,94,234,119,178,60,14,61,107,83,83,99,46,128,55,36]
+    | 54192 => JGc_TX2_HashBytes.state [162,78,44,26,160,83,123,134,218,232,6,213,29,159,101,194,116,107,147,229,122,88,91,82,166,42,5,120,181,179,197,167]
+    | 61480 => JGc_TX2_HashBytes.state [16,233,214,196,219,235,118,177,214,211,77,23,126,52,140,234,128,247,206,133,105,180,135,29,2,2,189,128,41,90,9,193]
+    | _ => JGc_TX2_HashBytes.state []
+  | 4 => match base with
+    | 16400 => JGc_TX2_HashBytes.state [65,234,38,73,66,178,230,20,65,121,30,37,225,239,162,80,19,158,198,194,173,16,25,109,108,151,246,72,8,249,139,52]
+    | 23376 => JGc_TX2_HashBytes.state [160,196,206,167,250,112,3,28,143,138,174,230,166,61,96,100,21,194,32,169,75,99,235,184,138,126,251,198,150,238,190,52]
+    | 36864 => JGc_TX2_HashBytes.state [116,149,89,253,254,19,246,16,170,116,173,230,189,196,143,72,229,205,60,207,4,27,195,29,163,34,89,116,252,50,119,14]
+    | 39936 => JGc_TX2_HashBytes.state [55,78,39,200,76,202,7,1,140,171,82,253,129,15,177,0,61,7,55,23,33,240,211,141,37,123,101,117,182,39,64,187]
+    | 45968 => JGc_TX2_HashBytes.state [214,125,42,28,128,37,83,168,43,239,170,218,176,52,50,65,50,39,88,130,133,76,132,84,182,217,3,23,118,224,99,151]
+    | 48080 => JGc_TX2_HashBytes.state [59,77,103,151,197,77,27,177,181,138,84,152,90,178,108,53,229,207,203,146,23,110,171,197,65,83,20,196,13,21,172,117]
+    | 48256 => JGc_TX2_HashBytes.state [121,155,170,137,92,23,153,245,180,227,87,14,77,237,32,32,201,175,78,100,37,206,227,60,30,169,227,45,145,173,245,195]
+    | 52320 => JGc_TX2_HashBytes.state [77,20,168,204,126,214,237,104,69,211,193,212,69,14,169,89,19,73,26,130,68,35,49,151,26,120,232,187,43,24,108,230]
+    | 54176 => JGc_TX2_HashBytes.state [219,113,206,154,96,101,14,206,79,208,91,12,62,43,111,15,159,175,162,128,58,189,130,180,129,14,209,29,246,135,107,199]
+    | 61488 => JGc_TX2_HashBytes.state [179,218,162,212,20,131,120,109,52,129,111,92,132,18,158,30,184,98,130,212,185,233,158,145,127,59,221,46,0,214,80,21]
+    | _ => JGc_TX2_HashBytes.state []
+  | 5 => match base with
+    | 16416 => JGc_TX2_HashBytes.state [125,62,11,58,152,121,161,20,87,123,59,146,157,58,136,241,164,159,33,232,66,172,208,243,124,111,180,225,182,173,183,11]
+    | 23392 => JGc_TX2_HashBytes.state [108,85,227,67,255,107,240,217,131,85,181,219,24,10,252,188,214,141,198,133,159,73,116,15,37,35,242,27,251,66,11,3]
+    | 36896 => JGc_TX2_HashBytes.state [20,69,131,244,4,224,142,147,45,30,160,115,55,150,86,41,62,233,146,3,5,126,120,19,244,204,58,53,181,84,196,197]
+    | 39968 => JGc_TX2_HashBytes.state [46,207,213,156,44,97,223,5,239,95,131,76,225,10,249,132,169,237,91,238,24,122,79,76,77,172,35,29,240,46,161,81]
+    | 45984 => JGc_TX2_HashBytes.state [95,12,139,86,115,166,43,216,121,70,107,251,72,70,51,33,19,180,64,129,152,241,136,194,104,235,4,19,207,59,71,38]
+    | 48096 => JGc_TX2_HashBytes.state [96,144,30,173,153,163,192,34,238,70,42,254,168,235,204,203,30,126,228,206,111,202,34,173,110,50,39,31,76,7,91,117]
+    | 48288 => JGc_TX2_HashBytes.state [193,40,69,139,235,218,184,141,95,6,104,82,149,17,63,148,181,126,57,142,185,25,231,88,16,185,114,171,2,44,236,81]
+    | 52288 => JGc_TX2_HashBytes.state [108,244,30,13,4,164,224,60,6,70,5,194,113,19,224,179,103,199,233,246,124,170,2,80,220,146,148,253,253,191,218,219]
+    | 54144 => JGc_TX2_HashBytes.state [77,83,165,84,145,44,241,189,189,116,178,122,62,239,124,255,41,4,75,96,207,188,221,80,196,143,108,51,218,23,202,213]
+    | 61440 => JGc_TX2_HashBytes.state [111,137,193,249,230,246,19,197,115,7,165,255,66,184,205,55,249,202,250,176,180,214,60,254,61,126,78,118,255,181,149,35]
+    | _ => JGc_TX2_HashBytes.state []
+  | 6 => match base with
+    | 16448 => JGc_TX2_HashBytes.state [12,35,6,54,189,41,166,74,28,227,63,181,204,131,135,75,78,199,125,83,131,232,162,74,16,255,240,44,226,253,152,131]
+    | 23296 => JGc_TX2_HashBytes.state [34,202,202,246,204,161,168,147,72,248,145,59,46,233,17,80,67,226,203,239,118,214,122,140,141,112,234,72,115,236,35,119]
+    | 36928 => JGc_TX2_HashBytes.state [233,186,25,148,101,33,33,145,191,159,134,50,19,208,18,164,241,22,203,112,242,116,2,159,74,87,212,75,68,12,27,203]
+    | 40000 => JGc_TX2_HashBytes.state [172,95,38,161,233,39,109,98,162,182,95,62,119,94,97,67,209,214,59,41,199,165,99,92,109,80,89,57,162,40,2,101]
+    | 46016 => JGc_TX2_HashBytes.state [103,108,72,109,95,12,246,45,50,177,228,166,118,36,249,156,201,210,30,254,219,199,140,75,105,48,211,178,152,240,35,25]
+    | 48000 => JGc_TX2_HashBytes.state [76,138,139,110,125,144,229,21,210,24,82,54,6,198,0,84,11,57,149,77,118,158,174,117,16,240,50,61,167,224,164,114]
+    | 48320 => JGc_TX2_HashBytes.state [92,18,27,186,69,57,105,145,26,193,234,90,166,206,223,1,124,10,44,87,174,35,213,59,133,136,95,93,181,15,102,76]
+    | 52224 => JGc_TX2_HashBytes.state [221,19,169,114,80,134,201,224,126,254,210,16,35,216,131,101,98,130,177,176,105,17,245,221,225,119,36,214,154,102,135,54]
+    | 54208 => JGc_TX2_HashBytes.state [109,164,95,10,124,67,109,255,131,97,215,20,161,76,7,61,239,85,118,134,154,43,70,21,176,103,66,1,84,203,21,178]
+    | 61504 => JGc_TX2_HashBytes.state [189,12,56,31,97,219,222,72,85,148,145,20,206,134,123,106,158,78,125,165,158,116,184,132,122,139,219,64,2,74,255,189]
+    | _ => JGc_TX2_HashBytes.state []
+  | 7 => match base with
+    | 16512 => JGc_TX2_HashBytes.state [40,66,57,248,171,64,19,248,144,29,218,123,161,176,117,253,56,239,96,55,49,89,217,26,77,172,100,4,82,114,8,47]
+    | 23424 => JGc_TX2_HashBytes.state [120,18,210,66,139,22,89,122,216,63,152,111,19,111,250,236,51,117,22,85,177,55,233,164,124,98,214,151,43,78,253,217]
+    | 36992 => JGc_TX2_HashBytes.state [103,178,124,35,134,30,155,148,34,121,100,244,172,217,64,95,40,79,185,187,244,242,175,24,223,94,11,7,90,165,205,4]
+    | 40064 => JGc_TX2_HashBytes.state [226,197,181,101,101,106,77,175,222,109,224,228,95,177,222,195,21,159,182,213,81,131,239,8,141,115,209,130,107,39,67,196]
+    | 45824 => JGc_TX2_HashBytes.state [79,228,52,63,17,238,145,181,34,187,241,201,144,85,1,72,189,253,175,235,150,239,202,216,171,117,100,210,208,107,207,133]
+    | 47872 => JGc_TX2_HashBytes.state [86,120,3,16,14,90,106,11,180,182,86,253,48,54,60,51,178,176,131,60,37,248,185,4,109,125,236,97,241,128,96,4]
+    | 48128 => JGc_TX2_HashBytes.state [220,66,240,11,224,86,73,210,202,251,58,129,19,14,221,86,179,240,73,49,122,95,40,107,25,132,18,187,64,22,193,243]
+    | 52352 => JGc_TX2_HashBytes.state [238,251,240,139,222,162,82,13,5,62,14,101,72,222,153,31,136,216,181,124,9,170,18,210,98,111,201,200,121,154,149,146]
+    | 54016 => JGc_TX2_HashBytes.state [84,69,130,187,250,41,60,93,211,73,58,43,46,132,20,190,44,37,46,171,236,6,109,126,126,222,174,144,62,90,134,121]
+    | 61568 => JGc_TX2_HashBytes.state [220,229,124,220,129,225,225,51,200,62,80,161,62,80,246,77,79,81,125,59,117,195,120,42,167,10,86,19,49,243,144,77]
+    | _ => JGc_TX2_HashBytes.state []
+  | 8 => match base with
+    | 16640 => JGc_TX2_HashBytes.state [129,139,196,209,161,57,255,18,26,252,18,30,104,179,146,146,53,230,56,126,7,69,243,43,190,141,29,119,242,28,130,38]
+    | 23040 => JGc_TX2_HashBytes.state [117,171,13,240,245,18,102,9,11,246,84,158,171,240,2,164,240,189,242,95,184,129,172,128,21,241,222,68,41,84,235,244]
+    | 37120 => JGc_TX2_HashBytes.state [112,189,186,141,150,13,115,120,9,52,169,201,97,163,116,115,235,94,1,206,49,158,11,31,22,195,133,0,144,140,158,171]
+    | 40192 => JGc_TX2_HashBytes.state [65,26,79,118,1,189,37,99,244,25,130,70,240,70,77,82,137,79,54,72,155,62,165,187,17,76,147,69,84,119,4,194]
+    | 45568 => JGc_TX2_HashBytes.state [5,50,44,127,47,107,97,24,250,118,48,94,115,31,165,104,79,252,110,153,14,168,101,168,252,13,13,176,5,235,11,81]
+    | 47616 => JGc_TX2_HashBytes.state [146,141,221,94,160,176,42,173,76,178,63,145,211,201,232,196,75,136,193,192,49,187,63,18,243,80,211,155,61,26,74,208]
+    | 48384 => JGc_TX2_HashBytes.state [58,139,189,211,146,54,137,210,150,131,78,126,15,71,120,13,201,90,22,49,210,172,123,254,222,83,204,237,128,27,176,200]
+    | 52480 => JGc_TX2_HashBytes.state [154,56,13,62,76,194,157,36,143,253,24,180,172,172,162,80,108,195,243,117,154,221,90,53,117,255,176,94,77,196,103,105]
+    | 53760 => JGc_TX2_HashBytes.state [83,238,52,1,11,212,139,234,45,234,168,167,214,33,22,250,35,179,143,118,209,205,200,109,206,127,81,82,170,12,47,46]
+    | 61696 => JGc_TX2_HashBytes.state [241,181,167,150,78,64,96,175,242,182,206,109,16,199,77,118,205,21,203,47,68,204,83,194,143,140,213,34,148,113,119,188]
+    | _ => JGc_TX2_HashBytes.state []
+  | 9 => match base with
+    | 16896 => JGc_TX2_HashBytes.state [88,84,1,232,136,97,59,25,95,79,171,202,50,73,181,91,156,235,147,175,149,228,206,198,32,112,132,5,97,147,214,87]
+    | 22528 => JGc_TX2_HashBytes.state [49,215,205,0,167,207,189,105,41,234,95,241,207,36,58,176,15,198,248,69,205,13,124,207,197,169,58,105,168,219,95,167]
+    | 37376 => JGc_TX2_HashBytes.state [70,134,10,212,128,202,30,53,59,190,3,183,111,214,12,121,235,23,249,250,247,194,155,71,110,138,126,72,15,189,138,73]
+    | 40448 => JGc_TX2_HashBytes.state [10,39,97,221,95,35,17,150,57,128,55,20,176,218,99,160,138,81,221,206,84,83,87,98,113,139,232,155,109,200,172,130]
+    | 45056 => JGc_TX2_HashBytes.state [229,179,51,182,45,79,191,222,28,125,224,229,212,199,58,124,45,169,119,100,137,91,235,224,126,108,71,10,55,150,202,46]
+    | 47104 => JGc_TX2_HashBytes.state [225,153,52,213,21,109,19,130,233,62,120,171,84,78,8,150,137,100,130,111,192,224,128,194,151,56,130,138,66,53,217,85]
+    | 48640 => JGc_TX2_HashBytes.state [63,157,246,68,247,156,167,236,33,147,196,148,11,221,187,24,80,152,186,62,219,33,199,166,205,164,91,93,159,195,123,173]
+    | 52736 => JGc_TX2_HashBytes.state [248,231,68,50,25,138,85,185,211,224,168,58,116,149,74,89,192,55,189,210,248,227,32,87,12,111,89,138,56,159,211,246]
+    | 53248 => JGc_TX2_HashBytes.state [121,77,72,55,197,240,239,13,38,245,104,128,31,8,169,49,228,30,30,39,15,43,17,9,136,253,250,13,253,55,182,203]
+    | 61952 => JGc_TX2_HashBytes.state [3,74,103,5,105,99,91,75,105,84,175,69,235,21,94,73,167,83,99,16,155,139,147,0,108,111,209,105,20,221,143,245]
+    | _ => JGc_TX2_HashBytes.state []
+  | 10 => match base with
+    | 17408 => JGc_TX2_HashBytes.state [59,119,73,169,22,234,180,231,182,173,95,170,28,240,254,211,36,169,197,26,155,126,34,120,70,14,2,233,116,165,77,238]
+    | 23552 => JGc_TX2_HashBytes.state [155,115,130,156,18,114,181,14,247,172,123,90,64,80,209,183,141,7,129,131,179,236,78,203,48,11,88,165,65,162,198,183]
+    | 37888 => JGc_TX2_HashBytes.state [233,55,27,237,249,242,100,244,152,233,196,144,235,235,188,45,24,60,248,32,79,165,176,201,186,138,207,29,188,87,191,26]
+    | 38912 => JGc_TX2_HashBytes.state [21,19,134,173,7,2,210,241,42,75,194,167,15,45,14,161,26,153,154,65,84,193,25,180,34,59,39,191,21,32,25,135]
+    | 46080 => JGc_TX2_HashBytes.state [186,104,47,209,122,14,221,153,173,57,67,129,86,66,66,233,32,56,115,230,42,38,98,22,111,235,154,246,230,200,89,9]
+    | 51200 => JGc_TX2_HashBytes.state [160,11,21,231,220,161,4,194,145,32,85,167,167,102,254,212,177,251,97,177,99,36,215,15,114,51,84,17,30,107,226,151]
+    | 54272 => JGc_TX2_HashBytes.state [79,82,178,84,61,147,76,0,223,43,6,169,212,57,122,92,55,118,68,198,170,121,50,188,215,151,199,101,127,208,161,110]
+    | 62464 => JGc_TX2_HashBytes.state [113,199,16,24,52,72,40,241,79,147,76,57,246,194,155,42,154,10,38,24,158,221,37,151,184,52,224,109,73,38,75,31]
+    | _ => JGc_TX2_HashBytes.state []
+  | 11 => match base with
+    | 18432 => JGc_TX2_HashBytes.state [170,153,117,5,67,73,116,195,9,13,223,78,171,169,18,95,110,140,91,37,34,17,55,253,160,219,151,107,246,215,123,234]
+    | 20480 => JGc_TX2_HashBytes.state [216,219,166,205,15,70,186,97,80,104,229,181,34,249,182,130,33,182,45,106,240,203,133,32,164,178,203,167,172,135,153,82]
+    | 49152 => JGc_TX2_HashBytes.state [60,65,38,140,93,216,131,203,27,50,149,248,16,182,251,250,174,83,223,189,145,180,153,159,227,187,210,101,127,209,224,34]
+    | 55296 => JGc_TX2_HashBytes.state [6,129,243,133,201,8,108,81,39,87,79,34,75,133,83,63,178,115,227,174,129,80,5,186,58,198,235,77,231,201,140,216]
+    | 63488 => JGc_TX2_HashBytes.state [197,225,37,96,40,16,98,217,159,88,149,106,254,188,227,153,131,207,22,77,128,46,74,234,41,2,48,235,27,112,230,153]
+    | _ => JGc_TX2_HashBytes.state []
+  | 12 => match base with
+    | 32768 => JGc_TX2_HashBytes.state [224,16,194,66,110,101,52,10,179,79,182,34,88,250,183,144,150,209,247,104,194,136,212,200,251,140,161,235,156,251,89,119]
+    | 40960 => JGc_TX2_HashBytes.state [110,140,14,207,117,61,1,50,35,2,166,51,143,145,85,104,230,62,135,43,183,242,18,192,131,122,184,244,45,205,135,7]
+    | 57344 => JGc_TX2_HashBytes.state [141,64,232,71,157,231,216,45,93,159,181,117,153,193,198,18,181,64,29,202,192,123,128,152,11,184,100,22,94,163,139,202]
+    | _ => JGc_TX2_HashBytes.state []
+  | 13 => match base with
+    | 24576 => JGc_TX2_HashBytes.state [34,112,182,144,67,6,64,238,194,132,59,239,67,247,9,55,180,77,17,67,178,157,110,43,220,71,83,104,67,4,240,73]
+    | _ => JGc_TX2_HashBytes.state []
+  | 14 => match base with
+    | 0 => JGc_TX2_HashBytes.state [28,133,8,205,254,15,139,95,248,58,225,38,64,117,236,147,74,140,165,149,219,239,213,12,183,184,40,0,97,10,83,26]
+    | _ => JGc_TX2_HashBytes.state []
+  | 15 => match base with
+    | _ => JGc_TX2_HashBytes.state []
+  | 16 => match base with
+    | 65536 => JGc_TX2_HashBytes.state [128,179,167,189,122,81,88,173,23,97,55,49,163,83,67,138,131,227,2,149,136,117,239,125,58,69,31,115,134,136,165,136]
+    | _ => JGc_TX2_HashBytes.state []
+  | 17 => match base with
+    | 131072 => JGc_TX2_HashBytes.state [220,196,233,115,158,7,124,8,46,188,36,235,198,156,139,68,223,130,204,114,37,155,16,71,174,150,102,35,254,100,134,80]
+    | _ => JGc_TX2_HashBytes.state []
+  | _ => JGc_TX2_HashBytes.state []
+def SiblingLaw (f : Nat → Nat → State) : Prop := ∀ h,h<18 → ∀ b,b∈bases h → f h b=siblingAt h b
+theorem unoccupied (f : Nat → Bytes) (g : Nat → Nat → State) (h b : Nat)
+    (no : ¬OracleDecisionMultiBuild.Occupied indices h b) :
+    OracleDecisionMultiBuild.build indices f g h b=.supplied (g h b) := by
+  cases h <;> simp only [OracleDecisionMultiBuild.build,if_neg no]
+#print axioms unoccupied
+end AspisR1.JHc_Gr_M2Roots
+end
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHc_Gr_M2Roots
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open OracleDecisionMultiTree
+def input000 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash000.message
+def value000 : State := JFp_SHADigest.output JHc_Gr_M2.Hash000.result
+theorem cast000_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash000.B00.input).map Fin.val=JHc_Gr_M2.Hash000.B00.input := by rfl
+#print axioms cast000_0
+theorem cast000_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash000.B01.input).map Fin.val=JHc_Gr_M2.Hash000.B01.input := by rfl
+#print axioms cast000_1
+theorem tail000 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash000.tail).map Fin.val=JHc_Gr_M2.Hash000.tail := by rfl
+#print axioms tail000
+theorem numeric000 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash000.message).map Fin.val=JHc_Gr_M2.Hash000.message := by
+  simp only [JHc_Gr_M2.Hash000.message,JHc_Gr_M2.Hash000.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast000_0,cast000_1,tail000]
+#print axioms numeric000
+theorem hash000 : JFp_SHADigest.digest input000=value000 := by
+  unfold input000 JFp_SHADigest.digest
+  rw [numeric000,JHc_Gr_M2.Hash000.checked]
+  rfl
+#print axioms hash000
+def tree000 : Tree := .opened input000
+theorem root000 : root JFp_SHADigest.digest tree000=value000 := hash000
+#print axioms root000
+def input001 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash001.message
+def value001 : State := JFp_SHADigest.output JHc_Gr_M2.Hash001.result
+theorem cast001_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash001.B00.input).map Fin.val=JHc_Gr_M2.Hash001.B00.input := by rfl
+#print axioms cast001_0
+theorem cast001_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash001.B01.input).map Fin.val=JHc_Gr_M2.Hash001.B01.input := by rfl
+#print axioms cast001_1
+theorem tail001 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash001.tail).map Fin.val=JHc_Gr_M2.Hash001.tail := by rfl
+#print axioms tail001
+theorem numeric001 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash001.message).map Fin.val=JHc_Gr_M2.Hash001.message := by
+  simp only [JHc_Gr_M2.Hash001.message,JHc_Gr_M2.Hash001.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast001_0,cast001_1,tail001]
+#print axioms numeric001
+theorem hash001 : JFp_SHADigest.digest input001=value001 := by
+  unfold input001 JFp_SHADigest.digest
+  rw [numeric001,JHc_Gr_M2.Hash001.checked]
+  rfl
+#print axioms hash001
+def tree001 : Tree := .opened input001
+theorem root001 : root JFp_SHADigest.digest tree001=value001 := hash001
+#print axioms root001
+def input002 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash002.message
+def value002 : State := JFp_SHADigest.output JHc_Gr_M2.Hash002.result
+theorem cast002_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash002.B00.input).map Fin.val=JHc_Gr_M2.Hash002.B00.input := by rfl
+#print axioms cast002_0
+theorem cast002_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash002.B01.input).map Fin.val=JHc_Gr_M2.Hash002.B01.input := by rfl
+#print axioms cast002_1
+theorem tail002 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash002.tail).map Fin.val=JHc_Gr_M2.Hash002.tail := by rfl
+#print axioms tail002
+theorem numeric002 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash002.message).map Fin.val=JHc_Gr_M2.Hash002.message := by
+  simp only [JHc_Gr_M2.Hash002.message,JHc_Gr_M2.Hash002.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast002_0,cast002_1,tail002]
+#print axioms numeric002
+theorem hash002 : JFp_SHADigest.digest input002=value002 := by
+  unfold input002 JFp_SHADigest.digest
+  rw [numeric002,JHc_Gr_M2.Hash002.checked]
+  rfl
+#print axioms hash002
+def tree002 : Tree := .opened input002
+theorem root002 : root JFp_SHADigest.digest tree002=value002 := hash002
+#print axioms root002
+def input003 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash003.message
+def value003 : State := JFp_SHADigest.output JHc_Gr_M2.Hash003.result
+theorem cast003_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash003.B00.input).map Fin.val=JHc_Gr_M2.Hash003.B00.input := by rfl
+#print axioms cast003_0
+theorem cast003_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash003.B01.input).map Fin.val=JHc_Gr_M2.Hash003.B01.input := by rfl
+#print axioms cast003_1
+theorem tail003 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash003.tail).map Fin.val=JHc_Gr_M2.Hash003.tail := by rfl
+#print axioms tail003
+theorem numeric003 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash003.message).map Fin.val=JHc_Gr_M2.Hash003.message := by
+  simp only [JHc_Gr_M2.Hash003.message,JHc_Gr_M2.Hash003.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast003_0,cast003_1,tail003]
+#print axioms numeric003
+theorem hash003 : JFp_SHADigest.digest input003=value003 := by
+  unfold input003 JFp_SHADigest.digest
+  rw [numeric003,JHc_Gr_M2.Hash003.checked]
+  rfl
+#print axioms hash003
+def tree003 : Tree := .opened input003
+theorem root003 : root JFp_SHADigest.digest tree003=value003 := hash003
+#print axioms root003
+def input004 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash004.message
+def value004 : State := JFp_SHADigest.output JHc_Gr_M2.Hash004.result
+theorem cast004_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash004.B00.input).map Fin.val=JHc_Gr_M2.Hash004.B00.input := by rfl
+#print axioms cast004_0
+theorem cast004_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash004.B01.input).map Fin.val=JHc_Gr_M2.Hash004.B01.input := by rfl
+#print axioms cast004_1
+theorem tail004 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash004.tail).map Fin.val=JHc_Gr_M2.Hash004.tail := by rfl
+#print axioms tail004
+theorem numeric004 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash004.message).map Fin.val=JHc_Gr_M2.Hash004.message := by
+  simp only [JHc_Gr_M2.Hash004.message,JHc_Gr_M2.Hash004.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast004_0,cast004_1,tail004]
+#print axioms numeric004
+theorem hash004 : JFp_SHADigest.digest input004=value004 := by
+  unfold input004 JFp_SHADigest.digest
+  rw [numeric004,JHc_Gr_M2.Hash004.checked]
+  rfl
+#print axioms hash004
+def tree004 : Tree := .opened input004
+theorem root004 : root JFp_SHADigest.digest tree004=value004 := hash004
+#print axioms root004
+def input005 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash005.message
+def value005 : State := JFp_SHADigest.output JHc_Gr_M2.Hash005.result
+theorem cast005_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash005.B00.input).map Fin.val=JHc_Gr_M2.Hash005.B00.input := by rfl
+#print axioms cast005_0
+theorem cast005_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash005.B01.input).map Fin.val=JHc_Gr_M2.Hash005.B01.input := by rfl
+#print axioms cast005_1
+theorem tail005 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash005.tail).map Fin.val=JHc_Gr_M2.Hash005.tail := by rfl
+#print axioms tail005
+theorem numeric005 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash005.message).map Fin.val=JHc_Gr_M2.Hash005.message := by
+  simp only [JHc_Gr_M2.Hash005.message,JHc_Gr_M2.Hash005.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast005_0,cast005_1,tail005]
+#print axioms numeric005
+theorem hash005 : JFp_SHADigest.digest input005=value005 := by
+  unfold input005 JFp_SHADigest.digest
+  rw [numeric005,JHc_Gr_M2.Hash005.checked]
+  rfl
+#print axioms hash005
+def tree005 : Tree := .opened input005
+theorem root005 : root JFp_SHADigest.digest tree005=value005 := hash005
+#print axioms root005
+def input006 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash006.message
+def value006 : State := JFp_SHADigest.output JHc_Gr_M2.Hash006.result
+theorem cast006_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash006.B00.input).map Fin.val=JHc_Gr_M2.Hash006.B00.input := by rfl
+#print axioms cast006_0
+theorem cast006_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash006.B01.input).map Fin.val=JHc_Gr_M2.Hash006.B01.input := by rfl
+#print axioms cast006_1
+theorem tail006 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash006.tail).map Fin.val=JHc_Gr_M2.Hash006.tail := by rfl
+#print axioms tail006
+theorem numeric006 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash006.message).map Fin.val=JHc_Gr_M2.Hash006.message := by
+  simp only [JHc_Gr_M2.Hash006.message,JHc_Gr_M2.Hash006.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast006_0,cast006_1,tail006]
+#print axioms numeric006
+theorem hash006 : JFp_SHADigest.digest input006=value006 := by
+  unfold input006 JFp_SHADigest.digest
+  rw [numeric006,JHc_Gr_M2.Hash006.checked]
+  rfl
+#print axioms hash006
+def tree006 : Tree := .opened input006
+theorem root006 : root JFp_SHADigest.digest tree006=value006 := hash006
+#print axioms root006
+def input007 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash007.message
+def value007 : State := JFp_SHADigest.output JHc_Gr_M2.Hash007.result
+theorem cast007_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash007.B00.input).map Fin.val=JHc_Gr_M2.Hash007.B00.input := by rfl
+#print axioms cast007_0
+theorem cast007_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash007.B01.input).map Fin.val=JHc_Gr_M2.Hash007.B01.input := by rfl
+#print axioms cast007_1
+theorem tail007 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash007.tail).map Fin.val=JHc_Gr_M2.Hash007.tail := by rfl
+#print axioms tail007
+theorem numeric007 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash007.message).map Fin.val=JHc_Gr_M2.Hash007.message := by
+  simp only [JHc_Gr_M2.Hash007.message,JHc_Gr_M2.Hash007.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast007_0,cast007_1,tail007]
+#print axioms numeric007
+theorem hash007 : JFp_SHADigest.digest input007=value007 := by
+  unfold input007 JFp_SHADigest.digest
+  rw [numeric007,JHc_Gr_M2.Hash007.checked]
+  rfl
+#print axioms hash007
+def tree007 : Tree := .opened input007
+theorem root007 : root JFp_SHADigest.digest tree007=value007 := hash007
+#print axioms root007
+def input008 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash008.message
+def value008 : State := JFp_SHADigest.output JHc_Gr_M2.Hash008.result
+theorem cast008_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash008.B00.input).map Fin.val=JHc_Gr_M2.Hash008.B00.input := by rfl
+#print axioms cast008_0
+theorem cast008_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash008.B01.input).map Fin.val=JHc_Gr_M2.Hash008.B01.input := by rfl
+#print axioms cast008_1
+theorem tail008 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash008.tail).map Fin.val=JHc_Gr_M2.Hash008.tail := by rfl
+#print axioms tail008
+theorem numeric008 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash008.message).map Fin.val=JHc_Gr_M2.Hash008.message := by
+  simp only [JHc_Gr_M2.Hash008.message,JHc_Gr_M2.Hash008.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast008_0,cast008_1,tail008]
+#print axioms numeric008
+theorem hash008 : JFp_SHADigest.digest input008=value008 := by
+  unfold input008 JFp_SHADigest.digest
+  rw [numeric008,JHc_Gr_M2.Hash008.checked]
+  rfl
+#print axioms hash008
+def tree008 : Tree := .opened input008
+theorem root008 : root JFp_SHADigest.digest tree008=value008 := hash008
+#print axioms root008
+def input009 : Bytes := JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash009.message
+def value009 : State := JFp_SHADigest.output JHc_Gr_M2.Hash009.result
+theorem cast009_0 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash009.B00.input).map Fin.val=JHc_Gr_M2.Hash009.B00.input := by rfl
+#print axioms cast009_0
+theorem cast009_1 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash009.B01.input).map Fin.val=JHc_Gr_M2.Hash009.B01.input := by rfl
+#print axioms cast009_1
+theorem tail009 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash009.tail).map Fin.val=JHc_Gr_M2.Hash009.tail := by rfl
+#print axioms tail009
+theorem numeric009 : (JGc_TX2_HashBytes.bytes JHc_Gr_M2.Hash009.message).map Fin.val=JHc_Gr_M2.Hash009.message := by
+  simp only [JHc_Gr_M2.Hash009.message,JHc_Gr_M2.Hash009.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast009_0,cast009_1,tail009]
+#print axioms numeric009
+theorem hash009 : JFp_SHADigest.digest input009=value009 := by
+  unfold input009 JFp_SHADigest.digest
+  rw [numeric009,JHc_Gr_M2.Hash009.checked]
+  rfl
+#print axioms hash009
+def tree009 : Tree := .opened input009
+theorem root009 : root JFp_SHADigest.digest tree009=value009 := hash009
+#print axioms root009
+def inputAt (base : Nat) : Bytes := match base with
+  | 23374 => input000
+  | 36882 => input001
+  | 54205 => input002
+  | 61474 => input003
+  | 52342 => input004
+  | 48079 => input005
+  | 16398 => input006
+  | 45964 => input007
+  | 48273 => input008
+  | 39953 => input009
+  | _ => []
+def InputLaw (f : Nat → Bytes) : Prop := ∀ b,b∈indices → f b=inputAt b
+theorem shape000 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 23374=tree000 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 23374),inputs 23374 (by decide)]
+  rfl
+#print axioms shape000
+theorem shape001 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 36882=tree001 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 36882),inputs 36882 (by decide)]
+  rfl
+#print axioms shape001
+theorem shape002 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 54205=tree002 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 54205),inputs 54205 (by decide)]
+  rfl
+#print axioms shape002
+theorem shape003 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 61474=tree003 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 61474),inputs 61474 (by decide)]
+  rfl
+#print axioms shape003
+theorem shape004 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 52342=tree004 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 52342),inputs 52342 (by decide)]
+  rfl
+#print axioms shape004
+theorem shape005 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 48079=tree005 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 48079),inputs 48079 (by decide)]
+  rfl
+#print axioms shape005
+theorem shape006 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 16398=tree006 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 16398),inputs 16398 (by decide)]
+  rfl
+#print axioms shape006
+theorem shape007 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 45964=tree007 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 45964),inputs 45964 (by decide)]
+  rfl
+#print axioms shape007
+theorem shape008 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 48273=tree008 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 48273),inputs 48273 (by decide)]
+  rfl
+#print axioms shape008
+theorem shape009 (f : Nat → Bytes) (g : Nat → Nat → State) (inputs : InputLaw f) (_siblings : SiblingLaw g) :
+    OracleDecisionMultiBuild.build indices f g 0 39953=tree009 := by
+  rw [OracleDecisionMultiBuild.build,if_pos (by decide : OracleDecisionMultiBuild.Occupied indices 0 39953),inputs 39953 (by decide)]
+  rfl
+#print axioms shape009
+end AspisR1.JHc_Gr_M2Roots
+end
