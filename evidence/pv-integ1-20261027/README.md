@@ -26,7 +26,16 @@ successful default build. Their admission receipts are preserved separately.
 
 ## Stage 2: client build and route
 
-Pending. Label: **recommended recipe pending owner approval; toolchain unpinned**.
+PASS. SHA-256 `5fc6c98d2e34b873faae3773064f6b0eda505623b161a703647c7787b2f46688`,
+2,747,928 bytes. `route-symbols.json`, `route-disassembly.txt` and
+`op223-site.json` retain resolved call paths from `devnet_spend::main` to
+`generate_for_mask_nonce` and `prover_shared::compress_tagged_tuple`, plus the
+source call at host_semantic.rs:423. This is binary/source route evidence, not
+a whole-prover refinement theorem. Build exit 0, 126.807 seconds, peak process
+RSS 636,300 KiB, swap 0; see capped receipt for aggregate peak. Two admission
+refusals preceded the successful third client admission.
+
+Label: **recommended recipe pending owner approval; toolchain unpinned**.
 Recipe: host rustc 1.94.1, release, offline, locked, four build jobs:
 
 ```
@@ -83,14 +92,17 @@ for side in baseline candidate; do
 done
 ```
 
-Install this job's unmodified reservation/barrier/receipt runners separately
-under each `combined/{baseline,candidate}` root, with that root's paths substituted
-in `native.py`, `run_host.py` and `capped.py`. Keep a runner diff and SHA manifest.
-The `native.py` runner uses each root's source pin and distinct cargo target.
-Copy `combined-corpus.py` as `combined/corpus.py` and `combined-timing.py` as
-`combined/timing.py`; copy the existing `quiet-preflight.py` from op223 into
-`combined/quiet-preflight.py`, read-only. Use a combined-root `run_host.py` whose
-source pin is the reviewed candidate revision. No shared source changes.
+Install the path-adapted reservation/barrier/receipt runners and planned gate
+scripts with the following preparation-only command. It verifies both source
+pins, refuses to overwrite an existing runner, records all runner hashes, and
+does not launch a build, differential or timing:
+
+```sh
+python3 tools/pv-integ1-20261027/prepare_combined_runners.py "$NEXT_REV"
+```
+
+The baseline and candidate have separate job-owned cargo targets. No shared
+source is written.
 
 Exact build commands after installing those runner paths:
 
