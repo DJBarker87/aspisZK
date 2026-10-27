@@ -262,3 +262,23 @@ dropped-restoration pattern and a native differential on inputs where the
 write matters. Audits: Stream A SDY_ (the four named functions plus a
 whole-Funs pattern grep) and Stream B pv-d188 (every Stream B emission). A body
 flagged by either audit is suspended for both streams.
+
+D188-P3 check result, 2026-10-27 16:10 UTC (SDY_, evidence/fidelity-check1-20261027/SDY_FINDING.md):
+- Static scan of every emitted body in the raw release Funs (SHA256
+  f4b2d17c...a3b5) for a discarded mutable back-function: exactly ONE hit, the
+  known sampler binding (line 3611, discarded quotient at 3624). There are no
+  other hits.
+- Native differentials, three fixtures per function, each exercising a write
+  that changes state (unchanged tails asserted; multiproof's writes checked
+  before its rejection): multiproof::verify_in_place,
+  verifier::update_residue_row, sampler::add_small_base_p and
+  verifier::BatchedWeights::finish are all FAITHFUL. The twelve complete
+  emitted Results equal the frozen native Rust outputs; standard axioms only.
+
+Under the owner-approved narrowing (contract 'Owner-approved amendment,
+2026-10-27 (second)', item 3), these four functions pass both gates, and their
+D188 credit is restored. sampler::low_base_p_digits remains EXCLUDED and is
+bridged natively as an opaque leaf (LPk_). This restores credit under the
+approved gate. It is not a general proof of translator fidelity: D188 remains
+a trust item, and these checks are its entry condition. The scan covers
+emitted bodies only; opaque native leaves have no emitted body.
