@@ -100,3 +100,20 @@ next recount.
   invocations, add-leaf-and-retry). If the leaf count passes ten before
   emission, the job also writes the route-A case (translator upgrade and
   D188 re-pin) for the owner. Each leaf is a P6 obligation and a ledger row.
+
+## Update 2026-10-27 (XRg_): leaf count passed ten; route-A evaluation started
+
+extraction-repro7 used all 12 invocations: the call-closed release kit now
+needs TWELVE opaque leaves (compact::check_values, verifier::echeck,
+compact::expand_values, candidate::wide_view, checkpoint, prepared_claim,
+r1_semantic::claims, decode_k, validate_record_fields, semantic_boundary,
+canonical::Dot::push, the circle_sample closure) and the twelve-leaf LLBC
+is not yet run through Aeneas. The failures fall into a few translator
+classes (loop-context borrow collapse, join mismatch, borrow/value
+bottoms, unsupported Arrow types), none a mathematical counterexample.
+Route-A case: evidence/extraction-repro7-20261027/XRg_ROUTE-A-CASE.md.
+extraction-eval1 (XRh_) runs the twelve-leaf kit once more with the pinned
+tool and, separately and in isolation, evaluates the newest Aeneas/Charon
+on one minimised reproduction per failure class and, if those pass, on the
+full kit. Evaluation only: no pin changes, nothing it emits is imported or
+cited. Re-pinning D188 to a new translator remains the owner's decision.
