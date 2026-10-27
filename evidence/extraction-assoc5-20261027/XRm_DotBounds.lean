@@ -23,7 +23,7 @@ theorem raw_index (a b : fast_pairing.canonical.Q) (j : Nat) :
     simp only [h,Option.getD_some]
     exact raw a b n (List.mem_of_getElem? h)
 
-theorem partial (n : Nat) (hn : n<18446744073709551616) : XRk_partial n<B := by
+theorem partial_bound (n : Nat) (hn : n<18446744073709551616) : XRk_partial n<B := by
   have fold := XRm_Reduce.mersenneFold31_lt_two34 hn
   change n%2147483648+n/2147483648<B at fold
   unfold XRk_partial XRk_wrap64
@@ -33,7 +33,7 @@ theorem partial (n : Nat) (hn : n<18446744073709551616) : XRk_partial n<B := by
 def term (j : Fin 4) (v : XRl_DotSums.Operand) :=
   XRk_partial ((XRk_raw v.1 v.2)[j.val]?.getD 0)
 theorem term_bound (j : Fin 4) (v : XRl_DotSums.Operand) : term j v<B :=
-  partial _ (raw_index v.1 v.2 j.val)
+  partial_bound _ (raw_index v.1 v.2 j.val)
 
 theorem u64_value (n : Nat) : (XRk_u64 n).val=XRk_wrap64 n := by
   simp [XRk_u64]
@@ -46,7 +46,7 @@ theorem step_value (j : Fin 4) (s : U64) (v : XRl_DotSums.Operand)
 #print axioms wrap
 #print axioms raw
 #print axioms raw_index
-#print axioms partial
+#print axioms partial_bound
 #print axioms term_bound
 #print axioms u64_value
 #print axioms step_value

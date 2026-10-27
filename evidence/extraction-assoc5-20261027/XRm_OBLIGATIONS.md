@@ -66,3 +66,45 @@ cardinality-only laws, but do not prove the table generator/root-of-unity
 identity, field inverse identity, native allocation/error effects or P6.
 XRm_AllocationBoundary proves the supplied typed heap.filled model cannot
 return Allocation; native fallible allocation must still be associated.
+
+## Dot and TX1/checkpoint continuation results
+
+XRm_DotBounds proves each partial raw-cell contribution <2^34 from the actual
+wrapping-cell definition. XRm_DotNoWrap.fold/zero derive ordinary natural sums of the specified partial WRAPPING raw-cell contributions
+for every history of length≤4096; XRm_DotNaturalHistory.reached obtains that
+bound from the SAME emitted Reached history. XRm_ActualDot.associated composes
+this with the source Prepared.new producer and the three actual tail pushes,
+canonical wide/scalar operands and count=3. Native P6 remains open.
+
+XRm_CandidateAssociation.source derives SAME compact parse/scan, S2/split,
+canonical source scratch and model checkpoint digest/payload cuts from ONE
+accepted emitted TX1 run. XRm_CheckpointSize.model derives the model's physical
+byte-length guard; XRm_CompactLength.reject gives all-input first-guard wrong-
+length rejection. Native public parsing/authentication/expansion and the
+three ordered native digest attempts remain unproved; K010 timed out.
+
+Non-vacuity is local, XRm_Nonvacuity: concrete reverse capture/prefix, actual
+empty new dot history and canonical ONE. The extracted noncanonical-wide
+history counterexample is retained. No joint SAME-witness inhabitant of the
+actual top's hypotheses or ten-query accepted TX1 is constructed.
+
+## Final accepted caller-index composition and audits
+
+XRm_QueryIndices.reached derives the SAME cast query (<262144), /4,*4,+3
+checked operations and fibre/line_node calls from an actual emitted body step.
+XRm_QueryPoint.reached composes this with the table-word ZMod interpretation;
+it is defined and checked in XRm_LocalAudit.lean L100. L098's typed-existential
+syntax-error candidate remains XRm_QueryPoint_candidate.lean.txt; it is not
+imported. This is a corrected statement elaboration, not an alternate source.
+
+L100 jointly imports the final local cohort, prints all139 accepted new axiom
+reports (standard-only), and checks the five principal full interfaces. L099's
+separate cached actual-root audit FAILED: unknown module prefix Port5Q1_Ten
+on the required coherent LEAN_PATH. The cached ARX_Root source matches the
+before/after source hash, but no fresh root axioms, full root replay or
+formatter proof-term reachability result is claimed. Root audit input is
+retained as XRm_RootAudit_candidate.lean.txt. No substitute module was selected.
+
+Budget exhausted:100 Lean compiler invocations (78PASS/22FAIL),10 Kani runs
+(6PASS/4FAIL),0 extraction. No prover invocation after L100. All fifteen full
+D188-P2 rows remain OPEN, actual-top premises removed0, T/P/G/C delta0/0/0/0.
