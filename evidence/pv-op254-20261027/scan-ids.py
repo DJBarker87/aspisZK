@@ -9,5 +9,5 @@ for here,dirs,files in os.walk(root):
  for n in files:
   if n=='sent.txt':
    for line in (Path(here)/n).read_text().splitlines():
-    if re.search(r'(?<![0-9])385[0-9]{2}(?![0-9])',line):hits.append(dict(path=str(Path(here)/n),line=line))
+    if len(line.split())>2 and line.split()[2].isdigit() and 38500<=int(line.split()[2])<=38599:hits.append(dict(path=str(Path(here)/n),line=line))
 print(json.dumps(dict(range=[38500,38599],hits=hits),indent=2))

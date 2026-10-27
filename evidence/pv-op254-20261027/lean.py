@@ -34,7 +34,7 @@ for name in re.findall(r'^import (\S+)',src.read_text(),re.M):
  assert p is not None,('missing dependency',name)
  if name.startswith(('PV_B1_', 'R1Z.ProverRwFull')): assert p.is_relative_to(O),('foreign private object',name,str(p))
  deps[name]={'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
-fp=hashlib.sha256(json.dumps(dict(deps=deps,environment=env),sort_keys=True).encode()).hexdigest()
+fp=hashlib.sha256(json.dumps(dict(deps=deps,environment=dict(env,LEAN_PATH=str(O)+':'+env['LEAN_PATH'])),sort_keys=True).encode()).hexdigest()
 submission=dict(attempt=a,module=module,source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),source_revision=(H/'proof-revision.txt').read_text().strip(),rust_source_revision='ccf87ccecd8e0463a53bbedd0fc995837937dac9',dependencies=deps,deps_fingerprint=fp,private_source_root=str(S),private_object_root=str(O),launcher_original_sha256=hashlib.sha256(launcher.encode()).hexdigest(),launcher_private_sha256=hashlib.sha256(private.encode()).hexdigest(),launcher_delta='private source/object roots and private env with original shared namespace priority; no shared writes',private_environment_sha256=hashlib.sha256(private_env.read_bytes()).hexdigest())
 (R/'submission.json').write_text(json.dumps(submission,indent=2)+'\n')
 with (R/'reservation.json').open('w') as log:
@@ -45,7 +45,7 @@ if pre.returncode or admission.get('allowed') is not True:
  sys.exit(78)
 start=time.monotonic()
 with (R/'launcher.log').open('w') as log:
- p=subprocess.run(['sh',str(H/'run-private-joint.sh'),str(a),module,'J','7000','8',fp],stdout=log,stderr=subprocess.STDOUT)
+ p=subprocess.run(['sh',str(H/'run-private-joint.sh'),str(a),module.replace('.','/'),'J','7000','8',fp],stdout=log,stderr=subprocess.STDOUT)
 for n,dest in [('out','out.log'),('time','time.log'),('sha','sha.txt')]:
  f=T/f'{n}-{a}.{ "txt" if n=="sha" else "log"}'
  if f.exists():(R/dest).write_bytes(f.read_bytes())
