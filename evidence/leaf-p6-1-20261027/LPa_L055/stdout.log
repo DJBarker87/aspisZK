@@ -1,0 +1,10 @@
+def Aeneas.Std.U32.wrapping_add : U32 → U32 → U32 :=
+fun x y => UScalar.wrapping_add x y
+def Aeneas.Std.U32.wrapping_sub : U32 → U32 → U32 :=
+UScalar.wrapping_sub
+def Aeneas.Std.UScalar.ofNatCore : {ty : UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+def Aeneas.Std.UScalar.val : {ty : UScalarTy} → UScalar ty → ℕ :=
+fun {ty} x => x.bv.toNat
+'Aeneas.Std.U32.wrapping_add' does not depend on any axioms
+'Aeneas.Std.U32.wrapping_sub' does not depend on any axioms

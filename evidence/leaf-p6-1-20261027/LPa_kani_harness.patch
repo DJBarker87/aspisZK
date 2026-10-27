@@ -1,0 +1,302 @@
+diff --git a/crates/aspis-r1-cost-probe/src/LPa_candidate.rs b/crates/aspis-r1-cost-probe/src/LPa_candidate.rs
+new file mode 100644
+index 0000000000..0cbe1510e8
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPa_candidate.rs
+@@ -0,0 +1,21 @@
++//! Direct wide_view at actual frozen bounds, arbitrary inactive32-byte stage.
++use super::*;
++#[kani::proof] #[kani::unwind(35)] fn LPa_view_inactive(){
++ let mut proof=[0u8;compact::PROOF_BYTES];let b:[u8;32]=kani::any();
++ proof[compact::OFF_INACTIVE..compact::OFF_ROUND0].copy_from_slice(&b);
++ let semantic=[0u8;super::SEMANTIC_BYTES];let y1=[0u8;29*32];
++ let actual=wide_view(&proof,&semantic,&y1);let inactive=E::from_le_bytes(&b);
++ match (actual,inactive){
++  (Err(e),None)=>assert_eq!(e,Error::Parse),
++  (Ok(v),Some(x))=>{
++   assert_eq!(v.inactive,x);assert_eq!(v.variant,Variant::S2);
++   assert!(core::ptr::eq(v.semantic.as_ptr(),semantic.as_ptr()));assert_eq!(v.semantic.len(),semantic.len());
++   assert!(core::ptr::eq(v.y1.as_ptr(),y1.as_ptr()));assert_eq!(v.y1.len(),y1.len());
++   assert!(core::ptr::eq(v.round0.as_ptr(),proof[compact::OFF_ROUND0..].as_ptr()));assert_eq!(v.round0.len(),224);
++   assert!(core::ptr::eq(v.folded_root.unwrap().as_ptr(),proof[compact::OFF_FOLDED_ROOT..].as_ptr()));
++   assert!(core::ptr::eq(v.round1.as_ptr(),proof[compact::OFF_ROUND1..].as_ptr()));assert_eq!(v.round1.len(),224);
++   assert!(core::ptr::eq(v.final_message.as_ptr(),proof[compact::OFF_FINAL..].as_ptr()));assert_eq!(v.final_message.len(),2048);
++   assert_eq!(v.query_bytes.len(),0);
++  },_=>assert!(false)
++ }
++}
+diff --git a/crates/aspis-r1-cost-probe/src/LPa_compact.rs b/crates/aspis-r1-cost-probe/src/LPa_compact.rs
+new file mode 100644
+index 0000000000..1770a3ba98
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPa_compact.rs
+@@ -0,0 +1,48 @@
++//! Direct calls to the shipped library. Owned references: XRf_reference.rs:28-47.
++use super::*;
++fn reference_check(b:&[u8])->Result<(),CodecError>{
++ let mut i=0;while i<b.len()/16 {for j in 0..4 {
++  let n=u32::from_le_bytes(b[16*i+4*j..16*i+4*j+4].try_into().unwrap());
++  if n>=0x7fff_ffff{return Err(CodecError::NonCanonical)}
++ }i+=1;}Ok(())
++}
++fn reference_expand(b:&[u8],o:&mut[u8])->Result<(),CodecError>{
++ if b.len()%16!=0||o.len()!=2*b.len(){return Err(CodecError::Length)}
++ for i in 0..b.len()/16 {for j in 0..32{o[32*i+j]=if j<16{b[16*i+j]}else{0};}}Ok(())
++}
++#[kani::proof] #[kani::unwind(6)] fn LPa_check_stage(){
++ let b:[u8;16]=kani::any();assert_eq!(check_values(&b),reference_check(&b));
++}
++#[kani::proof] #[kani::unwind(6)] fn LPa_check_composition(){
++ let b:[u8;32]=kani::any();let left=check_values(&b[..16]);
++ let staged=left.and_then(|()|check_values(&b[16..]));assert_eq!(check_values(&b),staged);
++}
++#[kani::proof] #[kani::unwind(6)] fn LPa_check_tail(){
++ let b:[u8;31]=kani::any();let n:usize=kani::any();kani::assume(n<=31);
++ assert_eq!(check_values(&b[..n]),reference_check(&b[..n]));
++}
++#[kani::proof] #[kani::unwind(35)] fn LPa_expand_stage(){
++ let b:[u8;16]=kani::any();let mut o:[u8;48]=kani::any();let mut r=o;
++ assert_eq!(expand_values(&b,&mut o[8..40]),reference_expand(&b,&mut r[8..40]));
++ let j:usize=kani::any();kani::assume(j<48);assert_eq!(o[j],r[j]);
++}
++#[kani::proof] #[kani::unwind(6)] fn LPa_expand_alignment(){
++ let b:[u8;464]=kani::any();let mut o:[u8;928]=kani::any();let before=o;
++ let n:usize=kani::any();kani::assume(n<=464&&n%16!=0);
++ assert_eq!(expand_values(&b[..n],&mut o),Err(CodecError::Length));
++ let j:usize=kani::any();kani::assume(j<928);assert_eq!(o[j],before[j]);
++}
++#[kani::proof] #[kani::unwind(35)] fn LPa_expand_indexed_stage(){
++ let b:[u8;464]=kani::any();let mut o:[u8;928]=kani::any();let before=o;
++ let i:usize=kani::any();kani::assume(i<29);
++ assert_eq!(expand_values(&b[16*i..16*i+16],&mut o[32*i..32*i+32]),Ok(()));
++ let j:usize=kani::any();kani::assume(j<928);
++ assert_eq!(o[j],if j<32*i||j>=32*i+32{before[j]}else if j<32*i+16{b[16*i+j-32*i]}else{0});
++}
++#[kani::proof] #[kani::unwind(6)] fn LPa_expand_length(){
++ let b:[u8;464]=kani::any();let mut o:[u8;928]=kani::any();let before=o;
++ let n:usize=kani::any();kani::assume(n<=464&&n%16==0);
++ let m:usize=kani::any();kani::assume(m<=928&&m!=2*n);
++ assert_eq!(expand_values(&b[..n],&mut o[..m]),Err(CodecError::Length));
++ let j:usize=kani::any();kani::assume(j<928);assert_eq!(o[j],before[j]);
++}
+diff --git a/crates/aspis-r1-cost-probe/src/LPa_dot.rs b/crates/aspis-r1-cost-probe/src/LPa_dot.rs
+new file mode 100644
+index 0000000000..a9a58da57a
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPa_dot.rs
+@@ -0,0 +1,12 @@
++use super::*;
++#[kani::proof] #[kani::unwind(6)]
++fn LPa_dot_stage() {
++    let x:[u32;4]=kani::any(); let y:[u32;4]=kani::any();
++    kani::assume(x.iter().all(|v|*v<P)); kani::assume(y.iter().all(|v|*v<P));
++    let a=Q::from_limbs(x).unwrap(); let b=Q::from_limbs(y).unwrap();
++    let sums:[u64;4]=kani::any(); let mut actual=Dot{sums};
++    let raw=a.raw(b); actual.push(a,b);
++    let j:usize=kani::any();kani::assume(j<4);
++    let expected=sums[j].wrapping_add((raw[j]%(1u64<<31)).wrapping_add(raw[j]/(1u64<<31)));
++    assert_eq!(actual.sums[j],expected);
++}
+diff --git a/crates/aspis-r1-cost-probe/src/LPa_sampler.rs b/crates/aspis-r1-cost-probe/src/LPa_sampler.rs
+new file mode 100644
+index 0000000000..9f85dc373e
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPa_sampler.rs
+@@ -0,0 +1,6 @@
++//! Direct circle_sample on the reached rejected-parameter stage, no stubs.
++use super::*;
++#[kani::proof] #[kani::unwind(260)] fn LPa_circle_fallback(){
++ let second:bool=kani::any();let row=if second{CircleRow::Second}else{CircleRow::First};
++ assert_eq!(circle_sample(&[0u8;32],row),aspis_core::transcript::circle_fallback_point(usize::from(second)));
++}
+diff --git a/crates/aspis-r1-cost-probe/src/LPa_semantic.rs b/crates/aspis-r1-cost-probe/src/LPa_semantic.rs
+new file mode 100644
+index 0000000000..1172dc655b
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPa_semantic.rs
+@@ -0,0 +1,33 @@
++//! Library calls, no child stubs. Owned boundary reference is XRg_boundary_reference.
++use super::*;
++fn canonical()->QM31{
++ let x:[u32;4]=kani::any();kani::assume(x.iter().all(|x|*x<2147483647));
++ QM31{c0:aspis_core::field::CM31::new(aspis_core::field::M31(x[0]),aspis_core::field::M31(x[1])),c1:aspis_core::field::CM31::new(aspis_core::field::M31(x[2]),aspis_core::field::M31(x[3]))}
++}
++#[kani::proof] #[kani::unwind(30)] fn LPa_boundary(){
++ let p:[QM31;28]=core::array::from_fn(|_|canonical());
++ let mut r=p[0].add(p[0]);for i in 1..28{r=r.add(p[i]);}assert_eq!(semantic_boundary(&p),r);
++}
++// Reached decoder/storage stages with one arbitrary lane; remaining lanes zero.
++// Full arbitrary87-lane/allocation association remains open.
++fn claim_stage(point:usize){
++ let mut bytes=[0u8;5+116*32];let q=canonical();let lane:usize=kani::any();kani::assume(lane<29);
++ let at=5+(29*point+lane)*32;q.write_le_bytes(&mut bytes[at..at+16]);
++ let p=crate::r1_wire::LPa_wire::prefix(&bytes);let actual=claims(&p).unwrap();
++ let j:usize=kani::any();kani::assume(j<87);
++ assert_eq!(actual[j/29][j%29],if j==29*point+lane{q}else{QM31::ZERO});
++}
++#[kani::proof] #[kani::unwind(32)] fn LPa_claim_point0(){claim_stage(0)}
++#[kani::proof] #[kani::unwind(32)] fn LPa_claim_point2(){claim_stage(2)}
++// Replacement for timed-out whole28 fold: one unrestricted canonical addition
++// stage, as actually called by semantic_boundary. No copied shipped body.
++#[kani::proof] #[kani::unwind(6)] fn LPa_boundary_step(){
++ let a=canonical();let b=canonical();let result=a.add(b);
++ let x=[a.c0.a.0,a.c0.b.0,a.c1.a.0,a.c1.b.0];
++ let y=[b.c0.a.0,b.c0.b.0,b.c1.a.0,b.c1.b.0];
++ let actual=[result.c0.a.0,result.c0.b.0,result.c1.a.0,result.c1.b.0];
++ let j:usize=kani::any();kani::assume(j<4);
++ let sum=u64::from(x[j])+u64::from(y[j]);
++ let expected=if sum>=2147483647{sum-2147483647}else{sum};
++ assert_eq!(u64::from(actual[j]),expected);
++}
+diff --git a/crates/aspis-r1-cost-probe/src/LPa_verifier.rs b/crates/aspis-r1-cost-probe/src/LPa_verifier.rs
+new file mode 100644
+index 0000000000..27a98c7161
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPa_verifier.rs
+@@ -0,0 +1,19 @@
++//! Owned reference: XRf_reference_echeck. Shipped echeck is called directly.
++use super::*;
++fn reference(b:&[u8],k:bool)->Result<(),Error>{
++ for i in 0..b.len()/32 {for j in 0..8 {
++  let x=u32::from_le_bytes(b[32*i+4*j..32*i+4*j+4].try_into().unwrap());
++  if x>=0x7fff_ffff||(k&&j>=4&&x!=0){return Err(Error::Parse)}
++ }}Ok(())
++}
++#[kani::proof] #[kani::unwind(10)] fn LPa_echeck_stage(){
++ let b:[u8;32]=kani::any();let k:bool=kani::any();assert_eq!(echeck(&b,k),reference(&b,k));
++}
++#[kani::proof] #[kani::unwind(10)] fn LPa_echeck_tail(){
++ let b:[u8;63]=kani::any();let n:usize=kani::any();kani::assume(n<=63);let k:bool=kani::any();
++ assert_eq!(echeck(&b[..n],k),reference(&b[..n],k));
++}
++#[kani::proof] #[kani::unwind(10)] fn LPa_echeck_composition(){
++ let b:[u8;64]=kani::any();let k:bool=kani::any();
++ assert_eq!(echeck(&b,k),echeck(&b[..32],k).and_then(|()|echeck(&b[32..],k)));
++}
+diff --git a/crates/aspis-r1-cost-probe/src/LPa_wire.rs b/crates/aspis-r1-cost-probe/src/LPa_wire.rs
+new file mode 100644
+index 0000000000..6ee03a57d1
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPa_wire.rs
+@@ -0,0 +1,36 @@
++//! Direct private-library calls; safe references correspond to XRg_reference.rs.
++use super::*;
++pub(crate) fn prefix<'a>(framed:&'a[u8])->Prefix<'a>{Prefix{c1_root:&[0;32],records:[framed;27]}}
++fn reference_validate(row:u8,b:&[u8])->Result<(),Error>{
++ for i in 0..b.len()/32 {for j in 0..8 {
++  let x=u32::from_le_bytes(b[32*i+4*j..32*i+4*j+4].try_into().unwrap());
++  if x>=0x7fff_ffff||(j>=4&&x!=0){return Err(Error::NonCanonical{row,value:i})}
++ }}Ok(())
++}
++fn reference_decode<const N:usize>(row:u8,b:&[u8],offset:usize)->Result<[QM31;N],Error>{
++ if row<14{return Err(Error::InvalidRow)}
++ let start=offset.checked_mul(32).ok_or(Error::Length{row})?;
++ let end=start.checked_add(N.checked_mul(32).ok_or(Error::Length{row})?).ok_or(Error::Length{row})?;
++ let payload=&b[5..];if end>payload.len(){return Err(Error::Length{row})}
++ let mut out=[QM31::ZERO;N];for i in 0..N {
++  for j in 0..4 {let x=u32::from_le_bytes(payload[start+32*i+4*j..start+32*i+4*j+4].try_into().unwrap());
++   if x>=0x7fff_ffff{return Err(Error::NonCanonical{row,value:offset+i})}
++  }out[i]=QM31::from_le_bytes(&payload[start+32*i..start+32*i+16]).unwrap();
++ }Ok(out)
++}
++#[kani::proof] #[kani::unwind(10)] fn LPa_decode_stage(){
++ let b:[u8;37]=kani::any();let row:u8=kani::any();let offset:usize=kani::any();
++ assert_eq!(ValidatedRecord{row,framed:&b}.decode_k::<1>(offset),reference_decode::<1>(row,&b,offset));
++}
++#[kani::proof] #[kani::unwind(10)] fn LPa_decode_guard29(){
++ let b:[u8;37]=kani::any();let row:u8=kani::any();let offset:usize=kani::any();
++ assert_eq!(ValidatedRecord{row,framed:&b}.decode_k::<29>(offset),reference_decode::<29>(row,&b,offset));
++}
++#[kani::proof] #[kani::unwind(10)] fn LPa_validate_stage(){
++ let b:[u8;32]=kani::any();let row:u8=kani::any();assert_eq!(validate_record_fields(row,&b),reference_validate(row,&b));
++}
++#[kani::proof] #[kani::unwind(10)] fn LPa_validate_composition(){
++ let b:[u8;64]=kani::any();let row:u8=kani::any();
++ let staged=validate_record_fields(row,&b[..32]).and_then(|()|validate_record_fields(row,&b[32..]).map_err(|e|match e{Error::NonCanonical{row,value}=>Error::NonCanonical{row,value:value+1},e=>e}));
++ assert_eq!(validate_record_fields(row,&b),staged);
++}
+diff --git a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+index 59e43f26e0..0f07d47e8c 100644
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,7 @@ pub fn tx2<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], ha
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path = "LPa_candidate.rs"]
++mod LPa_candidate;
+diff --git a/crates/aspis-r1-cost-probe/src/compact.rs b/crates/aspis-r1-cost-probe/src/compact.rs
+index 362f224b01..a9d87cacd4 100644
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -199,3 +199,7 @@ mod tests {
+         assert_eq!(check_values(&bad), Err(CodecError::NonCanonical));
+     }
+ }
++
++#[cfg(kani)]
++#[path = "LPa_compact.rs"]
++mod LPa_compact;
+diff --git a/crates/aspis-r1-cost-probe/src/fast_pairing.rs b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+index 12eba5134d..cad7ab9229 100644
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -122,7 +122,7 @@ mod canonical {
+         }
+         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
+-}
++#[cfg(kani)] mod LPa_dot { include!("LPa_dot.rs"); } }
+ 
+ 
+ use aspis_core::field::{CM31, QM31, WideExact as E};
+diff --git a/crates/aspis-r1-cost-probe/src/r1_semantic.rs b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+index 6a0d717bcf..1756ff1618 100644
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -316,3 +316,7 @@ pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, o
+     mark(obs, 1);
+     verify_finish(public, prefix, transcript, challenges, obs)
+ }
++
++#[cfg(kani)]
++#[path = "LPa_semantic.rs"]
++mod LPa_semantic;
+diff --git a/crates/aspis-r1-cost-probe/src/r1_wire.rs b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+index bd830aab6b..0fb074f561 100644
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -848,3 +848,7 @@ pub mod fields29 {
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)]
++#[path = "LPa_wire.rs"]
++pub(crate) mod LPa_wire;
+diff --git a/crates/aspis-r1-cost-probe/src/sampler.rs b/crates/aspis-r1-cost-probe/src/sampler.rs
+index 50b7fca7d0..60a2dd6599 100644
+--- a/crates/aspis-r1-cost-probe/src/sampler.rs
++++ b/crates/aspis-r1-cost-probe/src/sampler.rs
+@@ -228,3 +228,7 @@ mod qm31_index_tests {
+         }
+     }
+ }
++
++#[cfg(kani)]
++#[path = "LPa_sampler.rs"]
++mod LPa_sampler;
+diff --git a/crates/aspis-r1-cost-probe/src/verifier.rs b/crates/aspis-r1-cost-probe/src/verifier.rs
+index d8e2588d33..651b345e9d 100644
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,7 @@ const _:()=assert!(PROOF_BYTES==57_607&&SPLIT==10);
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)]
++#[path = "LPa_verifier.rs"]
++mod LPa_verifier;

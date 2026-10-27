@@ -1,0 +1,992 @@
+[
+  {
+    "leaf": "compact::check_values",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/compact.rs",
+    "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "source_lines": [
+      {
+        "line": 139,
+        "text": "pub fn check_values(compact: &[u8]) -> Result<(), CodecError> {"
+      },
+      {
+        "line": 140,
+        "text": "    for c in compact.chunks_exact(16) {"
+      },
+      {
+        "line": 141,
+        "text": "        QM31::from_le_bytes(c).ok_or(CodecError::NonCanonical)?;"
+      },
+      {
+        "line": 142,
+        "text": "    }"
+      },
+      {
+        "line": 143,
+        "text": "    Ok(())"
+      },
+      {
+        "line": 144,
+        "text": "}"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro6-20261027/XRf_reference.rs",
+      "name": "XRf_reference_check_values",
+      "start_line": 28,
+      "end_line": 38,
+      "sha256": "bbd1d177a15c1e66017fb13f2b77266ae1edbde81f81a4045a8043e7c47c3c5f",
+      "lines": [
+        {
+          "line": 28,
+          "text": "fn XRf_reference_check_values(bytes:&[u8])->Result<(),compact::CodecError> {"
+        },
+        {
+          "line": 29,
+          "text": "    let mut at=0;"
+        },
+        {
+          "line": 30,
+          "text": "    while at+16<=bytes.len() {"
+        },
+        {
+          "line": 31,
+          "text": "        for j in 0..4 {"
+        },
+        {
+          "line": 32,
+          "text": "            let mut raw=[0;4];raw.copy_from_slice(&bytes[at+4*j..at+4*j+4]);"
+        },
+        {
+          "line": 33,
+          "text": "            if u32::from_le_bytes(raw)>=0x7fff_ffff {return Err(compact::CodecError::NonCanonical)}"
+        },
+        {
+          "line": 34,
+          "text": "        }"
+        },
+        {
+          "line": 35,
+          "text": "        at+=16;"
+        },
+        {
+          "line": 36,
+          "text": "    }"
+        },
+        {
+          "line": 37,
+          "text": "    Ok(())"
+        },
+        {
+          "line": 38,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_FunsExternal.lean",
+      "start_line": 429,
+      "end_line": 432,
+      "sha256": "091388a659e9723b6840ae7485807aec7aac35ebd2e34777ae1314a46c7fc3f4"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_Check.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  },
+  {
+    "leaf": "verifier::echeck",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+    "source_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+    "source_lines": [
+      {
+        "line": 39,
+        "text": "fn echeck(b:&[u8],k:bool)->Result<(),Error> {"
+      },
+      {
+        "line": 40,
+        "text": "    for c in b.chunks_exact(32) {let x=E::from_le_bytes(c).ok_or(Error::Parse)?;if k&&x.c1()!=K::ZERO {return Err(Error::Parse);}}"
+      },
+      {
+        "line": 41,
+        "text": "    Ok(())"
+      },
+      {
+        "line": 42,
+        "text": "}"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro6-20261027/XRf_reference.rs",
+      "name": "XRf_reference_echeck",
+      "start_line": 49,
+      "end_line": 60,
+      "sha256": "bbd1d177a15c1e66017fb13f2b77266ae1edbde81f81a4045a8043e7c47c3c5f",
+      "lines": [
+        {
+          "line": 49,
+          "text": "fn XRf_reference_echeck(bytes:&[u8],k:bool)->Result<(),Error> {"
+        },
+        {
+          "line": 50,
+          "text": "    let mut at=0;"
+        },
+        {
+          "line": 51,
+          "text": "    while at+32<=bytes.len() {"
+        },
+        {
+          "line": 52,
+          "text": "        for j in 0..8 {"
+        },
+        {
+          "line": 53,
+          "text": "            let mut raw=[0;4];raw.copy_from_slice(&bytes[at+4*j..at+4*j+4]);"
+        },
+        {
+          "line": 54,
+          "text": "            let x=u32::from_le_bytes(raw);"
+        },
+        {
+          "line": 55,
+          "text": "            if x>=0x7fff_ffff || (k&&j>=4&&x!=0) {return Err(Error::Parse)}"
+        },
+        {
+          "line": 56,
+          "text": "        }"
+        },
+        {
+          "line": 57,
+          "text": "        at+=32;"
+        },
+        {
+          "line": 58,
+          "text": "    }"
+        },
+        {
+          "line": 59,
+          "text": "    Ok(())"
+        },
+        {
+          "line": 60,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_FunsExternal.lean",
+      "start_line": 435,
+      "end_line": 438,
+      "sha256": "091388a659e9723b6840ae7485807aec7aac35ebd2e34777ae1314a46c7fc3f4"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_Echeck.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  },
+  {
+    "leaf": "compact::expand_values",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/compact.rs",
+    "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "source_lines": [
+      {
+        "line": 127,
+        "text": "pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {"
+      },
+      {
+        "line": 128,
+        "text": "    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {"
+      },
+      {
+        "line": 129,
+        "text": "        return Err(CodecError::Length);"
+      },
+      {
+        "line": 130,
+        "text": "    }"
+      },
+      {
+        "line": 131,
+        "text": "    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {"
+      },
+      {
+        "line": 132,
+        "text": "        o[..16].copy_from_slice(c);"
+      },
+      {
+        "line": 133,
+        "text": "        o[16..].fill(0);"
+      },
+      {
+        "line": 134,
+        "text": "    }"
+      },
+      {
+        "line": 135,
+        "text": "    Ok(())"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro6-20261027/XRf_reference.rs",
+      "name": "XRf_reference_expand_values",
+      "start_line": 39,
+      "end_line": 48,
+      "sha256": "bbd1d177a15c1e66017fb13f2b77266ae1edbde81f81a4045a8043e7c47c3c5f",
+      "lines": [
+        {
+          "line": 39,
+          "text": "fn XRf_reference_expand_values(bytes:&[u8],out:&mut[u8])->Result<(),compact::CodecError> {"
+        },
+        {
+          "line": 40,
+          "text": "    if bytes.len()%16!=0 || out.len()!=2*bytes.len() {return Err(compact::CodecError::Length)}"
+        },
+        {
+          "line": 41,
+          "text": "    let mut i=0;"
+        },
+        {
+          "line": 42,
+          "text": "    while i<bytes.len()/16 {"
+        },
+        {
+          "line": 43,
+          "text": "        let mut j=0;"
+        },
+        {
+          "line": 44,
+          "text": "        while j<32 {out[32*i+j]=if j<16 {bytes[16*i+j]} else {0};j+=1;}"
+        },
+        {
+          "line": 45,
+          "text": "        i+=1;"
+        },
+        {
+          "line": 46,
+          "text": "    }"
+        },
+        {
+          "line": 47,
+          "text": "    Ok(())"
+        },
+        {
+          "line": 48,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_FunsExternal.lean",
+      "start_line": 454,
+      "end_line": 469,
+      "sha256": "091388a659e9723b6840ae7485807aec7aac35ebd2e34777ae1314a46c7fc3f4"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_Expand.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  },
+  {
+    "leaf": "candidate::wide_view",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+    "source_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+    "source_lines": [
+      {
+        "line": 76,
+        "text": "fn wide_view<'a>(proof: &'a [u8], semantic: &'a [u8], y1: &'a [u8]) -> Result<View<'a>, Error> {"
+      },
+      {
+        "line": 77,
+        "text": "    Ok(View {"
+      },
+      {
+        "line": 78,
+        "text": "        variant: Variant::S2,"
+      },
+      {
+        "line": 79,
+        "text": "        semantic,"
+      },
+      {
+        "line": 80,
+        "text": "        y1,"
+      },
+      {
+        "line": 81,
+        "text": "        inactive: E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?,"
+      },
+      {
+        "line": 82,
+        "text": "        round0: &proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],"
+      },
+      {
+        "line": 83,
+        "text": "        folded_root: Some(proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap()),"
+      },
+      {
+        "line": 84,
+        "text": "        round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],"
+      },
+      {
+        "line": 85,
+        "text": "        final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],"
+      },
+      {
+        "line": 86,
+        "text": "        query_bytes: &[],"
+      },
+      {
+        "line": 87,
+        "text": "    })"
+      },
+      {
+        "line": 88,
+        "text": "}"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro6-20261027/XRf_reference.rs",
+      "name": "XRf_reference_wide_view",
+      "start_line": 61,
+      "end_line": 67,
+      "sha256": "bbd1d177a15c1e66017fb13f2b77266ae1edbde81f81a4045a8043e7c47c3c5f",
+      "lines": [
+        {
+          "line": 61,
+          "text": "fn XRf_reference_wide_view<'a>(proof:&'a[u8],semantic:&'a[u8],y1:&'a[u8])->Result<View<'a>,Error> {"
+        },
+        {
+          "line": 62,
+          "text": "    let inactive=E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;"
+        },
+        {
+          "line": 63,
+          "text": "    let root:&[u8;32]=proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();"
+        },
+        {
+          "line": 64,
+          "text": "    Ok(View {variant:Variant::S2,semantic,y1,inactive,"
+        },
+        {
+          "line": 65,
+          "text": "      round0:&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],folded_root:Some(root),"
+        },
+        {
+          "line": 66,
+          "text": "      round1:&proof[compact::OFF_ROUND1..compact::OFF_FINAL],final_message:&proof[compact::OFF_FINAL..compact::OFF_OPENINGS],query_bytes:&[]})"
+        },
+        {
+          "line": 67,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_DecodeModels.lean",
+      "start_line": 65,
+      "end_line": 92,
+      "sha256": "6333cf13f39e505a28f88b2cdf7291131f57328e45c4516bd7620a645c1d32cd"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_View.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  },
+  {
+    "leaf": "r1_semantic::claims",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+    "source_sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+    "source_lines": [
+      {
+        "line": 42,
+        "text": "fn claims(prefix: &Prefix<'_>) -> Result<Box<[[QM31; 29]; 3]>, Error> {"
+      },
+      {
+        "line": 43,
+        "text": "    let record = prefix.validated_record(25)?;"
+      },
+      {
+        "line": 44,
+        "text": "    let mut out ="
+      },
+      {
+        "line": 45,
+        "text": "        aspis_core::r0::heap::uninit::<[[QM31; 29]; 3]>().map_err(|_| Error::Allocation)?;"
+      },
+      {
+        "line": 46,
+        "text": "    unsafe {"
+      },
+      {
+        "line": 47,
+        "text": "        for p in 0..3 {"
+      },
+      {
+        "line": 48,
+        "text": "            out.as_mut_ptr()"
+      },
+      {
+        "line": 49,
+        "text": "                .cast::<[QM31; 29]>()"
+      },
+      {
+        "line": 50,
+        "text": "                .add(p)"
+      },
+      {
+        "line": 51,
+        "text": "                .write(record.decode_k::<29>(p * 29)?);"
+      },
+      {
+        "line": 52,
+        "text": "        }"
+      },
+      {
+        "line": 53,
+        "text": "        Ok(out.assume_init())"
+      },
+      {
+        "line": 54,
+        "text": "    }"
+      },
+      {
+        "line": 55,
+        "text": "}"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro7-20261027/XRg_reference.rs",
+      "name": "XRg_claims_reference",
+      "start_line": 2,
+      "end_line": 5,
+      "sha256": "950baa1197116c8a3ad539a3161476ad6a58f26c1a5c3f4f06bb3f52c1d86a4c",
+      "lines": [
+        {
+          "line": 2,
+          "text": "fn XRg_claims_reference(rows: [Result<[K;29],Error>;3]) -> Result<Box<[[K;29];3]>,Error> {"
+        },
+        {
+          "line": 3,
+          "text": "    let a=rows[0]?; let b=rows[1]?; let c=rows[2]?;"
+        },
+        {
+          "line": 4,
+          "text": "    Ok(Box::new([a,b,c]))"
+        },
+        {
+          "line": 5,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_DecodeModels.lean",
+      "start_line": 34,
+      "end_line": 50,
+      "sha256": "6333cf13f39e505a28f88b2cdf7291131f57328e45c4516bd7620a645c1d32cd"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_ClaimsFold.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  },
+  {
+    "leaf": "ValidatedRecord::decode_k",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+    "source_sha256": "7479389501c3d2510f639546e0d834dbc42e2bed33c6b5d38c89b8b6318ae3b8",
+    "source_lines": [
+      {
+        "line": 139,
+        "text": "    pub(crate) fn decode_k<const N: usize>("
+      },
+      {
+        "line": 140,
+        "text": "        &self,"
+      },
+      {
+        "line": 141,
+        "text": "        offset_values: usize,"
+      },
+      {
+        "line": 142,
+        "text": "    ) -> Result<[QM31; N], Error> {"
+      },
+      {
+        "line": 143,
+        "text": "        if self.row < 14 {"
+      },
+      {
+        "line": 144,
+        "text": "            return Err(Error::InvalidRow);"
+      },
+      {
+        "line": 145,
+        "text": "        }"
+      },
+      {
+        "line": 146,
+        "text": "        let byte_offset = offset_values"
+      },
+      {
+        "line": 147,
+        "text": "            .checked_mul(32)"
+      },
+      {
+        "line": 148,
+        "text": "            .ok_or(Error::Length { row: self.row })?;"
+      },
+      {
+        "line": 149,
+        "text": "        let byte_len = N.checked_mul(32).ok_or(Error::Length { row: self.row })?;"
+      },
+      {
+        "line": 150,
+        "text": "        let end = byte_offset"
+      },
+      {
+        "line": 151,
+        "text": "            .checked_add(byte_len)"
+      },
+      {
+        "line": 152,
+        "text": "            .ok_or(Error::Length { row: self.row })?;"
+      },
+      {
+        "line": 153,
+        "text": "        let bytes = self"
+      },
+      {
+        "line": 154,
+        "text": "            .payload()"
+      },
+      {
+        "line": 155,
+        "text": "            .get(byte_offset..end)"
+      },
+      {
+        "line": 156,
+        "text": "            .ok_or(Error::Length { row: self.row })?;"
+      },
+      {
+        "line": 157,
+        "text": "        let mut out = [QM31::ZERO; N];"
+      },
+      {
+        "line": 158,
+        "text": "        for (value, part) in bytes.chunks_exact(32).enumerate() {"
+      },
+      {
+        "line": 159,
+        "text": "            out[value] = QM31::from_le_bytes(&part[..16]).ok_or(Error::NonCanonical {"
+      },
+      {
+        "line": 160,
+        "text": "                row: self.row,"
+      },
+      {
+        "line": 161,
+        "text": "                value: offset_values + value,"
+      },
+      {
+        "line": 162,
+        "text": "            })?;"
+      },
+      {
+        "line": 163,
+        "text": "        }"
+      },
+      {
+        "line": 164,
+        "text": "        Ok(out)"
+      },
+      {
+        "line": 165,
+        "text": "    }"
+      },
+      {
+        "line": 166,
+        "text": "}"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro7-20261027/XRg_reference.rs",
+      "name": "XRg_decode_reference",
+      "start_line": 7,
+      "end_line": 24,
+      "sha256": "950baa1197116c8a3ad539a3161476ad6a58f26c1a5c3f4f06bb3f52c1d86a4c",
+      "lines": [
+        {
+          "line": 7,
+          "text": "fn XRg_decode_reference<const N:usize>(row:u8,framed:&[u8],offset:usize)->Result<[K;N],Error> {"
+        },
+        {
+          "line": 8,
+          "text": "    if row<14 {return Err(Error::InvalidRow)}"
+        },
+        {
+          "line": 9,
+          "text": "    let start=offset.checked_mul(32).ok_or(Error::Length{row})?;"
+        },
+        {
+          "line": 10,
+          "text": "    let size=N.checked_mul(32).ok_or(Error::Length{row})?;"
+        },
+        {
+          "line": 11,
+          "text": "    let end=start.checked_add(size).ok_or(Error::Length{row})?;"
+        },
+        {
+          "line": 12,
+          "text": "    let payload=&framed[5..];"
+        },
+        {
+          "line": 13,
+          "text": "    if end>payload.len() {return Err(Error::Length{row})}"
+        },
+        {
+          "line": 14,
+          "text": "    let mut out=[K::ZERO;N];"
+        },
+        {
+          "line": 15,
+          "text": "    let mut i=0;"
+        },
+        {
+          "line": 16,
+          "text": "    while i<N {"
+        },
+        {
+          "line": 17,
+          "text": "        let mut limbs=[0u32;4];"
+        },
+        {
+          "line": 18,
+          "text": "        for j in 0..4 {let at=start+32*i+4*j; limbs[j]=u32::from_le_bytes(payload[at..at+4].try_into().unwrap());}"
+        },
+        {
+          "line": 19,
+          "text": "        if limbs.iter().any(|x| *x>=2147483647) {return Err(Error::NonCanonical{row,value:offset+i})}"
+        },
+        {
+          "line": 20,
+          "text": "        out[i]=K::from_le_bytes(&payload[start+32*i..start+32*i+16]).unwrap();"
+        },
+        {
+          "line": 21,
+          "text": "        i+=1;"
+        },
+        {
+          "line": 22,
+          "text": "    }"
+        },
+        {
+          "line": 23,
+          "text": "    Ok(out)"
+        },
+        {
+          "line": 24,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_DecodeModels.lean",
+      "start_line": 7,
+      "end_line": 31,
+      "sha256": "6333cf13f39e505a28f88b2cdf7291131f57328e45c4516bd7620a645c1d32cd"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_Decode.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  },
+  {
+    "leaf": "validate_record_fields",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+    "source_sha256": "7479389501c3d2510f639546e0d834dbc42e2bed33c6b5d38c89b8b6318ae3b8",
+    "source_lines": [
+      {
+        "line": 51,
+        "text": "fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {"
+      },
+      {
+        "line": 52,
+        "text": "    for (value, bytes) in payload.chunks_exact(32).enumerate() {"
+      },
+      {
+        "line": 53,
+        "text": "        let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;"
+      },
+      {
+        "line": 54,
+        "text": "        if x.c1() != QM31::ZERO {"
+      },
+      {
+        "line": 55,
+        "text": "            return Err(Error::NonCanonical { row, value });"
+      },
+      {
+        "line": 56,
+        "text": "        }"
+      },
+      {
+        "line": 57,
+        "text": "    }"
+      },
+      {
+        "line": 58,
+        "text": "    Ok(())"
+      },
+      {
+        "line": 59,
+        "text": "}"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro7-20261027/XRg_reference.rs",
+      "name": "XRg_validate_reference",
+      "start_line": 26,
+      "end_line": 35,
+      "sha256": "950baa1197116c8a3ad539a3161476ad6a58f26c1a5c3f4f06bb3f52c1d86a4c",
+      "lines": [
+        {
+          "line": 26,
+          "text": "fn XRg_validate_reference(row:u8,bytes:&[u8])->Result<(),Error>{"
+        },
+        {
+          "line": 27,
+          "text": "    let mut i=0;"
+        },
+        {
+          "line": 28,
+          "text": "    while i<bytes.len()/32 {"
+        },
+        {
+          "line": 29,
+          "text": "        for j in 0..8 {let at=32*i+4*j; let x=u32::from_le_bytes(bytes[at..at+4].try_into().unwrap());"
+        },
+        {
+          "line": 30,
+          "text": "            if x>=2147483647 || (j>=4 && x!=0) {return Err(Error::NonCanonical{row,value:i})}"
+        },
+        {
+          "line": 31,
+          "text": "        }"
+        },
+        {
+          "line": 32,
+          "text": "        i+=1;"
+        },
+        {
+          "line": 33,
+          "text": "    }"
+        },
+        {
+          "line": 34,
+          "text": "    Ok(())"
+        },
+        {
+          "line": 35,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_FunsExternal.lean",
+      "start_line": 441,
+      "end_line": 451,
+      "sha256": "091388a659e9723b6840ae7485807aec7aac35ebd2e34777ae1314a46c7fc3f4"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_Validate.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  },
+  {
+    "leaf": "semantic_boundary",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+    "source_sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+    "source_lines": [
+      {
+        "line": 82,
+        "text": "fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {"
+      },
+      {
+        "line": 83,
+        "text": "        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);"
+      },
+      {
+        "line": 84,
+        "text": "    boundary"
+      },
+      {
+        "line": 85,
+        "text": "}"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro7-20261027/XRg_reference.rs",
+      "name": "XRg_boundary_reference",
+      "start_line": 38,
+      "end_line": 42,
+      "sha256": "950baa1197116c8a3ad539a3161476ad6a58f26c1a5c3f4f06bb3f52c1d86a4c",
+      "lines": [
+        {
+          "line": 38,
+          "text": "fn XRg_boundary_reference(polynomial:&[K;28])->K{"
+        },
+        {
+          "line": 39,
+          "text": "    let mut out=polynomial[0].add(polynomial[0]);"
+        },
+        {
+          "line": 40,
+          "text": "    for i in 1..28 {out=out.add(polynomial[i]);}"
+        },
+        {
+          "line": 41,
+          "text": "    out"
+        },
+        {
+          "line": 42,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_DecodeModels.lean",
+      "start_line": 54,
+      "end_line": 57,
+      "sha256": "6333cf13f39e505a28f88b2cdf7291131f57328e45c4516bd7620a645c1d32cd"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_Boundary.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  },
+  {
+    "leaf": "canonical::Dot::push",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+    "source_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+    "source_lines": [
+      {
+        "line": 114,
+        "text": "        pub fn push(&mut self,a:Q,b:Q) {"
+      },
+      {
+        "line": 115,
+        "text": "            // Both enclosing public accumulators check the 4096-term bound."
+      },
+      {
+        "line": 116,
+        "text": "            // This private accumulator cannot be reached by raw callers."
+      },
+      {
+        "line": 117,
+        "text": "            let raw=a.raw(b);"
+      },
+      {
+        "line": 118,
+        "text": "            for j in 0..4 {"
+      },
+      {
+        "line": 119,
+        "text": "                self.sums[j]=self.sums[j].wrapping_add("
+      },
+      {
+        "line": 120,
+        "text": "                    (raw[j]&u64::from(P)).wrapping_add(raw[j]>>31u32));"
+      },
+      {
+        "line": 121,
+        "text": "            }"
+      },
+      {
+        "line": 122,
+        "text": "        }"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro7-20261027/XRg_reference.rs",
+      "name": "XRg_dot_reference",
+      "start_line": 44,
+      "end_line": 46,
+      "sha256": "950baa1197116c8a3ad539a3161476ad6a58f26c1a5c3f4f06bb3f52c1d86a4c",
+      "lines": [
+        {
+          "line": 44,
+          "text": "fn XRg_dot_reference(sums:[u64;4],raw:[u64;4],i:usize)->u64{"
+        },
+        {
+          "line": 45,
+          "text": "    sums[i].wrapping_add((raw[i] % (1u64<<31)).wrapping_add(raw[i]/(1u64<<31)))"
+        },
+        {
+          "line": 46,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_DotModel.lean",
+      "start_line": 29,
+      "end_line": 36,
+      "sha256": "ded8f763afb3843de8e7a8caab809a750fd6764b28db46a0f410ae29e4ed580b"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_Dot.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  },
+  {
+    "leaf": "circle_sample closure",
+    "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source": "crates/aspis-r1-cost-probe/src/sampler.rs",
+    "source_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+    "source_lines": [
+      {
+        "line": 148,
+        "text": "            c0: CM31::new(M31(digits[0]), M31(digits[1])),"
+      },
+      {
+        "line": 149,
+        "text": "            c1: CM31::new(M31(digits[2]), M31(digits[3])),"
+      },
+      {
+        "line": 150,
+        "text": "        }"
+      },
+      {
+        "line": 151,
+        "text": "    }"
+      },
+      {
+        "line": 152,
+        "text": ""
+      },
+      {
+        "line": 153,
+        "text": "    fn old_pass(mut rank: [u32; 8]) -> ([u32; 8], u32) {"
+      }
+    ],
+    "owned_reference": {
+      "path": "evidence/extraction-repro7-20261027/XRg_reference.rs",
+      "name": "XRg_fallback_reference",
+      "start_line": 48,
+      "end_line": 50,
+      "sha256": "950baa1197116c8a3ad539a3161476ad6a58f26c1a5c3f4f06bb3f52c1d86a4c",
+      "lines": [
+        {
+          "line": 48,
+          "text": "fn XRg_fallback_reference(second:bool)->aspis_core::circle::SecureCirclePoint {"
+        },
+        {
+          "line": 49,
+          "text": "    aspis_core::transcript::circle_fallback_point(usize::from(second))"
+        },
+        {
+          "line": 50,
+          "text": "}"
+        }
+      ]
+    },
+    "lean_leaf": {
+      "path": "evidence/extraction-assoc3-20261027/XRk_CircleModel.lean",
+      "start_line": 31,
+      "end_line": 44,
+      "sha256": "ffec75d00b9ad9862bc716c15abba0aa2d8cd4da74f91e4738a5d0ba8d683c4f"
+    },
+    "association": "evidence/leaf-p6-1-20261027/LPa_Circle.lean",
+    "qualification": "Line correspondence and native stage domain are audited separately; no whole bridge inferred merely from this inventory."
+  }
+]
