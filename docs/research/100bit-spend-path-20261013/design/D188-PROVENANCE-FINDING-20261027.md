@@ -158,3 +158,18 @@ emitted signatures and namespace arrangement first; otherwise only a
 scripted, reproducible, audited transform limited to name qualification or
 signature adaptation, every changed declaration listed with before/after
 text (XRk_ADAPTERS.md). No change to function-body logic.
+
+## Update 2026-10-27 (XRk_): release definitions compile; adapters need proofs
+
+extraction-assoc3: all 103 externals supplied (twelve leaf models defined
+from the owned references), the emitted release Funs compiles through a
+deterministic, documented adapter transform (XRk_ADAPTERS.md,
+XRk_adapter_changes.json; raw input retained by hash). Local emitted-model
+associations proved: PreparedScratchProjection, PreparedClaimPowers-
+Association, local DotCountProjection laws, CandidateTx1AcceptedPath and
+AcceptedCandidateCheckpoint local projections. Lead review: the adapters
+are more than renaming; they restructure mutable-iterator/closure state
+restoration to fit the pinned library's fixed trait signatures. Ruling:
+each adapter needs its own proved Result-and-state equivalence to the
+emitted original semantics before any association through it is credited
+(extraction-assoc4, XRl_). No D188-P2 row is closed yet.
