@@ -1,60 +1,24 @@
 # Callback mid-row work
 
-Candidate base: 237e13556180d2ce0320a2760f89b35b5f4f02bb (unmerged).
-Target not yet established. Rows discharged: 0 → 0.
+Branch codex/pv-cbmid-20261027, candidate base 237e13556180d2ce0320a2760f89b35b5f4f02bb (unmerged). Target not yet established. Rows discharged **0 → 0**. Endpoint premises removed **0**; none added or weakened. No checked ROW counterexample.
 
 | op | row | status | theorem | receipt |
 |---|---|---|---|---|
-|132|V228|P6 required: built MIR extracted; pinned Aeneas rejects escaping references/structured Drop|none|charon-op132-002/receipt.json; aeneas-op132-001/receipt.json|
-|133|V229|P6 required: built MIR extracted; same explicit backend rejection|none|charon-op133-001/receipt.json; aeneas-op133-001/receipt.json|
-|134|V230|pending; shares schedule/iterator graph with op133|none|pending|
-|79|V201|pending|none|pending|
-|222|V239|pending sibling ownership recheck|none|pending|
-|224|V241|pending sibling ownership recheck|none|pending|
+|132|V228|Direct Aeneas refused references/structured Drop; mutable-output owned reference extracted. Chunk proofs in progress; complete native equality pending.|reference prerequisites only|aeneas-op132-001/receipt.json; aeneas-op132fill-001/receipt.json; numbered chunk receipts|
+|133|V229|Direct Aeneas refused references/structured Drop. Mutable-output reference prepared; native equality pending.|none|aeneas-op133-001/receipt.json|
+|134|V230|Owned reference extracted and selected. Complete native equality timed out at180s and permitted900s retry; no verdict.|PV_CBM_CallbackBundle.op134_reference (not a source law)|aeneas-op134ref-001/receipt.json; kani-masks-001/receipt.json; kani-masks-900-001/receipt.json|
+|79|V201|Built MIR extracted, direct Aeneas refused references/structured Drop. Indexed reference and canonical QM31 harness prepared. Actual QM31/WideExact caller invariant remains open.|none|aeneas-op79-001/receipt.json|
+|222|V239|Optional; latest sibling search absent. Indexed reference and partial-domain harnesses prepared; no native association.|none|FRAGMENT-PINS.json|
+|224|V241|Optional; latest sibling search absent. Exact source fragment prepared.|none|FRAGMENT-PINS.json|
 
-All six source-law searches returned no matches on codex/pv-cb-20261026,
-codex/pv-cb3-20261026, and codex/pv-cblib-20261027 before work began.
-Frozen shipped code unchanged. No premise removed, added, or weakened.
-No source counterexample has been observed. Extraction failures are not counterexamples.
-The owned references require independent complete shipped/reference Kani checks
-before any row can be credited.
+Before work, all six source-law searches were absent on codex/pv-cb-20261026, codex/pv-cb3-20261026 and codex/pv-cblib-20261027. Frozen crates/programs and all ProverRw imports remain unchanged. The single stable bundle publishes reference selections only, never substitutes them for opN_source.
 
-Host cache: cb3/lean-objects absent. PROVENANCE.json records exact matches for
-all inspected source/manifests in the three reused crates. No sibling directory
-is edited. The own wrapper is cfg(kani); it imports hash-checked source read-only.
+Proved prerequisites: sparse inventory classification bijections and cardinality3803 (40624), generic bounded append and complete Result right-identity, and separately checked literal chunks. Native classifier kani-classifier-001 passed all61 checks over row<1024,column<16, unwind25, no stubs. None discharges the whole callback. See RECEIPTS.md for every actual target, exit, wall time, RSS, swap, source revision and axioms output. TALLY.json is authoritative for budget/ID use; refused admissions consume IDs but not compile attempts. Last three charged Lean attempts and IDs40897–40899 remain reserved for audit.
 
-Next: independent P6 inventory references and exact equality harnesses; focused
-op79 extraction with a narrower dependency graph. Lean budget 1/100, Kani 1/10.
+Mutable-output extraction preserved native wrapper ownership/destructors. No Drop erasure or backend modification. CELL-DROP-INSPECTION.json records the refused ownership graph. prepare_cells.py --check and prepare_fill_spec.py --check validate current emission; drafts without a passing current-source receipt are explicitly uncredited.
 
-40600 compiled InventoryShape: three prerequisite classification theorems,
-all axioms [propext]. This is a model prerequisite, not a callback/source law.
-The complete mask native gate timed out at 180s, exit124; no verdict or
-counterexample. No unchanged retry or raised cap is authorized.
-Op79 built MIR also extracted but Aeneas rejected the same explicit graph
-features (aeneas-op79-001).
+Cache provenance: cb3/lean-objects was absent; no cache copy claimed. PROVENANCE.json and SOURCE-RECHECK.json record the read-only source/manifests match. Restored shared objects support focused candidate evidence, not a coherent deployed release replay. LEAN-IMPORT-PROVENANCE.json pins the unchanged ProverRw imports. No sibling source is overwritten. One capped scope at a time;6G/8G/swap0. Admission refusal triggers180s wait and a fresh ID.
 
-The owned mask reference extraction succeeded (aeneas-op134ref-001), including
-the concrete error carrier and all 64 values. Its selected-reference theorem
-is explicitly named `op134_reference`; it is not `op134_source`, and is not
-credited as V230 closure. Bundle stable name: PV_CBM_CallbackBundle.
+Masks900 timeout: no third identical run. GNU-time parent RSS is incomplete for killed descendants; retained snapshot measured CBMC VmHWM6699344KiB, cgroup peak6873858048 bytes, swap0. TEN-MINUTE-REVIEW.json explicitly records its late physical snapshot; it is not represented as an exact600s measurement.
 
-Admission ID40601 refused (projected 60,532,195,328 bytes > 55 GiB limit);
-zero compiler charge. Wait 180 seconds, then use the next unused ID. Earlier
-op79 upload admission hit a vanished unrelated session cgroup, retained in
-admission-state.json; special transient wait was 30 seconds and retry succeeded.
-
-## Checked prerequisite stage
-
-InventoryCardinality.cardinal proves the mathematical classification has exactly 3803 cells (40624). Padding/path/value bijections passed at 40618/40621/40623, with standard axioms, swap0. This is a model/count prerequisite, not the shipped callback law.
-
-Native classifier: kani-classifier-001 passed (0/61 failed), exact frozen source-prefix child harness vs owned classifier, all 1024×16 valid inputs, unwind25, no stubs. Full masks gate180 timed out; ruling(i) now permits one 900-second retry with identical bounds/caps.
-
-Current tally: Lean 20/100, Kani 2/10; next Env-J ID 40627. Last three charged Lean attempts remain reserved. No ROW counterexample. Rows0→0 and endpoint premises unchanged.
-
-## Mutable-output reference extraction
-
-Owned-by-value Vec functions were refused:61 declarations contain structured Drop (CELL-DROP-INSPECTION.json). No Drop was removed. The reference now uses unique mutable output parameters; the native wrapper retains vector ownership and destructors. Charon and Aeneas accepted fill_cells (charon-op132fill-001, aeneas-op132fill-001). Aeneas emitted owned Vec states and a complete Rust-result/state pair.
-
-prepare_cells.py --check passes. Generic PushList and Result right-identity lemmas compiled; first chunk fixed by equation rewriting and the named complete-Result right-identity theorem (no limits raised). Remaining chunks are independent, serial, first-time compiles; all staged pending modules are explicitly uncredited until their receipts pass.
-
-Checkpoint tally: Lean38/100, Kani3/10; nextID40652. Last3charged slots and IDs40897-40899 reserved for audit. Rows0→0.
+Next deliverable: complete inventory composition, remaining native comparisons/extractions, and one final bundle audit within the100 Lean/10 Kani budgets. P6 association requires complete shipped/reference equality and actual canonical caller invariants; prepared partial-domain tests do not satisfy that requirement.

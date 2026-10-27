@@ -13,6 +13,12 @@ mod pv_cbm_checks {
         kani::assume(row<1024);kani::assume(column<16);
         assert_eq!(super::forest_aux_cell_is_used(row,column),crate::reference::aux_used(row,column));
     }
+    #[kani::proof]
+    #[kani::unwind(25)]
+    fn classifier_all_usize() {
+        let row:usize=kani::any();let column:usize=kani::any();
+        assert_eq!(super::forest_aux_cell_is_used(row,column),crate::reference::aux_used(row,column));
+    }
 }
 '''
 p.write_bytes(source+suffix)
