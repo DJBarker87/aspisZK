@@ -30,3 +30,10 @@ Six residual inputs are being audited by their actual installation path:
 
 New modules use IDb_ only. At most40 Lean attempts, one capped scope at a time,
 existing host reservation/runner, no package replay. No prover has run yet.
+
+Stage2 result: query/geometry consumer identities checked in IDb_003; all nine
+Configuration projections and the exact FJu application checked in IDb_005.
+Attempts001/002 were syntax/record indentation failures in the new source;
+004 was notation-dot parsing in auxiliary field statements. None was a timeout
+or memory failure; their error/sorryAx diagnostics are rejected evidence and
+replaced by the clean003/005 results. Only passing sources are deliverables.
