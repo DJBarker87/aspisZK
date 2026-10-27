@@ -57,8 +57,13 @@ Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one scop
 | 40059 | R1SourceSamplerByteRank | 0 | standard | 0:01.66 | 3832832 | 0 | 6f0741bb10 | 7/7 |
 | 40061 | ExtractedQM31SamplerCorrect | 0 | standard | 0:01.74 | 3839732 | 0 | 6f0741bb10 | 7/7 |
 | 40062 | R1J/SamplerLawSpend | 0 | standard | 0:02.00 | 3843972 | 0 | 6f0741bb10 | 10/10 |
+| 40065 | R1Z/PV_Src_MapperBody | 1 | REJECTED | 0:01.72 | 4093376 | 0 | e75a239390 | 3/3 |
+| 40066 | R1Z/PV_Src_MapperBody | 1 | REJECTED | 0:01.85 | 4092560 | 0 | e75a239390 | 3/3 |
+| 40067 | R1Z/PV_Src_MapperBody | 0 | standard | 0:01.94 | 4114052 | 0 | e75a239390 | 3/3 |
+| 40068 | R1Z/PV_Src_MapperWords | 1 | REJECTED | 0:01.87 | 4085668 | 0 | e75a239390 | 2/2 |
+| 40069 | R1Z/PV_Src_MapperWords | 0 | standard | 0:01.72 | 4101392 | 0 | e75a239390 | 2/2 |
 
-Charged Lean attempts: 53/100. Reservation refusals: 10, uncharged. Next unused ID: 40063.
+Charged Lean attempts: 58/100. Reservation refusals: 12, uncharged. Next unused ID: 40070.
 
 ## Shared replacements
 
