@@ -5,6 +5,8 @@ root=Path(__file__).resolve().parents[2]
 name,harness=sys.argv[1:3]
 timeout=int(sys.argv[3]) if len(sys.argv)>3 else 900
 assert 0<timeout<=900
+solver=sys.argv[4] if len(sys.argv)>4 else 'kissat'
+assert solver in ['kissat','default']
 tally_path=root/'evidence/pv-cb-20261026/RESUME5-TALLY.json'
 tally=json.loads(tally_path.read_text());assert tally['kani_charged']<12
 base='/home/dombarker/project-offloads/codex-pv-cb-20261026'
@@ -19,8 +21,11 @@ if r.returncode:print(name,'reservation refused',r.returncode);sys.exit(r.return
 # Sync only proof inputs after admission and before compiling this one gate.
 for relative in ['step-proof/Cargo.toml','step-proof/lib.rs','step-proof/owned_points.rs','step-proof/owned_wide_new.rs','step-proof/owned_compress.rs','step-proof/owned_pole.rs','source-proof/lib.rs','source-proof/owned_circle.rs']:
  subprocess.run(['scp',str(root/'tools/pv-cb-20261026'/relative),'dombarker@100.108.41.90:'+base+'/'+relative],check=True)
-cmd=['taskset','--cpu-list','0-3','timeout',str(timeout),'env','PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin',f'CARGO_TARGET_DIR={base}/source-kani-target','RUSTFLAGS=--cfg kani','/home/dombarker/.cargo/bin/cargo','kani','--manifest-path',base+'/step-proof/Cargo.toml','--lib','--harness','checks::'+harness,'--solver','kissat','--output-format','terse','-j','4']
+cmd=['taskset','--cpu-list','0-3','timeout',str(timeout),'env','PATH=/home/dombarker/.cargo/bin:/home/dombarker/.local/bin:/usr/local/bin:/usr/bin:/bin',f'CARGO_TARGET_DIR={base}/source-kani-target','RUSTFLAGS=--cfg kani','/home/dombarker/.cargo/bin/cargo','kani','--manifest-path',base+'/step-proof/Cargo.toml','--lib','--harness','checks::'+harness,*(['--solver','kissat'] if solver=='kissat' else []),'--output-format','terse','-j','4']
 meta=dict(target=cmd,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),print_axioms='N/A Kani; separate Lean source/axioms receipts',harness=harness,no_stubs=True,expected_time='cached optimized compilation, then CBMC proof generation for this one named harness',configuration_change=('Ruling (i): one retry after 180s timeout, now 900s, same harness and unwind bound; taskset CPU0-3 and unchanged caps' if timeout==900 else 'New explicitly partitioned harness after timeout; taskset CPU0-3 and unchanged caps'),profile='step-proof profile.dev opt-level3, overflow-checks=false, debug-assertions=false; source uses explicit wrapping CT arithmetic')
+meta['solver_selection']=solver
+meta['unwind_bound']=(18 if harness.startswith('compress') else 30 if harness.startswith('horner_index') else 40 if harness=='circle_sample_reference' else 1026 if harness=='pole1024_reference' else None)
+meta['timeout_seconds']=timeout
 (local/'target.json').write_text(json.dumps(meta,indent=2)+'\n')
 tally=json.loads(tally_path.read_text());tally['kani_charged']+=1;tally.setdefault('kani_runs',[]).append(dict(name=name,harness=harness,timeout_seconds=timeout,state='running'));tally_path.write_text(json.dumps(tally,indent=2)+'\n')
 args=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',dest+'/time.log',*cmd]

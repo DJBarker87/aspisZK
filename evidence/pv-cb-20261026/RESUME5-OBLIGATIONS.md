@@ -31,3 +31,15 @@ transport available for a consumer restricted to proven reachable arguments.
 No read-only ProverRw consumer is edited in this worktree.
 
 Extraction and Kani outcomes will be appended after the actual scopes finish.
+
+Checked progress through41230: the actual producer now supplies the numerical
+array invariant under plain canonical trace/offset input conditions, and
+ProducerCallsite.endpoint transports agreement on those produced arrays through
+the full Result caller. CompressSelectedCanonical.reference uses exactly the
+V164 selected primitive dictionary. These do not establish the missing native
+agreement or the complete producer input invariant and do not change V164.
+
+Fresh extraction results are in RESUME5-CALLSITE-STAGE.md. The wrapper-only
+optimized extraction's zero exit is explicitly NOT source acceptance: its
+compressor remained opaque. Both transparent wrapper configurations fail with
+the exact loan-validation error. No external template was installed.

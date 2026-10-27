@@ -286,6 +286,9 @@ mod checks {
         };
     }
     compress_partition!(compress16_lane0,16,0);
+    compress_partition!(compress16_lane1,16,1);
+    compress_partition!(compress16_lane2,16,2);
+    compress_partition!(compress16_lane3,16,3);
     compress_partition!(compress1_all,1,4);
     compress_partition!(compress0_all,0,4);
     compress_partition!(compress2_lane0,2,0);
@@ -297,7 +300,7 @@ mod checks {
             #[kani::proof]
             #[kani::unwind(30)]
             fn $name() {
-                let term=cq(kani::any());let coefficients=[term;27];
+                let coefficients=kani::any::<[[u32;4];27]>().map(cq);
                 let prepared=PreparedQm31Multiplier::new(cq(kani::any()));
                 let state=cq(kani::any());
                 let actual=shipped::horner_step(&coefficients,prepared,$index,state);

@@ -19,29 +19,34 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
  out=ssh(f'mkdir -p {dest}; python3 {scanner} {dest}/admission-before.json > {dest}/reservation.log 2>&1')
  (local/'reservation-transport.log').write_text(out.stdout)
  if out.returncode:print(name,'reservation refused',out.returncode);sys.exit(out.returncode)
- if stage=='charon' and project in ['proof','source-proof','step-proof']:
+ if stage=='charon' and project in ['proof','source-proof','step-proof','shim-proof']:
   inputs=[project+'/lib.rs']
+  if project=='shim-proof':
+   assert ssh(f'mkdir -p {base}/shim-proof').returncode==0
+   inputs+=['shim-proof/Cargo.toml']
   if project in ['source-proof','step-proof']:inputs+=['source-proof/owned_circle.rs']
   if project=='step-proof':inputs+=['step-proof/owned_points.rs','step-proof/owned_wide_new.rs']
   for relative in inputs:
    subprocess.run(['scp',str(root/'tools/pv-cb-20261026'/relative),'dombarker@100.108.41.90:'+base+'/'+relative],check=True)
  if stage=='charon':
-  args=['taskset','--cpu-list','0-3','timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract --cfg aeneas_ref',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir',mir,*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--rustc-arg=--cfg=aeneas_ref'] if project in ['source-proof','proof','step-proof'] else []),'--sysroot','default','--start-from',entry]
+  args=['taskset','--cpu-list','0-3','timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract --cfg aeneas_ref'+((' -Zalways-encode-mir -Zcross-crate-inline-threshold=always -Zinline-mir=yes -Zinline-mir-threshold=100000 -Zmir-opt-level=4' if sys.argv[9]=='force' else ' -Zalways-encode-mir') if len(sys.argv)>9 and sys.argv[9] in ['mir4','force'] else ''),f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir',mir,*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--rustc-arg=--cfg=aeneas_ref'] if project in ['source-proof','proof','step-proof'] else []),'--sysroot','default','--start-from',entry]
   if include:
    for pattern in include.split('+'):args+=['--include',pattern]
   for pattern in opaque:args+=['--opaque',pattern]
-  if len(sys.argv)>9 and sys.argv[9]=='inline':
+  if len(sys.argv)>9 and sys.argv[9] in ['inline','mir4','force']:
    args+=['--rustc-arg=-Zinline-mir=yes','--rustc-arg=-Zinline-mir-threshold=100000','--rustc-arg=-Zcross-crate-inline-threshold=100000']
+   if sys.argv[9] in ['mir4','force']:args+=['--rustc-arg=-Zmir-opt-level=4','--rustc-arg=-Zalways-encode-mir']
+  if len(sys.argv)>9 and sys.argv[9]=='force':args+=['--rustc-arg=-Zcross-crate-inline-threshold=always']
   args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{project}/Cargo.toml','--release','--offline','--lib','--jobs','4',*(['--features','ct-host-prover' if project.endswith('aspis-r1-cost-probe') else 'r0'] if project.startswith('source/crates/') else [])]
  else:
   assert ssh(f'mkdir -p {base}/shipped-op{op}-generated').returncode==0
   args=['timeout','120',aeneas,'-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace',f'PV_CB_ShippedOp{op}','-dest',f'{base}/shipped-op{op}-generated','-split-files','-emit-json',f'{base}/PV_CB_ShippedOp{op}.llbc']
- target=dict(target=args,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),print_axioms='N/A extraction; corresponding Lean proof receipt required')
+ target=dict(expected_time=('optimized compilation of reduced shim dependency graph, then one named Charon/Aeneas target' if project=='shim-proof' else 'optimized compilation/MIR extraction or one named Aeneas translation'),target=args,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),print_axioms='N/A extraction; corresponding Lean proof receipt required')
  (local/'target.json').write_text(json.dumps(target,indent=2)+'\n')
  cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',f'{dest}/time.log',*args]
  out=ssh(f'{shlex.join(cmd)} > {dest}/output.log 2>&1')
  (local/'transport.log').write_text(out.stdout)
- subprocess.run([sys.executable,str(root/'tools/pv-cb-20261026/collect_native.py'),name,f'PV_CB_ShippedOp{op}.llbc',f'shipped-op{op}-generated/Funs.lean',f'shipped-op{op}-generated/Types.lean',f'shipped-op{op}-generated/translation.json','source-proof/lib.rs','source-proof/Cargo.toml','source-proof/Cargo.lock',*(['step-proof/lib.rs','step-proof/owned_points.rs','step-proof/owned_wide_new.rs','step-proof/Cargo.toml','step-proof/Cargo.lock'] if project=='step-proof' else []),'source/crates/aspis-statement/src/logup.rs','source/crates/aspis-core/src/field.rs','source/crates/aspis-core/src/field/ct.rs','source/crates/aspis-core/src/field/wide_exact.rs','source/crates/aspis-core/src/r0/scalar.rs','source/crates/aspis-core/src/state_only_hiding.rs','source/crates/aspis-core/src/state_only_prefix.rs'],check=True)
+ subprocess.run([sys.executable,str(root/'tools/pv-cb-20261026/collect_native.py'),name,f'PV_CB_ShippedOp{op}.llbc',f'shipped-op{op}-generated/Funs.lean',f'shipped-op{op}-generated/Types.lean',f'shipped-op{op}-generated/translation.json','source-proof/lib.rs','source-proof/Cargo.toml','source-proof/Cargo.lock',*(['step-proof/lib.rs','step-proof/owned_points.rs','step-proof/owned_wide_new.rs','step-proof/Cargo.toml','step-proof/Cargo.lock'] if project=='step-proof' else []),*(['shim-proof/lib.rs','shim-proof/Cargo.toml','shim-proof/Cargo.lock'] if project=='shim-proof' else []),'source/crates/aspis-statement/src/logup.rs','source/crates/aspis-core/src/field.rs','source/crates/aspis-core/src/field/ct.rs','source/crates/aspis-core/src/field/wide_exact.rs','source/crates/aspis-core/src/r0/scalar.rs','source/crates/aspis-core/src/state_only_hiding.rs','source/crates/aspis-core/src/state_only_prefix.rs'],check=True)
  receipt=json.loads((local/'collected-receipt.json').read_text());receipt.update(target)
  (local/'collected-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
  print(name,'exit',receipt['exit'])

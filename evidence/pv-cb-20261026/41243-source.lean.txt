@@ -1,0 +1,51 @@
+import R1Z.PV_CB_TupleProducerScalar
+import R1Z.PV_CB_PartialArrayUpdate
+set_option autoImplicit false
+namespace R1Z.PV_CB_TupleProducerOffset
+open Aeneas Aeneas.Std Result
+abbrev Limb := PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.PoolV1PairTupleLimbV1
+abbrev Source := PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.PoolV1PairTraceCellV1
+abbrev Bank := PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.PoolV1PairTraceBankV1
+abbrev Tuple := PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.PoolV1PairCopyTupleV1
+
+def ValidLimb : Limb → Prop
+  | .Zero => True
+  | .Cell _ offset => PV_CB_CanonicalM31.Valid offset
+abbrev Valid (limbs : Array Limb 16#usize) := PV_CB_CanonicalArrays.Valid ValidLimb limbs
+
+/-- Factor of the actual emitted body; the loop-body equality is checked
+    separately. The integer counter affects only which canonical offset is used. -/
+def offset (tweak_right : Bool) (lane count : Usize) : Result U32 :=
+  if tweak_right then do
+    let i ← lift (Usize.wrapping_add lane 1#usize)
+    if i = count then
+      PV_CB_TupleProducerScalar.S.sub PV_CB_TupleProducerScalar.S.zero PV_CB_TupleProducerScalar.S.tweak
+    else ok PV_CB_TupleProducerScalar.S.zero
+  else ok PV_CB_TupleProducerScalar.S.zero
+
+theorem canonical (tweak_right : Bool) (lane count : Usize) :
+    ∃ value, offset tweak_right lane count = ok value ∧ PV_CB_CanonicalM31.Valid value := by
+  cases tweak_right with
+  | false => exact ⟨_,rfl,PV_CB_TupleProducerScalar.zero_valid⟩
+  | true =>
+    change ∃ value,
+      (if Usize.wrapping_add lane 1#usize = count then
+        PV_CB_TupleProducerScalar.S.sub PV_CB_TupleProducerScalar.S.zero PV_CB_TupleProducerScalar.S.tweak
+      else ok PV_CB_TupleProducerScalar.S.zero) = ok value ∧ PV_CB_CanonicalM31.Valid value
+    by_cases same : Usize.wrapping_add lane 1#usize = count
+    · rw [if_pos same]
+      exact PV_CB_TupleProducerScalar.canonical _ _ PV_CB_TupleProducerScalar.zero_valid PV_CB_TupleProducerScalar.tweak_valid
+    · rw [if_neg same]
+      exact ⟨_,rfl,PV_CB_TupleProducerScalar.zero_valid⟩
+
+theorem initial : Valid (Array.repeat 16#usize (.Zero : Limb)) :=
+  PV_CB_CanonicalArrays.repeat_valid ValidLimb 16#usize _ True.intro
+
+theorem update (limbs : Array Limb 16#usize) (vl : Valid limbs) (i : Usize)
+    (source : Source) (value : U32) (vv : PV_CB_CanonicalM31.Valid value) :
+    PV_CB_PartialForward.Post Valid (Array.update limbs i (.Cell source value)) :=
+  PV_CB_PartialArrayUpdate.update ValidLimb limbs vl i (.Cell source value) vv
+#print axioms canonical
+#print axioms initial
+#print axioms update
+end R1Z.PV_CB_TupleProducerOffset
