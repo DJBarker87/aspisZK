@@ -1,4 +1,11 @@
 use super::*;
+// Exact frozen continuing suffix; only Self is renamed to its concrete owner.
+fn NBA_tail<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,g:&mut[E;29],gamma:E,kappa:E,alpha:[E;2],rho:K,queries:[u32;22],t:Transcript<H>)->Result<Box<Prepared>,Error>{
+        *g=powers::<29>(gamma);
+        let claim=prepared_claim(sem,v.y1,v.inactive,g,kappa)?;
+        Ok(Box::new(Prepared{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))
+}
+
 #[derive(Clone,Copy)] struct NBA_Digest;
 impl Digest32 for NBA_Digest { fn digest(&self,_parts:&[&[u8]])->[u8;32]{kani::any()} }
 // Return overapproximations, not arithmetic contracts. All raw field limbs,
@@ -7,6 +14,8 @@ impl Digest32 for NBA_Digest { fn digest(&self,_parts:&[&[u8]])->[u8;32]{kani::a
 fn any_e()->E { unsafe {core::mem::transmute::<[u32;8],E>(kani::any())} }
 fn any_k()->K { unsafe {core::mem::transmute::<[u32;4],K>(kani::any())} }
 static mut EVENT:usize=0;
+static mut PREFIX_ONLY:bool=false;
+static mut MID_ONLY:bool=false;
 static mut SCALARS:[E;4]=[E::ZERO;4];
 static mut QUERY:[u32;22]=[0;22];
 static mut RHO:K=K::ZERO;
@@ -19,23 +28,29 @@ static mut SEM_PTR:*const crate::r1_semantic::Verified<NBA_Digest>=core::ptr::nu
 static mut YPTR:*const u8=core::ptr::null();
 static mut YLEN:usize=0;
 static mut INACTIVE:E=E::ZERO;
-fn scalar(t:&mut Transcript<NBA_Digest>,row:u8,payload:&[u8],nonzero:bool)->E {
+static mut R0PTR:*const u8=core::ptr::null();
+static mut R1PTR:*const u8=core::ptr::null();
+static mut ROOTPTR:*const u8=core::ptr::null();
+static mut FPTR:*const u8=core::ptr::null();
+fn scalar<H:Digest32>(t:&mut Transcript<H>,row:u8,payload:&[u8],nonzero:bool)->E {
  unsafe {
   assert!(EVENT<4);assert_eq!(row,27+EVENT as u8);assert_eq!(nonzero,EVENT==0);
-  if EVENT==0 {assert_eq!(payload.as_ptr(),YPTR);assert_eq!(payload.len(),YLEN);}
-  if EVENT==1 {let i:usize=kani::any();kani::assume(i<32);assert_eq!(payload.len(),32);assert_eq!(payload[i],INACTIVE.to_le_bytes()[i]);}
+  if PREFIX_ONLY && EVENT==0 {assert_eq!(payload.as_ptr(),YPTR);assert_eq!(payload.len(),YLEN);}
+  if PREFIX_ONLY && EVENT==1 {let i:usize=kani::any();kani::assume(i<32);assert_eq!(payload.len(),32);assert_eq!(payload[i],INACTIVE.to_le_bytes()[i]);}
+  if PREFIX_ONLY && EVENT==2 {assert_eq!(payload.as_ptr(),R0PTR);assert_eq!(payload.len(),224);}
+  if PREFIX_ONLY && EVENT==3 {let i:usize=kani::any();kani::assume(i<256);assert_eq!(payload.len(),256);let expected=if i<32{*ROOTPTR.add(i)}else{*R1PTR.add(i-32)};assert_eq!(payload[i],expected);}
   SCALARS[EVENT]=any_e();let out=SCALARS[EVENT];EVENT+=1;t.state=kani::any();out
  }
 }
-fn queries(t:&mut Transcript<NBA_Digest>,row:u8,_payload:&[u8])->Result<[u32;22],Error>{
- unsafe {assert_eq!(EVENT,4);assert_eq!(row,31);EVENT+=1;t.state=kani::any();QERR=kani::any();QUERY=kani::any();if QERR{Err(Error::Transcript)}else{Ok(QUERY)}}
+fn queries<H:Digest32>(t:&mut Transcript<H>,row:u8,payload:&[u8])->Result<[u32;22],Error>{
+ unsafe {assert_eq!(EVENT,4);assert_eq!(row,31);assert_eq!(payload.as_ptr(),FPTR);assert_eq!(payload.len(),2048);if PREFIX_ONLY{kani::cover!(true,"prefix reaches queries");kani::assume(false);}EVENT+=1;t.state=kani::any();QERR=kani::any();QUERY=kani::any();if QERR{Err(Error::Transcript)}else{Ok(QUERY)}}
 }
-fn scalar_k(t:&mut Transcript<NBA_Digest>,row:u8,payload:&[u8])->K{
+fn scalar_k<H:Digest32>(t:&mut Transcript<H>,row:u8,payload:&[u8])->K{
  unsafe{assert_eq!(EVENT,5);assert_eq!(row,32);assert!(payload.is_empty());EVENT+=1;t.state=kani::any();LAST=t.state;RHO=any_k();RHO}
 }
-fn powers29(x:E)->[E;29]{unsafe{assert_eq!(EVENT,6);assert_eq!(x,SCALARS[0]);EVENT+=1;POWERS=core::mem::transmute::<[[u32;8];29],[E;29]>(kani::any());POWERS}}
-fn claim(sem:&crate::r1_semantic::Verified<NBA_Digest>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error>{
- unsafe{assert_eq!(EVENT,7);EVENT+=1;assert_eq!(sem as *const _,SEM_PTR);assert_eq!(y1.as_ptr(),YPTR);assert_eq!(y1.len(),YLEN);assert_eq!(inactive,INACTIVE);assert_eq!(kappa,SCALARS[1]);let i:usize=kani::any();kani::assume(i<29);assert_eq!(g[i],POWERS[i]);CLAIM=any_e();CERR=kani::any();if CERR{Err(Error::Parse)}else{Ok(CLAIM)}}
+fn powers29<const N:usize>(x:E)->[E;N]{unsafe{assert_eq!(N,29);assert_eq!(EVENT,6);assert_eq!(x,SCALARS[0]);if MID_ONLY{kani::cover!(true,"success reaches powers before scratch write");kani::assume(false);}EVENT+=1;let out=core::array::from_fn(|_|any_e());POWERS=*(&out as *const [E;N] as *const [E;29]);out}}
+fn claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error>{
+ unsafe{assert_eq!(EVENT,7);EVENT+=1;assert_eq!(sem as *const _ as *const (),SEM_PTR as *const ());assert_eq!(y1.as_ptr(),YPTR);assert_eq!(y1.len(),YLEN);assert_eq!(inactive,INACTIVE);assert_eq!(kappa,SCALARS[1]);let i:usize=kani::any();kani::assume(i<29);assert_eq!(g[i],POWERS[i]);CLAIM=any_e();CERR=kani::any();if CERR{Err(Error::Parse)}else{Ok(CLAIM)}}
 }
 fn context<const PART:usize>(){
  let q=any_k();let point=SecureCirclePoint{x:any_k(),y:any_k()};
@@ -43,15 +58,18 @@ fn context<const PART:usize>(){
  let y:[u8;928]=kani::any();let round0:[u8;224]=kani::any();let round1:[u8;224]=kani::any();let root:[u8;32]=kani::any();let final_message:[u8;2048]=kani::any();
  let v=View{variant:Variant::S2,semantic:&[],y1:&y,inactive:any_e(),round0:&round0,folded_root:Some(&root),round1:&round1,final_message:&final_message,query_bytes:&[]};
  let mut g:[E;29]=unsafe{core::mem::transmute::<[[u32;8];29],[E;29]>(kani::any())};let old=g;let i:usize=kani::any();kani::assume(i<29);
- unsafe{EVENT=0;SEM_PTR=&sem;YPTR=y.as_ptr();YLEN=y.len();INACTIVE=v.inactive;}
- let result=Prepared::new(&sem,&v,NBA_Digest,&mut g);
+ unsafe{PREFIX_ONLY=PART==3;MID_ONLY=PART==7;EVENT=0;SEM_PTR=&sem;YPTR=y.as_ptr();YLEN=y.len();INACTIVE=v.inactive;R0PTR=round0.as_ptr();R1PTR=round1.as_ptr();ROOTPTR=root.as_ptr();FPTR=final_message.as_ptr();}
+ let result=if PART>=4 && PART<=6 {
+  unsafe {EVENT=6;QERR=false;SCALARS=[any_e(),any_e(),any_e(),any_e()];RHO=any_k();QUERY=kani::any();LAST=kani::any();let mut t=Transcript::new(NBA_Digest,sem.transcript.state(),v.variant);t.state=LAST;
+   NBA_tail(&sem,&v,&mut g,SCALARS[0],SCALARS[1],[SCALARS[2],SCALARS[3]],RHO,QUERY,t)}
+ }else{Prepared::new(&sem,&v,NBA_Digest,&mut g)};
  unsafe{
   if QERR{assert_eq!(EVENT,5);assert!(matches!(result,Err(Error::Transcript)));assert_eq!(g[i],old[i]);kani::cover!(true,"query rejection retains scratch");}
   else{assert_eq!(EVENT,8);assert_eq!(g[i],POWERS[i]);if CERR{assert!(matches!(result,Err(Error::Parse)));kani::cover!(true,"claim rejection retains produced scratch");}
    else{let p=result.unwrap();kani::cover!(true,"success");
-    if PART==0{assert_eq!(p.variant,Variant::S2);assert_eq!(p.gamma,SCALARS[0]);assert_eq!(p.kappa,SCALARS[1]);assert_eq!(p.alpha[0],SCALARS[2]);assert_eq!(p.alpha[1],SCALARS[3]);}
-    if PART==1{assert_eq!(p.rho,RHO);assert_eq!(p.claim,CLAIM);let j:usize=kani::any();kani::assume(j<22);assert_eq!(p.queries[j],QUERY[j]);let k:usize=kani::any();kani::assume(k<32);assert_eq!(p.state[k],LAST[k]);}
-    if PART==2{let r:usize=kani::any();let j:usize=kani::any();kani::assume(r<2&&j<32);assert_eq!(p.roots[r][j],sem.roots[r][j]);let a:usize=kani::any();kani::assume(a<10);assert_eq!(p.semantic_alpha[a],sem.alpha[a]);assert_eq!(p.z[r],sem.z[r]);}
+    if PART%4==0{assert_eq!(p.variant,Variant::S2);assert_eq!(p.gamma,SCALARS[0]);assert_eq!(p.kappa,SCALARS[1]);assert_eq!(p.alpha[0],SCALARS[2]);assert_eq!(p.alpha[1],SCALARS[3]);}
+    if PART%4==1{assert_eq!(p.rho,RHO);assert_eq!(p.claim,CLAIM);let j:usize=kani::any();kani::assume(j<22);assert_eq!(p.queries[j],QUERY[j]);let k:usize=kani::any();kani::assume(k<32);assert_eq!(p.state[k],LAST[k]);}
+    if PART%4==2{let r:usize=kani::any();let j:usize=kani::any();kani::assume(r<2&&j<32);assert_eq!(p.roots[r][j],sem.roots[r][j]);let a:usize=kani::any();kani::assume(a<10);assert_eq!(p.semantic_alpha[a],sem.alpha[a]);assert_eq!(p.z[r],sem.z[r]);}
    }
   }
  }
@@ -77,3 +95,34 @@ fn NBA_new_tail(){context::<1>()}
 #[kani::stub(powers::<29>,powers29)]
 #[kani::stub(prepared_claim::<NBA_Digest>,claim)]
 fn NBA_new_semantic_frame(){context::<2>()}
+
+#[kani::proof] #[kani::unwind(33)]
+#[kani::stub(Transcript::<NBA_Digest>::scalar,scalar)]
+#[kani::stub(Transcript::<NBA_Digest>::queries,queries)]
+#[kani::stub(Transcript::<NBA_Digest>::scalar_k,scalar_k)]
+#[kani::stub(powers::<29>,powers29)]
+#[kani::stub(prepared_claim::<NBA_Digest>,claim)]
+fn NBA_prefix_to_queries(){context::<3>()}
+
+#[kani::proof] #[kani::unwind(33)]
+#[kani::stub(powers::<29>,powers29)]
+#[kani::stub(prepared_claim::<NBA_Digest>,claim)]
+fn NBA_suffix_challenges(){context::<4>()}
+
+#[kani::proof] #[kani::unwind(33)]
+#[kani::stub(powers::<29>,powers29)]
+#[kani::stub(prepared_claim::<NBA_Digest>,claim)]
+fn NBA_suffix_tail(){context::<5>()}
+
+#[kani::proof] #[kani::unwind(33)]
+#[kani::stub(powers::<29>,powers29)]
+#[kani::stub(prepared_claim::<NBA_Digest>,claim)]
+fn NBA_suffix_semantic_frame(){context::<6>()}
+
+#[kani::proof] #[kani::unwind(33)]
+#[kani::stub(Transcript::<NBA_Digest>::scalar,scalar)]
+#[kani::stub(Transcript::<NBA_Digest>::queries,queries)]
+#[kani::stub(Transcript::<NBA_Digest>::scalar_k,scalar_k)]
+#[kani::stub(powers::<29>,powers29)]
+#[kani::stub(prepared_claim::<NBA_Digest>,claim)]
+fn NBA_middle_to_powers(){context::<7>()}
