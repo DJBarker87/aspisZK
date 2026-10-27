@@ -1,0 +1,22 @@
+XRx_generated/XRx_StageFold.lean:45:36: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+XRx_generated/XRx_StageFold.lean:47:66: error: unsolved goals
+E S O : Type
+step : ℕ → S → Result (core.result.Result S E)
+last : S → Result (core.result.Result O E)
+n i : ℕ
+s : core.result.Result S E
+⊢ (do
+      let out ← fold step (List.range' i n) s
+      match out with
+        | core.result.Result.Err e => ok sorry
+        | core.result.Result.Ok x => last x) =
+    do
+    let out ← fold step (List.range' i n) s
+    match out with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok x => last x
+'XRx_StageFold.source' depends on axioms: [Quot.sound]
+'XRx_StageFold.finish' depends on axioms: [sorryAx, Quot.sound]

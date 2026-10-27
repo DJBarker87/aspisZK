@@ -18,7 +18,7 @@ for retry in range(11):
  if 'FileNotFoundError' in (E/log).read_text() and retry==0:time.sleep(30);continue
  raise SystemExit('STOP admission '+r.stdout+r.stderr)
 else:raise SystemExit('STOP admission retries')
-cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','XRx_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':B+'/XRx_objects:'+C+':'+C+'/objects'},deps_fingerprint={'scope':'isolated release external definitions and emitted release; coherent objects'},expected_time='single module elaboration, no concrete arithmetic normalization',reservation_retries=retry)
+cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','XRx_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':B+'/XRx_objects:/home/dombarker/project-offloads/codex-cx-assoc-a2-cache-20261027/XRw_objects:'+C+':'+C+'/objects'},deps_fingerprint={'scope':'isolated release external definitions and emitted release; coherent objects'},expected_time='single module elaboration, no concrete arithmetic normalization',reservation_retries=retry)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 r=ssh(f'mkdir -p {B}/{str(Path(src).parent)} {B}/{str(Path(obj).parent)}');assert r.returncode==0,r.stderr
 subprocess.run(['scp','-q',str(local),H+':'+B+'/'+src],check=True)
