@@ -55,10 +55,11 @@ def visit(m,parent=None):
   else:
    if not depth:clean.append(text[i])
    i+=1
- imports=re.findall(r'^import\s+([A-Za-z0-9_.]+)',''.join(clean),re.M)
+ imports=[name for line in re.findall(r'^(?:(?:public|private|meta)[ \t]+)*import[ \t]+([^\n]+)', ''.join(clean), re.M) for name in line.split('--')[0].split() if re.fullmatch(r'[A-Za-z0-9_.]+',name)]
  rows[m]=dict(module=m,authority=authority,path=path,revision=rev,blob=blob,sha256=hashlib.sha256(data).hexdigest(),imports=imports)
  for i in imports:visit(i,path)
  order.append(m)
+visit('AspisV8R17.QM31WordFormulas')
 visit('AspisV8R17.QM31WordResidues')
 visit('R1Z.PV_CB_CandidateCore')
 visit('R1Z.PV_CB_CandidateDictionary')
