@@ -1,0 +1,37 @@
+{"attempt": "ARX_032", "exit_status": 0, "wall_seconds": 2.3566073999973014, "peak_rss_kib": "5536460", "swaps": "0", "print_axioms": ["'AspisR1.ARW_AdmittedBudget.issued' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARW_AdmittedBudget.issued : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasE
+...
+@AspisR1.ARW_AdmittedBudget.issued : ∀ {W A C Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record))
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (c : AspisR1.DrvC_Installation.Configuration AspisR1.FIo_Install.W C) (err : C) (r : AspisR1.NP6_StdModel.Reservation)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk (AspisR1.FIp_Install.configuration err c r)) native1 native2 hashv →
+    ∀ (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (n : AspisR1.ARU_Support.At L copy allocator c err r native1 native2 hashv a H) (Q0 Q1 : ℕ),
+      (∀ (world : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisR1.ARW_Induced.issued native1 copy allocator AspisR1.CPH_Program.verifier a world).length ≤ Q0 + Q1) →
+        AspisR1.ART_AdversaryWork.work (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+              AspisR1.CPH_Program.verifier a H ≤
+            Q0 + Q1 ∧
+          (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.ART_PartialAccount.account (AspisR1.FIp_Install.configuration err c r) hashv copy allocator
+                    AspisR1.CPH_Program.verifier a)).1.length ≤
+            Q0 + Q1 + 1921
+'AspisR1.ARW_AdmittedBudget.issued' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r51a5320414dd44c9b9b9a196c869551d.scope; invocation ID: c94af7247d594706a9f54de79b546eb4

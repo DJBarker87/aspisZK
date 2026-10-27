@@ -1,0 +1,10 @@
+AspisR1.F3T_Charged.charged_eval : ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_Experiment.Prover)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.charged D P) =
+    ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.base D P)).1,
+      ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.base D P)).2.1.1,
+        AspisR1.RawCutTranscriptRun.proof
+          (AspisR1.F3T_Charged.build D (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.base D P)))
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.base D P)).2.1.2),
+      Bool.true)
+'AspisR1.F3T_Charged.charged_eval' depends on axioms: [propext, Classical.choice, Quot.sound]

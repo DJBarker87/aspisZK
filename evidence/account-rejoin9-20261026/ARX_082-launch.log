@@ -1,0 +1,26 @@
+{"attempt": "ARX_082", "exit_status": 0, "wall_seconds": 2.6583694430300966, "peak_rss_kib": "5601752", "swaps": "0", "print_axioms": ["'AspisR1.JFv_SemanticChain.success' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.JFv_SemanticChain.success : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H),
+  AspisR1.JFv_TranscriptTotal.Total D →
+    ∀ (pre : AspisR1PublicPreparation.r1_wire.Prefix) (rows : List Aeneas.Std.U8) (start : ℕ)
+      (t : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+      ↑t.next_row = start →
+        List.map Aeneas.Std.UScalar.val rows = List.range' start rows.length →
+          start + rows.length ≤ 25 →
+            ∃ after qs,
+              AspisR1PublicPreparation.BeginCalls.SemanticRun D pre rows t after qs ∧
+                ∀ q ∈ qs, AspisR1.JFv_RoundArithmetic.Canonical q
+'AspisR1.JFv_SemanticChain.success' depends on axioms: [propext, Classical.
+...
+@AspisR1.JFv_SemanticChain.success : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H),
+  AspisR1.JFv_TranscriptTotal.Total D →
+    ∀ (pre : AspisR1PublicPreparation.r1_wire.Prefix) (rows : List Aeneas.Std.U8) (start : ℕ)
+      (t : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+      ↑t.next_row = start →
+        List.map Aeneas.Std.UScalar.val rows = List.range' start rows.length →
+          start + rows.length ≤ 25 →
+            ∃ after qs,
+              AspisR1PublicPreparation.BeginCalls.SemanticRun D pre rows t after qs ∧
+                ∀ q ∈ qs, AspisR1.JFv_RoundArithmetic.Canonical q
+'AspisR1.JFv_SemanticChain.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf29d1f40fb0b499d982c9ef62b183bdc.scope; invocation ID: 44809c11a823407f9d1df1b11b1d3a16

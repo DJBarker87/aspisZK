@@ -1,0 +1,71 @@
+ARX_Mass.lean:43:15: error: don't know how to synthesize implicit argument `O`
+  @BinRawByteCollisionTargets.event ?m.88 SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+context:
+W A C Tx : Type
+L : Library W (ℕ → Record)
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+a : Adversary A
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+std : S2W_TrustedStd.TrustedStd copy
+D : LiteralByteProtocol.Decoder
+words : CanonicalCutEnrichedTranscript.Words
+owners :
+  FIp_GlobalOwners.Owners (FIp_Install.configuration err c r)
+    (Rc2_Install.configuration (Rc5_Install.seed err (FIp_Install.select r c)) r).boundaries
+Q0 Q1 : ℕ
+queries : ∀ (H : Bytes → State), (ARW_Induced.issued native1 copy allocator CPH_Program.verifier a H).length ≤ Q0 + Q1
+cfg : DrvC_Installation.Configuration FIo_Install.W C := ⋯
+source : Program Bytes State (Outcome A) := ⋯
+capped : Program Bytes State (Outcome A) := ⋯
+model : RawRecordedOracleExtractionMassBin.Experiment := ⋯
+runtime : F3T_Runtime.Runtime := ⋯
+recorder : Program Bytes State (View Bytes State (Outcome A)) := ⋯
+⊢ Type
+ARX_Mass.lean:43:6: error: failed to infer `let` declaration type
+ARX_Mass.lean:36:92: error: unsolved goals
+W A C Tx : Type
+L : Library W (ℕ → Record)
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+a : Adversary A
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+std : S2W_TrustedStd.TrustedStd copy
+D : LiteralByteProtocol.Decoder
+words : CanonicalCutEnrichedTranscript.Words
+owners :
+  FIp_GlobalOwners.Owners (FIp_Install.configuration err c r)
+    (Rc2_Install.configuration (Rc5_Install.seed err (FIp_Install.select r c)) r).boundaries
+Q0 Q1 : ℕ
+queries : ∀ (H : Bytes → State), (ARW_Induced.issued native1 copy allocator CPH_Program.verifier a H).length ≤ Q0 + Q1
+cfg : DrvC_Installation.Configuration FIo_Install.W C := FIp_Install.configuration err c r
+source : Program Bytes State (Outcome A) := ART_PartialAccount.account cfg hashv copy allocator CPH_Program.verifier a
+capped : Program Bytes State (Outcome A) := ARX_LocalCharge.bounded source (Q0 + Q1)
+model : RawRecordedOracleExtractionMassBin.Experiment :=
+  F3T_Charged.projected D (F3T_Canon.canon (F3T_ByteCarrier.lift cfg (submission a)))
+runtime : F3T_Runtime.Runtime := ARX_AdmittedRuntime.runtime L copy allocator c err r native1 native2 hashv a
+recorder : Program Bytes State (View Bytes State (Outcome A)) :=
+  Hiq_RecordedJoint.program capped ARQ_Observer.project (ARQ_Observer.select cfg CPH_Program.verifier)
+⊢ F3T_Runtime.deployedFailure (ARX_AdmittedRuntime.runtime L copy allocator c err r native1 native2 hashv a) ≤
+    lazyMean
+        (F3T_Charged.projected D
+          (F3T_Canon.canon (F3T_ByteCarrier.lift (FIp_Install.configuration err c r) (submission a))))
+        FS.emptyTable RawRecordedOracleExtractionMassBin.failureMass +
+      F3T_Numeric.accountLoss (Q0 + Q1)
+'AspisR1.ARX_Mass.bounded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

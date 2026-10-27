@@ -1,0 +1,12 @@
+AspisR1.SCF_Recovery.agreement : ∀ (left right : AspisR1.RawCutProverCompiler.RunView),
+  left.2.1.1 = right.2.1.1 →
+    (∀ (row : ℕ),
+        row = 0 ∨ row = 2 ∨ row = 30 →
+          AspisR1.RawCommitmentFrameReplay.frameFromView left row =
+            AspisR1.RawCommitmentFrameReplay.frameFromView right row) →
+      (∀ (row : ℕ),
+          row = 0 ∨ row = 2 ∨ row = 30 →
+            AspisR1.BinRawByteCutRecovery.cut left.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row) =
+              AspisR1.BinRawByteCutRecovery.cut right.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row)) →
+        AspisR1.OraclePortRefineJoin.RecoveredInputAgreement left right
+'AspisR1.SCF_Recovery.agreement' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,72 @@
+ARX_RestrictedCharge.lean:50:2: error: unsolved goals
+case neg
+W A C Tx : Type
+L : Library W (ℕ → Record)
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+c : DrvC_Installation.Configuration FIo_Install.W C
+err : C
+r : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+a : Adversary A
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk (FIp_Install.configuration err c r)) native1 native2
+    hashv
+Q0 Q1 : ℕ
+queries : ∀ (H : Bytes → State), (ARW_Induced.issued native1 copy allocator CPH_Program.verifier a H).length ≤ Q0 + Q1
+H : Bytes → State
+source : Program Bytes State (Outcome A) :=
+  ART_PartialAccount.account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a
+supported : ¬Nonempty (ARU_Support.At L copy allocator c err r native1 native2 hashv a H)
+noO : ¬ARX_AdmittedRuntime.permitted L copy allocator c err r native1 native2 hashv a (eval H source)
+noC :
+  ¬ARX_AdmittedRuntime.permitted L copy allocator c err r native1 native2 hashv a
+      (eval H (ARX_LocalCharge.bounded source (Q0 + Q1)))
+⊢ (if
+        ARX_AdmittedRuntime.permitted L copy allocator c err r native1 native2 hashv a
+          (eval H
+            (ART_PartialAccount.account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+              a)) then
+      indicator
+        (BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+          (eval H
+            (Hiq_RecordedJoint.program
+              (ART_PartialAccount.account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+                a)
+              ARQ_Observer.project (ARQ_Observer.select (FIp_Install.configuration err c r) CPH_Program.verifier))))
+    else 0) =
+    if
+        ARX_AdmittedRuntime.permitted L copy allocator c err r native1 native2 hashv a
+          (eval H
+            (ARX_LocalCharge.bounded
+              (ART_PartialAccount.account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+                a)
+              (Q0 + Q1))) then
+      indicator
+        (BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+          (eval H
+            (Hiq_RecordedJoint.program
+              (ARX_LocalCharge.bounded
+                (ART_PartialAccount.account (FIp_Install.configuration err c r) hashv copy allocator
+                  CPH_Program.verifier a)
+                (Q0 + Q1))
+              ARQ_Observer.project (ARQ_Observer.select (FIp_Install.configuration err c r) CPH_Program.verifier))))
+    else 0
+ARX_RestrictedCharge.lean:55:45: warning: This simp argument is unused:
+  if_neg noO
+
+Hint: Omit it from the simp argument list.
+  simp only [Hiq_RecordedJoint.source_view,i̵f̵_̵n̵e̵g̵ n̵o̵O̵,̵if_neg noC]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ARX_RestrictedCharge.lean:55:56: warning: This simp argument is unused:
+  if_neg noC
+
+Hint: Omit it from the simp argument list.
+  simp only [̵H̵i̵q̵_̵R̵e̵c̵o̵r̵d̵e̵d̵J̵o̵i̵n̵t̵.̵s̵o̵u̵r̵c̵e̵_̵v̵i̵e̵w̵,̵i̵f̵_̵n̵e̵g̵ ̵n̵o̵O̵,̵i̵f̵_̵n̵e̵g̵ ̵n̵o̵C̵]̵[̲H̲i̲q̲_̲R̲e̲c̲o̲r̲d̲e̲d̲J̲o̲i̲n̲t̲.̲s̲o̲u̲r̲c̲e̲_̲v̲i̲e̲w̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲n̲o̲O̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ARX_RestrictedCharge.equality' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ARX_RestrictedCharge.bounded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

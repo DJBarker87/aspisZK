@@ -1,0 +1,51 @@
+{"attempt": "ARX_089", "exit_status": 0, "wall_seconds": 0.28930216300068423, "peak_rss_kib": "753384", "swaps": "0", "print_axioms": ["'AspisR1.S2Trust.model_satisfies' depends on axioms: [propext, Quot.sound]"]}
+AspisR1.S2Trust.model_satisfies : ∀ (F : Type), AspisR1.S2Trust.S2TrustedSdkBorrow (AspisR1.S2Trust.model F)
+'AspisR1.S2Trust.model_satisfies' depends on axioms: [propext, Quot.sound]
+structure AspisR1.S2Trust.S2TrustedSdkBorrow {W F : Type} (L : AspisR1.S2Trust.Library W F) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          ∀ (a b : Nat),
+            L.accountData w a = (s.accounts a).fst ∧
+              L.accountLamports w a = (s.accounts a).snd ∧
+                ((s.accounts a).fst = (s.accounts b).fst → L.accountData w a = L.accountData w
+...
+rust.Heap F) (t : Nat) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                0 < s.counter g.cell →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (exclusive_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                s.counter g.cell = -1 →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (error_move_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (borrow_frame :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op))
+    (guard_liveness :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : Nat) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              L.liveGuard w t = Option.some g ∧
+                L.allocated w g.cell = Bool.true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor) :
+    AspisR1.S2Trust.S2TrustedSdkBorrow L
+
+Running as unit: run-r145041d7bdb74acc84804e9ad5ac3ec9.scope; invocation ID: b0aeed3953ef4dc8baf05e86745556ef
