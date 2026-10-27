@@ -1,0 +1,49 @@
+from pathlib import Path
+import hashlib,json,re,shlex,subprocess,sys,time
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-dict2-20261027';D='/home/dombarker/project-offloads/codex-pv-dict2-20261027';H='dombarker@100.108.41.90'
+n=int(sys.argv[1]);module=sys.argv[2];assert 54600<=n<=54899
+p=R/'docs/research/v8-r0-zk-20261009/lean'/(module.replace('.','/')+'.lean');assert p.is_file()
+tp=E/'TALLY.json';t=json.loads(tp.read_text());assert n>=t['next_env_j_id'] and t['lean_charged']<60
+assert n<54897 or 'Audit' in module
+entry=dict(id=n,module=module,charged=False);t['next_env_j_id']=n+1;t['attempts'].append(entry);tp.write_text(json.dumps(t,indent=2)+'\n')
+imports=re.findall(r'^import (\S+)',p.read_text(),re.M)
+code='''from pathlib import Path
+import json,hashlib,subprocess,sys
+D=Path(DIR);B=D.parent
+with (D/('precopy-'+str(ID)+'.log')).open('w') as f:
+ status=subprocess.run(['python3',str(B/'codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/reservation.py'),str(D/('precopy-'+str(ID)+'.json'))],stdout=f,stderr=subprocess.STDOUT).returncode
+if status:raise SystemExit(status)
+e=json.loads((B/'r1-privacy-build-integration-20261019/env/J.json').read_text());e['LEAN_PATH']=str(B/'aspis-joint-20261019/objects')+':'+e['LEAN_PATH'];(D/'env-J.json').write_text(json.dumps(e));r={}
+for m in IMPORTS:
+ for d in [str(D/'lean-objects')]+e['LEAN_PATH'].split(':'):
+  p=Path(d)/(m.replace('.','/')+'.olean')
+  if p.exists():r[m]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest());break
+ else:raise SystemExit('missing object '+m)
+print(json.dumps(r,sort_keys=True))
+'''.replace('DIR',repr(D)).replace('IMPORTS',repr(imports)).replace('ID',str(n))
+r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True)
+if r.returncode:
+ (E/f'{n}-preflight-error.txt').write_text(r.stderr+r.stdout);print(r.stdout+r.stderr);sys.exit(r.returncode)
+deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();meta=dict(attempt=n,module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_objects=deps)
+(E/f'{n}-submission.json').write_text(json.dumps(meta,indent=2)+'\n');(E/f'{n}-source.lean.txt').write_bytes(p.read_bytes())
+target=D+'/lean-objects/'+module.replace('.','/')+'.olean'
+subprocess.run(['ssh',H,"python3 -c "+shlex.quote("from pathlib import Path; ps=[Path("+repr(target)+"+s) for s in ['','.private','.server']]+[Path("+repr(target[:-6])+"+s) for s in ['.ir','.ilean']]; [p.unlink() for p in ps if p.is_symlink()]")],check=True)
+subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+module.replace('.','/')+'.lean'],check=True)
+cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+module.replace('.','/')+'.olean',D+'/lean-sources/'+module.replace('.','/')+'.lean','7000']
+label='lean-'+str(n)
+a=subprocess.run(['ssh',H,shlex.join(['python3',D+'/run_host.py',label,json.dumps(cmd)])],text=True,capture_output=True);(E/f'{n}-launcher.log').write_text(a.stdout+a.stderr)
+res=subprocess.run(['ssh',H,'cat '+D+'/'+label+'/receipt/receipt.json'],text=True,capture_output=True)
+if res.returncode:
+ for name in ['admission-before.json','reservation.log','admission-barrier.json','output.log']:
+  rr=subprocess.run(['ssh',H,'cat '+D+'/'+label+'/'+name],text=True,capture_output=True)
+  if rr.returncode==0:(E/f'{n}-{name}').write_text(rr.stdout)
+ print('UNCHARGED refusal',a.stdout+a.stderr);sys.exit(a.returncode or 1)
+rec=json.loads(res.stdout);t=json.loads(tp.read_text());t['lean_charged']+=1;t['attempts'][-1].update(charged=True,exit=rec['exit_status']);tp.write_text(json.dumps(t,indent=2)+'\n')
+for name in ['stdout.log','stderr.log','time.log']:
+ v=subprocess.check_output(['ssh',H,'cat '+D+'/'+label+'/receipt/'+name],text=True);(E/f'{n}-{name}').write_text(v)
+ if name=='stdout.log':meta['axiom_output']=v
+rec['print_axioms']=[line for line in meta.get('axiom_output','').splitlines() if 'axioms' in line] if rec['exit_status']==0 else 'compile failed; no accepted theorem from this attempt'
+meta.update(rec);(E/f'{n}.json').write_text(json.dumps(meta,indent=2)+'\n')
+print(n,module,'exit',rec['exit_status'],'wall',rec['wall_seconds'],'axiom reports',len(rec['print_axioms']) if isinstance(rec['print_axioms'],list) else 0,flush=True)
+if rec['exit_status']:print(meta.get('axiom_output',''))
+sys.exit(rec['exit_status'])
