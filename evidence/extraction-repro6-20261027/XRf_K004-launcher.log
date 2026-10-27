@@ -1,0 +1,51 @@
+Running as unit: run-r21c30069a0344aae9b6484ff4bad2c6f.scope; invocation ID: 286837b6c3ec4d8e82d68c88cf1d0fa6
+{"attempt": "XRf_K004", "exit_status": 0, "wall_seconds": 3.872233835980296, "peak_rss_kib": "375880", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+5 | #[kani::proof] #[kani::unwind(10)] fn XRf_check_canonical(){
+   |                                       ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrf_check_canonical`
+
+warning: function `XRf_check_rejected_prefix` should have a snake case name
+  --> XRf_harnesses.rs:39:39
+   |
+39 | #[kani::proof] #[kani::unwind(10)] fn XRf_check_rejected_prefix(){
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrf_check_rejected_prefix`
+
+warning: function `XRf_check_tail_ignored` should have a snake case name
+  --> XRf_harnesses.rs:43:39
+   |
+43 | #[kani::proof] #[kani::unwind(10)] fn XRf_check_tail_ignored(){
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrf_check_tail_ignored`
+
+warning: function `XRf_expand_chunk_composition` should have a snake case name
+  --> XRf_harnesses.rs:47:39
+   |
+47 | #[kani::proof] #[kani::unwind(35)] fn XRf_expand_chunk_composition(){
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrf_expand_chunk_composition`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.37s
+Checking harness XRf_harnesses::XRf_expand_bad_output...
+
+VERIFICATION RESULT:
+ ** 0 of 247 failed (14 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 2.451859s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
