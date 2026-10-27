@@ -212,3 +212,7 @@ then compile the smallest changed native/world/selected bridges, check the
 frozen stdlib structural link, perform one combined axioms audit and one final
 candidate closure-manifest replay. Clean only own compiled caches after those
 checks. **Target not yet established.**
+
+Source/proof commit log from `aa27e73f99` is retained in `COMMITS.txt`;
+`f1db3be67a` contains the final V184 attempt and host-stop evidence.
+Working tree was clean after that path-limited commit. No push was performed.
