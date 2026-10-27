@@ -685,3 +685,81 @@ to Some(r), using its Copy derive payment_relation.rs:88. All later
 recipient reads and transfer discrimination operate on an identical owned
 optional value. The signature, types, returned values, panics/aborts,
 allocation and I/O behavior remain identical; no other function changes.
+
+12. D277, sink recipient reads to the final return branch, verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index 06df9cddcb..eb2c7376e0 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -226,7 +226,6 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
+ 
+ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
+            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
+-    let rec = match rec { Some(r) => Some(*r), None => None };
+     let input = *input;
+     let chg = *chg;
+     let snapshot = *snapshot;
+@@ -283,13 +282,7 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+     bits[23] = u32::from(input.super_root_directions[2]);
+     sibs[23] = [input.super_root_siblings[2][0].0, input.super_root_siblings[2][1].0, input.super_root_siblings[2][2].0, input.super_root_siblings[2][3].0, input.super_root_siblings[2][4].0, input.super_root_siblings[2][5].0, input.super_root_siblings[2][6].0, input.super_root_siblings[2][7].0];
+     let empty = pair_empty_roots();
+-    let (recipient_key, recipient_note_salt, transfer) = match rec {
+-        Some(r) => (r.owner_key, r.salt, true),
+-        None => ([M31(0); 8], [M31(0); 8], false),
+-    };
+-    let recipient_owner = [recipient_key[0].0, recipient_key[1].0, recipient_key[2].0, recipient_key[3].0, recipient_key[4].0, recipient_key[5].0, recipient_key[6].0, recipient_key[7].0];
+-    let recipient_salt = [recipient_note_salt[0].0, recipient_note_salt[1].0, recipient_note_salt[2].0, recipient_note_salt[3].0, recipient_note_salt[4].0, recipient_note_salt[5].0, recipient_note_salt[6].0, recipient_note_salt[7].0];
+-    let w = RW {
++    let mut w = RW {
+         input_value: pair.value,
+         output_value: out,
+         change_value: chg.value,
+@@ -301,13 +294,13 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+         pair_occupied: pair.pair_leaf.second_occupied.0,
+         pair_second: [pair.pair_leaf.second_commitment[0].0, pair.pair_leaf.second_commitment[1].0, pair.pair_leaf.second_commitment[2].0, pair.pair_leaf.second_commitment[3].0, pair.pair_leaf.second_commitment[4].0, pair.pair_leaf.second_commitment[5].0, pair.pair_leaf.second_commitment[6].0, pair.pair_leaf.second_commitment[7].0],
+         pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
+-        recipient_owner,
+-        recipient_salt,
++        recipient_owner: ZERO8,
++        recipient_salt: ZERO8,
+         change_owner: [chg.owner_key[0].0, chg.owner_key[1].0, chg.owner_key[2].0, chg.owner_key[3].0, chg.owner_key[4].0, chg.owner_key[5].0, chg.owner_key[6].0, chg.owner_key[7].0],
+         change_salt: [chg.salt[0].0, chg.salt[1].0, chg.salt[2].0, chg.salt[3].0, chg.salt[4].0, chg.salt[5].0, chg.salt[6].0, chg.salt[7].0],
+     };
+-    let p = RP {
+-        transfer,
++    let mut p = RP {
++        transfer: false,
+         asset: asset.0,
+         next_pair_index: snapshot.next_pair_index,
+         frontier: [
+@@ -355,7 +348,16 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+             [empty[19][0].0, empty[19][1].0, empty[19][2].0, empty[19][3].0, empty[19][4].0, empty[19][5].0, empty[19][6].0, empty[19][7].0],
+         ],
+     };
+-    (w, p)
++    match rec {
++        Some(r) => {
++            let r = *r;
++            w.recipient_owner = [r.owner_key[0].0, r.owner_key[1].0, r.owner_key[2].0, r.owner_key[3].0, r.owner_key[4].0, r.owner_key[5].0, r.owner_key[6].0, r.owner_key[7].0];
++            w.recipient_salt = [r.salt[0].0, r.salt[1].0, r.salt[2].0, r.salt[3].0, r.salt[4].0, r.salt[5].0, r.salt[6].0, r.salt[7].0];
++            p.transfer = true;
++            (w, p)
++        },
++        None => (w, p),
++    }
+ }
+ 
+ // ---------- interface for the forest compiler ----------
+```
+
+Repair 11 fails at the entry option join (records:229 / InterpAbs.ml:1955).
+The shared record body now builds zero recipient words and transfer=false.
+None returns those exact original values. Some(r) copies the note
+(payment_relation.rs:88), writes exactly its eight owner words and eight
+salt words into w, sets p.transfer=true, and returns. All other RW/RP
+fields and empty-root call are unchanged. Delayed field reads are pure,
+in bounds, panic/abort-free, with no allocation or I/O. No code follows
+the match, removing the need to carry its optional borrow into later work.
+No signature/type/other-function changes.
