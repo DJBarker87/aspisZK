@@ -709,3 +709,193 @@ Validation: 15/15 Lean compiler invocations (Env-J24300–24314), 0 Kani, 13 exi
 |24314 / Trust|0|0:02.28|4223436|0|
 
 No new theorem/proof, runtime experiment, Kani/Rust/SBF build, timing suite or full manifest replay. Mechanical validation checks all 403 unique rows, preserved 400 statements/classes, bucket/status sums, exact git snapshots, helper-only commands and 15 receipts. No root/sibling worktree, soundness file, implementation, key/account/fund, push or merge operation. Premises removed/added/weakened: **0/0/0**. Stop: every row reviewed and all 15 statement-check slots used.
+
+
+## Recount 3 2026-10-27 (B)
+
+**Target not yet established.** This statement/dependency audit removes no
+endpoint premise. The original ledger rows and both previous recounts remain
+intact. [Every row, dependency and import disposition](../evidence/privacy-recount-20261026/ROWS3.md),
+[method and corrections to D209–D235](../evidence/privacy-recount-20261026/recount3/METHOD3.md),
+[immutable branch pins](../evidence/privacy-recount-20261026/recount3/pins.json),
+[machine-readable rows](../evidence/privacy-recount-20261026/recount3/rows3.json),
+[import chains](../evidence/privacy-recount-20261026/recount3/import-closures.json),
+and [20 statement-check receipts](../evidence/privacy-recount-20261026/recount3/receipts.json)
+are the evidence of record. No proof, theorem, implementation, observer,
+simulator, bad-event definition or release pin was changed.
+
+The denominator grows by four explicitly tracked P rows: V403 canonical M31
+domain at op121 callers, V404 transfer reachability, V405 withdrawal
+reachability, V406 owner adoption of the proposed three-field T. These are
+slices/decisions with recorded overlaps, not four independent security gates.
+**V240/op223 is V164's remaining P_source_p6; it is linked, never counted twice.**
+The proposed T is not accepted trust: the original T/P/C classes stay intact.
+
+| Inventory / status | Recount 1 | Recount 2 | Recount 3 |
+|---|---:|---:|---:|
+| Rows | 400 | 403 | 407 |
+| T | 26 | 26 | 26 |
+| P | 370 | 372 | 376 |
+| C | 4 | 5 | 5 |
+| OPEN | 138 | 110 | 103 |
+| REDUCED | 152 | 154 | 176 |
+| EVIDENCED | 10 | 12 | 14 |
+| CLOSED-ON-RESEARCH | 87 | 87 | 87 |
+| CLOSED-ON-CANDIDATE | 13 | 40 | 27 |
+
+On the **same inherited 403 rows**, recount 3 is OPEN 99, REDUCED 176,
+EVIDENCED 14, CLOSED-ON-RESEARCH 87, CLOSED-ON-CANDIDATE 27, with T/P/C
+26/372/5. The four new OPEN P rows bring OPEN to 103 and P to 376.
+The decrease in candidate closure labels is a correction under the requested
+strict source criterion, not regression of the underlying proved equations.
+
+There are **26 exact operation source closures**: 23 from the callback branch
+and three unique CB3 rows (op120, op225, op246). op229/V246 appears on both
+branches and counts once. The scoped Formatter-axiom diagnostic V270 adds
+one candidate closure, giving 27. V269's original native Formatter type,
+value, options, sink, failure/state/world row remains OPEN; types stay 26/28.
+The original 87 research closures are model-scoped and retain their guards.
+
+For a V169–V267 candidate source closure, the complete extracted Result
+equation must be supplied: an installed equation or bounded Kani gate alone
+is insufficient. Seventeen former installed/value closures and the older
+op81/V203 selected heap interpretation therefore return to REDUCED.
+The stronger fresh Exact equations replace several partial source labels
+already counted in recount 2, so they are not five additional ledger rows.
+
+| CLOSED-ON-CANDIDATE import disposition | Count |
+|---|---:|
+| In research headline closure | 0 |
+| In candidate refinement_of_data consumer closure | 17 |
+| In neither | 10 |
+
+The ten in neither are V197, V206, V209, V210, V212, V213, V214, V218, V219
+and V270. Nine are source laws whose exact current theorem is absent from the
+consumer import paths; V270 is an axiom-audit property with no imported
+closure theorem. Among the 26 operation source rows alone: 0 research,
+17 candidate, 9 neither. Import membership is not a proof of the caller's
+whole-data premise. All 407 row dispositions are separately listed as
+research 160 / candidate 133 / neither 114; for non-closure rows this records
+only defining-source membership, not discharge.
+
+The consumer roots are PV_Join_AggregateCaller, PV_Join_PublicCaller,
+ProverRw19CanonicalAuditRefinement and ProverRw18ContextData. Paths and exact
+source bindings are retained; older imported partial names do not confer
+credit on newer Exact laws. Missing candidate dictionary source files are
+resolved explicitly from the pinned dictionary branch for graph analysis;
+this is not a coherent object/source replay certificate. No audit module is
+used as a root to create membership.
+
+Per-row changes since recount 2 (every other inherited status is unchanged;
+all inherited rows are individually re-derived in ROWS3.md):
+
+| Row | Recount 2 → recount 3 | Evidence / retained limit |
+|---|---|---|
+| V152 | OPEN → REDUCED | Source-identification interfaces and canonical source-stage laws reduce the row to five named families. words/publicCorr/admission/row_call REDUCED; compile_call OPEN. Deployed premises 5→5; reference 3. Concrete native returned compiler/carrier association is not provided. D231 merge gate blocked by stale cached object; newer resume6 additionally records a protected source replay failure, not a row counterexample. No whole deployment closure. |
+| V153 | OPEN → REDUCED | Source-identification interfaces and canonical source-stage laws reduce the row to five named families. words/publicCorr/admission/row_call REDUCED; compile_call OPEN. Deployed premises 5→5; reference 3. Concrete native returned compiler/carrier association is not provided. D231 merge gate blocked by stale cached object; newer resume6 additionally records a protected source replay failure, not a row counterexample. No whole deployment closure. |
+| V154 | OPEN → REDUCED | Source-identification interfaces and canonical source-stage laws reduce the row to five named families. words/publicCorr/admission/row_call REDUCED; compile_call OPEN. Deployed premises 5→5; reference 3. Concrete native returned compiler/carrier association is not provided. D231 merge gate blocked by stale cached object; newer resume6 additionally records a protected source replay failure, not a row counterexample. No whole deployment closure. |
+| V164 | OPEN → REDUCED | rw18/rw20 source decomposition and concrete context identity are checked. Remaining single hypothesis P_source_p6 identifies ops.op223 with ProverRwP6CompressSource.compress under PV_CurrentScaleInstall.selected. This is V240/op223, not an extra independent row. Context identity is discharged; original shipped-helper correspondence is not. |
+| V188 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V189 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V190 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V191 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V192 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V193 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V194 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V196 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V200 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V203 | CLOSED-ON-CANDIDATE → REDUCED | op81 selected heap interpretation and caller specialization exist, but the current 23/73 extracted-source inventory does not credit op81. PV_CB_Op81Source is an older selected-reference equation, not fresh extracted shipped Vec allocation source. Keep the useful caller/dictionary bridge; stricter source-closure credit withdrawn. |
+| V219 | OPEN → CLOSED-ON-CANDIDATE | Complete extracted source Result equation in CB3, composed in CallbackBundle. All unrelated callbacks remain arbitrary; source/native/release joins are retained. This row is distinct from V246/op229. |
+| V242 | OPEN → CLOSED-ON-CANDIDATE | Complete extracted source Result equation in CB3, composed in CallbackBundle. All unrelated callbacks remain arbitrary; source/native/release joins are retained. This row is distinct from V246/op229. |
+| V246 | OPEN → CLOSED-ON-CANDIDATE | Complete extracted source Result equation for arbitrary declared inputs; nominal carrier conversions are explicit and all failure/divergence outcomes remain. D188 extraction boundary retained. Native effects, carrier/world and release association remain V165–V167. 24034.json; prior restored replay 27161.json; Direct candidate equality extraction includes M31 and verified-afterstate Eq bodies; no external function template imported. Exact pointwise dictionary law uses a proved bijective nominal record conversion (PV_CB_Op229Codec). … |
+| V248 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V250 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V251 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V252 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V253 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V254 | OPEN → CLOSED-ON-CANDIDATE | Complete extracted source Result equation in CB3, composed in CallbackBundle. All unrelated callbacks remain arbitrary; source/native/release joins are retained. This row is distinct from V246/op229. |
+| V255 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V262 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V266 | CLOSED-ON-CANDIDATE → REDUCED | Recount 3 strict source criterion: historical selected/installed equation or selected reference interpretation is available, but not an accepted complete extracted-source theorem at this operation. Preserve the useful value installation; withdraw source-closure credit. This is a reporting correction, not a disproved equation. |
+| V270 | OPEN → CLOSED-ON-CANDIDATE | D219 Formatter forbidden-axiom release-blocker audit: 12,920 declarations in 321 candidate family modules and endpoint roots have only propext/Classical.choice/Quot.sound. This closes the scoped inadmissible axiom-route diagnostic, not native Formatter adequacy V269 or a coherent release replay. Original 26201/26203 audit receipts reused; 38608 could not check a separate owned-coefficient helper because its object is missing. |
+| V344 | OPEN → EVIDENCED | D216 qualified quiet-host timing PASSED: transfer research/candidate medians 38.909/13.742 s, withdrawal 38.560/13.499 s; n=5 each, twenty quiet pre/post checks; candidate <15 s and <=1.10x. Fixture medians only, not universal constant-time/native refinement. Earlier invalidated windows retained. |
+| V345 | OPEN → EVIDENCED | D216 qualified quiet-host timing PASSED: transfer research/candidate medians 38.909/13.742 s, withdrawal 38.560/13.499 s; n=5 each, twenty quiet pre/post checks; candidate <15 s and <=1.10x. Fixture medians only, not universal constant-time/native refinement. Earlier invalidated windows retained. |
+| V403 | NOT-PREVIOUSLY-SEPARATE → OPEN | Prove every M31 reaching op121 from actual caller producers is in [0,P). Retained challenge 2^31 is noncanonical: it refutes only the unrestricted Horner replacement, not selected entry=self extraction. Producer polynomial/interpolation canonicality has later partial source lemmas; challenge semantic/update/read composition and full reached-domain invariant remain OPEN. This is a proof obligation, never new accepted trust. |
+| V404 | NOT-PREVIOUSLY-SEPARATE → OPEN | Determine the actual execution-reached entries and prove any exclusion for all admitted transfer inputs. Static import/dependency paths are not execution witnesses. Universally excluded set remains empty; conditional serialization-panic prefix and op226-first-after-entry do not establish reach/admission. Distinct fixture slice of V163; no new callback inventory decrement. |
+| V405 | NOT-PREVIOUSLY-SEPARATE → OPEN | Determine the actual execution-reached entries and prove any exclusion for all admitted withdrawal inputs. Static import/dependency paths are not execution witnesses. Universally excluded set remains empty; conditional serialization-panic prefix and op226-first-after-entry do not establish reach/admission. Distinct fixture slice of V163; no new callback inventory decrement. |
+| V406 | NOT-PREVIOUSLY-SEPARATE → OPEN | Owner decision pending for entropy_law (E1), entropy_kernel (joint 128-draw density), observation (native outcomes/filesystem/complete observer equal extracted execution). None is equality to the security experiment. Do not silently inflate accepted T or treat conditional candidate headline as deployed closure. A/B OS-failure repair remains separate V400. |
+
+V163 remains OPEN but moves from (a) to (b): the independent mathematical
+serializer is published, while the concrete deployed-input-to-model instance
+and full proof-byte/data equations are still missing. V164 is REDUCED to
+P_source_p6 / V240; rw20's concrete context identity is checked. Source-ID
+families words/publicCorr/admission/row_call are REDUCED, compile_call OPEN;
+V152–V154 are REDUCED, never deployed closures. The merge gate remains blocked
+by the stale-object/provenance issue; newer resume6 records a rejected protected
+source replay failure as well. No protected source is edited here.
+
+| OPEN dependency | Recount 2 | Recount 3, same 403 | Recount 3, all 407 | Change, all rows |
+|---|---:|---:|---:|---:|
+| (a) independent source obligation | 51 | 41 | 44 | -7 |
+| (b) native interpretation / concrete model instance | 50 | 51 | 51 | +1 |
+| (c) owner decision | 9 | 7 | 8 | -1 |
+| Total OPEN | 110 | 99 | 103 | -7 |
+
+Bucket (a) loses V152–V154, V164, V270, four unique new source closures
+(V219/V242/V246/V254), and V163's native-dependent completion; it gains the
+three new source/reachability families. Bucket (b) gains V163. Bucket (c)
+loses timing rows V344/V345 after D216 and gains proposed-T adoption V406.
+Owner-first rows are V370 compiler preservation, V371 DOITM/CPU latency,
+V373 and V380-inversion inversion boundary, V374 Docker-cap/quiet-host dudect,
+V396 client bundle pin, V400 OS-entropy-failure repair A/B, V406 exact T list.
+All five L1 and eighteen inherited L2 rows remain native-dependent OPEN.
+REDUCED/EVIDENCED residuals are not disguised as completed native gates.
+
+Corrections and supported lead claims, stated plainly:
+
+- D211/recount 2 over-credited installed/value interpretations as extracted
+  source closures. The 18 affected rows are explicitly downgraded above.
+- D219 closes the candidate Formatter-axiom blocker only. It does not close
+  V269's full native interpretation; V270 gets the scoped diagnostic closure.
+- D223 is correct: refinement_of_data has no callback-hypothesis list. Its
+  ExternalFuns value, reservation and whole proof/audit data equation remain.
+  The source callback inventory is **30**, not 31; selected-entry source
+  correspondence is not another inventory decrement. Both fixture reached
+  sets remain unresolved; universally excluded entries are **none proved**.
+- D226 counts op229/V246 twice across cb/cb3: only three unique additions,
+  not four. Its 40→44 / 110→106 arithmetic is unsupported as unique-row
+  arithmetic; cb5 inherits that duplicated baseline.
+- D235's operation-to-row labels are incorrect: op84 is V206, op105 V211,
+  op107 V212, op109 V213, op118 V218. The source table's 23/73 is supported;
+  these strengthen five older partial equations already counted in recount 2.
+- Op51/V195 remains OPEN as requested. The newer cb5 final report claims
+  arbitrary-carrier P6 coverage and a checked reference-selector wrapper;
+  that claim is retained explicitly, without silently reversing the withdrawal.
+- D232 supplies constructed-candidate initial/causal, while **deployed P is
+  unchanged: 2→2 / 8→8 / 6→6**. T stays exactly three proposed fields:
+  entropy_law, entropy_kernel, observation. Neither owner adoption nor A/B
+  OS-failure repair nor deployed (P ∧ T) fixture inhabitance is supplied.
+- D234's noncanonical M31 reference disagreement is retained and is **not a
+  row counterexample**. The canonical-domain proof is V403; no assumption,
+  raw carrier restriction on source self-equality, or shipped fix is added.
+- D216's timing pass supports V344/V345 EVIDENCED (5 samples per fixture and
+  binary; transfer 13.742 s, withdrawal 13.499 s candidate medians). It is not
+  a universal side-channel theorem. pv-envfix repairs the environment only.
+
+**Single most valuable independent next row: V240/op223**, exact complete
+shipped/extracted-source correspondence for arbitrary slices and Result
+outcomes. It is V164's last P_source_p6 and feeds V163; a reference-only
+extraction or another selector equation does not finish it.
+
+Validation: **20/20 Lean statement-check invocations**, Env-J38600–38619;
+19 exit 0, one exit 1 (38608, exact missing
+R1Z/PDict_OwnedCorrect262.olean). Every run records target, exit, wall, peak RSS,
+swap, revision/source hash, dependency fingerprint and full axioms/errors.
+All accepted axiom reports are standard only. No retry or cap/range change;
+current launcher TasksMax=64, -M7000, MemoryHigh 6G, MemoryMax 8G,
+MemorySwapMax=0, one scope at a time. Missing helper object is not reported
+passing or confused with D219's separately reused audit. Zero Kani, new proofs,
+runtime suites, Aeneas/SBF/Rust builds or full manifest replay. No sibling/root
+worktree edit, merge, push, or key/account/fund operation. Premises
+removed/added/weakened: **0/0/0**. Stop: all rows re-derived, statement budget
+exhausted. **Target not yet established.**
