@@ -27,6 +27,8 @@ theorem change_claim {H : Type} (D : C.D H) (sem : C.Sem H) (v : C.View) (hash :
  rintro ⟨kappa,t2⟩ hk
  have hkc := XSf_Reached.kappa D t1 t2 28#u8 payload kappa hk
  have hclaim := XSa_CachedClaim.claim D sem v.y1 v.inactive kappa g hi hkc hgc
+ apply (bind_eq_iff _ _ _).mpr
+ rintro ⟨alpha,t3⟩ ha
  simp only [hp,bind_tc_ok,hclaim]
 
 #print axioms change_claim
