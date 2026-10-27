@@ -10681,3 +10681,26 @@ publish the concrete mathematical model instance early under a stable name for j
 the transfer then withdrawal proof-byte equations, then the general criterion; re-freeze the manifest.
 Six slots: cb4, cb5, join4, srcid6, runjoin9, rw21. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D234 (Stream B) 2026-10-27 00:40 UTC: join4 stopped on an op121 disagreement; ruled not a row counterexample (non-canonical M31 input); join5 launched
+
+pv-join4 (`codex/pv-join-20261026`, head 8eba145a71; 5/100 Lean, 6/6 Kani, final audit 36804 GREEN: 127
+PV_Join theorems plus the headline, standard axioms, 1.73 s / 4.34 GB / swap 0; no crates/programs change;
+no forbidden tokens). Findings: per-fixture execution-reached sets unresolved, universally unreachable set
+empty (`PV_Join_PublicFailure4.fail_public` proves only a conditional serialization-panic prefix);
+inventory 30 → 30, entries 4, 32, 122, 123, 232, 257 explicitly deferred to pv-runjoin; both fixture
+equations open; rw20's model instance not yet published. The worker stopped on a checked disagreement:
+for shipped `evaluate_state_only_polynomial` versus its proposed Horner reference, with coefficient 2 =
+[1,0,0,0] and challenge [0, 2147483648, 0, 0], optimized source returns [3,0,0,0] and the reference
+[2147483646,0,0,0]; Kani confirms an unsigned-subtraction overflow at crates/aspis-core/src/field.rs:331
+(`a + P - b`). RETAINED as evidence (AGENTS.md §7). LEAD RULING: not a ROW counterexample. The challenge
+component 2^31 exceeds P = 2^31 - 1 and so violates M31's documented representation invariant
+("canonical representation in [0, P)", field.rs:22); the subtraction underflows only for non-canonical
+b. The row statement (op121 selected entry = its own extracted definition, D208/D211) is untouched, as
+the worker's report itself states. Consequence: the P6 owned reference's domain is the canonical
+representatives, and "every M31 reaching op121 in the deployed caller is canonical" becomes a PROOF
+OBLIGATION discharged from the producers (reduce_u64 < P, constructors, deserialisation checks), never an
+assumption; the direct extraction route is preferred where it succeeds. No shipped-code change. Launched
+pv-join5 (same branch, IDs 38000-38299, 95 Lean / 6 Kani) with this ruling, then reachability, source laws
+for reached entries, and the fixture equations once rw21 publishes ProverRw21ModelInstance. Six slots:
+cb4, cb5, srcid6, runjoin9, rw21, join5. Rows removed outright: 0. Privacy target not yet established.
