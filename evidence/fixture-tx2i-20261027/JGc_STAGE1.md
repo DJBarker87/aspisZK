@@ -1,0 +1,9 @@
+# Complete actual TX2 query-loop join
+
+JGc_TX2_QueryLoop.source (014) proves the actual installed Port3_QueryStage.query return on the retained real bytes is the SAME pair obtained by JFz_TX2_AccumulationChain.updates at12, followed by the SAME returning canonical64-entry flush, next22 and unchanged weights. No successful query/loop/circle/decoder/dot/node/line callback is a premise. QueryStep builds the source Observation from checked children; LoopPrefix transports the twelve actual accumulations through actual loop control flow. The retained marker op19 is the release mark body. No whole buffer or accumulation recurrence is kernel-normalized.
+
+JGc_TX2_QueryFixture.on_saved (015) composes this with the actual reader on the retained1768-byte checkpoint, with Realizes H explicit. inhabited extends the inherited finite checkpoint-oracle model, establishing the combined local reader/query/flush calls; it is not SHA256 realization, batch1 authentication, installed finish, accepted2 or deployed-top satisfiability.
+
+Local BEFORE: twelve gate/accumulation/flush children without actual query loop. AFTER: actual installed loop derives its SAME return from those children, no free callback. Rc10_Top.deployed BEFORE/AFTER byte-identical: actual83T/12P/13G/0C; combined89T/16P/13G/0C; removals/additions/changes all zero. No trust boundary, carrier, quantifier, game or metric changed.
+
+015 exit0,wall2.5227605450199917s,peakRSS5739180KiB,swap0,revision17b848dcbf (dirty exact source hash and dependencies in receipt). New roots print standard axioms only. Attempts001,003–005,007,010–011 retain parser/type/rewrite failures and their rejected recovery axiom diagnostics; only exact-source successful receipts receive credit. Budget15/100 Lean,0/10 Kani. No shipped-source edit or ELF rebuild trigger. Next: actual batch1 authentication; preflight its block count before hash generation.
