@@ -27,7 +27,7 @@ if prepath.exists():
  pre=json.loads(prepath.read_text());actual=pre['deps_fingerprint'];r['dependency_objects_before_run']=pre['dependency_objects'];r['post_dependency_fingerprint']=r['deps_fingerprint'];r['dependency_identity_changed_during_run']={k:({'missing':True} if v=='MISSING' else v) for k,v in pre['dependency_objects'].items()}!=ids
 else:actual='none'
 r['actual_launcher_fingerprint']=actual
-r['target']=[base+'/r1-privacy-build-integration-20261019/tools/run-joint.sh',a,module,'J','7000','8']+([] if actual=='none' else [actual])
+r['target']=[base+'/codex-pv-op134-20261027/run-joint.sh',a,module,'J','7000','8']+([] if actual=='none' else [actual])
 r['source_pin']='source_revision is the actual checkout HEAD; source_sha256 pins the compiled working source, including pre-commit additions.'
 if not r['axioms']:r['axioms_status']='N/A extraction-definition rebuild or declaration-only inspection; see downstream audits.'
 (out/f'{a}.json').write_text(json.dumps(r,indent=2)+'\n');print(a,r['exit'],r['wall'])
