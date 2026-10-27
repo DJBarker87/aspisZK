@@ -1,0 +1,14 @@
+theorem AspisR1.JGn_MaskedAcceptance.source : ∀ {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (hash : H),
+  ∃ terminal mask,
+    AspisR1.FIq_Terminal.terminal AspisR1.JFs_PublicSerialization.value AspisR1.JFu_ClaimsData.claims
+          AspisR1.JFm_PartialAlpha.a10 AspisR1.JFm_Begin.challenges =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok terminal) ∧
+      AspisR1.FIp_SemanticArithmetic.mask AspisR1.JFu_MaskInputs.c1 AspisR1.JFu_MaskInputs.maskOnly
+            AspisR1.JFu_MaskInputs.g AspisR1.JFu_MaskInputs.point =
+          Aeneas.Std.Result.ok mask ∧
+        AspisR1.JGb_MaskedArithmetic.run terminal mask = Aeneas.Std.Result.ok AspisR1.JGd_NumericData.running :=
+fun {H} D hash =>
+  Exists.intro AspisR1.JGd_NumericData.neededTerminal
+    (Exists.intro AspisR1.JGd_NumericData.mask
+      ⟨AspisR1.JGn_TerminalIdentified.source D hash, ⟨AspisR1.JGd_MaskSource.source, AspisR1.JGd_MaskedGate.source⟩⟩)

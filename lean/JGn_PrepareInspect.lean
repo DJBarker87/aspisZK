@@ -1,0 +1,12 @@
+import JGn_CurrentPreparation
+import JGi_TX1Ready
+set_option autoImplicit false
+namespace AspisR1.JGn_PrepareInspect
+open AspisR1CurrentCaller InstalledPreparation BorrowedClaimPrepared OriginalSerializerInstallation
+open AspisS1ValuesOwnedInstallation AspisS1NativeBufferClaimTrace
+#print NativeBuffers.install
+#print withValues
+#print S1PrepareCode.prepare
+#print verifier.candidate.prepare
+#print axioms JGn_CurrentPreparation.inhabited
+end AspisR1.JGn_PrepareInspect

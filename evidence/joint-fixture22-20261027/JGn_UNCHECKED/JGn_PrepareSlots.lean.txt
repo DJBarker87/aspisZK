@@ -1,0 +1,23 @@
+import JGi_TX1Ready
+set_option autoImplicit false
+namespace AspisR1.JGn_PrepareSlots
+open Aeneas Aeneas.Std Result
+open AspisR1CurrentCaller
+
+theorem allocation {C : Type} (ops : Ops) (reserved : Bool)
+    (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops C)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls) :
+    @(WAdm_Execution.actual ops reserved query geo B std).op1 = @ops.op1 := rfl
+#print axioms allocation
+
+theorem layout {C : Type} (ops : Ops) (reserved : Bool)
+    (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops C)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls) :
+    let installed := WAdm_Execution.actual ops reserved query geo B std
+    installed.op12=ops.op12 ∧ installed.op13=ops.op13 ∧
+    installed.op14=ops.op14 ∧ installed.op15=ops.op15 := ⟨rfl,rfl,rfl,rfl⟩
+#print axioms layout
+
+#print compact.LOGICAL_Y1
+#print aspis_core.field.wide_exact.WideExact.ZERO
+end AspisR1.JGn_PrepareSlots

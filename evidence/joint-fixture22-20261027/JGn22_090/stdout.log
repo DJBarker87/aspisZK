@@ -1,0 +1,230 @@
+def AspisR1CurrentCaller.BorrowedClaimPrepared.NativeBuffers.install : Ops →
+  AspisS1NativeCompact.Ops →
+    AspisR1PublicPreparation.RoundModel.Boundaries → AspisR1PublicPreparation.FinishModel.Boundaries → Ops :=
+fun ops native R B =>
+  closedInstall
+    (S1SemanticInstallation.install
+      { op0 := ops.op0, op1 := @Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4, op5 := ops.op5,
+        op6 := @Ops.op6 ops, op7 := ops.op7, op8 := @Ops.op8 ops, op9 := @Ops.op9 ops,
+        op10 := AspisS1NativeCompact.compact.expand_semantic native, op11 := ops.op11, op12 := ops.op12,
+        op13 := ops.op13, op14 := ops.op14, op15 := ops.op15, op16 := @Ops.op16 ops, op17 := ops.op17, op18 := ops.op18,
+        op19 := ops.op19, op20 := ops.op20, op21 := ops.op21 }
+      R B)
+def AspisS1ValuesOwnedInstallation.withValues : Ops → Ops :=
+fun ops =>
+  { op0 := ops.op0, op1 := @Ops.op1 ops, op2 := ops.op2, op3 := ops.op3, op4 := ops.op4, op5 := ops.op5,
+    op6 := @Ops.op6 ops, op7 := ops.op7, op8 := @Ops.op8 ops, op9 := @Ops.op9 ops, op10 := ops.op10,
+    op11 := expandValues, op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15, op16 := @Ops.op16 ops,
+    op17 := ops.op17, op18 := ops.op18, op19 := ops.op19, op20 := ops.op20, op21 := ops.op21 }
+def AspisR1CurrentCaller.S1PrepareCode.prepare : Ops →
+  AspisR1PublicPreparation.RoundModel.Boundaries →
+    AspisR1PublicPreparation.FinishModel.Boundaries →
+      {H : Type} →
+        aspis_core.digest.Digest32 H →
+          aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              H →
+                Aeneas.Std.Array aspis_core.field.wide_exact.WideExact 29#usize →
+                  AspisR1PublicPreparation.PreparedHashCode.Code
+                    (Aeneas.Std.core.result.Result verifier.Prepared verifier.Error ×
+                      Aeneas.Std.Array aspis_core.field.wide_exact.WideExact 29#usize) :=
+fun base R B {H} aspis_coredigestDigest32Inst public1 proof hash g =>
+  have ops := NativeBuffers.install (withValues base) nativeValues R B;
+  do
+  let i ← liftM (compact.LOGICAL_SEMANTIC ops)
+  let i1 ← liftM compact.LOGICAL_Y1
+  let i2 ← liftM (i + i1)
+  let r ← liftM (ops.op1 Aeneas.Std.core.marker.CopyU8 i2 0#u8)
+  let r1 ←
+    liftM
+        (core.result.Result.map_err
+          (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError aspis_coredigestDigest32Inst) r
+          ())
+  let cf ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1)
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+      let __x ← liftM (Aeneas.Std.lift val.deref_mut)
+      match __x with
+        | (s, deref_mut_back) => do
+          let __x ← liftM (Aeneas.Std.core.slice.Slice.split_at_mut s i)
+          match __x with
+            | ((semantic, y1), split_at_mut_back) => do
+              let i3 ← liftM (compact.OFF_SEMANTIC ops)
+              let i4 ← liftM (compact.OFF_Y1 ops)
+              let s1 ←
+                liftM
+                    (Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                      { start := i3, «end» := i4 })
+              let __x ← liftM (ops.op10 s1 semantic)
+              match __x with
+                | (r2, semantic1) => do
+                  let cf1 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2)
+                  match cf1 with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                      let i5 ← liftM (compact.OFF_INACTIVE ops)
+                      let s2 ←
+                        liftM
+                            (Aeneas.Std.core.slice.index.Slice.index
+                              (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                              { start := i4, «end» := i5 })
+                      let __x ← liftM (ops.op11 s2 y1)
+                      match __x with
+                        | (r3, y11) => do
+                          let cf2 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3)
+                          match cf2 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                              have s3 := split_at_mut_back (semantic1, y11);
+                              have val1 := deref_mut_back s3;
+                              do
+                              let s4 ←
+                                liftM
+                                    (Aeneas.Std.alloc.vec.Vec.index
+                                      (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) val1
+                                      { «end» := i })
+                              let s5 ←
+                                liftM
+                                    (Aeneas.Std.alloc.vec.Vec.index
+                                      (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) val1
+                                      { start := i })
+                              let r4 ← liftM (ops.op5 proof s4 s5)
+                              let cf3 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4)
+                              match cf3 with
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v => do
+                                  let r5 ←
+                                    S1SemanticCodeInstallation.code R B aspis_coredigestDigest32Inst public1 v.semantic
+                                        hash
+                                  let r6 ←
+                                    liftM
+                                        (core.result.Result.map_err
+                                          (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                            aspis_coredigestDigest32Inst)
+                                          r5 ())
+                                  let cf4 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r6)
+                                  match cf4 with
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                                      liftM (verifier.mark none verifier.Phase.Semantic)
+                                      closedPreparationCode aspis_coredigestDigest32Inst val2 v hash g
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                                      let r7 ←
+                                        liftM
+                                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              verifier.Prepared (Aeneas.Std.core.convert.FromSame verifier.Error)
+                                              residual)
+                                      pure (r7, g)
+                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                                  let r5 ←
+                                    liftM
+                                        (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          verifier.Prepared (Aeneas.Std.core.convert.FromSame verifier.Error) residual)
+                                  pure (r5, g)
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                              let r4 ←
+                                liftM
+                                    (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      verifier.Prepared (verifier.Error.Insts.CoreConvertFromCodecError ops) residual)
+                              pure (r4, g)
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                      let r3 ←
+                        liftM
+                            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              verifier.Prepared (verifier.Error.Insts.CoreConvertFromCodecError ops) residual)
+                      pure (r3, g)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        liftM
+            (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              verifier.Prepared (Aeneas.Std.core.convert.FromSame verifier.Error) residual)
+      pure (r2, g)
+def AspisR1CurrentCaller.verifier.candidate.prepare : Ops →
+  {H : Type} →
+    aspis_core.digest.Digest32 H →
+      aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          H →
+            Option (verifier.Phase → Aeneas.Std.Result Unit) →
+              Aeneas.Std.Array aspis_core.field.wide_exact.WideExact 29#usize →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result verifier.Prepared verifier.Error ×
+                    Aeneas.Std.Array aspis_core.field.wide_exact.WideExact 29#usize) :=
+fun ops {H} aspis_coredigestDigest32Inst public1 proof hash obs g => do
+  let i ← compact.LOGICAL_SEMANTIC ops
+  let i1 ← compact.LOGICAL_Y1
+  let i2 ← i + i1
+  let r ← ops.op1 Aeneas.Std.core.marker.CopyU8 i2 0#u8
+  let r1 ←
+    core.result.Result.map_err
+        (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError aspis_coredigestDigest32Inst) r
+        ()
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+      let (s, deref_mut_back) ← Aeneas.Std.lift val.deref_mut
+      let ((semantic, y1), split_at_mut_back) ← Aeneas.Std.core.slice.Slice.split_at_mut s i
+      let i3 ← compact.OFF_SEMANTIC ops
+      let i4 ← compact.OFF_Y1 ops
+      let s1 ←
+        Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+            proof { start := i3, «end» := i4 }
+      let (r2, semantic1) ← ops.op10 s1 semantic
+      let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+      match cf1 with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+          let i5 ← compact.OFF_INACTIVE ops
+          let s2 ←
+            Aeneas.Std.core.slice.index.Slice.index
+                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof { start := i4, «end» := i5 }
+          let (r3, y11) ← ops.op11 s2 y1
+          let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf2 with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+              have s3 := split_at_mut_back (semantic1, y11);
+              have val1 := deref_mut_back s3;
+              do
+              let s4 ←
+                Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8)
+                    val1 { «end» := i }
+              let s5 ←
+                Aeneas.Std.alloc.vec.Vec.index (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8)
+                    val1 { start := i }
+              let r4 ← ops.op5 proof s4 s5
+              let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4
+              match cf3 with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v => do
+                  let r5 ← ops.op9 aspis_coredigestDigest32Inst public1 v.semantic hash obs
+                  let r6 ←
+                    core.result.Result.map_err
+                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                          aspis_coredigestDigest32Inst)
+                        r5 ()
+                  let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r6
+                  match cf4 with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                      verifier.mark obs verifier.Phase.Semantic
+                      ops.op8 aspis_coredigestDigest32Inst val2 v hash g
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                      let r7 ←
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            verifier.Prepared (Aeneas.Std.core.convert.FromSame verifier.Error) residual
+                      Aeneas.Std.Result.ok (r7, g)
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                  let r5 ←
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.Prepared (Aeneas.Std.core.convert.FromSame verifier.Error) residual
+                  Aeneas.Std.Result.ok (r5, g)
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.Prepared (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+              Aeneas.Std.Result.ok (r4, g)
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+          let r3 ←
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                verifier.Prepared (verifier.Error.Insts.CoreConvertFromCodecError ops) residual
+          Aeneas.Std.Result.ok (r3, g)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+            (Aeneas.Std.core.convert.FromSame verifier.Error) residual
+      Aeneas.Std.Result.ok (r2, g)
+'AspisR1.JGn_CurrentPreparation.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]

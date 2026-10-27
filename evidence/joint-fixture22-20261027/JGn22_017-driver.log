@@ -1,0 +1,46 @@
+{"attempt": "JGn22_017", "exit_status": 1, "wall_seconds": 6.85855081002228, "peak_rss_kib": "6029444", "swaps": "0", "print_axioms": ["'AspisR1.JGn_PoseidonNumeric.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JGn_PoseidonNumeric.identified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGn_PoseidonNumeric.lean:16:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R0P.poseidonLeadingPair (decoded JGl_NumericData.a) (decoded JGl_NumericData.c)
+in the target expression
+  FIv_NativeValue.decode JGl_NumericData.sops.block *
+      (decoded JGl_NumericData.sops.local ⟨↑0#usize, FJh_Native07RawValue.model._proof_3⟩ *
+            ((fun v =>
+                  R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis
+                    ExtractedMaskQmPackBase4Arithmetic.uBasis fun j => v (FJe_ExternalAdjoint.lane g j))
+                (decoded JGl_NumericData.openings.succ_z) -
+              (fun v =>
+                  R0P.poseidonPackingFormul
+...
+             (decoded JGl_NumericData.openings.succ_z) -
+            (fun v =>
+                R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis
+                  ExtractedMaskQmPackBase4Arithmetic.uBasis fun j => v (FJe_ExternalAdjoint.lane g j))
+              (R0P.poseidonInterpolatedInternalPair (decoded JGl_NumericData.openings.z)
+                (decoded JGl_NumericData.sops.local)))) =
+    decoded JGl_NumericData.poseidon g
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    decoded JGl_NumericData.openings.succ_z
+  has type
+    Fin ↑16#usize → FIv_NativeValue.K
+  but is expected to have type
+    Fin 16 → FIv_NativeValue.K
+  in the application
+    (fun v =>
+        R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis ExtractedMaskQmPackBase4Arithmetic.uBasis
+          fun j => v (FJe_ExternalAdjoint.lane g j))
+      (decoded JGl_NumericData.openings.succ_z)
+'AspisR1.JGn_PoseidonNumeric.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGn_PoseidonNumeric.lean:25:60: error: unsolved goals
+out : Std.Array field.QM31 4#usize
+run :
+  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected JGl_NumericData.openings JGl_NumericData.sops =
+    ok out
+⊢ JGl_NumericData.sops.block =
+    { c0 := { a := 2041874586#u32, b := 2083904705#u32 }, c1 := { a := 442046485#u32, b := 2021195725#u32 } }
+'AspisR1.JGn_PoseidonNumeric.identified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r28719ad8174e47bfae3307da958fb6d2.scope; invocation ID: 1a8acc6a2f644750a5ce56562575ae5a
+
