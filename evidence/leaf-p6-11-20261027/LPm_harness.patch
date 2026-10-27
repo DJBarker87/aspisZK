@@ -100,7 +100,7 @@
 +}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/LPm_verifier.rs
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,70 @@
 +//! Frozen checkpoint weights: actual Vec carrier and one iterator transition.
 +use super::*;
 +use aspis_core::field::CM31;
@@ -149,6 +149,27 @@
 + let at:usize=kani::any();kani::assume(at<out.len());
 + assert_eq!(out[at],if at<len{initial[at]}else{let b=at-len;(raw[b/4]>>((b%4)*8)) as u8});
 + kani::cover!(i==0);kani::cover!(i==63);kani::cover!(at==len+15);
++}
++// Prefix-equivariant append primitives used by roots/state/digests and queries.
++fn check_append<const N:usize>() {
++ let initial:[u8;1736]=kani::any();let value:[u8;N]=kani::any();
++ let len:usize=kani::any();kani::assume(len<=1736-N);
++ let mut out=initial[..len].to_vec();out.extend_from_slice(&value);
++ assert_eq!(out.len(),len+N);
++ let at:usize=kani::any();kani::assume(at<out.len());
++ assert_eq!(out[at],if at<len{initial[at]}else{value[at-len]});
++ kani::cover!(len==0);kani::cover!(len==1736-N);kani::cover!(at==len+N-1);
++}
++#[kani::proof] #[kani::unwind(1740)] fn append32(){check_append::<32>();}
++#[kani::proof] #[kani::unwind(1740)] fn append4(){check_append::<4>();}
++#[kani::proof] #[kani::unwind(1740)]
++fn query_word_append() {
++ let initial:[u8;1736]=kani::any();let q:u32=kani::any();
++ let len:usize=kani::any();kani::assume(len<=1732);
++ let mut out=initial[..len].to_vec();out.extend_from_slice(&q.to_le_bytes());
++ assert_eq!(out.len(),len+4);let at:usize=kani::any();kani::assume(at<out.len());
++ assert_eq!(out[at],if at<len{initial[at]}else{(q>>(8*(at-len))) as u8});
++ kani::cover!(len==320);kani::cover!(len==404);kani::cover!(q==u32::MAX);
 +}
 --- a/crates/aspis-r1-cost-probe/src/verifier.rs
 +++ b/crates/aspis-r1-cost-probe/src/verifier.rs

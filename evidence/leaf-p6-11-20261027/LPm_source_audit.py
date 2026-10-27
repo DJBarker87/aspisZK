@@ -27,7 +27,8 @@ actual=json.loads(r.stdout);errors=[]
 for f,h in expected.items():
  actual[f]['frozen_sha256']=h
  if actual[f].get('normalized_sha256')!=h:errors.append(f)
-result={'frozen_revision':R,'files':actual,'errors':errors,'repository_shipped_diff':subprocess.check_output(['git','diff','--name-only','HEAD','--','crates','programs']).decode().splitlines()}
+local_errors=[f for f,h in expected.items() if not Path(f).is_file() or hashlib.sha256(Path(f).read_bytes()).hexdigest()!=h]
+result={'repository_frozen_errors':local_errors,'frozen_revision':R,'files':actual,'errors':errors,'repository_shipped_diff':subprocess.check_output(['git','diff','--name-only','HEAD','--','crates','programs']).decode().splitlines()}
 (E/'LPm_SOURCE_AUDIT.json').write_text(json.dumps(result,indent=2)+'\n')
 print('Frozen files',len(files),'mismatches',errors)
-assert not errors and not result['repository_shipped_diff']
+assert not errors and not local_errors and not result['repository_shipped_diff']
