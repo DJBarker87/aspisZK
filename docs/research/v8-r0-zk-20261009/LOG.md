@@ -11804,3 +11804,33 @@ file or crates conflicts aborted and recorded, never guessed), show every result
 cfg(kani)-only, gate (a), re-check every published bundle against the integrated tree, one combined
 axioms audit with the row table and candidate-closure import paths. Six slots: runjoin16, route2b,
 integ1, batch1b, recount5, integ2. Rows removed outright: 0. Privacy target not yet established.
+
+## D286 (Stream B) 2026-10-27 13:20 UTC: integ1 gates pass on the integrated candidate; candidate fast-forwarded; dictionary branch cleared as cfg(kani)-only; L3 evidence on research; recount 5 and the owner packet merged; quiet-window timing gate for op223 launched
+
+pv-integ1 (`codex/pv-integ1-20261027`; 5/30 Lean, no Kani; cargo targets removed): on the INTEGRATED
+candidate (rebased + op223) all three ELF pins match; devnet_spend with the recommended recipe sha256
+5fc6c98d2e34b873faae3773064f6b0eda505623b161a703647c7787b2f46688, symbols show main →
+generate_for_mask_nonce and the op223 call through prover_shared::compress_tagged_tuple; fixed-coin
+fixtures match c57a344726 in proof/public bytes, result records and ledger bytes (raw result.json files
+differ only in the elapsed-seconds field); PV_Op223_Source.op223_source and PV_Op223_V164.refinement
+re-check against the integrated objects (53906/53907, standard axioms); the combined differential/timing
+commands are written, not run. The candidate was a strict ancestor and is FAST-FORWARDED to 8873306db1.
+Review of the two excluded siblings: cx-prover-dict's three shipped-file diffs (state_only_hiding.rs,
+prover.rs, r1_wire.rs) are entirely `#[cfg(kani)]` contract modules (pdict_offpath_volatile_contract,
+pdict_rejection_contracts, pdict_error/typenum/numeric_contracts), so it may join a later consolidation;
+pv-l3's shipped-file history comes from its pre-rebase merge base (old candidate commits already
+represented in the candidate), so only its evidence is needed: evidence/pv-l3-20261027 (39 MB of
+disassembly text, call graphs, inventories; no keys, no binaries) committed to research (026eb3e734).
+Recount 5 merged (0c6ca2f6a1): OPEN 95 → 93; CLOSED-ON-CANDIDATE 35 → 37 (V181/V182 bounded P6); closure
+routes 27 extraction laws, 1 bridge, 8 P6 gates, 1 axiom diagnostic; OPEN buckets a/b/c/d 23/55/1/16 →
+10/55/6/22; candidate-closure membership 0/29/8; corrections accepted (N7 custody classification; an
+unsupported "op259 already proved" wording; the soft-SHA gate failure is PROJECTED, not measured;
+batch1's ELF gate repaired with source laws still open). design/PV-OWNER-PACKET-20261027.md lists the
+seven owner decisions with options, evidence and the LOG's recommendations. Quiet window: Stream A agreed
+and raised its shim's hold limit to 3 hours; the dudect (V374) plan is bound to a stale binary (pre-rebase
+artifact B using generate()) and needs an in-process harness, so this window is ONLY the op223 timing
+gate (about one hour). Launched pv-quiet (`codex/pv-quiet-20261027` from 8873306db1, pv-l3 worktree):
+binaries built outside the window; marker written only after running scopes drain; owner bypass for its
+own scopes; trap-deleted marker; paired alternating samples vs control c57a344726; verdict on median < 15 s
+and ratio ≤ 1.10. Six slots: runjoin16, route2b, batch1b, integ2, quiet (five live). Rows removed outright:
+0. Privacy target not yet established.
