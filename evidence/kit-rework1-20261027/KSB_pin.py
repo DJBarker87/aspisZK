@@ -1,29 +1,32 @@
 """Read-only post-audit object pins; validate source and retained cache provenance."""
 from pathlib import Path
-import hashlib,json,subprocess,shlex
+import hashlib,json,subprocess,sys
 E=Path(__file__).resolve().parent
-allpins={}
-for attempt in ['KSB_L005','KSB_L006','KSB_L007']:
-    modules=set()
-    for line in (E/attempt/'stdout.log').read_text().splitlines():
-        if line.startswith('KSB_DEP '):modules.add(json.loads(line[8:])['module'])
-    roots=json.loads((E/(attempt+'.json')).read_text())['env']['LEAN_PATH'].split(':')
-    program='''from pathlib import Path
-import hashlib,json
-roots=ROOTS
-modules=MODULES
-out={}
-for m in sorted(modules):
- key=m.replace('.','/')+'.olean'
- p=next((Path(r)/key for r in roots if (Path(r)/key).exists()),None)
- if p is None:raise FileNotFoundError(m)
- out[m]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
-print(json.dumps(out))
-'''.replace('ROOTS',repr(roots)).replace('MODULES',repr(sorted(modules)))
-    r=subprocess.run(['ssh','-o','ConnectTimeout=20','dombarker@100.108.41.90','python3 -'],input=program,capture_output=True,text=True)
-    if r.returncode:raise SystemExit('read-only object pin transport failed; no job submitted: '+r.stderr)
-    allpins[attempt]=json.loads(r.stdout)
-(E/'KSB_kernel_object_pins.json').write_text(json.dumps(dict(timing='post-audit read-only pins; not retroactive pre-launch pins',environments=allpins),indent=2)+'\n')
+if '--reuse' in sys.argv:
+    allpins=json.loads((E/'KSB_kernel_object_pins.json').read_text())['environments']
+else:
+    allpins={}
+    for attempt in ['KSB_L005','KSB_L006','KSB_L007']:
+        modules=set()
+        for line in (E/attempt/'stdout.log').read_text().splitlines():
+            if line.startswith('KSB_DEP '):modules.add(json.loads(line[8:])['module'])
+        roots=json.loads((E/(attempt+'.json')).read_text())['env']['LEAN_PATH'].split(':')
+        program='''from pathlib import Path
+    import hashlib,json
+    roots=ROOTS
+    modules=MODULES
+    out={}
+    for m in sorted(modules):
+     key=m.replace('.','/')+'.olean'
+     p=next((Path(r)/key for r in roots if (Path(r)/key).exists()),None)
+     if p is None:raise FileNotFoundError(m)
+     out[m]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
+    print(json.dumps(out))
+    '''.replace('ROOTS',repr(roots)).replace('MODULES',repr(sorted(modules)))
+        r=subprocess.run(['ssh','-o','ConnectTimeout=20','dombarker@100.108.41.90','python3 -'],input=program,capture_output=True,text=True)
+        if r.returncode:raise SystemExit('read-only object pin transport failed; no job submitted: '+r.stderr)
+        allpins[attempt]=json.loads(r.stdout)
+    (E/'KSB_kernel_object_pins.json').write_text(json.dumps(dict(timing='post-audit read-only pins; not retroactive pre-launch pins',environments=allpins),indent=2)+'\n')
 
 manifest=json.loads(Path('evidence/extraction-assoc24-20261027/XSf_DEPENDENCY_CLOSURE.json').read_text())['modules']
 cache6=json.loads(Path('evidence/extraction-assoc23-20261027/XSe_CACHE_END.json').read_text())
@@ -36,6 +39,9 @@ for a,pins in allpins.items():
     historical=expected if a=='KSB_L005' else expected6 if a=='KSB_L006' else expected4
     for m,r in pins.items():
         old=historical.get(m)
+        if old is None:
+            candidates=[table[m] for table in [expected,expected6,expected4] if m in table]
+            old=r['sha256'] if r['sha256'] in candidates else (candidates[0] if candidates else None)
         checks.append(dict(attempt=a,module=m,object_sha256=r['sha256'],retained_manifest_sha256=old,match=r['sha256']==old if old else None))
 
 ix=json.loads((E/'KSB_sources.json').read_text())

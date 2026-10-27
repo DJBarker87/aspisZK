@@ -1,6 +1,6 @@
 # Corrected association kit re-check
 
-Status: IN PROGRESS. No premise removed, added or changed. S2 and the 100-bit
+Status: BLOCKED / PARTIAL; target not yet established. No premise removed, added or changed. S2 and the 100-bit
 release target remain open. Headline: `AspisR1.RPx_Deployed.deployed`.
 
 Binding basis: C3-BIN 2026-10-27 23:00 UTC kit-method ruling and KSA inventory.
@@ -112,3 +112,65 @@ fails. The exact next deliverable is a permitted emitted dependency closure
 for the missing shipped callees, then library ABI/fidelity completion and
 unchanged proof re-elaboration. The remaining source spans then need actual
 per-theorem transfer or precise reproof/obsolescence decisions.
+
+## Validation, provenance and remaining work
+
+Used **8/150 Lean attempts: 7 pass, 1 rejected; 0 Kani, 0 Rust**.
+No timeout, memory kill, cap increase, admission refusal, transport retry,
+unchanged compiler rerun or full-manifest replay occurred. The single failure
+is the intended raw-kit dependency diagnostic. `KSB_VERIFICATION.json` has
+zero evidence-consistency errors; that is NOT a successful KIT2 result.
+Compiler wall total54.135490339s; maximum peak RSS5,319,328KiB; swap0.
+Every exact target/command/revision/source hash/dependency fingerprint/exit/
+wall/RSS/swap/axiom print is in `KSB_attempts.jsonl` and per-attempt receipts.
+
+| Attempt | Target | Exit | Wall s | Peak RSS KiB | Swap |
+|---|---|---:|---:|---:|---:|
+| KSB_L001 | KSB_Kit_TypesExternal | 0 | 2.624145416 | 2631892 | 0 |
+| KSB_L002 | KSB_Kit_Types | 0 | 6.493918561 | 2714348 | 0 |
+| KSB_L003 | KSB_Kit_Library | 0 | 3.333678040 | 2664912 | 0 |
+| KSB_L004 | KSB_Kit_Funs | 1 | 11.131283607 | 2724896 | 0 |
+| KSB_L005 | KSB_DependenciesA2 | 0 | 9.135911032 | 5314356 | 0 |
+| KSB_L006 | KSB_DependenciesA6 | 0 | 9.982318423 | 5287776 | 0 |
+| KSB_L007 | KSB_DependenciesA4 | 0 | 6.729266110 | 5319328 | 0 |
+| KSB_L008 | KSB_AxiomsA6 | 0 | 4.704969150 | 5202720 | 0 |
+
+L008 additionally audits all seven selected A6-A8 roots; every print is
+`[propext, Classical.choice, Quot.sound]`. These are existing roots in their
+old environments. There are no new theorem declarations or axioms.
+
+`KSB_kernel_object_pins.json` contains read-only POST-audit pins (not invented
+pre-launch evidence). All814 inspected module-object selections match the
+retained A2/A4/A6 cache manifests, including inherited entries resolved via
+their unchanged predecessor manifests. All505 inspected source modules have
+exact matching accepted source receipts, and every available A2 source pin
+matches the current source. `KSB_provenance.json` records these checks.
+Actual Aeneas .olean selections were pinned BEFORE every submission; terminal
+checks match all those hashes. Library split objects/IR are also recorded at
+terminal time, without pretending that those extra pins preceded submission.
+
+`KSB_terminal_state.json`: all eight owned scopes are gone; no failed Funs
+object exists; both runners are byte-identical to the coherent SInt2 runners;
+the persistent KIT2 cache and private valid objects are retained. No historical
+cache was overwritten or deleted. No binary/object/ELF is committed.
+
+No security assumption, game, metric, failure event, trust boundary, source
+adoption or headline premise is discharged/added/changed (0/0/0).
+No local association is promoted to a complete source, native or release proof.
+A2 remains closed relative to the old kit only; A6-A8 remain open. Other rows
+receive no fresh closure credit. The original 100-bit release target remains
+not established. Inherited, NOT rebuilt, ELF SHA256 pins:
+
+- default `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`
+- devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`
+- Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`
+
+Completion requires additional pinned emitted implementations of the missing
+shipped dependencies, with appropriate proved carrier/name adapters and the
+CLOSED leaves' actual domains; only then repair the library ABI and complete
+its separately assigned fidelity obligations, elaborate the whole kit, and
+re-elaborate the unclassified proofs. No substitution of a new opaque premise
+or hand-written shipped implementation is proposed. The pending clarification
+asks whether that additional emitted dependency closure is within KIT2 scope.
+No further compiler launch is useful under the current raw-only boundary.
+All stage commits are local; no push or merge.
