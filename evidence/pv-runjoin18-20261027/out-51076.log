@@ -1,0 +1,23 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:3:7: error(lean.unknownIdentifier): Unknown constant `UScalar.shl`
+def Aeneas.Std.UScalar.div : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if (y.bv != 0) = true then ok (x.bv.udiv y.bv#uscalar) else fail Error.divisionByZero
+def Aeneas.Std.UScalar.rem : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if (↑y != 0) = true then ok (x.bv.umod y.bv#uscalar) else fail Error.divisionByZero
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:6:7: error(lean.unknownIdentifier): Unknown constant `UScalar.shl_spec`
+def Aeneas.Std.UScalar.shiftLeft : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.shiftLeft s#uscalar) else fail Error.integerOverflow
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:8:7: error(lean.unknownIdentifier): Unknown constant `UScalar.shift_left`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:9:7: error(lean.unknownIdentifier): Unknown constant `UScalar.shift_left_spec`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_ScalarInspect18.lean:10:7: error(lean.unknownIdentifier): Unknown constant `UScalar.try_shl`
+theorem Aeneas.Std.UScalar.cast_val_eq : ∀ {src_ty : UScalarTy} (tgt_ty : UScalarTy) (x : UScalar src_ty),
+  ↑(UScalar.cast tgt_ty x) = ↑x % 2 ^ tgt_ty.numBits :=
+fun {src_ty} tgt_ty x =>
+  id
+    (of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (Eq.trans (BitVec.toNat_setWidth tgt_ty.numBits x.bv)
+              (congrFun' (congrArg HMod.hMod (UScalar.bv_toNat x)) (2 ^ tgt_ty.numBits))))
+          (congrFun' (congrArg HMod.hMod (UScalar.bv_toNat x)) (2 ^ tgt_ty.numBits)))
+        (eq_self (↑x % 2 ^ tgt_ty.numBits))))

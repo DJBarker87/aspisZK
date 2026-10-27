@@ -1,0 +1,111 @@
+import R1Z.PV_RunJoin_ReconstructTransfer0018
+import R1Z.PV_RunJoin_ReconstructWithdrawal0018
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_AppendShape18
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+open PV_RunJoin_OwnedConstructor18
+local instance : ExternalLinear := PV_Src_ExternalReference.dictionary
+abbrev Digest := Array U32 8#usize
+
+def frontier (leaf : Digest) : PV_RunJoin_ZeroTree17.Frontier :=
+  PV_RunJoin_FixtureArguments.snapshot.frontier.set 0#usize leaf
+
+def after (leaf root : Digest) : incremental_merkle.IncrementalMerkleTreeV1 := {
+  next_leaf_index := 1#u64
+  root := root
+  frontier := frontier leaf }
+
+theorem read_frontier (leaf : Digest) : (frontier leaf).val[0]! = leaf := by
+  unfold frontier
+  simp
+#print axioms read_frontier
+
+theorem reconstruct (leaf root : Digest)
+    (h : incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level_loop
+      ⟨0#usize,20#usize⟩ 1#u64 (frontier leaf) PV_Src_CanonicalRoots.table
+        PV_Src_CanonicalRoots.table.val[0]! = ok root) :
+    incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level
+      (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO))
+        PV_Src_CanonicalRoots.table 0#usize = ok (.Ok root) := by
+  rw [incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level,
+    PV_RunJoin_ZeroConstructor18.capacity,format.POOL_V1_TREE_DEPTH]
+  simp only [bind_tc_ok]
+  rw [if_neg (by change ¬ (1#u64 : U64) ≥ 1048576#u64; decide)]
+  rw [index_ok_gen PV_Src_CanonicalRoots.table 0#usize (by decide)]
+  simp only [bind_tc_ok]
+  exact congrArg (fun x => x >>= fun r => ok (core.result.Result.Ok r)) h
+#print axioms reconstruct
+
+def history : root_history.RootHistoryLocationV1 := { page_number := 0#u64,slot := 1#u16 }
+
+theorem history_one : root_history.root_history_location 1#u64 = ok history := by
+  rw [root_history.root_history_location,root_history.POOL_V1_ROOT_HISTORY_CAPACITY,
+    root_history.POOL_V1_ROOT_HISTORY_CAPACITY_LOG2]
+  have hcap : (1#usize <<< 8#u8) = ok 256#usize := by
+    change UScalar.shiftLeft 1#usize 8 = _
+    rw [UScalar.shiftLeft,if_pos (by change 8 < System.Platform.numBits; have := System.Platform.le_numBits; omega)]
+    apply congrArg Result.ok
+    apply UScalar.eq_of_val_eq
+    simp only [UScalar.bv_toNat,BitVec.toNat_shiftLeft]
+    have hb : 256 < 2^UScalarTy.Usize.numBits := by scalar_tac
+    norm_num
+    exact Nat.mod_eq_of_lt hb
+  rw [hcap]
+  simp only [bind_tc_ok,lift]
+  have hc : UScalar.cast .U64 256#usize = 256#u64 := by
+    apply UScalar.eq_of_val_eq
+    rw [UScalar.cast_val_eq]
+    rfl
+  rw [hc]
+  have hd : (1#u64 / 256#u64) = ok 0#u64 := by
+    obtain ⟨d,hd,hv⟩ := UScalar.div_spec 1#u64 (y := 256#u64) (by decide)
+    have he : d = 0#u64 := UScalar.eq_of_val_eq hv
+    exact hd.trans (congrArg Result.ok he)
+  have hm : (1#u64 % 256#u64) = ok 1#u64 := by
+    obtain ⟨d,hd,hv⟩ := WP.spec_imp_exists (UScalar.rem_spec 1#u64 (y := 256#u64) (by decide))
+    have he : d = 1#u64 := UScalar.eq_of_val_eq hv
+    exact hd.trans (congrArg Result.ok he)
+  rw [hd]
+  simp only [bind_tc_ok]
+  rw [hm]
+  rfl
+#print axioms history_one
+
+def receipt (root : Digest) : incremental_merkle.AppendOneV1 := {
+ leaf_index := 0#u64, root_sequence := 1#u64, root := root, history := history }
+
+theorem append (leaf root : Digest)
+    (hr : incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level
+      (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO))
+        PV_Src_CanonicalRoots.table 0#usize = ok (.Ok root)) :
+    incremental_merkle.tree_reference.OwnedTree.append_one owned leaf =
+      ok (.Ok ({ inner := after leaf root, empty := PV_Src_CanonicalRoots.table },receipt root)) := by
+  rw [incremental_merkle.tree_reference.OwnedTree.append_one,PV_RunJoin_ZeroConstructor18.capacity]
+  simp only [bind_tc_ok]
+  rw [if_neg (by decide)]
+  simp only [owned,PV_RunJoin_ZeroConstructor18.tree]
+  have hz : PV_RunJoin_FixtureArguments.snapshot.next_pair_index = 0#u64 := rfl
+  rw [hz,carry]
+  simp only [bind_tc_ok,lift,format.POOL_V1_TREE_DEPTH]
+  rw [if_neg (by decide),update_ok PV_RunJoin_FixtureArguments.snapshot.frontier 0#usize leaf (by decide)]
+  simp only [bind_tc_ok]
+  change (do
+    let r ← incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level
+      (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)) PV_Src_CanonicalRoots.table 0#usize
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let loc ← root_history.root_history_location 1#u64
+      ok (core.result.Result.Ok ({ inner := after leaf val,empty := PV_Src_CanonicalRoots.table },
+        { leaf_index := 0#u64,root_sequence := 1#u64,root := val,history := loc }))
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual _
+        (core.convert.FromSame incremental_merkle.PoolV1TreeError) residual) = _
+  rw [hr]
+  simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+  rw [history_one]
+  rfl
+#print axioms append
+end R1Z.PV_RunJoin_AppendShape18

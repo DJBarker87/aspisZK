@@ -1,0 +1,128 @@
+'R1Z.PV_RunJoin_AppendShape18.read_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_AppendShape18.lean:34:25: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.53 then ?m.57 else ?m.58
+in the target expression
+  (do
+      let i ← ok 1048576#u64
+      if (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)).next_leaf_index ≥ i then
+          ok (core.result.Result.Err incremental_merkle.PoolV1TreeError.TreeFull)
+        else do
+          let node ← Array.index_usize PV_Src_CanonicalRoots.table 0#usize
+          let node1 ←
+            incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level_loop
+                { start := 0#usize, «end» := 20#usize }
+                (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)).next_leaf_index
+                (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)).frontier PV_Src_CanonicalRoots.table node
+          ok (core.result.Result.Ok node1)) =
+    ok (core.result.Result.Ok root)
+
+leaf root : Digest
+h :
+  incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level_loop
+      { start := 0#usize, «end» := 20#usize } 1#u64 (frontier leaf) PV_Src_CanonicalRoots.table
+      (↑PV_Src_CanonicalRoots.table)[0]! =
+    ok root
+⊢ (do
+      let i ← ok 1048576#u64
+      if (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)).next_leaf_index ≥ i then
+          ok (core.result.Result.Err incremental_merkle.PoolV1TreeError.TreeFull)
+        else do
+          let node ← Array.index_usize PV_Src_CanonicalRoots.table 0#usize
+          let node1 ←
+            incremental_merkle.IncrementalMerkleTreeV1.reconstruct_nonfull_root_from_level_loop
+                { start := 0#usize, «end» := 20#usize }
+                (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)).next_leaf_index
+                (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)).frontier PV_Src_CanonicalRoots.table node
+          ok (core.result.Result.Ok node1)) =
+    ok (core.result.Result.Ok root)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_AppendShape18.reconstruct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_AppendShape18.lean:45:21: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i ← 1#usize <<< 8#u8
+    let i1 ← lift (UScalar.cast UScalarTy.U64 i)
+    let i2 ← 1#u64 / i1
+    let i3 ← lift (UScalar.cast UScalarTy.U64 i)
+    let i4 ← 1#u64 % i3
+    let i5 ← lift (UScalar.cast UScalarTy.U16 i4)
+    ok { page_number := i2, slot := i5 }
+is not definitionally equal to the right-hand side
+  ok history
+
+⊢ (do
+      let i ← 1#usize <<< 8#u8
+      let i1 ← lift (UScalar.cast UScalarTy.U64 i)
+      let i2 ← 1#u64 / i1
+      let i3 ← lift (UScalar.cast UScalarTy.U64 i)
+      let i4 ← 1#u64 % i3
+      let i5 ← lift (UScalar.cast UScalarTy.U16 i4)
+      ok { page_number := i2, slot := i5 }) =
+    ok history
+'R1Z.PV_RunJoin_AppendShape18.history_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_AppendShape18.lean:58:46: error: don't know how to synthesize placeholder for argument `t`
+context:
+leaf root : Digest
+hr :
+  (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)).reconstruct_nonfull_root_from_level
+      PV_Src_CanonicalRoots.table 0#usize =
+    ok (core.result.Result.Ok root)
+⊢ Result
+    (core.result.Result (incremental_merkle.tree_reference.OwnedTree × incremental_merkle.AppendOneV1)
+      incremental_merkle.PoolV1TreeError)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_AppendShape18.lean:56:100: error: unsolved goals
+leaf root : Digest
+hr :
+  (after leaf (Array.repeat 8#usize aspis_core.field.M31.ZERO)).reconstruct_nonfull_root_from_level
+      PV_Src_CanonicalRoots.table 0#usize =
+    ok (core.result.Result.Ok root)
+⊢ (do
+      let i ← ok 1048576#u64
+      if owned.inner.next_leaf_index = i then ok (core.result.Result.Err incremental_merkle.PoolV1TreeError.TreeFull)
+        else do
+          let __x ←
+            incremental_merkle.tree_reference.OwnedTree.append_one_loop owned.inner.next_leaf_index owned.empty
+                owned.inner.frontier leaf 0#usize
+          match __x with
+            | (frontier, root, carry_level) => do
+              let next_leaf_index ← lift (owned.inner.next_leaf_index.wrapping_add 1#u64)
+              if carry_level = format.POOL_V1_TREE_DEPTH then do
+                  let rhlv ← root_history.root_history_location next_leaf_index
+                  ok
+                      (core.result.Result.Ok
+                        ({ inner := { next_leaf_index := next_leaf_index, root := root, frontier := frontier },
+                            empty := owned.empty },
+                          { leaf_index := owned.inner.next_leaf_index, root_sequence := next_leaf_index, root := root,
+                            history := rhlv }))
+                else do
+                  let frontier1 ← frontier.update carry_level root
+                  have a : Std.Array aspis_core.field.M31 8#usize := Array.repeat 8#usize aspis_core.field.M31.ZERO
+                  let r ←
+                    { next_leaf_index := next_leaf_index, root := a,
+                            frontier := frontier1 }.reconstruct_nonfull_root_from_level
+                        owned.empty carry_level
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let rhlv ← root_history.root_history_location next_leaf_index
+                      ok
+                          (core.result.Result.Ok
+                            ({ inner := { next_leaf_index := next_leaf_index, root := val, frontier := frontier1 },
+                                empty := owned.empty },
+                              { leaf_index := owned.inner.next_leaf_index, root_sequence := next_leaf_index,
+                                root := val, history := rhlv }))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (incremental_merkle.tree_reference.OwnedTree × incremental_merkle.AppendOneV1)
+                        (core.convert.FromSame incremental_merkle.PoolV1TreeError) residual) =
+    ok (core.result.Result.Ok ({ inner := after leaf root, empty := PV_Src_CanonicalRoots.table }, receipt root))
+'R1Z.PV_RunJoin_AppendShape18.append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -39,7 +39,7 @@ for m in re.findall(r'^import\\s+(\\S+)',pathlib.Path({P!r}+'/sources/{M}.lean')
  q=next((r/pathlib.Path(*m.split('.')).with_suffix('.olean') for r in roots if (r/pathlib.Path(*m.split('.')).with_suffix('.olean')).is_file()),None);d[m]=dict(path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest()) if q else None
 print(json.dumps(d))
 '''
-r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr;deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(dict(dependencies=deps,private_standard_cache=P+'/std-cache',environment='restored standard-cache view v1'),sort_keys=True).encode()).hexdigest()
+r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr;deps=json.loads(r.stdout);fp=hashlib.sha256(json.dumps(dict(dependencies=deps,private_standard_cache=P+'/std-cache',environment='restored standard-cache view v2; private R1Z retained links'),sort_keys=True).encode()).hexdigest()
 assert not any(r.get('source_sha256')==sha and r.get('deps_fingerprint')==fp and r.get('exit') is not None for r in rows),'unchanged input already compiled'
 snapshot=f'{A}-{S.name}.txt';(E/snapshot).write_bytes(S.read_bytes());rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 cmd=['systemd-run','--user','--scope','--quiet','--unit=pv18-lean-'+str(A),'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/pv18-time-{A}.log','timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',P+'/J.json',P+'/objects',P+'/sources',P+'/objects/'+M+'.olean',P+'/sources/'+M+'.lean','7000']

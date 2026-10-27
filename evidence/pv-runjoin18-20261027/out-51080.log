@@ -1,0 +1,17 @@
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+theorem Aeneas.Std.UScalar.eq_of_val_eq : ∀ {ty : UScalarTy} {i j : UScalar ty}, ↑i = ↑j → i = j :=
+fun {ty} x x_1 x_2 =>
+  match x, x_1, x_2 with
+  | { toFin := ⟨val, isLt⟩ }#uscalar, { toFin := ⟨.(val), isLt_1⟩ }#uscalar,
+    Eq.refl ↑({ toFin := ⟨.(val), .(isLt)⟩ }#uscalar) => rfl
+def Aeneas.Std.UScalar.val : {ty : UScalarTy} → UScalar ty → ℕ :=
+fun {ty} x => x.bv.toNat
+theorem BitVec.toNat_shiftLeft : ∀ {v n : ℕ} {x : BitVec v}, (x <<< n).toNat = x.toNat <<< n % 2 ^ v :=
+fun {v n} {x} => BitVec.toNat_ofNat (x.toNat <<< n) v
+constructor Aeneas.Std.UScalarTy.Usize : UScalarTy
+def Aeneas.Std.UScalar.shiftLeft : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.shiftLeft s#uscalar) else fail Error.integerOverflow

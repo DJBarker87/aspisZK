@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_OwnedConstructor18.lean:22:58: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+'R1Z.PV_RunJoin_OwnedConstructor18.construct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin18-lean/sources/R1Z/PV_RunJoin_OwnedConstructor18.lean:34:21: error: Tactic `rfl` failed: The left-hand side
+  if 0#usize < 20#usize then do
+    let i ← lift (BuilderStdModels.shift64 0#u64 0#usize)
+    let i1 ← lift (i &&& 1#u64)
+    if i1 = 1#u64 then do
+        let a1 ← PV_RunJoin_FixtureArguments.snapshot.frontier.index_usize 0#usize
+        let carry1 ← format.pool_v1_tree_parent a1 leaf
+        let a2 ← Array.index_usize PV_Src_CanonicalRoots.table 0#usize
+        let a3 ← PV_RunJoin_FixtureArguments.snapshot.frontier.update 0#usize a2
+        let carry_level1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+        incremental_merkle.tree_reference.OwnedTree.append_one_loop 0#u64 PV_Src_CanonicalRoots.table a3 carry1
+            carry_level1
+      else ok (PV_RunJoin_FixtureArguments.snapshot.frontier, leaf, 0#usize)
+  else ok (PV_RunJoin_FixtureArguments.snapshot.frontier, leaf, 0#usize)
+is not definitionally equal to the right-hand side
+  ok (PV_RunJoin_FixtureArguments.snapshot.frontier, leaf, 0#usize)
+
+leaf : Std.Array U32 8#usize
+⊢ (if 0#usize < 20#usize then do
+      let i ← lift (BuilderStdModels.shift64 0#u64 0#usize)
+      let i1 ← lift (i &&& 1#u64)
+      if i1 = 1#u64 then do
+          let a1 ← PV_RunJoin_FixtureArguments.snapshot.frontier.index_usize 0#usize
+          let carry1 ← format.pool_v1_tree_parent a1 leaf
+          let a2 ← Array.index_usize PV_Src_CanonicalRoots.table 0#usize
+          let a3 ← PV_RunJoin_FixtureArguments.snapshot.frontier.update 0#usize a2
+          let carry_level1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+          incremental_merkle.tree_reference.OwnedTree.append_one_loop 0#u64 PV_Src_CanonicalRoots.table a3 carry1
+              carry_level1
+        else ok (PV_RunJoin_FixtureArguments.snapshot.frontier, leaf, 0#usize)
+    else ok (PV_RunJoin_FixtureArguments.snapshot.frontier, leaf, 0#usize)) =
+    ok (PV_RunJoin_FixtureArguments.snapshot.frontier, leaf, 0#usize)
+'R1Z.PV_RunJoin_OwnedConstructor18.carry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

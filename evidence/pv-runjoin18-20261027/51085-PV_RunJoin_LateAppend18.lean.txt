@@ -1,0 +1,94 @@
+import R1Z.PV_RunJoin_AppendShape18
+import R1Z.PV_RunJoin_ReferenceRootClosed
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_LateAppend18
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+open PV_RunJoin_AppendShape18 PV_RunJoin_OwnedConstructor18
+open PV_RunJoin_AppendNative17 PV_RunJoin_ReferenceFixtureResults
+local instance : ExternalLinear := PV_Src_ExternalReference.dictionary
+
+theorem from_parts : incremental_merkle.IncrementalMerkleTreeV1.from_parts_with_empty_roots
+    PV_RunJoin_FixtureArguments.snapshot.next_pair_index
+    PV_RunJoin_FixtureArguments.snapshot.current_root
+    PV_RunJoin_FixtureArguments.snapshot.frontier PV_Src_CanonicalRoots.table =
+      ok (.Ok PV_RunJoin_ZeroConstructor18.tree) := by
+  rw [incremental_merkle.IncrementalMerkleTreeV1.from_parts_with_empty_roots,construct]
+  rfl
+#print axioms from_parts
+
+theorem append_tree (leaf root : Digest)
+    (h : incremental_merkle.tree_reference.OwnedTree.append_one owned leaf =
+      ok (.Ok ({ inner := after leaf root,empty := PV_Src_CanonicalRoots.table },receipt root))) :
+    incremental_merkle.IncrementalMerkleTreeV1.append_one_with_empty_roots
+      PV_RunJoin_ZeroConstructor18.tree leaf PV_Src_CanonicalRoots.table =
+      ok (.Ok (after leaf root,receipt root)) := by
+  rw [incremental_merkle.IncrementalMerkleTreeV1.append_one_with_empty_roots]
+  change (do
+    let r ← incremental_merkle.tree_reference.OwnedTree.from_parts
+      PV_RunJoin_FixtureArguments.snapshot.next_pair_index
+      PV_RunJoin_FixtureArguments.snapshot.current_root
+      PV_RunJoin_FixtureArguments.snapshot.frontier PV_Src_CanonicalRoots.table
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let r1 ← incremental_merkle.tree_reference.OwnedTree.append_one val leaf
+      BuilderForestStdPort.core.result.Result.map
+        incremental_merkle.IncrementalMerkleTreeV1.append_one_with_empty_roots.closure.Insts.CoreOpsFunctionFnOnceTuplePairOwnedTreeAppendOneV1PairIncrementalMerkleTreeV1AppendOneV1 r1 ()
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual _
+        (core.convert.FromSame incremental_merkle.PoolV1TreeError) residual) = _
+  rw [construct]
+  simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+  rw [h]
+  rfl
+#print axioms append_tree
+
+def result (leaf root : Digest) : pair_terminal.PoolV1PairVerifiedAfterstateV1 := {
+  next_pair_index := 1#u64,next_root := root,next_frontier := frontier leaf }
+
+theorem late (records : pair_forest_copy_builder.CopyRecords) (leaf root : Digest)
+    (ha : incremental_merkle.IncrementalMerkleTreeV1.append_one_with_empty_roots
+      PV_RunJoin_ZeroConstructor18.tree leaf PV_Src_CanonicalRoots.table =
+      ok (.Ok (after leaf root,receipt root)))
+    (hc : pair_forest_copy_builder.CopyRecords.append_root records = ok root) :
+    pair_forest_trace.late_append records PV_RunJoin_FixtureArguments.snapshot leaf = ok (.Ok (result leaf root)) := by
+  rw [pair_forest_trace.late_append]
+  rw [if_neg (by decide)]
+  rw [PV_RunJoin_ReferenceRootClosed.roots]
+  simp only [bind_tc_ok]
+  rw [from_parts]
+  simp only [bind_tc_ok,BuilderForestStdPort.core.result.Result.map_err,BuilderAdmissionStd.mapErr,core.result.Result.Insts.CoreOpsTry.branch]
+  rw [ha]
+  simp only [bind_tc_ok,BuilderForestStdPort.core.result.Result.map_err,BuilderAdmissionStd.mapErr,core.result.Result.Insts.CoreOpsTry.branch]
+  rw [hc]
+  simp only [bind_tc_ok]
+  change (do
+    let b ← core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 root root
+    if b then ok (.Err pair_trace.PoolV1PairTraceErrorV1.SnapshotBindingMismatch)
+    else ok (.Ok (result leaf root))) = _
+  rw [PV_RunJoin_ZeroTree17.ne_self]
+  rfl
+#print axioms late
+
+theorem transfer : pair_forest_trace.late_append ⟨transferWitness,transferPublic⟩
+    PV_RunJoin_FixtureArguments.snapshot transfer0 = ok (.Ok (result transfer0 transfer20)) := by
+  apply late
+  · apply append_tree
+    apply PV_RunJoin_AppendShape18.append
+    apply reconstruct
+    exact PV_RunJoin_Reconstruct18.transfer_suffix0 _ (read_frontier _)
+  · exact PV_RunJoin_AppendNative17.transfer
+#print axioms transfer
+
+theorem withdrawal : pair_forest_trace.late_append ⟨withdrawalWitness,withdrawalPublic⟩
+    PV_RunJoin_FixtureArguments.snapshot withdrawal0 = ok (.Ok (result withdrawal0 withdrawal20)) := by
+  apply late
+  · apply append_tree
+    apply PV_RunJoin_AppendShape18.append
+    apply reconstruct
+    exact PV_RunJoin_Reconstruct18.withdrawal_suffix0 _ (read_frontier _)
+  · exact PV_RunJoin_AppendNative17.withdrawal
+#print axioms withdrawal
+end R1Z.PV_RunJoin_LateAppend18
