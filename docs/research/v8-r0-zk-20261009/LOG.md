@@ -12543,3 +12543,30 @@ both pinned and differently tracked is a stop. The lead checked that the six are
 env-J inventory. pv-reach7 (fresh 100 attempts; IDs 38800-38899) compiles the installed-op84 lemma,
 chunks 064-073, then the invocation exclusions, conditional native witnesses and minimal reached
 sets. Rows removed outright: 0. Privacy target not yet established.
+
+## D320 (Stream B) 2026-10-27 21:24 UTC: runjoin22 result; the runjoin line is redirected from a "deployment-selected index" to the universal rows V152-V154; runjoin23 launched
+
+runjoin22 (99 charged compiles: 93 accepted, 6 rejected; IDs 38200-38299; peak 7.34 GB on one retained
+failed candidate; no swap) proves complete canonical-public equality for both recorded fixture
+inputs, their canonical witness fibres, and admission/full-trace association for the returned
+payloads. Audits 38297/38298 pass; 38299 failed at the import of
+AspisV8R19.SamplerClosureProductCorrectness. pv-op254's first launch at 20:50 UTC died on a Codex
+API network drop before doing any work and was relaunched unchanged.
+
+Its selection investigation (STAGE1-SELECTION.md) is the important result: Selection.selected in
+the endpoint is a caller-supplied data field; the frozen RealR1_client takes public and compiled
+arguments and selects nothing; its only callers are fixture tests. There is no frozen deployment
+selector whose index i could be identified, which is why two runs aimed at "the actual
+deployment-selected i" made no progress.
+
+Lead assessment: that target was mis-framed by the lead's prompts. The rows the line exists to
+remove are universal by their recorded meanings: V152 (actual builder public projection equals the
+canonical map), V153 (actual builder raw trace equals the canonical merged trace), V154 (actual S2
+transport equals pi/D18), all from BuilderSource.lean#SourceIdentification, and V038 over every
+common sample. Fixture results cannot remove them; they are non-vacuity instances (V047's fibre).
+runjoin23 (IDs 38900-38999) states the exact quantifiers first, then lifts the general records
+identification, the symbolic bank composition and the compiler-return proofs to universal form for
+V152, V153, V154, with the fixtures as non-vacuity instances; a universal step that fails on some
+admitted input is a checked counterexample and a stop. The client-scope owner item (V396: the
+shipped client is a devnet fixture harness, not a wallet) is unchanged and stays with the owner.
+Rows removed outright: 0. Privacy target not yet established.
