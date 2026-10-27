@@ -38,7 +38,8 @@ submission=dict(attempt=a,module=module,source_sha256=hashlib.sha256(src.read_by
 (R/'submission.json').write_text(json.dumps(submission,indent=2)+'\n')
 with (R/'reservation.json').open('w') as log:
  pre=subprocess.run(['python3',str(H/'Port13GATE_admission.py')],stdout=log,stderr=subprocess.STDOUT)
-if pre.returncode:
+admission=json.loads((R/'reservation.json').read_text())
+if pre.returncode or admission.get('allowed') is not True:
  (R/'refusal.json').write_text(json.dumps(dict(attempt=a,charged=0,exit=pre.returncode,scope_started=False)))
  sys.exit(78)
 start=time.monotonic()
