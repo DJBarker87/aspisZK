@@ -1,0 +1,19 @@
+import Mathlib.Data.Rat.Lemmas
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Linarith
+
+/-! Capped rejection at the Option-candidate interface. `none` means reject;
+`some a` means accept a. The uniform-word association is a separate obligation. -/
+set_option autoImplicit false
+namespace PV_L2B_Rejection
+
+def scan {A : Type} : Nat → List (Option A) → Nat × Option A
+  | 0, _ => (0, none)
+  | _ + 1, [] => (0, none)
+  | n + 1, none :: xs => let r := scan n xs; (r.1 + 1, r.2)
+  | _ + 1, some a :: _ => (1, some a)
+
+theorem cap_zero {A : Type} (xs : List (Option A)) : scan 0 xs = (0, none) := rfl
+#print axioms cap_zero
+end PV_L2B_Rejection
