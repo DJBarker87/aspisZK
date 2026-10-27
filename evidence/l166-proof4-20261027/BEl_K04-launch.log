@@ -1,0 +1,44 @@
+{"attempt": "BEl_K04", "exit_status": 1, "wall_seconds": 3.051077118027024, "peak_rss_kib": "280576", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling bel-batch-observation v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEl_rust)
+warning: unused import: `alloc::vec::Vec`
+  --> src/BEl_frozen.rs:86:5
+   |
+86 | use alloc::vec::Vec;
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` pr
+...
+id integer address in other->calls: SUCCESS
+
+src/BEl_reference.rs function BEl_reference::check_leaf_coordinate
+[BEl_reference::check_leaf_coordinate.assertion.1] line 137 assertion failed: original == reference: SUCCESS
+[BEl_reference::check_leaf_coordinate.assertion.2] line 137 assertion failed: *a.borrow() == *b.borrow(): SUCCESS
+[BEl_reference::check_leaf_coordinate.assertion.3] line 138 assertion failed: a.borrow().calls == 1: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.1] line 138 dereference failure: pointer NULL in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.2] line 138 dereference failure: pointer invalid in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.3] line 138 dereference failure: deallocated dynamic object in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.4] line 138 dereference failure: dead object in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.5] line 138 dereference failure: pointer outside object bounds in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.pointer_dereference.6] line 138 dereference failure: invalid integer address in var_38->calls: SUCCESS
+[BEl_reference::check_leaf_coordinate.cover.1] line 139 cover condition: selected==0 && part==1 && byte==0 && a.borrow().byte.is_some(): FAILURE
+
+src/BEl_reference.rs function BEl_reference::leaf::<BEl_reference::At<'_>>
+[BEl_reference::leaf::<BEl_reference::At<'_>>.assertion.1] line 39 attempt to add with overflow: SUCCESS
+
+** 1 of 344 failed (2 iterations)
+VERIFICATION FAILED
+Manual Harness Summary:
+Verification failed for - BEl_reference::leaf_c1_coordinate
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-re96f52cdfe714d289481a37d9297b535.scope; invocation ID: 6760502ea7af4444ae7c10d9142470f5

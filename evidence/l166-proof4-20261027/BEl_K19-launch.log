@@ -1,0 +1,48 @@
+{"attempt": "BEl_K19", "exit_status": 0, "wall_seconds": 21.632139036024455, "peak_rss_kib": "1102076", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling bel-batch-observation v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEl_rust)
+warning: unused import: `alloc::vec::Vec`
+  --> src/BEl_frozen.rs:86:5
+   |
+86 | use alloc::vec::Vec;
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` pr
+...
+rence failure: deallocated dynamic object in var_32->returned: SUCCESS
+[<BEl_reference::Recording<'_, BEl_reference::EntryProbe<'_>> as Digest32>::digest.pointer_dereference.36] line 24 dereference failure: dead object in var_32->returned: SUCCESS
+[<BEl_reference::Recording<'_, BEl_reference::EntryProbe<'_>> as Digest32>::digest.pointer_dereference.37] line 24 dereference failure: pointer outside object bounds in var_32->returned: SUCCESS
+[<BEl_reference::Recording<'_, BEl_reference::EntryProbe<'_>> as Digest32>::digest.pointer_dereference.38] line 24 dereference failure: invalid integer address in var_32->returned: SUCCESS
+
+src/BEl_reference.rs function BEl_reference::recorder_entry
+[BEl_reference::recorder_entry.assertion.1] line 329 assertion failed: entered.get(): SUCCESS
+[BEl_reference::recorder_entry.assertion.2] line 329 assertion failed: out == answer: SUCCESS
+[BEl_reference::recorder_entry.assertion.3] line 329 assertion failed: log.borrow()[0].returned == Some(Ok(answer)): SUCCESS
+
+src/lib.rs function <std::result::Result<[u8; 32], ()> as std::cmp::PartialEq>::eq
+[<std::result::Result<[u8; 32], ()> as std::cmp::PartialEq>::eq.unreachable.1] line 0 unreachable code: SUCCESS
+
+src/lib.rs function alloc::raw_vec::RawVecInner::grow_amortized
+[alloc::raw_vec::RawVecInner::grow_amortized.unreachable.1] line 0 unreachable code: SUCCESS
+
+src/lib.rs function alloc::raw_vec::RawVecInner::try_allocate_in
+[alloc::raw_vec::RawVecInner::try_allocate_in.unreachable.1] line 0 unreachable code: SUCCESS
+
+src/lib.rs function std::alloc::Global::grow_impl
+[std::alloc::Global::grow_impl.unreachable.1] line 0 unreachable code: SUCCESS
+
+** 0 of 975 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r4034fd3da09f406eabcff69ddc66fd30.scope; invocation ID: 5b6f1141084b41d6a77dc29bd979b4e0

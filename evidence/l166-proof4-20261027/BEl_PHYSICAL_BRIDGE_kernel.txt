@@ -1,0 +1,11 @@
+@AspisR1.BEl_PhysicalCut.transfer : ∀ {S E : Type}
+  (call : AspisR1.SdkC_Source.Parts → S → Aeneas.Std.Result AspisR1.SdkC_Source.Digest × S)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (admitted : AspisR1.BEl_NativeBatchCut.Input → Fin 2 → S → Prop)
+  (physical :
+    AspisR1.BEl_NativeBatchCut.Input → Fin 2 → S → AspisR1.SdkC_Source.Log → AspisR1.BEh_Scope.Outcome S Unit E),
+  (∀ (input : AspisR1.BEl_NativeBatchCut.Input) (slot : Fin 2) (state : S) (before : AspisR1.SdkC_Source.Log),
+      admitted input slot state →
+        AspisR1.BEh_Scope.Law (physical input slot state before)
+          (AspisR1.BEl_NativeBatchCut.native call hashv input slot state before)) →
+    AspisR1.BEh_Scope.BothSlots admitted physical (AspisR1.BEl_NativeBatchCut.source call hashv)

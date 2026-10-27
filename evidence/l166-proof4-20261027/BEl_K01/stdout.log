@@ -1,0 +1,44 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling bel-batch-observation v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEl_rust)
+warning: unused import: `alloc::vec::Vec`
+  --> src/BEl_frozen.rs:86:5
+   |
+86 | use alloc::vec::Vec;
+   |     ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+WARN kani_compiler::codegen_cprover_gotoc::codegen::place Unexpected type mismatch in projection:
+Expr { value: Member { lhs: Expr { value: Dereference(Expr { value: Symbol { identifier: "_RNvXsw_NtCsci0VKyKEi6N_4core6resultINtB5_6ResultAhj20_NtNtB7_7convert10InfallibleENtNtB7_3cmp9PartialEq2eqCs3JlFCsjDOnf_21bel_batch_observation::1::var_21" }, typ: Pointer { typ: StructTag("tag-_264264767623207601041299725894551649802") }, location: None, size_of_annotation: None }), typ: StructTag("tag-_264264767623207601041299725894551649802"), location: None, size_of_annotation: None }, field: "0" }, typ: Array { typ: Unsignedbv { width: 8 }, size: 32 }, location: None, size_of_annotation: None }
+Expr type
+Array { typ: Unsignedbv { width: 8 }, size: 32 }
+Type from MIR
+StructTag("tag-_75736144943647785846004120880629573917")
+
+thread 'rustc' (2397582) panicked at cprover_bindings/src/goto_program/stmt.rs:176:9:
+assertion `left == right` failed: Error: assign statement with unequal types lhs Pointer { typ: StructTag("tag-_75736144943647785846004120880629573917") } rhs StructTag("tag-_75736144943647785846004120880629573917")
+  left: Pointer { typ: StructTag("tag-_75736144943647785846004120880629573917") }
+ right: StructTag("tag-_75736144943647785846004120880629573917")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+Kani unexpectedly panicked during compilation.
+Please file an issue here: https://github.com/model-checking/kani/issues/new?labels=bug&template=bug_report.md
+
+[Kani] current codegen item: codegen_function: <std::result::Result<[u8; 32], std::convert::Infallible> as std::cmp::PartialEq>::eq
+_RNvXsw_NtCsci0VKyKEi6N_4core6resultINtB5_6ResultAhj20_NtNtB7_7convert10InfallibleENtNtB7_3cmp9PartialEq2eqCs3JlFCsjDOnf_21bel_batch_observation
+[Kani] current codegen location: Loc { file: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs", function: None, start_line: 553, start_col: Some(16), end_line: 553, end_col: Some(25), pragmas: [] }
+error: internal compiler error: Kani unexpectedly panicked at panicked at cprover_bindings/src/goto_program/stmt.rs:176:9:
+                                assertion `left == right` failed: Error: assign statement with unequal types lhs Pointer { typ: StructTag("tag-_75736144943647785846004120880629573917") } rhs StructTag("tag-_75736144943647785846004120880629573917")
+                                  left: Pointer { typ: StructTag("tag-_75736144943647785846004120880629573917") }
+                                 right: StructTag("tag-_75736144943647785846004120880629573917").
+
+error: could not compile `bel-batch-observation` (lib); 1 warning emitted
+
+Caused by:
+  process didn't exit successfully: `/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name bel_batch_observation --edition=2021 src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debug-assertions=on --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values())' -C metadata=ede2fa3ad6cdc53a -C extra-filename=-0176066387ed9991 --out-dir /home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEl_target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C incremental=/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEl_target/kani/x86_64-unknown-linux-gnu/debug/incremental -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEl_target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/BEl_target/kani/debug/deps '-Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --harness BEl_reference::leaf_c1 --exact -Z unstable-options' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib' -C opt-level=3 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0` (exit status: 101)
+error: Failed to compile `bel_batch_observation` due to an internal compiler error.: error: internal compiler error: Kani unexpectedly panicked at panicked at cprover_bindings/src/goto_program/stmt.rs:176:9:
+                                assertion `left == right` failed: Error: assign statement with unequal types lhs Pointer { typ: StructTag("tag-_75736144943647785846004120880629573917") } rhs StructTag("tag-_75736144943647785846004120880629573917")
+                                  left: Pointer { typ: StructTag("tag-_75736144943647785846004120880629573917") }
+                                 right: StructTag("tag-_75736144943647785846004120880629573917").
+
+
