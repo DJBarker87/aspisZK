@@ -1,0 +1,24 @@
+XRs_generated/XRs_AddAssociation.lean:25:1: error: Type mismatch: After simplification, term
+  hc
+ has type
+  @Eq (Result (Bool × Std.Array U32 8#usize))
+    (do
+      let x ← loop XRs_AddLoop.ebody ({ slice := digits.to_slice }, id, n)
+      ok (x.1 != 0#u32, digits.from_slice (x.2 { slice := digits.to_slice }).slice))
+    do
+    let p ← loop XRs_AddLoop.ibody (digits, n, UScalar.ofNat 0 ⋯)
+    ok (p.2 != 0#u32, p.1)
+but is expected to have type
+  @Eq (Result (Bool × Std.Array U32 8#usize))
+    (do
+      let p ←
+        loop (fun x => XRn_Join_Release.sampler.add_small_base_p_loop.body x.1 x.2.1 x.2.2)
+            ({ slice := digits.to_slice }, fun im => im, n)
+      ok (p.1 != 0#u32, digits.from_slice (p.2 { slice := digits.to_slice }).slice))
+    do
+    let p ←
+      loop (fun x => AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p_loop.body x.1 x.2.1 x.2.2)
+          (digits, n, 0#usize)
+    ok (p.2 != 0#u32, p.1)
+'XRs_AddAssociation.pair_bind' does not depend on any axioms
+'XRs_AddAssociation.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

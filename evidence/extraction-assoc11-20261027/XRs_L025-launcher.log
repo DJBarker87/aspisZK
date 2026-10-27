@@ -1,0 +1,52 @@
+{"attempt": "XRs_L025", "exit_status": 1, "wall_seconds": 1.0984754710225388, "peak_rss_kib": "2653624", "swaps": "0", "print_axioms": ["'XRs_AddAssociation.pair_bind' does not depend on any axioms", "'XRs_AddAssociation.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRs_generated/XRs_AddAssociation.lean:14:83: error: unsolved goals
+digits : Std.Array U32 8#usize
+n : U32
+h :
+  loop XRs_AddLoop.ebody ({ slice := { slice := digits.to_slice }.slice }, id, n) >>=
+      XRs_AddLoop.output digits { slice := digits.to_slice } =
+    loop XRs_AddLoop.ibody (digits, n, XRs_AddIndexed.idx 0 ⋯)
+hz : XRs_AddIndexed.idx 0 ⋯ = 0#usize
+hc :
+  (do
+      let x ←
+        loop (fun s => XRn_Join_Release.sampler.add_small_base_p_loop.body s.1 s.2.1 s.2.2)
+            ({ slice := digits.to_slice }, id, n)
+      ok (x.1 != 0#u32, digits.from_slice (x.2 { slice := digits.to_slice }).slice)) =
+    do
+    let p ←
+      loop (fun s => AspisR1Post25SamplerIndexedAddSmallCandidate.s
+...
+XRs_generated/XRs_AddAssociation.lean:14:83: error: unsolved goals
+digits : Std.Array U32 8#usize
+n : U32
+h :
+  loop XRs_AddLoop.ebody ({ slice := { slice := digits.to_slice }.slice }, id, n) >>=
+      XRs_AddLoop.output digits { slice := digits.to_slice } =
+    loop XRs_AddLoop.ibody (digits, n, XRs_AddIndexed.idx 0 ⋯)
+hz : XRs_AddIndexed.idx 0 ⋯ = 0#usize
+hc :
+  (do
+      let x ←
+        loop (fun s => XRn_Join_Release.sampler.add_small_base_p_loop.body s.1 s.2.1 s.2.2)
+            ({ slice := digits.to_slice }, id, n)
+      ok (x.1 != 0#u32, digits.from_slice (x.2 { slice := digits.to_slice }).slice)) =
+    do
+    let p ←
+      loop (fun s => AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p_loop.body s.1 s.2.1 s.2.2)
+          (digits, n, 0#usize)
+    ok (p.2 != 0#u32, p.1)
+⊢ (let (iter, into_iter_back) :=
+      ({ slice := digits.to_slice }, fun restore => digits.from_slice (restore { slice := digits.to_slice }).slice)
+    do
+    let p ← loop (fun x => XRn_Join_Release.sampler.add_small_base_p_loop.body x.1 x.2.1 x.2.2) (iter, fun im => im, n)
+    ok (p.1 != 0#u32, into_iter_back p.2)) =
+    do
+    let x ←
+      loop (fun s => XRn_Join_Release.sampler.add_small_base_p_loop.body s.1 s.2.1 s.2.2)
+          ({ slice := digits.to_slice }, id, n)
+    ok (x.1 != 0#u32, digits.from_slice (x.2 { slice := digits.to_slice }).slice)
+'XRs_AddAssociation.pair_bind' does not depend on any axioms
+'XRs_AddAssociation.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf58f93bfe08a48ffac9cdc4c2afcc89d.scope; invocation ID: 04cf021127b8492db5e5d611d960837d

@@ -1,0 +1,67 @@
+{"attempt": "XRs_L016", "exit_status": 1, "wall_seconds": 1.187482646026183, "peak_rss_kib": "2651424", "swaps": "0", "print_axioms": ["'XRs_AddLoop.restored' depends on axioms: [propext, Classical.choice, Quot.sound]", "'XRs_AddLoop.join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+XRs_generated/XRs_AddLoop.lean:47:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  XRn_Join_Release.sampler.add_small_base_p_loop.body ?m.276 ?m.277 ?m.278
+in the target expression
+  ebody ({ slice := base.slice, i := i }, back, c) = do
+    let p ← step (↑a)[i] c
+    ok (cont ({ slice := base.slice, i := i + 1 }, fun r => back (write r i p.1), p.2))
+
+seed : Std.Array U32 8#usize
+base : Iter
+hlen : (↑base.slice).length = 8
+n : ℕ
+ih :
+  ∀ (i : ℕ) (bound : i + n = 8) (a : Std.Array U32 8#usize) (back : Back) (c : U32),
+    Good base back a i →
+      loop ebody ({ slice := base.slice, i := i }, back, c) >>= output seed base = loop ibody (a, c, idx i ⋯)
+i : ℕ
+bound :
+...
+= do
+    let p ← step (↑a)[i] c
+    ok (cont ({ slice := base.slice, i := i + 1 }, fun r => back (write r i p.1), p.2))
+
+seed : Std.Array U32 8#usize
+base : Iter
+hlen : (↑base.slice).length = 8
+n : ℕ
+ih :
+  ∀ (i : ℕ) (bound : i + n = 8) (a : Std.Array U32 8#usize) (back : Back) (c : U32),
+    Good base back a i →
+      loop ebody ({ slice := base.slice, i := i }, back, c) >>= output seed base = loop ibody (a, c, idx i ⋯)
+i : ℕ
+bound : i + (n + 1) = 8
+a : Std.Array U32 8#usize
+back : Back
+c : U32
+g : Good base back a i
+hi : i < 8
+hb : i < (↑base.slice).length
+ha : i < (↑a).length
+hv : (↑base.slice)[i] = (↑a)[i]
+⊢ ebody ({ slice := base.slice, i := i }, back, c) = do
+    let p ← step (↑a)[i] c
+    ok (cont ({ slice := base.slice, i := i + 1 }, fun r => back (write r i p.1), p.2))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+XRs_generated/XRs_AddLoop.lean:47:22: error: Application type mismatch: The argument
+  hb
+has type
+  i < (↑base.slice).length
+but is expected to have type
+  core.slice.iter.IterMut.i ?m.276 < (↑(core.slice.iter.IterMut.slice ?m.276)).length
+in the application
+  emitted ?m.276 ?m.277 ?m.278 hb
+'XRs_AddLoop.restored' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRs_AddLoop.join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfa17ecc9425b4e30ac6debfb78964c3f.scope; invocation ID: 939b846317d647eb8d037430d55e31c7

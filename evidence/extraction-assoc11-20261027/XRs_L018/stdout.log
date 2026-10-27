@@ -1,0 +1,17 @@
+XRs_generated/XRs_AddLoop.lean:60:28: error(lean.unknownIdentifier): Unknown identifier `bind_tc_ok_eq`
+XRs_generated/XRs_AddLoop.lean:60:4: error: Type mismatch: After simplification, term
+  h
+ has type
+  (do
+      let x ← loop ibody (a, c, idx i ⋯)
+      ok x) =
+    do
+    let x ← step (↑a)[i] c
+    let x ← loop ibody (XRs_AddIndexed.set a i x.1, x.2, idx (i + 1) ⋯)
+    ok x
+but is expected to have type
+  loop ibody (a, c, idx i ⋯) = do
+    let p ← step (↑a)[i] c
+    loop ibody (XRs_AddIndexed.set a i p.1, p.2, idx (i + 1) ⋯)
+'XRs_AddLoop.restored' depends on axioms: [propext, Classical.choice, Quot.sound]
+'XRs_AddLoop.join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

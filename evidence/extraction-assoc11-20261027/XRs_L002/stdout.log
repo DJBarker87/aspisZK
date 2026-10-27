@@ -1,0 +1,115 @@
+XRs_generated/XRs_AddStep.lean:30:26: error: Ambiguous term
+  dite_true
+Possible interpretations:
+  _root_.dite_true : dite True ?m.43 ?m.44 = ?m.43 True.intro
+  
+  Aeneas.dite_true : dite True ?m.43 ?m.44 = ?m.43 True.intro
+XRs_generated/XRs_AddStep.lean:31:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (o, iter1, next_back) ←
+      if h : it.i < ↑(Usize.ofNatCore (↑it.slice).length ⋯) then
+          ok
+            (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun it' x =>
+              match x with
+              | none => it'
+              | some x => { slice := it'.slice.setAtNat it.i x, i := it'.i })
+        else ok (none, it, fun it x => it)
+    match o with
+      | none => ok (done (c, fun im => back (next_back im none)))
+      | some digit => do
+        let sum ← core.convert.num.FromU64U32.from digit + core.convert.num.FromU64U32.from c
+        let i4 ← sum % core.convert.num.FromU64U32.from 2147483647#u32
+        let i6 ← sum / core.convert.num.FromU64U32.from 2147483647#u32
+        ok
+            (cont
+              (iter1, fun im => back (next_back im (some (UScalar.cast UScalarTy.U32 i4))),
+                UScalar.cast UScalarTy.U32 i6))
+is not definitionally equal to the right-hand side
+  do
+    let (d, c') ← step (↑it.slice)[it.i] c
+    ok (cont ({ slice := it.slice, i := it.i + 1 }, fun r => back (write r it.i d), c'))
+
+it : Iter
+back : Back
+c : U32
+h : it.i < (↑it.slice).length
+⊢ (do
+      let (o, iter1, next_back) ←
+        if h : it.i < ↑(Usize.ofNatCore (↑it.slice).length ⋯) then
+            ok
+              (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun it' x =>
+                match x with
+                | none => it'
+                | some x => { slice := it'.slice.setAtNat it.i x, i := it'.i })
+          else ok (none, it, fun it x => it)
+      match o with
+        | none => ok (done (c, fun im => back (next_back im none)))
+        | some digit => do
+          let sum ← core.convert.num.FromU64U32.from digit + core.convert.num.FromU64U32.from c
+          let i4 ← sum % core.convert.num.FromU64U32.from 2147483647#u32
+          let i6 ← sum / core.convert.num.FromU64U32.from 2147483647#u32
+          ok
+              (cont
+                (iter1, fun im => back (next_back im (some (UScalar.cast UScalarTy.U32 i4))),
+                  UScalar.cast UScalarTy.U32 i6))) =
+    do
+    let (d, c') ← step (↑it.slice)[it.i] c
+    ok (cont ({ slice := it.slice, i := it.i + 1 }, fun r => back (write r it.i d), c'))
+XRs_generated/XRs_AddStep.lean:30:23: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len, h̵,̵ ̵dite_true, bind_tc_ok, lift, aspis_core.field.P]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_AddStep.lean:39:24: error: Ambiguous term
+  dite_false
+Possible interpretations:
+  _root_.dite_false : dite False ?m.19 ?m.20 = ?m.20 not_false
+  
+  Aeneas.dite_false : dite False ?m.19 ?m.20 = ?m.20 ⋯
+XRs_generated/XRs_AddStep.lean:36:24: error: unsolved goals
+it : Iter
+back : Back
+c : U32
+h : ¬it.i < (↑it.slice).length
+⊢ (do
+      let (o, iter1, next_back) ←
+        if h : it.i < ↑(Usize.ofNatCore (↑it.slice).length ⋯) then
+            ok
+              (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun it' x =>
+                match x with
+                | none => it'
+                | some x => { slice := it'.slice.setAtNat it.i x, i := it'.i })
+          else ok (none, it, fun it x => it)
+      match o with
+        | none => ok (done (c, fun im => back (next_back im none)))
+        | some digit => do
+          let i ← lift (core.convert.num.FromU64U32.from digit)
+          let i1 ← lift (core.convert.num.FromU64U32.from c)
+          let sum ← i + i1
+          let i2 ← aspis_core.field.P
+          let i3 ← lift (core.convert.num.FromU64U32.from i2)
+          let i4 ← sum % i3
+          let digit1 ← lift (UScalar.cast UScalarTy.U32 i4)
+          let i5 ← lift (core.convert.num.FromU64U32.from i2)
+          let i6 ← sum / i5
+          let addend1 ← lift (UScalar.cast UScalarTy.U32 i6)
+          ok (cont (iter1, fun im => back (next_back im (some digit1)), addend1))) =
+    ok (done (c, back))
+XRs_generated/XRs_AddStep.lean:39:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len,h̵,̵ ̲dite_false, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_AddStep.lean:39:35: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵h̵,̵d̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲h̲,̲ ̲d̲i̲t̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRs_AddStep.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRs_AddStep.exhausted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

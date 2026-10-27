@@ -1,0 +1,137 @@
+XRs_generated/XRs_AddStep.lean:33:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (o, iter1, next_back) ←
+      if h : it.i < ↑(Usize.ofNatCore (↑it.slice).length ⋯) then
+          ok
+            (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun it' x =>
+              match x with
+              | none => it'
+              | some x => { slice := it'.slice.setAtNat it.i x, i := it'.i })
+        else ok (none, it, fun it x => it)
+    match o with
+      | none => ok (done (c, fun im => back (next_back im none)))
+      | some digit => do
+        let sum ← core.convert.num.FromU64U32.from digit + core.convert.num.FromU64U32.from c
+        let i4 ← sum % core.convert.num.FromU64U32.from 2147483647#u32
+        let i6 ← sum / core.convert.num.FromU64U32.from 2147483647#u32
+        ok
+            (cont
+              (iter1, fun im => back (next_back im (some (UScalar.cast UScalarTy.U32 i4))),
+                UScalar.cast UScalarTy.U32 i6))
+is not definitionally equal to the right-hand side
+  do
+    let x ← core.convert.num.FromU64U32.from (↑it.slice)[it.i] + core.convert.num.FromU64U32.from c
+    let x_1 ← x % core.convert.num.FromU64U32.from 2147483647#u32
+    let x ← x / core.convert.num.FromU64U32.from 2147483647#u32
+    let (d, c') := (UScalar.cast UScalarTy.U32 x_1, UScalar.cast UScalarTy.U32 x)
+      ok (cont ({ slice := it.slice, i := it.i + 1 }, fun r => back (write r it.i d), c'))
+
+it : Iter
+back : Back
+c : U32
+h : it.i < (↑it.slice).length
+⊢ (do
+      let (o, iter1, next_back) ←
+        if h : it.i < ↑(Usize.ofNatCore (↑it.slice).length ⋯) then
+            ok
+              (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun it' x =>
+                match x with
+                | none => it'
+                | some x => { slice := it'.slice.setAtNat it.i x, i := it'.i })
+          else ok (none, it, fun it x => it)
+      match o with
+        | none => ok (done (c, fun im => back (next_back im none)))
+        | some digit => do
+          let sum ← core.convert.num.FromU64U32.from digit + core.convert.num.FromU64U32.from c
+          let i4 ← sum % core.convert.num.FromU64U32.from 2147483647#u32
+          let i6 ← sum / core.convert.num.FromU64U32.from 2147483647#u32
+          ok
+              (cont
+                (iter1, fun im => back (next_back im (some (UScalar.cast UScalarTy.U32 i4))),
+                  UScalar.cast UScalarTy.U32 i6))) =
+    do
+    let x ← core.convert.num.FromU64U32.from (↑it.slice)[it.i] + core.convert.num.FromU64U32.from c
+    let x_1 ← x % core.convert.num.FromU64U32.from 2147483647#u32
+    let x ← x / core.convert.num.FromU64U32.from 2147483647#u32
+    let (d, c') := (UScalar.cast UScalarTy.U32 x_1, UScalar.cast UScalarTy.U32 x)
+      ok (cont ({ slice := it.slice, i := it.i + 1 }, fun r => back (write r it.i d), c'))
+XRs_generated/XRs_AddStep.lean:30:23: warning: This simp argument is unused:
+  UScalar.ofNatCore_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len, U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵C̵o̵r̵e̵_̵v̵a̵l̵_̵e̵q̵,̵ ̵h, dif_pos, bind_tc_ok, lift, aspis_core.field.P]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_AddStep.lean:30:49: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len, UScalar.ofNatCore_val_eq, h̵,̵ ̵dif_pos, bind_tc_ok, lift, aspis_core.field.P]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_AddStep.lean:30:52: warning: This simp argument is unused:
+  dif_pos
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len, UScalar.ofNatCore_val_eq, h, d̵i̵f̵_̵p̵o̵s̵,̵ ̵bind_tc_ok, lift, aspis_core.field.P]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_AddStep.lean:38:24: error: unsolved goals
+it : Iter
+back : Back
+c : U32
+h : ¬it.i < (↑it.slice).length
+⊢ (do
+      let (o, iter1, next_back) ←
+        if h : it.i < ↑(Usize.ofNatCore (↑it.slice).length ⋯) then
+            ok
+              (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun it' x =>
+                match x with
+                | none => it'
+                | some x => { slice := it'.slice.setAtNat it.i x, i := it'.i })
+          else ok (none, it, fun it x => it)
+      match o with
+        | none => ok (done (c, fun im => back (next_back im none)))
+        | some digit => do
+          let i ← lift (core.convert.num.FromU64U32.from digit)
+          let i1 ← lift (core.convert.num.FromU64U32.from c)
+          let sum ← i + i1
+          let i2 ← aspis_core.field.P
+          let i3 ← lift (core.convert.num.FromU64U32.from i2)
+          let i4 ← sum % i3
+          let digit1 ← lift (UScalar.cast UScalarTy.U32 i4)
+          let i5 ← lift (core.convert.num.FromU64U32.from i2)
+          let i6 ← sum / i5
+          let addend1 ← lift (UScalar.cast UScalarTy.U32 i6)
+          ok (cont (iter1, fun im => back (next_back im (some digit1)), addend1))) =
+    ok (done (c, back))
+XRs_generated/XRs_AddStep.lean:41:23: warning: This simp argument is unused:
+  UScalar.ofNatCore_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len, U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵C̵o̵r̵e̵_̵v̵a̵l̵_̵e̵q̵,̵h̵,̵d̵i̵f̵_̵n̵e̵g̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵h̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_AddStep.lean:41:48: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len, UScalar.ofNatCore_val_eq,h̵,̵ ̲dif_neg, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_AddStep.lean:41:50: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len, UScalar.ofNatCore_val_eq, ̲h,d̵i̵f̵_̵n̵e̵g̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+XRs_generated/XRs_AddStep.lean:41:58: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len, U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵C̵o̵r̵e̵_̵v̵a̵l̵_̵e̵q̵,̵h̵,̵d̵i̵f̵_̵n̵e̵g̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵U̲S̲c̲a̲l̲a̲r̲.̲o̲f̲N̲a̲t̲C̲o̲r̲e̲_̲v̲a̲l̲_̲e̲q̲,̲ ̲h̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'XRs_AddStep.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'XRs_AddStep.exhausted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
