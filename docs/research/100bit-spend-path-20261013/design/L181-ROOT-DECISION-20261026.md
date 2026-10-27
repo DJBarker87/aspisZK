@@ -94,3 +94,7 @@ Rc10_Top.deployed: actual 83T/12P/13G, deployment-inclusive 89T/16P/13G.
 ARX_Root.deployed: actual 83T/11P/13G, deployment-inclusive 89T/14P/13G.
 Removed: L159/L185, L181. Added atomic premises: none. Draft contract
 amendment: design/SECURITY-CONTRACT-ARX-AMENDMENT-DRAFT-20261027.md.
+
+## Status 2026-10-27 (RPz8_): ARX_Root.deployed compiles fresh on the coherent cohort
+Fresh kernel statement captured; axioms propext/Classical.choice/Quot.sound
+only; all formatter axioms unreachable. Same cohort as the fresh Rc10_Top.
