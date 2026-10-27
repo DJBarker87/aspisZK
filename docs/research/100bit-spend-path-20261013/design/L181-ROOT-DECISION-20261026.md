@@ -98,3 +98,9 @@ amendment: design/SECURITY-CONTRACT-ARX-AMENDMENT-DRAFT-20261027.md.
 ## Status 2026-10-27 (RPz8_): ARX_Root.deployed compiles fresh on the coherent cohort
 Fresh kernel statement captured; axioms propext/Classical.choice/Quot.sound
 only; all formatter axioms unreachable. Same cohort as the fresh Rc10_Top.
+
+## Caveat 2026-10-27 (L8a_): D188 provenance finding applies to BOTH roots
+The adoption question is unaffected in form, but note that neither
+Rc10_Top nor ARX_Root is yet shown to be about the frozen release extraction
+of PublicPreparation (eight source cuts differ textually from the release
+pin); extraction-repro1 is resolving this.
