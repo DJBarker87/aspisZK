@@ -710,11 +710,13 @@ pub fn multilinear_evaluate(column: &[M31], point: &[QM31; 10]) -> Option<QM31> 
     if column.len() != TRACE_ROWS {
         return None;
     }
-    let weights=sparse_eq_weights(point);
-    let mut sum=QM31::ZERO;
-    let mut i=0usize;
-    while i < weights.len() { let (row,weight)=weights[i];sum=sum.add(weight.mul(column[row]));i+=1; }
-    Some(sum)
+    Some(
+        sparse_eq_weights(point)
+            .into_iter()
+            .fold(QM31::ZERO, |sum, (row, weight)| {
+                sum.add(weight.mul_m31(column[row]))
+            }),
+    )
 }
 
 #[cfg(not(target_os = "solana"))]
@@ -780,13 +782,11 @@ pub fn multilinear_evaluate_qm31(column: &[QM31], point: &[QM31; 10]) -> Option<
     if column.len() != TRACE_ROWS {
         return None;
     }
-    Some(
-        sparse_eq_weights(point)
-            .into_iter()
-            .fold(QM31::ZERO, |sum, (row, weight)| {
-                sum.add(weight.mul(column[row]))
-            }),
-    )
+    let weights=sparse_eq_weights(point);
+    let mut sum=QM31::ZERO;
+    let mut i=0usize;
+    while i<weights.len() {let (row,weight)=weights[i];sum=sum.add(weight.mul(column[row]));i+=1;}
+    Some(sum)
 }
 
 #[inline(always)]

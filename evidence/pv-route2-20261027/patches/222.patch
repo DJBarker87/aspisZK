@@ -40,7 +40,7 @@
          }
          weights.push((row, weight));
      }
-@@ -711,13 +710,11 @@
+@@ -783,13 +782,11 @@
      if column.len() != TRACE_ROWS {
          return None;
      }
@@ -48,17 +48,17 @@
 -        sparse_eq_weights(point)
 -            .into_iter()
 -            .fold(QM31::ZERO, |sum, (row, weight)| {
--                sum.add(weight.mul_m31(column[row]))
+-                sum.add(weight.mul(column[row]))
 -            }),
 -    )
 +    let weights=sparse_eq_weights(point);
 +    let mut sum=QM31::ZERO;
 +    let mut i=0usize;
-+    while i < weights.len() { let (row,weight)=weights[i];sum=sum.add(weight.mul(column[row]));i+=1; }
++    while i<weights.len() {let (row,weight)=weights[i];sum=sum.add(weight.mul(column[row]));i+=1;}
 +    Some(sum)
  }
  
- #[cfg(not(target_os = "solana"))]
+ #[inline(always)]
 @@ -2092,9 +2089,9 @@
          for (coordinate, value) in point[..fixed_bits].iter().enumerate() {
              let bit = (cursor >> (point.len() - 1 - coordinate)) & 1;

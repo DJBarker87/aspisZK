@@ -1,0 +1,11 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_oracle.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_oracle.rs
+@@ -175,7 +175,7 @@
+     chi: QM31,
+ ) -> Result<Vec<QM31>, PoolV1PairTraceErrorV1> {
+     let rows = pool_v1_pair_forest_copy_rows_v1(trace, append_index, lambda)?;
+-    build_copy_logup_helper(&rows, chi).map_err(|_| PoolV1PairTraceErrorV1::CopyImbalance)
++    match build_copy_logup_helper(&rows, chi) {Ok(v)=>Ok(v),Err(_)=>Err(PoolV1PairTraceErrorV1::CopyImbalance)}
+ }
+ 
+ /// Evaluate the exact forest copy lane from the sixteen merged-C1 openings
