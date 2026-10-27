@@ -7,7 +7,7 @@ R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-reach-20261027/re
 a=int(sys.argv[1]);limit=int(sys.argv[2]);assert 40210<=a<=limit<=40296
 rows=json.load(open(E/'native-project-closure.json'));mapping={r['module']:r for r in rows};old={r['module'] for r in json.load(open(E/'project-closure.json'))}
 available=set(old);attempted=set();progress=[]
-for p in E.glob('receipt-*.json'):
+for p in E.glob('receipt-[0-9]*.json'):
  x=json.loads(p.read_text())
  for r in x['modules']:
   if r.get('exit') is not None and r['module'] in mapping:

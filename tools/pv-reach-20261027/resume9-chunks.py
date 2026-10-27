@@ -3,7 +3,7 @@ import pathlib,json,subprocess,sys,hashlib,shlex,datetime,time,base64
 R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-reach-20261027/resume9';H='/home/dombarker/project-offloads/codex-pv-reach-20261027';host='dombarker@100.108.41.90'
 a=int(sys.argv[1]);single=sys.argv[2] if not sys.argv[2].isdigit() else None;idx=int(sys.argv[2]) if single is None else -1;assert 40200<=a<=40299
 assert a<40297 or (single and 'Audit' in single)
-assert sum(1 for p in E.glob('receipt-*.json') if json.loads(p.read_text()).get('modules'))<100
+assert sum(1 for p in E.glob('receipt-[0-9]*.json') if json.loads(p.read_text()).get('modules'))<100
 assert str(R)=='/Users/dominic/ZK/.worktrees/pv-reach' and subprocess.check_output(['git','branch','--show-current'],text=True).strip()=='codex/pv-reach-20261027'
 assert not json.load(open(E/'h4-verification.json'))['mismatches']
 assert not (E/f'used-{a}.json').exists()

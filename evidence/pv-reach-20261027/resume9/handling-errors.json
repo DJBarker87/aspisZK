@@ -1,0 +1,23 @@
+[
+  {
+    "operation": "local native-inventory receipt scan",
+    "error": "AttributeError: list object has no attribute get",
+    "cause": "Historical receipt glob includes a list-valued receipt; scanner initially assumed every JSON payload was a dictionary.",
+    "correction": "Skip non-dictionary receipt payloads before reading accepted/target fields.",
+    "lean_attempts": 0,
+    "ids_consumed": [],
+    "host_compile_submitted": false,
+    "validation": "Corrected inventory completed; no matching authorized private native objects were found."
+  },
+  {
+    "operation": "local compile-budget receipt scan before 40254 allocation",
+    "error": "AttributeError: list object has no attribute get",
+    "cause": "The new receipt-index.json matched the broad receipt-*.json glob.",
+    "correction": "Restrict compile runner, native driver and result validator to numbered receipt-[0-9]*.json files.",
+    "lean_attempts": 0,
+    "ids_consumed": [],
+    "requested_id_not_allocated": 40254,
+    "host_compile_submitted": false,
+    "validation": "No plan, used marker, reservation, launch or receipt exists for 40254; failure occurred before any SSH or ID allocation. Resume uses this still-unused ID; no Lean source is rerun."
+  }
+]
