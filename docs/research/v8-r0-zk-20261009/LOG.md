@@ -12936,3 +12936,27 @@ proves first that every input the honest pipeline builds satisfies HonestInput (
 for some admitted honest witness is a stop and an owner item), then the native execution and
 observable agreement toward RustRealRefinement. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D338 (Stream B) 2026-10-27 23:54 UTC: full withdrawals with zero change are admitted but cannot be prepared by the shipped client; owner decision on the honest-user domain; runjoin29 launched
+
+runjoin28 (2 attempts; standard axioms) stopped on a checked coverage finding in step 1.
+PV_RunJoin_SpendDomain27 proves that a withdrawal of a note's full 1,000 units with zero change,
+built from the fixture's input key, salt, pair and membership path with a freshly computed change
+commitment, output pair, append root and frontier, satisfies BuilderSpendRelation.RspendPlus
+(38144). The frozen native wrapper compile_pool_v1_pair_forest_withdrawal_merged_c1_v1 rejects
+change.value == 0 with Err(Conservation) before compiling (source-guard.json); the native probe
+pv27-zero-change-03 confirms it, and a 250/750 withdrawal succeeds as control. So the admitted
+relation contains spends the shipped client cannot prepare, and "every admitted witness yields an
+honest input" is false. This is a domain finding, not a privacy distinguisher and not a refutation of
+the V152-V154 honest-family theorem; the narrower "successful preparation yields an honest input"
+remains unproved.
+
+Escalated to the owner (design/PV-OWNER-PACKET-20261027.md): (A) state the honest-user domain as
+spends whose preparation succeeds, today positive change, and record separately that the shipped
+client cannot withdraw a full balance; or (B) change the frozen compiler to accept zero change,
+reopening the freeze and the affected gates. Lead recommendation: (A), since it changes no
+implementation and the guard rejects locally before any proof or transaction exists; the functional
+limitation is a product question. runjoin29 (remaining 57 attempts) proceeds with what both options
+need: the exact preparation domain with each rejection guard proved, successful preparation implying
+HonestInput, and the resulting coverage sentence; then RustRealRefinement's V038/V045. Rows removed
+outright: 0. Privacy target not yet established.
