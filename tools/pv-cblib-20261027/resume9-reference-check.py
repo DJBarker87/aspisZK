@@ -10,7 +10,7 @@ def body(s,name):
   d+=(s[i]=='{')-(s[i]=='}');i+=1
  return re.sub(r'\s+','',s[op:i])
 r={}
-for x,y in [('sha_load_be4','load'),('sha_store_be4','store'),('pop_copy_resize_reference','pop_resize'),('join_resize_reference','join_resize')]:
+for x,y in [('sha_load_be4','load'),('sha_store_be4','store'),('pop_slices_reference','pop_slices'),('join_slices_reference','join_slices')]:
  c=body(a,x);d=body(b,y);assert c==d,(x,c,d)
  r[x]={'kani_function':y,'body_sha256':hashlib.sha256(c.encode()).hexdigest()}
 (root/'evidence/pv-cblib-20261027/resume9-reference-bodies.json').write_text(json.dumps({'status':'PASS','references':r},indent=2)+'\n')

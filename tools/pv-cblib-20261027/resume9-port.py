@@ -11,12 +11,12 @@ def definitions(s):
   result[m[1]]=body
  return result
 def norm(s):
- s=re.sub(r'\bPV_CBL_(?:FallbackBlock|ShaBytes|ShaPadFixed|FinalSoft)\.','',s)
+ s=re.sub(r'\bPV_CBL_(?:FallbackBlock|ShaBytes|ShaPadFixed|FinalSoft|ArrayKernel)\.','',s)
  s=re.sub(r'/\*.*?\*/','',s,flags=re.S)
  s=re.sub(r'--[^\n]*','',s)
  return re.sub(r'\s+','',s)
 known={}
-for name in ['PV_CBL_FallbackBlock','PV_CBL_ShaBytes','PV_CBL_ShaPadFixed','PV_CBL_FinalSoft']:
+for name in ['PV_CBL_FallbackBlock','PV_CBL_ShaBytes','PV_CBL_ShaPadFixed','PV_CBL_FinalSoft','PV_CBL_ArrayKernel']:
  if not (directory/f'{name}.lean').exists(): continue
  for k,v in definitions((directory/f'{name}.lean').read_text()).items():known[k]=(name,v)
 matched={};remaining={}

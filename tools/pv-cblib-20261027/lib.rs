@@ -549,3 +549,21 @@ pub fn array_slice_result_reference<T:Copy,const N:usize>(v:&[T],zero:T)
  ->Result<[T;N],Vec<T>> {
     match array_reference(v,zero) { Some(out)=>Ok(out), None=>Err(v.to_vec()) }
 }
+
+// Slice-only indexing; the caller owns the output Vec throughout.
+pub fn join_slices_reference(base:&[u8],path:&[u8],out:&mut Vec<u8>) {
+    if path.len()>0 && path[0]==b'/' {
+        out.extend_from_slice(path);
+    } else {
+        out.extend_from_slice(base);
+        if base.len()>0 && base[base.len()-1]!=b'/' {out.push(b'/');}
+        out.extend_from_slice(path);
+    }
+}
+pub fn pop_slices_reference<T:Copy>(v:&[T],out:&mut Vec<T>)->Option<T> {
+    if v.len()==0 {None} else {
+        let last=v.len()-1;let mut i=0;
+        while i<last {out.push(v[i]);i+=1;}
+        Some(v[last])
+    }
+}

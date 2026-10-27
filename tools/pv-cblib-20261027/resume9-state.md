@@ -74,3 +74,37 @@ words: rows7→?, exact soft status, receipts target/exit/wall/RSS/swap/revision
 axioms, commits, premises0 removed / T unchanged, next deliverable, target not
 established. User mandates no early stop while compile budget remains except
 checked ROW counterexample; report counterexample without fixing ROW.
+
+LATEST UPDATE (supersedes active-state details above):
+- Complete DigestSoftSource passed52497. All soft reference proofs, including
+  content fold and deterministic whole digest, accepted. Commit9e58493e14.
+- 87/100 Lean charged; last3 still52697–52699. Two Kani used/pass:
+  resume9-load-be4-r01 (1.18s/134472KiB), resume9-store-be4-r01(.83s/135332KiB).
+  First collector failed on underscore label after actual pass; logs were
+  copied under canonical hyphen alias, collected, charged ONCE; never rerun.
+- Original resize join/pop references passedCharon but Aeneas rejected escaping
+  reference output. ArraySliceResult PASSED extraction, no foreign template.
+  New PV_CBL_ArraySliceResult reuses3 exact existing ArrayKernel defs; new
+  ArraySliceLaw file prepared (not compiled) with identity clone proof via
+  spec_imp_exists(to_vec_spec), full generic success/error value law.
+- Current active local tool session56365: resume9-upload-extract.py
+  join-slices-opt pop-slices-opt. Source changed to Slice-index/caller-output
+  Vec references to avoid Vec indexing/resize loan frontier. Charon join passed;
+  Aeneas currently admission-refused. At most one capped scope, don't overlap.
+  The verified source SHA is now the latest resume9-upload-verified.json,
+  NOT the previous210425... hash. New lib functions join_slices_reference,
+  pop_slices_reference; extraction entries PV_CBL_JoinSlices/PV_CBL_PopSlices.
+- Kani local harness changed BEFORE the remaining2 native runs to
+  resume9_links::join_slices_two and ::pop_slices_u8, exact body equality check
+  passes. MUST `resume9-kani-queue.py upload` before running them, then each
+  newmode. Native host still has earlier resize harness until upload succeeds.
+  Mode labels now sanitized hyphens, collector accepts; no further alias issue.
+- NEW uncompiled CallbackPublication reopens CallbackBundle namespace, adds
+  selectedAppend/AppendTypes + old7 `_source_append` aliases + exact soft
+  source aliases. Add join selected/source theorem only if newSlice ref extracts
+  and native link passes. Keep old names, no imports cycle.
+- Only13 Lean attempts remain incl3audits, so prioritize source bindings,
+  array law and publication; don't spend optional draft budget prematurely.
+- Own manifest generator prepared resume9-manifest.py, requires proof_status
+  all current sources accepted exceptnew3reserved audits. Move unused drafts
+  into evidence before final manifest, keeping rejected snapshots intact.

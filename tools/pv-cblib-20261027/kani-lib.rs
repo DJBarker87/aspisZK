@@ -241,31 +241,39 @@ mod resume9_links {
     #[kani::proof]
     #[kani::unwind(6)]
     fn store_be4() {let w:u32=kani::any();assert_eq!(w.to_be_bytes(),store(w));}
-    fn pop_resize<T:Copy>(v:&mut Vec<T>)->Option<T> {
-        let n=v.len();if n==0 {None} else {let last=v[n-1];v.resize(n-1,last);Some(last)}
+    fn pop_slices<T:Copy>(v:&[T],out:&mut Vec<T>)->Option<T> {
+        if v.len()==0 {None} else {
+            let last=v.len()-1;let mut i=0;
+            while i<last {out.push(v[i]);i+=1;}
+            Some(v[last])
+        }
     }
     #[kani::proof]
     #[kani::unwind(8)]
-    fn pop_resize_u8() {
+    fn pop_slices_u8() {
         let raw:[u8;2]=kani::any();let n:usize=kani::any();kani::assume(n<=2);
-        let mut a=raw[..n].to_vec();let mut b=raw[..n].to_vec();
-        assert_eq!(a.pop(),pop_resize(&mut b));
+        let mut a=raw[..n].to_vec();let mut b=Vec::new();
+        assert_eq!(a.pop(),pop_slices(&raw[..n],&mut b));
         let i:usize=kani::any();assert_eq!(a.len(),b.len());assert_eq!(a.get(i),b.get(i));
     }
-    fn join_resize(base:&mut Vec<u8>,path:&[u8]) {
-        if path.len()>0 && path[0]==b'/' {base.resize(0,0);}
-        else if base.len()>0 && base[base.len()-1]!=b'/' {base.push(b'/');}
-        base.extend_from_slice(path);
+    fn join_slices(base:&[u8],path:&[u8],out:&mut Vec<u8>) {
+        if path.len()>0 && path[0]==b'/' {
+            out.extend_from_slice(path);
+        } else {
+            out.extend_from_slice(base);
+            if base.len()>0 && base[base.len()-1]!=b'/' {out.push(b'/');}
+            out.extend_from_slice(path);
+        }
     }
     #[kani::proof]
     #[kani::unwind(10)]
-    fn join_resize_two() {
+    fn join_slices_two() {
         use std::os::unix::ffi::OsStrExt;
         let a:[u8;2]=kani::any();let b:[u8;2]=kani::any();
         let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=2 && m<=2);
         let p=std::path::Path::new(std::ffi::OsStr::from_bytes(&a[..n]));
         let q=std::path::Path::new(std::ffi::OsStr::from_bytes(&b[..m]));
-        let native=p.join(q);let mut reference=a[..n].to_vec();join_resize(&mut reference,&b[..m]);
+        let native=p.join(q);let mut reference=Vec::new();join_slices(&a[..n],&b[..m],&mut reference);
         let i:usize=kani::any();
         assert_eq!(native.as_os_str().as_bytes().len(),reference.len());
         assert_eq!(native.as_os_str().as_bytes().get(i),reference.get(i));

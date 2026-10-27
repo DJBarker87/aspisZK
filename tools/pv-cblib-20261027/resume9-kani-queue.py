@@ -23,6 +23,6 @@ if mode=='upload':
 else:
  for i in range(1,11):
   wait_refusal();subprocess.run([sys.executable,str(td/'wait_capacity.py')],check=True)
-  p=subprocess.run([sys.executable,str(td/'resume9_kani.py'),f'resume9-{mode}-r{i:02}',f'resume9_links::{mode}','standalone'])
+  p=subprocess.run([sys.executable,str(td/'resume9_kani.py'),f'resume9-{mode.replace(chr(95),chr(45))}-r{i:02}',f'resume9_links::{mode}','standalone'])
   if p.returncode!=78:sys.exit(p.returncode)
 sys.exit(78)

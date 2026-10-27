@@ -1,6 +1,6 @@
 # Library row table
 
-Candidate source callback laws supplied: **5 → 7** (V177/V179/V180/V181/V182/V185/V186), through `PV_CBL_CallbackBundle`. Native P6 bounds and the distinct extraction/Kani toolchains remain explicit. The canonical recount and endpoint are not edited here; RunJoin/deployment integration remains open. Target not yet established.
+Candidate source callback laws supplied: **7 → 8** (V177/V178/V179/V180/V181/V182/V185/V186), through `PV_CBL_CallbackBundle`. Native P6 bounds and the distinct extraction/Kani toolchains remain explicit. The canonical recount and endpoint are not edited here; RunJoin/deployment integration remains open. Target not yet established.
 
 | op | row | route | status | theorem | crate/version; source hash | receipt |
 |---|---|---|---|---|---|---|
@@ -13,16 +13,16 @@ Candidate source callback laws supplied: **5 → 7** (V177/V179/V180/V181/V182/V
 | 217 | V237 | extraction | OPEN; generic loan/Drop; concrete-default monomorphization has invalid UInt generics | — | `digest-0.10.7/src/core_api/wrapper.rs` sha256 `033777bed7d140b158e15d50fda8a6e06557ce89bd0738fcca692be2c39e8b8a` | aeneas-source-op217-opt-frontier-01; charon-source-op217-mono-resume-concrete-default-01 |
 | 219 | V238 | extraction | OPEN; escaping reference output requires loan validation; structured Drop requires destructor semantics | — | `digest-0.10.7/src/core_api/ct_variable.rs` sha256 `703bd62fb693a437e319d1192988bd674f9127a6b76f73b4c58c71afc79bc013` | aeneas-source-op219-opt-frontier-01 |
 | 25 | V177 | P6 | SOURCE LAW SUPPLIED; P6 bounded native check | R1Z.PV_CBL_CallbackBundle.op25_source | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | 39647/39648/39650; kani-pathbuf-borrows-r01 |
-| 26 | V178 | P6 | OPEN; split no-stub P6 passes lengths 0–2; reference Drop frontier retained | — | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | resume8-join-two-r01; aeneas-source-join-mut-opt-resume-01 |
+| 26 | V178 | P6 | SOURCE LAW SUPPLIED; checked UTF-8 carrier; native byte lengths0–2, every output coordinate | R1Z.PV_CBL_CallbackBundle.op26_source | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | 52498/52499/52505; aeneas-source-join-slices-opt-resume9-verified-02; resume9-join-slices-two-r01 |
 | 28 | V179 | P6 | SOURCE LAW SUPPLIED; P6 valid UTF-8 length 2, arbitrary byte index | R1Z.PV_CBL_CallbackBundle.op28_source | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | 43000/43001/43004/43005; resume-string-path-01; route P6 |
 | 29 | V180 | P6 | SOURCE LAW SUPPLIED; P6 bounded native check | R1Z.PV_CBL_CallbackBundle.op29_source | `std/src/path.rs` sha256 `14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886` | 39647/39648/39650; kani-pathbuf-borrows-r01 |
 | 30 | V181 | P6 | SOURCE LAW SUPPLIED; empty-byte carrier adapter; native n≤4; allocation/deployed association retained | R1Z.PV_CBL_AppendBundle.op30_source | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | 41592/41594/41596; resume8-capacity-r01; op30-bytes-opt-resume8; earlier direct extraction rejected |
 | 31 | V182 | P6 | SOURCE LAW SUPPLIED; extracted byte append and checked UTF-8 transport; native valid UTF-8 2+1 | R1Z.PV_CBL_AppendBundle.op31_source | `alloc/src/string.rs` sha256 `d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d` | resume8-push-r01; op31-bytes-opt-resume8; 41593/41642/41671/41681–41683 |
 | 32 | V183 | native-effect deferral | DEFER(pv-runjoin): recoverable native allocation effects | NATIVE-EFFECTS.md | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | — |
-| 33 | V184 | P6 | OPEN; retained-owned reference still structured Drop; error empty/singleton native check passes | — | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | resume-pop-errors-r01; resume-pop-single-r01 (timeout); aeneas-source-op33-retain-opt-resume-pop-retain-01 |
+| 33 | V184 | P6 | OPEN; Copy Slice/caller-output reference extracted, marker/empty laws checked; native u8 length0–2 passes; actual Word/prefix/native association retained | — | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | 52503/52507; resume9-pop-slices-u8-r01; older rejected/timeout receipts retained |
 | 34 | V185 | P6 | SOURCE LAW SUPPLIED; P6 bounded native check | R1Z.PV_CBL_CallbackBundle.op34_source | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | 39604–39610; bundle 39622; kani-op34-exact-006 |
 | 35 | V186 | P6 | SOURCE LAW SUPPLIED; native default check | R1Z.PV_CBL_CallbackBundle.op35_source | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | 39611/39614/39622; kani-op35-exact-002 |
-| 36 | V187 | P6 | OPEN; retained-owned adapter still needs loan validation; ARRAY-FRONTIER.md | — | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | resume-array-exact-r01 (timeout); resume-array-reject-r01; aeneas-source-op36-retain-opt-resume-array-retain-01 |
+| 36 | V187 | P6 | OPEN; complete borrowed-Slice Result/identity-clone value law and QM31 adapter source bridge proved; native N=1024/owned/actual Clone association retained | PV_CBL_ArraySliceBridge.source (reference only) | `alloc/src/vec/mod.rs` sha256 `a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f` | 52500/52502/52506; aeneas-source-array-slice-result-opt-resume9-std-01; old rejected gates not rerun |
 
 Std/alloc source corpus: rustc **1.98.0-nightly (14210df0e, 2026-05-31)**, toolchain nightly-2026-06-01. Kani gates use their separately pinned rustc **1.93.0-nightly (53732d5e0)**; no deployed std/ELF association is inferred. Cargo library rows use the versions in the file column. Full source SHA-256 values above are retained.
 
@@ -99,3 +99,21 @@ normalized again. Native generic wrapper loan/Drop semantics, runtime
 SHA-NI/soft dispatch, compiler/toolchain/deployed association and native
 allocation/world/side-channel closure remain separate P obligations; no
 V231–V238 row credit or privacy endpoint removal is claimed.
+
+Fourth-pass publication: candidate supplied rows **7 → 8**, adding V178/op26
+through `PV_CBL_CallbackBundle.op26_source` (52505). The new dictionary calls
+the supplied generic AsRef instance and preserves its Result, then uses the
+extracted caller-output byte reference and checked UTF-8 adapter. Its native
+P6 link covers byte inputs of lengths0–2 and every output coordinate; arbitrary
+native PathBuf/UTF-8 image, allocation/world, unbounded and deployed association
+remain explicit. The prior seven names persist, and the final selection audit
+checks that they coexist on selectedJoin. No canonical endpoint is edited.
+
+V184/op33 remains OPEN: the changed Copy Slice reference extracts and the
+marker/empty laws check, plus a new u8 length0–2 native gate. No full actual
+Result<Word,Error> prefix/payload/native association is inferred. V187/op36
+remains OPEN: the complete generic Result wrapper and identity-clone value law
+now bind the previous QM31 value adapter through a checked source theorem;
+actual native Clone, owned/error Vec, allocator and N=1024 success association
+remain. op32's native allocator-effect deferral is unchanged. All four new
+Kani gates pass, with no old pop/array timeout gate rerun.
