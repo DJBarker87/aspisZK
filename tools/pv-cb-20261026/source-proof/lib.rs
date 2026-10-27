@@ -168,3 +168,14 @@ pub fn copy_tag(id: u16) -> aspis_core::field::M31 {
         aspis_statement::pool_v1::pair_trace::POOL_V1_PAIR_COPY_TAG_BASE_V1 + u32::from(id)
     )
 }
+
+/// Extraction-only by-value wrapper. Body is one call to the shipped function.
+/// The cfg-gated shim changes no shipped compressor code.
+#[cfg(aeneas_ref)]
+pub fn compress16_by_value(
+    tag: aspis_core::field::M31,
+    values: [aspis_core::field::M31; 16],
+    lambda: aspis_core::field::QM31,
+) -> aspis_core::field::QM31 {
+    aspis_statement::logup::compress_tagged_tuple(tag, &values, lambda)
+}
