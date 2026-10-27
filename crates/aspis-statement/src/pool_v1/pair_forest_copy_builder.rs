@@ -226,7 +226,7 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
 
 fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
-    let pair = &input.pair;
+    let pair = input.pair;
     let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
     let mut bits = [0u32; 24];
     let mut sibs = [[0u32; 8]; 24];
