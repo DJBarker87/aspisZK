@@ -2,7 +2,7 @@
 No launcher, environment, cap, locking or monitoring infrastructure is changed.
 """
 from pathlib import Path
-import subprocess,json,sys,shlex,hashlib,datetime,re
+import subprocess,json,sys,shlex,hashlib,datetime,re,base64,zlib
 r=Path(__file__).resolve().parents[3];a=int(sys.argv[1]);module=sys.argv[2]
 assert 27700<=a<=27999
 flag=Path('/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-host-restored.flag')
@@ -60,7 +60,7 @@ def visit(name):
  rows.append({'module':name,'object':str(p) if p else None,'sha256':hashlib.sha256(p.read_bytes()).hexdigest() if p else None})
 for name in NAMES:visit(name)
 print(json.dumps(rows))
-""".replace('J',repr(j),1).replace('GRAPH',repr(graph),1).replace('NAMES',repr(imports(s)),1)
+""".replace('J',repr(j),1).replace('GRAPH',"json.loads(__import__('zlib').decompress(__import__('base64').b64decode("+repr(base64.b64encode(zlib.compress(json.dumps(graph).encode())).decode())+")))",1).replace('NAMES',repr(imports(s)),1)
 
 q=py(code);assert q.returncode==0,q.stderr
 x['dependencies']=json.loads(q.stdout);x['deps_fingerprint']=hashlib.sha256(json.dumps(x['dependencies'],sort_keys=True).encode()).hexdigest()
