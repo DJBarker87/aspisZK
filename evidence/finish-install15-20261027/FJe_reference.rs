@@ -73,25 +73,18 @@ mod FJe_reference {
     fn local(input: [QM31;4]) -> QM31 { extension_from_raw_limbs(local_raw(input)) }
 
     fn external(state: [QM31; POSEIDON2_WIDTH]) -> [QM31; 4] {
-        let mut local_packed = [QM31::ZERO; 4];
-        let mut group = 0usize;
-        while group < 4 {
-            let start = 4 * group;
-            let input = [
-                state[start],
-                state[start + 1],
-                state[start + 2],
-                state[start + 3],
-            ];
-            local_packed[group] = external_local_packed(input);
-            group += 1;
-        }
-        let sum = QM31::ZERO
-            .add(local_packed[0])
-            .add(local_packed[1])
-            .add(local_packed[2])
-            .add(local_packed[3]);
-        local_packed.map(|value| value.add(sum))
+        // Explicit fixed groups split the native traversal from its algebra.
+        // Every leaf is the actual source call;no return value is stubbed.
+        let local_packed = [
+            external_local_packed([state[0],state[1],state[2],state[3]]),
+            external_local_packed([state[4],state[5],state[6],state[7]]),
+            external_local_packed([state[8],state[9],state[10],state[11]]),
+            external_local_packed([state[12],state[13],state[14],state[15]]),
+        ];
+        let sum=QM31::ZERO.add(local_packed[0]).add(local_packed[1])
+            .add(local_packed[2]).add(local_packed[3]);
+        [local_packed[0].add(sum),local_packed[1].add(sum),
+         local_packed[2].add(sum),local_packed[3].add(sum)]
     }
 
     fn m31_packed(
@@ -207,6 +200,42 @@ mod FJe_reference {
         for j in 0..16 { n[j]=pow5(n[j].add(odd[j])); assume_q(n[j]); }
         assume_external_intermediates(n);
     }
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn external_lowbit_unrolled() {
+        let s=any_state();assume_external_intermediates(s);
+        kani::cover!(true,"same canonical external low-bit domain inhabited");
+        let a=external_linear_packed(s);let b=external(s);
+        assert_eq!(a[0].c0.b.0 & 1,b[0].c0.b.0 & 1);
+    }
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn leading_lowbit_unrolled() {
+        let o=StateOnlyPoseidonOpenings{z:any_state(),succ_z:any_state(),xor12_z:any_state()};
+        leading_bounds(&o);
+        kani::cover!(true,"same canonical leading low-bit domain inhabited");
+        let a=leading_pair_packed(&o);let b=leading(&o);
+        assert_eq!(a[1].c1.a.0 & 1,b[1].c1.a.0 & 1);
+    }
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn full_lowbit_unrolled() {
+        let s=any_state();let l=any_state();full_bounds(s,&l);
+        kani::cover!(true,"same canonical full low-bit domain inhabited");
+        let a=interpolated_full_pair_packed(s,&l);let b=full(s,&l);
+        assert_eq!(a[2].c1.b.0 & 1,b[2].c1.b.0 & 1);
+    }
+
+    // Split successor of raw K007:the SAME native local conversion after raw packing.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn local_packed_complete() {
+        let x:[QM31;4]=core::array::from_fn(|_|any_q());
+        assume_rows(x);
+        kani::cover!(true,"canonical local converted domain inhabited");
+        assert_q(external_local_packed(x),local(x));
+    }
+
     #[kani::proof]
     #[kani::unwind(18)]
     fn full_word0_derived() {
