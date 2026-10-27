@@ -23,16 +23,16 @@ for t in [0,2]:
   if h==17:s+='  rfl\n'
   else:s+=f'  change {c}+sourceCount {17-h} indices{h+1:02}={n}\n  rw [total{h+1:02}]\n'
   s+=f'#print axioms total{h:02}\n'
- s+='def frontier : Slice U32 := ⟨'+ls([str(i)+'#u32' for i in steps[0][0]])+',by decide⟩\n'
+ s+='def frontier : Slice U32 := ⟨'+ls([str(i)+'#u32' for i in steps[0][0]])+',by change 12≤Usize.max; scalar_tac⟩\n'
  s+='theorem values : frontier.val.map UScalar.val=indices00 := by rfl\n#print axioms values\n'
- s+='theorem well : wellFormed indices00 := by decide\n#print axioms well\n'
+ s+='theorem well : wellFormed indices00 := by simp [wellFormed,indices00,List.pairwise_cons]\n#print axioms well\n'
  s+=f'''theorem source : Port4B_Install.leaves.op11 .Two frontier=ok (some {tree['consumed']}#usize) := by
   change Port4B_CountInstall.nodeCount .Two frontier=_
-  rw [Port4B_CountInstall.nodeCount,values,dif_pos well]
-  congr 2
-  apply UScalar.eq_of_val_eq
-  change sourceCount 18 indices00={tree['consumed']}
-  exact total00
+  have count : Port4B_CountInstall.countValue indices00 well={tree['consumed']}#usize := by
+    apply UScalar.eq_of_val_eq
+    change sourceCount 18 indices00={tree['consumed']}
+    exact total00
+  rw [Port4B_CountInstall.nodeCount,values,dif_pos well,count]
 #print axioms source
 end AspisR1.{ns}
 end
