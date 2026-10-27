@@ -1,0 +1,60 @@
+{"attempt": "JGv_TX2_084", "exit_status": 1, "wall_seconds": 4.2466112449765205, "peak_rss_kib": "5735088", "swaps": "0", "print_axioms": ["'AspisR1.JGv_WeightsExact.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGv_WeightsExact.lean:30:8: error: Type mismatch
+  Eq.trans h (congrArg some same)
+has type
+  (↑flushed)[j]? = some q
+but is expected to have type
+  some actual = some q
+JGv_WeightsExact.lean:35:28: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JGv_QueryRows.weights 12 ↑?i ?k
+in the target expression
+  JGv_QueryRows.weights 12 j k = ↑↑(JGv_FlushMeaning.limb (JGv_WeightsData.cell ⟨j, hi⟩) k)
+
+C : Type
+err : C
+geometry : Port3_NativeGeometryBody.Ops C
+seed : Port3_NativeQueryBody.Ops
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+flushed : Slice SAQ_WideABI.K
+updates : JFz_TX2_AccumulationChain.updates seed 12 = ok (a, b)
+flush : Port3_FlushInstall.flush b a
+...
+JGv_WeightsExact.lean:30:8: error: Type mismatch
+  Eq.trans h (congrArg some same)
+has type
+  (↑flushed)[j]? = some q
+but is expected to have type
+  some actual = some q
+JGv_WeightsExact.lean:35:28: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JGv_QueryRows.weights 12 ↑?i ?k
+in the target expression
+  JGv_QueryRows.weights 12 j k = ↑↑(JGv_FlushMeaning.limb (JGv_WeightsData.cell ⟨j, hi⟩) k)
+
+C : Type
+err : C
+geometry : Port3_NativeGeometryBody.Ops C
+seed : Port3_NativeQueryBody.Ops
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+flushed : Slice SAQ_WideABI.K
+updates : JFz_TX2_AccumulationChain.updates seed 12 = ok (a, b)
+flush : Port3_FlushInstall.flush b a.weights.deref = ok flushed
+size : (↑flushed).length = 64
+canonical : ∀ q ∈ ↑flushed, Port3_FlushInstall.Canonical q
+j : ℕ
+hj : j < (↑flushed).length
+hr : j < (↑JGv_WeightsData.value).length
+hi : j < 64
+indexWord : Usize := j#usize
+q : JGv_FlushMeaning.K
+read : flushed.index_usize indexWord = ok q
+meaning : ∀ (k : Fin 4), ↑↑(JGv_FlushMeaning.limb q k) = JGv_QueryRows.weights 12 (↑indexWord) k
+index : ↑indexWord = j
+read' : (↑flushed)[j]? = some q
+get : q = (↑flushed)[j]
+k : Fin 4
+⊢ JGv_QueryRows.weights 12 j k = ↑↑(JGv_FlushMeaning.limb (JGv_WeightsData.cell ⟨j, hi⟩) k)
+'AspisR1.JGv_WeightsExact.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd39985dd807e4a97970fc10cfb5a8776.scope; invocation ID: f7d63ac50ace4cd7ba07911191d3cd05

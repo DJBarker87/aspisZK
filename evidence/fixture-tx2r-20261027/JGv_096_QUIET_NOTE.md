@@ -1,0 +1,1 @@
+Read-only preservation of the first observed096 refusal: allowed:false, quiet window until1793112917. Corrected task wrapper did not launch; it is in the mandated180-second wait/retry loop. No marker/barrier/launcher was edited. Final096 retries and admission are collected by the wrapper after completion.

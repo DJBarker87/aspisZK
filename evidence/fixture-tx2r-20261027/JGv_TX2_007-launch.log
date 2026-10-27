@@ -1,0 +1,41 @@
+{"attempt": "JGv_TX2_007", "exit_status": 1, "wall_seconds": 3.0091227469965816, "peak_rss_kib": "6046248", "swaps": "0", "print_axioms": ["'AspisR1.JGv_PairShared0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGv_PairShared0.lean:82:65: error: unsolved goals
+⊢ (do
+      let (self1, common1) ←
+        FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w
+            (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO)
+      let r2 ← FIo_Native.weights.shared_partials f common1
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r3, parts2) ← FIo_Native.weights.shared_high val self1 
+...
+weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } JGq_Powers0.a4
+                    JGq_Powers1.a4 (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+              let we1 ← FIo_Native.weights.grouped_inactive_pair self1 f low1
+              let a ← parts2.update 0#usize we1
+              let b ←
+                FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                    FIo_Native.transport.Variant.S2
+              let libra ←
+                if b = true then FIo_Native.weights.factored_s2_libra_weights JGq_Powers0.a4 JGq_Powers1.a4 self1.extra
+                  else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+              let parts3 ← FIo_Native.weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+              let k ← FIo_Native.weights.powers 7#usize kappa
+              let sum ←
+                FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                    FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+              ok (core.result.Result.Ok sum)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+              residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error) residual
+'AspisR1.JGv_PairShared0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc645bba2aac64ac89765d8b65e91a120.scope; invocation ID: ae1cf325fcb04256a37c4df4fab7a14b

@@ -1,0 +1,124 @@
+JGv_PairShared0.lean:82:65: error: unsolved goals
+⊢ (do
+      let (self1, common1) ←
+        FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w
+            (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO)
+      let r2 ← FIo_Native.weights.shared_partials f common1
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r3, parts2) ← FIo_Native.weights.shared_high val self1 JGq_Powers0.a4 JGq_Powers1.a4 JGs_K4.parts
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if 2#usize = 1#usize then do
+                let dual1 ←
+                  FIo_Native.weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } JGq_Powers0.a4
+                      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                let groups1 ←
+                  FIo_Native.weights.Weights.pair_loop3 { start := 0#usize, «end» := 64#usize } self1 f
+                      (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                let parts3 ←
+                  FIo_Native.weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                let parts4 ←
+                  FIo_Native.weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f JGq_Powers0.a4
+                      parts3
+                let k ← FIo_Native.weights.powers 7#usize kappa
+                let sum ←
+                  FIo_Native.weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                ok (core.result.Result.Ok sum)
+              else do
+                let low1 ←
+                  FIo_Native.weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } JGq_Powers0.a4
+                      JGq_Powers1.a4 (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+                let we1 ← FIo_Native.weights.grouped_inactive_pair self1 f low1
+                let a ← parts2.update 0#usize we1
+                let b ←
+                  FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                      FIo_Native.transport.Variant.S2
+                let libra ←
+                  if b = true then
+                      FIo_Native.weights.factored_s2_libra_weights JGq_Powers0.a4 JGq_Powers1.a4 self1.extra
+                    else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+                let parts3 ← FIo_Native.weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                let k ← FIo_Native.weights.powers 7#usize kappa
+                let sum ←
+                  FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                      FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+                ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+            residual) =
+    do
+    let (self1, common1) ←
+      FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } w
+          (Array.repeat 16#usize FIo_Native.aspis_core.field.QM31.ZERO)
+    let r2 ← FIo_Native.weights.shared_partials f common1
+    let cf1 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (r3, parts2) ← FIo_Native.weights.shared_high val self1 JGq_Powers0.a4 JGq_Powers1.a4 JGs_K4.parts
+        let cf2 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf2 with
+          | core.ops.control_flow.ControlFlow.Continue a =>
+            if 2#usize = 1#usize then do
+              let dual1 ←
+                FIo_Native.weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } JGq_Powers0.a4
+                    (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+              let groups1 ←
+                FIo_Native.weights.Weights.pair_loop3 { start := 0#usize, «end» := 64#usize } self1 f
+                    (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+              let parts3 ←
+                FIo_Native.weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+              let parts4 ←
+                FIo_Native.weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f JGq_Powers0.a4
+                    parts3
+              let k ← FIo_Native.weights.powers 7#usize kappa
+              let sum ←
+                FIo_Native.weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                    FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+              ok (core.result.Result.Ok sum)
+            else do
+              let low1 ←
+                FIo_Native.weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } JGq_Powers0.a4
+                    JGq_Powers1.a4 (Array.repeat 16#usize FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO)
+              let we1 ← FIo_Native.weights.grouped_inactive_pair self1 f low1
+              let a ← parts2.update 0#usize we1
+              let b ←
+                FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant
+                    FIo_Native.transport.Variant.S2
+              let libra ←
+                if b = true then FIo_Native.weights.factored_s2_libra_weights JGq_Powers0.a4 JGq_Powers1.a4 self1.extra
+                  else FIo_Native.weights.twofold_libra_weights low1 self1.extra
+              let parts3 ← FIo_Native.weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+              let k ← FIo_Native.weights.powers 7#usize kappa
+              let sum ←
+                FIo_Native.weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                    FIo_Native.aspis_core.field.wide_exact.WideExact.ZERO
+              ok (core.result.Result.Ok sum)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error)
+              residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          FIo_Native.aspis_core.field.wide_exact.WideExact (core.convert.FromSame FIo_Native.verifier.Error) residual
+'AspisR1.JGv_PairShared0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

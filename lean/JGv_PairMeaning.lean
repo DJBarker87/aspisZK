@@ -1,0 +1,49 @@
+import JGv_Pair
+import JGq_PairMeaning
+import FJr_BodyPairMeaning
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JGv_PairMeaning
+open Aeneas Aeneas.Std Result AspisR1CurrentWide.Proof
+open AspisR1Stage2 AspisR1Stage2.Stage2Finish
+open FIo_FieldBridge (NE wide)
+open scoped BigOperators
+attribute [local irreducible] QuadraticAlgebra.instInv
+/-- The inherited interpretation now consumes the constructed successful Pair. -/
+theorem source :
+    ∃ (a0 a1 : NE) (p0 p1 : FIn_WeightsExtract.circle.SecureCirclePoint),
+      Slice.index_usize (FIo_Install.toSlice JGo_TX2_FinishPrefix.alphas) 0#usize=ok a0 ∧
+      Slice.index_usize (FIo_Install.toSlice JGo_TX2_FinishPrefix.alphas) 1#usize=ok a1 ∧
+      Array.index_usize (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toPoint JFo_Prepared.value.z) 0#usize=ok p0 ∧
+      Array.index_usize (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toPoint JFo_Prepared.value.z) 1#usize=ok p1 ∧
+      CheckpointBytes5Output.ofE JGo_TX2_Horner1_6.after=RoundPairing.dot
+        (fun i : Fin 64=>FJc_InactiveCoefficientsModel.field (JFw_Frames.window 8007 2048) i.val)
+        (RoundPairing.dualFold (n:=64) (decodeWide (wide a1))
+          (RoundPairing.dualFold (n:=256) (decodeWide (wide a0))
+            (fun i=>∑ j : Fin 7,CheckpointBytes5Output.ofE JFo_Prepared.value.kappa^j.val*
+              FJr_PairRows.rows JFo_Prepared.value.semantic_alpha p0 p1 j i))) := by
+  exact JGq_PairMeaning.value JGo_TX2_Horner1_6.after JGv_Pair.source
+#print axioms source
+/-- Exact body-field specialization at this producing execution. The explicit
+body-field identification is retained here, while source needs none of it. -/
+theorem body (pm : OraclePortCheckpointAbiC5.Prepared)
+    (am : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+    (fields : CheckpointBytes4SavedFields.BodyMatches JFo_Prepared.value JFo_Prepared.accumulator pm am) :
+    ∃ (a0 a1 : NE) (p0 p1 : FIn_WeightsExtract.circle.SecureCirclePoint),
+      Slice.index_usize (FIo_Install.toSlice JGo_TX2_FinishPrefix.alphas) 0#usize=ok a0 ∧
+      Slice.index_usize (FIo_Install.toSlice JGo_TX2_FinishPrefix.alphas) 1#usize=ok a1 ∧
+      Array.index_usize (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toPoint JFo_Prepared.value.z) 0#usize=ok p0 ∧
+      Array.index_usize (FIn_WeightsInstall.mapArray FIn_WeightsInstall.toPoint JFo_Prepared.value.z) 1#usize=ok p1 ∧
+      CheckpointBytes5Output.ofE JGo_TX2_Horner1_6.after=RoundPairing.dot
+        (fun i : Fin 64=>FJc_InactiveCoefficientsModel.field (JFw_Frames.window 8007 2048) i.val)
+        (RoundPairing.dualFold (n:=64) (decodeWide (wide a1))
+          (RoundPairing.dualFold (n:=256) (decodeWide (wide a0))
+            (fun i=>∑ j : Fin 7,CheckpointBytes5Output.ofE JFo_Prepared.value.kappa^j.val*
+              FJr_PairRows.rows JFo_Prepared.value.semantic_alpha p0 p1 j i))) := by
+  exact FJr_BodyPairMeaning.value (.Ok ()) JFo_Prepared.value JFo_Prepared.accumulator pm am fields
+    JGo_TX2_WeightData.value JGo_TX2_FinishPrefix.alphas (JFw_Frames.window 8007 2048)
+    JGo_TX2_Horner1_6.after JGo_TX2_NewWeights.source (by rfl)
+    (JFw_Frames.window_length 8007 2048 (by decide)) JGv_Pair.source
+#print axioms body
+end AspisR1.JGv_PairMeaning
+end

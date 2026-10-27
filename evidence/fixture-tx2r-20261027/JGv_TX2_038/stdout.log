@@ -1,0 +1,80 @@
+JGv_DotBody.lean:21:36: error: Type mismatch: After simplification, term
+  bound
+ has type
+  ↑j < 64
+but is expected to have type
+  j < ws.len
+JGv_DotBody.lean:13:51: error: unsolved goals
+fm : Slice U8
+ws : Slice Q
+s : State
+j : Usize
+length : (↑ws).length = 64
+bound : ↑j < 64
+count : ↑s.count = ↑j
+read : ∀ (i : Usize), ↑i < 64 → ∃ x, finishField fm i = ok x ∧ CanonicalFinish x
+canonical : ∀ q ∈ ↑ws, CanonQ q
+x : FinishE
+field : finishField fm j = ok x
+cx : CanonicalFinish x
+q : Q
+rq : ws.index_usize j = ok q
+hq : q = (↑ws)[↑j]
+member : q ∈ ↑ws
+out : AspisR1FinishDotSourceABI.PushState
+pushed : ops.pushDot s x q = ok (core.result.Result.Ok (), out)
+hcount : ↑out.count = ↑s.count + 1
+next : UScalar UScalarTy.Usize
+inc : j + 1#usize = ok next
+hnext : ↑next = ↑j + ↑1#usize
+guard : j < ws.len
+⊢ (do
+      let we ← ops.field fm j
+      let (r, dot1) ← ops.pushDot s we q
+      let r1 ←
+        match r with
+          | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+          | core.result.Result.Err e => do
+            let t ← verifier.finish_query_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError.call_once () e
+            ok (core.result.Result.Err t)
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (dot1, next))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done (dot1, some return_capture))) =
+    ok (cont (out, next))
+JGv_DotBody.lean:24:28: warning: This simp argument is unused:
+  field
+
+Hint: Omit it from the simp argument list.
+  simp only [guard, ̲ite_true,f̵i̵e̵l̵d̵,̵ ̲rq, ̲pushed, ̲bind_tc_ok, ̲Aeneas.Std.uncurry,
+      core.result.Result.map_err, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲inc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGv_DotBody.lean:24:37: warning: This simp argument is unused:
+  pushed
+
+Hint: Omit it from the simp argument list.
+  simp only [guard, ̲ite_true, ̲field, ̲rq,p̵u̵s̵h̵e̵d̵,̵ ̲bind_tc_ok, ̲Aeneas.Std.uncurry,
+  ̵  ̵ ̵ ̵core.result.Result.map_err,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲inc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JGv_DotBody.lean:24:55: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵u̵a̵r̵d̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵f̵i̵e̵l̵d̵,̵r̵q̵,̵p̵u̵s̵h̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵i̵n̵c̵]̵[̲g̲u̲a̲r̲d̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲f̲i̲e̲l̲d̲,̲ ̲r̲q̲,̲ ̲p̲u̲s̲h̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲i̲n̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JGv_DotBody.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JGv_DotBody.lean:31:37: error: `simp` made no progress
+'AspisR1.JGv_DotBody.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

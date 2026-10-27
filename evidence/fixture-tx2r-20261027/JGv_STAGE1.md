@@ -1,0 +1,3 @@
+Checked Pair sum: JGv_PairSum.step5, step6 and source (receipts002,003,006). All seven ordered loop9 parts now compose from JGt_PairWrites.p4 and actual kappa powers. No top premise removal or complete Pair credit yet. Receipts004/005 reject because native ZERO is irreducible;006 uses a named ZERO=v0 equality and symbolic loop-chain application. No large parent reduction.
+
+001 is a launcher input failure before a Lean process: incorrectly renamed missing import JGv_PairSum4. Corrected to checked JGt_PairSum4 and JGt_PairWrites. Conservative budget slots used6; actual Lean processes5. No infrastructure change or cap increase.
