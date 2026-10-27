@@ -12521,3 +12521,25 @@ prover candidate (1934d3b410, pushed) and its worktree and branch removed. New j
 sum and V264 op258 all_slots_clear, finishing with a combined audit and a focused closure replay.
 A brief second DNS failure delayed one push; no job was affected. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D319 (Stream B) 2026-10-27 20:58 UTC: pv-reach6 result: installed op84 does not catch; project-module authority completed (ruling (h5)); pv-reach7 launched
+
+pv-reach6 used its remaining 65 attempts (64 passed, 1 missing-dependency failure; audits passed). It
+recovered attempt 37334 read-only (passed; not rerun), proved entropy failure forwarding through the
+original closure/trait and one retry unrolling plus retry divergence (PV_RE_EntropyBoundaryFrames),
+linked the exceptional scalar match to a named lemma, and extended the compiled source/suffix
+context chunks from 000-010 to 000-063. On op84 it found, by inspecting the installed source, that
+the installed op84 instance returns the hash callback's Result directly with no catching path; the
+earlier catching finding concerned an arbitrary instance of the interface, not the installed one.
+The installed-instance lemma was not compiled because six candidate project modules
+(R1Z.PV_CB_Merkle, ProverRwSuccessHashes, PV_CB_Op84Exact, PV_CB_Op84Funs, PV_CB_CandidateCore,
+PV_CB_CandidateDictionary) have no entry in any authority the rulings named. V404/V405 stay OPEN.
+
+Lead correction: the resolution rulings covered env-J modules, freeze-pinned modules and external
+objects, but not project modules added on the candidate or a job branch. Ruling (h5): such a module,
+absent from EJR_final-inventory.json and the freeze records, resolves to the git-tracked file in the
+job's own worktree at HEAD, recorded by path, blob id and sha256, built privately; a name that is
+both pinned and differently tracked is a stop. The lead checked that the six are absent from the
+env-J inventory. pv-reach7 (fresh 100 attempts; IDs 38800-38899) compiles the installed-op84 lemma,
+chunks 064-073, then the invocation exclusions, conditional native witnesses and minimal reached
+sets. Rows removed outright: 0. Privacy target not yet established.
