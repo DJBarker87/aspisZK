@@ -1,9 +1,11 @@
 """Serial invocation of the unchanged S2H admission and S2W runners."""
 from pathlib import Path
-import subprocess,sys,json,time
+import subprocess,sys,json,time,os
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-kit2-cache-20261027';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 a,local,module=sys.argv[1:];
 if int(a.rsplit('L',1)[1])>150:raise SystemExit('budget exhausted')
+extra=[x for x in os.environ.get('KSB_EXTRA_PATH','').split(':') if x]
+roots=[B+'/KSB_objects']+extra+[C,C+'/objects']
 local=Path(local);src='KSB_generated/'+module.replace('.','/')+'.lean';obj='KSB_objects/'+module.replace('.','/')+'.olean'
 if (E/a/'receipt.json').exists():raise SystemExit('attempt already receipted')
 def ssh(s):
@@ -39,10 +41,10 @@ for retry in range(11):
  raise SystemExit('STOP admission '+r.stdout+r.stderr)
 else:raise SystemExit('STOP admission retries')
 # Pin every selected Aeneas object, before submission, using the selected search order.
-pins=ssh("python3 - <<'PIN'\nfrom pathlib import Path\nimport hashlib,json\nroots="+repr([B+'/KSB_objects',C,C+'/objects'])+"\nkeys=set()\nfor root in roots:\n r=Path(root)\n keys.update(str(p.relative_to(r)) for base in ['Aeneas','AeneasMeta'] for p in (r/base).rglob('*.olean'))\n if (r/'Aeneas.olean').exists():keys.add('Aeneas.olean')\nselected={}\nfor key in sorted(keys):\n p=next(Path(r)/key for r in roots if (Path(r)/key).is_file())\n selected[str(p)]=hashlib.sha256(p.read_bytes()).hexdigest()\nprint(json.dumps(selected))\nPIN")
+pins=ssh("python3 - <<'PIN'\nfrom pathlib import Path\nimport hashlib,json\nroots="+repr(roots)+"\nkeys=set()\nfor root in roots:\n r=Path(root)\n keys.update(str(p.relative_to(r)) for base in ['Aeneas','AeneasMeta'] for p in (r/base).rglob('*.olean'))\n if (r/'Aeneas.olean').exists():keys.add('Aeneas.olean')\nselected={}\nfor key in sorted(keys):\n p=next(Path(r)/key for r in roots if (Path(r)/key).is_file())\n selected[str(p)]=hashlib.sha256(p.read_bytes()).hexdigest()\nprint(json.dumps(selected))\nPIN")
 assert pins.returncode==0,pins.stderr
 (E/(a+'-admission.json')).write_text(json.dumps({'exit_status':r.returncode,'allowed':ad['allowed'],'retry':retry})+'\n')
-cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','KSB_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':B+'/KSB_objects:'+C+':'+C+'/objects'},deps_fingerprint={'scope':'KSB raw kit private modules on persistent kit2 cache and coherent SInt2 objects','aeneas_library_objects':json.loads(pins.stdout)},expected_time='single module elaboration, no concrete arithmetic normalization',reservation_retries=retry)
+cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','KSB_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':':'.join(roots)},deps_fingerprint={'scope':'KSB raw kit private modules on persistent kit2 cache and coherent SInt2 objects','aeneas_library_objects':json.loads(pins.stdout)},expected_time='single module elaboration, no concrete arithmetic normalization',reservation_retries=retry)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 r=ssh(f'mkdir -p {B}/{str(Path(src).parent)} {B}/{str(Path(obj).parent)}');assert r.returncode==0,r.stderr
 transfer([str(local),H+':'+B+'/'+src])
