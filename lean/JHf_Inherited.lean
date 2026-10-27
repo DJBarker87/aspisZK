@@ -1,0 +1,41 @@
+import JHd_AuthInspect
+import JHd_Authentication
+import JHd_AuthenticationPrefix
+import JHd_Discriminant
+import JHd_Distinct
+import JHd_Distinct0
+import JHd_Distinct1
+import JHd_Distinct2
+import JHd_Distinct3
+import JHd_Distinct4
+import JHd_Distinct5
+import JHd_Distinct6
+import JHd_DistinctAccounts
+import JHd_KeyStd
+import JHd_NativeGuards
+import JHd_ProofRead
+import JHd_ReferenceSlots
+import JHd_RequestBindings
+import JHd_RequestCanon
+import JHd_RequestCarrier
+import JHd_RequestCommon
+import JHd_RequestDecode
+import JHd_RequestDigests
+import JHd_RequestExternal
+import JHd_RequestFuns
+import JHd_RequestHead
+import JHd_RequestHeader
+import JHd_RequestNative
+import JHd_RequestOperations
+import JHd_RequestPayload
+import JHd_RequestPayment
+import JHd_RequestSegments
+import JHd_RequestSuffix
+import JHd_RequestTypes
+import JHd_RequestValue
+import JHd_RequestWindow
+import JHd_ScanValue
+import JHd_Validation
+set_option autoImplicit false
+#print axioms AspisR1.JHd_Validation.source
+#print axioms AspisR1.JHd_AuthenticationPrefix.source

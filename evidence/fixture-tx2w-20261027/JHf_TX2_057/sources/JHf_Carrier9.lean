@@ -1,0 +1,13 @@
+import JHf_Carrier8
+set_option autoImplicit false
+namespace AspisR1.JHf_Carrier
+open Aeneas Aeneas.Std Result
+def toPoolV1PairForestMasterV1 (value : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1) : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1 :=
+  {bump:=value.bump,identity:=toPoolIdentityV1 value.identity,verifier_policy:=toVerifierPolicyV1 value.verifier_policy,initialized_lane_mask:=value.initialized_lane_mask,has_checkpoint:=value.has_checkpoint,next_checkpoint_sequence:=value.next_checkpoint_sequence,last_checkpoint_lane_sequences:=value.last_checkpoint_lane_sequences}
+def fromPoolV1PairForestMasterV1 (value : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1) : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1 :=
+  {bump:=value.bump,identity:=fromPoolIdentityV1 value.identity,verifier_policy:=fromVerifierPolicyV1 value.verifier_policy,initialized_lane_mask:=value.initialized_lane_mask,has_checkpoint:=value.has_checkpoint,next_checkpoint_sequence:=value.next_checkpoint_sequence,last_checkpoint_lane_sequences:=value.last_checkpoint_lane_sequences}
+theorem from_toPoolV1PairForestMasterV1 (v : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1) : fromPoolV1PairForestMasterV1 (toPoolV1PairForestMasterV1 v)=v := by
+  cases v <;> simp only [fromPoolV1PairLiveSnapshotV1,toPoolV1PairLiveSnapshotV1,fromPoolV1PairVerifiedAfterstateV1,toPoolV1PairVerifiedAfterstateV1,fromPoolV1PairLatePublicStatementV1,toPoolV1PairLatePublicStatementV1,fromPoolV1PairForestTerminalCommonV1,toPoolV1PairForestTerminalCommonV1,fromPoolV1PrivateTransferPublicV1,toPoolV1PrivateTransferPublicV1,fromPoolV1WithdrawalPublicV1,toPoolV1WithdrawalPublicV1,fromPoolV1PairForestTerminalStatementV1,toPoolV1PairForestTerminalStatementV1,fromPoolIdentityV1,toPoolIdentityV1,fromVerifierPolicyV1,toVerifierPolicyV1,fromPoolV1PairForestMasterV1,toPoolV1PairForestMasterV1]
+  all_goals rfl
+#print axioms from_toPoolV1PairForestMasterV1
+end AspisR1.JHf_Carrier

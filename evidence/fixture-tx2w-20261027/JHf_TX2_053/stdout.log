@@ -1,0 +1,21 @@
+JHf_KeyEq.lean:27:8: error: Type mismatch: After simplification, term
+  ih ys tail
+ has type
+  @Eq (Result Bool)
+    (List.allM
+      (fun x => do
+        let b ← liftFun2 core.cmp.impls.PartialEqU8.ne x.1 x.2
+        ok (decide ¬b = true))
+      (xs.zip ys))
+    (ok (decide (xs = ys)))
+but is expected to have type
+  @Eq (Result Bool) (List.allM (fun x => ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true)) (xs.zip ys))
+    (ok (decide (xs = ys)))
+'AspisR1.JHf_KeyEq.lists' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JHf_KeyEq.lean:42:2: error: Type mismatch
+  propext Subtype.val_inj
+has type
+  (↑?m.52 = ↑?m.53) = (?m.52 = ?m.53)
+but is expected to have type
+  decide (↑left = ↑right) = decide (left = right)
+'AspisR1.JHf_KeyEq.key' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,50 @@
+{"attempt": "JHf_TX2_069", "exit_status": 1, "wall_seconds": 3.9099166220403276, "peak_rss_kib": "5930460", "swaps": "0", "print_axioms": ["'AspisR1.JHf_ValidationInversion.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHf_ValidationInversion.lean:20:73: error: unsolved goals
+case h_1.Ok
+ops : Ops
+verifier : solana_pubkey.Pubkey
+accounts : Slice r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+out : r1_pool_adapter.ValidatedAsqa
+a✝¹² : U64
+x✝¹⁴ : Result Usize
+a✝¹¹ : Usize
+heq✝¹⁴ : aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES = ok a✝¹¹
+h✝³ : ¬(data.len != a✝¹¹) = true
+x✝¹³ :
+  Result
+    (core.result.Result aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
+      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹⁰ : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
+heq✝¹
+...
+authenticate_asq8_accounts ops verifier accounts a✝⁸ a✝⁶ a✝¹² = ok (core.result.Result.Ok a✝⁵)
+x✝⁴ : Result (Option r1_pool_adapter.owned.OwnedAccount)
+a✝⁴ : Option r1_pool_adapter.owned.OwnedAccount
+heq✝⁴ : ops.op9 accounts = ok a✝⁴
+x✝³ : Result (core.result.Result r1_pool_adapter.owned.OwnedAccount solana_program_error.ProgramError)
+a✝³ : r1_pool_adapter.owned.OwnedAccount
+heq✝³ :
+  core.option.Option.ok_or a✝⁴ solana_program_error.ProgramError.NotEnoughAccountKeys = ok (core.result.Result.Ok a✝³)
+x✝² : Result (core.result.Result (Slice U8) solana_program_error.ProgramError)
+a✝² : Slice U8
+heq✝² : r1_pool_adapter.owned.OwnedAccount.data ops a✝³ = ok (core.result.Result.Ok a✝²)
+x✝¹ : Result (core.result.Result r1_pool_adapter.ScannedAsqaProof solana_program_error.ProgramError)
+a✝¹ : r1_pool_adapter.ScannedAsqaProof
+heq✝¹ : ops.op51 a✝² = ok (core.result.Result.Ok a✝¹)
+x✝ :
+  Result
+    (core.result.Result aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      solana_program_error.ProgramError)
+a✝ : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝ : ops.op52 a✝¹⁰ a✝⁵ a✝¹.candidate_afterstate = ok (core.result.Result.Ok a✝)
+accepted :
+  ok (core.result.Result.Ok { statement := a✝, proof_length := a✝¹.proof_length }) = ok (core.result.Result.Ok out)
+⊢ ∃ request authenticated candidate pool lane current,
+    ops.op23 data = ok (core.result.Result.Ok request) ∧
+      r1_pool_adapter.owned.authenticate_asq8_accounts ops verifier accounts pool lane current =
+          ok (core.result.Result.Ok authenticated) ∧
+        ops.op52 request authenticated candidate = ok (core.result.Result.Ok out.statement)
+'AspisR1.JHf_ValidationInversion.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r363b75fad77640d29aa228071ccb5265.scope; invocation ID: c524b6763d0b494d9f3c0f1493a7ceec

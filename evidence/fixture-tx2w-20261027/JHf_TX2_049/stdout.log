@@ -1,0 +1,143 @@
+JHf_ValidationRejection.lean:9:44: error: unsolved goals
+encoded : Std.Array U8 216#usize
+contents : ↑encoded = ↑JFu_PublicRange.payment
+payment :
+  pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 JFs_PaymentValue.value =
+    ok (core.result.Result.Ok encoded)
+common : JHf_ReconstructedStatement.value.common = ok JHf_ReconstructedStatement.common
+publicCall :
+  statement_public_common
+      (PoolV1PairForestTerminalStatementV1.PrivateTransfer JHf_ReconstructedStatement.common JFs_PaymentValue.value) =
+    ok
+      (JFs_PaymentValue.common.pool, JFs_PaymentValue.common.deployment_domain, JFs_PaymentValue.common.anchor_sequence,
+        JFs_PaymentValue.common.anchor_root, JFs_PaymentValue.common.nullifier, JFs_PaymentValue.common.asset_id)
+zm :
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JHf_ReconstructedStatement.common.master_account
+      (Array.repeat 32#usize 0#u8) =
+    ok false
+zc :
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JHf_ReconstructedStatement.common.checkpoint_account
+      (Array.repeat 32#usize 0#u8) =
+    ok false
+zl :
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JHf_ReconstructedStatement.common.selected_lane_account
+      (Array.repeat 32#usize 0#u8) =
+    ok false
+lane :
+  ¬core.convert.num.FromUsizeU8.from JHf_ReconstructedStatement.common.output_lane ≥
+      pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_COUNT
+pool :
+  core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 JFs_PaymentValue.common.pool
+      JHf_ReconstructedStatement.common.master_account =
+    ok false
+domain :
+  core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 JFs_PaymentValue.common.deployment_domain
+      JHf_ReconstructedStatement.common.lane_transition.live_snapshot.deployment_domain =
+    ok true
+⊢ (let (pool, deployment, anchor_sequence, anchor, nullifier, _) :=
+      (JFs_PaymentValue.common.pool, JFs_PaymentValue.common.deployment_domain, JFs_PaymentValue.common.anchor_sequence,
+        JFs_PaymentValue.common.anchor_root, JFs_PaymentValue.common.nullifier, JFs_PaymentValue.common.asset_id)
+    do
+    let b3 ←
+      core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool JHf_ReconstructedStatement.common.master_account
+    if b3 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+      else do
+        let b4 ←
+          core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 deployment
+              JHf_ReconstructedStatement.common.lane_transition.live_snapshot.deployment_domain
+        if b4 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+          else do
+            let b5 ←
+              core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                  JHf_ReconstructedStatement.common.lane_transition.live_snapshot.pool
+                  JHf_ReconstructedStatement.common.master_account
+            if b5 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+              else
+                if (anchor_sequence != JHf_ReconstructedStatement.common.checkpoint_sequence) = true then
+                  ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                else do
+                  let b6 ←
+                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                        JHf_ReconstructedStatement.common.historical_global_anchor
+                  if b6 = true then
+                      ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                    else do
+                      let r2 ← pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 nullifier
+                      let r3 ←
+                        match r2 with
+                          | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                          | core.result.Result.Err e => do
+                            let t ←
+                              validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                  () e
+                            ok (core.result.Result.Err t)
+                      let cf1 ←
+                        match r3 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue val =>
+                          if (val != JHf_ReconstructedStatement.common.output_lane) = true then
+                            ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                          else
+                            let (s, _) := (Array.repeat 1520#usize 0#u8).to_slice_mut
+                            do
+                            let (r4, _) ←
+                              pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                                  JHf_ReconstructedStatement.common.lane_transition s
+                            let r5 ←
+                              match r4 with
+                                | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                                | core.result.Result.Err e => do
+                                  let t ←
+                                    validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                        () e
+                                  ok (core.result.Result.Err t)
+                            let cf2 ←
+                              match r5 with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                            match cf2 with
+                              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+JHf_ValidationRejection.lean:42:24: warning: This simp argument is unused:
+  pool
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,p̵o̵o̵l̵,̵ ̲domain,
+  ̵  ̵ ̵ ̵Bool.false_eq_true, ̲↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_ValidationRejection.lean:42:29: warning: This simp argument is unused:
+  domain
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̵o̵o̵l̵,̵d̵o̵m̵a̵i̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲o̲o̲l̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_ValidationRejection.lean:43:4: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̵o̵o̵l̵,̵d̵o̵m̵a̵i̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲o̲o̲l̲,̲ ̲d̲o̲m̲a̲i̲n̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHf_ValidationRejection.lean:43:23: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̵o̵o̵l̵,̵d̵o̵m̵a̵i̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲o̲o̲l̲,̲ ̲d̲o̲m̲a̲i̲n̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHf_ValidationRejection.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

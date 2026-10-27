@@ -1,0 +1,20 @@
+import JHf_ProgramErrorCarrier
+set_option autoImplicit false
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1PairLiveSnapshotV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1PairVerifiedAfterstateV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1PairLatePublicStatementV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1PairForestTerminalCommonV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1PrivateTransferPublicV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1WithdrawalPublicV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1PairForestTerminalStatementV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolIdentityV1
+#print axioms AspisR1.JHf_Carrier.from_toVerifierPolicyV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1PairForestMasterV1
+#print axioms AspisR1.JHf_Carrier.from_toIncrementalMerkleTreeV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1PairForestLaneStateV1
+#print axioms AspisR1.JHf_Carrier.from_toPoolV1PairForestCheckpointV1
+#print axioms AspisR1.JHf_Carrier.from_toAuthenticatedAsq8Accounts
+#print axioms AspisR1.JHf_Carrier.from_toPayment
+#print axioms AspisR1.JHf_Carrier.from_toRequest
+#print axioms AspisR1.JHf_ProgramErrorCarrier.from_to
+#print axioms AspisR1.JHf_ProgramErrorCarrier.to_from
