@@ -1,0 +1,25 @@
+import Aeneas
+set_option autoImplicit false
+namespace R1Z.ProverRw21VecAppend
+open Aeneas Aeneas.Std Result
+
+theorem clone_bytes (s : Slice U8) : Slice.clone core.clone.CloneU8.clone s=ok s := by
+  have ⟨result,hr,heq⟩ := spec_imp_exists (Slice.clone_spec
+    (s := s) (clone := core.clone.CloneU8.clone) (by intros; rfl))
+  rw [← heq] at hr
+  exact hr
+
+def append (out : alloc.vec.Vec U8) (s : Slice U8)
+    (bound : out.length+s.length≤Usize.max) : alloc.vec.Vec U8 :=
+  ⟨out.val++s.val,by simpa only [List.length_append] using bound⟩
+
+theorem exact_append (out : alloc.vec.Vec U8) (s : Slice U8)
+    (bound : out.length+s.length≤Usize.max) :
+    alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s=ok (append out s bound) := by
+  simp only [alloc.vec.Vec.extend_from_slice,bound,if_pos,clone_bytes]
+  rfl
+
+#print axioms clone_bytes
+#print axioms append
+#print axioms exact_append
+end R1Z.ProverRw21VecAppend

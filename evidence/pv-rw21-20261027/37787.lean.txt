@@ -1,0 +1,49 @@
+import R1Z.ProverRw21EncodedOutput
+import R1Z.ProverRw19LoopBind
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21EncodedLoop
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open ProverRw21EncodedStep ProverRw21EncodedOutput
+variable [ExternalTypes]
+
+theorem run (ops : ExternalFuns) (values : Slice W) (n : Nat)
+    (out : alloc.vec.Vec U8) (i : Usize) (remaining : values.length-i.val=n)
+    (bound : out.length+32*(values.length-i.val)≤Usize.max) :
+    @prover.encoded_slice_loop _ (selected ops) values out i=ok (output values out i bound) := by
+  have lens : values.length=values.val.length := rfl
+  induction n generalizing out i with
+  | zero =>
+    have done : values.val.length ≤ i.val := by omega
+    unfold prover.encoded_slice_loop
+    rw [ProverRw19LoopBind.loop_bind]
+    simp only [finished ops values out i done,bind_tc_ok]
+    congr 1
+    apply Subtype.ext
+    simp only [output,List.drop_eq_nil_of_le done,ProverRw21FlatSequence.bytes,
+      List.flatMap_nil,List.append_nil]
+  | succ n ih =>
+    have inside : i.val<values.val.length := by omega
+    let cap := ProverRw21EncodedBounds.step_capacity values out i inside bound
+    let next := appended values out i inside cap
+    let ni := Usize.wrapping_add i 1#usize
+    have inc := ProverRw21EncodedBounds.successor values i inside
+    have rem : values.length-ni.val=n := by dsimp only [ni];rw [inc];omega
+    have nb : next.length+32*(values.length-ni.val)≤Usize.max :=
+      next_capacity values out i inside bound
+    unfold prover.encoded_slice_loop
+    rw [ProverRw19LoopBind.loop_bind]
+    simp only [active ops values out i inside cap,bind_tc_ok]
+    change @prover.encoded_slice_loop _ (selected ops) values next ni=_
+    rw [ih next ni rem nb]
+    congr 1
+    apply Subtype.ext
+    change (out.val++ProverRw21FlatOutput.bytes (cell values i inside))++
+      ProverRw21FlatSequence.bytes (values.val.drop ni.val)=
+      out.val++ProverRw21FlatSequence.bytes (values.val.drop i.val)
+    rw [ProverRw21FlatSequence.suffix values.val i.val inside]
+    dsimp only [ni,cell]
+    rw [inc,List.append_assoc]
+
+#print axioms run
+end R1Z.ProverRw21EncodedLoop

@@ -1,0 +1,30 @@
+import R1Z.ProverRw21ByteCarrier
+set_option autoImplicit false
+namespace R1Z.ProverRw21WordImage
+open Aeneas Aeneas.Std ProverRw21ByteCarrier
+open AspisR1.RetainedFieldByteCodec
+
+theorem ofFin_toFin (b : UInt8) : UInt8.ofFin b.toFin=b := by cases b; rfl
+
+theorem decoded (x : U32) :
+    (core.num.U32.to_le_bytes x).val.map decode =
+      (List.ofFn (encodeWordLE (ProverCommitWordBytes47.rawWord x))).map UInt8.ofFin := by
+  have h := congrArg (List.map UInt8.ofFin) (word_bytes x)
+  simpa only [List.map_map,Function.comp_def,ofFin_toFin,List.map_id_fun] using h
+
+theorem model_word (x : U32) :
+    (List.ofFn (encodeWordLE (ProverCommitWordBytes47.rawWord x))).map UInt8.ofFin =
+      ProverRw21ProtocolOutput.word x.val := by
+  unfold ProverRw21ProtocolOutput.word encodeWordLE
+  simp only [List.ofFn_succ,List.ofFn_zero,List.map_cons,List.map_nil,List.range_succ,List.map_append]
+  rfl
+
+theorem source_word (x : U32) :
+    (core.num.U32.to_le_bytes x).val.map decode=ProverRw21ProtocolOutput.word x.val := by
+  rw [decoded,model_word]
+
+#print axioms ofFin_toFin
+#print axioms decoded
+#print axioms model_word
+#print axioms source_word
+end R1Z.ProverRw21WordImage

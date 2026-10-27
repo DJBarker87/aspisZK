@@ -1,0 +1,28 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0221); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21SequenceImage.lean:16:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map ProverRw21ByteCarrier.decode (ProverRw21FlatSequence.bytes xs)
+in the target expression
+  ProverRw21ProtocolOutput.wide (value x) ++
+      List.map ProverRw21ByteCarrier.decode (List.flatMap ProverRw21FlatOutput.bytes xs) =
+    ProverRw21ProtocolOutput.wide (value x) ++ List.flatMap (fun x => ProverRw21ProtocolOutput.wide (value x)) xs
+
+case cons
+x : W
+xs : List W
+ih :
+  (∀ x ∈ xs, canonical x) →
+    List.map ProverRw21ByteCarrier.decode (ProverRw21FlatSequence.bytes xs) =
+      List.flatMap (fun x => ProverRw21ProtocolOutput.wide (value x)) xs
+h : ∀ x_1 ∈ x :: xs, canonical x_1
+⊢ ProverRw21ProtocolOutput.wide (value x) ++
+      List.map ProverRw21ByteCarrier.decode (List.flatMap ProverRw21FlatOutput.bytes xs) =
+    ProverRw21ProtocolOutput.wide (value x) ++ List.flatMap (fun x => ProverRw21ProtocolOutput.wide (value x)) xs
+'R1Z.ProverRw21SequenceImage.image' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRw21SequenceImage.encoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.62
+	Maximum resident set size (kbytes): 4291724
+	Swaps: 0
+	Exit status: 1

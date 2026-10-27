@@ -1,0 +1,36 @@
+import R1Z.ProverRw21EncodedStep
+import R1Z.ProverRw21EncodedBounds
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw21EncodedOutput
+open Aeneas Aeneas.Std ProverRw21EncodedStep
+
+def output (values : Slice W) (out : alloc.vec.Vec U8) (i : Usize)
+    (bound : out.length+32*(values.length-i.val)≤Usize.max) : alloc.vec.Vec U8 :=
+  ⟨out.val++ProverRw21FlatSequence.bytes (values.val.drop i.val),by
+    simpa only [List.length_append,ProverRw21FlatSequence.length,List.length_drop] using bound⟩
+
+theorem value (values : Slice W) (out : alloc.vec.Vec U8) (i : Usize)
+    (bound : out.length+32*(values.length-i.val)≤Usize.max) :
+    (output values out i bound).val = out.val++ProverRw21FlatSequence.bytes (values.val.drop i.val) := rfl
+
+theorem appended_length (values : Slice W) (out : alloc.vec.Vec U8) (i : Usize)
+    (h : i.val<values.val.length) (bound : out.length+32≤Usize.max) :
+    (appended values out i h bound).length=out.length+32 := by
+  simp only [appended,ProverRw21VecAppend.append,alloc.vec.Vec.length,Slice.length,List.length_append,
+    Array.to_slice,ProverRw21FlatOutput.output,ProverRw21FlatOutput.length]
+
+theorem next_capacity (values : Slice W) (out : alloc.vec.Vec U8) (i : Usize)
+    (h : i.val<values.val.length)
+    (bound : out.length+32*(values.length-i.val)≤Usize.max) :
+    (appended values out i h (ProverRw21EncodedBounds.step_capacity values out i h bound)).length+
+      32*(values.length-(Usize.wrapping_add i 1#usize).val)≤Usize.max := by
+  rw [appended_length,ProverRw21EncodedBounds.successor values i h]
+  have count := ProverRw21EncodedBounds.remaining values.length i.val h
+  omega
+
+#print axioms output
+#print axioms value
+#print axioms appended_length
+#print axioms next_capacity
+end R1Z.ProverRw21EncodedOutput

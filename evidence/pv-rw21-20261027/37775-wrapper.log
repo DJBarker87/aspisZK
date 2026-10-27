@@ -1,0 +1,48 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0219); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21VecAppend.lean:7:26: error(lean.unknownIdentifier): Unknown identifier `spec_imp_exists`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21VecAppend.lean:7:7: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21VecAppend.lean:9:6: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21VecAppend.lean:20:2: error: Tactic `rfl` failed: The left-hand side
+  if h : True then
+    match h' : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) s with
+    | ok s' => ok ⟨↑out ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+is not definitionally equal to the right-hand side
+  ok (append out s bound)
+
+out : alloc.vec.Vec U8
+s : Slice U8
+bound : out.length + s.length ≤ Usize.max
+⊢ (if h : True then
+      match h' : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) s with
+      | ok s' => ok ⟨↑out ++ ↑s', ⋯⟩
+      | fail e => fail e
+      | div => div
+    else fail Error.panic) =
+    ok (append out s bound)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21VecAppend.lean:19:51: warning: This simp argument is unused:
+  if_pos
+
+Hint: Omit it from the simp argument list.
+  simp only [alloc.vec.Vec.extend_from_slice, ̲bound,i̵f̵_̵p̵o̵s̵,̵ ̲clone_bytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRw21VecAppend.lean:19:58: warning: This simp argument is unused:
+  clone_bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵e̵x̵t̵e̵n̵d̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵b̵o̵u̵n̵d̵,̵i̵f̵_̵p̵o̵s̵,̵c̵l̵o̵n̵e̵_̵b̵y̵t̵e̵s̵]̵[̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲e̲x̲t̲e̲n̲d̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲b̲o̲u̲n̲d̲,̲ ̲i̲f̲_̲p̲o̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRw21VecAppend.clone_bytes' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverRw21VecAppend.append' depends on axioms: [propext]
+'R1Z.ProverRw21VecAppend.exact_append' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.13
+	Maximum resident set size (kbytes): 2618172
+	Swaps: 0
+	Exit status: 1
