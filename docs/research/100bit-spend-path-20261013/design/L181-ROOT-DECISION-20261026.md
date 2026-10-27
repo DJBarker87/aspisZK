@@ -104,3 +104,8 @@ The adoption question is unaffected in form, but note that neither
 Rc10_Top nor ARX_Root is yet shown to be about the frozen release extraction
 of PublicPreparation (eight source cuts differ textually from the release
 pin); extraction-repro1 is resolving this.
+
+## Note 2026-10-27 (D188-P2)
+See design/D188-PROVENANCE-FINDING-20261027.md: both Rc10_Top and ARX_Root
+carry the same qualification at the semantic-prefix/preparation boundary.
+The adoption decision between them is unaffected.
