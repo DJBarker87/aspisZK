@@ -11923,3 +11923,28 @@ run the plan exactly, per-kernel |t| and verdicts ("no difference detected at th
 proof of absence; a detected difference is reported as a finding), evidence RESULTS.md. Five live slots:
 route2b, batch1b, runjoin17, dict2, dudect-run. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D291 (Stream B) 2026-10-27 14:25 UTC: Drop-free route (ii) is accepted by the unchanged extractor; the extraction-strategy question is resolved inside D187 (no toolchain change); batch 2 launched
+
+pv-route2b (`codex/pv-route2-20261027`, final 0fa3ed6b3b; 17/60 Lean = 15 passed / 2 rejected artifacts,
+no Kani; no crates/programs/pinned-tool change). Drop-free prover-local variants (fixed arrays or caller
+buffers instead of Vec/Box/String, no destructor-bearing temporaries) of ALL FOUR representative Drop
+refusals extract with the UNCHANGED pinned extractor (preflight on): op252 Weights::new, op226
+Public::public_bytes, op249 gamma_sample, op134 forest mask helper; three raw emissions type-check
+directly, weights needs the documented U32 shift-literal port. The seven previously unmeasured ops: op36
+full generic Vec→Array conversion still refused on Drop, a narrowed Copy-buffer variant passes; op217
+concrete SHA-256 initialisation passes; ops 205/212/215/216/219 concrete SHA-256 variants clear the Drop
+preflight but fail internally (InterpReduceCollapse.ml:1991); every SHA measurement narrows the generic
+quantifier, so no generic digest row is discharged. Batch source floors: batch 1 56 line-change events,
+batch 2 (sampler/weights) 127 probe lines, batch 3 (shared semantic closure) 106 probe lines; array sizes,
+caller changes, allocation/copy risks and the timing gates are in design/PV-ROUTE2-20261027.md. LEAD
+CONCLUSION: the destructor limitation is a code-shape problem solvable under the owner-approved prover
+rewrite route D187 without changing the extraction toolchain behind the D188 trust item; the owner-packet
+item "extraction strategy beyond Drop" becomes information, not a decision request, EXCEPT the SHA-2
+wrappers, which stay with the SHA-NI decision. The binding constraint is timing: about +4% headroom
+remains (D289). Launched pv-batch2 (`codex/pv-batch2-20261027` from candidate 73070ddd51, reusing the
+pv-canon worktree): ops 249-253 as prover-local Drop-free copies behind the prover feature (ruling (l):
+weights and the sampler are compiled into the default release ELF, nothing in place), gate (a), an
+indicative timing pre-check that stops the batch above +3%, extraction, source laws, copy-equals-original
+proofs, the fixture gate. Five live slots: batch1b, runjoin17, dict2, dudect-run, batch2. Rows removed
+outright: 0. Privacy target not yet established.
