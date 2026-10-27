@@ -344,3 +344,15 @@ wallet or key was changed. [CIa validation and receipt](../evidence/contract-inv
 record source hashes and checks. Commits are local; no push or merge.
 The next deliverable is the owner's explicit inventory/D188/ARX decision and
 the remaining association proofs, not a release-completion claim.
+
+## Status note (lead, 2026-10-27 15:30 UTC): D188 contradicted for one body
+
+Finding D188-P3 (docs/research/100bit-spend-path-20261013/design/
+D188-PROVENANCE-FINDING-20261027.md) shows the pinned emission of
+`sampler::low_base_p_digits` drops a write the frozen Rust performs. The D188
+row does not credit that body. Credit for multiproof::verify_in_place,
+verifier::update_residue_row, sampler::add_small_base_p and
+BatchedWeights::finish is suspended pending per-function checks. Repair route:
+owner decision, D188-FIDELITY-DECISION-20261027.md (recommended: narrow D188
+and bridge those bodies natively as opaque leaves). The inventory text above is
+otherwise unchanged.

@@ -202,3 +202,54 @@ P6 bridges (leaf-p6-1, and prepared_claim/checkpoint) and the adapters
 emitted release definitions on the same carriers (projection/transport laws
 where the cohort followed the retired path). extraction-assoc6 (XRn_)
 restates the rows under this scope and proves them in order.
+
+## Finding D188-P3 (lead, 2026-10-27 15:30 UTC): the pinned emission drops a write the frozen Rust performs
+
+Source: evidence/sampler-diag-20261027/SDX_FINDING.md (SDX_, merged
+bebf19df06), building on XRp_LowSamplerObstruction.all_blocks_law_false.
+
+The frozen Rust `sampler::low_base_p_digits`
+(crates/aspis-r1-cost-probe/src/sampler.rs:56, revision 4bb3b3f5...) assigns
+each long-division quotient back through `*limb` (line 63). The pinned
+Charon/Aeneas emission of that body does not. Declaration
+`sampler.low_base_p_digits.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut_loop.body`
+is at line 3599 of the raw release-kit Funs
+(evidence/extraction-assoc2-20261027/XRj_L013/sources/XRj_generated/XRh_Release/Funs.lean,
+SHA256 f4b2d17c...a3b5). At line 3624 it binds `let (o, iter1, next_back, _)`,
+discards the mutable restoration callback, and passes the computed quotient to
+no write-back. The worker-assembled XRn_ kit carries a byte-identical loop body
+(up to one callee name), so the loss precedes any worker adaptation. Measured:
+
+| Block | frozen Rust (native, release, frozen lock) | cohort AspisR1Post25Sampler | XRn_ kit emission |
+|---|---|---|---|
+| P | [0,1,0,0,0,0,0,0], 0 | same | [0,...,0], 2147483647 |
+| zero | [0,...,0], 0 | same | same |
+| P+1 | [1,1,0,...,0], 0 | same | [1,...,1], 2147483648 |
+| 32 x ff | [255,2048,7168,14336,17920,14336,7168,2048], 256 | same | [255 x 8], 4294967295 |
+
+The raw release kit does not elaborate on its own either: XRj_L013 logs
+mismatched mutable Iterator/FnMut and from_fn signatures. Its externals are
+templates, not part of the trust inventory.
+
+Consequence: D188 as adopted 2026-10-27 states that the pinned translation of
+the release source is the semantics of each translated shipped body, at Result
+and attempted-digest-trace fidelity. That is FALSE for this body. The claim is
+corrected here. D188 cannot credit `low_base_p_digits`.
+
+Four further shipped functions use the same mutable-iterator restoration family
+in the same emitted Funs, so D188 credit for them is SUSPENDED pending a
+per-function check:
+- multiproof::verify_in_place
+- verifier::update_residue_row
+- sampler::add_small_base_p
+- verifier::BatchedWeights::finish
+
+No other mutable `IterMut.rev` caller and no other captured-mutation from_fn
+site exists in that Funs (SDX_ Q4).
+
+What is NOT affected: the adopted soundness theorems are about the cohort
+models, and on these four blocks the cohort sampler agrees with the native
+Rust. No shipped-Rust defect is claimed; the deployed code computes the
+documented digits. What is missing is the correspondence D188 was meant to
+supply for this function. The release target and contract are unchanged. The
+repair route is an owner decision (D188-FIDELITY-DECISION-20261027.md).
