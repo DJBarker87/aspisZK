@@ -6,7 +6,7 @@ Both requested git merges completed without conflicts. New modules only, prefix 
 
 Recount 3 has 26 source-law rows and V270, an audit diagnostic without a closing operation theorem. V270 cannot be made an operation application.
 
-The new consumer selects current exact callback laws on the existing P6 aggregate baseline and retains the complete data equation and reservation premise. The historical aggregate statement remains published unchanged. A source-law bundle exposes every selected-operation equation and is paired with the refinement by the combined consumer theorem, so proof reachability is checked independently of import reachability.
+The new consumer selects current exact callback laws on the existing P6 aggregate baseline and retains the complete data equation and reservation premise. The historical aggregate statement remains published unchanged. Each selected-operation equation supplies a callback function equality. The dictionary theorem applies all these equalities, and the aggregate caller rewrites through that dictionary before applying the reservation/data criterion. Proof reachability is checked independently of import reachability.
 
 ## Neither rows
 
