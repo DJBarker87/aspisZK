@@ -1,0 +1,5 @@
+import R1Z.ProverRw19CanonicalAuditRefinement
+set_option pp.proofs false
+#check R1Z.ProverRw19CanonicalAuditRefinement.refinement
+#print R1Z.ProverRw19CanonicalAuditRefinement.refinement
+#print axioms R1Z.ProverRw19CanonicalAuditRefinement.refinement
