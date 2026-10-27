@@ -20,6 +20,8 @@ elif sys.argv[1]=='batches':
  (E/'RPz8_audit-groups.json').write_text(json.dumps(groups,indent=2)+'\n')
  for i,ms in enumerate(groups):
   module=f'RPz8_AuditBatch{i+1:02d}'
+  prior=next((d for d in receipts() if d['module']==module),None)
+  if prior and prior['exit_status']!=0:module+='Fixed'
   if any(d['module']==module for d in receipts()):continue
   t=(E/'RPz8_audit-template.txt').read_text().replace('@@IMPORTS@@','\n'.join('import '+m for m in ms)).replace('@@SELECTED@@','#[ '+', '.join('`'+m for m in ms)+' ]');src=E/(module+'.lean');src.write_text(t)
   a=next_attempt();assert a<=1500;d=run(f'RPz8_{a:03d}',module,src,['Init','Lean']+ms)
