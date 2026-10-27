@@ -50,6 +50,27 @@ fn transfer_dynamic() {compare_mode(true,true);}
 #[kani::unwind(25)]
 fn withdrawal_dynamic() {compare_mode(false,true);}
 '''
+# Keep the same exact fixture data and compare every scalar explicitly. Aggregate
+# Rust PartialEq lowers to memcmp (up to768 bytes), outside prior25/33 bounds.
+start=text.index('fn compare_mode(');split=text.index(' let (w,p)=records(')
+setup=text[start:split].replace('fn compare_mode(transfer: bool, dynamic_roots: bool) {','fn fixture(transfer: bool) -> (PoolV1PairForestInputNoteWitnessV1,u32,Option<PoolV1OutputNoteWitnessV1>,PoolV1OutputNoteWitnessV1,PoolV1PairLiveSnapshotV1) {')
+setup+=' (input,out,rec,chg,snap)\n}\n'
+text=text[:start]+setup+'fn compare_mode(transfer: bool, dynamic_roots: bool) {\n let (input,out,rec,chg,snap)=fixture(transfer);\n'+text[split:]
+text+='''fn compare_pointwise(transfer: bool, dynamic_roots: bool) {
+ let (input,out,rec,chg,snap)=fixture(transfer);
+ let (w,p)=records(&input,out,rec.as_ref(),&chg,&snap,M31(77));
+ let expected_roots=if dynamic_roots {pair_empty_roots()}else{EMPTY};
+ let (v,q)=super::super::records_reference::records_reference_with_roots(input,out,rec,chg,snap,M31(77),expected_roots);
+'''
+for field in ['input_value','output_value','change_value','pair_occupied','pair_inverse']:text+=f' assert_eq!(w.{field},v.{field});\n'
+for field in ['sk','salt','pair_first','pair_second','recipient_owner','recipient_salt','change_owner','change_salt']:text+=f' for lane in 0..8 {{assert_eq!(w.{field}[lane],v.{field}[lane]);}}\n'
+text+=' for level in 0..24 {assert_eq!(w.bits[level],v.bits[level]);for lane in 0..8 {assert_eq!(w.sibs[level][lane],v.sibs[level][lane]);}}\n'
+for field in ['transfer','asset','next_pair_index']:text+=f' assert_eq!(p.{field},q.{field});\n'
+for field in ['frontier','empty']:text+=f' for level in 0..20 {{for lane in 0..8 {{assert_eq!(p.{field}[level][lane],q.{field}[level][lane]);}}}}\n'
+text+='}\n'
+for variant in ['transfer','withdrawal']:
+ for root_mode in ['dynamic','fixed']:
+  text+=f'#[kani::proof]\n#[kani::unwind(25)]\nfn {variant}_pointwise_{root_mode}() {{compare_pointwise({str(variant=="transfer").lower()},{str(root_mode=="dynamic").lower()});}}\n'
 dst=R/'tools/r1-builder-reference/pv_runjoin12_exact.rs'
 if '--check' in sys.argv:assert dst.read_text()==text
 else:dst.write_text(text)

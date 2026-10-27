@@ -23,7 +23,7 @@ const EMPTY: [Digest;21] = [
 [M31(1519171444), M31(1235587172), M31(1671492368), M31(1449613582), M31(547369941), M31(1621086153), M31(266860322), M31(450526803)],
 [M31(19381883), M31(1308966873), M31(251977766), M31(474343397), M31(2069732268), M31(1863820229), M31(152153379), M31(665567443)],
 [M31(1201428963), M31(1296676114), M31(441891487), M31(1910121140), M31(602621674), M31(1294160489), M31(1878016864), M31(855887413)]];
-fn compare_mode(transfer: bool, dynamic_roots: bool) {
+fn fixture(transfer: bool) -> (PoolV1PairForestInputNoteWitnessV1,u32,Option<PoolV1OutputNoteWitnessV1>,PoolV1OutputNoteWitnessV1,PoolV1PairLiveSnapshotV1) {
  let input=PoolV1PairForestInputNoteWitnessV1 {
   pair: PoolV1PairInputNoteWitnessV1 {
 nullifier_key:[M31(11), M31(28), M31(45), M31(62), M31(79), M31(96), M31(113), M31(130)],salt:[M31(101), M31(118), M31(135), M31(152), M31(169), M31(186), M31(203), M31(220)],value:1000,
@@ -75,6 +75,10 @@ selected_second:false,membership:PoolV1MembershipWitnessV1 {siblings:[
 [M31(1519171444), M31(1235587172), M31(1671492368), M31(1449613582), M31(547369941), M31(1621086153), M31(266860322), M31(450526803)],
 [M31(19381883), M31(1308966873), M31(251977766), M31(474343397), M31(2069732268), M31(1863820229), M31(152153379), M31(665567443)]]};
  let out=if transfer {600}else{250};
+ (input,out,rec,chg,snap)
+}
+fn compare_mode(transfer: bool, dynamic_roots: bool) {
+ let (input,out,rec,chg,snap)=fixture(transfer);
  let (w,p)=records(&input,out,rec.as_ref(),&chg,&snap,M31(77));
  let expected_roots=if dynamic_roots {pair_empty_roots()}else{EMPTY};
  let (v,q)=super::super::records_reference::records_reference_with_roots(input,out,rec,chg,snap,M31(77),expected_roots);
@@ -118,3 +122,40 @@ fn transfer_dynamic() {compare_mode(true,true);}
 #[kani::proof]
 #[kani::unwind(25)]
 fn withdrawal_dynamic() {compare_mode(false,true);}
+fn compare_pointwise(transfer: bool, dynamic_roots: bool) {
+ let (input,out,rec,chg,snap)=fixture(transfer);
+ let (w,p)=records(&input,out,rec.as_ref(),&chg,&snap,M31(77));
+ let expected_roots=if dynamic_roots {pair_empty_roots()}else{EMPTY};
+ let (v,q)=super::super::records_reference::records_reference_with_roots(input,out,rec,chg,snap,M31(77),expected_roots);
+ assert_eq!(w.input_value,v.input_value);
+ assert_eq!(w.output_value,v.output_value);
+ assert_eq!(w.change_value,v.change_value);
+ assert_eq!(w.pair_occupied,v.pair_occupied);
+ assert_eq!(w.pair_inverse,v.pair_inverse);
+ for lane in 0..8 {assert_eq!(w.sk[lane],v.sk[lane]);}
+ for lane in 0..8 {assert_eq!(w.salt[lane],v.salt[lane]);}
+ for lane in 0..8 {assert_eq!(w.pair_first[lane],v.pair_first[lane]);}
+ for lane in 0..8 {assert_eq!(w.pair_second[lane],v.pair_second[lane]);}
+ for lane in 0..8 {assert_eq!(w.recipient_owner[lane],v.recipient_owner[lane]);}
+ for lane in 0..8 {assert_eq!(w.recipient_salt[lane],v.recipient_salt[lane]);}
+ for lane in 0..8 {assert_eq!(w.change_owner[lane],v.change_owner[lane]);}
+ for lane in 0..8 {assert_eq!(w.change_salt[lane],v.change_salt[lane]);}
+ for level in 0..24 {assert_eq!(w.bits[level],v.bits[level]);for lane in 0..8 {assert_eq!(w.sibs[level][lane],v.sibs[level][lane]);}}
+ assert_eq!(p.transfer,q.transfer);
+ assert_eq!(p.asset,q.asset);
+ assert_eq!(p.next_pair_index,q.next_pair_index);
+ for level in 0..20 {for lane in 0..8 {assert_eq!(p.frontier[level][lane],q.frontier[level][lane]);}}
+ for level in 0..20 {for lane in 0..8 {assert_eq!(p.empty[level][lane],q.empty[level][lane]);}}
+}
+#[kani::proof]
+#[kani::unwind(25)]
+fn transfer_pointwise_dynamic() {compare_pointwise(true,true);}
+#[kani::proof]
+#[kani::unwind(25)]
+fn transfer_pointwise_fixed() {compare_pointwise(true,false);}
+#[kani::proof]
+#[kani::unwind(25)]
+fn withdrawal_pointwise_dynamic() {compare_pointwise(false,true);}
+#[kani::proof]
+#[kani::unwind(25)]
+fn withdrawal_pointwise_fixed() {compare_pointwise(false,false);}

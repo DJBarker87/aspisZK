@@ -25,7 +25,7 @@ with (out/'out.log').open('w') as log:
   time.sleep(.1)
 wall=time.monotonic()-started;u=resource.getrusage(resource.RUSAGE_CHILDREN)
 peak=int((cgroup/'memory.peak').read_text());swap=(cgroup/'memory.swap.peak').read_text().strip() if (cgroup/'memory.swap.peak').exists() else None
-files=['Cargo.lock','crates/aspis-statement/Cargo.toml','crates/aspis-statement/src/pool_v1/pair_trace.rs','crates/aspis-statement/src/pool_v1/pair_trace_pv_runjoin8_roots.rs','crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal_constants.rs','crates/aspis-statement/src/pool_v1/format.rs','crates/aspis-statement/src/poseidon2.rs','crates/aspis-core/src/field.rs']
+files=['tools/r1-builder-reference/records_reference.rs','crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs','Cargo.lock','crates/aspis-statement/Cargo.toml','crates/aspis-statement/src/pool_v1/pair_trace.rs','crates/aspis-statement/src/pool_v1/pair_trace_pv_runjoin8_roots.rs','crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal_constants.rs','crates/aspis-statement/src/pool_v1/format.rs','crates/aspis-statement/src/poseidon2.rs','crates/aspis-core/src/field.rs']
 pins={p:hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() for p in files}
 record=dict(target=command,exit=r.returncode,wall_seconds=wall,peak_rss_bytes=peak_rss,rusage_child_rss_max_bytes=u.ru_maxrss*1024,cgroup_peak_bytes=peak,swaps=u.ru_nswap,scope_swap_peak_bytes=swap,controls=controls,cgroup=str(cgroup),expected_time=expected,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_sha256=pins,axioms='N/A: Kani source verification',stubs=[])
 removed=[]

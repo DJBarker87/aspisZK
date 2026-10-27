@@ -75,3 +75,8 @@ pub(super) fn records_reference_with_roots(input: PoolV1PairForestInputNoteWitne
 fn raw_owned(d: Digest) -> [u32; 8] {
     [d[0].0, d[1].0, d[2].0, d[3].0, d[4].0, d[5].0, d[6].0, d[7].0]
 }
+
+// Extraction adapter calls shipped records; it does not reimplement the mapper.
+#[cfg(aeneas_ref)]
+#[path = "pv_runjoin12_shipped.rs"]
+pub(super) mod pv_runjoin12_shipped;
