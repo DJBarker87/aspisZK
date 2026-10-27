@@ -4,11 +4,14 @@ noncomputable section
 namespace AspisR1.FJn_InstallationSeparation
 open Aeneas Aeneas.Std Result DrvC_Installation
 abbrev MQ:=FIp_SemanticArithmetic.MQ
+def one : MQ := FIq_Carriers.fromQ FIq_Native.field.QM31.ONE
 /-- Only the two tiny literal carrier values are inspected. -/
 theorem zero_ne_one : AspisR1PublicPreparation.aspis_core.field.QM31.ZERO≠
-    AspisR1PublicPreparation.aspis_core.field.QM31.ONE := by
+    one := by
   intro same
   have h:=congrArg (fun q : MQ=>q.c0.a.val) same
+  unfold one FIq_Carriers.fromQ FIq_Native.field.QM31.ONE
+    AspisR1PublicPreparation.aspis_core.field.QM31.ZERO at h
   change 0=1 at h
   omega
 /-- An arbitrary Configuration does not imply fixed-terminal installation.
@@ -21,7 +24,7 @@ theorem not_uniform {C : Type} (err : C) (c : Configuration FIo_Install.W C)
       (FIp_Install.configuration err chosen r).boundaries.terminal≠FIq_Terminal.terminal := by
   classical
   let z:=AspisR1PublicPreparation.aspis_core.field.QM31.ZERO
-  let o:=AspisR1PublicPreparation.aspis_core.field.QM31.ONE
+  let o:=one
   by_cases hz : FIq_Terminal.terminal pub claims alpha challenges=ok (.Ok z)
   · refine ⟨{c with boundaries:={c.boundaries with terminal:=fun _ _ _ _=>ok (.Ok o)}},?_⟩
     intro same

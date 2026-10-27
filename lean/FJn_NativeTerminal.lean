@@ -29,8 +29,10 @@ theorem value (pub : pool_v1.pair_forest_semantic_terminal.r0.Public)
   obtain ⟨selected,sem,c1,mask,g,gather,semantic,parts⟩:=FIq_TerminalParts.reached pub claims alpha c out run
   have cc:=FIr_GatherCanonical.gathered claims selected hc gather
   have back : FIq_Carriers.toPublic (FIq_Carriers.fromPublic pub)=pub := by cases pub <;> rfl
+  have constructed:=FJa_PublicCopy.on_statement (FIq_Carriers.fromPublic pub)
+  rw [back] at constructed
   have same : sem=FJa_PublicCopy.native (FIq_Carriers.fromPublic pub) :=
-    Result.ok.inj (semantic.symm.trans (by rw [←back];exact FJa_PublicCopy.on_statement _))
+    Result.ok.inj (semantic.symm.trans constructed)
   subst sem
   have got:=FJn_TerminalModel.value _ selected alpha c.zc c.lambda c.chi c.theta c.mu out c1 mask g
     cc ha hz hl hchi ht hm bounds parts

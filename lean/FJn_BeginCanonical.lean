@@ -16,7 +16,7 @@ theorem value {H : Type} (D : aspis_core.Digest32 H) (pre : r1_wire.Prefix)
   intro x mem
   obtain ⟨i,hi,hx⟩:=List.mem_iff_getElem.mp mem
   rw [←hx]
-  exact hz ⟨i,by simpa only [c.zc.property] using hi⟩
+  exact hz ⟨i,by have len : c.zc.val.length=10:=c.zc.property;omega⟩
 #print axioms value
 end AspisR1.FJn_BeginCanonical
 end
