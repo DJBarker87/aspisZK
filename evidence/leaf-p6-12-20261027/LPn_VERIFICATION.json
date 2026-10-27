@@ -1,36 +1,36 @@
 {
   "errors": [],
   "budget": {
-    "lean_used": 60,
+    "lean_used": 67,
     "lean_limit": 80,
-    "kani_used": 10,
+    "kani_used": 12,
     "kani_limit": 30,
     "exhausted": false
   },
   "summary": {
     "L": {
-      "attempts": 60,
+      "attempts": 67,
       "statuses": {
         "FAILED_PROOF": 5,
-        "PASS": 55
+        "PASS": 62
       },
-      "wall_seconds": 78.26285381690832,
+      "wall_seconds": 87.12906506896252,
       "peak_rss_kib": 2714452,
       "swaps": 0
     },
     "K": {
-      "attempts": 10,
+      "attempts": 12,
       "statuses": {
         "FAILED": 1,
-        "PASS": 9
+        "PASS": 11
       },
-      "wall_seconds": 55.86007768509444,
-      "peak_rss_kib": 1015476,
+      "wall_seconds": 89.71689369907835,
+      "peak_rss_kib": 1108904,
       "swaps": 0
     }
   },
-  "native_input_hashes_reconstructed": 388,
-  "accepted_printed_names": 153,
+  "native_input_hashes_reconstructed": 468,
+  "accepted_printed_names": 177,
   "axioms": {
     "LPl_G.window_contained": "'LPl_G.window_contained' does not depend on any axioms",
     "LPl_G.scan928": "'LPl_G.scan928' depends on axioms: [propext, Quot.sound]",
@@ -184,7 +184,31 @@
     "LPn.Decode.arithmetic_error": "'LPn.Decode.arithmetic_error' depends on axioms: [propext, Classical.choice, Quot.sound]",
     "LPn.Decode.range_error": "'LPn.Decode.range_error' depends on axioms: [propext, Classical.choice, Quot.sound]",
     "LPn.Decode.error_bound": "'LPn.Decode.error_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
-    "LPn.Decode.token_unique": "'LPn.Decode.token_unique' depends on axioms: [propext, Classical.choice, Quot.sound]"
+    "LPn.Decode.token_unique": "'LPn.Decode.token_unique' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.stagesM_fold": "'LPn.stagesM_fold' depends on axioms: [propext, Quot.sound]",
+    "LPn.walkM_fold": "'LPn.walkM_fold' depends on axioms: [propext, Quot.sound]",
+    "LPn.ClaimsModel.loop_eq_fold": "'LPn.ClaimsModel.loop_eq_fold' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.ClaimsModel.leaf_call_order": "'LPn.ClaimsModel.leaf_call_order' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.ClaimsModel.fromRecord_spec": "'LPn.ClaimsModel.fromRecord_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.ClaimsModel.leaf_eq_loop": "'LPn.ClaimsModel.leaf_eq_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.step_eq": "'LPn.Claims.step_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.stages_eq": "'LPn.Claims.stages_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.success_length": "'LPn.Claims.success_length' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.from_record": "'LPn.Claims.from_record' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.prefix_result": "'LPn.Claims.prefix_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.allocated_result": "'LPn.Claims.allocated_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.accepted_to_cohort": "'LPn.Claims.accepted_to_cohort' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.bound25": "'LPn.Claims.bound25' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.read25": "'LPn.Claims.read25' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.native_result": "'LPn.Claims.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.native_success": "'LPn.Claims.native_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.native_error": "'LPn.Claims.native_error' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.allocation_rejection": "'LPn.Claims.allocation_rejection' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.point_domain": "'LPn.Claims.point_domain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.decode_total": "'LPn.Claims.decode_total' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.offset_value": "'LPn.Claims.offset_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.point_ready": "'LPn.Claims.point_ready' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "LPn.Claims.total": "'LPn.Claims.total' depends on axioms: [propext, Classical.choice, Quot.sound]"
   },
   "scope_policy": {
     "limits": "6G high/8G max/swap0/tasks64; Lean-M7000; optimized offline Rust",
@@ -193,9 +217,10 @@
   },
   "closed_leaves": [
     "compact::expand_values (adopted bounded domain)",
-    "ValidatedRecord::decode_k (adopted N1/28/29)"
+    "ValidatedRecord::decode_k (adopted N1/28/29)",
+    "r1_semantic::claims (explicit allocation partition; accepted cohort transport)"
   ],
-  "first_open_leaf": "r1_semantic::claims: three Box writes/ownership/cleanup/SAME Prefix association",
+  "first_open_leaf": "canonical::Dot::push: raw/Dot carrier and state/Result/caller association",
   "headline": "AspisR1.RPx_Deployed.deployed",
   "headline_premises_removed": 0,
   "rows": [
@@ -740,6 +765,69 @@
       "revision": "7b9dbe8f519b9835f6fe4e39b30b0bb3e9df4d51"
     },
     {
+      "attempt": "LPn_L061",
+      "status": "PASS",
+      "exit": 0,
+      "wall_seconds": 1.3759999119793065,
+      "peak_rss_kib": 2646728,
+      "swaps": 0,
+      "revision": "a545162ea63032ddcd78a4ea0decc356f1035106"
+    },
+    {
+      "attempt": "LPn_L062",
+      "status": "PASS",
+      "exit": 0,
+      "wall_seconds": 1.1330215960042551,
+      "peak_rss_kib": 2640508,
+      "swaps": 0,
+      "revision": "a545162ea63032ddcd78a4ea0decc356f1035106"
+    },
+    {
+      "attempt": "LPn_L063",
+      "status": "PASS",
+      "exit": 0,
+      "wall_seconds": 1.1696732440032065,
+      "peak_rss_kib": 2642780,
+      "swaps": 0,
+      "revision": "a545162ea63032ddcd78a4ea0decc356f1035106"
+    },
+    {
+      "attempt": "LPn_L064",
+      "status": "PASS",
+      "exit": 0,
+      "wall_seconds": 1.2744674410205334,
+      "peak_rss_kib": 2647440,
+      "swaps": 0,
+      "revision": "a545162ea63032ddcd78a4ea0decc356f1035106"
+    },
+    {
+      "attempt": "LPn_L065",
+      "status": "PASS",
+      "exit": 0,
+      "wall_seconds": 1.3395287120365538,
+      "peak_rss_kib": 2647036,
+      "swaps": 0,
+      "revision": "a545162ea63032ddcd78a4ea0decc356f1035106"
+    },
+    {
+      "attempt": "LPn_L066",
+      "status": "PASS",
+      "exit": 0,
+      "wall_seconds": 1.2252753560314886,
+      "peak_rss_kib": 2652356,
+      "swaps": 0,
+      "revision": "a545162ea63032ddcd78a4ea0decc356f1035106"
+    },
+    {
+      "attempt": "LPn_L067",
+      "status": "PASS",
+      "exit": 0,
+      "wall_seconds": 1.3482449909788556,
+      "peak_rss_kib": 2657708,
+      "swaps": 0,
+      "revision": "a545162ea63032ddcd78a4ea0decc356f1035106"
+    },
+    {
       "attempt": "LPn_K001",
       "status": "PASS",
       "exit": 0,
@@ -828,6 +916,24 @@
       "peak_rss_kib": 401776,
       "swaps": 0,
       "revision": "7b9dbe8f519b9835f6fe4e39b30b0bb3e9df4d51"
+    },
+    {
+      "attempt": "LPn_K011",
+      "status": "PASS",
+      "exit": 0,
+      "wall_seconds": 30.33392363699386,
+      "peak_rss_kib": 1108904,
+      "swaps": 0,
+      "revision": "a545162ea63032ddcd78a4ea0decc356f1035106"
+    },
+    {
+      "attempt": "LPn_K012",
+      "status": "PASS",
+      "exit": 0,
+      "wall_seconds": 3.5228923769900575,
+      "peak_rss_kib": 398292,
+      "swaps": 0,
+      "revision": "a545162ea63032ddcd78a4ea0decc356f1035106"
     }
   ]
 }

@@ -13,7 +13,7 @@ code=f'''from pathlib import Path
 import difflib,json,hashlib
 B=Path('{B}');base=Path('/home/dombarker/project-offloads/codex-cx-leaf-p6-10-20261027/LPl_src');scratch=B/'LPn_src'
 for harness in (scratch/'crates/aspis-r1-cost-probe/src').glob('LPn_*.rs'):
- parent=scratch/'crates/aspis-r1-cost-probe/src'/('verifier.rs' if harness.stem=='LPn_echeck' else 'r1_wire.rs' if harness.stem in ['LPn_validate','LPn_decode'] else 'compact.rs')
+ parent=scratch/'crates/aspis-r1-cost-probe/src'/('verifier.rs' if harness.stem=='LPn_echeck' else 'r1_wire.rs' if harness.stem in ['LPn_validate','LPn_decode'] else 'r1_semantic.rs' if harness.stem=='LPn_claims' else 'compact.rs')
  if ('mod '+harness.stem) not in parent.read_text():parent.write_text(parent.read_text()+'\\n#[cfg(kani)] mod '+harness.stem+' {{ include!("'+harness.name+'"); }}\\n')
 a={{str(p.relative_to(base)):p for p in base.rglob('*') if p.is_file()}}
 b={{str(p.relative_to(scratch)):p for p in scratch.rglob('*') if p.is_file()}}

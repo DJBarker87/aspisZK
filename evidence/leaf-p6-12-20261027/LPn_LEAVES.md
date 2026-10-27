@@ -8,7 +8,7 @@ narrowed D188 unchanged. S2/100-bit target not yet established.
 |---|---|
 | compact::expand_values | CLOSED on all adopted source lengths0..1856/output lengths0..3712 and arbitrary bytes, including both length errors. K001/K002, L044/L045, inherited LPl_K012 and LPl frame/output/Result induction. Exact P6 limits in LPn_expand_values_LEAF.md. |
 | ValidatedRecord::decode_k | CLOSED on N=1/28/29, every bounded framing≥5, all row/offset bytes including overflow and first-error paths. K003/K005/K006/K008/K009/K010; L054/L057/L059/L060. LPn_decode_k_LEAF.md. |
-| r1_semantic::claims | OPEN inherited: decoder association, three Box writes/ownership/cleanup/SAME Prefix; not started. |
+| r1_semantic::claims | CLOSED on genuine adopted Prefix row25, all data/error prefixes; explicit allocation rejection and accepted-to-cohort transport. K011/K012; L065–L067. LPn_claims_LEAF.md states allocation/unsafe/ownership limits. |
 | canonical::Dot::push | OPEN inherited: raw/Dot carrier/Result/state and private Q producer/caller; not started. |
 | candidate::wide_view | OPEN inherited: carrier/ranges/lifetime/frame/native Slice/caller; not started. |
 | semantic_boundary | OPEN inherited: SAME decoded array/model polynomial/token/caller; not started. |

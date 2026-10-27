@@ -1,4 +1,58 @@
 --- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/LPn_claims.rs
+@@ -0,0 +1,51 @@
++use super::*;
++fn eq_q(a:QM31,b:QM31){assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);}
++#[kani::proof] #[kani::unwind(6)]
++fn LPn_owned_step(){
++ // All bits are valid: only nested u32 products, no padding interpretation,
++ // pointers, references or enum discriminants are fabricated.
++ let raw:[u8;928]=kani::any();
++ let prior:[[QM31;29];2]=unsafe{core::mem::transmute(raw)};
++ let raw:[u8;464]=kani::any();let next:[QM31;29]=unsafe{core::mem::transmute(raw)};
++ let p:usize=kani::any();kani::assume(p<3);
++ let j:usize=kani::any();kani::assume(j<=p);
++ let lane:usize=kani::any();kani::assume(lane<29);
++ match aspis_core::r0::heap::uninit::<[[QM31;29];3]>(){
++  Err(e)=>assert_eq!(e,aspis_core::r0::Error::Allocation),
++  Ok(mut out)=>unsafe{
++   let base=out.as_mut_ptr();let dst=base.cast::<[QM31;29]>();
++   // Reachable prefix invariant. No uninitialized future slot is read.
++   if p>0{dst.write(prior[0]);}if p>1{dst.add(1).write(prior[1]);}
++   // Exactly one verbatim source iteration after the CLOSED decoder returns.
++   dst.add(p).write(next);
++   assert_eq!(out.as_mut_ptr(),base);
++   let got=(*dst.add(j))[lane];eq_q(got,if j==p{next[lane]}else{prior[j][lane]});
++   if p==2{
++    let initialized=out.assume_init();
++    assert_eq!(initialized.as_ptr(),dst);
++    eq_q(initialized[j][lane],if j==p{next[lane]}else{prior[j][lane]});
++    drop(initialized);
++   }else{drop(out);}
++  }
++ }
++}
++fn abort_after_prefix(p:usize,prior:[[QM31;29];2],row:u8,value:usize)->Result<(),Error>{
++ let mut out=aspis_core::r0::heap::uninit::<[[QM31;29];3]>().map_err(|_|Error::Allocation)?;
++ unsafe{
++  let dst=out.as_mut_ptr().cast::<[QM31;29]>();
++  if p>0{dst.write(prior[0]);}if p>1{dst.add(1).write(prior[1]);}
++  let child:Result<[QM31;29],Error>=Err(Error::NonCanonical{row,value});
++  dst.add(p).write(child?);
++ }
++ // Unreachable after the failing child; owned MaybeUninit drops on the ? arm.
++ panic!("rejecting child reached a later write")
++}
++#[kani::proof] #[kani::unwind(6)]
++fn LPn_abort(){
++ let raw:[u8;928]=kani::any();let prior:[[QM31;29];2]=unsafe{core::mem::transmute(raw)};
++ let p:usize=kani::any();kani::assume(p<3);let row:u8=kani::any();let value:usize=kani::any();kani::assume(value<116);
++ match abort_after_prefix(p,prior,row,value){
++  Err(Error::NonCanonical{row:r,value:v})=>{assert_eq!(r,row);assert_eq!(v,value);},
++  Err(Error::Allocation)=>(),_=>panic!("wrong error suffix")
++ }
++}
+--- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/LPn_decode.rs
 @@ -0,0 +1,96 @@
 +use super::*;
@@ -139,6 +193,14 @@
  #[cfg(kani)] mod LPl_expand { include!("LPl_expand.rs"); }
 +
 +#[cfg(kani)] mod LPn_expand { include!("LPn_expand.rs"); }
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -320,3 +320,5 @@
+ #[cfg(kani)]
+ #[path = "LPa_semantic.rs"]
+ mod LPa_semantic;
++
++#[cfg(kani)] mod LPn_claims { include!("LPn_claims.rs"); }
 --- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
 +++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
 @@ -860,3 +860,5 @@
