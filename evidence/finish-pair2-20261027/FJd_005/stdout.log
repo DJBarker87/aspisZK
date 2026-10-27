@@ -1,0 +1,82 @@
+FJd_SourceFactor.lean:41:31: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  x = f3 ∨ x ∈ []
+
+case refl.left.inr.inr.inr
+a b : SQ
+ha : Canon a
+hb : Canon b
+na : FIn_WeightsExtract.field.QM31
+hna : FIn_WeightsExtract.field.QM31.ONE.sub a = ok na
+nb : FIn_WeightsExtract.field.QM31
+hnb : FIn_WeightsExtract.field.QM31.ONE.sub b = ok nb
+f0 : FIn_WeightsExtract.field.QM31
+h0 : na.mul nb = ok f0
+f1 : FIn_WeightsExtract.field.QM31
+h1 : FIn_WeightsExtract.field.QM31.mul a nb = ok f1
+f2 : FIn_WeightsExtract.field.QM31
+h2 : na.mul b = ok f2
+f3 : FIn_WeightsExtract.field.QM31
+h3 : FIn_WeightsExtract.field.QM31.mul a b = ok f3
+hna' : Canon na ∧ decode na = decode FIn_WeightsExtract.field.QM31.ONE - decode a
+hnb' : Canon nb ∧ decode nb = decode FIn_WeightsExtract.field.QM31.ONE - decode b
+v0 : Canon f0 ∧ decode f0 = decode na * decode nb
+v1 : Canon f1 ∧ decode f1 = decode a * decode nb
+v2 : Canon f2 ∧ decode f2 = decode na * decode b
+v3 : Canon f3 ∧ decode f3 = decode a * decode b
+run✝⁵ :
+  (do
+      let na ← FIn_WeightsExtract.field.QM31.ONE.sub a
+      let nb ← FIn_WeightsExtract.field.QM31.ONE.sub b
+      let f0 ← na.mul nb
+      let f1 ← FIn_WeightsExtract.field.QM31.mul a nb
+      let f2 ← na.mul b
+      let f3 ← FIn_WeightsExtract.field.QM31.mul a b
+      ok [f0, f1, f2, f3]) =
+    ok [f0, f1, f2, f3]
+run✝⁴ :
+  (do
+      let nb ← FIn_WeightsExtract.field.QM31.ONE.sub b
+      let f0 ← na.mul nb
+      let f1 ← FIn_WeightsExtract.field.QM31.mul a nb
+      let f2 ← na.mul b
+      let f3 ← FIn_WeightsExtract.field.QM31.mul a b
+      ok [f0, f1, f2, f3]) =
+    ok [f0, f1, f2, f3]
+run✝³ :
+  (do
+      let f0 ← na.mul nb
+      let f1 ← FIn_WeightsExtract.field.QM31.mul a nb
+      let f2 ← na.mul b
+      let f3 ← FIn_WeightsExtract.field.QM31.mul a b
+      ok [f0, f1, f2, f3]) =
+    ok [f0, f1, f2, f3]
+run✝² :
+  (do
+      let f1 ← FIn_WeightsExtract.field.QM31.mul a nb
+      let f2 ← na.mul b
+      let f3 ← FIn_WeightsExtract.field.QM31.mul a b
+      ok [f0, f1, f2, f3]) =
+    ok [f0, f1, f2, f3]
+run✝¹ :
+  (do
+      let f2 ← na.mul b
+      let f3 ← FIn_WeightsExtract.field.QM31.mul a b
+      ok [f0, f1, f2, f3]) =
+    ok [f0, f1, f2, f3]
+run✝ :
+  (do
+      let f3 ← FIn_WeightsExtract.field.QM31.mul a b
+      ok [f0, f1, f2, f3]) =
+    ok [f0, f1, f2, f3]
+run : ok [f0, f1, f2, f3] = ok [f0, f1, f2, f3]
+x : SQ
+h✝ : x = f3 ∨ x ∈ []
+⊢ Canon x
+FJd_SourceFactor.lean:40:29: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_cons,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵] at hx
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJd_SourceFactor.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
