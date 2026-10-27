@@ -11017,3 +11017,16 @@ axiom). Privacy arguments cite D188 by that name and do not restate it. The soun
 trust surfaces are the separately adopted T (D248: three PV_RunJoin_TrustItems fields) plus V371. Route A
 (translator re-pin) was not approved. Stream A's session moved to a new address; the D248 handoffs (client
 bundle pin, Docker caps) were re-sent there. Privacy target not yet established.
+
+## D250 (Stream B) 2026-10-27 06:50 UTC: Mac disk full; five idle Stream B worktrees removed (branches kept)
+
+Creating the pv-optb/pv-inv worktrees failed with "No space left on device" (Mac data volume 99%, 8.9
+GiB free; each checkout of this repository is about 7.8 GiB). No running worker was affected (no disk
+errors in any of the six worker logs). Freed 42 GiB (now 51 GiB free) by removing the worktrees of five
+IDLE Stream B branches, each checked clean (no tracked changes, no untracked files, no process using
+them): pv-join (c3b99bc9d9), pv-l3 (3d19f820c9), pv-rebase (b7f1f3c470), cx-prover-dict (615d347232),
+cx-prover-rw (the candidate, 237e135561); all five BRANCHES are kept unchanged (none merged into research;
+the candidate stays unmerged until its adoption gates pass), and the finished rw18 local Lean cache under
+/private/tmp. A future job on any of them recreates its worktree. The option-B and inversion jobs (D248)
+create their worktrees when their slots open. Rows removed outright: 0. Privacy target not yet
+established.
