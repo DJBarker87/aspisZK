@@ -156,4 +156,3 @@ retain commands, revisions, source/dependency hashes, exit, wall, RSS, swap and
 complete axioms/errors. No shared source overwrite, local Lean, proof, Kani,
 Rust/SBF/runtime gate, full regression, key/fund operation, merge or push.
 Stop: every row re-derived and owner packet written. **Target not yet established.**
-

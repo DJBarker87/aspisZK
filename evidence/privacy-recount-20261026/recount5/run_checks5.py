@@ -7,6 +7,7 @@ receipts=json.loads((P/'receipts.json').read_text()) if (P/'receipts.json').exis
 revision=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip()
 for check in json.loads((P/'checks.json').read_text()):
  if any(r['module']==check['module'] for r in receipts):continue
+ if sum(r['compiler_invoked'] for r in receipts)>=20:break
  for retry in range(11):
   a=attempt;attempt+=1
   pre=ssh(f'python3 /home/dombarker/project-offloads/codex-cx-s2x-20261023/S2X_reservation.py {OWN}/reservation-{a}.json > {OWN}/reservation-{a}.log 2>&1; cat {OWN}/reservation-{a}.log; cat {OWN}/reservation-{a}.json')
