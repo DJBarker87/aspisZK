@@ -28,3 +28,13 @@ A7 before/after: complete narrowed hybrid/adopted TX1/finish association OPEN. T
 XRx_ValueNonvacuity.source constructs both emitted and owned successes for EVERY four-cell raw row and arbitrary terms in an explicit one-row Vec. XRx_ValueRow.source is total at EVERY bounded index of arbitrary raw Vecs. No independent successful output or accepted-query assumption is used. Reuse earlier rejected parser/observed, wrong-split, stopped-query and zero-basis row witnesses. No accepted TX1/TX2/joint headline inhabitant is claimed.
 
 Complete headline statements XRx_top_before/after.lean.txt are byte-identical; ledger-method removed0/added0/changed0, T0/P0/G0/C0. Quantifiers, carriers, failure event, adversary, metric, conclusion and trust inventory unchanged. No new absolute recount.
+
+One precise A6 next sub-equation is the full Result equality between
+`mapR (fun out => out.val.map XRx_ValueOwned.oldQ) (verifier.BatchedWeights.finish b weights)`
+and the owned finish's output-list projection, with owned initial weights made from
+`weights.val.map XRx_ValueOwned.oldQ` and raw rows exactly `b.raw` (length domain
+`weights.length ≤ b.raw.length`). Equality of these output lists must then be
+lifted back to the full Slice carrier and composed with the SAME query-prefix
+state relation; it does not by itself prove the full query trace equation.
+
+Budget exhausted100/100 Lean;79pass/21fail. Final audit L100 accepted14 new proof modules/24 printed declarations, standard axioms only. Kani0/10. No further compiler run in this round.
