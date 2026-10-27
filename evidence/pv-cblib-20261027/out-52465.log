@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_FinalizeSoftValue.lean:26:87: error: unsolved goals
+case none
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos : Usize
+hp : ↑pos < 64
+first : Std.Array U8 64#usize
+hfirst :
+  ↑first =
+    PV_CBL_PaddingModel.first ↑buffer ↑pos ↑(PV_CBL_Suffix64Value.value (PV_CBL_ShaBitLength.bitLength pos blocks))
+hbits :
+  PV_CBL_ShaBitLength.bitLength pos blocks =
+    core.num.U64.wrapping_mul 8#u64
+      (core.num.U64.wrapping_add (UScalar.cast UScalarTy.U64 pos) (core.num.U64.wrapping_mul 64#u64 blocks))
+hpad :
+  PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos
+      (PV_CBL_Suffix64Value.value
+        (core.num.U64.wrapping_mul 8#u64
+          (core.num.U64.wrapping_add (UScalar.cast UScalarTy.U64 pos) (core.num.U64.wrapping_mul 64#u64 blocks)))) =
+    ok (first, none, first, 0#usize)
+hsecond :
+  Option.map (fun a => ↑a) none =
+    PV_CBL_PaddingModel.second ↑pos ↑(PV_CBL_Suffix64Value.value (PV_CBL_ShaBitLength.bitLength pos blocks))
+⊢ (let (first, second, retained, newpos) := (first, none, first, 0#usize)
+    do
+    let next1 ←
+      match second with
+        | none => ok (PV_CBL_SoftByteSource.value state first)
+        | some block => ok (PV_CBL_SoftByteSource.value (PV_CBL_SoftByteSource.value state first) block)
+    ok (PV_CBL_DigestBytesValue.value next1, next1, retained, newpos)) =
+    ok
+      (PV_CBL_DigestBytesValue.value (PV_CBL_SoftByteSource.value state first), PV_CBL_SoftByteSource.value state first,
+        first, 0#usize)
+
+case some
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos : Usize
+hp : ↑pos < 64
+first : Std.Array U8 64#usize
+hfirst :
+  ↑first =
+    PV_CBL_PaddingModel.first ↑buffer ↑pos ↑(PV_CBL_Suffix64Value.value (PV_CBL_ShaBitLength.bitLength pos blocks))
+hbits :
+  PV_CBL_ShaBitLength.bitLength pos blocks =
+    core.num.U64.wrapping_mul 8#u64
+      (core.num.U64.wrapping_add (UScalar.cast UScalarTy.U64 pos) (core.num.U64.wrapping_mul 64#u64 blocks))
+val✝ : Std.Array U8 64#usize
+hpad :
+  PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos
+      (PV_CBL_Suffix64Value.value
+        (core.num.U64.wrapping_mul 8#u64
+          (core.num.U64.wrapping_add (UScalar.cast UScalarTy.U64 pos) (core.num.U64.wrapping_mul 64#u64 blocks)))) =
+    ok (first, some val✝, first, 0#usize)
+hsecond :
+  Option.map (fun a => ↑a) (some val✝) =
+    PV_CBL_PaddingModel.second ↑pos ↑(PV_CBL_Suffix64Value.value (PV_CBL_ShaBitLength.bitLength pos blocks))
+⊢ (let (first, second, retained, newpos) := (first, some val✝, first, 0#usize)
+    do
+    let next1 ←
+      match second with
+        | none => ok (PV_CBL_SoftByteSource.value state first)
+        | some block => ok (PV_CBL_SoftByteSource.value (PV_CBL_SoftByteSource.value state first) block)
+    ok (PV_CBL_DigestBytesValue.value next1, next1, retained, newpos)) =
+    ok
+      (PV_CBL_DigestBytesValue.value (PV_CBL_SoftByteSource.value (PV_CBL_SoftByteSource.value state first) val✝),
+        PV_CBL_SoftByteSource.value (PV_CBL_SoftByteSource.value state first) val✝, first, 0#usize)
+'R1Z.PV_CBL_FinalizeSoftValue.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_FinalizeSoftValue.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -67,3 +67,15 @@ and state. No V232 dispatcher or V231–V238 wrapper credit is inferred.
 The last accepted own modules remain below 2.7 million KiB RSS, swap zero.
 Finalization/reference upload is admission-gated; no timed-out arithmetic
 Kani gate, local Lean compile, SHA-NI refinement or production edit ran.
+
+Fourth pass third checkpoint: **7 → 7**. `PV_CBL_FinalizeSoftValue.source`
+(52466) proves the complete extracted fixed owned soft finalizer result on
+arbitrary state/block counter/buffer and pos<64. It composes canonical soft
+compression, padding contents/order, the exact length expression and all 32
+output bytes, retaining the first padding buffer and reset position zero.
+`PV_CBL_FinalizeSoftTotal.total/no_fail` (52467) preserve full Result outcomes.
+`PV_CBL_DigestBytesList.list` (52459) identifies output bytes with the ordered
+flattening of the eight big-endian words. Forty identical extracted helpers
+were reused and four new definitions checked (52450), with no external leaf.
+Actual borrowed generic wrappers/Drop/dispatcher and deployed association
+remain OPEN: no V231–V238 row credit or endpoint removal is inferred.

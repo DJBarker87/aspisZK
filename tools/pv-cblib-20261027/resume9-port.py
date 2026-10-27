@@ -11,6 +11,7 @@ def definitions(s):
   result[m[1]]=body
  return result
 def norm(s):
+ s=re.sub(r'\bPV_CBL_(?:FallbackBlock|ShaBytes|ShaPadFixed|FinalSoft)\.','',s)
  s=re.sub(r'/\*.*?\*/','',s,flags=re.S)
  s=re.sub(r'--[^\n]*','',s)
  return re.sub(r'\s+','',s)
@@ -34,6 +35,6 @@ for k,v in remaining.items():
  s+=v+'\n\n'
 s+='\n'.join('#print axioms '+k for k in remaining)+'\nend '+namespace+'\n'
 (directory/f'{namespace}.lean').write_text(s)
-r=dict(raw_sha256=hashlib.sha256(raw.encode()).hexdigest(),result_sha256=hashlib.sha256(s.encode()).hexdigest(),reused=matched,remaining=list(remaining),method='whitespace/comment-normalized exact generated definition equality; helper namespaces rebound to existing identical definitions; no external template',source_file=rawpath)
+r=dict(raw_sha256=hashlib.sha256(raw.encode()).hexdigest(),result_sha256=hashlib.sha256(s.encode()).hexdigest(),reused=matched,remaining=list(remaining),method='whitespace/comment and checked helper-namespace normalized generated definition equality; helper namespaces rebound to existing identical definitions; no external template',source_file=rawpath)
 (ev/(namespace+'-port.json')).write_text(json.dumps(r,indent=2)+'\n')
 print(namespace,len(matched),'identical helpers;',len(remaining),'new definitions')

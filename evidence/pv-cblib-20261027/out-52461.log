@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CBL_FinalizeSoftValue.lean:32:2: error: 'change' tactic failed, pattern
+  (do
+      let padding ←
+        PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos
+            (PV_CBL_Suffix64Value.value (PV_CBL_ShaBitLength.bitLength pos blocks))
+      let next0 ← PV_CBL_FinalSoft.sha_compress_byte_owned state padding.1
+      have __do_jp :
+        Std.Array U32 8#usize →
+          Result (Std.Array U8 32#usize × Std.Array U32 8#usize × Std.Array U8 64#usize × Usize) :=
+        fun next1 => do
+        let digest ← PV_CBL_FinalSoft.sha_digest32 next1
+        ok (digest, next1, padding.2.2.1, padding.2.2.2)
+      match padding.2.1 with
+        | none => do
+          let next1 ← ok next0
+          __do_jp next1
+        | some b => do
+          let next1 ← PV_CBL_FinalSoft.sha_compress_byte_owned next0 b
+          __do_jp next1) =
+    ?m.98
+is not definitionally equal to target
+  (do
+      let (first, second, retained, newpos) ←
+        PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos
+            (PV_CBL_Suffix64Value.value
+              (core.num.U64.wrapping_mul 8#u64
+                (core.num.U64.wrapping_add (UScalar.cast UScalarTy.U64 pos) (core.num.U64.wrapping_mul 64#u64 blocks))))
+      let next ← PV_CBL_FinalSoft.sha_compress_byte_owned state first
+      let next1 ←
+        match second with
+          | none => ok next
+          | some block => PV_CBL_FinalSoft.sha_compress_byte_owned next block
+      let a1 ← PV_CBL_FinalSoft.sha_digest32 next1
+      ok (a1, next1, retained, newpos)) =
+    ok (PV_CBL_DigestBytesValue.value (next state first second), next state first second, first, 0#usize)
+'R1Z.PV_CBL_FinalizeSoftValue.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_FinalizeSoftValue.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

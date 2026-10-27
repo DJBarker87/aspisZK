@@ -543,3 +543,9 @@ pub fn sha_digest_soft_owned(data:&[u8])->[u8;32] {
     let (digest,_,_,_)=sha_finalize_soft_owned(state,blocks,buffer,pos);
     digest
 }
+
+// Full value variants, with a borrowed input and an owned error byte image.
+pub fn array_slice_result_reference<T:Copy,const N:usize>(v:&[T],zero:T)
+ ->Result<[T;N],Vec<T>> {
+    match array_reference(v,zero) { Some(out)=>Ok(out), None=>Err(v.to_vec()) }
+}

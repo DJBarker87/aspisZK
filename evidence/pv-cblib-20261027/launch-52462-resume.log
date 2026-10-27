@@ -1,0 +1,66 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 1124); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+      let (first, second, retained, newpos) ←
+        PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos
+            (PV_CBL_Suffix64Value.value
+              (core.num.U64.wrapping_mul 8#u64
+                (core.num.U64.wrapping_add (UScalar.cast UScalarTy.U64 pos) (core.num.U64.wrapping_mul 64#u64 blocks))))
+      let next ← PV_CBL_FinalSoft.sha_compress_byte_owned state first
+      let next1 ←
+        match second with
+          | none => ok next
+          | some block => PV_CBL_FinalSoft.sha_compress_byte_owned next block
+      let a1 ← PV_CBL_FinalSoft.sha_digest32 next1
+      ok (a1, next1, retained, newpos)) =
+    ok (PV_CBL_DigestBytesValue.value (next state first second), next state first second, first, 0#usize)
+
+state : Std.Array U32 8#usize
+blocks : U64
+buffer : Std.Array U8 64#usize
+pos : Usize
+hp : ↑pos < 64
+first : Std.Array U8 64#usize
+second : Option (Std.Array U8 64#usize)
+hpad :
+  PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos
+      (PV_CBL_Suffix64Value.value (PV_CBL_ShaBitLength.bitLength pos blocks)) =
+    ok (first, second, first, 0#usize)
+hfirst :
+  ↑first =
+    PV_CBL_PaddingModel.first ↑buffer ↑pos ↑(PV_CBL_Suffix64Value.value (PV_CBL_ShaBitLength.bitLength pos blocks))
+hsecond :
+  Option.map (fun a => ↑a) second =
+    PV_CBL_PaddingModel.second ↑pos ↑(PV_CBL_Suffix64Value.value (PV_CBL_ShaBitLength.bitLength pos blocks))
+⊢ (do
+      let (first, second, retained, newpos) ←
+        PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos
+            (PV_CBL_Suffix64Value.value
+              (core.num.U64.wrapping_mul 8#u64
+                (core.num.U64.wrapping_add (UScalar.cast UScalarTy.U64 pos) (core.num.U64.wrapping_mul 64#u64 blocks))))
+      let next ← PV_CBL_FinalSoft.sha_compress_byte_owned state first
+      let next1 ←
+        match second with
+          | none => ok next
+          | some block => PV_CBL_FinalSoft.sha_compress_byte_owned next block
+      let a1 ← PV_CBL_FinalSoft.sha_digest32 next1
+      ok (a1, next1, retained, newpos)) =
+    ok (PV_CBL_DigestBytesValue.value (next state first second), next state first second, first, 0#usize)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_CBL_FinalizeSoftValue.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_FinalizeSoftValue.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.62
+	Maximum resident set size (kbytes): 2627420
+	Swaps: 0
+	Exit status: 1
