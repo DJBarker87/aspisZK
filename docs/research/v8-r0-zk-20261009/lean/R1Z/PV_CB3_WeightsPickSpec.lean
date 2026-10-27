@@ -13,7 +13,12 @@ theorem source (xs : Array aspis_core.field.QM31 4#usize) (i : Usize) (hi : i.va
     PV_CB3_StagedTotal.read_eq xs 3#usize (by decide),
     PV_CB3_StagedTotal.read_eq xs i hi]
   simp only [bind_tc_ok]
-  interval_cases h : i.val <;> simp [h]
+  have h0 : (0#usize).val=0 := rfl
+  have h1 : (1#usize).val=1 := rfl
+  have h2 : (2#usize).val=2 := rfl
+  have h3 : (3#usize).val=3 := rfl
+  have hc : i.val=0 ∨ i.val=1 ∨ i.val=2 ∨ i.val=3 := by omega
+  rcases hc with hc|hc|hc|hc <;> simp only [hc,h0,h1,h2,h3]
 
 theorem failure (xs : Array aspis_core.field.QM31 4#usize) (i : Usize) (hi : 4 ≤ i.val) :
     PV_CB3_WeightsPickSource.resume6_tensor_reference.pick4 xs i = fail .panic := by

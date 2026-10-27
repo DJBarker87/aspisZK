@@ -13,6 +13,7 @@ theorem and_zero (x : U16) : 0#u16 &&& x = 0#u16 := by
   apply UScalar.eq_of_val_eq
   change (0#16 &&& x.bv).toNat = 0
   simp only [BitVec.zero_and]
+  rfl
 
 theorem body (values : Rows) (masks : Array U16 64#usize) (chi : aspis_core.field.QM31)
     (hz : IsZero masks) (clear : Bool) (row : Usize)
