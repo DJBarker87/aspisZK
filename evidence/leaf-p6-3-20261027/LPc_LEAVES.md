@@ -12,13 +12,13 @@ This is an in-progress ledger. No entire native leaf is CLOSED yet.
 |---|---|
 | canonical::Dot::push | All four fixed cells on arbitrary canonical operands time out (K001/002/003/005). K004 compile failure repaired. Raw producer safety and model association remain open. |
 | r1_semantic::claims | Offset29 whole29 PASS; offsets0/58 early-error classes PASS, first15-canonical late classes TIMEOUT. Actual allocation/pointer writes and Prefix provenance remain open. |
-| verifier::echeck | Four tail-length classes pending; actual928-byte loop/carrier association remains open. |
-| compact::check_values | Actual464-byte native loop and input-carrier installation. |
-| compact::expand_values | Actual464/928-byte stage/frame and29-row versus byte-map composition. |
+| verifier::echeck | K009 tail stage CLOSED: K013..016 PASS all lengths0..63/both k; LPc model tail induction and actual928/29 bound compile. Native full928 loop/carrier association remains open. |
+| compact::check_values | LPc model464/29 caller law compiles. Full464-byte native loop and input-carrier installation remain open. |
+| compact::expand_values | LPc generic row low/high formulas and928 model length compile. Actual464/928 native stage/frame checks pending; source29-row/byte-map and full borrow/frame association remain open. |
 | candidate::wide_view | Arbitrary non-inactive proof bytes and native frame/borrow interpretation. |
 | ValidatedRecord::decode_k | Successful29-value decode at reached offsets and native output/token association. |
-| validate_record_fields | Full116-value native loop and error/carrier association. |
-| semantic_boundary | Canonical producer and decoded28-array native/model association. |
+| validate_record_fields | LPc model3712/116 caller success and exact error-index bound compile. Full116-value native loop and error/carrier association remain open. |
+| semantic_boundary | LPc model successful decode→all canonical→full28 boundary canonical composition compiles, with no supplied canonicality premise. Native canonical producer check pending; decoded-array native/model association remains open. |
 | circle_sample closure | Anonymous-closure capture and actual fallback/inverse helper association. |
 
 Inherited checks/proofs are in LPa_LEAVES.md. A new passing stage is only that

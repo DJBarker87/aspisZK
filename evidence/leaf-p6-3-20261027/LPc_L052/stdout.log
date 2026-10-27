@@ -1,0 +1,19 @@
+LPc_generated/LPc_BoundaryProducer.lean:15:55: error: unsolved goals
+r : r1_wire.ValidatedRecord
+p : Std.Array aspis_core.field.QM31 28#usize
+decoded : r1_wire.ValidatedRecord.decode_k 28#usize r 0#usize = ok (core.result.Result.Ok p)
+all : ∀ q ∈ ↑p, LPa.Add.Canonical q
+bound : 0 < (↑p).length
+seed : aspis_core.field.QM31 := (↑p)[0]
+⊢ (match p[0#usize]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok seed
+LPc_generated/LPc_BoundaryProducer.lean:16:34: warning: This simp argument is unused:
+  List.getElem?_eq_getElem bound
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.index_usize,̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵b̵o̵u̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'LPc.Boundary.decoded_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

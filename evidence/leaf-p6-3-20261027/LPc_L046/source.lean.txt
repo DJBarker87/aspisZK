@@ -1,0 +1,17 @@
+import LPa_DecodeLaws
+import LPa_AddInvariant
+open Aeneas Aeneas.Std Result XRk_Release XRk_FieldExternal
+set_option autoImplicit false
+namespace LPc.Decode
+/-- Every accepted byte-decoding stage produces canonical limbs. -/
+theorem step_canonical (payload : List U8) (start i : Nat)
+    (good : (LPa.Decode.step payload start i).1 = true) :
+    LPa.Add.Canonical (LPa.Decode.step payload start i).2 := by
+  let w := fun j => XRk_word ((((payload.drop (start+32*i)).take 16).drop (4*j)).take 4)
+  change ([w 0,w 1,w 2,w 3].all (fun x => x < 2147483647#u32)) = true at good
+  change (w 0).val < 2147483647 ∧ (w 1).val < 2147483647 ∧
+    (w 2).val < 2147483647 ∧ (w 3).val < 2147483647
+  simpa only [List.all_cons, List.all_nil, Bool.and_eq_true, Bool.and_true,
+    decide_eq_true_eq, UScalar.lt_equiv] using good
+#print axioms step_canonical
+end LPc.Decode

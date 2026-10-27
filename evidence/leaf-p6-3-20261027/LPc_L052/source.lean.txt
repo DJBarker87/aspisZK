@@ -1,0 +1,22 @@
+import LPc_DecodeSuccess
+import LPa_BoundaryPure
+open Aeneas Aeneas.Std Result XRk_Release XRk_FieldExternal
+set_option autoImplicit false
+namespace LPc.Boundary
+/-- The actual28-value decode derives every canonical operand of the fold.
+The head is also the seed, matching the shipped double occurrence of p[0]. -/
+theorem decoded_canonical (r : r1_wire.ValidatedRecord)
+    (p : Array aspis_core.field.QM31 28#usize)
+    (decoded : r1_wire.ValidatedRecord.decode_k 28#usize r 0#usize = ok (.Ok p)) :
+    ∃ result, r1_semantic.semantic_boundary p = ok result ∧ LPa.Add.Canonical result := by
+  have all := LPc.Decode.success_canonical 28#usize r 0#usize p decoded
+  have bound : 0 < p.val.length := by have h := p.property; change p.val.length = 28 at h; omega
+  let seed := p.val[0]'bound
+  have head : Array.index_usize p 0#usize = ok seed := by
+    simp only [Array.index_usize, List.getElem?_eq_getElem bound]
+  refine ⟨p.val.foldl LPa.Add.field seed, ?_, ?_⟩
+  · rw [← LPa.Boundary.loop_eq_model, LPa.Boundary.loop_pure, head]
+    rfl
+  · exact LPa.Add.fold_canonical p.val all seed (all seed (List.getElem_mem bound))
+#print axioms decoded_canonical
+end LPc.Boundary

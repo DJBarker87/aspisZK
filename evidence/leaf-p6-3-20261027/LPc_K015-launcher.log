@@ -1,0 +1,55 @@
+{"attempt": "LPc_K015", "exit_status": 0, "wall_seconds": 10.609415884013288, "peak_rss_kib": "639616", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+es/aspis-r1-cost-probe/src/LPc_compact.rs:15:39
+   |
+15 | #[kani::proof] #[kani::unwind(35)] fn LPc_expand1(){expansion::<1>()}
+   |                                       ^^^^^^^^^^^ help: convert the identifier to snake case: `lpc_expand1`
+
+warning: function `LPc_expand2` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPc_compact.rs:16:39
+   |
+16 | #[kani::proof] #[kani::unwind(35)] fn LPc_expand2(){expansion::<2>()}
+   |                                       ^^^^^^^^^^^ help: convert the identifier to snake case: `lpc_expand2`
+
+warning: function `LPc_expand3` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPc_compact.rs:17:39
+   |
+17 | #[kani::proof] #[kani::unwind(35)] fn LPc_expand3(){expansion::<3>()}
+   |                                       ^^^^^^^^^^^ help: convert the identifier to snake case: `lpc_expand3`
+
+warning: function `LPc_check464` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPc_compact.rs:19:39
+   |
+19 | #[kani::proof] #[kani::unwind(32)] fn LPc_check464(){
+   |                                       ^^^^^^^^^^^^ help: convert the identifier to snake case: `lpc_check464`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.05s
+Checking harness verifier::LPc_verifier::LPc_tail2...
+
+VERIFICATION RESULT:
+ ** 0 of 377 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 8.383536s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rb26e099d1e2b43d080909461d3b01859.scope; invocation ID: c869fb35d37d413ebe82349dd74a1eb1
