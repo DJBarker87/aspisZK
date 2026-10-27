@@ -1,8 +1,9 @@
 """Read-only source and object inventory for the inherited private cache."""
 from pathlib import Path
-import json,subprocess,shlex
+import json,subprocess,shlex,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin23-20261027'
-r=json.loads((E/'focused-resolution.json').read_text());mods={m:v for m,v in r['resolved'].items() if 'imports' in v}
+label=sys.argv[1] if len(sys.argv)>1 else 'focused'
+r=json.loads((E/(label+'-resolution.json')).read_text());mods={m:v for m,v in r['resolved'].items() if 'imports' in v}
 code='''import pathlib,json,sys,hashlib
 H=pathlib.Path('/home/dombarker/project-offloads/codex-pv-runjoin-20261026');e=json.load(open(H/'runjoin23-lean/J.json'));roots=[pathlib.Path(x) for x in e['LEAN_PATH'].split(':')];out=[]
 for m,v in json.load(sys.stdin).items():
@@ -32,6 +33,6 @@ for f in (R/'evidence').glob('pv-runjoin*/receipt-*.json'):
 for x in out:
  if not x.get('source_match') and x.get('expected_sha256') in prior:
   x['prior_own_source_receipts']=prior[x['expected_sha256']];x['retained_own_cache_source_match']=True
-(E/'focused-project-cache-check.json').write_text(json.dumps(out,indent=2)+'\n')
+(E/(label+'-project-cache-check.json')).write_text(json.dumps(out,indent=2)+'\n')
 unmatched=[x['module'] for x in out if not (x.get('source_match') or x.get('retained_own_cache_source_match'))]
 print('project source checks',len(out),'unmatched',unmatched)
