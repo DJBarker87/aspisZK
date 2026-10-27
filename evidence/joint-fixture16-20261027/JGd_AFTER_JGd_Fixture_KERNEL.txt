@@ -1,0 +1,109 @@
+theorem AspisR1.JGd_Fixture.inhabited : ∀ {Hash : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (hash : Hash),
+  have D0 :=
+    AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+      (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D);
+  have t0 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFr_SeedBoundary.numeric, hash := hash,
+      next_row := 0#u8 };
+  have t15 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q14Source.ratchet, hash := hash,
+      next_row := 15#u8 };
+  have t25 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q24Source.ratchet, hash := hash,
+      next_row := 25#u8 };
+  ∃ expanded y1 pre view claims cs mask selected a b c m selectors sops leading full internal schedule path bits sem h1
+    copy,
+    ((AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+              AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+          AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+            AspisS1ValuesOwnedInstallation.expandValues AspisR1.JFw_Y1.stored AspisR1.JFw_Y1.initial =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), y1) ∧
+              y1.length = 928 ∧
+                AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded y1 =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+                  AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ()))
+                        pre =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claims) ∧
+                    AspisR1PublicPreparation.r1_semantic.public_transcript D0 AspisR1.JFs_PublicSerialization.value hash
+                          pre.c1_root =
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok t0) ∧
+                      AspisR1PublicPreparation.r1_wire.begin D0 pre t0 =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JFm_Begin.challenges, t15) ∧
+                        AspisR1PublicPreparation.RoundModel.rounds AspisS1ExtractedRoundChildren.children D0 pre t15 =
+                            Aeneas.Std.Result.ok
+                              (Aeneas.Std.core.result.Result.Ok
+                                (AspisS1ExtractedRoundChildren.genToMain AspisR1.JFr_Data09.output,
+                                  AspisR1.JFm_PartialAlpha.a10, t25)) ∧
+                          AspisR1PublicPreparation.SourceFull25.Trace D0 pre t0 t25 cs ∧
+                            List.map AspisR1PublicPreparation.SourceFull25.Call.row cs = AspisR1.JFm_RealTrace.rows ∧
+                              List.map AspisR1PublicPreparation.SourceFull25.Call.q cs = AspisR1.JFm_RealTrace.values ∧
+                                List.map (fun c => c.record.framed) cs = List.take 25 ↑pre.records ∧
+                                  pre.validated_record 25#u8 =
+                                      Aeneas.Std.Result.ok
+                                        (Aeneas.Std.core.result.Result.Ok AspisR1.JFu_Q25Source.record) ∧
+                                    AspisR1PublicPreparation.FinishModel.circle_validated
+                                          (AspisR1.F3M_CircleSource.install B) D0 t25 AspisR1.JFu_Q25Source.record =
+                                        Aeneas.Std.Result.ok
+                                          (Aeneas.Std.core.result.Result.Ok AspisR1.JFu_CircleExact.z0, ⋯) ∧
+                                      pre.validated_record ⋯ =
+                                          Aeneas.Std.Result.ok
+                                            (Aeneas.Std.core.result.Result.Ok AspisR1.JFu_Q26Source.record) ∧
+                                        ⋯ = ⋯ ∧
+                                          AspisR1PublicPreparation.FinishModel.pointEq AspisR1.JFu_CircleExact.z0
+                                                AspisR1.JFu_CircleExact.z1 =
+                                              Aeneas.Std.Result.ok false ∧
+                                            (AspisR1.SAP_CanonicalCarrier.CanonK AspisR1.JFu_CircleExact.z0.x ∧
+                                                AspisR1.SAP_CanonicalCarrier.CanonK AspisR1.JFu_CircleExact.z0.y) ∧
+                                              AspisR1.SAP_CanonicalCarrier.CanonK AspisR1.JFu_CircleExact.z1.x ∧
+                                                AspisR1.SAP_CanonicalCarrier.CanonK AspisR1.JFu_CircleExact.z1.y) ∧
+        claims = AspisR1.JFu_ClaimsData.claims ∧
+          AspisS1ExtractedRoundChildren.decodeMain 29#usize AspisR1.JFu_Q25Source.record 87#usize =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JFu_ClaimsData.a3) ∧
+            AspisR1.OraclePortStdBuilder.fromFn 16#usize (AspisR1PublicPreparation.FinishModel.closureFn9 D0) claims =
+                Aeneas.Std.Result.ok AspisR1.JFu_MaskInputs.c1 ∧
+              AspisR1.OraclePortStdBuilder.fromFn 10#usize (AspisR1PublicPreparation.FinishModel.closureFn5 D0) claims =
+                  Aeneas.Std.Result.ok AspisR1.JFu_MaskInputs.maskOnly ∧
+                AspisR1.FIp_SemanticArithmetic.mask AspisR1.JFu_MaskInputs.c1 AspisR1.JFu_MaskInputs.maskOnly
+                      AspisR1.JFu_MaskInputs.g AspisR1.JFm_PartialAlpha.a10 =
+                    Aeneas.Std.Result.ok mask ∧
+                  AspisR1.FIp_SemanticValues.Canon mask) ∧
+      FIq_Native.array_from_fn_copy 84#usize FIq_Native.field.QM31.Insts.CoreMarkerCopy
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+            FIq_Native.field.QM31.ZERO AspisR1.JFu_TerminalCallback.claims =
+          Aeneas.Std.Result.ok selected ∧
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.validate_transition AspisR1.JFu_PublicSemantic.value =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+          FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31
+                (AspisR1.FIq_Carriers.toPublic AspisR1.JFs_PublicSerialization.value)
+                AspisR1.JFu_TerminalCallback.claims AspisR1.JFu_TerminalPrefix.alpha
+                AspisR1.JFu_TerminalPrefix.challenges =
+              AspisR1.JFu_TerminalPrefix.tail selected ∧
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts AspisR1.JFu_PublicSemantic.value selected
+                  AspisR1.JFu_TerminalPrefix.alpha AspisR1.JFu_TerminalPrefix.challenges.lambda
+                  AspisR1.JFu_TerminalPrefix.challenges.chi AspisR1.JFu_TerminalPrefix.challenges.theta =
+                AspisR1.JFy_CompositionTail.tail selected a b c m selectors sops leading full internal path ∧
+              AspisR1.FIw_ArrayValue.canonical selected ∧
+                AspisR1.FIw_ArrayValue.canonical a ∧
+                  AspisR1.FIw_ArrayValue.canonical b ∧
+                    AspisR1.FIw_ArrayValue.canonical c ∧
+                      AspisR1.FIw_ArrayValue.canonical m ∧
+                        FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point
+                              AspisR1.JFu_TerminalPrefix.alpha =
+                            Aeneas.Std.Result.ok selectors ∧
+                          AspisR1.FIw_ArrayValue.canonical selectors.high ∧
+                            AspisR1.FIw_ArrayValue.canonical selectors.low ∧
+                              FIq_Native.pool_v1.pair_forest_semantic_terminal.poseidon_selectors selectors =
+                                  Aeneas.Std.Result.ok sops ∧
+                                AspisR1.FIv_NativeValue.Canon sops.block ∧
+                                  AspisR1.FIw_ArrayValue.canonical sops.local ∧
+                                    FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
+                                          { z := a, succ_z := b, xor12_z := c } sops =
+                                        AspisR1.JFy_PoseidonPrefix.tail { z := a, succ_z := b, xor12_z := c } sops
+                                          leading full internal ∧
+                                      AspisR1.FIv_NativeValue.Canon leading ∧
+                                        AspisR1.FIv_NativeValue.Canon full ∧
+                                          AspisR1.FIv_NativeValue.Canon internal ∧ ⋯ :=
+⋯
