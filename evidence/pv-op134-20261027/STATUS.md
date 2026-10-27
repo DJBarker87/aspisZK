@@ -11,11 +11,13 @@ Target not yet established. Branch codex/pv-op134-20261027, base 8483406290.
   PV_Op134_Inventory.ordered_bounds/nodup/complete; the complete Result
   PV_Op134_InventoryCallback.callback. The 3,803-cell reference inventory is
   now proved bounded, unique, free, and complete over the 1024 x 16 grid.
-* Also checked: complete Result row materialization (214 rows), row-order,
-  nodup/dedup, the complete reference mask value, and MaskBits0.
-* Draft/queued: the remaining mask-bit chunks, mask composition, and selected
-  reference bundle. Optional generic transport/indexing drafts are deferred. Do not count drafts as
-  checked evidence. Per-module JSON receipts supersede this interim list.
+* Also checked: complete Result row materialization (214 rows), ascending
+  order, nodup/dedup identity, the complete reference mask value, all eight
+  mask-bit chunks, global MaskSpec.bits, and selected ReferenceBundle
+  equations for arbitrary base/callback dictionaries.
+* Pending only: the final full new-theorem axioms audit and frozen-manifest
+  import audit. Optional generic transport/indexing drafts are uncompiled
+  text under drafts/ and are not hypotheses of the checked reference facts.
 
 Premise accounting: no deployed endpoint premise removed, added, or weakened.
 V230's shipped-source link remains open. The existing op134_reference remains
