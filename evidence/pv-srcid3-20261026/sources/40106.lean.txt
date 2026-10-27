@@ -1,0 +1,75 @@
+import R1Z.PV_Src_PortInternalSumField
+import R1Z.PV_Src_PortInternalZero
+
+/-! Complete internal-linear source/model refinement at canonical inputs.
+The source checked sum and all sixteen source writes are proved, not assumed. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_PortInternalModel
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.PoseidonRefine
+open BuilderForestAdmissionPort PV_Src_PortInternalStep PV_Src_PortInternalTotal
+variable {K : Type} [Field K] [CharP K 2147483647]
+
+theorem source (state : State) (hs : PV_Src_PortSboxStep.Canonical state) :
+    ∃ out, poseidon2.internal_linear_lazy state = ok out ∧
+      PV_Src_PortSboxStep.Canonical out ∧ ∀ j : Fin 16,
+        liftU (K := K) out.val[j.val]! =
+          R0P.poseidonInternalLinear (fun i => liftU (K := K) state.val[i.val]!) j := by
+  obtain ⟨part,hpart,hval⟩ := PV_Src_PortSumTotal.fifteen (tail state).val (tail_length state)
+  let first := state.val[0]!
+  let full := U64.wrapping_add part (UScalar.cast .U64 first)
+  let reduced := PV_Src_PortInternalZero.cell part first
+  let changed := state.set 0#usize reduced
+  let result := PV_Src_PortInternalLoop.steps 15 1#usize changed full
+  have hr : aspis_core.field.M31.reduce_u62
+      (U64.wrapping_sub (U64.wrapping_add part (UScalar.cast .U64 aspis_core.field.P))
+        (UScalar.cast .U64 first)) = ok reduced := by
+    change aspis_core.field.M31.reduce_u62 _ = ok (PV_Src_ScalarReduce.value _)
+    rw [PV_Src_PortReduce.source,PV_Src_ScalarReduce.reference_eq]
+  have he : poseidon2.internal_linear_lazy state = ok result := by
+    rw [PV_Src_PortInternalBody.source,PV_Src_PortInternalBody.body,tail_eq]
+    simp only [bind_tc_ok]
+    rw [hpart]
+    simp only [bind_tc_ok]
+    rw [index_ok state 0#usize (by decide)]
+    simp only [bind_tc_ok]
+    change (do let r ← aspis_core.field.M31.reduce_u62
+                 (U64.wrapping_sub (U64.wrapping_add part (UScalar.cast .U64 aspis_core.field.P))
+                   (UScalar.cast .U64 first))
+               let a ← Array.update state 0#usize r
+               ok (PV_Src_PortInternalLoop.steps 15 1#usize a full)) = _
+    rw [hr]
+    simp only [bind_tc_ok,BuilderRecordsArray.update_gen state 0#usize reduced (by decide),result,changed]
+  obtain ⟨out,hout,hcan⟩ := total state
+  have ho : out=result := Result.ok.inj (hout.symm.trans he)
+  subst out
+  refine ⟨result,he,hcan,?_⟩
+  have hp := PV_Src_PortInternalFullBound.part_bound state part hval
+  have hf : full.val < 68719476736 := PV_Src_PortInternalFullBound.full_bound state part hval
+  have hsum := PV_Src_PortInternalSumField.part_lift (K := K) state part hval
+  have fullval : full.val = part.val + first.val :=
+    add64v _ _ _ _ rfl (c64 first) (by have := u32lt first;omega)
+  intro j
+  change (liftU (K := K) (PV_Src_PortInternalLoop.steps 15 1#usize changed full).val[j.val]!) = _
+  rw [PV_Src_PortInternalCells.cells 15 1#usize changed full (by decide) j]
+  by_cases hz : j.val=0
+  · have hj : j=0 := Fin.ext hz
+    subst j
+    rw [if_pos (by decide)]
+    change liftU (K := K) (state.set 0#usize reduced).val[0]! = _
+    rw [BuilderRecordsArray.set_get state 0#usize reduced 0 (by decide),if_pos (by scalar_tac)]
+    rw [PV_Src_PortInternalZero.lift part first hp (hs ⟨0,by decide⟩),lin_unfold]
+    simp only [Fin.val_zero,dif_pos rfl]
+    rw [hsum] <;> rfl
+  · rw [if_neg (by simp only [UScalar.ofNatCore_val_eq];omega)]
+    let index : Usize := Usize.ofNatCore j.val (by have := j.isLt;scalar_tac)
+    have indexval : index.val=j.val := by scalar_tac
+    change liftU (K := K) (cell (state.set 0#usize reduced) full index) = _
+    rw [PV_Src_PortInternalCells.cell_set_other state full 0#usize index reduced
+      (by decide) (by rw [indexval];simpa using hz)]
+    rw [PV_Src_PortInternalField.cell_lift state full index (by rw [indexval];omega)
+      (by rw [indexval];exact j.isLt) hf,indexval,lin_unfold,dif_neg hz]
+    rw [PV_Src_PortInternalField.shifts_model ⟨j.val-1,by have := j.isLt;omega⟩,
+      fullval,Nat.cast_add,hsum,Nat.shiftLeft_eq,one_mul] <;> rfl
+
+#print axioms source
+end R1Z.PV_Src_PortInternalModel

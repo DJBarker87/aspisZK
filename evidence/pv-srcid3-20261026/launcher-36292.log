@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2326); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+    (sibs : ∀ l < 24, R0Z.WriterRefine.Canon8 (↑W.sibs)[l]!) : R0Z.WriterRefine.WitnessOk W
+structure R0Z.WriterRefine.PubCorr {K : Type} [Field K] (P : R0Z.WriterRefine.RustPublic) (pub : R0P.Public K) : Prop
+number of parameters: 4
+fields:
+  R0Z.WriterRefine.PubCorr.variant : P.variant = pub.variant
+  R0Z.WriterRefine.PubCorr.asset : R0Z.WriterRefine.liftU P.asset = pub.assetId
+  R0Z.WriterRefine.PubCorr.next : P.nextPairIndex = pub.nextPairIndex
+  R0Z.WriterRefine.PubCorr.frontier : ∀ (l : Fin 20),
+      R0Z.WriterRefine.DigestLift (↑P.frontier)[↑l]! (pub.snapshotFrontier l)
+  R0Z.WriterRefine.PubCorr.empty : ∀ (l : Fin 20),
+      R0Z.WriterRefine.DigestLift (↑P.empty)[↑l]! (R0Z.BuilderModel.emptyRootK l)
+  R0Z.WriterRefine.PubCorr.frontierCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.frontier)[↑l]!
+  R0Z.WriterRefine.PubCorr.emptyCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.empty)[↑l]!
+constructor:
+  R0Z.WriterRefine.PubCorr.mk {K : Type} [Field K] {P : R0Z.WriterRefine.RustPublic} {pub : R0P.Public K}
+    (variant : P.variant = pub.variant) (asset : R0Z.WriterRefine.liftU P.asset = pub.assetId)
+    (next : P.nextPairIndex = pub.nextPairIndex)
+    (frontier : ∀ (l : Fin 20), R0Z.WriterRefine.DigestLift (↑P.frontier)[↑l]! (pub.snapshotFrontier l))
+    (empty : ∀ (l : Fin 20), R0Z.WriterRefine.DigestLift (↑P.empty)[↑l]! (R0Z.BuilderModel.emptyRootK l))
+    (frontierCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.frontier)[↑l]!)
+    (emptyCanon : ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑P.empty)[↑l]!) : R0Z.WriterRefine.PubCorr P pub
+structure R1Z.PV_Src_RecordReference.Checked (i : R1Z.PV_Src_NativeInput.Input) : Prop
+number of parameters: 1
+fields:
+  R1Z.PV_Src_RecordReference.Checked.values : ↑i.witness.pair.value < 2 ^ 30 ∧
+      ↑(R1Z.PV_Src_NativeInput.outputValue i.request) < 2 ^ 30 ∧ ↑i.change.value < 2 ^ 30
+  R1Z.PV_Src_RecordReference.Checked.first : R0Z.WriterRefine.Canon8 i.witness.pair.pair_leaf.first_commitment
+  R1Z.PV_Src_RecordReference.Checked.second : R0Z.WriterRefine.Canon8 i.witness.pair.pair_leaf.second_commitment
+  R1Z.PV_Src_RecordReference.Checked.membership : ∀ l < 20,
+      R0Z.WriterRefine.Canon8 (↑i.witness.pair.membership.siblings)[l]!
+  R1Z.PV_Src_RecordReference.Checked.superRoot : ∀ l < 3, R0Z.WriterRefine.Canon8 (↑i.witness.super_root_siblings)[l]!
+constructor:
+  R1Z.PV_Src_RecordReference.Checked.mk {i : R1Z.PV_Src_NativeInput.Input}
+    (values :
+      ↑i.witness.pair.value < 2 ^ 30 ∧
+        ↑(R1Z.PV_Src_NativeInput.outputValue i.request) < 2 ^ 30 ∧ ↑i.change.value < 2 ^ 30)
+    (first : R0Z.WriterRefine.Canon8 i.witness.pair.pair_leaf.first_commitment)
+    (second : R0Z.WriterRefine.Canon8 i.witness.pair.pair_leaf.second_commitment)
+    (membership : ∀ l < 20, R0Z.WriterRefine.Canon8 (↑i.witness.pair.membership.siblings)[l]!)
+    (superRoot : ∀ l < 3, R0Z.WriterRefine.Canon8 (↑i.witness.super_root_siblings)[l]!) :
+    R1Z.PV_Src_RecordReference.Checked i
+'R1Z.PV_Src_RecordRangeObstruction.output_bound_required' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_RecordRangeObstruction.reference_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_RecordReference.word_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_RecordReference.word_public' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_RecordReference.newRecords_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_RecordReference.words' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises : ∀ {CommitHandle : Type}
+  {x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle},
+  R1Z.PrivacyR1Headline.BuilderPremises (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineOwnedClosed.Admitted.input)
+    R1Z.PrivacyR1AcctBasis.basis x
+'R1Z.PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeConsumer.builder_premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeConsumer.phased_builder_premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Fixtures.fixture_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Fixtures.transfer_public' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Fixtures.withdrawal_public' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_Fixtures.fibres' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.67
+	Maximum resident set size (kbytes): 4229984
+	Swaps: 0
+	Exit status: 0

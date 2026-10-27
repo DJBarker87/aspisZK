@@ -1,0 +1,49 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0320); env=J
+slot: /tmp/aspis-r0-lean-slot-2.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_MapperBody.lean:53:16: error: Tactic `rfl` failed: The left-hand side
+  witness i out none chg (BuilderRecordsPath.bits (PV_Src_NativeDirections.reference i))
+is not definitionally equal to the right-hand side
+  PV_Src_RecordReference.witness
+    (BuilderRecordsReference.witness (PV_Src_NativeDirections.reference i) out
+      (Option.map PV_Src_RecordReference.note none) (PV_Src_RecordReference.note chg))
+
+case none
+i : Input
+out : U32
+chg : Note
+⊢ witness i out none chg (BuilderRecordsPath.bits (PV_Src_NativeDirections.reference i)) =
+    PV_Src_RecordReference.witness
+      (BuilderRecordsReference.witness (PV_Src_NativeDirections.reference i) out
+        (Option.map PV_Src_RecordReference.note none) (PV_Src_RecordReference.note chg))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_MapperBody.lean:69:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Records.call ?input ?out ?rec ?chg ?s ?asset
+in the target expression
+  (do
+      let roots ← pair_trace.pair_empty_roots
+      ok
+          (witness i out rec chg (BuilderRecordsPath.bits (PV_Src_NativeDirections.reference i)),
+            publicRecord rec s asset roots)) =
+    PV_Src_RecordDynamic.call i out rec chg s asset
+
+inst✝ : ExternalLinear
+i : Input
+out : U32
+rec : Option Note
+chg : Note
+s : Snapshot
+asset : U32
+⊢ (do
+      let roots ← pair_trace.pair_empty_roots
+      ok
+          (witness i out rec chg (BuilderRecordsPath.bits (PV_Src_NativeDirections.reference i)),
+            publicRecord rec s asset roots)) =
+    PV_Src_RecordDynamic.call i out rec chg s asset
+'R1Z.PV_Src_MapperBody.witness_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_MapperBody.public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_MapperBody.call_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.72
+	Maximum resident set size (kbytes): 4093376
+	Swaps: 0
+	Exit status: 1

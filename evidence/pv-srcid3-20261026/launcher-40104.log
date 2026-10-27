@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0418); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+        (UScalar.cast UScalarTy.U64 first)) =
+    ok reduced
+he : poseidon2.internal_linear_lazy state = ok result
+hout : poseidon2.internal_linear_lazy state = ok result
+hcan : PV_Src_PortSboxStep.Canonical result
+hp : ↑part < 68719476736
+hf : ↑full < 68719476736
+hsum : ↑↑part = List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun j => liftU (↑state)[↑j + 1]!)
+fullval : ↑full = ↑part + ↑first
+hz : ↑0 = 0
+⊢ liftU (↑changed)[↑0]! = R0P.poseidonInternalLinear (fun i => liftU (↑state)[↑i]!) 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    changed
+  has type
+    Std.Array U32 16#usize
+  but is expected to have type
+    { l // l.length = ↑16#usize }
+  in the application
+    ↑changed
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortInternalModel.lean:61:2: error: unsolved goals
+case neg
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+state : State
+hs : PV_Src_PortSboxStep.Canonical state
+part : U64
+hpart : PV_Src_PortSumTrace.fold (List.map (UScalar.cast UScalarTy.U64) ↑(tail state)) 0#u64 = ok part
+hval : ↑part = PV_Src_PortSumTotal.natSum (List.map (UScalar.cast UScalarTy.U64) ↑(tail state))
+first : U32 := (↑state)[0]!
+full : U64 := part.wrapping_add (UScalar.cast UScalarTy.U64 first)
+reduced : U32 := PV_Src_PortInternalZero.cell part first
+changed : Std.Array U32 16#usize := Std.Array.set state 0#usize reduced
+result : State := PV_Src_PortInternalLoop.steps 15 1#usize changed full
+hr :
+  aspis_core.field.M31.reduce_u62
+      ((part.wrapping_add (UScalar.cast UScalarTy.U64 aspis_core.field.P)).wrapping_sub
+        (UScalar.cast UScalarTy.U64 first)) =
+    ok reduced
+he : poseidon2.internal_linear_lazy state = ok result
+hout : poseidon2.internal_linear_lazy state = ok result
+hcan : PV_Src_PortSboxStep.Canonical result
+hp : ↑part < 68719476736
+hf : ↑full < 68719476736
+hsum : ↑↑part = List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun j => liftU (↑state)[↑j + 1]!)
+fullval : ↑full = ↑part + ↑first
+j : Fin 16
+hz : ¬↑j = 0
+index : Usize := Usize.ofNatCore ↑j ⋯
+indexval : ↑index = ↑j
+⊢ List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun j => liftU (↑state)[↑j + 1]!) + ↑↑first +
+      liftU (↑state)[↑j]! * ↑(2 ^ R0P.poseidonInternalShifts ⟨↑j - 1, ⋯⟩) =
+    List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun j => liftU (↑state)[↑j.succ]!) + liftU (↑state)[↑0]! +
+      liftU (↑state)[↑j]! * ↑(2 ^ R0P.poseidonInternalShifts ⟨↑j - 1, ⋯⟩)
+'R1Z.PV_Src_PortInternalModel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.81
+	Maximum resident set size (kbytes): 4139384
+	Swaps: 0
+	Exit status: 1

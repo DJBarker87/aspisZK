@@ -1,0 +1,51 @@
+import R1Z.PV_Src_PublicParts
+
+/-! The frozen table's word/field interface, without evaluating its generating
+hash recurrence. Equality to the actual helper result is still to be proved. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_CanonicalRoots
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R0Z.BuilderModel R1J.SpendWitnessMap
+
+def word (l : Fin 21) (lane : Fin 8) : U32 :=
+  UScalar.ofNatCore (R0P.emptyRootsNat l lane) (lt_u32 (emptyRoot_lt l lane))
+
+def table : BuilderRecordsReference.Roots :=
+  ⟨List.ofFn (fun l : Fin 21 => arr8 (word l)),by simp⟩
+
+theorem at_level (l : Fin 21) : table.val[l.val]! = arr8 (word l) := by
+  change (List.ofFn (fun l : Fin 21 => arr8 (word l)))[l.val]! = _
+  rw [List.getElem!_eq_getElem?_getD,List.getElem?_ofFn,dif_pos l.isLt]
+  rfl
+
+theorem canonical (l : Fin 21) : Canon8 table.val[l.val]! := by
+  intro lane hlane
+  rw [at_level,arr8_get _ lane hlane]
+  change (UScalar.ofNatCore (R0P.emptyRootsNat l ⟨lane,hlane⟩) _).val < 2147483647
+  rw [UScalar.ofNatCore_val_eq]
+  exact emptyRoot_lt _ _
+
+theorem meaning {K : Type} [Field K] (l : Fin 20) :
+    DigestLift table.val[l.val]! (emptyRootK (K := K) l) := by
+  intro lane
+  rw [at_level l.castSucc,arr8_get _ lane.val lane.isLt]
+  simp only [liftU,word,UScalar.ofNatCore_val_eq,emptyRootK]
+
+/-- The single pure helper equation suffices for both root sub-obligations;
+this file does not assume it as a global axiom or install a replacement. -/
+theorem source_parts [BuilderForestAdmissionPort.ExternalLinear]
+    (h : BuilderForestAdmissionPort.pool_v1.pair_trace.pair_empty_roots = ok table)
+    {K : Type} [Field K]
+    (roots : BuilderRecordsReference.Roots)
+    (hr : BuilderForestAdmissionPort.pool_v1.pair_trace.pair_empty_roots = ok roots) :
+    (∀ l : Fin 20, DigestLift roots.val[l.val]! (emptyRootK (K := K) l)) ∧
+      (∀ l : Fin 20, Canon8 roots.val[l.val]!) := by
+  rw [h] at hr
+  cases Result.ok.inj hr
+  exact ⟨meaning,fun l => canonical l.castSucc⟩
+
+#print axioms at_level
+#print axioms canonical
+#print axioms meaning
+#print axioms source_parts
+end R1Z.PV_Src_CanonicalRoots

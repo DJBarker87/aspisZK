@@ -1,0 +1,31 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0800); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortNodeResult.lean:27:6: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+left right : Std.Array U32 8#usize
+hr : ↑(↑right)[7]! < 2147483647
+z : aspis_core.field.M31
+hz : aspis_core.field.M31.add (↑right)[7]! poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK = ok z
+left✝ : ↑z < 2147483647
+hmz : liftU z = liftU (↑right)[7]! - 1051521018
+joined : Std.Array U32 16#usize := PV_Src_PortNodeCopy.joined left right
+hlast : (↑joined)[15]! = (↑right)[7]!
+out : State
+ho : poseidon2.permute_optimized_with_trace PV_Src_PortNoop.callback (joined.set 15#usize z) () = ok out
+hc : Canonical out
+hm : liftA out = R0P.poseidonPermutation (liftA (joined.set 15#usize z))
+⊢ ↑(Usize.wrapping_sub 16#usize 1#usize) = ↑15#usize
+'R1Z.PV_Src_PortNodeResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.78
+	Maximum resident set size (kbytes): 4153564
+	Swaps: 0
+	Exit status: 1

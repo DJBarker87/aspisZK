@@ -1,0 +1,74 @@
+Host restoration instructions: HOST RESTORED 2026-10-26 21:50 UTC (Stream B lead). Launcher: /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh <attempt> <Module> J 7000 8 [deps-fingerprint]; sources /home/dombarker/project-offloads/aspis-joint-20261019/sources, objects .../aspis-joint-20261019/objects; env/J.json and run2.py committed; verification attempt 30799 exit 0. Accepted IDs 5000-39999; 20000-27099 BLOCKED (exit 65); 28000-29999 reserved (do not use); 30000-34999 Stream A.
+Per-job env-J ranges (use ONLY yours, next unused ID, never an old ID):
+cb3: 35600-35899 (your old range 24700-24999 is blocked)
+cb4: 27100-27399
+srcid4: 27400-27699
+rw20: 27700-27999
+runjoin8: 35000-35299
+join2: 35300-35599
+CAVEAT: the rebuilt object cache is PARTIAL (767/800 compiled, 1,007 resolved sources not yet attempted; see evidence/envj-rebuild-20261026/EJR_HANDOFF.md on research). A missing imported .olean in the shared objects is not a stop and not a sorry: first use your own job's surviving host cache (codex-pv-*/lean-objects), else compile the missing dependency module yourself as a charged attempt (smallest first), else record the exact missing object and continue with other work. Never retry EventsR1P2 or SimCostOuterRetry6; they are assigned to a dedicated Stream B job. Quiet windows (ruling (e)) still apply via the systemd-run shim.
+
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0013); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1NaturalProjection.lean:28:35: error: unsolved goals
+K : Type u_1
+inst✝¹ : Field K
+inst✝ : NeZero 2
+n : ℕ
+m : Fin n → K
+slot : Fin 4
+i : Fin n
+⊢ (if slot = 0 then m i else 0) = (if slot = 0 then m else 0) i
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1NaturalProjection.lean:38:0: warning: automatically included section variable(s) unused in theorem `AspisR1.sparseLift_add`:
+  [NeZero 2]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [NeZero 2] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1NaturalProjection.lean:43:0: warning: automatically included section variable(s) unused in theorem `AspisR1.sparseLift_smul`:
+  [NeZero 2]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [NeZero 2] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1NaturalProjection.lean:58:67: error: unsolved goals
+K : Type u_1
+inst✝¹ : Field K
+inst✝ : NeZero 2
+n : ℕ
+hn : 0 < n
+m : Fin n → K
+x : K
+⊢ Polynomial.eval (doubledFactor x 2) (naturalCoefficientPolynomial m) +
+          x * Polynomial.eval (doubledFactor x 2) (naturalCoefficientPolynomial 0) +
+        doubledFactor x 1 * Polynomial.eval (doubledFactor x 2) (naturalCoefficientPolynomial 0) +
+      x * doubledFactor x 1 * Polynomial.eval (doubledFactor x 2) (naturalCoefficientPolynomial 0) =
+    Polynomial.eval (doubledFactor x 2) (naturalCoefficientPolynomial m)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1NaturalProjection.lean:62:8: warning: This simp argument is unused:
+  naturalCoefficientPolynomial_zero_eval hn
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵n̵a̵t̵u̵r̵a̵l̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵P̵o̵l̵y̵n̵o̵m̵i̵a̵l̵_̵z̵e̵r̵o̵_̵e̵v̵a̵l̵ ̵h̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1NaturalProjection.lean:84:53: warning: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1NaturalProjection.lean:84:53: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.coefficientLane_sparseLift' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.sparseLift_injective' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.sparseLift_add' depends on axioms: [propext, Quot.sound]
+'AspisR1.sparseLift_smul' depends on axioms: [propext, Quot.sound]
+'AspisR1.naturalCoefficientPolynomial_zero_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.sparseLift_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.natural_fibre_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.naturalProjection_eval_fibre_mean' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.41
+	Maximum resident set size (kbytes): 2729920
+	Swaps: 0
+	Exit status: 1
+

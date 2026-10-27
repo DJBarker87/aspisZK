@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_ExternalBlockStep.lean:75:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R0PoseidonCopy.mat4 (↑s)[↑(base g)]! (↑s)[↑((base g).wrapping_add 1#usize)]! (↑s)[↑((base g).wrapping_add 2#usize)]!
+    (↑s)[↑((base g).wrapping_add 3#usize)]!
+in the target expression
+  (do
+      let x ←
+        R0PoseidonCopy.mat4
+            [(↑s)[↑(base g)]!, (↑s)[↑((base g).wrapping_add 1#usize)]!, (↑s)[↑((base g).wrapping_add 2#usize)]!,
+                (↑s)[↑((base g).wrapping_add 3#usize)]!][0]!
+            [(↑s)[↑(base g)]!, (↑s)[↑((base g).wrapping_add 1#usize)]!, (↑s)[↑((base g).wrapping_add 2#usize)]!,
+                (↑s)[↑((base g).wrapping_add 3#usize)]!][1]!
+            [(↑s)[↑(base g)]!, (↑s)[↑((base g).wrapping_add 1#usize)]!, (↑s)[↑((base g).wrapping_add 2#usize)]!,
+                (↑s)[↑((base g).wrapping_add 3#usize)]!][2]!
+            [(↑s)[↑(base g)]!, (↑s)[↑((base g).wrapping_add 1#usize)]!, (↑s)[↑((base g).wrapping_add 2#usize)]!,
+                (↑s)[↑((base g).wrapping_add 3#usize)]!][3]!
+      let x0 ← x.index_usize 0#usize
+      let s0 ← Array.update s (base g) x0
+      let x1 ← x.index_usize 1#usize
+      let s1 ← s0.update ((base g).wrapping_add 1#usize) x1
+      let x2 ← x.index_usize 2#usize
+      let s2 ← s1.update ((base g).wrapping_add 2#usize) x2
+      let x3 ← x.index_usize 3#usize
+      let s3 ← s2.update ((base g).wrapping_add 3#usize) x3
+      poseidon2.builder_reference.external_owned_loop0 s3 (g.wrapping_add 1#usize)) =
+    poseidon2.builder_reference.external_owned_loop0 (write s g m) (g.wrapping_add 1#usize)
+
+s : State
+g : Usize
+hg : ↑g < 4
+m : Std.Array U32 4#usize
+hm :
+  R0PoseidonCopy.mat4 (↑s)[↑(base g)]! (↑s)[↑((base g).wrapping_add 1#usize)]! (↑s)[↑((base g).wrapping_add 2#usize)]!
+      (↑s)[↑((base g).wrapping_add 3#usize)]! =
+    ok m
+b0 : ↑(base g) < ↑16#usize
+b1 : ↑((base g).wrapping_add 1#usize) < ↑16#usize
+b2 : ↑((base g).wrapping_add 2#usize) < ↑16#usize
+b3 : ↑((base g).wrapping_add 3#usize) < ↑16#usize
+⊢ (do
+      let x ←
+        R0PoseidonCopy.mat4
+            [(↑s)[↑(base g)]!, (↑s)[↑((base g).wrapping_add 1#usize)]!, (↑s)[↑((base g).wrapping_add 2#usize)]!,
+                (↑s)[↑((base g).wrapping_add 3#usize)]!][0]!
+            [(↑s)[↑(base g)]!, (↑s)[↑((base g).wrapping_add 1#usize)]!, (↑s)[↑((base g).wrapping_add 2#usize)]!,
+                (↑s)[↑((base g).wrapping_add 3#usize)]!][1]!
+            [(↑s)[↑(base g)]!, (↑s)[↑((base g).wrapping_add 1#usize)]!, (↑s)[↑((base g).wrapping_add 2#usize)]!,
+                (↑s)[↑((base g).wrapping_add 3#usize)]!][2]!
+            [(↑s)[↑(base g)]!, (↑s)[↑((base g).wrapping_add 1#usize)]!, (↑s)[↑((base g).wrapping_add 2#usize)]!,
+                (↑s)[↑((base g).wrapping_add 3#usize)]!][3]!
+      let x0 ← x.index_usize 0#usize
+      let s0 ← Array.update s (base g) x0
+      let x1 ← x.index_usize 1#usize
+      let s1 ← s0.update ((base g).wrapping_add 1#usize) x1
+      let x2 ← x.index_usize 2#usize
+      let s2 ← s1.update ((base g).wrapping_add 2#usize) x2
+      let x3 ← x.index_usize 3#usize
+      let s3 ← s2.update ((base g).wrapping_add 3#usize) x3
+      poseidon2.builder_reference.external_owned_loop0 s3 (g.wrapping_add 1#usize)) =
+    poseidon2.builder_reference.external_owned_loop0 (write s g m) (g.wrapping_add 1#usize)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_Src_ExternalBlockStep.base_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ExternalBlockStep.offset_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_ExternalBlockStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

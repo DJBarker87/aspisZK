@@ -1,0 +1,63 @@
+import R1Z.PV_Src_PortInternalBody
+import R1Z.PV_Src_PortInternalCanonical
+import R1Z.PV_Src_PortSumTotal
+
+/-! Totality and canonical output of the actual source internal linear layer,
+for arbitrary U32 lanes. The checked sum bound is proved, not assumed. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_PortInternalTotal
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort PV_Src_PortInternalStep
+
+def tail (state : State) : Slice U32 := Slice.drop state.to_slice 1#usize
+
+theorem tail_eq (state : State) :
+    core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeFromUsizeSlice aspis_core.field.M31))
+      state {start := 1#usize} = ok (tail state) := by
+  have bound : (1#usize).val ≤ state.to_slice.length := by
+    change (1#usize).val ≤ state.val.length
+    rw [state.property]
+    scalar_tac
+  simp only [core.array.Array.index,core.ops.index.IndexSlice,
+    core.slice.index.Slice.index,core.slice.index.SliceIndexRangeFromUsizeSlice,
+    core.slice.index.SliceIndexRangeFromUsizeSlice.index,bound,if_true,tail]
+
+theorem tail_length (state : State) : (tail state).val.length ≤ 15 := by
+  change (state.val.drop 1).length ≤ 15
+  rw [List.length_drop,state.property]
+  decide
+
+theorem total (state : State) :
+    ∃ out, poseidon2.internal_linear_lazy state = ok out ∧
+      PV_Src_PortSboxStep.Canonical out := by
+  obtain ⟨part,hpart,_⟩ := PV_Src_PortSumTotal.fifteen (tail state).val (tail_length state)
+  let first := state.val[0]!
+  let full := U64.wrapping_add part (UScalar.cast .U64 first)
+  let x := U64.wrapping_sub
+    (U64.wrapping_add part (UScalar.cast .U64 aspis_core.field.P)) (UScalar.cast .U64 first)
+  let reduced := PV_Src_ScalarReduce.value x
+  have hr : aspis_core.field.M31.reduce_u62 x = ok reduced := by
+    rw [PV_Src_PortReduce.source,PV_Src_ScalarReduce.reference_eq]
+  refine ⟨PV_Src_PortInternalLoop.steps 15 1#usize (state.set 0#usize reduced) full,?_,?_⟩
+  · rw [PV_Src_PortInternalBody.source,PV_Src_PortInternalBody.body,tail_eq]
+    simp only [bind_tc_ok]
+    rw [hpart]
+    simp only [bind_tc_ok]
+    rw [index_ok state 0#usize (by decide)]
+    simp only [bind_tc_ok]
+    change (do let r ← aspis_core.field.M31.reduce_u62 x
+               let a ← Array.update state 0#usize r
+               ok (PV_Src_PortInternalLoop.steps 15 1#usize a full)) = _
+    rw [hr,BuilderRecordsArray.update_gen _ 0#usize _ (by decide)]
+    rfl
+  · apply PV_Src_PortInternalCanonical.steps_canonical 15 1#usize _ full (by decide)
+    intro j hj
+    have hj0 : j=0 := by simp only [UScalar.ofNatCore_val_eq] at hj;omega
+    rw [hj0,BuilderRecordsArray.set_get state 0#usize reduced 0 (by decide),if_pos (by scalar_tac)]
+    exact PV_Src_ScalarReduce.canonical x
+
+#print axioms tail_eq
+#print axioms tail_length
+#print axioms total
+end R1Z.PV_Src_PortInternalTotal

@@ -1,0 +1,69 @@
+Host restored; allocation 9, next unused ID 42731
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0755); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortNodeShape.lean:20:64: error: unsolved goals
+left right : Std.Array U32 8#usize
+⊢ (do
+      let __x ←
+        core.array.Array.index_mut
+            (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice aspis_core.field.M31))
+            (Array.repeat 16#usize aspis_core.field.M31.ZERO) { «end» := poseidon2.DIGEST_ELEMS }
+      let s1 ← lift left.to_slice
+      let s2 ← core.slice.Slice.copy_from_slice aspis_core.field.M31.Insts.CoreMarkerCopy __x.1 s1
+      let __x ←
+        core.array.Array.index_mut
+            (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice aspis_core.field.M31))
+            (__x.2 s2) { start := poseidon2.DIGEST_ELEMS }
+      let s4 ← lift right.to_slice
+      let s5 ← core.slice.Slice.copy_from_slice aspis_core.field.M31.Insts.CoreMarkerCopy __x.1 s4
+      let i ← lift (poseidon2.POSEIDON2_WIDTH.wrapping_sub 1#usize)
+      let m ← (__x.2 s5).index_usize i
+      let m1 ← m.add poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+      let i1 ← lift (poseidon2.POSEIDON2_WIDTH.wrapping_sub 1#usize)
+      let state3 ← (__x.2 s5).update i1 m1
+      let state4 ←
+        poseidon2.permute_optimized_with_trace
+            poseidon2.merkle_node_compress_v3.closure.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+            state3 ()
+      core.array.from_fn 8#usize poseidon2.merkle_node_compress_v3.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31
+          state4) =
+    do
+    let x ←
+      core.array.Array.index_mut
+          (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice aspis_core.field.M31))
+          (Array.repeat 16#usize aspis_core.field.M31.ZERO) { «end» := poseidon2.DIGEST_ELEMS }
+    let s ←
+      let (s, back) := x
+        do
+        let l ← lift left.to_slice
+        let l1 ← core.slice.Slice.copy_from_slice aspis_core.field.M31.Insts.CoreMarkerCopy s l
+        let (s1, back1) ←
+          core.array.Array.index_mut
+              (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice aspis_core.field.M31))
+              (back l1) { start := poseidon2.DIGEST_ELEMS }
+        let r ← lift right.to_slice
+        let r1 ← core.slice.Slice.copy_from_slice aspis_core.field.M31.Insts.CoreMarkerCopy s1 r
+        ok (back1 r1)
+    let i ← lift (poseidon2.POSEIDON2_WIDTH.wrapping_sub 1#usize)
+    let m ← s.index_usize i
+    let m1 ← aspis_core.field.M31.add m poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+    let i1 ← lift (poseidon2.POSEIDON2_WIDTH.wrapping_sub 1#usize)
+    let s1 ← s.update i1 m1
+    let s2 ← poseidon2.permute_optimized_with_trace PV_Src_PortNoop.callback s1 ()
+    core.array.from_fn 8#usize poseidon2.merkle_node_compress_v3.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31 s2
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PortNodeShape.lean:21:92: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [poseidon2.merkle_node_compress_v3, ̲PV_Src_PortNodeCopy.run, ̲finish, ̲bind_assoc_eq,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_PortNodeShape.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.54
+	Maximum resident set size (kbytes): 4139340
+	Swaps: 0
+	Exit status: 1
+cat: /sys/fs/cgroup/user.slice/user-1000.slice/session-218357.scope/memory.max: No such file or directory
+

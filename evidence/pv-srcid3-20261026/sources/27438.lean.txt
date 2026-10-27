@@ -1,0 +1,81 @@
+import R1Z.PV_Src_CanonicalNormalize
+import R1Z.PV_Src_CanonicalTransferRecord
+import R1Z.PV_Src_CanonicalWithdrawalRecord
+import R1Z.PV_Src_RecordAdmission
+
+/-! Private reference records recover every normalized canonical witness.
+The admission bridge retains the exact public association as an explicit join;
+it does not assert that arbitrary supplied compiler payloads are successful. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_CanonicalPrivateRecord
+open Aeneas Aeneas.Std Result R1J.SpendWitnessMap
+open BuilderForestAdmissionPort.pool_v1
+variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
+
+def input (c : BuilderCanonical.Instance (K := K))
+    (pool domain destination : PV_Src_PublicRecords.Context)
+    (snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1)
+    (compiled : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (anchor : Array U32 8#usize) : PV_Src_NativeInput.Input :=
+  let n := PV_Src_CanonicalNormalize.normalize c
+  PV_Src_CheckedEncoding.input n.val.2
+    (PV_Src_CanonicalRequest.request n pool domain destination)
+    (PV_Src_PathIndex.index n.val.2) snapshot compiled anchor
+
+theorem witness (c : BuilderCanonical.Instance (K := K))
+    (roots : BuilderRecordsReference.Roots)
+    (pool domain destination : PV_Src_PublicRecords.Context)
+    (snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1)
+    (compiled : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (anchor : Array U32 8#usize) :
+    PV_Src_Forest_PrimitiveArguments.wordWitness
+      (PV_Src_RecordReference.returned roots
+        (input c pool domain destination snapshot compiled anchor)).w =
+      BuilderCanonical.rustWitness (PV_Src_CanonicalNormalize.normalize c).val.2 := by
+  cases hv : c.val.1.variant with
+  | privateTransfer =>
+    exact PV_Src_CanonicalTransferRecord.witness (PV_Src_CanonicalNormalize.normalize c)
+      (by rw [PV_Src_CanonicalNormalize.public_eq]; exact hv)
+      roots pool domain destination snapshot compiled anchor
+  | withdrawal =>
+    have hn : (PV_Src_CanonicalNormalize.normalize c).val.1.variant = .withdrawal := by
+      rw [PV_Src_CanonicalNormalize.public_eq]; exact hv
+    have he : PV_Src_WithdrawalRecipient.erase (PV_Src_CanonicalNormalize.normalize c).val.2 =
+        (PV_Src_CanonicalNormalize.normalize c).val.2 := by
+      rw [PV_Src_CanonicalNormalize.withdrawal c hv]
+      rfl
+    simpa only [he] using
+      PV_Src_CanonicalWithdrawalRecord.witness (PV_Src_CanonicalNormalize.normalize c)
+        hn roots pool domain destination snapshot compiled anchor
+
+theorem admission (c : BuilderCanonical.Instance (K := K))
+    (roots : BuilderRecordsReference.Roots)
+    (pool domain destination : PV_Src_PublicRecords.Context)
+    (snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1)
+    (compiled : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (anchor : Array U32 8#usize)
+    (records : pair_forest_copy_builder.CopyRecords)
+    (hr : @PV_Src_NativeInput.newRecords (PV_Src_RecordReference.withRoots roots)
+      (input c pool domain destination snapshot compiled anchor) = ok records)
+    (publicEq : mapPub (K := K) (PV_Src_Public.canonicalPublic
+      (PV_Src_NativeInput.publicInput (input c pool domain destination snapshot compiled anchor))) =
+      mapPub (K := K) c.val.1) :
+    BuilderSpendRelation.RspendPlus
+      (mapPub (K := K) (PV_Src_Public.canonicalPublic
+        (PV_Src_NativeInput.publicInput (input c pool domain destination snapshot compiled anchor))))
+      (BuilderCanonical.liftWitness (BuilderRecordCanonical.witness
+        (PV_Src_Forest_PrimitiveArguments.wordWitness records.w))) := by
+  rw [PV_Src_RecordReference.newRecords_eq] at hr
+  have he := Result.ok.inj hr
+  apply PV_Src_RecordAdmission.selected (PV_Src_CanonicalNormalize.normalize c)
+    (input c pool domain destination snapshot compiled anchor) records
+  · rw [← he]
+    exact witness c roots pool domain destination snapshot compiled anchor
+  · rw [PV_Src_CanonicalNormalize.public_eq]
+    exact publicEq
+
+#print axioms witness
+#print axioms admission
+end R1Z.PV_Src_CanonicalPrivateRecord

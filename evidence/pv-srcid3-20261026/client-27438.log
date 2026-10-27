@@ -1,0 +1,36 @@
+Host restoration instructions: HOST RESTORED 2026-10-26 21:50 UTC (Stream B lead). Launcher: /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh <attempt> <Module> J 7000 8 [deps-fingerprint]; sources /home/dombarker/project-offloads/aspis-joint-20261019/sources, objects .../aspis-joint-20261019/objects; env/J.json and run2.py committed; verification attempt 30799 exit 0. Accepted IDs 5000-39999; 20000-27099 BLOCKED (exit 65); 28000-29999 reserved (do not use); 30000-34999 Stream A.
+Per-job env-J ranges (use ONLY yours, next unused ID, never an old ID):
+cb3: 35600-35899 (your old range 24700-24999 is blocked)
+cb4: 27100-27399
+srcid4: 27400-27699
+rw20: 27700-27999
+runjoin8: 35000-35299
+join2: 35300-35599
+CAVEAT: the rebuilt object cache is PARTIAL (767/800 compiled, 1,007 resolved sources not yet attempted; see evidence/envj-rebuild-20261026/EJR_HANDOFF.md on research). A missing imported .olean in the shared objects is not a stop and not a sorry: first use your own job's surviving host cache (codex-pv-*/lean-objects), else compile the missing dependency module yourself as a charged attempt (smallest first), else record the exact missing object and continue with other work. Never retry EventsR1P2 or SimCostOuterRetry6; they are assigned to a dedicated Stream B job. Quiet windows (ruling (e)) still apply via the systemd-run shim.
+
+reservation: populated 24 GiB + 8 GiB; window=0 (London 2227); env=J
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_CanonicalPrivateRecord.lean:49:4: error: Type mismatch: After simplification, term
+  PV_Src_CanonicalWithdrawalRecord.witness (PV_Src_CanonicalNormalize.normalize c) hn roots pool domain destination
+    snapshot compiled anchor
+ has type
+  @Eq R0Z.WriterRefine.RustWitness
+    (PV_Src_Forest_PrimitiveArguments.wordWitness
+      (PV_Src_RecordReference.returned roots
+          (PV_Src_CheckedEncoding.input (↑(PV_Src_CanonicalNormalize.normalize c)).2
+            (PV_Src_CanonicalRequest.request (PV_Src_CanonicalNormalize.normalize c) pool domain destination)
+            (PV_Src_PathIndex.index (↑(PV_Src_CanonicalNormalize.normalize c)).2) snapshot compiled anchor)).w)
+    (BuilderCanonical.rustWitness (↑(PV_Src_CanonicalNormalize.normalize c)).2)
+but is expected to have type
+  @Eq R0Z.WriterRefine.RustWitness
+    (PV_Src_Forest_PrimitiveArguments.wordWitness
+      (PV_Src_RecordReference.returned roots (input c pool domain destination snapshot compiled anchor)).w)
+    (BuilderCanonical.rustWitness (↑(PV_Src_CanonicalNormalize.normalize c)).2)
+'R1Z.PV_Src_CanonicalPrivateRecord.witness' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_CanonicalPrivateRecord.admission' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.48
+	Maximum resident set size (kbytes): 4089280
+	Swaps: 0
+	Exit status: 1
+

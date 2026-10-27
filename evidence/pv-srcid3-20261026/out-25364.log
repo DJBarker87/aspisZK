@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_CanonicalRoots.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑table)[↑l.castSucc]!
+in the target expression
+  liftU (↑(↑table)[↑l]!)[↑lane]! = emptyRootK l lane
+
+K : Type
+inst✝ : Field K
+l : Fin 20
+lane : Fin 8
+⊢ liftU (↑(↑table)[↑l]!)[↑lane]! = emptyRootK l lane
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    table
+  has type
+    BuilderRecordsReference.Roots
+  but is expected to have type
+    { l // l.length = ↑21#usize }
+  in the application
+    ↑table
+'R1Z.PV_Src_CanonicalRoots.at_level' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_CanonicalRoots.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_CanonicalRoots.meaning' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Src_CanonicalRoots.source_parts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

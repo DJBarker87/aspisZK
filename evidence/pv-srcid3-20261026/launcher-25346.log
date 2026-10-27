@@ -1,0 +1,65 @@
+reservation: populated 24 GiB + 8 GiB; window=0 (London 1853); env=J
+inverse : U32
+hf : Canon8 first
+hs : Canon8 second
+hi : ↑inverse < 2147483647
+hne : (↑second)[7]! ≠ 0#u32
+hm : aspis_core.field.M31.mul (↑second)[7]! inverse = ok 1#u32
+mul10 : aspis_core.field.M31.mul 1#u32 0#u32 = ok 0#u32
+⊢ (do
+      let m3 ← aspis_core.field.M31.mul (↑second)[↑7#usize]! inverse
+      if ↑m3 = 1 then do
+          let m4 ← aspis_core.field.M31.mul 0#u32 inverse
+          if ↑m4 = 0 then do
+              let s ← lift second.to_slice
+              let i2 ← core.slice.Slice.iter s
+              let __x ←
+                core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                    pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.validate.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                    i2 0#u32
+              if __x.1 = true then
+                  ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.EmptyCommitmentNonZero)
+                else
+                  if (↑second)[↑7#usize]! = 0#u32 then
+                    ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.OccupiedSentinelZero)
+                  else ok (core.result.Result.Ok ())
+            else ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.EmptyInverseNonZero)
+        else ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1.SentinelInverseMismatch)) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionOccupied.lean:24:35: warning: This simp argument is unused:
+  pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲↓reduceIte,p̵ ̲ai̵r̵,̵a̵spis_core.field.P,
+  ̵  ̵ ̵ ̵aspis_core.field.M31.ONE,
+  ̲ ̲ ̲ ̲ ̲aspis_core.field.M31.ZERO]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionOccupied.lean:39:4: warning: This simp argument is unused:
+  aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+
+Hint: Omit it from the simp argument list.
+  simp [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵M̵3̵1̵,̵
+  ̵ ̵ ̵ ̵ ̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵M̵3̵1̵.̵e̵q̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲t̲r̲a̲i̲t̲_̲d̲e̲f̲a̲u̲l̲t̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲M̲3̲1̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲C̲m̲p̲P̲a̲r̲t̲i̲a̲l̲E̲q̲M̲3̲1̲.̲e̲q̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_AdmissionOccupied.validates' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.46
+	Maximum resident set size (kbytes): 4092220
+	Swaps: 0
+	Exit status: 1

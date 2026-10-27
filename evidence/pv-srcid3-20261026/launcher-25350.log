@@ -1,0 +1,65 @@
+reservation: populated 26 GiB + 8 GiB; window=0 (London 1902); env=J
+                                core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                                    validate_common.closure.Insts.CoreOpsFunctionFnMutTupleSharedArrayM318Bool i ()
+                              if __x.1 = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.WitnessDigest)
+                                else
+                                  if input.value = 0#u32 then
+                                    ok (core.result.Result.Err PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                  else do
+                                    let i1 ← spend.VALUE_LIMIT
+                                    if input.value ≥ i1 then
+                                        ok (core.result.Result.Err PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                      else do
+                                        let i2 ← lift (U32.wrapping_shl 1#u32 20#u32)
+                                        if input.membership.index ≥ i2 then
+                                            ok (core.result.Result.Err PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                          else do
+                                            let r ← input.pair_leaf.require_selected_spendable input.selected_second
+                                            core.result.Result.map_err
+                                                (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+                                                  PoolV1PairTraceErrorV1)
+                                                r PoolV1PairTraceErrorV1.PairLeafCtor
+                            else ok (core.result.Result.Err PoolV1PairTraceErrorV1.WitnessDigest)
+                        else ok (core.result.Result.Err PoolV1PairTraceErrorV1.WitnessDigest)) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    instDecidableEqBool ((fresh binding).runtime_binding.anchor_sequence != binding.anchor_sequence) true
+  has type
+    Decidable (((fresh binding).runtime_binding.anchor_sequence != binding.anchor_sequence) = true)
+  but is expected to have type
+    Decidable ((binding.anchor_sequence != binding.anchor_sequence) = true)
+  in the application
+    @ite (Result (core.result.Result Unit PoolV1PairTraceErrorV1))
+      ((binding.anchor_sequence != binding.anchor_sequence) = true)
+      (instDecidableEqBool ((fresh binding).runtime_binding.anchor_sequence != binding.anchor_sequence) true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionCommonSuccess.lean:32:24: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵f̵r̵e̵s̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲f̲r̲e̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionCommonSuccess.lean:32:35: warning: This simp argument is unused:
+  fresh
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵f̵r̵e̵s̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionCommonSuccess.lean:34:24: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_AdmissionCommonSuccess.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.86
+	Maximum resident set size (kbytes): 4090136
+	Swaps: 0
+	Exit status: 1

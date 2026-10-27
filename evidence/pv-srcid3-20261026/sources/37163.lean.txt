@@ -1,0 +1,169 @@
+/- Namespace port of BuilderDigestArguments: same symbolic proof, actual forest extraction. -/
+import R1Z.PV_Src_Forest_PrimitiveDigests
+import R1Z.BuilderStdArray
+import R1Z.BuilderRecordsArray
+
+/-! Actual primitive digest and note-chunk arguments. These are complete
+Result identities; no semantic admission or digest equality is assumed. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_Forest_DigestArguments
+open Aeneas Aeneas.Std Result R0Z.WriterRefine PV_Src_Forest_PrimitiveArguments
+open BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder
+
+ theorem from_fn_nat {C T : Type} (n : Usize)
+    (f : core.ops.function.FnMut C Usize T) (c : C) (g : Nat → T)
+    (hf : ∀ i, i.val < n.val → f.call_mut c i = ok (g i.val,c)) :
+    BuilderForestStdPort.core.array.from_fn n f c =
+      ok (BuilderRecordsArray.tabulate n g) := by
+  rw [BuilderForestStdPort.core.array.from_fn,
+    BuilderStdModels.fromFn_bounded n f (fun i => g i.val) c hf]
+  congr 1
+  apply Subtype.ext
+  simp only [BuilderStdModels.indices,BuilderRecordsArray.tabulate,Array.make,List.map_ofFn]
+  congr 1
+
+theorem digest8_eq (s : Array U32 16#usize) :
+    BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.digest8 s = ok (R0Z.WriterRefine.digest8 s) := by
+  unfold BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.digest8
+  have hf : ∀ i : Usize, i.val < 8 →
+      digest8.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut s i = ok (s.val[i.val]!,s) := by
+    intro i hi
+    rw [digest8.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut,
+      index_ok s i (by simp; omega)]
+    rfl
+  rw [from_fn_nat 8#usize digest8.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 s (fun i => s.val[i]!) hf]
+  rfl
+
+theorem note_c3 (salt : Array U32 8#usize) : note_c3r salt = ok (noteC3R salt) := by
+  unfold note_c3r
+  let g : Nat → U32 := fun j => if j=0 then salt.val[6]! else if j=1 then salt.val[7]! else 0#u32
+  have hf : ∀ i : Usize, i.val < 8 →
+      note_c3r.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut salt i = ok (g i.val,salt) := by
+    intro i hi
+    rw [note_c3r.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut]
+    by_cases h0 : i = 0#usize
+    · rw [if_pos h0,index_ok salt 6#usize (by decide)]
+      simp only [bind_tc_ok,g,h0,UScalar.ofNatCore_val_eq,if_true]
+    · rw [if_neg h0]
+      by_cases h1 : i = 1#usize
+      · rw [if_pos h1,index_ok salt 7#usize (by decide)]
+        simp [g,h1] <;> rfl
+      · rw [if_neg h1]
+        have h0' : i.val ≠ 0 := by intro h;apply h0;apply UScalar.eq_of_val_eq;simpa using h
+        have h1' : i.val ≠ 1 := by intro h;apply h1;apply UScalar.eq_of_val_eq;simpa using h
+        simp [g,h0',h1']
+  rw [from_fn_nat 8#usize note_c3r.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 salt g hf]
+  rfl
+
+theorem note_c2 (value asset : U32) (salt : Array U32 8#usize) :
+    note_c2r value asset salt = ok (noteC2R value asset salt) := by
+  unfold note_c2r
+  let g : Nat → U32 := fun j => if j=0 then value else if j=1 then asset else salt.val[j-2]!
+  have hf : ∀ i : Usize, i.val < 8 →
+      note_c2r.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut (value,asset,salt) i =
+        ok (g i.val,(value,asset,salt)) := by
+    intro i hi
+    rw [note_c2r.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut]
+    by_cases h0 : i = 0#usize
+    · rw [if_pos h0];simp [g,h0] <;> rfl
+    · rw [if_neg h0]
+      by_cases h1 : i = 1#usize
+      · rw [if_pos h1];simp [g,h1] <;> rfl
+      · rw [if_neg h1]
+        have h0' : i.val ≠ 0 := by intro h;apply h0;apply UScalar.eq_of_val_eq;simpa using h
+        have h1' : i.val ≠ 1 := by intro h;apply h1;apply UScalar.eq_of_val_eq;simpa using h
+        have hv : (Usize.wrapping_sub i 2#usize).val = i.val-2 := by
+          rw [R0Z.WriterRefine.usub _ _ (by simp; omega)] <;> rfl
+        simp only [lift,bind_tc_ok]
+        rw [index_ok salt _ (by rw [hv];simp;omega)]
+        simp [g,h0',h1',hv] <;> rfl
+  rw [from_fn_nat 8#usize note_c2r.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 (value,asset,salt) g hf]
+  rfl
+
+theorem perm_eq (pre ab : Array U32 16#usize) :
+    perm pre ab = R0PoseidonCopy.perm_rounds pre ab := by
+  rw [perm,PV_Src_Forest_PrimitiveDigests.poseidon_perm_rounds]
+
+theorem block_digest (pre ab : Array U32 16#usize) :
+    block_digest_r pre ab = blockDigestR pre ab := by
+  unfold block_digest_r blockDigestR
+  rw [perm_eq]
+  congr 1
+  funext rounds
+  rw [index_ok_gen rounds 10#usize (by decide)]
+  simp only [bind_tc_ok,digest8_eq,UScalar.ofNatCore_val_eq]
+
+theorem sponge_digest (pre : Array U32 16#usize) (chunk : Array U32 8#usize) (len : Usize) :
+    sponge_digest_r pre chunk len = spongeDigestR pre chunk len := by
+  simp only [sponge_digest_r,spongeDigestR,PV_Src_Forest_PrimitiveDigests.block_sponge_absorb,block_digest]
+
+theorem node_digest (left right : Array U32 8#usize) :
+    node_digest_r left right = nodeDigestR left right := by
+  simp only [node_digest_r,nodeDigestR,PV_Src_Forest_PrimitiveDigests.block_node_pre,
+    PV_Src_Forest_PrimitiveDigests.block_node_absorb,block_digest]
+
+theorem sponge_step_eq (pre : Array U32 16#usize) (chunk : Array U32 8#usize) (len : Usize) :
+    sponge_step pre chunk len = spongeStep pre chunk len := by
+  unfold sponge_step spongeStep
+  rw [PV_Src_Forest_PrimitiveDigests.block_sponge_absorb]
+  congr 1
+  funext ab
+  rw [perm_eq]
+  congr 1
+  funext rounds
+  rw [index_ok_gen rounds 10#usize (by decide)]
+  rfl
+
+theorem owner (w : RW) : owner_d w = ownerD (wordWitness w) := by
+  simp only [owner_d,ownerD,init_owner,initOwner,PV_Src_Forest_PrimitiveDigests.block_sponge_init,
+    sponge_digest,wordWitness]
+
+theorem scalar_eq (a b : Usize) : a = b ↔ a.val = b.val :=
+  ⟨congrArg UScalar.val,UScalar.eq_of_val_eq⟩
+
+theorem owner_success (w : RW) : ∃ d, ownerD (wordWitness w) = ok d := by
+  obtain ⟨d,hd,_,_⟩ := owner_lift (K := ZMod AspisCircleGroupOrder.P) (wordWitness w)
+  exact ⟨d,hd⟩
+
+theorem ok_ite {T : Type} (condition : Prop) [Decidable condition] (a b : T) :
+    (ok (if condition then a else b) : Result T) = if condition then ok a else ok b := by
+  split_ifs <;> rfl
+
+theorem chunk (w : RW) (p : RP) (h : Usize) :
+    schunk w p h = ok ((chunksOf (wordWitness w) (wordPublic p)).schunk h.val) := by
+  obtain ⟨d,hd⟩ := owner_success w
+  rw [schunk]
+  simp only [owner,hd,note_c2,note_c3,PV_Src_Forest_PrimitiveArguments.zero_digest]
+  simp only [chunksOf,hd,okOr_ok,scalar_eq,UScalar.ofNatCore_val_eq,ite_or]
+  simp only [ok_ite]
+  rfl
+
+theorem chunk_len (w : RW) (p : RP) (h : Usize) :
+    sclen h = ok ((chunksOf (wordWitness w) (wordPublic p)).sclen h.val) := by
+  simp only [sclen,chunksOf,scalar_eq,UScalar.ofNatCore_val_eq,ite_or]
+  split_ifs <;> rfl
+
+theorem pre_state (w : RW) (p : RP) (h : Usize) :
+    sponge_pre w p h = spongePre (chunksOf (wordWitness w) (wordPublic p)) h.val := by
+  simp only [sponge_pre,spongePre,chunk,chunk_len w p,bind_tc_ok,sponge_step_eq,
+    init_owner,init_note,init_nul,initOwner,initNote,initNul,
+    PV_Src_Forest_PrimitiveDigests.block_sponge_init,UScalar.ofNatCore_val_eq,zero16]
+  rfl
+
+#print axioms from_fn_nat
+#print axioms digest8_eq
+#print axioms note_c3
+#print axioms note_c2
+#print axioms perm_eq
+#print axioms block_digest
+#print axioms sponge_digest
+#print axioms node_digest
+#print axioms sponge_step_eq
+#print axioms owner
+#print axioms scalar_eq
+#print axioms owner_success
+#print axioms ok_ite
+#print axioms chunk
+#print axioms chunk_len
+#print axioms pre_state
+end R1Z.PV_Src_Forest_DigestArguments
