@@ -82,11 +82,14 @@ not measured runtimes; families overlap and must not be double counted.
   have passing local source-stage gates. K02064-weight serialization TIMES OUT;
   full model/call/heap composition still required.6–10 remaining targets,
   overlapping item7; this is not whole-function closure.
-- check_values: K008 universally bounded0..31 passes;464 timed out. Need full
-  loop/iterator/canonical byte association;2–4 targets. Tail behavior retained.
+- check_values: K008 universally bounded0..31 passes;464 timed out. XRf_K005–K009 prove two-row short-circuit, one-chunk canonicality,
+  rejected-prefix and incomplete-tail stages. Arbitrary-length induction and full
+  loop/iterator/canonical byte association still need2–4 targets. Tail behavior retained.
 - expand_values:464/928 timed out;32/64 array assertion unwinding failed; K019
   PASSES after changing only assertion to arbitrary destination index with SAME32/64 bounds.
-  Need full caller bounds, overflow/borrow/frame and byte/Result associations;
+  XRf_K001–K004/K010 add one-row, destination frame, error branches and
+  two-row composition. Need arbitrary-length induction, full caller bounds,
+  overflow/borrow/frame and byte/Result associations;
   3–6 targets regardless of K019 disposition.
 - echeck: K013 covers0..63 arbitrary bytes and both flags;928/224 timed out.
   Need full source loop/carrier association;2–4 targets.
@@ -94,7 +97,7 @@ not measured runtimes; families overlap and must not be double counted.
   association remains unproved in full;2–4 plus caller targets.
 
 Leaf families include L099/L108–109/L139–148/L157/L181/L186–188; exact helper/
-whole-body distinction is XRe_CORRESPONDENCE.md. No stubs or new trust item. XRf per-stage Kani results will be recorded in
+whole-body distinction is XRe_CORRESPONDENCE.md. No stubs or new trust item. XRf per-stage Kani results (10/10 passed) are recorded in
 XRf_P6.md; no whole-leaf or arbitrary-length closure is inferred.
 
 ## Before/after, ledger and non-vacuity
