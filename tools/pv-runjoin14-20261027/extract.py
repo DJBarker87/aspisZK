@@ -58,7 +58,7 @@ expected_tools=json.loads((R/'evidence/pv-runjoin13-20261027/extractor-pins.json
 prior=json.loads((R/'evidence/pv-runjoin13-20261027/pv13-records-aeneas-02.json').read_text())['tool_source_pins']
 for tool in [charon,charon+'-driver',aeneas]:
  assert json.loads(pins.stdout)[tool]==prior[tool], 'pinned extractor changed: '+tool
-record=dict(name=name,phase=phase,command=cmd,tool_source_pins=json.loads(pins.stdout),worker_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),crate_revision='05cb63a2ea589fe77b29444e2338ebbc505c3ad1',opaque_child='pair_empty_roots must resolve to existing extracted implementation; no successful-child assumption',expected_time='optimized compilation then one records MIR translation' if phase=='charon' else 'one records Aeneas translation')
+record=dict(name=name,phase=phase,command=cmd,tool_source_pins=json.loads(pins.stdout),worker_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),crate_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),opaque_child='pair_empty_roots must resolve to existing extracted implementation; no successful-child assumption',expected_time='optimized compilation then one records MIR translation' if phase=='charon' else 'one records Aeneas translation')
 if phase=='charon' and len(sys.argv)>3 and sys.argv[3] in ['shipped-owned','shipped-owned-force']:record['adapter']='cfg(aeneas_ref) owned-argument borrow adapter calls original shipped records; no algorithm transcription; extraction not yet accepted'
 (E/(name+'.json')).write_text(json.dumps(record,indent=2)+'\n')
 subprocess.run(['scp','-q',str(R/'tools/pv-runjoin11-20261027/kani-receipt.py'),f'{host}:{H}/evidence/pv12-extract-receipt.py'],check=True)
