@@ -1,8 +1,13 @@
 """Resolve endpoint project closure under EJR/(h''); verify all replay external objects under (h4)."""
 from pathlib import Path
-import json,subprocess,hashlib,re,shlex
+import json,subprocess,hashlib,re,shlex,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin23-20261027';host='dombarker@100.108.41.90'
-def git(s):return subprocess.check_output(['git','show',s],cwd=R)
+batch=subprocess.Popen(['git','cat-file','--batch'],cwd=R,stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+def git(s):
+ batch.stdin.write((s+'\n').encode());batch.stdin.flush()
+ line=batch.stdout.readline().decode().strip();parts=line.split()
+ if len(parts)<3:raise RuntimeError(line)
+ b=batch.stdout.read(int(parts[-1]));assert batch.stdout.read(1)==b'\n';return b
 rev=subprocess.check_output(['git','rev-parse','research'],text=True).strip()
 ip='evidence/envj-rebuild-20261026/EJR_final-inventory.json';ep='evidence/pv-replay-20261027/receipts/external-object-manifest.json';fp='docs/research/100bit-spend-path-20261013/evidence/prover-commit47-20261022/final-source-freeze.json'
 ib=git(rev+':'+ip);eb=git(rev+':'+ep);fb=git(rev+':'+fp)
@@ -58,15 +63,22 @@ def visit(m):
   variants={hashlib.sha256(git(head+':'+p)).hexdigest() for p in ps}
   if len(variants)!=1:missing.add(m+' [conflicting h5 tracked variants]');return
   p=ps[0];b=git(head+':'+p);expected=hashlib.sha256(b).hexdigest()
-  r=dict(path=p,git_blob=subprocess.check_output(['git','rev-parse',head+':'+p],text=True).strip());a='h5 own git-tracked HEAD'
+  r=dict(path=p,git_blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest());a='h5 own git-tracked HEAD'
 
  assert hashlib.sha256(b).hexdigest()==expected,m
  imports=re.findall(r'^import\s+(\S+)',uncomment(b.decode()),re.M)
- done[m]=dict(authority=a,path=r['path'],git_blob=r.get('git_blob',r.get('blob')),sha256=expected,imports=imports);sources[m]=b.decode()
+ conflicts=[]
+ if a != 'h5 own git-tracked HEAD':
+  for p in tracked:
+   if p.endswith('/lean/'+m.replace('.','/')+'.lean'):
+    tb=git(head+':'+p);th=hashlib.sha256(tb).hexdigest()
+    if th!=expected:conflicts.append(dict(path=p,sha256=th,selected_sha256=expected,ruling='h5 precedence amended by h5 prime'))
+ done[m]=dict(tracked_conflicts=conflicts,authority=a,path=r['path'],git_blob=r.get('git_blob',r.get('blob')),sha256=expected,imports=imports);sources[m]=b.decode()
  for dep in imports:visit(dep)
 
-roots=['R1Z.PV_RunJoin_NativeFibre21']
+roots=sys.argv[1:] or ['R1Z.PV_RunJoin_NativeFibre21']
+label='admission-audit' if not sys.argv[1:] else 'focused'
 for m in roots:visit(m)
-(E/'admission-audit-resolution.json').write_text(json.dumps(dict(head=head,research_revision=rev,resolved=done,unpinned=sorted(missing)),indent=2)+'\n')
-(E/'admission-audit-project-sources.json').write_text(json.dumps(sources)+'\n')
+(E/(label+'-resolution.json')).write_text(json.dumps(dict(head=head,research_revision=rev,resolved=done,unpinned=sorted(missing)),indent=2)+'\n')
+(E/(label+'-project-sources.json')).write_text(json.dumps(sources)+'\n')
 print('Project',len(sources),'h5',sum(r['authority'].startswith('h5') for r in done.values()),'missing',sorted(missing))
