@@ -420,7 +420,7 @@ fn copy_endpoint_values(trace:&aspis_statement::pool_v1::pair_forest_trace::Pool
     if row>=1024 || arity[row][side]>=2 {return Err(Error::Public);}
     let slot=arity[row][side];arity[row][side]+=1;
     let limbs=copy_tuple_values(trace,tuple)?;
-    let compressed=aspis_statement::compress_tagged_tuple(tag,&limbs,lambda);
+    let compressed=crate::prover_shared::compress_tagged_tuple(tag,&limbs,lambda);
     let next=values[row][side][slot].add(compressed);
     values[row][side][slot]=next;
     Ok((values,arity))
