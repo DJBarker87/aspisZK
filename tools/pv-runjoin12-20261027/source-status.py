@@ -4,7 +4,7 @@ import subprocess,json,re,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin12-20261027'
 changed=set(subprocess.check_output(['git','diff','--name-only','458a0c1ff2'],cwd=R,text=True).splitlines())
 changed.update(subprocess.check_output(['git','ls-files','--others','--exclude-standard'],cwd=R,text=True).splitlines())
-receipts=[json.loads(p.read_text()) for p in E.glob('receipt-*.json')]
+receipts=[json.loads(p.read_text()) for p in E.glob('receipt-[0-9]*.json')]
 rows=[]
 for name in sorted(changed):
  p=R/name
@@ -14,6 +14,6 @@ for name in sorted(changed):
  sha=hashlib.sha256(raw).hexdigest();module='R1Z/'+p.stem
  matching=[r for r in receipts if r.get('target')==module and r.get('source_sha256')==sha]
  matching.sort(key=lambda r:r['attempt']);r=matching[-1] if matching else None
- rows.append(dict(source=name,sha256=sha,status='accepted' if r and r.get('accepted') else 'not accepted',attempt=r.get('attempt') if r else None,receipt='receipt-'+str(r['attempt'])+'.json' if r else None))
+ rows.append(dict(source=name,sha256=sha,status='accepted' if r and r.get('accepted') else 'not accepted',attempt=r.get('attempt') if r else None,lean_exit=r.get('exit') if r else None,launcher_exit=r.get('launcher_exit') if r else None,launcher_postrun_failure_review=r.get('launcher_postrun_failure_review') if r else None,receipt='receipt-'+str(r['attempt'])+'.json' if r else None))
 obj=dict(base='458a0c1ff2',revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),files=rows,accepted=sum(r['status']=='accepted' for r in rows),not_accepted=sum(r['status']!='accepted' for r in rows),R_shipped='OPEN: no shipped records extraction constant accepted',target='not established')
 (E/'source-status.json').write_text(json.dumps(obj,indent=2)+'\n');print({k:v for k,v in obj.items() if k!='files'})

@@ -9,3 +9,5 @@ Data40968 and the first affected round group40969 passed before its dependent br
 All remaining hash groups and consumer theorems are still drafts until their exact-source receipts pass. Source identity remains OPEN; these model/literal facts do not select R_shipped. Target not established.
 
 After the required wait,40989/40990 completed the final note permutation, and40991 proved input_commitment by named absorption/permutation equations. Nullifier groups40992/40993 passed.40994 was refused at09:27:09.992UTC, uncharged; next40995 not before09:30:09.992UTC. No source mapper or compiler equation is inferred.
+
+Final mathematical consumers passed:Cell4 40998; all cell5 groups41003–41006 and bridge41007; nullifier41008; literal-field facts41009; inverse41010; frozen root words41011. Exactly97 actual Lean attempts are now charged; last3 reserved audits remain. All these new consumers exit0 with standard axioms and zero swap. Source mapper/native compiler/deployed equations remain OPEN.

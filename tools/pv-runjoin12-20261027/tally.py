@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json,pathlib
 root=pathlib.Path(__file__).resolve().parents[2];e=root/'evidence/pv-runjoin12-20261027'
-rows=sorted([json.loads(p.read_text()) for p in e.glob('receipt-*.json')],key=lambda r:r['attempt'])
+rows=sorted([json.loads(p.read_text()) for p in e.glob('receipt-[0-9]*.json')],key=lambda r:r['attempt'])
 used=sorted(int(p.stem.split('-')[1]) for p in e.glob('used-*.json'))
 charged=sum(r.get('exit') is not None for r in rows)
 k=e/'kani-invocations.jsonl';kani=len(k.read_text().splitlines()) if k.exists() else 0

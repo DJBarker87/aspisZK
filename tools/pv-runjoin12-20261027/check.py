@@ -11,7 +11,7 @@ attempt=int(sys.argv[1]); module=sys.argv[2]
 assert 40900<=attempt<=41199
 assert not (e/f'used-{attempt}.json').exists(), 'ID already consumed'
 (e/f'used-{attempt}.json').write_text(json.dumps(dict(attempt=attempt,module=module,utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))+'\n')
-charged=sum(json.loads(p.read_text()).get('exit') is not None for p in e.glob('receipt-*.json'))
+charged=sum(json.loads(p.read_text()).get('exit') is not None for p in e.glob('receipt-[0-9]*.json'))
 assert charged<100, 'Lean budget exhausted'
 assert charged<97 or 'TrustAudit12' in module, 'Final three charged attempts reserved for focused trust audit'
 source=root/'docs/research/v8-r0-zk-20261009/lean'/(module+'.lean')
@@ -84,7 +84,7 @@ m=re.search(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (\S+)',tim)
 if m:
  v=m[1].split(':');record['wall_seconds']=sum(float(x)*60**i for i,x in enumerate(reversed(v)))
 record['axioms']=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",out)
-record['accepted']=record['exit']==0 and 'error:' not in out and 'sorryAx' not in out
+record['accepted']=record['launcher_exit']==0 and record['exit']==0 and 'error:' not in out and 'sorryAx' not in out
 (e/f'receipt-{attempt}.json').write_text(json.dumps(record,indent=2)+'\n')
 if record['accepted']:
  r=ssh('mkdir -p '+job+'/lean-objects/'+str(pathlib.Path(module).parent)+'; cp '+joint+'/objects/'+module+'.olean '+job+'/lean-objects/'+module+'.olean'); assert r.returncode==0,r.stderr

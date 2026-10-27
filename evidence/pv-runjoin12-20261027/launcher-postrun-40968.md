@@ -1,0 +1,5 @@
+# Exact wrapper/kernel status distinction
+
+40968 compiled the new FixtureHashData source for17.26s, peak4299517952bytes, swap0. run2/Lean exited0, printed standard axioms, emitted the fresh object and matching SHA(c5429dd0…). The launcher then printed `run-joint.sh:60: Syntax error: Unterminated quoted string` and returned2 AFTER emitting the complete successful compile and timing output. Both exits were retained in the original JSON; they are not the same status. The source had no prior attempt/output under40968. Later independently checked round modules imported this object successfully.
+
+This is accepted Lean compilation evidence, not an overall successful launcher execution. Current read-only launcher text is well-formed and all later accepted launcher exits are0. The worker did not change that shared script. Future local wrapper acceptance explicitly requires launcher_exit0, preventing an older unrelated out-log from concealing any future launcher failure. No unchanged full replay or extra compile is used to hide this event. Final audits recheck the relevant dependency closure by importing the actual checked modules.
