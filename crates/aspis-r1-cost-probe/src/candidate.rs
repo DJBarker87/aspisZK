@@ -338,3 +338,7 @@ pub fn tx2<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], ha
     mark(obs, Phase::Parsed);
     tx2_common(public_bytes, proof, checkpoint, hash, obs)
 }
+
+#[cfg(kani)]
+#[path = "LPa_candidate.rs"]
+mod LPa_candidate;

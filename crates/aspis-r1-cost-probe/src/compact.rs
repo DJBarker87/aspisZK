@@ -199,3 +199,7 @@ mod tests {
         assert_eq!(check_values(&bad), Err(CodecError::NonCanonical));
     }
 }
+
+#[cfg(kani)]
+#[path = "LPa_compact.rs"]
+mod LPa_compact;

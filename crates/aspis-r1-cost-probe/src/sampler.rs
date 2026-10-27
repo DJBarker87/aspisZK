@@ -228,3 +228,7 @@ mod qm31_index_tests {
         }
     }
 }
+
+#[cfg(kani)]
+#[path = "LPa_sampler.rs"]
+mod LPa_sampler;

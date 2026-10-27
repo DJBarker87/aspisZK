@@ -848,3 +848,7 @@ pub mod fields29 {
         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
     }
 }
+
+#[cfg(kani)]
+#[path = "LPa_wire.rs"]
+pub(crate) mod LPa_wire;

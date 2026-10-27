@@ -526,3 +526,7 @@ const _:()=assert!(PROOF_BYTES==57_607&&SPLIT==10);
 #[cfg(feature="audit-eight-way")]
 #[path="eight_way.rs"]
 pub mod eight_way;
+
+#[cfg(kani)]
+#[path = "LPa_verifier.rs"]
+mod LPa_verifier;

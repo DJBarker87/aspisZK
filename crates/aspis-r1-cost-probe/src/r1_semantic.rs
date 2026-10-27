@@ -316,3 +316,7 @@ pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, o
     mark(obs, 1);
     verify_finish(public, prefix, transcript, challenges, obs)
 }
+
+#[cfg(kani)]
+#[path = "LPa_semantic.rs"]
+mod LPa_semantic;
