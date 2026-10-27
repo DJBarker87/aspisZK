@@ -1,0 +1,25 @@
+def Aeneas.Std.Usize.wrapping_mul : Usize → Usize → Usize :=
+fun x y => UScalar.wrapping_mul x y
+def Aeneas.Std.Usize.wrapping_add : Usize → Usize → Usize :=
+fun x y => UScalar.wrapping_add x y
+theorem Aeneas.Std.UScalar.wrapping_mul_val_eq : ∀ {ty : UScalarTy} (x y : UScalar ty),
+  ↑(x.wrapping_mul y) = ↑x * ↑y % UScalar.size ty :=
+fun {ty} x y =>
+  Eq.mpr (id (congrArg (Eq (x.bv * y.bv).toNat) (congrArg (HMod.hMod (x.bv.toNat * y.bv.toNat)) (UScalar.size_def ty))))
+    (have this := of_eq_true (pow_pos._simp_1 (of_eq_true Nat.ofNat_pos._simp_1) ty.numBits);
+    have this := Decidable.byContradiction fun a => UScalar.wrapping_mul_val_eq._proof_1_2 this a;
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (congrFun' (congrArg HMod.hMod (congr (congrArg HMul.hMul (UScalar.bv_toNat x)) (UScalar.bv_toNat y)))
+              (2 ^ ty.numBits)))
+          (congrFun' (congrArg HMod.hMod (congr (congrArg HMul.hMul (UScalar.bv_toNat x)) (UScalar.bv_toNat y)))
+            (2 ^ ty.numBits)))
+        (eq_self (↑x * ↑y % 2 ^ ty.numBits))))
+@[irreducible] def Aeneas.Std.UScalar.size : UScalarTy → ℕ :=
+wrapped✝.1
+@[irreducible] def Aeneas.Std.Usize.size : ℕ :=
+wrapped✝.1
+Aeneas.Std.Usize.wrapping_mul_val_eq (x y : Usize) : ↑(x.wrapping_mul y) = ↑x * ↑y % UScalar.size UScalarTy.Usize
+Aeneas.Std.Usize.wrapping_add_val_eq (x y : Usize) : ↑(x.wrapping_add y) = (↑x + ↑y) % UScalar.size UScalarTy.Usize

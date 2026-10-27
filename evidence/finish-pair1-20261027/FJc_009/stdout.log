@@ -1,0 +1,78 @@
+FJc_WeightQMBridge.lean:20:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.aspis_core.field.CM31.add (FJc_WeightCMBridge.toC x.c0) (FJc_WeightCMBridge.toC y.c0)
+in the target expression
+  (do
+      let a ← (toQ x).c0.add (toQ y).c0
+      let b ← (toQ x).c1.add (toQ y).c1
+      ok { c0 := a, c1 := b }) =
+    ok (toQ { c0 := a, c1 := b })
+
+case refl
+x y : SQ
+a : FIn_WeightsExtract.field.CM31
+ha✝ : x.c0.add y.c0 = ok a
+b : FIn_WeightsExtract.field.CM31
+hb✝ : x.c1.add y.c1 = ok b
+ha :
+  FIo_Native.aspis_core.field.CM31.add (FJc_WeightCMBridge.toC x.c0) (FJc_WeightCMBridge.toC y.c0) =
+    ok (FJc_WeightCMBridge.toC a)
+hb :
+  FIo_Native.aspis_core.field.CM31.add (FJc_WeightCMBridge.toC x.c1) (FJc_WeightCMBridge.toC y.c1) =
+    ok (FJc_WeightCMBridge.toC b)
+run✝¹ :
+  (do
+      let c ← x.c0.add y.c0
+      let c1 ← x.c1.add y.c1
+      ok { c0 := c, c1 := c1 }) =
+    ok { c0 := a, c1 := b }
+run✝ :
+  (do
+      let c1 ← x.c1.add y.c1
+      ok { c0 := a, c1 := c1 }) =
+    ok { c0 := a, c1 := b }
+run : ok { c0 := a, c1 := b } = ok { c0 := a, c1 := b }
+⊢ (do
+      let a ← (toQ x).c0.add (toQ y).c0
+      let b ← (toQ x).c1.add (toQ y).c1
+      ok { c0 := a, c1 := b }) =
+    ok (toQ { c0 := a, c1 := b })
+FJc_WeightQMBridge.lean:34:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.aspis_core.field.CM31.sub (FJc_WeightCMBridge.toC x.c0) (FJc_WeightCMBridge.toC y.c0)
+in the target expression
+  (do
+      let a ← (toQ x).c0.sub (toQ y).c0
+      let b ← (toQ x).c1.sub (toQ y).c1
+      ok { c0 := a, c1 := b }) =
+    ok (toQ { c0 := a, c1 := b })
+
+case refl
+x y : SQ
+a : FIn_WeightsExtract.field.CM31
+ha✝ : x.c0.sub y.c0 = ok a
+b : FIn_WeightsExtract.field.CM31
+hb✝ : x.c1.sub y.c1 = ok b
+ha :
+  FIo_Native.aspis_core.field.CM31.sub (FJc_WeightCMBridge.toC x.c0) (FJc_WeightCMBridge.toC y.c0) =
+    ok (FJc_WeightCMBridge.toC a)
+hb :
+  FIo_Native.aspis_core.field.CM31.sub (FJc_WeightCMBridge.toC x.c1) (FJc_WeightCMBridge.toC y.c1) =
+    ok (FJc_WeightCMBridge.toC b)
+run✝¹ :
+  (do
+      let c ← x.c0.sub y.c0
+      let c1 ← x.c1.sub y.c1
+      ok { c0 := c, c1 := c1 }) =
+    ok { c0 := a, c1 := b }
+run✝ :
+  (do
+      let c1 ← x.c1.sub y.c1
+      ok { c0 := a, c1 := c1 }) =
+    ok { c0 := a, c1 := b }
+run : ok { c0 := a, c1 := b } = ok { c0 := a, c1 := b }
+⊢ (do
+      let a ← (toQ x).c0.sub (toQ y).c0
+      let b ← (toQ x).c1.sub (toQ y).c1
+      ok { c0 := a, c1 := b }) =
+    ok (toQ { c0 := a, c1 := b })
+'AspisR1.FJc_WeightQMBridge.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FJc_WeightQMBridge.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
