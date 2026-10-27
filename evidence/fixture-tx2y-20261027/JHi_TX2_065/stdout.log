@@ -1,0 +1,258 @@
+'_private.JHi_LateAccepted.0.AspisR1.JHi_LateAccepted.array_slice_length' depends on axioms: [propext, Quot.sound]
+JHi_LateAccepted.lean:13:80: error: unsolved goals
+output : Slice U8
+size : (↑output).length = 1520
+⊢ (do
+      let i1 ← POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES
+      if (output.len != i1) = true then
+          ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.WrongLength, output)
+        else do
+          let o ← lift (JHg_RawCommon.common.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64)
+          let b ←
+            core.cmp.PartialEq.ne.default (core.option.Option.Insts.CoreCmpPartialEqOption.eq core.cmp.PartialEqU64) o
+                (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index)
+          if b = true then
+              ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch, output)
+            else do
+              let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8
+              let (s, index_mut_back) ←
+                core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 8#usize } output1
+              let s1 ← lift POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+              let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+              let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+              let output4 ← output3.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT
+              let (s3, index_mut_back1) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 10#usize, «end» := 12#usize } output4
+              let i2 ← lift (UScalar.cast UScalarTy.U16 32#usize)
+              let a ← lift (core.num.U16.to_le_bytes i2)
+              let s4 ← lift a.to_slice
+              let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+              let (s6, index_mut_back2) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 12#usize, «end» := 16#usize }
+                    (index_mut_back1 s5)
+              let i3 ← lift (UScalar.cast UScalarTy.U32 800#usize)
+              let a1 ← lift (core.num.U32.to_le_bytes i3)
+              let s7 ← lift a1.to_slice
+              let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7
+              let (s9, index_mut_back3) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 16#usize, «end» := 20#usize }
+                    (index_mut_back2 s8)
+              let i4 ← aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+              let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+              let a2 ← lift (core.num.U32.to_le_bytes i5)
+              let s10 ← lift a2.to_slice
+              let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10
+              let (s12, index_mut_back4) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 20#usize, «end» := 24#usize }
+                    (index_mut_back3 s11)
+              let i6 ← lift (UScalar.cast UScalarTy.U32 i1)
+              let a3 ← lift (core.num.U32.to_le_bytes i6)
+              let s13 ← lift a3.to_slice
+              let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13
+              let i7 ← 32#usize + 800#usize
+              let (s15, index_mut_back5) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 32#usize, «end» := i7 }
+                    (index_mut_back4 s14)
+              let (r, s16) ← encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15
+              let r1 ←
+                core.result.Result.map_err
+                    encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1
+                    r ()
+              let cf ←
+                match r1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let r2 ←
+                    aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+                        JHg_RawCommon.common.lane_transition.candidate_afterstate
+                  let r3 ←
+                    core.result.Result.map_err
+                        encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1
+                        r2 ()
+                  let cf1 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let (s17, index_mut_back6) ←
+                        core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut { start := i7 } (index_mut_back5 s16)
+                      let s18 ← lift val.to_slice
+                      let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 s18
+                      ok (core.result.Result.Ok (), index_mut_back6 s19)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r4 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+                      ok (r4, index_mut_back5 s16)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+                  ok (r4, index_mut_back5 s16)) ⦃
+    result => result.1 = core.result.Result.Ok () ∧ (↑result.2).length = 1520 ⦄
+output : Slice U8
+size : (↑output).length = 1520
+⊢ (do
+      let i1 ← POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES
+      if (output.len != i1) = true then
+          ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.WrongLength, output)
+        else do
+          let o ← lift (JHg_RawCommon.common.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64)
+          let b ←
+            core.cmp.PartialEq.ne.default (core.option.Option.Insts.CoreCmpPartialEqOption.eq core.cmp.PartialEqU64) o
+                (some JHg_RawCommon.common.lane_transition.candidate_afterstate.next_pair_index)
+          if b = true then
+              ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch, output)
+            else do
+              let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8
+              let (s, index_mut_back) ←
+                core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 8#usize } output1
+              let s1 ← lift POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+              let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+              let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+              let output4 ← output3.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT
+              let (s3, index_mut_back1) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 10#usize, «end» := 12#usize } output4
+              let i2 ← lift (UScalar.cast UScalarTy.U16 32#usize)
+              let a ← lift (core.num.U16.to_le_bytes i2)
+              let s4 ← lift a.to_slice
+              let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+              let (s6, index_mut_back2) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 12#usize, «end» := 16#usize }
+                    (index_mut_back1 s5)
+              let i3 ← lift (UScalar.cast UScalarTy.U32 800#usize)
+              let a1 ← lift (core.num.U32.to_le_bytes i3)
+              let s7 ← lift a1.to_slice
+              let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7
+              let (s9, index_mut_back3) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 16#usize, «end» := 20#usize }
+                    (index_mut_back2 s8)
+              let i4 ← aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+              let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+              let a2 ← lift (core.num.U32.to_le_bytes i5)
+              let s10 ← lift a2.to_slice
+              let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10
+              let (s12, index_mut_back4) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 20#usize, «end» := 24#usize }
+                    (index_mut_back3 s11)
+              let i6 ← lift (UScalar.cast UScalarTy.U32 i1)
+              let a3 ← lift (core.num.U32.to_le_bytes i6)
+              let s13 ← lift a3.to_slice
+              let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13
+              let i7 ← 32#usize + 800#usize
+              let (s15, index_mut_back5) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 32#usize, «end» := i7 }
+                    (index_mut_back4 s14)
+              let (r, s16) ← encode_pool_v1_pair_live_snapshot_v1 JHg_RawCommon.common.lane_transition.live_snapshot s15
+              let r1 ←
+                core.result.Result.map_err
+                    encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1
+                    r ()
+              let cf ←
+                match r1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let r2 ←
+                    aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+                        JHg_RawCommon.common.lane_transition.candidate_afterstate
+                  let r3 ←
+                    core.result.Result.map_err
+                        encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1
+                        r2 ()
+                  let cf1 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let (s17, index_mut_back6) ←
+                        core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut { start := i7 } (index_mut_back5 s16)
+                      let s18 ← lift val.to_slice
+                      let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 s18
+                      ok (core.result.Result.Ok (), index_mut_back6 s19)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r4 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+                      ok (r4, index_mut_back5 s16)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+                  ok (r4, index_mut_back5 s16)) ⦃
+    result => result.1 = core.result.Result.Ok () ∧ (↑result.2).length = 1520 ⦄
+JHi_LateAccepted.lean:18:28: warning: This simp argument is unused:
+  array_slice_length
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵_̵a̵l̵l̵ ̵o̵n̵l̵y̵ ̵[̵a̵r̵r̵a̵y̵_̵s̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵A̵t̵N̵a̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵S̵6̵N̵a̵t̵i̵v̵e̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵,̵A̵s̵p̵i̵s̵S̵6̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵s̲i̲m̲p̲_̲a̲l̲l̲ ̲o̲n̲l̲y̲ ̲[̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲A̲t̲N̲a̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲S̲6̲N̲a̲t̲i̲v̲e̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲,̲ ̲A̲s̲p̲i̲s̲S̲6̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_LateAccepted.lean:18:60: warning: This simp argument is unused:
+  Slice.set
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵_̵a̵l̵l̵ ̵o̵n̵l̵y̵ ̵[̵a̵r̵r̵a̵y̵_̵s̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵A̵t̵N̵a̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵S̵6̵N̵a̵t̵i̵v̵e̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵,̵A̵s̵p̵i̵s̵S̵6̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵s̲i̲m̲p̲_̲a̲l̲l̲ ̲o̲n̲l̲y̲ ̲[̲a̲r̲r̲a̲y̲_̲s̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲A̲t̲N̲a̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲S̲6̲N̲a̲t̲i̲v̲e̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲,̲ ̲A̲s̲p̲i̲s̲S̲6̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_LateAccepted.lean:18:70: warning: This simp argument is unused:
+  Slice.setAtNat
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵_̵a̵l̵l̵ ̵o̵n̵l̵y̵ ̵[̵a̵r̵r̵a̵y̵_̵s̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵A̵t̵N̵a̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵S̵6̵N̵a̵t̵i̵v̵e̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵,̵A̵s̵p̵i̵s̵S̵6̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵s̲i̲m̲p̲_̲a̲l̲l̲ ̲o̲n̲l̲y̲ ̲[̲a̲r̲r̲a̲y̲_̲s̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲S̲6̲N̲a̲t̲i̲v̲e̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲,̲ ̲A̲s̲p̲i̲s̲S̲6̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_LateAccepted.lean:19:4: warning: This simp argument is unused:
+  AspisS6NativeSliceFrame.setSlice_length
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵a̵r̵r̵a̵y̵_̵s̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵A̵t̵N̵a̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵S̵6̵N̵a̵t̵i̵v̵e̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵,̵A̵s̵p̵i̵s̵S̵6̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵[̲a̲r̲r̲a̲y̲_̲s̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲A̲t̲N̲a̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲,̲ ̲A̲s̲p̲i̲s̲S̲6̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_LateAccepted.lean:19:44: warning: This simp argument is unused:
+  List.length_set
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵_̵a̵l̵l̵ ̵o̵n̵l̵y̵ ̵[̵a̵r̵r̵a̵y̵_̵s̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵A̵t̵N̵a̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵S̵6̵N̵a̵t̵i̵v̵e̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵,̵A̵s̵p̵i̵s̵S̵6̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵s̲i̲m̲p̲_̲a̲l̲l̲ ̲o̲n̲l̲y̲ ̲[̲a̲r̲r̲a̲y̲_̲s̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲A̲t̲N̲a̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲S̲6̲N̲a̲t̲i̲v̲e̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲A̲s̲p̲i̲s̲S̲6̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_LateAccepted.lean:19:60: warning: This simp argument is unused:
+  AspisS6SliceFrame.setSlice_length
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵a̵r̵r̵a̵y̵_̵s̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵A̵t̵N̵a̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵S̵6̵N̵a̵t̵i̵v̵e̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵,̵A̵s̵p̵i̵s̵S̵6̵S̵l̵i̵c̵e̵F̵r̵a̵m̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵_̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵[̲a̲r̲r̲a̲y̲_̲s̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲A̲t̲N̲a̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲S̲6̲N̲a̲t̲i̲v̲e̲S̲l̲i̲c̲e̲F̲r̲a̲m̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_LateAccepted.lean:19:94: warning: This simp argument is unused:
+  List.length_replicate
+
+Hint: Omit it from the simp argument list.
+  simp_all only [array_slice_length, ̲Slice.length, ̲Slice.set, ̲Slice.setAtNat,
+      AspisS6NativeSliceFrame.setSlice_length, ̲List.length_set, ̲AspisS6SliceFrame.setSlice_length,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHi_LateAccepted.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHi_LateAccepted.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

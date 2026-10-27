@@ -1,0 +1,182 @@
+JHi_RawTerminalValidation.lean:40:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  statement_public_common value
+in the target expression
+  (do
+      let (pool, deployment, anchor_sequence, anchor, nullifier, _) ←
+        statement_public_common
+            (PoolV1PairForestTerminalStatementV1.PrivateTransfer JHg_RawCommon.common JHg_RawPrefix.payment)
+      let b3 ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool JHg_RawCommon.common.master_account
+      if b3 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+        else do
+          let b4 ←
+            core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 deployment
+                JHg_RawCommon.common.lane_transition.live_snapshot.deployment_domain
+          if b4 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+            else do
+              let b5 ←
+                core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                    JHg_RawCommon.common.lane_transition.live_snapshot.pool JHg_RawCommon.common.master_account
+              if b5 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                else
+                  if (anchor_sequence != JHg_RawCommon.common.checkpoint_sequence) = true then
+                    ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                  else do
+                    let b6 ←
+                      core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                          JHg_RawCommon.common.historical_global_anchor
+                    if b6 = true then
+                        ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                      else do
+                        let r2 ←
+                          aspis_statement.pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 nullifier
+                        let r3 ←
+                          match r2 with
+                            | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                            | core.result.Result.Err e => do
+                              let t ←
+                                validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                    () e
+                              ok (core.result.Result.Err t)
+                        let cf1 ←
+                          match r3 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                        match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue val =>
+                            if (val != JHg_RawCommon.common.output_lane) = true then
+                              ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                            else
+                              let (s, _) := (Array.repeat 1520#usize 0#u8).to_slice_mut
+                              do
+                              let (r4, _) ←
+                                aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                                    JHg_RawCommon.common.lane_transition s
+                              let r5 ←
+                                match r4 with
+                                  | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                                  | core.result.Result.Err e => do
+                                    let t ←
+                                      validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                          () e
+                                    ok (core.result.Result.Err t)
+                              let cf2 ←
+                                match r5 with
+                                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                  | core.result.Result.Err e =>
+                                    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                              match cf2 with
+                                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Ok ())
+
+encoded : Std.Array U8 216#usize
+payment :
+  aspis_statement.pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 JHg_RawPrefix.payment =
+    ok (core.result.Result.Ok encoded)
+updated : Slice U8
+late :
+  aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+      JHg_RawCommon.common.lane_transition (Array.repeat 1520#usize 0#u8).to_slice =
+    ok (core.result.Result.Ok (), updated)
+right✝ : updated.length = 1520
+common : value.common = ok JHg_RawCommon.common
+publicCall :
+  statement_public_common value =
+    ok
+      (JHg_RawPrefix.payment.pool, JHg_RawPrefix.payment.deployment_domain, JHg_RawPrefix.payment.anchor_sequence,
+        JHg_RawPrefix.payment.anchor_root, JHg_RawPrefix.payment.nullifier, JHg_RawPrefix.payment.asset_id)
+master :
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JHg_RawCommon.common.master_account
+      (Array.repeat 32#usize 0#u8) =
+    ok false
+checkpoint :
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JHg_RawCommon.common.checkpoint_account
+      (Array.repeat 32#usize 0#u8) =
+    ok false
+lane :
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JHg_RawCommon.common.selected_lane_account
+      (Array.repeat 32#usize 0#u8) =
+    ok false
+laneCall :
+  aspis_statement.pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 JHg_RawPrefix.payment.nullifier =
+    ok (core.result.Result.Ok 3#u8)
+⊢ (do
+      let (pool, deployment, anchor_sequence, anchor, nullifier, _) ←
+        statement_public_common
+            (PoolV1PairForestTerminalStatementV1.PrivateTransfer JHg_RawCommon.common JHg_RawPrefix.payment)
+      let b3 ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool JHg_RawCommon.common.master_account
+      if b3 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+        else do
+          let b4 ←
+            core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 deployment
+                JHg_RawCommon.common.lane_transition.live_snapshot.deployment_domain
+          if b4 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+            else do
+              let b5 ←
+                core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                    JHg_RawCommon.common.lane_transition.live_snapshot.pool JHg_RawCommon.common.master_account
+              if b5 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                else
+                  if (anchor_sequence != JHg_RawCommon.common.checkpoint_sequence) = true then
+                    ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                  else do
+                    let b6 ←
+                      core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                          JHg_RawCommon.common.historical_global_anchor
+                    if b6 = true then
+                        ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                      else do
+                        let r2 ←
+                          aspis_statement.pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 nullifier
+                        let r3 ←
+                          match r2 with
+                            | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                            | core.result.Result.Err e => do
+                              let t ←
+                                validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                    () e
+                              ok (core.result.Result.Err t)
+                        let cf1 ←
+                          match r3 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                        match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue val =>
+                            if (val != JHg_RawCommon.common.output_lane) = true then
+                              ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                            else
+                              let (s, _) := (Array.repeat 1520#usize 0#u8).to_slice_mut
+                              do
+                              let (r4, _) ←
+                                aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                                    JHg_RawCommon.common.lane_transition s
+                              let r5 ←
+                                match r4 with
+                                  | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                                  | core.result.Result.Err e => do
+                                    let t ←
+                                      validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                          () e
+                                    ok (core.result.Result.Err t)
+                              let cf2 ←
+                                match r5 with
+                                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                  | core.result.Result.Err e =>
+                                    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                              match cf2 with
+                                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Ok ())
+'AspisR1.JHi_RawTerminalValidation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

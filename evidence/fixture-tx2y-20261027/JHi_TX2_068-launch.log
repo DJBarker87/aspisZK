@@ -1,0 +1,46 @@
+{"attempt": "JHi_TX2_068", "exit_status": 1, "wall_seconds": 11.706177890999243, "peak_rss_kib": "5469148", "swaps": "0", "print_axioms": ["'_private.JHi_LateAccepted.0.AspisR1.JHi_LateAccepted.array_slice_length' depends on axioms: [propext, Quot.sound]", "'AspisR1.JHi_LateAccepted.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JHi_LateAccepted.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'_private.JHi_LateAccepted.0.AspisR1.JHi_LateAccepted.array_slice_length' depends on axioms: [propext, Quot.sound]
+JHi_LateAccepted.lean:14:80: error: unsolved goals
+output : Slice U8
+size : output.length = 1520
+output1 : Slice U8
+_✝⁸ : [> let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8 <]
+output1_post2 : ↑output1 = List.replicate output.length 0#u8
+s : Slice U8
+index_mut_back : Slice U8 → Slice U8
+_✝⁷ : [> let(s, index_mut_back) ← core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 8#usize } output1 <]
+s_post3✝ : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑output1).setSlice! 0 ↑s'
+s2 : Slice U8
+_✝⁶ :
+  [> let s2 ← core.slice.Slice.copy_from_slice core.marker
+...
+lt.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (s17, index_mut_back6) ←
+                core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut { start := i7 } (index_mut_back5 s16)
+              let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 val.to_slice
+              ok (core.result.Result.Ok (), index_mut_back6 s19)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+              ok (r4, index_mut_back5 s16)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r4 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+          ok (r4, index_mut_back5 s16)) ⦃
+    result => result.1 = core.result.Result.Ok () ∧ (↑result.2).length = 1520 ⦄
+JHi_LateAccepted.lean:33:67: warning: This simp argument is unused:
+  bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [lift, ̲bind_tc_ok, ̲compare, ̲Bool.false_eq_true, ̲↓reduceIte,̵b̵y̵t̵e̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHi_LateAccepted.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHi_LateAccepted.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra561871ff79e49c1bc67d06d17516c5d.scope; invocation ID: 6e8810be489f42ad93387df4c2d096df

@@ -1,0 +1,9 @@
+import JHi_Authentication
+import JHi_AuthenticationPrefix
+import JHi_AuthenticationRefusal
+set_option autoImplicit false
+set_option pp.proofs false
+#print axioms AspisR1.JHi_AuthenticationPrefix.source
+#print axioms AspisR1.JHi_AuthenticationRefusal.source
+#print axioms AspisR1.JHi_AuthenticationRefusal.no_success
+#print AspisR1.JHi_AuthenticationRefusal.source

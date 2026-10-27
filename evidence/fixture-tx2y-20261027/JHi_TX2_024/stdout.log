@@ -1,0 +1,177 @@
+JHi_PaymentValidation.lean:21:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ←
+      core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JFs_PaymentValue.common.pool
+          (Array.repeat 32#usize 0#u8)
+    if b = true then ok (core.result.Result.Err PoolV1PaymentStatementFormatError.ZeroRequiredBinding)
+      else do
+        let b1 ←
+          core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JFs_PaymentValue.common.deployment_domain
+              (Array.repeat 32#usize 0#u8)
+        if b1 = true then ok (core.result.Result.Err PoolV1PaymentStatementFormatError.ZeroRequiredBinding)
+          else do
+            let i ← 1#u64 <<< 20#usize
+            if JFs_PaymentValue.common.anchor_sequence > i then
+                ok (core.result.Result.Err PoolV1PaymentStatementFormatError.InvalidAnchorSequence)
+              else do
+                let b2 ←
+                  AspisR1TerminalDecoder.pool_v1.payment_relation.digest_is_canonical
+                      JFs_PaymentValue.common.anchor_root
+                if b2 = true then do
+                    let b3 ←
+                      AspisR1TerminalDecoder.pool_v1.payment_relation.digest_is_canonical
+                          JFs_PaymentValue.common.nullifier
+                    if b3 = true then
+                        if JFs_PaymentValue.common.asset_id ≥ 2147483647#u32 then
+                          ok (core.result.Result.Err PoolV1PaymentStatementFormatError.NonCanonicalAssetId)
+                        else ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err PoolV1PaymentStatementFormatError.NonCanonicalDigest)
+                  else ok (core.result.Result.Err PoolV1PaymentStatementFormatError.NonCanonicalDigest)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok ())
+
+⊢ (do
+      let b ←
+        core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JFs_PaymentValue.common.pool
+            (Array.repeat 32#usize 0#u8)
+      if b = true then ok (core.result.Result.Err PoolV1PaymentStatementFormatError.ZeroRequiredBinding)
+        else do
+          let b1 ←
+            core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 JFs_PaymentValue.common.deployment_domain
+                (Array.repeat 32#usize 0#u8)
+          if b1 = true then ok (core.result.Result.Err PoolV1PaymentStatementFormatError.ZeroRequiredBinding)
+            else do
+              let i ← 1#u64 <<< 20#usize
+              if JFs_PaymentValue.common.anchor_sequence > i then
+                  ok (core.result.Result.Err PoolV1PaymentStatementFormatError.InvalidAnchorSequence)
+                else do
+                  let b2 ←
+                    AspisR1TerminalDecoder.pool_v1.payment_relation.digest_is_canonical
+                        JFs_PaymentValue.common.anchor_root
+                  if b2 = true then do
+                      let b3 ←
+                        AspisR1TerminalDecoder.pool_v1.payment_relation.digest_is_canonical
+                            JFs_PaymentValue.common.nullifier
+                      if b3 = true then
+                          if JFs_PaymentValue.common.asset_id ≥ 2147483647#u32 then
+                            ok (core.result.Result.Err PoolV1PaymentStatementFormatError.NonCanonicalAssetId)
+                          else ok (core.result.Result.Ok ())
+                        else ok (core.result.Result.Err PoolV1PaymentStatementFormatError.NonCanonicalDigest)
+                    else ok (core.result.Result.Err PoolV1PaymentStatementFormatError.NonCanonicalDigest)) =
+    ok (core.result.Result.Ok ())
+JHi_PaymentValidation.lean:15:13: warning: This simp argument is unused:
+  JFs_PaymentValue.pool_nonzero
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_PaymentValue.p̵o̵o̵l̵_̵n̵o̵n̵z̵e̵r̵o̵,̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵domain_nonzero, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵Bool.false_eq_true, ̲↓reduceIte,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentValue.sequence, ̲JFs_PaymentValue.asset,
+  ̵  ̵ ̵ ̵JHi_DigestAssociation.canonical,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentCanon.source _ JFt_Digest43.canonical,
+      JFs_PaymentCanon.source _ JFt_Digest44.canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_PaymentValidation.lean:15:43: warning: This simp argument is unused:
+  JFs_PaymentValue.domain_nonzero
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_PaymentValue.pool_nonzero,J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵d̵o̵m̵a̵i̵n̵_̵n̵o̵n̵z̵e̵r̵o̵,̵ ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵Bool.false_eq_true, ̲↓reduceIte,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentValue.sequence, ̲JFs_PaymentValue.asset,
+  ̵  ̵ ̵ ̵JHi_DigestAssociation.canonical,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentCanon.source _ JFt_Digest43.canonical,
+      JFs_PaymentCanon.source _ JFt_Digest44.canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_PaymentValidation.lean:15:75: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_PaymentValue.pool_nonzero, ̲JFs_PaymentValue.domain_nonzero,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵  ̵ ̵ ̵Bool.false_eq_true,
+  ̲ ̲ ̲ ̲ ̲↓reduceIte, ̲JFs_PaymentValue.sequence, ̲JFs_PaymentValue.asset,
+  ̵  ̵ ̵ ̵JHi_DigestAssociation.canonical,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentCanon.source _ JFt_Digest43.canonical,
+      JFs_PaymentCanon.source _ JFt_Digest44.canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_PaymentValidation.lean:16:4: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_PaymentValue.pool_nonzero, ̲JFs_PaymentValue.domain_nonzero, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓reduceIte,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentValue.sequence, ̲JFs_PaymentValue.asset,
+  ̵  ̵ ̵ ̵JHi_DigestAssociation.canonical,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentCanon.source _ JFt_Digest43.canonical,
+      JFs_PaymentCanon.source _ JFt_Digest44.canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_PaymentValidation.lean:16:23: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_PaymentValue.pool_nonzero, ̲JFs_PaymentValue.domain_nonzero, ̲bind_tc_ok,
+      Bool.false_eq_true,↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵ ̲JFs_PaymentValue.sequence, ̲JFs_PaymentValue.asset,
+      JHi_DigestAssociation.canonical, ̲JFs_PaymentCanon.source _ JFt_Digest43.canonical,
+      JFs_PaymentCanon.source _ JFt_Digest44.canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_PaymentValidation.lean:16:34: warning: This simp argument is unused:
+  JFs_PaymentValue.sequence
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_PaymentValue.pool_nonzero, ̲JFs_PaymentValue.domain_nonzero, ̲bind_tc_ok,
+      Bool.false_eq_true, ̲↓reduceIte, ̲JFs_PaymentValue.s̵e̵q̵u̵e̵n̵c̵e̵,̵J̵F̵s̵_̵P̵ay̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵a̵sset,
+  ̵  ̵ ̵ ̵JHi_DigestAssociation.canonical,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentCanon.source _ JFt_Digest43.canonical,
+      JFs_PaymentCanon.source _ JFt_Digest44.canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_PaymentValidation.lean:16:60: warning: This simp argument is unused:
+  JFs_PaymentValue.asset
+
+Hint: Omit it from the simp argument list.
+  simp only [JFs_PaymentValue.pool_nonzero, ̲JFs_PaymentValue.domain_nonzero, ̲bind_tc_ok,
+      Bool.false_eq_true, ̲↓reduceIte, ̲JFs_PaymentValue.sequence,J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵a̵s̵s̵e̵t̵,̵
+  ̵  ̵ ̵ ̵JHi_DigestAssociation.canonical,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentCanon.source _ JFt_Digest43.canonical,
+      JFs_PaymentCanon.source _ JFt_Digest44.canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_PaymentValidation.lean:17:36: warning: This simp argument is unused:
+  JFs_PaymentCanon.source _ JFt_Digest43.canonical
+
+Hint: Omit it from the simp argument list.
+  simp only [̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵p̵o̵o̵l̵_̵n̵o̵n̵z̵e̵r̵o̵,̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵d̵o̵m̵a̵i̵n̵_̵n̵o̵n̵z̵e̵r̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵s̵e̵q̵u̵e̵n̵c̵e̵,̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵a̵s̵s̵e̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵i̵_̵D̵i̵g̵e̵s̵t̵A̵s̵s̵o̵c̵i̵a̵t̵i̵o̵n̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵,̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵C̵a̵n̵o̵n̵.̵s̵o̵u̵r̵c̵e̵ ̵_̵ ̵J̵F̵t̵_̵D̵i̵g̵e̵s̵t̵4̵3̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵,̵[̲J̲F̲s̲_̲P̲a̲y̲m̲e̲n̲t̲V̲a̲l̲u̲e̲.̲p̲o̲o̲l̲_̲n̲o̲n̲z̲e̲r̲o̲,̲ ̲J̲F̲s̲_̲P̲a̲y̲m̲e̲n̲t̲V̲a̲l̲u̲e̲.̲d̲o̲m̲a̲i̲n̲_̲n̲o̲n̲z̲e̲r̲o̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲J̲F̲s̲_̲P̲a̲y̲m̲e̲n̲t̲V̲a̲l̲u̲e̲.̲s̲e̲q̲u̲e̲n̲c̲e̲,̲ ̲J̲F̲s̲_̲P̲a̲y̲m̲e̲n̲t̲V̲a̲l̲u̲e̲.̲a̲s̲s̲e̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲i̲_̲D̲i̲g̲e̲s̲t̲A̲s̲s̲o̲c̲i̲a̲t̲i̲o̲n̲.̲c̲a̲n̲o̲n̲i̲c̲a̲l̲,̲ JFs_PaymentCanon.source _ JFt_Digest44.canonical]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHi_PaymentValidation.lean:18:4: warning: This simp argument is unused:
+  JFs_PaymentCanon.source _ JFt_Digest44.canonical
+
+Hint: Omit it from the simp argument list.
+  simp only [̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵p̵o̵o̵l̵_̵n̵o̵n̵z̵e̵r̵o̵,̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵d̵o̵m̵a̵i̵n̵_̵n̵o̵n̵z̵e̵r̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵s̵e̵q̵u̵e̵n̵c̵e̵,̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵V̵a̵l̵u̵e̵.̵a̵s̵s̵e̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵J̵H̵i̵_̵D̵i̵g̵e̵s̵t̵A̵s̵s̵o̵c̵i̵a̵t̵i̵o̵n̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵,̵J̵F̵s̵_̵P̵a̵y̵m̵e̵n̵t̵C̵a̵n̵o̵n̵.̵s̵o̵u̵r̵c̵e̵ ̵_̵ ̵J̵F̵t̵_̵D̵i̵g̵e̵s̵t̵4̵3̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵,̵[̲J̲F̲s̲_̲P̲a̲y̲m̲e̲n̲t̲V̲a̲l̲u̲e̲.̲p̲o̲o̲l̲_̲n̲o̲n̲z̲e̲r̲o̲,̲ ̲J̲F̲s̲_̲P̲a̲y̲m̲e̲n̲t̲V̲a̲l̲u̲e̲.̲d̲o̲m̲a̲i̲n̲_̲n̲o̲n̲z̲e̲r̲o̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲J̲F̲s̲_̲P̲a̲y̲m̲e̲n̲t̲V̲a̲l̲u̲e̲.̲s̲e̲q̲u̲e̲n̲c̲e̲,̲ ̲J̲F̲s̲_̲P̲a̲y̲m̲e̲n̲t̲V̲a̲l̲u̲e̲.̲a̲s̲s̲e̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲J̲H̲i̲_̲D̲i̲g̲e̲s̲t̲A̲s̲s̲o̲c̲i̲a̲t̲i̲o̲n̲.̲c̲a̲n̲o̲n̲i̲c̲a̲l̲,̲ JFs_PaymentCanon.source _ J̵F̵t̵_̵D̵i̵g̵e̵s̵t̵4̵4̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵]̵J̲F̲t̲_̲D̲i̲g̲e̲s̲t̲4̲3̲.̲c̲a̲n̲o̲n̲i̲c̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHi_PaymentValidation.common_validated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JHi_PaymentValidation.lean:34:21: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+JHi_PaymentValidation.lean:34:38: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+JHi_PaymentValidation.lean:35:13: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+'AspisR1.JHi_PaymentValidation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
