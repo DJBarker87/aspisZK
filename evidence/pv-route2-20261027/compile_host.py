@@ -13,6 +13,10 @@ for row in rows[int(sys.argv[3]) if len(sys.argv)>3 else 0:]:
   if p.exists():deps[imp]=hashlib.sha256(p.read_bytes()).hexdigest()
   else:deps[imp]='missing'
  fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest();a=nextid;nextid+=1;O=D/'lean-receipts'/str(a);O.mkdir(parents=True)
+ gate=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/reservation.py')
+ pre=subprocess.run(['python3',str(gate),str(O/'admission-before.json')],stdout=open(O/'reservation.log','w'),stderr=subprocess.STDOUT)
+ if pre.returncode:
+  (O/'refusal.json').write_text(json.dumps(dict(attempt=a,module=module,next_unused_id=nextid,charged_lean_attempts=0,scope_started=False,exit=pre.returncode),indent=2));(D/'NEXT-ID.json').write_text(json.dumps(dict(next_unused_id=nextid,refused_id=a,charged_lean_attempts=0),indent=2));print(a,'reservation hold; wait 180 seconds',flush=True);break
  submission=dict(attempt=a,module=module,source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),dependency_object_hashes=deps,deps_fingerprint=fp,source_revision=(D/'revision').read_text().strip());(O/'submission.json').write_text(json.dumps(submission,indent=2));start=time.monotonic()
  r=subprocess.run([L,str(a),module,'J','7000','8',fp],stdout=open(O/'launcher.log','w'),stderr=subprocess.STDOUT)
  out=(T/f'out-{a}.log');tm=T/f'time-{a}.log';txt=out.read_text() if out.exists() else '';wall=time.monotonic()-start
