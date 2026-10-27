@@ -1,0 +1,57 @@
+{"attempt": "XRn_K004", "exit_status": 0, "wall_seconds": 2.932158143958077, "peak_rss_kib": "320712", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` an
+...
+
+   |    ^^^^^^^^^^ help: convert the identifier to snake case: `xrn_finish`
+
+warning: function `XRn_claim_selection_success` should have a snake case name
+  --> XRn_native_harnesses.rs:31:4
+   |
+31 | fn XRn_claim_selection_success(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrn_claim_selection_success`
+
+warning: function `XRn_claim_selection_error` should have a snake case name
+  --> XRn_native_harnesses.rs:39:4
+   |
+39 | fn XRn_claim_selection_error(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrn_claim_selection_error`
+
+warning: function `XRn_powers` should have a snake case name
+  --> XRn_native_harnesses.rs:47:4
+   |
+47 | fn XRn_powers<const N:usize>(_:E)->[E;N]{let mut out=[E::ZERO;N];if N>0{out[0]=E::ONE;}out}
+   |    ^^^^^^^^^^ help: convert the identifier to snake case: `xrn_powers`
+
+warning: function `XRn_claim_first_rejection` should have a snake case name
+  --> XRn_native_harnesses.rs:51:4
+   |
+51 | fn XRn_claim_first_rejection(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `xrn_claim_first_rejection`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.46s
+Checking harness XRn_verifier::XRn_native_harnesses::XRn_claim_first_rejection...
+
+VERIFICATION RESULT:
+ ** 0 of 576 failed (59 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.1411815s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r2a91e1f16a7a40d089fef71dda3cbf0a.scope; invocation ID: cf0e0c594c6b4929b4750954ea02a21b

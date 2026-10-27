@@ -1,0 +1,35 @@
+XRn_generated/XRn_JoinedDotFinish.lean:12:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 0#usize
+    let i1 ← AspisR1CanonicalDotFinish.canonical.reduce i
+    let i2 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 1#usize
+    let i3 ← AspisR1CanonicalDotFinish.canonical.reduce i2
+    let i4 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 2#usize
+    let i5 ← AspisR1CanonicalDotFinish.canonical.reduce i4
+    let i6 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 3#usize
+    let i7 ← AspisR1CanonicalDotFinish.canonical.reduce i6
+    ok (Array.make 4#usize [i1, i3, i5, i7] ⋯)
+is not definitionally equal to the right-hand side
+  do
+    let a ←
+      Std.core.array.Array.map (BuiltinFnMut U64 U32) (Array.make 4#usize [a, b, c, d] ⋯)
+          AspisR1CanonicalDotFinish.canonical.reduce
+    ok a
+
+a b c d : U64
+⊢ (do
+      let i ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 0#usize
+      let i1 ← AspisR1CanonicalDotFinish.canonical.reduce i
+      let i2 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 1#usize
+      let i3 ← AspisR1CanonicalDotFinish.canonical.reduce i2
+      let i4 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 2#usize
+      let i5 ← AspisR1CanonicalDotFinish.canonical.reduce i4
+      let i6 ← (Array.make 4#usize [a, b, c, d] ⋯).index_usize 3#usize
+      let i7 ← AspisR1CanonicalDotFinish.canonical.reduce i6
+      ok (Array.make 4#usize [i1, i3, i5, i7] ⋯)) =
+    do
+    let a ←
+      Std.core.array.Array.map (BuiltinFnMut U64 U32) (Array.make 4#usize [a, b, c, d] ⋯)
+          AspisR1CanonicalDotFinish.canonical.reduce
+    ok a
+'XRn_JoinedDotFinish.four_words' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
