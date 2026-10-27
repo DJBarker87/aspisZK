@@ -1,0 +1,32 @@
+reservation: populated 15 GiB + 8 GiB; window=0 (London 2129); env=J
+'PV_B1_ClosureReplay.closing_dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+PV_B1_254.source (N : Aeneas.Std.Usize) (x : PV_B1_254.aspis_core.field.wide_exact.WideExact) :
+  PV_B1_254.powers N x = PV_B1_PowersOriginal.weights.powers N x
+PV_B1_230.source (xs : Aeneas.Std.Slice PV_B1_230.aspis_core.field.QM31) :
+  PV_B1_230.state_only_copy_helper_sum xs = Aeneas.Std.Result.ok (PV_B1_SumOriginal.original_row xs)
+PV_B1_258.source
+  (v : Aeneas.Std.Slice (Aeneas.Std.Array (Aeneas.Std.Array PV_B1_258.aspis_core.field.QM31 2#usize) 2#usize))
+  (m : Aeneas.Std.Array Aeneas.Std.U16 64#usize) (c : PV_B1_258.aspis_core.field.QM31) :
+  PV_B1_258.all_slots_clear v m c = PV_B1_PoleOriginal.reference.all_slots_clear v m c
+PV_B1_Close254.nonfailure [ExternalTypes] (ops : ExternalFuns) (N : Aeneas.Std.Usize) (x : HW) :
+  ∃ out, ExternalFuns.op254 N x = Aeneas.Std.Result.ok out
+PV_B1_Close230.nonvacuity [ExternalTypes] (ops : ExternalFuns) (x : HQ) :
+  ∃ y, ExternalFuns.op230 ⟨List.replicate 1024 x, ⋯⟩ = Aeneas.Std.Result.ok (some y)
+PV_B1_PoleWitnesses.nonempty [ExternalTypes] (ops : ExternalFuns) (m : Aeneas.Std.Array Aeneas.Std.U16 64#usize)
+  (c : HQ) (r : Aeneas.Std.Array (Aeneas.Std.Array HQ 2#usize) 2#usize) :
+  ∃ b, ExternalFuns.op258 ⟨[r], ⋯⟩ m c = Aeneas.Std.Result.ok b
+PV_B1_PoleWitnesses.failure_nonvacuity [ExternalTypes] (ops : ExternalFuns)
+  (m : Aeneas.Std.Array Aeneas.Std.U16 64#usize) (c : HQ) (r : Aeneas.Std.Array (Aeneas.Std.Array HQ 2#usize) 2#usize) :
+  ExternalFuns.op258 ⟨List.replicate 1025 r, ⋯⟩ m c = Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+PV_B1_Nonvacuity.joint_success :
+  (∃ out, ExternalFuns.op254 1#usize PV_B1_Nonvacuity.w = Aeneas.Std.Result.ok out) ∧
+    (∃ y, ExternalFuns.op230 ⟨List.replicate 1024 PV_B1_Nonvacuity.q, ⋯⟩ = Aeneas.Std.Result.ok (some y)) ∧
+      ∃ b,
+        ExternalFuns.op258 ⟨[PV_B1_Nonvacuity.row], ⋯⟩ (Aeneas.Std.Array.repeat 64#usize 0#u16) PV_B1_Nonvacuity.q =
+          Aeneas.Std.Result.ok b
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.02
+	Maximum resident set size (kbytes): 2636712
+	Swaps: 0
+	Exit status: 0
