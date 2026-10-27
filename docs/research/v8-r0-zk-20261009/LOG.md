@@ -12778,3 +12778,29 @@ module lists, source and object hashes and resources per chunk; a failing chunk 
 module, reported as a finding about that source and not rerun unchanged. It then compiles the
 installed-op84 lemma and continues the exclusions, conditional native witnesses and minimal reached
 sets. Rows removed outright: 0. Privacy target not yet established.
+
+## D331 (Stream B) 2026-10-27 22:55 UTC: runjoin24: source.Instance admits raw instances that the compiler does not produce; satisfiability of the source-identification premise is now in question; runjoin25 decides it
+
+runjoin24 (20 charged attempts: 18 accepted, 2 rejected; final audits with standard axioms; the
+1,263-module source closure now has no unpinned module and the broader admission audit 38116 passes)
+produced two checked results:
+- AdmissionBoundary23.admission_not_derivable: a raw w : source.Instance (input 0, withdrawal output
+  1, change 0, otherwise the fixture) for which Admission would need 0 = 1 + 0. So Admission does not
+  follow from source.Instance, and public_eq was proved only for the admitted subtype
+  (AdmittedCarrier23.public_eq). V152 quantifies over every w : source.Instance.
+- AdmittedReturnCounterexample23.universal_guarded_return_false: the transfer input with only its
+  cached trace.variant changed to Withdrawal satisfies Admission, Checked and the canonical-frontier
+  guards, yet the actual compiler succeeds with the original transfer payload, which differs from the
+  cached one. So "every admitted input's compiler return equals its cached payload" is false.
+The job stopped on the second result, as instructed. Neither result yet shows a ledger row false:
+V152 and V153 are statements about the builder and the canonical map, and whether they depend on
+the cached fields is exactly what is undecided.
+
+Lead assessment: this is a satisfiability question about the endpoint's own premise. If
+public_eq, build_eq or transport_eq is false on some w : source.Instance, the SourceIdentification
+premise cannot hold and the privacy endpoint is vacuous as stated, the same class of defect as
+Stream A's L157. runjoin25 (remaining 80 attempts; IDs 38121-38196) must print the exact premise as
+the endpoint consumes it and prove each field true or false on the two instances. A false field is
+a stop and an owner escalation with the minimal statement change (for example restricting the
+quantifier to the honest carrier); the worker must not apply it. Rows removed outright: 0. Privacy
+target not yet established.
