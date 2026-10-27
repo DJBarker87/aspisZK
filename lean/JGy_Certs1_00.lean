@@ -2725,7 +2725,6 @@ theorem checked : JFp_SHA256.hash message=result := by
 #print axioms checked
 end AspisR1.JGy_Gr_M1.Hash003
 
-import JGr_M1C000
 set_option autoImplicit false
 namespace AspisR1.JGy_Gr_M1.Hash004
 open JFp_SHA256

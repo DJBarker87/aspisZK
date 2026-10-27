@@ -39,8 +39,14 @@ if '--groups' in sys.argv:
     text=re.sub(r'theorem (word|round)\d\d[^\n]*\n','',text)
     text=re.sub(r'#print axioms (word|round)\d\d\n','',text)
     text=re.sub(r' s64 word\d\d round\d\d',r' s64 (by rfl) (by rfl)',text)
-    texts.append(text.replace('import JGy_FoldStep\n',''))
-   text='import JGy_FoldStep\n'+'\n'.join(texts)
+    texts.append('\n'.join(l for l in text.splitlines() if not l.startswith('import '))+'\n')
+   imports=['JGy_FoldStep']
+   mapping={f.stem:f'JGy_Certs{tree}_{j//2:02}' for j,f in enumerate(fs)}
+   for original in fs[g:g+2]:
+    for dependency in re.findall(r'^import (\w+)',original.read_text(),re.M):
+     dependency=mapping.get(dependency,dependency)
+     if dependency not in [mod,'JFp_SHABlocks'] and dependency not in imports:imports.append(dependency)
+   text=''.join('import '+x+'\n' for x in imports)+'\n'.join(texts)
    f=R/'lean'/f'{mod}.lean'
    if '--check' in sys.argv:assert f.read_text()==text
    else:f.write_text(text)

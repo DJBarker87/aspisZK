@@ -1,5 +1,5 @@
 import JGy_FoldStep
-import JGr_M0C003
+import JGy_Certs0_01
 set_option autoImplicit false
 namespace AspisR1.JGy_Gr_M0.Hash005
 open JFp_SHA256
@@ -2588,7 +2588,6 @@ theorem checked : compress start (words input)=result := by
 end B05
 end AspisR1.JGy_Gr_M0.Hash006
 
-import JGr_M0C004
 set_option autoImplicit false
 namespace AspisR1.JGy_Gr_M0.Hash006
 open JFp_SHA256

@@ -1,5 +1,5 @@
 import JGy_FoldStep
-import JGr_M1C013
+import JGy_Certs1_06
 set_option autoImplicit false
 namespace AspisR1.JGy_Gr_M1.Hash079
 open JFp_SHA256
@@ -2810,7 +2810,6 @@ theorem checked : JFp_SHA256.hash message=result := by
 #print axioms checked
 end AspisR1.JGy_Gr_M1.Hash084
 
-import JGr_M1C014
 set_option autoImplicit false
 namespace AspisR1.JGy_Gr_M1.Hash085
 open JFp_SHA256

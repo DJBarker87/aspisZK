@@ -2587,7 +2587,6 @@ theorem checked : compress start (words input)=result := by
 end B02
 end AspisR1.JGy_Gr_M0.Hash001
 
-import JGr_M0C000
 set_option autoImplicit false
 namespace AspisR1.JGy_Gr_M0.Hash001
 open JFp_SHA256
