@@ -36,3 +36,11 @@ The installed records caller on codex/pv-runjoin-20261026 remains a P6 candidate
 `evidence/pv-runjoin12-20261027/route.json` reports no accepted shipped records
 extraction. Its native association cannot be assumed or added to T. T stays the
 three PV_RunJoin_TrustItems fields.
+
+Stage 2 correction: existing `PV_Join_CurrentPolynomialCanonical5.polynomial`
+is stronger than a canonical-input interpolation result: successful current
+interpolation is canonical even for arbitrary raw input values. Its scaling
+uses multiplication/reduction before addition. Thus P_oracle is useful for the
+whole field invariant but is NOT necessary for the op121 coefficient domain if
+this exact current installation is the installed deployed dictionary. The
+installed dictionary association itself remains P_installed.

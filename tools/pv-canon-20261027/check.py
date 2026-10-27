@@ -15,11 +15,12 @@ G=B/'codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 a=subprocess.run(['python3',str(G/'reservation.py'),str(O/'reservation.json')],stdout=open(O/'reservation.log','w'),stderr=subprocess.STDOUT)
 if a.returncode: print((O/'reservation.log').read_text());raise SystemExit(a.returncode)
 e=json.loads((B/'r1-privacy-build-integration-20261019/env/J.json').read_text()); 
-for root in e['LEAN_PATH'].split(':'):
- for source in Path(root).rglob('*.olean*'):
+for root in ([] if (D/'overlay-ready').exists() else e['LEAN_PATH'].split(':')):
+ for source in Path(root).rglob('*'):
   if source.is_file():
    dest=D/'objects'/source.relative_to(Path(root));dest.parent.mkdir(parents=True,exist_ok=True)
    if not dest.exists() and not dest.is_symlink(): dest.symlink_to(source)
+(D/'overlay-ready').touch()
 e['LEAN_PATH']=str(D/'objects')+':'+e['LEAN_PATH'];(D/'env.json').write_text(json.dumps(e))
 src=D/'sources'/(M+'.lean');obj=D/'objects'/(M+'.olean');obj.parent.mkdir(parents=True,exist_ok=True)
 meta=dict(target=M,attempt=N,revision=REVISION,source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),env='J read-only with private overlay')
