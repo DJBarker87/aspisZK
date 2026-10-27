@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0115); env=J
+slot: /tmp/aspis-r0-lean-slot-2.lock
+                                { statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                      layout_factor_fingerprint := l }.layout_factor_fingerprint =
+                                  { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                      layout_factor_fingerprint := l' }.layout_factor_fingerprint then
+                              if
+                                  decide
+                                      ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                            layout_factor_fingerprint := l }.statement_digest =
+                                        { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                            layout_factor_fingerprint := l' }.statement_digest) =
+                                    true then
+                                Aeneas.Std.Result.ok
+                                  (decide
+                                    ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                          layout_factor_fingerprint := l }.mask_nonce =
+                                      { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                          layout_factor_fingerprint := l' }.mask_nonce))
+                              else Aeneas.Std.Result.ok false
+                            else Aeneas.Std.Result.ok false)
+                            (Aeneas.Std.Result.ok false) (eq_false hm)))
+                        (congrArg Aeneas.Std.Result.ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp
+                              ({ statement_digest := d, mask_nonce := n, mask_layout_fingerprint := m,
+                                  layout_factor_fingerprint := l } =
+                                { statement_digest := d', mask_nonce := n', mask_layout_fingerprint := m',
+                                  layout_factor_fingerprint := l' })
+                              False
+                              (Eq.trans
+                                (ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.mk.injEq d n m l d' n'
+                                  m' l')
+                                (Eq.trans
+                                  (congr (congrArg And (eq_false hd))
+                                    (Eq.trans
+                                      (congr (congrArg And (eq_false hn))
+                                        (Eq.trans (congr (congrArg And (eq_false hm)) (eq_false hl)) (and_self False)))
+                                      (and_self False)))
+                                  (and_self False))))
+                            (decide_false instDecidableFalse))))
+                      (eq_self (Aeneas.Std.Result.ok false)))))
+'R1Z.PV_Join_StateChanged.source_status' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_Join_StoreLedgerSource.body_source : ∀ [inst : ProverRwFull.ExternalTypes]
+  [inst_1 : ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] {N C : Type}
+  (ops : R1Z.PV_RunJoin_LedgerBody.State N C → ProverRwFull.ExternalFuns)
+  (pub : R1Z.PV_RunJoin_LedgerBody.State N C → R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.PV_RunJoin_LedgerBody.State N C → R1Z.ProverRwRetryModel.Compiled)
+  (hash : R1Z.PV_RunJoin_LedgerBody.State N C → R1Z.ProverRwRetryModel.Hash)
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address),
+  R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+    (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody (R1Z.PV_Join_StoreLedgerSource.inputs ops pub compiled hash))
+    (R1Z.PV_RunJoin_LedgerBody.body schedule unix address
+      (R1Z.PV_Join_StoreLedgerSource.inputs ops pub compiled hash)) :=
+fun [inst : ProverRwFull.ExternalTypes] [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] {N C} ops pub
+    compiled hash schedule unix address =>
+  R1Z.PV_RunJoin_LedgerSourceBody.source_law schedule unix address
+    (R1Z.PV_Join_StoreLedgerSource.inputs ops pub compiled hash) fun s =>
+    Eq.refl (@ProverRwFull.ExternalFuns.op12 inst ((R1Z.PV_Join_StoreLedgerSource.inputs ops pub compiled hash).ops s))
+'R1Z.PV_Join_StoreLedgerSource.body_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.44
+	Maximum resident set size (kbytes): 4357684
+	Swaps: 0
+	Exit status: 0

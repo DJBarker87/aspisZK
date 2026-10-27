@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0114); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+        have he := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm hd) hd1);
+        Eq.ndrec (motive := fun delta =>
+          scale.mul_m31 m = Aeneas.Std.Result.ok delta →
+            (do
+                  let next ← value.add delta
+                  let out1 ← Aeneas.Std.Array.update out k next
+                  let k1 ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                  Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (out1, k1))) =
+                Aeneas.Std.Result.ok cf →
+              match cf with
+              | Aeneas.Std.ControlFlow.done ys => R1Z.PV_Join_Canonical5.QArray ys
+              | Aeneas.Std.ControlFlow.cont ys =>
+                R1Z.PV_Join_GAccumulateCanonical5.inv ys ∧
+                  R1Z.PV_Join_GAccumulateCanonical5.rank ys < R1Z.PV_Join_GAccumulateCanonical5.rank (out, k))
+          (fun hd hcf_1 =>
+            let ⟨next, h✝⁴⟩ :=
+              R1Z.PV_Join_BindSuccess5.unpack (value.add d)
+                (fun next => do
+                  let out1 ← Aeneas.Std.Array.update out k next
+                  let k1 ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                  Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (out1, k1)))
+                cf hcf_1
+            let ⟨hn, hcf⟩ := h✝⁴
+            let ⟨n, h✝⁵⟩ := laws.add value d hv hdelta
+            let ⟨hn1, hnext⟩ := h✝⁵
+            have he := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm hn) hn1);
+            Eq.ndrec (motive := fun next =>
+              value.add d = Aeneas.Std.Result.ok next →
+                (do
+                      let out1 ← Aeneas.Std.Array.update out k next
+                      let k1 ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (out1, k1))) =
+                    Aeneas.Std.Result.ok cf →
+                  match cf with
+                  | Aeneas.Std.ControlFlow.done ys => R1Z.PV_Join_Canonical5.QArray ys
+                  | Aeneas.Std.ControlFlow.cont ys =>
+                    R1Z.PV_Join_GAccumulateCanonical5.inv ys ∧
+                      R1Z.PV_Join_GAccumulateCanonical5.rank ys < R1Z.PV_Join_GAccumulateCanonical5.rank (out, k))
+              (fun hn hcf_2 =>
+                let ⟨ys, h✝⁶⟩ :=
+                  R1Z.PV_Join_BindSuccess5.unpack (Aeneas.Std.Array.update out k n)
+                    (fun out1 => do
+                      let k1 ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+                      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (out1, k1)))
+                    cf hcf_2
+                let ⟨hys, hcf⟩ := h✝⁶
+                have hy := R1Z.PV_Join_ArrayInvariant5.update out hout k n hnext ys hys;
+                let ⟨⟩ := Aeneas.Std.Result.ok cf
+                Eq.mp
+                  (congrFun'
+                    (congrArg Eq
+                      (Aeneas.Std.bind_tc_ok (k.wrapping_add 1#usize) fun y =>
+                        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (ys, y))))
+                    (Aeneas.Std.Result.ok cf))
+                  hcf)
+              (Eq.symm he) hn hcf)
+          (Eq.symm he) hd hcf)
+'R1Z.PV_Join_GAccumulateCanonical5.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.37
+	Maximum resident set size (kbytes): 4362788
+	Swaps: 0
+	Exit status: 0
