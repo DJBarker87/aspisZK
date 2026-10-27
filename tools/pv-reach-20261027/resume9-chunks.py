@@ -92,4 +92,6 @@ if r.returncode==255:
 for name,path in [('receipt',f'{H}/evidence/resume9-{a}/receipt.json'),('out',f'{H}/evidence/resume9-out-{a}.log'),('time',f'{H}/evidence/resume9-time-{a}.log')]:
  q=ssh('cat '+shlex.quote(path));(E/(f'{name}-{a}'+('.json' if name=='receipt' else '.log'))).write_text(q.stdout+q.stderr)
 print((E/f'out-{a}.log').read_text()[-4000:],flush=True)
-sys.exit(r.returncode)
+result=json.loads((E/f'receipt-{a}.json').read_text())
+(E/f'collection-{a}.json').write_text(json.dumps(dict(submission_transport_exit=r.returncode,recovered_without_resubmission=r.returncode==255,receipt_accepted=result['accepted']))+'\n')
+sys.exit(0 if result['accepted'] else 1)
