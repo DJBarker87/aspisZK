@@ -1,0 +1,12 @@
+import JGk_TX2_OrderTools
+import Mathlib.Data.Multiset.AddSub
+set_option autoImplicit false
+namespace AspisR1.JGk_TX2_PermutationTools
+
+theorem swap_blocks {α : Type} (a b c : List α) : (a++b++c).Perm (b++a++c) := by
+  apply Multiset.coe_eq_coe.mp
+  change ((a : Multiset α)+(b : Multiset α))+(c : Multiset α)=
+    ((b : Multiset α)+(a : Multiset α))+(c : Multiset α)
+  ac_rfl
+#print axioms swap_blocks
+end AspisR1.JGk_TX2_PermutationTools
