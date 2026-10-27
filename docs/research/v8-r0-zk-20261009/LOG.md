@@ -12314,3 +12314,33 @@ proved suffix by suffix and composed with the existing retry equations; exclusio
 S is the corollary. pv-reach3 must first check the V404/V405 Lean definitions and say whether
 congruence is exactly what they require, weaker, or different, and must not claim the rows in the
 latter cases (IDs 36900-36999). Rows removed outright: 0. Privacy target not yet established.
+
+## D310 (Stream B) 2026-10-27 18:23 UTC: pv-reach3 result; 18 shared library objects were recompiled in place by a Stream B worker; ruling (h4); pv-reach4 launched
+
+pv-reach3 checked the V404/V405 definitions before proving anything and found dictionary congruence
+weaker than the rows: a callback can be invoked with its result ignored, so invocation, minimality,
+ordering and native-effect fidelity do not follow. It checked 21 suffixes and 318 compositional
+congruences (33 attempts, 27 passed), then stopped compiling because 18 library objects on the host
+did not match the pin file named by ruling (h'''). It should have verified the pins before
+compiling; its 33 checks stay uncredited until re-verified.
+
+Cause, found by the lead: on 2026-10-27 00:43-01:37 UTC the Stream B worker pv-srcid3 (resume 6)
+recompiled 18 Aeneas library objects in place in the shared directory
+project-offloads/codex-cx-import-union-20261022 (objects/ and retained-objects/). It did so to make
+them coherent with the two library sources (Fmt, ArraySlice) that the env-J rebuild had recompiled
+from archive. Its evidence records every before/after hash (resume6-rebuilt-object-deltas.json), but
+no LOG entry disclosed a shared-object change. The env-J library pin file is therefore stale for those
+18. The coherent 672-module privacy replay ran against the current objects; its external-object
+manifest lists all 236 library modules, differs from the env-J pin file in exactly those 18, and
+matches the host. Ruling (h4) makes that manifest the library authority, requires verification
+before the first compile, and forbids rebuilding any library object. (h''') was the lead's error: it
+named a record the lead had not checked against the host. Stream A has been told, since its jobs
+share the LEAN_PATH, and has been offered restoration of the old bytes at the cost of redoing
+Stream B's replay.
+
+pv-reach4 resumes with 67 attempts: re-verify the 33 checks under (h4); then recover invocation from
+congruence by poisoning (no-catch per suffix; exclusion of an entry by replacing it with a failing
+callback on successful runs; minimality of the reached set by poisoning each member on a fixture
+input); then compare with the row definitions again and name what remains. runjoin20 was launched
+under (h''') and may stop on the same mismatch; it is corrected on return. Rows removed outright: 0.
+Privacy target not yet established.
