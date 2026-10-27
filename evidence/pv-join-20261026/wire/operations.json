@@ -1,0 +1,245 @@
+[
+  {
+    "op": 3,
+    "source_law": "R1Z.PV_CB_TakeSource.op3_source",
+    "module": "R1Z.PV_Join_Wire_Op3",
+    "theorem": "R1Z.PV_Join_Wire_Op3.op3_source",
+    "binders": "{T : Type}\n    (inst : core.default.Default T) (x : T)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op3 inst x = PV_CB_ShippedTake.core.mem.take inst x",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_TakeSource"
+  },
+  {
+    "op": 71,
+    "source_law": "R1Z.PV_CB_Op71Exact.op71_source",
+    "module": "R1Z.PV_Join_Wire_Op71",
+    "theorem": "R1Z.PV_Join_Wire_Op71.op71_source",
+    "binders": "(bytes : Slice U8)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op71 bytes = (do\n      let value \u2190 PV_CB_ShippedOp71.aspis_core.field.QM31.from_le_bytes bytes\n      ok (value.map decode))",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op71Transport PV_CB_Op71Exact"
+  },
+  {
+    "op": 72,
+    "source_law": "R1Z.PV_CB_Op72Exact.op72_source",
+    "module": "R1Z.PV_Join_Wire_Op72",
+    "theorem": "R1Z.PV_Join_Wire_Op72.op72_source",
+    "binders": "(x : aspis_core.field.QM31) (bytes : Slice U8)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op72 x bytes =\n      PV_CB_ShippedOp72.aspis_core.field.QM31.write_le_bytes (encode x) bytes",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op72Transport PV_CB_Op72Exact"
+  },
+  {
+    "op": 77,
+    "source_law": "R1Z.PV_CB_Op77Source.op77_source",
+    "module": "R1Z.PV_Join_Wire_Op77",
+    "theorem": "R1Z.PV_Join_Wire_Op77.op77_source",
+    "binders": "{E : Type} (inst : core.clone.Clone E)\n    (p : aspis_core.r0.domain.Point E)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op77 inst p =\n      PV_CB_ShippedOp77.aspis_core.r0.domain.Point.Insts.CoreCloneClone.clone inst p",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op77Source"
+  },
+  {
+    "op": 80,
+    "source_law": "R1Z.PV_CB_Op80Exact.op80_source",
+    "module": "R1Z.PV_Join_Wire_Op80",
+    "theorem": "R1Z.PV_Join_Wire_Op80.op80_source",
+    "binders": "{E : Type}\n    (inst : aspis_core.r0.scalar.CodeField E) (x y : E) (h : Array E 4#usize)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op80 inst x y h =\n      PV_CB_ShippedOp80.aspis_core.r0.fold.phi_inverse (encode inst) x y h",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op80Transport PV_CB_Op80Exact"
+  },
+  {
+    "op": 82,
+    "source_law": "R1Z.PV_CB_Op82Source.op82_source",
+    "module": "R1Z.PV_Join_Wire_Op82",
+    "theorem": "R1Z.PV_Join_Wire_Op82.op82_source",
+    "binders": "",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op82 = .ok PV_CB_ShippedOp82.aspis_core.r0.merkle.C1_TAG",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op82Source"
+  },
+  {
+    "op": 83,
+    "source_law": "R1Z.PV_CB_Op83Source.op83_source",
+    "module": "R1Z.PV_Join_Wire_Op83",
+    "theorem": "R1Z.PV_Join_Wire_Op83.op83_source",
+    "binders": "",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op83 = .ok PV_CB_ShippedOp83.aspis_core.r0.merkle.C2_TAG",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op83Source"
+  },
+  {
+    "op": 84,
+    "source_law": "R1Z.PV_CB_Op84Exact.op84_source",
+    "module": "R1Z.PV_Join_Wire_Op84",
+    "theorem": "R1Z.PV_Join_Wire_Op84.op84_source",
+    "binders": "(hash : Slice (Slice U8) \u2192 Result (Array U8 32#usize)) (tag : U8) (values : Slice U8)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op84 hash tag values =\n      PV_CB_ShippedOp84Fresh.aspis_core.r0.merkle.leaf hash tag values",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op84Exact"
+  },
+  {
+    "op": 86,
+    "source_law": "R1Z.PV_CB_Op86Source.op86_source",
+    "module": "R1Z.PV_Join_Wire_Op86",
+    "theorem": "R1Z.PV_Join_Wire_Op86.op86_source",
+    "binders": "",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op86 = .ok PV_CB_ShippedOp86.aspis_core.r0.opening.LANES",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op86Source"
+  },
+  {
+    "op": 100,
+    "source_law": "R1Z.PV_CB_Op100Exact.op100_source",
+    "module": "R1Z.PV_Join_Wire_Op100",
+    "theorem": "R1Z.PV_Join_Wire_Op100.op100_source",
+    "binders": "(x : aspis_core.field.wide_exact.WideExact)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op100 x = (do\n      let y \u2190 PV_CB_ShippedOp100.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.neg (encodeW x)\n      ok (decodeW y))",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op100Transport PV_CB_Op100Exact"
+  },
+  {
+    "op": 101,
+    "source_law": "R1Z.PV_CB_Op101Exact.op101_source",
+    "module": "R1Z.PV_Join_Wire_Op101",
+    "theorem": "R1Z.PV_Join_Wire_Op101.op101_source",
+    "binders": "(x : aspis_core.field.QM31)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op101 x = (do\n      let y \u2190 PV_CB_ShippedOp101.aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField.neg (encode x)\n      ok (decode y))",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op101Transport PV_CB_Op101Exact"
+  },
+  {
+    "op": 105,
+    "source_law": "R1Z.PV_CB_Op105Exact.op105_source",
+    "module": "R1Z.PV_Join_Wire_Op105",
+    "theorem": "R1Z.PV_Join_Wire_Op105.op105_source",
+    "binders": "(x : aspis_core.field.M31)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op105 x =\n      PV_CB_ShippedOp105.aspis_core.field.M31.Insts.Aspis_coreR0ScalarCodeField.try_inv x",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op105Exact"
+  },
+  {
+    "op": 107,
+    "source_law": "R1Z.PV_CB_Op107Exact.op107_source",
+    "module": "R1Z.PV_Join_Wire_Op107",
+    "theorem": "R1Z.PV_Join_Wire_Op107.op107_source",
+    "binders": "(x : aspis_core.field.QM31)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op107 x = (do\n      let value \u2190 PV_CB_ShippedOp107.aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField.try_inv (encode x)\n      ok (value.map decode))",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op107Transport PV_CB_Op107Exact"
+  },
+  {
+    "op": 109,
+    "source_law": "R1Z.PV_CB_Op109Exact.op109_source",
+    "module": "R1Z.PV_Join_Wire_Op109",
+    "theorem": "R1Z.PV_Join_Wire_Op109.op109_source",
+    "binders": "(x : aspis_core.field.wide_exact.WideExact)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op109 x = (do\n      let value \u2190 PV_CB_ShippedOp109.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.try_inv (encodeW x)\n      ok (value.map decodeW))",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op109Transport PV_CB_Op109Exact"
+  },
+  {
+    "op": 110,
+    "source_law": "R1Z.PV_CB_Op110Source.op110_source",
+    "module": "R1Z.PV_Join_Wire_Op110",
+    "theorem": "R1Z.PV_Join_Wire_Op110.op110_source",
+    "binders": "(x : aspis_core.field.M31)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op110 x =\n      PV_CB_ShippedOp110.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31 x",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op110Source"
+  },
+  {
+    "op": 111,
+    "source_law": "R1Z.PV_CB_Op111Source.op111_source",
+    "module": "R1Z.PV_Join_Wire_Op111",
+    "theorem": "R1Z.PV_Join_Wire_Op111.op111_source",
+    "binders": "",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op111 = .ok PV_CB_ShippedOp111.aspis_core.state_only_hiding.PINNED_POOL_V1_PAYMENT_RELATION_FREE_MASK_FINGERPRINT",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op111Source"
+  },
+  {
+    "op": 114,
+    "source_law": "R1Z.PV_CB_Op114Source.op114_source",
+    "module": "R1Z.PV_Join_Wire_Op114",
+    "theorem": "R1Z.PV_Join_Wire_Op114.op114_source",
+    "binders": "(a b : aspis_core.state_only_hiding.StateOnlyHidingContext)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op114 a b =\n      PV_CB_ShippedOp114.aspis_core.state_only_hiding.StateOnlyHidingContext.Insts.CoreCmpPartialEqStateOnlyHidingContext.eq a b",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op114Source"
+  },
+  {
+    "op": 118,
+    "source_law": "R1Z.PV_CB_Op118Exact.op118_source",
+    "module": "R1Z.PV_Join_Wire_Op118",
+    "theorem": "R1Z.PV_Join_Wire_Op118.op118_source",
+    "binders": "(x : Array aspis_core.field.QM31 10#usize)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op118 x = (do\n      let value \u2190 PV_CB_ShippedOp118.aspis_core.state_only_prefix.r0.statement_points (encodeArray x)\n      ok (decodePoints value))",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op118Transport PV_CB_Op118Exact"
+  },
+  {
+    "op": 120,
+    "source_law": "R1Z.PV_CB3_Op120Source.op120_source",
+    "module": "R1Z.PV_Join_Wire_Op120",
+    "theorem": "R1Z.PV_Join_Wire_Op120.op120_source",
+    "binders": "(p : Array aspis_core.field.QM31 28#usize)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op120 p = Raw.boundary_flat p",
+    "opens": "Aeneas Aeneas.Std Result  ProverRwFull Aeneas Aeneas.Std Result ProverRwFull PV_CB3_Op120Source"
+  },
+  {
+    "op": 127,
+    "source_law": "R1Z.PV_CB_Op127Source.op127_source",
+    "module": "R1Z.PV_Join_Wire_Op127",
+    "theorem": "R1Z.PV_Join_Wire_Op127.op127_source",
+    "binders": "{Z : Type} (inst : zeroize.Zeroize Z) (x : Z)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op127 inst x =\n      PV_CB_ShippedOp127.zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref inst x",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op127Source"
+  },
+  {
+    "op": 128,
+    "source_law": "R1Z.PV_CB_Op128Source.op128_source",
+    "module": "R1Z.PV_Join_Wire_Op128",
+    "theorem": "R1Z.PV_Join_Wire_Op128.op128_source",
+    "binders": "{Z : Type} (inst : zeroize.Zeroize Z) (x : Z)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op128 inst x =\n      PV_CB_ShippedOp128.zeroize.Zeroizing.new inst x",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op128Source"
+  },
+  {
+    "op": 130,
+    "source_law": "R1Z.PV_CB_Op130Source.op130_source",
+    "module": "R1Z.PV_Join_Wire_Op130",
+    "theorem": "R1Z.PV_Join_Wire_Op130.op130_source",
+    "binders": "{Z : Type} (inst : zeroize.Zeroize Z) (x : Z)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op130 inst x =\n      PV_CB_ShippedOp130.zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize inst x",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op130Source"
+  },
+  {
+    "op": 131,
+    "source_law": "R1Z.PV_CB_Op131Source.op131_source",
+    "module": "R1Z.PV_Join_Wire_Op131",
+    "theorem": "R1Z.PV_Join_Wire_Op131.op131_source",
+    "binders": "{T Z : Type}\n    (view : core.convert.AsRef Z T) (inst : zeroize.Zeroize Z) (x : Z)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op131 view inst x =\n      PV_CB_ShippedOp131.zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref view inst x",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op131Source"
+  },
+  {
+    "op": 225,
+    "source_law": "R1Z.PV_CB3_Op225Source.op225_source",
+    "module": "R1Z.PV_Join_Wire_Op225",
+    "theorem": "R1Z.PV_Join_Wire_Op225.op225_source",
+    "binders": "(transfer : Transfer \u2192 Raw.Transfer) (withdrawal : Withdrawal \u2192 Raw.Withdrawal)\n    (p : Public)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op225 p =\n      ProverRwP6TransitionSource.transition (toRaw transfer withdrawal p)",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB3_Op225Source"
+  },
+  {
+    "op": 229,
+    "source_law": "R1Z.PV_CB_Op229Source.op229_source",
+    "module": "R1Z.PV_Join_Wire_Op229",
+    "theorem": "R1Z.PV_Join_Wire_Op229.op229_source",
+    "binders": "(a b : PV_CB_Op229Transport.Late base)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op229 a b = source (encode base a) (encode base b)",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB_Op229Transport PV_CB_Op229Source"
+  },
+  {
+    "op": 246,
+    "source_law": "R1Z.PV_CB3_Op246Source.op246_source",
+    "module": "R1Z.PV_Join_Wire_Op246",
+    "theorem": "R1Z.PV_Join_Wire_Op246.op246_source",
+    "binders": "{H : Type}\n    (inst : aspis_core.digest.Digest32 H) (hash : H)\n    (left right : Array U8 32#usize)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op246 inst hash left right =\n      PV_CB3_ShippedOp246.multiproof.binary_parent inst hash left right",
+    "opens": "Aeneas Aeneas.Std Result  Aeneas Aeneas.Std Result ProverRwFull PV_CB3_Op246Source"
+  },
+  {
+    "op": 51,
+    "source_law": "R1Z.PV_CB3_Op51Arbitrary.op51_source",
+    "module": "R1Z.PV_Join_Wire_Op51",
+    "theorem": "R1Z.PV_Join_Wire_Op51.op51_source",
+    "binders": "(x : aspis_core.field.wide_exact.WideExact)",
+    "equation": "(PV_Join_Wire_Selection.selected base ops).op51 x = PV_CB3_Op51Source.Raw.wide_bytes_flat x",
+    "opens": "Aeneas Aeneas.Std Result ProverRwFull PV_CB3_Op51Arbitrary"
+  }
+]
