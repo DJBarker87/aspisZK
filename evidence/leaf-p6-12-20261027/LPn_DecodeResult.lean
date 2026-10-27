@@ -22,6 +22,7 @@ theorem native_success (N : Usize) (r : r1_wire.ValidatedRecord) (off : Usize)
   rw [LPn.DecodeModel.shipped_leaf_model]
   simp only [if_neg ready.row,if_neg ready.arithmetic,if_neg ready.framed,if_neg ready.range]
   change LPl_A.firstBad (fun i => !predicate (r.framed.val.drop 5) (off.val*32) N.val i) N.val = none at noerr
+  simp only [predicate] at noerr
   rw [noerr,values]
   simp [a.property]
 
@@ -35,6 +36,7 @@ theorem native_error (N : Usize) (r : r1_wire.ValidatedRecord) (off : Usize)
   rw [LPn.DecodeModel.shipped_leaf_model]
   simp only [if_neg ready.row,if_neg ready.arithmetic,if_neg ready.framed,if_neg ready.range]
   change LPl_A.firstBad (fun j => !predicate (r.framed.val.drop 5) (off.val*32) N.val j) N.val = some i at hit
+  simp only [predicate] at hit
   rw [hit]
   simp [bound]
 
@@ -55,7 +57,10 @@ theorem range_error (N : Usize) (r : r1_wire.ValidatedRecord) (off : Usize)
     (framed : ¬ r.framed.val.length<5)
     (bad : off.val*32+N.val*32>(r.framed.val.drop 5).length) :
     r1_wire.ValidatedRecord.decode_k N r off = ok (.Err (.Length r.row)) := by
-  rw [LPn.DecodeModel.shipped_leaf_model];simp [row,arithmetic,framed,bad]
+  have bad' : off.val*32+N.val*32 > r.framed.val.length-5 := by
+    simpa only [List.length_drop] using bad
+  rw [LPn.DecodeModel.shipped_leaf_model]
+  simp only [if_neg row,if_neg arithmetic,if_neg framed,List.length_drop,if_pos bad']
 
 #print axioms native_success
 #print axioms native_error

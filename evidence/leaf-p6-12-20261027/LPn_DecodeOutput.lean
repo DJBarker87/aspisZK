@@ -84,11 +84,16 @@ theorem total (bs : List U8) (start : Nat) (initial : List Q) (n : Nat) :
 /-- Rebase a selected array cell to the three-cell native frame harness. -/
 def coordinate (row j : Nat) : Nat := if j<row then 0 else if j=row then 1 else 2
 
-theorem coordinate_bound (row j : Nat) : coordinate row j<3 := by
-  unfold coordinate;split <;> try omega;split <;> omega
+theorem coordinate_bound (row j : Nat) : coordinate row j < 3 := by
+  unfold coordinate
+  split
+  · omega
+  · split <;> omega
 
 theorem coordinate_written (row j : Nat) : coordinate row j=1 ↔ j=row := by
-  unfold coordinate;split <;> simp_all
+  by_cases lt : j < row
+  · simp [coordinate,lt,show j≠row by omega]
+  · simp [coordinate,lt]
 
 theorem write_of_local (bs : List U8) (start row : Nat) (before after : List Q)
     (size : after.length=before.length)
