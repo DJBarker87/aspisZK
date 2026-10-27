@@ -1,0 +1,348 @@
+'R1Z.PV_RE_AttemptEntry.failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_AttemptEntry.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_AttemptHashPrefix6.attempt_to_hash' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_AttemptHashPrefix6.publicFrame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_ClientEntry.bind_assoc' does not depend on any axioms
+'R1Z.PV_RE_ClientEntry.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_ClientHashPrefix6.client_to_hash' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_ClientHashPrefix6.poisoned_hash_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_ClientPrefix6.client_to_retry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_ClientPrefix6.pair_identity' does not depend on any axioms
+'R1Z.PV_RE_ClientPrefix6.retry_to_attempt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_Op84Forward6.divergence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_Op84Forward6.failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_Op84Forward6.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_Op84Forward6.invocation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_Op84Forward6.noCatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_PublicPoison6.entropy_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_PublicPoison6.poison226' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_PublicPoison6.poisoned_client_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_PublicPoison6.success_distinguishes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_PublicPrefix6.EntropyWrapper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_PublicPrefix6.client_public_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RE_PublicPrefix6.client_to_public' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RE_AttemptHashPrefix6.attempt_to_hash : ∀ [inst : ProverRwFull.ExternalTypes]
+  (D : ProverRwFull.ExternalFuns) (pub : R1Z.PV_RE_RetryStep.Public) (compiled : R1Z.PV_RE_RetryStep.Compiled)
+  (variant : ProverRwFull.transport.Variant) (hash : R1Z.PV_RE_RetryStep.Hash) (secret : R1Z.PV_RE_RetryStep.Secrets)
+  (store : R1Z.PV_RE_RetryStep.Store) (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op226 pub = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+    ProverRwFull.ExternalFuns.op12
+          ProverRwFull.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+          (Aeneas.Std.core.result.Result.Ok bytes) () =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+      ∃ next,
+        ProverRwFull.prover.prove_masked_attempt pub compiled variant hash secret store =
+          hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) >>= next :=
+fun [ProverRwFull.ExternalTypes] D pub compiled variant hash secret store bytes serialization map_error =>
+  id
+    (have call_eq := rfl;
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            ∃ next,
+              (do
+                  let r ← _a
+                  let r1 ←
+                    ProverRwFull.core.result.Result.map_err
+                        ProverRwFull.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+                  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+                      let s := val.deref;
+                      do
+                      let s1 ←
+                        Aeneas.Std.lift
+                            (Aeneas.Std.Array.make 1#usize [s]
+                                (ProverRwFull.prover.prove_masked_attempt._proof_1 val)).to_slice
+                      let a ← hash s1
+                      let a1 ←
+                        ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.impl.mask_nonce secret
+                      let context ←
+                        ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1 a a1
+                      let s2 ←
+                        Aeneas.Std.lift
+                            (Aeneas.Std.Array.make 30#usize
+                                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                  80#u8, 51#u8, 58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 65#u8,
+                                  84#u8, 84#u8, 69#u8, 77#u8, 80#u8, 84#u8]
+                                ProverRwFull.prover.prove_masked_attempt._proof_3).to_slice
+                      let s3 : Aeneas.Std.Slice Aeneas.Std.U8 := val.deref
+                      let i ← variant.tag
+                      let s4 ←
+                        Aeneas.Std.lift
+                            (Aeneas.Std.Array.make 1#usize [i]
+                                (ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.derive_pool_v1_leaf_salt._proof_1
+                                  i)).to_slice
+                      let a2 ← context.encode
+                      let s5 ← Aeneas.Std.lift a2.to_slice
+                      let s6 ←
+                        Aeneas.Std.lift
+                            (Aeneas.Std.Array.make 4#usize [s2, s3, s4, s5]
+                                (ProverRwFull.prover.prove_masked_attempt._proof_4 val s2 s4 s5)).to_slice
+                      let binding ← hash s6
+                      ProverRwFull.prover.prove_masked_with_attempt
+                          ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+                          pub compiled variant hash context binding secret store
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                      let r2 ←
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwFull.prover.MaskedFixtureAudit)
+                            (Aeneas.Std.core.convert.FromSame ProverRwFull.verifier.Error) residual
+                      Aeneas.Std.Result.ok (r2, store)) =
+                hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) >>= next)
+          call_eq))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              ∃ next,
+                (do
+                    let r ← _a
+                    let r1 ←
+                      ProverRwFull.core.result.Result.map_err
+                          ProverRwFull.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r
+                          ()
+                    let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                    match cf with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+                        let s := val.deref;
+                        do
+                        let s1 ←
+                          Aeneas.Std.lift
+                              (Aeneas.Std.Array.make 1#usize [s]
+                                  (ProverRwFull.prover.prove_masked_attempt._proof_1 val)).to_slice
+                        let a ← hash s1
+                        let a1 ←
+                          ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.impl.mask_nonce secret
+                        let context ←
+                          ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1 a a1
+                        let s2 ←
+                          Aeneas.Std.lift
+                              (Aeneas.Std.Array.make 30#usize
+                                  [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                    80#u8, 51#u8, 58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 65#u8,
+                                    84#u8, 84#u8, 69#u8, 77#u8, 80#u8, 84#u8]
+                                  ProverRwFull.prover.prove_masked_attempt._proof_3).to_slice
+                        let s3 : Aeneas.Std.Slice Aeneas.Std.U8 := val.deref
+                        let i ← variant.tag
+                        let s4 ←
+                          Aeneas.Std.lift
+                              (Aeneas.Std.Array.make 1#usize [i]
+                                  (ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.derive_pool_v1_leaf_salt._proof_1
+                                    i)).to_slice
+                        let a2 ← context.encode
+                        let s5 ← Aeneas.Std.lift a2.to_slice
+                        let s6 ←
+                          Aeneas.Std.lift
+                              (Aeneas.Std.Array.make 4#usize [s2, s3, s4, s5]
+                                  (ProverRwFull.prover.prove_masked_attempt._proof_4 val s2 s4 s5)).to_slice
+                        let binding ← hash s6
+                        ProverRwFull.prover.prove_masked_with_attempt
+                            ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+                            pub compiled variant hash context binding secret store
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                        let r2 ←
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwFull.prover.MaskedFixtureAudit)
+                              (Aeneas.Std.core.convert.FromSame ProverRwFull.verifier.Error) residual
+                        Aeneas.Std.Result.ok (r2, store)) =
+                  hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) >>= next)
+            serialization))
+        (id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  ∃ next,
+                    (do
+                        let r1 ← _a
+                        let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                        match cf with
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+                            let s := val.deref;
+                            do
+                            let s1 ←
+                              Aeneas.Std.lift
+                                  (Aeneas.Std.Array.make 1#usize [s]
+                                      (ProverRwFull.prover.prove_masked_attempt._proof_1 val)).to_slice
+                            let a ← hash s1
+                            let a1 ←
+                              ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.impl.mask_nonce
+                                  secret
+                            let context ←
+                              ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1 a
+                                  a1
+                            let s2 ←
+                              Aeneas.Std.lift
+                                  (Aeneas.Std.Array.make 30#usize
+                                      [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8,
+                                        58#u8, 80#u8, 51#u8, 58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8,
+                                        45#u8, 65#u8, 84#u8, 84#u8, 69#u8, 77#u8, 80#u8, 84#u8]
+                                      ProverRwFull.prover.prove_masked_attempt._proof_3).to_slice
+                            let s3 : Aeneas.Std.Slice Aeneas.Std.U8 := val.deref
+                            let i ← variant.tag
+                            let s4 ←
+                              Aeneas.Std.lift
+                                  (Aeneas.Std.Array.make 1#usize [i]
+                                      (ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.derive_pool_v1_leaf_salt._proof_1
+                                        i)).to_slice
+                            let a2 ← context.encode
+                            let s5 ← Aeneas.Std.lift a2.to_slice
+                            let s6 ←
+                              Aeneas.Std.lift
+                                  (Aeneas.Std.Array.make 4#usize [s2, s3, s4, s5]
+                                      (ProverRwFull.prover.prove_masked_attempt._proof_4 val s2 s4 s5)).to_slice
+                            let binding ← hash s6
+                            ProverRwFull.prover.prove_masked_with_attempt
+                                ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+                                pub compiled variant hash context binding secret store
+                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                            let r2 ←
+                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwFull.prover.MaskedFixtureAudit)
+                                  (Aeneas.Std.core.convert.FromSame ProverRwFull.verifier.Error) residual
+                            Aeneas.Std.Result.ok (r2, store)) =
+                      hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) >>= next)
+                map_error))
+            (Exists.intro
+              (fun a => do
+                let a1 ← ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.impl.mask_nonce secret
+                let context ←
+                  ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1 a a1
+                let s2 ←
+                  Aeneas.Std.lift
+                      (Aeneas.Std.Array.make 30#usize
+                          [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8,
+                            51#u8, 58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 65#u8, 84#u8, 84#u8,
+                            69#u8, 77#u8, 80#u8, 84#u8]
+                          ProverRwFull.prover.prove_masked_attempt._proof_3).to_slice
+                let s3 : Aeneas.Std.Slice Aeneas.Std.U8 := bytes.deref
+                let i ← variant.tag
+                let s4 ←
+                  Aeneas.Std.lift
+                      (Aeneas.Std.Array.make 1#usize [i]
+                          (ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.derive_pool_v1_leaf_salt._proof_1
+                            i)).to_slice
+                let a2 ← context.encode
+                let s5 ← Aeneas.Std.lift a2.to_slice
+                let s6 ←
+                  Aeneas.Std.lift
+                      (Aeneas.Std.Array.make 4#usize [s2, s3, s4, s5]
+                          (ProverRwFull.prover.prove_masked_attempt._proof_4 bytes s2 s4 s5)).to_slice
+                let binding ← hash s6
+                ProverRwFull.prover.prove_masked_with_attempt
+                    ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+                    pub compiled variant hash context binding secret store)
+              rfl)))))
+theorem R1Z.PV_RE_ClientHashPrefix6.client_to_hash : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns) (entropy : R1Z.PV_RE_PublicPrefix6.RawEntropy C) (pub : R1Z.PV_RE_RetryStep.Public)
+  (compiled : R1Z.PV_RE_RetryStep.Compiled) (hash : R1Z.PV_RE_RetryStep.Hash) (store : R1Z.PV_RE_RetryStep.Store)
+  (state state1 : C) (secret : R1Z.PV_RE_RetryStep.Secrets) (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.ok true →
+    (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy).call_mut state 0#usize =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, state1) →
+      ProverRwFull.ExternalFuns.op226 pub = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+        ProverRwFull.ExternalFuns.op12
+              ProverRwFull.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+              (Aeneas.Std.core.result.Result.Ok bytes) () =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+          ∃ next,
+            ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+              hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) >>= next :=
+fun [ProverRwFull.ExternalTypes] {C} D entropy pub compiled hash store state state1 secret bytes guard entropy_prefix
+    serialization map_error =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => ∃ next, _a = hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) >>= next)
+        (R1Z.PV_RE_ClientPrefix6.client_to_retry D entropy pub compiled hash store state guard)))
+    (let ⟨next, hn⟩ :=
+      R1Z.PV_RE_ClientPrefix6.retry_to_attempt D (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy) pub compiled
+        ProverRwFull.transport.Variant.S2 hash store state state1 0#usize secret R1Z.PV_RE_CapValue.below_cap
+        entropy_prefix
+    Eq.mpr (id (congrArg (fun _a => ∃ next, _a = hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) >>= next) hn))
+      (let ⟨suffix, hs⟩ :=
+        R1Z.PV_RE_AttemptHashPrefix6.attempt_to_hash D pub compiled ProverRwFull.transport.Variant.S2 hash secret store
+          bytes serialization map_error
+      Eq.mpr
+        (id
+          (congrArg (fun _a => ∃ next_1, _a >>= next = hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) >>= next_1)
+            hs))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => ∃ next, _a = hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes) >>= next)
+              (R1Z.PV_RE_ClientEntry.bind_assoc (hash (R1Z.PV_RE_AttemptHashPrefix6.publicFrame bytes)) suffix next)))
+          (Exists.intro (fun a => suffix a >>= next) rfl))))
+theorem R1Z.PV_RE_ClientHashPrefix6.poisoned_hash_failure : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns) (entropy : R1Z.PV_RE_PublicPrefix6.RawEntropy C) (pub : R1Z.PV_RE_RetryStep.Public)
+  (compiled : R1Z.PV_RE_RetryStep.Compiled) (store : R1Z.PV_RE_RetryStep.Store) (state state1 : C)
+  (secret : R1Z.PV_RE_RetryStep.Secrets) (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.ok true →
+    (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy).call_mut state 0#usize =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, state1) →
+      ProverRwFull.ExternalFuns.op226 pub = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+        ProverRwFull.ExternalFuns.op12
+              ProverRwFull.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+              (Aeneas.Std.core.result.Result.Ok bytes) () =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+          ∀ (e : Aeneas.Std.Error),
+            ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled (fun x => Aeneas.Std.Result.fail e)
+                store state =
+              Aeneas.Std.Result.fail e :=
+fun [ProverRwFull.ExternalTypes] {C} D entropy pub compiled store state state1 secret bytes guard entropy_prefix
+    serialization map_error e =>
+  let ⟨next, hn⟩ :=
+    R1Z.PV_RE_ClientHashPrefix6.client_to_hash D entropy pub compiled (fun x => Aeneas.Std.Result.fail e) store state
+      state1 secret bytes guard entropy_prefix serialization map_error
+  Eq.mpr (id (congrArg (fun _a => _a = Aeneas.Std.Result.fail e) hn)) (Eq.refl (Aeneas.Std.Result.fail e >>= next))
+theorem R1Z.PV_RE_PublicPoison6.poisoned_client_failure : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns) (entropy : R1Z.PV_RE_PublicPrefix6.RawEntropy C) (pub : R1Z.PV_RE_RetryStep.Public)
+  (compiled : R1Z.PV_RE_RetryStep.Compiled) (hash : R1Z.PV_RE_RetryStep.Hash) (store : R1Z.PV_RE_RetryStep.Store)
+  (state state1 : C) (secret : R1Z.PV_RE_RetryStep.Secrets),
+  ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.ok true →
+    (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy).call_mut state 0#usize =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, state1) →
+      ∀ (e : Aeneas.Std.Error),
+        ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+          Aeneas.Std.Result.fail e :=
+fun [ProverRwFull.ExternalTypes] {C} D entropy pub compiled hash store state state1 secret guard entropy_prefix e =>
+  R1Z.PV_RE_PublicPrefix6.client_public_failure (R1Z.PV_RE_PublicPoison6.poison226 D e) entropy pub compiled hash store
+    state state1 secret guard
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, state1))
+          (R1Z.PV_RE_PublicPoison6.entropy_transport D e entropy state 0#usize)))
+      entropy_prefix)
+    e (Eq.refl (ProverRwFull.ExternalFuns.op226 pub))
+theorem R1Z.PV_RE_PublicPrefix6.client_to_public : ∀ [inst : ProverRwFull.ExternalTypes] {C : Type}
+  (D : ProverRwFull.ExternalFuns) (entropy : R1Z.PV_RE_PublicPrefix6.RawEntropy C) (pub : R1Z.PV_RE_RetryStep.Public)
+  (compiled : R1Z.PV_RE_RetryStep.Compiled) (hash : R1Z.PV_RE_RetryStep.Hash) (store : R1Z.PV_RE_RetryStep.Store)
+  (state state1 : C) (secret : R1Z.PV_RE_RetryStep.Secrets),
+  ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.ok true →
+    (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy).call_mut state 0#usize =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, state1) →
+      ∃ next,
+        ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state =
+          ProverRwFull.ExternalFuns.op226 pub >>= next :=
+fun [ProverRwFull.ExternalTypes] {C} D entropy pub compiled hash store state state1 secret guard entropy_prefix =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => ∃ next, _a = ProverRwFull.ExternalFuns.op226 pub >>= next)
+        (R1Z.PV_RE_ClientPrefix6.client_to_retry D entropy pub compiled hash store state guard)))
+    (let ⟨next, hn⟩ :=
+      R1Z.PV_RE_ClientPrefix6.retry_to_attempt D (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy) pub compiled
+        ProverRwFull.transport.Variant.S2 hash store state state1 0#usize secret R1Z.PV_RE_CapValue.below_cap
+        entropy_prefix
+    Eq.mpr (id (congrArg (fun _a => ∃ next, _a = ProverRwFull.ExternalFuns.op226 pub >>= next) hn))
+      (let ⟨suffix, hs⟩ :=
+        R1Z.PV_RE_AttemptEntry.first D pub compiled ProverRwFull.transport.Variant.S2 hash secret store
+      Eq.mpr (id (congrArg (fun _a => ∃ next_1, _a >>= next = ProverRwFull.ExternalFuns.op226 pub >>= next_1) hs))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => ∃ next, _a = ProverRwFull.ExternalFuns.op226 pub >>= next)
+              (R1Z.PV_RE_ClientEntry.bind_assoc (ProverRwFull.ExternalFuns.op226 pub) suffix next)))
+          (Exists.intro (fun a => suffix a >>= next) rfl))))

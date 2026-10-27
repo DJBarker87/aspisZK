@@ -1,0 +1,15 @@
+R1Z.PV_RE_PublicPoison6.poisoned_client_failure [ProverRwFull.ExternalTypes] {C : Type} (D : ProverRwFull.ExternalFuns)
+  (entropy : R1Z.PV_RE_PublicPrefix6.RawEntropy C) (pub : R1Z.PV_RE_RetryStep.Public)
+  (compiled : R1Z.PV_RE_RetryStep.Compiled) (hash : R1Z.PV_RE_RetryStep.Hash) (store : R1Z.PV_RE_RetryStep.Store)
+  (state state1 : C) (secret : R1Z.PV_RE_RetryStep.Secrets)
+  (guard :
+    ProverRwFull.ExternalFuns.op233 ProverRwFull.transport.Variant.S2 ProverRwFull.transport.Variant.S2 =
+      Aeneas.Std.Result.ok true)
+  (entropy_prefix :
+    (R1Z.PV_RE_PublicPrefix6.EntropyWrapper D entropy).call_mut state 0#usize =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok secret, state1))
+  (e : Aeneas.Std.Error) :
+  ProverRwFull.RealR1_client.prove_for_proof_accounts entropy pub compiled hash store state = Aeneas.Std.Result.fail e
+R1Z.PV_RE_Op84Forward6.noCatch (tag : Aeneas.Std.U8) (values : Aeneas.Std.Slice Aeneas.Std.U8) :
+  R1Z.PV_RE_NoCatchCore.NoCatch fun pending =>
+    PV_CB_ShippedOp84Fresh.aspis_core.r0.merkle.leaf (fun x => pending) tag values
