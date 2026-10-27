@@ -1,0 +1,8 @@
+from pathlib import Path
+import hashlib,json,subprocess
+E=Path(__file__).parent;R=E.resolve().parents[1]
+paths=['crates/aspis-r1-cost-probe/src/host_semantic.rs','crates/aspis-r1-cost-probe/src/prover.rs','crates/aspis-statement/src/pool_v1/pair_forest_trace.rs','crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs','crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs','crates/aspis-statement/src/pool_v1/pair_trace.rs','crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal_constants.rs','crates/aspis-statement/src/pool_v1/pair_forest_semantic_oracle.rs','crates/aspis-statement/src/logup.rs','crates/aspis-core/src/field.rs','crates/aspis-core/src/circle.rs','crates/aspis-core/src/transcript.rs']
+(E/'source-pins.json').write_text(json.dumps(dict(base='4bdd2679c847a2b8354fa4c2fa9ea941484984e0',revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),sources=[dict(path=p,sha256=hashlib.sha256((R/p).read_bytes()).hexdigest(),bytes=(R/p).stat().st_size) for p in paths]),indent=2)+'\n')
+# Record authority, not a grep-derived source/module replacement.
+d=json.loads((R/'evidence/envj-rebuild-20261026/EJR_final-inventory.json').read_text());selected=d['selected'];wanted={'R0P/Copy','R0P/CopyRegistry','R0P/CopyConstants','R0Z/HvzkV','R1Z/PoleMassR1','R1Z/ReadBudgetR1'}
+(E/'envj-authority.json').write_text(json.dumps(dict(authority='evidence/envj-rebuild-20261026/EJR_final-inventory.json and evidence/envj-rebuild2-20261026/',authority_revision=d.get('revision'),resolved=[x for x in selected if x.get('module') in wanted],shared_sources_written=False,shared_objects_written=False),indent=2)+'\n')
