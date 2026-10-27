@@ -1,0 +1,48 @@
+{"attempt": "JHe30_005", "exit_status": 1, "wall_seconds": 2.417770977015607, "peak_rss_kib": "5260032", "swaps": "0", "print_axioms": ["'AspisR1.JHe_WriterTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHe_WriterTrace.lean:21:106: error: unsolved goals
+H : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 H
+hash : H
+total : ∀ (parts : Slice (Slice U8)), ∃ out, D.digest hash parts = ok out
+p : Prepared
+a : Accumulator
+proof pub saved : Slice U8
+size : (↑a.weights).length = 64
+variant : p.variant = aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2
+next : ↑a.next = 10
+execute : erase D hash (WAdm_SourceWriter.code p a proof pub) = ok saved
+before : Log
+hp hu hc : Std.Array U8 32#usize
+body : Slice U8
+hpCall : D.digest hash (singletonParts proof) = ok hp
+huCall : D.digest hash (singletonParts pub) = ok hu
+bodyCall : WAdm_SourceWriter.toSlice (WAdm_SourceBody.body p a hp hu) = ok body
+hcCa
+...
+t.CheckpointAbi2Variant.S2
+next : ↑a.next = 10
+execute : erase D hash (WAdm_SourceWriter.code p a proof pub) = ok saved
+before : Log
+hp hu hc : Std.Array U8 32#usize
+body : Slice U8
+hpCall : D.digest hash (singletonParts proof) = ok hp
+huCall : D.digest hash (singletonParts pub) = ok hu
+bodyCall : WAdm_SourceWriter.toSlice (WAdm_SourceBody.body p a hp hu) = ok body
+hcCall : D.digest hash (checksumParts body) = ok hc
+_len : (↑body).length = 1736
+_image : ↑saved = List.map CheckpointBytes5Writer.u8 (WAdm_SourceBody.body p a hp hu) ++ ↑hc
+finalCall : WAdm_SourceWriter.toSlice (WAdm_SourceBody.body p a hp hu ++ bytesOf ↑hc) = ok saved
+⊢ ok (saved, before ++ ([(singletonParts proof, hp)] ++ ([(singletonParts pub, hu)] ++ [(checksumParts body, hc)]))) =
+    ok (saved, before ++ [(singletonParts proof, hp), (singletonParts pub, hu), (checksumParts body, hc)])
+JHe_WriterTrace.lean:28:63: warning: This simp argument is unused:
+  run_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵W̵A̵d̵m̵_̵S̵o̵u̵r̵c̵e̵W̵r̵i̵t̵e̵r̵.̵c̵o̵d̵e̵,̵r̵u̵n̵_̵b̵i̵n̵d̵,̵r̵u̵n̵_̵r̵e̵a̵d̵,̵r̵u̵n̵_̵l̵i̵f̵t̵,̵r̵u̵n̵_̵p̵u̵r̵e̵,̵h̵p̵C̵a̵l̵l̵,̵h̵u̵C̵a̵l̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵o̵d̵y̵C̵a̵l̵l̵,̵h̵c̵C̵a̵l̵l̵,̵f̵i̵n̵a̵l̵C̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲W̲A̲d̲m̲_̲S̲o̲u̲r̲c̲e̲W̲r̲i̲t̲e̲r̲.̲c̲o̲d̲e̲,̲ ̲r̲u̲n̲_̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲_̲r̲e̲a̲d̲,̲ ̲r̲u̲n̲_̲l̲i̲f̲t̲,̲ ̲h̲p̲C̲a̲l̲l̲,̲ ̲h̲u̲C̲a̲l̲l̲,̲ ̲b̲o̲d̲y̲C̲a̲l̲l̲,̲ ̲h̲c̲C̲a̲l̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲i̲n̲a̲l̲C̲a̲l̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHe_WriterTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1b802f333f564f36b561613857a90d25.scope; invocation ID: 3eb93c44476f4b3593cbb50b521b76a5
