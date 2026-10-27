@@ -1,0 +1,35 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0754); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Inv_GlobalPairs.lean:19:4: error: Tactic `subst` failed: did not find equation for eliminating 'e'
+
+case inr
+I V W L : Type
+inst✝² : DecidableEq I
+inst✝¹ : Zero W
+inst✝ : DecidableEq W
+P : I → V → Prop
+producer consumer : L → I × Entry V W
+links : List L
+hp : ∀ (l : L), l ∈ links → P (producer l).fst (producer l).snd.value
+hc : ∀ (l : L), l ∈ links → P (consumer l).fst (consumer l).snd.value
+e : I × Entry V W
+he✝ : e ∈ endpoints producer consumer links
+l : L
+hl : l ∈ links
+he : e = consumer l ∨ e ∈ []
+⊢ P e.fst e.snd.value
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Inv_GlobalPairs.lean:16:27: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_cons,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵] at he
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Inv_GlobalPairs.safe_pairs' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_Inv_GlobalPairs.build_safe' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.55
+	Maximum resident set size (kbytes): 1439532
+	Swaps: 0
+	Exit status: 1

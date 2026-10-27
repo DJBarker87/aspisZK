@@ -66,3 +66,29 @@ Residual inventory audit: resolve the transitive z4/probe utility reachability
 and every generic function-pointer inverse; lexical absence alone is insufficient.
 
 Review correction: generic Ech::insert (probe.rs:145), circuits (:181), and normalize_d (:2292) are distinct. z9c::emit uses TagEch throughout; the normalize_d edge is reached via chain_targets and must remain. No inverse is in tail_row itself. The generic inverse-bearing transform r0/fold::phi is used by z9b design relations, with public domain coordinates, while the deployed encoder calls its inverse transform.
+
+## Builder/caller envelope and aliases
+
+The prover entry receives an already compiled witness. Expanding the envelope to
+its honest compiler and note constructors adds the following sites. They must not
+be lost by searching only the spelling `try_inv`.
+
+| Source | Reach/provenance | Zero handling/status |
+|---|---|---|
+| crates/aspis-statement/src/pool_v1/pair_tree_profile.rs:221 | two_outputs constructor, second commitment sentinel; witness/coin-derived | explicit sentinel==0 return precedes inversion; local guarded source-reference theorem in PV_Inv_Sentinel; constructor retry/source association remains OPEN |
+| crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs:159,182 | compile_forest_from_copies → merged_banks → Parts/out_rec → inv_r(change digest[7]); witness-derived | total x^(p-2) algorithm has no operand-zero branch; exponent-only branches, u64 remainder latency remains existing L2/L3 work; no zero-boundary exception invented |
+| crates/aspis-core/src/state_only_masked_switch_basis.rs:62,155,247 | inverse_raw during const table construction | public basis constants, no witness-runtime call |
+| crates/aspis-core/src/field.rs:390,396,398 | CM31 inv→inv_with(M31::inv) | includes function-pointer edge to M31 inverse, internal norm nonzero established from nonzero canonical QM31/CM31 input |
+
+Correction to the provisional generic-geometry edge: z9b imports encoder/opening,
+but design_relations implements its own geometry folds. There is no source call
+from this prover/certificate route to `r0/fold::phi`, chord::interpolation_pair,
+r0/prover::prove or inherent WideExact::try_inv. Their generic inverse definitions
+are retained in candidates.json as exclusions; they are not counted as witnessed
+native calls. Their mere presence does not justify a new probabilistic charge.
+The certificate path's actual denominators are M31 geometry, TagEch M31 pivots,
+and the QM31 half difference; this source path has no WideExact inversion call.
+
+This is a conservative source review, not a proved complete compiler-resolved
+call graph. Candidate source rows retain declaration/test/comment hits for an
+auditor to inspect; candidate count is not reachable-call count.
