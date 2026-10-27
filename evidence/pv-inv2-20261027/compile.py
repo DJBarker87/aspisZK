@@ -25,7 +25,7 @@ for m in '''+repr([m for line in imports for m in line.split()])+''':
 print(json.dumps(ds))
 '''
 deps=remote('python3 -c '+shlex.quote(depcode));save(q/'deps.json',deps.stdout);assert deps.returncode==0,deps.stderr
-fp=hashlib.sha256(deps.stdout.encode()).hexdigest();cmd=f'systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 /usr/bin/time -v -o {T}/time-{a}.log timeout 900 python3 {B}/aspis-fs-generic-20261006/evidence/run2.py {B}/r1-privacy-build-integration-20261019/env/J.json {J}/objects {J}/sources {J}/objects/{mod}.olean {J}/sources/{mod}.lean 7000 > {T}/out-{a}.log 2>&1'
+context=(E/'readonly-object-links.json').read_bytes()+(E/'readonly-root-links.json').read_bytes();save(q/'cache-context-sha256.txt',hashlib.sha256(context).hexdigest()+'\n');fp=hashlib.sha256(deps.stdout.encode()+context).hexdigest();cmd=f'systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 /usr/bin/time -v -o {T}/time-{a}.log timeout 900 python3 {B}/aspis-fs-generic-20261006/evidence/run2.py {B}/r1-privacy-build-integration-20261019/env/J.json {J}/objects {J}/sources {J}/objects/{mod}.olean {J}/sources/{mod}.lean 7000 > {T}/out-{a}.log 2>&1'
 remote(f'sha256sum {J}/sources/{mod}.lean > {T}/sha-{a}.txt');
 for old in E.glob('J*/receipt.json'):
  d=json.loads(old.read_text());assert (d['source_sha256'],d['deps_fingerprint'])!=(hashlib.sha256(src.encode()).hexdigest(),fp),'unchanged input refused'
