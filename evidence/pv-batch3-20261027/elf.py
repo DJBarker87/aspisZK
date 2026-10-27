@@ -8,7 +8,7 @@ for mode in ['default','devnet','pool']:
  features='r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit' if mode=='pool' else 'pool-adapter,private-leaf-salts'
  env={'CARGO_HOME':'/home/dombarker/.cargo','CARGO_TARGET_DIR':str(H/'sbf-target'),'CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS':'-C link-arg=--threads=4','RUSTC_WRAPPER':'/home/dombarker/project-offloads/codex-cx-lowering2-20261026/rustc-diagnostics.py','S10_DIAGNOSTICS':str(H/label/'diagnostics')}
  if mode=='devnet':env.update(ASPIS_R1_POOL_PROGRAM_ID='BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs',ASPIS_R1_REGISTRY_PROGRAM_ID='9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q')
- cmd=['timeout','600','/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf','--manifest-path',str(S/'programs'/program/'Cargo.toml'),'--sbf-out-dir',str(out),'--features',features,'--skip-tools-install','--offline','-j','4','--','--locked']
+ cmd=['timeout','600','taskset','--cpu-list','0-3','/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf','--manifest-path',str(S/'programs'/program/'Cargo.toml'),'--sbf-out-dir',str(out),'--features',features,'--skip-tools-install','--offline','-j','4','--','--locked']
  status=run(label,cmd,'optimized SBF compilation and diagnostic emission; no arithmetic elimination',env)
  if status:sys.exit(status)
  file=out/('aspis_pool.so' if mode=='pool' else 'aspis_r1_cost_probe_program.so')

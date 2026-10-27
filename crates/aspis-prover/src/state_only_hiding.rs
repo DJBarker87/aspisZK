@@ -28,7 +28,7 @@ use aspis_statement::{
     atomic_state_only_registry::atomic_state_only_relation_free_mask_cells_v3,
     atomic_state_only_terminal::atomic_state_only_copy_active_rows_v3,
     pool_v1::{
-        pool_v1_pair_forest_copy_active_rows_v1, pool_v1_pair_forest_relation_free_mask_cells_v1,
+         
         pool_v1_payment_relation_free_mask_cells_v1,
         pool_v1_private_transfer_copy_active_row_masks_compiled_v1,
         pool_v1_withdrawal_copy_active_row_masks_compiled_v1,
@@ -41,6 +41,16 @@ use zeroize::Zeroize;
 use crate::state_only_zerocheck::{
     prove_state_only_sumcheck_from_claim, StateOnlyZerocheckProveError, StateOnlyZerocheckTrace,
 };
+
+#[cfg(not(feature="prover"))]
+use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_rows_v1;
+#[cfg(feature="prover")]
+use crate::host_forest::materialize_active_rows as pool_v1_pair_forest_copy_active_rows_v1;
+
+#[cfg(not(feature="prover"))]
+use aspis_statement::pool_v1::pool_v1_pair_forest_relation_free_mask_cells_v1;
+#[cfg(feature="prover")]
+use crate::host_forest::materialize_mask_cells as pool_v1_pair_forest_relation_free_mask_cells_v1;
 
 const MASK_SEED_DOMAIN: &[u8] = b"aspis:state-only:private-mask-seed:v1";
 const MASK_EXPAND_DOMAIN: &[u8] = b"aspis:state-only:private-mask-expand:v1";

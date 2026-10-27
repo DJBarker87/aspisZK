@@ -38,8 +38,8 @@ use aspis_statement::atomic_state_only_terminal::{
 };
 use aspis_statement::pool_v1::{
     pool_v1_pair_copy_active_rows_v1, pool_v1_pair_copy_inactive_row_masks_v1,
-    pool_v1_pair_forest_copy_active_rows_v1, pool_v1_pair_forest_copy_inactive_row_masks_v1,
-    pool_v1_pair_forest_relation_free_mask_cells_v1, pool_v1_pair_relation_free_mask_cells_v1,
+     
+     pool_v1_pair_relation_free_mask_cells_v1,
 };
 use aspis_statement::{
     binary_successor_point, state_only_copy_active_rows_v4, state_only_copy_inactive_row_masks_v4,
@@ -112,6 +112,21 @@ pub use state_only_two_variable_slice_rank::{
 pub use state_only_variable_permutation_rank::{
     AtomicProfile21VariablePermutationP0Probe, AtomicProfile21VariablePermutationP0RankReport,
 };
+
+#[cfg(not(feature="prover"))]
+use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_rows_v1;
+#[cfg(feature="prover")]
+use crate::host_forest::materialize_active_rows as pool_v1_pair_forest_copy_active_rows_v1;
+
+#[cfg(not(feature="prover"))]
+use aspis_statement::pool_v1::pool_v1_pair_forest_copy_inactive_row_masks_v1;
+#[cfg(feature="prover")]
+use crate::host_forest::pool_v1_pair_forest_copy_inactive_row_masks_v1 as pool_v1_pair_forest_copy_inactive_row_masks_v1;
+
+#[cfg(not(feature="prover"))]
+use aspis_statement::pool_v1::pool_v1_pair_forest_relation_free_mask_cells_v1;
+#[cfg(feature="prover")]
+use crate::host_forest::materialize_mask_cells as pool_v1_pair_forest_relation_free_mask_cells_v1;
 
 const TRACE_ROWS: usize = 1 << STATE_ONLY_HIDING_SUMCHECK_ROUNDS;
 const MASK_SUMCHECK_DEGREE: usize = 27;

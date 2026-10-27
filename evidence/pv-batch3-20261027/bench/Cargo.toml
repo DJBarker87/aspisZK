@@ -1,0 +1,16 @@
+[package]
+name="pv-b3-forest-bench"
+version="0.0.0"
+edition="2021"
+[workspace]
+[features]
+prover=[]
+[[bin]]
+name="forest-bench"
+path="main.rs"
+required-features=["prover"]
+[dependencies]
+aspis-prover={path="../../../../crates/aspis-prover",features=["r0","prover","insecure-spend-fixture"]}
+aspis-statement={path="../../../../crates/aspis-statement",features=["r0","pool-v1-kernel"]}
+[profile.release]
+opt-level=3

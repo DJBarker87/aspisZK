@@ -63,4 +63,4 @@ pub mod host_work;
 mod prover_shared;
 
 #[cfg(feature = "prover")]
-pub mod host_forest;
+pub use aspis_prover::host_forest;
