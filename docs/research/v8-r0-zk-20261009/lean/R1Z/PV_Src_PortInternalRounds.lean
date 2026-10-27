@@ -40,9 +40,11 @@ theorem source {F : Type}
       steps callback xs s trace round input := by
   induction ht generalizing s input trace round with
   | done it it' hn =>
+    simp only [iterator] at hn
     rw [poseidon2.permute_optimized_with_trace_loop1,hn]
     rfl
   | step it it' p xs hn tail ih =>
+    simp only [iterator] at hn
     rcases p with ⟨index,c⟩
     have hconst : c.val < 2147483647 := hc (index,c) (by simp)
     have htail : ∀ p ∈ xs, p.2.val < 2147483647 := fun p hp => hc p (by simp [hp])

@@ -24,9 +24,11 @@ theorem source {F : Type}
         xs s trace round input := by
   induction ht generalizing s input trace round with
   | done it it' hn =>
+    simp only [iterator] at hn
     rw [poseidon2.permute_optimized_with_trace_loop0,hn]
     rfl
   | step it it' p xs hn tail ih =>
+    simp only [iterator] at hn
     rcases p with ⟨index,c⟩
     have hconst : Canonical c := hc (index,c) (by simp)
     have htail : ∀ p ∈ xs, Canonical p.2 := fun p hp => hc p (by simp [hp])
