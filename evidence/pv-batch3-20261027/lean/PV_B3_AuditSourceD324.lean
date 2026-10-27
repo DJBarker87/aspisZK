@@ -349,8 +349,8 @@ theorem no_hidden_success (r : Result NewFinal) (m : Array U16 64#usize) :
     translate r = ok (.Ok m) ↔ r = ok (.Ok m) := by
   constructor
   · intro h
-    have eq := congrArg restore h
-    simpa only [roundtrip, restore] using eq
+    apply injective
+    exact h
   · intro h
     rw [h]
     rfl
@@ -394,6 +394,9 @@ theorem source (c1 : Array Q 16#usize) (mask : Array Q 10#usize)
   unfold host_arithmetic.state_only_selected_mask_value reference
   simp_rw [PV_B3_Range117.selected, PV_B3_Range117.mask_only,
     PV_B3_Range117.prepared_horner]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  rintro ⟨linear, explicit_linear⟩ h
+  with_unfolding_all rfl
 
 #print axioms reference
 #print axioms source
