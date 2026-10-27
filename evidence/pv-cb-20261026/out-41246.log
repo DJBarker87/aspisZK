@@ -1,0 +1,148 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_TupleProducerBody.lean:14:2: error: unsolved goals
+case pos
+row start count : Usize
+tweak_right : Bool
+bank : Bank
+limbs : Std.Array Limb 16#usize
+i stop : Usize
+more : ↑i < ↑stop
+hn :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop } =
+    ok (some i, { start := PV_CB_ForwardRange.advance i, «end» := stop })
+⊢ (let (o, iter1) := (some i, { start := PV_CB_ForwardRange.advance i, «end» := stop })
+    match o with
+    | none => ok (done limbs)
+    | some lane => do
+      let offset ←
+        if tweak_right = true then
+            if Usize.wrapping_add lane 1#usize = count then
+              PV_CB_ShippedOp223Tuple.aspis_core.field.M31.ZERO.sub
+                PV_CB_ShippedOp223Tuple.poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+            else ok PV_CB_ShippedOp223Tuple.aspis_core.field.M31.ZERO
+          else ok PV_CB_ShippedOp223Tuple.aspis_core.field.M31.ZERO
+      let limbs1 ←
+        limbs.update lane
+            (PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.PoolV1PairTupleLimbV1.Cell
+              { bank := bank,
+                cell :=
+                  { row := UScalar.cast UScalarTy.U16 row,
+                    column := UScalar.cast UScalarTy.U8 (start.wrapping_add lane) } }
+              offset)
+      ok (cont (iter1, limbs1))) =
+    if i < stop then do
+      let x ←
+        if tweak_right = true then
+            if i.wrapping_add 1#usize = count then
+              PV_CB_TupleProducerScalar.S.sub PV_CB_TupleProducerScalar.S.zero PV_CB_TupleProducerScalar.S.tweak
+            else ok PV_CB_TupleProducerScalar.S.zero
+          else ok PV_CB_TupleProducerScalar.S.zero
+      let out ←
+        limbs.update i
+            (PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.PoolV1PairTupleLimbV1.Cell
+              { bank := bank,
+                cell :=
+                  { row := UScalar.cast UScalarTy.U16 row,
+                    column := UScalar.cast UScalarTy.U8 (start.wrapping_add i) } }
+              x)
+      ok (cont ({ start := PV_CB_ForwardRange.advance i, «end» := stop }, out))
+    else ok (done limbs)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_TupleProducerBody.lean:20:2: error: unsolved goals
+case neg
+row start count : Usize
+tweak_right : Bool
+bank : Bank
+limbs : Std.Array Limb 16#usize
+i stop : Usize
+more : ¬↑i < ↑stop
+hn :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := i, «end» := stop } =
+    ok (none, { start := i, «end» := stop })
+⊢ (let (o, iter1) := (none, { start := i, «end» := stop })
+    match o with
+    | none => ok (done limbs)
+    | some lane => do
+      let column ← lift (start.wrapping_add lane)
+      let offset ←
+        if tweak_right = true then do
+            let i ← lift (Usize.wrapping_add lane 1#usize)
+            if i = count then
+                PV_CB_ShippedOp223Tuple.aspis_core.field.M31.ZERO.sub
+                  PV_CB_ShippedOp223Tuple.poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+              else ok PV_CB_ShippedOp223Tuple.aspis_core.field.M31.ZERO
+          else ok PV_CB_ShippedOp223Tuple.aspis_core.field.M31.ZERO
+      let i ← lift (UScalar.cast UScalarTy.U16 row)
+      let i1 ← lift (UScalar.cast UScalarTy.U8 column)
+      let limbs1 ←
+        limbs.update lane
+            (PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.PoolV1PairTupleLimbV1.Cell
+              { bank := bank, cell := { row := i, column := i1 } } offset)
+      ok (cont (iter1, limbs1))) =
+    if i < stop then do
+      let out ← PV_CB_TupleProducerStep.step row start count tweak_right bank i limbs
+      ok (cont ({ start := PV_CB_ForwardRange.advance i, «end» := stop }, out))
+    else ok (done limbs)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_TupleProducerBody.lean:18:6: warning: This simp argument is unused:
+  PV_CB_ForwardRange.next
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵P̵V̵_̵C̵B̵_̵S̵h̵i̵p̵p̵e̵d̵O̵p̵2̵2̵3̵T̵u̵p̵l̵e̵.̵p̵o̵o̵l̵_̵v̵1̵.̵p̵a̵i̵r̵_̵t̵r̵a̵c̵e̵.̵t̵u̵p̵l̵e̵_̵c̵e̵l̵l̵s̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵C̵B̵_̵F̵o̵r̵w̵a̵r̵d̵L̵o̵o̵p̵.̵b̵o̵d̵y̵,̵P̵V̵_̵C̵B̵_̵T̵u̵p̵l̵e̵P̵r̵o̵d̵u̵c̵e̵r̵S̵t̵e̵p̵.̵s̵t̵e̵p̵,̵o̵f̵f̵s̵e̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵C̵B̵_̵F̵o̵r̵w̵a̵r̵d̵R̵a̵n̵g̵e̵.̵n̵e̵x̵t̵,̵P̵V̵_̵C̵B̵_̵F̵o̵r̵w̵a̵r̵d̵R̵a̵n̵g̵e̵.̵b̵e̵t̵w̵e̵e̵n̵,̵h̵n̵,̵m̵o̵r̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲b̲o̲d̲y̲,̲ ̲P̲V̲_̲C̲B̲_̲S̲h̲i̲p̲p̲e̲d̲O̲p̲2̲2̲3̲T̲u̲p̲l̲e̲.̲p̲o̲o̲l̲_̲v̲1̲.̲p̲a̲i̲r̲_̲t̲r̲a̲c̲e̲.̲t̲u̲p̲l̲e̲_̲c̲e̲l̲l̲s̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲C̲B̲_̲F̲o̲r̲w̲a̲r̲d̲L̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲P̲V̲_̲C̲B̲_̲T̲u̲p̲l̲e̲P̲r̲o̲d̲u̲c̲e̲r̲S̲t̲e̲p̲.̲s̲t̲e̲p̲,̲ ̲o̲f̲f̲s̲e̲t̲,̲ ̲P̲V̲_̲C̲B̲_̲F̲o̲r̲w̲a̲r̲d̲R̲a̲n̲g̲e̲.̲b̲e̲t̲w̲e̲e̲n̲,̲ ̲h̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲o̲r̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_TupleProducerBody.lean:18:60: warning: This simp argument is unused:
+  more
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.tuple_cells_loop.body,
+        PV_CB_ForwardLoop.body, ̲PV_CB_TupleProducerStep.step, ̲offset,
+  ̵  ̵ ̵ ̵ ̵ ̵PV_CB_ForwardRange.next,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_CB_ForwardRange.between, ̲hn,m̵o̵r̵e̵,̵ ̲if_true,
+  ̵  ̵ ̵ ̵ ̵ ̵lift, ̲bind_tc_ok, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_TupleProducerBody.lean:18:65: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.tuple_cells_loop.body,
+        PV_CB_ForwardLoop.body, ̲PV_CB_TupleProducerStep.step, ̲offset,
+  ̵  ̵ ̵ ̵ ̵ ̵PV_CB_ForwardRange.next,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_CB_ForwardRange.between, ̲hn, ̲more,i̵f̵_̵t̵r̵u̵e̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵lift, ̲bind_tc_ok, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_TupleProducerBody.lean:23:29: warning: This simp argument is unused:
+  PV_CB_ForwardRange.next
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵P̵V̵_̵C̵B̵_̵S̵h̵i̵p̵p̵e̵d̵O̵p̵2̵2̵3̵T̵u̵p̵l̵e̵.̵p̵o̵o̵l̵_̵v̵1̵.̵p̵a̵i̵r̵_̵t̵r̵a̵c̵e̵.̵t̵u̵p̵l̵e̵_̵c̵e̵l̵l̵s̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵C̵B̵_̵F̵o̵r̵w̵a̵r̵d̵L̵o̵o̵p̵.̵b̵o̵d̵y̵,̵P̵V̵_̵C̵B̵_̵F̵o̵r̵w̵a̵r̵d̵R̵a̵n̵g̵e̵.̵n̵e̵x̵t̵,̵P̵V̵_̵C̵B̵_̵F̵o̵r̵w̵a̵r̵d̵R̵a̵n̵g̵e̵.̵b̵e̵t̵w̵e̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵n̵,̵m̵o̵r̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲o̲d̲y̲,̲ ̲P̲V̲_̲C̲B̲_̲S̲h̲i̲p̲p̲e̲d̲O̲p̲2̲2̲3̲T̲u̲p̲l̲e̲.̲p̲o̲o̲l̲_̲v̲1̲.̲p̲a̲i̲r̲_̲t̲r̲a̲c̲e̲.̲t̲u̲p̲l̲e̲_̲c̲e̲l̲l̲s̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲C̲B̲_̲F̲o̲r̲w̲a̲r̲d̲L̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲P̲V̲_̲C̲B̲_̲F̲o̲r̲w̲a̲r̲d̲R̲a̲n̲g̲e̲.̲b̲e̲t̲w̲e̲e̲n̲,̲ ̲h̲n̲,̲ ̲m̲o̲r̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_TupleProducerBody.lean:24:9: warning: This simp argument is unused:
+  more
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.tuple_cells_loop.body,
+        PV_CB_ForwardLoop.body, ̲PV_CB_ForwardRange.next, ̲PV_CB_ForwardRange.between, ̲h̲n̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+        h̵n̵,̵m̵o̵r̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_TupleProducerBody.lean:24:14: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲PV_CB_ShippedOp223Tuple.pool_v1.pair_trace.tuple_cells_loop.body,
+        PV_CB_ForwardLoop.body, ̲PV_CB_ForwardRange.next, ̲PV_CB_ForwardRange.between, ̲h̲n̲,̲ ̲m̲o̲r̲e̲,̲
+        h̵n̵,̵m̵o̵r̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB_TupleProducerBody.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
