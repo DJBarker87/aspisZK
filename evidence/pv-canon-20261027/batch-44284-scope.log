@@ -1,0 +1,268 @@
+44284 R1Z/PV_Canon_Round exit=0
+44285 R1Z/PV_Canon_RoundCounter exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_RoundCounter.lean:10:68: error: Tactic `decide` failed for proposition
+  10 < 2 ^ UScalarTy.Usize.numBits
+because its `Decidable` instance
+  Nat.decLt 10 (2 ^ UScalarTy.Usize.numBits)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, and `Nat.decLt`, reduction got stuck at the `Decidable` instance
+  match (Nat.succ 10).ble (2 ^ UScalarTy.Usize.numBits), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'R1Z.PV_Canon.next_round_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Canon.next_round_remaining' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+44286 R1Z/PV_Canon_CheckedRounds exit=0
+44287 R1Z/PV_Canon_Rounds SKIP failed/missing predecessor
+44288 R1Z/PV_Canon_Prover SKIP failed/missing predecessor
+44289 R1Z/PV_Canon_Inverse exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Inverse.lean:12:2: error: `simp` made no progress
+'R1Z.PV_Canon.inverse_owned_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+44290 R1Z/PV_Canon_InterpolationInverse SKIP failed/missing predecessor
+44291 R1Z/PV_Canon_Index exit=0
+44292 R1Z/PV_Canon_SampleRemainder exit=0
+44293 R1Z/PV_Canon_RowObligation exit=0
+44294 R1Z/PV_Canon_ParseM exit=0
+44295 R1Z/PV_Canon_ParseC exit=0
+44296 R1Z/PV_Canon_ParseQ exit=0
+44297 R1Z/PV_Canon_LegacyMask exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_LegacyMask.lean:10:8: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U32.and_val_eq`
+'R1Z.PV_Canon.legacy_mask_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+44298 R1Z/PV_Canon_Neg exit=0
+44299 R1Z/PV_Canon_Neg101 exit=0
+44300 R1Z/PV_Canon_Constructors exit=0
+44301 R1Z/PV_Canon_FrozenReduce exit=0
+44302 R1Z/PV_Canon_ScalarTryInverse exit=0
+44303 R1Z/PV_Canon_CanonicalInjective exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_CanonicalInjective.lean:8:2: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  ProverRwFull.ExternalTypes
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+'R1Z.PV_Canon.canonical_injective' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+44304 R1Z/PV_Canon_IndexTotal exit=0
+44305 R1Z/PV_Canon_PrepareComponent exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PrepareComponent.lean:11:2: error: unsolved goals
+case refine_1
+x : aspis_core.field.CM31
+hx : C x
+m : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hm : S.add x.a x.b = ok m
+hcm : M m
+⊢ ProverRwP7CurrentFieldSource.aspis_core.field.PreparedQm31Multiplier.new.closure.Insts.CoreOpsFunctionFnTupleCM31ArrayM313.call
+      () x =
+    ok (Array.make 3#usize [x.a, x.b, m] ⋯)
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PrepareComponent.lean:11:32: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [PrepareComponent,h̵m̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PrepareComponent.lean:11:35: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵e̵p̵a̵r̵e̵C̵o̵m̵p̵o̵n̵e̵n̵t̵,̵h̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲P̲r̲e̲p̲a̲r̲e̲C̲o̲m̲p̲o̲n̲e̲n̲t̲,̲ ̲h̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Canon.prepare_component' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+44306 R1Z/PV_Canon_Prepare SKIP failed/missing predecessor
+44307 R1Z/PV_Canon_PreparedComponent exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:10:60: error: unsolved goals
+left : Std.Array U32 3#usize
+right : aspis_core.field.CM31
+hr : C right
+a : U32
+ha : left.index_usize 0#usize = ok a
+b : U32
+hb : left.index_usize 1#usize = ok b
+c : U32
+hc : left.index_usize 2#usize = ok c
+m0 : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hm0 : S.mul a right.a = ok m0
+hcm0 : M m0
+m1 : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hm1 : S.mul b right.b = ok m1
+hcm1 : M m1
+s : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hs : S.add right.a right.b = ok s
+hcs : M s
+m2 : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hm2 : S.mul c s = ok m2
+hcm2 : M m2
+d : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hd : S.sub m0 m1 = ok d
+hcd : M d
+e : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+he : S.sub m2 m0 = ok e
+hce : M e
+f : ProverRwP7CurrentFieldSource.aspis_core.field.M31
+hf : S.sub e m1 = ok f
+hcf : M f
+⊢ ProverRwP7CurrentFieldSource.aspis_core.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call
+      () (left, right) =
+    ok { a := d, b := f }
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:31: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha̵,̵h̵b, ̲hc, ̲hm0, ̲hm1, ̲hs, ̲hm2, ̲hd, ̲he, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:34: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha, ̲hb̵,̵h̵c, ̲hm0, ̲hm1, ̲hs, ̲hm2, ̲hd, ̲he, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:37: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha, ̲hb, ̲hc̵,̵h̵m0, ̲hm1, ̲hs, ̲hm2, ̲hd, ̲he, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:40: warning: This simp argument is unused:
+  hm0
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha, ̲hb, ̲hc, ̲hm0̵,̵h̵m̵1, ̲hs, ̲hm2, ̲hd, ̲he, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:44: warning: This simp argument is unused:
+  hm1
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha, ̲hb, ̲hc, ̲hm0, ̲hm̵1̵,̵h̵s, ̲hm2, ̲hd, ̲he, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:48: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha, ̲hb, ̲hc, ̲hm0, ̲hm1, ̲hs̵,̵h̵m2, ̲hd, ̲he, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:51: warning: This simp argument is unused:
+  hm2
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha, ̲hb, ̲hc, ̲hm0, ̲hm1, ̲hs, ̲hm̵2̵,̵h̵d, ̲he, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:55: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha, ̲hb, ̲hc, ̲hm0, ̲hm1, ̲hs, ̲hm2, ̲hd̵,̵h̵e, ̲hf, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:58: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha, ̲hb, ̲hc, ̲hm0, ̲hm1, ̲hs, ̲hm2, ̲hd, ̲he̵,̵h̵f, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:61: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedComponent, ̲ha, ̲hb, ̲hc, ̲hm0, ̲hm1, ̲hs, ̲hm2, ̲hd, ̲he,h̵f̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_PreparedComponent.lean:22:64: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵e̵p̵a̵r̵e̵d̵C̵o̵m̵p̵o̵n̵e̵n̵t̵,̵h̵a̵,̵h̵b̵,̵h̵c̵,̵h̵m̵0̵,̵h̵m̵1̵,̵h̵s̵,̵h̵m̵2̵,̵h̵d̵,̵h̵e̵,̵h̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲P̲r̲e̲p̲a̲r̲e̲d̲C̲o̲m̲p̲o̲n̲e̲n̲t̲,̲ ̲h̲a̲,̲ ̲h̲b̲,̲ ̲h̲c̲,̲ ̲h̲m̲0̲,̲ ̲h̲m̲1̲,̲ ̲h̲s̲,̲ ̲h̲m̲2̲,̲ ̲h̲d̲,̲ ̲h̲e̲,̲ ̲h̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Canon.prepared_component' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+44308 R1Z/PV_Canon_PreparedMul SKIP failed/missing predecessor
+44309 R1Z/PV_Canon_FieldMeaning exit=0
+44310 R1Z/PV_Canon_Horner exit=0
+44311 R1Z/PV_Canon_HornerMeaning exit=0
+44312 R1Z/PV_Canon_HornerObligation exit=0
+44313 R1Z/PV_Canon_Deployment exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:21:45: error: Application type mismatch: The argument
+  values
+has type
+  ?m.2 → Std.Array aspis_core.field.QM31 28#usize
+but is expected to have type
+  Std.Array aspis_core.field.QM31 28#usize
+in the application
+  host_sumcheck.interpolate values
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:21:58: error(lean.unknownIdentifier): Unknown identifier `coefficients`
+
+Note: It is not possible to treat `coefficients` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:23:54: error: Application type mismatch: The argument
+  before
+has type
+  ?m.1 → host_wire.SemanticTranscript H
+but is expected to have type
+  host_wire.SemanticTranscript H
+in the application
+  host_wire.SemanticTranscript.semantic digest before
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:23:83: error: Application type mismatch: The argument
+  sampled
+has type
+  ?m.10 → aspis_core.field.QM31
+but is expected to have type
+  aspis_core.field.QM31
+in the application
+  core.result.Result.Ok sampled
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:23:91: error(lean.unknownIdentifier): Unknown identifier `after`
+
+Note: It is not possible to treat `after` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:24:24: error: Application type mismatch: The argument
+  point
+has type
+  ?m.6 → Std.Array aspis_core.field.QM31 10#usize
+but is expected to have type
+  Std.Array ?m.28 ?m.29
+in the application
+  Array.update point
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:24:50: error(lean.unknownIdentifier): Unknown identifier `updated`
+
+Note: It is not possible to treat `updated` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:24:2: error: stuck at solving universe constraint
+  ?u.43 + 1 =?= max 1 ?u.23
+while trying to unify
+  ?m.10 → aspis_core.field.QM31 : Sort (max 1 ?u.23)
+with
+  ?m.10 → aspis_core.field.QM31 : Sort (max 1 ?u.23)
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:33:29: error(lean.unknownIdentifier): Unknown identifier `ExtractedPrefix`
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:35:66: error(lean.unknownIdentifier): Unknown identifier `ExtractedPrefix`
+
+Note: It is not possible to treat `ExtractedPrefix` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Deployment.lean:39:9: warning: declaration uses `sorry`
+'R1Z.PV_Canon.extracted_prefix_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Canon.reached_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+44314 R1Z/PV_Canon_ComplexTryInverse exit=1
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_ComplexTryInverse.lean:24:4: error: Type mismatch: After simplification, term
+  PV_Join_ParseQuarticCanonical5.none_residual C
+ has type
+  @PV_Join_ResultInvariant5.Safe (Option aspis_core.field.CM31)
+    (fun o => ∀ (x : aspis_core.field.CM31), o = some x → C x)
+    (ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+      aspis_core.field.CM31 none)
+but is expected to have type
+  @Safe (Option aspis_core.field.CM31) SomeC
+    (ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+      ProverRwSuccessInverseSource.field.CM31 none)
+'R1Z.PV_Canon.release_mul_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Canon.complex_try_inverse_safe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+44315 R1Z/PV_Canon_RadixFour exit=0
+Running as unit: run-rf2cf15d1802e4a48b9fc80f5b5e2c01b.scope; invocation ID: b28107d93f8143afbeeec565420ef799

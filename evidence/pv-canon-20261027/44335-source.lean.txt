@@ -1,0 +1,45 @@
+import R1Z.PV_Canon_Round
+import R1Z.PV_Canon_CheckedRounds
+import R1Z.PV_Canon_RoundCounter
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Canon
+open Aeneas Aeneas.Std Result ProverRwFull
+ theorem rounds_checked (base : ExternalTypes)
+    (ops : @ExternalFuns (PV_Join_PublicCaller.native base))
+    {H F : Type} (digest : aspis_core.digest.Digest32 H) (oracleInst : host_sumcheck.Oracle F)
+    (n : Nat) (s : host_wire.SemanticTranscript H) (output : alloc.vec.Vec U8)
+    (point : Array aspis_core.field.QM31 10#usize) (running : aspis_core.field.QM31)
+    (round : Usize) (oracle : F) (hn : round.val+n=10) :
+    @host_sumcheck.prove_sumcheck_rounds (PV_Join_PublicCaller.native base)
+      (PV_Join_PublicCaller.selected base ops) H F digest oracleInst s output point running round oracle =
+    @checked_rounds (PV_Join_PublicCaller.native base)
+      (PV_Join_PublicCaller.selected base ops) H F digest oracleInst s output point running round oracle := by
+  letI : ExternalTypes := PV_Join_PublicCaller.native base
+  letI : ExternalFuns := PV_Join_PublicCaller.selected base ops
+  induction n generalizing s output point running round with
+  | zero =>
+    have hz : round=10#usize := UScalar.eq_of_val_eq (by simpa using hn)
+    subst round
+    rw [host_sumcheck.prove_sumcheck_rounds.eq_def,checked_rounds.eq_def]
+    simp only [if_true]
+  | succ n ih =>
+    have hlt : round.val < 10 := by omega
+    have hne : round≠10#usize := by intro h; subst round; change 10 < 10 at hlt; omega
+    rw [host_sumcheck.prove_sumcheck_rounds.eq_def,checked_rounds.eq_def]
+    simp only [hne,if_false]
+    rw [round_checked base ops digest oracleInst s output point running round oracle hlt]
+    apply bind_congr_all; rintro ⟨r,after,bytes⟩
+    cases r with
+    | Err e => rfl
+    | Ok pair =>
+      obtain ⟨point1,running1⟩ := pair
+      change (do
+        let next ← lift (Usize.wrapping_add round 1#usize)
+        host_sumcheck.prove_sumcheck_rounds digest oracleInst after bytes point1 running1 next oracle) = (do
+        let next ← lift (Usize.wrapping_add round 1#usize)
+        checked_rounds digest oracleInst after bytes point1 running1 next oracle)
+      simp only [lift,bind_tc_ok]
+      exact ih after bytes point1 running1 _ (next_round_remaining round n hn)
+#print axioms rounds_checked
+end R1Z.PV_Canon

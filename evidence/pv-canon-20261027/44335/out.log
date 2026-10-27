@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Rounds.lean:21:9: error: unsolved goals
+case zero
+base : ExternalTypes
+ops : ExternalFuns
+H F : Type
+digest : aspis_core.digest.Digest32 H
+oracleInst : host_sumcheck.Oracle F
+oracle : F
+this✝ : ExternalTypes := PV_Join_PublicCaller.native base
+this : ExternalFuns := PV_Join_PublicCaller.selected base ops
+s : host_wire.SemanticTranscript H
+output : alloc.vec.Vec U8
+point : Std.Array aspis_core.field.QM31 10#usize
+running : aspis_core.field.QM31
+hn : ↑10#usize + 0 = 10
+⊢ (do
+      let r ← oracleInst.evaluate oracle point
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+          if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal, s, output)
+            else ok (core.result.Result.Ok (point, running), s, output)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+                residual
+          ok (r1, s, output)) =
+    do
+    let r ← oracleInst.evaluate oracle point
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+        if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal, s, output)
+          else ok (core.result.Result.Ok (point, running), s, output)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+              residual
+        ok (r1, s, output)
+/home/dombarker/project-offloads/codex-pv-canon-20261027/sources/R1Z/PV_Canon_Rounds.lean:8:9: error: (kernel) excessive memory consumption detected
+'R1Z.PV_Canon.rounds_checked' depends on axioms: [propext, Classical.choice, Quot.sound, rounds_checked]
