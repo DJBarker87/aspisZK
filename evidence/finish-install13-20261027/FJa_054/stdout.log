@@ -1,0 +1,25 @@
+FJa_WeightBits.lean:12:8: error: unsolved goals
+case nil
+j : ℕ
+⊢ 1 = ∏ x, R0P.SemDegree.bitFactor (j.testBit ([].length - 1 - ↑x)) [][↑x]
+FJa_WeightBits.lean:15:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∏ i, ?f i
+in the target expression
+  (if j / 2 ^ cs.length % 2 = 0 then 1 - c else c) * FJa_TensorMeaning.weight cs j =
+    ∏ c_1, R0P.SemDegree.bitFactor (j.testBit ((c :: cs).length - 1 - ↑c_1)) (c :: cs)[↑c_1]
+
+case cons
+j : ℕ
+c : K
+cs : List K
+ih : FJa_TensorMeaning.weight cs j = R0P.SemDegree.bitWeight cs.length (fun i => cs[↑i]) j
+⊢ (if j / 2 ^ cs.length % 2 = 0 then 1 - c else c) * FJa_TensorMeaning.weight cs j =
+    ∏ c_1, R0P.SemDegree.bitFactor (j.testBit ((c :: cs).length - 1 - ↑c_1)) (c :: cs)[↑c_1]
+FJa_WeightBits.lean:12:71: warning: This simp argument is unused:
+  Fin.prod_univ_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵J̵a̵_̵T̵e̵n̵s̵o̵r̵M̵e̵a̵n̵i̵n̵g̵.̵w̵e̵i̵g̵h̵t̵,̵R̵0̵P̵.̵S̵e̵m̵D̵e̵g̵r̵e̵e̵.̵b̵i̵t̵W̵e̵i̵g̵h̵t̵,̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵z̵e̵r̵o̵]̵[̲F̲J̲a̲_̲T̲e̲n̲s̲o̲r̲M̲e̲a̲n̲i̲n̲g̲.̲w̲e̲i̲g̲h̲t̲,̲ ̲R̲0̲P̲.̲S̲e̲m̲D̲e̲g̲r̲e̲e̲.̲b̲i̲t̲W̲e̲i̲g̲h̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJa_WeightBits.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
