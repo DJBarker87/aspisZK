@@ -2,3 +2,6 @@
 include!("BEl_frozen.rs");
 #[cfg(kani)]
 mod BEl_reference;
+
+#[cfg(test)]
+mod BEl_nativefixtures;

@@ -1,79 +1,4 @@
-//! Owned safe reference and explicit attempted-call recorder. No stubs.
-use super::*;
-use std::cell::RefCell;
-use shipped::Error;
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-struct Attempt {
-    // Oracle address is the concatenated input; part boundaries also retained.
-    address: Vec<u8>,
-    input: Vec<Vec<u8>>,
-    // None records an attempt whose backend has not returned.
-    returned: Option<Result<[u8;32], ()>>,
-}
-#[derive(Clone,Copy)]
-struct Recording<'a,H:Digest32> { backend:H, log:&'a RefCell<Vec<Attempt>> }
-impl<H:Digest32> Digest32 for Recording<'_,H> {
-    fn digest(&self, parts:&[&[u8]])->[u8;32] {
-        let position=self.log.borrow().len();
-        let mut input=Vec::with_capacity(parts.len());
-        let mut address=Vec::new();
-        for part in parts {input.push(part.to_vec());address.extend_from_slice(part);}
-        self.log.borrow_mut().push(Attempt {address,input,returned:None});
-        let answer=self.backend.digest(parts);
-        self.log.borrow_mut()[position].returned=Some(Ok(answer));
-        answer
-    }
-}
-#[derive(Clone,Copy)]
-struct Reply([u8;32]);
-impl Digest32 for Reply {
-    fn digest(&self,_:&[&[u8]])->[u8;32] { self.0 }
-}
-
-fn leaf<H:Digest32>(hash:H,tree:usize,q:&[u8])->[u8;32] {
-    let (tag,start,end,salt)=match tree {
-        0=>(0x71,0,480,608),
-        1=>(0xf1,480,608,640),
-        _=>(0x72,672,800,800),
-    };
-    hash.digest(&[&[0x10,tag],&q[start..end],&q[salt..salt+32]])
-}
-
-fn tree<H:Digest32>(proof:&[u8],queries:[u32;22],root:[u8;32],batch:usize,
-    tree:usize,idx:&mut [u32;16],val:&mut [[u8;32];16],hash:H)->Result<(),Error> {
-    let lo=if batch==0 {0} else {compact::SPLIT};
-    let n=if batch==0 {compact::SPLIT} else {22-compact::SPLIT};
-    let slot=3*batch+tree;
-    let keys=shipped::sort_batch_keys(shipped::batch_keys(&queries,lo,n,tree),n);
-    let mut used=0;
-    for position in 0..n {
-        let key=keys[position];
-        let index=(key>>8) as u32;
-        let selected=lo+(key&255) as usize;
-        let at=compact::OFF_OPENINGS+selected*compact::OPENING;
-        let digest=leaf(hash,tree,&proof[at..at+compact::OPENING]);
-        if used>0 && idx[used-1]==index {
-            if val[used-1]!=digest { return Err(Error::Merkle) }
-        } else {
-            idx[used]=index; val[used]=digest; used+=1;
-        }
-    }
-    let count=multiproof::node_count(multiproof::Arity::Two,&idx[..used]).ok_or(Error::Merkle)?;
-    let nodes=&proof[compact::slot_offset(slot)..compact::slot_offset(slot+1)];
-    if count>compact::SLOT_NODES[slot] {return Err(Error::Parse)}
-    for word in nodes[32*count..].chunks_exact(8) {
-        if word.iter().any(|b|*b!=0) {return Err(Error::Parse)}
-    }
-    if multiproof::verify_in_place(hash,multiproof::Arity::Two,&root,idx,val,used,&nodes[..32*count]) {
-        Ok(())
-    } else {Err(Error::Merkle)}
-}
-fn batch<H:Digest32>(proof:&[u8],queries:[u32;22],roots:[[u8;32];3],ordinal:usize,hash:H)->Result<(),Error> {
-    let mut idx=[0u32;16]; let mut val=[[0u8;32];16];
-    for slot in 0..3 {tree(proof,queries,roots[slot],ordinal,slot,&mut idx,&mut val,hash)?;}
-    Ok(())
-}
+include!("BEl_owned.rs");
 
 fn check_leaf(tree:usize) {
     let q:[u8;832]=kani::any(); let answer:[u8;32]=kani::any();
@@ -339,6 +264,7 @@ fn opening_geometry() {
     let at=compact::OFF_OPENINGS+(lo+(key&255) as usize)*compact::OPENING;
     let reference=&proof[at..at+compact::OPENING];
     assert_eq!(original.len(),832);assert_eq!(original.as_ptr(),reference.as_ptr());
-    let byte:usize=kani::any();kani::assume(byte<832);
-    assert_eq!(original[byte],reference[byte]);
+    assert_eq!(original.len(),reference.len());
+    // Both slices borrow the SAME allocation; byte equality follows from
+    // equal offset/extent. Avoid enumerating a symbolic57607-byte array.
 }

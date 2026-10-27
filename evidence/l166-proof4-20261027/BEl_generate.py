@@ -6,6 +6,12 @@ def item(path,marker):
  while d: d+=(s[e]=='{')-(s[e]=='}'); e+=1
  t=s[a:e]; cuts.append(dict(path=path,marker=marker,sha256=hashlib.sha256(t.encode()).hexdigest(),body=t)); return t
 base='crates/aspis-r1-cost-probe/src/'
+merkle=(R/'crates/aspis-core/src/r0/merkle.rs').read_text()
+private=(R/'crates/aspis-core/src/state_only_private_merkle.rs').read_text()
+assert 'pub const C1_TAG: u8 = 0x71;' in merkle
+assert 'pub const C2_TAG: u8 = 0xf1;' in merkle
+assert 'const DOM_LEAF: u8 = 0x10;' in private
+assert 'pub const STATE_ONLY_PRIVATE_LEAF_SALT_BYTES: usize = 32;' in private
 trait=item('crates/aspis-core/src/digest.rs','pub trait Digest32: Copy')
 leaf=item('crates/aspis-core/src/state_only_private_merkle.rs','pub fn private_leaf_hash_with_digest<')
 parent=item('crates/aspis-core/src/r0/merkle.rs','pub fn parent_with_digest<')
@@ -51,7 +57,7 @@ use crate::{r0::merkle,private_leaf_hash_with_digest};
 '''+batch+'''\n}
 '''
 outputs={P/'BEl_rust/src/BEl_frozen.rs':source}
-manifest={'exact_items':cuts,'full_prefixes':{base+'multiproof.rs':hashlib.sha256((R/(base+'multiproof.rs')).read_bytes()).hexdigest()},'substitutions':['Visibility only: batch helpers pub(crate).','compact LOGICAL_SEMANTIC replaced with pinned literal 13831; copied constants and slot_offset body.','Exact minimal Digest32, private leaf hash and eight-child hash bodies; imports re-exported through proof crate alias.','Proof crate Error has exactly reachable batch errors Merkle/Parse; no other variants used in copied body.','Module documentation omitted from multiproof prefix; body bytes retained.','leaf_loop: exact whole leaf while loop, hoist pure key/sort/lo/n setup as inputs, expose Result and d; no other body change.','leaf_step: exact while iteration, preselected q replaces opening range; key_position/d passed as locals; Err/continue mapped to explicit bool and poststate; no leaf/helper stubs.'],'outputs':{str(p.relative_to(P)):hashlib.sha256(s.encode()).hexdigest() for p,s in outputs.items()}}
+manifest={'exact_items':cuts,'full_prefixes':{f:hashlib.sha256((R/f).read_bytes()).hexdigest() for f in [base+'multiproof.rs','crates/aspis-core/src/r0/merkle.rs','crates/aspis-core/src/state_only_private_merkle.rs']},'substitutions':['Visibility only: batch helpers pub(crate).','compact LOGICAL_SEMANTIC replaced with pinned literal 13831; copied constants and slot_offset body.','Exact minimal Digest32, private leaf hash and eight-child hash bodies; imports re-exported through proof crate alias.','Proof crate Error has exactly reachable batch errors Merkle/Parse; no other variants used in copied body.','Module documentation omitted from multiproof prefix; body bytes retained.','leaf_loop: exact whole leaf while loop, hoist pure key/sort/lo/n setup as inputs, expose Result and d; no other body change.','leaf_step: exact while iteration, preselected q replaces opening range; key_position/d passed as locals; Err/continue mapped to explicit bool and poststate; no leaf/helper stubs.'],'outputs':{str(p.relative_to(P)):hashlib.sha256(s.encode()).hexdigest() for p,s in outputs.items()}}
 outputs[P/'BEl_source_cuts.json']=json.dumps(manifest,indent=2)+'\n'
 for p,s in outputs.items():
  if '--check' in sys.argv: assert p.read_text()==s,p
