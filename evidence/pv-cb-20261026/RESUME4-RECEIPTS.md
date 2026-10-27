@@ -101,3 +101,6 @@ Stopped/failed outputs are rejected, including any error-recovery sorryAx output
 |[38401](38401.json)|R1Z/PV_CB_Op223TagCanonical|1|0:01.58|4282908|0|b823593eb8|REJECTED|
 |[38402](38402.json)|R1Z/PV_CB_Op223TagCanonical|1|0:01.54|4283572|0|b823593eb8|REJECTED|
 |[38403](38403.json)|R1Z/PV_CB_Op223TagCanonical|0|0:01.64|4304892|0|b823593eb8|standard/none|
+|[38404](38404.json)|R1Z/PV_CB_Resume4JointAudit1|0|0:01.70|4283944|0|5caf54e394|standard/none|
+|[38405](38405.json)|R1Z/PV_CB_Resume4JointAudit2|0|0:01.91|4284528|0|5caf54e394|standard/none|
+|[38406](38406.json)|R1Z/PV_CB_Resume4JointAudit3|0|0:01.68|4283664|0|5caf54e394|standard/none|
