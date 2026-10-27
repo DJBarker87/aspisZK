@@ -1,0 +1,60 @@
+structure R1Z.PV_CB3_Op120Source.Raw.BoundaryAcc : Type
+number of parameters: 0
+fields:
+  R1Z.PV_CB3_Op120Source.Raw.BoundaryAcc.a : Aeneas.Std.U64
+  R1Z.PV_CB3_Op120Source.Raw.BoundaryAcc.b : Aeneas.Std.U64
+  R1Z.PV_CB3_Op120Source.Raw.BoundaryAcc.c : Aeneas.Std.U64
+  R1Z.PV_CB3_Op120Source.Raw.BoundaryAcc.d : Aeneas.Std.U64
+constructor:
+  R1Z.PV_CB3_Op120Source.Raw.BoundaryAcc.mk (a b c d : Aeneas.Std.U64) : R1Z.PV_CB3_Op120Source.Raw.BoundaryAcc
+@R1Z.PV_CB3_Op120Source.op120_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst)
+  (p :
+    Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 28) (instOfNatNat (nat_lit 28))) ⋯)),
+  @Eq (Aeneas.Std.Result ProverRwFull.aspis_core.field.QM31)
+    (@ProverRwFull.ExternalFuns.op120 inst (@R1Z.PV_CB3_Op120Source.selected inst ops) p)
+    (R1Z.PV_CB3_Op120Source.Raw.boundary_flat p)
+'R1Z.PV_CB3_Op120Source.op120_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_CB3_Op225Source.op225_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst)
+  (transfer : @R1Z.PV_CB3_Op225Source.Transfer inst → R1Z.PV_CB3_Op225Source.Raw.Transfer)
+  (withdrawal : @R1Z.PV_CB3_Op225Source.Withdrawal inst → R1Z.PV_CB3_Op225Source.Raw.Withdrawal)
+  (p : @R1Z.PV_CB3_Op225Source.Public inst),
+  @Eq (Aeneas.Std.Result (@ProverRwFull.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 inst))
+    (@ProverRwFull.ExternalFuns.op225 inst (@R1Z.ProverRwP6TransitionInstall.selected inst ops) p)
+    (@R1Z.ProverRwP6TransitionSource.transition inst (@R1Z.PV_CB3_Op225Source.toRaw inst transfer withdrawal p))
+'R1Z.PV_CB3_Op225Source.op225_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_CB3_Op225Source.adapters_independent : ∀ [inst : ProverRwFull.ExternalTypes]
+  (transfer transfer' : @R1Z.PV_CB3_Op225Source.Transfer inst → R1Z.PV_CB3_Op225Source.Raw.Transfer)
+  (withdrawal withdrawal' : @R1Z.PV_CB3_Op225Source.Withdrawal inst → R1Z.PV_CB3_Op225Source.Raw.Withdrawal)
+  (p : @R1Z.PV_CB3_Op225Source.Public inst),
+  @Eq (Aeneas.Std.Result (@ProverRwFull.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 inst))
+    (@R1Z.ProverRwP6TransitionSource.transition inst (@R1Z.PV_CB3_Op225Source.toRaw inst transfer withdrawal p))
+    (@R1Z.ProverRwP6TransitionSource.transition inst (@R1Z.PV_CB3_Op225Source.toRaw inst transfer' withdrawal' p))
+'R1Z.PV_CB3_Op225Source.adapters_independent' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_CB3_Op246Source.op246_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst)
+  {H : Type} (inst_1 : ProverRwFull.aspis_core.digest.Digest32 H) (hash : H)
+  (left right :
+    Aeneas.Std.Array Aeneas.Std.U8
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯)),
+  @Eq
+    (Aeneas.Std.Result
+      (Aeneas.Std.Array Aeneas.Std.U8
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯)))
+    (@ProverRwFull.ExternalFuns.op246 inst (@R1Z.ProverRwSuccessHashes.selected inst ops) H inst_1 hash left right)
+    (@PV_CB3_ShippedOp246.multiproof.binary_parent H inst_1 hash left right)
+'R1Z.PV_CB3_Op246Source.op246_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CB3_Op51Arbitrary.carrier_complete : ∀ (x : ProverRwFull.aspis_core.field.wide_exact.WideExact),
+  @Eq ProverRwFull.aspis_core.field.wide_exact.WideExact
+    (R1Z.PV_CB3_Op51Arbitrary.carrier x.c0.c0.a x.c0.c0.b x.c0.c1.a x.c0.c1.b x.c1.c0.a x.c1.c0.b x.c1.c1.a x.c1.c1.b) x
+'R1Z.PV_CB3_Op51Arbitrary.carrier_complete' does not depend on any axioms
+@R1Z.PV_CB3_Op51Arbitrary.op51_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst)
+  (x : ProverRwFull.aspis_core.field.wide_exact.WideExact),
+  @Eq
+    (Aeneas.Std.Result
+      (Aeneas.Std.Array Aeneas.Std.U8
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯)))
+    (@ProverRwFull.ExternalFuns.op51 inst (@R1Z.PV_CB3_Op51Source.selected inst ops) x)
+    (R1Z.PV_CB3_Op51Source.Raw.wide_bytes_flat x)
+'R1Z.PV_CB3_Op51Arbitrary.op51_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

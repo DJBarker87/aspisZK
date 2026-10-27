@@ -1,0 +1,4 @@
+import R1Z.PV_Join_CurrentPolynomialCanonical5
+set_option pp.explicit true
+#check @R1Z.PV_Join_CurrentPolynomialCanonical5.polynomial
+#print axioms R1Z.PV_Join_CurrentPolynomialCanonical5.polynomial

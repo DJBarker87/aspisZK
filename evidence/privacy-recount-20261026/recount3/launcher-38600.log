@@ -1,0 +1,36 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0125); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+@R1Z.PV_CB_TakeSource.op3_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst)
+  {T : Type} (inst_1 : Aeneas.Std.core.default.Default T) (x : T),
+  @Eq (Aeneas.Std.Result (Prod T T))
+    (@ProverRwFull.ExternalFuns.op3 inst (@R1Z.PV_CB_Take.selected inst ops) T inst_1 x)
+    (@PV_CB_ShippedTake.core.mem.take T inst_1 x)
+'R1Z.PV_CB_TakeSource.op3_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_CB_Op71Exact.op71_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  @Eq (Aeneas.Std.Result (Option ProverRwFull.aspis_core.field.QM31))
+    (@ProverRwFull.ExternalFuns.op71 inst (@R1Z.PV_CB_Op71Exact.selected inst ops) bytes)
+    (@bind Aeneas.Std.Result Aeneas.Std.instBindResult (Option PV_CB_ShippedOp71.aspis_core.field.QM31)
+      (Option ProverRwFull.aspis_core.field.QM31) (PV_CB_ShippedOp71.aspis_core.field.QM31.from_le_bytes bytes)
+      fun value =>
+      @Aeneas.Std.Result.ok (Option ProverRwFull.aspis_core.field.QM31)
+        (@Option.map R1Z.PV_CB_Op71Transport.R ProverRwFull.aspis_core.field.QM31 R1Z.PV_CB_Op71Transport.decode value))
+'R1Z.PV_CB_Op71Exact.op71_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_CB_Op72Exact.op72_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst)
+  (x : ProverRwFull.aspis_core.field.QM31) (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  @Eq (Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8))
+    (@ProverRwFull.ExternalFuns.op72 inst (@R1Z.PV_CB_Op72Exact.selected inst ops) x bytes)
+    (PV_CB_ShippedOp72.aspis_core.field.QM31.write_le_bytes (R1Z.PV_CB_Op72Transport.encode x) bytes)
+'R1Z.PV_CB_Op72Exact.op72_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_CB_Op77Source.op77_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst)
+  {E : Type} (inst_1 : Aeneas.Std.core.clone.Clone E) (p : ProverRwFull.aspis_core.r0.domain.Point E),
+  @Eq (Aeneas.Std.Result (ProverRwFull.aspis_core.r0.domain.Point E))
+    (@ProverRwFull.ExternalFuns.op77 inst (@R1Z.PV_CB_PointClone.selected inst ops) E inst_1 p)
+    (@PV_CB_ShippedOp77.aspis_core.r0.domain.Point.Insts.CoreCloneClone.clone E inst_1 p)
+'R1Z.PV_CB_Op77Source.op77_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.52
+	Maximum resident set size (kbytes): 4274804
+	Swaps: 0
+	Exit status: 0
