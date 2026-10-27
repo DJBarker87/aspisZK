@@ -1,0 +1,5 @@
+# Stage 9: generic raw-list/typed-array weighted sum
+
+XSa_GenericPairs.fold_map/indexed_zip (L067) first proved generic monadic map/fold and equal-length zip association. XSa_ClaimPairs.pairs/step (L068) instantiates them on the SAME seven typed cells with bounded actual reads. XSa_FoldCongr.fold (L069) and XSa_ClaimSumJoin.fold/paired (L070) compose the complete raw zip-list weighted fold with XRy's checked actual prepared_claim_sum. Canonical SAME k and parts yield a DERIVED shared canonical output; no supplied sum success/output or whole claim hypothesis. Full Result preserved by generic congruences. Only standard axioms.
+
+XSa_ArrayPrefix.write/last (L071) is the typed-array prefix adapter for the next powers/parts join; XSa_PowersStep.last/next (L073) strengthens the reused powers control step with the actual product observation required by list association. It reuses XRy arithmetic and source step proofs, with no arithmetic reproof or new trust. L072 excluded tactic-layout error. Canonical powersPublic scratch/reached-kappa and six actual point updates are not yet identified with the raw claim's lists. A2/A3 and headline unchanged.
