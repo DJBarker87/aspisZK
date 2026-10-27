@@ -227,6 +227,8 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
 fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
     let input = *input;
+    let chg = *chg;
+    let snapshot = *snapshot;
     let pair = input.pair;
     let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
     let mut bits = [0u32; 24];
@@ -281,7 +283,10 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
     sibs[23] = raw(&input.super_root_siblings[2]);
     let empty = pair_empty_roots();
     let (recipient_owner, recipient_salt, transfer) = match rec {
-        Some(r) => (raw(&r.owner_key), raw(&r.salt), true),
+        Some(r) => {
+            let r = *r;
+            (raw(&r.owner_key), raw(&r.salt), true)
+        },
         None => (ZERO8, ZERO8, false),
     };
     let w = RW {

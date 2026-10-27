@@ -366,3 +366,41 @@ record's other raw calls; raw only reads eight fixed in-bounds M31 fields,
 with no panic, abort, allocation, mutation or I/O, so the order is unobservable.
 The empty-root call remains first. No types/signatures/other functions change.
 No new Copy is required; M31 Copy derive remains field.rs:22.
+
+8. D277, copy the remaining immutable borrowed records, verbatim:
+
+```diff
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+index 5914874afd..32cc1f8ae3 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs
+@@ -227,6 +227,8 @@ include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/g
+ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
+            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
+     let input = *input;
++    let chg = *chg;
++    let snapshot = *snapshot;
+     let pair = input.pair;
+     let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
+     let mut bits = [0u32; 24];
+@@ -281,7 +283,10 @@ fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&Po
+     sibs[23] = raw(&input.super_root_siblings[2]);
+     let empty = pair_empty_roots();
+     let (recipient_owner, recipient_salt, transfer) = match rec {
+-        Some(r) => (raw(&r.owner_key), raw(&r.salt), true),
++        Some(r) => {
++            let r = *r;
++            (raw(&r.owner_key), raw(&r.salt), true)
++        },
+         None => (ZERO8, ZERO8, false),
+     };
+     let w = RW {
+```
+
+Repair 7 reaches raw(&r.salt) but fails at records:284:24–36,
+InterpBorrowsCore.ml:629. The Some branch now reads both digest fields from
+an identical local Copy of r. Change-note and snapshot reads likewise use
+identical immutable local copies. PoolV1OutputNoteWitnessV1 derives Clone,
+Copy at payment_relation.rs:88; PoolV1PairLiveSnapshotV1 at
+pair_tree_profile.rs:403. No value, branch, raw call order, panic/abort,
+allocation, I/O, signature, type, or other function changes.
