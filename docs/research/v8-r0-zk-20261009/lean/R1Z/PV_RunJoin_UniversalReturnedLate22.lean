@@ -29,6 +29,15 @@ theorem exists_success {α β ε : Type} {f : Result α}
   ⟨leaf,hf,call_continue hg hb⟩
 #print axioms exists_success
 
+theorem exists_and_success {α β ε : Type} {p : Prop} {f : Result α}
+    {g : α → Result (core.result.Result β ε)} {value : β}
+    {leaf : α} {r : core.result.Result β ε}
+    (hp : p) (hf : f = ok leaf) (hg : g leaf = ok r)
+    (hb : core.result.Result.Insts.CoreOpsTry.branch r = ok (.Continue value)) :
+    ∃ leaf, p ∧ f = ok leaf ∧ g leaf = ok (.Ok value) :=
+  ⟨leaf,hp,hf,call_continue hg hb⟩
+#print axioms exists_and_success
+
 /-- Every successful outer compiler return uses the actual late_append
 result on its actual record/output-pair, including both native error layers. -/
 theorem returned [ExternalLinear] [Records]
@@ -59,11 +68,6 @@ theorem returned [ExternalLinear] [Records]
       | (have _test : _ × _ := value; rcases value with ⟨value,rest⟩)
       | (cases h)
     all_goals
-      have joined : ∃ leaf : Array U32 8#usize,
-          pair_forest_copy_builder.CopyRecords.output_pair records = ok leaf ∧
-          pair_forest_trace.late_append records snapshot leaf = ok (.Ok _) := by
-        apply exists_success <;> assumption
-      rcases joined with ⟨leaf,hp,hl⟩
-      exact ⟨leaf,hr,hp,hl⟩
+      apply exists_and_success hr <;> assumption
 #print axioms returned
 end R1Z.PV_RunJoin_UniversalReturnedLate22
