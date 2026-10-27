@@ -28,6 +28,7 @@ if mod=='JHc_HeadlineAudit':
 cfg['command'][-3:]=['-o',mod.replace('.','/')+'.olean',relative_source]
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]
+admissions=[]
 for retry in range(11):
  cmd=f'python3 /home/dombarker/project-offloads/codex-cx-s2c-20261023/reservation.py {B}/{a}-reservation.json > {B}/{a}-barrier.log 2>&1'
  r=ssh(cmd)
@@ -36,6 +37,8 @@ for retry in range(11):
  (P/(a+'-barrier.log')).write_text(sshout.stdout+sshout.stderr)
  exists=ssh(f'test -f {B}/{a}-reservation.json').returncode==0
  admission=json.loads(ssh(f'cat {B}/{a}-reservation.json',capture_output=True,text=True).stdout) if exists else {}
+ admissions.append(dict(retry=retry,exit_status=r.returncode,receipt=admission))
+ (P/(a+'-admission.json')).write_text(json.dumps(admissions,indent=2)+'\n')
  if r.returncode==0 and admission.get('allowed') is True:break
  if (r.returncode==78 or admission.get('allowed') is False) and retry<10:
   retries.append(dict(wait_seconds=180,reason='reservation contention')); print('Reservation contention; waiting 180s',flush=True);time.sleep(180);continue
