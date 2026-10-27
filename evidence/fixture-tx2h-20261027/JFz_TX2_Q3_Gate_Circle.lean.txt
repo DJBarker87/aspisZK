@@ -1,0 +1,165 @@
+import JFz_TX2_Q3_Slot0
+import JFz_TX2_Q3_Slot1
+import JFz_TX2_Q3_Slot2
+import JFz_TX2_Q3_Slot3
+import JFv_TX2_Query0Formula
+import JFv_TX2_Query0Inverse
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFz_TX2_Q3_Dots0
+open Aeneas Aeneas.Std Result
+def native : Array FIo_Install.NE 4#usize := Array.make 4#usize
+  [JFz_TX2_Q3_Dot0.value,JFz_TX2_Q3_Dot1.value,JFz_TX2_Q3_Dot2.value,JFz_TX2_Q3_Dot3.value]
+def value := FIp_DotsAdapter.fromArray native
+
+theorem source : JFs_TX2_Dots.value 3=value := by
+  apply JFw_TX2_DotsExplicit.chosen
+  rw [JFs_TX2_FourHead.source]
+  simp only [JFs_TX2_FourHead.slots,JFz_TX2_Q3_Dot0.source,JFz_TX2_Q3_Dot1.source,
+    JFz_TX2_Q3_Dot2.source,JFz_TX2_Q3_Dot3.source,bind_tc_ok]
+  rfl
+#print axioms source
+end AspisR1.JFz_TX2_Q3_Dots0
+end
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFz_TX2_Q3_CircleNumbers
+open Aeneas Aeneas.Std Result
+abbrev FE := AspisWideTower.WideExact
+def alpha : FE := ⟨⟨⟨492967452,709301790⟩,⟨1617612614,599334322⟩⟩,⟨⟨1668486716,1253062525⟩,⟨341779229,880523595⟩⟩⟩
+def h0 : FE := ⟨⟨⟨331710821,1292512236⟩,⟨221409308,1456639581⟩⟩,⟨⟨1057384701,1044533974⟩,⟨186685275,1331437011⟩⟩⟩
+def h1 : FE := ⟨⟨⟨2014320379,1486874925⟩,⟨1962658938,160292975⟩⟩,⟨⟨448001028,250571711⟩,⟨1905050296,309592456⟩⟩⟩
+def h2 : FE := ⟨⟨⟨1742267678,516913465⟩,⟨1851652058,241846151⟩⟩,⟨⟨1105776660,1607207361⟩,⟨434087235,47753424⟩⟩⟩
+def h3 : FE := ⟨⟨⟨29056946,1957545360⟩,⟨652576060,1885483517⟩⟩,⟨⟨222508830,614251596⟩,⟨510028834,1788362215⟩⟩⟩
+def t2 : FE := ⟨⟨⟨1454406294,664332944⟩,⟨1467400990,972859959⟩⟩,⟨⟨817337915,1556584123⟩,⟨2113676914,870902036⟩⟩⟩
+def t1 : FE := ⟨⟨⟨1274148733,1788054287⟩,⟨610598306,345168690⟩⟩,⟨⟨307246331,799779685⟩,⟨1020443242,1216312141⟩⟩⟩
+def value : FE := ⟨⟨⟨901329660,294142851⟩,⟨332212484,2141990079⟩⟩,⟨⟨1613711982,83705593⟩,⟨1349691811,2036132375⟩⟩⟩
+theorem quarter : (4:FE)⁻¹=536870912 := by
+  apply inv_eq_of_mul_eq_one_right
+  ext <;> norm_num [AspisWideTower.wideU,AspisV8R15.ExactTowerBase.qm31R,
+    AspisV8R15.ExactTowerBase.M31Exact,AspisV8R15.ExactTowerBase.P] <;> decide
+theorem horner2 : h2+alpha*h3=t2 := by
+  unfold h2 alpha h3 t2
+  ext <;> norm_num [AspisWideTower.wideU,AspisV8R15.ExactTowerBase.qm31R,
+    AspisV8R15.ExactTowerBase.M31Exact,AspisV8R15.ExactTowerBase.P] <;> decide
+theorem horner1 : h1+alpha*t2=t1 := by
+  unfold h1 alpha t2 t1
+  ext <;> norm_num [AspisWideTower.wideU,AspisV8R15.ExactTowerBase.qm31R,
+    AspisV8R15.ExactTowerBase.M31Exact,AspisV8R15.ExactTowerBase.P] <;> decide
+theorem horner0 : h0+alpha*t1=value := by
+  unfold h0 alpha t1 value
+  ext <;> norm_num [AspisWideTower.wideU,AspisV8R15.ExactTowerBase.qm31R,
+    AspisV8R15.ExactTowerBase.M31Exact,AspisV8R15.ExactTowerBase.P] <;> decide
+#print axioms quarter
+#print axioms horner2
+#print axioms horner1
+#print axioms horner0
+end AspisR1.JFz_TX2_Q3_CircleNumbers
+end
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFz_TX2_Q3_CircleCoefficients
+open Aeneas Aeneas.Std Result
+open JFz_TX2_Q3_CircleNumbers
+def d0 : FE := JFw_TX2_PowersExplicit.decode JFz_TX2_Q3_Dot0.value
+def d1 : FE := JFw_TX2_PowersExplicit.decode JFz_TX2_Q3_Dot1.value
+def d2 : FE := JFw_TX2_PowersExplicit.decode JFz_TX2_Q3_Dot2.value
+def d3 : FE := JFw_TX2_PowersExplicit.decode JFz_TX2_Q3_Dot3.value
+theorem coefficient0 : (d0+d1+d2+d3)*536870912=h0 := by
+  change ((⟨⟨⟨339262139,732628543⟩,⟨1005963240,722757112⟩⟩,⟨⟨1413599205,1775077425⟩,⟨1426778238,1978410783⟩⟩⟩+⟨⟨⟨1995883035,903208221⟩,⟨57562012,1427931575⟩⟩,⟨⟨653240513,535753348⟩,⟨1368764700,1157119489⟩⟩⟩+⟨⟨⟨1248460411,264642389⟩,⟨1798166254,734378101⟩⟩,⟨⟨1793215929,1147034388⟩,⟨741278219,1229782693⟩⟩⟩+⟨⟨⟨2038204993,1122086144⟩,⟨171429373,794007889⟩⟩,⟨⟨369483157,720270735⟩,⟨1504887237,960435079⟩⟩⟩)*536870912 : FE)=h0
+  unfold h0
+  ext <;> norm_num [AspisWideTower.wideU,AspisV8R15.ExactTowerBase.qm31R,
+    AspisV8R15.ExactTowerBase.M31Exact,AspisV8R15.ExactTowerBase.P] <;> decide
+theorem coefficient1 : (d0-d1-d2+d3)*(536870912*1121811647)=h1 := by
+  change ((⟨⟨⟨339262139,732628543⟩,⟨1005963240,722757112⟩⟩,⟨⟨1413599205,1775077425⟩,⟨1426778238,1978410783⟩⟩⟩-⟨⟨⟨1995883035,903208221⟩,⟨57562012,1427931575⟩⟩,⟨⟨653240513,535753348⟩,⟨1368764700,1157119489⟩⟩⟩-⟨⟨⟨1248460411,264642389⟩,⟨1798166254,734378101⟩⟩,⟨⟨1793215929,1147034388⟩,⟨741278219,1229782693⟩⟩⟩+⟨⟨⟨2038204993,1122086144⟩,⟨171429373,794007889⟩⟩,⟨⟨369483157,720270735⟩,⟨1504887237,960435079⟩⟩⟩)*(536870912*1121811647) : FE)=h1
+  unfold h1
+  ext <;> norm_num [AspisWideTower.wideU,AspisV8R15.ExactTowerBase.qm31R,
+    AspisV8R15.ExactTowerBase.M31Exact,AspisV8R15.ExactTowerBase.P] <;> decide
+theorem coefficient2 : (d0+d1-d2-d3)*(536870912*91151177)=h2 := by
+  change ((⟨⟨⟨339262139,732628543⟩,⟨1005963240,722757112⟩⟩,⟨⟨1413599205,1775077425⟩,⟨1426778238,1978410783⟩⟩⟩+⟨⟨⟨1995883035,903208221⟩,⟨57562012,1427931575⟩⟩,⟨⟨653240513,535753348⟩,⟨1368764700,1157119489⟩⟩⟩-⟨⟨⟨1248460411,264642389⟩,⟨1798166254,734378101⟩⟩,⟨⟨1793215929,1147034388⟩,⟨741278219,1229782693⟩⟩⟩-⟨⟨⟨2038204993,1122086144⟩,⟨171429373,794007889⟩⟩,⟨⟨369483157,720270735⟩,⟨1504887237,960435079⟩⟩⟩)*(536870912*91151177) : FE)=h2
+  unfold h2
+  ext <;> norm_num [AspisWideTower.wideU,AspisV8R15.ExactTowerBase.qm31R,
+    AspisV8R15.ExactTowerBase.M31Exact,AspisV8R15.ExactTowerBase.P] <;> decide
+theorem coefficient3 : (d0-d1+d2-d3)*(536870912*91151177*1121811647)=h3 := by
+  change ((⟨⟨⟨339262139,732628543⟩,⟨1005963240,722757112⟩⟩,⟨⟨1413599205,1775077425⟩,⟨1426778238,1978410783⟩⟩⟩-⟨⟨⟨1995883035,903208221⟩,⟨57562012,1427931575⟩⟩,⟨⟨653240513,535753348⟩,⟨1368764700,1157119489⟩⟩⟩+⟨⟨⟨1248460411,264642389⟩,⟨1798166254,734378101⟩⟩,⟨⟨1793215929,1147034388⟩,⟨741278219,1229782693⟩⟩⟩-⟨⟨⟨2038204993,1122086144⟩,⟨171429373,794007889⟩⟩,⟨⟨369483157,720270735⟩,⟨1504887237,960435079⟩⟩⟩)*(536870912*91151177*1121811647) : FE)=h3
+  unfold h3
+  ext <;> norm_num [AspisWideTower.wideU,AspisV8R15.ExactTowerBase.qm31R,
+    AspisV8R15.ExactTowerBase.M31Exact,AspisV8R15.ExactTowerBase.P] <;> decide
+#print axioms coefficient0
+#print axioms coefficient1
+#print axioms coefficient2
+#print axioms coefficient3
+end AspisR1.JFz_TX2_Q3_CircleCoefficients
+end
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFz_TX2_Q3_CircleFormula
+open Aeneas Aeneas.Std Result
+open JFz_TX2_Q3_CircleNumbers JFz_TX2_Q3_CircleCoefficients
+
+theorem scalar : CheckpointBytes5Output.ofE JFq_Alpha0.scalar=alpha := rfl
+theorem ix : algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE 91151177=(91151177:FE) :=
+  map_natCast _ _
+theorem iy : algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE 1121811647=(1121811647:FE) :=
+  map_natCast _ _
+theorem v0 : Port5Q1_OpeningValues.values JFz_TX2_Q3_Dots0.value 0=d0 := rfl
+theorem v1 : Port5Q1_OpeningValues.values JFz_TX2_Q3_Dots0.value 1=d1 := rfl
+theorem v2 : Port5Q1_OpeningValues.values JFz_TX2_Q3_Dots0.value 2=d2 := rfl
+theorem v3 : Port5Q1_OpeningValues.values JFz_TX2_Q3_Dots0.value 3=d3 := rfl
+
+theorem formula : FoldRuntimeAlgebra.circleWithInverses
+    (CheckpointBytes5Output.ofE JFq_Alpha0.scalar)
+    (algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE 91151177)
+    (algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE 1121811647)
+    (Port5Q1_OpeningValues.values JFz_TX2_Q3_Dots0.value)=JFz_TX2_Q3_CircleNumbers.value := by
+  rw [scalar,ix,iy]
+  unfold FoldRuntimeAlgebra.circleWithInverses
+  rw [v0,v1,v2,v3,quarter,coefficient0,coefficient1,coefficient2,coefficient3,horner2,horner1,horner0]
+#print axioms scalar
+#print axioms ix
+#print axioms iy
+#print axioms v0
+#print axioms v1
+#print axioms v2
+#print axioms v3
+#print axioms formula
+end AspisR1.JFz_TX2_Q3_CircleFormula
+end
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFz_TX2_Q3_Query
+open Aeneas Aeneas.Std Result
+abbrev FP := Port5Q1_QueryPorts.FP
+def selected : SAQ_WideABI.E := SAQ_RecordDecode.fromRecord JFn_Value13_0.value
+theorem x : (S7JoinBasisMachine.decode (JFv_TX2_Rows.value 3).x)⁻¹=(91151177 : FP) := by
+  exact JFv_TX2_Query0Inverse.reciprocal 171471092 91151177 (by norm_num)
+#print axioms x
+theorem y : (S7JoinBasisMachine.decode (JFv_TX2_Rows.value 3).y)⁻¹=(1121811647 : FP) := by
+  exact JFv_TX2_Query0Inverse.reciprocal 272206234 1121811647 (by norm_num)
+#print axioms y
+theorem selected_read : Array.index_usize (JFn_Values.value 3) 0#usize=ok selected := JFn_Values13.selected
+
+def Goal {C : Type} (err : C) (seed : Port3_NativeGeometryBody.Ops C) : Prop :=
+  FIp_CircleQuery.circle JFq_Alpha0.scalar (JFs_TX2_Dots.value 3)
+    (JFv_TX2_CircleGeometry.inverse err seed 3)=ok selected
+
+theorem source {C : Type} (err : C) (seed : Port3_NativeGeometryBody.Ops C) : Goal err seed := by
+  obtain ⟨out,run,canon,sem⟩ := JFv_TX2_CircleGeometry.source err seed 3
+  rw [x,y,JFz_TX2_Q3_Dots0.source,JFz_TX2_Q3_CircleFormula.formula] at sem
+  have selectedValue : JFz_TX2_Q3_CircleNumbers.value=CheckpointBytes5Output.ofE selected := rfl
+  have csel : FIo_WideValues.Canon (FIo_Install.toE selected) := by
+    change ((901329660<2147483647 ∧ 294142851<2147483647) ∧ (332212484<2147483647 ∧ 2141990079<2147483647)) ∧
+      ((1613711982<2147483647 ∧ 83705593<2147483647) ∧ (1349691811<2147483647 ∧ 2036132375<2147483647))
+    omega
+  have co : FIo_WideValues.Canon (FIo_Install.toE out) := (SAQ_WideABI.w_canonical out).mp canon
+  have sameNative := JFw_TX2_ValueUnique.native (FIo_Install.toE out) (FIo_Install.toE selected) co csel (sem.trans selectedValue)
+  have same : out=selected := congrArg FIo_Install.fromE sameNative
+  exact run.trans (congrArg Result.ok same)
+#print axioms selected_read
+#print axioms source
+end AspisR1.JFz_TX2_Q3_Query
+end
