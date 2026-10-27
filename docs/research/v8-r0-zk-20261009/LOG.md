@@ -11254,3 +11254,32 @@ extraction split of candidate closures, the headline-closure column set from the
 bucket for rows blocked by the shared extraction obstruction, and corrections to D236-D261. Six slots:
 runjoin12, optb, cblib2, op223, canon, recount4. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D262 (Stream B) 2026-10-27 09:10 UTC: option B round 1; the witness-independence condition made precise (off the charged bad events); optb2 launched
+
+pv-optb (`codex/pv-optb-20261027`, head b654d6d8b1; 100/100 Lean = 52 pass / 48 fail, no Kani; three
+reserved audits exit 0, ≤4.97 s, ≤4.27 GB, swap 0, standard axioms; no crates/programs change; no
+forbidden tokens; four memory-killed attempts (41830/41832/41834/41843) on concrete finite-function-space
+cardinality, caps not raised, replaced by an abstract Nat.card proof that checks in 1.98 s / 4.1 GB).
+Stated `privacy_headline_deployed_B`: same simE, observer map and bound; a different theorem with a fixed
+public failure signal (evidence/pv-optb-20261027/STATEMENT-DIFF.md). Proved: the emitted caller stops on
+its first Entropy callback error; extracted retry-control results; independence on named failure
+prefixes; a conditional synchronisation theorem for PV_RunJoin_Deployed.execute; and a family of admitted
+same-public witnesses whose pole sets differ (41850/41851), so for some challenge their NoPole verdicts
+are opposite. Not proved: witness-independence of every reached deployed OS failure. A native
+programmed-oracle probe differing in reached failure used a malformed compilation and a programmable
+oracle, so it is explicitly not an admitted-witness counterexample. LEAD RULING: the job's condition
+`Independent` (equal reached failure observation for ALL admitted same-public pairs at the same world
+and coins) is stronger than the adopted condition and is expected to be false: later OS calls are
+reached only after a Rejected attempt, and rejection depends on the witness through the pole set. The
+headline already charges exactly that dependence (the HVZK chain's real and ideal loops agree off
+`poleBad`, whose mass bound feeds the headline, alongside the fresh-query, seed and fuel events). The
+D215 condition, made precise, is IndependentOffBad: off the union of the headline's existing charged bad
+events, the reached failure observation is a function of public input, OS world and coins. This is not a
+weakening: simE, the observer and the bound are unchanged; witness-dependent retries stay paid for inside
+poleBad (the same pattern as the inversion containment, D259). Option A is selected only by an
+admitted-witness counterexample with the fixed HOST_HASH oracle OUTSIDE every charged event. Launched
+pv-optb2 (same branch, IDs 44600-44899, 100 Lean / 4 Kani control only): state IndependentOffBad naming
+only existing events, prove it for the emitted retry body, derive the B headline, or stop on that
+counterexample. Six slots: runjoin12, cblib2, op223, canon, recount4, optb2. Rows removed outright: 0.
+Privacy target not yet established.
