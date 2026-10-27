@@ -71,7 +71,9 @@ theorem variant_public_eq :
         (PV_RunJoin_UniversalBuild22.toInstance
           (fun _ : Unit => PV_RunJoin_AdmittedReturnCounterexample23.counterexample)
           (fun _ => PV_RunJoin_AdmittedReturnCounterexample23.admitted) ()) :=
-  PV_RunJoin_UniversalBuild22.public_eq _ _ _ ()
+  PV_RunJoin_UniversalBuild22.public_eq
+    (fun _ : Unit => PV_RunJoin_AdmittedReturnCounterexample23.counterexample)
+    PV_Src_Transport.transport (fun _ => PV_RunJoin_AdmittedReturnCounterexample23.admitted) ()
 #print axioms variant_public_eq
 
 theorem raw_transport_eq : (raw (K := K)).transport = BuilderSource.π :=

@@ -27,7 +27,8 @@ theorem public_eq :
       BuilderSource.prover.public
         (PV_RunJoin_UniversalBuild22.toInstance (fun _ : Unit => bad)
           (fun _ => admitted) ()) :=
-  PV_RunJoin_UniversalBuild22.public_eq _ _ _ ()
+  PV_RunJoin_UniversalBuild22.public_eq (fun _ : Unit => bad)
+    PV_Src_Transport.transport (fun _ => admitted) ()
 #print axioms public_eq
 
 /-- A symbolic padding lemma: no recurrence state or hash is evaluated. -/
