@@ -1,0 +1,55 @@
+{"attempt": "LPl_K012", "exit_status": 0, "wall_seconds": 4.79981813300401, "peak_rss_kib": "354172", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+9
+   |
+42 | #[kani::proof] #[kani::unwind(18)] fn LPl_frame_before(){frame::<0>()}
+   |                                       ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpl_frame_before`
+
+warning: function `LPl_frame_low` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPl_expand.rs:43:39
+   |
+43 | #[kani::proof] #[kani::unwind(18)] fn LPl_frame_low(){frame::<1>()}
+   |                                       ^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpl_frame_low`
+
+warning: function `LPl_frame_high` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPl_expand.rs:44:39
+   |
+44 | #[kani::proof] #[kani::unwind(18)] fn LPl_frame_high(){frame::<2>()}
+   |                                       ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpl_frame_high`
+
+warning: function `LPl_frame_after` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/LPl_expand.rs:45:39
+   |
+45 | #[kani::proof] #[kani::unwind(18)] fn LPl_frame_after(){frame::<3>()}
+   |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `lpl_frame_after`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.00s
+Checking harness compact::LPl_expand::LPl_iterator...
+
+VERIFICATION RESULT:
+ ** 0 of 375 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 2.7119713s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-ra872bb9b116546239ab0515ca8a2d65d.scope; invocation ID: e7d8f4c264ca4d8a9558adabda9a7729
