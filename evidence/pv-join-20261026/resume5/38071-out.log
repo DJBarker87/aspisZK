@@ -1,0 +1,21 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_AccumulateLoopCanonical5.lean:16:4: error: Type mismatch
+  step ops basis scale ys i hys
+has type
+  Safe
+    (fun cf =>
+      match cf with
+      | ControlFlow.done ys => QArray ys
+      | ControlFlow.cont ys_1 => inv ys_1 ∧ rank ys_1 < rank (ys, i))
+    (host_sumcheck.interpolation_accumulate_loop.body basis scale ys i)
+but is expected to have type
+  Safe
+    (fun cf =>
+      match cf with
+      | ControlFlow.done y => QArray y
+      | ControlFlow.cont y => inv y ∧ rank y < rank (ys, i))
+    (match (ys, i) with
+    | (out1, k1) => host_sumcheck.interpolation_accumulate_loop.body basis scale out1 k1)
+'R1Z.PV_Join_AccumulateLoopCanonical5.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Join_AccumulateLoopCanonical5.accumulate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

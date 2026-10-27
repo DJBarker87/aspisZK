@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0057); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+  ProverRwFull.aspis_core.field.CM31.mk (a b : ProverRwFull.aspis_core.field.M31) : ProverRwFull.aspis_core.field.CM31
+structure ProverRwFull.aspis_core.field.QM31 : Type
+number of parameters: 0
+fields:
+  ProverRwFull.aspis_core.field.QM31.c0 : ProverRwFull.aspis_core.field.CM31
+  ProverRwFull.aspis_core.field.QM31.c1 : ProverRwFull.aspis_core.field.CM31
+constructor:
+  ProverRwFull.aspis_core.field.QM31.mk (c0 c1 : ProverRwFull.aspis_core.field.CM31) :
+    ProverRwFull.aspis_core.field.QM31
+@[reducible] def ProverRwFull.aspis_core.field.QM31.from_le_bytes : [types : ProverRwFull.ExternalTypes] →
+  [ext : ProverRwFull.ExternalFuns] →
+    Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (Option ProverRwFull.aspis_core.field.QM31) :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] => ProverRwFull.ExternalFuns.op71
+def ProverRwFull.host_sumcheck.interpolation_accumulate_loop.body : [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    Aeneas.Std.Array ProverRwFull.aspis_core.field.M31 28#usize →
+      ProverRwFull.aspis_core.field.QM31 →
+        Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 28#usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.ControlFlow (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 28#usize × Aeneas.Std.Usize)
+                (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 28#usize)) :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] basis scale out k =>
+  if k < 28#usize then do
+    let value ← out.index_usize k
+    let m ← basis.index_usize k
+    let delta ← scale.mul_m31 m
+    let next ← value.add delta
+    let out1 ← out.update k next
+    let k1 ← Aeneas.Std.lift (k.wrapping_add 1#usize)
+    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (out1, k1))
+  else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out)
+Aeneas.Std.UScalar.val {ty : Aeneas.Std.UScalarTy} (x : Aeneas.Std.UScalar ty) : ℕ
+def Aeneas.Std.Array.{u} : Type u → Aeneas.Std.Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+def Aeneas.Std.Array.update.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.set.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Array α n :=
+fun {α} {n} v i x => ⟨(↑v).set (↑i) x, ⋯⟩
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) → α → Aeneas.Std.Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | Aeneas.Std.Result.ok r =>
+        match r with
+        | Aeneas.Std.ControlFlow.cont x => f x
+        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+    ⋯
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_CanonicalInspect5.lean:16:7: error: ill-formed syntax
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.04
+	Maximum resident set size (kbytes): 2622312
+	Swaps: 0
+	Exit status: 1

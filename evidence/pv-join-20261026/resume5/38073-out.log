@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_AccumulateLoopCanonical5.lean:18:27: error: Type mismatch
+  @step inst✝ ops basis scale ys i hys
+has type
+  @Safe
+    (ControlFlow
+      (Prod
+        (Std.Array aspis_core.field.QM31 (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 28) (instOfNatNat (nat_lit 28))) ⋯))
+        Usize)
+      (Std.Array aspis_core.field.QM31 (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 28) (instOfNatNat (nat_lit 28))) ⋯)))
+    (fun cf =>
+      step.match_1 (fun cf => Prop) cf
+        (fun ys => @QArray (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 28) (instOfNatNat (nat_lit 28))) ⋯) ys) fun ys_1 =>
+        And (inv ys_1) (@LT.lt Nat instLTNat (rank ys_1) (rank (@Prod.mk QA Usize ys i))))
+    (@host_sumcheck.interpolation_accumulate_loop.body inst✝ (@ProverRwP6BodyStore.selected inst✝ ops) basis scale ys i)
+but is expected to have type
+  @Safe
+    (ControlFlow (Prod QA Usize)
+      (Std.Array aspis_core.field.QM31 (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 28) (instOfNatNat (nat_lit 28))) ⋯)))
+    (fun cf =>
+      @PV_Join_LoopInvariant5.preserve.match_1 (Prod QA Usize)
+        (Std.Array aspis_core.field.QM31 (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 28) (instOfNatNat (nat_lit 28))) ⋯))
+        (fun cf => Prop) cf
+        (fun y => @QArray (Usize.ofNat (@OfNat.ofNat Nat (nat_lit 28) (instOfNatNat (nat_lit 28))) ⋯) y) fun y =>
+        And (inv y) (@LT.lt Nat instLTNat (rank y) (rank (@Prod.mk QA Usize ys i))))
+    (@host_sumcheck.interpolation_accumulate_loop.body inst✝ (@ProverRwP6BodyStore.selected inst✝ ops) basis scale
+      (@Prod.fst QA Usize (@Prod.mk QA Usize ys i)) (@Prod.snd QA Usize (@Prod.mk QA Usize ys i)))
+'R1Z.PV_Join_AccumulateLoopCanonical5.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Join_AccumulateLoopCanonical5.accumulate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh

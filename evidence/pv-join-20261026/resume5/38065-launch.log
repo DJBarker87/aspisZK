@@ -1,0 +1,63 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0100); env=J
+slot: /tmp/aspis-r0-lean-slot-2.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_AccumulateCanonical5.lean:29:63: error: don't know how to synthesize placeholder
+context:
+inst✝ : ExternalTypes
+ops : ExternalFuns
+basis : MA
+scale : aspis_core.field.QM31
+out : QA
+k : Usize
+hout : QArray out
+hk : k < 28#usize
+value : aspis_core.field.QM31
+hv : Q value
+m : U32
+delta : ProverRwDictionaryTower.Q
+hd : PV_Join_ScaleCanonical5.scale scale m = Result.ok delta
+hdelta : Q delta
+⊢ ProverRwDictionaryTower.Q →
+    Result
+      (Result
+        (ControlFlow (Std.Array aspis_core.field.QM31 28#usize × Usize) (Std.Array aspis_core.field.QM31 28#usize)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_AccumulateCanonical5.lean:23:21: error: don't know how to synthesize placeholder for argument `f`
+context:
+inst✝ : ExternalTypes
+ops : ExternalFuns
+basis : MA
+scale : aspis_core.field.QM31
+out : QA
+k : Usize
+hout : QArray out
+hk : k < 28#usize
+⊢ aspis_core.field.QM31 →
+    Result
+      (Result
+        (ControlFlow (Std.Array aspis_core.field.QM31 28#usize × Usize) (Std.Array aspis_core.field.QM31 28#usize)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_AccumulateCanonical5.lean:22:2: error: unsolved goals
+case isTrue.a
+inst✝ : ExternalTypes
+ops : ExternalFuns
+basis : MA
+scale : aspis_core.field.QM31
+out : QA
+k : Usize
+hout : QArray out
+hk : k < 28#usize
+⊢ (Array.index_usize out k >>= fun value =>
+      ?m.81 value >>= fun m => PV_Join_ScaleCanonical5.scale scale m >>= ?m.110 value m) =
+    Result.ok do
+      let value ← Array.index_usize out k
+      let m ← Array.index_usize basis k
+      let delta ← scale.mul_m31 m
+      let next ← value.add delta
+      let out1 ← Array.update out k next
+      let k1 ← lift (k.wrapping_add 1#usize)
+      Result.ok (ControlFlow.cont (out1, k1))
+'R1Z.PV_Join_AccumulateCanonical5.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.07
+	Maximum resident set size (kbytes): 4295744
+	Swaps: 0
+	Exit status: 1

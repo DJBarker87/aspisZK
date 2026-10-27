@@ -1,0 +1,13 @@
+# op121 producer obligations (D234)
+
+The deployed extraction root is `RealR1_client.prove_for_proof_accounts`, which selects S2. Its unique syntactic op121 caller is `host_sumcheck.prove_sumcheck_round` (the source call is host_sumcheck.rs:112). Other Rust call sites in verifier, simulator, tests and other prover versions do not have an edge from this extracted root. This is a call-graph statement, not a fixture execution witness.
+
+Inputs at that call:
+
+- Polynomial: `host_sumcheck.interpolate`, initialized with QM31::ZERO; every updated coefficient is a QM31::mul_m31 result added to an existing coefficient. `ProverCommitScale50.scale` already proves raw arbitrary inputs produce canonical outputs. `PV_Join_ScaleCanonical5.canonical` transports it to this caller carrier. `PV_Join_ArithmeticCanonical5.add` proves canonical operands produce a canonical result. `PV_Join_ArrayInvariant5` proves canonical array reads and updates. `PV_Join_CurrentPolynomialCanonical5.polynomial` (38090) now proves the complete interpolation invariant for the joined current caller dictionary on arbitrary raw evaluation values.
+- Challenge: `host_wire.SemanticTranscript.semantic`, then `Array.update point round val2` and `Array.index_usize point1 round`. The successful semantic challenge is produced by op248, the installed QM31 sampler. `ProverRwSamplerModel.sample_total` already concludes canonicality for every 32-byte block, independently of the hash output. The source semantic/control-flow and array update/read composition remain to prove.
+- Reducers: `ct::reduce64` and M31::reduce_u64 accept arbitrary u64; canonicality is a conclusion in `PV_Join_ReducerCanonical5`, not an input assumption. A separate arbitrary-u64 Kani gate passes. add/sub/mul primitive gates pass on their explicit canonical operand domains; they do not themselves prove the caller invariant.
+- Constructors: raw `M31(u32)` does not enforce canonicality. ZERO/ONE and paired CM31/QM31 constructors preserve the explicit per-component predicate; `PV_Join_Canonical5` proves these cases.
+- Deserialization: M31::from_le_bytes rejects values >= P. `PV_Join_ParseScalarCanonical5.parsed` proves the successful scalar output is < P. Complex/quartic composition is being checked. The deployed op121 call is fed by interpolation/sampling rather than a raw deserializer.
+
+The row itself keeps arbitrary raw inputs and complete Result. No canonicality assumption or domain restriction has been added to it or the privacy endpoint. A canonical-domain P6 equality is only useful once these producer invariants are discharged and the relation to the arbitrary-input row has been justified. The retained noncanonical Horner counterexample remains in resume4; it does not refute the row.

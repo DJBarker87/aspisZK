@@ -22,11 +22,11 @@ namespace PV_Join_Direct5Source
 def aspis_core.field.ct.reduce64 (x : Std.U64) : Result Std.U32 := do
   let i ← lift (UScalar.cast .U64 aspis_core.field.P)
   let i1 ← lift (x &&& i)
-  let i2 ← lift (Std.U64.wrapping_shr x 31#i32)
+  let i2 ← lift (Std.U64.wrapping_shr x 31#u32)
   let x1 ← lift (Std.U64.wrapping_add i1 i2)
   let i3 ← lift (UScalar.cast .U64 aspis_core.field.P)
   let i4 ← lift (x1 &&& i3)
-  let i5 ← lift (Std.U64.wrapping_shr x1 31#i32)
+  let i5 ← lift (Std.U64.wrapping_shr x1 31#u32)
   let x2 ← lift (Std.U64.wrapping_add i4 i5)
   let i6 ← lift (UScalar.cast .U32 x2)
   aspis_core.field.ct.subtract_p i6

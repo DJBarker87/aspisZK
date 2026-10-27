@@ -68,4 +68,19 @@ mod checks {
         let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<P);kani::assume(b<P);
         assert!(M31(a).mul(M31(b)).0<P);
     }
+    #[kani::proof]
+    fn cm_square_canonical() {
+        let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<P);kani::assume(b<P);
+        let q=CM31{a:M31(a),b:M31(b)}.square();
+        assert!(q.a.0<P);assert!(q.b.0<P);
+    }
+    #[kani::proof]
+    #[kani::unwind(5)]
+    fn sum3_reference_equivalence() {
+        let left=[anyq(),anyq(),anyq()];let right=[anyq(),anyq(),anyq()];
+        kani::assume(canonical(left[0]));kani::assume(canonical(left[1]));kani::assume(canonical(left[2]));
+        kani::assume(canonical(right[0]));kani::assume(canonical(right[1]));kani::assume(canonical(right[2]));
+        assert_eq!(aspis_core::field::qm31_sum_products3(left,right),sum3(left,right));
+    }
+
 }
