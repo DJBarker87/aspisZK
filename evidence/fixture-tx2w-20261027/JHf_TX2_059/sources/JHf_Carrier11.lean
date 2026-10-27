@@ -1,0 +1,13 @@
+import JHf_Carrier10
+set_option autoImplicit false
+namespace AspisR1.JHf_Carrier
+open Aeneas Aeneas.Std Result
+def toPoolV1PairForestLaneStateV1 (value : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1) : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1 :=
+  {bump:=value.bump,master:=value.master,lane_id:=value.lane_id,tree:=toIncrementalMerkleTreeV1 value.tree}
+def fromPoolV1PairForestLaneStateV1 (value : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1) : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1 :=
+  {bump:=value.bump,master:=value.master,lane_id:=value.lane_id,tree:=fromIncrementalMerkleTreeV1 value.tree}
+theorem from_toPoolV1PairForestLaneStateV1 (v : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1) : fromPoolV1PairForestLaneStateV1 (toPoolV1PairForestLaneStateV1 v)=v := by
+  cases v <;> simp only [fromPoolV1PairLiveSnapshotV1,toPoolV1PairLiveSnapshotV1,fromPoolV1PairVerifiedAfterstateV1,toPoolV1PairVerifiedAfterstateV1,fromPoolV1PairLatePublicStatementV1,toPoolV1PairLatePublicStatementV1,fromPoolV1PairForestTerminalCommonV1,toPoolV1PairForestTerminalCommonV1,fromPoolV1PrivateTransferPublicV1,toPoolV1PrivateTransferPublicV1,fromPoolV1WithdrawalPublicV1,toPoolV1WithdrawalPublicV1,fromPoolV1PairForestTerminalStatementV1,toPoolV1PairForestTerminalStatementV1,fromPoolIdentityV1,toPoolIdentityV1,fromVerifierPolicyV1,toVerifierPolicyV1,fromPoolV1PairForestMasterV1,toPoolV1PairForestMasterV1,fromIncrementalMerkleTreeV1,toIncrementalMerkleTreeV1,fromPoolV1PairForestLaneStateV1,toPoolV1PairForestLaneStateV1]
+  all_goals rfl
+#print axioms from_toPoolV1PairForestLaneStateV1
+end AspisR1.JHf_Carrier

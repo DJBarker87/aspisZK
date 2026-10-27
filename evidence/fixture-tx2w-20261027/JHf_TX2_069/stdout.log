@@ -1,0 +1,74 @@
+JHf_ValidationInversion.lean:20:73: error: unsolved goals
+case h_1.Ok
+ops : Ops
+verifier : solana_pubkey.Pubkey
+accounts : Slice r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+out : r1_pool_adapter.ValidatedAsqa
+a✝¹² : U64
+x✝¹⁴ : Result Usize
+a✝¹¹ : Usize
+heq✝¹⁴ : aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES = ok a✝¹¹
+h✝³ : ¬(data.len != a✝¹¹) = true
+x✝¹³ :
+  Result
+    (core.result.Result aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
+      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹⁰ : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
+heq✝¹³ : ops.op23 data = ok (core.result.Result.Ok a✝¹⁰)
+x✝¹² : Result Bool
+heq✝¹² :
+  core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a✝¹⁰.verifier_profile r1_pool_adapter.PROFILE_BINDING =
+    ok false
+h✝² : ¬false = true
+x✝¹¹ : Result Bool
+heq✝¹¹ :
+  core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a✝¹⁰.verifier_release r1_pool_adapter.RELEASE_BINDING =
+    ok false
+h✝¹ : ¬false = true
+x✝¹⁰ : Result (Std.Array U8 32#usize)
+a✝⁹ : Std.Array U8 32#usize
+heq✝¹⁰ : ops.op45 = ok a✝⁹
+x✝⁹ : Result Bool
+heq✝⁹ : core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a✝¹⁰.pool_program a✝⁹ = ok false
+h✝ : ¬false = true
+x✝⁸ : Result solana_pubkey.Pubkey
+a✝⁸ : solana_pubkey.Pubkey
+heq✝⁸ : ops.op37 a✝¹⁰.pool_program = ok a✝⁸
+x✝⁷ : Result (Std.Array aspis_core.field.M31 8#usize)
+a✝⁷ : Std.Array aspis_core.field.M31 8#usize
+heq✝⁷ : ops.op20 a✝¹⁰.public = ok a✝⁷
+x✝⁶ : Result (core.result.Result U8 aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+a✝⁶ : U8
+heq✝⁶ : ops.op17 a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result (core.result.Result r1_pool_adapter.AuthenticatedAsq8Accounts solana_program_error.ProgramError)
+a✝⁵ : r1_pool_adapter.AuthenticatedAsq8Accounts
+heq✝⁵ :
+  r1_pool_adapter.owned.authenticate_asq8_accounts ops verifier accounts a✝⁸ a✝⁶ a✝¹² = ok (core.result.Result.Ok a✝⁵)
+x✝⁴ : Result (Option r1_pool_adapter.owned.OwnedAccount)
+a✝⁴ : Option r1_pool_adapter.owned.OwnedAccount
+heq✝⁴ : ops.op9 accounts = ok a✝⁴
+x✝³ : Result (core.result.Result r1_pool_adapter.owned.OwnedAccount solana_program_error.ProgramError)
+a✝³ : r1_pool_adapter.owned.OwnedAccount
+heq✝³ :
+  core.option.Option.ok_or a✝⁴ solana_program_error.ProgramError.NotEnoughAccountKeys = ok (core.result.Result.Ok a✝³)
+x✝² : Result (core.result.Result (Slice U8) solana_program_error.ProgramError)
+a✝² : Slice U8
+heq✝² : r1_pool_adapter.owned.OwnedAccount.data ops a✝³ = ok (core.result.Result.Ok a✝²)
+x✝¹ : Result (core.result.Result r1_pool_adapter.ScannedAsqaProof solana_program_error.ProgramError)
+a✝¹ : r1_pool_adapter.ScannedAsqaProof
+heq✝¹ : ops.op51 a✝² = ok (core.result.Result.Ok a✝¹)
+x✝ :
+  Result
+    (core.result.Result aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      solana_program_error.ProgramError)
+a✝ : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝ : ops.op52 a✝¹⁰ a✝⁵ a✝¹.candidate_afterstate = ok (core.result.Result.Ok a✝)
+accepted :
+  ok (core.result.Result.Ok { statement := a✝, proof_length := a✝¹.proof_length }) = ok (core.result.Result.Ok out)
+⊢ ∃ request authenticated candidate pool lane current,
+    ops.op23 data = ok (core.result.Result.Ok request) ∧
+      r1_pool_adapter.owned.authenticate_asq8_accounts ops verifier accounts pool lane current =
+          ok (core.result.Result.Ok authenticated) ∧
+        ops.op52 request authenticated candidate = ok (core.result.Result.Ok out.statement)
+'AspisR1.JHf_ValidationInversion.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

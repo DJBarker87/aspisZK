@@ -1,0 +1,13 @@
+import JHf_Carrier9
+set_option autoImplicit false
+namespace AspisR1.JHf_Carrier
+open Aeneas Aeneas.Std Result
+def toIncrementalMerkleTreeV1 (value : AdapterRw.aspis_statement.pool_v1.incremental_merkle.IncrementalMerkleTreeV1) : AspisR1AdapterReconstruct.aspis_statement.pool_v1.incremental_merkle.IncrementalMerkleTreeV1 :=
+  {next_leaf_index:=value.next_leaf_index,root:=value.root,frontier:=value.frontier}
+def fromIncrementalMerkleTreeV1 (value : AspisR1AdapterReconstruct.aspis_statement.pool_v1.incremental_merkle.IncrementalMerkleTreeV1) : AdapterRw.aspis_statement.pool_v1.incremental_merkle.IncrementalMerkleTreeV1 :=
+  {next_leaf_index:=value.next_leaf_index,root:=value.root,frontier:=value.frontier}
+theorem from_toIncrementalMerkleTreeV1 (v : AdapterRw.aspis_statement.pool_v1.incremental_merkle.IncrementalMerkleTreeV1) : fromIncrementalMerkleTreeV1 (toIncrementalMerkleTreeV1 v)=v := by
+  cases v <;> simp only [fromPoolV1PairLiveSnapshotV1,toPoolV1PairLiveSnapshotV1,fromPoolV1PairVerifiedAfterstateV1,toPoolV1PairVerifiedAfterstateV1,fromPoolV1PairLatePublicStatementV1,toPoolV1PairLatePublicStatementV1,fromPoolV1PairForestTerminalCommonV1,toPoolV1PairForestTerminalCommonV1,fromPoolV1PrivateTransferPublicV1,toPoolV1PrivateTransferPublicV1,fromPoolV1WithdrawalPublicV1,toPoolV1WithdrawalPublicV1,fromPoolV1PairForestTerminalStatementV1,toPoolV1PairForestTerminalStatementV1,fromPoolIdentityV1,toPoolIdentityV1,fromVerifierPolicyV1,toVerifierPolicyV1,fromPoolV1PairForestMasterV1,toPoolV1PairForestMasterV1,fromIncrementalMerkleTreeV1,toIncrementalMerkleTreeV1]
+  all_goals rfl
+#print axioms from_toIncrementalMerkleTreeV1
+end AspisR1.JHf_Carrier
