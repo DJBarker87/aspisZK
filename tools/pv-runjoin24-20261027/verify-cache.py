@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin24-20261027'
 label=sys.argv[1] if len(sys.argv)>1 else 'focused'
 r=json.loads((E/(label+'-resolution.json')).read_text());mods={m:v for m,v in r['resolved'].items() if 'imports' in v}
 code='''import pathlib,json,sys,hashlib
-H=pathlib.Path('/home/dombarker/project-offloads/codex-pv-runjoin-20261026');e=json.load(open(H/'runjoin23-lean/J.json'));roots=[pathlib.Path(x) for x in e['LEAN_PATH'].split(':')];out=[]
+H=pathlib.Path('/home/dombarker/project-offloads/codex-pv-runjoin-20261026');e=json.load(open(H/'runjoin24-lean/J.json'));roots=[pathlib.Path(x) for x in e['LEAN_PATH'].split(':')];out=[]
 for m,v in json.load(sys.stdin).items():
  rel=m.replace('.','/');o=next((root/(rel+'.olean') for root in roots if (root/(rel+'.olean')).is_file()),None)
  if o is None:

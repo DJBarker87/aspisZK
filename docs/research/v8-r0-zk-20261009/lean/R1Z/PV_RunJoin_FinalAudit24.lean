@@ -9,6 +9,12 @@ theorem endpoint_input_is_canonical :
     PrivacyR1HeadlineDeployedReal.input =
       BuilderSource.prover (K := PrivacyR1AcctBasis.K) := rfl
 #print axioms endpoint_input_is_canonical
+/-- The fixed canonical input itself satisfies identification with identity.
+This does not identify the raw native cache family with the endpoint. -/
+theorem canonical_identification :
+    BuilderSource.SourceIdentification PrivacyR1HeadlineDeployedReal.input
+      (fun w => w) := ⟨fun _ => rfl,fun _ => rfl,rfl⟩
+#print axioms canonical_identification
 end R1Z.PV_RunJoin_FinalAudit24
 #print R1Z.PrivacyR1HeadlineDeployedReal.input
 #print R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement
