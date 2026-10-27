@@ -1,0 +1,35 @@
+FJa_SplitCanonical.lean:22:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 ?iter ?weights ?prepared
+in the target expression
+  FJa_SplitStep.Loop (cursor 0#usize) weights p = ok out
+
+case pos
+N : Usize
+out : Std.Array NQ N
+p : NP
+c : NQ
+hc : Canon c
+hp : field.PreparedQm31Multiplier.new c = ok p
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (weights : Std.Array NQ N) (e : Usize),
+      canonical weights → FJa_SplitStep.Loop (cursor e) weights p = ok out → ↑e = m → canonical out
+weights : Std.Array NQ N
+hw : canonical weights
+hz : n = 0
+run : FJa_SplitStep.Loop (cursor 0#usize) weights p = ok out
+he : ↑0#usize = n
+⊢ canonical out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FJa_SplitCanonical.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

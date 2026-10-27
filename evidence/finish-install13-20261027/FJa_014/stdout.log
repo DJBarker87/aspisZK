@@ -1,0 +1,239 @@
+FJa_ExpandCanonical.lean:19:20: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.29
+of sort `Type (?u.29 + 1)` in the application
+  @PrincipalSeg it.i
+FJa_ExpandCanonical.lean:19:26: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+FJa_ExpandCanonical.lean:20:20: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+N : Usize
+out : Std.Array NQ N
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (it : Iter) (weights : Std.Array NQ N) (len : Usize),
+      (∀ x ∈ ↑it.slice, Canon x) →
+        canonical weights →
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 it weights len = ok out →
+            (↑it.slice).length - it.i = m → canonical out
+it : Iter
+weights : Std.Array NQ N
+len : Usize
+hc : ∀ x ∈ ↑it.slice, Canon x
+hw : canonical weights
+run :
+  (do
+      let (o, iter1) ← core.slice.iter.IteratorSliceIter.next it
+      match o with
+        | none => ok weights
+        | some coordinate => do
+          let prepared ← field.PreparedQm31Multiplier.new coordinate
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := len }
+          let weights1 ← pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter2 weights prepared
+          let len1 ← len * 2#usize
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+hm : (↑it.slice).length - it.i = n
+more : sorry
+⊢ it.i < (↑it.slice).length
+FJa_ExpandCanonical.lean:23:63: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.58
+of sort `Type (?u.58 + 1)` in the application
+  @PrincipalSeg it.i
+FJa_ExpandCanonical.lean:23:69: error(lean.unknownIdentifier): Unknown identifier `t.slice.len`
+FJa_ExpandCanonical.lean:22:78: error: unsolved goals
+N : Usize
+out : Std.Array NQ N
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (it : Iter) (weights : Std.Array NQ N) (len : Usize),
+      (∀ x ∈ ↑it.slice, Canon x) →
+        canonical weights →
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 it weights len = ok out →
+            (↑it.slice).length - it.i = m → canonical out
+it : Iter
+weights : Std.Array NQ N
+len : Usize
+hc : ∀ x ∈ ↑it.slice, Canon x
+hw : canonical weights
+run :
+  (do
+      let (o, iter1) ← core.slice.iter.IteratorSliceIter.next it
+      match o with
+        | none => ok weights
+        | some coordinate => do
+          let prepared ← field.PreparedQm31Multiplier.new coordinate
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := len }
+          let weights1 ← pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter2 weights prepared
+          let len1 ← len * 2#usize
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+hm : (↑it.slice).length - it.i = n
+more : sorry
+c : NQ := it.slice[it.i]
+next : Iter := { slice := it.slice, i := it.i + 1 }
+⊢ (if h : it.i < ↑it.slice.len then ok (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }) else ok (none, it)) =
+    ok (some it.slice[it.i], { slice := it.slice, i := it.i + 1 })
+FJa_ExpandCanonical.lean:33:20: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+N : Usize
+out : Std.Array NQ N
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (it : Iter) (weights : Std.Array NQ N) (len : Usize),
+      (∀ x ∈ ↑it.slice, Canon x) →
+        canonical weights →
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 it weights len = ok out →
+            (↑it.slice).length - it.i = m → canonical out
+it : Iter
+weights : Std.Array NQ N
+len : Usize
+hc : ∀ x ∈ ↑it.slice, Canon x
+hw : canonical weights
+hm : (↑it.slice).length - it.i = n
+more : sorry
+c : NQ := it.slice[it.i]
+next : Iter := { slice := it.slice, i := it.i + 1 }
+hn : core.slice.iter.IteratorSliceIter.next it = ok (some c, next)
+run✝³ :
+  (let (o, iter1) := (some c, next)
+    match o with
+    | none => ok weights
+    | some coordinate => do
+      let prepared ← field.PreparedQm31Multiplier.new coordinate
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := len }
+      let weights1 ← pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter2 weights prepared
+      let len1 ← len * 2#usize
+      pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+p : field.PreparedQm31Multiplier
+hp : field.PreparedQm31Multiplier.new c = ok p
+run✝² :
+  (do
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := len }
+      let weights1 ← pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter2 weights p
+      let len1 ← len * 2#usize
+      pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 next weights1 len1) =
+    ok out
+rev : core.iter.adapters.rev.Rev (core.ops.range.Range (UScalar UScalarTy.Usize))
+hr :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := len } =
+    ok rev
+run✝¹ :
+  (do
+      let weights1 ← pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 rev weights p
+      let len1 ← len * 2#usize
+      pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 next weights1 len1) =
+    ok out
+afterSplit : Std.Array field.QM31 N
+hs :
+  pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 (FJa_ReverseStep.cursor len) weights p = ok afterSplit
+run✝ :
+  (do
+      let len1 ← len * 2#usize
+      pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 next afterSplit len1) =
+    ok out
+len1 : UScalar UScalarTy.Usize
+hl : len * 2#usize = ok len1
+run : pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 next afterSplit len1 = ok out
+hrev : rev = FJa_ReverseStep.cursor len
+⊢ it.i < (↑it.slice).length
+FJa_ExpandCanonical.lean:37:63: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+where
+ e := ↑(↑it.slice).length
+FJa_ExpandCanonical.lean:39:64: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬it.i
+FJa_ExpandCanonical.lean:39:70: error(lean.unknownIdentifier): Unknown identifier `t.slice.len`
+FJa_ExpandCanonical.lean:38:74: error: unsolved goals
+N : Usize
+out : Std.Array NQ N
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (it : Iter) (weights : Std.Array NQ N) (len : Usize),
+      (∀ x ∈ ↑it.slice, Canon x) →
+        canonical weights →
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 it weights len = ok out →
+            (↑it.slice).length - it.i = m → canonical out
+it : Iter
+weights : Std.Array NQ N
+len : Usize
+hc : ∀ x ∈ ↑it.slice, Canon x
+hw : canonical weights
+run :
+  (do
+      let (o, iter1) ← core.slice.iter.IteratorSliceIter.next it
+      match o with
+        | none => ok weights
+        | some coordinate => do
+          let prepared ← field.PreparedQm31Multiplier.new coordinate
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := len }
+          let weights1 ← pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0_loop0 iter2 weights prepared
+          let len1 ← len * 2#usize
+          pool_v1.pair_forest_copy_terminal.Selectors.expand_loop0 iter1 weights1 len1) =
+    ok out
+hm : (↑it.slice).length - it.i = n
+more : ¬sorry
+⊢ (if h : it.i < ↑it.slice.len then ok (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }) else ok (none, it)) =
+    ok (none, it)
+FJa_ExpandCanonical.lean:23:91: warning: This simp argument is unused:
+  dif_pos
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵.̵n̵e̵x̵t̵,̵s̵h̵o̵w̵ ̵i̵t̵.̵i̵<̵i̵t̵.̵s̵l̵i̵c̵e̵.̵l̵e̵n̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲S̲l̲i̲c̲e̲I̲t̲e̲r̲.̲n̲e̲x̲t̲,̲ ̲s̲h̲o̲w̲ ̲i̲t̲.̲i̲ ̲<̲i̲ ̲t̲.̲s̲l̲i̲c̲e̲.̲l̲e̲n̲ from m̵o̵r̵e̵,̵d̵i̵f̵_̵p̵o̵s̵,̵c̵,̵n̵e̵x̵t̵]̵m̲o̲r̲e̲,̲ ̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FJa_ExpandCanonical.lean:39:92: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵.̵n̵e̵x̵t̵,̵s̵h̵o̵w̵ ̵¬̵i̵t̵.̵i̵<̵i̵t̵.̵s̵l̵i̵c̵e̵.̵l̵e̵n̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲S̲l̲i̲c̲e̲I̲t̲e̲r̲.̲n̲e̲x̲t̲,̲ ̲s̲h̲o̲w̲ ̲¬̲i̲t̲.̲i̲ ̲<̲i̲ ̲t̲.̲s̲l̲i̲c̲e̲.̲l̲e̲n̲ from m̵o̵r̵e̵,̵d̵i̵f̵_̵n̵e̵g̵]̵m̲o̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FJa_ExpandCanonical.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
