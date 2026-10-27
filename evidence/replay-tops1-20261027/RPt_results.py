@@ -11,6 +11,9 @@ for root,closure in p['closures'].items():
  unbuilt=[n for n in new if rows[n]['module'] not in by]
  roots.append({'root':root,'closure':len(closure),'reused':len(closure)-len(new),'new_green':len(green),'failed':failed,'unbuilt':unbuilt})
 out={'attempts':len(rs),'lean_limit':400,'kani_runs':0,'passed':sum(d['exit_status']==0 for d in rs),'failed_attempts':[d['attempt'] for d in rs if d['exit_status']!=0],'roots':roots,'new_source_contexts':len(rows),'fresh_source_green':sum(r['module'] in by and by[r['module']]['exit_status']==0 for r in rows.values()),'remaining_source_vertices':[n for n,r in rows.items() if r['module'] not in by],'compiler_wall_seconds':sum(d['wall_seconds'] for d in rs),'peak_rss_kib':max([int(d['peak_rss_kib']) for d in rs] or [0]),'swaps':sum(int(d['swaps']) for d in rs),'reservation_retries':sum(d['reservation_retries'] for d in rs),'no_new_premise_discharge':True}
+fresh_modules={r['module'] for r in rows.values()}
+out['ready_unbuilt']=[n for n,r in rows.items() if r['module'] not in by and all(i not in fresh_modules or (i in by and by[i]['exit_status']==0) for i in r['imports'])]
+out['new_failed_vertices']=[n for n,r in rows.items() if r['module'] in by and by[r['module']]['exit_status']!=0]
 (E/'RPt_frontier.json').write_text(json.dumps(out,indent=2)+'\n')
 for d in rs:
  if d['module']!='RPt_BEnAudit':continue

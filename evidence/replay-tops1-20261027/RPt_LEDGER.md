@@ -22,10 +22,18 @@ boundary/chain endpoint gates, retaining the last-evaluation equality L146.
 Complete source statements are RPt_*_Top.source-statement.txt; fresh kernel
 comparisons must be tracked separately and never inferred from these tables.
 
-Non-vacuity remains conditional: FJp_Nonvacuity.weaken preserves old owner
+Non-vacuity remains conditional: FJp_Nonvacuity.owners (via FJp_GlobalOwners.weaken) preserves old owner
 instances; FJu_Nonvacuity.equivalent proves old/new owner equivalence.
 Inherited FIn/FIo non-vacuity fixtures retain their successful installation,
 primitive and witness/collision gates. No simultaneous inhabitant of every
 runtime/native premise is constructed by this replay. The security target,
 carriers, failure events, budget, frozen3 and RuntimePersistence are unchanged.
 The deployed 100-bit target remains not yet established.
+
+Fresh BEn-chain non-vacuity checks: RPt_072 checks BEk_Nonvacuity.rejected
+and step; RPt_073 checks BEl_Nonvacuity.rejected and occurrences.
+The explicit reference code makes two identical digest reads before rejection;
+both issued occurrences survive, and the backend's Nat state increments twice.
+This excludes an empty query-prefix interpretation of these reference fixtures.
+It is not a real-byte successful native batch fixture or a joint root realization.
+The sources explicitly retain that distinction; all printed axioms are standard.

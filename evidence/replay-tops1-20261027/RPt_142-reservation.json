@@ -1,0 +1,40 @@
+{
+  "requested_bytes": 8589934592,
+  "allowed": true,
+  "utc": 1793102800.9970386,
+  "populated_scopes": [
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rd67188a2c67948f0b97136bb676c0e81.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus-paired-1000/admission-barrier.json python3 /home/dombarker/project-offloads/codex-pv-op223-20261027/capped.py /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus-paired-1000/receipt optimized complete retry-owner proof generation and P_R1 elimination -- python3 /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus.py",
+        "python3 /home/dombarker/project-offloads/codex-pv-op223-20261027/capped.py /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus-paired-1000/receipt optimized complete retry-owner proof generation and P_R1 elimination -- python3 /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus.py",
+        "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus-paired-1000/receipt/time.log python3 /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus.py",
+        "python3 /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus.py",
+        "/home/dombarker/project-offloads/codex-pv-op223-20261027/candidate/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus-2000/2955-candidate 2955 1 0",
+        "/home/dombarker/project-offloads/codex-pv-op223-20261027/baseline/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus-2000/2956-baseline 2956 1 0",
+        "/home/dombarker/project-offloads/codex-pv-op223-20261027/candidate/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-op223-20261027/corpus-2000/2956-candidate 2956 1 0"
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 2236411904
+    },
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r82163b59b72349b4805fdb83b9787c0a.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/python3 -u -c import json,pathlib,subprocess,sys,hashlib,re job=pathlib.Path(sys.argv[1]);T=sys.argv[2];items=json.load(open(job/'cursor-manifest.json')) env='/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json' for x in items:  a=x['attempt'];m=x['module'];src=job/(m+'.lean');src.write_text(x['source'])  paths=[str(job)]+json.load(open(env))['LEAN_PATH'].split(':');deps=[]  for name in re.findall(r'^import (\\S+)',x['source'],re.M):   p=next((pathlib.Path(r)/(name.replace('.','/')+'.olean') for r in paths if (pathlib.Path(r)/(name.replace('.','/')+'.olean')).is_file()),None)   deps.append(dict(module=name,path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest() if p else None))  (job/f'deps-{a}.json').write_text(json.dumps(deps,sort_keys=True)+'\\n')  with (job/f'out-{a}.log').open('w') as out:   p=subprocess.run(['/usr/bin/time','-v','-o',str(job/f'time-{a}.log'),'timeout','900','python3',T+'/run2.py',env,str(job),str(job),str(job/(m+'.olean')),str(src),'7000'],stdout=out,stderr=subprocess.STDOUT)   out.write(f'\\nexit={p.returncode}\\n')  print(a,p.returncode,flush=True)  if p.returncode:break  /home/dombarker/project-offloads/codex-pv-l2b-20261027 /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence",
+        "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-l2b-20261027/time-53063.log timeout 900 python3 /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json /home/dombarker/project-offloads/codex-pv-l2b-20261027 /home/dombarker/project-offloads/codex-pv-l2b-20261027 /home/dombarker/project-offloads/codex-pv-l2b-20261027/PV_L2B_Cursor.olean /home/dombarker/project-offloads/codex-pv-l2b-20261027/PV_L2B_Cursor.lean 7000",
+        "timeout 900 python3 /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py /home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json /home/dombarker/project-offloads/codex-pv-l2b-20261027 /home/dombarker/project-offloads/codex-pv-l2b-20261027 /home/dombarker/project-offloads/codex-pv-l2b-20261027/PV_L2B_Cursor.olean /home/dombarker/project-offloads/codex-pv-l2b-20261027/PV_L2B_Cursor.lean 7000",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M7000 -DElab.async=false -R /home/dombarker/project-offloads/codex-pv-l2b-20261027 -o /home/dombarker/project-offloads/codex-pv-l2b-20261027/PV_L2B_Cursor.olean /home/dombarker/project-offloads/codex-pv-l2b-20261027/PV_L2B_Cursor.lean"
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 23883776
+    }
+  ],
+  "bounded_reserved_bytes": 17179869184,
+  "all_populated_scopes_bounded": true,
+  "safe_limit_bytes": 59055800320,
+  "print_axioms": "N/A: read-only resource preflight"
+}

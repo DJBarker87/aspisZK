@@ -40,6 +40,21 @@ BEn was scheduled first to establish one complete root, followed by the
 FJp/FJu dependency chain. Query contexts do not inflate source-closure credit.
 The exact current frontier and every unbuilt vertex are RPt_frontier.json.
 Fresh root audits and declaration batches are recorded separately.
+
+BEn's 5,367 repository contexts are green (109 fresh, 5,258 reused), with an
+exact checked-header closure match (RPt_BEn-import-closure-check.json).
+RPt_110 checks the complete type Expr equals ARX after universe alignment,
+and also checks their equality by rfl. Its full canonical kernel statement is
+RPt_BEn_Top.kernel.txt: 657,311 bytes, SHA256
+a0ff8eb5366d7ae62f2de7245ff482457c974da6ff9ba530d216bfd79f53ac90.
+The full #print axioms and an independent checked-constant traversal both yield
+only propext, Classical.choice and Quot.sound. All 180 formatter implementation
+records are present and unreachable, as are all 84 actual formatter axioms.
+The Formatter := Unit definition remains reachable. The retained corpus still
+contains the 84 native axioms; an all-declaration standard-only claim for that
+entire corpus remains false. No formatter or library implementation changed.
+RPt_BEn-formatter-records.json has Boolean reachability for every record.
+
 FJv_Top / FJv_Deployed were absent at planning; recheck at the audit stage.
 
 ## Trust, ledger and non-vacuity
