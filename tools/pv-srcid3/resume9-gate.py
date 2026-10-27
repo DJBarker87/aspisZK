@@ -18,6 +18,12 @@ for r in ledger:
   rows[m]=dict(module=m,classification='PROJECT',source_receipts=[],source_kind='reviewable branch addition',source_path=str(src.relative_to(root)),imports=re.findall(r'^import (\S+)',src.read_text(),re.M),projection_dependency_gap=False,projection_exception=None)
  rows[m]['expected_source_sha256']=hashlib.sha256(src.read_bytes()).hexdigest()
  rows[m]['source_receipts'].append(dict(attempt=r['attempt'],source_sha256=r['source_sha256'],object_sha256=r['object_sha256']))
+# Read-only mathematical certificate cohort, from its owner's accepted source snapshots.
+for q in json.loads((e/'resume9-model-pins.json').read_text()):
+ m=q['module']
+ if m not in rows:
+  rows[m]=dict(module=m,classification='PROJECT',source_receipts=[],source_kind='read-only RunJoin branch dependency',source_path=q['source_path'],expected_source_sha256=q['source_sha256'],imports=q['imports'],projection_dependency_gap=False,projection_exception=None,readonly_source_revision=q['revision'])
+ rows[m]['source_receipts'].append(dict(attempt=q['attempt'],receipt=q['receipt'],source_sha256=q['source_sha256'],object_sha256=q['object_sha256'],evidence_kind='accepted owner compiler receipt plus read-only consumer artifact hash',object_hash_from_consumer_receipt=q.get('object_hash_from_consumer_receipt'),object_hash_from_own_focused_consumer=q.get('object_hash_from_own_focused_consumer')))
 # Final kernel closure has both old and new audit objects, all individually retained.
 audit=next((r for r in reversed(ledger) if r['module']=='R1Z/PV_Src_FinalAudit9C' and r['accepted']),None)
 if audit:

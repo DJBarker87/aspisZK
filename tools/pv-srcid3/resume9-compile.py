@@ -40,11 +40,10 @@ if datetime.datetime(2026,10,26,17,45,tzinfo=datetime.timezone.utc) <= now < qui
 src=root/f'docs/research/v8-r0-zk-20261009/lean/{module_path}.lean'
 plan={'research_revision':subprocess.check_output(['git','rev-parse','research'],text=True).strip()}
 row=None
-pin_table=root/'docs/research/100bit-spend-path-20261013/evidence/lean-semantic-prefix-agreement-20261015/import-source-pins.json'
-pin=json.loads(subprocess.check_output(['git','show','research:'+str(pin_table.relative_to(root))]))['modules'].get(module_name)
-if pin and not module_name.startswith('R1Z.PV_Src_'):
- expected=subprocess.check_output(['git','show','research:'+pin['source']],cwd=root)
- src=e/'sources'/('research-'+m+'.lean');src.parent.mkdir(exist_ok=True);src.write_bytes(expected)
+# This continuation installs only its own new PV_Src sources. Existing cohorts
+# are read-only and resolved by the separate h-prime gate, never by this client.
+if not module_name.startswith('R1Z.PV_Src_'):
+ print('STOP: allocation 9 client accepts only own new source modules');sys.exit(76)
 shared=subprocess.run(['ssh',host,'cat '+joint+'/sources/'+module_path+'.lean'],capture_output=True)
 baseline_own = subprocess.run(['git','cat-file','-e','3873ce854e:docs/research/v8-r0-zk-20261009/lean/'+module_path+'.lean'],capture_output=True).returncode==0
 if shared.returncode==0 and shared.stdout!=src.read_bytes() and (not module_name.startswith('R1Z.PV_Src_') or baseline_own):
