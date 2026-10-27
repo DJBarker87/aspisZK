@@ -1,0 +1,54 @@
+{"attempt": "JGu25_006", "exit_status": 1, "wall_seconds": 6.843128432985395, "peak_rss_kib": "6328524", "swaps": "0", "print_axioms": ["'AspisR1.JGu_Level0_00.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JGu_Level0_00.lean:84:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  MultiproofConeSlices.sub (JGm_TX2_Supplied.leading ?m.243 ?m.244) ?m.245 ?m.246
+in the target expression
+  reference.read32 (MultiproofConeSlices.sub JGu_Supplied.nodes0 0#usize 32#usize) =
+    ok
+      (encodeState
+        (JGc_TX2_HashBytes.state
+          [138, 12, 78, 4, 29, 195, 175, 124, 49, 12, 183, 253, 137, 178, 1, 172, 57, 105, 147, 139, 13, 27, 199, 21,
+            103, 254, 125, 5, 89, 218, 213, 42]))
+
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+s : reference.Scratch
+view : JGm_TX2_View.View s indices00 values00 0
+v00 : JGm_TX2_View.View (s00 s) indic
+...
+3, 28]))
+      (encodeState value002) 9#usize 288#usize 216823#u32 8#usize
+row08 :
+  reference.binary_step (Port4B_VerifyInstall.digest (JGc_TX2_RealLeaves.dictionary D)) hash (s08 s) JGu_Supplied.nodes0
+      8#usize 8#usize =
+    ok (reference.Row.Next (s09 s) 9#usize 9#usize)
+v09 : JGm_TX2_View.View (s09 s) indices09 values09 288
+ri09 : (s09 s).idx.index_usize 9#usize = ok 245899#u32
+rv09 : (s09 s).val.index_usize 9#usize = ok (encodeState value003)
+active09 : 9#usize < (s09 s).n
+cursor09 : (s09 s).at = 288#usize
+unpaired09 : 10#usize < (s09 s).n → ∃ other, (s09 s).idx.index_usize 10#usize = ok other ∧ other ≠ 245899#u32 ^^^ 1#u32
+⊢ reference.read32 (MultiproofConeSlices.sub JGu_Supplied.nodes0 288#usize 320#usize) =
+    ok
+      (encodeState
+        (JGc_TX2_HashBytes.state
+          [2, 236, 210, 68, 67, 97, 179, 9, 220, 150, 3, 95, 165, 1, 185, 29, 159, 221, 4, 51, 208, 1, 32, 211, 224,
+            128, 53, 137, 65, 4, 60, 189]))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JGu_Level0_00.lean:527:48: error: Expected type must not contain metavariables
+  ↑?m.4252 ≤ ↑?m.4253
+JGu_Level0_00.lean:527:60: error: Expected type must not contain metavariables
+  ↑?m.4253 ≤ ↑?m.4251
+'AspisR1.JGu_Level0_00.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7c6c1609920c4fec87b1533ac39f364e.scope; invocation ID: c62b9fb82eb541b98f370e74d184ea67
