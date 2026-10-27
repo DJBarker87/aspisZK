@@ -88,3 +88,14 @@ and arbitrary sized-Slice update totality (52484). The content-fold and
 whole-digest composition checks remain pending admission. This is no credit
 for borrowed digest Update/default/finalize wrappers V231–V238. No native
 wrapper/dispatcher/Drop or deployment premise is hidden in the dictionary.
+
+Fourth pass soft-reference composition: **7 → 7**. The complete extracted
+owned fixed SHA-256 digest is now proved against a deterministic value model
+for every sized byte Slice: `PV_CBL_DigestSoftSource.source` (52497).
+`PV_CBL_DigestUpdateSource.source` (52490) identifies the buffer update with
+its byte fold; deterministic padding/finalization are checked at 52494/52495.
+Whole digest totality is checked at 52492. No concrete SHA recurrence is
+normalized again. Native generic wrapper loan/Drop semantics, runtime
+SHA-NI/soft dispatch, compiler/toolchain/deployed association and native
+allocation/world/side-channel closure remain separate P obligations; no
+V231–V238 row credit or privacy endpoint removal is claimed.
