@@ -1,0 +1,544 @@
+'AspisR1.JHi_AuthenticationPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHi_Validation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry : AdapterRw.Ops →
+  AdapterRw.solana_pubkey.Pubkey →
+    AdapterRw.solana_pubkey.Pubkey →
+      AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+        AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1 →
+          AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+              Aeneas.Std.U64 →
+                Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AdapterRw.solana_program_error.ProgramError) :=
+fun ops verifier_program pool_program master_account master registry_account entry_account current_slot => do
+  let a ← ops.op39 pool_program
+  let a1 ← ops.op45
+  let b ← Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8 a a1
+  if b = true then
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+    else do
+      let i ← ops.op13
+      let i1 ← Aeneas.Std.lift (master.verifier_policy.flags &&& i)
+      if i1 = 0#u8 then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else do
+          let a2 ← ops.op46
+          let b1 ←
+            Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8
+                master.verifier_policy.registry_program a2
+          if b1 = true then
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+            else
+              have a3 := Aeneas.Std.Array.repeat 32#usize 0#u8;
+              do
+              let b2 ←
+                Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8
+                    master.verifier_policy.registry_authority a3
+              if b2 = true then
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                else do
+                  let b3 ←
+                    Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8
+                        master.verifier_policy.policy_binding AdapterRw.r1_pool_adapter.AUDIT_POLICY_BINDING
+                  if b3 = true then
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err
+                          AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                    else do
+                      let r ← ops.op15 master.verifier_policy
+                      let r1 ←
+                        AdapterRw.core.result.Result.map_err
+                            AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1FormatErrorProgramError
+                            r ()
+                      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+                      match cf with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                          let registry_program ← ops.op37 a2
+                          let r2 ←
+                            AdapterRw.r1_pool_adapter.owned.require_readonly_account ops registry_account
+                                registry_program
+                          let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                          match cf1 with
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => do
+                              let i2 ← ops.op14
+                              let i3 ← Aeneas.Std.lift (master.verifier_policy.flags &&& i2)
+                              if (i3 != 0#u8) = true then do
+                                  let loader ← ops.op41
+                                  let r3 ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops registry_account
+                                  let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+                                  match cf2 with
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+                                      let r4 ← ops.op33 val
+                                      let r5 ←
+                                        AdapterRw.core.result.Result.map_err
+                                            AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+                                            r4 ()
+                                      let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r5
+                                      match cf3 with
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+                                          let p ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.key master_account
+                                          let s ← ops.op40 p
+                                          let s1 ←
+                                            Aeneas.Std.lift (Aeneas.Std.Array.make 1#usize [val1.bump] ⋯).to_slice
+                                          let s2 ←
+                                            Aeneas.Std.lift
+                                                (Aeneas.Std.Array.make 3#usize
+                                                    [AdapterRw.r1_pool_adapter.VERIFIER_REGISTRY_V2_SEED, s, s1]
+                                                    ⋯).to_slice
+                                          let r6 ← ops.op38 s2 registry_program
+                                          let r7 ←
+                                            AdapterRw.core.result.Result.map_err
+                                                AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_2.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                r6 ()
+                                          let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7
+                                          match cf4 with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                                              let p1 ←
+                                                AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.key registry_account
+                                              let b4 ←
+                                                Aeneas.Std.core.cmp.impls.PartialEqShared.ne
+                                                    (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey ops) p1
+                                                    val2
+                                              if b4 = true then
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.result.Result.Err
+                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                else do
+                                                  let s3 ← ops.op40 registry_program
+                                                  let s4 ←
+                                                    Aeneas.Std.lift
+                                                        (Aeneas.Std.Array.make 1#usize [val1.programdata_bump]
+                                                            ⋯).to_slice
+                                                  let s5 ←
+                                                    Aeneas.Std.lift (Aeneas.Std.Array.make 2#usize [s3, s4] ⋯).to_slice
+                                                  let r8 ← ops.op38 s5 loader
+                                                  let r9 ←
+                                                    AdapterRw.core.result.Result.map_err
+                                                        AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_3.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                        r8 ()
+                                                  let cf5 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r9
+                                                  match cf5 with
+                                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                      let a4 ← ops.op39 p
+                                                      let b5 ←
+                                                        Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                            Aeneas.Std.core.cmp.PartialEqU8 val1.pool a4
+                                                      if b5 = true then
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.result.Result.Err
+                                                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                        else do
+                                                          let b6 ←
+                                                            Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                                Aeneas.Std.core.cmp.PartialEqU8 val1.authority
+                                                                master.verifier_policy.registry_authority
+                                                          if b6 = true then
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.result.Result.Err
+                                                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                            else do
+                                                              let b7 ←
+                                                                Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                                    Aeneas.Std.core.cmp.PartialEqU8 val1.policy_binding
+                                                                    master.verifier_policy.policy_binding
+                                                              if b7 = true then
+                                                                  Aeneas.Std.Result.ok
+                                                                    (Aeneas.Std.core.result.Result.Err
+                                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                else do
+                                                                  let a5 ← ops.op39 registry_program
+                                                                  let b8 ←
+                                                                    Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                                        Aeneas.Std.core.cmp.PartialEqU8
+                                                                        val1.registry_program a5
+                                                                  if b8 = true then
+                                                                      Aeneas.Std.Result.ok
+                                                                        (Aeneas.Std.core.result.Result.Err
+                                                                          AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                    else do
+                                                                      let a6 ← ops.op39 loader
+                                                                      let b9 ←
+                                                                        Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                                            Aeneas.Std.core.cmp.PartialEqU8
+                                                                            val1.loader_program a6
+                                                                      if b9 = true then
+                                                                          Aeneas.Std.Result.ok
+                                                                            (Aeneas.Std.core.result.Result.Err
+                                                                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                        else do
+                                                                          let a7 ← ops.op39 val3
+                                                                          let b10 ←
+                                                                            Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                                                Aeneas.Std.core.cmp.PartialEqU8
+                                                                                val1.programdata_address a7
+                                                                          if b10 = true then
+                                                                              Aeneas.Std.Result.ok
+                                                                                (Aeneas.Std.core.result.Result.Err
+                                                                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                            else do
+                                                                              let b11 ← ops.op28 val1
+                                                                              if b11 = true then do
+                                                                                  let b12 ← ops.op27 val1
+                                                                                  if b12 = true then
+                                                                                      Aeneas.Std.Result.ok
+                                                                                        (Aeneas.Std.core.result.Result.Err
+                                                                                          AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                                    else do
+                                                                                      let r10 ←
+                                                                                        AdapterRw.r1_pool_adapter.owned.require_readonly_account
+                                                                                            ops entry_account
+                                                                                            registry_program
+                                                                                      let cf6 ←
+                                                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                            r10
+                                                                                      match cf6 with
+                                                                                        |
+                                                                                        Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                            a =>
+                                                                                          do
+                                                                                          let r11 ←
+                                                                                            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                                                                                                ops entry_account
+                                                                                          let cf7 ←
+                                                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                r11
+                                                                                          match cf7 with
+                                                                                            |
+                                                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                                val4 =>
+                                                                                              do
+                                                                                              let r12 ← ops.op34 val4
+                                                                                              let r13 ←
+                                                                                                AdapterRw.core.result.Result.map_err
+                                                                                                    AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_4.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+                                                                                                    r12 ()
+                                                                                              let cf8 ←
+                                                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                    r13
+                                                                                              match cf8 with
+                                                                                                |
+                                                                                                Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                                    val5 =>
+                                                                                                  do
+                                                                                                  let s6 ← ops.op40 p
+                                                                                                  let s7 ←
+                                                                                                    Aeneas.Std.lift
+                                                                                                        AdapterRw.r1_pool_adapter.PROFILE_BINDING.to_slice
+                                                                                                  let s8 ←
+                                                                                                    Aeneas.Std.lift
+                                                                                                        AdapterRw.r1_pool_adapter.RELEASE_BINDING.to_slice
+                                                                                                  let s9 ←
+                                                                                                    Aeneas.Std.lift
+                                                                                                        (Aeneas.Std.Array.make
+                                                                                                            1#usize
+                                                                                                            [val5.bump]
+                                                                                                            ⋯).to_slice
+                                                                                                  let s10 ← ⋯
+                                                                                                  let r14 ←
+                                                                                                    ops.op38 s10
+                                                                                                        registry_program
+                                                                                                  let r15 ←
+                                                                                                    AdapterRw.core.result.Result.map_err
+                                                                                                        AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_5.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                                                                        r14 ()
+                                                                                                  let cf9 ←
+                                                                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                        r15
+                                                                                                  ⋯
+                                                                                                |
+                                                                                                Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                                    residual =>
+                                                                                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                                    Unit
+                                                                                                    (Aeneas.Std.core.convert.FromSame
+                                                                                                      AdapterRw.solana_program_error.ProgramError)
+                                                                                                    residual
+                                                                                            |
+                                                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                                residual =>
+                                                                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                                Unit
+                                                                                                (Aeneas.Std.core.convert.FromSame
+                                                                                                  AdapterRw.solana_program_error.ProgramError)
+                                                                                                residual
+                                                                                        |
+                                                                                        Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                            residual =>
+                                                                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                            Unit
+                                                                                            (Aeneas.Std.core.convert.FromSame
+                                                                                              AdapterRw.solana_program_error.ProgramError)
+                                                                                            residual
+                                                                                else
+                                                                                  Aeneas.Std.Result.ok
+                                                                                    (Aeneas.Std.core.result.Result.Err
+                                                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        Unit
+                                                        (Aeneas.Std.core.convert.FromSame
+                                                          AdapterRw.solana_program_error.ProgramError)
+                                                        residual
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit
+                                                (Aeneas.Std.core.convert.FromSame
+                                                  AdapterRw.solana_program_error.ProgramError)
+                                                residual
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit
+                                            (Aeneas.Std.core.convert.FromSame
+                                              AdapterRw.solana_program_error.ProgramError)
+                                            residual
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit
+                                        (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                        residual
+                                else do
+                                  let r3 ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops registry_account
+                                  let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+                                  match cf2 with
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+                                      let r4 ← ops.op31 val
+                                      let r5 ←
+                                        AdapterRw.core.result.Result.map_err
+                                            AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_7.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+                                            r4 ()
+                                      let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r5
+                                      match cf3 with
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+                                          let p ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.key master_account
+                                          let s ← ops.op40 p
+                                          let s1 ←
+                                            Aeneas.Std.lift (Aeneas.Std.Array.make 1#usize [val1.bump] ⋯).to_slice
+                                          let s2 ←
+                                            Aeneas.Std.lift
+                                                (Aeneas.Std.Array.make 3#usize
+                                                    [AdapterRw.r1_pool_adapter.VERIFIER_REGISTRY_SEED, s, s1]
+                                                    ⋯).to_slice
+                                          let r6 ← ops.op38 s2 registry_program
+                                          let r7 ←
+                                            AdapterRw.core.result.Result.map_err
+                                                AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_8.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                r6 ()
+                                          let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7
+                                          match cf4 with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                                              let p1 ←
+                                                AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.key registry_account
+                                              let b4 ←
+                                                Aeneas.Std.core.cmp.impls.PartialEqShared.ne
+                                                    (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey ops) p1
+                                                    val2
+                                              if b4 = true then
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.result.Result.Err
+                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                else do
+                                                  let a4 ← ops.op39 p
+                                                  let b5 ←
+                                                    Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                        Aeneas.Std.core.cmp.PartialEqU8 val1.pool a4
+                                                  if b5 = true then
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.result.Result.Err
+                                                          AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                    else do
+                                                      let b6 ←
+                                                        Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                            Aeneas.Std.core.cmp.PartialEqU8 val1.authority
+                                                            master.verifier_policy.registry_authority
+                                                      if b6 = true then
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.result.Result.Err
+                                                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                        else do
+                                                          let b7 ←
+                                                            Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                                Aeneas.Std.core.cmp.PartialEqU8 val1.policy_binding
+                                                                master.verifier_policy.policy_binding
+                                                          if b7 = true then
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.result.Result.Err
+                                                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                            else do
+                                                              let b8 ← ops.op26 val1
+                                                              if b8 = true then do
+                                                                  let b9 ← ops.op25 val1
+                                                                  if b9 = true then
+                                                                      Aeneas.Std.Result.ok
+                                                                        (Aeneas.Std.core.result.Result.Err
+                                                                          AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                    else do
+                                                                      let r8 ←
+                                                                        AdapterRw.r1_pool_adapter.owned.require_readonly_account
+                                                                            ops entry_account registry_program
+                                                                      let cf5 ←
+                                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                            r8
+                                                                      match cf5 with
+                                                                        |
+                                                                        Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                            a =>
+                                                                          do
+                                                                          let r9 ←
+                                                                            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data
+                                                                                ops entry_account
+                                                                          let cf6 ←
+                                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                r9
+                                                                          match cf6 with
+                                                                            |
+                                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                val3 =>
+                                                                              do
+                                                                              let r10 ← ops.op32 val3
+                                                                              let r11 ←
+                                                                                AdapterRw.core.result.Result.map_err
+                                                                                    AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_9.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+                                                                                    r10 ()
+                                                                              let cf7 ←
+                                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                    r11
+                                                                              match cf7 with
+                                                                                |
+                                                                                Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                    val4 =>
+                                                                                  do
+                                                                                  let s3 ← ops.op40 p
+                                                                                  let s4 ←
+                                                                                    Aeneas.Std.lift
+                                                                                        AdapterRw.r1_pool_adapter.PROFILE_BINDING.to_slice
+                                                                                  let s5 ←
+                                                                                    Aeneas.Std.lift
+                                                                                        AdapterRw.r1_pool_adapter.RELEASE_BINDING.to_slice
+                                                                                  let s6 ←
+                                                                                    Aeneas.Std.lift
+                                                                                        (Aeneas.Std.Array.make 1#usize
+                                                                                            [val4.bump] ⋯).to_slice
+                                                                                  let s7 ←
+                                                                                    Aeneas.Std.lift
+                                                                                        (Aeneas.Std.Array.make 5#usize
+                                                                                            [AdapterRw.r1_pool_adapter.VERIFIER_ENTRY_SEED,
+                                                                                              s3, s4, s5, s6]
+                                                                                            ⋯).to_slice
+                                                                                  let r12 ← ops.op38 s7 registry_program
+                                                                                  let r13 ←
+                                                                                    AdapterRw.core.result.Result.map_err
+                                                                                        AdapterRw.r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_10.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+                                                                                        r12 ()
+                                                                                  let cf8 ←
+                                                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                        r13
+                                                                                  match cf8 with
+                                                                                    |
+                                                                                    Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                        val5 =>
+                                                                                      do
+                                                                                      let p2 ←
+                                                                                        AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.key
+                                                                                            entry_account
+                                                                                      let b10 ←
+                                                                                        Aeneas.Std.core.cmp.impls.PartialEqShared.ne
+                                                                                            (AdapterRw.solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey
+                                                                                              ops)
+                                                                                            p2 val5
+                                                                                      if b10 = true then
+                                                                                          Aeneas.Std.Result.ok
+                                                                                            (Aeneas.Std.core.result.Result.Err
+                                                                                              AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                                        else do
+                                                                                          let a5 ← ops.op39 p
+                                                                                          let b11 ←
+                                                                                            Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                                                                Aeneas.Std.core.cmp.PartialEqU8
+                                                                                                val4.pool a5
+                                                                                          if b11 = true then
+                                                                                              Aeneas.Std.Result.ok
+                                                                                                (Aeneas.Std.core.result.Result.Err
+                                                                                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                                            else do
+                                                                                              let b12 ←
+                                                                                                Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                                                                    Aeneas.Std.core.cmp.PartialEqU8
+                                                                                                    val4.policy_binding
+                                                                                                    AdapterRw.r1_pool_adapter.AUDIT_POLICY_BINDING
+                                                                                              if b12 = true then
+                                                                                                  Aeneas.Std.Result.ok
+                                                                                                    (Aeneas.Std.core.result.Result.Err
+                                                                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                                                                                else do
+                                                                                                  let a6 ←
+                                                                                                    ops.op39
+                                                                                                        verifier_program
+                                                                                                  let b13 ←
+                                                                                                    Aeneas.Std.core.array.equality.PartialEqArray.ne
+                                                                                                        Aeneas.Std.core.cmp.PartialEqU8
+                                                                                                        val4.verifier_program
+                                                                                                        a6
+                                                                                                  ⋯
+                                                                                    |
+                                                                                    Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                        residual =>
+                                                                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                        Unit
+                                                                                        (Aeneas.Std.core.convert.FromSame
+                                                                                          AdapterRw.solana_program_error.ProgramError)
+                                                                                        residual
+                                                                                |
+                                                                                Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                    residual =>
+                                                                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                    Unit
+                                                                                    (Aeneas.Std.core.convert.FromSame
+                                                                                      AdapterRw.solana_program_error.ProgramError)
+                                                                                    residual
+                                                                            |
+                                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                residual =>
+                                                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                Unit
+                                                                                (Aeneas.Std.core.convert.FromSame
+                                                                                  AdapterRw.solana_program_error.ProgramError)
+                                                                                residual
+                                                                        |
+                                                                        Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                            residual =>
+                                                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            Unit
+                                                                            (Aeneas.Std.core.convert.FromSame
+                                                                              AdapterRw.solana_program_error.ProgramError)
+                                                                            residual
+                                                                else
+                                                                  Aeneas.Std.Result.ok
+                                                                    (Aeneas.Std.core.result.Result.Err
+                                                                      AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit
+                                                (Aeneas.Std.core.convert.FromSame
+                                                  AdapterRw.solana_program_error.ProgramError)
+                                                residual
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit
+                                            (Aeneas.Std.core.convert.FromSame
+                                              AdapterRw.solana_program_error.ProgramError)
+                                            residual
+                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit
+                                        (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                        residual
+                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                Unit (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                residual
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            Unit (Aeneas.Std.core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
