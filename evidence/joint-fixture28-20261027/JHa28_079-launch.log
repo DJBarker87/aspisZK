@@ -1,0 +1,59 @@
+{"attempt": "JHa28_079", "exit_status": 1, "wall_seconds": 3.2283143940148875, "peak_rss_kib": "6298616", "swaps": "0", "print_axioms": ["'AspisR1.JHa_Query0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHa_Query0.lean:88:104: error: Tactic `rfl` failed: The left-hand side
+  ok 3#usize
+is not definitionally equal to the right-hand side
+  ok (↑(UScalar.cast UScalarTy.Usize (JGp_Rows.query 0)) % 4)#usize
+
+p : verifier.Prepared
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+old : S8OwnedP6Finish.Weights
+sum : S7Kani3CallerTrace.Sum
+queries : p.queries = JFq_Queries.value
+alpha : p.alpha = JFo_Prepared.value.alpha
+next : a.next = 0#usize
+size : (↑a.weights).length = 64
+crhs : Port4C_QueryArithmetic.CanonE a.rhs
+cpower : Port3_FlushInstall.Canonical a.power
+crho : Port3_FlushInstall.Canonical p.rho
+history : PushTrace old (Port3_RowsInstall.toBW b) sum
+phase : Progress 0 0 (Port3_RowsInsta
+...
+te_batched_with_node (JFn_ArrayBuilder.ops (JGc_TX2_QueryDictionary.input JGp_Seeds.query)) p a node
+      lineValue b =
+    ok (out, after)
+weights : out.weights = a.weights
+inc : ↑out.next = ↑a.next + 1
+cr : Port4C_QueryArithmetic.CanonE out.rhs
+cp : Port3_FlushInstall.Canonical out.power
+ht : PushTrace old (Port3_RowsInstall.toBW after) sumOut
+hp : Progress (0 + 1) 0 (Port3_RowsInstall.toBW after)
+fields :
+  (JGc_TX2_QueryDictionary.ops JGp_Seeds.query).op11 = Port4B_Opening.opening ∧
+    (JGc_TX2_QueryDictionary.ops JGp_Seeds.query).op18 = Port5Q1_GeometryBinding.forQuery ∧
+      (JGc_TX2_QueryDictionary.ops JGp_Seeds.query).op20 = FIp_DotsAdapter.dots ∧
+        (JGc_TX2_QueryDictionary.ops JGp_Seeds.query).op17 = FIp_CircleQuery.circle ∧
+          (JGc_TX2_QueryDictionary.ops JGp_Seeds.query).op16 = SAQ_LineQuery.line ∧
+            (JGc_TX2_QueryDictionary.ops JGp_Seeds.query).widePartialEq = FIp_Equality.dictionary ∧
+              ((JGc_TX2_QueryDictionary.ops JGp_Seeds.query).op15 = fun x x_1 x_2 => ok ()) ∧
+                (JGc_TX2_QueryDictionary.ops JGp_Seeds.query).op19 = Port3_QueryStage.mark
+nodeCall✝ :
+  (do
+      let s ← AspisR1Qm31ArithmeticProbe.field.M31.mul (JGp_Rows.value 0).lineZ (JGp_Rows.value 0).lineZ
+      let d ← s.double
+      d.sub 1#u32) =
+    ok node
+sq : AspisR1Qm31ArithmeticProbe.field.M31
+hsq : AspisR1Qm31ArithmeticProbe.field.M31.mul (JGp_Rows.value 0).lineZ (JGp_Rows.value 0).lineZ = ok sq
+nodeCall :
+  (do
+      let d ← sq.double
+      d.sub 1#u32) =
+    ok node
+dbl : AspisR1Qm31ArithmeticProbe.field.M31
+hdbl : sq.double = ok dbl
+hnode : dbl.sub 1#u32 = ok node
+⊢ ok 3#usize = ok (↑(UScalar.cast UScalarTy.Usize (JGp_Rows.query 0)) % 4)#usize
+'AspisR1.JHa_Query0.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8e81bec3e0c84330a52c215024b40785.scope; invocation ID: e8364e8ef4ff4ccabf291e74fa2db194
