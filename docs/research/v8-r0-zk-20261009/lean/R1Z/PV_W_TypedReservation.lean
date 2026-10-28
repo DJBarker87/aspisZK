@@ -10,8 +10,8 @@ open PV_W_SourceSyntax (source_bind_congr)
 /-- Generated syntax; helpers retain unexecuted source-call thunks. -/
 def syncDirectory
   (directory : std.path.Path) : P (core.result.Result Unit std.io.error.Error) := do
-  let r ← perform (.fileOpen (Shared0T.Insts.CoreConvertAsRef
-    std.path.Path.Insts.CoreConvertAsRefPath) directory)
+  let r ← perform (.fileOpen (fun dictionary => letI : ExternalFuns := dictionary; (Shared0T.Insts.CoreConvertAsRef
+    std.path.Path.Insts.CoreConvertAsRefPath)) directory)
   let cf ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
     letI : ExternalFuns := ops
     core.result.Result.Insts.CoreOpsTry.branch r)
@@ -48,8 +48,7 @@ def reserveFallible
     letI : ExternalFuns := ops
     std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode options1 384#u32)
   let options2 := mode_back oo3
-  let r ← perform (.optionsOpen std.path.PathBuf.Insts.CoreConvertAsRefPath
-    options2 path)
+  let r ← perform (.optionsOpen (fun dictionary => letI : ExternalFuns := dictionary; std.path.PathBuf.Insts.CoreConvertAsRefPath) options2 path)
   match r with
   | core.result.Result.Ok file =>
     let s ← invoke "Aeneas.Std.lift" (fun ops =>

@@ -12,10 +12,10 @@ an interpreter to inspect a function thunk or recover an argument from a
 previously evaluated Result. Helpers remain explicit unresolved subprograms. -/
 inductive Primitive : Type → Type 1 where
   | helper {A : Type} (op : PV_W_SourceSyntax.Op A) : Primitive A
-  | fileOpen {P : Type} (convert : core.convert.AsRef P std.path.Path) (path : P) :
+  | fileOpen {P : Type} (convert : ExternalFuns → core.convert.AsRef P std.path.Path) (path : P) :
       Primitive (core.result.Result std.fs.File std.io.error.Error)
   | fileSync (file : std.fs.File) : Primitive (core.result.Result Unit std.io.error.Error)
-  | optionsOpen {P : Type} (convert : core.convert.AsRef P std.path.Path)
+  | optionsOpen {P : Type} (convert : ExternalFuns → core.convert.AsRef P std.path.Path)
       (options : std.fs.OpenOptions) (path : P) :
       Primitive (core.result.Result std.fs.File std.io.error.Error)
   | errorKind (error : std.io.error.Error) : Primitive core.io.error.ErrorKind
@@ -26,13 +26,13 @@ def embed {A : Type} : Primitive A → PV_W_SourceSyntax.Op A
   | .helper op => op
   | .fileOpen convert path => ⟨"std.fs.File.open",fun dictionary =>
       letI : ExternalFuns := dictionary
-      std.fs.File.open convert path⟩
+      std.fs.File.open (convert dictionary) path⟩
   | .fileSync file => ⟨"std.fs.File.sync_all",fun dictionary =>
       letI : ExternalFuns := dictionary
       std.fs.File.sync_all file⟩
   | .optionsOpen convert options path => ⟨"std.fs.OpenOptions.open",fun dictionary =>
       letI : ExternalFuns := dictionary
-      std.fs.OpenOptions.open convert options path⟩
+      std.fs.OpenOptions.open (convert dictionary) options path⟩
   | .errorKind error => ⟨"std.io.error.Error.kind",fun dictionary =>
       letI : ExternalFuns := dictionary
       std.io.error.Error.kind error⟩
@@ -77,10 +77,10 @@ theorem erase_pure {A : Type} (dictionary : ExternalFuns) (a : A) :
 OS atomicity, crash persistence, or helper adequacy is smuggled into a law. -/
 structure Algebra (W C E : Type) where
   helper : {A : Type} → PV_W_SourceSyntax.Op A → PV_W_Threading.M W C E A
-  fileOpen : {P : Type} → core.convert.AsRef P std.path.Path → P →
+  fileOpen : {P : Type} → (ExternalFuns → core.convert.AsRef P std.path.Path) → P →
     PV_W_Threading.M W C E (core.result.Result std.fs.File std.io.error.Error)
   fileSync : std.fs.File → PV_W_Threading.M W C E (core.result.Result Unit std.io.error.Error)
-  optionsOpen : {P : Type} → core.convert.AsRef P std.path.Path → std.fs.OpenOptions → P →
+  optionsOpen : {P : Type} → (ExternalFuns → core.convert.AsRef P std.path.Path) → std.fs.OpenOptions → P →
     PV_W_Threading.M W C E (core.result.Result std.fs.File std.io.error.Error)
   errorKind : std.io.error.Error → PV_W_Threading.M W C E core.io.error.ErrorKind
   writeAll : std.fs.File → Slice U8 →

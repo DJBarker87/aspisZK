@@ -46,7 +46,19 @@ for name,new,header in zip(names,short,headers):
    ls=expr.replace(inline[0],inline[1],1).splitlines();out.append(indent+prefix+ls[0]);out.extend(indent+'  '+v for v in ls[1:]);continue
   label=expr.split()[0]
   if typed and label in constructors:
-   es=expr[len(label):].strip().splitlines();out.append(indent+prefix+'perform (.'+constructors[label]+' '+es[0]);out.extend(indent+'  '+v for v in es[1:]);out[-1]+=')';continue
+   args=expr[len(label):].strip()
+   if label in ['std.fs.File.open','std.fs.OpenOptions.open']:
+    if args.startswith('('):
+     depth=0;cut=0
+     for cut,ch in enumerate(args):
+      if ch=='(':depth+=1
+      elif ch==')':
+       depth-=1
+       if depth==0:cut+=1;break
+    else:cut=len(args.split()[0])
+    convert=args[:cut];rest=args[cut:].strip()
+    args='(fun dictionary => letI : ExternalFuns := dictionary; '+convert+') '+rest
+   es=args.splitlines();out.append(indent+prefix+'perform (.'+constructors[label]+' '+es[0]);out.extend(indent+'  '+v for v in es[1:]);out[-1]+=')';continue
   out.append(indent+prefix+'invoke '+json.dumps(label)+' (fun ops =>')
   out.append(indent+'  letI : ExternalFuns := ops')
   for el in expr.splitlines():out.append(indent+'  '+el)
