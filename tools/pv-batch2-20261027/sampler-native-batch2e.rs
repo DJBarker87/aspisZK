@@ -14,11 +14,12 @@ fn main() {
   z^=z>>31;chunk.copy_from_slice(&z.to_le_bytes());
  }cases.push(b);}
  let mut changed=0;
- for b in &cases {
+ for (i,b) in cases.iter().enumerate() {
   let old=aspis_r1_cost_probe::sampler::ordinary_sample(b);
   let new=copied::ordinary_sample(b);assert_eq!(old,new,"op250 input {b:?}");
   let gold=aspis_r1_cost_probe::sampler::gamma_sample(b);
   let gnew=copied::gamma_sample(b);assert_eq!(gold,gnew,"op249 input {b:?}");
+  if i<2 {let label=if i==0 {"zero"} else {"ff"};println!("PV_B2_E_NATIVE_250_{}={:?}",label,new.to_limbs());println!("PV_B2_E_NATIVE_249_{}={:?}",label,gnew.to_limbs());}
   assert!(new.to_limbs().iter().all(|x|*x<P));if new.to_limbs()!=[0;8]{changed+=1;}
  }
  println!("FINITE_NATIVE_DIFFERENTIAL: op250 ordinary and op249 gamma; {} inputs each; {} ordinary changing-output cases; original/copy values match; not a universal theorem, effect law or fixture-byte gate",cases.len(),changed);

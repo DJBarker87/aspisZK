@@ -578,4 +578,24 @@ theorem preserved_261 (ops : ExternalFuns) : @ExternalFuns.op261 _ (selected ops
 #print axioms preserved_259
 #print axioms preserved_260
 #print axioms preserved_261
+#eval ("250_zero", match PV_B2_C_Sampler.host_sampler.ordinary_sample (Array.repeat 32#usize 0#u8) with
+  | .ok v => some [v.c0.c0.a.val,v.c0.c0.b.val,v.c0.c1.a.val,v.c0.c1.b.val,
+      v.c1.c0.a.val,v.c1.c0.b.val,v.c1.c1.a.val,v.c1.c1.b.val]
+  | .fail _ => (none : Option (List Nat))
+  | .div => none)
+#eval ("250_ff", match PV_B2_C_Sampler.host_sampler.ordinary_sample (Array.repeat 32#usize 255#u8) with
+  | .ok v => some [v.c0.c0.a.val,v.c0.c0.b.val,v.c0.c1.a.val,v.c0.c1.b.val,
+      v.c1.c0.a.val,v.c1.c0.b.val,v.c1.c1.a.val,v.c1.c1.b.val]
+  | .fail _ => (none : Option (List Nat))
+  | .div => none)
+#eval ("249_zero", match PV_B2_C_249.host_sampler.gamma_sample (Array.repeat 32#usize 0#u8) with
+  | .ok v => some [v.c0.c0.a.val,v.c0.c0.b.val,v.c0.c1.a.val,v.c0.c1.b.val,
+      v.c1.c0.a.val,v.c1.c0.b.val,v.c1.c1.a.val,v.c1.c1.b.val]
+  | .fail _ => (none : Option (List Nat))
+  | .div => none)
+#eval ("249_ff", match PV_B2_C_249.host_sampler.gamma_sample (Array.repeat 32#usize 255#u8) with
+  | .ok v => some [v.c0.c0.a.val,v.c0.c0.b.val,v.c0.c1.a.val,v.c0.c1.b.val,
+      v.c1.c0.a.val,v.c1.c0.b.val,v.c1.c1.a.val,v.c1.c1.b.val]
+  | .fail _ => (none : Option (List Nat))
+  | .div => none)
 end PV_B2_E_Install250
