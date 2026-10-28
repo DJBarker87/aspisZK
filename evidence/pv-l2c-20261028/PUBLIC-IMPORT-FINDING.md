@@ -23,3 +23,11 @@ job did not complete the requested new combined fixture/axioms audit.
 Local successful receipts and their standard-axiom outputs remain local
 results; no whole honest-native association, dependency-closed release,
 endpoint premise removal, or ledger row subtraction is credited.
+
+The static postmortem found four omitted edges: two h4 external modules and
+QM31WordResidues / QuadraticTowerOperations from QM31WordTower. No accepted
+local PV_L2C proof root gained a missing dependency in that scan. The planned
+consumer/sumcheck closure did. This narrows the finding; it does not convert
+the failed combined replay into a pass. The source resolvers now recognize
+public/private imports and all module names on each import line. Earlier
+manifests remain untouched; no corrected closure was compiled in this task.
