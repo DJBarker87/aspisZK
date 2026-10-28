@@ -22,8 +22,11 @@ for cfg in sorted(E.glob('KMX_[KRL][0-9][0-9][0-9].json')):
   assert 'sorryAx' not in t,a
  rows.append({k:r.get(k) for k in ['attempt','kind','command','exit_status','wall_seconds','peak_rss_kib','cgroup_memory_peak_bytes','swaps','source_revision','source_hashes','print_axioms']})
 assert sum(p['kind']=='kani' for p in [json.loads(x.read_text()) for x in E.glob('KMX_[KRL][0-9][0-9][0-9].json')])<=80
-patch=(E/'KMX_copy_stubs.patch').read_text();stub='\n'.join(l[1:] for l in patch.splitlines() if l.startswith('+') and not l.startswith('+++'))+'\n'
-assert stub==(E/'KMX_stubs.rs.txt').read_text()
+patch=(E/'KMX_copy_stubs.patch').read_text()
+for name,path in [('KMX_stubs.rs',E/'KMX_stubs.rs.txt'),('KMX_native.rs',E/'KMX_native.rs.txt'),('KMX_CopyMeaning.lean',E.parents[1]/'lean/KMX_CopyMeaning.lean')]:
+ part=next(part for part in patch.split('diff --git ') if part.startswith('a/'+name+' '))
+ actual='\n'.join(l[1:] for l in part.splitlines() if l.startswith('+') and not l.startswith('+++'))+'\n'
+ assert actual==path.read_text(),name
 assert all(x['body_unchanged_except_namespace'] for x in json.loads((E/'KMX_REPLAY_BODY_AUDIT.json').read_text()))
 (E/'KMX_LEDGER.json').write_text(json.dumps(rows,indent=2)+'\n')
 print('KMX packet validation PASS:',len(rows),'attempts; K004 explicitly unresolved; K006 outer-timeout after-hash absent')

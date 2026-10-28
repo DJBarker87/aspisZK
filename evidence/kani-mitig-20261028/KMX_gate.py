@@ -35,7 +35,7 @@ if harness.startswith('@statement:'):
  cmd[cmd.index('--harness')+1]=harness.split(':',1)[1]
 if harness=='@latest':
  latest=json.loads((b/'KMX_LATEST_INSTALL.json').read_text());os.environ.update(latest['env'])
- cmd=[latest['driver'],str(b/'KMX_latest_probe.rs'),'--harness','KMX_latest_','--harness-timeout','90s','--output-format','regular','--cbmc-args','--unwinding-assertions']
+ cmd=[latest['driver'],str(b/'KMX_latest_probe.rs'),'-Z','unstable-options','--harness','KMX_latest_','--harness-timeout','90s','--output-format','regular','--cbmc-args','--unwinding-assertions']
 print(json.dumps(dict(command=cmd)),flush=True)
 r=subprocess.run(cmd,env=os.environ)
 if harness in ['@native','@native-extra'] and r.returncode==0:r=subprocess.run([str(b/('KMX_native_bin' if harness=='@native' else 'KMX_native_extra_bin'))],env=os.environ)

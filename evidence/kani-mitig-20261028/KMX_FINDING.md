@@ -7,7 +7,7 @@ Summary: the one-u32 fixture exhibits a false-PASS on the pinned model. Six loop
 
 ## Configuration map
 
-Each row has independent expected-value and wrong-zero controls. Native R002 checks all 49 original shapes and the loop replacements. R003 separately checks the three additional slice-parameter/literal shapes when its terminal receipt is present. These are concrete last-element observations, not a universal characterization of all inputs or compiler lowering. Source lengths are symbolic but constrained to the listed size, except slice_constant rows which use literal full-array copies; destinations start zeroed. A short copy uses a matching destination subslice of a larger backing allocation.
+Each row has independent expected-value and wrong-zero controls. Native R002 checks all 49 original shapes and the loop replacements. R003 checks the three additional slice-parameter/literal shapes; R005 adds native value controls for 1, 255 and 256. These are concrete last-element observations, not a universal characterization of all inputs or compiler lowering. Source lengths are symbolic but constrained to the listed size, except slice_constant rows which use literal full-array copies; destinations start zeroed. A short copy uses a matching destination subslice of a larger backing allocation.
 
 | ID | Type | Bytes | API / destination | Offset / extra | Expected / wrong | Interpretation |
 |---|---|---:|---|---|---|---|
@@ -29,12 +29,12 @@ Each row has independent expected-value and wrong-zero controls. Native R002 che
 | c015 | `u64` | 32 | slice / array | 0 / 0 | FAIL K009 / PASS K009 | DISAGREES |
 | c016 | `u64` | 64 | slice / array | 0 / 0 | FAIL K009 / PASS K009 | DISAGREES |
 | c017 | `u64` | 128 | slice / array | 0 / 0 | FAIL K009 / PASS K009 | DISAGREES |
-| c018 | `[u8;32]` | 32 | slice / array | 0 / 0 | FAIL K009 / FAIL (unwind) K009 | INCONCLUSIVE (unwind) |
-| c019 | `[u8;32]` | 64 | slice / array | 0 / 0 | FAIL K009 / FAIL (unwind) K009 | INCONCLUSIVE (unwind) |
-| c020 | `[u8;32]` | 96 | slice / array | 0 / 0 | FAIL K009 / FAIL (unwind) K009 | INCONCLUSIVE (unwind) |
-| c021 | `[u8;32]` | 128 | slice / array | 0 / 0 | FAIL K009 / FAIL (unwind) K009 | INCONCLUSIVE (unwind) |
-| c022 | `[u8;32]` | 256 | slice / array | 0 / 0 | FAIL K009 / FAIL (unwind) K009 | INCONCLUSIVE (unwind) |
-| c023 | `[u8;32]` | 512 | slice / array | 0 / 0 | TIMEOUT K009 / TIMEOUT K009 | TIMEOUT |
+| c018 | `[u8;32]` | 32 | slice / array | 0 / 0 | FAIL K030 / PASS K030 | DISAGREES |
+| c019 | `[u8;32]` | 64 | slice / array | 0 / 0 | FAIL K031 / PASS K031 | DISAGREES |
+| c020 | `[u8;32]` | 96 | slice / array | 0 / 0 | FAIL K032 / PASS K032 | DISAGREES |
+| c021 | `[u8;32]` | 128 | slice / array | 0 / 0 | FAIL K033 / PASS K033 | DISAGREES |
+| c022 | `[u8;32]` | 256 | slice / array | 0 / 0 | FAIL K034 / PASS K034 | DISAGREES |
+| c023 | `[u8;32]` | 512 | slice / array | 0 / 0 | TIMEOUT K035 / TIMEOUT K035 | TIMEOUT |
 | c024 | `KMX_Pair` | 8 | slice / array | 0 / 0 | FAIL K009 / PASS K009 | DISAGREES |
 | c025 | `KMX_Pair` | 16 | slice / array | 0 / 0 | FAIL K009 / PASS K009 | DISAGREES |
 | c026 | `KMX_Pair` | 24 | slice / array | 0 / 0 | FAIL K009 / PASS K009 | DISAGREES |
@@ -60,11 +60,14 @@ Each row has independent expected-value and wrong-zero controls. Native R002 che
 | c046 | `u32` | 64 | slice / array | 1 / 1 | FAIL K006 / PASS K006 | DISAGREES |
 | c047 | `u32` | 64 | slice / array | 3 / 5 | FAIL K006 / PASS K006 | DISAGREES |
 | c048 | `u32` | 64 | slice / vec | 0 / 0 | PASS K006 / FAIL K006 | agrees on fixture |
-| c049 | `u32` | 64 | slice_fn / slice | 0 / 0 | NOT RUN / NOT RUN | NOT RUN |
-| c050 | `u32` | 4 | slice_constant / array | 0 / 0 | NOT RUN / NOT RUN | NOT RUN |
-| c051 | `u32` | 64 | slice_constant / array | 0 / 0 | NOT RUN / NOT RUN | NOT RUN |
+| c049 | `u32` | 64 | slice_fn / slice | 0 / 0 | FAIL K036 / PASS K036 | DISAGREES |
+| c050 | `u32` | 4 | slice_constant / array | 0 / 0 | PASS K037 / FAIL K037 | agrees on fixture |
+| c051 | `u32` | 64 | slice_constant / array | 0 / 0 | PASS K038 / FAIL K038 | agrees on fixture |
+| c052 | `u32` | 4 | slice_value_1 / array | 0 / 0 | FAIL K039 / PASS K039 | DISAGREES |
+| c053 | `u32` | 4 | slice_value_255 / array | 0 / 0 | FAIL K039 / PASS K039 | DISAGREES |
+| c054 | `u32` | 4 | slice_value_256 / array | 0 / 0 | FAIL K039 / PASS K039 | DISAGREES |
 
-The observed disagreement includes one u32 (4 bytes), so it is not restricted to the original 64-byte fixture. Flat byte copies and the tested Vec variants must not be generalized to untested shapes. For nested arrays, the original bounds counted outer elements and underbounded byte-level/equality loops; such failures do not establish a false-PASS. Larger typed-copy timeouts remain inconclusive. Internal model root cause remains open.
+The observed disagreement includes one u32 (4 bytes), so it is not restricted to the original 64-byte fixture. Flat byte copies and the tested Vec variants must not be generalized to untested shapes. For nested arrays, the original bounds counted outer elements and underbounded equality loops. K030–K035 change those source bounds to 35, covering the 32-byte equality loop, and retain the original failed drafts. Only completed adequately bounded pairs receive a classification. Larger typed-copy timeouts remain inconclusive. Internal model root cause remains open.
 
 ## Validated replacements
 
@@ -137,14 +140,17 @@ Only rows with a reached copy require mitigation replay. Other audit rows are re
 
 ## Newest release comparison
 
-Installation and reproducer pending. Latest published release lookup: [Kani 0.68.0](https://github.com/model-checking/kani/releases/tag/kani-0.68.0). No upgrade adopted.
+[Kani 0.68.0](https://github.com/model-checking/kani/releases/tag/kani-0.68.0), the latest published release at the lookup, was installed in a private scratch Rust toolchain (R004). CBMC is 6.11.0. The published Linux bundle SHA-256 is `32e2b484d73ede0bbf64a2cf0879c4259422497d8aec4ee67d448de9ae7843d3`; installer verification and version output are retained in `KMX_LATEST_INSTALL.json` and R004.
+
+K029 runs the smallest one-u32 fixture without stubs: expected-512 **FAIL**, wrong-zero **PASS** (0/44 failing checks for the false assertion). The discrepancy therefore persists on this configuration in the newest release. K028 was an own-wrapper option error (omitted `-Z unstable-options`) before verification, corrected for K029. The dependency-free standalone source uses the private driver; the frozen scratch workspace graph is validated offline before invocation and its lock hash checked after. No release-function credit or toolchain upgrade is adopted.
+
 
 ## Execution and limitations
 
 K004 was our omitted-input launcher error: `KMX_native.rs` was uploaded after admission KMX_UPLOAD4. K005 continued successfully; K004 remains a failed pre-Kani attempt, not a verification result. K001/K003/K007 were failed setup drafts. K010 failed on missing harness imports/helpers. K011 exposed additional unused historical contract attributes and incomplete auxiliary stub snapshots; scratch overlays were corrected without changing any selected property. L001/L002 were failed Lean drafts. Receipts, source snapshots, graph validation and exact commands are retained per attempt.
 
-Conservative configured attempts: Kani 27/80; Lean 3/30; Rust 2/15. Each admitted build uses MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, one scope at a time. Cargo graph is validated against the copied frozen lock offline before each gate; before/after hashes are recorded. Optimized Rust profile. Persistent cache retained; no keys touched; no push.
+Conservative configured attempts: Kani 39/80; Lean 3/30; Rust 5/15. Each admitted build uses MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, one scope at a time. Cargo graph is validated against the copied frozen lock offline before each gate; before/after hashes are recorded. Optimized Rust profile. Persistent cache retained; no keys touched; no push.
 
 **Confirmed earlier properties:** LPa_K004, LPl_K015, LPn_K010, LPe_K015, LPe_K018. No complete release-function confirmation is claimed beyond the selected passing properties.
 
-The K006 outer timeout ended before its in-process after-lock check; this missing contemporaneous check is retained as a limitation. Subsequent graph checks found the pinned lock unchanged. No unchanged timeout was resubmitted. Detailed target, exit status, wall time, peak RSS/cgroup memory, swap, source revision/hashes and axioms are in `KMX_LEDGER.json` and the individual receipts.
+The K006 outer timeout ended before its in-process after-lock check; this missing contemporaneous check is retained as a limitation. Subsequent graph checks found the pinned lock unchanged. No unchanged timeout was resubmitted. The nested-array retry changes a demonstrably inadequate source bound; no memory cap or timeout was raised. Detailed target, exit status, wall time, peak RSS/cgroup memory, swap, source revision/hashes and axioms are in `KMX_LEDGER.json` and the individual receipts.
