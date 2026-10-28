@@ -113,3 +113,12 @@ started. resume-check.py44628 is active and waits full180s, retries SAME ID
 Budget66charged (38accepted,28rejected),34remaining. Next unlaunched ID29 after
 28 is actually compiled; do not charge a reservation refusal. Current candidates
 have the map_success tactic added where needed; no unchanged rerun.
+
+Update: LateAppendFrame31 passed44628 after the symbolic map_success repair.
+RecordOutputLift31 passed44629. Current single driver44630 LateAppendCarry31;
+collect before any next compile. Budget68charged (40accepted,28rejected),32left
+before30. Then32 SemanticAppendRoot31,33 SemanticAppendCarry31,37
+OutputPairMeaning31,38 RecipientLift31,39 SemanticRecipient31 (adjust IDs only
+for actual failed candidates/new source). All remaining candidate modules listed
+above are already committed. Compiler/root/frame results all standard axioms,
+zero swap. No unconditional honesty/owner-coverage/V038/V045 claim yet.
