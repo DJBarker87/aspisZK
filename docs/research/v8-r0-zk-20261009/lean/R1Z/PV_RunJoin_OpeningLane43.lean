@@ -6,9 +6,9 @@ open Aeneas Aeneas.Std Result ProverRwFull
 variable [ExternalTypes]
 abbrev W := aspis_core.field.wide_exact.WideExact
 
-def row [ExternalFuns] (ops : ExternalFuns) (word : host_commitment.Word)
+def row (ops : ExternalFuns) (word : host_commitment.Word)
     (u : aspis_core.r0.domain.FibreIndex) : Result (Array W 4#usize) := do
-  let i ← aspis_core.r0.domain.FibreIndex.get u
+  let i ← @aspis_core.r0.domain.FibreIndex.get _ (ProverRwP6BodyCandidate.selected ops) u
   let at1 ← Aeneas.Std.lift (Std.Usize.wrapping_mul 4#usize i)
   let we ← PV_RunJoin_OpeningWord43.read ops word at1
   let i1 ← Aeneas.Std.lift (Std.Usize.wrapping_add at1 1#usize)
@@ -24,7 +24,7 @@ The FibreIndex operation and every Result failure remain in the execution. -/
 theorem complete (ops : ExternalFuns) (word : host_commitment.Word)
     (u : aspis_core.r0.domain.FibreIndex) :
     @host_commitment.opening_lane_values _ (ProverRwP6BodyCandidate.selected ops) word u=
-      @row _ (ProverRwP6BodyCandidate.selected ops) ops word u := by
+      row ops word u := by
   have hv : @host_commitment.Word.value _ (ProverRwP6BodyCandidate.selected ops) word=
       PV_RunJoin_OpeningWord43.read ops word := by
     funext i

@@ -16,7 +16,7 @@ def step (ops : ExternalFuns) (c : host_commitment.Commitment) (u : aspis_core.r
   let w ←
     alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
       host_commitment.Word) c.words j
-  let row ← @PV_RunJoin_OpeningLane43.row _ (ProverRwP6BodyCandidate.selected ops) ops w u
+  let row ← PV_RunJoin_OpeningLane43.row ops w u
   let we ← Array.index_usize row 0#usize
   let (a, index_mut_back) ← Array.index_mut_usize values 0#usize
   let a1 ← Array.update a lane we
