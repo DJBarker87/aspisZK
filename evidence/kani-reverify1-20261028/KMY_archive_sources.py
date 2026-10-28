@@ -14,7 +14,7 @@ for p in sorted(b.glob('KMY_*/receipt.json')):
   unique[sha]=data.decode();rows[name]=sha
  attempts[c['attempt']]=rows
 cache=Path('/home/dombarker/project-offloads/codex-cx-kmy-cache-20261028')
-objects={p.name:dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size=p.stat().st_size) for p in cache.glob('*.olean')}
+objects={p.name:dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size=p.stat().st_size) for p in cache.glob('*.olean')}
 print(json.dumps(dict(unique=unique,attempts=attempts,objects=objects)))
 '''
 r=h.remote_py(code);assert r.returncode==0,r.stderr

@@ -58,4 +58,8 @@ Every attempt has its exact command, source revision/hashes, exit status, wall t
 
 Every admitted scope uses MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, one scope at a time, after reservation JSON allowed:true AND exit0. Maximum recorded RSS:6473584 KiB; all recorded swaps0. Frozen dependency graph validation and before/after lock hashes are retained per gate. No shared launcher repair, release-source changes, wallet/key changes or push. Persistent cache `/home/dombarker/project-offloads/codex-cx-kmy-cache-20261028` is retained.
 
-Final Lean manifest/axioms audit and cleanup receipt are recorded below after completion.
+Final manifest: **KMY_L010 / KMY_Final.lean PASS**, exit0, wall 0.769491s, peak RSS 768460 KiB, swaps0, source revision `926033a26f4120db398c60dbd9a0986617a907e4`, source SHA-256 `07dec3f73d3aa54afdf104d2ccc9710ef65c42fdb23a8e58b18b1a0dc496c13f`. Thirteen axioms audit lines contain only accepted axioms (or none). Selected cached objects were hash-verified before the single final import/bridge replay. No unchanged final replay was run.
+
+Final budgets: **Kani60/60 conservative units, Lean10/60 compiles, Rust0/5 runs**. The 56 Kani invocation receipts comprise37 successful invocations (K004 excluded from mitigation credit),12 timeouts,1 initializer-unwind failure and6 setup/compiler failures. K051 adds four successful selected harnesses to the conservative budget. All14 semantic/z stages are green; K060/K061 are counted redundancies, not additional proof strength.
+
+[KMY_CLEANUP.json](KMY_CLEANUP.json) confirms no live own process and eight unchanged retained cache objects. The driver had already removed generated object scratch (zero remained for explicit removal); no owned external-solver temp was identified. Shared/unattributed solver files were retained. The source archive contains32 unique textual snapshots for66 attempts, with no binaries or .olean files committed.
