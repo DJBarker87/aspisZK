@@ -52,7 +52,8 @@ theorem interval_split {α : Type} (step : α → Nat → Result α)
     fold step (List.range' start (left+right)) state = (do
       let next ← fold step (List.range' start left) state
       fold step (List.range' (start+left) right) next) := by
-  rw [List.range'_append,append]
+  have h := (List.range'_append start left right 1).symm
+  simpa only [Nat.one_mul] using congrArg (fun xs => fold step xs state) h |>.trans (append step (List.range' start left) (List.range' (start+left) right) state)
 
 /-- Moving an immutable copy ahead of a Result computation preserves all tags. -/
 theorem pure_copy {α β γ : Type} (source : α) (copy : α → β)
