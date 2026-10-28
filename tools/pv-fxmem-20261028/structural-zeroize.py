@@ -16,7 +16,7 @@ checks=[]
 for anchor,want in expected:
  actual=body(s,anchor);assert tokens(actual)==tokens(want),(anchor,actual)
  checks.append(dict(anchor=anchor,body=actual,tokens_equal=True,line=s[:s.index(anchor)].count('\n')+1))
-assert 'impl_zeroize_with_default!(\n    PhantomPinned, (), bool, char, u8, i8, u16, i16, u32, i32, u64, i64, usize, isize, f32, f64\n);' in s or re.search(r'impl_zeroize_with_default!\([\s\S]*?\bu8\b[\s\S]*?\);',s)
+assert tokens(body(s,'impl_zeroize_with_default! {'))==tokens('{PhantomPinned, (), bool, char, f32, f64, i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize}')
 j=dict(evidence_class='structural (K-1 substitute)',path=p,sha256=hashlib.sha256(s.encode()).hexdigest(),checks=checks,
  establishes='At source level every byte of [u8;N] is visited exactly once by IterMut; blanket u8 default is zero; write_volatile overwrites target before compiler_fence(SeqCst). The reference elements recursion retains every returned element, with no discarded restoration continuation. Volatile writes are observable effects in the Rust primitive interpretation and cannot be erased from that interpretation.',
  excludes='No hardware memory fence is asserted. A compiler fence controls compiler ordering. No inspection of emitted deployed machine instructions, registers, spill slots, extra copies, pages after free, persistence, concurrent reads, DMA, or side-channel observations. L3 binary audit remains separate and open.',

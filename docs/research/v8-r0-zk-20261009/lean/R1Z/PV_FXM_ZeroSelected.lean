@@ -35,12 +35,14 @@ def byteZero : zeroize.Zeroize U8 := ⟨scalar byteDefault⟩
 
 theorem byte_value (x : U8) : scalar byteDefault x = .ok 0#u8 := rfl
 
+theorem byte_step (x : U8) : byteZero.zeroize x = .ok 0#u8 := rfl
+
 theorem elements_value (xs : List U8) :
     elements byteZero xs = .ok ⟨List.replicate xs.length 0#u8,by simp⟩ := by
   induction xs with
   | nil => rfl
   | cons x xs ih =>
-    simp only [elements,byteZero,byte_value,ih,bind_tc_ok,List.length_cons,
+    simp only [elements,byte_step,ih,bind_tc_ok,List.length_cons,
       List.replicate_succ]
 
 theorem array_value {N : Usize} (a : Array U8 N) :
@@ -71,6 +73,17 @@ theorem execution {F A : Type} (ops : ExternalFuns) {N : Usize}
   simp only [bind_tc_ok]
   exact PV_FXM_ZeroWorld.caller_composition address N.val w (caller (Array.repeat N 0#u8))
 
+theorem scalar_execution {F A : Type} (ops : ExternalFuns) (x : U8)
+    (address : Nat) (w : PV_FXM_ZeroWorld.World F)
+    (caller : U8 → PV_FXM_ZeroWorld.World F → Result A) :
+    (do let x' ← (selected ops).op123 byteDefault x
+        caller x' (PV_FXM_ZeroWorld.byte address w)) =
+      caller 0#u8 (PV_FXM_ZeroWorld.byte address w) := by
+  rw [scalar_installed]
+  rfl
+
+#print axioms byte_step
+#print axioms scalar_execution
 #print axioms byte_value
 #print axioms elements_value
 #print axioms array_value
