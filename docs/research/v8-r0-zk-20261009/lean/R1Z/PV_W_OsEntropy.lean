@@ -43,7 +43,7 @@ theorem draw_rejected (update : Update E Fs Allocator Extra)
 
 theorem draw_valid (update : Update E Fs Allocator Extra)
     (tag : Fin 128 → PV_RunJoin_CallerWorld.RawReply E → C) (i : Fin 128) :
-    Valid (Step update tag) (draw update tag i) := by
+    Valid (Step (File := File) (Reply := Reply) (Time := Time) (Worker := Worker) update tag) (draw update tag i) := by
   intro w
   by_cases at_cursor : w.os.entropyUsed = i.val
   · rw [draw_at update tag i w at_cursor]
