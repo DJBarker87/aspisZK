@@ -46,23 +46,35 @@ theorem absorption_lane_total (lane : Usize)
     (low fixed chunk_two chunk_eight nodes opened : aspis_core.field.QM31) :
     Success (reference_terminal.absorption_lane227 lane low fixed chunk_two chunk_eight nodes opened) := by
   unfold reference_terminal.absorption_lane227
-  apply bind
-  · split
-    · exact ok _
-    · split
+  by_cases h2 : lane<2#usize
+  · simp only [h2,↓reduceIte,bind_tc_ok]
+    apply bind
+    · apply qmul
+    intro q
+    apply qmul
+  · by_cases hr : lane<aspis_statement.poseidon2.RATE
+    · simp only [h2,hr,↓reduceIte]
+      apply bind
       · apply qadd
-      · apply bind
-        · apply qadd
-        intro q
-        apply bind
-        · apply qadd
-        intro q1
-        apply qadd
-  intro blocks
-  apply bind
-  · apply qmul
-  intro q
-  apply qmul
+      intro blocks
+      apply bind
+      · apply qmul
+      intro q
+      apply qmul
+    · simp only [h2,hr,↓reduceIte]
+      apply bind
+      · apply qadd
+      intro q
+      apply bind
+      · apply qadd
+      intro q1
+      apply bind
+      · apply qadd
+      intro blocks
+      apply bind
+      · apply qmul
+      intro q2
+      apply qmul
 
 #print axioms lift_m31_total
 #print axioms initial_lane_total
