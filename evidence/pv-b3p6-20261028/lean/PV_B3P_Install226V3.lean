@@ -18,8 +18,7 @@ def transport : Result (core.result.Result Packet E) →
 @[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
     @ExternalFuns (Types base) :=
   letI : ExternalTypes := Types base
-  {ops with op226 := fun p => transport
-    (PV_B3P_226V3.reference226.public_bytes (PV_B3P_PublicCarrier226V3.toSource base p))}
+  {ops with op226 := fun p => transport (PV_B3P_226V3.reference226.public_bytes (PV_B3P_PublicCarrier226V3.toSource base p))}
 
 theorem source (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     (p : @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (Types base)) :
