@@ -12,6 +12,7 @@ theorem low (bytes : List U8) (n : Nat) (len : bytes.length=32*n) :
     have := i.isLt
     omega
   simp only [PV_RunJoin_SemanticCompact40.low,List.length_flatten,List.map_map,List.map_ofFn]
+  change (List.ofFn (fun i : Fin n => ((bytes.drop (32*i.val)).take 16).length)).sum=16*n
   simp only [cell,List.ofFn_const,List.sum_replicate,smul_eq_mul]
   omega
 
