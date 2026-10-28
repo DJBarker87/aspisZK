@@ -15,8 +15,8 @@ fn check(data:&[u8]){
  if !b.is_empty(){assert_eq!(b.as_ptr().cast::<u8>(),data.as_ptr());}
 }
 fn main(){
- assert_eq!(std::mem::size_of::<block_buffer::Block<block_buffer::generic_array::typenum::U64>>(),64);
- assert_eq!(std::mem::align_of::<block_buffer::Block<block_buffer::generic_array::typenum::U64>>(),1);
+ assert_eq!(std::mem::size_of::<generic_array::GenericArray<u8,typenum::U64>>(),64);
+ assert_eq!(std::mem::align_of::<generic_array::GenericArray<u8,typenum::U64>>(),1);
  let mut cases=0u64;
  for seed in 0..8usize{
  let data:Vec<u8>=(0..4097).map(|i|((i*17+seed*31+(i>>8))%256)as u8).collect();
