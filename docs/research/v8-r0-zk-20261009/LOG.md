@@ -13112,3 +13112,19 @@ on research, the candidate and the live branches, and lists for each row whether
 stands by an independent non-Kani route. Re-verification waits for Stream A's validated element-wise
 copy stub (job KMX_), so that both streams use one fix. Rows removed outright: 0. Privacy target not
 yet established.
+
+## D347 (Stream B) 2026-10-28 02:58 UTC: Kani exposure scan, first pass: five candidate links suspended; 162 audits unresolved; kscan2 launched
+
+pv-kscan (10 diagnostic Kani runs; no Lean; no source change) indexed 264 Kani PASS observations that
+Stream B cites and applied Stream A's KDX method. Suspended under ruling (r), because the asserted
+property depends on a reached copy builtin and no independent route keeps the closure: V178, V179,
+V182, V195 and V233 (V233's kani-split64-02 gate). V184 stands on its independent structural stdlib
+proof; its bounded Kani gate is suspended as evidence. The every-PASS audit is incomplete: 162 PASS
+observations still lack a reached-call inventory. Evidence merged into research
+(evidence/pv-kscan-20261028/, da76b09a0d).
+
+Ledger effect, pending recount 7: V233 drops from CLOSED-ON-CANDIDATE back to suspended; V178 (D285),
+V179, V182 and V195 likewise lose credit until re-verified. kscan2 completes the audit by Kani codegen
+and goto-program inspection only (no verification runs; same pins and harness sources; up to 120
+capped scopes) and produces the final suspension list. Re-verification of suspended links waits for
+Stream A's validated copy stub. Rows removed outright: 0. Privacy target not yet established.
