@@ -64,4 +64,8 @@ theorem complete (ops : ExternalFuns) (opening : aspis_core.r0.wire.FibreOpening
 #print axioms complete
 end R1Z.PV_RunJoin_OpeningValues41
 '''
-(root/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_OpeningValues41.lean').write_text(s)
+target=root/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_OpeningValues41.lean'
+if '--check' in __import__('sys').argv:
+ assert target.read_text()==s, 'generated opening source changed'
+ print('OpeningValues41 generator --check: source matches')
+else:target.write_text(s)
