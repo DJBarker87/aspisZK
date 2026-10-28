@@ -1,0 +1,16 @@
+pub fn checkpoint<H:Digest32>(p:&Prepared,a:&Accumulator,proof:&[u8],public:&[u8],hash:H)->Vec<u8> {
+    let mut out=Vec::with_capacity(checkpoint_size(p.variant));
+    out.extend_from_slice(b"R1P2CKP2");out.extend_from_slice(&[p.variant.tag(),a.next as u8,1,0,0,0,0,0]);
+    out.extend_from_slice(&hash.digest(&[proof]));out.extend_from_slice(&hash.digest(&[public]));out.extend_from_slice(&p.state);
+    for root in &p.roots {out.extend_from_slice(root);}
+    for x in [p.gamma,p.kappa,p.alpha[0],p.alpha[1]] {put(&mut out,x);}
+    put_k(&mut out,p.rho);
+    for q in p.queries {out.extend_from_slice(&q.to_le_bytes());}
+    for x in p.semantic_alpha {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}
+    for z in p.z {for x in [z.x,z.y] {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}}
+    for x in [p.claim,a.rhs] {put(&mut out,x);}
+    put_k(&mut out,a.power);
+    for &x in &a.weights {put_k(&mut out,x);}
+    let sum=hash.digest(&[b"UNPROVED:R1:checkpoint",&out]);out.extend_from_slice(&sum);
+    assert_eq!(out.len(),checkpoint_size(p.variant));out
+}

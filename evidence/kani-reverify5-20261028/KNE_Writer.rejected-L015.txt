@@ -1,0 +1,110 @@
+import KNE_Schedule
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.KNE_Writer
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open CheckpointBytes5Writer CheckpointBytes5Effect CheckpointBytesBody CheckpointBytesDigest
+open KNE_Model KNE_Schedule KNE_Caller
+open AspisR1Stage2.WireTx2 (singletonParts checksumParts)
+
+-- Source-shaped sequential materialization; each list cell is one append.
+def appendAll : List (String × Bytes) → Bytes → Bytes
+  | [], before => before
+  | (_,value)::rest, before => appendAll rest (before ++ value)
+
+theorem appendAll_eq (es : List (String × Bytes)) (before : Bytes) :
+    appendAll es before = before ++ payload es := by
+  induction es generalizing before with
+  | nil => simp [appendAll,payload]
+  | cons e es ih =>
+    rw [appendAll,ih]
+    simp [payload,List.append_assoc]
+
+variable (p : Prepared) (a : Accumulator) (domain : WriterDomain p a)
+
+def bodyList (hp hu : Digest) : List U8 :=
+  (appendAll (bodyEmissions (fields p a domain.size domain.queriesBound)
+    (stateOf hp) (stateOf hu)) []).map u8
+
+theorem bodyList_eq (hp hu : Digest) :
+    bodyList p a domain hp hu = (LPm_CheckpointProgram.materialize p a
+      domain.size domain.queriesBound domain.canonical domain.next hp hu).val := by
+  simp only [bodyList,appendAll_eq,List.nil_append,
+    native_body_decomposition p a domain hp hu,LPm_CheckpointProgram.materialize]
+
+def materialize (hp hu : Digest) : Slice U8 :=
+  ⟨bodyList p a domain hp hu,by
+    rw [bodyList_eq]
+    exact (LPm_CheckpointProgram.materialize p a domain.size domain.queriesBound
+      domain.canonical domain.next hp hu).property⟩
+
+theorem materialize_eq (hp hu : Digest) : materialize p a domain hp hu =
+    LPm_CheckpointProgram.materialize p a domain.size domain.queriesBound
+      domain.canonical domain.next hp hu := by
+  apply Subtype.ext
+  exact bodyList_eq p a domain hp hu
+
+def returnList (hp hu hc : Digest) : List U8 :=
+  (appendAll (writerEmissions (fields p a domain.size domain.queriesBound)
+    (stateOf hp) (stateOf hu) (stateOf hc)) []).map u8
+
+theorem returnList_eq (hp hu hc : Digest) : returnList p a domain hp hu hc =
+    (LPm_CheckpointProgram.returned p a domain.size domain.queriesBound
+      domain.canonical domain.next hp hu hc).val := by
+  apply MultiproofConeByteEquality.bytes_injective
+  simp only [returnList,appendAll_eq,List.nil_append,bytes_roundtrip]
+  exact returned_decomposition p a domain hp hu hc
+
+def returned (hp hu hc : Digest) : Slice U8 :=
+  ⟨returnList p a domain hp hu hc,by
+    rw [returnList_eq]
+    exact (LPm_CheckpointProgram.returned p a domain.size domain.queriesBound
+      domain.canonical domain.next hp hu hc).property⟩
+
+theorem returned_eq (hp hu hc : Digest) : returned p a domain hp hu hc =
+    LPm_CheckpointProgram.returned p a domain.size domain.queriesBound
+      domain.canonical domain.next hp hu hc := by
+  apply Subtype.ext
+  exact returnList_eq p a domain hp hu hc
+
+-- The115+1 writes are the operational refinement of the adopted byte writer.
+-- Equality is for every oracle reply, not an assumed successful output equality.
+def sourceProgram (proof public1 : Slice U8) : Code (Slice U8) := do
+  let hp ← read (singletonParts proof)
+  let hu ← read (singletonParts public1)
+  let body := materialize p a domain hp hu
+  let hc ← read (checksumParts body)
+  pure ⟨body.val ++ hc.val,by
+    rw [materialize_eq]
+    exact (LPm_CheckpointProgram.returned p a domain.size domain.queriesBound
+      domain.canonical domain.next hp hu hc).property⟩
+
+theorem program_eq (proof public1 : Slice U8) : sourceProgram p a domain proof public1 =
+    LPm_CheckpointProgram.native p a domain.size domain.queriesBound domain.canonical
+      domain.next proof public1 := by
+  simp only [sourceProgram,LPm_CheckpointProgram.native,materialize_eq,
+    LPm_CheckpointProgram.returned]
+
+theorem cohort_program_eq (proof public1 : Slice U8) :
+    sourceProgram p a domain proof public1 = writer p a proof public1 := by
+  rw [program_eq,LPm_CheckpointProgram.program_eq]
+
+theorem emission_count (hp hu hc : Digest) :
+    (writerEmissions (fields p a domain.size domain.queriesBound)
+      (stateOf hp) (stateOf hu) (stateOf hc)).length = 116 := by
+  have h := congrArg List.length (writer_shape (fields p a domain.size domain.queriesBound)
+    (stateOf hp) (stateOf hu) (stateOf hc))
+  have count : KND_Schedule.emissions.length = 116 := by decide
+  simpa only [shape,List.length_map,count] using h
+
+#print axioms emission_count
+#print axioms appendAll_eq
+#print axioms bodyList_eq
+#print axioms materialize_eq
+#print axioms returnList_eq
+#print axioms returned_eq
+#print axioms program_eq
+#print axioms cohort_program_eq
+end AspisR1.KNE_Writer
+end
