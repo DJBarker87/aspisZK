@@ -1,0 +1,139 @@
+'AspisR1.JHk_Line00.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHk_QueryPower.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHk_WorldFirst.accounts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHk_WorldFirst.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHk_QueryPower.source : ∀ (p : AspisR1CurrentCaller.verifier.Prepared)
+  (input scratch : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  (initial out : AspisR1CurrentCaller.verifier.Accumulator)
+  (pending after : AspisR1CurrentCaller.verifier.BatchedWeights) (g : AspisR1CurrentCaller.verifier.QueryGeometry),
+  AspisR1CurrentCaller.verifier.candidate.prepare AspisR1.JGr_Geometry.installed AspisR1.JGr_Geometry.digest
+        (AspisR1CurrentCaller.FirstComposition.toCurrentPublic AspisR1.JFs_PublicSerialization.value)
+        AspisR1.JFx_NativeBytes.proof () none input =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, scratch) →
+    p.queries = AspisR1.JFq_Queries.value →
+      AspisR1.JGr_Geometry.installed.op20 AspisR1CurrentCaller.transport.Variant.S2 =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok initial) →
+        AspisR1.JGr_Geometry.installed.op18 initial.weights.deref =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pending) →
+          AspisR1.JGr_Geometry.installed.op19 p.queries 0#usize 10#usize =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok g) →
+            AspisR1.JGr_Geometry.installed.op7 AspisR1.JFx_NativeBytes.proof p initial scratch none g pending 10#usize =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, after)) →
+              AspisR1.Tx1Q_Carriers.k out.power = AspisR1.JFq_Power.scalar :=
+fun p input scratch initial out pending after g prepare queries init pend geo query =>
+  have power :=
+    AspisR1.JHk_CurrentPowerFormula.source p input scratch initial out pending after g prepare queries init pend geo
+      query;
+  have rho :=
+    AspisR1.JHa_CurrentRho.source (AspisR1.JGp_Allocation.base (AspisR1.Op5T_Concrete.current AspisR1.JGp_Seeds.base))
+      (AspisR1.SAQ_Decoder.install (AspisR1.JFr_TX2_DotsBinding.ops AspisR1.JGp_Seeds.query))
+      (AspisR1.SAQ_Constructor.install () AspisR1.JGp_Seeds.geometry) AspisR1.JGn_TerminalIdentified.shaDictionary () p
+      input scratch prepare;
+  have initialPower := (AspisR1.JGw_InitialFacts.source initial init).right.right.left;
+  have one := rfl;
+  let ⟨out1, h✝⟩ := AspisR1.JHc_QueryPost.source p input scratch initial pending g prepare queries init pend geo
+  let ⟨after1, h✝¹⟩ := h✝
+  let ⟨flushed, h✝²⟩ := h✝¹
+  let ⟨run, right✝⟩ := h✝²
+  let ⟨flush, right✝¹⟩ := right✝
+  let ⟨next, right✝²⟩ := right✝¹
+  let ⟨length, right✝³⟩ := right✝²
+  let ⟨variant, right✝⁴⟩ := right✝³
+  let ⟨rhs, canon⟩ := right✝⁴
+  have same :=
+    congrArg Prod.fst (Aeneas.Std.core.result.Result.Ok.inj (Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm run) query)));
+  id
+    (fun same =>
+      AspisR1.JHk_KUnique.source (AspisR1.Tx1Q_Carriers.k out.power) AspisR1.JFq_Power.scalar
+        (Eq.mp
+          (congrArg (fun _a => AspisR1.Port3_FlushInstall.Canonical (AspisR1.Tx1Q_Carriers.accumulator _a).power) same)
+          canon)
+        AspisR1.JFn_AccumulatorCanonical.power
+        (Eq.mp
+          (congrArg (fun _a => AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.accumulator out).power = _a)
+            AspisR1.JHk_Power10.retained)
+          (Eq.mp
+            (congrArg
+              (fun _a =>
+                AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.accumulator out).power =
+                  AspisR1.CheckpointBytes5Output.ofK _a ^ 10)
+              (have this := rho.left;
+              this))
+            (Eq.mp
+              (congrArg
+                (fun _a => AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.accumulator out).power = _a)
+                (one_mul (AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.prepared p).rho ^ 10)))
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.accumulator out).power =
+                      _a * AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.prepared p).rho ^ 10)
+                  one)
+                (Eq.mp
+                  (congrArg
+                    (fun _a =>
+                      AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.accumulator out).power =
+                        AspisR1.CheckpointBytes5Output.ofK _a *
+                          AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.prepared p).rho ^ 10)
+                    initialPower)
+                  power))))))
+    same
+theorem AspisR1.JHk_WorldFirst.source : ∀ (base : AdapterRw.Ops) (stage : VTop_Stages.Ops)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  (↑saved).length = 1768 →
+    AdapterRw.first_decoded (AspisR1.JHe_Natives.sdk base stage)
+          (AspisR1.S6N_Getters.publicValue AspisR1.JGx_RealStatement.value) AspisR1.JFx_NativeBytes.publicInput
+          AspisR1.JFx_NativeBytes.proof 10#usize =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+      AspisR1.S2W_D189Wrappers.first (AspisR1.JHe_Natives.first base stage) AspisR1.CPH_FixtureData.copy
+          AspisR1.CPH_FixtureData.allocator AspisR1.JHg_World.e1 AspisR1.CPH_Program.verifier AspisR1.JHe_Natives.data1
+          () =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, AspisR1.JHk_WorldFirst.post saved, ())) :=
+fun base stage saved size child =>
+  have native :=
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            AspisR1.JHe_Natives.first base stage AspisR1.CPH_Program.verifier _a AspisR1.JHe_Natives.data1 =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved))
+          AspisR1.JHk_WorldFirst.accounts))
+      (AspisR1.JHe_SdkParent.source base stage saved size child);
+  AspisR1.CPH_WrapperConstructor.first_success (AspisR1.JHe_Natives.first base stage) AspisR1.CPH_FixtureData.allocator
+    AspisR1.JHg_World.e1 AspisR1.CPH_Program.verifier AspisR1.JHe_Natives.data1 () () () saved
+    (AspisR1.CPH_FixtureReserve.reserve_ok
+      (AspisR1.S2W_D189Wrappers.admittedSizes AspisR1.JHg_World.e1 3 AspisR1.S2W_D189Wrappers.firstSizes))
+    native rfl
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => (List.replicate 1768 0#u8).length = _a.length)
+              (AspisR1.S2W_ReturnedCheckpoint.nativeBytes.eq_1 saved)))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => (List.replicate 1768 0#u8).length = _a)
+                (List.length_map AspisR1.S2W_ReturnedCheckpoint.nativeByte)))
+            (Eq.mpr (id (congrArg (fun _a => (List.replicate 1768 0#u8).length = _a) size))
+              (Eq.mpr (id (congrArg (fun _a => _a = 1768) List.length_replicate)) (Eq.refl 1768)))))))
+class AspisR1.JHe_SHARealization : Prop
+number of parameters: 0
+fields:
+  AspisR1.JHe_SHARealization.tree0 : ∀ (i : Fin 157),
+      AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs0.input i) = AspisR1.JHe_SHAInputs0.expected i
+  AspisR1.JHe_SHARealization.tree1 : ∀ (i : Fin 157),
+      AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs1.input i) = AspisR1.JHe_SHAInputs1.expected i
+  AspisR1.JHe_SHARealization.tree2 : ∀ (i : Fin 139),
+      AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs2.input i) = AspisR1.JHe_SHAInputs2.expected i
+constructor:
+  AspisR1.JHe_SHARealization.mk
+    (tree0 :
+      ∀ (i : Fin 157),
+        AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs0.input i) = AspisR1.JHe_SHAInputs0.expected i)
+    (tree1 :
+      ∀ (i : Fin 157),
+        AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs1.input i) = AspisR1.JHe_SHAInputs1.expected i)
+    (tree2 :
+      ∀ (i : Fin 139),
+        AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs2.input i) = AspisR1.JHe_SHAInputs2.expected i) :
+    AspisR1.JHe_SHARealization
