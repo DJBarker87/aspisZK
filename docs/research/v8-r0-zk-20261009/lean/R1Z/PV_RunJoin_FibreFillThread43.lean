@@ -49,6 +49,41 @@ theorem one_step (c : host_commitment.Commitment) (u : aspis_core.r0.domain.Fibr
       host_commitment.fill_opening_values c u next (Usize.wrapping_add j 1#usize)) := by
   rw [host_commitment.fill_opening_values]
   simp only [more,↓reduceIte,step,Aeneas.Std.uncurry,bind_assoc_eq,bind_tc_ok,lift]
+  apply congrArg (Aeneas.Std.bind _)
+  funext lane
+  apply congrArg (Aeneas.Std.bind _)
+  funext w
+  apply congrArg (Aeneas.Std.bind _)
+  funext row
+  apply congrArg (Aeneas.Std.bind _)
+  funext we
+  apply congrArg (Aeneas.Std.bind _)
+  funext pair0
+  rcases pair0 with ⟨row0,back0⟩
+  apply congrArg (Aeneas.Std.bind _)
+  funext a1
+  apply congrArg (Aeneas.Std.bind _)
+  funext we1
+  apply congrArg (Aeneas.Std.bind _)
+  funext pair1
+  rcases pair1 with ⟨row1,back1⟩
+  apply congrArg (Aeneas.Std.bind _)
+  funext a3
+  apply congrArg (Aeneas.Std.bind _)
+  funext we2
+  apply congrArg (Aeneas.Std.bind _)
+  funext pair2
+  rcases pair2 with ⟨row2,back2⟩
+  apply congrArg (Aeneas.Std.bind _)
+  funext a5
+  apply congrArg (Aeneas.Std.bind _)
+  funext we3
+  apply congrArg (Aeneas.Std.bind _)
+  funext pair3
+  rcases pair3 with ⟨row3,back3⟩
+  apply congrArg (Aeneas.Std.bind _)
+  funext a7
+  rfl
 
 theorem thread (n : Nat) (c : host_commitment.Commitment)
     (u : aspis_core.r0.domain.FibreIndex) (values : Matrix) (j : Usize)
