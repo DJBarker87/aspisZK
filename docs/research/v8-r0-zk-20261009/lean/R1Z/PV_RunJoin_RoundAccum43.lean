@@ -39,8 +39,12 @@ theorem phase (ops : ExternalFuns) {H F : Type} (hash : aspis_core.digest.Digest
       | false => exact Stream.nil out.val
   | succ n ih =>
     simp only [PV_RunJoin_RoundThread38.phase]
+    change out.val.length+901*(n+1)≤Usize.max at room
+    have stepRoom : out.length+901≤Usize.max := by
+      change out.val.length+901≤Usize.max
+      omega
     have post := PV_RunJoin_RoundRecord43.post ops hash oi oracle round (by omega)
-      transcript out point running (by omega)
+      transcript out point running stepRoom
     apply PV_RunJoin_RecordAppend41.bind_post post
     intro triple hp
     rcases triple with ⟨r,t,o⟩
