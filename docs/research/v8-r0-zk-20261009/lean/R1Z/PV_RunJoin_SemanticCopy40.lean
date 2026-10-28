@@ -1,9 +1,11 @@
 import R1Z.PV_RunJoin_ByteSlice40
 import R1Z.PV_RunJoin_CompactStep39
+import R1Z.ProverRwP6BodyCandidate
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_SemanticCopy40
 open Aeneas Aeneas.Std Result ProverRwFull
-variable [ExternalTypes] [ExternalFuns]
+variable [ExternalTypes] (ops : ExternalFuns)
+local instance : ExternalFuns := ProverRwP6BodyCandidate.selected ops
 
 /-- A message-free or uncompressed semantic row retains its five-byte header
 and exact payload. The source row-shape law is supplied separately. -/
@@ -35,13 +37,14 @@ theorem row (logical : Slice U8) (out : alloc.vec.Vec U8) (row tag : U8)
     (Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size)
     (by rw [inc,endval];omega) (by rw [endval];exact bound)
     (by rw [endval,inc,midlen];omega)
+  have ho : core.option.Option.ok_or (some (tag,size)) compact.CodecError.Length=
+      .ok (.Ok (tag,size)) := rfl
   refine ⟨next,?_,?_⟩
   · simp only [host_compact.compact_semantic_row,shape,
-      core.option.Option.ok_or,core.result.Result.Insts.CoreOpsTry.branch,
+      ho,core.result.Result.Insts.CoreOpsTry.branch,
       bind_tc_ok,lift,hh,hm,host_compact.compact_row,
-      show ¬row≥14#u8 from (by change ¬row.val≥14;omega),↓reduceIte,hp,hn]
-  · simpa only [inc,endval,Nat.add_sub_cancel_left] using
-      hnext.trans (congrArg (fun t => t ++
-        (logical.val.drop (at1.val+5)).take size.val) hmid)
+      show ¬row≥14#u8 from (by change ¬row.val≥14;omega),Bool.decide_false,↓reduceIte,hp,hn]
+  · rw [hnext,hmid,inc,endval]
+    simp only [Nat.add_sub_cancel_left]
 #print axioms row
 end R1Z.PV_RunJoin_SemanticCopy40
