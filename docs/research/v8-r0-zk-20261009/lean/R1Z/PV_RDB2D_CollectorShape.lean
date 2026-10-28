@@ -1,5 +1,5 @@
 import R1Z.PV_RDB2D_PV_B3P_ScheduleResult133
-#print Aeneas.Std.core.ptr.alignment.Alignment
+#print Aeneas.Std.core.ptr.alignment.AlignmentEnum
 namespace R1Z.PV_RDB2D_CollectorShape
 open PV_B3P_Schedule133
 set_option autoImplicit false
@@ -19,13 +19,9 @@ theorem filtered_length : (legacyLinks.filter (fun x => !x.path)).length = 64 :=
   rw [PV_B3P_LegacyValues133.legacy_eval]
   rfl
 
-theorem filter_no_shrink (cap : Nat) : needsShrink 8 8 cap = false := by
-  simp only [needsShrink,show (8:Nat) ≠ 0 by omega,show (8:Nat)%8=0 by rfl,
-    and_self,ite_true]
+theorem filter_no_shrink (cap : Nat) : needsShrink 8 8 cap = false := rfl
 
-theorem hypothetical_flat_no_shrink (cap : Nat) : needsShrink 8 2 cap = false := by
-  simp only [needsShrink,show (2:Nat) ≠ 0 by omega,show (8:Nat)%2=0 by rfl,
-    and_self,ite_true]
+theorem hypothetical_flat_no_shrink (cap : Nat) : needsShrink 8 2 cap = false := rfl
 
 /-- FlatMap has SourceIter and TrustedLen but no InPlaceIterable in deployed
 core::iter::adapters::flatten. The binding gate selects the TrustedLen
