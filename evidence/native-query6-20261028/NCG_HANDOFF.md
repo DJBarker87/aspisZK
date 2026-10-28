@@ -26,3 +26,5 @@ Host `/home/dombarker/project-offloads/codex-cx-native-query6-20261028`; corpus 
 Frozen Rust4bb3b3f5; headline AspisR1.RPx_Deployed.deployed/frozen3; L154 parameter, narrowed D188, RuntimePersistence unchanged. No shipped edit/ELF rebuild. Historical pins f8c0ec72… /63ad3e9c… /121f3e29… are retained, not freshly reproduced. No wallet/key or other live worktree/candidate is touched. The next deliverable is an exact-carrier native installation/frame certificate, composing the recorded local cuts and existing model inductions on the same actual writer.
 
 Coherent cohort digest/error slots are op43/op44; no retired inventory row is reused.
+
+Final repository checks: working tree clean after stage commits; all changed code/prose pass git diff --check. The unrestricted historical diff check reports whitespace retained verbatim in compiler logs, patch context lines and the exact decoder-annotation input; these evidence bytes are deliberately preserved. The20MB file gate passes.
