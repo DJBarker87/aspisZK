@@ -14,7 +14,8 @@ def input (size : Usize) (f : Nat → W) :=
 
 theorem input_size (size : Usize) (f : Nat → W) : Slice.len (input size f)=size := by
   apply UScalar.eq_of_val_eq
-  simp only [input,Slice.len,Array.to_slice,ProverCommitArray49.array,List.length_ofFn,UScalar.ofNatCore_val_eq]
+  simp only [input,Slice.len,Array.to_slice,ProverCommitArray49.array,List.length_ofFn]
+  scalar_tac
 
 theorem increment (size k : Usize) (hk : k.val<size.val) :
     (Usize.wrapping_add k 1#usize).val=k.val+1 := by
