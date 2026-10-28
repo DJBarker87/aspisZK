@@ -51,7 +51,7 @@ theorem shape (domain : U32) (input : Slice U32) (hne : input.val ≠ []) :
   simp only [poseidon2.RATE,aspis_core.field.M31.ZERO]
   have hr : Usize.wrapping_add 8#usize 1#usize = 9#usize := by
     apply UScalar.eq_of_val_eq
-    rw [R0Z.PoseidonRefine.uadd _ _ (by simp)]
+    rw [R0Z.WriterRefine.uadd _ _ (by simp)]
     rfl
   rw [hr]
   simp only [core.slice.Slice.is_empty,core.slice.Slice.chunks,lift,bind_tc_ok]
