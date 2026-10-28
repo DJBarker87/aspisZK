@@ -49,6 +49,7 @@ theorem transfer (bytes : Slice U8)
   obtain ⟨root,hr,hi⟩ := PV_RunJoin_CanonicalHonest31.transfer (K := K) bytes p w context snapshot c h
   refine ⟨root,hr,hi,?_⟩
   let i : Honest (K := K) := ⟨(PV_RunJoin_OuterChecked30.transferInput p w root (PV_RunJoin_CodecOuter30.snapshot snapshot) c),hi⟩
+  dsimp only
   intro state
   letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
   refine ⟨PV_RunJoin_NativeCallerFrame32.complete_public base ops hash i.val state,?_,
@@ -89,6 +90,7 @@ theorem withdrawal (bytes : Slice U8)
   obtain ⟨root,hr,hi⟩ := PV_RunJoin_CanonicalHonest31.withdrawal (K := K) bytes p w context snapshot c h
   refine ⟨root,hr,hi,?_⟩
   let i : Honest (K := K) := ⟨(PV_RunJoin_OuterChecked30.withdrawalInput p w root (PV_RunJoin_CodecOuter30.snapshot snapshot) c),hi⟩
+  dsimp only
   intro state
   letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
   refine ⟨PV_RunJoin_NativeCallerFrame32.complete_public base ops hash i.val state,?_,

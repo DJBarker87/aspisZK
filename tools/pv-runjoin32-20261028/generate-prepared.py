@@ -55,6 +55,7 @@ theorem {kind} (bytes : Slice U8)
   obtain ⟨root,hr,hi⟩ := PV_RunJoin_CanonicalHonest31.{kind} (K := K) bytes p w context snapshot c h
   refine ⟨root,hr,hi,?_⟩
   let i : Honest (K := K) := ⟨{i},hi⟩
+  dsimp only
   intro state
   letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
   refine ⟨PV_RunJoin_NativeCallerFrame32.complete_public base ops hash i.val state,?_,
