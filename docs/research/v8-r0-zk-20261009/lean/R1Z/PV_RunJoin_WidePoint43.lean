@@ -15,6 +15,7 @@ def word (x : W) : Fin 8 → U32 :=
 theorem read (x : W) (i : Fin 8) (j : Fin 4) :
     (PV_RunJoin_FlatBytes35.wire x).val[4*i.val+j.val]'(by
       rw [(PV_RunJoin_FlatBytes35.wire x).property]
+      change 4*i.val+j.val<32
       have := i.isLt;have := j.isLt;omega)=PV_RunJoin_FlatBytes35.byte (word x i) j := by
   fin_cases i <;> fin_cases j <;> rfl
 
