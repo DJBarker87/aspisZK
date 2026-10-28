@@ -1,6 +1,7 @@
 import PV_B3P_DigestOutcome226V3
 import PV_B3P_FrontierOutcome226V3
 import PV_B3P_Offset226V3
+import PV_B3P_NestedOffset226V3
 namespace PV_B3P_ByteOutcome226V3
 open Aeneas Aeneas.Std PV_B3P_226V3
 set_option autoImplicit false
@@ -81,15 +82,20 @@ theorem no_outer_failure (p : reference226.OwnedPublic) (i : Usize) :
   cases hp : p.withdrawal <;>
     simp only [hp,Bool.false_eq_true,↓reduceIte,lift,bind_tc_ok,
       c0,c1,c2,c3,c4,c5,c6,c7,c8,c9]
-  all_goals split_ifs
+  -- Explicit splits avoid split_ifs' broad default simplifier.
+  all_goals repeat' split
   all_goals first
     | exact ⟨_,rfl⟩
     | apply PV_B3P_FieldResult226V3.no_outer_failure
     | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-      · repeat rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+      · repeat first
+          | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+          | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
         scalar_tac
     | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-      · repeat rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+      · repeat first
+          | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+          | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
         scalar_tac
     | exfalso; scalar_tac
 
