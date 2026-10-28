@@ -16,9 +16,9 @@ theorem accepted (ops : Ops) (field : NBF_PowerStep.NBC_Qm31Canonical ops)
  obtain ⟨result,history,same⟩ := NBB_QueryWitness.direct (NBF_Accumulate.install ops)
    proof p g none geometry 10#usize a b
  have resultEq : result=ok (.Ok (out,bout)) := same.symm.trans run
- subst result
+ rw [resultEq] at history
  have preserved := NBF_QueryInvariant.trace ops field proof p g geometry rho (.Ok (a,b))
-   (ok (.Ok (out,bout))) history good
+   (ok (.Ok (out,bout))) (by simpa only [show (10#usize).val=10 from rfl] using history) good
  rw [Port3_NativeQueryFrame.loop_eq] at run
  have calls := Port2_QueryLoop.source_calls
    (verifier.candidate.query_values (NBF_Accumulate.install ops)) proof p g none geometry 10#usize

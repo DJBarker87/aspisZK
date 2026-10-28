@@ -28,3 +28,5 @@ canonical E inputs and inverse words, and native add/sub propagates canonical
 intermediates. Domain assertions remain checked at every reached field call.
 The source/cohort op16/op17 installation is still a separate named dependency;
 a field-stub routing pass alone does not close that installation.
+
+| NBF_field::qm31 for native QM31::mul in accumulation tail | AspisR1.LPh.Native.qm_mul_expanded (LPh_NativeQ, accepted L007) | All8 input limbs<P; four exact natural Karatsuba word formulas and canonical output. Native WideExact::mul_qm31 stays actual and calls this twice, followed by the old-power/rho call. Ghost observations do not change chosen values. |
