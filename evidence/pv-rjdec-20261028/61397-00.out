@@ -1,0 +1,932 @@
+def R1Z.PV_RJDec_Factor.Fibres : {W C A V : Type} →
+  (R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → Prop) → (R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → V) → Prop :=
+fun {W C A V} reachable observe =>
+  ∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A),
+    reachable l →
+      reachable r →
+        R1Z.PV_RunJoin_WorldDecode33.returned l = R1Z.PV_RunJoin_WorldDecode33.returned r → observe l = observe r
+theorem R1Z.PV_RJDec_Factor.exists_iff : ∀ {W C A V : Type} [Nonempty V]
+  (reachable : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → Prop)
+  (observe : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → V),
+  (∃ decode,
+      ∀ (r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A),
+        reachable r → decode (R1Z.PV_RunJoin_WorldDecode33.returned r) = observe r) ↔
+    R1Z.PV_RJDec_Factor.Fibres reachable observe :=
+fun {W C A V} [Nonempty V] reachable observe =>
+  {
+    mp := fun a =>
+      let ⟨decode, law, l, r, hl, hr, same⟩ := a
+      Eq.mpr (id (congrArg (fun _a => _a = observe r) (Eq.symm (law l hl))))
+        (Eq.mpr (id (congrArg (fun _a => decode (R1Z.PV_RunJoin_WorldDecode33.returned l) = _a) (Eq.symm (law r hr))))
+          (Eq.mpr (id (congrArg (fun _a => decode _a = decode (R1Z.PV_RunJoin_WorldDecode33.returned r)) same))
+            (Eq.refl (decode (R1Z.PV_RunJoin_WorldDecode33.returned r))))),
+    mpr := fun fibres =>
+      let decode := fun out =>
+        if h : ∃ r, reachable r ∧ R1Z.PV_RunJoin_WorldDecode33.returned r = out then observe (Classical.choose h)
+        else Classical.choice inferInstance;
+      Exists.intro decode fun r hr =>
+        have h := Exists.intro r ⟨hr, rfl⟩;
+        id
+          (Eq.mpr (id (congrArg (fun _a => _a = observe r) (dif_pos h)))
+            (fibres (Classical.choose h) r (Classical.choose_spec h).left hr (Classical.choose_spec h).right)) }
+theorem R1Z.PV_RJDec_Factor.pair_iff : ∀ {W C A V U : Type}
+  (reachable : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → Prop)
+  (disclosed : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → V)
+  (oracle : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → U),
+  (R1Z.PV_RJDec_Factor.Fibres reachable fun r => (disclosed r, oracle r)) ↔
+    R1Z.PV_RJDec_Factor.Fibres reachable disclosed ∧ R1Z.PV_RJDec_Factor.Fibres reachable oracle :=
+fun {W C A V U} reachable disclosed oracle =>
+  {
+    mp := fun h =>
+      ⟨fun l r hl hr same => congrArg Prod.fst (h l r hl hr same), fun l r hl hr same =>
+        congrArg Prod.snd (h l r hl hr same)⟩,
+    mpr := fun a =>
+      let ⟨hd, ho, l, r, hl, hr, same⟩ := a
+      Prod.ext (hd l r hl hr same) (ho l r hl hr same) }
+theorem R1Z.PV_RJDec_ResultCases.returned_eq : ∀ {W C A : Type} (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A),
+  R1Z.PV_RunJoin_WorldDecode33.returned l = R1Z.PV_RunJoin_WorldDecode33.returned r ↔
+    (∃ a,
+        l.outcome = R1Z.PV_W_Threading.Outcome.ok a ∧ r.outcome = R1Z.PV_W_Threading.Outcome.ok a ∧ l.world = r.world) ∨
+      (∃ e, l.outcome = R1Z.PV_W_Threading.Outcome.fail e ∧ r.outcome = R1Z.PV_W_Threading.Outcome.fail e) ∨
+        l.outcome = R1Z.PV_W_Threading.Outcome.div ∧ r.outcome = R1Z.PV_W_Threading.Outcome.div :=
+fun {W C A} l r =>
+  let ⟨lo, lw, lc, h✝⟩ := l
+  Eq.symm h✝ ▸
+    let ⟨ro, rw, rc, h✝¹⟩ := r
+    Eq.symm h✝¹ ▸
+      R1Z.PV_W_Threading.Outcome.casesOn (motive := fun t =>
+        lo = t →
+          (R1Z.PV_RunJoin_WorldDecode33.returned { outcome := lo, world := lw, calls := lc } =
+              R1Z.PV_RunJoin_WorldDecode33.returned { outcome := ro, world := rw, calls := rc } ↔
+            (∃ a,
+                { outcome := lo, world := lw, calls := lc }.outcome = R1Z.PV_W_Threading.Outcome.ok a ∧
+                  { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.ok a ∧
+                    { outcome := lo, world := lw, calls := lc }.world =
+                      { outcome := ro, world := rw, calls := rc }.world) ∨
+              (∃ e,
+                  { outcome := lo, world := lw, calls := lc }.outcome = R1Z.PV_W_Threading.Outcome.fail e ∧
+                    { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.fail e) ∨
+                { outcome := lo, world := lw, calls := lc }.outcome = R1Z.PV_W_Threading.Outcome.div ∧
+                  { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.div))
+        lo
+        (fun value h =>
+          Eq.symm h ▸
+            R1Z.PV_W_Threading.Outcome.casesOn (motive := fun t =>
+              ro = t →
+                (R1Z.PV_RunJoin_WorldDecode33.returned
+                      { outcome := R1Z.PV_W_Threading.Outcome.ok value, world := lw, calls := lc } =
+                    R1Z.PV_RunJoin_WorldDecode33.returned { outcome := ro, world := rw, calls := rc } ↔
+                  (∃ a,
+                      { outcome := R1Z.PV_W_Threading.Outcome.ok value, world := lw, calls := lc }.outcome =
+                          R1Z.PV_W_Threading.Outcome.ok a ∧
+                        { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.ok a ∧
+                          { outcome := R1Z.PV_W_Threading.Outcome.ok value, world := lw, calls := lc }.world =
+                            { outcome := ro, world := rw, calls := rc }.world) ∨
+                    (∃ e,
+                        { outcome := R1Z.PV_W_Threading.Outcome.ok value, world := lw, calls := lc }.outcome =
+                            R1Z.PV_W_Threading.Outcome.fail e ∧
+                          { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.fail e) ∨
+                      { outcome := R1Z.PV_W_Threading.Outcome.ok value, world := lw, calls := lc }.outcome =
+                          R1Z.PV_W_Threading.Outcome.div ∧
+                        { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.div))
+              ro
+              (fun value_1 h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Iff
+                          (Eq.trans (Aeneas.Std.Result.ok.injEq (value, lw) (value_1, rw))
+                            (Prod.mk.injEq value lw value_1 rw)))
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrArg Exists
+                                    (funext fun a =>
+                                      congr (congrArg And (R1Z.PV_W_Threading.Outcome.ok.injEq value a))
+                                        (congrFun' (congrArg And (R1Z.PV_W_Threading.Outcome.ok.injEq value_1 a))
+                                          (lw = rw))))
+                                  exists_eq_left'._simp_1)
+                                (congrFun' (congrArg And R1Z.PV_RJDec_ResultCases.returned_eq._simp_1) (lw = rw))))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (congrArg Exists
+                                      (funext fun e =>
+                                        Eq.trans
+                                          (congr
+                                            (congrArg And
+                                              (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                                (eq_false' fun h =>
+                                                  False.elim
+                                                    (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                            (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                          (and_self False)))
+                                    exists_false._simp_1))
+                                (Eq.trans
+                                  (congr
+                                    (congrArg And
+                                      (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                        (eq_false' fun h =>
+                                          False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                    (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                      (eq_false' fun h =>
+                                        False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                  (and_self False)))
+                              (or_self False)))
+                          (or_false (value = value_1 ∧ lw = rw))))
+                      (iff_self (value = value_1 ∧ lw = rw))))
+              (fun error h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Iff
+                          (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                            (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h))))
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (congrArg Exists
+                                  (funext fun a =>
+                                    Eq.trans
+                                      (congr (congrArg And (R1Z.PV_W_Threading.Outcome.ok.injEq value a))
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg And
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                            (lw = rw))
+                                          (false_and (lw = rw))))
+                                      (and_false (value = a))))
+                                exists_false._simp_1))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (congrArg Exists
+                                      (funext fun e =>
+                                        Eq.trans
+                                          (congr
+                                            (congrArg And
+                                              (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                                (eq_false' fun h =>
+                                                  False.elim
+                                                    (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                            (R1Z.PV_W_Threading.Outcome.fail.injEq error e))
+                                          (false_and (error = e))))
+                                    exists_false._simp_1))
+                                (Eq.trans
+                                  (congr
+                                    (congrArg And
+                                      (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                        (eq_false' fun h =>
+                                          False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                    (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                      (eq_false' fun h =>
+                                        False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                  (and_self False)))
+                              (or_self False)))
+                          (or_self False)))
+                      (iff_self False)))
+              (fun h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Iff
+                          (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                            (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h))))
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (congrArg Exists
+                                  (funext fun a =>
+                                    Eq.trans
+                                      (congr (congrArg And (R1Z.PV_W_Threading.Outcome.ok.injEq value a))
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg And
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                            (lw = rw))
+                                          (false_and (lw = rw))))
+                                      (and_false (value = a))))
+                                exists_false._simp_1))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (congrArg Exists
+                                      (funext fun e =>
+                                        Eq.trans
+                                          (congr
+                                            (congrArg And
+                                              (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                                (eq_false' fun h =>
+                                                  False.elim
+                                                    (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                            (eq_false' fun h =>
+                                              False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                          (and_self False)))
+                                    exists_false._simp_1))
+                                (Eq.trans
+                                  (congr
+                                    (congrArg And
+                                      (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                        (eq_false' fun h =>
+                                          False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                    (eq_self R1Z.PV_W_Threading.Outcome.div))
+                                  (and_true False)))
+                              (or_self False)))
+                          (or_self False)))
+                      (iff_self False)))
+              (Eq.refl ro))
+        (fun error h =>
+          Eq.symm h ▸
+            R1Z.PV_W_Threading.Outcome.casesOn (motive := fun t =>
+              ro = t →
+                (R1Z.PV_RunJoin_WorldDecode33.returned
+                      { outcome := R1Z.PV_W_Threading.Outcome.fail error, world := lw, calls := lc } =
+                    R1Z.PV_RunJoin_WorldDecode33.returned { outcome := ro, world := rw, calls := rc } ↔
+                  (∃ a,
+                      { outcome := R1Z.PV_W_Threading.Outcome.fail error, world := lw, calls := lc }.outcome =
+                          R1Z.PV_W_Threading.Outcome.ok a ∧
+                        { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.ok a ∧
+                          { outcome := R1Z.PV_W_Threading.Outcome.fail error, world := lw, calls := lc }.world =
+                            { outcome := ro, world := rw, calls := rc }.world) ∨
+                    (∃ e,
+                        { outcome := R1Z.PV_W_Threading.Outcome.fail error, world := lw, calls := lc }.outcome =
+                            R1Z.PV_W_Threading.Outcome.fail e ∧
+                          { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.fail e) ∨
+                      { outcome := R1Z.PV_W_Threading.Outcome.fail error, world := lw, calls := lc }.outcome =
+                          R1Z.PV_W_Threading.Outcome.div ∧
+                        { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.div))
+              ro
+              (fun value h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Iff (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (congrArg Exists
+                                  (funext fun a =>
+                                    Eq.trans
+                                      (congr
+                                        (congrArg And
+                                          (eq_false' fun h =>
+                                            False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                        (congrFun' (congrArg And (R1Z.PV_W_Threading.Outcome.ok.injEq value a))
+                                          (lw = rw)))
+                                      (false_and (value = a ∧ lw = rw))))
+                                exists_false._simp_1))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (congrArg Exists
+                                      (funext fun e =>
+                                        Eq.trans
+                                          (congr (congrArg And (R1Z.PV_W_Threading.Outcome.fail.injEq error e))
+                                            (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                          (and_false (error = e))))
+                                    exists_false._simp_1))
+                                (Eq.trans
+                                  (congr
+                                    (congrArg And
+                                      (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                        (eq_false' fun h =>
+                                          False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                    (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                      (eq_false' fun h =>
+                                        False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                  (and_self False)))
+                              (or_self False)))
+                          (or_self False)))
+                      (iff_self False)))
+              (fun error_1 h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr (congrArg Iff (Aeneas.Std.Result.fail.injEq error error_1))
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (congrArg Exists
+                                  (funext fun a =>
+                                    Eq.trans
+                                      (congr
+                                        (congrArg And
+                                          (eq_false' fun h =>
+                                            False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg And
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                            (lw = rw))
+                                          (false_and (lw = rw))))
+                                      (and_self False)))
+                                exists_false._simp_1))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (Eq.trans
+                                      (congrArg Exists
+                                        (funext fun e =>
+                                          congr (congrArg And (R1Z.PV_W_Threading.Outcome.fail.injEq error e))
+                                            (R1Z.PV_W_Threading.Outcome.fail.injEq error_1 e)))
+                                      exists_eq_left'._simp_1)
+                                    R1Z.PV_RJDec_ResultCases.returned_eq._simp_1))
+                                (Eq.trans
+                                  (congr
+                                    (congrArg And
+                                      (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                        (eq_false' fun h =>
+                                          False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                    (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                      (eq_false' fun h =>
+                                        False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                  (and_self False)))
+                              (or_false (error = error_1))))
+                          (false_or (error = error_1))))
+                      (iff_self (error = error_1))))
+              (fun h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Iff
+                          (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                            (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h))))
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (congrArg Exists
+                                  (funext fun a =>
+                                    Eq.trans
+                                      (congr
+                                        (congrArg And
+                                          (eq_false' fun h =>
+                                            False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg And
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                            (lw = rw))
+                                          (false_and (lw = rw))))
+                                      (and_self False)))
+                                exists_false._simp_1))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (congrArg Exists
+                                      (funext fun e =>
+                                        Eq.trans
+                                          (congr (congrArg And (R1Z.PV_W_Threading.Outcome.fail.injEq error e))
+                                            (eq_false' fun h =>
+                                              False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                          (and_false (error = e))))
+                                    exists_false._simp_1))
+                                (Eq.trans
+                                  (congr
+                                    (congrArg And
+                                      (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                        (eq_false' fun h =>
+                                          False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                    (eq_self R1Z.PV_W_Threading.Outcome.div))
+                                  (and_true False)))
+                              (or_self False)))
+                          (or_self False)))
+                      (iff_self False)))
+              (Eq.refl ro))
+        (fun h =>
+          Eq.symm h ▸
+            R1Z.PV_W_Threading.Outcome.casesOn (motive := fun t =>
+              ro = t →
+                (R1Z.PV_RunJoin_WorldDecode33.returned
+                      { outcome := R1Z.PV_W_Threading.Outcome.div, world := lw, calls := lc } =
+                    R1Z.PV_RunJoin_WorldDecode33.returned { outcome := ro, world := rw, calls := rc } ↔
+                  (∃ a,
+                      { outcome := R1Z.PV_W_Threading.Outcome.div, world := lw, calls := lc }.outcome =
+                          R1Z.PV_W_Threading.Outcome.ok a ∧
+                        { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.ok a ∧
+                          { outcome := R1Z.PV_W_Threading.Outcome.div, world := lw, calls := lc }.world =
+                            { outcome := ro, world := rw, calls := rc }.world) ∨
+                    (∃ e,
+                        { outcome := R1Z.PV_W_Threading.Outcome.div, world := lw, calls := lc }.outcome =
+                            R1Z.PV_W_Threading.Outcome.fail e ∧
+                          { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.fail e) ∨
+                      { outcome := R1Z.PV_W_Threading.Outcome.div, world := lw, calls := lc }.outcome =
+                          R1Z.PV_W_Threading.Outcome.div ∧
+                        { outcome := ro, world := rw, calls := rc }.outcome = R1Z.PV_W_Threading.Outcome.div))
+              ro
+              (fun value h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Iff (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (congrArg Exists
+                                  (funext fun a =>
+                                    Eq.trans
+                                      (congr
+                                        (congrArg And
+                                          (eq_false' fun h =>
+                                            False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                        (congrFun' (congrArg And (R1Z.PV_W_Threading.Outcome.ok.injEq value a))
+                                          (lw = rw)))
+                                      (false_and (value = a ∧ lw = rw))))
+                                exists_false._simp_1))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (congrArg Exists
+                                      (funext fun e =>
+                                        Eq.trans
+                                          (congr
+                                            (congrArg And
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                            (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                          (and_self False)))
+                                    exists_false._simp_1))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self R1Z.PV_W_Threading.Outcome.div))
+                                    (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                      (eq_false' fun h =>
+                                        False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                  (and_false True)))
+                              (or_self False)))
+                          (or_self False)))
+                      (iff_self False)))
+              (fun error h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Iff (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (congrArg Exists
+                                  (funext fun a =>
+                                    Eq.trans
+                                      (congr
+                                        (congrArg And
+                                          (eq_false' fun h =>
+                                            False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg And
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                            (lw = rw))
+                                          (false_and (lw = rw))))
+                                      (and_self False)))
+                                exists_false._simp_1))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (congrArg Exists
+                                      (funext fun e =>
+                                        Eq.trans
+                                          (congr
+                                            (congrArg And
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                            (R1Z.PV_W_Threading.Outcome.fail.injEq error e))
+                                          (false_and (error = e))))
+                                    exists_false._simp_1))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self R1Z.PV_W_Threading.Outcome.div))
+                                    (Eq.trans R1Z.PV_RJDec_ResultCases.returned_eq._simp_1
+                                      (eq_false' fun h =>
+                                        False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h))))
+                                  (and_false True)))
+                              (or_self False)))
+                          (or_self False)))
+                      (iff_self False)))
+              (fun h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr (congrArg Iff (eq_self Aeneas.Std.Result.div))
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (congrArg Exists
+                                  (funext fun a =>
+                                    Eq.trans
+                                      (congr
+                                        (congrArg And
+                                          (eq_false' fun h =>
+                                            False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg And
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                            (lw = rw))
+                                          (false_and (lw = rw))))
+                                      (and_self False)))
+                                exists_false._simp_1))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (congrArg Exists
+                                      (funext fun e =>
+                                        Eq.trans
+                                          (congr
+                                            (congrArg And
+                                              (eq_false' fun h =>
+                                                False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                            (eq_false' fun h =>
+                                              False.elim (noConfusion_of_Nat R1Z.PV_W_Threading.Outcome.ctorIdx h)))
+                                          (and_self False)))
+                                    exists_false._simp_1))
+                                (Eq.trans
+                                  (congr (congrArg And (eq_self R1Z.PV_W_Threading.Outcome.div))
+                                    (eq_self R1Z.PV_W_Threading.Outcome.div))
+                                  (and_self True)))
+                              (or_true False)))
+                          (or_true False)))
+                      (iff_self True)))
+              (Eq.refl ro))
+        (Eq.refl lo)
+theorem R1Z.PV_RJDec_ResultCases.fibres_iff : ∀ {W C A V : Type}
+  (reachable : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → Prop)
+  (observe : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → V),
+  R1Z.PV_RJDec_Factor.Fibres reachable observe ↔
+    (∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A) (a : A),
+        reachable l →
+          reachable r →
+            l.outcome = R1Z.PV_W_Threading.Outcome.ok a →
+              r.outcome = R1Z.PV_W_Threading.Outcome.ok a → l.world = r.world → observe l = observe r) ∧
+      (∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A) (e : Aeneas.Std.Error),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.fail e →
+                r.outcome = R1Z.PV_W_Threading.Outcome.fail e → observe l = observe r) ∧
+        ∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.div →
+                r.outcome = R1Z.PV_W_Threading.Outcome.div → observe l = observe r :=
+fun {W C A V} reachable observe =>
+  {
+    mp := fun h =>
+      ⟨fun l r a hl hr hol hor hw =>
+        h l r hl hr ((R1Z.PV_RJDec_ResultCases.returned_eq l r).mpr (Or.inl (Exists.intro a ⟨hol, ⟨hor, hw⟩⟩))),
+        ⟨fun l r e hl hr hol hor =>
+          h l r hl hr ((R1Z.PV_RJDec_ResultCases.returned_eq l r).mpr (Or.inr (Or.inl (Exists.intro e ⟨hol, hor⟩)))),
+          fun l r hl hr hol hor =>
+          h l r hl hr ((R1Z.PV_RJDec_ResultCases.returned_eq l r).mpr (Or.inr (Or.inr ⟨hol, hor⟩)))⟩⟩,
+    mpr := fun a =>
+      let ⟨hs, right✝⟩ := a
+      let ⟨hf, hd, l, r, hl, hr, same⟩ := right✝
+      Or.casesOn ((R1Z.PV_RJDec_ResultCases.returned_eq l r).mp same)
+        (fun h =>
+          let ⟨a, h✝⟩ := h
+          let ⟨hol, right✝¹⟩ := h✝
+          let ⟨hor, hw⟩ := right✝¹
+          hs l r a hl hr hol hor hw)
+        fun h =>
+        Or.casesOn h
+          (fun h =>
+            let ⟨e, h✝¹⟩ := h
+            let ⟨hol, hor⟩ := h✝¹
+            hf l r e hl hr hol hor)
+          fun h =>
+          let ⟨hol, hor⟩ := h
+          hd l r hl hr hol hor }
+theorem R1Z.PV_RJDec_MemoryReserve.complete : ∀ [inst : ProverRwFull.ExternalTypes] {W S F D DF ZF C T : Type}
+  (ops : ProverRwFull.ExternalFuns) (base : R1Z.PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
+  (m : R1Z.PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF) (Allocator : Type) (v : Aeneas.Std.alloc.vec.Vec T)
+  (n : Aeneas.Std.Usize) (w : W),
+  (R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).reserve Allocator v n w =
+    have e :=
+      R1Z.PV_FXM_ReserveWorld.reference m.allocate m.wordMax m.byteMax (m.shape T)
+        (R1Z.PV_FXM_ReserveSelected.buffer v (m.metadata w v)) (↑n) (m.reserveView w);
+    { outcome := R1Z.PV_W_SourceSyntax.resultOutcome (ProverRwFull.ExternalFuns.op32 Allocator v n),
+      world := m.reserveCommit w e.buffer e.world, calls := [(w, none)] } :=
+fun [ProverRwFull.ExternalTypes] {W S F D DF ZF C T} ops base m Allocator v n w =>
+  R1Z.PV_RJDec_Run.ext ((R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).reserve Allocator v n w)
+    (let e :=
+      R1Z.PV_FXM_ReserveWorld.reference m.allocate m.wordMax m.byteMax (m.shape T)
+        (R1Z.PV_FXM_ReserveSelected.buffer v (m.metadata w v)) (↑n) (m.reserveView w);
+    { outcome := R1Z.PV_W_SourceSyntax.resultOutcome (ProverRwFull.ExternalFuns.op32 Allocator v n),
+      world := m.reserveCommit w e.buffer e.world, calls := [(w, none)] })
+    (R1Z.PV_RunJoin_RuntimeMemorySource38.reserve ops base m Allocator v n w)
+    (R1Z.PV_RunJoin_RuntimeMemory38.reserve base m Allocator v n w)
+    (Eq.refl ((R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).reserve Allocator v n w).calls)
+theorem R1Z.PV_RJDec_MemoryDrop.complete : ∀ [inst : ProverRwFull.ExternalTypes] {W S F D DF ZF C : Type}
+  (ops : ProverRwFull.ExternalFuns) (base : R1Z.PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
+  (m : R1Z.PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF) (v : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U32) (w : W),
+  (R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).dropWords v w =
+    { outcome := R1Z.PV_W_SourceSyntax.resultOutcome (ProverRwFull.ExternalFuns.op4 v),
+      world := m.dropCommit w (R1Z.PV_FXM_DropWorld.reference m.free (m.dropBuffer w v) (m.dropView w)).2,
+      calls := [(w, none)] } :=
+fun [ProverRwFull.ExternalTypes] {W S F D DF ZF C} ops base m v w =>
+  R1Z.PV_RJDec_Run.ext ((R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).dropWords v w)
+    { outcome := R1Z.PV_W_SourceSyntax.resultOutcome (ProverRwFull.ExternalFuns.op4 v),
+      world := m.dropCommit w (R1Z.PV_FXM_DropWorld.reference m.free (m.dropBuffer w v) (m.dropView w)).2,
+      calls := [(w, none)] }
+    (R1Z.PV_RunJoin_RuntimeMemorySource38.drop ops base m v w)
+    (R1Z.PV_W_MemoryLift.drop_world m.dropView m.dropCommit m.free (m.dropBuffer w v) w)
+    (Eq.refl ((R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).dropWords v w).calls)
+theorem R1Z.PV_RJDec_MemoryZero.complete : ∀ [inst : ProverRwFull.ExternalTypes] {W S F D DF ZF C : Type}
+  (ops : ProverRwFull.ExternalFuns) (base : R1Z.PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
+  (m : R1Z.PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF) (N : Aeneas.Std.Usize)
+  (v : Aeneas.Std.Array Aeneas.Std.U8 N) (w : W),
+  (R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).zeroArray N v w =
+    {
+      outcome :=
+        R1Z.PV_W_SourceSyntax.resultOutcome (ProverRwFull.ExternalFuns.op122 R1Z.PV_FXM_ZeroSelected.byteZero v),
+      world := m.zeroCommit w (R1Z.PV_FXM_ZeroWorld.indexed (m.arrayAddress w v) 0 (↑N) (m.zeroView w)),
+      calls := [(w, none)] } :=
+fun [ProverRwFull.ExternalTypes] {W S F D DF ZF C} ops base m N v w =>
+  R1Z.PV_RJDec_Run.ext ((R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).zeroArray N v w)
+    {
+      outcome :=
+        R1Z.PV_W_SourceSyntax.resultOutcome (ProverRwFull.ExternalFuns.op122 R1Z.PV_FXM_ZeroSelected.byteZero v),
+      world := m.zeroCommit w (R1Z.PV_FXM_ZeroWorld.indexed (m.arrayAddress w v) 0 (↑N) (m.zeroView w)),
+      calls := [(w, none)] }
+    (R1Z.PV_RunJoin_RuntimeMemorySource38.array ops base m N v w)
+    (R1Z.PV_W_MemoryLift.zero_world m.zeroView m.zeroCommit (m.arrayAddress w v) N w)
+    (Eq.refl ((R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).zeroArray N v w).calls)
+structure R1Z.PV_RunJoin_Deployed.Runtime (CommitHandle Aux Coins N L C : Type) : Type 1
+number of parameters: 6
+fields:
+  R1Z.PV_RunJoin_Deployed.Runtime.world : R1Z.PV_RunJoin_CompletedWorld.Data Coins N L C
+  R1Z.PV_RunJoin_Deployed.Runtime.account : R1Z.ProverRwEffectCallback.Account (R1Z.PV_RunJoin_Deployed.State N L C)
+  R1Z.PV_RunJoin_Deployed.Runtime.body : (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        h.Instance → R1Z.PV_RunJoin_UnifiedRetry.Body (R1Z.PV_RunJoin_Deployed.State N L C)
+  R1Z.PV_RunJoin_Deployed.Runtime.disclosed : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N L C) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat
+  R1Z.PV_RunJoin_Deployed.Runtime.observerOracle : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N L C) →
+          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer)
+  R1Z.PV_RunJoin_Deployed.Runtime.ideal : (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+        R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat
+constructor:
+  R1Z.PV_RunJoin_Deployed.Runtime.mk {CommitHandle Aux Coins N L C : Type}
+    (world : R1Z.PV_RunJoin_CompletedWorld.Data Coins N L C)
+    (account : R1Z.ProverRwEffectCallback.Account (R1Z.PV_RunJoin_Deployed.State N L C))
+    (body :
+      (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          h.Instance → R1Z.PV_RunJoin_UnifiedRetry.Body (R1Z.PV_RunJoin_Deployed.State N L C))
+    (disclosed :
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N L C) →
+            R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+    (observerOracle :
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N L C) →
+            List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+    (ideal :
+      (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+          R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+            R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+        R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+          R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+            R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) :
+    R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C
+structure R1Z.PV_RunJoin_RuntimeMemory38.Memory [ProverRwFull.ExternalTypes] (W S F D DF ZF : Type) : Type 1
+number of parameters: 7
+fields:
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.reserveView : W → R1Z.PV_FXM_ReserveWorld.World S F
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.reserveCommit : {T : Type} →
+      W → R1Z.PV_FXM_ReserveWorld.Buffer T → R1Z.PV_FXM_ReserveWorld.World S F → W
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.allocate : R1Z.PV_FXM_ReserveWorld.Request → S → Option ℕ × S
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.wordMax : ℕ
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.byteMax : ℕ
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.shape : Type → R1Z.PV_FXM_ReserveWorld.Shape
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.metadata : {T : Type} →
+      W → (v : Aeneas.Std.alloc.vec.Vec T) → R1Z.PV_FXM_ReserveSelected.Metadata v
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.encode : R1Z.PV_FXM_ReserveWorld.Error →
+      ProverRwFull.alloc.collections.TryReserveError
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.dropView : W → R1Z.PV_FXM_DropWorld.World D DF
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.dropCommit : W → R1Z.PV_FXM_DropWorld.World D DF → W
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.free : ℕ → ℕ → ℕ → D → D
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.dropBuffer : W →
+      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U32 → R1Z.PV_FXM_DropWorld.Buffer
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.zeroView : W → R1Z.PV_FXM_ZeroWorld.World ZF
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.zeroCommit : W → R1Z.PV_FXM_ZeroWorld.World ZF → W
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.arrayAddress : {N : Aeneas.Std.Usize} → W → Aeneas.Std.Array Aeneas.Std.U8 N → ℕ
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.byteAddress : W → Aeneas.Std.U8 → ℕ
+constructor:
+  R1Z.PV_RunJoin_RuntimeMemory38.Memory.mk [ProverRwFull.ExternalTypes] {W S F D DF ZF : Type}
+    (reserveView : W → R1Z.PV_FXM_ReserveWorld.World S F)
+    (reserveCommit : {T : Type} → W → R1Z.PV_FXM_ReserveWorld.Buffer T → R1Z.PV_FXM_ReserveWorld.World S F → W)
+    (allocate : R1Z.PV_FXM_ReserveWorld.Request → S → Option ℕ × S) (wordMax byteMax : ℕ)
+    (shape : Type → R1Z.PV_FXM_ReserveWorld.Shape)
+    (metadata : {T : Type} → W → (v : Aeneas.Std.alloc.vec.Vec T) → R1Z.PV_FXM_ReserveSelected.Metadata v)
+    (encode : R1Z.PV_FXM_ReserveWorld.Error → ProverRwFull.alloc.collections.TryReserveError)
+    (dropView : W → R1Z.PV_FXM_DropWorld.World D DF) (dropCommit : W → R1Z.PV_FXM_DropWorld.World D DF → W)
+    (free : ℕ → ℕ → ℕ → D → D) (dropBuffer : W → Aeneas.Std.alloc.vec.Vec Aeneas.Std.U32 → R1Z.PV_FXM_DropWorld.Buffer)
+    (zeroView : W → R1Z.PV_FXM_ZeroWorld.World ZF) (zeroCommit : W → R1Z.PV_FXM_ZeroWorld.World ZF → W)
+    (arrayAddress : {N : Aeneas.Std.Usize} → W → Aeneas.Std.Array Aeneas.Std.U8 N → ℕ)
+    (byteAddress : W → Aeneas.Std.U8 → ℕ) : R1Z.PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF
+def R1Z.PV_RunJoin_RuntimeBody38.initialized : [inst : ProverRwFull.ExternalTypes] →
+  {S F D DF ZF C Coins E N L File Reply Time Worker Fs Allocator Extra : Type} →
+    R1Z.PV_RunJoin_RuntimeInit35.Input Coins E N L File Reply Time Worker Fs Allocator Extra →
+      R1Z.PV_W_TypedEffects.Algebra (R1Z.PV_W_OsFile.Full E File Reply Time Worker Fs Allocator Extra) (Option C)
+          Aeneas.Std.Error →
+        R1Z.PV_RunJoin_RuntimeMemory38.Memory (R1Z.PV_W_OsFile.Full E File Reply Time Worker Fs Allocator Extra) S F D
+            DF ZF →
+          R1Z.PV_RunJoin_RuntimeBody38.Inputs →
+            R1Z.PV_RunJoin_RuntimeBody38.Secret →
+              Coins →
+                R1Z.PV_W_Threading.Run (R1Z.PV_W_OsFile.Full E File Reply Time Worker Fs Allocator Extra) (Option C)
+                  Aeneas.Std.Error R1Z.PV_RunJoin_RuntimeBody38.Output :=
+fun [ProverRwFull.ExternalTypes] {S F D DF ZF C Coins E N L File Reply Time Worker Fs Allocator Extra} data base memory
+    input secret c =>
+  R1Z.PV_RunJoin_RuntimeBody38.run base memory input secret (R1Z.PV_RunJoin_RuntimeInit35.world data c)
+theorem R1Z.PV_RunJoin_CommonSample32.complete_view : ∀ [ProverRwFull.ExternalTypes]
+  {CH Aux Coins NA LA CA NB LB CB : Type} (a : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NA LA CA)
+  (b : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NB LB CB)
+  (project : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA → R1Z.PV_RunJoin_UnifiedRetry.State NB LB CB)
+  (h : R0Z.ZkStatement.HonestProver R1Z.PrivacyR1AcctBasis.K) (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH)
+  (w : h.Instance),
+  (∀ (index : ℕ) (s : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA),
+      R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+          (R1Z.PV_RunJoin_UnifiedRetry.entropy a.account index s) =
+        R1Z.PV_RunJoin_UnifiedRetry.entropy b.account index (project s)) →
+    (∀ (secret : R1Z.ProverRwRetryModel.Secret) (s : R1Z.PV_RunJoin_Deployed.State NA LA CA),
+        R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2)) (a.body h x w secret s) =
+          b.body h x w secret (project s)) →
+      (∀ (c : Coins), project (R1Z.PV_RunJoin_Deployed.initialState a c) = R1Z.PV_RunJoin_Deployed.initialState b c) →
+        ∀
+          (outputs :
+            R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH →
+              R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+          (adv : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CH Aux),
+          (∀ (out : Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output NA LA CA)),
+              a.disclosed adv x out =
+                b.disclosed adv x
+                  (R1Z.ProverCommitSemanticTransport26.mapR (fun pair => (pair.1, project pair.2)) out)) →
+            (∀ (out : Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output NA LA CA)),
+                a.observerOracle adv x out =
+                  b.observerOracle adv x
+                    (R1Z.ProverCommitSemanticTransport26.mapR (fun pair => (pair.1, project pair.2)) out)) →
+              ∀ (c : Coins),
+                (R1Z.PV_RunJoin_Deployed.rust a).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+                    (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState a) c) =
+                  (R1Z.PV_RunJoin_Deployed.rust b).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+                    (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c) :=
+fun [ProverRwFull.ExternalTypes] {CH Aux Coins NA LA CA NB LB CB} a b project h x w entropy_step body_step initial
+    outputs adv disclosed oracle c =>
+  have he := R1Z.PV_RunJoin_CommonSample32.execute a b project h x w entropy_step body_step initial c;
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            { disclosed := _a,
+                observerOracle :=
+                  a.observerOracle adv x
+                    (R1Z.PV_RunJoin_Deployed.execute a h x w
+                      (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState a) c)) } =
+              {
+                disclosed :=
+                  b.disclosed adv x
+                    (R1Z.PV_RunJoin_Deployed.execute b h x w
+                      (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c)),
+                observerOracle :=
+                  b.observerOracle adv x
+                    (R1Z.PV_RunJoin_Deployed.execute b h x w
+                      (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c)) })
+          (disclosed
+            (R1Z.PV_RunJoin_Deployed.execute a h x w
+              (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState a) c)))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              {
+                  disclosed :=
+                    b.disclosed adv x
+                      (R1Z.ProverCommitSemanticTransport26.mapR (fun pair => (pair.1, project pair.2))
+                        (R1Z.PV_RunJoin_Deployed.execute a h x w
+                          (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState a) c))),
+                  observerOracle := _a } =
+                {
+                  disclosed :=
+                    b.disclosed adv x
+                      (R1Z.PV_RunJoin_Deployed.execute b h x w
+                        (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c)),
+                  observerOracle :=
+                    b.observerOracle adv x
+                      (R1Z.PV_RunJoin_Deployed.execute b h x w
+                        (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c)) })
+            (oracle
+              (R1Z.PV_RunJoin_Deployed.execute a h x w
+                (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState a) c)))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                { disclosed := b.disclosed adv x _a, observerOracle := b.observerOracle adv x _a } =
+                  {
+                    disclosed :=
+                      b.disclosed adv x
+                        (R1Z.PV_RunJoin_Deployed.execute b h x w
+                          (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c)),
+                    observerOracle :=
+                      b.observerOracle adv x
+                        (R1Z.PV_RunJoin_Deployed.execute b h x w
+                          (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c)) })
+              he))
+          (Eq.refl
+            {
+              disclosed :=
+                b.disclosed adv x
+                  (R1Z.PV_RunJoin_Deployed.execute b h x w
+                    (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c)),
+              observerOracle :=
+                b.observerOracle adv x
+                  (R1Z.PV_RunJoin_Deployed.execute b h x w
+                    (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c)) }))))
+theorem R1Z.PV_RunJoin_CommonObserver32.complete_pair : ∀ [ProverRwFull.ExternalTypes]
+  {CH Aux Coins NA LA CA NB LB CB : Type} (a : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NA LA CA)
+  (b : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NB LB CB)
+  (project : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA → R1Z.PV_RunJoin_UnifiedRetry.State NB LB CB)
+  (h : R0Z.ZkStatement.HonestProver R1Z.PrivacyR1AcctBasis.K) (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH)
+  (w : h.Instance),
+  (∀ (index : ℕ) (s : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA),
+      R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+          (R1Z.PV_RunJoin_UnifiedRetry.entropy a.account index s) =
+        R1Z.PV_RunJoin_UnifiedRetry.entropy b.account index (project s)) →
+    (∀ (secret : R1Z.ProverRwRetryModel.Secret) (s : R1Z.PV_RunJoin_Deployed.State NA LA CA),
+        R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2)) (a.body h x w secret s) =
+          b.body h x w secret (project s)) →
+      (∀ (c : Coins), project (R1Z.PV_RunJoin_Deployed.initialState a c) = R1Z.PV_RunJoin_Deployed.initialState b c) →
+        ∀
+          (outputs :
+            R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH →
+              R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+          (adv : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CH Aux),
+          (∀ (out : Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output NA LA CA)),
+              a.disclosed adv x out =
+                b.disclosed adv x
+                  (R1Z.ProverCommitSemanticTransport26.mapR (fun pair => (pair.1, project pair.2)) out)) →
+            (∀ (out : Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output NA LA CA)),
+                a.observerOracle adv x out =
+                  b.observerOracle adv x
+                    (R1Z.ProverCommitSemanticTransport26.mapR (fun pair => (pair.1, project pair.2)) out)) →
+              ∀ (c : Coins),
+                (have v :=
+                    (R1Z.PV_RunJoin_Deployed.rust a).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+                      (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState a) c);
+                  (v, (R1Z.PV_RunJoin_Deployed.rust a).observe adv v)) =
+                  have v :=
+                    (R1Z.PV_RunJoin_Deployed.rust b).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+                      (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c);
+                  (v, (R1Z.PV_RunJoin_Deployed.rust b).observe adv v) :=
+fun [ProverRwFull.ExternalTypes] {CH Aux Coins NA LA CA NB LB CB} a b project h x w entropy_step body_step initial
+    outputs adv disclosed oracle c =>
+  have hv :=
+    R1Z.PV_RunJoin_CommonSample32.complete_view a b project h x w entropy_step body_step initial outputs adv disclosed
+      oracle c;
+  congrArg (fun v => (v, adv.decide v)) hv

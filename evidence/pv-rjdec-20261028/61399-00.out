@@ -1,0 +1,60 @@
+@R1Z.PV_RJDec_Factor.exists_iff : ∀ {W C A V : Type} [Nonempty V]
+  (reachable : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → Prop)
+  (observe : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → V),
+  (∃ decode,
+      ∀ (r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A),
+        reachable r → decode (R1Z.PV_RunJoin_WorldDecode33.returned r) = observe r) ↔
+    R1Z.PV_RJDec_Factor.Fibres reachable observe
+@R1Z.PV_RJDec_ResultCases.fibres_iff : ∀ {W C A V : Type}
+  (reachable : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → Prop)
+  (observe : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → V),
+  R1Z.PV_RJDec_Factor.Fibres reachable observe ↔
+    (∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A) (a : A),
+        reachable l →
+          reachable r →
+            l.outcome = R1Z.PV_W_Threading.Outcome.ok a →
+              r.outcome = R1Z.PV_W_Threading.Outcome.ok a → l.world = r.world → observe l = observe r) ∧
+      (∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A) (e : Aeneas.Std.Error),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.fail e →
+                r.outcome = R1Z.PV_W_Threading.Outcome.fail e → observe l = observe r) ∧
+        ∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.div →
+                r.outcome = R1Z.PV_W_Threading.Outcome.div → observe l = observe r
+@R1Z.PV_RJDec_MemoryReserve.complete : ∀ [inst : ProverRwFull.ExternalTypes] {W S F D DF ZF C T : Type}
+  (ops : ProverRwFull.ExternalFuns) (base : R1Z.PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
+  (m : R1Z.PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF) (Allocator : Type) (v : Aeneas.Std.alloc.vec.Vec T)
+  (n : Aeneas.Std.Usize) (w : W),
+  (R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).reserve Allocator v n w =
+    have e :=
+      R1Z.PV_FXM_ReserveWorld.reference m.allocate m.wordMax m.byteMax (m.shape T)
+        (R1Z.PV_FXM_ReserveSelected.buffer v (m.metadata w v)) (↑n) (m.reserveView w);
+    { outcome := R1Z.PV_W_SourceSyntax.resultOutcome (ProverRwFull.ExternalFuns.op32 Allocator v n),
+      world := m.reserveCommit w e.buffer e.world, calls := [(w, none)] }
+@R1Z.PV_RJDec_MemoryDrop.complete : ∀ [inst : ProverRwFull.ExternalTypes] {W S F D DF ZF C : Type}
+  (ops : ProverRwFull.ExternalFuns) (base : R1Z.PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
+  (m : R1Z.PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF) (v : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U32) (w : W),
+  (R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).dropWords v w =
+    { outcome := R1Z.PV_W_SourceSyntax.resultOutcome (ProverRwFull.ExternalFuns.op4 v),
+      world := m.dropCommit w (R1Z.PV_FXM_DropWorld.reference m.free (m.dropBuffer w v) (m.dropView w)).2,
+      calls := [(w, none)] }
+@R1Z.PV_RJDec_MemoryZero.complete : ∀ [inst : ProverRwFull.ExternalTypes] {W S F D DF ZF C : Type}
+  (ops : ProverRwFull.ExternalFuns) (base : R1Z.PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
+  (m : R1Z.PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF) (N : Aeneas.Std.Usize)
+  (v : Aeneas.Std.Array Aeneas.Std.U8 N) (w : W),
+  (R1Z.PV_RunJoin_RuntimeMemory38.algebra base m).zeroArray N v w =
+    {
+      outcome :=
+        R1Z.PV_W_SourceSyntax.resultOutcome (ProverRwFull.ExternalFuns.op122 R1Z.PV_FXM_ZeroSelected.byteZero v),
+      world := m.zeroCommit w (R1Z.PV_FXM_ZeroWorld.indexed (m.arrayAddress w v) 0 (↑N) (m.zeroView w)),
+      calls := [(w, none)] }
+@R1Z.PV_RJDec_ZeroizeFinding.byte_fence_mismatch : ∀ {F : Type} (a : ℕ) (w : R1Z.PV_FXM_ZeroWorld.World F),
+  (R1Z.PV_FXM_ZeroWorld.native a 1 w).fences ≠ w.fences + R1Z.PV_RJDec_ZeroizeFinding.inspectedByteCompilerFences
+@R1Z.PV_RJDec_ZeroizeFinding.array32_fence_mismatch : ∀ {F : Type} (a : ℕ) (w : R1Z.PV_FXM_ZeroWorld.World F),
+  (R1Z.PV_FXM_ZeroWorld.native a 32 w).fences ≠ w.fences + R1Z.PV_RJDec_ZeroizeFinding.inspectedArray32CompilerFences
+'R1Z.PV_RJDec_Factor.exists_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJDec_MemoryReserve.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJDec_ZeroizeFinding.byte_fence_mismatch' depends on axioms: [propext, Quot.sound]

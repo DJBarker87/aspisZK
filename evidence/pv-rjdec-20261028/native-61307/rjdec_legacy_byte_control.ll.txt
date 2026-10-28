@@ -1,0 +1,6 @@
+define void @rjdec_legacy_byte_control(ptr noalias noundef align 1 dereferenceable(1) %byte) unnamed_addr #0 {
+start:
+  store volatile i8 0, ptr %byte, align 1
+  fence syncscope("singlethread") seq_cst
+  ret void
+}
