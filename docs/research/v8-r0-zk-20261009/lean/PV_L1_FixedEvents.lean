@@ -20,7 +20,11 @@ theorem bind_lift {α β : Type} (r : Result α) (f : α → Logged β)
     (events : List Event) (h : ∀ a, Fixed events (f a)) :
     Fixed events (lift r >>= f) := by
   cases r with
-  | ok a => simpa only [Fixed,PV_L1_Logged.bind,PV_L1_Logged.lift,List.nil_append] using h a
+  | ok a =>
+    intro b result
+    have same : (f a).result = .ok b := result
+    change [] ++ (f a).events = events
+    exact h a b same
   | fail e => intro b impossible; cases impossible
   | div => intro b impossible; cases impossible
 #print axioms bind_lift
