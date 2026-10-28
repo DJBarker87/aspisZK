@@ -1,0 +1,210 @@
+NCL_generated/NCL_DriverForward.lean:19:13: error(lean.unknownIdentifier): Unknown identifier `verifier.candidate.parse_shape`
+NCL_generated/NCL_DriverForward.lean:19:44: error(lean.unknownIdentifier): Unknown identifier `verifier.candidate.canonical_scan`
+NCL_generated/NCL_DriverForward.lean:23:4: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentCaller.verifier.Accumulator.new`
+NCL_generated/NCL_DriverForward.lean:23:29: error(lean.unknownIdentifier): Unknown identifier `verifier.candidate.batch_merkle`
+NCL_generated/NCL_DriverForward.lean:23:61: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentCaller.verifier.QueryGeometry.for_range`
+NCL_generated/NCL_DriverForward.lean:24:4: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentCaller.verifier.BatchedWeights.new`
+NCL_generated/NCL_DriverForward.lean:24:32: error(lean.unknownIdentifier): Unknown identifier `verifier.candidate.query_loop`
+NCL_generated/NCL_DriverForward.lean:24:62: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentCaller.verifier.BatchedWeights.finish`
+NCL_generated/NCL_DriverForward.lean:25:4: error(lean.unknownIdentifier): Unknown identifier `verifier.checkpoint`
+NCL_generated/NCL_DriverForward.lean:17:91: error: unsolved goals
+ops : Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+hash : H
+saved : alloc.vec.Vec U8
+start : compact.OFF_FOLDED_ROOT ops = ok 7751#usize
+finish : compact.OFF_ROUND1 ops = ok 7783#usize
+c : NCL_DriverCuts.Cuts ops D semantic pub proof hash saved
+⊢ (let (r2, g1) := (core.result.Result.Ok c.prepared, c.scratch)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r5 ← ops.op6 D proof val c.root 0#usize hash
+        let cf4 ←
+          match r5 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf4 with
+          | core.ops.control_flow.ControlFlow.Continue _ => do
+            let r6 ← ops.op19 val.queries 0#usize 10#usize
+            let cf5 ←
+              match r6 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf5 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                let r7 ← ops.op18 ⟨↑c.initial.weights, ⋯⟩
+                let cf6 ←
+                  match r7 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf6 with
+                  | core.ops.control_flow.ControlFlow.Continue val3 => do
+                    let r8 ← ops.op7 proof val c.initial g1 none val2 val3 10#usize
+                    let cf7 ←
+                      match r8 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf7 with
+                      | core.ops.control_flow.ControlFlow.Continue val4 =>
+                        let (a, pending) := val4
+                        do
+                        let (s2, deref_mut_back) ← lift (⟨↑a.weights, ⋯⟩, fun s => ⟨↑s, ⋯⟩)
+                        let s3 ← ops.op17 pending s2
+                        let bytes ←
+                          ops.op16 D val
+                              { weights := deref_mut_back s3, rhs := a.rhs, power := a.power, next := a.next } proof pub
+                              hash
+                        ok (core.result.Result.Ok bytes)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                  (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok saved)
+NCL_generated/NCL_DriverForward.lean:21:4: warning: This simp argument is unused:
+  c.batch
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.candidate.tx1, ̲compact.SPLIT, ̲bne_self_eq_false, ̲Bool.false_eq_true,
+  ̵  ̵ ̵ ̵if_false,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.parse_shape, ̲verifier.candidate.canonical_scan,
+  ̵  ̵ ̵ ̵c.shape, ̲c.scan, ̲c.zero_call,
+  ̲ ̲ ̲ ̲ ̲c.prepare, ̲c.initial_call, ̲start, ̲finish, ̲c.root_range, ̲c.root_copy,
+  ̵  ̵ ̵ ̵c.b̵a̵t̵c̵h̵,̵c̵.̵geometry_call,
+  ̲ ̲ ̲ ̲ ̲c.pending_call, ̲c.query, ̲c.flush, ̲c.checkpoint,
+  ̵  ̵ ̵ ̵verifier.mark, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵verifier.Accumulator.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.batch_merkle, ̲verifier.QueryGeometry.for_range,
+  ̵  ̵ ̵ ̵verifier.BatchedWeights.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.query_loop, ̲verifier.BatchedWeights.finish,
+  ̵  ̵ ̵ ̵verifier.checkpoint,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.unwrap, ̲alloc.vec.Vec.deref_mut, ̲alloc.vec.Vec.deref]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCL_generated/NCL_DriverForward.lean:21:12: warning: This simp argument is unused:
+  c.geometry_call
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.candidate.tx1, ̲compact.SPLIT, ̲bne_self_eq_false, ̲Bool.false_eq_true,
+  ̵  ̵ ̵ ̵if_false,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.parse_shape, ̲verifier.candidate.canonical_scan,
+  ̵  ̵ ̵ ̵c.shape, ̲c.scan, ̲c.zero_call,
+  ̲ ̲ ̲ ̲ ̲c.prepare, ̲c.initial_call, ̲start, ̲finish, ̲c.root_range, ̲c.root_copy,
+  ̵  ̵ ̵ ̵c.batch, ̲c.g̵e̵o̵m̵e̵t̵r̵y̵_̵c̵a̵l̵l̵,̵c̵.̵pending_call,
+  ̲ ̲ ̲ ̲ ̲c.query, ̲c.flush, ̲c.checkpoint,
+  ̵  ̵ ̵ ̵verifier.mark, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵verifier.Accumulator.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.batch_merkle, ̲verifier.QueryGeometry.for_range,
+  ̵  ̵ ̵ ̵verifier.BatchedWeights.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.query_loop, ̲verifier.BatchedWeights.finish,
+  ̵  ̵ ̵ ̵verifier.checkpoint,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.unwrap, ̲alloc.vec.Vec.deref_mut, ̲alloc.vec.Vec.deref]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCL_generated/NCL_DriverForward.lean:21:28: warning: This simp argument is unused:
+  c.pending_call
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.candidate.tx1, ̲compact.SPLIT, ̲bne_self_eq_false, ̲Bool.false_eq_true,
+  ̵  ̵ ̵ ̵if_false,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.parse_shape, ̲verifier.candidate.canonical_scan,
+  ̵  ̵ ̵ ̵c.shape, ̲c.scan, ̲c.zero_call,
+  ̲ ̲ ̲ ̲ ̲c.prepare, ̲c.initial_call, ̲start, ̲finish, ̲c.root_range, ̲c.root_copy,
+  ̵  ̵ ̵ ̵c.batch, ̲c.geometry_call,
+  ̲ ̲ ̲ ̲ ̲c.p̵e̵n̵d̵i̵n̵g̵_̵c̵a̵l̵l̵,̵c̵.̵query, ̲c.flush, ̲c.checkpoint,
+  ̵  ̵ ̵ ̵verifier.mark, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵verifier.Accumulator.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.batch_merkle, ̲verifier.QueryGeometry.for_range,
+  ̵  ̵ ̵ ̵verifier.BatchedWeights.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.query_loop, ̲verifier.BatchedWeights.finish,
+  ̵  ̵ ̵ ̵verifier.checkpoint,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.unwrap, ̲alloc.vec.Vec.deref_mut, ̲alloc.vec.Vec.deref]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCL_generated/NCL_DriverForward.lean:21:43: warning: This simp argument is unused:
+  c.query
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵t̵x̵1̵,̵c̵o̵m̵p̵a̵c̵t̵.̵S̵P̵L̵I̵T̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵i̵f̵_̵f̵a̵l̵s̵e̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵p̵a̵r̵s̵e̵_̵s̵h̵a̵p̵e̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵_̵s̵c̵a̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵.̵s̵h̵a̵p̵e̵,̵c̵.̵s̵c̵a̵n̵,̵c̵.̵z̵e̵r̵o̵_̵c̵a̵l̵l̵,̵c̵.̵p̵r̵e̵p̵a̵r̵e̵,̵c̵.̵i̵n̵i̵t̵i̵a̵l̵_̵c̵a̵l̵l̵,̵s̵t̵a̵r̵t̵,̵f̵i̵n̵i̵s̵h̵,̵c̵.̵r̵o̵o̵t̵_̵r̵a̵n̵g̵e̵,̵c̵.̵r̵o̵o̵t̵_̵c̵o̵p̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵.̵b̵a̵t̵c̵h̵,̵c̵.̵g̵e̵o̵m̵e̵t̵r̵y̵_̵c̵a̵l̵l̵,̵c̵.̵p̵e̵n̵d̵i̵n̵g̵_̵c̵a̵l̵l̵,̵c̵.̵q̵u̵e̵r̵y̵,̵c̵.̵f̵l̵u̵s̵h̵,̵c̵.̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵A̵c̵c̵u̵m̵u̵l̵a̵t̵o̵r̵.̵n̵e̵w̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵b̵a̵t̵c̵h̵_̵m̵e̵r̵k̵l̵e̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵Q̵u̵e̵r̵y̵G̵e̵o̵m̵e̵t̵r̵y̵.̵f̵o̵r̵_̵r̵a̵n̵g̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵B̵a̵t̵c̵h̵e̵d̵W̵e̵i̵g̵h̵t̵s̵.̵n̵e̵w̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵q̵u̵e̵r̵y̵_̵l̵o̵o̵p̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵B̵a̵t̵c̵h̵e̵d̵W̵e̵i̵g̵h̵t̵s̵.̵f̵i̵n̵i̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵d̵e̵r̵e̵f̵_̵m̵u̵t̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵d̵e̵r̵e̵f̵]̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲t̲x̲1̲,̲ ̲c̲o̲m̲p̲a̲c̲t̲.̲S̲P̲L̲I̲T̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲p̲a̲r̲s̲e̲_̲s̲h̲a̲p̲e̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲c̲a̲n̲o̲n̲i̲c̲a̲l̲_̲s̲c̲a̲n̲,̲ ̲c̲.̲s̲h̲a̲p̲e̲,̲ ̲c̲.̲s̲c̲a̲n̲,̲ ̲c̲.̲z̲e̲r̲o̲_̲c̲a̲l̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲.̲p̲r̲e̲p̲a̲r̲e̲,̲ ̲c̲.̲i̲n̲i̲t̲i̲a̲l̲_̲c̲a̲l̲l̲,̲ ̲s̲t̲a̲r̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲,̲ ̲c̲.̲r̲o̲o̲t̲_̲r̲a̲n̲g̲e̲,̲ ̲c̲.̲r̲o̲o̲t̲_̲c̲o̲p̲y̲,̲ ̲c̲.̲b̲a̲t̲c̲h̲,̲ ̲c̲.̲g̲e̲o̲m̲e̲t̲r̲y̲_̲c̲a̲l̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲.̲p̲e̲n̲d̲i̲n̲g̲_̲c̲a̲l̲l̲,̲ ̲c̲.̲f̲l̲u̲s̲h̲,̲ ̲c̲.̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲A̲c̲c̲u̲m̲u̲l̲a̲t̲o̲r̲.̲n̲e̲w̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲b̲a̲t̲c̲h̲_̲m̲e̲r̲k̲l̲e̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲Q̲u̲e̲r̲y̲G̲e̲o̲m̲e̲t̲r̲y̲.̲f̲o̲r̲_̲r̲a̲n̲g̲e̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲B̲a̲t̲c̲h̲e̲d̲W̲e̲i̲g̲h̲t̲s̲.̲n̲e̲w̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲q̲u̲e̲r̲y̲_̲l̲o̲o̲p̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲B̲a̲t̲c̲h̲e̲d̲W̲e̲i̲g̲h̲t̲s̲.̲f̲i̲n̲i̲s̲h̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲,̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲d̲e̲r̲e̲f̲_̲m̲u̲t̲,̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲d̲e̲r̲e̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCL_generated/NCL_DriverForward.lean:21:51: warning: This simp argument is unused:
+  c.flush
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.candidate.tx1, ̲compact.SPLIT, ̲bne_self_eq_false, ̲Bool.false_eq_true,
+  ̵  ̵ ̵ ̵if_false,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.parse_shape, ̲verifier.candidate.canonical_scan,
+  ̵  ̵ ̵ ̵c.shape, ̲c.scan, ̲c.zero_call,
+  ̲ ̲ ̲ ̲ ̲c.prepare, ̲c.initial_call, ̲start, ̲finish, ̲c.root_range, ̲c.root_copy,
+  ̵  ̵ ̵ ̵c.batch, ̲c.geometry_call,
+  ̲ ̲ ̲ ̲ ̲c.pending_call, ̲c.query, ̲c.f̵l̵u̵s̵h̵,̵c.̵c̵heckpoint,
+  ̵  ̵ ̵ ̵verifier.mark, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵verifier.Accumulator.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.batch_merkle, ̲verifier.QueryGeometry.for_range,
+  ̵  ̵ ̵ ̵verifier.BatchedWeights.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.query_loop, ̲verifier.BatchedWeights.finish,
+  ̵  ̵ ̵ ̵verifier.checkpoint,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.unwrap, ̲alloc.vec.Vec.deref_mut, ̲alloc.vec.Vec.deref]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCL_generated/NCL_DriverForward.lean:21:59: warning: This simp argument is unused:
+  c.checkpoint
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.candidate.tx1, ̲compact.SPLIT, ̲bne_self_eq_false, ̲Bool.false_eq_true,
+  ̵  ̵ ̵ ̵if_false,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.parse_shape, ̲verifier.candidate.canonical_scan,
+  ̵  ̵ ̵ ̵c.shape, ̲c.scan, ̲c.zero_call,
+  ̲ ̲ ̲ ̲ ̲c.prepare, ̲c.initial_call, ̲start, ̲finish, ̲c.root_range, ̲c.root_copy,
+  ̵  ̵ ̵ ̵c.batch, ̲c.geometry_call,
+  ̲ ̲ ̲ ̲ ̲c.pending_call, ̲c.query, ̲c.flush,c̵.̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵
+  ̵  ̵ ̵ ̵verifier.mark, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵verifier.Accumulator.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.batch_merkle, ̲verifier.QueryGeometry.for_range,
+  ̵  ̵ ̵ ̵verifier.BatchedWeights.new,
+  ̲ ̲ ̲ ̲ ̲verifier.candidate.query_loop, ̲verifier.BatchedWeights.finish,
+  ̵  ̵ ̵ ̵verifier.checkpoint,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.unwrap, ̲alloc.vec.Vec.deref_mut, ̲alloc.vec.Vec.deref]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCL_DriverForward.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
