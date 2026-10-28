@@ -24,7 +24,10 @@ theorem complete (xs : List Nat) (i : Nat) (cell : Nat → Nat)
   induction xs generalizing i with
   | nil => simp [loop,run]
   | cons x xs ih =>
-    have hx : cell i = x := by simpa only [Nat.add_zero, List.getElem_cons_zero] using h 0 (by simp)
+    have hx : cell i = x := by
+      have h0 := h 0 (by simp)
+      change cell (i+0) = x at h0
+      exact h0
     have ht : ∀ k (hk : k < xs.length), cell (i+1+k) = xs[k] := by
       intro k hk
       have he := h (k+1) (by simp; omega)
