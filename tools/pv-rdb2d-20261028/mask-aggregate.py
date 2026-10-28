@@ -5,9 +5,12 @@ name='PV_RDB2D_MasksValue';s='import R1Z.PV_RDB2D_MaskChunk13\nnamespace R1Z.'+n
 s+='def initial : Masks := PV_RDB2D_MaskChunk00.before\ndef value : Masks := PV_RDB2D_MaskChunk13.after\n'
 parts=[f'PV_RDB2D_MaskChunk{i:02}.rows' for i in range(14)];right=parts[-1]
 for x in reversed(parts[:-1]):right=x+' ++ ('+right+')'
-s+='theorem rows_split : PV_B3P_Sorted133.expected = '+right+' := by\n  simp only ['+','.join(['PV_B3P_Sorted133.expected']+[f'PV_RDB2D_MaskChunk{i:02}.rows'for i in range(14)]+['List.cons_append','List.nil_append'])+']\n  rfl\n'
+s+='theorem rows_split : PV_B3P_Sorted133.expected = '+right+' := by\n  simp only ['+','.join(['PV_B3P_Sorted133.expected']+[f'PV_RDB2D_MaskChunk{i:02}.rows'for i in range(14)]+['List.cons_append','List.nil_append'])+']\n'
 s+='theorem concrete : run PV_B3P_Sorted133.expected initial=value := by\n  rw [rows_split]\n  unfold initial value\n'
-for i in range(13):s+=f'  rw [append,PV_RDB2D_MaskChunk{i:02}.value]\n'
+for i in range(13):
+ if i:s+=f'  rw [show PV_RDB2D_MaskChunk{i-1:02}.after=PV_RDB2D_MaskChunk{i:02}.before by rfl]\n'
+ s+=f'  rw [append,PV_RDB2D_MaskChunk{i:02}.value]\n'
+s+='  rw [show PV_RDB2D_MaskChunk12.after=PV_RDB2D_MaskChunk13.before by rfl]\n'
 s+='  exact PV_RDB2D_MaskChunk13.value\n'
 s+='theorem length : value.length=64 := rfl\n'
 s+='theorem native_rows : run (PV_B3P_Install133.value.val.map (fun x => x.val)) initial=value := by\n  rw [PV_B3P_Closure133.value_nat,concrete]\n'
