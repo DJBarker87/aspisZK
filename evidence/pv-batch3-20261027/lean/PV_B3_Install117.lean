@@ -30,7 +30,7 @@ theorem nonvacuity [ExternalTypes] (ops : ExternalFuns) :
     toArray (Array.repeat 10#usize PV_B3_ZeroArithmetic.Z),toQ PV_B3_ZeroArithmetic.Z,?_⟩
   change callback _ _ _ _ = _
   unfold callback
-  rw [left,left,q_left,left,PV_B3_ZeroMask117.source]
+  simp only [left,q_left,PV_B3_ZeroMask117.source]
   rfl
 
 #print axioms callback
