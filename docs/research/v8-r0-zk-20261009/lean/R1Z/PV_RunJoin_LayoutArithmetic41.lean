@@ -7,7 +7,7 @@ theorem mul (a b c : Usize) (value : a.val*b.val=c.val) :
     Usize.wrapping_mul a b=c := by
   apply UScalar.eq_of_val_eq
   rw [Usize.wrapping_mul_val_eq]
-  have bound : a.val*b.val≤Usize.max := by rw [value];exact c.hmax
+  have bound : a.val*b.val≤Usize.max := by rw [value];scalar_tac
   have size := Usize.max_succ_eq_pow
   rw [UScalar.size_def,UScalarTy.Usize_numBits_eq]
   rw [Nat.mod_eq_of_lt (by omega)]
@@ -16,7 +16,7 @@ theorem mul (a b c : Usize) (value : a.val*b.val=c.val) :
 theorem add (a b c : Usize) (value : a.val+b.val=c.val) :
     Usize.wrapping_add a b=c := by
   apply UScalar.eq_of_val_eq
-  rw [PV_RunJoin_CompactStep39.offset a b (by rw [value];exact c.hmax)]
+  rw [PV_RunJoin_CompactStep39.offset a b (by rw [value];scalar_tac)]
   exact value
 #print axioms mul
 #print axioms add
