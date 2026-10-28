@@ -1,0 +1,53 @@
+"""Compile focused prerequisites, dependent bridges, then one final axioms manifest."""
+from pathlib import Path
+import json,subprocess,hashlib,time,sys,shlex
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-kstub-20261028';D='/home/dombarker/project-offloads/codex-pv-kstub-20261028';H='dombarker@100.108.41.90'
+names=['AppendDomain','CopyWindows','CopyEquality','AppendCoordinates','OptionCoordinates','SplitCoverage','AppendBridge','Final'];pins=[]
+for i,n in enumerate(names,44702):
+ module='PV_KStub_'+n;p=R/'tools/pv-kstub-20261028'/(module+'.lean');rel=str(p.relative_to(R));data=p.read_bytes();tracked=subprocess.check_output(['git','show','HEAD:'+rel],cwd=R);assert data==tracked
+ pins.append(dict(id=i,module=module,path=rel,blob=subprocess.check_output(['git','rev-parse','HEAD:'+rel],cwd=R,text=True).strip(),sha256=hashlib.sha256(data).hexdigest(),revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source=data.decode()))
+(E/'lean-continuation-plan.json').write_text(json.dumps([{k:v for k,v in p.items() if k!='source'} for p in pins],indent=2)+'\n')
+code='''from pathlib import Path
+import json,hashlib,re,os
+D=Path('/home/dombarker/project-offloads/codex-pv-kstub-20261028')
+pins=json.loads(PAYLOAD)
+used=[]
+for base in Path('/home/dombarker/project-offloads').glob('codex-pv-*'):
+ for x in pins:
+  for relative in [str(x['id']), 'receipts/'+str(x['id']), 'evidence/'+str(x['id'])]:
+   p=base/relative
+   if p.exists():used.append(str(p))
+sent=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/sent.txt')
+if sent.exists():
+ for line in sent.read_text().splitlines():
+  if any(re.search(r'(?<!\\d)'+str(p['id'])+r'(?!\\d)',line) for p in pins):used.append(line)
+assert not used,used
+checks=[]
+for x in json.loads((D/'external-object-manifest.json').read_text()):
+ if x['module']=='Init' or x['module'].startswith('Init/') or x['module']=='Std' or x['module'].startswith('Std/'):
+  h=hashlib.sha256(Path(x['path']).read_bytes()).hexdigest();assert h==x['object_sha256'],x['module'];checks.append(dict(module=x['module'],sha256=h,ok=True))
+for p in pins:
+ assert hashlib.sha256(p['source'].encode()).hexdigest()==p['sha256'];(D/(p['module']+'.lean')).write_text(p['source'])
+env=json.loads((D/'env-J.json').read_text());env['LEAN_PATH']=str(D/'lean-objects')+':'+env['LEAN_PATH'];(D/'env-J-continuation.json').write_text(json.dumps(env,indent=2))
+record=dict(ids=[p['id'] for p in pins],other_receipt_conflicts=used,external_objects=checks,private_dependency_sources=[p['module'] for p in pins]+['PV_KStub_CopyMeaning','PV_KStub_WindowFrame'])
+(D/'lean-continuation-preflight.json').write_text(json.dumps(record,indent=2));print(json.dumps(record))
+'''.replace('PAYLOAD',repr(json.dumps(pins)))
+for k in range(11):
+ q=subprocess.run(['ssh',H,'python3 -'],input=code,text=True,capture_output=True)
+ if q.returncode!=255:break
+ with (E/'lean-continuation-transport.jsonl').open('a') as f:f.write(json.dumps(dict(exit=255,attempt=k,stderr=q.stderr,time=time.time()))+'\n')
+ if k<10:time.sleep(60)
+assert q.returncode==0,q.stderr
+(E/'lean-continuation-preflight.json').write_text(q.stdout)
+for p in pins:
+ n=str(p['id']);m=p['module'];cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J-continuation.json',D+'/lean-objects',D,D+'/lean-objects/'+m+'.olean',D+'/'+m+'.lean','7000']
+ assert not (E/n/'receipt.json').exists()
+ for k in range(11):
+  q=subprocess.run([sys.executable,str(R/'tools/pv-kstub-20261028/scope.py'),n,'Lean',*cmd])
+  if q.returncode==79:time.sleep(60);continue
+  if q.returncode!=78:break
+  if k<10:time.sleep(180)
+ f=E/n/'receipt.json'
+ if not f.exists():raise RuntimeError('Unresolved Lean attempt; recover before retry')
+ receipt=json.loads(f.read_text());receipt.update({k:v for k,v in p.items() if k!='source'});receipt['external_preflight']='lean-continuation-preflight.json';f.write_text(json.dumps(receipt,indent=2)+'\n')
+ if receipt['exit']!=0:sys.exit('Focused Lean error; correct source before proceeding')
