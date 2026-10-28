@@ -119,11 +119,11 @@ for name,short in CONFIG:
  pre='import R1Z.PV_W_StructuredBinds\nimport R1Z.PV_W_RecursiveLaws\n'+''.join('import R1Z.PV_W_R_'+x+'\n' for x in sorted(imports))
  out=pre+'set_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_W_R_'+short+'\nopen Aeneas Aeneas.Std ProverRwFull PV_W_ReachedEffects PV_W_Callbacks\nvariable [ExternalTypes]\n\n'
  out+='def program\n  '+h+' :\n  P '+result+' := do\n'+translated+'\n\n'
- out+='theorem erase_program (ops : ExternalFuns)\n  '+h+' :\n  erase ops (program '+' '.join(explicit)+') =\n    @'+name+' _ ops '+' '.join(actualargs)+' := by\n  unfold program '+name+'\n'+pr+'\n\n#print axioms erase_program\n'
+ out+='theorem erase_program (ops : ExternalFuns)\n  '+h+' :\n  erase ops (program '+' '.join(explicit)+') =\n    @'+name+(' ' if short=='PreReservedReserve' else ' _ ops ')+' '.join(actualargs)+' := by\n  unfold program '+name+'\n'+pr+'\n\n#print axioms erase_program\n'
  if short in ['PreReservedReserve','DurableReserve']:
   typ='aspis_prover.state_only_entropy.'+('PreReservedNonce' if short=='PreReservedReserve' else 'DurableStateOnlyMaskNonceStore')
   inst=next(d for d,x in DICT.items() if x==short)
-  out+='\ndef store : Store '+typ+' := ⟨program⟩\n\ntheorem store_source (ops : ExternalFuns) :\n    sourceStore ops store = @'+inst+' _ ops := by\n  apply congrArg aspis_prover.state_only_hiding.StateOnlyMaskNonceStore.mk\n  funext self a b\n  exact erase_program ops self a b\n\n#print axioms store_source\n'
+  out+='\ndef store : Store '+typ+' := ⟨program⟩\n\ntheorem store_source (ops : ExternalFuns) :\n    sourceStore ops store = @'+inst+('' if short=='PreReservedReserve' else ' _ ops')+' := by\n  apply congrArg aspis_prover.state_only_hiding.StateOnlyMaskNonceStore.mk\n  funext self a b\n  exact erase_program ops self a b\n\n#print axioms store_source\n'
  out+='end R1Z.PV_W_R_'+short+'\n'
  target=D/('PV_W_R_'+short+'.lean')
  if '--check' in args:assert target.read_text()==out

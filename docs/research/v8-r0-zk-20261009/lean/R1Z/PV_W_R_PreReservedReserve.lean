@@ -35,7 +35,7 @@ theorem erase_program (ops : ExternalFuns)
   (statement_digest : Array Std.U8 32#usize)
   (mask_nonce : Array Std.U8 32#usize) :
   erase ops (program self statement_digest mask_nonce) =
-    @aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve _ ops self statement_digest mask_nonce := by
+    @aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve self statement_digest mask_nonce := by
   unfold program aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
   try dsimp only
   apply PV_W_Callbacks.erase_if_congr
@@ -71,7 +71,7 @@ theorem erase_program (ops : ExternalFuns)
 def store : Store aspis_prover.state_only_entropy.PreReservedNonce := ⟨program⟩
 
 theorem store_source (ops : ExternalFuns) :
-    sourceStore ops store = @aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore _ ops := by
+    sourceStore ops store = @aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore := by
   apply congrArg aspis_prover.state_only_hiding.StateOnlyMaskNonceStore.mk
   funext self a b
   exact erase_program ops self a b
