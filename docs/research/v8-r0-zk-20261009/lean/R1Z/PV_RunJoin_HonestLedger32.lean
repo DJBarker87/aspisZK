@@ -17,7 +17,7 @@ variable (base : ExternalTypes) (a b : Honest (K := K))
 include same header pool domain
 
 /-- Complete prefix result, before any private compiled columns are consumed. -/
-theorem prefix (ops : @ExternalFuns (PDict_CodecDictionary.native base))
+theorem prefix_result (ops : @ExternalFuns (PDict_CodecDictionary.native base))
     (hash : Slice (Slice U8) → Result (Array U8 32#usize))
     (address : PV_RunJoin_LedgerWorld.Address) (nonce : Array U8 32#usize) :
     letI : ExternalTypes := PDict_CodecDictionary.native base
@@ -28,7 +28,7 @@ theorem prefix (ops : @ExternalFuns (PDict_CodecDictionary.native base))
   letI : ExternalFuns := PDict_CodecDictionary.selected base ops
   exact PV_RunJoin_PublicReservation.common address _ _ .S2 hash hash nonce nonce
     (PV_RunJoin_PublicAgreement32.honest base a b same header pool domain) rfl rfl
-#print axioms prefix
+#print axioms prefix_result
 
 /-- On a common source world and common secret, both actually returned ledger
 models agree even when the private compiled payloads differ. No equality of
