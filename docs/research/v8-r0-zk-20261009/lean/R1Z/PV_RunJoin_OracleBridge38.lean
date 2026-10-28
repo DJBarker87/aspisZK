@@ -73,6 +73,7 @@ theorem selected_callback (ops : ExternalFuns) (terminal : Terminal)
   | Continue claims =>
     simp only [aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31,
       op227 claims]
+    rfl
 
 #print axioms selected_callback
 end R1Z.PV_RunJoin_OracleBridge38
