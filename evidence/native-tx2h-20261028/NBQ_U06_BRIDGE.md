@@ -1,6 +1,6 @@
 # NBQ U06 — CLOSED-CONDITIONAL
 
-All13 members have local value/Result bridges in the inherited native/cohort
+All12 members have local value/Result bridges in the inherited native/cohort
 carrier domain. Conditional credit: inherited private Dot::push and reached
 array/carrier copies await the K-1 recheck (KMX_/KDX_); no unconditional native
 copy closure is asserted. No headline premise removed. S2/100-bit target remain
@@ -13,7 +13,7 @@ not established. Frozen Rust4bb3b3f5, same source/cohort pins and trust boundary
 | canonical::reduce | K001, all u64 | LPf_ReductionWord.native_reduce: result x%P and <P |
 | canonical::Dot::new | K003 | FIo_Native body, NBQ_U06.new composes zero constructors |
 | canonical::Dot::finish | K004, arbitrary four u64 | LPf_DotFinish.source, all four residues and bounds |
-| canonical::Dot::push | inherited CLOSED private-push leaf, K-1 conditional | LPm_PublicState.private_source and LPi_RawValues.source: canonical Q×Q, arbitrary four-u64 prestate, exact wrapping update; not newly run |
+| canonical::Dot::push | inherited CLOSED LPn_Dot_push_LEAF.md, K-1 conditional | LPm_PublicState.private_source and LPi_RawValues.source: canonical Q×Q, arbitrary four-u64 prestate, exact wrapping update; not newly run |
 | canonical::Q::from_limbs | K005 | NBQ_QChecks.from_limbs: all raw limbs, exact Some/None |
 | canonical::Q::limbs | K006 | FIo_Native body returns identical array |
 | canonical::Q::from_wide | K007 | LPi_CheckedInputs.from_wide, exact low/high four limbs |
@@ -68,3 +68,11 @@ association remain existing obligations. No changed cryptographic assumption,
 security metric, source adoption, shipped file, release ELF or key. Inherited
 ELF pins only, as in NBQ_PLAN.md. Next deliverable is K-1 validation of copied
 carriers; conditional closure must not be relabelled unconditional before it.
+
+Private-push source reference:
+[evidence/leaf-p6-12-20261027/LPn_Dot_push_LEAF.md](../leaf-p6-12-20261027/LPn_Dot_push_LEAF.md).
+All11 LPb passing stages have existing frozen-lock replays booked by
+[LPi_REUSE.md](../leaf-p6-9-20261027/LPi_REUSE.md): five fresh/rejection→LPe_K001;
+three scalar/wide/scalar-frame serialization→LPe_K004; six-wide→LPe_K005;
+selected-field→LPe_K006; zero-wide29-push→LPe_K007. Their narrow original domains
+remain; no unchanged LPb suite was newly run or used as a whole-leaf proof.

@@ -1,0 +1,57 @@
+{
+  "requested_bytes": 8589934592,
+  "allowed": true,
+  "utc": 1793157830.9894836,
+  "populated_scopes": [
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rf1468a15032c45c2a5aa9a116b0a0a16.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-kscan-20261028/d347/D051/time.log python3 /home/dombarker/project-offloads/codex-pv-kscan-20261028/d347-run.py D051 inner",
+        "python3 /home/dombarker/project-offloads/codex-pv-kscan-20261028/d347-run.py D051 inner",
+        "timeout 300 taskset --cpu-list 0-3 /home/dombarker/.cargo/bin/cargo kani --manifest-path /home/dombarker/project-offloads/codex-pv-kscan-20261028/d347/workspace/tools/prover-rw-20261023/pv-rw-step/proof/Cargo.toml --lib --only-codegen --keep-temps -j 4 --output-format terse --no-overflow-checks -Z unstable-options --no-assertion-reach-checks",
+        "/home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-pv-kscan-20261028/d347/workspace/tools/prover-rw-20261023/pv-rw-step/proof/Cargo.toml --lib --only-codegen --keep-temps -j 4 --output-format terse --no-overflow-checks -Z unstable-options --no-assertion-reach-checks",
+        "cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-pv-kscan-20261028/d347/workspace/tools/prover-rw-20261023/pv-rw-step/proof/Cargo.toml --lib --only-codegen --keep-temps -j 4 --output-format terse --no-overflow-checks -Z unstable-options --no-assertion-reach-checks",
+        ""
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 231874560
+    },
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/l2c-batch-42638.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/python3 -u -c import json,pathlib,subprocess,hashlib,re,sys,time H=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')] for x in json.load(open(H/('batch-'+start+'.json'))):  a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)  if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))  s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']  deps={}  for name in re.findall(r'^import\\s+(\\S+)',x['source'],re.M):   p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)   if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)   deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())  (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))  t=time.monotonic()  with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:   p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)   f.write('\\nexit='+str(p.returncode)+'\\n')  (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))  print(a,m,p.returncode,flush=True)  if p.returncode:break  /home/dombarker/project-offloads/codex-pv-l2c-20261028 42638",
+        "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-l2c-20261028/evidence/time-42639.log timeout 900 python3 /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/J.json /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/R1Z/ProverCommitWordBytes47.olean /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/R1Z/ProverCommitWordBytes47.lean 7000",
+        "timeout 900 python3 /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/J.json /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/R1Z/ProverCommitWordBytes47.olean /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/R1Z/ProverCommitWordBytes47.lean 7000",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M7000 -DElab.async=false -R /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources -o /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/R1Z/ProverCommitWordBytes47.olean /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/R1Z/ProverCommitWordBytes47.lean"
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 125333504
+    },
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r59f1b420d8414ac2bfc3bac15a1273c8.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/python3 S2W_run_host.py KMX_K036.json",
+        "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_K036/time.log timeout 600 python3 KMX_gate.py KMX_K036 KMX_c049_ --cbmc-args --unwinding-assertions",
+        "timeout 600 python3 KMX_gate.py KMX_K036 KMX_c049_ --cbmc-args --unwinding-assertions",
+        "python3 KMX_gate.py KMX_K036 KMX_c049_ --cbmc-args --unwinding-assertions",
+        "/home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target --lib -j 1 -Z unstable-options -Z stubbing --harness-timeout 90s --harness KMX_c049_ --output-format regular --cbmc-args --unwinding-assertions",
+        "cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target --lib -j 1 -Z unstable-options -Z stubbing --harness-timeout 90s --harness KMX_c049_ --output-format regular --cbmc-args --unwinding-assertions",
+        "/home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo rustc --manifest-path /home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_src/crates/aspis-r1-cost-probe/Cargo.toml --target x86_64-unknown-linux-gnu -Zhost-config -Ztarget-applies-to-host --config=host.rustflags=[\"--cfg=kani_host\"] --target-dir /home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target/kani --message-format json-diagnostic-rendered-ansi -p path+file:///home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_src/crates/aspis-r1-cost-probe#0.1.0 --lib -- -Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --enable-stubbing --harness KMX_c049_ -Z unstable-options -Z stubbing",
+        "/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name aspis_r1_cost_probe --edition=2021 crates/aspis-r1-cost-probe/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debug-assertions=on --cfg feature=\"default\" --cfg feature=\"private-leaf-salts\" --check-cfg cfg(docsrs,test) --check-cfg cfg(feature, values(\"audit-eight-way\", \"default\", \"detail-phases\", \"optimized-terminal\", \"private-leaf-salts\", \"program-build\", \"prover\", \"r0-op-count\", \"r1p-check\")) -C metadata=a37efdc8979ec450 -C extra-filename=-27cd5a23498efb38 --out-dir /home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C incremental=/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target/kani/x86_64-unknown-linux-gnu/debug/incremental -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target/kani/debug/deps --extern aspis_core=/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_core-38bcfec2328c2516.rmeta --extern aspis_statement=/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_statement-ac977e9e04527609.rmeta -Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --enable-stubbing --harness KMX_c049_ -Z unstable-options -Z stubbing -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0"
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 115769344
+    }
+  ],
+  "bounded_reserved_bytes": 25769803776,
+  "all_populated_scopes_bounded": true,
+  "safe_limit_bytes": 59055800320,
+  "print_axioms": "N/A: read-only resource preflight"
+}
+

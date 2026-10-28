@@ -11,3 +11,20 @@ callee value proofs; K-1 credit remains conditional where a reached copy matters
 | NBQ_error_control::private_log (K016) | NBQ_ErrorControl.frame | Returning log has no account-data writes under existing runtime log frame; one call, then InvalidInstructionData. Runtime effects/value are not supplied by Kani. |
 | NBQ_powers::NBQ_emul::replacement for WideExact::mul (U07) | AspisR1.LPi_TowerValues.wide_mul; AspisR1.LPm_StubBounds.product/canonical_sum/residue | Both eight-word operands canonical. Exact inherited natural tower spec, any canonical output constrained to spec; natural word range makes wrapping reference operations exact. No native field multiplication is executed. Caller derives canonical inputs through powers induction. |
 | NBQ_dots::child for four_dots_one (U07) | NONE: OPEN child bridge | Routing-only experiment. Never credit as four_dots_one closure or universal exact-value substitution. Parent must wait for complete child association. |
+
+Tail-window EbyKDot::push (K037–039) is replaced by NBQ_tail::push, which
+checks the SAME receiver pointer, selected coefficient and canonical scalar,
+then increments the SAME count and havocs both four-word accumulators. This
+is a caller overapproximation. Exact values/state updates are paired to
+NBQ_U06.push / AspisR1.LPm_PublicState.source; the canonical/count domains for
+all three SAME chained calls are derived by NBQ_TailDomain.three and
+NBQ_PublicInvariant.step. Natural raw specs are LPi_RawValues.spec; no arithmetic
+claim is derived from the havoc. Query-byte/gamma producer association remains
+the open parent obligation, not an unproved stub postcondition given credit.
+
+After-product windows K024–031 have no function stub and execute no multiply.
+Their arbitrary product is an explicit program cut, paired to
+NBQ_RawCell.arithmetic (checked emitted U64 multiply+add equals exact natural
+product and no overflow on canonical inputs) and NBQ_QueryBounds.product /
+group_bound. The joined full eight-cell source step/loop is still OPEN.
+They are not asserted to close the full body by themselves.

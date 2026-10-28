@@ -2,8 +2,8 @@
 
 **Unit OPEN: filled native arbitrary-positive-size association remains open.**
 Error is **CLOSED-CONDITIONAL** at the 03:00 soundness observation, subject to
-the retained native K-1 copy recheck and standard/runtime private-allocation and
-log frame boundary. No formatted bytes are claimed. No headline premise removed.
+the retained standard/runtime private-allocation and log frame boundary.
+Fresh NBQ_K016 below supersedes the copied NBP reply for this observation. No formatted bytes are claimed. No headline premise removed.
 
 ## filled
 
@@ -51,3 +51,15 @@ removed or cryptographic assumption added. Frozen source4bb3b3f5 and inherited
 three ELF pins in NBQ_PLAN.md remain; no shipped edit or ELF rebuild trigger.
 Next deliverable: native symbolic positive-size buffer-use/initialization and
 cleanup bridge. Target not yet established.
+
+## Fresh scope-only error gate
+
+NBQ_K016 passes the actual frozen wrapper for all eight error variants with
+0/186 failed (4 unreachable),1/1 cover,wall51.193833037s,RSS488896KiB,swap0.
+The formatter returns an empty private String and the runtime log stub observes
+only call count; neither contents nor copied bytes enter the property. This is
+new control evidence under the 03:00 scope, not a claim about actual formatting.
+The existing standard/runtime private formatting/allocation and log frame
+boundary is retained explicitly in LPh_STUBS.md and NBQ_ErrorControl.frame.
+It supersedes the need for NBP_K040's copied one-byte reply for this observation.
+filled remains OPEN exactly as above.
