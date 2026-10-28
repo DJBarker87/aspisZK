@@ -1,0 +1,22 @@
+'AspisR1.JHt_PrattCore.cast_modPow' depends on axioms: [propext, Quot.sound]
+'AspisR1.JHt_PrattCore.prime_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHt_PrattCore.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+JHt_PrattCore.lean:37:2: error: Tactic `decide` failed for proposition
+  modPow 2 57896044618658097711785492504343953926634992332820282019728792003956564819948
+      57896044618658097711785492504343953926634992332820282019728792003956564819949 =
+    1
+because its `Decidable` instance
+  instDecidableEqNat
+    (modPow 2 57896044618658097711785492504343953926634992332820282019728792003956564819948
+      57896044618658097711785492504343953926634992332820282019728792003956564819949)
+    1
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqNat` and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h :
+    (modPow 2 57896044618658097711785492504343953926634992332820282019728792003956564819948
+          57896044618658097711785492504343953926634992332820282019728792003956564819949).beq
+      1 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+'AspisR1.JHt_PrattCore.preflight' depends on axioms: [propext, sorryAx, Quot.sound]
