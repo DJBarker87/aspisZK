@@ -67,7 +67,7 @@ use aspis_statement::pool_v1::{
 };
 
 use aspis_prover::host_arithmetic::state_only_selected_mask_value;
-use crate::host_copy_terminal::{evaluate_with_selectors,PoolV1PairForestCompiledVariantV1,Selectors};
+use crate::reference_copy_terminal::{evaluate_with_selectors,PoolV1PairForestCompiledVariantV1,Selectors};
 
 const DOMAIN_OWNER_KEY:M31=M31(0x4153_0001);
 const DOMAIN_NULLIFIER:M31=M31(0x4153_0002);
@@ -234,10 +234,42 @@ fn sum_high(selectors: &Selectors, ranges: &[core::ops::Range<usize>]) -> QM31 {
 fn reconstruct_10(view: &[QM31; 16]) -> QM31 {
     let mut acc = view[9];
     let mut index = 9usize;
-    while index > 0 {
-        index -= 1;
-        acc = acc.add(acc).add(view[index]);
-    }
+    
+        
+        acc = acc.add(acc).add(view[8usize]);
+    
+
+        
+        acc = acc.add(acc).add(view[7usize]);
+    
+
+        
+        acc = acc.add(acc).add(view[6usize]);
+    
+
+        
+        acc = acc.add(acc).add(view[5usize]);
+    
+
+        
+        acc = acc.add(acc).add(view[4usize]);
+    
+
+        
+        acc = acc.add(acc).add(view[3usize]);
+    
+
+        
+        acc = acc.add(acc).add(view[2usize]);
+    
+
+        
+        acc = acc.add(acc).add(view[1usize]);
+    
+
+        
+        acc = acc.add(acc).add(view[0usize]);
+    
     acc
 }
 
@@ -389,14 +421,7 @@ fn absorption_lanes_literal(
     openings: &[QM31; 16],
 ) -> [QM31; 16] {
     qm31_array!(16, lane, {
-        let blocks = if lane < 2 {
-            fixed
-        } else if lane < RATE {
-            fixed.add(chunk_two)
-        } else {
-            fixed.add(chunk_two).add(chunk_eight).add(nodes)
-        };
-        low.mul(blocks).mul(openings[lane])
+        absorption_lane227(lane,low,fixed,chunk_two,chunk_eight,nodes,read227(*openings,lane))
     })
 }
 
@@ -437,59 +462,35 @@ fn add_digest_binding(
     right_tweak: bool,
 ) -> [QM31;DIGEST_ELEMS] {
     let mut lane_index = 0usize;  
-        let mut target = expected[0usize];
-        if right_tweak && 0usize + 1 == DIGEST_ELEMS {
-            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-        }
+        let target=tweak227(expected[0usize],right_tweak,0usize);
         output[0usize] = output[0usize].add(selector.mul(opened[start + 0usize].sub(lift_m31(target))));
     
  
-        let mut target = expected[1usize];
-        if right_tweak && 1usize + 1 == DIGEST_ELEMS {
-            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-        }
+        let target=tweak227(expected[1usize],right_tweak,1usize);
         output[1usize] = output[1usize].add(selector.mul(opened[start + 1usize].sub(lift_m31(target))));
     
  
-        let mut target = expected[2usize];
-        if right_tweak && 2usize + 1 == DIGEST_ELEMS {
-            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-        }
+        let target=tweak227(expected[2usize],right_tweak,2usize);
         output[2usize] = output[2usize].add(selector.mul(opened[start + 2usize].sub(lift_m31(target))));
     
  
-        let mut target = expected[3usize];
-        if right_tweak && 3usize + 1 == DIGEST_ELEMS {
-            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-        }
+        let target=tweak227(expected[3usize],right_tweak,3usize);
         output[3usize] = output[3usize].add(selector.mul(opened[start + 3usize].sub(lift_m31(target))));
     
  
-        let mut target = expected[4usize];
-        if right_tweak && 4usize + 1 == DIGEST_ELEMS {
-            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-        }
+        let target=tweak227(expected[4usize],right_tweak,4usize);
         output[4usize] = output[4usize].add(selector.mul(opened[start + 4usize].sub(lift_m31(target))));
     
  
-        let mut target = expected[5usize];
-        if right_tweak && 5usize + 1 == DIGEST_ELEMS {
-            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-        }
+        let target=tweak227(expected[5usize],right_tweak,5usize);
         output[5usize] = output[5usize].add(selector.mul(opened[start + 5usize].sub(lift_m31(target))));
     
  
-        let mut target = expected[6usize];
-        if right_tweak && 6usize + 1 == DIGEST_ELEMS {
-            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-        }
+        let target=tweak227(expected[6usize],right_tweak,6usize);
         output[6usize] = output[6usize].add(selector.mul(opened[start + 6usize].sub(lift_m31(target))));
     
  
-        let mut target = expected[7usize];
-        if right_tweak && 7usize + 1 == DIGEST_ELEMS {
-            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-        }
+        let target=tweak227(expected[7usize],right_tweak,7usize);
         output[7usize] = output[7usize].add(selector.mul(opened[start + 7usize].sub(lift_m31(target))));
     
     output
@@ -2537,9 +2538,7 @@ fn claim227(claims: [[QM31;29];3], index: usize) -> QM31 { let row=claims[index/
 
 /// Owned value entry: copy the immutable inputs before evaluating the same chain.
 pub fn reference227(public: SemanticPublic, claims: [[QM31;29];3], alpha: [QM31;10], c: aspis_core::state_only_prefix::r0::Challenges) -> Result<QM31,aspis_core::state_only_prefix::r0::Error> {
-    let mut selected=[QM31::ZERO;84];
-    let mut i=0usize;
-    while i<84 { let value=claim227(claims,i); selected[i]=value; i+=1; }
+    let selected=select227(claims);
     match terminal_parts(public,&selected,&alpha,c.lambda,c.chi,c.theta,&c.zc,c.mu) {
         Ok(parts)=>Ok(parts.0),
         Err(_)=>Err(aspis_core::state_only_prefix::r0::Error::Public)
@@ -2559,4 +2558,20 @@ fn sum_interval227(high:[QM31;64], initial:QM31, start:usize, end:usize)->QM31 {
 
 fn initial_lane227(lane:usize,full_or_rate:PreparedQm31Multiplier,full:PreparedQm31Multiplier,value:QM31)->QM31 {
     if lane<RATE { full_or_rate.mul(value) } else { full.mul(value) }
+}
+
+fn tweak227(value:M31,right_tweak:bool,lane:usize)->M31 {
+    if right_tweak && lane+1==DIGEST_ELEMS { value.add(MERKLE_NODE_COMPRESSION_V3_TWEAK) } else { value }
+}
+
+pub fn select227(claims:[[QM31;29];3])->[QM31;84] {
+    let mut selected=[QM31::ZERO;84];
+    let mut i=0usize;
+    while i<84 { let value=claim227(claims,i); selected[i]=value; i+=1; }
+    selected
+}
+
+fn absorption_lane227(lane:usize,low:QM31,fixed:QM31,chunk_two:QM31,chunk_eight:QM31,nodes:QM31,opened:QM31)->QM31 {
+    let blocks=if lane<2 {fixed} else if lane<RATE {fixed.add(chunk_two)} else {fixed.add(chunk_two).add(chunk_eight).add(nodes)};
+    low.mul(blocks).mul(opened)
 }

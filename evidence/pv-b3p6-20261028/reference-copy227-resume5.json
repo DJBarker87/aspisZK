@@ -1,0 +1,8 @@
+{
+  "source_sha256": "98e1bdacb3afee24572eccb71a1ecefe857cedf7a74d990e0046bec4c433fcce",
+  "reference_sha256": "3ab9c695e9b794cb2d45a56dd57e0128957aedb7a671dda7ae2575a30b0440d5",
+  "original_inner_loop": "        limb = 0;\n        while limb < POSEIDON2_WIDTH {\n            if pattern.kinds[limb] == 1 {\n                let source = openings[usize::from(pattern.columns[limb])]\n                    .add(lift_m31(M31(pattern.offsets[limb])));\n                value = value.add(powers[limb].mul(source));\n            }\n            limb += 1;\n        }\n",
+  "change": "isolate limb branch in owned value helper, preserves indexing inside kind==1 and field operations/order",
+  "proved": false,
+  "active_change": "active_block227 owns selector copy; mask_step227 owns values and isolates scalar add/sub branch; unchanged guard and operation order"
+}

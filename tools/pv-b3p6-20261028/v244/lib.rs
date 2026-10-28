@@ -12,3 +12,5 @@ pub fn reference227(public: reference_terminal::r0::Public<'_>, claims: &[[aspis
 }
 
 pub mod std194227;
+
+mod reference_copy_terminal;

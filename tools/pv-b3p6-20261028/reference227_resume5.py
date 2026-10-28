@@ -187,3 +187,63 @@ while needle in s:
 record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
 record['lane_loop_change']='all fixed8 source lane loops unrolled in increasing order; paths/occupancy/digest output writes preserved'
 Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
+a=s.index('fn reconstruct_10(');b=s.index('\nfn ',a+3);part=s[a:b]
+needle='while index > 0 {';start=part.index(needle);bs=part.index('{',start)+1;depth=1;end=bs
+while depth:
+    depth+=(part[end]=='{')-(part[end]=='}');end+=1
+body=part[bs:end-1].replace('index -= 1;','')
+part=part[:start]+'\n'.join(re.sub(r'\bindex\b',str(i)+'usize',body)for i in reversed(range(9)))+part[end:]
+s=s[:a]+part+s[b:]
+(P/'reference_terminal.rs').write_text(s)
+record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
+record['reconstruct_change']='reconstruct_10 reverse loop unrolled for indices8 through0 in unchanged order'
+Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
+a=s.index('fn add_digest_binding(');b=s.index('\n#[inline(never)]',a);part=s[a:b]
+part,count=re.subn(r'let mut target = expected\[(\d+usize)\];\s*if right_tweak && \1 \+ 1 == DIGEST_ELEMS \{\s*target = target.add\(MERKLE_NODE_COMPRESSION_V3_TWEAK\);\s*\}',r'let target=tweak227(expected[\1],right_tweak,\1);',part)
+assert count==8,count
+s=s[:a]+part+s[b:]
+s+='''
+fn tweak227(value:M31,right_tweak:bool,lane:usize)->M31 {
+    if right_tweak && lane+1==DIGEST_ELEMS { value.add(MERKLE_NODE_COMPRESSION_V3_TWEAK) } else { value }
+}
+'''
+(P/'reference_terminal.rs').write_text(s)
+record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
+record['digest_branch_change']='scalar tweak227 helper isolates same right_tweak/lane guard and optional M31 addition'
+Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
+s=s.replace('crate::host_copy_terminal::','crate::reference_copy_terminal::')
+(P/'reference_terminal.rs').write_text(s)
+record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
+record['copy_helper_change']='use owned reference_copy_terminal; see reference-copy227-resume5.json'
+Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
+old='''    let mut selected=[QM31::ZERO;84];
+    let mut i=0usize;
+    while i<84 { let value=claim227(claims,i); selected[i]=value; i+=1; }
+'''
+assert s.count(old)==1
+s=s.replace(old,'    let selected=select227(claims);\n')
+s+='\npub fn select227(claims:[[QM31;29];3])->[QM31;84] {\n'+old+'    selected\n}\n'
+(P/'reference_terminal.rs').write_text(s)
+record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
+record['selection_change']='factor unchanged owned select84 loop into select227 for a focused complete selection proof'
+Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
+old='''        let blocks = if lane < 2 {
+            fixed
+        } else if lane < RATE {
+            fixed.add(chunk_two)
+        } else {
+            fixed.add(chunk_two).add(chunk_eight).add(nodes)
+        };
+        low.mul(blocks).mul(openings[lane])'''
+assert s.count(old)==1
+s=s.replace(old,'        absorption_lane227(lane,low,fixed,chunk_two,chunk_eight,nodes,read227(*openings,lane))')
+s+='''
+fn absorption_lane227(lane:usize,low:QM31,fixed:QM31,chunk_two:QM31,chunk_eight:QM31,nodes:QM31,opened:QM31)->QM31 {
+    let blocks=if lane<2 {fixed} else if lane<RATE {fixed.add(chunk_two)} else {fixed.add(chunk_two).add(chunk_eight).add(nodes)};
+    low.mul(blocks).mul(opened)
+}
+'''
+(P/'reference_terminal.rs').write_text(s)
+record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
+record['absorption_change']='scalar absorption_lane227 isolates unchanged three-way lane branch and arithmetic chain'
+Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
