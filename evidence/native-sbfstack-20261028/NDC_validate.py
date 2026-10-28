@@ -10,7 +10,7 @@ for x in w:
 for mode,j in J('NDC_LINKAGE.json').items():
  assert j['text_equal'] and j['text_sha256']==j['unstripped_text_sha256']
  exact=J('NDC_EXACT_SYMBOLS.json')['pool' if mode=='pool' else 'verifier'];assert len(exact)==62 and not any(exact.values())
- s=(E/('NDC_'+('pool' if mode=='pool' else 'verifier')+'_symbols.txt')).read_text()
+ s=lzma.decompress((E/('NDC_'+('pool' if mode=='pool' else 'verifier')+'_symbols.txt.xz')).read_bytes()).decode()
  for name in exact:assert name not in s
 for mode,j in J('NDC_CALLGRAPH_FINAL.json').items():assert j['e_flags']==0 and not j['unresolved_direct'] and max(j['direct_r10_max_negative_offsets'].values())==4096
 rows=J('NDC_TABLE.json');assert len(rows)==102 and len({(r['id'],r['elf']) for r in rows})==102
