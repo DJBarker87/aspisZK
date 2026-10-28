@@ -71,6 +71,7 @@ theorem thread {H F : Type} (digest : aspis_core.digest.Digest32 H)
     subst round
     rw [host_sumcheck.prove_sumcheck_rounds]
     simp only [↓reduceIte,phase,finish]
+    rfl
   | succ n ih =>
     have hn : round≠10#usize := by scalar_tac
     have inc := PV_RunJoin_MergeLoop35.increment round (by omega)
@@ -78,9 +79,11 @@ theorem thread {H F : Type} (digest : aspis_core.digest.Digest32 H)
     simp only [hn,↓reduceIte,phase]
     apply congrArg (Aeneas.Std.bind
       (host_sumcheck.prove_sumcheck_round digest oi transcript output point running round oracle))
-    rintro ⟨r,t,o⟩
+    funext triple
+    rcases triple with ⟨r,t,o⟩
+    dsimp only [Aeneas.Std.uncurry]
     apply congrArg (Aeneas.Std.bind (core.result.Result.Insts.CoreOpsTry.branch r))
-    intro cf
+    funext cf
     cases cf with
     | Break residual => rfl
     | Continue val =>
