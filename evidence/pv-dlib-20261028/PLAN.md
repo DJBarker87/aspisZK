@@ -145,3 +145,8 @@ reset only. Final planned Kani run combines corrected retained-buffer equality,
 Digest/FixedOutput forwarding and left/right 28/32-byte Ct truncation with
 arbitrary output seeds. All callbacks are real generic trait implementations,
 not stubs; no SHA compression or field chain is executed.
+
+Ruling (r) appended to common file and read after 42244: Kani padding PASS5
+is suspended (reached copies); constructor PASS1/2 conservatively suspended
+pending reached-copy audit. Sixth copy-dependent wrapper gate will not run.
+Continue structural/extraction Lean work; no row credited removed.

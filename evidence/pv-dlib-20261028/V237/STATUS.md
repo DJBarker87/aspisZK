@@ -19,3 +19,10 @@ RunJoin binding and V232 remain. Deployed headline premises removed: zero.
 All target/exit/time/RSS/swap/revision/axiom receipts are indexed in status.json.
 The shipped generic extraction refusal is retained under
 ../aeneas-wrapper-default-01; it is not a false-row counterexample.
+
+## Lead ruling (r), discovered on reread
+
+The selected model theorems remain kernel checked. The Kani native-link credit
+is suspended conservatively because the constructor/observer path may reach
+memory-copy builtins. V237 is OPEN; no native closure is claimed. The prior
+PASS receipts are measurements, not an accepted native correspondence.
