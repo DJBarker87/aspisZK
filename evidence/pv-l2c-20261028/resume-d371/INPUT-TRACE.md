@@ -113,3 +113,40 @@ generator/hash ranges and compiler/mask preservation are separate obligations.
 This document is not yet a completed structural (K-1 substitute) proof of the
 entire route or N3. In particular, a source inspection of `%P` or a hash's
 reduced final layer is not being reported as a universal compiled theorem.
+
+
+## D371 proof status at focused-budget exhaustion
+
+No raw noncanonical private/statement limb source was found in the selected
+JSON planner. The only raw M31 constructors left after its final-remainder
+generator are literal 77. The four output owner/salt origins are supplied by
+`PV_L2C_PlannerOutputs.outputs`, with unconditional hash success and range for
+those generated keys. Canonical scalar/digest decoder laws retain rejecting
+branches. The ordered account cut proves all root/frontier fields are decoded,
+including active frontier slots; `AccountOrigins` and `AccountEncode` connect
+the exact returned positions and lossless bytes. The generic Rust API still
+accepts compiled columns without imposing this route: D370 is retained.
+
+`ClientRoute.Transfer/Withdrawal` explicitly includes successful outer compile,
+asset 77, ordered account field-decode provenance and output origins. It uses
+the planner's directly constructed snapshot, not the different 800-byte codec.
+`transfer_columns`/`withdrawal_columns` derive shape 16 x 1024 and every raw
+cell < P through exact recorded fields, all block pre/absorption/permutation
+rows, path/value/occupancy rows, banks, merge and returned compiler columns.
+No N3 success or raw-column bound is part of the input carrier.
+
+`MaterialN3.transfer/withdrawal` proves the complete owned base,d,g guard cut
+returns Ok from stateful sampler/build/apply executions. These execution
+records retain sample states/results and assume no column canonicality or
+guard outcome. Instantiating them from the *whole native* material/derive/
+clone caller remains P, as does the exact selected-planner-to-carrier domain
+inclusion beyond the source-checked field cuts. This is not an unconditional
+whole-native N3 or deployed observation theorem. The source binding receipt
+names these remaining links explicitly; no new trust item hides them.
+
+Both original fixtures satisfy the canonical-origin refinement of the old
+honest family, with successful lossless digest/account-field decoder witnesses.
+That broader refinement is not asserted equal to the selected planner's
+specific two-deposit reconstruction. The native two-case diagnostic uses
+generated output fields and real account codecs and both full provers pass;
+it is finite validation, not exact planner non-vacuity or universal privacy.
