@@ -5,7 +5,10 @@ open Aeneas Aeneas.Std Result
 
 theorem read (s : Slice U8) (i : Usize) (h : i.val<s.length) :
     Slice.index_usize s i=.ok (s.val[i.val]'h) := by
-  simp only [Slice.index_usize,h,↓reduceDIte]
+  change (match s.val[i.val]? with
+    | none => .fail .arrayOutOfBounds
+    | some x => .ok x) = _
+  rw [List.getElem?_eq_getElem h]
 theorem zero (s : Slice U8) (i : Usize) (h : i.val<s.length)
     (hz : s.val[i.val]?=some 0#u8) : Slice.index_usize s i=.ok 0#u8 := by
   rw [read s i h]
