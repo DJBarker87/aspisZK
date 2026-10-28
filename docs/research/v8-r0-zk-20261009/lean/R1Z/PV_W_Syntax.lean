@@ -94,8 +94,8 @@ theorem execution_complete (ops : Interpreter Op W C E)
     | ok a =>
       simp only [Executes,h]
       exact ⟨eval ops (k a) (ops op w).world,ih a _,bind_ok _ _ _ _ h⟩
-    | fail e => simp only [Executes,eval,bind,h]
-    | div => simp only [Executes,eval,bind,h]
+    | fail e => simp only [Executes,eval,PV_W_Threading.bind,h]
+    | div => simp only [Executes,eval,PV_W_Threading.bind,h]
 
 theorem eval_valid (ops : Interpreter Op W C E) (step : W → C → W → Prop)
     (leaves : ∀ {B : Type} (op : Op B), Valid step (ops op))
