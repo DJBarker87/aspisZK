@@ -1,4 +1,5 @@
 import R1Z.PV_RW_CompressEmission
+import R1Z.ProverRw19LoopBind
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RW_CompressIterator
@@ -18,7 +19,7 @@ def execute (lambda : Q) (remaining : List M) (out power : Q) : Result Q :=
 
 theorem nil (lambda out power : Q) : execute lambda [] out power = ok out := by
   unfold execute
-  rw [ProverRwSuccessPowerTotal.loop_bind]
+  rw [ProverRw19LoopBind.loop_bind]
   rfl
 
 theorem cons (lambda out power : Q) (value : M) (remaining : List M) :
@@ -26,7 +27,7 @@ theorem cons (lambda out power : Q) (value : M) (remaining : List M) :
       let (nextOut,nextPower) ← PV_RW_CompressEmission.generated.shipped_step out power value lambda
       execute lambda remaining nextOut nextPower) := by
   unfold execute
-  rw [ProverRwSuccessPowerTotal.loop_bind]
+  rw [ProverRw19LoopBind.loop_bind]
   simp only [step,bind_assoc_eq]
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   rintro ⟨nextOut,nextPower⟩ _
