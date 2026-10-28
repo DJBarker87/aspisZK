@@ -13,7 +13,8 @@ cohorts=[]
 for version in ['nightly-2026-06-01','1.94.1']:
  R=Path('/home/dombarker/.rustup/toolchains')/(version+'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library');rec=dict(version=version,files={},bodies={})
  for f,marker,key in plan:
-  q=R/f;s=q.read_text();whole,b=fn(s,marker);rec['files'][f]=dict(path=str(q),sha256=sha(q.read_bytes()));rec['bodies'][key]=dict(text=whole,body_token_sha256=sha('\0'.join(toks(b)).encode()))
+  actual=f.replace('core/src/ptr/alignment.rs','core/src/mem/alignment.rs') if version=='nightly-2026-06-01' else f
+  q=R/actual;s=q.read_text();whole,b=fn(s,marker);rec['files'][f]=dict(path=str(q),sha256=sha(q.read_bytes()));rec['bodies'][key]=dict(text=whole,body_token_sha256=sha('\0'.join(toks(b)).encode()))
  q=R/'core/src/array/mod.rs';s=q.read_text();whole,b=fn(s,'macro_rules! array_impl_default');rec['files']['core/src/array/mod.rs']=dict(path=str(q),sha256=sha(q.read_bytes()));rec['bodies']['arrayDefault_macro']=dict(text=whole,body_token_sha256=sha('\0'.join(toks(b)).encode()));assert 'array_impl_default! {32,' in s
  cohorts.append(rec)
 identity={k:cohorts[0]['bodies'][k]['body_token_sha256']==cohorts[1]['bodies'][k]['body_token_sha256'] for k in cohorts[0]['bodies']}
