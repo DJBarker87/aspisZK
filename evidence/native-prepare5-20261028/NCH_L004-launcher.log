@@ -1,0 +1,46 @@
+{"attempt": "NCH_L004", "exit_status": 1, "wall_seconds": 2.1312494830344804, "peak_rss_kib": "5259036", "swaps": "0", "print_axioms": ["'AspisR1.NCH_ArrayJoin.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCH_generated/NCH_ArrayJoin.lean:16:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.setSlice! ?s ?i ?s').length
+in the target expression
+  ↑14759#usize = (↑(before.setSlice! start ↑bytes)).length
+
+case hl
+before after : Std.Array U8 14759#usize
+n : Usize
+bytes : Std.Array U8 n
+start : ℕ
+room : start + ↑n ≤ 14759
+values : ∀ k < ↑n, (↑after)[start + k]! = (↑bytes)[k]!
+frame : ∀ k < 14759, k < start ∨ start + ↑n ≤ k → (↑after)[k]! = (↑before)[k]!
+⊢ ↑14759#usize = (↑(before.setSlice! start ↑bytes)).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by 
+...
+NCH_generated/NCH_ArrayJoin.lean:16:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.setSlice! ?s ?i ?s').length
+in the target expression
+  ↑14759#usize = (↑(before.setSlice! start ↑bytes)).length
+
+case hl
+before after : Std.Array U8 14759#usize
+n : Usize
+bytes : Std.Array U8 n
+start : ℕ
+room : start + ↑n ≤ 14759
+values : ∀ k < ↑n, (↑after)[start + k]! = (↑bytes)[k]!
+frame : ∀ k < 14759, k < start ∨ start + ↑n ≤ k → (↑after)[k]! = (↑before)[k]!
+⊢ ↑14759#usize = (↑(before.setSlice! start ↑bytes)).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (14759 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NCH_ArrayJoin.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r09abee1ad2074897b0146fd8e2acc16c.scope; invocation ID: 4d2c84d08aeb47a6ae0902f7e3391b47
