@@ -13025,3 +13025,26 @@ runjoin30 (64 attempts; IDs 38183-38193 then 42300-42399) characterises the oute
 along that route, proves that every successful canonical preparation is an honest input, and states
 the coverage sentence for the owner, before V038/V045. Rows removed outright: 0. Privacy target not
 yet established.
+
+## D343 (Stream B) 2026-10-28 01:55 UTC: V230, V239, V217 and V220 closed on the candidate; batch 3 merged and retired; pv-b3p6 takes batch 3's remaining six rows by the P6 route
+
+batch3f (43 of 100 attempts; no crates/ or programs/ change; no XR imports; peak 2.57 GiB; no swap)
+closes four rows on the candidate by the structural route that ruling (k) allows: V230 (op134), V239
+(op222), V217 (op117) and V220 (op121). For each, the native link is a script-checked structural
+binding between the frozen original and its prover-local copy, backed by the copy's complete-Result
+Lean law from extraction, with the selected callback installed in the original carrier; the combined
+dictionary preserves the other 258 callbacks. Same-input native differentials are finite
+validation. Audit 40597 and the focused replay 40599 pass with standard axioms (the nested replay
+timed out; a flat installation replaced it and is retained). They enter the ledger at the next
+recount.
+
+codex/pv-batch3-20261027 was merged into the prover candidate (5fa2cc6781, pushed) and its worktree and
+branch removed. Its crates/ changes are those of c97270adc2, gated earlier (three ELF pins, native
+comparisons, +1.906% projection). pv-integ5 is gating the earlier candidate 03905a5259, so the
+current candidate needs its own three-ELF gate, differential and timing before adoption.
+
+New job pv-b3p6 (IDs 42500-42599; 12 Kani runs; no crates/ change) takes batch 3's remaining six rows,
+V228, V229, V241, V243, V244, V245, by the P6 route: owned references in a proof-only crate, no-stub
+bounded Kani for control and indexing, the structural route where field arithmetic chains, then the
+reference law, installation and non-vacuity. Rows removed outright: 0. Privacy target not yet
+established.
