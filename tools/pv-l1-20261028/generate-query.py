@@ -59,6 +59,8 @@ for is_absorb in [True,False]:
   code+='  apply PV_L1_FixedBind.bind_fixed _ _ [.call .queryScan 0] ((List.range 16).map (fun n => .call .queryScan (n+1)))\n  · exact PV_L1_QueryAbsorb.completed_order _ _ _ _\n  · intro firstState\n'
   code+='    simp only [PV_L1_Projection.prod_case]\n'+''.join('  '+line+'\n' for line in proof.rstrip().splitlines())
  else:code+=proof
+ if not is_absorb:
+  code+='    all_goals\n      cases value <;> simp only [List.map_nil,PV_L1_Projection.prod_case]\n      all_goals\n        apply bind_lift\n        intro outcome\n        exact fixed_pure _\n'
  code+='#print axioms completed_order\nend '+mod+'\n';(D/(mod+'.lean')).write_text(code)
 (E/'query-instrumentation.json').write_text(json.dumps(dict(source_function='host_transcript.Transcript.queries',digest_reads=17,absorb_reads=1,pair_reads=16,indices=list(range(17)),native_association='V163/V167 retained; no native/differential credit'),indent=2)+'\n')
 print('Query producer: one absorb read and sixteen eager block/advance reads')

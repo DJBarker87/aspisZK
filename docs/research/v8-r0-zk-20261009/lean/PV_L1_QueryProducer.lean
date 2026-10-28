@@ -156,5 +156,11 @@ theorem completed_order
       | exact fixed_lift _
       | exact fixed_pure _
       | split <;> simp only [PV_L1_Projection.prod_case]
+    all_goals
+      cases value <;> simp only [List.map_nil,PV_L1_Projection.prod_case]
+      all_goals
+        apply bind_lift
+        intro outcome
+        exact fixed_pure _
 #print axioms completed_order
 end PV_L1_QueryProducer
