@@ -7,13 +7,13 @@ import-narrowed owned cohort. Only the five arithmetic operations reached by
 the compressor are selected. All other dictionary entries remain parameters
 and cannot change this helper. No generic native-source correspondence is
 obtained merely by declaring an ExternalFuns value. -/
-namespace R1Z.PV_RDB2_Compress
 set_option autoImplicit false
 noncomputable section
+namespace R1Z.PV_RDB2_Compress
 open Aeneas Aeneas.Std Result ProverRwFull
 variable [ExternalTypes]
 
-def primitives (ops : ExternalFuns) : ExternalFuns :=
+@[reducible] def primitives (ops : ExternalFuns) : ExternalFuns :=
   {ops with
     op61 := PV_Op223_Applied.aspis_core.field.CM31.from_m31
     op66 := PV_Op223_Applied.aspis_core.field.QM31.from_cm31
@@ -24,11 +24,7 @@ def primitives (ops : ExternalFuns) : ExternalFuns :=
 theorem body (ops : ExternalFuns) :
     PV_Op223_Applied.prover_shared.compress_tagged_tuple_loop.body =
       @ProverRwP6CompressSource.compress_loop.body _ (primitives ops) := by
-  funext values lambda out power i
-  unfold PV_Op223_Applied.prover_shared.compress_tagged_tuple_loop.body
-    ProverRwP6CompressSource.compress_loop.body
-  simp only [aspis_core.field.QM31.mul_m31,aspis_core.field.QM31.add,
-    aspis_core.field.QM31.mul,primitives]
+  rfl
 
 theorem loop (ops : ExternalFuns) :
     PV_Op223_Applied.prover_shared.compress_tagged_tuple_loop =
@@ -42,13 +38,9 @@ theorem loop (ops : ExternalFuns) :
 theorem complete (ops : ExternalFuns) :
     PV_Op223_Applied.prover_shared.compress_tagged_tuple =
       @ProverRwP6CompressSource.compress _ (primitives ops) := by
-  funext tag values lambda
-  unfold PV_Op223_Applied.prover_shared.compress_tagged_tuple
-    ProverRwP6CompressSource.compress
-  simp only [aspis_core.field.CM31.from_m31,aspis_core.field.QM31.from_cm31,
-    primitives,loop ops]
+  rfl
 
-def selected (ops : ExternalFuns) : ExternalFuns :=
+@[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=
   {ops with op223 := PV_Op223_Applied.prover_shared.compress_tagged_tuple}
 
 theorem installed (ops : ExternalFuns) :
