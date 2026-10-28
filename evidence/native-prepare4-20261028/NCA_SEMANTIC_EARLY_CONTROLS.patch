@@ -1,0 +1,238 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCA_candidate.rs
+@@ -0,0 +1,235 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++use crate::r1_wire as wire;
++use wire::NCA_wire as carrier;
++#[derive(Clone,Copy)]struct NCA_Digest(u64);
++impl Digest32 for NCA_Digest{fn digest(&self,_:&[&[u8]])->[u8;32]{assert!(false,"digest belongs to the cut child");[0;32]}}
++static mut NCA_MODE:u8=0;static mut NCA_STAGE:u8=0;static mut NCA_INDEX:usize=0;
++static mut NCA_BYTES:*const u8=core::ptr::null();static mut NCA_P:*const u8=core::ptr::null();static mut NCA_T:*const u8=core::ptr::null();
++static mut NCA_STATES:[[u8;32];3]=[[0;32];3];static mut NCA_HASH:u64=0;static mut NCA_CALLBACKS:usize=0;
++static mut NCA_CH:wire::Challenges=wire::Challenges{lambda:K::ZERO,chi:K::ZERO,theta:K::ZERO,zc:[K::ZERO;10],mu:K::ZERO,eta:K::ZERO};
++static mut NCA_ROOTS:[[u8;32];2]=[[0;32];2];static mut NCA_ALPHA:[K;10]=[K::ZERO;10];static mut NCA_CLAIMS:[[K;29];3]=[[K::ZERO;29];3];static mut NCA_EXTRA:[K;29]=[K::ZERO;29];static mut NCA_BEFORE:[K;29]=[K::ZERO;29];static mut NCA_BEFORE_STATE:[u8;32]=[0;32];static mut NCA_Z:[SecureCirclePoint;2]=[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2];static mut NCA_CLAIM_PTR:*const K=core::ptr::null();
++fn NCA_public_identity(public:Public<'_>){unsafe{match public{Public::Transfer(p,t)=>{assert_eq!(p as *const _ as *const u8,NCA_P);assert_eq!(t as *const _ as *const u8,NCA_T);},_=>assert!(false,"same public variant")}}}
++struct NCA_Parser<'a>(core::marker::PhantomData<&'a ()>);
++impl<'a> NCA_Parser<'a>{fn parse(bytes:&'a[u8])->Result<wire::Prefix<'a>,wire::Error>{unsafe{
++ assert_eq!(NCA_STAGE,0);assert_eq!(bytes.as_ptr(),NCA_BYTES);assert_eq!(bytes.len(),13831);NCA_STAGE=1;
++ if NCA_MODE==0{return Err(wire::Error::Length{row:7});}
++ let root:&[u8;32]=bytes[..32].try_into().unwrap();
++ let records=[&bytes[32..37],&bytes[37..42],&bytes[42..79],&bytes[79..84],&bytes[84..89],&bytes[89..94],&bytes[94..99],&bytes[99..104],&bytes[104..109],&bytes[109..114],&bytes[114..119],&bytes[119..124],&bytes[124..129],&bytes[129..134],&bytes[134..171],&bytes[171..1072],&bytes[1072..1973],&bytes[1973..2874],&bytes[2874..3775],&bytes[3775..4676],&bytes[4676..5577],&bytes[5577..6478],&bytes[6478..7379],&bytes[7379..8280],&bytes[8280..9181],&bytes[9181..12898],&bytes[12898..13831]];Ok(carrier::prefix(root,records))
++}}}
++fn NCA_public<H:Digest32>(public:Public<'_>,hash:H,root:&[u8;32])->Result<wire::SemanticTranscript<H>,wire::Error>{unsafe{
++ assert_eq!(NCA_STAGE,1);NCA_public_identity(public);assert_eq!(root.as_ptr(),NCA_BYTES);NCA_STAGE=2;
++ if NCA_MODE==1{return Err(wire::Error::Public);}
++ Ok(carrier::transcript(hash,NCA_STATES[0],0))
++}}
++fn NCA_begin<H:Digest32>(prefix:&wire::Prefix<'_>,t:&mut wire::SemanticTranscript<H>)->Result<wire::Challenges,wire::Error>{unsafe{
++ assert_eq!(NCA_STAGE,2);assert_eq!(prefix.c1_root.as_ptr(),NCA_BYTES);assert_eq!(t.state()[NCA_INDEX],NCA_STATES[0][NCA_INDEX]);assert_eq!(t.next_row(),0);NCA_STAGE=3;
++ carrier::update(t,NCA_STATES[1],15);
++ if NCA_MODE==2{return Err(wire::Error::RowOrder{expected:0,actual:1});}
++ Ok(NCA_CH)
++}}
++fn NCA_finish<H:Digest32>(public:Public<'_>,prefix:wire::Prefix<'_>,t:wire::SemanticTranscript<H>,ch:wire::Challenges,obs:Observer)->Result<crate::r1_semantic::Verified<H>,wire::Error>{unsafe{
++ assert_eq!(NCA_STAGE,3);NCA_public_identity(public);assert_eq!(prefix.c1_root.as_ptr(),NCA_BYTES);assert!(obs.is_none());assert_eq!(t.state()[NCA_INDEX],NCA_STATES[1][NCA_INDEX]);assert_eq!(t.next_row(),15);
++ assert_eq!(ch.lambda,NCA_CH.lambda);assert_eq!(ch.chi,NCA_CH.chi);assert_eq!(ch.theta,NCA_CH.theta);assert_eq!(ch.mu,NCA_CH.mu);assert_eq!(ch.eta,NCA_CH.eta);let a:usize=kani::any();kani::assume(a<10);assert_eq!(ch.zc[a],NCA_CH.zc[a]);
++ NCA_STAGE=4;if NCA_MODE==3{return Err(wire::Error::Terminal);}
++ let claims=Box::new(NCA_CLAIMS);NCA_CLAIM_PTR=claims.as_ptr().cast::<K>();
++ Ok(crate::r1_semantic::Verified{roots:NCA_ROOTS,challenges:ch,alpha:NCA_ALPHA,claims,extra:NCA_EXTRA,before_z1:NCA_BEFORE,state_before_z0:NCA_BEFORE_STATE,z:NCA_Z,transcript:carrier::transcript(carrier::into_hash(t),NCA_STATES[2],27)})
++}}
++fn NCA_init(bytes:*const u8,p:*const u8,t:*const u8,mode:u8,index:usize){unsafe{
++ NCA_STAGE=0;NCA_MODE=mode;NCA_INDEX=index;NCA_BYTES=bytes;NCA_P=p;NCA_T=t;NCA_HASH=kani::any();NCA_STATES=kani::any();NCA_CALLBACKS=0;
++ NCA_CH=wire::Challenges{lambda:core::mem::transmute::<[u8;16],K>(kani::any()),chi:core::mem::transmute::<[u8;16],K>(kani::any()),theta:core::mem::transmute::<[u8;16],K>(kani::any()),zc:core::mem::transmute::<[u8;160],[K;10]>(kani::any()),mu:core::mem::transmute::<[u8;16],K>(kani::any()),eta:core::mem::transmute::<[u8;16],K>(kani::any())};
++ NCA_ROOTS=kani::any();NCA_ALPHA=core::mem::transmute::<[u8;160],[K;10]>(kani::any());NCA_CLAIMS=core::mem::transmute::<[u8;1392],[[K;29];3]>(kani::any());NCA_EXTRA=core::mem::transmute::<[u8;464],[K;29]>(kani::any());NCA_BEFORE=core::mem::transmute::<[u8;464],[K;29]>(kani::any());NCA_BEFORE_STATE=kani::any();NCA_Z=core::mem::transmute::<[u8;64],[SecureCirclePoint;2]>(kani::any());
++}}
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(crate::r1_wire::Prefix::parse,NCA_Parser::parse)]
++#[kani::stub(crate::r1_semantic::public_transcript,NCA_public)]
++#[kani::stub(crate::r1_wire::begin,NCA_begin)]
++#[kani::stub(crate::r1_semantic::verify_finish,NCA_finish)]
++fn NCA_observed_early_controls(){
++ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let bytes:[u8;13831]=kani::any();let index:usize=kani::any();kani::assume(index<32);
++ let mode:u8=kani::any();kani::assume(mode<3);NCA_init(bytes.as_ptr(),&p as *const _ as *const u8,&t as *const _ as *const u8,mode,index);
++ let result=crate::r1_semantic::verify_observed(Public::Transfer(&p,&t),&bytes,unsafe{NCA_Digest(NCA_HASH)},None);
++ unsafe{match result{
++ Err(wire::Error::Length{row})=>{assert_eq!(mode,0);assert_eq!(row,0,"wrong zero parse payload");assert_eq!(NCA_STAGE,1);kani::cover!(true,"parse failure has no child suffix");},
++Err(wire::Error::Public)=>{assert_eq!(mode,1);assert_eq!(NCA_STAGE,0,"wrong absent public call");kani::cover!(true,"public failure has no begin");},
++Err(wire::Error::RowOrder{expected,actual})=>{assert_eq!(mode,2);assert_eq!(expected,0);assert_eq!(actual,0,"wrong zero begin payload");assert_eq!(NCA_STAGE,3);kani::cover!(true,"begin failure has no finish");},
++Err(wire::Error::Terminal)=>{assert_eq!(mode,3);assert_eq!(NCA_STAGE,4);kani::cover!(true,"finish error returned unchanged");},
++ Ok(v)=>{assert_eq!(mode,4);assert_eq!(NCA_STAGE,4);let b:usize=kani::any();let a:usize=kani::any();let point:usize=kani::any();let lane:usize=kani::any();kani::assume(b<2&&a<10&&point<3&&lane<29);
++assert_eq!(v.roots[b][index],NCA_ROOTS[b][index]);
++assert_eq!(v.alpha[a],NCA_ALPHA[a]);assert_eq!(v.claims[point][lane],NCA_CLAIMS[point][lane]);assert_eq!(v.claims.as_ptr().cast::<K>(),NCA_CLAIM_PTR);assert_eq!(v.extra[lane],NCA_EXTRA[lane]);assert_eq!(v.before_z1[lane],NCA_BEFORE[lane]);assert_eq!(v.state_before_z0[index],NCA_BEFORE_STATE[index]);assert_eq!(v.z[b],NCA_Z[b]);assert_eq!(v.transcript.state()[index],NCA_STATES[2][index]);assert_eq!(v.transcript.next_row(),27);assert_eq!(v.challenges.lambda,NCA_CH.lambda);assert_eq!(v.challenges.chi,NCA_CH.chi);assert_eq!(v.challenges.theta,NCA_CH.theta);assert_eq!(v.challenges.zc[a],NCA_CH.zc[a]);assert_eq!(v.challenges.mu,NCA_CH.mu);assert_eq!(v.challenges.eta,NCA_CH.eta);kani::cover!(true,"complete returned Verified carrier");},
++ _=>assert!(false,"unexpected semantic Result")};assert_eq!(NCA_CALLBACKS,0);}
++}
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(crate::r1_wire::Prefix::parse,NCA_Parser::parse)]
++#[kani::stub(crate::r1_semantic::public_transcript,NCA_public)]
++#[kani::stub(crate::r1_wire::begin,NCA_begin)]
++#[kani::stub(crate::r1_semantic::verify_finish,NCA_finish)]
++fn NCA_observed_success(){
++ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let bytes:[u8;13831]=kani::any();let index:usize=kani::any();kani::assume(index<32);
++ let mode:u8=4;kani::assume(mode<5);NCA_init(bytes.as_ptr(),&p as *const _ as *const u8,&t as *const _ as *const u8,mode,index);
++ let result=crate::r1_semantic::verify_observed(Public::Transfer(&p,&t),&bytes,unsafe{NCA_Digest(NCA_HASH)},None);
++ unsafe{match result{
++ Err(wire::Error::Length{row})=>{assert_eq!(mode,0);assert_eq!(row,7);assert_eq!(NCA_STAGE,1);kani::cover!(true,"parse failure has no child suffix");},
++Err(wire::Error::Public)=>{assert_eq!(mode,1);assert_eq!(NCA_STAGE,2);kani::cover!(true,"public failure has no begin");},
++Err(wire::Error::RowOrder{expected,actual})=>{assert_eq!(mode,2);assert_eq!(expected,0);assert_eq!(actual,1);assert_eq!(NCA_STAGE,3);kani::cover!(true,"begin failure has no finish");},
++Err(wire::Error::Terminal)=>{assert_eq!(mode,3);assert_eq!(NCA_STAGE,4);kani::cover!(true,"finish error returned unchanged");},
++ Ok(v)=>{assert_eq!(mode,4);assert_eq!(NCA_STAGE,4);let b:usize=kani::any();let a:usize=kani::any();let point:usize=kani::any();let lane:usize=kani::any();kani::assume(b<2&&a<10&&point<3&&lane<29);
++assert_eq!(v.roots[b][index],NCA_ROOTS[b][index]);
++assert_eq!(v.alpha[a],NCA_ALPHA[a]);assert_eq!(v.claims[point][lane],NCA_CLAIMS[point][lane]);assert_eq!(v.claims.as_ptr().cast::<K>(),NCA_CLAIM_PTR);assert_eq!(v.extra[lane],NCA_EXTRA[lane]);assert_eq!(v.before_z1[lane],NCA_BEFORE[lane]);assert_eq!(v.state_before_z0[index],NCA_BEFORE_STATE[index]);assert_eq!(v.z[b],NCA_Z[b]);assert_eq!(v.transcript.state()[index],NCA_STATES[2][index]);assert_eq!(v.transcript.next_row(),27);assert_eq!(v.challenges.lambda,NCA_CH.lambda);assert_eq!(v.challenges.chi,NCA_CH.chi);assert_eq!(v.challenges.theta,NCA_CH.theta);assert_eq!(v.challenges.zc[a],NCA_CH.zc[a]);assert_eq!(v.challenges.mu,NCA_CH.mu);assert_eq!(v.challenges.eta,NCA_CH.eta);kani::cover!(true,"complete returned Verified carrier");},
++ _=>assert!(false,"unexpected semantic Result")};assert_eq!(NCA_CALLBACKS,0);}
++}
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(crate::r1_wire::Prefix::parse,NCA_Parser::parse)]
++#[kani::stub(crate::r1_semantic::public_transcript,NCA_public)]
++#[kani::stub(crate::r1_wire::begin,NCA_begin)]
++#[kani::stub(crate::r1_semantic::verify_finish,NCA_finish)]
++fn NCA_observed_success_wrong(){
++ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let bytes:[u8;13831]=kani::any();let index:usize=kani::any();kani::assume(index<32);
++ let mode:u8=4;kani::assume(mode<5);NCA_init(bytes.as_ptr(),&p as *const _ as *const u8,&t as *const _ as *const u8,mode,index);
++ let result=crate::r1_semantic::verify_observed(Public::Transfer(&p,&t),&bytes,unsafe{NCA_Digest(NCA_HASH)},None);
++ unsafe{match result{
++ Err(wire::Error::Length{row})=>{assert_eq!(mode,0);assert_eq!(row,7);assert_eq!(NCA_STAGE,1);kani::cover!(true,"parse failure has no child suffix");},
++Err(wire::Error::Public)=>{assert_eq!(mode,1);assert_eq!(NCA_STAGE,2);kani::cover!(true,"public failure has no begin");},
++Err(wire::Error::RowOrder{expected,actual})=>{assert_eq!(mode,2);assert_eq!(expected,0);assert_eq!(actual,1);assert_eq!(NCA_STAGE,3);kani::cover!(true,"begin failure has no finish");},
++Err(wire::Error::Terminal)=>{assert_eq!(mode,3);assert_eq!(NCA_STAGE,4);kani::cover!(true,"finish error returned unchanged");},
++ Ok(v)=>{assert_eq!(mode,4);assert_eq!(NCA_STAGE,4);let b:usize=kani::any();let a:usize=kani::any();let point:usize=kani::any();let lane:usize=kani::any();kani::assume(b<2&&a<10&&point<3&&lane<29);
++assert_ne!(v.roots[b][index],NCA_ROOTS[b][index]);
++assert_eq!(v.alpha[a],NCA_ALPHA[a]);assert_eq!(v.claims[point][lane],NCA_CLAIMS[point][lane]);assert_eq!(v.claims.as_ptr().cast::<K>(),NCA_CLAIM_PTR);assert_eq!(v.extra[lane],NCA_EXTRA[lane]);assert_eq!(v.before_z1[lane],NCA_BEFORE[lane]);assert_eq!(v.state_before_z0[index],NCA_BEFORE_STATE[index]);assert_eq!(v.z[b],NCA_Z[b]);assert_eq!(v.transcript.state()[index],NCA_STATES[2][index]);assert_eq!(v.transcript.next_row(),27);assert_eq!(v.challenges.lambda,NCA_CH.lambda);assert_eq!(v.challenges.chi,NCA_CH.chi);assert_eq!(v.challenges.theta,NCA_CH.theta);assert_eq!(v.challenges.zc[a],NCA_CH.zc[a]);assert_eq!(v.challenges.mu,NCA_CH.mu);assert_eq!(v.challenges.eta,NCA_CH.eta);kani::cover!(true,"complete returned Verified carrier");},
++ _=>assert!(false,"unexpected semantic Result")};assert_eq!(NCA_CALLBACKS,0);}
++}
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(crate::r1_wire::Prefix::parse,NCA_Parser::parse)]
++#[kani::stub(crate::r1_semantic::public_transcript,NCA_public)]
++#[kani::stub(crate::r1_wire::begin,NCA_begin)]
++#[kani::stub(crate::r1_semantic::verify_finish,NCA_finish)]
++fn NCA_observed_parse_error(){
++ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let bytes:[u8;13831]=kani::any();let index:usize=kani::any();kani::assume(index<32);
++ let mode:u8=0;kani::assume(mode<5);NCA_init(bytes.as_ptr(),&p as *const _ as *const u8,&t as *const _ as *const u8,mode,index);
++ let result=crate::r1_semantic::verify_observed(Public::Transfer(&p,&t),&bytes,unsafe{NCA_Digest(NCA_HASH)},None);
++ unsafe{match result{
++ Err(wire::Error::Length{row})=>{assert_eq!(mode,0);assert_eq!(row,7);assert_eq!(NCA_STAGE,1);kani::cover!(true,"parse failure has no child suffix");},
++Err(wire::Error::Public)=>{assert_eq!(mode,1);assert_eq!(NCA_STAGE,2);kani::cover!(true,"public failure has no begin");},
++Err(wire::Error::RowOrder{expected,actual})=>{assert_eq!(mode,2);assert_eq!(expected,0);assert_eq!(actual,1);assert_eq!(NCA_STAGE,3);kani::cover!(true,"begin failure has no finish");},
++Err(wire::Error::Terminal)=>{assert_eq!(mode,3);assert_eq!(NCA_STAGE,4);kani::cover!(true,"finish error returned unchanged");},
++ Ok(v)=>{assert_eq!(mode,4);assert_eq!(NCA_STAGE,4);let b:usize=kani::any();let a:usize=kani::any();let point:usize=kani::any();let lane:usize=kani::any();kani::assume(b<2&&a<10&&point<3&&lane<29);
++assert_eq!(v.roots[b][index],NCA_ROOTS[b][index]);
++assert_eq!(v.alpha[a],NCA_ALPHA[a]);assert_eq!(v.claims[point][lane],NCA_CLAIMS[point][lane]);assert_eq!(v.claims.as_ptr().cast::<K>(),NCA_CLAIM_PTR);assert_eq!(v.extra[lane],NCA_EXTRA[lane]);assert_eq!(v.before_z1[lane],NCA_BEFORE[lane]);assert_eq!(v.state_before_z0[index],NCA_BEFORE_STATE[index]);assert_eq!(v.z[b],NCA_Z[b]);assert_eq!(v.transcript.state()[index],NCA_STATES[2][index]);assert_eq!(v.transcript.next_row(),27);assert_eq!(v.challenges.lambda,NCA_CH.lambda);assert_eq!(v.challenges.chi,NCA_CH.chi);assert_eq!(v.challenges.theta,NCA_CH.theta);assert_eq!(v.challenges.zc[a],NCA_CH.zc[a]);assert_eq!(v.challenges.mu,NCA_CH.mu);assert_eq!(v.challenges.eta,NCA_CH.eta);kani::cover!(true,"complete returned Verified carrier");},
++ _=>assert!(false,"unexpected semantic Result")};assert_eq!(NCA_CALLBACKS,0);}
++}
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(crate::r1_wire::Prefix::parse,NCA_Parser::parse)]
++#[kani::stub(crate::r1_semantic::public_transcript,NCA_public)]
++#[kani::stub(crate::r1_wire::begin,NCA_begin)]
++#[kani::stub(crate::r1_semantic::verify_finish,NCA_finish)]
++fn NCA_observed_public_error(){
++ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let bytes:[u8;13831]=kani::any();let index:usize=kani::any();kani::assume(index<32);
++ let mode:u8=1;kani::assume(mode<5);NCA_init(bytes.as_ptr(),&p as *const _ as *const u8,&t as *const _ as *const u8,mode,index);
++ let result=crate::r1_semantic::verify_observed(Public::Transfer(&p,&t),&bytes,unsafe{NCA_Digest(NCA_HASH)},None);
++ unsafe{match result{
++ Err(wire::Error::Length{row})=>{assert_eq!(mode,0);assert_eq!(row,7);assert_eq!(NCA_STAGE,1);kani::cover!(true,"parse failure has no child suffix");},
++Err(wire::Error::Public)=>{assert_eq!(mode,1);assert_eq!(NCA_STAGE,2);kani::cover!(true,"public failure has no begin");},
++Err(wire::Error::RowOrder{expected,actual})=>{assert_eq!(mode,2);assert_eq!(expected,0);assert_eq!(actual,1);assert_eq!(NCA_STAGE,3);kani::cover!(true,"begin failure has no finish");},
++Err(wire::Error::Terminal)=>{assert_eq!(mode,3);assert_eq!(NCA_STAGE,4);kani::cover!(true,"finish error returned unchanged");},
++ Ok(v)=>{assert_eq!(mode,4);assert_eq!(NCA_STAGE,4);let b:usize=kani::any();let a:usize=kani::any();let point:usize=kani::any();let lane:usize=kani::any();kani::assume(b<2&&a<10&&point<3&&lane<29);
++assert_eq!(v.roots[b][index],NCA_ROOTS[b][index]);
++assert_eq!(v.alpha[a],NCA_ALPHA[a]);assert_eq!(v.claims[point][lane],NCA_CLAIMS[point][lane]);assert_eq!(v.claims.as_ptr().cast::<K>(),NCA_CLAIM_PTR);assert_eq!(v.extra[lane],NCA_EXTRA[lane]);assert_eq!(v.before_z1[lane],NCA_BEFORE[lane]);assert_eq!(v.state_before_z0[index],NCA_BEFORE_STATE[index]);assert_eq!(v.z[b],NCA_Z[b]);assert_eq!(v.transcript.state()[index],NCA_STATES[2][index]);assert_eq!(v.transcript.next_row(),27);assert_eq!(v.challenges.lambda,NCA_CH.lambda);assert_eq!(v.challenges.chi,NCA_CH.chi);assert_eq!(v.challenges.theta,NCA_CH.theta);assert_eq!(v.challenges.zc[a],NCA_CH.zc[a]);assert_eq!(v.challenges.mu,NCA_CH.mu);assert_eq!(v.challenges.eta,NCA_CH.eta);kani::cover!(true,"complete returned Verified carrier");},
++ _=>assert!(false,"unexpected semantic Result")};assert_eq!(NCA_CALLBACKS,0);}
++}
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(crate::r1_wire::Prefix::parse,NCA_Parser::parse)]
++#[kani::stub(crate::r1_semantic::public_transcript,NCA_public)]
++#[kani::stub(crate::r1_wire::begin,NCA_begin)]
++#[kani::stub(crate::r1_semantic::verify_finish,NCA_finish)]
++fn NCA_observed_begin_error(){
++ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let bytes:[u8;13831]=kani::any();let index:usize=kani::any();kani::assume(index<32);
++ let mode:u8=2;kani::assume(mode<5);NCA_init(bytes.as_ptr(),&p as *const _ as *const u8,&t as *const _ as *const u8,mode,index);
++ let result=crate::r1_semantic::verify_observed(Public::Transfer(&p,&t),&bytes,unsafe{NCA_Digest(NCA_HASH)},None);
++ unsafe{match result{
++ Err(wire::Error::Length{row})=>{assert_eq!(mode,0);assert_eq!(row,7);assert_eq!(NCA_STAGE,1);kani::cover!(true,"parse failure has no child suffix");},
++Err(wire::Error::Public)=>{assert_eq!(mode,1);assert_eq!(NCA_STAGE,2);kani::cover!(true,"public failure has no begin");},
++Err(wire::Error::RowOrder{expected,actual})=>{assert_eq!(mode,2);assert_eq!(expected,0);assert_eq!(actual,1);assert_eq!(NCA_STAGE,3);kani::cover!(true,"begin failure has no finish");},
++Err(wire::Error::Terminal)=>{assert_eq!(mode,3);assert_eq!(NCA_STAGE,4);kani::cover!(true,"finish error returned unchanged");},
++ Ok(v)=>{assert_eq!(mode,4);assert_eq!(NCA_STAGE,4);let b:usize=kani::any();let a:usize=kani::any();let point:usize=kani::any();let lane:usize=kani::any();kani::assume(b<2&&a<10&&point<3&&lane<29);
++assert_eq!(v.roots[b][index],NCA_ROOTS[b][index]);
++assert_eq!(v.alpha[a],NCA_ALPHA[a]);assert_eq!(v.claims[point][lane],NCA_CLAIMS[point][lane]);assert_eq!(v.claims.as_ptr().cast::<K>(),NCA_CLAIM_PTR);assert_eq!(v.extra[lane],NCA_EXTRA[lane]);assert_eq!(v.before_z1[lane],NCA_BEFORE[lane]);assert_eq!(v.state_before_z0[index],NCA_BEFORE_STATE[index]);assert_eq!(v.z[b],NCA_Z[b]);assert_eq!(v.transcript.state()[index],NCA_STATES[2][index]);assert_eq!(v.transcript.next_row(),27);assert_eq!(v.challenges.lambda,NCA_CH.lambda);assert_eq!(v.challenges.chi,NCA_CH.chi);assert_eq!(v.challenges.theta,NCA_CH.theta);assert_eq!(v.challenges.zc[a],NCA_CH.zc[a]);assert_eq!(v.challenges.mu,NCA_CH.mu);assert_eq!(v.challenges.eta,NCA_CH.eta);kani::cover!(true,"complete returned Verified carrier");},
++ _=>assert!(false,"unexpected semantic Result")};assert_eq!(NCA_CALLBACKS,0);}
++}
++
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(crate::r1_wire::Prefix::parse,NCA_Parser::parse)]
++#[kani::stub(crate::r1_semantic::public_transcript,NCA_public)]
++#[kani::stub(crate::r1_wire::begin,NCA_begin)]
++#[kani::stub(crate::r1_semantic::verify_finish,NCA_finish)]
++fn NCA_observed_parse_wrong(){
++ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let bytes:[u8;13831]=kani::any();let index:usize=kani::any();kani::assume(index<32);
++ let mode:u8=0;kani::assume(mode<5);NCA_init(bytes.as_ptr(),&p as *const _ as *const u8,&t as *const _ as *const u8,mode,index);
++ let result=crate::r1_semantic::verify_observed(Public::Transfer(&p,&t),&bytes,unsafe{NCA_Digest(NCA_HASH)},None);
++ unsafe{match result{
++ Err(wire::Error::Length{row})=>{assert_eq!(mode,0);assert_ne!(row,0);assert_eq!(NCA_STAGE,1);kani::cover!(true,"parse failure has no child suffix");},
++Err(wire::Error::Public)=>{assert_eq!(mode,1);assert_eq!(NCA_STAGE,2);kani::cover!(true,"public failure has no begin");},
++Err(wire::Error::RowOrder{expected,actual})=>{assert_eq!(mode,2);assert_eq!(expected,0);assert_eq!(actual,1);assert_eq!(NCA_STAGE,3);kani::cover!(true,"begin failure has no finish");},
++Err(wire::Error::Terminal)=>{assert_eq!(mode,3);assert_eq!(NCA_STAGE,4);kani::cover!(true,"finish error returned unchanged");},
++ Ok(v)=>{assert_eq!(mode,4);assert_eq!(NCA_STAGE,4);let b:usize=kani::any();let a:usize=kani::any();let point:usize=kani::any();let lane:usize=kani::any();kani::assume(b<2&&a<10&&point<3&&lane<29);
++assert_eq!(v.roots[b][index],NCA_ROOTS[b][index]);
++assert_eq!(v.alpha[a],NCA_ALPHA[a]);assert_eq!(v.claims[point][lane],NCA_CLAIMS[point][lane]);assert_eq!(v.claims.as_ptr().cast::<K>(),NCA_CLAIM_PTR);assert_eq!(v.extra[lane],NCA_EXTRA[lane]);assert_eq!(v.before_z1[lane],NCA_BEFORE[lane]);assert_eq!(v.state_before_z0[index],NCA_BEFORE_STATE[index]);assert_eq!(v.z[b],NCA_Z[b]);assert_eq!(v.transcript.state()[index],NCA_STATES[2][index]);assert_eq!(v.transcript.next_row(),27);assert_eq!(v.challenges.lambda,NCA_CH.lambda);assert_eq!(v.challenges.chi,NCA_CH.chi);assert_eq!(v.challenges.theta,NCA_CH.theta);assert_eq!(v.challenges.zc[a],NCA_CH.zc[a]);assert_eq!(v.challenges.mu,NCA_CH.mu);assert_eq!(v.challenges.eta,NCA_CH.eta);kani::cover!(true,"complete returned Verified carrier");},
++ _=>assert!(false,"unexpected semantic Result")};assert_eq!(NCA_CALLBACKS,0);}
++}
++
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(crate::r1_wire::Prefix::parse,NCA_Parser::parse)]
++#[kani::stub(crate::r1_semantic::public_transcript,NCA_public)]
++#[kani::stub(crate::r1_wire::begin,NCA_begin)]
++#[kani::stub(crate::r1_semantic::verify_finish,NCA_finish)]
++fn NCA_observed_public_wrong(){
++ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let bytes:[u8;13831]=kani::any();let index:usize=kani::any();kani::assume(index<32);
++ let mode:u8=1;kani::assume(mode<5);NCA_init(bytes.as_ptr(),&p as *const _ as *const u8,&t as *const _ as *const u8,mode,index);
++ let result=crate::r1_semantic::verify_observed(Public::Transfer(&p,&t),&bytes,unsafe{NCA_Digest(NCA_HASH)},None);
++ unsafe{match result{
++ Err(wire::Error::Length{row})=>{assert_eq!(mode,0);assert_eq!(row,7);assert_eq!(NCA_STAGE,1);kani::cover!(true,"parse failure has no child suffix");},
++Err(wire::Error::Public)=>{assert_eq!(mode,1);assert_ne!(NCA_STAGE,2);kani::cover!(true,"public failure has no begin");},
++Err(wire::Error::RowOrder{expected,actual})=>{assert_eq!(mode,2);assert_eq!(expected,0);assert_eq!(actual,1);assert_eq!(NCA_STAGE,3);kani::cover!(true,"begin failure has no finish");},
++Err(wire::Error::Terminal)=>{assert_eq!(mode,3);assert_eq!(NCA_STAGE,4);kani::cover!(true,"finish error returned unchanged");},
++ Ok(v)=>{assert_eq!(mode,4);assert_eq!(NCA_STAGE,4);let b:usize=kani::any();let a:usize=kani::any();let point:usize=kani::any();let lane:usize=kani::any();kani::assume(b<2&&a<10&&point<3&&lane<29);
++assert_eq!(v.roots[b][index],NCA_ROOTS[b][index]);
++assert_eq!(v.alpha[a],NCA_ALPHA[a]);assert_eq!(v.claims[point][lane],NCA_CLAIMS[point][lane]);assert_eq!(v.claims.as_ptr().cast::<K>(),NCA_CLAIM_PTR);assert_eq!(v.extra[lane],NCA_EXTRA[lane]);assert_eq!(v.before_z1[lane],NCA_BEFORE[lane]);assert_eq!(v.state_before_z0[index],NCA_BEFORE_STATE[index]);assert_eq!(v.z[b],NCA_Z[b]);assert_eq!(v.transcript.state()[index],NCA_STATES[2][index]);assert_eq!(v.transcript.next_row(),27);assert_eq!(v.challenges.lambda,NCA_CH.lambda);assert_eq!(v.challenges.chi,NCA_CH.chi);assert_eq!(v.challenges.theta,NCA_CH.theta);assert_eq!(v.challenges.zc[a],NCA_CH.zc[a]);assert_eq!(v.challenges.mu,NCA_CH.mu);assert_eq!(v.challenges.eta,NCA_CH.eta);kani::cover!(true,"complete returned Verified carrier");},
++ _=>assert!(false,"unexpected semantic Result")};assert_eq!(NCA_CALLBACKS,0);}
++}
++
++#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(crate::r1_wire::Prefix::parse,NCA_Parser::parse)]
++#[kani::stub(crate::r1_semantic::public_transcript,NCA_public)]
++#[kani::stub(crate::r1_wire::begin,NCA_begin)]
++#[kani::stub(crate::r1_semantic::verify_finish,NCA_finish)]
++fn NCA_observed_begin_wrong(){
++ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let bytes:[u8;13831]=kani::any();let index:usize=kani::any();kani::assume(index<32);
++ let mode:u8=2;kani::assume(mode<5);NCA_init(bytes.as_ptr(),&p as *const _ as *const u8,&t as *const _ as *const u8,mode,index);
++ let result=crate::r1_semantic::verify_observed(Public::Transfer(&p,&t),&bytes,unsafe{NCA_Digest(NCA_HASH)},None);
++ unsafe{match result{
++ Err(wire::Error::Length{row})=>{assert_eq!(mode,0);assert_eq!(row,7);assert_eq!(NCA_STAGE,1);kani::cover!(true,"parse failure has no child suffix");},
++Err(wire::Error::Public)=>{assert_eq!(mode,1);assert_eq!(NCA_STAGE,2);kani::cover!(true,"public failure has no begin");},
++Err(wire::Error::RowOrder{expected,actual})=>{assert_eq!(mode,2);assert_eq!(expected,0);assert_ne!(actual,1);assert_eq!(NCA_STAGE,3);kani::cover!(true,"begin failure has no finish");},
++Err(wire::Error::Terminal)=>{assert_eq!(mode,3);assert_eq!(NCA_STAGE,4);kani::cover!(true,"finish error returned unchanged");},
++ Ok(v)=>{assert_eq!(mode,4);assert_eq!(NCA_STAGE,4);let b:usize=kani::any();let a:usize=kani::any();let point:usize=kani::any();let lane:usize=kani::any();kani::assume(b<2&&a<10&&point<3&&lane<29);
++assert_eq!(v.roots[b][index],NCA_ROOTS[b][index]);
++assert_eq!(v.alpha[a],NCA_ALPHA[a]);assert_eq!(v.claims[point][lane],NCA_CLAIMS[point][lane]);assert_eq!(v.claims.as_ptr().cast::<K>(),NCA_CLAIM_PTR);assert_eq!(v.extra[lane],NCA_EXTRA[lane]);assert_eq!(v.before_z1[lane],NCA_BEFORE[lane]);assert_eq!(v.state_before_z0[index],NCA_BEFORE_STATE[index]);assert_eq!(v.z[b],NCA_Z[b]);assert_eq!(v.transcript.state()[index],NCA_STATES[2][index]);assert_eq!(v.transcript.next_row(),27);assert_eq!(v.challenges.lambda,NCA_CH.lambda);assert_eq!(v.challenges.chi,NCA_CH.chi);assert_eq!(v.challenges.theta,NCA_CH.theta);assert_eq!(v.challenges.zc[a],NCA_CH.zc[a]);assert_eq!(v.challenges.mu,NCA_CH.mu);assert_eq!(v.challenges.eta,NCA_CH.eta);kani::cover!(true,"complete returned Verified carrier");},
++ _=>assert!(false,"unexpected semantic Result")};assert_eq!(NCA_CALLBACKS,0);}
++}
++

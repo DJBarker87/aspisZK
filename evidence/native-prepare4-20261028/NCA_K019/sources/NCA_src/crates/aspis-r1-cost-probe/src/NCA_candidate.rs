@@ -1,0 +1,18 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[repr(C)]struct NCA_Carrier{window:[u8;32],rest:[u8;14727]}
+#[kani::proof]#[kani::unwind(3)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NCA_root_one_write(){
+ let input:[u8;7015]=kani::any();let mut out=NCA_Carrier{window:kani::any(),rest:kani::any()};
+ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<32&&j<14727);let before=out.rest[j];
+ let full=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Carrier).cast::<u8>(),14759)};
+ // ONE exact KMX copy-loop iteration on arbitrary full-carrier pre-state.
+ full[i]=input[i];assert_eq!(out.window[i],input[i]);assert_eq!(out.rest[j],before);kani::cover!(i==31&&j==14726,"last copy iteration and exterior byte");
+}
+#[kani::proof]#[kani::unwind(3)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NCA_root_one_wrong(){
+ let input:[u8;7015]=kani::any();let mut out=NCA_Carrier{window:kani::any(),rest:kani::any()};let i:usize=kani::any();kani::assume(i<32);let mut input=input;input[i]=1;out.window[i]=0;
+ let full=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Carrier).cast::<u8>(),14759)};full[i]=input[i];assert_eq!(out.window[i],0,"negative one root iteration");
+}

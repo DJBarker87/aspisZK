@@ -1,0 +1,46 @@
+{"attempt": "NCA_K064", "exit_status": 1, "wall_seconds": 25.609131562989205, "peak_rss_kib": "2146932", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs:565:9 in function core::mem::MaybeUninit::<[u8; 32]>::write
+
+Check 1670: core::mem::MaybeUninit::<[u8; 32]>::write.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs:565:9 in function core::mem::MaybeUninit::<[u8; 32]>::write
+
+Check 1671: core::ub_checks::is_valid_allocation_size.division-by-zero.1
+	 - Status: SUCCESS
+	 - Description: "division by zero"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs:149:54 in function core::ub_checks::is_valid_allocation_size
+
+
+SUMMARY:
+ ** 2 of 1668 failed (150 unreachable)
+
+ ** 0 of 3 cover properties satisfied (3 unreachable)
+
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "crates/aspis-r1-cost-probe/src/NCA_candidate.rs", line 20, in alloc::vec::Vec::<u8>::extend_from_slice
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "crates/aspis-r1-cost-probe/src/NCA_candidate.rs", line 51, in verifier::candidate::NCA_candidate::NCA_opening_strong_controls
+
+VERIFICATION:- FAILED
+Verification Time: 21.882656s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NCA_candidate::NCA_opening_strong_controls
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r575a0962c40a44849b71f669416126b8.scope; invocation ID: cbf4855923f4440e963174960c2a8fd0

@@ -1,0 +1,11 @@
+# Complete semantic-call association
+
+Statement2 is owned here. The closed fixture computations are not a universal native refinement of r1_semantic::verify_observed. No fixture success is used as an adversarial-domain theorem. The frozen body consists of Prefix::parse, default-feature mark0, public_transcript, begin with a mutable transcript, default-feature mark1, and verify_finish returning its full Result unchanged.
+
+New scratch-only cfg(kani) NCA_wire constructors expose valid Prefix and SemanticTranscript carriers through their actual private fields. They perform no field arithmetic, serializer, allocation approximation or independent prepare success. Every harness mutation remains a committed patch only; research crates/programs stay untouched. Parent/source pins and frozen lock graph are checked before each run.
+
+K021 fails before codegen due an own module path; K022 repairs that path and finds generic arity mismatches. K023 repairs generic type parameters but reveals Prefix's early-bound impl lifetime must also match. K024 uses an explicit lifetime-parameterized impl and reaches CBMC, failing the harness's array-generation unwinding bound. K025 increases only the fixed fixture/aggregate-copy unwinding bound to35 (no timeout/cap increase, no semantic loop or multiplication). No failing run has proof credit. Raw output and exact source snapshots are preserved.
+
+Native lower association rows remain explicit: Prefix parse on produced semantic bytes; Public public_bytes/public_transcript realization on the SAME public/root/hash; wire::begin on the returned transcript/records; complete verify_finish including errors and ordered digest prefixes. Their successful fixture instances do not discharge these universal native rows.
+
+K025 reaches all three early error branches, but its complete Result gate FAILS because the finish stub observes obs.is_none()=false although the actual verify_observed entry was passed None. The failing check precedes later success/field checks. This is a source/stub ABI association finding; no source bug or universal bridge is claimed. Split early rejection gates and native/source-position diagnostics will keep the observer gap explicit. K021..K025 are all charged and excluded from passes.

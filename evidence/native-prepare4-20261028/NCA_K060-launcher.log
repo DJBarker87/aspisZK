@@ -1,0 +1,53 @@
+{"attempt": "NCA_K060", "exit_status": 0, "wall_seconds": 30.870887016004417, "peak_rss_kib": "2131268", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ield.rs:23:16 in function <aspis_core::field::M31 as core::cmp::PartialEq>::eq
+
+Check 941: <aspis_core::field::M31 as core::cmp::PartialEq>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: NCA_src/crates/aspis-core/src/field.rs:23:16 in function <aspis_core::field::M31 as core::cmp::PartialEq>::eq
+
+Check 942: <aspis_core::field::M31 as core::cmp::PartialEq>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: NCA_src/crates/aspis-core/src/field.rs:23:16 in function <aspis_core::field::M31 as core::cmp::PartialEq>::eq
+
+Check 943: <aspis_core::field::M31 as core::cmp::PartialEq>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: NCA_src/crates/aspis-core/src/field.rs:23:16 in function <aspis_core::field::M31 as core::cmp::PartialEq>::eq
+
+Check 944: <aspis_core::field::M31 as core::cmp::PartialEq>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: NCA_src/crates/aspis-core/src/field.rs:23:16 in function <aspis_core::field::M31 as core::cmp::PartialEq>::eq
+
+Check 945: <aspis_core::field::M31 as core::cmp::PartialEq>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: NCA_src/crates/aspis-core/src/field.rs:23:16 in function <aspis_core::field::M31 as core::cmp::PartialEq>::eq
+
+
+SUMMARY:
+ ** 0 of 940 failed (109 unreachable)
+
+ ** 3 of 5 cover properties satisfied (2 unreachable)
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 27.393538s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r2bf3f16e0ca44473abd2b0566c1f1350.scope; invocation ID: 43d5ca1610004724abf2398d3eadc49f

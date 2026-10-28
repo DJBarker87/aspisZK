@@ -1,0 +1,187 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCA_candidate.rs
+@@ -0,0 +1,184 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed0(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[32..37].copy_from_slice(&input[32..37]);assert_eq!(out[k],if k>=32&&k<37{input[k]}else{old});kani::cover!(k==36,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed0_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[32..37].copy_from_slice(&input[32..37]);assert_ne!(out[32+k],input[32+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed1(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[37..42].copy_from_slice(&input[37..42]);assert_eq!(out[k],if k>=37&&k<42{input[k]}else{old});kani::cover!(k==41,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed1_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[37..42].copy_from_slice(&input[37..42]);assert_ne!(out[37+k],input[37+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed3(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[79..84].copy_from_slice(&input[79..84]);assert_eq!(out[k],if k>=79&&k<84{input[k]}else{old});kani::cover!(k==83,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed3_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[79..84].copy_from_slice(&input[79..84]);assert_ne!(out[79+k],input[79+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed4(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[84..89].copy_from_slice(&input[84..89]);assert_eq!(out[k],if k>=84&&k<89{input[k]}else{old});kani::cover!(k==88,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed4_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[84..89].copy_from_slice(&input[84..89]);assert_ne!(out[84+k],input[84+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed5(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[89..94].copy_from_slice(&input[89..94]);assert_eq!(out[k],if k>=89&&k<94{input[k]}else{old});kani::cover!(k==93,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed5_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[89..94].copy_from_slice(&input[89..94]);assert_ne!(out[89+k],input[89+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed6(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[94..99].copy_from_slice(&input[94..99]);assert_eq!(out[k],if k>=94&&k<99{input[k]}else{old});kani::cover!(k==98,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed6_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[94..99].copy_from_slice(&input[94..99]);assert_ne!(out[94+k],input[94+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed7(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[99..104].copy_from_slice(&input[99..104]);assert_eq!(out[k],if k>=99&&k<104{input[k]}else{old});kani::cover!(k==103,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed7_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[99..104].copy_from_slice(&input[99..104]);assert_ne!(out[99+k],input[99+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed8(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[104..109].copy_from_slice(&input[104..109]);assert_eq!(out[k],if k>=104&&k<109{input[k]}else{old});kani::cover!(k==108,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed8_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[104..109].copy_from_slice(&input[104..109]);assert_ne!(out[104+k],input[104+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed9(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[109..114].copy_from_slice(&input[109..114]);assert_eq!(out[k],if k>=109&&k<114{input[k]}else{old});kani::cover!(k==113,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed9_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[109..114].copy_from_slice(&input[109..114]);assert_ne!(out[109+k],input[109+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed10(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[114..119].copy_from_slice(&input[114..119]);assert_eq!(out[k],if k>=114&&k<119{input[k]}else{old});kani::cover!(k==118,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed10_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[114..119].copy_from_slice(&input[114..119]);assert_ne!(out[114+k],input[114+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed11(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[119..124].copy_from_slice(&input[119..124]);assert_eq!(out[k],if k>=119&&k<124{input[k]}else{old});kani::cover!(k==123,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed11_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[119..124].copy_from_slice(&input[119..124]);assert_ne!(out[119+k],input[119+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed12(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[124..129].copy_from_slice(&input[124..129]);assert_eq!(out[k],if k>=124&&k<129{input[k]}else{old});kani::cover!(k==128,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed12_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[124..129].copy_from_slice(&input[124..129]);assert_ne!(out[124+k],input[124+k],"negative fixed header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed13(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<134);let old=out[k];out[129..134].copy_from_slice(&input[129..134]);assert_eq!(out[k],if k>=129&&k<134{input[k]}else{old});kani::cover!(k==133,"last reached header byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header_fixed13_wrong(){
++ let input:[u8;134]=kani::any();let mut out:[u8;134]=kani::any();
++ let k:usize=kani::any();kani::assume(k<5);out[129..134].copy_from_slice(&input[129..134]);assert_ne!(out[129+k],input[129+k],"negative fixed header byte");
++}
