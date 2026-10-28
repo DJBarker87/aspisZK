@@ -13584,3 +13584,15 @@ randomness, the guard takes its constant branch or lies in an already-charged ba
 links by extraction or the structural route, toward V352, V354, V357 and V360. The reachability line
 stays parked on runjoin33's native associations (V045/V038) and the file-effects line on pv-world2's
 threading theorem. Rows removed outright: 0. Privacy target not yet established.
+
+## D370 (Stream B) 2026-10-28 11:49 UTC: l2c3 cut off by the model provider's content filter; resumed without encoded file transfer
+
+l2c3 committed its D369 entry, a canonical-caller fix, a payload adapter correction and a retained
+native noncanonical-preparation diagnostic with masked guard reachability (head 3ba01cb05b), then
+the Codex session was ended by the model provider's content filter ("flagged for possible
+cybersecurity risk") while the worker was rewriting a helper script to base64-encode binary files
+for transfer to the build host, in a side-channel context. The work is defensive privacy
+verification of the project's own prover; the encoded-payload transfer was unnecessary. l2c4
+resumes with the remaining budget, reconciles state without rerunning anything, and moves files with
+plain scp or rsync, keeping helper scripts minimal and plainly descriptive. Rows removed outright: 0.
+Privacy target not yet established.
