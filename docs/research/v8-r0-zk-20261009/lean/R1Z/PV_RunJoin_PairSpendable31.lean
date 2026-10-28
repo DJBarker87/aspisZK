@@ -40,6 +40,6 @@ theorem semantic (i : Input)
   · have ho := selected _ _ h hb
     change i.witness.pair.pair_leaf.second_occupied = 1#u32 at ho
     rw [ho]
-    simp only [liftU,UScalar.ofNatCore_val_eq,Nat.cast_one]
+    rfl
 #print axioms semantic
 end R1Z.PV_RunJoin_PairSpendable31
