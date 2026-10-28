@@ -13986,3 +13986,16 @@ runjoin40 (IDs 60000-60099) continues with the ROMView decoders, the native help
 associations, commitments, openings and published-proof serialization, then the RustRealRefinement
 composition with the op227 bridge as its single named hypothesis. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D393 (Stream B) 2026-10-28 18:34 UTC: V221 and V222 restored under zeroize 1.9.0; rdcd2 continues the unresolved rows
+
+pv-rdcd (14 of 100 Lean attempts; 26 native scopes; no Kani; combined audit 41497 and focused replay
+41498 with standard axioms; no source change) restores V221 and V222 at the emitted byte and source-law
+boundary with a revised law for the shipped zeroize 1.9.0: ordered volatile writes followed by the
+assembly barrier that replaced the old SeqCst compiler fence (class C); the binary-level erasure
+question stays with L3. The other 15 rows (class D) remain suspended on unresolved checker provenance
+or missing deployed standard-library laws, each with its own commit and exact blocker. With V186
+(D389), three of the 41 suspensions are now restored. rdcd2 continues with the remaining budget:
+rebuild missing structural checkers from their committed sources by hash chain, prove the 1.94.1
+library laws (V212's Option and wrapping-macro binding first), and re-run the gates. Rows removed
+outright: 0. Privacy target not yet established.
