@@ -1,0 +1,47 @@
+Running as unit: run-r0edc19eda3094dfea13068624c6145ec.scope; invocation ID: d8f7aec7540144ac943e3e0685cc8898
+{"attempt": "NCQ_L001", "exit_status": 0, "wall_seconds": 2.2406181070255116, "peak_rss_kib": "4390744", "swaps": "0", "print_axioms": ["'AspisR1.NCQ_TopSpec.fields_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCQ_TopSpec.assemble' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCQ_TopSpec.factor_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCQ_TopSpec.digest_source_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCQ_TopSpec.model_instance' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+'AspisR1.NCQ_TopSpec.fields_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCQ_TopSpec.assemble' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCQ_TopSpec.factor_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCQ_TopSpec.digest_source_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCQ_TopSpec.model_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def AspisR1.S2W_ExtractionBoundary.First : Type :=
+Program → Accounts → Slice U8 → Result (core.result.Result (
+...
+core.result.Result (alloc.vec.Vec U8 × S2Trust.Heap (ℕ → S2W_D189Entry.Record) × A)
+                    AdapterRw.Cuts.PE) :=
+fun {A} native copy allocator e program data state => do
+  let allocated ←
+    S2W_D189Wrappers.reserve allocator (S2W_D189Wrappers.admittedSizes e 3 S2W_D189Wrappers.firstSizes) state
+  let result ← native program e.first data
+  match result with
+    | core.result.Result.Err error => ok (core.result.Result.Err error)
+    | core.result.Result.Ok saved =>
+      match
+        copy (S2Trust.acquire e.heap (e.heap.accounts 2).1 0 0 S2Trust.Kind.exclusive) (e.heap.accounts 2).1
+          (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved)) with
+      | S2W_TrustedStd.Outcome.panic => fail Error.assertionFailure
+      | S2W_TrustedStd.Outcome.returned written => do
+        let cleaned ← allocator.cleanup allocated
+        ok
+            (core.result.Result.Ok
+              (saved, S2Trust.release written (S2W_WrapperLaws.exclusiveGuard e.heap 2 0 0), cleaned))
+def AspisR1.S2W_D189Wrappers.second : {A : Type} →
+  Second →
+    S2W_D189Wrappers.Allocator A →
+      S2W_D189Entry.Entry →
+        Program →
+          Slice U8 →
+            Slot → A → Result (core.result.Result (S2Trust.Heap (ℕ → S2W_D189Entry.Record) × A) AdapterRw.Cuts.PE) :=
+fun {A} native allocator e program data slot state => do
+  let allocated ←
+    S2W_D189Wrappers.reserve allocator (S2W_D189Wrappers.admittedSizes e 7 S2W_D189Wrappers.secondSizes) state
+  let result ← native program (e.second S2W_D189Wrappers.secondSizes) data slot
+  match result with
+    | core.result.Result.Err error => ok (core.result.Result.Err error)
+    | core.result.Result.Ok PUnit.unit => do
+      let cleaned ← allocator.cleanup allocated
+      ok (core.result.Result.Ok (e.heap, cleaned))
+
