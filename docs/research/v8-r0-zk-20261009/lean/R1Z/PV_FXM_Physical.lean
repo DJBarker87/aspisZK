@@ -22,7 +22,8 @@ theorem drop_effect {S F D : Type}
       (free b.address (4*b.capacity) 4 w.allocator).bytes ∧
     (PV_FXM_DropWorld.native free b w).2.allocator.external=
       (free b.address (4*b.capacity) 4 w.allocator).external := by
-  simp only [PV_FXM_DropWorld.native,PV_FXM_DropWorld.release,h,ite_false]
+  unfold PV_FXM_DropWorld.native PV_FXM_DropWorld.release
+  rw [if_neg h]
   exact ⟨rfl,rfl⟩
 
 theorem drop_source_reference {S F D : Type}
