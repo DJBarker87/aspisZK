@@ -40,7 +40,7 @@ theorem complete (ops : ExternalFuns) (count a : Usize) (es : Nat → Q)
     have len : Slice.len (Array.to_slice (ProverCommitArray49.array count
         (fun j => (core.result.Result.Ok (es j) : core.result.Result Q r1_wire.Error))))=count := by
       apply UScalar.eq_of_val_eq
-      simp only [Slice.len,Array.to_slice,ProverCommitArray49.array,List.length_ofFn]
+      simp only [Slice.len,Array.to_slice,ProverCommitArray49.array,List.length_ofFn,Usize.ofNatCore_val_eq]
     rw [len,hout]
     rfl
   · simpa only [value_source,ProverCommitSubfieldOps47.zero_decode,
