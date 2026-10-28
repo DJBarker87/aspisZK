@@ -29,10 +29,10 @@ theorem call_once (ops : ExternalFuns) {H F : Type} (digest : aspis_core.digest.
     host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error.call_mut
     host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error.call
   rcases c with ⟨f,p,r,a⟩
-  dsimp only
-  simp only [bind_assoc_eq]
-  cases h : @host_sumcheck.evaluate_assignment _ ops F oracle f p r a i <;>
-    simp only [h,bind_tc_ok,bind_tc_fail,bind_tc_div]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  change (do let z ← @host_sumcheck.evaluate_assignment _ ops F oracle f p r a i
+             .ok z) = _
+  cases @host_sumcheck.evaluate_assignment _ ops F oracle f p r a i <;> rfl
 
 #print axioms call
 #print axioms call_mut
