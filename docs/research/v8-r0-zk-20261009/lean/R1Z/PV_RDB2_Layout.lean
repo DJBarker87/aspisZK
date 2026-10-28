@@ -22,7 +22,7 @@ def deployed (limit size count : Nat) : Option Nat := checked limit (count*size)
 theorem same_result (limit size count : Nat) :
     historical limit size count = deployed limit size count := by
   cases count with
-  | zero => rfl
+  | zero => simp [historical, deployed]
   | succ n =>
     by_cases h : n*size+size ≤ limit
     · have hp : n*size ≤ limit := by omega
