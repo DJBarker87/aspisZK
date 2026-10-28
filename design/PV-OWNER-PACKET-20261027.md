@@ -228,3 +228,14 @@ withdrawal_iff; codex/pv-runjoin-20261026, evidence/pv-runjoin31-20261028/OWNER-
 option (A) the privacy claim's honest-user domain is therefore exactly "spends the shipped client
 prepares", with zero-change spends of either kind outside it. The decision itself is still the
 owner's.
+
+## Pending (LOG D371, 2026-10-28): noncanonical witness limbs accepted by the compiler, then rejected by the prover
+
+A recipient owner-key limb written as raw P (the same field element as 0) is accepted by the frozen
+forest compiler and later makes the shipped prover fail with Err(Semantic); the canonically written
+twin succeeds (codex/pv-l2c-20261028, evidence/pv-l2c-20261028/resume-d369/D370-FINDING.md). A job is
+tracing whether the shipped client's input decoders can ever pass such a limb through. If they always
+canonicalise or reject, this is outside the honest route and no decision is needed. If not, the
+options will be (A) reject or canonicalise noncanonical limbs at decode, which changes frozen client
+code and its gates, or (B) restrict the privacy claim's honest domain to canonical inputs. The lead's
+recommendation will follow the trace.

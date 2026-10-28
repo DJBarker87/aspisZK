@@ -13596,3 +13596,29 @@ verification of the project's own prover; the encoded-payload transfer was unnec
 resumes with the remaining budget, reconciles state without rerunning anything, and moves files with
 plain scp or rsync, keeping helper scripts minimal and plainly descriptive. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D371 (Stream B) 2026-10-28 12:15 UTC: level-2 finding: guard N3 is not constant on all successful canonical preparations (a noncanonical recipient-key limb); l2c5 traces whether the honest pipeline can produce one
+
+l2c4 ( 3 attempts; no Kani; no source change; files moved by rsync) found a checked native
+counterexample to N3 constancy on the D369 domain (D370-FINDING.md, codex/pv-l2c-20261028 at
+3197fab0eb). Two transfers with identical public statement and identical returned public transition
+(input 1000, recipient 600, change 400) differ only in recipient.owner_key[0], written as M31(0) or
+as raw M31(P), P = 2147483647, the same field element. Both snapshots decode and both full forest
+compilers return Ok; the raw-P case leaves c1[0][444] = P, which survives masking because row 444 is
+inactive and not a mask or balancing cell; the exact-body check_base_column guard returns
+Err(Public), and the shipped prover returns Err(Semantic) (prove_masked_fixture, and
+prove_masked_attempt with OS entropy and the durable nonce store, without reservation I/O error). The
+canonical twin passes. The forest compiler validates public and common inputs, output values and
+computed commitments, but does not reject this raw owner-key representation.
+
+Lead assessment: this refutes N3 constancy on the domain as stated, and it is a real availability
+defect (a sender given a noncanonically encoded recipient key cannot pay). It is probably not a
+leak of the sender's secrets, because the deciding value is the recipient's own key representation
+and a failed attempt publishes no proof, but that is not established. The decisive question is
+whether the honest pipeline can produce such a limb; the noncanonical frontier words (D342) were
+outside the honest route because the snapshot codec rejects them. l2c5 (remaining budget) traces
+every externally supplied field to the shipped client's decoders (devnet_spend request decoding, key
+codecs, the RealR1_client caller) and proves canonicalisation, or reports the raw path as an owner
+finding with the options (reject or canonicalise at decode, which changes frozen client code; or
+restrict the honest domain). The owner packet records the finding as pending that trace. Rows removed
+outright: 0. Privacy target not yet established.
