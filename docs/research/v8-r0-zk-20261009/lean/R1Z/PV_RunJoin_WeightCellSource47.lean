@@ -1,4 +1,5 @@
-import R1Z.PV_RunJoin_WeightCellIndices46
+import R1Z.PV_RunJoin_WeightCellFold47
+import R1Z.PV_RunJoin_WeightReadFold47
 import R1Z.PV_RunJoin_WeightRowArray46
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_WeightCellSource47
@@ -49,13 +50,12 @@ theorem complete (w : W) (hs : w.variant=.S2) (k : Powers) (j : Usize) (hj : j.v
   have hc : PV_B2_251c1.host_weights.materialize_cell w (k0,k1,k2,k3,k4,k5,k6) j=
       PV_RunJoin_WeightCell46.finite 7 (powerArray (k0,k1,k2,k3,k4,k5,k6)) row 0#usize
         PV_B2_251c1.aspis_core.field.wide_exact.WideExact.ZERO := by
-    dsimp only [PV_B2_251c1.host_weights.materialize_cell,powerArray,row]
-    simp only [powerArray,row,PV_RunJoin_WeightCell46.finite,h0,h1,h2,h3,h4,h5,h6,
-      PV_RunJoin_WeightCellIndices46.index0,PV_RunJoin_WeightCellIndices46.index1,PV_RunJoin_WeightCellIndices46.index2,PV_RunJoin_WeightCellIndices46.index3,PV_RunJoin_WeightCellIndices46.index4,PV_RunJoin_WeightCellIndices46.index5,PV_RunJoin_WeightCellIndices46.index6,
-      PV_RunJoin_WeightCounters46.add0,PV_RunJoin_WeightCounters46.add1,PV_RunJoin_WeightCounters46.add2,PV_RunJoin_WeightCounters46.add3,
-      PV_RunJoin_WeightCellIndices46.add4,PV_RunJoin_WeightCellIndices46.add5,PV_RunJoin_WeightCellIndices46.add6,
-      bind_tc_ok,PV_RunJoin_WeightResult46.ok_bind]
-    rfl
+    rw [PV_B2_F_CellFold.source,PV_RunJoin_WeightCellFold47.source]
+    dsimp only [PV_B2_F_CellFold.ordered,powerArray,row]
+    rw [PV_RunJoin_WeightCellFold47.seven]
+    apply PV_RunJoin_WeightReadFold47.map_read
+    exact .cons ⟨rfl,h0⟩ (.cons ⟨rfl,h1⟩ (.cons ⟨rfl,h2⟩
+      (.cons ⟨rfl,h3⟩ (.cons ⟨rfl,h4⟩ (.cons ⟨rfl,h5⟩ (.cons ⟨rfl,h6⟩ .nil))))))
   refine ⟨row,hr,hm,hc,?_⟩
   rw [PV_RunJoin_WeightCellIndices46.zero]
   exact (PV_RunJoin_WeightCell46.complete 7 _ row 0#usize 7#u8 rfl _).trans
