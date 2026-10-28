@@ -1,0 +1,30 @@
+{"attempt": "NCX_E001", "exit_status": 2, "wall_seconds": 0.4527747380780056, "peak_rss_kib": "168080", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8", "aeneas_sha256": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958", "rust_reference_sha256": "fb5d87c3360996d73ed06a69023f69a8efc7e7ff6d83389f4a4cbe2190d1f0cd", "charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--include", "core::result::_::unwrap", "--start-from", "crate::decode_verifier_registry_v2", "--start-from", "crate::decode_verifier_registry_e
+...
+pace", "NCX_Reference", "-dest", "/home/dombarker/project-offloads/codex-cx-native-decref2-20261028/NCX_extracted", "-subdir", "NCX_Reference", "-split-files", "/home/dombarker/project-offloads/codex-cx-native-decref2-20261028/NCX_reference.llbc"]
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-native-decref2-20261028/NCX_reference.llbc
+[[91mError[39m] Nested-loop returns require exactly one Option language item
+Source: 'src/lib.rs', lines 101:0-101:105
+Compiler source: PrePasses.ml, line 840
+
+Uncaught exception:
+  
+  (Failure
+    "Nested-loop returns require exactly one Option language item\
+   \nSource: 'src/lib.rs', lines 101:0-101:105\
+   \nCompiler source: PrePasses.ml, line 840")
+
+Raised at Aeneas__Errors.craise_opt_span in file "Errors.ml", line 120, characters 4-23
+Called from Aeneas__Errors.craise in file "Errors.ml" (inlined), line 126, characters 2-43
+Called from Aeneas__PrePasses.lower_nested_loop_returns in file "PrePasses.ml", lines 840-841, characters 14-78
+Called from Aeneas__PrePasses.apply_passes.apply_function_pass in file "PrePasses.ml", line 3307, characters 14-26
+Called from Stdlib__List.fold_left in file "list.ml", line 123, characters 24-34
+Called from Aeneas__PrePasses.apply_passes.(fun) in file "PrePasses.ml", lines 3336-3338, characters 14-33
+Called from Stdlib__Map.Make.map in file "map.ml", line 312, characters 19-22
+Called from Stdlib__Map.Make.map in file "map.ml", line 311, characters 19-26
+Called from Stdlib__Map.Make.map in file "map.ml", line 313, characters 19-26
+Called from Stdlib__Map.Make.map in file "map.ml", line 311, characters 19-26
+Called from Aeneas__PrePasses.apply_passes in file "PrePasses.ml", lines 3328-3342, characters 4-26
+Called from Dune__exe__Main in file "Main.ml", line 734, characters 14-45
+
+Running as unit: run-ra1eef13ae51240c08df7b44aea4aead3.scope; invocation ID: a66a7704464e40fcbb8fc140352e3a1e
