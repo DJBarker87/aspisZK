@@ -6,7 +6,8 @@ namespace R1Z.PV_RunJoin_DualCell44
 open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
 open ProverCommitWideOps48 ProverCommitMix48
 variable [ProverRwFull.ExternalTypes]
-open PV_RunJoin_WideArithmetic44 PV_RunJoin_FoldCell44 (array)
+open PV_RunJoin_WideArithmetic44
+open PV_RunJoin_FoldCell44 (array)
 attribute [local irreducible] sourceArray source value
 
 def polynomial (q : Nat → Raw) (a : Exact) : Exact :=
