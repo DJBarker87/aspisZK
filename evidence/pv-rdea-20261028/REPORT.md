@@ -101,3 +101,19 @@ allocator relation after earlier witness computation, failure-event
 noninterference and L1/L2/L3 are **not proved**. No measured/public-looking
 path expression is promoted to a side-channel theorem. Both status records
 are [rows/V181.json](rows/V181.json) and [rows/V178.json](rows/V178.json).
+
+## LOG D399 continuation (in progress)
+
+The rdea-1 ruling supersedes this report's earlier stopping conclusion about
+allocation failure on capacity 69. Such failure is covered by the existing
+**runtime/allocator primitive adequacy** item, including dependence on allocator
+state after earlier witness computation. It adds no trust item. Request sizes
+and order still need source-derived public-data proofs. The old all-Usize
+unconditional-success reference is superseded for the consumed native law.
+
+A full deployed client build with LLVM IR/MIR emission is underway. Native
+scope 02 failed with lld thread exhaustion (RSS 447072 KiB, exit101); scope03
+used CPU affinity0–3, then was interrupted after source/shape review of long
+MIR emission for generated secp tables. The next diagnostic suppresses only
+MIR text for those arithmetic crates and retains LLVM IR. No cap is raised,
+and no frozen source or dictionary is changed. No restoration is claimed yet.
