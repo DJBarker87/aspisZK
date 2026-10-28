@@ -1,0 +1,20 @@
+{
+  "candidate_only": true,
+  "source": "host_terminal.rs",
+  "source_sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+  "reference": "reference_terminal.rs",
+  "reference_sha256": "d8c5f94ba2621e998bfc9fec405328fd1859397b898f8b7f3071e6e7781730c2",
+  "edits": [
+    {
+      "before": "    for range in ranges {\n        for block in range.clone() {\n            sum = sum.add(selectors.high[block]);\n        }\n    }",
+      "after": "    let mut range_index = 0usize;\n    while range_index < ranges.len() {\n        let mut block = ranges[range_index].start;\n        while block < ranges[range_index].end {\n            sum = sum.add(selectors.high[block]);\n            block += 1;\n        }\n        range_index += 1;\n    }"
+    },
+    {
+      "before": "        for residual in &mut range {\n            *residual = range_selector.mul(*residual);\n        }",
+      "after": "        let mut residual_index = 0usize;\n        while residual_index < 33 {\n            range[residual_index] = range_selector.mul(range[residual_index]);\n            residual_index += 1;\n        }"
+    }
+  ],
+  "remaining": "prove loop equivalences in Lean and complete Result law; native validation; source correspondence not yet established",
+  "entry_change": "owned SemanticPublic, owned immutable claims/alpha/Challenges; same selected84 fill and terminal_parts Result mapping; conversion law outstanding",
+  "array_read_change": "semantic/poseidon reverse-Horner loop reads via owned-copy read227; read identity law outstanding"
+}
