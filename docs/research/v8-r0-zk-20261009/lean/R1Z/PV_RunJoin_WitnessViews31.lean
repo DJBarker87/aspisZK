@@ -44,8 +44,10 @@ theorem first_direction (i : Input) :
   change ((BuilderSpendRelation.modelWitness (witness (K := K) i)).path 0).1 = _
   unfold witness
   rw [BuilderFieldNormalization.decoded_witness]
-  cases h : i.witness.pair.selected_second <;> simp only [toModel,bitB,PV_RunJoin_SemanticChange30.witness]
-  all_goals rfl
+  change decide (((BuilderRecordsPath.bits (PV_Src_NativeDirections.reference i.witness)).val[0]!).val ≠ 0) = _
+  rw [BuilderRecordsPath.bits_get _ 0#usize (by decide)]
+  change decide ((AspisBuilderRecordsReference.core.convert.num.FromU32Bool.from i.witness.pair.selected_second).val ≠ 0) = _
+  cases i.witness.pair.selected_second <;> rfl
 #print axioms first_direction
 
 theorem first_sibling (i : Input) :
@@ -55,6 +57,9 @@ theorem first_sibling (i : Input) :
   change ((BuilderSpendRelation.modelWitness (witness (K := K) i)).path 0).2 = _
   unfold witness
   rw [BuilderFieldNormalization.decoded_witness]
-  cases h : i.witness.pair.selected_second <;> rfl
+  change digK ((BuilderRecordsPath.siblings (PV_Src_NativeDirections.reference i.witness)).val[0]!) = _
+  rw [BuilderRecordsArray.tabulate_get 24#usize _ 0 (by decide)]
+  change digK (if i.witness.pair.selected_second then _ else _) = _
+  cases i.witness.pair.selected_second <;> rfl
 #print axioms first_sibling
 end R1Z.PV_RunJoin_WitnessViews31
