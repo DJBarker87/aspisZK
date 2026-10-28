@@ -1,4 +1,4 @@
-# Runjoin35 continuation — work in progress
+# Runjoin35 continuation — budget exhausted
 
 Exact worktree `/Users/dominic/ZK/.worktrees/pv-runjoin`; unchanged branch
 `codex/pv-runjoin-20261026`; entry `27140d50d2703382661f16248f28590cbe71c0d9`.
@@ -100,4 +100,52 @@ MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64, after allowed:true AND exit0
 No local Lean, Kani, Rust, new native/extraction/structural gate, unchanged full
 regression, raised cap or shared-source mutation. Failed source candidates are
 retained at exact committed revisions and are not accepted theorem evidence.
-Final counts, audits, exact receipts and stopping reason will be filled below.
+The 100 charged starts are exactly IDs 54000–54099: 88 accepted, 12 retained
+candidate failures, zero Kani. Every scope compiled one module. Accepted results
+comprise 14 new source/proof modules, three new audits and 71 newly needed inherited
+prerequisites. Prerequisite imports are not new theorem or row-removal credit.
+retained-failed-sources.json pins each rejected input's exact Git revision/blob
+and source/output hashes. Changed-input replacements passed; no unchanged failed
+job was rerun. All 100 original output/time pairs were collected and hash-checked
+in original-module-logs.json.xz. No compiler or own scope remains running.
+
+| ID | Focused audit target | Exit | Scope wall s | Peak RSS bytes | Swap |
+| --- | --- | --- | --- | --- | --- |
+| 54097 | R1Z.PV_RunJoin_SourceAudit35 | 0 | 1.70 | 4407943168 | 0 |
+| 54098 | R1Z.PV_RunJoin_RuntimeAudit35 | 0 | 1.75 | 4391653376 | 0 |
+| 54099 | R1Z.PV_RunJoin_BoundaryAudit35 | 0 | 1.81 | 5144141824 | 0 |
+
+Audit source revision: b4b31e12ce11d875d6f77debba468e5f53c331ee. Printed accepted
+axiom sets are subsets of propext, Classical.choice, Quot.sound. Exact target,
+source authority/path/blob/SHA/revision, all direct import object fingerprints,
+exit, wall, RSS, swap and full axiom output are in receipt-*.json, modules-*.json
+and the original logs. Overall peak RSS: 5144141824 bytes; all swap counts zero.
+No timeout, memory kill or reservation refusal. The longest inherited powers
+installation compile finished in 114.04 scope seconds under the unchanged cap.
+These are focused dependency/source audits, not an unchanged endpoint replay or
+frozen release manifest replay.
+
+Final read-only integrity preflight matches 2319 accepted project source/object
+pairs, 4876 direct import fingerprints, all 5673 external objects and 5438 IR
+companions, toolchain and LEAN_PATH. The 77 staged but uncompiled modules are
+listed in not-compiled-staged-modules.json and receive no credit. No unresolved
+oracle module is in the staged plan. The flat proof generator --check passes.
+endpoint-boundaries-unchanged.json and changed-file-boundaries.json verify the
+endpoint, trust/headline, ledger and shipped source boundaries are unchanged.
+
+Stopped on 100-attempt budget exhaustion. The h7 gaps stopped only their affected
+import step; independent proof work continued through the entire budget. No
+checked counterexample to the shipped security target is claimed.
+
+Next concrete deliverable: obtain a valid h7 authority/coherent object cohort for
+SelectedMaskProbe.Funs and .Types, then identify the actual current-emission
+SemanticOracle.evaluate complete Result with the owned/security oracle on the
+canonical public, original columns and retained challenges. Use the checked
+source sample/merge laws and supply the native worker/effect association; finish
+source interpolation/rounds, commitments/openings and complete proof serialization.
+Then install the actual PV_W runtime and both complete decoders and compose the
+unchanged coupling/bad/query events into RustRealRefinement. No such concrete
+endpoint instance is supplied by the local laws above.
+
+commits.txt records `git log --oneline 27140d50d2..HEAD` through the final source
+and receipt freeze; a final evidence-only commit follows.

@@ -46,4 +46,8 @@ theorem installed (ops : ExternalFuns) (x : Wide) :
 #print axioms installed
 end R1Z.PV_RunJoin_FlatBytes35
 '''
-p.write_text(s)
+if __import__('sys').argv[1:] == ['--check']:
+ assert p.read_text()==s, 'flat serializer proof generator drift'
+ print('flat serializer proof generator matches committed source')
+else:
+ p.write_text(s)
