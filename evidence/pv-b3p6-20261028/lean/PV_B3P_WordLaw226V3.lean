@@ -20,19 +20,19 @@ theorem complete_word (v : U32) : four v =
   have hc0 : U32.wrapping_mul 8#u32 (UScalar.cast .U32 0#usize) = 0#u32 := by
     apply UScalar.eq_of_val_eq
     rw [U32.wrapping_mul_val_eq,UScalar.cast_val_eq]
-    norm_num [UScalar.size,UScalarTy.numBits,U32.size]
+    norm_num [UScalar.size,UScalarTy.numBits,U32.size,U32.numBits]
   have hc1 : U32.wrapping_mul 8#u32 (UScalar.cast .U32 1#usize) = 8#u32 := by
     apply UScalar.eq_of_val_eq
     rw [U32.wrapping_mul_val_eq,UScalar.cast_val_eq]
-    norm_num [UScalar.size,UScalarTy.numBits,U32.size]
+    norm_num [UScalar.size,UScalarTy.numBits,U32.size,U32.numBits]
   have hc2 : U32.wrapping_mul 8#u32 (UScalar.cast .U32 2#usize) = 16#u32 := by
     apply UScalar.eq_of_val_eq
     rw [U32.wrapping_mul_val_eq,UScalar.cast_val_eq]
-    norm_num [UScalar.size,UScalarTy.numBits,U32.size]
+    norm_num [UScalar.size,UScalarTy.numBits,U32.size,U32.numBits]
   have hc3 : U32.wrapping_mul 8#u32 (UScalar.cast .U32 3#usize) = 24#u32 := by
     apply UScalar.eq_of_val_eq
     rw [U32.wrapping_mul_val_eq,UScalar.cast_val_eq]
-    norm_num [UScalar.size,UScalarTy.numBits,U32.size]
+    norm_num [UScalar.size,UScalarTy.numBits,U32.size,U32.numBits]
   have hz : U32.wrapping_shr v 0#u32 = v := by
     apply UScalar.eq_of_val_eq
     change (U32.wrapping_shr v 0#u32).bv.toNat = v.val
