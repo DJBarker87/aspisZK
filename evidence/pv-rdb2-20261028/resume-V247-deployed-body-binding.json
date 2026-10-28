@@ -1,0 +1,94 @@
+{
+  "row": "V247",
+  "checks": [
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/src/crates/aspis-statement/src/state_only_semantic.rs",
+      "file_sha256": "fdea5d4d8be1dd4a093e2b06391d3f242866648496ed791a03597b596719fdd4",
+      "item": "pub fn state_only_copy_helper_sum(",
+      "body": "{\n    (h1.len() == TRACE_ROWS).then(|| h1.iter().copied().fold(QM31::ZERO, QM31::add))\n}",
+      "exact_tokens": true,
+      "law": "SumDeployed.complete/storage_and_value/wrong_length_no_read/installed"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/src/crates/aspis-statement/src/trace_v4.rs",
+      "file_sha256": "60e36ebb52b003de401c014eb6a139f1981b19b06f575dad5b87d8f59d0c8aa3",
+      "constant": "TRACE_ROWS=1<<10=1024",
+      "import_resolved": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/bool.rs",
+      "file_sha256": "c8c8cc32423a54b00f0ee3314924e7d00b2b20623728d6c602390c7fc5d7839c",
+      "item": "pub fn then<",
+      "body": "{\n        if self { Some(f()) } else { None }\n    }",
+      "exact_tokens": true,
+      "law": "SumDeployed.wrong_length_no_read; callback evaluated only on true"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/copied.rs",
+      "file_sha256": "cb07284d108296fab55b3fc5071b5785fb5f3989d6fc240f381a506e4c438553",
+      "item": "pub(in crate::iter) fn new(",
+      "body": "{\n        Copied { it }\n    }",
+      "exact_tokens": true,
+      "law": "single-field adapter construction; unchanged iterator"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/copied.rs",
+      "file_sha256": "cb07284d108296fab55b3fc5071b5785fb5f3989d6fc240f381a506e4c438553",
+      "item": "fn copy_fold<",
+      "body": "{\n    move |acc, &elt| f(acc, elt)\n}",
+      "exact_tokens": true,
+      "law": "four-limb Copy semantics; SumNative.add_source; backing slice unchanged"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/copied.rs",
+      "file_sha256": "cb07284d108296fab55b3fc5071b5785fb5f3989d6fc240f381a506e4c438553",
+      "item": "fn fold<",
+      "body": "{\n        self.it.fold(init, copy_fold(f))\n    }",
+      "exact_tokens": true,
+      "law": "Fold.initial/complete; SumDeployed.fold_value"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "file_sha256": "3d02121faa057f039d2d677829b2d8e04d1d772c6891b5b5c66514e4e7f185dc",
+      "item": "fn fold<B, F>(",
+      "body": "{\n                \n                \n                \n                \n                \n                \n                \n                if is_empty!(self) {\n                    return init;\n                }\n                let mut acc = init;\n                let mut i = 0;\n                let len = len!(self);\n                loop {\n                    \n                    \n                    acc = f(acc, unsafe { & $( $mut_ )? *self.ptr.add(i).as_ptr() });\n                    \n                    \n                    \n                    i = unsafe { i.unchecked_add(1) };\n                    if i == len {\n                        break;\n                    }\n                }\n                acc\n            }",
+      "exact_tokens": true,
+      "law": "Fold.complete/initial/increment/qm31_read_bounds/offset_provenance/offset_alignment; SumDeployed.complete"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const unsafe fn offset_from_unsigned(",
+      "body": "{\n        \n        unsafe { self.as_ptr().offset_from_unsigned(subtracted.as_ptr()) }\n    }",
+      "exact_tokens": true,
+      "law": "Fold.length_from_pointers; same allocation from NonNull.cast_provenance and Fold.offset_provenance"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mut_ptr.rs",
+      "file_sha256": "b2c91c8ecad105dd611f004d8af1b7ff621007485c1b65f011b17b747e74cdae",
+      "item": "pub const unsafe fn offset_from_unsigned(",
+      "body": "{\n        \n        unsafe { (self as *const T).offset_from_unsigned(origin) }\n    }",
+      "exact_tokens": true,
+      "law": "const/mut pointer cast retains allocation and address"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs",
+      "file_sha256": "a50ae219d63dc49bb2da48fa9bc607e3e1227c556376a00ae6e906205051073d",
+      "item": "pub const unsafe fn offset_from_unsigned(",
+      "body": "{\n        #[rustc_allow_const_fn_unstable(const_eval_select)]\n        const fn runtime_ptr_ge(this: *const (), origin: *const ()) -> bool {\n            const_eval_select!(\n                @capture { this: *const (), origin: *const () } -> bool:\n                if const {\n                    true\n                } else {\n                    this >= origin\n                }\n            )\n        }\n\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::offset_from_unsigned requires `self >= origin`\",\n            (\n                this: *const () = self as *const (),\n                origin: *const () = origin as *const (),\n            ) => runtime_ptr_ge(this, origin)\n        );\n\n        let pointee_size = size_of::<T>();\n        assert!(0 < pointee_size && pointee_size <= isize::MAX as usize);\n        \n        unsafe { intrinsics::ptr_offset_from_unsigned(self, origin) }\n    }",
+      "exact_tokens": true,
+      "law": "Fold.length_from_pointers; pointee size16; native valid-slice allocation/provenance relation"
+    }
+  ],
+  "toolchain": "rustc1.94.1",
+  "profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "resolved_features_reference": "native-sum/receipt.json",
+  "shared_constructor_laws": "V240-deployed-body-binding.json: NonNull.from_ref_complete/cast_complete/iterator_constructor",
+  "arithmetic_source": "same frozen CT add source; SumNative.limb_source/add_source prove complete arbitrary-raw-word law",
+  "original_result": "PV_B1_SumOriginal.op230_source; PV_B1_Close230.selected_callback",
+  "deployed_result": "R1Z.PV_RDB2_SumDeployed.complete/installed",
+  "mutation_audit": "Only acc and i locals are assigned; iter/copy_fold use shared references; every backing-storage return preserved; no backward mutable continuation exists.",
+  "precise_boundary": "bool::then, Slice::iter/Iter::new, Copied::new/copy_fold/fold, Iter::fold, pointer difference/add/as_ptr, QM31::add; no Bound::copied or SIMD dictionary is instantiated here.",
+  "machine_boundary": "Rust reference/Copy/intrinsic/transparent-layout semantics; no compiler, SBF or complete observer correspondence claimed",
+  "restored": false
+}

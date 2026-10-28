@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_GlobalAlloc.lean:66:79: error: unsolved goals
+World : Type
+allocate zero : Layout → World → Result (Raw × World)
+layout : Layout
+zeroed : Bool
+world after : World
+ptr : Raw
+nonzero : layout.size ≠ 0
+null : ptr.address = 0
+call : (if zeroed = true then zero layout world else allocate layout world) = ok (ptr, after)
+⊢ (if zeroed = true then do
+      let __x ← zero layout world
+      if __x.1.address = 0 then ok (Except.error (), __x.2)
+        else ok (Except.ok (sliceFromRawParts __x.1 layout.size), __x.2)
+    else do
+      let __x ← allocate layout world
+      if __x.1.address = 0 then ok (Except.error (), __x.2)
+        else ok (Except.ok (sliceFromRawParts __x.1 layout.size), __x.2)) =
+    ok (Except.error (), after)
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_GlobalAlloc.lean:67:36: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [deployedGlobal, ̲nonzero,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲call, ̲bind_tc_ok, ̲null, ̲↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_GlobalAlloc.lean:67:45: warning: This simp argument is unused:
+  call
+
+Hint: Omit it from the simp argument list.
+  simp only [deployedGlobal, ̲nonzero, ̲if_false,c̵a̵l̵l̵,̵ ̲bind_tc_ok, ̲null, ̲↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_GlobalAlloc.lean:67:50: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵e̵p̵l̵o̵y̵e̵d̵G̵l̵o̵b̵a̵l̵,̵n̵o̵n̵z̵e̵r̵o̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵c̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵n̵u̵l̵l̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲d̲e̲p̲l̲o̲y̲e̲d̲G̲l̲o̲b̲a̲l̲,̲ ̲n̲o̲n̲z̲e̲r̲o̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲a̲l̲l̲,̲ ̲n̲u̲l̲l̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_GlobalAlloc.lean:67:61: warning: This simp argument is unused:
+  null
+
+Hint: Omit it from the simp argument list.
+  simp only [deployedGlobal, ̲nonzero, ̲if_false, ̲call, ̲bind_tc_ok,n̵u̵l̵l̵,̵ ̲↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDB2_GlobalAlloc.allocate_complete' does not depend on any axioms
+'R1Z.PV_RDB2_GlobalAlloc.runtime_complete' does not depend on any axioms
+'R1Z.PV_RDB2_GlobalAlloc.zero_no_allocator_call' depends on axioms: [propext]
+'R1Z.PV_RDB2_GlobalAlloc.null_is_allocation_error' depends on axioms: [propext, sorryAx]
