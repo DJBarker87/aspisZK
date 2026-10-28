@@ -1,6 +1,6 @@
 # NCY release ELF reproductions — 2026-10-28
 
-Status: devnet reproduced; Pool pending; no release claim. Frozen source baseline
+Status: devnet and Pool reproduced bit-exactly; no release claim. Frozen source baseline
 `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Only NCY evidence changes.
 
 The default verifier is reused from the fresh NCR_B003 reproduction:
@@ -47,8 +47,9 @@ No shared launcher/reservation/shim/infrastructure was edited.
 | Target | Exit | Build wall s | Peak RSS KiB | Cgroup peak bytes | Swap peak bytes | Bytes | SHA-256 |
 |---|---:|---:|---:|---:|---:|---:|---|
 | devnet NCY_B001 | 0 | 28.453730122 | 686108 | 2506846208 | 0 | 1563728 | 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299 |
+| Pool NCY_B002 | 0 | 29.281395283 | 678936 | 2065387520 | 0 | 605704 | 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548 |
 
-NCY_B001-time.log records full scoped wall 29.48 s; transport-included wall
+NCY_B001-time.log records full scoped wall 29.39 s; transport-included wall
 29.698603584 s. The 1243 source/input pins match both before and after.
 
 The compiler emits jobserver-FD/unused/deprecation warnings and stack-offset
@@ -66,3 +67,27 @@ readback, loader-authority check, source/model bridge, syscall-value proof,
 security experiment transport or final L188 audit is supplied by hash equality.
 Keys, if generated, remain on the host at mode 0600; no key cleanup or refund.
 No binaries, objects, keys or archives are committed.
+
+Pool scoped resource details are in NCY_B002-time.log and NCY_B002-receipt.json.
+
+NCY_I003 (exit 0) rehashed both ELFs, inventoried actual diagnostic/compiler
+snapshots and post-build read-only cache seed hashes, then removed only own
+NCY_target_devnet / NCY_target_pool rebuildable directories. It retained all
+artifacts and keys. Exact readelf -Ws outputs show only dynamic symbol tables;
+they do not establish whether stack-diagnostic functions are reachable.
+NCY_PROVENANCE.json pins command/artifact/diagnostic records. Full compiler
+MIR/LLVM/mono text transport is split per build and compressed as NCY_COMPILER_SNAPSHOTS_NCY_B001.json.xz
+and NCY_COMPILER_SNAPSHOTS_NCY_B002.json.xz (index records reconstruction)
+with uncompressed SHA-256 in its .sha256 sidecar; compact compiler arguments
+and symbol outputs are also in NCY_COMPILER_COMMANDS.json. No ELF is committed.
+The seed hash manifests are explicitly POST-build censuses, not pre-build hashes.
+
+Final stage-1 budget: 3/6 capped scopes (2 optimized builds, 1 inspection/own-target
+cleanup), 0/10 Lean, 0 Kani. No timeout, memory kill, refused admission, raised
+cap or unchanged regression rerun occurred. No Lean objects were needed;
+the named NCY Lean cache was therefore not seeded or mutated, and the read-only
+leaf cache / coherent SInt2 objects were untouched.
+
+Barrier log transport-only final empty lines were normalized; admission JSON
+and exits are preserved. The initial combined xz exceeded 20 MB and was never
+committed; per-build parts are each below 20 MB with reconstruction hashes.
