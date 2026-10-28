@@ -12,9 +12,9 @@ theorem snapshots (a b : Honest (K := K))
     (pool : a.val.snapshot.pool=b.val.snapshot.pool)
     (domain : a.val.snapshot.deployment_domain=b.val.snapshot.deployment_domain) :
     a.val.snapshot=b.val.snapshot := by
-  have ha := PV_RunJoin_UniversalPublic22.projection (inputs (K := K)) PV_Src_Transport.transport a
-  have hb := PV_RunJoin_UniversalPublic22.projection (inputs (K := K)) PV_Src_Transport.transport b
-  exact PV_RunJoin_SnapshotAgreement31.whole a.val b.val (success a) (success b)
+  have ha := PV_RunJoin_UniversalPublic22.projection (K := K) (inputs (K := K)) PV_Src_Transport.transport a
+  have hb := PV_RunJoin_UniversalPublic22.projection (K := K) (inputs (K := K)) PV_Src_Transport.transport b
+  exact PV_RunJoin_SnapshotAgreement31.whole (K := K) a.val b.val (success a) (success b)
     a.property.2.2.2 b.property.2.2.2 (ha.symm.trans (same.trans hb)) pool domain
 #print axioms snapshots
 
