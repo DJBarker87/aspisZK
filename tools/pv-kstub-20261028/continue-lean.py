@@ -29,7 +29,7 @@ for base in ['aspis-fs-generic-20261006','r1-privacy-build-integration-20261019'
 assert not used,used
 checks=[]
 for x in json.loads((D/'external-object-manifest.json').read_text()):
- if x['module']=='Init' or x['module'].startswith('Init/') or x['module']=='Std' or x['module'].startswith('Std/'):
+ if any(x['module']==prefix or x['module'].startswith(prefix+'/') for prefix in ['Init','Std','Lean','Lake']):
   h=hashlib.sha256(Path(x['path']).read_bytes()).hexdigest();assert h==x['object_sha256'],x['module'];checks.append(dict(module=x['module'],sha256=h,ok=True))
 private_cache=[]
 for module,expected in [('PV_KStub_CopyMeaning','2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'),('PV_KStub_WindowFrame','37fc1b48fa430b433b4c7e875fe7690fffb9eda336da549dc3570cd5a9c50911')]:
