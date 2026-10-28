@@ -25,3 +25,9 @@ C. **Reject.** Then the native bridges remain supporting evidence only, and `ext
 ## What stays separate in every option
 
 Source-to-ELF correspondence (the deployed binary is this source under the pinned toolchain); the K-1/K-2 Kani findings and their handling; runtime syscall, allocator and std rows; and the open item NCQ_ flagged, where release preparation/query/finish must be tied to the same pinned source by association evidence, not by tool trust.
+
+## Second, smaller item: the address-derivation runtime call (test run only)
+
+JHs_ (evidence/joint-pda-20261028/JHs_TRUST_PROPOSAL.md) modelled how the pinned Solana library derives program-owned account addresses, and proved all seven hash equations the TX2 test run needs. What remains for a faithful concrete TX2 run is the runtime call itself (sol_create_program_address) and its ed25519 "not a valid public key" check, which no current trust row covers. JHs_ drafted a narrow row, `FixturePdaRuntime`, limited to the seven enumerated calls. It matters ONLY for the concrete test run (non-vacuity), never for soundness, because the headline quantifies over this operation (ruling (s)).
+
+Lead recommendation: DEFER this decision. The test run is also blocked on the three account decoders, which need real definitions from the contract approach first, so adopting the row now would not unblock anything. I will bring it back, with the off-curve facts either proved or isolated as the only remaining certificates, once the decoders exist.
