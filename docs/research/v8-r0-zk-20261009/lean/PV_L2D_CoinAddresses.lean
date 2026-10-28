@@ -9,7 +9,12 @@ def counter (m c i : Nat) := (c+i)%m
 theorem same_counter_iff (m c i j : Nat) :
     counter m c i=counter m c j ↔ Nat.ModEq m i j := by
   change Nat.ModEq m (c+i) (c+j) ↔ Nat.ModEq m i j
-  exact Nat.ModEq.add_left_cancel' c
+  constructor
+  · exact Nat.ModEq.add_left_cancel' c
+  · intro h
+    change i%m=j%m at h
+    change (c+i)%m=(c+j)%m
+    simp only [Nat.add_mod,h]
 #print axioms same_counter_iff
 
 theorem first_cycle_unique (m c i j : Nat) (hi : i<m) (hj : j<m)
