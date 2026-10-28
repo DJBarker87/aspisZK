@@ -13470,3 +13470,22 @@ about, and reports which OS facts the existing trust list covers; uncovered ones
 possible trust items with what depends on them. The file-effects line is parked (branch pushed) until
 then; fxmem2 continues on drop at the finite set of dropped types. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D364 (Stream B) 2026-10-28 10:35 UTC: pv-world builds the state/error/trace calculus; W-CARRIER-1 refutes an OS-only world; pv-world2 enriches the carrier and proves threading
+
+pv-world (4 of 100 attempts; no Kani; 17 axiom queries with standard axioms) proved a state, error
+and trace calculus over the existing Observation World: lifting of pure callbacks, ordered pre-world
+traces, and named composition lemmas that preserve effects on failure and divergence. The threading
+theorem for the extracted prover is not yet proved. It stopped on a checked finding, W-CARRIER-1: if
+the world projects only to operating-system state and forgets process state that destructors can
+reach, even a world-threaded interpreter cannot reproduce both outcomes of pv-fxmem's native drop
+witness. That refutes a candidate design, not a ledger row; the lead's prompt had not limited the
+stop rule to row statements, so the worker stopped correctly by its wording. It also recorded, as
+obligations without any new trust field, exclusive creation (O_EXCL) and crash persistence, noting
+that file sync and directory-entry durability need separate treatment.
+
+pv-world2 (remaining 96 attempts) has the stop rule clarified (a counterexample to a ledger row or the
+endpoint only), enriches the world with the process-local state destructors and callbacks can reach
+(or cites fxmem2's proof that the reached destructors are trivial or pure), proves the threading
+theorem over the extracted control flow, keeps the OS facts as owner findings, and closes the effect
+rows that rest only on that. Rows removed outright: 0. Privacy target not yet established.
