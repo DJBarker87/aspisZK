@@ -25,7 +25,7 @@ theorem complete (ops : ExternalFuns) (values : Nat → Q) :
   refine ⟨out,bytes,hout,hbytes,hval,hlen,hcan,?_⟩
   intro k
   have eq := congrArg (fun p : Polynomial AspisR1.ExtractedCurrentQM31Exact.QM31Exact => p.coeff k.val) hpoly
-  simpa only [poly,ProverCommitInterpolationRow48.qpoly,ProverCommitInterpolationPoly48.coeff,
+  simpa only [value,poly,ProverCommitInterpolationRow48.qpoly,ProverCommitInterpolationPoly48.coeff,
     if_pos k.isLt] using eq
 
 #print axioms complete
