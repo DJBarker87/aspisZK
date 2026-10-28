@@ -1,0 +1,65 @@
+{"attempt": "NBC_K001", "exit_status": 0, "wall_seconds": 18.164906154968776, "peak_rss_kib": "532308", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-tx2a-20261027/NBC_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qu
+...
+
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: module `NBC_runtime` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:531:5
+    |
+531 | mod NBC_runtime;
+    |     ^^^^^^^^^^^ help: convert the identifier to snake case: `nbc_runtime`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NBC_mark_none` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/verifier/NBC_runtime.rs:13:4
+   |
+13 | fn NBC_mark_none() {
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbc_mark_none`
+
+    Finished `dev` profile [optimized] target(s) in 17.23s
+Checking harness verifier::NBC_runtime::NBC_mark_none...
+
+VERIFICATION RESULT:
+ ** 0 of 10 failed
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.06752036s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r3b3c8a113b8c4e1aada08901862c815f.scope; invocation ID: 43a73a1c3aea4e479efa45b388352904

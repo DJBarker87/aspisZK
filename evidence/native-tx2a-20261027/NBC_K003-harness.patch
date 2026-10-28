@@ -1,0 +1,46 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,6 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)]
++mod NBC_runtime;
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -168,3 +168,6 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)]
++mod NBC_runtime;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/verifier/NBC_runtime.rs
+@@ -0,0 +1,17 @@
++use super::*;
++fn phase() -> Phase {
++    match kani::any::<u8>() % 11 {
++        0 => Phase::Parsed, 1 => Phase::Semantic,
++        2 => Phase::SemanticPart(kani::any()), 3 => Phase::Prepare,
++        4 => Phase::CheckpointRead, 5 => Phase::Merkle(kani::any()),
++        6 => Phase::Query(kani::any()),
++        7 => Phase::QueryPart(kani::any(),kani::any()),
++        8 => Phase::CheckpointWrite, 9 => Phase::Relation, _ => Phase::Final,
++    }
++}
++#[kani::proof]
++fn NBC_mark_none() {
++    let p=phase();
++    super::mark(None,p);
++    kani::cover!(true);
++}
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NBC_runtime.rs
+@@ -0,0 +1,5 @@
++#[kani::proof]
++fn NBC_observer_none() {
++    assert!(super::observer().is_none());
++    kani::cover!(true);
++}

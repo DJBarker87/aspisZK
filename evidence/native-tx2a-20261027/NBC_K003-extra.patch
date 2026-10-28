@@ -1,0 +1,34 @@
+--- a/crates/aspis-core/src/field/wide_exact.rs
++++ b/crates/aspis-core/src/field/wide_exact.rs
+@@ -626,3 +626,6 @@
+         assert_canonical(x.sub(x.neg()));
+     }
+ }
++
++#[cfg(kani)]
++mod NBC_runtime;
+--- /dev/null
++++ b/crates/aspis-core/src/field/wide_exact/NBC_runtime.rs
+@@ -0,0 +1,8 @@
++use super::*;
++impl kani::Arbitrary for WideExact {
++    fn any() -> Self {
++        let q = || QM31 { c0: CM31 { a: M31(kani::any()), b: M31(kani::any()) },
++                           c1: CM31 { a: M31(kani::any()), b: M31(kani::any()) } };
++        Self { c0: q(), c1: q() }
++    }
++}
+--- a/crates/aspis-r1-cost-probe/src/verifier/NBC_runtime.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier/NBC_runtime.rs
+@@ -15,3 +15,11 @@
+     super::mark(None,p);
+     kani::cover!(true);
+ }
++#[kani::proof]
++fn NBC_trace_value() {
++    let tag: u16=kani::any();
++    let index: usize=kani::any();
++    let x: aspis_core::field::WideExact=kani::any();
++    crate::trace::value(tag,index,x);
++    kani::cover!(true);
++}
