@@ -4,6 +4,26 @@ namespace PV_B3P_Success227
 open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
 
+/-- A grid offset stays below16 even if wrapping occurs: modulo never
+increases a natural number. This lemma does not evaluate a field expression. -/
+theorem grid_mul_bound (g : Usize) (hg : g.val<4) :
+    (Usize.wrapping_mul 4#usize g).val<16 := by
+  rw [Usize.wrapping_mul_val_eq]
+  change (4*g.val) % UScalar.size .Usize < 16
+  have hm := Nat.mod_le (4*g.val) (UScalar.size .Usize)
+  omega
+
+theorem grid_add_bound (g offset : Usize) (hg : g.val<4) (ho : offset.val<4) :
+    (Usize.wrapping_add (Usize.wrapping_mul 4#usize g) offset).val<16 := by
+  rw [Usize.wrapping_add_val_eq,Usize.wrapping_mul_val_eq]
+  change ((4*g.val) % UScalar.size .Usize + offset.val) % UScalar.size .Usize < 16
+  have hm := Nat.mod_le (4*g.val) (UScalar.size .Usize)
+  have ha := Nat.mod_le ((4*g.val) % UScalar.size .Usize + offset.val) (UScalar.size .Usize)
+  omega
+
+#print axioms grid_mul_bound
+#print axioms grid_add_bound
+
 theorem total_reference_poseidon_external_local_packed (input : Array aspis_core.field.QM31 4#usize) :
     Success (reference_poseidon.external_local_packed input) := by
   apply bind
@@ -15,25 +35,21 @@ theorem total_reference_poseidon_external_local_packed (input : Array aspis_core
 
 theorem total_reference_poseidon_external_linear_packed (state : Array aspis_core.field.QM31 16#usize) :
     Success (reference_poseidon.external_linear_packed state) := by
-  have hsize : 16 < UScalar.size .Usize := by
-    have hm := Usize.cMax_bound_concrete.1
-    rw [UScalar.size_def]
-    scalar_tac
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q1
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q2
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q3
   apply bind
   · apply total_reference_poseidon_external_local_packed
@@ -43,19 +59,19 @@ theorem total_reference_poseidon_external_linear_packed (state : Array aspis_cor
   intro local_packed1
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q5
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q6
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q7
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q8
   apply bind
   · apply total_reference_poseidon_external_local_packed
@@ -65,19 +81,19 @@ theorem total_reference_poseidon_external_linear_packed (state : Array aspis_cor
   intro local_packed2
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q10
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q11
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q12
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q13
   apply bind
   · apply total_reference_poseidon_external_local_packed
@@ -87,19 +103,19 @@ theorem total_reference_poseidon_external_linear_packed (state : Array aspis_cor
   intro local_packed3
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q15
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q16
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q17
   apply lift_total
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q18
   apply bind
   · apply total_reference_poseidon_external_local_packed
@@ -108,25 +124,25 @@ theorem total_reference_poseidon_external_linear_packed (state : Array aspis_cor
   · apply update <;> scalar_tac
   intro local_packed4
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q20
   apply bind
   · apply qadd
   intro q21
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q22
   apply bind
   · apply qadd
   intro q23
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q24
   apply bind
   · apply qadd
   intro q25
   apply bind
-  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q26
   apply bind
   · apply qadd

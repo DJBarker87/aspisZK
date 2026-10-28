@@ -16,6 +16,8 @@ mapping['reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND']='modulus_total'
 records=[]
 def emit(mod,srcs,imports):
  out=['import '+m for m in imports]+['namespace PV_B3P_Success227','open Aeneas Aeneas.Std PV_B3P_227','set_option autoImplicit false','']
+ if mod=='PV_B3P_InternalSuccess227':
+  out += ['/-- A grid offset stays below16 even if wrapping occurs: modulo never\nincreases a natural number. This lemma does not evaluate a field expression. -/\ntheorem grid_mul_bound (g : Usize) (hg : g.val<4) :\n    (Usize.wrapping_mul 4#usize g).val<16 := by\n  rw [Usize.wrapping_mul_val_eq]\n  change (4*g.val) % UScalar.size .Usize < 16\n  have hm := Nat.mod_le (4*g.val) (UScalar.size .Usize)\n  omega\n\ntheorem grid_add_bound (g offset : Usize) (hg : g.val<4) (ho : offset.val<4) :\n    (Usize.wrapping_add (Usize.wrapping_mul 4#usize g) offset).val<16 := by\n  rw [Usize.wrapping_add_val_eq,Usize.wrapping_mul_val_eq]\n  change ((4*g.val) % UScalar.size .Usize + offset.val) % UScalar.size .Usize < 16\n  have hm := Nat.mod_le (4*g.val) (UScalar.size .Usize)\n  have ha := Nat.mod_le ((4*g.val) % UScalar.size .Usize + offset.val) (UScalar.size .Usize)\n  omega\n\n#print axioms grid_mul_bound\n#print axioms grid_add_bound\n']
  for source in srcs:
   for name,head,body in extract(source):
    if name.endswith('.SHIFTS'):continue
@@ -36,12 +38,10 @@ def emit(mod,srcs,imports):
    theorem='total_'+name.replace('.','_');mapping[name]=theorem
    if name=='reference_poseidon.interpolate_column227':pass
    lets=list(re.finditer(r'^  let (.*?)\s*(←|:=)\s*','  '+body.lstrip(),re.M));body='  '+body.lstrip();proof=[]
-   if name=='reference_poseidon.external_linear_packed':
-    proof=['  have hsize : 16 < UScalar.size .Usize := by','    have hm := Usize.cMax_bound_concrete.1','    rw [UScalar.size_def]','    scalar_tac']
    def rule(expr):
     call=expr.split()[0];assert call in mapping,(name,call,expr)
     target=mapping[call]
-    if name=='reference_poseidon.external_linear_packed' and target=='index':return 'apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)'
+    if name=='reference_poseidon.external_linear_packed' and target=='index':return 'apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)'
     if target in ['index','update','borrow','raw_limb_total','total_reference_field_qm31_pack_base4']:return 'apply '+target+' <;> scalar_tac'
     if target=='ok':return 'exact ok _'
     return 'apply '+target
