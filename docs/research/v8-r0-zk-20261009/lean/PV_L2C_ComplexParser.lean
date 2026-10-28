@@ -12,12 +12,10 @@ theorem parse (x y : U32) (hx : x.val<2147483647) (hy : y.val<2147483647) :
   simp only [core.slice.index.Slice.index,core.slice.index.SliceIndexRangeUsizeSlice]
   rw [left]
   simp only [bind_tc_ok,copy_array]
-  simp only [bind_tc_ok]
   rw [PV_L2C_CanonicalParser.scalar_parse x hx]
   simp only [bind_tc_ok,core.option.Option.Insts.CoreOpsTry_traitTry.branch]
   rw [right]
   simp only [bind_tc_ok,copy_array]
-  simp only [bind_tc_ok]
   rw [PV_L2C_CanonicalParser.scalar_parse y hy]
   rfl
 #print axioms parse
