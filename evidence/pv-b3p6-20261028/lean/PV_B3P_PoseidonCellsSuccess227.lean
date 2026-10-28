@@ -16,7 +16,9 @@ theorem raw_limb_total (output : Usize) (a b c d : U64) (ho : output.val<4) :
   rcases hc with h | h | h | h <;>
     simp only [reference_poseidon.raw_limb227,h,lift,bind_tc_ok] <;> exact ok _
 
-theorem modulus_total : Success reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND := ⟨_,rfl⟩
+theorem modulus_total : Success reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND := by
+  unfold reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND aspis_core.field.P
+  exact ⟨_,rfl⟩
 
 #print axioms modulus_total
 #print axioms lift_total
