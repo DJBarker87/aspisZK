@@ -4,12 +4,12 @@ namespace R1Z.PV_RDCD_Wrapping194
 open Aeneas Aeneas.Std
 /- Source bodies are the pinned uint_impl! macro methods. Intrinsics are
    interpreted at the existing bitvector primitive boundary, not proved LLVM. -/
-def add32 (x y : U32) : U32 := UScalar.ofBitVec (x.bv + y.bv)
-def sub32 (x y : U32) : U32 := UScalar.ofBitVec (x.bv - y.bv)
-def add64 (x y : U64) : U64 := UScalar.ofBitVec (x.bv + y.bv)
-def mul64 (x y : U64) : U64 := UScalar.ofBitVec (x.bv * y.bv)
+def add32 (x y : U32) : U32 := (x.bv + y.bv)#uscalar
+def sub32 (x y : U32) : U32 := (x.bv - y.bv)#uscalar
+def add64 (x y : U64) : U64 := (x.bv + y.bv)#uscalar
+def mul64 (x y : U64) : U64 := (x.bv * y.bv)#uscalar
 def shr64 (x : U64) (rhs : U32) : U64 :=
-  UScalar.ofBitVec (x.bv.ushiftRight (rhs.val &&& (64 - 1)))
+  (x.bv.ushiftRight (rhs.val &&& (64 - 1)))#uscalar
 theorem add32_binding (x y : U32) : add32 x y = core.num.U32.wrapping_add x y := rfl
 theorem sub32_binding (x y : U32) : sub32 x y = core.num.U32.wrapping_sub x y := rfl
 theorem add64_binding (x y : U64) : add64 x y = U64.wrapping_add x y := rfl
