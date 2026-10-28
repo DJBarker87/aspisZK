@@ -65,6 +65,11 @@ trigger fired. Inherited, not reproduced: default f8c0ec72621fd5029a97d796c4a362
 devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
 
+Full-change whitespace audit exits2 only on the three verbatim barrier logs
+(extra EOF blank line) and rejected L001 launcher excerpt (one-space line).
+NBC_DIFF_CHECK.txt retains the exact diagnostics. Raw logs are not normalized;
+no all-evidence whitespace-pass claim is made.
+
 ## Terminal state and transport
 
 The first terminal-audit SSH submission exited255/reset before returning output.
