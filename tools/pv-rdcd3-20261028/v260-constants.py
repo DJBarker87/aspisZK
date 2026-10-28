@@ -35,7 +35,9 @@ cmd=[rustc,'--edition=2021','--cfg','feature="ct-host-prover"','-C','opt-level=3
 subprocess.run(cmd,check=True)
 values=json.loads(subprocess.check_output([str(D/'v260-constant-probe')],text=True))
 table=bundle['files']['docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_C_Table.lean']['text']
-chunks={int(n):[int(x) for x in re.findall(r'(\d+)#u16',body)] for n,body in re.findall(r'def chunk(\d+) : List U16 := \[([^]]*)\]',table)}
+chunk_rows=re.findall(r'def chunk(\d+) : List U16 := \[([^]]*)\]',table)
+for n,body in chunk_rows:assert re.fullmatch(r'\s*\d+#u16(?:\s*,\s*\d+#u16)*\s*,?\s*',body),(n,body)
+chunks={int(n):[int(x) for x in re.findall(r'(\d+)#u16',body)] for n,body in chunk_rows}
 assert sorted(chunks)==list(range(32)) and all(len(v)==32 for v in chunks.values())
 expr=table.split('def values : List U16 :=',1)[1].split('\ntheorem',1)[0]
 # Accept only the complete append expression; no other operation can be hidden.

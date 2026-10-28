@@ -61,6 +61,17 @@ theorem point_loop (points : Array K 10#usize) (r : Usize) :
   simp only [List.foldlM_cons,List.foldlM_nil,pointStep,pointArgs,
     host_weights.point_raw,bind_tc_ok,bind_assoc,bind_pure,lift]
 
+/-- The native conditional reads one point in either branch. Distributing
+that immutable read through the pure bit guard preserves the complete Result. -/
+theorem point_read_order (read : Result K) (r : Usize) (shift : U32) :
+    (if (r &&& Usize.wrapping_shl 1#usize shift)=0#usize then
+      (do let q ← read; aspis_core.field.QM31.sub aspis_core.field.QM31.ONE q)
+    else read) =
+    (do let q ← read; host_weights.point_factor q r shift) := by
+  by_cases h : (r &&& Usize.wrapping_shl 1#usize shift)=0#usize <;>
+    simp only [host_weights.point_factor,lift,bind_tc_ok,h,if_true,if_false,bind_pure]
+#print axioms point_read_order
+
 #print axioms tensor_loop
 #print axioms point_loop
 end R1Z.PV_RDCD3_V260Folds
