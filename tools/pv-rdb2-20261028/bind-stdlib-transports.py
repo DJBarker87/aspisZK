@@ -81,6 +81,22 @@ assert ''.join(tokens(oldexpr)) in ''.join(tokens(a))
 assert ''.join(tokens(newexpr)) in ''.join(tokens(b))
 assert ''.join(tokens(a)).replace(''.join(tokens(oldexpr)),'PTR_SLICE')==''.join(tokens(b)).replace(''.join(tokens(newexpr)),'PTR_SLICE')
 checks.append(dict(family='Vec.truncate',old_body=a,deployed_body=b,exact_only_difference='raw-slice constructor spelling',proof='Truncate.complete/reduced_before_drop/no_drop_when_extending',effects='length reduced before destructor; destructor errors and world evidence preserved'))
+og='evidence/library/alloc/src/alloc.rs';ng='deployed/library/alloc/src/alloc.rs'
+pair('Global.alloc_impl_runtime',og,ng,'fn alloc_impl_runtime(','fn alloc_impl_runtime(','''{
+ match layout.size(){0=>Ok(layout.dangling_ptr().cast_slice(0)),size=>unsafe{
+ let raw_ptr=if zeroed{alloc_zeroed(layout)}else{alloc(layout)};
+ let ptr=NonNull::new(raw_ptr).ok_or(AllocError)?;Ok(ptr.cast_slice(size))},}}''',
+ '''{match layout.size(){0=>Ok(NonNull::slice_from_raw_parts(layout.dangling(),0)),size=>unsafe{
+ let raw_ptr=if zeroed{alloc_zeroed(layout)}else{alloc(layout)};
+ let ptr=NonNull::new(raw_ptr).ok_or(AllocError)?;Ok(NonNull::slice_from_raw_parts(ptr,size))},}}''',
+ 'GlobalAlloc.runtime_complete/zero_no_allocator_call/null_is_allocation_error; ConstructorEffects.slice_complete',
+ 'same allocator hooks and error worlds; fresh-memory semantics of the concrete hook still require resource-family association')
+for name,hook in [('alloc','__rust_alloc'),('alloc_zeroed','__rust_alloc_zeroed')]:
+ pair('Global.'+name,og,ng,'pub unsafe fn '+name+'(','pub unsafe fn '+name+'(',
+  '{unsafe{__rust_no_alloc_shim_is_unstable_v2();'+hook+'(layout.size(),layout.alignment())}}',
+  '{unsafe{__rust_no_alloc_shim_is_unstable_v2();'+hook+'(layout.size(),layout.align())}}',
+  'GlobalAlloc.allocate_complete; Alignment.allocator_argument',
+  'word encoding of alignment and all argument positions/call order preserved; allocator primitive not replaced')
 out=dict(checks=checks,toolchain='rustc1.94.1',profile='release opt3 debug_assertions=false overflow_checks=false panic=unwind',
  domains='transport families only; no assumption added to capped trust record',
  pending=['Box::new intrinsic lowering to allocation+initialization','concrete allocator freshness/prefix guarantee and resource-family association','per-row concrete call/instantiation cone and complete project checker where still missing'],
