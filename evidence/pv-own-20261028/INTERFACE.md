@@ -86,3 +86,19 @@ remaining deployment diagnostic reachability. Each row remains SUSPENDED until
 all consumed facts hold. Witness-dependent occurrence/order/size of any
 allocation or destructor event is a FINDING: stop that row, retain evidence,
 never restrict the witness or weaken D159.
+
+## Implemented relation names and limits
+
+PV_OWN_Containers.VecView is the public relation: zero capacity owns no heap
+allocation; nonzero capacity uses Operations.VecView. The latter is the internal
+allocated-storage relation, not an assertion that Rust Vec::new allocates.
+Containers.StringView requires an actual String UTF8 encoding witness, using
+the concrete U8 codec; Operations.StringView is only a parameterized helper.
+The present representation relation uses exact optional-byte snapshots. A
+native Link codec, including padding abstraction and variant layout, is still
+unproved. No schema check or pointer-offset measurement supplies that codec.
+Raw operations are transformers; CheckedAlloc/CheckedStore/CheckedMove/DropGate
+carry their permission and range preconditions. Borrow release presently models
+a scoped LIFO continuation; arbitrary native lifetime/alias correspondence is
+not claimed. No native allocator/process projection is inferred from an Extra
+frame equation in this model.
