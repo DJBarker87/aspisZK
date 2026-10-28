@@ -13,7 +13,7 @@ theorem shift (ops : ExternalFuns) (basis : MA) (k : Usize) :
   unfold host_sumcheck.interpolation_shift AspisR1ProducerRelease47.predecessor
   by_cases hz : k=0#usize
   · simp only [hz,↓reduceIte]
-    change .ok AspisR1ProducerRelease47.field.M31.ZERO = _
+    change (Result.ok AspisR1ProducerRelease47.field.M31.ZERO : Result U32) = _
     rfl
   · simp only [hz,↓reduceIte]
 
