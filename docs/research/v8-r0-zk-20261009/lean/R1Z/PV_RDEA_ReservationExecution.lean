@@ -8,7 +8,7 @@ def run {S F : Type} (step : Request → S → Option Nat × S) (shape : Shape)
     (address : Nat) (digest : List (Fin 256)) (w : World S F) : Outcome (Buffer U8) S F :=
   let e := PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69 w
   match e.returned with
-  | .error err => (.error err,e.world)
+  | .error err => (Except.error err,e.world)
   | .ok () => PV_RDEA_NameFill.fill step shape digest e.buffer e.world
 
 /-- Constructor plus all 65 source-ordered appends: one request, on failure
@@ -22,7 +22,7 @@ theorem requests {S F : Type} (step : Request → S → Option Nat × S)
   change sizes e.world.history=_ at hist
   unfold run
   change sizes (match e.returned with
-    | .error err => (.error err,e.world)
+    | .error err => (Except.error err,e.world)
     | .ok () => PV_RDEA_NameFill.fill step shape digest e.buffer e.world).2.history=_
   cases h : e.returned with
   | error err => exact hist
