@@ -1,7 +1,7 @@
 """One capped native probe on source-hash-checked frozen dependencies."""
 from pathlib import Path
 import json,subprocess,shlex,hashlib,datetime,sys
-R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l2c-20261028/resume-d369';H='/home/dombarker/project-offloads/codex-pv-l2c-20261028';host='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin27-native-source'
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l2c-20261028/resume-d369';H='/home/dombarker/project-offloads/codex-pv-l2c-20261028';host='dombarker@100.108.41.90';B=H+'/native-source'
 name=sys.argv[1];assert not (E/(name+'-invocation.json')).exists()
 def ssh(s):return subprocess.run(['ssh',host,s],text=True,capture_output=True)
 files=sorted(str(p.relative_to(R)) for crate in ['aspis-core','aspis-statement','aspis-prover','aspis-r1-cost-probe'] for p in (R/'crates'/crate/'src').rglob('*.rs'))
@@ -22,7 +22,7 @@ for f in ['main.rs','Cargo.toml','guard_cut.rs']:
  subprocess.run(['scp','-q',str(R/'tools/pv-l2c-20261028/canonical-probe'/f),f'{host}:{H}/canonical-probe/{f}'],check=True)
 subprocess.run(['scp','-q',str(R/'tools/pv-l2c-20261028/native-receipt.py'),f'{host}:{H}/native-receipt.py'],check=True)
 assert ssh(f'cp {B}/Cargo.lock {H}/canonical-probe/Cargo.lock').returncode==0
-cmd=['systemd-run','--user','--scope','--quiet','--unit=l2c-'+name,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','env','PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_TARGET_DIR='+H+'/canonical-probe-target','CARGO_BUILD_JOBS=4','RUSTFLAGS=-C opt-level=3 -C link-arg=-Wl,--threads=4','PV8_SOURCE_DIR='+H+'/canonical-probe','PV_L2C_PIN_FILES=main.rs:Cargo.toml:Cargo.lock:guard_cut.rs','PV_L2C_EXPECTED_TIME=Optimized compilation then two concrete canonical compiler probes; no dense elimination','PV_L2C_EVIDENCE_CLASS=Native finite counterexample diagnostic; no Kani','python3',H+'/native-receipt.py',H+'/evidence/'+name,'timeout','240','cargo','run','--release','--offline','-j','4']
+cmd=['systemd-run','--user','--scope','--quiet','--unit=l2c-'+name,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','env','PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_TARGET_DIR='+H+'/canonical-probe-target','CARGO_BUILD_JOBS=4','RUSTFLAGS=-C opt-level=3 -C link-arg=-Wl,--threads=4','PV8_SOURCE_DIR='+H+'/canonical-probe','PV_L2C_PIN_FILES=main.rs:Cargo.toml:Cargo.lock:guard_cut.rs','PV_L2C_EXPECTED_TIME=Optimized compilation then two successful-preparation masking and semantic guard reachability probes; no dense elimination','PV_L2C_EVIDENCE_CLASS=Native finite counterexample diagnostic; no Kani','python3',H+'/native-receipt.py',H+'/evidence/'+name,'timeout','240','cargo','run','--release','--offline','-j','4']
 (E/(name+'-invocation.json')).write_text(json.dumps(dict(command=cmd,revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),reservation=gate),indent=2)+'\n')
 p=ssh(shlex.join(cmd));(E/(name+'-scope.log')).write_text(p.stdout+p.stderr)
 assert p.returncode!=255,'Submitted: recover read-only, do not resubmit'
