@@ -2,6 +2,7 @@ import PV_B3P_ByteLayout226V3
 namespace PV_B3P_LayoutRegions226
 open Aeneas Aeneas.Std PV_B3P_226V3 PV_B3P_ByteLayout226V3
 set_option autoImplicit false
+attribute [local irreducible] fields PV_B3P_ByteLayout226V3.frontier
 set_option backward.isDefEq.respectTransparency false in
 theorem variant (p : reference226.OwnedPublic) (i : Nat)
     (lo : 0 ≤ i) (hi : i < 1) :
@@ -21,9 +22,7 @@ theorem variant (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms variant
 set_option backward.isDefEq.respectTransparency false in
 theorem recipient_flag (p : reference226.OwnedPublic) (i : Nat)
@@ -44,9 +43,7 @@ theorem recipient_flag (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms recipient_flag
 set_option backward.isDefEq.respectTransparency false in
 theorem withdrawal_flag (p : reference226.OwnedPublic) (i : Nat)
@@ -67,9 +64,7 @@ theorem withdrawal_flag (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms withdrawal_flag
 set_option backward.isDefEq.respectTransparency false in
 theorem anchor (p : reference226.OwnedPublic) (i : Nat)
@@ -90,9 +85,7 @@ theorem anchor (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms anchor
 set_option backward.isDefEq.respectTransparency false in
 theorem nullifier (p : reference226.OwnedPublic) (i : Nat)
@@ -113,9 +106,7 @@ theorem nullifier (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms nullifier
 set_option backward.isDefEq.respectTransparency false in
 theorem asset (p : reference226.OwnedPublic) (i : Nat)
@@ -136,9 +127,7 @@ theorem asset (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms asset
 set_option backward.isDefEq.respectTransparency false in
 theorem recipient (p : reference226.OwnedPublic) (i : Nat)
@@ -157,9 +146,7 @@ theorem recipient (p : reference226.OwnedPublic) (i : Nat)
           List.length_cons,List.length_nil]
         omega)]
   try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-  first
-  | rfl
-  | congr 1 <;> omega
+  all_goals congr 1 <;> omega
 #print axioms recipient
 set_option backward.isDefEq.respectTransparency false in
 theorem change (p : reference226.OwnedPublic) (i : Nat)
@@ -180,9 +167,7 @@ theorem change (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms change
 set_option backward.isDefEq.respectTransparency false in
 theorem amount (p : reference226.OwnedPublic) (i : Nat)
@@ -201,9 +186,7 @@ theorem amount (p : reference226.OwnedPublic) (i : Nat)
           List.length_cons,List.length_nil]
         omega)]
   try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-  first
-  | rfl
-  | congr 1 <;> omega
+  all_goals congr 1 <;> omega
 #print axioms amount
 set_option backward.isDefEq.respectTransparency false in
 theorem index (p : reference226.OwnedPublic) (i : Nat)
@@ -224,14 +207,12 @@ theorem index (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms index
 set_option backward.isDefEq.respectTransparency false in
 theorem frontier (p : reference226.OwnedPublic) (i : Nat)
     (lo : (if p.withdrawal then 115 else 143) ≤ i) (hi : i < (if p.withdrawal then 755 else 783)) :
-    (layout p)[i]? = (fields (frontier p.frontier))[i-(if p.withdrawal then 115 else 143)]? := by
+    (layout p)[i]? = (fields (PV_B3P_ByteLayout226V3.frontier p.frontier))[i-(if p.withdrawal then 115 else 143)]? := by
   have h8 : (8#usize).val = 8 := rfl
   cases hw : p.withdrawal
   all_goals
@@ -247,9 +228,7 @@ theorem frontier (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms frontier
 set_option backward.isDefEq.respectTransparency false in
 theorem next_root (p : reference226.OwnedPublic) (i : Nat)
@@ -270,14 +249,12 @@ theorem next_root (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms next_root
 set_option backward.isDefEq.respectTransparency false in
 theorem next_frontier (p : reference226.OwnedPublic) (i : Nat)
     (lo : (if p.withdrawal then 787 else 815) ≤ i) (hi : i < (if p.withdrawal then 1427 else 1455)) :
-    (layout p)[i]? = (fields (frontier p.next_frontier))[i-(if p.withdrawal then 787 else 815)]? := by
+    (layout p)[i]? = (fields (PV_B3P_ByteLayout226V3.frontier p.next_frontier))[i-(if p.withdrawal then 787 else 815)]? := by
   have h8 : (8#usize).val = 8 := rfl
   cases hw : p.withdrawal
   all_goals
@@ -293,8 +270,6 @@ theorem next_frontier (p : reference226.OwnedPublic) (i : Nat)
             List.length_cons,List.length_nil]
           omega)]
     try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
-    first
-    | rfl
-    | congr 1 <;> omega
+    all_goals congr 1 <;> omega
 #print axioms next_frontier
 end PV_B3P_LayoutRegions226

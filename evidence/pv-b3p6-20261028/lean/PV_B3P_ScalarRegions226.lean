@@ -12,7 +12,17 @@ theorem recipient_tag (p : reference226.OwnedPublic) :
 theorem withdrawal_tag (p : reference226.OwnedPublic) :
     reference226.byte_at p (if p.withdrawal then 102#usize else 134#usize) =
     .ok (.Ok (if p.withdrawal then 1#u8 else 0#u8)) := by
-  cases hw : p.withdrawal <;> simp [reference226.byte_at,hw,lift,bind_tc_ok,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9]
+  cases hw : p.withdrawal with
+  | false =>
+    simp [reference226.byte_at,hw,lift,bind_tc_ok,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9]
+    intro h
+    have hm := Nat.mod_le 134 Usize.size
+    omega
+  | true =>
+    simp [reference226.byte_at,hw,lift,bind_tc_ok,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9]
+    intro h
+    have hm := Nat.mod_le 102 Usize.size
+    omega
 #print axioms withdrawal_tag
 theorem amount (p : reference226.OwnedPublic) (i : Usize) (hw : p.withdrawal = true)
     (lo : 103 ≤ i.val) (hi : i.val < 107) :
