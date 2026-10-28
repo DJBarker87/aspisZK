@@ -1,0 +1,70 @@
+{
+  "attempt": "NCL_K043",
+  "kind": "kani",
+  "sources": [
+    "NCL_src/Cargo.lock",
+    "NCL_gate.py",
+    "NCL_src/KMX_stubs.rs",
+    "NCL_KMX_copy_stubs.patch",
+    "NCL_src/programs/r1-cost-probe/src/lib.rs",
+    "NCL_src/programs/r1-cost-probe/src/pool_route.rs",
+    "NCL_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NCL_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+    "NCL_src/programs/r1-cost-probe/src/NCL_program.rs",
+    "NCL_src/programs/r1-cost-probe/src/NCL_adapter.rs",
+    "NCL_src/programs/r1-cost-probe/src/NCL_owned.rs"
+  ],
+  "command": [
+    "python3",
+    "NCL_gate.py",
+    "NCL_K043",
+    "r1_pool_adapter::owned::NCL_owned::NCL_owned_bad_instruction",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 240,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx1top-20261028/NCL_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "NCL_K043-graph.json",
+    "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+  },
+  "expected_time": "optimized program compilation then one named local helper SAT gate; no SHA or multiplication",
+  "expected_negative": false,
+  "source_revision": "3a88e6f54805eb15793a8d6666af7e13feff7f5c",
+  "source_tree_dirty": true,
+  "exit_status": 0,
+  "wall_seconds": 22.899240389000624,
+  "peak_rss_kib": "1252716",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r71359d97762e483d88621f452b533378.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1244246016",
+  "source_hashes": {
+    "NCL_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NCL_gate.py": "dad6876e3cdc94b6febf47f611573a0ad7b54f0511827263511b6764ecb48b14",
+    "NCL_src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "NCL_KMX_copy_stubs.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NCL_src/programs/r1-cost-probe/src/lib.rs": "68fb4edb11813c42253e95edd6d6e786cffbe1754c9ef7c61dc357415f1b32a3",
+    "NCL_src/programs/r1-cost-probe/src/pool_route.rs": "43cfa25ec59e5349773599924d318a4b8fda923c4958760fcf1482d8fb2db9f0",
+    "NCL_src/programs/r1-cost-probe/src/r1_pool_adapter.rs": "7de4f1d8fc0797a794563f4d8693a32ae1fae3099fba337725ab285a65b0be0b",
+    "NCL_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs": "0ca90fe9ef2554424431071146591b88826299581c3035fae44b1176eb929898",
+    "NCL_src/programs/r1-cost-probe/src/NCL_program.rs": "c5d17159d5f58ce68fabca3a82f1d42c36c34f2268088e3cb362e7529acdcf7a",
+    "NCL_src/programs/r1-cost-probe/src/NCL_adapter.rs": "55e17183961ae25810aa8d3fea6ed47b01f352695fd03953d988dd339e78e2ca",
+    "NCL_src/programs/r1-cost-probe/src/NCL_owned.rs": "fdfb68818bb8e05ee07e89da41181b271c9fb186c8ba0b7b7adcc1b77a9f5a63"
+  },
+  "print_axioms": "N/A: kani"
+}

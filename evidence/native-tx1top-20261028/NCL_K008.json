@@ -1,0 +1,42 @@
+{
+  "attempt": "NCL_K008",
+  "kind": "kani",
+  "sources": [
+    "NCL_src/Cargo.lock",
+    "NCL_gate.py",
+    "NCL_src/KMX_stubs.rs",
+    "NCL_KMX_copy_stubs.patch",
+    "NCL_src/programs/r1-cost-probe/src/lib.rs",
+    "NCL_src/programs/r1-cost-probe/src/pool_route.rs",
+    "NCL_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NCL_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+    "NCL_src/programs/r1-cost-probe/src/NCL_program.rs",
+    "NCL_src/programs/r1-cost-probe/src/NCL_adapter.rs",
+    "NCL_src/programs/r1-cost-probe/src/NCL_owned.rs"
+  ],
+  "command": [
+    "python3",
+    "NCL_gate.py",
+    "NCL_K008",
+    "r1_pool_adapter::NCL_adapter::NCL_readonly_meta_wrong",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 240,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx1top-20261028/NCL_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "NCL_K008-graph.json",
+    "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+  },
+  "expected_time": "optimized program compilation then one named local helper SAT gate; no SHA or multiplication",
+  "expected_negative": true
+}

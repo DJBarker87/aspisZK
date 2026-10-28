@@ -1,0 +1,68 @@
+{
+  "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "status": [
+    {
+      "attempt": "NCL_L040",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    },
+    {
+      "attempt": "NCL_L041",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    },
+    {
+      "attempt": "NCL_L042",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    },
+    {
+      "attempt": "NCL_L043",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    },
+    {
+      "attempt": "NCL_L044",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    },
+    {
+      "attempt": "NCL_L045",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    },
+    {
+      "attempt": "NCL_L046",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    },
+    {
+      "attempt": "NCL_L047",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    },
+    {
+      "attempt": "NCL_L048",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    },
+    {
+      "attempt": "NCL_L049",
+      "receipt": false,
+      "attempt_directory": false,
+      "barriers": []
+    }
+  ],
+  "observed_live_own_launchers": [
+    "python3 -c from pathlib import Path import json,lzma,base64,hashlib,subprocess,re b=Path('/home/dombarker/project-offloads/codex-cx-native-tx1top-20261028');out={};status=[] for a in ['NCL_L040', 'NCL_L041', 'NCL_L042', 'NCL_L043', 'NCL_L044', 'NCL_L045', 'NCL_L046', 'NCL_L047', 'NCL_L048', 'NCL_L049']:  names=[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-launcher.log',a+'-reservation.json',a+'.json']  names += [str(p.relative_to(b)) for p in b.glob(a+'-barrier-*.log')]  for n in names:   if (b/n).is_file():out[n]=(b/n).read_text()  status.append(dict(attempt=a,receipt=(b/a/'receipt.json').is_file(),attempt_directory=(b/a).is_dir(),barriers=[str(p.name) for p in b.glob(a+'-barrier-*.log')])) rows=subprocess.check_output(['ps','-eo','args='],text=True).splitlines() live=[x for x in rows if re.match(r'^(?:/usr/bin/)?python3 S2W_(?:run|lean)_host[.]py NCL_',x.strip()) or ('NCL_generated/NCL_R_' in x and 'lean -j1' in x)] raw=json.dumps(out).encode();print(json.dumps(dict(data=base64.b64encode(lzma.compress(raw,preset=6)).decode(),sha256=hashlib.sha256(raw).hexdigest(),status=status,observed_live_own_launchers=live))) "
+  ]
+}
