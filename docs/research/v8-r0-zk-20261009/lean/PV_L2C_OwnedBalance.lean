@@ -40,9 +40,12 @@ theorem complete_result (table : Fin 1024 → Q) (active : Fin 1024 → Bool)
   rw [PV_L2C_VecWrite.index_mut bound1024 _ d hd]
   simp only [bind_tc_ok]
   rw [PV_L2C_VecWrite.write bound1024 _ d hd]
-  congr 2
-  funext i
-  unfold output
-  split <;> rfl
+  have he : (fun i : Fin 1024 => if i.val=d.val then
+      source (subQ zero (foldQ (selected table active d rows) zero)) else source (table i))=
+      (fun i => source (output table active d i)) := by
+    funext i
+    unfold output
+    split <;> rfl
+  rw [he]
 #print axioms complete_result
 end PV_L2C_OwnedBalance

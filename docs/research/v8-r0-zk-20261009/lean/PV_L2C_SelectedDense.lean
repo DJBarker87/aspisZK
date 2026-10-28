@@ -44,11 +44,20 @@ theorem selected_sum (table : Fin 1024 → Q) (active : Fin 1024 → Bool) (d : 
   change foldQ (List.ofFn (fun i =>
     if (!flag active (index i)) && (index i != index d) then lookup table (index i) else zero)) zero=
       foldQ (List.ofFn (inactiveTable active (without d table))) zero
-  congr 2
+  apply congrArg (fun values : List Q => foldQ values zero)
+  apply congrArg (fun f : Fin 1024 → Q => List.ofFn f)
   funext i
   have hb : (index i).val<1024 := by rw [index_val];exact i.isLt
   have he : (index i=index d)↔i=d := index_injective.eq_iff
-  simp only [flag,lookup,dif_pos hb]
+  have hf : flag active (index i)=active i := by
+    unfold flag
+    rw [dif_pos hb]
+    rfl
+  have hl : lookup table (index i)=table i := by
+    unfold lookup
+    rw [dif_pos hb]
+    rfl
+  rw [hf,hl]
   by_cases hid : i=d <;> cases ha : active i <;>
     simp [inactiveTable,without,hid,ha,he]
 #print axioms selected_sum
