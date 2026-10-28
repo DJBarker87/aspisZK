@@ -1,0 +1,13 @@
+from pathlib import Path
+p=['import NBA_Transcript','import NBA_Store8','import Query31MaterializedSchedule','set_option autoImplicit false','namespace AspisR1.NBA_Materialize','open Aeneas Aeneas.Std Result AspisR1PublicPreparation','abbrev Bytes32 := Array U8 32#usize','theorem source {H : Type} (D : aspis_core.Digest32 H) (hash : H)','    (state '+ ' '.join(f'b{i} a{i}' for i in range(8))+' : Bytes32)']
+for i in range(8):
+ state='state' if i==0 else f'a{i-1}'
+ for tag,kind in [(1,'b'),(2,'a')]:p += [f'    (h{kind}{i} : D.digest hash (NBA_Transcript.readParts {state} {tag}#u8)=ok {kind}{i})']
+zero='(Array.repeat 32#usize 0#u8)'
+bs=' '.join(f'b{i}' for i in range(8));ads=' '.join(f'a{i}' for i in range(8))
+p += [f'    : QueriesModel.materialize D hash state=ok (NBA_Store8.s8 {zero} {bs},NBA_Store8.s8 {zero} {ads}) := by']
+for kind,args in [('b',bs),('a',ads)]:
+ for i in range(8):p += [f'  have {kind}w{i} := NBA_Store8.write{i} {zero} {args}']
+ for i in range(8):p += [f'  have {kind}r{i} := NBA_Store8.read{i} {zero} {args}']
+p += [f'  have initialRead := NBA_Store8.mutable {zero} {bs}', '  unfold QueriesModel.materialize', '  simp only [NBA_Transcript.readParts] at '+ ' '.join(f'h{k}{i}' for i in range(8) for k in ['b','a']), '  simp only [lift,bind_tc_ok]', '  repeat\' first', '    | dsimp! only','    | simp only ['+', '.join(['initialRead']+[f'{k}w{i}' for i in range(8) for k in ['b','a']]+[f'{k}r{i}' for i in range(8) for k in ['b','a']]+[f'h{k}{i}' for i in range(8) for k in ['b','a']]+['bind_tc_ok'])+']', '#print axioms source','end AspisR1.NBA_Materialize']
+Path('lean/NBA_Materialize.lean').write_text('\n'.join(p)+'\n')
