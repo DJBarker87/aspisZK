@@ -28,7 +28,7 @@ p=Path({D+'/lean-sources/'+m+'.lean'!r});p.parent.mkdir(parents=True,exist_ok=Tr
 b=base64.b64decode({base64.b64encode(b).decode()!r});p.write_bytes(b)
 assert hashlib.sha256(p.read_bytes()).hexdigest()=={hashlib.sha256(b).hexdigest()!r}
 # Compilation must never write through a private cache link into a reused directory.
-o=Path({D+'/lean-objects/'+m+'.olean'!r})
+o=Path({D+'/lean-objects/'+m+'.olean'!r});o.parent.mkdir(parents=True,exist_ok=True)
 for q in [o,Path(str(o)+'.server'),Path(str(o)+'.private'),o.with_suffix('.ir')]:
  if q.is_symlink():q.unlink()
 '''
