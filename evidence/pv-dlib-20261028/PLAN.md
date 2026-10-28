@@ -184,3 +184,12 @@ Resume preflight: all5673 authoritative and selected external objects matched.
 43403 next admission03:30:37Z passed, zip conjunction candidate failed.
 43404 changed candidate upload refused03:30:52Z; next admission >=03:33:52Z.
 All failed source snapshots and refusals retained; no unchanged compile retry.
+
+D349 resume deviation: stage-digest-forward-resume admission04:42:54.960463Z
+was167.062062s after43441 refusal04:40:07.898401Z (12.938s early).
+It refused; no upload/compiler ran. This is retained, not excused as a race.
+Replacement: local job input guard records readiness180s AFTER receipt of
+every refusal, blocks all used Lean/native/staging admission paths before
+any host call, and consumes no ID for its own pre-admission hold. Shared
+launchers/barriers/caps unchanged. Guard initialization waits a fresh180s
+from local receipt; later refusals append cooldown-history.jsonl.

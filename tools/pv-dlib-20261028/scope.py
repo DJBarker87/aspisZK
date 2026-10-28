@@ -3,12 +3,14 @@
 This uses, without changing, the existing reservation/barrier tools.
 """
 from pathlib import Path
+from cooldown import check_ready,refuse
 import hashlib, json, re, shlex, subprocess, sys
 R=Path(__file__).resolve().parents[2]
 E=R/'evidence/pv-dlib-20261028'
 D='/home/dombarker/project-offloads/codex-pv-dlib-20261028'
 H='dombarker@100.108.41.90'
 G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
+check_ready()
 name,phase,*cmd=sys.argv[1:]
 assert re.fullmatch(r'[a-zA-Z0-9_-]+',name) and cmd
 out=E/name;out.mkdir(exist_ok=True)
@@ -19,6 +21,7 @@ for f in ['admission-before.json','reservation.log']:
  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
 ad=json.loads((out/'admission-before.json').read_text())
 if r.returncode!=0 or ad.get('allowed') is not True:
+ refuse('scope pre-admission '+name,{k:ad.get(k) for k in ['utc','allowed','error']})
  print('UNCHARGED REFUSAL',r.returncode,{k:ad.get(k) for k in ['utc','allowed','error','bounded_reserved_bytes','safe_limit_bytes']});sys.exit(78)
 run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',G+'/barrier.py',D+'/'+name+'/admission-barrier.json','/usr/bin/time','-v','-o',D+'/'+name+'/time.log',*cmd]
 r=ssh(shlex.join(run)+f' > {D}/{name}/output.log 2>&1')
@@ -26,6 +29,7 @@ for f in ['admission-barrier.json','output.log','time.log']:
  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
 bar=json.loads((out/'admission-barrier.json').read_text())
 if bar.get('allowed') is not True:
+ refuse('scope barrier '+name,{k:bar.get(k) for k in ['utc','allowed','error']})
  print('UNCHARGED BARRIER REFUSAL',{k:bar.get(k) for k in ['utc','allowed','error','bounded_reserved_bytes','safe_limit_bytes']});sys.exit(78)
 tim=(out/'time.log').read_text()
 def field(s):

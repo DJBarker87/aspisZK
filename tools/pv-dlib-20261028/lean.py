@@ -1,8 +1,10 @@
 """Private-source invocation of the standing Env-J runner and resource barrier."""
 from pathlib import Path
+from cooldown import check_ready,refuse
 import subprocess,json,hashlib,re,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-dlib-20261028'
 D='/home/dombarker/project-offloads/codex-pv-dlib-20261028';H='dombarker@100.108.41.90'
+check_ready()
 n=int(sys.argv[1]);m=sys.argv[2];retry=sys.argv[3] if len(sys.argv)>3 else '';assert 43400<=n<=43499
 pins=json.loads((E/'dependency-source-pins.json').read_text());assert m.startswith('R1Z/PV_DL_') or m in pins;assert n<43497 or any(x in m for x in ['Audit','Replay'])
 t=json.loads((E/'TALLY.json').read_text());assert ((n not in t['used_ids']) or (retry and n not in t['lean_charged'])) and len(t['lean_charged'])<100
@@ -45,7 +47,8 @@ g='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover
 r=subprocess.run(['ssh',H,f'mkdir -p {D}/upload-{n}; python3 {g}/reservation.py {D}/upload-{n}/admission.json > {D}/upload-{n}/reservation.log 2>&1'],capture_output=True,text=True)
 a=subprocess.check_output(['ssh',H,f'cat {D}/upload-{n}/admission.json'],text=True)
 (E/f'{n}-upload-admission.json').write_text(a)
-if r.returncode!=0 or json.loads(a).get('allowed') is not True:sys.exit(78)
+if r.returncode!=0 or json.loads(a).get('allowed') is not True:
+ refuse('lean upload '+str(n),json.loads(a));sys.exit(78)
 subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+m+'.lean'],check=True)
 cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+m+'.olean',D+'/lean-sources/'+m+'.lean','7000']
 r=subprocess.run([sys.executable,str(R/'tools/pv-dlib-20261028/scope.py'),f'lean-{n}{retry}','focused Lean compilation; source/import fingerprints in submission receipt',*cmd])
