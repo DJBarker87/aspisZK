@@ -41,6 +41,7 @@ theorem value_formula (c : Nat) :
   simp (disch := omega) only [pick_value,decide_eq_true_eq]
   simp only [PV_B3P_MaskModel132.valueUsed]
   norm_num only
+  simp
   omega
 
 theorem value_block (c : Nat) :
