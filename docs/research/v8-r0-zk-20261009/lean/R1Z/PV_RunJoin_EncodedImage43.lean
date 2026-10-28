@@ -17,8 +17,8 @@ theorem entry (count : Usize) (p : Nat → Raw) (i : Nat) (hi : i<count.val) :
   simp only [List.getElem?_ofFn,hi,↓reduceDIte,Option.getD_some]
 
 def image (n start : Nat) (p : Nat → Raw) : List UInt8 :=
-  (List.ofFn (fun i : Fin n => List.ofFn
-    (ProverCommitValueRange47.bytes (value (p (start+i.val))))))).flatten
+  (List.ofFn fun i : Fin n =>
+    List.ofFn (ProverCommitValueRange47.bytes (value (p (start + i.val))))).flatten
 
 theorem payload (count : Usize) (p : Nat → Raw) (n start : Nat)
     (bound : start+n≤count.val) (hc : ∀ i, i<count.val → canonical (p i)) :
