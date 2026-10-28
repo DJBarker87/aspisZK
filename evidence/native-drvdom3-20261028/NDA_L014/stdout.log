@@ -1,0 +1,58 @@
+NDA_PowerDomain.lean:85:65: error: Application type mismatch: The argument
+  actual
+has type
+  Port2_QueryLoop.Calls
+    (fun a b =>
+      verifier.candidate.query_values (Tx1Q_QueryBridge.leaves c.query) proof (Tx1Q_Carriers.prepared cut.prepared) a
+        (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch) none (Tx1Q_Carriers.geometry cut.geometry) b)
+    (↑10#usize) (Tx1Q_Carriers.accumulator cut.initial) (Tx1Q_Carriers.pending cut.pending)
+    (Tx1Q_Carriers.accumulator cut.out) (Tx1Q_Carriers.pending cut.after)
+    (↑10#usize - ↑(Tx1Q_Carriers.accumulator cut.initial).next)
+but is expected to have type
+  Port2_QueryLoop.Calls
+    (fun a b =>
+      verifier.candidate.query_values c.query proof (Tx1Q_Carriers.prepared cut.prepared) a ?m.242 none ?m.244 b)
+    10 (Tx1Q_Carriers.accumulator cut.initial) ?m.249 (Tx1Q_Carriers.accumulator cut.out) ?m.250 ?m.251
+in the application
+  calls c.query law proof (Tx1Q_Carriers.prepared cut.prepared) ?m.242 none ?m.244 10
+    (Tx1Q_Carriers.accumulator cut.initial) (Tx1Q_Carriers.accumulator cut.out) ?m.249 ?m.250 ?m.251 rho
+    init.right.right.left actual
+NDA_PowerDomain.lean:69:78: error: unsolved goals
+F C : Type
+c : DrvC_Installation.Configuration F C
+semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+cut :
+  NCU_DriverDomain.Prefix (DrvC_Installation.currentInstalled c) (DrvC_Installation.currentDigest c) semantic pub proof
+    ()
+law : Law c.query
+rho : Port3_FlushInstall.Canonical (Tx1Q_Carriers.prepared cut.prepared).rho
+initCall :
+  Port3_Initial.constructor c.reserved transport.Variant.S2 =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.accumulator cut.initial))
+init :
+  (↑(Tx1Q_Carriers.accumulator cut.initial).weights).length = 64 ∧
+    ↑(Tx1Q_Carriers.accumulator cut.initial).next = 0 ∧
+      Port3_FlushInstall.Canonical (Tx1Q_Carriers.accumulator cut.initial).power ∧
+        Port4C_QueryArithmetic.CanonE (Tx1Q_Carriers.accumulator cut.initial).rhs ∧
+          CheckpointBytes5Output.accumulator (Tx1Q_Carriers.accumulator cut.initial) = QueryAccumulator.initial
+qry :
+  AspisR1Stage2.verifier.candidate.query_loop (verifier.candidate.query_values (Tx1Q_QueryBridge.leaves c.query)) proof
+      (Tx1Q_Carriers.prepared cut.prepared) (Tx1Q_Carriers.accumulator cut.initial)
+      (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch) (Tx1Q_Carriers.observer none)
+      (Tx1Q_Carriers.geometry cut.geometry) (Tx1Q_Carriers.pending cut.pending) 10#usize =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.accumulator cut.out, Tx1Q_Carriers.pending cut.after))
+actual :
+  Port2_QueryLoop.Calls
+    (fun a b =>
+      verifier.candidate.query_values (Tx1Q_QueryBridge.leaves c.query) proof (Tx1Q_Carriers.prepared cut.prepared) a
+        (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch) none (Tx1Q_Carriers.geometry cut.geometry) b)
+    (↑10#usize) (Tx1Q_Carriers.accumulator cut.initial) (Tx1Q_Carriers.pending cut.pending)
+    (Tx1Q_Carriers.accumulator cut.out) (Tx1Q_Carriers.pending cut.after)
+    (↑10#usize - ↑(Tx1Q_Carriers.accumulator cut.initial).next)
+⊢ Port3_FlushInstall.Canonical (Tx1Q_Carriers.accumulator cut.out).power
+'AspisR1.NDA_PowerDomain.canonical_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.of_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.on_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

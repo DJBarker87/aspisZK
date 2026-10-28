@@ -1,0 +1,106 @@
+import NCU_DriverDomain
+import WAdm_Arithmetic
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NDA_QueryCanonical
+open Aeneas Aeneas.Std Result AspisR1Stage2 Port3_NativeQueryBody
+
+/-- Only canonicality preservation of retained primitive calls. No arithmetic
+value equality, whole-query result or caller conclusion is a field. -/
+structure Laws (ops : Ops) : Prop where
+  mulE : ∀ x y z, Port4C_QueryArithmetic.CanonE x → Port3_FlushInstall.Canonical y →
+    ops.op3 x y = ok z → Port4C_QueryArithmetic.CanonE z
+  addE : ∀ x y z, Port4C_QueryArithmetic.CanonE x → Port4C_QueryArithmetic.CanonE y →
+    ops.op2 x y = ok z → Port4C_QueryArithmetic.CanonE z
+  mulK : ∀ x y z, Port3_FlushInstall.Canonical x → Port3_FlushInstall.Canonical y →
+    ops.op9 x y = ok z → Port3_FlushInstall.Canonical z
+  line : ∀ alpha values inverses value, ops.op16 alpha values inverses = ok value →
+    Port4C_QueryArithmetic.CanonE value
+
+/-- Existing arithmetic ports imply the strictly smaller value-domain laws. -/
+theorem of_ports (ops : Ops) (ports : Port5Q1_QueryPorts.SessionAPrimitives ops) : Laws ops :=
+  ⟨fun x y z hx hy h => (ports.arithmetic.s3_s4_s5_mulE x y z hx hy h).2,
+   fun x y z hx hy h => (ports.arithmetic.s3_s4_s5_addE x y z hx hy h).2,
+   fun x y z hx hy h => (ports.arithmetic.s3_s4_s9_mulK x y z hx hy h).2,
+   ports.line_canonical⟩
+
+/-- One actual native-model iteration on an arbitrary canonical pre-state. -/
+theorem step (ops : Ops) (laws : Laws ops) (proof : Slice U8)
+    (p : verifier.Prepared) (a out : verifier.Accumulator)
+    (g : Array Stage2E 29#usize) (obs : Option (verifier.Phase → Result Unit))
+    (geo : verifier.QueryGeometry) (b bout : verifier.BatchedWeights)
+    (rho : Port3_FlushInstall.Canonical p.rho)
+    (rhs : Port4C_QueryArithmetic.CanonE a.rhs) (power : Port3_FlushInstall.Canonical a.power)
+    (call : verifier.candidate.query_values ops proof p a g obs geo b = ok (.Ok (out,bout))) :
+    Port4C_QueryArithmetic.CanonE out.rhs ∧ Port3_FlushInstall.Canonical out.power := by
+  obtain ⟨o⟩ := Port4C_QueryValues.observed ops proof p a out g obs geo b bout call
+  obtain ⟨product,mul,add,mulK,_,_⟩ :=
+    Port4C_QueryValues.accumulated ops p a out o.node o.value b bout o.accumulate
+  exact ⟨laws.addE _ _ _ rhs (laws.mulE _ _ _ (laws.line _ _ _ _ o.line) power mul) add,
+    laws.mulK _ _ _ power rho mulK⟩
+
+/-- Induction over calls of that same loop; no whole-buffer native gate. -/
+theorem calls (ops : Ops) (laws : Laws ops) (proof : Slice U8)
+    (p : verifier.Prepared) (g : Array Stage2E 29#usize)
+    (obs : Option (verifier.Phase → Result Unit)) (geo : verifier.QueryGeometry)
+    (stop : Nat) (a out : verifier.Accumulator) (b bout : verifier.BatchedWeights) (n : Nat)
+    (rho : Port3_FlushInstall.Canonical p.rho)
+    (rhs : Port4C_QueryArithmetic.CanonE a.rhs) (power : Port3_FlushInstall.Canonical a.power)
+    (actual : Port2_QueryLoop.Calls
+      (fun a b => verifier.candidate.query_values ops proof p a g obs geo b)
+      stop a b out bout n) :
+    Port4C_QueryArithmetic.CanonE out.rhs ∧ Port3_FlushInstall.Canonical out.power := by
+  induction actual with
+  | done => exact ⟨rhs,power⟩
+  | step active returned tail ih =>
+    have next := step ops laws proof p _ _ g obs geo _ _ rho rhs power returned
+    exact ih next.1 next.2
+
+/-- The installed query leaves retain exactly the four primitive slots needed. -/
+theorem retained (ops : Ops) :
+    (Tx1Q_QueryBridge.leaves ops).op2 = ops.op2 ∧
+    (Tx1Q_QueryBridge.leaves ops).op3 = ops.op3 ∧
+    (Tx1Q_QueryBridge.leaves ops).op9 = ops.op9 ∧
+    (Tx1Q_QueryBridge.leaves ops).op16 = ops.op16 := ⟨rfl,rfl,rfl,rfl⟩
+
+theorem installed_laws (ops : Ops) (laws : Laws ops) : Laws (Tx1Q_QueryBridge.leaves ops) :=
+  ⟨laws.mulE,laws.addE,laws.mulK,laws.line⟩
+
+/-- Propagate primitive domains through THIS prefix's query loop. Preparation,
+initial accumulator and every successful query observation are derived. -/
+theorem on_prefix {F C : Type} (c : DrvC_Installation.Configuration F C)
+    (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8)
+    (cut : NCU_DriverDomain.Prefix (DrvC_Installation.currentInstalled c)
+      (DrvC_Installation.currentDigest c) semantic pub proof ())
+    (laws : Laws c.query)
+    (rho : Port3_FlushInstall.Canonical (Tx1Q_Carriers.prepared cut.prepared).rho) :
+    Port4C_QueryArithmetic.CanonE (Tx1Q_Carriers.accumulator cut.out).rhs ∧
+    Port3_FlushInstall.Canonical (Tx1Q_Carriers.accumulator cut.out).power := by
+  have initCall := Tx1Q_PrefixInstall.initial_success c.reserved cut.initial cut.initial_call
+  have init := Tx1Q_Initial.fields c.reserved (Tx1Q_Carriers.accumulator cut.initial) initCall
+  have qry := Tx1Q_Install.query_success (Tx1Q_QueryBridge.leaves c.query) proof cut.prepared
+    cut.initial cut.out cut.scratch none cut.geometry cut.pending cut.after 10#usize cut.query
+  rw [Tx1Q_QueryBridge.release_leaves] at qry
+  rw [Port3_NativeQueryFrame.loop_eq] at qry
+  have actual := Port2_QueryLoop.source_calls
+    (verifier.candidate.query_values (Tx1Q_QueryBridge.leaves c.query)) proof
+    (Tx1Q_Carriers.prepared cut.prepared) (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch)
+    none (Tx1Q_Carriers.geometry cut.geometry) 10#usize
+    (fun a a1 b b1 h => (Port3_NativeQueryFrame.query_fields (Tx1Q_QueryBridge.leaves c.query)
+      proof (Tx1Q_Carriers.prepared cut.prepared) a a1 (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch)
+      none (Tx1Q_Carriers.geometry cut.geometry) b b1 h).2.2)
+    (Tx1Q_Carriers.accumulator cut.initial) (Tx1Q_Carriers.accumulator cut.out)
+    (Tx1Q_Carriers.pending cut.pending) (Tx1Q_Carriers.pending cut.after)
+    (by rw [init.2.1]; decide) qry
+  exact calls _ (installed_laws c.query laws) proof _ _ none _ 10 _ _ _ _ _ rho
+    init.2.2.2.1 init.2.2.1 actual
+
+#print axioms on_prefix
+#print axioms of_ports
+#print axioms step
+#print axioms calls
+#print axioms retained
+#print axioms installed_laws
+end AspisR1.NDA_QueryCanonical
+end
