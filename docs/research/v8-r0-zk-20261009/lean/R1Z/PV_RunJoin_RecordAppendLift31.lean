@@ -10,7 +10,7 @@ open PV_Src_Forest_PrimitiveArguments
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
 
-theorem prefix (r : CopyRecords) (pub : R0P.Public K)
+theorem path_prefix (r : CopyRecords) (pub : R0P.Public K)
     (hw : WitnessOk (wordWitness r.w)) (hp : PubCorr (wordPublic r.p) pub)
     (n : Usize) (hn : n.val ≤ 20)
     (d : Array U32 8#usize) (hd : app_cur_r r.w r.p n = ok d) :
@@ -22,7 +22,7 @@ theorem prefix (r : CopyRecords) (pub : R0P.Public K)
   have he := funext hm
   rw [BuilderSpendRelation.appCur_eq pub (toModel (wordWitness r.w))] at he
   exact he
-#print axioms prefix
+#print axioms path_prefix
 
 theorem root (r : CopyRecords) (pub : R0P.Public K)
     (hw : WitnessOk (wordWitness r.w)) (hp : PubCorr (wordPublic r.p) pub)
@@ -32,6 +32,6 @@ theorem root (r : CopyRecords) (pub : R0P.Public K)
   pv_peel hd with raw hr
   rw [PV_RunJoin_DigestIdentity30.digest] at hd
   cases Result.ok.inj hd
-  exact prefix r pub hw hp 20#usize (by decide) _ hr
+  exact path_prefix r pub hw hp 20#usize (by decide) _ hr
 #print axioms root
 end R1Z.PV_RunJoin_RecordAppendLift31
