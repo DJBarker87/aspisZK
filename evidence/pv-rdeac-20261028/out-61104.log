@@ -1,0 +1,27 @@
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+def Aeneas.Std.Slice.clone : {T : Type} → (T → Result T) → Slice T → Result (Slice T) :=
+fun {T} clone s => do
+  let s' ← List.clone clone ↑s
+  ok ⟨↑s', ⋯⟩
+@[reducible] def Aeneas.Std.core.clone.impls.CloneU8.clone : U8 → U8 :=
+fun x => x
+def Aeneas.Std.List.clone.{u_1} : {α : Type u_1} →
+  (α → Result α) → (l : List α) → Result { l' // l'.length = l.length } :=
+fun {α} clone l =>
+  match h : List.mapM clone l with
+  | ok v => ok ⟨v, ⋯⟩
+  | fail e => fail e
+  | div => div
+@[reducible] def Aeneas.Std.liftFun1.{u_1, u_2} : {α : Sort u_1} → {β : Type u_2} → (α → β) → α → Result β :=
+fun {α} {β} f x => ok (f x)
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : core.clone.Clone U8 :=
+{ clone := liftFun1 core.clone.impls.CloneU8.clone }
+'R1Z.PV_RDEAC_AppendSimulation.empty_represents' depends on axioms: [propext]

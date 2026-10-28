@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_ActualRound.lean:33:37: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+digest : Std.Array U8 32#usize
+s : String
+i : Usize
+⊢ (do
+      let byte ← digest.index_usize i
+      let i1 ← lift (byte.wrapping_shr 4#u32)
+      let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+      let high ←
+        (Array.make 16#usize
+                [toStr "0" PV_RDEA_ActualNameLoop.round._proof_4, toStr "1" PV_RDEA_ActualNameLoop.round._proof_5,
+                  toStr "2" PV_RDEA_ActualNameLoop.round._proof_6, toStr "3" PV_RDEA_ActualNameLoop.round._proof_7,
+                  toStr "4" PV_RDEA_ActualNameLoop.round._proof_8, toStr "5" PV_RDEA_ActualNameLoop.round._proof_9,
+                  toStr "6" PV_RDEA_ActualNameLoop.round._proof_10, toStr "7" PV_RDEA_ActualNameLoop.round._proof_11,
+                  toStr "8" PV_RDEA_ActualNameLoop.round._proof_12, toStr "9" PV_RDEA_ActualNameLoop.round._proof_13,
+                  toStr "a" PV_RDEA_ActualNameLoop.round._proof_14, toStr "b" PV_RDEA_ActualNameLoop.round._proof_15,
+                  toStr "c" PV_RDEA_ActualNameLoop.round._proof_16, toStr "d" PV_RDEA_ActualNameLoop.round._proof_17,
+                  toStr "e" PV_RDEA_ActualNameLoop.round._proof_18, toStr "f" PV_RDEA_ActualNameLoop.round._proof_19]
+                PV_RDEA_ActualNameLoop.round._proof_20).index_usize
+            i2
+      let i3 ← lift (byte &&& 15#u8)
+      let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+      let low ←
+        (Array.make 16#usize
+                [toStr "0" PV_RDEA_ActualNameLoop.round._proof_4, toStr "1" PV_RDEA_ActualNameLoop.round._proof_5,
+                  toStr "2" PV_RDEA_ActualNameLoop.round._proof_6, toStr "3" PV_RDEA_ActualNameLoop.round._proof_7,
+                  toStr "4" PV_RDEA_ActualNameLoop.round._proof_8, toStr "5" PV_RDEA_ActualNameLoop.round._proof_9,
+                  toStr "6" PV_RDEA_ActualNameLoop.round._proof_10, toStr "7" PV_RDEA_ActualNameLoop.round._proof_11,
+                  toStr "8" PV_RDEA_ActualNameLoop.round._proof_12, toStr "9" PV_RDEA_ActualNameLoop.round._proof_13,
+                  toStr "a" PV_RDEA_ActualNameLoop.round._proof_14, toStr "b" PV_RDEA_ActualNameLoop.round._proof_15,
+                  toStr "c" PV_RDEA_ActualNameLoop.round._proof_16, toStr "d" PV_RDEA_ActualNameLoop.round._proof_17,
+                  toStr "e" PV_RDEA_ActualNameLoop.round._proof_18, toStr "f" PV_RDEA_ActualNameLoop.round._proof_19]
+                PV_RDEA_ActualNameLoop.round._proof_20).index_usize
+            i4
+      let name2 ← alloc.string.String.push_str s high
+      let name3 ← alloc.string.String.push_str name2 low
+      ok name3) =
+    do
+    let x ← digest.index_usize i
+    let x_1 ← lift (x.wrapping_shr 4#u32)
+    let x_2 ← lift (UScalar.cast UScalarTy.Usize x_1)
+    let x_3 ←
+      (Array.make 16#usize
+              [toStr "0" digits._proof_4, toStr "1" digits._proof_5, toStr "2" digits._proof_6,
+                toStr "3" digits._proof_7, toStr "4" digits._proof_8, toStr "5" digits._proof_9,
+                toStr "6" digits._proof_10, toStr "7" digits._proof_11, toStr "8" digits._proof_12,
+                toStr "9" digits._proof_13, toStr "a" digits._proof_14, toStr "b" digits._proof_15,
+                toStr "c" digits._proof_16, toStr "d" digits._proof_17, toStr "e" digits._proof_18,
+                toStr "f" digits._proof_19]
+              digits._proof_20).index_usize
+          x_2
+    let x ← lift (x &&& 15#u8)
+    let x ← lift (UScalar.cast UScalarTy.Usize x)
+    let x ←
+      (Array.make 16#usize
+              [toStr "0" digits._proof_4, toStr "1" digits._proof_5, toStr "2" digits._proof_6,
+                toStr "3" digits._proof_7, toStr "4" digits._proof_8, toStr "5" digits._proof_9,
+                toStr "6" digits._proof_10, toStr "7" digits._proof_11, toStr "8" digits._proof_12,
+                toStr "9" digits._proof_13, toStr "a" digits._proof_14, toStr "b" digits._proof_15,
+                toStr "c" digits._proof_16, toStr "d" digits._proof_17, toStr "e" digits._proof_18,
+                toStr "f" digits._proof_19]
+              digits._proof_20).index_usize
+          x
+    let (high, low) := (x_3, x)
+      do
+      let next ← ExternalFuns.op31 s high
+      ExternalFuns.op31 next low
+def Aeneas.Std.U8.wrapping_shr : U8 → U32 → U8 :=
+fun x s => UScalar.wrapping_shr x s
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+def Aeneas.Std.UScalar.and : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv &&& y.bv)#uscalar
+'R1Z.PV_RDEAC_ActualRound.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

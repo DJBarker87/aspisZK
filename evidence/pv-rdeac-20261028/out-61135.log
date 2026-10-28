@@ -1,0 +1,8 @@
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} → alloc.vec.Vec α → α → Result (alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then ok ⟨(↑v).concat x, ⋯⟩
+  else fail Error.maximumSizeExceeded
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+'R1Z.PV_RDEAC_VectorProjection.extend' depends on axioms: [propext, Quot.sound]

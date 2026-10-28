@@ -1,0 +1,89 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:11:17: error: unsolved goals
+case cons
+x : U8
+xs : List U8
+ih : List.mapM (fun b => ok b) xs = ok xs
+⊢ List.mapM.loop (fun b => ok b) (x :: xs) [] = ok (x :: xs)
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:11:37: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [List.mapM,̵ ̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:14:51: error: unsolved goals
+s : Slice U8
+⊢ (do
+      let s' ←
+        match h : List.mapM (liftFun1 core.clone.impls.CloneU8.clone) ↑s with
+          | ok v => ok ⟨v, ⋯⟩
+          | fail e => fail e
+          | div => div
+      ok ⟨↑s', ⋯⟩) =
+    ok s
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:16:4: warning: This simp argument is unused:
+  liftFun1
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.clone, List.clone, core.clone.CloneU8,
+  ̵  ̵ ̵ ̵l̵i̵f̵t̵F̵u̵n̵1̵,̵ ̵core.clone.impls.CloneU8.clone, map_ok,
+  ̲  ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:16:14: warning: This simp argument is unused:
+  core.clone.impls.CloneU8.clone
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.clone, List.clone, core.clone.CloneU8, liftFun1, c̵o̵r̵e̵.̵c̵l̵o̵n̵e̵.̵i̵m̵p̵l̵s̵.̵C̵l̵o̵n̵e̵U̵8̵.̵c̵l̵o̵n̵e̵,̵ ̵map_ok, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:16:46: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.clone, List.clone, core.clone.CloneU8,
+  ̵  ̵ ̵ ̵liftFun1, core.clone.impls.CloneU8.clone,
+  ̲ m̵a̵p̵_̵o̵k̵,̵  ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:16:54: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.clone, List.clone, core.clone.CloneU8,
+  ̵  ̵ ̵ ̵liftFun1, core.clone.impls.CloneU8.clone,
+  ̲  ̲ ̲ ̲map_ok,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:20:87: error: unsolved goals
+s : String
+t : Str
+bound : (encodeList s).length + (↑t).length ≤ Usize.max
+input : (encodeList s).length ≤ Usize.max
+⊢ (do
+      let v ←
+        match h' : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) t with
+          | ok s' => ok ⟨encodeList s ++ ↑s', ⋯⟩
+          | fail e => fail e
+          | div => div
+      decode v) =
+    decode ⟨encodeList s ++ ↑t, ⋯⟩
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:24:64: warning: This simp argument is unused:
+  clone_bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [alloc.vec.Vec.length, Slice.length, dif_pos bound, c̵l̵o̵n̵e̵_̵b̵y̵t̵e̵s̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:25:4: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [alloc.vec.Vec.length, Slice.length, dif_pos bound, clone_bytes,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDEAC_AppendSimulation.map_ok' depends on axioms: [sorryAx]
+'R1Z.PV_RDEAC_AppendSimulation.clone_bytes' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_RDEAC_AppendSimulation.callback_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_AppendSimulation.empty_represents' depends on axioms: [propext]
