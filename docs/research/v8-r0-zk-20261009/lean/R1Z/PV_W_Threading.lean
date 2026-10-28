@@ -54,6 +54,16 @@ theorem bind_div (m : M W C E A) (k : A → M W C E B)
     bind m k w = ⟨.div,(m w).world,(m w).calls⟩ := by
   simp only [bind,h]
 
+theorem bind_assoc (m : M W C E A) (k : A → M W C E B)
+    (h : B → M W C E D) : bind (bind m k) h = bind m (fun a => bind (k a) h) := by
+  funext w
+  cases hm : (m w).outcome with
+  | fail e => simp only [bind,hm]
+  | div => simp only [bind,hm]
+  | ok a =>
+    cases hk : (k a (m w).world).outcome <;>
+      simp only [bind,hm,hk,List.append_assoc]
+
 /-- Every call is recorded at its own pre-world, in execution order. -/
 def emit (c : C) (step : W → Outcome E A × W) : M W C E A := fun w =>
   ⟨(step w).1,(step w).2,[(w,c)]⟩
@@ -108,6 +118,7 @@ theorem no_trace_decoder (r : Outcome E A) (w : W) (c : C) :
   have lengths := congrArg List.length (one.symm.trans two)
   exact Nat.noConfusion lengths
 
+#print axioms bind_assoc
 #print axioms lift_frame
 #print axioms lift_bind
 #print axioms bind_ok
