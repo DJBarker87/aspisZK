@@ -20,7 +20,7 @@ def proof(lines,names,short):
                 expr='\n'.join(x for x in parts if x)
                 inline=next((n for old,n in zip(names,short) if expr.startswith(old) and expr[len(old):len(old)+1].isspace()),None)
                 law='erase_'+inline if inline else 'erase_invoke'
-                out += [pad+'dsimp only',pad+'rw [erase_bind,'+law+']',pad+'apply source_bind_congr']
+                out += [pad+'try dsimp only',pad+'rw [erase_bind,'+law+']',pad+'apply source_bind_congr']
                 if var.startswith('('):out.append(pad+'rintro ⟨'+var[1:-1]+'⟩')
                 else:out.append(pad+'intro '+var)
                 continue
@@ -30,7 +30,7 @@ def proof(lines,names,short):
                 continue
             if t.startswith('match '):
                 discr=t[len('match '):-len(' with')]
-                out += [pad+'dsimp only',pad+'cases '+discr+' with'];i+=1
+                out += [pad+'try dsimp only',pad+'cases '+discr+' with'];i+=1
                 while i<len(lines) and indent(lines[i])==base and lines[i].lstrip().startswith('| '):
                     branch=lines[i].strip()[2:].split('=>')[0].strip();pieces=branch.split();ctor=pieces[0].split('.')[-1]
                     args=[]

@@ -173,15 +173,15 @@ theorem erase_syncDirectory (ops : ExternalFuns) (directory : std.path.Path) :
     erase ops (syncDirectory directory) =
       @aspis_prover.state_only_entropy.sync_directory _ ops directory := by
   unfold syncDirectory aspis_prover.state_only_entropy.sync_directory
-  dsimp only
+  try dsimp only
   rw [erase_bind,erase_invoke]
   apply source_bind_congr
   intro r
-  dsimp only
+  try dsimp only
   rw [erase_bind,erase_invoke]
   apply source_bind_congr
   intro cf
-  dsimp only
+  try dsimp only
   cases cf with
   | Continue val =>
     exact erase_invoke ops _ _
@@ -195,145 +195,145 @@ theorem erase_reserveFallible (ops : ExternalFuns) (self : aspis_prover.state_on
     erase ops (reserveFallible self statement_digest mask_nonce) =
       @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible _ ops self statement_digest mask_nonce := by
   unfold reserveFallible aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
-  dsimp only
+  try dsimp only
   rw [erase_bind,erase_invoke]
   apply source_bind_congr
   intro path
-  dsimp only
+  try dsimp only
   rw [erase_bind,erase_invoke]
   apply source_bind_congr
   intro options
-  dsimp only
+  try dsimp only
   rw [erase_bind,erase_invoke]
   apply source_bind_congr
   rintro ⟨oo, write_back⟩
-  dsimp only
+  try dsimp only
   rw [erase_bind,erase_invoke]
   apply source_bind_congr
   rintro ⟨oo1, create_new_back⟩
-  dsimp only
+  try dsimp only
   rw [erase_bind,erase_invoke]
   apply source_bind_congr
   rintro ⟨oo3, mode_back⟩
-  dsimp only
+  try dsimp only
   rw [erase_bind,erase_invoke]
   apply source_bind_congr
   intro r
-  dsimp only
+  try dsimp only
   cases r with
   | Ok file =>
-    dsimp only
+    try dsimp only
     rw [erase_bind,erase_invoke]
     apply source_bind_congr
     intro s
-    dsimp only
+    try dsimp only
     rw [erase_bind,erase_invoke]
     apply source_bind_congr
     rintro ⟨r1, file1⟩
-    dsimp only
+    try dsimp only
     rw [erase_bind,erase_invoke]
     apply source_bind_congr
     intro cf
-    dsimp only
+    try dsimp only
     cases cf with
     | Continue unused1 =>
-      dsimp only
+      try dsimp only
       rw [erase_bind,erase_invoke]
       apply source_bind_congr
       intro s1
-      dsimp only
+      try dsimp only
       rw [erase_bind,erase_invoke]
       apply source_bind_congr
       rintro ⟨r2, file2⟩
-      dsimp only
+      try dsimp only
       rw [erase_bind,erase_invoke]
       apply source_bind_congr
       intro cf1
-      dsimp only
+      try dsimp only
       cases cf1 with
       | Continue unused2 =>
-        dsimp only
+        try dsimp only
         rw [erase_bind,erase_invoke]
         apply source_bind_congr
         intro s2
-        dsimp only
+        try dsimp only
         rw [erase_bind,erase_invoke]
         apply source_bind_congr
         rintro ⟨r3, file3⟩
-        dsimp only
+        try dsimp only
         rw [erase_bind,erase_invoke]
         apply source_bind_congr
         intro cf2
-        dsimp only
+        try dsimp only
         cases cf2 with
         | Continue unused3 =>
-          dsimp only
+          try dsimp only
           rw [erase_bind,erase_invoke]
           apply source_bind_congr
           intro r4
-          dsimp only
+          try dsimp only
           rw [erase_bind,erase_invoke]
           apply source_bind_congr
           intro cf3
-          dsimp only
+          try dsimp only
           cases cf3 with
           | Continue unused4 =>
-            dsimp only
+            try dsimp only
             rw [erase_bind,erase_invoke]
             apply source_bind_congr
             intro p
-            dsimp only
+            try dsimp only
             rw [erase_bind,erase_syncDirectory]
             apply source_bind_congr
             intro r5
-            dsimp only
+            try dsimp only
             rw [erase_bind,erase_invoke]
             apply source_bind_congr
             intro cf4
-            dsimp only
+            try dsimp only
             cases cf4 with
             | Continue unused5 =>
               rfl
             | Break residual =>
-              dsimp only
+              try dsimp only
               rw [erase_bind,erase_invoke]
               apply source_bind_congr
               intro r6
               rfl
           | Break residual =>
-            dsimp only
+            try dsimp only
             rw [erase_bind,erase_invoke]
             apply source_bind_congr
             intro r5
             rfl
         | Break residual =>
-          dsimp only
+          try dsimp only
           rw [erase_bind,erase_invoke]
           apply source_bind_congr
           intro r4
           rfl
       | Break residual =>
-        dsimp only
+        try dsimp only
         rw [erase_bind,erase_invoke]
         apply source_bind_congr
         intro r3
         rfl
     | Break residual =>
-      dsimp only
+      try dsimp only
       rw [erase_bind,erase_invoke]
       apply source_bind_congr
       intro r2
       rfl
   | Err error =>
-    dsimp only
+    try dsimp only
     rw [erase_bind,erase_invoke]
     apply source_bind_congr
     intro ek
-    dsimp only
+    try dsimp only
     rw [erase_bind,erase_invoke]
     apply source_bind_congr
     intro b
-    dsimp only
+    try dsimp only
     rw [erase_bind,erase_invoke]
     apply source_bind_congr
     intro r1
@@ -346,16 +346,16 @@ theorem erase_reserve (ops : ExternalFuns) (self : aspis_prover.state_only_entro
     erase ops (reserve self statement_digest mask_nonce) =
       @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve _ ops self statement_digest mask_nonce := by
   unfold reserve aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
-  dsimp only
+  try dsimp only
   rw [erase_bind,erase_reserveFallible]
   apply source_bind_congr
   rintro ⟨r, self1⟩
-  dsimp only
+  try dsimp only
   cases r with
   | Ok reserved =>
     rfl
   | Err error =>
-    dsimp only
+    try dsimp only
     rw [erase_bind,erase_invoke]
     apply source_bind_congr
     intro ek
