@@ -3,7 +3,7 @@ No repeat, simplifier search, evaluation, or increased prover options.
 """
 import re
 
-def proof(lines,names,short):
+def proof(lines,names,short,primitive_labels=()):
     def indent(s):return len(s)-len(s.lstrip())
     counter=0
     def block(i,base,level):
@@ -19,7 +19,7 @@ def proof(lines,names,short):
                     parts.append(lines[i].strip());i+=1
                 expr='\n'.join(x for x in parts if x)
                 inline=next((n for old,n in zip(names,short) if expr.startswith(old) and expr[len(old):len(old)+1].isspace()),None)
-                law='erase_'+inline if inline else 'erase_invoke'
+                law='erase_'+inline if inline else 'erase_perform' if expr.split()[0] in primitive_labels else 'erase_invoke'
                 out += [pad+'try dsimp only',pad+'rw [erase_bind,'+law+']',pad+'apply source_bind_congr']
                 if var.startswith('('):out.append(pad+'rintro ⟨'+var[1:-1]+'⟩')
                 else:out.append(pad+'intro '+var)
@@ -45,7 +45,7 @@ def proof(lines,names,short):
             while i<len(lines) and indent(lines[i])>base:parts.append(lines[i].strip());i+=1
             expr='\n'.join(parts)
             inline=next((n for old,n in zip(names,short) if expr.startswith(old) and expr[len(old):len(old)+1].isspace()),None)
-            out.append(pad+'exact '+('erase_'+inline+' ops _' if inline else 'erase_invoke ops _ _'))
+            out.append(pad+'exact '+('erase_'+inline+' ops _' if inline else 'erase_perform ops _' if expr.split()[0] in primitive_labels else 'erase_invoke ops _ _'))
             return out,i
         return out,i
     def advance(i,base):

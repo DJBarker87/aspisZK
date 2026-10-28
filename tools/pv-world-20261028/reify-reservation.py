@@ -13,6 +13,10 @@ names=[stem+'sync_directory',stem+'DurableStateOnlyMaskNonceStore.reserve_fallib
 short=['syncDirectory','reserveFallible','reserve']
 headers=['(directory : std.path.Path) : P (core.result.Result Unit std.io.error.Error)', '(self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  (statement_digest mask_nonce : Array Aeneas.Std.U8 32#usize) :\n  P ((core.result.Result Bool std.io.error.Error) × aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)', '(self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  (statement_digest mask_nonce : Array Aeneas.Std.U8 32#usize) :\n  P (Bool × aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)']
 output=['import R1Z.PV_W_SourceSyntax\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_W_Reservation\nopen ProverRwFull PV_W_SourceSyntax PV_W_Syntax PV_W_Threading\nopen Aeneas.Std\nvariable [ExternalTypes]\n']
+typed='--typed' in sys.argv
+constructors={'std.fs.File.open':'fileOpen','std.fs.File.sync_all':'fileSync','std.fs.OpenOptions.open':'optionsOpen','std.io.error.Error.kind':'errorKind','std.fs.File.Insts.StdIoWrite.write_all':'writeAll'}
+if typed:
+ output=[output[0].replace('PV_W_SourceSyntax','PV_W_TypedEffects').replace('namespace R1Z.PV_W_Reservation','namespace R1Z.PV_W_TypedReservation')+'open PV_W_SourceSyntax (source_bind_congr)\n']
 rows=[];proofs={}
 for name,new,header in zip(names,short,headers):
  mat=re.search(r'\ndef\s+'+re.escape(name)+r'\s*\(',s);assert mat,name
@@ -22,7 +26,7 @@ for name,new,header in zip(names,short,headers):
   if '=> ' in line and line.lstrip().startswith('| '):
    left,right=line.split('=> ',1);lines.extend([left+'=>',' '*(len(line)-len(line.lstrip())+2)+right])
   else:lines.append(line)
- proofs[new]=proof(lines,names,short)
+ proofs[new]=proof(lines,names,short,constructors if typed else ())
  out=[];calls=[];i=0
  while i<len(lines):
   line=lines[i];m=re.match(r'^(\s*)let (.*?) ←(.*)$',line)
@@ -41,6 +45,8 @@ for name,new,header in zip(names,short,headers):
   if inline:
    ls=expr.replace(inline[0],inline[1],1).splitlines();out.append(indent+prefix+ls[0]);out.extend(indent+'  '+v for v in ls[1:]);continue
   label=expr.split()[0]
+  if typed and label in constructors:
+   es=expr[len(label):].strip().splitlines();out.append(indent+prefix+'perform (.'+constructors[label]+' '+es[0]);out.extend(indent+'  '+v for v in es[1:]);out[-1]+=')';continue
   out.append(indent+prefix+'invoke '+json.dumps(label)+' (fun ops =>')
   out.append(indent+'  letI : ExternalFuns := ops')
   for el in expr.splitlines():out.append(indent+'  '+el)
@@ -53,9 +59,9 @@ proofheaders=[
 '(ops : ExternalFuns) (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n    (statement_digest mask_nonce : Array U8 32#usize) :\n    erase ops (reserve self statement_digest mask_nonce) =\n      @'+names[2]+' _ ops self statement_digest mask_nonce']
 for old,new,h in zip(names,short,proofheaders):
  output.append('theorem erase_'+new+' '+h+' := by\n  unfold '+new+' '+old+'\n'+proofs[new]+'\n\n#print axioms erase_'+new+'\n')
-output.append('end R1Z.PV_W_Reservation\n')
-target=R/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_Reservation.lean';data='\n'.join(output)
+output.append('end R1Z.'+('PV_W_TypedReservation' if typed else 'PV_W_Reservation')+'\n')
+target=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/('PV_W_TypedReservation.lean' if typed else 'PV_W_Reservation.lean');data='\n'.join(output)
 if '--check' in sys.argv:assert target.read_text()==data
 else:target.write_text(data)
-(E/'reservation-reification.json').write_text(json.dumps(dict(source_path=p,source_sha256=hashlib.sha256(b).hexdigest(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+p],cwd=R,text=True).strip(),bodies=rows,check=True,scope='control-flow reification and exact source erasure; native effect adequacy not asserted'),indent=2)+'\n')
+(E/('typed-reservation-reification.json' if typed else 'reservation-reification.json')).write_text(json.dumps(dict(source_path=p,source_sha256=hashlib.sha256(b).hexdigest(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+p],cwd=R,text=True).strip(),bodies=rows,check=True,scope='control-flow reification and exact source erasure; native effect adequacy not asserted'),indent=2)+'\n')
 print('Exact reification check:',len(rows),'bodies;',sum(len(x['calls']) for x in rows),'call sites')

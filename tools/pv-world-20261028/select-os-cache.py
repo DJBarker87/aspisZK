@@ -24,7 +24,6 @@ for m in ORDER:
  if m not in NEEDED:continue
  x=PROJECT[m];r=RECORDS.get(m);rel=m.replace('.','/')
  own=D/'lean-objects'/(rel+'.olean')
- if own.exists() and not own.is_symlink():rows[m]=dict(kind='own previously compiled',path=str(own),sha256=sha(own));continue
  valid=r is not None and r['source_sha256']==x['sha256'] and r['status'] in ['pass','reused','ok','compiled']
  # Results use exit/status labels; record the actual status below if ineligible.
  if r is not None and r['source_sha256']==x['sha256'] and r['object_sha256']==r.get('expected_object_sha256'):valid=True
@@ -32,11 +31,13 @@ for m in ORDER:
  for d in x['imports']:
   if d in PROJECT:
    selected=rows.get(d);old=RECORDS.get(d)
-   ok=selected is not None and old is not None and selected['sha256']==old['object_sha256']
+   ok=selected is not None and old is not None and selected['sha256']==old['object_sha256'] and selected.get('replay_compatible',False)
   else:
    selected=EXTERNAL.get(d);ok=selected is not None
   dep_checks.append(dict(module=d,ok=ok))
   if not ok:valid=False
+ if own.exists() and not own.is_symlink():
+  h=sha(own);rows[m]=dict(kind='own previously compiled',path=str(own),sha256=h,replay_compatible=r is not None and h==r['object_sha256'] and all(d['ok'] for d in dep_checks));continue
  obj=B/'objects'/(rel+'.olean');src=B/'sources'/(rel+'.lean')
  if not obj.exists() or not src.exists():valid=False
  elif r is not None and (sha(obj)!=r['object_sha256'] or sha(src)!=x['sha256']):valid=False
@@ -51,7 +52,7 @@ for m in ORDER:
    if a.exists():
     if not t.exists():t.symlink_to(a)
     companions[suffix]=sha(a)
-  rows[m]=dict(kind='h6 replay',path=str(own),source_path=str(src),source_sha256=sha(src),sha256=sha(obj),recorded_object_sha256=r['object_sha256'],dependencies=dep_checks,companions=companions)
+  rows[m]=dict(kind='h6 replay',replay_compatible=True,path=str(own),source_path=str(src),source_sha256=sha(src),sha256=sha(obj),recorded_object_sha256=r['object_sha256'],dependencies=dep_checks,companions=companions)
  else:
   missing.append(m)
   for q in [own,Path(str(own)+'.server'),Path(str(own)+'.private'),own.with_suffix('.ir')]:
