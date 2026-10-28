@@ -62,6 +62,7 @@ fn main(){
  println!("{{\\\"checks\\\":{},\\\"failed\\\":0}}",checks);
 }
 '''
+harness=harness.replace(r'\\\"',r'\"')
 (R/'tools/pv-l2d-20261028/zero-tail-native.rs').write_text(harness)
 (E/'zero-tail-native-source.txt').write_text(body+'\n')
 (E/'zero-tail-structural.json').write_text(json.dumps(dict(
