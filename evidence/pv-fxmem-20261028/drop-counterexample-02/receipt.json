@@ -1,0 +1,43 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/drop-counterexample-02/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/drop-counterexample-02/time.log",
+    "sh",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/run-drop.sh"
+  ],
+  "exit": 0,
+  "wall": "0:00.11",
+  "peak_rss_kib": "112640",
+  "swap": "0",
+  "source_revision": "7b5b43fcd7de61ddb9f305407065d660bd82f952",
+  "expected_phase": "compilation-and-32-finite-paired-checks",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "executed_source_files": {
+    "tools/pv-fxmem-20261028/drop-counterexample.rs": "f7d13201b0bce24a4313cf730f8f917f9eeb8c84a068461cd898b0fe18962cae",
+    "tools/pv-fxmem-20261028/run-drop.sh": "e8ec2e223121dd16d6801bbc7570f44e7e740491e461480d569fe35e011a1369"
+  },
+  "driver_delta_from_recorded_HEAD": "run-drop.sh uses the absolute pinned compiler path, correcting attempt01 rustc-not-found; exact executed driver hash included"
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+    "file_sha256": "a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f",
+    "anchor": "pub fn try_reserve_exact(",
+    "body": "{\n        self.buf.try_reserve_exact(self.len, additional)\n    }"
+  },
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+    "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+    "anchor": "pub(crate) fn try_reserve_exact(",
+    "body": "{\n        \n        unsafe { self.inner.try_reserve_exact(len, additional, T::LAYOUT) }\n    }"
+  },
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+    "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+    "anchor": "unsafe fn try_reserve_exact(",
+    "body": "{\n        if self.needs_to_grow(len, additional, elem_layout) {\n            \n            unsafe {\n                self.grow_exact(len, additional, elem_layout)?;\n            }\n        }\n        unsafe {\n            \n            hint::assert_unchecked(!self.needs_to_grow(len, additional, elem_layout));\n        }\n        Ok(())\n    }"
+  },
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+    "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+    "anchor": "unsafe fn grow_exact(",
+    "body": "{\n        if elem_layout.size() == 0 {\n            \n            \n            return Err(CapacityOverflow.into());\n        }\n\n        let cap = len.checked_add(additional).ok_or(CapacityOverflow)?;\n\n        \n        let ptr = unsafe { self.finish_grow(cap, elem_layout)? };\n\n        \n        unsafe { self.set_ptr_and_cap(ptr, cap) };\n        Ok(())\n    }"
+  },
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+    "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+    "anchor": "fn needs_to_grow(",
+    "body": "{\n        additional > self.capacity(elem_layout.size()).wrapping_sub(len)\n    }"
+  },
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+    "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+    "anchor": "fn finish_grow(",
+    "body": "{\n        let new_layout = layout_array(cap, elem_layout)?;\n\n        let memory = if let Some((ptr, old_layout)) = unsafe { self.current_memory(elem_layout) } {\n            \n            debug_assert!(old_layout.align() == new_layout.align());\n            unsafe {\n                \n                hint::assert_unchecked(old_layout.align() == new_layout.align());\n                self.alloc.grow(ptr, old_layout, new_layout)\n            }\n        } else {\n            self.alloc.allocate(new_layout)\n        };\n\n        \n        match memory {\n            Ok(memory) => Ok(memory),\n            Err(_) => Err(AllocError { layout: new_layout, non_exhaustive: () }.into()),\n        }\n    }"
+  },
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+    "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+    "anchor": "unsafe fn set_ptr_and_cap(",
+    "body": "{\n        \n        \n        \n        self.ptr = Unique::from(ptr.cast());\n        self.cap = unsafe { Cap::new_unchecked(cap) };\n    }"
+  },
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+    "file_sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+    "anchor": "fn alloc_impl_runtime(",
+    "body": "{\n        match layout.size() {\n            0 => Ok(layout.dangling_ptr().cast_slice(0)),\n            \n            size => unsafe {\n                let raw_ptr = if zeroed { alloc_zeroed(layout) } else { alloc(layout) };\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                Ok(ptr.cast_slice(size))\n            },\n        }\n    }"
+  },
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+    "file_sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+    "anchor": "fn grow_impl_runtime(",
+    "body": "{\n        debug_assert!(\n            new_layout.size() >= old_layout.size(),\n            \"`new_layout.size()` must be greater than or equal to `old_layout.size()`\"\n        );\n\n        match old_layout.size() {\n            0 => self.alloc_impl(new_layout, zeroed),\n\n            \n            \n            old_size if old_layout.align() == new_layout.align() => unsafe {\n                let new_size = new_layout.size();\n\n                \n                hint::assert_unchecked(new_size >= old_layout.size());\n\n                let raw_ptr = realloc_nonnull(ptr, old_layout, new_size);\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                if zeroed {\n                    raw_ptr.add(old_size).write_bytes(0, new_size - old_size);\n                }\n                Ok(ptr.cast_slice(new_size))\n            },\n\n            \n            \n            \n            \n            \n            old_size => unsafe {\n                let new_ptr = self.alloc_impl(new_layout, zeroed)?;\n                ptr::copy_nonoverlapping(ptr.as_ptr(), new_ptr.as_mut_ptr(), old_size);\n                self.deallocate(ptr, old_layout);\n                Ok(new_ptr)\n            },\n        }\n    }"
+  },
+  {
+    "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+    "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+    "anchor": "fn layout_array(",
+    "body": "{\n    \n    \n    debug_assert!(elem_layout.size() == elem_layout.pad_to_align().size());\n\n    elem_layout.repeat_packed(cap).map_err(const |_| CapacityOverflow.into())\n}"
+  }
+]

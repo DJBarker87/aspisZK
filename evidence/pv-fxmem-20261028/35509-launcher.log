@@ -1,0 +1,39 @@
+reservation: populated 15 GiB + 8 GiB; window=1 (London 0958); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_FXM_ZeroSelected.lean:36:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_FXM_ZeroSelected.byte_value`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_FXM_ZeroSelected.lean:42:17: error: unsolved goals
+case cons
+inst✝ : ExternalTypes
+x : U8
+xs : List U8
+ih : elements byteZero xs = Result.ok ⟨List.replicate xs.length 0#u8, ⋯⟩
+⊢ (do
+      let ys ← elements { zeroize := scalar byteDefault } xs
+      Result.ok ⟨0#u8 :: ↑ys, ⋯⟩) =
+    Result.ok ⟨0#u8 :: List.replicate xs.length 0#u8, ⋯⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_FXM_ZeroSelected.lean:43:44: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [elements, ̲byteZero, ̲byte_value,i̵h̵,̵ ̲bind_tc_ok, ̲List.length_cons,
+  ̵  ̵ ̵ ̵ ̵ ̵List.replicate_succ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_FXM_ZeroSelected.byte_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_FXM_ZeroSelected.elements_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_FXM_ZeroSelected.array_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_FXM_ZeroSelected.scalar_installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_FXM_ZeroSelected.array_installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_FXM_ZeroSelected.other_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_FXM_ZeroSelected.execution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.36
+	Maximum resident set size (kbytes): 2643976
+	Swaps: 0
+	Exit status: 1

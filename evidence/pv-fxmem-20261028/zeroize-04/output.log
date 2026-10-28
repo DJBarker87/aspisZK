@@ -1,0 +1,51 @@
+rustc 1.98.0-nightly (14210df0e 2026-05-31)
+binary: rustc
+commit-hash: 14210df0e27ccd7d9e6a05b8085cbd438e4bbc65
+commit-date: 2026-05-31
+host: x86_64-unknown-linux-gnu
+release: 1.98.0-nightly
+LLVM version: 22.1.6
+warning: unnecessary qualification
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.1/src/lib.rs:415:63
+    |
+415 |             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+    |                                                               ^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.1/src/lib.rs:7:41
+    |
+  7 | #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
+    |                                         ^^^^^^^^^^^^^^^^^^^^^
+help: remove the unnecessary path segments
+    |
+415 -             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+415 +             volatile_set((self as *mut Self).cast::<u8>(), 0, size_of::<Self>());
+    |
+
+warning: unnecessary qualification
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.1/src/lib.rs:460:43
+    |
+460 |         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+    |                                           ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+460 -         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+460 +         let size = self.len().checked_mul(size_of::<Z>()).unwrap();
+    |
+
+warning: unnecessary qualification
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.1/src/lib.rs:840:16
+    |
+840 |     let size = mem::size_of::<F>();
+    |                ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+840 -     let size = mem::size_of::<F>();
+840 +     let size = size_of::<F>();
+    |
+
+warning: 3 warnings emitted
+
+PASS 1280 array pairs and 1280 byte cases, all target bytes zero and adjacent frames intact; finite validation, not machine non-elision audit

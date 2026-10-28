@@ -1,0 +1,30 @@
+{
+  "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+  "sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+  "bodies": [
+    {
+      "anchor": "fn allocate(&self, layout: Layout)",
+      "body": "{\n        self.alloc_impl(layout, false)\n    }"
+    },
+    {
+      "anchor": "unsafe fn grow(",
+      "body": "{\n        \n        unsafe { self.grow_impl(ptr, old_layout, new_layout, false) }\n    }"
+    },
+    {
+      "anchor": "const fn alloc_impl(",
+      "body": "{\n        core::intrinsics::const_eval_select(\n            (layout, zeroed),\n            Global::alloc_impl_const,\n            Global::alloc_impl_runtime,\n        )\n    }"
+    },
+    {
+      "anchor": "const unsafe fn grow_impl(",
+      "body": "{\n        core::intrinsics::const_eval_select(\n            (self, ptr, old_layout, new_layout, zeroed),\n            Global::grow_shrink_impl_const,\n            Global::grow_impl_runtime,\n        )\n    }"
+    },
+    {
+      "anchor": "pub unsafe fn dealloc(",
+      "body": "{\n    unsafe { dealloc_nonnull(NonNull::new_unchecked(ptr), layout) }\n}"
+    },
+    {
+      "anchor": "unsafe fn dealloc_nonnull(",
+      "body": "{\n    unsafe { __rust_dealloc(ptr, layout.size(), layout.alignment()) }\n}"
+    }
+  ]
+}
