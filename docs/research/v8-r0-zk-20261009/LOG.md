@@ -13453,7 +13453,7 @@ V175, V176, V267, V268, V271) on a checked obstruction FXIO-1: a fixed world-fre
 reproduce create_new succeeding and then returning AlreadyExists for identical inputs across changing
 file-system worlds. This is the same obstruction pv-fxmem found for drop (D362): the ProverRwFull
 ExternalFuns callbacks are world-free, so any callback whose native outcome depends on external state
-cannot be installed as a fixed function. Its OS-contract coverage report shows that the trust field
+cannot be installed as a fixed function. Its OS-contract coverage report shows that the trust field observation
  (trust-items.md) already carries a world-threaded joint Observation (initial and final
 worlds, an ordered list of world-tagged calls, file-system State, the D159 payload) and only transfers
 an extracted outcome to native; it does not define what open, write, sync or close do, and
@@ -13465,7 +13465,7 @@ Lead decision (AGENTS.md section 7): one job for the shared piece instead of mor
 (IDs 36000-36199; no Kani; no source change; T unchanged) defines a world-indexed state-and-error
 interpretation of the external callbacks over the existing Observation World, lifts the provably pure
 callbacks, gives the effectful ones explicit world laws, proves caller-level threading over the
-extracted control flow so the ordered calls produce exactly the tagged-call list  speaks
+extracted control flow so the ordered calls produce exactly the tagged-call list observation  
 about, and reports which OS facts the existing trust list covers; uncovered ones go to the owner as
 possible trust items with what depends on them. The file-effects line is parked (branch pushed) until
 then; fxmem2 continues on drop at the finite set of dropped types. Rows removed outright: 0. Privacy
