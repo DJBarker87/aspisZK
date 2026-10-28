@@ -1,5 +1,5 @@
 import R1Z.PV_RE_MaskedClone10
-import R1Z.PV_RE_AttemptClone10
+import R1Z.PV_RE_AttemptCloneB10
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RE_ClientCloneB10
@@ -31,7 +31,7 @@ theorem entered {C : Type} (ops : ExternalFuns)
   have ht : D.op234 .S2 = .ok 2#u8 := rfl
   have he : D.op116 context = .ok (ProverRwOuterEncode.value context) := ProverRwOuterEncode.encode_total context
   apply PV_RE_ClientAttempt7.lift_prefix D entropy pub compiled hash store state state1 secret (by rfl) entropy_prefix (D.op231 compiled.semantic_c1)
-  exact PV_RE_AttemptClone10.entered D pub compiled .S2 hash secret store
+  exact PV_RE_AttemptCloneB10.entered D pub compiled .S2 hash secret store
     bytes digest serialization hm first_hash context hc 2#u8 ht
     (ProverRwOuterEncode.value context) he binding second_hash
     store1 reserved material reservation (by rfl)
