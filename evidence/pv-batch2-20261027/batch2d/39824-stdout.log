@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_D_ScalarCanonical.lean:45:21: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [reduced, ̲BitVec.ule, ̲show (2147483647#32).toNat = 2147483647 from rfl, ̲h̲,̲
+       ̵ ̵h̵,̵decide_false,̵i̵f̵_̵n̵e̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_D_ScalarCanonical.lean:58:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @LT.lt ℕ instLTNat
+    (if
+        (2147483647#32).toNat ≤
+          (BitVec.setWidth 32
+              (((x.bv &&& 2147483647#64) + x.bv >>> 31 &&& 2147483647#64) +
+                ((x.bv &&& 2147483647#64) + x.bv >>> 31) >>> 31)).toNat then
+      (BitVec.setWidth 32
+            (((x.bv &&& 2147483647#64) + x.bv >>> 31 &&& 2147483647#64) +
+              ((x.bv &&& 2147483647#64) + x.bv >>> 31) >>> 31) -
+          (2147483647#32 &&& 0#32 - 1#32)).toNat
+    else
+      (BitVec.setWidth 32
+            (((x.bv &&& 2147483647#64) + x.bv >>> 31 &&& 2147483647#64) +
+              ((x.bv &&& 2147483647#64) + x.bv >>> 31) >>> 31) -
+          (2147483647#32 &&& 0#32 - 0#32)).toNat)
+    2147483647
+but is expected to have type
+  @LT.lt ℕ instLTNat
+    (if
+        2147483647#u32.bv.toNat ≤
+          (BitVec.setWidth 32
+              (((x.bv &&& BitVec.setWidth 64 2147483647#u32.bv) + x.bv.ushiftRight (31#u32.bv.toNat % 64) &&&
+                  BitVec.setWidth 64 2147483647#u32.bv) +
+                ((x.bv &&& BitVec.setWidth 64 2147483647#u32.bv) + x.bv.ushiftRight (31#u32.bv.toNat % 64)).ushiftRight
+                  (31#u32.bv.toNat % 64))).toNat then
+      (BitVec.setWidth 32
+            (((x.bv &&& BitVec.setWidth 64 2147483647#u32.bv) + x.bv.ushiftRight (31#u32.bv.toNat % 64) &&&
+                BitVec.setWidth 64 2147483647#u32.bv) +
+              ((x.bv &&& BitVec.setWidth 64 2147483647#u32.bv) + x.bv.ushiftRight (31#u32.bv.toNat % 64)).ushiftRight
+                (31#u32.bv.toNat % 64)) -
+          (2147483647#u32.bv &&& 0#u32.bv - 1#32)).toNat
+    else
+      (BitVec.setWidth 32
+            (((x.bv &&& BitVec.setWidth 64 2147483647#u32.bv) + x.bv.ushiftRight (31#u32.bv.toNat % 64) &&&
+                BitVec.setWidth 64 2147483647#u32.bv) +
+              ((x.bv &&& BitVec.setWidth 64 2147483647#u32.bv) + x.bv.ushiftRight (31#u32.bv.toNat % 64)).ushiftRight
+                (31#u32.bv.toNat % 64)) -
+          (2147483647#u32.bv &&& 0#u32.bv - 0#32)).toNat)
+    2147483647#u32.bv.toNat
+'PV_B2_D_ScalarCanonical.fold_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_D_ScalarCanonical.fold_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_D_ScalarCanonical.word_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_D_ScalarCanonical.bitvec_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_D_ScalarCanonical.reduce_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

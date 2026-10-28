@@ -1,0 +1,54 @@
+import R1Z.PV_B2_C_SamplerEnvironment
+import AspisR1Post25SamplerIndexedAddSmallCandidate.Funs
+set_option autoImplicit false
+namespace PV_B2_C_AddSmallAgreement
+open Aeneas Aeneas.Std Result ControlFlow
+namespace N
+abbrev body := PV_B2_C_Sampler.host_sampler.add_small_base_p_loop.body
+abbrev run := PV_B2_C_Sampler.host_sampler.add_small_base_p_loop
+end N
+namespace O
+abbrev body := AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p_loop.body
+abbrev run := AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p_loop
+end O
+
+/-- Complete Result equality on arbitrary typed digits, carry and counter. -/
+theorem body (ds : Array U32 8#usize) (n : U32) (i : Usize) :
+    N.body ds n i = O.body ds n i := by
+  unfold N.body O.body
+    PV_B2_C_Sampler.host_sampler.add_small_base_p_loop.body
+    AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p_loop.body
+  by_cases h : i < 8#usize
+  · have hi : i.val < 8 := h
+    simp only [if_pos h,lift,bind_tc_ok]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro d _
+    have hs := PV_B2_C_MachineArithmetic.u64_add_exact
+      (core.convert.num.FromU64U32.from d)
+      (core.convert.num.FromU64U32.from n) (by scalar_tac)
+    simp only [hs,PV_B2_C_MachineArithmetic.add_exact i 1#usize (by scalar_tac),
+      PV_B2_C_Sampler.aspis_core.field.P,
+      AspisR1Post25SamplerIndexedAddSmallCandidate.field.P,bind_tc_ok]
+  · simp only [if_neg h]
+
+theorem loop (ds : Array U32 8#usize) (n : U32) (i : Usize) :
+    N.run ds n i = O.run ds n i := by
+  unfold N.run O.run
+    PV_B2_C_Sampler.host_sampler.add_small_base_p_loop
+    AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p_loop
+  have hb : (fun (a,b,c) => N.body a b c) = (fun (a,b,c) => O.body a b c) := by
+    funext ⟨a,b,c⟩
+    exact body a b c
+  rw [hb]
+
+theorem wrapper (ds : Array U32 8#usize) (n : U32) :
+    PV_B2_C_Sampler.host_sampler.add_small_base_p ds n =
+      AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p ds n := by
+  unfold PV_B2_C_Sampler.host_sampler.add_small_base_p
+    AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p
+  rw [loop]
+
+#print axioms body
+#print axioms loop
+#print axioms wrapper
+end PV_B2_C_AddSmallAgreement

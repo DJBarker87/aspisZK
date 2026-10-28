@@ -1,0 +1,51 @@
+{
+  "attempt": 52030,
+  "module": "R1Z/PV_B2_C_ScalarInspect",
+  "source_revision": "de2db0d063090882e7e9f405b72f49e4268803b3",
+  "worktree_source_dirty": true,
+  "source_sha256": "b1a2f2d1c122864ce96de254215e98ca7657b3fa47f98078985c4398a491c47d",
+  "deps_fingerprint": "342834391b5dcde8671c6e2367b6f28eab1e9e8203141df88b9bcbdde6e797f7",
+  "dependency_objects": {
+    "Aeneas": {
+      "path": "/home/dombarker/project-offloads/aspis-joint-20261019/objects/Aeneas.olean",
+      "sha256": "d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d"
+    }
+  },
+  "axiom_output": "theorem LawfulMonad.bind_assoc.{u, v} : \u2200 {m : Type u \u2192 Type v} {inst : Monad m} [self : LawfulMonad m] {\u03b1 \u03b2 \u03b3 : Type u}\n  (x : m \u03b1) (f : \u03b1 \u2192 m \u03b2) (g : \u03b2 \u2192 m \u03b3), x >>= f >>= g = x >>= fun x => f x >>= g :=\nfun m {inst} [self : LawfulMonad m] => self.5\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `bind_tc`\ntheorem Aeneas.Std.bind_tc_ok.{u_1} : \u2200 {\u03b1 \u03b2 : Type u_1} (x : \u03b1) (f : \u03b1 \u2192 Result \u03b2),\n  (do\n      let y \u2190 Result.ok x\n      f y) =\n    f x :=\nfun {\u03b1 \u03b2} x f => of_eq_true (eq_self (f x))\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `bind_tc_assoc`\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Result.bind`\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Result.bind_assoc`\ndef Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} \u2192 (tgt_ty : UScalarTy) \u2192 UScalar src_ty \u2192 UScalar tgt_ty :=\nfun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar\ndef Aeneas.Std.U64.wrapping_shr : U64 \u2192 U32 \u2192 U64 :=\nfun x s => UScalar.wrapping_shr x s\ndef Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} \u2192 UScalar ty \u2192 U32 \u2192 UScalar ty :=\nfun {ty} x s => x.bv.ushiftRight (\u2191s % ty.numBits)#uscalar\ndef Aeneas.Std.UScalar.wrapping_add : {ty : UScalarTy} \u2192 UScalar ty \u2192 UScalar ty \u2192 UScalar ty :=\nfun {ty} x y => (x.bv + y.bv)#uscalar\ndef Aeneas.Std.UScalar.val : {ty : UScalarTy} \u2192 UScalar ty \u2192 \u2115 :=\nfun {ty} x => x.bv.toNat\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:14:7: error(lean.unknownIdentifier): Unknown constant `UScalar.land`\nNat.mod_mod_of_dvd {c b : \u2115} (a : \u2115) (h : c \u2223 b) : a % b % c = a % c\nNat.and_le_right {n m : \u2115} : n &&& m \u2264 m\nNat.and_le_left {n m : \u2115} : n &&& m \u2264 n\nNat.shiftRight_eq_div_pow (m n : \u2115) : m >>> n = m / 2 ^ n\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:19:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.cast_val`\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:20:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_cast`\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:21:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.wrapping_add_val`\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:22:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_wrapping_add`\nAeneas.Std.UScalar.bv_toNat {ty : UScalarTy} (x : UScalar ty) : x.bv.toNat = \u2191x\nAeneas.Std.UScalar.size (ty : UScalarTy) : \u2115\n/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean:25:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.size_pos`\n",
+  "command": [
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_C_ScalarInspect.olean",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_C_ScalarInspect.lean",
+    "7000"
+  ],
+  "cwd": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src",
+  "expected_time": "Lean single-module formal check under env J, -M7000; no Rust arithmetic gate",
+  "exit_status": 1,
+  "wall_seconds": 1.073,
+  "peak_rss_kib": 2611416,
+  "swaps": 0,
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rfbd66f49362647a7ba0b9c046dfc83a6.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": 280530944,
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "SBF_TRACE_DIR": null
+  },
+  "print_axioms": "compile failed; no accepted theorem from this attempt",
+  "native_wrapper_revision": "5b11c957a0c160467a90afdf23d3d4c25228c8d0",
+  "parsed_axioms": [],
+  "accepted_axioms": true
+}

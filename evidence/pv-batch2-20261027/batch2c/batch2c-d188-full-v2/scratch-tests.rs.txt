@@ -1,0 +1,18 @@
+
+#[cfg(test)]
+mod pv_b2_full_checks {
+ extern crate std;
+ use super::*;
+ use aspis_core::field::{CM31,M31,P};
+ #[test]
+ fn full_mutation_outputs() {
+  for variant in [Variant::S1,Variant::S2,Variant::D] {
+   let a=Weights{variant,factors:[[[K::ONE;4];5];5],points:[[K::ONE;10];3],extra:[K::ONE;2]};
+   let b=crate::weights::Weights{variant,factors:a.factors,points:a.points,extra:a.extra};
+   let mut out=[E::ZERO;1024];a.materialize(E::ONE,&mut out).unwrap();
+   assert_eq!(out.as_slice(),b.materialize(E::ONE).unwrap().as_slice());
+   let selected=out.map(|x|x.to_limbs());
+   std::println!("PV_B2_NATIVE_FULL_OK_{:?}={:?}",variant,selected);
+  }
+ }
+}

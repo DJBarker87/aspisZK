@@ -1,0 +1,65 @@
+{
+  "attempt": 39810,
+  "module": "R1Z/PV_B2_D_ScalarCanonical",
+  "source_revision": "2f6567c61c7e6fc44c451939dd6467daa0aa99cd",
+  "worktree_source_dirty": true,
+  "source_sha256": "fdc12b19119a7043d436c3086195d7e410028031a87b100e371240f13660df04",
+  "deps_fingerprint": "73642fa979e1090e12f719b2e9599efd554bcfc697ed2d03e0a9582a3ee392b5",
+  "dependency_objects": {
+    "R1Z.PV_B2_C_251FieldTotal": {
+      "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_C_251FieldTotal.olean",
+      "sha256": "5e860f50445de16684674e2015c863262ca6481c7c604029f4c32ac536ae22e3"
+    },
+    "Std.Tactic.BVDecide": {
+      "path": "/home/dombarker/project-offloads/aspis-joint-20261019/objects/Std/Tactic/BVDecide.olean",
+      "sha256": "537d25c1f8e655218a83b24b55ec43c8b6efa21cc75f313835518e3bd4723ea3"
+    }
+  },
+  "axiom_output": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_D_ScalarCanonical.lean:14:2: error: 'change' tactic failed, pattern\n  (let y := x.bv &&& 2147483647#64 + x.bv >>> 31;\n      let z := y &&& 2147483647#64 + y >>> 31;\n      let w := BitVec.setWidth 32 z;\n      w - (2147483647#32 &&& 0#32 - if w \u2265 2147483647#32 then 1#32 else 0#32)).toNat <\n    2147483647\nis not definitionally equal to target\n  (have i := UScalar.cast UScalarTy.U64 2147483647#u32;\n    have i1 := x &&& i;\n    have i2 := x.wrapping_shr 31#u32;\n    have x1 := U64.wrapping_add i1 i2;\n    have i3 := UScalar.cast UScalarTy.U64 2147483647#u32;\n    have i4 := x1 &&& i3;\n    have i5 := x1.wrapping_shr 31#u32;\n    have x2 := U64.wrapping_add i4 i5;\n    have i6 := UScalar.cast UScalarTy.U32 x2;\n    have i := UScalar.cast_fromBool UScalarTy.U32 (decide (i6 \u2265 2147483647#u32));\n    have mask := core.num.U32.wrapping_sub 0#u32 i;\n    have i1 := 2147483647#u32 &&& mask;\n    core.num.U32.wrapping_sub i6 i1) <\n    2147483647#u32\n'PV_B2_D_ScalarCanonical.reduce_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "command": [
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_D_ScalarCanonical.olean",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_D_ScalarCanonical.lean",
+    "7000"
+  ],
+  "cwd": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src",
+  "expected_time": "Lean single-module formal check under env J, -M7000; no Rust arithmetic gate",
+  "exit_status": 1,
+  "wall_seconds": 1.307,
+  "peak_rss_kib": 2618400,
+  "swaps": 0,
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rca9953a7c6bf499d8744ea0fdbca4a6e.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": 281837568,
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "SBF_TRACE_DIR": null
+  },
+  "print_axioms": "compile failed; no accepted theorem from this attempt",
+  "native_wrapper_revision": "5b11c957a0c160467a90afdf23d3d4c25228c8d0",
+  "parsed_axioms": [
+    {
+      "declaration": "PV_B2_D_ScalarCanonical.reduce_bound",
+      "axioms": [
+        "propext",
+        "sorryAx",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ],
+  "accepted_axioms": false
+}

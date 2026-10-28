@@ -1,0 +1,63 @@
+{
+  "status": "IN_PROGRESS_NOT_ROW_CLOSURE",
+  "source_revision": "e0f4b3a5716a5b007c5c5753dc2476a9f12401ee",
+  "inputs": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+      "git_blob": "ec753dfc47afb80ff1c4ab5864a9101ebe79bbb7",
+      "sha256": "ab55509e54218a2bfe7dd2d5e1b14216e3303961c16c181ce2e03d40f6b7678b"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_weights.rs",
+      "git_blob": "a042fb7011f588e52ed45fe27397c85c765bab1f",
+      "sha256": "f34c93324e91a1055aa8a2f27c3bc672eac96517a2d6edb72ed3960832856a7d"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "git_blob": "bdc7aa8aac9d8074a8b9f46bdd9bec5fbb049f73",
+      "sha256": "6d926e8095bbe03d2f1919a9ef650f0a87a820d088514287fef3f7f5ecd2d329"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover_powers.rs",
+      "git_blob": "949100ed8bf8679916e72facfb08e670cff90150",
+      "sha256": "966c7af71e730b3832c46efee1210f63861db5952b5965b1a94c6c23cfbc2379"
+    },
+    {
+      "path": "crates/aspis-core/src/r0/heap.rs",
+      "git_blob": "ef7826d856274ff9a8347e11c15f04b302f440fd",
+      "sha256": "67153a3fb69c839160855a9b8fdb886fbd1eac90f4dc686260f23a85e346e4f9"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "git_blob": "540ff5a7e8fcfd74ded7aa23ca8c9cdba03bb5a3",
+      "sha256": "f059fac85a369a226db0d9b37ba82e83cc50faf4aee7c69328c874e751d4b6a3"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "git_blob": "8df35586b1d6d6ac391a97b0d3aaf0a544917d64",
+      "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/transport.rs",
+      "git_blob": "676ff15ce2794c25abba47926a063e9ddc18420e",
+      "sha256": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7"
+    }
+  ],
+  "original": "weights.Weights.materialize",
+  "copy": "host_weights.Weights.materialize plus prepare_opening caller",
+  "allocation": {
+    "request": "heap::filled(1024, E::ZERO)",
+    "original_order": "powers7, filled, enumerate/7 kinds, Ok(Vec)",
+    "candidate_order": "new/inactive/transcript, filled, slice try_into, materialize powers7, owned loop, Ok(()) and retained Vec",
+    "errors": "filled Error maps to verifier.Error::Allocation; no success-only statement suffices",
+    "native_obligation": "same allocation request is a structural fact; actual allocation outcome/OS failure and failure-event witness independence are still P obligations, not new trust fields"
+  },
+  "mutation": {
+    "original": "outer iter_mut enumerate consumes ordered disjoint slots exactly once; each starts ZERO, seven writes accumulate in place",
+    "copy": "every cell starts ZERO; direct Array.update out[j]; loop forwards updated array; final caller restoration writes full array",
+    "required": "zero suffix invariant, full Result/mutation transport and raw/powers/mul source association",
+    "d188": "no copy writes through a mutable iterator borrow; retain batch2c D188-FULL-COMPARISON.json"
+  },
+  "native_link_class": "Structural source argument, with Lean copied-kernel equality and finite native comparisons as separately classified evidence; not fresh extraction of original iterator body",
+  "rows_closed": []
+}

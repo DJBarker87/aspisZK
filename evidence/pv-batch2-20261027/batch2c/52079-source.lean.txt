@@ -1,0 +1,109 @@
+import R1Z.PV_B2_C_AddSmallAgreement
+import R1Z.PV_B2_C_GammaTotal
+import GammaCandidateLowQuotient
+import IndexedCandidateAddSmallWrapperNatModelV3
+set_option autoImplicit false
+namespace PV_B2_C_GammaHelpers
+open Aeneas Aeneas.Std Result
+open AspisR1 AspisR1.SamplerNatModel AspisR1.SamplerMachineBounds
+open AspisR1.SamplerAddDigits AspisR1.SourceSamplerByteRank
+open PV_B2_C_GammaNumeric
+abbrev E := PV_B2_C_249.aspis_core.field.wide_exact.WideExact
+abbrev N := PV_B2_C_Sampler.host_sampler.low_base_p_digits
+abbrev O := AspisR1Post25Sampler.sampler.low_base_p_digits
+
+def ops : GammaHelpers E where
+  low := PV_B2_C_Sampler.host_sampler.low_base_p_digits
+  add := PV_B2_C_Sampler.host_sampler.add_small_base_p
+  decode := PV_B2_C_Sampler.host_sampler.decode8
+
+theorem low_agreement (b : Bytes32) : N b = O b :=
+  (PV_B2_C_LowDigits.source b).trans (R1Z.PV_B2_C_CheckedDigits.digits b)
+
+theorem low_refines (b : Bytes32) (ds : Digits) (q : U32)
+    (h : N b = ok (ds,q)) :
+    values ds = ordinaryDigits (rank b) ∧ q.val = rank b / P^8 := by
+  exact AspisR1GammaCaller.DigitsModel.low_candidate_refines b ds q
+    ((low_agreement b).symm.trans h)
+
+theorem canonical_indexed (ds : Digits) (h : Canonical ds) :
+    AspisR1.ExtractedIndexedAddSmallNatModelV1.Canonical ds := by
+  intro j hj
+  have h8 : (8#usize).val = 8 := by decide
+  have hlen : j < ds.val.length := by
+    rw [ds.property,h8]
+    exact hj
+  have hm : (ds.val[j]'hlen).val ∈ values ds := by
+    exact List.mem_map.mpr ⟨_,List.getElem_mem hlen,rfl⟩
+  change (ds.val[j]'(by rw [ds.property,h8];exact hj)).val < P
+  exact h _ hm
+
+theorem add_total_value (ds : Digits) (n : U32) (hc : Canonical ds) (hn : n.val ≤ 257) :
+    ∃ carry : U32, ∃ out : Digits,
+      ops.add ds n = ok (carry != 0#u32,out) ∧
+      values out = (addDigits P n.val (values ds)).1 ∧
+      carry.val = (addDigits P n.val (values ds)).2 := by
+  obtain ⟨carry,out,he,hv,hcarry⟩ :=
+    AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.add_small_base_p_refines_addDigits
+      ds n (canonical_indexed ds hc) hn
+  refine ⟨carry,out,?_,hv,hcarry⟩
+  exact (PV_B2_C_AddSmallAgreement.wrapper ds n).trans he
+
+theorem add_refines (ds : Digits) (n : U32) (wrapped : Bool) (out : Digits)
+    (hc : Canonical ds) (hn : n.val ≤ 257) (he : ops.add ds n = ok (wrapped,out)) :
+    values out = (addDigits P n.val (values ds)).1 ∧
+      (wrapped = false ↔ (addDigits P n.val (values ds)).2 = 0) := by
+  obtain ⟨carry,out1,he1,hv,hcarry⟩ := add_total_value ds n hc hn
+  have hp := Result.ok.inj (he1.symm.trans he)
+  have hw : (carry != 0#u32) = wrapped := congrArg Prod.fst hp
+  have ho : out1 = out := congrArg Prod.snd hp
+  subst out1
+  refine ⟨hv,?_⟩
+  rw [← hw]
+  constructor
+  · intro hf
+    have hzero : carry = 0#u32 := by
+      by_contra hne
+      have ht : (carry != 0#u32) = true := by simpa using hne
+      rw [ht] at hf
+      cases hf
+    have hval := congrArg UScalar.val hzero
+    rw [hcarry] at hval
+    exact hval
+  · intro hz
+    have hval : carry.val = 0 := hcarry.trans hz
+    have heq : carry = 0#u32 := UScalar.eq_of_val_eq hval
+    simp only [heq,beq_self_eq_true,Bool.not_true]
+
+theorem decode_total (ds : Digits) (hc : Canonical ds) :
+    ∃ out : E, ops.decode ds = ok out := by
+  refine ⟨PV_B2_C_ArrayDigits.raw ds,PV_B2_C_ArrayDigits.decode ds ?_⟩
+  intro i
+  have hm : (PV_B2_C_ArrayDigits.limb ds i).val ∈ values ds := by
+    exact List.mem_map.mpr ⟨_,List.getElem_mem (by rw [ds.property];exact i.isLt),rfl⟩
+  exact hc _ hm
+
+theorem refine_source : HelpersRefine ops where
+  low := low_refines
+  add := add_refines
+
+theorem total_source : HelpersTotal ops where
+  low := by
+    intro b
+    obtain ⟨ds,q,he,_,_⟩ := PV_B2_C_RankDigits.source b
+    exact ⟨ds,q,he⟩
+  add := by
+    intro ds n hc hn
+    obtain ⟨carry,out,he,_,_⟩ := add_total_value ds n hc hn
+    exact ⟨_,_,he⟩
+  decode := decode_total
+
+#print axioms low_agreement
+#print axioms low_refines
+#print axioms canonical_indexed
+#print axioms add_total_value
+#print axioms add_refines
+#print axioms decode_total
+#print axioms refine_source
+#print axioms total_source
+end PV_B2_C_GammaHelpers
