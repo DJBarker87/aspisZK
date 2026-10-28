@@ -22,14 +22,14 @@ def execute (folded : Bool) : Nat → List Nat → List Nat → List Nat × Trac
   | _i, out, [] => (out,[(0,0)])
   | i, out, q::xs =>
     let x := if folded then q/4 else q
-    let r := execute folded (i+1) (insert x out) xs
+    let r := execute folded (i+1) (PV_L2D_PublicationIndices.insert x out) xs
     (r.1, [(0,1),(1,bit folded),(2,i)] ++ insertion x 0 out ++ r.2)
 
 theorem erases (folded : Bool) (i : Nat) (out xs : List Nat) :
     (execute folded i out xs).1 = build out (xs.map (fun q => if folded then q/4 else q)) := by
   induction xs generalizing i out with
   | nil => rfl
-  | cons x xs ih => exact ih (i+1) (insert (if folded then x/4 else x) out)
+  | cons x xs ih => exact ih (i+1) (PV_L2D_PublicationIndices.insert (if folded then x/4 else x) out)
 #print axioms erases
 
 theorem full_replay (folded : Bool) (i : Nat) (out xs : List Nat) :
@@ -47,7 +47,7 @@ theorem query_set_insufficient :
 #print axioms query_set_insufficient
 
 theorem source_insert_erases (x : Nat) (xs : List Nat) :
-    sourceInsert x xs = insert x xs := source_insert x xs
+    sourceInsert x xs = PV_L2D_PublicationIndices.insert x xs := source_insert x xs
 #print axioms source_insert_erases
 
 -- This is the complete owned trace executor. Source-to-reference loop,
