@@ -1,5 +1,4 @@
 import PV_L2C_CombinedAudit
-import PV_L2C_FixtureAudit
 set_option autoImplicit false
 namespace PV_L2C_FocusedReplay
 /-- A raw padding-table law, not a whole honest-native execution theorem. -/
