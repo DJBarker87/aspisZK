@@ -42,7 +42,9 @@ fn arbitrary_source(withdrawal: bool) -> Source {
 }
 
 #[cfg(kani)]
-fn check(source: Source) {
+fn check(source: Source) { check_controlled(source,false); }
+#[cfg(kani)]
+fn check_controlled(source: Source, wrong_byte: bool) {
     let actual = match source {
         Source::Transfer(p, t) => Public::Transfer(&p, &t).public_bytes(),
         Source::Withdrawal(p, t) => Public::Withdrawal(&p, &t).public_bytes(),
@@ -55,7 +57,11 @@ fn check(source: Source) {
             let index: u16 = kani::any();
             let i = usize::from(index);
             kani::assume(i < n);
-            assert_eq!(bytes[i], chunks[i / 64][i % 64]);
+            if wrong_byte {
+                assert_eq!(bytes[i], chunks[i / 64][i % 64] ^ 1, "matched wrong-byte control");
+            } else {
+                assert_eq!(bytes[i], chunks[i / 64][i % 64]);
+            }
         }
         (Err(a), Err(b)) => assert_eq!(a, b),
         _ => assert!(false, "complete Result mismatch"),
@@ -155,3 +161,14 @@ fn emission_fixture226() {
 #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 fn both_variants() { check(arbitrary_source(kani::any())); }
+
+#[cfg(kani)]
+#[kani::proof]
+#[kani::unwind(2049)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn both_variants_wrong_byte() { check_controlled(arbitrary_source(kani::any()),true); }
