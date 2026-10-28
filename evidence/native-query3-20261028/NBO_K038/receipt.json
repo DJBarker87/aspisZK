@@ -1,0 +1,72 @@
+{
+  "source_revision": "5ce89a00981da433d9a0d4ae0727f3c7a885e20c",
+  "source_tree_dirty": true,
+  "sources": [
+    "NBO_src/Cargo.lock",
+    "NBO_src/Cargo.toml",
+    "NBO_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NBO_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "NBO_src/crates/aspis-r1-cost-probe/src/NBO_native.rs"
+  ],
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-query3-20261028/NBO_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "NBO_K038",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-query3-20261028/NBO_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-query3-20261028/NBO_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NBO_native::NBO_coeff_line_h1",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation then NBO_coeff_line_h1 native single-call gate",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_check": "NBO_K038-graph-check.json"
+  },
+  "reservation_retries": 0,
+  "exit_status": 0,
+  "wall_seconds": 7.464991674001794,
+  "peak_rss_kib": "404424",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r3b81fb33b90d44ff83edbaf9e66a26fd.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "380604416",
+  "source_hashes": {
+    "NBO_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBO_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "NBO_src/crates/aspis-r1-cost-probe/src/verifier.rs": "23c3de16ed408fadfa74d4597345b00da7285ee7b5c5df0058eb4dc6fb65d569",
+    "NBO_src/crates/aspis-r1-cost-probe/src/candidate.rs": "ee5749c558a71b1da3b5322bb044721d330b5109c0b2e059191fd248ecdf5eeb",
+    "NBO_src/crates/aspis-r1-cost-probe/src/NBO_native.rs": "6e35c1792cfd12328f3285edb4cf7c0cf1b0f0127ed79325611330832c096f5e"
+  },
+  "print_axioms": "N/A: kani"
+}

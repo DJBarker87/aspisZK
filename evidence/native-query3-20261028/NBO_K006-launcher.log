@@ -1,0 +1,53 @@
+{"attempt": "NBO_K006", "exit_status": 0, "wall_seconds": 5.004502048017457, "peak_rss_kib": "411184", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+before);unsafe{assert_eq!(NBF_VALUE_CALLS,0);}}
+     |                                                   ^^^^^^^^^^^^^^^ shared reference to mutable static
+     |
+     = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+     = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBF_init_body_prestate` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/NBF_harness.rs:1126:4
+     |
+1126 | fn NBF_init_body_prestate() {
+     |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbf_init_body_prestate`
+
+warning: variable `oldIndex` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/NBF_harness.rs:1128:62
+     |
+1128 |  let mut index:usize=kani::any();kani::assume(index<=64);let oldIndex=index;
+     |                                                              ^^^^^^^^ help: convert the identifier to snake case: `old_index`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.30s
+Checking harness verifier::candidate::NBO_native::NBO_capacity_weight_projection...
+
+VERIFICATION RESULT:
+ ** 0 of 389 failed (7 unreachable)
+
+ ** 2 of 2 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.7714213s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r8a1d39a2f86349928f527f1008a56aa3.scope; invocation ID: 3b735ba62f2c422baa149599d503abc8

@@ -1,0 +1,61 @@
+{"attempt": "NBO_L032", "exit_status": 1, "wall_seconds": 2.088542435958516, "peak_rss_kib": "4420764", "swaps": "0", "print_axioms": ["'_private.NBO_AccumulateAssociation.0.NBO_AccumulateAssociation.associate' does not depend on any axioms", "'NBO_AccumulateAssociation.prefix_terms' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBO_AccumulateAssociation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBO_generated/NBO_AccumulateAssociation.lean:76:10: error: unsolved goals
+case ok
+ops : Ops
+p : verifier.Prepared
+a : verifier.Accumulator
+node : U32
+value : Stage2E
+b : verifier.BatchedWeights
+size : (↑a.weights).length = 64
+raw : (↑b.raw).length = 64
+active : ↑a.next < 10
+sync : b.terms = a.next
+next : a.next + 1#usize = ok (a.next.wrapping_add 1#usize)
+nativeShell :
+  verifier.accumulate_batched_with_node (sourceOps ops) p a node value b = do
+    let mid ← prefixRun ops a node b
+    let term ← lift (mid.terms.wrapping_add 1#usize)
+    let product ← (sourceOps ops).op3 value a.power
+    let rhs ← (sourceOps ops).op2 a.rhs product
+    (sourceOps ops).op15 11#u16 a.next rhs
+    let power ← (
+...
+refixRun ops a node b = ok mid
+terms : mid.terms = b.terms
+term : mid.terms + 1#usize = ok (mid.terms.wrapping_add 1#usize)
+⊢ (do
+      let term ← lift (mid.terms.wrapping_add 1#usize)
+      let product ← (sourceOps ops).op3 value a.power
+      let rhs ← (sourceOps ops).op2 a.rhs product
+      (sourceOps ops).op15 11#u16 a.next rhs
+      let power ← (sourceOps ops).op9 a.power p.rho
+      let successor ← lift (a.next.wrapping_add 1#usize)
+      ok ({ weights := a.weights, rhs := rhs, power := power, next := successor }, { raw := mid.raw, terms := term })) =
+    do
+    let product ← (sourceOps ops).op3 value a.power
+    let rhs ← (sourceOps ops).op2 a.rhs product
+    (sourceOps ops).op15 11#u16 a.next rhs
+    let power ← (sourceOps ops).op9 a.power p.rho
+    ok
+        ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+          { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+NBO_generated/NBO_AccumulateAssociation.lean:60:24: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [associate,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBO_generated/NBO_AccumulateAssociation.lean:71:24: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [associate,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.NBO_AccumulateAssociation.0.NBO_AccumulateAssociation.associate' does not depend on any axioms
+'NBO_AccumulateAssociation.prefix_terms' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBO_AccumulateAssociation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r940410fb39a14383929c7b33e0eecd46.scope; invocation ID: 750a905dbc194f8a87b0d3ae550102bc

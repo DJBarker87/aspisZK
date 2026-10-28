@@ -1,0 +1,43 @@
+NBO_generated/NBO_SquareCut.lean:45:47: error: unsolved goals
+ops : Ops
+p : verifier.Prepared
+a : verifier.Accumulator
+obs : Option (verifier.Phase → Result Unit)
+geometry : verifier.QueryGeometry
+pending : verifier.BatchedWeights
+values : Std.Array Stage2E 4#usize
+inverse : Std.Array U32 5#usize
+⊢ (do
+      let we6 ← p.alpha.index_usize 1#usize
+      let folded1 ← ops.op16 we6 values inverse
+      let i10 ← lift (Usize.wrapping_mul 2#usize a.next)
+      let i11 ← lift (i10.wrapping_add 1#usize)
+      ops.op15 10#u16 i11 folded1
+      let i12 ← lift (a.next.wrapping_sub geometry.start)
+      let z ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) geometry.line_z i12
+      let m ← ops.op7 z z
+      let m1 ← ops.op8 m
+      let m2 ← ops.op5
+      let node ← ops.op6 m1 m2
+      let (a1, pending1) ← verifier.accumulate_batched_with_node ops p a node folded1 pending
+      ops.op19 obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok (a1, pending1))) =
+    do
+    let a_1 ← p.alpha.index_usize 1#usize
+    let a_2 ← ops.op16 a_1 values inverse
+    let a_3 ← lift (Usize.wrapping_mul 2#usize a.next)
+    let a_4 ← lift (a_3.wrapping_add 1#usize)
+    ops.op15 10#u16 a_4 a_2
+    let a_6 ← lift (a.next.wrapping_sub geometry.start)
+    let a_7 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) geometry.line_z a_6
+    let (line, z) := (a_2, a_7)
+      do
+      let square ← ops.op7 z z
+      let m1 ← ops.op8 square
+      let m2 ← ops.op5
+      let node ← ops.op6 m1 m2
+      let (a1, pending1) ← verifier.accumulate_batched_with_node ops p a node line pending
+      ops.op19 obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok (a1, pending1))
+'_private.NBO_SquareCut.0.NBO_SquareCut.associate' does not depend on any axioms
+'NBO_SquareCut.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

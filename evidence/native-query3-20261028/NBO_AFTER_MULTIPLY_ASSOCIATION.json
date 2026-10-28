@@ -1,0 +1,12 @@
+{
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "original": "    let node = z.mul(z).double().sub(M31::ONE);\n    accumulate_batched_with_node(p, &mut a, node, folded, &mut pending);\n    mark(obs, Phase::Query(i));\n    Ok((a, pending))",
+  "factored": "    let node = square.double().sub(M31::ONE);\n    accumulate_batched_with_node(p, &mut a, node, folded, &mut pending);\n    mark(obs, Phase::Query(i));\n    Ok((a, pending))",
+  "original_sha256": "71b7d8f6178874743db13632354c806a75c5b15491381183cb2730846d5df6f7",
+  "factored_sha256": "710b1542816762bfb459a76f0f7b8022a9fa4831b61bf5ed2b6480792170583b",
+  "changes": [
+    "replace the reached pure z.mul(z) return with square argument",
+    "pass same p/a/pending/line/i/observer cut carriers"
+  ],
+  "claim": "post-multiplication native continuation only; NOT a full-query pass, NOT a multiplication stub"
+}
