@@ -87,15 +87,15 @@ byte targets are represented by u8 and u32; this is not a full Cartesian sweep.
 | c047 | `u32` | 64 | slice | array | 3 | 5 | NOT RUN |
 | c048 | `u32` | 64 | slice | vec | 0 | 0 | NOT RUN |
 
-## Replacement status
+## Replacement validation
 
-`KMX_copy_stubs.patch` packages **unvalidated drafts** for slice copy, pointer
-copy, Copy-only clone, vector extension and to_vec. `KMX_STUB_USAGE.md` records
-usage and outstanding allocator/growth coverage. No stub is currently validated.
-Native exhaustive-small and random-large checks are drafted, not run.
-`lean/KMX_CopyMeaning.lean` is a draft meaning statement with four axioms-audit
-commands; zero compiles and zero axioms results are available. No formal release
-result is claimed.
+The six element-loop replacements are validated by K008: each expected-value
+check PASSes and each wrong-value control FAILs, with no unwinding failures.
+R002 validates the final allocator-generic source natively (1,466,538 checks,
+all 49 matrix cases). L003 compiles the value-level Lean meaning statements;
+all five axioms audits contain only accepted axioms. See `KMX_STUB_USAGE.md`
+for exact scope and caller obligations. K007 rejected a missing allocator type
+parameter; L001/L002 were failed proof drafts, not successful formal results.
 
 ## Exposure replay
 

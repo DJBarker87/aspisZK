@@ -35,7 +35,7 @@ print(p.read_text(),end='');sys.exit(r.returncode)
 def recover(a):
  r=remote_py(f'''from pathlib import Path
 import json
-b=Path({B!r});names=[{(a+'/receipt.json')!r},{(a+'/stdout.log')!r},{(a+'/time.log')!r}]
+b=Path({B!r});names=[{(a+'/receipt.json')!r},{(a+'/stdout.log')!r},{(a+'/time.log')!r},{(a+'-graph.json')!r}]
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))''')
  assert r.returncode==0,r.stderr
  for n,s in json.loads(r.stdout).items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)

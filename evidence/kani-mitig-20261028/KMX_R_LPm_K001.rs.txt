@@ -1,0 +1,26 @@
+use super::*;
+use aspis_core::field::CM31;
+fn q(w:[u32;4])->K {K{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+#[kani::unwind(1025)]
+fn weights_iterator() {
+ let raw:[[u32;4];64]=kani::any();
+ let a=Accumulator{next:kani::any(),weights:raw.map(q).to_vec(),rhs:E::ZERO,power:q(kani::any())};
+ let i:usize=kani::any();kani::assume(i<=64);
+ let mut iter=a.weights[i..].iter();
+ let item=iter.next();
+ assert_eq!(item.is_none(),i==64);
+ if let Some(&x)=item {let limb:usize=kani::any();kani::assume(limb<4);assert_eq!(words(x)[limb],raw[i][limb]);}
+ assert_eq!(iter.as_slice().len(),if i==64{0}else{63-i});
+ if i<63 {let j:usize=kani::any();kani::assume(j<63-i);let limb:usize=kani::any();kani::assume(limb<4);assert_eq!(words(iter.as_slice()[j])[limb],raw[i+1+j][limb]);}
+ assert_eq!(a.weights.len(),64);
+ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i==64);
+}
+fn words(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}

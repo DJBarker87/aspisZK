@@ -1,0 +1,18 @@
+use super::*;
+use aspis_core::field::CM31;
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+#[kani::unwind(33)]
+fn KMX_LPg_expand_high(){expansion::<16,32>()}
+fn expansion<const LO:usize,const HI:usize>(){
+ let b:[u8;16]=kani::any();let mut out:[u8;32]=kani::any();let old=out;
+ let lane:usize=kani::any();kani::assume(lane>=LO&&lane<HI);
+ assert_eq!(expand_values(&b,&mut out),Ok(()));
+ assert_eq!(out[lane],if lane<16{b[lane]}else{0});let _=old;
+}

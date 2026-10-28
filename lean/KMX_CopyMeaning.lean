@@ -14,11 +14,21 @@ theorem loop_spec {α : Type} (src dst : Nat → α) (start count k : Nat) :
     loop src dst start count k =
       if start ≤ k ∧ k < start + count then src k else dst k := by
   induction count generalizing dst start with
-  | zero => simp [loop]
+  | zero =>
+    have h : ¬ (start ≤ k ∧ k < start + 0) := by omega
+    simp only [loop, if_neg h]
   | succ n ih =>
     rw [loop, ih]
-    simp only [write]
-    split <;> split <;> split <;> simp_all <;> omega
+    by_cases hk : k = start
+    · subst k
+      have hn : ¬ (start + 1 ≤ start ∧ start < start + 1 + n) := by omega
+      have hy : start ≤ start ∧ start < start + (n + 1) := by omega
+      simp [hn, hy, write]
+    · by_cases h : start + 1 ≤ k ∧ k < start + 1 + n
+      · have hy : start ≤ k ∧ k < start + (n + 1) := by omega
+        simp [h, hy]
+      · have hn : ¬ (start ≤ k ∧ k < start + (n + 1)) := by omega
+        simp [h, hn, write, hk]
 
 theorem copy_prefix {α : Type} (src dst : Nat → α) (count k : Nat) :
     loop src dst 0 count k = if k < count then src k else dst k := by
@@ -41,6 +51,14 @@ theorem append_spec {α : Type} (dst src : List α) :
   | nil => simp [appendLoop]
   | cons x xs ih => simp [appendLoop, ih, List.append_assoc]
 
+/-- Successful reallocation preserves the overlapping byte prefix. Allocation
+success, ownership and uninitialized-byte validity are external obligations. -/
+theorem realloc_prefix {α : Type} (src dst : Nat → α) (oldSize newSize k : Nat) :
+    loop src dst 0 (min oldSize newSize) k =
+      if k < min oldSize newSize then src k else dst k :=
+  copy_prefix src dst (min oldSize newSize) k
+
+#print axioms realloc_prefix
 #print axioms loop_spec
 #print axioms copy_prefix
 #print axioms copy_frame

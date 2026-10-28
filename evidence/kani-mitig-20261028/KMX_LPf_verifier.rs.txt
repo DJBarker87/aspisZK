@@ -1,0 +1,57 @@
+// LPf checkpoint stages.
+use super::*;
+use crate::KMX_LPf_replay::{any_k,limbs};
+#[derive(Clone,Copy)]struct Checksum<'a>{count:&'a core::cell::Cell<usize>,prefix:&'a[u8],index:usize,answer:[u8;32]}
+impl Digest32 for Checksum<'_>{fn digest(&self,parts:&[&[u8]])->[u8;32]{assert_eq!(self.count.get(),2);assert_eq!(parts.len(),2);assert_eq!(parts[0].len(),22);assert_eq!(parts[0],b"UNPROVED:R1:checkpoint");assert_eq!(parts[1].len(),1736);assert_eq!(parts[1][self.index],self.prefix[self.index]);self.count.set(3);self.answer}}
+// Universal byte projection replaces the previous all-prefix memcmp.
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::unwind(1770)] fn KMX_LPf_checksum_projection(){let prefix:[u8;1736]=kani::any();let mut out=Vec::from(prefix);let answer:[u8;32]=kani::any();let at:usize=kani::any();kani::assume(at<1768);let index:usize=kani::any();kani::assume(index<1736);let count=core::cell::Cell::new(2);let hash=Checksum{count:&count,prefix:&prefix,index,answer};let sum=hash.digest(&[b"UNPROVED:R1:checkpoint",&out]);out.extend_from_slice(&sum);assert_eq!(count.get(),3);assert_eq!(out.len(),1768);assert_eq!(out[at],if at<1736{prefix[at]}else{answer[at-1736]});kani::cover!(at==1767);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::stub_verified(aspis_core::field::CM31::write_le_bytes)] #[kani::unwind(1770)]
+fn KMX_LPf_weights64_verified(){let xs:[K;64]=core::array::from_fn(|_|any_k());let mut out=Vec::new();for &x in &xs{put_k(&mut out,x);}let at:usize=kani::any();kani::assume(at<1024);assert_eq!(out.len(),1024);assert_eq!(out[at],limbs(xs[at/16])[(at%16)/4].to_le_bytes()[at%4]);kani::cover!(at==1023);}
+use crate::KMX_LPf_replay::any_e;
+use aspis_core::circle::SecureCirclePoint;
+fn inputs()->(Prepared,Accumulator){let p=Prepared{variant:Variant::S2,roots:kani::any(),gamma:any_e(),kappa:any_e(),alpha:[any_e(),any_e()],rho:any_k(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|any_k()),z:core::array::from_fn(|_|SecureCirclePoint{x:any_k(),y:any_k()}),claim:any_e(),state:kani::any()};let mut weights=Vec::with_capacity(64);for _ in 0..64{weights.push(any_k());}let a=Accumulator{weights,rhs:any_e(),power:any_k(),next:kani::any()};(p,a)}
+fn kbyte(k:K,j:usize)->u8{limbs(k)[j/4].to_le_bytes()[j%4]}
+fn ebyte(e:E,j:usize)->u8{e.to_limbs()[j/4].to_le_bytes()[j%4]}
+fn payload_byte(p:&Prepared,a:&Accumulator,answers:&[[u8;32];3],j:usize)->u8{
+ if j<8{b"R1P2CKP2"[j]}else if j<16{[p.variant.tag(),a.next as u8,1,0,0,0,0,0][j-8]}
+ else if j<48{answers[0][j-16]}else if j<80{answers[1][j-48]}else if j<112{p.state[j-80]}
+ else if j<176{p.roots[(j-112)/32][(j-112)%32]}
+ else if j<304{let k=j-176;ebyte([p.gamma,p.kappa,p.alpha[0],p.alpha[1]][k/32],k%32)}
+ else if j<320{kbyte(p.rho,j-304)}
+ else if j<408{let k=j-320;p.queries[k/4].to_le_bytes()[k%4]}
+ else if j<568{let k=j-408;kbyte(p.semantic_alpha[k/16],k%16)}
+ else if j<632{let k=j-568;let z=p.z[k/32];kbyte(if k%32<16{z.x}else{z.y},k%16)}
+ else if j<696{let k=j-632;ebyte([p.claim,a.rhs][k/32],k%32)}
+ else if j<712{kbyte(a.power,j-696)}else{kbyte(a.weights[(j-712)/16],(j-712)%16)}
+}
+#[derive(Clone,Copy)]struct Chronology<'a>{count:&'a core::cell::Cell<usize>,proof:&'a[u8],public:&'a[u8],p:&'a Prepared,a:&'a Accumulator,answers:[[u8;32];3],selected:usize}
+impl Digest32 for Chronology<'_>{fn digest(&self,parts:&[&[u8]])->[u8;32]{let n=self.count.get();assert!(n<3);match n{
+0=>{assert_eq!(parts.len(),1);assert_eq!(parts[0].len(),self.proof.len());assert_eq!(parts[0].as_ptr(),self.proof.as_ptr());},
+1=>{assert_eq!(parts.len(),1);assert_eq!(parts[0].len(),self.public.len());assert_eq!(parts[0].as_ptr(),self.public.as_ptr());},
+2=>{assert_eq!(parts.len(),2);assert_eq!(parts[0],b"UNPROVED:R1:checkpoint");assert_eq!(parts[1].len(),1736);assert_eq!(parts[1][self.selected],payload_byte(self.p,self.a,&self.answers,self.selected));},_=>unreachable!()};self.count.set(n+1);self.answers[n]}}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::stub_verified(aspis_core::field::CM31::write_le_bytes)] #[kani::unwind(1770)]
+fn KMX_LPf_checkpoint_chronology(){let(p,a)=inputs();let proof:[u8;3]=kani::any();let public:[u8;5]=kani::any();let answers:[[u8;32];3]=kani::any();let selected:usize=kani::any();kani::assume(selected<1736);let at:usize=kani::any();kani::assume(at<1768);let count=core::cell::Cell::new(0);let hash=Chronology{count:&count,proof:&proof,public:&public,p:&p,a:&a,answers,selected};let out=checkpoint(&p,&a,&proof,&public,hash);assert_eq!(count.get(),3);assert_eq!(out.len(),1768);let expected=if at<1736{payload_byte(&p,&a,&answers,at)}else{answers[2][at-1736]};assert_eq!(out[at],expected);kani::cover!(at==1767);kani::cover!(selected==1735);}

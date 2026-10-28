@@ -27,7 +27,7 @@ out=dict(lock_before=before,new_packages=new,edge_errors=edges,metadata_sha256=h
 assert out['allowed']
 cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',str(s/'crates/aspis-r1-cost-probe/Cargo.toml'),'--target-dir',str(b/'KMX_target'),'--lib','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--harness',harness,'--output-format','regular']+sys.argv[3:]
 if harness=='@native':
- cmd=['/home/dombarker/.cargo/bin/rustc','--edition=2021','-C','opt-level=3','-C','overflow-checks=yes',str(s/'crates/aspis-r1-cost-probe/src/KMX_native.rs'),'-o',str(b/'KMX_native_bin')]
+ cmd=['/home/dombarker/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/bin/rustc','--edition=2021','-C','opt-level=3','-C','overflow-checks=yes',str(s/'crates/aspis-r1-cost-probe/src/KMX_native.rs'),'-o',str(b/'KMX_native_bin')]
 print(json.dumps(dict(command=cmd)),flush=True)
 r=subprocess.run(cmd,env=os.environ)
 if harness=='@native' and r.returncode==0:r=subprocess.run([str(b/'KMX_native_bin')],env=os.environ)

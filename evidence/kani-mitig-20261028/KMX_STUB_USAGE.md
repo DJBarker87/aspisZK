@@ -1,27 +1,46 @@
-# Draft only — not validated
+# Element-loop copy replacements
 
-`KMX_copy_stubs.patch` adds standalone scratch sources, not shipped-code changes.
-Do not use this patch to restore proof credit. K003 failed compilation because
-stubbing was not enabled. K004 enabled `-Z stubbing` but the launcher failed
-before invoking Kani. No stub has a completed Kani validation receipt here.
+Validated on cargo-kani 0.67.0 / CBMC 6.8.0: K008 has six expected-value
+PASS results and six intended wrong-value FAIL results, with unwinding
+assertions enabled. K005 independently validates the slice pair.
+K007 is a compile failure corrected by preserving Vec's allocator parameter.
 
-In a scratch module importing `alloc`, the drafted slice use is:
+`KMX_stubs.rs` is a scratch module; declare it at the crate root. Enable
+`#![feature(allocator_api)]` in that scratch crate (pinned nightly only).
+Compile with `-Z unstable-options -Z stubbing`. Add all applicable attributes:
 
 ```rust
-#[kani::proof]
-#[kani::unwind(18)]
-#[kani::stub(<[u32]>::copy_from_slice, KMX_copy_from_slice)]
-fn example() { /* expected-value property and separate negative control */ }
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 ```
 
-Run with `-Z unstable-options -Z stubbing` and unwinding assertions enabled.
-The pointer replacement requires valid aligned, initialized, nonoverlapping
-regions. All replacements require `T: Copy`; the clone replacement does not
-model arbitrary side-effecting `Clone`. Destination slice lengths must match.
-Vector push can still reach allocator reallocation/copy paths: replacing only
-`extend_from_slice` does not establish a reliable growth model. These paths
-remain to be audited and validated before replaying release harnesses.
+The generic entry is replaced across reached monomorphizations, not just u8.
+Keep the original property and assumptions. Enable unwinding assertions;
+allow at least the longest element loop **and** the largest reallocated byte
+prefix, plus termination. Replacement of extension alone does not cover growth.
+The growth pair in K008 installs both pointer-copy and realloc replacements.
 
-`KMX_native.rs.txt` drafts differential checks; it has not been executed.
-`lean/KMX_CopyMeaning.lean` gives value-level loop specifications only and has
-not been compiled. It is not a Rust-to-Lean refinement theorem.
+R002 compares std and the final allocator-generic replacements using optimized
+native Rust, across 1,466,538 checks: all 49 concrete configurations, exhaustive
+lengths 0..6 over a five-value u32 alphabet and its type-specific images, all five
+element types, destination offsets 0/1/3, four capacities, and seeded random
+larger inputs (16 trials per type and length through 1768 elements). Realloc
+comparisons include shrink, equal size, and growth and compare the retained
+prefix. This is finite testing, not a universal Rust equivalence proof.
+
+Preconditions: T is Copy (arbitrary Clone side effects are not modeled),
+matching slice lengths, valid/aligned/nonoverlapping pointer regions, valid
+allocator layouts, positive valid realloc size, and allocator ownership.
+Realloc copies MaybeUninit bytes so spare capacity need not be initialized;
+on allocation failure the old allocation is retained. No capacity, address,
+allocation-count, or performance equality is claimed. The release properties
+being rechecked concern values, not those observables.
+
+`lean/KMX_CopyMeaning.lean` states indexed-copy, frame, append and retained
+reallocation-prefix laws. L003 compiles with only propext, Classical.choice and
+Quot.sound (append needs only propext). L001/L002 failed and have no proof
+credit. This is a value-level specification, not a Rust-to-Lean refinement.

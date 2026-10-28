@@ -1,0 +1,55 @@
+use super::*;
+fn KMX_NBH_asq8_header(bytes: &[u8])->Result<(),PoolV1PairForestTerminalFormatErrorV1> {
+    if bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);
+    }
+    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic);
+    }
+    if bytes[4] != POOL_V1_PAIR_FOREST_TERMINAL_VERSION {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongVersion);
+    }
+    let kind = transition_kind(bytes[5])?;
+    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding);
+    }
+    if bytes[7] != 0 {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
+    }
+ Ok(())}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+
+fn KMX_NBH_asq8_header_gate() {let raw:[u8;321]=kani::any();let n:usize=kani::any();kani::assume(n<=321);let bytes=&raw[..n];assert_eq!(KMX_NBH_asq8_header(bytes),if bytes.len()!=320 {Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength)} else if &bytes[..4]!=b"ASQ8" {Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic)} else if bytes[4]!=1 {Err(PoolV1PairForestTerminalFormatErrorV1::WrongVersion)} else if bytes[5]!=1 && bytes[5]!=2 {Err(PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind)} else if bytes[6]!=1 {Err(PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding)} else if bytes[7]!=0 {Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding)} else {Ok(())});}
+fn KMX_NBH_asf8_stores(kind:u8,lane:u8,master:[u8;32],checkpoint:[u8;32],selected:[u8;32],seq:u64,anchor:[u8;32])->[u8;1880]{    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES];
+    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC);
+    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;
+    output[5] = kind;
+    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
+    output[7] = lane;
+    output[MASTER_OFFSET..CHECKPOINT_ACCOUNT_OFFSET].copy_from_slice(&master);
+    output[CHECKPOINT_ACCOUNT_OFFSET..SELECTED_LANE_ACCOUNT_OFFSET]
+        .copy_from_slice(&checkpoint);
+    output[SELECTED_LANE_ACCOUNT_OFFSET..CHECKPOINT_SEQUENCE_OFFSET]
+        .copy_from_slice(&selected);
+    output[CHECKPOINT_SEQUENCE_OFFSET..HISTORICAL_ANCHOR_OFFSET]
+        .copy_from_slice(&seq.to_le_bytes());
+    output[HISTORICAL_ANCHOR_OFFSET..LATE_STATEMENT_OFFSET]
+        .copy_from_slice(&anchor);
+output}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+
+fn KMX_NBH_asf8_stores_gate(){let kind:u8=kani::any();let lane:u8=kani::any();let master:[u8;32]=kani::any();let checkpoint:[u8;32]=kani::any();let selected:[u8;32]=kani::any();let seq:u64=kani::any();let anchor:[u8;32]=kani::any();let out=KMX_NBH_asf8_stores(kind,lane,master,checkpoint,selected,seq,anchor);let j:usize=kani::any();kani::assume(j<1880);let expected=if j<4{b"ASF8"[j]}else if j==4{1}else if j==5{kind}else if j==6{1}else if j==7{lane}else if j<40{master[j-8]}else if j<72{checkpoint[j-40]}else if j<104{selected[j-72]}else if j<112{seq.to_le_bytes()[j-104]}else if j<144{anchor[j-112]}else{0};assert_eq!(out[j],expected);}

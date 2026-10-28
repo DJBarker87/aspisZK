@@ -1,0 +1,116 @@
+use super::*;
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::unwind(70)]
+fn KMX_LPl_iterator(){
+ let input:[u8;1856]=kani::any();let mut out:[u8;3712]=kani::any();
+ let n:usize=kani::any();kani::assume(n<=1856&&n%16==0);
+ let i:usize=kani::any();kani::assume(i<=n/16);
+ let source=input.as_ptr();let dest=out.as_mut_ptr();
+ let mut src=input[..n].chunks_exact(16);let mut dst=out[..2*n].chunks_exact_mut(32);
+ if i>0{assert!(src.nth(i-1).is_some());assert!(dst.nth(i-1).is_some());}
+ let mut it=src.zip(dst);assert_eq!(it.len(),n/16-i);
+ match it.next(){None=>{assert_eq!(i,n/16);assert_eq!(it.len(),0);},Some((c,o))=>{
+  assert!(i<n/16);assert_eq!(c.len(),16);assert_eq!(o.len(),32);
+  assert!(core::ptr::eq(c.as_ptr(),source.wrapping_add(16*i)));assert!(core::ptr::eq(o.as_ptr(),dest.wrapping_add(32*i)));
+  assert_eq!(it.len(),n/16-(i+1));
+  match it.next(){None=>assert_eq!(i+1,n/16),Some((c,o))=>{
+   assert!(i+1<n/16);assert!(core::ptr::eq(c.as_ptr(),source.wrapping_add(16*(i+1))));assert!(core::ptr::eq(o.as_ptr(),dest.wrapping_add(32*(i+1))));}}
+ }}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::unwind(70)]
+fn KMX_LPl_length_error(){
+ let input:[u8;1856]=kani::any();let mut out:[u8;3712]=kani::any();
+ let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=1856&&m<=3712);kani::assume(n%16!=0||m!=2*n);
+ let j:usize=kani::any();kani::assume(j<3712);let old=out[j];
+ assert_eq!(expand_values(&input[..n],&mut out[..m]),Err(CodecError::Length));assert_eq!(out[j],old);
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::unwind(70)]
+fn KMX_LPl_nonvacuity(){
+ let input:[u8;16]=kani::any();let mut out=[99u8;32];let j:usize=kani::any();kani::assume(j<32);
+ assert_eq!(expand_values(&input,&mut out),Ok(()));assert_eq!(out[j],if j<16{input[j]}else{0});
+ assert_eq!(expand_values(&[],&mut []),Ok(()));
+ let row:u8=kani::any();if row>=14&&row<=26{let size=row_shape(row).unwrap().1;assert!(size/2<=1856);assert!(size<=3712);assert_eq!(size%32,0);}
+}
+// Separate arbitrary16-byte source from its global pointer carrier (K012).
+// Split each destination-frame class; no full464/1856-byte source mux.
+fn frame<const PART:usize>(){
+ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();
+ let row:usize=kani::any();let j:usize=kani::any();kani::assume(row<116&&j<3712);
+ let at=32*row;kani::assume(if PART==0{j<at}else if PART==1{j>=at&&j<at+16}else if PART==2{j>=at+16&&j<at+32}else{j>=at+32});
+ let old=out[j];assert_eq!(expand_values(&input,&mut out[at..at+32]),Ok(()));
+ assert_eq!(out[j],if PART==1{input[j-at]}else if PART==2{0}else{old});
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::unwind(70)] fn KMX_LPl_frame_before(){frame::<0>()}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::unwind(70)] fn KMX_LPl_frame_low(){frame::<1>()}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::unwind(70)] fn KMX_LPl_frame_high(){frame::<2>()}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::unwind(70)] fn KMX_LPl_frame_after(){frame::<3>()}
+// Constant-offset replacement for K014's timed-out symbolic destination mux.
+fn fixed<const ROW:usize>(){
+ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);
+ let old=out[j];let at=32*ROW;assert_eq!(expand_values(&input,&mut out[at..at+32]),Ok(()));
+ assert_eq!(out[j],if j>=at&&j<at+16{input[j-at]}else if j>=at+16&&j<at+32{0}else{old});
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::unwind(70)] fn KMX_LPl_fixed_probe(){fixed::<1>()}

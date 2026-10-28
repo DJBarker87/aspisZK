@@ -1,0 +1,47 @@
+use super::*;
+// One reached iteration. Prefix: 0/32/64; suffix: any length that fits96.
+// Initial bytes, source bytes and the observed frame byte are unconstrained.
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+
+#[kani::unwind(70)]
+fn KMX_LPn_step_frame() {
+    let source: [u8;16] = kani::any();
+    let mut backing: [u8;96] = kani::any();
+    let slot: usize = kani::any(); kani::assume(slot < 3);
+    let at = 32 * slot;
+    let end: usize = kani::any(); kani::assume(at+32 <= end && end <= 96);
+    let j: usize = kani::any(); kani::assume(j < end);
+    let old = backing[j];
+    let base = backing.as_mut_ptr();
+    let window = &mut backing[..end][at..at+32];
+    assert!(core::ptr::eq(window.as_ptr(),base.wrapping_add(at)));
+    assert_eq!(window.len(),32);
+    assert_eq!(expand_values(&source,window),Ok(()));
+    assert_eq!(backing[j],if at<=j && j<at+16 { source[j-at] }
+        else if at+16<=j && j<at+32 { 0 } else { old });
+    assert!(core::ptr::eq(backing.as_ptr(),base));
+}
+// Scalar source guard only; no buffer loop, matching compact.rs:128.
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+
+fn KMX_LPn_guard() {
+    let n: usize = kani::any(); let m: usize = kani::any();
+    kani::assume(n<=1856 && m<=3712);
+    let reject = n%16 != 0 || m != 2*n;
+    assert_eq!(reject, !(n%16==0 && m==2*n));
+    if !reject { assert_eq!(m/32,n/16); assert_eq!(m%32,0); assert!(n/16<=116); }
+}
