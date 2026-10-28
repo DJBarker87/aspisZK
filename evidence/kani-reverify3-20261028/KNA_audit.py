@@ -17,9 +17,15 @@ for p in sorted(E.glob('KNA_*/receipt.json')):
    assert hashlib.sha256(src.read_bytes()).hexdigest()==r['source_hashes']['KNA_windows.rs']
    archive[a]={'KNA_windows.rs':str(src.relative_to(E))}
  else:
-  source=E/r['sources'][0];assert hashlib.sha256(source.read_bytes()).hexdigest()==r['source_hashes'][source.name]
-  if r['exit_status']==0:assert not any('sorryAx' in x for x in r['print_axioms'])
-  archive[a]={source.name:source.name}
+  name=r['sources'][0];source=E/name;sha=r['source_hashes'][name]
+  if hashlib.sha256(source.read_bytes()).hexdigest()!=sha:source=E/'sources'/(sha+'.lean')
+  assert hashlib.sha256(source.read_bytes()).hexdigest()==sha
+  if r['exit_status']==0:
+   for line in r['print_axioms']:
+    match=re.search(r'depends on axioms: \[(.*?)\]',line)
+    assert match is not None,line
+    assert set(x.strip() for x in match[1].split(',') if x.strip()) <= {'propext','Classical.choice','Quot.sound'},line
+  archive[a]={name:str(source.relative_to(E))}
  c=p.parent/'classification.json'
  result=json.loads(c.read_text())['result'] if c.exists() else ('PASS' if r['exit_status']==0 else 'ERROR')
  receipts.append(dict(attempt=a,kind=r['kind'],result=result,exit_status=r['exit_status'],wall_seconds=r['wall_seconds'],peak_rss_kib=int(r['peak_rss_kib']),swaps=int(r['swaps']),source_revision=r['source_revision']))
