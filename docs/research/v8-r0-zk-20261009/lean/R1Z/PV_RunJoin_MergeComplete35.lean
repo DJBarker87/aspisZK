@@ -31,7 +31,7 @@ theorem complete (ops : ExternalFuns) (count a : Usize) (es : Nat → Q)
       (∀ k, k<28 → canonical (out k)) ∧
       (fun k => value (out k))=fold count.val (fun _ => 0) (fun j => value (es j)) a.val 0 := by
   obtain ⟨out,hout,hc,hm⟩ := PV_RunJoin_MergeLoop35.complete ops count.val count a 0#usize
-    (fun _ => source ProverCommitSubfieldOps47.zero) es (by rfl) small positive samples
+    (fun _ => source ProverCommitSubfieldOps47.zero) es (by change 0+count.val=count.val;omega) small positive samples
     (fun _ _ => (canonical_source _).mpr ProverCommitSubfieldOps47.zero_canonical) he
   refine ⟨out,?_,hc,?_⟩
   · unfold host_sumcheck.merge_evaluations
