@@ -19,7 +19,7 @@ theorem step (f : A → A) (xs : Nat → A) (start n : Nat) :
     rw [if_neg (by omega),if_pos (by omega)]
   · simp only [map,Function.update_of_ne h]
     have bounds : (start+1 ≤ k ∧ k < start+1+n) ↔ (start ≤ k ∧ k < start+(n+1)) := by omega
-    rw [bounds]
+    simp only [bounds]
 
 theorem canonical (f : A → A) (P : A → Prop) (xs : Nat → A) (start n size : Nat)
     (hx : ∀ k, k < size → P (xs k)) (hf : ∀ x, P (f x)) :
