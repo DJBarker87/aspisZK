@@ -10,15 +10,16 @@ def source (r : Range) : Result (Option Usize × Range) :=
     ok (some r.start, {start:=next, «end»:=r.«end»})
   else ok (none,r)
 theorem forward_bound (r : Range) (h : r.start.val < r.«end».val) :
-    r.start.val+1 ≤ UScalar.max .Usize := by have := r.«end».hBounds; omega
+    r.start.val+1 ≤ UScalar.max .Usize := by scalar_tac
 
 theorem next (r : Range) :
     core.iter.range.IteratorRange.next core.iter.range.StepUsize r = source r := by
   by_cases h : r.start.val < r.«end».val
   · have hb := forward_bound r h
+    have hb' : r.start.val < UScalar.max .Usize := by omega
     simp [core.iter.range.IteratorRange.next,core.iter.range.StepUsize,
       core.iter.range.UScalarStep,core.iter.range.UScalarStep.forward_checked,
-      core.cmp.impls.PartialOrdUsize.lt,core.clone.CloneUsize,source,h,hb]
+      core.cmp.impls.PartialOrdUsize.lt,core.clone.CloneUsize,source,h,hb,hb']
   · simp [core.iter.range.IteratorRange.next,core.iter.range.StepUsize,
       core.iter.range.UScalarStep,core.cmp.impls.PartialOrdUsize.lt,source,h]
 #print axioms forward_bound
