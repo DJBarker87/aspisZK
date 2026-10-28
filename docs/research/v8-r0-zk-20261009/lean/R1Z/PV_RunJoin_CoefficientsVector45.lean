@@ -1,4 +1,4 @@
-import R1Z.PV_RunJoin_CoefficientsThread45
+import R1Z.PV_RunJoin_CoefficientsCell45
 import R1Z.PV_RunJoin_Vector44
 import R1Z.PV_RunJoin_MergeLoop35
 set_option autoImplicit false
@@ -26,7 +26,7 @@ theorem payload_length (p : Nat → Nat → W) (start n : Nat) : (payload p star
 
 theorem installed (ops : ExternalFuns) (p : Nat → W) :
     @transport.Variant.coefficients _ (ProverRwP6BodyCandidate.selected ops) _
-      aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy .S2 (ProverCommitArray49.array 1024#usize p) =
+      (@aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy _ (ProverRwP6BodyCandidate.selected ops)) .S2 (ProverCommitArray49.array 1024#usize p) =
         .ok (column p) := by
   exact PV_RunJoin_CoefficientInstalled45.complete ops _ p
 
@@ -46,8 +46,11 @@ theorem complete (ops : ExternalFuns) (p : Nat → Nat → W) (n : Nat)
     have inc := PV_RunJoin_MergeLoop35.increment lane (by omega)
     obtain ⟨next,hn,hnv⟩ := ih mid (Usize.wrapping_add lane 1#usize) (by rw [inc];omega) (by rw [ml];omega)
     refine ⟨next,?_,?_⟩
-    · simp only [PV_RunJoin_CoefficientsThread45.phase,PV_RunJoin_CoefficientsThread45.step,
-        read,installed ops (p lane.val),hm,bind_tc_ok,hn]
+    · have hs := PV_RunJoin_CoefficientsCell45.step ops (messages p) out lane (p lane.val) read
+      change @PV_RunJoin_CoefficientsThread45.step _ (ProverRwP6BodyCandidate.selected ops) .S2
+        (messages p) out lane >>= (fun mid => PV_RunJoin_CoefficientsThread45.phase .S2 (messages p) n mid (Usize.wrapping_add lane 1#usize)) = .ok next
+      rw [hs]
+      simp only [hm,bind_tc_ok,hn]
     · rw [hnv,hmv,inc,payload,List.append_assoc,List.singleton_append]
 #print axioms payload_length
 #print axioms installed

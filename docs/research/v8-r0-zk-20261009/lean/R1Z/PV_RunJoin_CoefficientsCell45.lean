@@ -18,6 +18,6 @@ theorem step (ops : ExternalFuns) (messages : Slice Column) (out : alloc.vec.Vec
   rw [read]
   simp only [bind_tc_ok]
   exact congrArg (fun r : Result Column => r >>= alloc.vec.Vec.push out)
-    (PV_RunJoin_CoefficientInstalled45.complete ops aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy p)
+    (PV_RunJoin_CoefficientInstalled45.complete ops (@aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy _ (ProverRwP6BodyCandidate.selected ops)) p)
 #print axioms step
 end R1Z.PV_RunJoin_CoefficientsCell45
