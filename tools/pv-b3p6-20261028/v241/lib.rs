@@ -100,3 +100,14 @@ fn fidelity224_prefix_side() {
     }
     println!("D188-prefix224-cases={cases:?}");
 }
+#[test]
+fn fidelity224_helper_write() {
+    use aspis_core::field::{M31,CM31,QM31};
+    use aspis_statement::logup::CopyLogUpRow;
+    let q=|n|QM31::from_cm31(CM31::from_m31(M31(n)));
+    let empty=CopyLogUpRow{producer_values:[q(0);2],producer_weights:[M31::ZERO;2],consumer_values:[q(0);2],consumer_weights:[M31::ZERO;2]};
+    let mut rows=[empty;1024];rows[1023].producer_values[0]=q(1);rows[1023].producer_weights[0]=M31::ONE;
+    let out=reference224::from_rows(rows,q(3)).unwrap();
+    let words=out.map(|v|[v.c0.a.0,v.c0.b.0,v.c1.a.0,v.c1.b.0]);
+    println!("D188-helper224-values={words:?}");
+}
