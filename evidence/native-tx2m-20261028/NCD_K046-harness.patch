@@ -1,0 +1,108 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1039,3 +1039,105 @@
+ unsafe{if X==0||Y==0||LX==0||LY==0{assert!(matches!(result,Err(Error::Query)));}}
+ }
+ }
++
++#[cfg(kani)] mod NCD_rows_12 {
++use super::*;
++fn carrier<const N:usize>(n:usize)->Vec<M31>{
++ assert!(core::mem::size_of::<M31>()==4&&core::mem::align_of::<M31>()==4&&core::mem::offset_of!(M31,0)==0);
++ let b=alloc::boxed::Box::new(kani::any::<[u32;N]>());let ptr=alloc::boxed::Box::into_raw(b) as *mut M31;
++ unsafe{Vec::from_raw_parts(ptr,n,N)}
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn metadata(){
++let rows:usize=kani::any();kani::assume(rows<12);let n=5*rows;
++ let mut flat=carrier::<60>(n);let mut line_z_values=carrier::<12>(rows);
++ let raw:[u32;5]=kani::any();let values=raw.map(M31);let line_z=values[4];
++ let j:usize=kani::any();kani::assume(j<5);let k:usize=kani::any();let z:usize=kani::any();kani::assume(rows==0||(k<n&&z<rows));
++ let old=if rows>0{flat[k].0}else{0};let old_z=if rows>0{line_z_values[z].0}else{0};let fp=flat.as_ptr();let zp=line_z_values.as_ptr();
++ flat.extend_from_slice(&values);
++ line_z_values.push(line_z);
++assert!(flat.len()==5*(rows+1)&&line_z_values.len()==rows+1&&flat.capacity()==60&&line_z_values.capacity()==12&&flat.as_ptr()==fp&&line_z_values.as_ptr()==zp);
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn flat_new(){
++let rows:usize=kani::any();kani::assume(rows<12);let n=5*rows;
++ let mut flat=carrier::<60>(n);let mut line_z_values=carrier::<12>(rows);
++ let raw:[u32;5]=kani::any();let values=raw.map(M31);let line_z=values[4];
++ let j:usize=kani::any();kani::assume(j<5);let k:usize=kani::any();let z:usize=kani::any();kani::assume(rows==0||(k<n&&z<rows));
++ let old=if rows>0{flat[k].0}else{0};let old_z=if rows>0{line_z_values[z].0}else{0};let fp=flat.as_ptr();let zp=line_z_values.as_ptr();
++ flat.extend_from_slice(&values);
++ line_z_values.push(line_z);
++assert!(flat[n+j].0==raw[j]);
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn flat_old(){
++let rows:usize=kani::any();kani::assume(rows<12);let n=5*rows;
++ let mut flat=carrier::<60>(n);let mut line_z_values=carrier::<12>(rows);
++ let raw:[u32;5]=kani::any();let values=raw.map(M31);let line_z=values[4];
++ let j:usize=kani::any();kani::assume(j<5);let k:usize=kani::any();let z:usize=kani::any();kani::assume(rows==0||(k<n&&z<rows));
++ let old=if rows>0{flat[k].0}else{0};let old_z=if rows>0{line_z_values[z].0}else{0};let fp=flat.as_ptr();let zp=line_z_values.as_ptr();
++ flat.extend_from_slice(&values);
++ line_z_values.push(line_z);
++if rows>0{assert!(flat[k].0==old);}
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn z_new(){
++let rows:usize=kani::any();kani::assume(rows<12);let n=5*rows;
++ let mut flat=carrier::<60>(n);let mut line_z_values=carrier::<12>(rows);
++ let raw:[u32;5]=kani::any();let values=raw.map(M31);let line_z=values[4];
++ let j:usize=kani::any();kani::assume(j<5);let k:usize=kani::any();let z:usize=kani::any();kani::assume(rows==0||(k<n&&z<rows));
++ let old=if rows>0{flat[k].0}else{0};let old_z=if rows>0{line_z_values[z].0}else{0};let fp=flat.as_ptr();let zp=line_z_values.as_ptr();
++ flat.extend_from_slice(&values);
++ line_z_values.push(line_z);
++assert!(line_z_values[rows].0==raw[4]);
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn z_old(){
++let rows:usize=kani::any();kani::assume(rows<12);let n=5*rows;
++ let mut flat=carrier::<60>(n);let mut line_z_values=carrier::<12>(rows);
++ let raw:[u32;5]=kani::any();let values=raw.map(M31);let line_z=values[4];
++ let j:usize=kani::any();kani::assume(j<5);let k:usize=kani::any();let z:usize=kani::any();kani::assume(rows==0||(k<n&&z<rows));
++ let old=if rows>0{flat[k].0}else{0};let old_z=if rows>0{line_z_values[z].0}else{0};let fp=flat.as_ptr();let zp=line_z_values.as_ptr();
++ flat.extend_from_slice(&values);
++ line_z_values.push(line_z);
++if rows>0{assert!(line_z_values[z].0==old_z);}
++}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn allocation(){let flat=Vec::<M31>::with_capacity(60);let line_z_values=Vec::<M31>::with_capacity(12);assert!(flat.len()==0&&flat.capacity()==60&&line_z_values.len()==0&&line_z_values.capacity()==12);}
++}

@@ -1,0 +1,21 @@
+# Capacity relaunch 1 recovery
+
+Recovered commits 0dccb31ead and eb5bccc249; no stage is restarted. NCD_L001 and L003 have passing authoritative receipts. NCD_L002 remains missing after two successful read-only host inventories returned no files: reserve one compile budget slot, no proof credit and no resubmission. NCD_L004 was admission-only. NCD_L005 has local config/source snapshot but no submission transport entry and no host config/receipt: interrupted before submission, zero compile credit. NCD_L006 continues the next independent generic retarget. No old process for this lane remained locally.
+
+Inherited NCB used 20 Lean and55 Kani; unused allowance60 Lean/15 Kani. This round's requested80 Lean/60 Kani combined allowance is bounded by the explicit120 Lean/50 Kani ceilings. Record predecessor and current counters separately; capacity relaunch does not reset either. Current conservative count before L006:3 Lean,0 Kani. Admission refusals and unsubmitted transfers do not consume prover runs.
+
+No source/harness/toolchain claim follows from missing receipts. No cache, shared infrastructure, source, key or live worker was modified. Rule10b read-only recovery was used; L002 is not retried.
+
+L006 was admitted, but its combined source-transfer/submission SSH closed before any receipt was recoverable. It is conservatively counted, with no credit and no resubmission. Own wrapper repair: send the setup Python through stdin in a separate idempotent prelaunch step; only then send the short, once-only systemd command. This removes large shell argument transport; validation, immutable backends, admission, limits and recovery stay unchanged. A causal diagnosis of the SSH closure is not asserted.
+
+L025's admitted scope ran only the immutable launcher's dependency inventory, then exited1 before invoking Lean: FileNotFoundError KMX_CopyMeaning. This is an own missing-input issue, not a lead infrastructure fault. Compile unchanged value-law body privately as NCD_KMX_CopyMeaning and retarget the new FillFrame import. No theorem credit or timed-out run arose from L025; retained launcher traceback identifies the exact failure. No shared cache/object overwritten.
+
+Own budget guards now count persisted per-attempt configs (including preflight-only and unresolved submissions, conservatively) rather than numeric labels or only successful receipts. This strengthens protection against unreceipted submissions; sparse attempt IDs do not consume imaginary prover runs. Lean and Kani budgets are independent, as required. No current compile or native result was retried because of this guard repair.
+
+Future native scopes use an own detached submission wrapper: start exactly the existing systemd-run/S2W command in a separate session, with stdin closed and stdout/stderr retained in a submission log. A per-attempt marker refuses duplicate submission. Read-only receipt polling replaces reliance on a live SSH foreground; no process is resubmitted after any connection loss. Admission, exact source/graph/lock checks, optimized profile, shared backend and all four caps are unchanged. This repairs own transport only, not shared host infrastructure.
+
+Final z1 preparation was refused before submission: repeated prepare had included its own unsubmitted K060 patch in the before manifest. Removed only that duplicate (identical original NCD_z.patch retained), regenerated the manifest against the actual prior chain, and retained strict exact before/after hashes. No source drift was bypassed, no scope launched, no budget slot used.
+
+Final source-hash audit found the import-rewrite helper had partially retargeted the historical NCD_Audit file without replaying it. Archived that mixed import-only draft as NCD_Audit_PARTIAL_UNRUN.lean.txt and restored the exact passing L001 source. The fully retargeted NCD_R_Audit is independently passing in L194/L195/L198. The own rewrite script now preserves the historical audit. No uncompiled source is credited.
+
+End-check script initially sent an embedded null byte in its /proc command-line separator literal; Python rejected it before execution. Replaced it with bytes([0]) and reran the own validation. No prover slot or cleanup action occurred in the rejected script.

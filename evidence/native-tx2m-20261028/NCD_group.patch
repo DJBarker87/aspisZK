@@ -1,0 +1,24 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1141,3 +1141,21 @@
+ #[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
+ fn allocation(){let flat=Vec::<M31>::with_capacity(60);let line_z_values=Vec::<M31>::with_capacity(12);assert!(flat.len()==0&&flat.capacity()==60&&line_z_values.len()==0&&line_z_values.capacity()==12);}
+ }
++
++#[cfg(kani)] mod NCD_group_row {
++use super::*;
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn values(){
++ let raw:[u32;60]=kani::any();let flat_inverse:Vec<M31>=raw.map(M31).into();let i:usize=kani::any();kani::assume(i<12);
++ let ptr=flat_inverse.as_ptr();let k:usize=kani::any();kani::assume(k<60);let old=flat_inverse[k].0;
++ let row:[M31;5]=core::array::from_fn(|j|flat_inverse[5*i+j]);
++ let j:usize=kani::any();kani::assume(j<5);assert!(row[j].0==raw[5*i+j]);
++ assert!(flat_inverse.as_ptr()==ptr&&flat_inverse.len()==60&&flat_inverse[k].0==old);
++}
++}

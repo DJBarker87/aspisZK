@@ -1,0 +1,57 @@
+--- a/crates/aspis-r1-cost-probe/src/transcript.rs
++++ b/crates/aspis-r1-cost-probe/src/transcript.rs
+@@ -197,12 +197,14 @@
+ #[cfg(kani)] mod NCD_query_pair {
+  use super::*;
+  #[derive(Clone,Copy)] struct Spy;
+- static mut CALLS:usize=0;static mut J:usize=0;
++ static mut CALLS:usize=0;static mut J:usize=0;static mut CHECK:usize=0;
+  static mut INITIAL:[u8;32]=[0;32];static mut BLOCK:[u8;32]=[0;32];static mut ADVANCE:[u8;32]=[0;32];
+  impl Digest32 for Spy{fn digest(&self,parts:&[&[u8]])->[u8;32]{unsafe{
+   let c=CALLS;assert!(c<2);CALLS+=1;
++if c==CHECK{
+   assert!(parts.len()==2&&parts[0].len()==32&&parts[0][J]==INITIAL[J]);
+   assert!(parts[1].len()==1&&parts[1][0]==if c==0{1}else{2});
++}
+   if c==0{BLOCK}else{ADVANCE}
+  }}}
+ #[kani::proof] #[kani::unwind(512)]
+@@ -317,4 +319,37 @@
+  advances[pair]=Spy.digest(&[&state,&[2]]);if pair<7{state=advances[pair];}
+ assert!(blocks.as_ptr()==bp&&advances.as_ptr()==ap&&blocks.len()==8&&advances.len()==8);
+ }
+-}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn request_block(){
++let mut blocks:[[u8;32];8]=kani::any();let mut advances:[[u8;32];8]=kani::any();let mut state:[u8;32]=kani::any();
++ let pair:usize=kani::any();kani::assume(pair<8);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
++ let old_block=blocks[k][j];let old_advance=advances[k][j];let old_state=state[j];let bp=blocks.as_ptr();let ap=advances.as_ptr();
++ unsafe{CHECK=0;CALLS=0;J=j;INITIAL=state;BLOCK=kani::any();ADVANCE=kani::any();}
++ blocks[pair]=Spy.digest(&[&state,&[1]]);
++ advances[pair]=Spy.digest(&[&state,&[2]]);if pair<7{state=advances[pair];}
++unsafe{assert!(CALLS==2);}
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn request_advance(){
++let mut blocks:[[u8;32];8]=kani::any();let mut advances:[[u8;32];8]=kani::any();let mut state:[u8;32]=kani::any();
++ let pair:usize=kani::any();kani::assume(pair<8);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
++ let old_block=blocks[k][j];let old_advance=advances[k][j];let old_state=state[j];let bp=blocks.as_ptr();let ap=advances.as_ptr();
++ unsafe{CHECK=1;CALLS=0;J=j;INITIAL=state;BLOCK=kani::any();ADVANCE=kani::any();}
++ blocks[pair]=Spy.digest(&[&state,&[1]]);
++ advances[pair]=Spy.digest(&[&state,&[2]]);if pair<7{state=advances[pair];}
++unsafe{assert!(CALLS==2);}
++}
++
++}

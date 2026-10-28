@@ -1,0 +1,775 @@
+[
+  {
+    "module": "NCD_KMX_CopyMeaning",
+    "path": "lean/NCD_KMX_CopyMeaning.lean",
+    "imports": [
+      "Std"
+    ]
+  },
+  {
+    "module": "NCD_FillFrame",
+    "path": "lean/NCD_FillFrame.lean",
+    "imports": [
+      "NCD_KMX_CopyMeaning"
+    ]
+  },
+  {
+    "module": "NCD_B_NBC_Filled",
+    "path": "lean/NCD_B_NBC_Filled.lean",
+    "imports": [
+      "RPz7_NP6_ClaimsModel"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_Filled",
+    "path": "lean/NCD_B_NBQ_Filled.lean",
+    "imports": [
+      "NCD_B_NBC_Filled"
+    ]
+  },
+  {
+    "module": "NCD_B_NBS_FilledTrace",
+    "path": "lean/NCD_B_NBS_FilledTrace.lean",
+    "imports": [
+      "NCD_B_NBQ_Filled"
+    ]
+  },
+  {
+    "module": "NCD_B_NCB_ResizeStep",
+    "path": "lean/NCD_B_NCB_ResizeStep.lean",
+    "imports": [
+      "NCD_B_NBQ_Filled"
+    ]
+  },
+  {
+    "module": "NCD_B_NCB_Filled14759",
+    "path": "lean/NCD_B_NCB_Filled14759.lean",
+    "imports": [
+      "NCD_B_NBQ_Filled",
+      "NCD_B_NBS_FilledTrace",
+      "NCD_B_NCB_ResizeStep"
+    ]
+  },
+  {
+    "module": "NCD_FillAssociation",
+    "path": "lean/NCD_FillAssociation.lean",
+    "imports": [
+      "NCD_FillFrame",
+      "NCD_B_NCB_Filled14759"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_ReductionWord",
+    "path": "lean/NCD_B_LPf_ReductionWord.lean",
+    "imports": [
+      "RPt_FIo_ReduceBounds",
+      "RPz7_FIo_NativeFuns",
+      "LPe_MersenneReduction"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_CoreReduction",
+    "path": "lean/NCD_B_LPf_CoreReduction.lean",
+    "imports": [
+      "NCD_B_LPf_ReductionWord"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_BaseMultiply",
+    "path": "lean/NCD_B_LPf_BaseMultiply.lean",
+    "imports": [
+      "NCD_B_LPf_CoreReduction"
+    ]
+  },
+  {
+    "module": "NCD_B_NBS_GeometryDomains",
+    "path": "lean/NCD_B_NBS_GeometryDomains.lean",
+    "imports": [
+      "Port4C_PrefixMeaning",
+      "Port4C_BatchInverse",
+      "NCD_B_LPf_BaseMultiply"
+    ]
+  },
+  {
+    "module": "NCD_GeometryCutDomains",
+    "path": "lean/NCD_GeometryCutDomains.lean",
+    "imports": [
+      "NCD_B_NBS_GeometryDomains",
+      "NBS_GeometryInstall"
+    ]
+  },
+  {
+    "module": "NCD_B_NCB_DigestTotal",
+    "path": "lean/NCD_B_NCB_DigestTotal.lean",
+    "imports": [
+      "RPz7_F3U_Rehash"
+    ]
+  },
+  {
+    "module": "NCD_B_NBA_Installed",
+    "path": "lean/NCD_B_NBA_Installed.lean",
+    "imports": [
+      "RPz7_CurrentPreparedInstalledMeaning",
+      "RPz7_S1OriginalSerializerInstallationV1",
+      "RPz7_CurrentCompactInstalledPreparationV1",
+      "RPz7_S1ClosedPreparationInstallationV1"
+    ]
+  },
+  {
+    "module": "NCD_B_NBA_Transcript",
+    "path": "lean/NCD_B_NBA_Transcript.lean",
+    "imports": [
+      "NCD_B_NBA_Installed"
+    ]
+  },
+  {
+    "module": "NCD_B_NBA_QueryFactor",
+    "path": "lean/NCD_B_NBA_QueryFactor.lean",
+    "imports": [
+      "NCD_B_NBA_Installed"
+    ]
+  },
+  {
+    "module": "NCD_B_NBA_Materialize",
+    "path": "lean/NCD_B_NBA_Materialize.lean",
+    "imports": [
+      "NCD_B_NBA_Transcript",
+      "NBA_Store8",
+      "NCD_B_NBA_QueryFactor"
+    ]
+  },
+  {
+    "module": "NCD_B_NBA_Scalars",
+    "path": "lean/NCD_B_NBA_Scalars.lean",
+    "imports": [
+      "NCD_B_NBA_Installed"
+    ]
+  },
+  {
+    "module": "NCD_B_NBA_SamplerValues",
+    "path": "lean/NCD_B_NBA_SamplerValues.lean",
+    "imports": [
+      "NCD_B_NBA_Scalars",
+      "GammaCandidateTotalityV14",
+      "IndexedCandidateOrdinaryRetainedBridgeV5"
+    ]
+  },
+  {
+    "module": "NCD_B_NBL_BlockTrace",
+    "path": "lean/NCD_B_NBL_BlockTrace.lean",
+    "imports": [
+      "NCD_B_NBA_Transcript",
+      "NCD_B_NBA_SamplerValues"
+    ]
+  },
+  {
+    "module": "NCD_B_NBL_MaterialTrace",
+    "path": "lean/NCD_B_NBL_MaterialTrace.lean",
+    "imports": [
+      "NCD_B_NBA_Materialize",
+      "NCD_B_NBL_BlockTrace"
+    ]
+  },
+  {
+    "module": "NCD_ChronologicalQuery",
+    "path": "lean/NCD_ChronologicalQuery.lean",
+    "imports": [
+      "NCD_B_NCB_DigestTotal",
+      "NCD_B_NBL_MaterialTrace"
+    ]
+  },
+  {
+    "module": "NCD_QueryFrame",
+    "path": "lean/NCD_QueryFrame.lean",
+    "imports": [
+      "NCD_KMX_CopyMeaning",
+      "NCD_ChronologicalQuery"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_QueryBounds",
+    "path": "lean/NCD_B_NBQ_QueryBounds.lean",
+    "imports": [
+      "NCD_B_LPf_BaseMultiply"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_RawCell",
+    "path": "lean/NCD_B_NBQ_RawCell.lean",
+    "imports": [
+      "NCD_B_NBQ_QueryBounds"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_Total",
+    "path": "lean/NCD_B_LPi_Total.lean",
+    "imports": [
+      "NCD_B_LPf_BaseMultiply",
+      "RPz7_FIo_NativeFuns"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_NatBase",
+    "path": "lean/NCD_B_LPi_NatBase.lean",
+    "imports": [
+      "NCD_B_LPi_Total"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_CMProduct",
+    "path": "lean/NCD_B_LPi_CMProduct.lean",
+    "imports": [
+      "NCD_B_LPi_NatBase"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_FieldValues",
+    "path": "lean/NCD_B_LPi_FieldValues.lean",
+    "imports": [
+      "NCD_B_LPi_CMProduct"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_TowerValues",
+    "path": "lean/NCD_B_LPi_TowerValues.lean",
+    "imports": [
+      "NCD_B_LPi_FieldValues"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_PowersStep",
+    "path": "lean/NCD_B_LPi_PowersStep.lean",
+    "imports": [
+      "NCD_B_LPi_TowerValues"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_PowersPrefix",
+    "path": "lean/NCD_B_LPi_PowersPrefix.lean",
+    "imports": [
+      "NCD_B_LPi_PowersStep"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_PowersValue",
+    "path": "lean/NCD_B_LPi_PowersValue.lean",
+    "imports": [
+      "NCD_B_LPi_PowersPrefix"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_PowersSource",
+    "path": "lean/NCD_B_LPi_PowersSource.lean",
+    "imports": [
+      "NCD_B_LPi_PowersValue"
+    ]
+  },
+  {
+    "module": "NCD_B_LPm_StubBounds",
+    "path": "lean/NCD_B_LPm_StubBounds.lean",
+    "imports": [
+      "NCD_B_LPi_TowerValues"
+    ]
+  },
+  {
+    "module": "NCD_B_LPm_PowersBridge",
+    "path": "lean/NCD_B_LPm_PowersBridge.lean",
+    "imports": [
+      "NCD_B_LPi_PowersSource",
+      "NCD_B_LPm_StubBounds"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_Powers29",
+    "path": "lean/NCD_B_NBQ_Powers29.lean",
+    "imports": [
+      "NCD_B_LPi_PowersSource",
+      "NCD_B_LPm_PowersBridge"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_RawAssociation",
+    "path": "lean/NCD_B_LPi_RawAssociation.lean",
+    "imports": [
+      "RPz7_FIo_NativeFuns",
+      "LPi_RawCallbacks"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_RawValues",
+    "path": "lean/NCD_B_LPi_RawValues.lean",
+    "imports": [
+      "NCD_B_LPi_RawAssociation"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_CheckedInputs",
+    "path": "lean/NCD_B_LPi_CheckedInputs.lean",
+    "imports": [
+      "NCD_B_LPi_RawValues",
+      "NCD_B_LPi_FieldValues"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_DotWordStep",
+    "path": "lean/NCD_B_LPf_DotWordStep.lean",
+    "imports": [
+      "NCD_B_LPf_ReductionWord"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_DotPushStep",
+    "path": "lean/NCD_B_LPf_DotPushStep.lean",
+    "imports": [
+      "NCD_B_LPf_DotWordStep",
+      "JGo_TX2_Range"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_DotPushFour",
+    "path": "lean/NCD_B_LPf_DotPushFour.lean",
+    "imports": [
+      "NCD_B_LPf_DotPushStep",
+      "JGo_TX2_LoopChain"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_DotPushCut",
+    "path": "lean/NCD_B_LPf_DotPushCut.lean",
+    "imports": [
+      "NCD_B_LPf_DotPushFour"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_ArrayFour",
+    "path": "lean/NCD_B_LPf_ArrayFour.lean",
+    "imports": [
+      "NCD_B_LPf_ReductionWord"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_DotPushTotal",
+    "path": "lean/NCD_B_LPi_DotPushTotal.lean",
+    "imports": [
+      "NCD_B_LPi_RawValues",
+      "NCD_B_LPf_DotPushCut",
+      "NCD_B_LPf_ArrayFour"
+    ]
+  },
+  {
+    "module": "NCD_B_LPi_PublicPush",
+    "path": "lean/NCD_B_LPi_PublicPush.lean",
+    "imports": [
+      "NCD_B_LPi_CheckedInputs",
+      "NCD_B_LPi_DotPushTotal"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_DotFinish",
+    "path": "lean/NCD_B_LPf_DotFinish.lean",
+    "imports": [
+      "NCD_B_LPf_ReductionWord"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_WideConstruction",
+    "path": "lean/NCD_B_LPf_WideConstruction.lean",
+    "imports": [
+      "NCD_B_LPf_ReductionWord"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_PublicDotFinish",
+    "path": "lean/NCD_B_LPf_PublicDotFinish.lean",
+    "imports": [
+      "NCD_B_LPf_DotFinish",
+      "NCD_B_LPf_WideConstruction"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_PublicDotAllStates",
+    "path": "lean/NCD_B_LPf_PublicDotAllStates.lean",
+    "imports": [
+      "NCD_B_LPf_PublicDotFinish",
+      "NCD_B_LPf_ArrayFour"
+    ]
+  },
+  {
+    "module": "NCD_B_LPm_PublicState",
+    "path": "lean/NCD_B_LPm_PublicState.lean",
+    "imports": [
+      "NCD_B_LPi_PublicPush",
+      "NCD_B_LPf_PublicDotAllStates"
+    ]
+  },
+  {
+    "module": "NCD_B_LPf_DotResidueStep",
+    "path": "lean/NCD_B_LPf_DotResidueStep.lean",
+    "imports": [
+      "NCD_B_LPf_DotPushFour"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_DotBounds",
+    "path": "lean/NCD_B_NBQ_DotBounds.lean",
+    "imports": [
+      "NCD_B_LPf_DotWordStep",
+      "NCD_B_LPf_DotResidueStep"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_U06",
+    "path": "lean/NCD_B_NBQ_U06.lean",
+    "imports": [
+      "NCD_B_LPm_PublicState",
+      "NCD_B_LPf_PublicDotAllStates",
+      "NCD_B_NBQ_DotBounds"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_PublicInvariant",
+    "path": "lean/NCD_B_NBQ_PublicInvariant.lean",
+    "imports": [
+      "NCD_B_NBQ_U06"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_TailDomain",
+    "path": "lean/NCD_B_NBQ_TailDomain.lean",
+    "imports": [
+      "NCD_B_NBQ_PublicInvariant"
+    ]
+  },
+  {
+    "module": "NCD_B_NBC_Audit",
+    "path": "lean/NCD_B_NBC_Audit.lean",
+    "imports": [
+      "NBC_ReleaseLeaves",
+      "NCD_B_NBC_Filled"
+    ]
+  },
+  {
+    "module": "NCD_B_NBG_Error",
+    "path": "lean/NCD_B_NBG_Error.lean",
+    "imports": [
+      "NCD_B_NBC_Audit"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_ErrorControl",
+    "path": "lean/NCD_B_NBQ_ErrorControl.lean",
+    "imports": [
+      "NCD_B_NBG_Error"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_FieldOffsets",
+    "path": "lean/NCD_B_NBQ_FieldOffsets.lean",
+    "imports": [
+      "RPz7_FIo_NativeFuns"
+    ]
+  },
+  {
+    "module": "NCD_B_NBG_WideCarriers",
+    "path": "lean/NCD_B_NBG_WideCarriers.lean",
+    "imports": [
+      "NCD_B_LPi_TowerValues",
+      "NCD_B_LPf_WideConstruction",
+      "AspisR1Post25Sampler.Funs"
+    ]
+  },
+  {
+    "module": "NCD_B_NBG_WideBytes",
+    "path": "lean/NCD_B_NBG_WideBytes.lean",
+    "imports": [
+      "NCD_B_NBG_WideCarriers"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_FieldPort",
+    "path": "lean/NCD_B_NBQ_FieldPort.lean",
+    "imports": [
+      "NCD_B_NBG_WideBytes"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_FieldTotal",
+    "path": "lean/NCD_B_NBQ_FieldTotal.lean",
+    "imports": [
+      "NCD_B_NBQ_FieldPort",
+      "NCD_B_NBQ_FieldOffsets"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_QChecks",
+    "path": "lean/NCD_B_NBQ_QChecks.lean",
+    "imports": [
+      "NCD_B_LPi_CheckedInputs"
+    ]
+  },
+  {
+    "module": "NCD_B_NBQ_Audit",
+    "path": "lean/NCD_B_NBQ_Audit.lean",
+    "imports": [
+      "NCD_B_NBQ_DotBounds",
+      "NCD_B_NBQ_ErrorControl",
+      "NCD_B_NBQ_FieldOffsets",
+      "NCD_B_NBQ_FieldPort",
+      "NCD_B_NBQ_FieldTotal",
+      "NCD_B_NBQ_Filled",
+      "NCD_B_NBQ_Powers29",
+      "NCD_B_NBQ_PublicInvariant",
+      "NCD_B_NBQ_QChecks",
+      "NCD_B_NBQ_QueryBounds",
+      "NCD_B_NBQ_RawCell",
+      "NCD_B_NBQ_TailDomain",
+      "NCD_B_NBQ_U06"
+    ]
+  },
+  {
+    "module": "NCD_R_NBS_DotTerm",
+    "path": "lean/NCD_R_NBS_DotTerm.lean",
+    "imports": [
+      "RPt_JFs_TX2_ArrayRead",
+      "RPt_FIo_ArrayCanon",
+      "NCD_B_NBQ_RawCell"
+    ]
+  },
+  {
+    "module": "NCD_R_NBS_DotInner",
+    "path": "lean/NCD_R_NBS_DotInner.lean",
+    "imports": [
+      "NCD_R_NBS_DotTerm"
+    ]
+  },
+  {
+    "module": "NCD_R_NBS_DotOuterActive",
+    "path": "lean/NCD_R_NBS_DotOuterActive.lean",
+    "imports": [
+      "NCD_R_NBS_DotInner",
+      "RPt_JFs_TX2_OuterStep",
+      "RPt_JFs_TX2_BatchWindow"
+    ]
+  },
+  {
+    "module": "NCD_R_NBS_DotOuter",
+    "path": "lean/NCD_R_NBS_DotOuter.lean",
+    "imports": [
+      "NCD_R_NBS_DotOuterActive"
+    ]
+  },
+  {
+    "module": "NCD_R_JFr_TX2_Tails",
+    "path": "lean/NCD_R_JFr_TX2_Tails.lean",
+    "imports": [
+      "RPu_JFr_TX2_TailRead"
+    ]
+  },
+  {
+    "module": "NCD_R_JFs_TX2_TailStages",
+    "path": "lean/NCD_R_JFs_TX2_TailStages.lean",
+    "imports": [
+      "RPu_JFs_TX2_DotSuffix",
+      "NCD_R_JFr_TX2_Tails"
+    ]
+  },
+  {
+    "module": "NCD_R_NBS_DotTail",
+    "path": "lean/NCD_R_NBS_DotTail.lean",
+    "imports": [
+      "NCD_R_NBS_DotTerm",
+      "NCD_B_NBQ_TailDomain",
+      "NCD_R_JFs_TX2_TailStages",
+      "RPu_JFs_TX2_TailQM"
+    ]
+  },
+  {
+    "module": "NCD_R_JFs_TX2_WideAdd",
+    "path": "lean/NCD_R_JFs_TX2_WideAdd.lean",
+    "imports": [
+      "RPt_FIo_WideValues"
+    ]
+  },
+  {
+    "module": "NCD_R_NBS_DotWhole",
+    "path": "lean/NCD_R_NBS_DotWhole.lean",
+    "imports": [
+      "NCD_R_NBS_DotOuter",
+      "NCD_R_NBS_DotTail",
+      "RPu_JFs_TX2_ScalarFinish",
+      "NCD_R_JFs_TX2_WideAdd"
+    ]
+  },
+  {
+    "module": "NCD_R_NBS_PowersCanon",
+    "path": "lean/NCD_R_NBS_PowersCanon.lean",
+    "imports": [
+      "NCD_B_NBQ_Powers29",
+      "RPt_FIo_ArrayCanon"
+    ]
+  },
+  {
+    "module": "NCD_R_NBS_Four",
+    "path": "lean/NCD_R_NBS_Four.lean",
+    "imports": [
+      "NCD_R_NBS_DotWhole",
+      "NCD_R_NBS_PowersCanon"
+    ]
+  },
+  {
+    "module": "NCD_R_NBS_NativeEight",
+    "path": "lean/NCD_R_NBS_NativeEight.lean",
+    "imports": [
+      "NCD_R_NBS_DotTerm"
+    ]
+  },
+  {
+    "module": "NCD_B_NBS_Audit",
+    "path": "lean/NCD_B_NBS_Audit.lean",
+    "imports": [
+      "NCD_R_NBS_DotInner",
+      "NCD_R_NBS_DotOuter",
+      "NCD_R_NBS_DotOuterActive",
+      "NCD_R_NBS_DotTail",
+      "NCD_R_NBS_DotTerm",
+      "NCD_R_NBS_DotWhole",
+      "NBS_FibreIndex",
+      "NCD_B_NBS_FilledTrace",
+      "NCD_R_NBS_Four",
+      "NCD_B_NBS_GeometryDomains",
+      "NBS_GeometryInstall",
+      "NCD_R_NBS_NativeEight",
+      "NCD_R_NBS_PowersCanon",
+      "NCD_B_NBQ_Audit"
+    ]
+  },
+  {
+    "module": "NCD_B_NCB_PrefixNativeStep",
+    "path": "lean/NCD_B_NCB_PrefixNativeStep.lean",
+    "imports": [
+      "NCD_B_NBS_GeometryDomains"
+    ]
+  },
+  {
+    "module": "NCD_B_NCB_PrefixCutTrace",
+    "path": "lean/NCD_B_NCB_PrefixCutTrace.lean",
+    "imports": [
+      "NCD_B_NCB_PrefixNativeStep"
+    ]
+  },
+  {
+    "module": "NCD_B_NBL_ScalarConstruct",
+    "path": "lean/NCD_B_NBL_ScalarConstruct.lean",
+    "imports": [
+      "NCD_B_NBL_BlockTrace",
+      "NCD_B_NBA_SamplerValues"
+    ]
+  },
+  {
+    "module": "NCD_B_NBR_BlockConstruct",
+    "path": "lean/NCD_B_NBR_BlockConstruct.lean",
+    "imports": [
+      "NCD_B_NBL_ScalarConstruct"
+    ]
+  },
+  {
+    "module": "NCD_B_NCB_ChronologicalBlock",
+    "path": "lean/NCD_B_NCB_ChronologicalBlock.lean",
+    "imports": [
+      "NCD_B_NCB_DigestTotal",
+      "NCD_B_NBR_BlockConstruct"
+    ]
+  },
+  {
+    "module": "NCD_R_NCB_CoefficientDomains",
+    "path": "lean/NCD_R_NCB_CoefficientDomains.lean",
+    "imports": [
+      "NCD_R_NBS_PowersCanon"
+    ]
+  },
+  {
+    "module": "NCD_R_NCB_DotNativeStep",
+    "path": "lean/NCD_R_NCB_DotNativeStep.lean",
+    "imports": [
+      "NCD_R_NBS_NativeEight"
+    ]
+  },
+  {
+    "module": "NCD_R_NCB_ScalarDomains",
+    "path": "lean/NCD_R_NCB_ScalarDomains.lean",
+    "imports": [
+      "NCD_R_NBS_DotTerm",
+      "RPu_FJl_SlotReads",
+      "RPu_FJl_SliceCopy",
+      "RPt_JFr_TX2_ScalarCanon"
+    ]
+  },
+  {
+    "module": "NCD_R_NCB_TailOffsets",
+    "path": "lean/NCD_R_NCB_TailOffsets.lean",
+    "imports": [
+      "NCD_R_NBS_DotTail",
+      "RPu_FJi_TailInputs"
+    ]
+  },
+  {
+    "module": "NCD_R_NCB_TailDomains",
+    "path": "lean/NCD_R_NCB_TailDomains.lean",
+    "imports": [
+      "NCD_R_NCB_TailOffsets",
+      "RPu_FJl_SlotReads"
+    ]
+  },
+  {
+    "module": "NCD_R_NCB_FourDomains",
+    "path": "lean/NCD_R_NCB_FourDomains.lean",
+    "imports": [
+      "NCD_R_NCB_ScalarDomains",
+      "NCD_R_NCB_TailDomains",
+      "RPu_FJo_FourCalls"
+    ]
+  },
+  {
+    "module": "NCD_R_NCB_TailFinal",
+    "path": "lean/NCD_R_NCB_TailFinal.lean",
+    "imports": [
+      "NCD_R_JFs_TX2_WideAdd",
+      "NCD_B_NBQ_U06"
+    ]
+  },
+  {
+    "module": "NCD_DotCutTrace",
+    "path": "lean/NCD_DotCutTrace.lean",
+    "imports": [
+      "NCD_R_NCB_DotNativeStep"
+    ]
+  },
+  {
+    "module": "NCD_R_Audit",
+    "path": "lean/NCD_R_Audit.lean",
+    "imports": [
+      "NCD_FillFrame",
+      "NCD_FillAssociation",
+      "NCD_GeometryCutDomains",
+      "NCD_ChronologicalQuery",
+      "NCD_QueryFrame",
+      "NCD_DotCutTrace",
+      "Lean",
+      "NCD_B_NBS_Audit",
+      "NCD_B_NBQ_Audit",
+      "NCD_B_NCB_ResizeStep",
+      "NCD_B_NCB_Filled14759",
+      "NCD_B_NCB_DigestTotal",
+      "NCD_R_NCB_ScalarDomains",
+      "NCD_R_NCB_TailOffsets",
+      "NCD_R_NCB_DotNativeStep",
+      "NCD_B_NCB_PrefixNativeStep",
+      "NCD_R_NCB_TailDomains",
+      "NCD_R_NCB_CoefficientDomains",
+      "NCD_B_NCB_PrefixCutTrace",
+      "NCD_R_NCB_FourDomains",
+      "NCD_R_NCB_TailFinal",
+      "NCD_B_NCB_ChronologicalBlock"
+    ]
+  }
+]

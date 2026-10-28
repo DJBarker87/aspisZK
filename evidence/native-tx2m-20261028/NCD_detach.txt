@@ -1,0 +1,11 @@
+from pathlib import Path
+import subprocess,json,time
+b=Path(B)
+marker=b/(a+'-submitted.json')
+assert not marker.exists(),'never submit an attempt twice'
+command=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',backend,a+'.json']
+with (b/(a+'-submission.log')).open('wb') as log:
+ child=subprocess.Popen(command,cwd=b,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+record=dict(pid=child.pid,command=command,submitted_utc=time.time())
+marker.write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(record))

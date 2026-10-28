@@ -1,0 +1,11 @@
+# NCD substitutions and exact domains
+
+Frozen source4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Exact KMX_copy_stubs.patch SHA256bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67 is inherited verbatim through NBS_copy. Every native receipt must validate that exact source chain and frozen lock graph offline before running; after-lock hash must remain5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef. No own copy stub and no field multiplication in Kani.
+
+| Native substitution | Lean/value association | Domain and credit |
+|---|---|---|
+| NBS_copy::KMX_copy_from_slice, KMX_copy_nonoverlapping, KMX_clone_from_slice, KMX_extend_from_slice, KMX_to_vec, KMX_realloc | KMX_CopyMeaning.loop_spec/copy_frame/append_spec/realloc_prefix, privately replayed unchanged as NCD_KMX_CopyMeaning (L026) | Valid live aligned pointer regions, nonoverlap for copy_nonoverlapping, equal slice lengths and valid allocation layouts. These are value laws, never allocator/ownership/lifetime laws. Positive copy credit also needs the matching negative control in the same crate/configuration. |
+| NCD_query_calls::Spy::digest observes Digest32 | AspisR1.NCB_DigestTotal.reached; NBA_Transcript.absorb/block; AspisR1.NCD_ChronologicalQuery.materialized (L029) | SAME causal parts/replies, row≤95,payload0..57607, arbitrary selected byte0..31. Runtime SHA realization is retained. No actual SHA evaluation and no caller/syscall memory-validity proof inferred. |
+| aspis_core::r0_transcript::queries_from_pairs → NCD_query_calls::child | NBL_QueryTrace.source/NBL_QueryHashReplay.source describe the required exact lower association; child stub is an explicit overapproximation, not that law | SAME8 blocks/advances; returns arbitrary canonical22 queries and one selected advance or rejection. Numeric sampler/decoder correspondence remains OPEN and is required before caller/result closure. The stub is only used to check parent request/call/reply routing; it does not claim native numeric credit. |
+
+No additional field arithmetic stub is introduced in NCD. Existing NCB/NBQ field stubs retain the exact named paired theorems/domains in ../native-tx2l-20261028/LPh_STUBS.md; no credit is broadened by an import retarget. Full allocation ownership and runtime validity remain separate open obligations.
