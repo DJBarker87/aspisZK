@@ -1,0 +1,39 @@
+START 60410 R1Z.PV_RunJoin_ZeroRows43
+DONE 60410 R1Z.PV_RunJoin_ZeroRows43 exit 1 wall 2.24 RSS 4419690496
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ZeroRows43.lean:75:6: error: Type mismatch: After simplification, term
+  transformed
+ has type
+  @Post
+    (host_wire.SemanticTranscript H ×
+      alloc.vec.Vec U8 × Std.Array Q 10#usize × Option (core.result.Result (Std.Array Q 10#usize) r1_wire.Error))
+    (Good out (n + 1))
+    (Std.loop (fun x => host_semantic.zc_rows_loop.body hash x.1 x.2.1 x.2.2.1 x.2.2.2)
+      (t, o, zc1, i.wrapping_add 1#usize))
+but is expected to have type
+  @Post
+    (host_wire.SemanticTranscript H ×
+      alloc.vec.Vec U8 × Std.Array Q 10#usize × Option (core.result.Result (Std.Array Q 10#usize) r1_wire.Error))
+    (Good out (n + 1))
+    (Std.loop
+      (fun x =>
+        if x.2.2.2 < 10#usize then do
+          let (r, transcript1, bytes1) ←
+            host_semantic.semantic_row hash (U8.wrapping_add 3#u8 (UScalar.cast UScalarTy.U8 x.2.2.2))
+                (Std.Array.empty U8).to_slice x.1 x.2.1
+          let cf ←
+            match r with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let zc1 ← x.2.2.1.update x.2.2.2 val
+              ok (ControlFlow.cont (transcript1, bytes1, zc1, x.2.2.2.wrapping_add 1#usize))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array aspis_core.field.QM31 10#usize) (core.convert.FromSame r1_wire.Error) residual
+              ok (ControlFlow.done (transcript1, bytes1, x.2.2.1, some r1))
+        else ok (ControlFlow.done (x.1, x.2.1, x.2.2.1, none)))
+      (t, o, zc1, i.wrapping_add 1#usize))
+'R1Z.PV_RunJoin_ZeroRows43.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

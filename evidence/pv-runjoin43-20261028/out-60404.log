@@ -1,0 +1,143 @@
+START 60404 R1Z.PV_RunJoin_ZeroRows43
+DONE 60404 R1Z.PV_RunJoin_ZeroRows43 exit 1 wall 2.08 RSS 4410163200
+nstraints
+  d ≥ 0
+  1 ≤ c ≤ 10
+  b ≥ 0
+  a ≥ 0
+  a - b - d ≤ 4
+  a - b + 5*c ≥ 55
+where
+ a := ↑Usize.max
+ b := ↑out.length
+ c := ↑↑(i.wrapping_add 1#usize)
+ d := ↑↑0#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ZeroRows43.lean:41:4: error: Tactic `apply` failed: could not unify the conclusion of `PV_RunJoin_RecordAppend41.bind_post post`
+  Post ?m.131
+    (host_semantic.semantic_row hash (U8.wrapping_add 3#u8 (UScalar.cast UScalarTy.U8 i)) (Std.Array.empty U8).to_slice
+        transcript out >>=
+      ?m.133)
+with the goal
+  Post (Good out (n + 1)) do
+    let cf ←
+      do
+        let (r, transcript1, bytes1) ←
+          host_semantic.semantic_row hash (U8.wrapping_add 3#u8 (UScalar.cast UScalarTy.U8 i))
+              (Std.Array.empty U8).to_slice transcript out
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let zc1 ← zc.update i val
+            ok (ControlFlow.cont (transcript1, bytes1, zc1, i.wrapping_add 1#usize))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Std.Array aspis_core.field.QM31 10#usize) (core.convert.FromSame r1_wire.Error) residual
+            ok (ControlFlow.done (transcript1, bytes1, zc, some r1))
+    match cf with
+      | ControlFlow.cont next =>
+        Std.loop
+          (fun x =>
+            if x.2.2.2 < 10#usize then do
+              let (r, transcript1, bytes1) ←
+                host_semantic.semantic_row hash (U8.wrapping_add 3#u8 (UScalar.cast UScalarTy.U8 x.2.2.2))
+                    (Std.Array.empty U8).to_slice x.1 x.2.1
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let zc1 ← x.2.2.1.update x.2.2.2 val
+                  ok (ControlFlow.cont (transcript1, bytes1, zc1, x.2.2.2.wrapping_add 1#usize))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r1 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (Std.Array aspis_core.field.QM31 10#usize) (core.convert.FromSame r1_wire.Error) residual
+                  ok (ControlFlow.done (transcript1, bytes1, x.2.2.1, some r1))
+            else ok (ControlFlow.done (x.1, x.2.1, x.2.2.1, none)))
+          next
+      | ControlFlow.done out => ok out
+
+Note: The full type of `PV_RunJoin_RecordAppend41.bind_post post` is
+  (∀ (a : core.result.Result aspis_core.field.QM31 r1_wire.Error × host_wire.SemanticTranscript H × alloc.vec.Vec U8),
+      (match a.1 with
+        | core.result.Result.Ok a_1 =>
+          ∃ header,
+            header.length = 5 ∧
+              ↑a.2.2 = ↑out ++ header ++ ↑(Std.Array.empty U8).to_slice ∧ a.2.2.length = out.length + 5 + ↑0#usize
+        | core.result.Result.Err a => True) →
+        Post ?m.131 (?m.133 a)) →
+    Post ?m.131
+      (host_semantic.semantic_row hash (U8.wrapping_add 3#u8 (UScalar.cast UScalarTy.U8 i))
+          (Std.Array.empty U8).to_slice transcript out >>=
+        ?m.133)
+
+case succ
+inst✝ : ExternalTypes
+ops : ExternalFuns
+H : Type
+hash : aspis_core.digest.Digest32 H
+n : ℕ
+ih :
+  ∀ (i : Usize) (transcript : host_wire.SemanticTranscript H) (out : alloc.vec.Vec U8) (zc : Std.Array Q 10#usize),
+    ↑i + n = 10 →
+      out.length + 5 * n ≤ Usize.max → Post (Good out n) (host_semantic.zc_rows_loop hash transcript out zc i)
+i : Usize
+transcript : host_wire.SemanticTranscript H
+out : alloc.vec.Vec U8
+zc : Std.Array Q 10#usize
+bound : ↑i + (n + 1) = 10
+room : out.length + 5 * (n + 1) ≤ Usize.max
+hi : i < 10#usize
+inc : ↑(i.wrapping_add 1#usize) = ↑i + 1
+post :
+  Post
+    (fun next =>
+      match next.1 with
+      | core.result.Result.Ok a =>
+        ∃ header,
+          header.length = 5 ∧
+            ↑next.2.2 = ↑out ++ header ++ ↑(Std.Array.empty U8).to_slice ∧ next.2.2.length = out.length + 5 + ↑0#usize
+      | core.result.Result.Err a => True)
+    (host_semantic.semantic_row hash (U8.wrapping_add 3#u8 (UScalar.cast UScalarTy.U8 i)) (Std.Array.empty U8).to_slice
+      transcript out)
+⊢ Post (Good out (n + 1)) do
+    let cf ←
+      do
+        let (r, transcript1, bytes1) ←
+          host_semantic.semantic_row hash (U8.wrapping_add 3#u8 (UScalar.cast UScalarTy.U8 i))
+              (Std.Array.empty U8).to_slice transcript out
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let zc1 ← zc.update i val
+            ok (ControlFlow.cont (transcript1, bytes1, zc1, i.wrapping_add 1#usize))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Std.Array aspis_core.field.QM31 10#usize) (core.convert.FromSame r1_wire.Error) residual
+            ok (ControlFlow.done (transcript1, bytes1, zc, some r1))
+    match cf with
+      | ControlFlow.cont next =>
+        Std.loop
+          (fun x =>
+            if x.2.2.2 < 10#usize then do
+              let (r, transcript1, bytes1) ←
+                host_semantic.semantic_row hash (U8.wrapping_add 3#u8 (UScalar.cast UScalarTy.U8 x.2.2.2))
+                    (Std.Array.empty U8).to_slice x.1 x.2.1
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let zc1 ← x.2.2.1.update x.2.2.2 val
+                  ok (ControlFlow.cont (transcript1, bytes1, zc1, x.2.2.2.wrapping_add 1#usize))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r1 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (Std.Array aspis_core.field.QM31 10#usize) (core.convert.FromSame r1_wire.Error) residual
+                  ok (ControlFlow.done (transcript1, bytes1, x.2.2.1, some r1))
+            else ok (ControlFlow.done (x.1, x.2.1, x.2.2.1, none)))
+          next
+      | ControlFlow.done out => ok out
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ZeroRows43.lean:48:19: error: unexpected identifier; expected prec
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ZeroRows43.lean:63:57: error: unexpected identifier; expected ':'
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ZeroRows43.lean:70:59: error: unexpected identifier; expected ':'
+'R1Z.PV_RunJoin_ZeroRows43.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

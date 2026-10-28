@@ -1,0 +1,112 @@
+START 60413 R1Z.PV_RunJoin_RoundRecord43
+DONE 60413 R1Z.PV_RunJoin_RoundRecord43 exit 1 wall 2.13 RSS 4422692864
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundRecord43.lean:87:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑framed
+in the target expression
+  ↑out ++ ↑framed.deref = ↑out ++ header ++ ↑payload
+
+case Ok.false.Ok.Ok
+inst✝ : ExternalTypes
+ops : ExternalFuns
+H F : Type
+hash : aspis_core.digest.Digest32 H
+oi : host_sumcheck.Oracle F
+oracle : F
+round : Usize
+small : ↑round < 10
+transcript : host_wire.SemanticTranscript H
+out : alloc.vec.Vec U8
+point : Std.Array Q 10#usize
+running : Q
+room : out.length + 901 ≤ Usize.max
+this : ExternalFuns := ProverRwP6BodyCandidate.selected ops
+zero : aspis_core.field.QM31
+evaluations : alloc.vec.Vec (core.result.Result aspis_core.field.QM31 r1_wire.Error)
+values polynomial : Std.Array aspis_core.field.QM31 28#usize
+boundary : aspis_core.field.QM31
+payload : alloc.vec.Vec U8
+hp : host_sumcheck.encode_polynomial polynomial = ok payload
+plen : payload.length = 896
+phigh : PV_RunJoin_HighDomain40.HighZero ↑payload
+header : List U8
+framed : alloc.vec.Vec U8
+hlen : header.length = 5
+fbytes : ↑framed = header ++ ↑payload.deref
+fpost :
+  Post
+    (fun r =>
+      match r with
+      | core.result.Result.Ok value => value = framed
+      | core.result.Result.Err a => True)
+    (host_wire.record (U8.wrapping_add 15#u8 (UScalar.cast UScalarTy.U8 round)) payload.deref)
+t : host_wire.SemanticTranscript H
+q : aspis_core.field.QM31
+nextPoint : Std.Array aspis_core.field.QM31 10#usize
+flen : framed.length = 901
+next : alloc.vec.Vec U8
+hn : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out framed.deref = ok next
+hv : ↑next = ↑out ++ ↑framed.deref
+pointValue runningValue : aspis_core.field.QM31
+⊢ ↑out ++ ↑framed.deref = ↑out ++ header ++ ↑payload
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out
+  has type
+    alloc.vec.Vec U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑out
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundRecord43.lean:38:69: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundRecord43.lean:38:88: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok, ̲Aeneas.Std.uncurry,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundRecord43.lean:51:28: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵l̵i̵f̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundRecord43.lean:63:19: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundRecord43.lean:63:73: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,̵l̵i̵f̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundRecord43.lean:70:21: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundRecord43.lean:70:94: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok, ̲Aeneas.Std.uncurry,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_RoundRecord43.post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
