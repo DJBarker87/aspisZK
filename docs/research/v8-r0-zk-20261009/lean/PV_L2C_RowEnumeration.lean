@@ -11,12 +11,14 @@ theorem index_val (i : Fin 1024) : (index i).val=i.val := by rfl
 
 /-- Symbolic range equality, without normalizing the 1024-cell recurrence. -/
 theorem enumeration : rows=List.ofFn index := by
-  apply (List.map_injective (fun a b h => UScalar.eq_of_val_eq h)).mp
+  apply (List.map_inj_right (f:=fun r : Usize => r.val)
+    (fun a b h => UScalar.eq_of_val_eq h)).mp
   rw [rows,sequence_ascending 1024 0#usize (by decide),List.map_ofFn]
   apply List.ext_getElem
   · simp only [List.length_range',List.length_ofFn]
   · intro i hi hj
-    simp only [List.getElem_range',List.getElem_ofFn,Function.comp_apply,index_val]
-    rfl
+    have hz : (0#usize).val=0 := by scalar_tac
+    simp only [List.getElem_range',List.getElem_ofFn,Function.comp_apply,index_val,hz,
+      Nat.mul_one,Nat.one_mul,Nat.zero_add]
 #print axioms enumeration
 end PV_L2C_RowEnumeration
