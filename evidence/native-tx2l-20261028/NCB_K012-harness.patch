@@ -1,0 +1,25 @@
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -231,11 +231,11 @@
+ #[cfg(kani)] mod NCB_digest {
+  use super::*;
+  use aspis_core::Digest32;
+- static mut PARTS:*const &[u8]=core::ptr::null();static mut LEN:usize=0;
++ static mut PARTS:*const ()=core::ptr::null();static mut LEN:usize=0;
+  static mut REPLY:[u8;32]=[0;32];static mut CALLS:usize=0;
+  fn reply(parts:&[&[u8]])->solana_program::hash::Hash {unsafe{
+   assert!(CALLS==0);CALLS=1;
+-  assert!(parts.len()==LEN);assert!(core::ptr::eq(parts.as_ptr(),PARTS));
++  assert!(parts.len()==LEN);assert!(core::ptr::eq(parts.as_ptr().cast::<()>(),PARTS));
+   solana_program::hash::Hash::new_from_array(REPLY)
+  }}
+  #[kani::proof] #[kani::unwind(64)]
+@@ -251,7 +251,7 @@
+   let la:usize=kani::any();let lb:usize=kani::any();let lc:usize=kani::any();
+   kani::assume(la<=4&&lb<=4&&lc<=4);let all=[&a[..la],&b[..lb],&c[..lc]];
+   let n:usize=kani::any();kani::assume(n<=3);let parts=&all[..n];let result:[u8;32]=kani::any();
+-  unsafe{PARTS=parts.as_ptr();LEN=parts.len();REPLY=result;CALLS=0;}
++  unsafe{PARTS=parts.as_ptr().cast::<()>();LEN=parts.len();REPLY=result;CALLS=0;}
+   let out=SolanaDigest.digest(parts);let j:usize=kani::any();kani::assume(j<32);
+   assert!(out[j]==result[j]);unsafe{assert!(CALLS==1);}
+  }

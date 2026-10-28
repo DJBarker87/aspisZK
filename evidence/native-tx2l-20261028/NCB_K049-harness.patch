@@ -1,0 +1,95 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -950,3 +950,92 @@
+  #[kani::proof] #[kani::unwind(4)] fn reverse_done(){let mut it=(0usize..0).rev();assert!(it.next()==None);assert!(it.size_hint()==(0,Some(0)));}
+  #[kani::proof] #[kani::unwind(4)] fn row_group(){let rows:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(rows<=22&&i<rows&&j<5);let at=5*i+j;assert!(at<5*rows&&at<110);}
+ }
++
++#[cfg(kani)] mod NCB_geometry_row {
++ use super::*;
++ static mut U:usize=0;static mut CALLS:u8=0;static mut X:u32=0;static mut Y:u32=0;static mut LX:u32=0;static mut LY:u32=0;
++ fn canonical()->M31{let x:u32=kani::any();kani::assume(x<2147483647);M31(x)}
++ fn point(i:domain::FibreIndex)->domain::Point<M31> {unsafe{
++  assert!(CALLS==0);CALLS=1;assert!(i.get()==U&&U<262144);
++  let x=canonical();let y=canonical();X=x.0;Y=y.0;domain::Point{x,y}
++ }}
++ fn line(i:domain::FibreIndex)->M31{unsafe{
++  assert!(CALLS==1||CALLS==2);let expected=U/4*4+if CALLS==1{0}else{3};assert!(i.get()==expected&&expected<262144);
++  let x=canonical();if CALLS==1{LX=x.0;}else{LY=x.0;}CALLS+=1;x
++ }}
++ fn mul(x:M31,y:M31)->M31{unsafe{
++  assert!(CALLS==3);CALLS=4;assert!(x.0==LX&&y.0==LX);assert!(x.0<2147483647&&y.0<2147483647);
++  let result:u32=kani::any();kani::assume(u64::from(result)==(u64::from(x.0)*u64::from(y.0))%2147483647);M31(result)
++ }}
++ fn row(query:u32)->Result<([M31;5],M31),Error>{
++
++            let u=query as usize;
++            let fibre=domain::FibreIndex::new(u).map_err(|_|Error::Query)?;
++            let domain::Point{x:circle_x,y:circle_y}=crate::fast_domain::fibre_point(fibre);
++            let line_x=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4).map_err(|_|Error::Query)?);
++            let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4+3).map_err(|_|Error::Query)?);
++            let line_z=line_x.mul(line_x).double().sub(M31::ONE);
++            let values=[circle_x,circle_y,line_x,line_y,line_z];
++            if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
++
++  Ok((values,line_z))
++ }
++#[kani::proof] #[kani::unwind(64)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++#[kani::stub(crate::fast_domain::fibre_point,point)]
++#[kani::stub(crate::fast_domain::line_node,line)]
++#[kani::stub(M31::mul,mul)]
++fn reject(){
++let query:u32=kani::any();unsafe{U=query as usize;CALLS=0;}
++kani::assume(query>=262144);let result=row(query);assert!(matches!(result,Err(Error::Query)));unsafe{assert!(CALLS==0);}
++}
++#[kani::proof] #[kani::unwind(64)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++#[kani::stub(crate::fast_domain::fibre_point,point)]
++#[kani::stub(crate::fast_domain::line_node,line)]
++#[kani::stub(M31::mul,mul)]
++fn routing(){
++let query:u32=kani::any();unsafe{U=query as usize;CALLS=0;}
++kani::assume(query<262144);let result=row(query);unsafe{assert!(CALLS==4);}
++}
++#[kani::proof] #[kani::unwind(64)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++#[kani::stub(crate::fast_domain::fibre_point,point)]
++#[kani::stub(crate::fast_domain::line_node,line)]
++#[kani::stub(M31::mul,mul)]
++fn returned(){
++let query:u32=kani::any();unsafe{U=query as usize;CALLS=0;}
++kani::assume(query<262144);let result=row(query);unsafe{assert!(CALLS==4);}
++if let Ok((values,z))=result{unsafe{assert!(values[0].0==X&&values[1].0==Y&&values[2].0==LX&&values[3].0==LY&&values[4].0==z.0);let j:usize=kani::any();kani::assume(j<5);assert!(values[j].0>0&&values[j].0<2147483647);}}
++}
++#[kani::proof] #[kani::unwind(64)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++#[kani::stub(crate::fast_domain::fibre_point,point)]
++#[kani::stub(crate::fast_domain::line_node,line)]
++#[kani::stub(M31::mul,mul)]
++fn zero(){
++let query:u32=kani::any();unsafe{U=query as usize;CALLS=0;}
++kani::assume(query<262144);let result=row(query);unsafe{assert!(CALLS==4);}
++unsafe{if X==0||Y==0||LX==0||LY==0{assert!(matches!(result,Err(Error::Query)));}}
++}
++}

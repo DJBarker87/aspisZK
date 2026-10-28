@@ -1,0 +1,44 @@
+{"attempt": "NCB_K005", "exit_status": 1, "wall_seconds": 1.0547725679934956, "peak_rss_kib": "185860", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+y();
+    |                                - binding `b` declared here
+251 |   let la:usize=kani::any();let lb:usize=kani::any();let lc:usize=kani::any();
+252 |   kani::assume(la<=4&&lb<=4&&lc<=4);let all=[&a[..la],&b[..lb],&c[..lc]];
+    |                                                        ^ borrowed value does not live long enough
+253 |   let n:usize=kani::any();kani::assume(n<=3);let parts=&all[..n];let result:[u8;32]=kani::any();
+254 |   unsafe{PARTS=parts.as_ptr();LEN=parts.len();REPLY=result;CALLS=0;}
+    |          -------------------- assignment requires that `b` is borrowed for `'static`
+...
+257 |  }
+    |  - `b` dropped here while still borrowed
+
+error[E0597]: `c` does not live long enough
+   --> programs/r1-cost-probe/src/lib.rs:252:65
+    |
+250 |   let a:[u8;4]=kani::any();let b:[u8;4]=kani::any();let c:[u8;4]=kani::any();
+    |                                                         - binding `c` declared here
+251 |   let la:usize=kani::any();let lb:usize=kani::any();let lc:usize=kani::any();
+252 |   kani::assume(la<=4&&lb<=4&&lc<=4);let all=[&a[..la],&b[..lb],&c[..lc]];
+    |                                                                 ^ borrowed value does not live long enough
+253 |   let n:usize=kani::any();kani::assume(n<=3);let parts=&all[..n];let result:[u8;32]=kani::any();
+254 |   unsafe{PARTS=parts.as_ptr();LEN=parts.len();REPLY=result;CALLS=0;}
+    |          -------------------- assignment requires that `c` is borrowed for `'static`
+...
+257 |  }
+    |  - `c` dropped here while still borrowed
+
+For more information about this error, try `rustc --explain E0597`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 3 previous errors; 7 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+
+Running as unit: run-r4aa36399ed594d1da0393924992ce187.scope; invocation ID: 17524ff92a104623a3a8bdf1c53779f0

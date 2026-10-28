@@ -1,0 +1,54 @@
+{"attempt": "NCB_K012", "exit_status": 1, "wall_seconds": 7.132194453966804, "peak_rss_kib": "514152", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-tx2l-20261028/NCB_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qu
+...
+opy>(dst:&mut [T],src:&[T]){
+    |        ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_copy_from_slice`
+
+warning: function `KMX_clone_from_slice` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:205:8
+    |
+205 | pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
+    |        ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_from_slice`
+
+warning: function `KMX_extend_from_slice` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:207:8
+    |
+207 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+    |        ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_from_slice`
+
+warning: function `KMX_to_vec` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:211:8
+    |
+211 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+    |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:216:15
+    |
+216 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+    |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+    Finished `dev` profile [optimized] target(s) in 6.32s
+Checking harness NCB_digest::copy_negative...
+
+VERIFICATION RESULT:
+ ** 1 of 17 failed
+Failed Checks: assertion failed: b[15]==0
+ File: "programs/r1-cost-probe/src/lib.rs", line 266, in NCB_digest::copy_negative
+
+VERIFICATION:- FAILED
+Verification Time: 0.06432568s
+
+Manual Harness Summary:
+Verification failed for - NCB_digest::copy_negative
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r763e38f3d0a34a63ad5e040e38af734b.scope; invocation ID: 4a2e522d5dca4b6491e9c19e58972f60

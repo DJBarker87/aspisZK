@@ -1,0 +1,25 @@
+--- a/crates/aspis-r1-cost-probe/src/transcript.rs
++++ b/crates/aspis-r1-cost-probe/src/transcript.rs
+@@ -123,4 +123,22 @@
+ #[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
+ 
+  fn block(){let state:[u8;32]=kani::any();let payload:[u8;64]=kani::any();let n:usize=kani::any();kani::assume(n<=64);let j:usize=kani::any();kani::assume(j<32);let row:u8=kani::any();kani::assume(row<=95);let bytes=&payload[..n];setup(2,state,row,bytes,j);let mut t=Transcript{state,hash:Spy};let out=t.block(row,bytes);unsafe{assert!(CALLS==3&&out[j]==REPLIES[1][j]&&t.state[j]==REPLIES[2][j]);}}
++#[kani::proof] #[kani::unwind(512)] #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++
++ fn absorb_full_bound(){let state:[u8;32]=kani::any();let payload:[u8;57607]=kani::any();let n:usize=kani::any();kani::assume(n<=57607);let j:usize=kani::any();kani::assume(j<32);let row:u8=kani::any();kani::assume(row<=95);let bytes=&payload[..n];setup(1,state,row,bytes,j);let mut t=Transcript{state,hash:Spy};t.absorb(row,bytes);unsafe{assert!(CALLS==1&&t.state[j]==REPLIES[0][j]);}}
++
++#[kani::proof] #[kani::unwind(512)] #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++
++ fn block_full_bound(){let state:[u8;32]=kani::any();let payload:[u8;57607]=kani::any();let n:usize=kani::any();kani::assume(n<=57607);let j:usize=kani::any();kani::assume(j<32);let row:u8=kani::any();kani::assume(row<=95);let bytes=&payload[..n];setup(2,state,row,bytes,j);let mut t=Transcript{state,hash:Spy};let out=t.block(row,bytes);unsafe{assert!(CALLS==3&&out[j]==REPLIES[1][j]&&t.state[j]==REPLIES[2][j]);}}
++
+ }

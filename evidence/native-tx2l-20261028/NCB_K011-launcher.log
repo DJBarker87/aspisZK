@@ -1,0 +1,61 @@
+{"attempt": "NCB_K011", "exit_status": 0, "wall_seconds": 12.133685513050295, "peak_rss_kib": "645544", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-tx2l-20261028/NCB_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qu
+...
+ffer` should have a snake case name
+  --> crates/aspis-core/src/r0/heap.rs:58:18
+   |
+58 | #[cfg(kani)] mod NBS_buffer {
+   |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nbs_buffer`
+
+warning: module `NCB_resize` should have a snake case name
+  --> crates/aspis-core/src/r0/heap.rs:95:18
+   |
+95 | #[cfg(kani)] mod NCB_resize {
+   |                  ^^^^^^^^^^ help: convert the identifier to snake case: `ncb_resize`
+
+warning: module `NCB_resize_split` should have a snake case name
+   --> crates/aspis-core/src/r0/heap.rs:138:18
+    |
+138 | #[cfg(kani)] mod NCB_resize_split {
+    |                  ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncb_resize_split`
+
+warning: function `NBS_recheck_26` should have a snake case name
+  --> crates/aspis-core/src/r0/heap.rs:48:4
+   |
+48 | fn NBS_recheck_26() {
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_recheck_26`
+
+warning: function `NBS_recheck_25` should have a snake case name
+  --> crates/aspis-core/src/r0/heap.rs:88:4
+   |
+88 | fn NBS_recheck_25(){
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_recheck_25`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 9.28s
+Checking harness r0::heap::NCB_resize_split::word_1_frame...
+
+VERIFICATION RESULT:
+ ** 0 of 414 failed (8 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.45113668s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r30e7f541b9a84b83816412689e0d30f9.scope; invocation ID: e210b56093974c2487383518caa4fb7b
