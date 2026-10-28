@@ -1,4 +1,5 @@
 import R1Z.PV_RDB2D_PV_B3P_ScheduleResult133
+#print Aeneas.Std.core.ptr.alignment.Alignment
 namespace R1Z.PV_RDB2D_CollectorShape
 open PV_B3P_Schedule133
 set_option autoImplicit false
