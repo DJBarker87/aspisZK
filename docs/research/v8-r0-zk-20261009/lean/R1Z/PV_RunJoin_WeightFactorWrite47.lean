@@ -24,7 +24,7 @@ theorem equation (fs : Factors) (slot d : Usize) (row : Array K 4#usize) :
 
 theorem read_set (fs : Factors) (slot : Usize) (m : Matrix) (hs : slot.val<5) :
     Array.index_usize (Aeneas.Std.Array.set fs slot m) slot=ok m := by
-  unfold Array.index_usize
+  unfold Array.index_usize Aeneas.Std.Array.set
   have hb : slot.val<fs.val.length := by rw [fs.property];exact hs
   change (match (fs.val.set slot.val m)[slot.val]? with
     | none => Result.fail .arrayOutOfBounds | some v => Result.ok v)=ok m
