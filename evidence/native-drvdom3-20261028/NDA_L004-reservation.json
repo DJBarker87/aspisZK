@@ -1,0 +1,28 @@
+{
+  "requested_bytes": 8589934592,
+  "allowed": true,
+  "utc": 1793215277.260002,
+  "populated_scopes": [
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rb636c354a58941a598ff326393e51641.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/python3 S2W_run_host.py NDB_K001.json",
+        "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_K001/time.log timeout 600 python3 NDB_gate.py NDB_K001 r1_pool_adapter::NDB_native::NDB_copy_fidelity",
+        "timeout 600 python3 NDB_gate.py NDB_K001 r1_pool_adapter::NDB_native::NDB_copy_fidelity",
+        "python3 NDB_gate.py NDB_K001 r1_pool_adapter::NDB_native::NDB_copy_fidelity",
+        "/home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe/Cargo.toml --lib -j 1 -Z unstable-options -Z stubbing -Z function-contracts --harness-timeout 90s --exact --harness r1_pool_adapter::NDB_native::NDB_copy_fidelity --output-format terse --features pool-adapter,private-leaf-salts",
+        "cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe/Cargo.toml --lib -j 1 -Z unstable-options -Z stubbing -Z function-contracts --harness-timeout 90s --exact --harness r1_pool_adapter::NDB_native::NDB_copy_fidelity --output-format terse --features pool-adapter,private-leaf-salts",
+        "/home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo rustc --manifest-path /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe/Cargo.toml --features=pool-adapter,private-leaf-salts --target x86_64-unknown-linux-gnu -Zhost-config -Ztarget-applies-to-host --config=host.rustflags=[\"--cfg=kani_host\"] --target-dir /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani --message-format json-diagnostic-rendered-ansi -p path+file:///home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe#aspis-r1-cost-probe-program@0.1.0 --lib -- -Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --enable-stubbing --harness r1_pool_adapter::NDB_native::NDB_copy_fidelity --exact -Z unstable-options -Z stubbing -Z function-contracts",
+        "/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name zerocopy --edition=2021 /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zerocopy-0.8.52/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debug-assertions=on --cfg feature=\"simd\" --check-cfg cfg(docsrs,test) --check-cfg cfg(feature, values(\"__internal_use_only_features_that_work_on_stable\", \"alloc\", \"derive\", \"float-nightly\", \"simd\", \"simd-nightly\", \"std\", \"zerocopy-derive\")) -C metadata=7bd56daf00017006 -C extra-filename=-6c75bdd22dfa2bd1 --out-dir /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/debug/deps --cap-lints allow -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0 --check-cfg cfg(no_zerocopy_simd_x86_avx12_1_89_0) --check-cfg cfg(rust, values(\"1.89.0\")) --check-cfg cfg(no_zerocopy_core_error_1_81_0) --check-cfg cfg(rust, values(\"1.81.0\")) --check-cfg cfg(no_zerocopy_diagnostic_on_unimplemented_1_78_0) --check-cfg cfg(rust, values(\"1.78.0\")) --check-cfg cfg(no_zerocopy_generic_bounds_in_const_fn_1_61_0) --check-cfg cfg(rust, values(\"1.61.0\")) --check-cfg cfg(no_zerocopy_target_has_atomics_1_60_0) --check-cfg cfg(rust, values(\"1.60.0\")) --check-cfg cfg(no_zerocopy_aarch64_simd_1_59_0) --check-cfg cfg(rust, values(\"1.59.0\")) --check-cfg cfg(no_zerocopy_aarch64_simd_be_1_87_0) --check-cfg cfg(rust, values(\"1.87.0\")) --check-cfg cfg(no_zerocopy_panic_in_const_and_vec_try_reserve_1_57_0) --check-cfg cfg(rust, values(\"1.57.0\")) --check-cfg cfg(doc_cfg) --check-cfg cfg(kani) --check-cfg cfg(__ZEROCOPY_INTERNAL_USE_ONLY_NIGHTLY_FEATURES_IN_TESTS) --check-cfg cfg(__ZEROCOPY_INTERNAL_USE_ONLY_DEV_MODE) --check-cfg cfg(coverage_nightly) --check-cfg cfg(zerocopy_inline_always) --check-cfg cfg(zerocopy_unstable_ptr) --check-cfg cfg(zerocopy_unstable_linux) --check-cfg cfg(no_fp_fmt_parse)"
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 331866112
+    }
+  ],
+  "bounded_reserved_bytes": 8589934592,
+  "all_populated_scopes_bounded": true,
+  "safe_limit_bytes": 59055800320,
+  "print_axioms": "N/A: read-only resource preflight"
+}

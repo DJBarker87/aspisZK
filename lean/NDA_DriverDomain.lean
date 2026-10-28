@@ -60,6 +60,38 @@ theorem preparation (c : Configuration F C)
     apply SAP_CanonicalCarrier.qm
     exact all _ (List.getElem_mem _)
 
+/-- The actual installed sampler returns 22 distinct coordinates, in their
+original order. Bounds and injectivity come from its strict decoder. -/
+theorem query_distinct (c : Configuration F C)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8)
+    (cut : NCU_DriverDomain.Prefix (currentInstalled c) (currentDigest c) semantic pub proof ()) :
+    ∃ q : Fin 22 → Fin 262144,
+      Function.Injective q ∧
+      ∀ j : Fin 22, ((writerPrepared cut.prepared).queries.val[j.val]'(by
+        simpa [(writerPrepared cut.prepared).queries.property] using j.isLt)).val = (q j).val := by
+  obtain ⟨expanded,y1,view,sem,out,rs,wide,same,verify,outEq,reached,canon,alpha,claim⟩ :=
+    SAP_OpeningCuts.opening (current c) c.boundaries c.std (currentDigest c) () semantic proof
+      cut.prepared (Array.repeat 29#usize cut.zero) cut.scratch cut.prepare
+  have variant : (retainedView view).variant = AspisR1PublicPreparation.transport.Variant.S2 := by
+    change retainedVariant view.variant = _
+    rw [sourceView_variant proof expanded y1 view wide]
+    rfl
+  obtain ⟨t0,t1,t2,t3,t4,t5,t6,inactive,root,bytes1,bytes2,gamma,kappa,a0,a1,rho,queries,claim,
+    seed,first,serialized,second,third,unwrapped,extended1,extended2,fourth,query,last,powers,claimed,output⟩ :=
+    PAln_OpeningStages.double_of_reached _ (retainedDigest (currentDigest c)) (retainedSem sem)
+      (retainedView view) () out rs variant reached
+  have query' : AspisR1PublicPreparation.QueriesModel.queries
+      (Query31ConcreteMaterializedSchedule.concreteBoundaries
+        Query31ConcreteDriverTraceFacts.sourceDefaultState AspisS1M31Embedding.Total.embed)
+      (retainedDigest (currentDigest c)) t4 31#u8 (retainedView view).final_message =
+      ok (.Ok queries,t5) := query
+  obtain ⟨q,decode,coordinates⟩ := F3K_SourceQueryDecode.source _ _ _ _ _ _ query'
+  refine ⟨q,(LiteralQueryRead.decode_success _ q decode).2,?_⟩
+  rw [←outEq,output]
+  exact coordinates
+
 #print axioms preparation
+#print axioms query_distinct
 end AspisR1.NDA_DriverDomain
 end

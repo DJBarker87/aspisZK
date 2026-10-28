@@ -22,3 +22,33 @@ No Kani, shipped source edits, artifact rebuilds, key operations or push.
 
 Remaining: query distinctness; coordinates, rhs, power canonicality, then leaf
 composition with the exact residual premises. Budget used 2/50 Lean, 0/0 Kani.
+
+# Stage 2 — distinct queries and primitive-domain composition
+
+`NDA_DriverDomain.query_distinct` derives an injective Fin22→Fin262144
+and exact coordinate equality to THIS cut's 22 query words. It uses the
+installed query arithmetic/strict decoder, not fresh sampled queries.
+L003 exit0,3.508835574s,RSS5349540KiB,swap0.
+
+`NDA_QueryCanonical` weakens the existing arithmetic ports to canonicality
+preservation only, proves one actual native-model query iteration, induction
+on Port2_QueryLoop.Calls, and on_prefix for NCU's own query result.
+No buffer execution is assumed. `retained` proves op2/op3/op9/op16 of
+Tx1Q_QueryBridge.leaves are c.query's unchanged slots. `of_ports` maps the
+existing stronger ports to these laws, not vice versa. These primitive laws
+are explicit remaining obligations, not new trust or a closed instance.
+L004 generic step/induction passed; L005 rejected reserved-keyword name draft;
+L006 complete module exit0,2.342826512s,RSS5385104KiB,swap0.
+
+`NDA_CircleCanonical.on_prefix` propagates a law on c.boundaries.circle to the
+four coordinates of THIS Prepared. It inverts the same successful semantic
+verification, derives both circle invocations, and retains the same z array.
+`of_source` supplies that primitive law IF the retained slot equals the
+existing emitted wrapper; it never installs a replacement dictionary.
+L007 exit0,2.568761469s,RSS5399024KiB,swap0.
+All successful roots print only [propext,Classical.choice,Quot.sound].
+Aeneas objects resolved by the ordered LEAN_PATH are pinned (221 object/split
+files) in NDA_AENEAS_PINS.json. All direct imports are re-pinned per attempt.
+The cache already existed, so no seed was copied or modified beyond NDA objects.
+Budget used 7/50 Lean, 0 Kani. Remaining: exact reduced domain/leaf export,
+and determine whether the arbitrary primitive-slot laws are derivable.
