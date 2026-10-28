@@ -57,12 +57,14 @@ theorem native_eq_model {S Secret Proof : Type} (callback : Callback S Secret)
     cases h : callback index state with
     | mk pair after =>
       rcases pair with ⟨before,out⟩
+      simp only [h]
       cases out with
       | error e => rfl
       | ok secret =>
         cases hp : prover secret after with
         | mk pair final =>
           rcases pair with ⟨suffix,result⟩
+          simp only [hp]
           cases result with
           | ok proof => rfl
           | error e =>
