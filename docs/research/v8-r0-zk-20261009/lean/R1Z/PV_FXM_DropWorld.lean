@@ -73,8 +73,7 @@ theorem allocated {S F : Type} (free : Nat → Nat → Nat → S → S)
     (native free b w).2.deallocations=w.deallocations+1 ∧
     (native free b w).2.history=w.history++[.free b.address (4*b.capacity) 4] ∧
     (native free b w).2.live b.address=false := by
-  simp only [native,release,h,ite_false,ite_true]
-  exact ⟨rfl,rfl,rfl⟩
+  simp [native,release,h]
 
 /-- The caller continues in the post-deallocation world, not the old world. -/
 theorem caller_composition {S F A : Type} (free : Nat → Nat → Nat → S → S)
