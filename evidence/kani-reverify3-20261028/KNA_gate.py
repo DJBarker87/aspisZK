@@ -26,7 +26,7 @@ for p in m['packages']:
 out=dict(lock_before=before,new_packages=new,edge_errors=edges,metadata_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),resolved_packages=len(actual),frozen_packages=len(frozen),allowed=not new and not edges)
 (b/(a+'-graph.json')).write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out),flush=True)
 assert out['allowed']
-cmd=['/home/dombarker/.kani/kani-0.67.0/bin/kani-driver',str(b/'KNA_windows.rs'),'-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--harness',harness,'--output-format','regular','--cbmc-args','--unwinding-assertions']
+cmd=['/home/dombarker/.kani/kani-0.67.0/bin/kani-driver',str(b/'KNA_windows.rs'),'-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--harness',harness,'--output-format','regular','--solver','kissat','--cbmc-args','--unwinding-assertions','--slice-formula']
 print(json.dumps(dict(command=cmd)),flush=True)
 with tempfile.TemporaryDirectory(prefix='KNA_'+a+'_tmp_',dir=b) as task_tmp:
  child_env=os.environ.copy();child_env['TMPDIR']=task_tmp
