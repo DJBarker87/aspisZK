@@ -46,7 +46,7 @@ if prov in bundle:
   if q.exists():v['sha256']=hashlib.sha256(readb(q)).hexdigest()
  virtual[prov]=json.dumps(j)
 plans=[('V170',['pv-fxmem-20261028/structural-drop.py']),('V183',['pv-fxmem-20261028/reserve-source.py','pv-fxmem-20261028/layout-source.py','pv-fxmem-20261028/structural-reserve.py']),('V184',['pv-alib-20261027/structural-pop.py']),('V187',['pv-dlib-20261028/structural-array.py']),('V221,V222',['pv-fxmem-20261028/structural-zeroize.py']),('V178',['pv-relink-20261028/bind-v178.py']),('V182',['pv-relink-20261028/bind-v182.py']),('V195',['pv-relink-20261028/bind-v195.py']),('V233',['pv-relink-20261028/bind-v233.py']),('V231',['pv-dlib-20261028/structural-sha-final.py']),('V238',['pv-dlib-20261028/structural-ct.py']),('V265',['pv-alib-20261027/structural-circle.py'])]
-if len(sys.argv)>1:plans=[x for x in plans if x[0]=='V265']
+plans=[x for x in plans if x[0] in ['V231','V238']]
 res=[]
 for ids,steps in plans:
  record=dict(rows=ids.split(','),steps=[],source_selection='1.94.1 sysroot; zeroize1.9.0; all other dependencies resolved versions unchanged; x86_64 Linux release')
