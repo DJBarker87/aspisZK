@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_ZeroScan31.lean:17:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  m = aspis_core.field.M31.ZERO
+but is expected to have type
+  m = 0#u32
+'R1Z.PV_RunJoin_ZeroScan31.word_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_ZeroScan31.lean:34:31: error: Tactic `rfl` failed: The left-hand side
+  liftU 0#u32
+is not definitionally equal to the right-hand side
+  0
+
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+c x : U32
+m : aspis_core.field.M31
+hm : aspis_core.field.M31.mul c x = ok m
+hb :
+  core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m aspis_core.field.M31.ZERO =
+    ok false
+h : ok (false, c) = ok (false, c)
+he : m = 0#u32
+z : aspis_core.field.M31
+hz : aspis_core.field.M31.mul c x = ok z
+left✝ : ↑z < 2147483647
+hv : liftU 0#u32 = liftU c * liftU x
+hez : z = m
+⊢ liftU 0#u32 = 0
+'R1Z.PV_RunJoin_ZeroScan31.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ZeroScan31.list' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_ZeroScan31.lean:74:57: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_ZeroScan31.lean:76:6: error(lean.unknownIdentifier): Unknown constant `List.getElem!_eq_getElem`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_ZeroScan31.lean:65:52: error: unsolved goals
+K : Type
+inst✝¹ : Field K
+inst✝ : CharP K 2147483647
+d : Std.Array U32 8#usize
+c : U32
+after : core.slice.iter.Iter U32
+n : ℕ
+hp :
+  scan predicate true (List.drop { slice := d.to_slice, i := 0 }.i ↑{ slice := d.to_slice, i := 0 }.slice) c =
+    ok (false, n)
+h :
+  (match (false, n) with
+    | (b, n) =>
+      ok (b, { slice := { slice := d.to_slice, i := 0 }.slice, i := { slice := d.to_slice, i := 0 }.i + n })) =
+    ok (false, after)
+hall : ∀ x ∈ ↑d, liftU c * liftU x = 0
+j : Fin 8
+hlt : ↑j < (↑d).length
+⊢ liftU c * liftU (↑d)[↑j]! = 0
+'R1Z.PV_RunJoin_ZeroScan31.array' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -71,6 +71,9 @@ theorem array (d : Array U32 8#usize) (c : U32)
   subst b
   have hall := list (K := K) d.val c n (by simpa only [Array.to_slice,List.drop_zero] using hp)
   intro j
-  exact hall _ (List.getElem!_mem (by rw [d.property]; simpa using j.isLt))
+  have hlt : j.val < d.val.length := by rw [d.property]; simpa using j.isLt
+  change liftU c * liftU d.val[j.val]! = 0
+  rw [List.getElem!_eq_getElem hlt]
+  exact hall _ (List.getElem_mem hlt)
 #print axioms array
 end R1Z.PV_RunJoin_ZeroScan31
