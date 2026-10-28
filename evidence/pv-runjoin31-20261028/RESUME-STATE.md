@@ -57,3 +57,44 @@ retired-ID notes: a refusal before compiler launch does not consume an ID.
 Next eligible unlaunched ID44611; full cooldown has elapsed. No unchanged
 compile/differential/measurement is rerun. Working tree had no uncommitted
 source work on entry; only this recovery evidence is newly written.
+
+## Live continuation after recovery, 2026-10-28 08:30 UTC
+
+CarryMeaning31 passed44611 (host2.34s; transport/submission554.43s;4.31GB;0swap).
+OwnedCarry31 failed44612 solely on named depth versus numeral20; fixed in
+8a5ea233ef. The original resume-check.py44613 OwnedCarry31 driver is active.
+Do not submit a second scope or resubmit13; wait/collect it. If transport is
+lost after launch, collect that original receipt read-only under(p).
+
+Budget now59charged,33accepted,26rejected,41remaining; update from receipts when
+13 completes. Existing tally may lag. No Kani. Unlaunched IDs eligible under
+m-prime are14,15,19,20,22,27-30,32,33,37-51,56,57,67-70,72,74,83-85 and97-99;
+13 is pending,97-99 reserved audits. Other IDs have actual compile receipts.
+The latest common m-prime supersedes the old retired-ID notes above.
+
+Next after owned carry is checked: PublicCarry31; CompilerAppend31;
+LateAppendRoot31; LateAppendFrame31; RecordOutputLift31; LateAppendCarry31;
+SemanticAppendRoot31; SemanticAppendCarry31; OutputPairMeaning31; RecipientLift31;
+SemanticRecipient31; AppendBinding31 (explicit variant premise); TwoOutputSentinel31;
+CompilerSentinel31; SemanticSentinel31; HonestPackage31; CanonicalHonest31.
+All sources already committed as candidates, each top theorem has#print axioms.
+Inspect each receipt and repair failures before submitting a dependent.
+Use resume-check.py ID R1Z/Module to preserve the quiet-window/cooldown and
+transport waits, one module only. check.py source must equal HEAD before launch.
+Never retry unchanged. Only check.py/resume-check.py wrapper was changed;
+no shared launcher or shared source writes.
+
+43/42/41 remaining figures track actual launched Lean attempts;15 completed
+extraction/native attempts are separate from the Lean budget. Recovery evidence
+includes exact Lean/extraction lists and original host hashes. No outstanding
+old driver/result. A quiet hold lasted until07:59:17; setup transport was flaky.
+44611 compiled in2.34s, so the long wall was transport, not proof normalization.
+Receipt fields now distinguish host_wall_seconds from wall_seconds(submission).
+Raw GNU time logs remain authoritative. The expanded1418-module resolution has
+no unpinned modules; all unmatched cache entries are new uncompiled candidates.
+Source/external/h6 validation artifacts are retained; no changed dependency was
+substituted. No actual shipped edit, wallet action, push or merge.
+
+No deployment premise removed/added/weakened/changed; T/observer/simulator fixed.
+The unconditional honesty and exact owner coverage sentence remain unproved.
+Do not proceed to V038/V045 until they are checked. Commit evidence after stages.
