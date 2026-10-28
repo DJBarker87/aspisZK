@@ -10,6 +10,10 @@ abbrev Output (N : Type) (s : PV_DL_ArrayShape.Shape) := GenericArray U8 N (PV_D
 
 def initial (N : Type) : Full N := ⟨PV_DL_StorageBuild.build 5 (fun _ => 0#u8)⟩
 
+theorem initial_byte (N : Type) (i : Fin 32) :
+    (flatten 5 (initial N).data)[i.val]?=some 0#u8 := by
+  simp only [initial,PV_DL_StorageBuild.flatten_build,List.getElem?_ofFn,dif_pos i.isLt]
+
 def adapted {T A N : Type} (finish : T → Buffer A → Full N → Result (T × Buffer A × Full N))
     (state : T) (buffer : Buffer A) (_ : List U8) : Result (T × Buffer A × List U8) := do
   let (state,buffer,full) ← finish state buffer (initial N)
@@ -57,6 +61,7 @@ theorem decoded {OutN : Type} (s : PV_DL_ArrayShape.Shape) (bytes : List U8)
   PV_DL_ArrayShape.reconstruct s bytes h
 
 #print axioms initial
+#print axioms initial_byte
 #print axioms adapted
 #print axioms callback
 #print axioms value
