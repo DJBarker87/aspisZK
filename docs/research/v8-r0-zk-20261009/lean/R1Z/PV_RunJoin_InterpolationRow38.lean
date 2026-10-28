@@ -32,7 +32,12 @@ theorem step (ops : ExternalFuns) (values p : Nat → Q) (i : Usize) (hi : i.val
   · unfold host_sumcheck.interpolate_loop.body
     simp only [show i<28#usize from hi,↓reduceIte,hbasis,bind_tc_ok]
     rw [read values i hi]
-    dsimp only
+    change (do
+      let m ← @aspis_core.field.M31.inv _ (ProverRwP6BodyCandidate.selected ops) den
+      let scale ← @aspis_core.field.QM31.mul_m31 _ (ProverRwP6BodyCandidate.selected ops) (values i.val) m
+      let out1 ← @host_sumcheck.interpolation_accumulate _ (ProverRwP6BodyCandidate.selected ops)
+        (array p) (ProverCommitM31Array48.array 28#usize basis) scale
+      .ok (.cont (out1,Usize.wrapping_add i 1#usize))) = _
     simp only [bind_tc_ok,inverse,hscale,hout,lift]
   · change ProverCommitM31Ops48.decode inv=(ProverCommitM31Ops48.decode den)⁻¹ at hdinv
     rw [hacc,hdscale,ProverCommitInterpolationEmbed48.source_embed,hdinv,hdd,hpoly]
