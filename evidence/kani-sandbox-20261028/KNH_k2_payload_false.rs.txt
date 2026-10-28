@@ -1,0 +1,23 @@
+#[derive(Clone,Copy)]
+enum Phase {Query(usize),Other}
+type Observer=Option<fn(Phase)>;
+#[cfg(kani)] mod NBZ_native { use super::*;
+
+static mut NBZ_Q:usize=0;
+static mut NBZ_MARK_CALLS:usize=0;
+fn NBZ_mark_none(obs:Observer,phase:Phase) {
+ assert!(obs.is_none());
+ match phase {Phase::Query(i)=>unsafe{assert!(i >= 10);},_=>panic!("wrong phase")}
+ unsafe{NBZ_MARK_CALLS+=1;}
+}
+#[kani::proof]
+
+#[kani::unwind(4096)]
+fn NBZ_return_carriers() {
+ let i:usize=kani::any();kani::assume(i<10);
+ unsafe{NBZ_Q=i;}
+ NBZ_mark_none(None,Phase::Query(i));
+ unsafe{assert_eq!(NBZ_MARK_CALLS,1);}
+}
+
+}
