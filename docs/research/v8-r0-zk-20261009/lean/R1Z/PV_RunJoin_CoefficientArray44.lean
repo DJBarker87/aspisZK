@@ -26,7 +26,7 @@ theorem complete {T : Type} (copy : core.marker.Copy T) (v : transport.Variant) 
   have same : a = ProverCommitArray49.array 1024#usize (fun j => xs (AspisR1.rowNat j)) := by
     apply Subtype.ext
     rw [hav]
-    simp only [ProverRwSuccessArrayFromFn.indices,List.map_ofFn,ProverCommitArray49.array,Function.comp_def,UScalar.ofNatCore_val_eq]
+    simp only [ProverRwSuccessArrayFromFn.indices,List.map_ofFn,ProverCommitArray49.array,Function.comp_def,UScalar.ofNatCore_val_eq,Usize.ofNatCore_val_eq,Fin.val_cast]
   change ProverRwSuccessArrayFromFn.fromFn 1024#usize f (rows,v) = _
   rw [ha,same]
 #print axioms complete
