@@ -12,7 +12,7 @@ try:
 except FileExistsError:
  raise SystemExit('STOP own attempt active; recover its terminal receipt before launching: '+active.read_text())
 with os.fdopen(fd,'w') as f:json.dump(dict(attempt=a),f)
-if (E/'NCA_BUDGET_STOP.json').exists():raise SystemExit('allocation exhausted: no prover launches')
+if (E/'NCA_BUDGET_STOP.json').exists() and json.loads((E/'NCA_BUDGET_STOP.json').read_text()).get('lean_exhausted',False):raise SystemExit('lean allocation exhausted: no lean launches')
 if (E/'NCA_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NCA_L[0-9][0-9][0-9].json')))<80
 assert not (E/a/'receipt.json').exists()

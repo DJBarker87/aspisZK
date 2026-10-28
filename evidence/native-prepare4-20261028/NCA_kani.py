@@ -17,7 +17,7 @@ try:
 except FileExistsError:
  raise SystemExit('STOP own attempt active; recover its terminal receipt before launching: '+active.read_text())
 with os.fdopen(fd,'w') as f:json.dump(dict(attempt=a),f)
-if (E/'NCA_BUDGET_STOP.json').exists():raise SystemExit('allocation exhausted: no prover launches')
+if (E/'NCA_BUDGET_STOP.json').exists() and json.loads((E/'NCA_BUDGET_STOP.json').read_text()).get('kani_exhausted',False):raise SystemExit('kani allocation exhausted: no kani launches')
 if (E/'NCA_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NCA_K[0-9][0-9][0-9].json')))<70
 assert not (E/a/'receipt.json').exists()
@@ -49,7 +49,10 @@ print(p.read_text(),end='');sys.exit(r.returncode)
  raise SystemExit('STOP admission error')
 else:raise SystemExit('STOP admission exhausted')
 (E/(a+'-harness.patch')).write_bytes((E/'NCA_harness.patch').read_bytes())
-(E/(a+'-source-pin.json')).write_bytes((E/'NCA_SOURCE.json').read_bytes())
+pinbytes=(E/'NCA_SOURCE.json').read_bytes();pinhash=hashlib.sha256(pinbytes).hexdigest();pinbase=E/('NCA_PINSET_'+pinhash[:20]+'.json')
+if not pinbase.exists():pinbase.write_bytes(pinbytes)
+assert pinbase.read_bytes()==pinbytes
+(E/(a+'-source-pin.json')).write_text(json.dumps(dict(schema='NCA-source-pin-reference-v1',pinset=pinbase.name,sha256=pinhash,bytes=len(pinbytes),original_sha256=pinhash),indent=2)+'\n')
 cfg=dict(attempt=a,kind='kani',module=module,sources=[src,'NCA_src/crates/aspis-r1-cost-probe/src/lib.rs','NCA_src/crates/aspis-r1-cost-probe/src/verifier.rs','NCA_src/crates/aspis-core/src/r0_transcript.rs','NCA_src/crates/aspis-r1-cost-probe/src/sampler.rs','NCA_src/Cargo.toml','NCA_src/Cargo.lock','NCA_src/KMX_stubs.rs','NCA_src/crates/aspis-r1-cost-probe/src/r1_wire.rs','NCA_src/crates/aspis-r1-cost-probe/src/NCA_wire.rs'],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NCA_src/crates/'+package+'/Cargo.toml','--target-dir',B+'/NCA_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',module,'--output-format','terse'],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/NCA_tmp'},deps_fingerprint={'scope':'frozen native source selected by NCA_SOURCE.json; graph audit before every run; arbitrary callee return overapproximations'},expected_time='optimized Kani compilation then native call routing; no arithmetic elimination',reservation_retries=retry)
 if os.environ.get('NCA_KANI_TRACE')=='1':
  cfg['command'][cfg['command'].index('terse')]='regular'
@@ -92,7 +95,7 @@ r=ssh('python3 -c '+shlex.quote(recover));assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 if a+'/receipt.json' not in out:raise SystemExit('STOP no prover receipt; inspect setup/launcher, do not resubmit blindly')
-rc=json.loads(out[a+'/receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-2000:])
+rc=json.loads(out[a+'/receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-650:])
 
 with (E/'NCA_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
 assert json.loads(active.read_text())["attempt"]==a

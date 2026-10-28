@@ -1,0 +1,45 @@
+{"attempt": "NCA_K061", "exit_status": 1, "wall_seconds": 29.39698275696719, "peak_rss_kib": "1903800", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+aspis-r1-cost-probe/src/NCA_candidate.rs:16:5 in function r1_wire::Prefix::<'_>::parse
+
+Check 945: r1_wire::Prefix::<'_>::parse.pointer_dereference.25
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/NCA_candidate.rs:16:24 in function r1_wire::Prefix::<'_>::parse
+
+Check 946: core::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer.1
+	 - Status: SUCCESS
+	 - Description: "same object violation in this >= origin"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:712:21 in function core::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime
+
+
+SUMMARY:
+ ** 3 of 941 failed (112 unreachable)
+
+ ** 0 of 5 cover properties satisfied (5 unreachable)
+
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "crates/aspis-r1-cost-probe/src/NCA_candidate.rs", line 56, in verifier::candidate::NCA_candidate::NCA_observed_early_controls
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "crates/aspis-r1-cost-probe/src/NCA_candidate.rs", line 55, in verifier::candidate::NCA_candidate::NCA_observed_early_controls
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "crates/aspis-r1-cost-probe/src/NCA_candidate.rs", line 57, in verifier::candidate::NCA_candidate::NCA_observed_early_controls
+
+VERIFICATION:- FAILED
+Verification Time: 25.304813s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NCA_candidate::NCA_observed_early_controls
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r8d374b3390764656a348f64f94cf90c4.scope; invocation ID: 44783e83374641db8f456df34b324fa6

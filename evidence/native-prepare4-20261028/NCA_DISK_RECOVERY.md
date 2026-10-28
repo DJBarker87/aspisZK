@@ -1,0 +1,5 @@
+# Local disk exhaustion, pre-launch recovery
+
+During the fixed-header batch, git index refresh reported ENOSPC and the own wrapper failed saving NCA_K038 admission evidence. Read-only host recovery confirms no K038 config or receipt, and K037 is terminal. K038 was NOT submitted; no process is resubmitted. Four stage commits, including b0ab455fc8, already exist. No other worktree/cache/source/key was touched.
+
+Own repeated source-pin JSONs were compacted losslessly into SHA-pinned baseline files plus per-attempt JSON references. NCA_RECEIPT_COMPACTION.json records each original byte hash/size and its exact preserved baseline. The own runner now writes this reference form. Host source validation and frozen graph/lock checks stay unchanged; evidence can reconstruct EVERY original pin file byte-for-byte. This is a repair of own receipt storage, not shared infrastructure. Native/Lean launch caps and timeout policy are unchanged. A fresh admission is required before the never-submitted K038 resumes.
