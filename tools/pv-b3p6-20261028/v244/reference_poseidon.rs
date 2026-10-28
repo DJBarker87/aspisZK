@@ -337,421 +337,42 @@ fn external_linear_packed(state: [QM31; POSEIDON2_WIDTH]) -> [QM31; 4] {
 }
 
 #[inline(never)]
-fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
-    const SHIFTS: [u8; 15] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15, 16];
-    let old_zero = extension_limbs(state[0]);
-    let mut part_sum = [0u64; 4];
-    let mut lane = 1usize;
-    
-        let limbs = extension_limbs(state[1usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[2usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[3usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[4usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[5usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[6usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[7usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[8usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[9usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[10usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[11usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[12usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[13usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[14usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-
-        let limbs = extension_limbs(state[15usize]);
-        let mut limb = 0usize;
-        
-            part_sum[0usize] += u64::from(limbs[0usize]);
-            
-        
-
-            part_sum[1usize] += u64::from(limbs[1usize]);
-            
-        
-
-            part_sum[2usize] += u64::from(limbs[2usize]);
-            
-        
-
-            part_sum[3usize] += u64::from(limbs[3usize]);
-            
-        
-        
-    
-    let full_sum: [u64; 4] =
-        array4!(limb, part_sum[limb] + u64::from(old_zero[limb]));
-    state[0] = extension_from_raw_limbs(array4!(limb, {
-        part_sum[limb] + u64::from(P) - u64::from(old_zero[limb])
-    }));
-    
-        let limbs = extension_limbs(state[1usize]);
-        state[1usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[1usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[2usize]);
-        state[2usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[2usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[3usize]);
-        state[3usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[3usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[4usize]);
-        state[4usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[4usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[5usize]);
-        state[5usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[5usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[6usize]);
-        state[6usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[6usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[7usize]);
-        state[7usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[7usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[8usize]);
-        state[8usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[8usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[9usize]);
-        state[9usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[9usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[10usize]);
-        state[10usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[10usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[11usize]);
-        state[11usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[11usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[12usize]);
-        state[12usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[12usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[13usize]);
-        state[13usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[13usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[14usize]);
-        state[14usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[14usize - 1])
-        }));
-    
-
-        let limbs = extension_limbs(state[15usize]);
-        state[15usize] = extension_from_raw_limbs(array4!(limb, {
-            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[15usize - 1])
-        }));
-    
+fn internal_linear_lazy(state:&mut[QM31;16]) {
+    const SHIFTS:[u8;15]=[0,1,2,3,4,5,6,7,8,10,12,13,14,15,16];
+    let old_zero=extension_limbs(state[0]);
+    let mut part_sum=[0u64;4];
+    part_sum=internal_sum227(part_sum,state[1]);
+    part_sum=internal_sum227(part_sum,state[2]);
+    part_sum=internal_sum227(part_sum,state[3]);
+    part_sum=internal_sum227(part_sum,state[4]);
+    part_sum=internal_sum227(part_sum,state[5]);
+    part_sum=internal_sum227(part_sum,state[6]);
+    part_sum=internal_sum227(part_sum,state[7]);
+    part_sum=internal_sum227(part_sum,state[8]);
+    part_sum=internal_sum227(part_sum,state[9]);
+    part_sum=internal_sum227(part_sum,state[10]);
+    part_sum=internal_sum227(part_sum,state[11]);
+    part_sum=internal_sum227(part_sum,state[12]);
+    part_sum=internal_sum227(part_sum,state[13]);
+    part_sum=internal_sum227(part_sum,state[14]);
+    part_sum=internal_sum227(part_sum,state[15]);
+    let full_sum=internal_full_sum227(part_sum,old_zero);
+    state[0]=internal_zero227(part_sum,old_zero);
+    state[1]=internal_shift227(state[1],full_sum,SHIFTS[0]);
+    state[2]=internal_shift227(state[2],full_sum,SHIFTS[1]);
+    state[3]=internal_shift227(state[3],full_sum,SHIFTS[2]);
+    state[4]=internal_shift227(state[4],full_sum,SHIFTS[3]);
+    state[5]=internal_shift227(state[5],full_sum,SHIFTS[4]);
+    state[6]=internal_shift227(state[6],full_sum,SHIFTS[5]);
+    state[7]=internal_shift227(state[7],full_sum,SHIFTS[6]);
+    state[8]=internal_shift227(state[8],full_sum,SHIFTS[7]);
+    state[9]=internal_shift227(state[9],full_sum,SHIFTS[8]);
+    state[10]=internal_shift227(state[10],full_sum,SHIFTS[9]);
+    state[11]=internal_shift227(state[11],full_sum,SHIFTS[10]);
+    state[12]=internal_shift227(state[12],full_sum,SHIFTS[11]);
+    state[13]=internal_shift227(state[13],full_sum,SHIFTS[12]);
+    state[14]=internal_shift227(state[14],full_sum,SHIFTS[13]);
+    state[15]=internal_shift227(state[15],full_sum,SHIFTS[14]);
 }
 
 #[inline(never)]
@@ -1345,4 +966,23 @@ QM31 {
                 ),
             ),
         }
+}
+
+fn internal_sum227(mut part_sum:[u64;4],value:QM31)->[u64;4] {
+    let limbs=extension_limbs(value);
+    part_sum[0]+=u64::from(limbs[0]);
+    part_sum[1]+=u64::from(limbs[1]);
+    part_sum[2]+=u64::from(limbs[2]);
+    part_sum[3]+=u64::from(limbs[3]);
+    part_sum
+}
+fn internal_full_sum227(part_sum:[u64;4],old_zero:[u32;4])->[u64;4] {
+    [part_sum[0]+u64::from(old_zero[0]),part_sum[1]+u64::from(old_zero[1]),part_sum[2]+u64::from(old_zero[2]),part_sum[3]+u64::from(old_zero[3])]
+}
+fn internal_zero227(part_sum:[u64;4],old_zero:[u32;4])->QM31 {
+    extension_from_raw_limbs([part_sum[0]+u64::from(P)-u64::from(old_zero[0]),part_sum[1]+u64::from(P)-u64::from(old_zero[1]),part_sum[2]+u64::from(P)-u64::from(old_zero[2]),part_sum[3]+u64::from(P)-u64::from(old_zero[3])])
+}
+fn internal_shift227(value:QM31,full_sum:[u64;4],shift:u8)->QM31 {
+    let limbs=extension_limbs(value);
+    extension_from_raw_limbs([full_sum[0]+(u64::from(limbs[0])<<shift),full_sum[1]+(u64::from(limbs[1])<<shift),full_sum[2]+(u64::from(limbs[2])<<shift),full_sum[3]+(u64::from(limbs[3])<<shift)])
 }

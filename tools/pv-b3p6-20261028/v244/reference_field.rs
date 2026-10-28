@@ -153,56 +153,28 @@ pub(crate) fn qm31_pack_base4(values: &[QM31]) -> QM31 {
     }
 }
 
+fn accumulate_prepared227(mut sums:[[u64;3];3],right:QM31,left:PreparedQm31Multiplier)->[[u64;3];3] {
+    let right_sum=right.c0.add(right.c1);
+    let right_components=[
+        [right.c0.a,right.c0.b,right.c0.a.add(right.c0.b)],
+        [right.c1.a,right.c1.b,right.c1.a.add(right.c1.b)],
+        [right_sum.a,right_sum.b,right_sum.a.add(right_sum.b)]];
+    sums[0][0]+=left.components[0][0].0 as u64 * right_components[0][0].0 as u64;
+    sums[0][1]+=left.components[0][1].0 as u64 * right_components[0][1].0 as u64;
+    sums[0][2]+=left.components[0][2].0 as u64 * right_components[0][2].0 as u64;
+    sums[1][0]+=left.components[1][0].0 as u64 * right_components[1][0].0 as u64;
+    sums[1][1]+=left.components[1][1].0 as u64 * right_components[1][1].0 as u64;
+    sums[1][2]+=left.components[1][2].0 as u64 * right_components[1][2].0 as u64;
+    sums[2][0]+=left.components[2][0].0 as u64 * right_components[2][0].0 as u64;
+    sums[2][1]+=left.components[2][1].0 as u64 * right_components[2][1].0 as u64;
+    sums[2][2]+=left.components[2][2].0 as u64 * right_components[2][2].0 as u64;
+    sums
+}
 pub(crate) fn qm31_sum_products3_prepared(left:&[PreparedQm31Multiplier;3],right:&[QM31;3])->QM31 {
     let mut sums=[[0u64;3];3];
-    { let index=0usize;
-    let right_sum=right[index].c0.add(right[index].c1);
-    let right_components=[
-        [right[index].c0.a,right[index].c0.b,right[index].c0.a.add(right[index].c0.b)],
-        [right[index].c1.a,right[index].c1.b,right[index].c1.a.add(right[index].c1.b)],
-        [right_sum.a,right_sum.b,right_sum.a.add(right_sum.b)]];
-    sums[0][0]+=left[index].components[0][0].0 as u64 * right_components[0][0].0 as u64;
-    sums[0][1]+=left[index].components[0][1].0 as u64 * right_components[0][1].0 as u64;
-    sums[0][2]+=left[index].components[0][2].0 as u64 * right_components[0][2].0 as u64;
-    sums[1][0]+=left[index].components[1][0].0 as u64 * right_components[1][0].0 as u64;
-    sums[1][1]+=left[index].components[1][1].0 as u64 * right_components[1][1].0 as u64;
-    sums[1][2]+=left[index].components[1][2].0 as u64 * right_components[1][2].0 as u64;
-    sums[2][0]+=left[index].components[2][0].0 as u64 * right_components[2][0].0 as u64;
-    sums[2][1]+=left[index].components[2][1].0 as u64 * right_components[2][1].0 as u64;
-    sums[2][2]+=left[index].components[2][2].0 as u64 * right_components[2][2].0 as u64;
-    }
-    { let index=1usize;
-    let right_sum=right[index].c0.add(right[index].c1);
-    let right_components=[
-        [right[index].c0.a,right[index].c0.b,right[index].c0.a.add(right[index].c0.b)],
-        [right[index].c1.a,right[index].c1.b,right[index].c1.a.add(right[index].c1.b)],
-        [right_sum.a,right_sum.b,right_sum.a.add(right_sum.b)]];
-    sums[0][0]+=left[index].components[0][0].0 as u64 * right_components[0][0].0 as u64;
-    sums[0][1]+=left[index].components[0][1].0 as u64 * right_components[0][1].0 as u64;
-    sums[0][2]+=left[index].components[0][2].0 as u64 * right_components[0][2].0 as u64;
-    sums[1][0]+=left[index].components[1][0].0 as u64 * right_components[1][0].0 as u64;
-    sums[1][1]+=left[index].components[1][1].0 as u64 * right_components[1][1].0 as u64;
-    sums[1][2]+=left[index].components[1][2].0 as u64 * right_components[1][2].0 as u64;
-    sums[2][0]+=left[index].components[2][0].0 as u64 * right_components[2][0].0 as u64;
-    sums[2][1]+=left[index].components[2][1].0 as u64 * right_components[2][1].0 as u64;
-    sums[2][2]+=left[index].components[2][2].0 as u64 * right_components[2][2].0 as u64;
-    }
-    { let index=2usize;
-    let right_sum=right[index].c0.add(right[index].c1);
-    let right_components=[
-        [right[index].c0.a,right[index].c0.b,right[index].c0.a.add(right[index].c0.b)],
-        [right[index].c1.a,right[index].c1.b,right[index].c1.a.add(right[index].c1.b)],
-        [right_sum.a,right_sum.b,right_sum.a.add(right_sum.b)]];
-    sums[0][0]+=left[index].components[0][0].0 as u64 * right_components[0][0].0 as u64;
-    sums[0][1]+=left[index].components[0][1].0 as u64 * right_components[0][1].0 as u64;
-    sums[0][2]+=left[index].components[0][2].0 as u64 * right_components[0][2].0 as u64;
-    sums[1][0]+=left[index].components[1][0].0 as u64 * right_components[1][0].0 as u64;
-    sums[1][1]+=left[index].components[1][1].0 as u64 * right_components[1][1].0 as u64;
-    sums[1][2]+=left[index].components[1][2].0 as u64 * right_components[1][2].0 as u64;
-    sums[2][0]+=left[index].components[2][0].0 as u64 * right_components[2][0].0 as u64;
-    sums[2][1]+=left[index].components[2][1].0 as u64 * right_components[2][1].0 as u64;
-    sums[2][2]+=left[index].components[2][2].0 as u64 * right_components[2][2].0 as u64;
-    }
+    sums=accumulate_prepared227(sums,right[0],left[0]);
+    sums=accumulate_prepared227(sums,right[1],left[1]);
+    sums=accumulate_prepared227(sums,right[2],left[2]);
     let m0=reconstruct_component(sums[0]);
     let m1=reconstruct_component(sums[1]);
     let m2=reconstruct_component(sums[2]);
