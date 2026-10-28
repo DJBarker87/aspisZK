@@ -82,7 +82,13 @@ layers, outer failure and divergence. They support input identification and
 rejection-path work; they are not native ROMView decoders or proof-publication
 serialization laws. Native primitive/helper adequacy remains explicit.
 
-The final accepted parser inventory and exact statements are in the resume
+PROVED lower complete source laws: `PV_RJDec_ParserR20.source` is
+`erase ops (program bytes) = decode_pool_v1_pair_forest_terminal_statement_v1 bytes`
+for every byte slice and dictionary, and `PV_RJDec_ParserR12.source` is the
+corresponding complete live-snapshot decoder equation. `ParserR15.source`
+identifies the complete verified-afterstate decoder. The 15 spliced caller
+modules and the named continuation chunks retain their exact source errors.
+The final accepted parser inventory and full statements are in the resume
 audits and receipts. The unchunked snapshot candidate failed on default
 recursion depth; named digest-continuation chunks replace it. No proof limit
 was raised and no unchanged failure was rerun. Staged/uncompiled candidates
@@ -150,8 +156,91 @@ validation, source reification or a cached axioms audit.
 
 ## Validation and final accounting
 
-Final statements, axioms, focused replay, exact resource metrics and attempt
-accounting are appended after the last scopes complete. Every accepted source
-and object must match its committed pin and dependency fingerprint. Only
-standard axioms are permitted. No native scope or Kani run was added in this
-resume, and no key/account file was touched.
+All three new audits passed at source revision
+`457849e4a8c117b5637f5a3145cc3a78af0abdf5`. No Lean source changed afterward.
+The original reserved audit IDs 61397–61399 had already launched before this
+resume; the last three unused IDs 61394–61396 were used instead.
+
+| ID | Exact target (`R1Z.PV_RJDec_…`) | Exit | Scope wall s | Peak RSS bytes | Swap |
+| --- | --- | --- | --- | --- | --- |
+| 61394 | ResumeStatements | 0 | 1.79 | 4422848512 | 0 |
+| 61395 | ResumeAxioms | 0 | 1.84 | 4419338240 | 0 |
+| 61396 | ResumeReplay | 0 | 1.74 | 4419067904 | 0 |
+
+`61394-00.out` prints the complete consumed laws, Common obligations and
+world/runtime structures. `61395-00.out` performs 120 combined axiom prints;
+`61396-00.out` is the final focused cached replay. All printed axiom sets are
+subsets of propext, Classical.choice, Quot.sound. These are focused source
+and statement audits, not a frozen release-closure or full-manifest replay.
+
+**Resume tally: 85 Lean attempts, 79 accepted / 6 rejected; 0 new native
+scopes; 0 Kani. Job total: 98 Lean attempts, 89 accepted / 9 rejected; 2 earlier
+native scopes; 0 Kani; 0 VOID attempts.** All 100 allowed IDs have actually
+launched: 98 Lean plus native 61307 and 61311. Thus the numeric remaining
+Lean budget of 87 could only fit **85** further launches in the permitted
+ID range. No ID was reused or taken outside 61300–61399. **Stop: assigned
+ID range exhausted**, not renewed reliance on the old fence mismatch.
+The unused native-scope allowance cannot be exercised without another ID.
+
+Every new compiler used one module and one admitted scope, MemoryHigh=6G,
+MemoryMax=8G, MemorySwapMax=0, TasksMax=64, Lean -M7000. No cap or prover limit
+was raised; no memory kill or timeout occurred. Peak job Lean RSS was
+4,422,848,512 bytes; all swap counts were zero. The six new rejected attempts
+were 61320 (implicit polymorphic dictionary fields), 61327 (unknown Boolean
+simp lemma), 61341 (dictionary rewrite pattern), 61357 (long snapshot
+elaboration depth), 61366 (unqualified dictionary type) and 61374 (Result
+constructor namespace). Their committed original sources and logs remain;
+replacements changed the inputs before compiling again. The long snapshot
+case permanently uses named digest-continuation chunks in the generators.
+
+New reservation refusals at 61315 (twice) and 61316 happened before compilers
+started. Full 180-second cooldowns were observed, and those still-unlaunched
+IDs were retained. Local early retries returned 77 without admission or a
+scope. Every actual launch checked allowed:true and admission exit zero in
+the same shell command as systemd-run, as required by ruling (t). No refusal
+or cooldown launch is credited. Local script/staging corrections are recorded
+separately in `resume-local-input-corrections.json` and cost no attempts.
+
+Initial and final inherited-cache checks verify 2,764 project source/object
+pairs, 5,802 recorded import fingerprints, 5,673 external objects and 5,438 IR
+companions. Final `resume-current-head-check.json` additionally verifies all
+1,982 h5 pins against current HEAD with zero mismatches; this additional
+HEAD check was performed at final validation, while the initial preflight
+checked the retained frozen pin/object cohort. `resume-own-validation.json`
+checks all 89 accepted private source/object pairs and 389 direct import
+fingerprints. `resume-generator-identity.json` checks all 62 generated Lean
+outputs byte-for-byte without writing any source. No accepted object or
+source in another job's directory was overwritten.
+
+`resume-validation.json`, `resume-source-validation.json`,
+`resume-failed-sources.json`, `resume-original-logs.json`, every receipt,
+module record and original output/time pair carry exact targets, source
+revisions/blobs/hashes, dependency fingerprints, exit status, wall time,
+peak RSS, swap and axiom lines. `resume-uncredited-sources.json` excludes the
+failed raw Parser12 and uncompiled raw Parser15, WorldAdequacy and
+ParserInterpret drafts. The checked ParserR12/ParserR15 replacements are
+credited independently. No uncompiled draft is imported by a final audit.
+
+No native scope, Kani run, extraction, ELF rebuild or unchanged full regression
+was added in this resume. Restored V221/V222 evidence is consumed in its exact
+structural source scope; its machine, provenance and side-channel boundaries
+are not broadened. The wrapper source hash matches the corrected deployed
+resolution's 61311 source hash. The private verified cache is retained for
+follow-up reuse; no key/account file was touched.
+
+## Next concrete deliverable
+
+Identify the actual native implementations/installations of both Runtime
+observation fields, then prove their full failure/divergence-prefix fibres
+and their total Result extension laws before supplying Common's hypotheses.
+Associate native heap metadata, view/commit, allocator/free and remaining
+base-helper/OS/Drop effects with the installed interpreter, including the
+routing equality for the original op130 thunk. For V047, prove the actual
+native statement equals `PV_2TNV_PublicEncoding.x native_handle` and apply
+`PV_RJDec_V047.consume` with `HeadlineFibre.fibre native_handle`, retaining the
+explicit fixture-runtime and joint-proof binders in the parked implication.
+
+The exact commit list since resume entry is in `resume-commits.txt`; the final
+evidence-freeze commit follows its generation. All three requested native
+items remain OPEN; the source and interpreter theorems above are the proved
+lower results. No endpoint premise or whole ledger row was removed.

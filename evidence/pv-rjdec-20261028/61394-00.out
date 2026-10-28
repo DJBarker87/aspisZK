@@ -1,0 +1,220 @@
+@R1Z.PV_RJDec_Runtime.source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (input : R1Z.PV_RJDec_Runtime.Inputs) (secret : R1Z.PV_RJDec_Runtime.Secret),
+  R1Z.PV_W_ReachedEffects.erase (R1Z.PV_RJDec_ZeroizingSelected.selected ops)
+      (R1Z.PV_RJDec_Runtime.program input secret) =
+    ProverRwFull.prover.prove_masked_attempt input.publicInput input.compiled ProverRwFull.transport.Variant.S2
+      input.hash secret input.store
+@R1Z.PV_RJDec_Runtime.executes : ∀ [inst : ProverRwFull.ExternalTypes] {W S F D DF ZF AF C : Type}
+  (base : R1Z.PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
+  (memory : R1Z.PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF) (zero : R1Z.PV_RJDec_AsmMemory.Memory W AF)
+  (input : R1Z.PV_RJDec_Runtime.Inputs) (secret : R1Z.PV_RJDec_Runtime.Secret) (w : W),
+  R1Z.PV_W_Syntax.Executes
+    (fun {B} => R1Z.PV_W_ReachedThreading.interpret (R1Z.PV_RJDec_MemoryInstalled.algebra base memory zero))
+    (R1Z.PV_RJDec_Runtime.program input secret) w (R1Z.PV_RJDec_Runtime.run base memory zero input secret w)
+@R1Z.PV_RJDec_MemoryInstalled.array_complete : ∀ [inst : ProverRwFull.ExternalTypes] {W S F D DF ZF AF C : Type}
+  (ops : ProverRwFull.ExternalFuns) (base : R1Z.PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
+  (m : R1Z.PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF) (z : R1Z.PV_RJDec_AsmMemory.Memory W AF)
+  (N : Aeneas.Std.Usize) (v : Aeneas.Std.Array Aeneas.Std.U8 N) (w : W),
+  (R1Z.PV_RJDec_MemoryInstalled.algebra base m z).zeroArray N v w =
+    {
+      outcome :=
+        R1Z.PV_W_SourceSyntax.resultOutcome
+          (ProverRwFull.ExternalFuns.op130
+            (ProverRwFull.Array.Insts.ZeroizeZeroize N
+              (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+            v),
+      world := z.commit w (R1Z.PV_RDCD_ZeroWorld.indexed (z.arrayAddress w v) 0 (↑N) (z.view w)), calls := [(w, none)] }
+@R1Z.PV_RJDec_ReachedZero.complete : ∀ [inst : ProverRwFull.ExternalTypes] {W F C : Type}
+  (ops : ProverRwFull.ExternalFuns) (m : R1Z.PV_RJDec_AsmMemory.Memory W F)
+  (v : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (w : W),
+  R1Z.PV_RJDec_AsmMemory.array m 32#usize v w =
+    {
+      outcome :=
+        R1Z.PV_W_SourceSyntax.resultOutcome
+          ((R1Z.PV_RJDec_ReachedZero.op v).source (R1Z.PV_RJDec_ZeroizingSelected.selected ops)),
+      world := m.commit w (R1Z.PV_RDCD_ZeroWorld.indexed (m.arrayAddress w v) 0 32 (m.view w)), calls := [(w, none)] }
+@R1Z.PV_RJDec_AsmBind.complete : ∀ [ProverRwFull.ExternalTypes] {W F C A : Type} (m : R1Z.PV_RJDec_AsmMemory.Memory W F)
+  (N : Aeneas.Std.Usize) (v : Aeneas.Std.Array Aeneas.Std.U8 N) (w : W)
+  (k : Aeneas.Std.Array Aeneas.Std.U8 N → R1Z.PV_W_Threading.M W (Option C) Aeneas.Std.Error A),
+  R1Z.PV_W_Threading.bind (R1Z.PV_RJDec_AsmMemory.array m N v) k w =
+    have z := m.commit w (R1Z.PV_RDCD_ZeroWorld.indexed (m.arrayAddress w v) 0 (↑N) (m.view w));
+    have r := k (Aeneas.Std.Array.repeat N 0#u8) z;
+    { outcome := r.outcome, world := r.world, calls := [(w, none)] ++ r.calls }
+@R1Z.PV_RJDec_ParserR12.source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_W_TypedEffects.erase ops (R1Z.PV_RJDec_ParserR12.program bytes) =
+    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1 bytes
+@R1Z.PV_RJDec_ParserR15.source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_W_TypedEffects.erase ops (R1Z.PV_RJDec_ParserR15.program bytes) =
+    AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1 bytes
+@R1Z.PV_RJDec_ParserR20.source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_W_TypedEffects.erase ops (R1Z.PV_RJDec_ParserR20.program bytes) =
+    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1 bytes
+@R1Z.PV_RJDec_V047.consume : ∀ {CommitHandle : Type}
+  (encoded actual : R0Z.ZkStatement.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle),
+  (∃ w, R1Z.PV_RJDec_V047.H.public w = encoded.1) → actual = encoded → ∃ w, R1Z.PV_RJDec_V047.H.public w = actual.1
+@R1Z.PV_RunJoin_CommonSample32.complete_view : ∀ [ProverRwFull.ExternalTypes] {CH Aux Coins NA LA CA NB LB CB : Type}
+  (a : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NA LA CA)
+  (b : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NB LB CB)
+  (project : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA → R1Z.PV_RunJoin_UnifiedRetry.State NB LB CB)
+  (h : R0Z.ZkStatement.HonestProver R1Z.PrivacyR1AcctBasis.K) (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH)
+  (w : h.Instance),
+  (∀ (index : ℕ) (s : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA),
+      R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+          (R1Z.PV_RunJoin_UnifiedRetry.entropy a.account index s) =
+        R1Z.PV_RunJoin_UnifiedRetry.entropy b.account index (project s)) →
+    (∀ (secret : R1Z.ProverRwRetryModel.Secret) (s : R1Z.PV_RunJoin_Deployed.State NA LA CA),
+        R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2)) (a.body h x w secret s) =
+          b.body h x w secret (project s)) →
+      (∀ (c : Coins), project (R1Z.PV_RunJoin_Deployed.initialState a c) = R1Z.PV_RunJoin_Deployed.initialState b c) →
+        ∀
+          (outputs :
+            R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH →
+              R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+          (adv : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CH Aux),
+          (∀ (out : Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output NA LA CA)),
+              a.disclosed adv x out =
+                b.disclosed adv x
+                  (R1Z.ProverCommitSemanticTransport26.mapR (fun pair => (pair.1, project pair.2)) out)) →
+            (∀ (out : Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output NA LA CA)),
+                a.observerOracle adv x out =
+                  b.observerOracle adv x
+                    (R1Z.ProverCommitSemanticTransport26.mapR (fun pair => (pair.1, project pair.2)) out)) →
+              ∀ (c : Coins),
+                (R1Z.PV_RunJoin_Deployed.rust a).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+                    (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState a) c) =
+                  (R1Z.PV_RunJoin_Deployed.rust b).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+                    (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c)
+@R1Z.PV_RunJoin_CommonObserver32.complete_pair : ∀ [ProverRwFull.ExternalTypes] {CH Aux Coins NA LA CA NB LB CB : Type}
+  (a : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NA LA CA)
+  (b : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NB LB CB)
+  (project : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA → R1Z.PV_RunJoin_UnifiedRetry.State NB LB CB)
+  (h : R0Z.ZkStatement.HonestProver R1Z.PrivacyR1AcctBasis.K) (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH)
+  (w : h.Instance),
+  (∀ (index : ℕ) (s : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA),
+      R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+          (R1Z.PV_RunJoin_UnifiedRetry.entropy a.account index s) =
+        R1Z.PV_RunJoin_UnifiedRetry.entropy b.account index (project s)) →
+    (∀ (secret : R1Z.ProverRwRetryModel.Secret) (s : R1Z.PV_RunJoin_Deployed.State NA LA CA),
+        R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2)) (a.body h x w secret s) =
+          b.body h x w secret (project s)) →
+      (∀ (c : Coins), project (R1Z.PV_RunJoin_Deployed.initialState a c) = R1Z.PV_RunJoin_Deployed.initialState b c) →
+        ∀
+          (outputs :
+            R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH →
+              R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+          (adv : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CH Aux),
+          (∀ (out : Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output NA LA CA)),
+              a.disclosed adv x out =
+                b.disclosed adv x
+                  (R1Z.ProverCommitSemanticTransport26.mapR (fun pair => (pair.1, project pair.2)) out)) →
+            (∀ (out : Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output NA LA CA)),
+                a.observerOracle adv x out =
+                  b.observerOracle adv x
+                    (R1Z.ProverCommitSemanticTransport26.mapR (fun pair => (pair.1, project pair.2)) out)) →
+              ∀ (c : Coins),
+                (have v :=
+                    (R1Z.PV_RunJoin_Deployed.rust a).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+                      (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState a) c);
+                  (v, (R1Z.PV_RunJoin_Deployed.rust a).observe adv v)) =
+                  have v :=
+                    (R1Z.PV_RunJoin_Deployed.rust b).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+                      (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c);
+                  (v, (R1Z.PV_RunJoin_Deployed.rust b).observe adv v)
+@R1Z.PV_RJDec_Factor.exists_iff : ∀ {W C A V : Type} [Nonempty V]
+  (reachable : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → Prop)
+  (observe : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → V),
+  (∃ decode,
+      ∀ (r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A),
+        reachable r → decode (R1Z.PV_RunJoin_WorldDecode33.returned r) = observe r) ↔
+    R1Z.PV_RJDec_Factor.Fibres reachable observe
+@R1Z.PV_RJDec_ResultCases.fibres_iff : ∀ {W C A V : Type}
+  (reachable : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → Prop)
+  (observe : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → V),
+  R1Z.PV_RJDec_Factor.Fibres reachable observe ↔
+    (∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A) (a : A),
+        reachable l →
+          reachable r →
+            l.outcome = R1Z.PV_W_Threading.Outcome.ok a →
+              r.outcome = R1Z.PV_W_Threading.Outcome.ok a → l.world = r.world → observe l = observe r) ∧
+      (∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A) (e : Aeneas.Std.Error),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.fail e →
+                r.outcome = R1Z.PV_W_Threading.Outcome.fail e → observe l = observe r) ∧
+        ∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.div →
+                r.outcome = R1Z.PV_W_Threading.Outcome.div → observe l = observe r
+inductive R1Z.PV_RDCD_ZeroWorld.Event : Type
+number of parameters: 0
+constructors:
+R1Z.PV_RDCD_ZeroWorld.Event.volatileWrite : ℕ → ℕ → R1Z.PV_RDCD_ZeroWorld.Event
+R1Z.PV_RDCD_ZeroWorld.Event.asmReadBarrier : ℕ → R1Z.PV_RDCD_ZeroWorld.Event
+structure R1Z.PV_RDCD_ZeroWorld.World (F : Type) : Type
+number of parameters: 1
+fields:
+  R1Z.PV_RDCD_ZeroWorld.World.memory : ℕ → ℕ
+  R1Z.PV_RDCD_ZeroWorld.World.writes : ℕ
+  R1Z.PV_RDCD_ZeroWorld.World.barriers : ℕ
+  R1Z.PV_RDCD_ZeroWorld.World.history : List R1Z.PV_RDCD_ZeroWorld.Event
+  R1Z.PV_RDCD_ZeroWorld.World.alloc : ℕ
+  R1Z.PV_RDCD_ZeroWorld.World.realloc : ℕ
+  R1Z.PV_RDCD_ZeroWorld.World.dealloc : ℕ
+  R1Z.PV_RDCD_ZeroWorld.World.drops : ℕ
+  R1Z.PV_RDCD_ZeroWorld.World.frame : F
+constructor:
+  R1Z.PV_RDCD_ZeroWorld.World.mk {F : Type} (memory : ℕ → ℕ) (writes barriers : ℕ)
+    (history : List R1Z.PV_RDCD_ZeroWorld.Event) (alloc realloc dealloc drops : ℕ) (frame : F) :
+    R1Z.PV_RDCD_ZeroWorld.World F
+structure R1Z.PV_RunJoin_Deployed.Runtime (CommitHandle Aux Coins N L C : Type) : Type 1
+number of parameters: 6
+fields:
+  R1Z.PV_RunJoin_Deployed.Runtime.world : R1Z.PV_RunJoin_CompletedWorld.Data Coins N L C
+  R1Z.PV_RunJoin_Deployed.Runtime.account : R1Z.ProverRwEffectCallback.Account (R1Z.PV_RunJoin_Deployed.State N L C)
+  R1Z.PV_RunJoin_Deployed.Runtime.body : (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        h.Instance → R1Z.PV_RunJoin_UnifiedRetry.Body (R1Z.PV_RunJoin_Deployed.State N L C)
+  R1Z.PV_RunJoin_Deployed.Runtime.disclosed : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N L C) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat
+  R1Z.PV_RunJoin_Deployed.Runtime.observerOracle : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N L C) →
+          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer)
+  R1Z.PV_RunJoin_Deployed.Runtime.ideal : (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+        R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat
+constructor:
+  R1Z.PV_RunJoin_Deployed.Runtime.mk {CommitHandle Aux Coins N L C : Type}
+    (world : R1Z.PV_RunJoin_CompletedWorld.Data Coins N L C)
+    (account : R1Z.ProverRwEffectCallback.Account (R1Z.PV_RunJoin_Deployed.State N L C))
+    (body :
+      (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          h.Instance → R1Z.PV_RunJoin_UnifiedRetry.Body (R1Z.PV_RunJoin_Deployed.State N L C))
+    (disclosed :
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N L C) →
+            R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+    (observerOracle :
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N L C) →
+            List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+    (ideal :
+      (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+          R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+            R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+        R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+          R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+            R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) :
+    R1Z.PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C
