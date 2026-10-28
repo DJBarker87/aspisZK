@@ -1,0 +1,38 @@
+from pathlib import Path
+import subprocess,difflib
+E=Path(__file__).resolve().parent
+REV='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
+def files():
+ out={}
+ for name,prefix,fun in [('pool_v1/pair_forest_semantic_terminal.rs','semantic','lift_m31'),('pool_v1/pair_forest_copy_terminal.rs','copy','lift_m31'),('state_only_poseidon.rs','poseidon','extension_limbs')]:
+  n='crates/aspis-statement/src/'+name
+  s=subprocess.check_output(['git','show',REV+':'+n],text=True)
+  prop='NDE_native::to_native(NDE_native::reference::lift_ref(value.0))' if fun=='lift_m31' else 'NDE_native::reference::extension_limbs_ref(NDE_native::to_ref(value))'
+  attr='#[cfg_attr(kani, kani::ensures(|r| (*r == '+prop+') != cfg!(NDE_invert))) ]\n'
+  s=s.replace('fn '+fun+'(',attr+'fn '+fun+'(',1)
+  module='NDE_'+prefix
+  s+='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod NDE_native;\n'
+  out[n]=s
+  dirname='pool_v1/' if name.startswith('pool_v1/') else ''
+  harness='''use super::*;
+#[path="NDE_reference.rs"] pub(super) mod reference;
+pub(super) fn to_ref(v:QM31)->reference::Q { reference::Q { c0:reference::C{a:v.c0.a.0,b:v.c0.b.0},c1:reference::C{a:v.c1.a.0,b:v.c1.b.0} } }
+pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31(v.c0.b)},c1:CM31{a:M31(v.c1.a),b:M31(v.c1.b)}}}
+'''
+  if fun=='lift_m31':
+   harness+='#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::lift_m31)]\nfn NDE_contract(){let v:u32=kani::any();let _=super::lift_m31(M31(v));}\n'
+  else:
+   harness+='#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::extension_limbs)]\nfn NDE_contract(){let v:[u32;4]=kani::any();let _=super::extension_limbs(to_native(reference::Q{c0:reference::C{a:v[0],b:v[1]},c1:reference::C{a:v[2],b:v[3]}}));}\n'
+  out['crates/aspis-statement/src/'+dirname+module+'.rs']=harness
+  out['crates/aspis-statement/src/'+dirname+'NDE_reference.rs']=(E/'NDE_reference.rs').read_text()
+ # Root allocator feature required by exact KMX code.
+ n='crates/aspis-statement/src/lib.rs';s=subprocess.check_output(['git','show',REV+':'+n],text=True)
+ s='#![cfg_attr(kani, feature(allocator_api))]\n'+s+'\n#[cfg(kani)]\n#[path="../../../KMX_stubs.rs"]\nmod NDE_kmx;\n'
+ out[n]=s
+ patch=''
+ for n,s in out.items():
+  old=subprocess.run(['git','show',REV+':'+n],capture_output=True,text=True)
+  patch+=''.join(difflib.unified_diff(old.stdout.splitlines(True),s.splitlines(True),fromfile='a/'+n if old.returncode==0 else '/dev/null',tofile='b/'+n))
+ (E/'NDE_harness.patch').write_text(patch)
+ return out
+if __name__=='__main__':files()

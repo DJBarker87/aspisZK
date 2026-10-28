@@ -1,0 +1,125 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -98,6 +98,7 @@
+ }
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NDE_native::to_native(NDE_native::reference::lift_ref(value.0))) != cfg!(NDE_invert))) ]
+ fn lift_m31(value: M31) -> QM31 {
+     QM31::from_cm31(CM31::from_m31(value))
+ }
+@@ -2328,3 +2329,7 @@
+         }
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDE_semantic.rs"]
++mod NDE_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NDE_semantic.rs
+@@ -0,0 +1,7 @@
++use super::*;
++#[path="NDE_reference.rs"] pub(super) mod reference;
++pub(super) fn to_ref(v:QM31)->reference::Q { reference::Q { c0:reference::C{a:v.c0.a.0,b:v.c0.b.0},c1:reference::C{a:v.c1.a.0,b:v.c1.b.0} } }
++pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31(v.c0.b)},c1:CM31{a:M31(v.c1.a),b:M31(v.c1.b)}}}
++#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]
++#[kani::proof_for_contract(super::lift_m31)]
++fn NDE_contract(){let v:u32=kani::any();let _=super::lift_m31(M31(v));}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NDE_reference.rs
+@@ -0,0 +1,10 @@
++#[derive(Clone, Copy, PartialEq, Eq)]
++pub struct C { pub a: u32, pub b: u32 }
++#[derive(Clone, Copy, PartialEq, Eq)]
++pub struct Q { pub c0: C, pub c1: C }
++pub fn lift_ref(value: u32) -> Q {
++    Q { c0: C { a: value, b: 0 }, c1: C { a: 0, b: 0 } }
++}
++pub fn extension_limbs_ref(value: Q) -> [u32;4] {
++    [value.c0.a, value.c0.b, value.c1.a, value.c1.b]
++}
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -111,6 +111,7 @@
+ }
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NDE_native::to_native(NDE_native::reference::lift_ref(value.0))) != cfg!(NDE_invert))) ]
+ fn lift_m31(value: M31) -> QM31 {
+     QM31::from_cm31(CM31::from_m31(value))
+ }
+@@ -1541,3 +1542,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDE_copy.rs"]
++mod NDE_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NDE_copy.rs
+@@ -0,0 +1,7 @@
++use super::*;
++#[path="NDE_reference.rs"] pub(super) mod reference;
++pub(super) fn to_ref(v:QM31)->reference::Q { reference::Q { c0:reference::C{a:v.c0.a.0,b:v.c0.b.0},c1:reference::C{a:v.c1.a.0,b:v.c1.b.0} } }
++pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31(v.c0.b)},c1:CM31{a:M31(v.c1.a),b:M31(v.c1.b)}}}
++#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]
++#[kani::proof_for_contract(super::lift_m31)]
++fn NDE_contract(){let v:u32=kani::any();let _=super::lift_m31(M31(v));}
+--- a/crates/aspis-statement/src/state_only_poseidon.rs
++++ b/crates/aspis-statement/src/state_only_poseidon.rs
+@@ -127,6 +127,7 @@
+ }
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NDE_native::reference::extension_limbs_ref(NDE_native::to_ref(value))) != cfg!(NDE_invert))) ]
+ fn extension_limbs(value: QM31) -> [u32; 4] {
+     [value.c0.a.0, value.c0.b.0, value.c1.a.0, value.c1.b.0]
+ }
+@@ -1239,3 +1240,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDE_poseidon.rs"]
++mod NDE_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/NDE_poseidon.rs
+@@ -0,0 +1,7 @@
++use super::*;
++#[path="NDE_reference.rs"] pub(super) mod reference;
++pub(super) fn to_ref(v:QM31)->reference::Q { reference::Q { c0:reference::C{a:v.c0.a.0,b:v.c0.b.0},c1:reference::C{a:v.c1.a.0,b:v.c1.b.0} } }
++pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31(v.c0.b)},c1:CM31{a:M31(v.c1.a),b:M31(v.c1.b)}}}
++#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]
++#[kani::proof_for_contract(super::extension_limbs)]
++fn NDE_contract(){let v:[u32;4]=kani::any();let _=super::extension_limbs(to_native(reference::Q{c0:reference::C{a:v[0],b:v[1]},c1:reference::C{a:v[2],b:v[3]}}));}
+--- /dev/null
++++ b/crates/aspis-statement/src/NDE_reference.rs
+@@ -0,0 +1,10 @@
++#[derive(Clone, Copy, PartialEq, Eq)]
++pub struct C { pub a: u32, pub b: u32 }
++#[derive(Clone, Copy, PartialEq, Eq)]
++pub struct Q { pub c0: C, pub c1: C }
++pub fn lift_ref(value: u32) -> Q {
++    Q { c0: C { a: value, b: 0 }, c1: C { a: 0, b: 0 } }
++}
++pub fn extension_limbs_ref(value: Q) -> [u32;4] {
++    [value.c0.a, value.c0.b, value.c1.a, value.c1.b]
++}
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Aspis SpendV0 statement layer, built evaluator-first.
+ //!
+ //! This crate deliberately contains no proof system. It defines the exact
+@@ -207,3 +208,7 @@
+ 
+ #[cfg(feature = "r0")]
+ pub mod r0;
++
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++mod NDE_kmx;
