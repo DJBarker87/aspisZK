@@ -14,3 +14,7 @@ Before/after endpoint: no premise removed or added at preparation; T stays exact
 D393 resume at af8459b3e3: keep exact branch/worktree and IDs41412–41496 plus41499 (already launched41400–41411,41497–41498). Starting V212. External preflight rechecks all5673 pinned objects before compilation; own deleted external overlay restored from verified objects. Original pinned extractor binaries retained under cb with committed cb9 hashes; extracting with its own nightly per(x'), deployed features/lock and release settings. Native/Lean budgets count new actual scopes/launches only. No substitute checker credit.
 
 D393 continuation: actual compiler41460 failed after an accidental premature dependent submission following a second-barrier refusal of41459. See RESUME-SEQUENCING.md; no proof credit.41459 is still unused. Subsequent dependent launches must be individually inspected; actual native/Lean admission/caps remain mandatory.
+
+## Final D393 disposition
+
+100/100 Lean attempts used;85 pass,15 fail.71/120 native scopes,0 Kani. Eight rows restored at their stated source/Result boundaries; nine exact blockers retained. Final combined audit41494, focused replay41495, all138-theorem axioms audit41496 and single frozen manifest41499 pass. Final69-project/5673-external object DAG,517 frozen source files and the whole100-ID block verify. See REPORT.md and AUDIT.json; no further compile budget remains.
