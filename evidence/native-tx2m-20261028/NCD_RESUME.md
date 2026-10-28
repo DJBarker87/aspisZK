@@ -1,0 +1,7 @@
+# Capacity relaunch 1 recovery
+
+Recovered commits 0dccb31ead and eb5bccc249; no stage is restarted. NCD_L001 and L003 have passing authoritative receipts. NCD_L002 remains missing after two successful read-only host inventories returned no files: reserve one compile budget slot, no proof credit and no resubmission. NCD_L004 was admission-only. NCD_L005 has local config/source snapshot but no submission transport entry and no host config/receipt: interrupted before submission, zero compile credit. NCD_L006 continues the next independent generic retarget. No old process for this lane remained locally.
+
+Inherited NCB used 20 Lean and55 Kani; unused allowance60 Lean/15 Kani. This round's requested80 Lean/60 Kani combined allowance is bounded by the explicit120 Lean/50 Kani ceilings. Record predecessor and current counters separately; capacity relaunch does not reset either. Current conservative count before L006:3 Lean,0 Kani. Admission refusals and unsubmitted transfers do not consume prover runs.
+
+No source/harness/toolchain claim follows from missing receipts. No cache, shared infrastructure, source, key or live worker was modified. Rule10b read-only recovery was used; L002 is not retried.
