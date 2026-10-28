@@ -18,7 +18,7 @@ theorem root (i : Input) (success : run i = ok (.Ok i.compiled))
     (frontier : ∀ l : Fin 20, Canon8 i.snapshot.frontier.val[l.val]!) :
     (statement (K := K) i).nextRoot = AspisR1.AppendPath.pathPrefix (statement (K := K) i)
       (R0Z.BuilderModel.outPair (statement (K := K) i) (BuilderSpendRelation.modelWitness (witness (K := K) i))) 20 := by
-  obtain ⟨r,leaf,hr,hlate⟩ := PV_RunJoin_CompilerAppend31.afterstate i.witness
+  obtain ⟨r,leaf,hr,hleaf,hlate⟩ := PV_RunJoin_CompilerAppend31.afterstate i.witness
     (outputValue i.request) (recipient i.request) i.change (forestPublic i.request)
     i.laneAnchor i.snapshot i.compiled success
   have hrecords : newRecords i = ok r := hr

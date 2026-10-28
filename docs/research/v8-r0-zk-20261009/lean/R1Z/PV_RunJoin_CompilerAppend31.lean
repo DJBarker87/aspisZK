@@ -1,3 +1,4 @@
+import R1Z.PV_RunJoin_DecoderReturn29
 import R1Z.PV_RunJoin_CompilerReads31
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_CompilerAppend31
@@ -13,6 +14,7 @@ theorem afterstate [ExternalLinear] [Records]
       publicInput anchor snapshot = ok (.Ok compiled)) :
     ∃ records leaf,
       pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot publicInput.asset = ok records ∧
+      pair_forest_copy_builder.CopyRecords.output_pair records = ok leaf ∧
       pair_forest_trace.late_append records snapshot leaf = ok (.Ok compiled.public_statement.candidate_afterstate) := by
   rcases publicInput with ⟨pa,pn,pr,pc,asset⟩
   cases pr <;> unfold pair_forest_trace.compile_forest_from_copies at h
@@ -20,6 +22,8 @@ theorem afterstate [ExternalLinear] [Records]
     pv_peel h with records hr
     refine ⟨records,?_⟩
     repeat' first
+      | (have he := PV_RunJoin_DecoderReturn29.branch_continue _ _ hvalue; clear hvalue; cases he)
+      | (have _result : core.result.Result _ _ := value; cases value <;> pv_head h)
       | (pv_peel h with value hvalue)
       | exact False.elim (PV_Src_ResultControl.error_ne_ok _ _ h)
       | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
@@ -27,6 +31,6 @@ theorem afterstate [ExternalLinear] [Records]
       | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value)
       | (have _test : _ × _ := value; rcases value with ⟨value,rest⟩)
       | (cases h)
-    all_goals exact ⟨_,hr,by assumption⟩
+    all_goals exact ⟨_,hr,by assumption,by assumption⟩
 #print axioms afterstate
 end R1Z.PV_RunJoin_CompilerAppend31

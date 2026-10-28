@@ -62,6 +62,7 @@ def ssh(c):return transport(['ssh',host,c],capture_output=True,text=True)
 r=ssh(f'python3 {H}/reservation-existing.py {H}/evidence/pv31-reservation-{A}.json > {H}/evidence/pv31-reservation-{A}.log 2>&1\nreservation_status=$?\ncat {H}/evidence/pv31-reservation-{A}.log\nexit $reservation_status')
 (E/f'reservation-{A}.log').write_text(r.stdout+r.stderr)
 admission=json.loads(r.stdout.strip().splitlines()[-1])
+admission.setdefault('utc',datetime.datetime.now(datetime.timezone.utc).isoformat())
 if r.returncode != 0 or not admission['allowed']:
  (E/f'refusal-{A}.json').write_text(json.dumps(admission,indent=2)+'\n')
  if re.search(r'(?:FileNotFoundError|OSError): \[Errno (?:2|19)\]',admission.get('error','')):
