@@ -34,7 +34,7 @@ theorem encode (ops : ExternalFuns) (logical : Slice U8) (out : alloc.vec.Vec U8
     omega
   obtain ⟨next,hn,hnext⟩ := PV_RunJoin_SemanticLoop40.complete ops logical 27#u8
     32#usize 0#u8 records domain mid (by rw [midlen];exact room)
-  refine ⟨next,?_,by rw [hnext,hmid];simp only [List.append_assoc]⟩
+  refine ⟨next,?_,by rw [hnext,hmid]⟩
   simp only [host_compact.compact_semantic,layout,lenword,bind_tc_ok,
     bne_self_eq_false,Bool.false_eq_true,↓reduceIte,hs,hm,compact.SEMANTIC_ROWS,hn]
 #print axioms encode
