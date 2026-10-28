@@ -1,0 +1,64 @@
+import R1Z.PV_RunJoin_BindCongruence
+import R1Z.PV_RunJoin_MapErrInstalled
+import Mathlib.Tactic.CasesM
+import R1Z.PV_RunJoin_PairElimination
+import R1Z.ProverRwRetryModel
+import R1Z.ProverRwBodyStore
+import R1Z.PV_RunJoin_ResultTransport
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_ContinuationProjection
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverCommitSemanticTransport26
+variable [ExternalTypes] [ExternalFuns]
+
+open PV_RunJoin_StoreContinuationResidual PV_RunJoin_BindCongruence
+
+/-- Parametric source continuation after the ONE native reservation. This
+changes only the retained store carrier and preserves the complete proof/error
+status. The callback's native effect law is not a premise hidden here. -/
+theorem after_reserve (parametric : MapErrParametric) {S T : Type} (project : S → T)
+    (left : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+    (right : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T)
+    (pub : ProverRwRetryModel.Pub) (compiled : ProverRwRetryModel.Compiled)
+    (variant : transport.Variant) (hash : ProverRwRetryModel.Hash)
+    (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
+    (binding : Array U8 32#usize) (attempt : ProverRwRetryModel.Secret)
+    (status : core.result.Result
+      (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+        aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+      aspis_prover.state_only_hiding.StateOnlyMaskBuildError) (s : S) :
+    mapR (fun out => (out.1,project out.2))
+      (ProverRwBodyStoreSource.afterReserve left pub compiled variant hash context binding attempt status s) =
+    ProverRwBodyStoreSource.afterReserve right pub compiled variant hash context binding attempt status (project s) := by
+  have closure {A : Type} (value : core.result.Result A _) := parametric
+    (prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError left)
+    (prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError right)
+    () () value (fun _ => rfl)
+  have closure1 {A : Type} (value : core.result.Result A _) := parametric
+    (prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error left)
+    (prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error right)
+    () () value (fun _ => rfl)
+  have closure2 {A : Type} (value : core.result.Result A _) := parametric
+    (prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error left)
+    (prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error right)
+    () () value (fun _ => rfl)
+  have closure3 {A : Type} (value : core.result.Result A _) := parametric
+    (prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError left)
+    (prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError right)
+    () () value (fun _ => rfl)
+  unfold ProverRwBodyStoreSource.afterReserve
+  simp only [closure,closure1,closure2,closure3,map_bind,map_if,map_ok,PV_RunJoin_PairElimination.cases_pair,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+  repeat' first
+    | rfl
+    | cases_type Prod
+    | apply bind_same
+      intro value
+      try (change (_ × _) at value; rcases value with ⟨value1,value2⟩)
+      try simp only [closure,closure1,closure2,closure3,Aeneas.Std.uncurry,map_bind,map_if,map_ok,PV_RunJoin_PairElimination.cases_pair,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+    | apply if_same
+    | split <;> try simp only [closure,closure1,closure2,closure3,Aeneas.Std.uncurry,map_bind,map_if,map_ok,PV_RunJoin_PairElimination.cases_pair,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+
+
+#print axioms after_reserve
+end R1Z.PV_RunJoin_ContinuationProjection

@@ -1,0 +1,51 @@
+import R1Z.BuilderForestAdmissionPort
+import R1Z.ProverRwFullFuns
+import R1Z.PDict_FinalTypes
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_NominalLeafData
+open Aeneas Aeneas.Std
+
+abbrev SourceFoundation := BuilderForestAdmissionPort.state_only_trace.StateOnlyTraceFoundation
+abbrev TargetFoundation := ProverRwFull.aspis_statement.state_only_trace.StateOnlyTraceFoundation
+abbrev SourceSnapshot := BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+abbrev TargetSnapshot := ProverRwFull.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+abbrev SourceAfterstate := BuilderForestAdmissionPort.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+abbrev TargetAfterstate := PDict_StatementTypes.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+
+def foundation (s : SourceFoundation) : TargetFoundation := ⟨s.c1⟩
+def unFoundation (s : TargetFoundation) : SourceFoundation := ⟨s.c1⟩
+
+def snapshot (s : SourceSnapshot) : TargetSnapshot where
+  pool := s.pool
+  deployment_domain := s.deployment_domain
+  sequence := s.sequence
+  next_pair_index := s.next_pair_index
+  current_root := s.current_root
+  frontier := s.frontier
+
+def unSnapshot (s : TargetSnapshot) : SourceSnapshot where
+  pool := s.pool
+  deployment_domain := s.deployment_domain
+  sequence := s.sequence
+  next_pair_index := s.next_pair_index
+  current_root := s.current_root
+  frontier := s.frontier
+
+def afterstate (s : SourceAfterstate) : TargetAfterstate where
+  next_pair_index := s.next_pair_index
+  next_root := s.next_root
+  next_frontier := s.next_frontier
+
+def unAfterstate (s : TargetAfterstate) : SourceAfterstate where
+  next_pair_index := s.next_pair_index
+  next_root := s.next_root
+  next_frontier := s.next_frontier
+
+theorem foundation_roundtrip (s : SourceFoundation) : unFoundation (foundation s) = s := rfl
+theorem snapshot_roundtrip (s : SourceSnapshot) : unSnapshot (snapshot s) = s := rfl
+theorem afterstate_roundtrip (s : SourceAfterstate) : unAfterstate (afterstate s) = s := rfl
+
+#print axioms foundation_roundtrip
+#print axioms snapshot_roundtrip
+#print axioms afterstate_roundtrip
+end R1Z.PV_RunJoin_NominalLeafData

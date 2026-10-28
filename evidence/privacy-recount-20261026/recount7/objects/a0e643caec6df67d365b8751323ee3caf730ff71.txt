@@ -1,0 +1,232 @@
+{
+  "row": "V258",
+  "operation": 251,
+  "status": "CLOSED_SELECTED_CANDIDATE_SOURCE_CALLBACK",
+  "closing_theorems": [
+    "PV_B2_F_MaterializeRequest.complete_result",
+    "PV_B2_F_ResourceFamilies.heap_source",
+    "PV_B2_F_251Bridge.source",
+    "PV_B2_F_251Closure.three_rows",
+    "PV_B2_F_AuditClosure.closed_rows",
+    "PV_B2_F_AuditClosure.nonvacuity"
+  ],
+  "statements": [
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_MaterializeRequest.lean",
+      "statement": "theorem after_eq_before (request : Result Outcome) (w : host_weights.Weights) (kappa : E) :\n    (request >>= fun event => PV_B2_F_MaterializeFrozen.original event w kappa) =\n      original request w kappa"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_MaterializeRequest.lean",
+      "statement": "theorem complete_result (request : Result Outcome) (w : host_weights.Weights) (kappa : E) :\n    PV_B2_F_AllocationEffects.copied request w kappa = original request w kappa"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem source (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base request ops) w kappa =\n      PV_B2_E_OrdinaryOriginal.mapResult mapRust\n        (PV_B2_F_MaterializeRequest.original request w (fromNative kappa))"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem nonvacuity (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    \u2203 out, @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base (ok .supplied) ops) w kappa = ok (.Ok out)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem allocation_error (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base (ok .denied) ops) w kappa = ok (.Err ProverRwFull.verifier.Error.Allocation)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem failure (base : ProverRwFull.ExternalTypes) (e : Error)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base (fail e) ops) w kappa = fail e"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem divergence (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base div ops) w kappa = div"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem gamma_preserved (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base)) :\n    @ProverRwFull.ExternalFuns.op249 (types base) (selected base request ops) =\n      @ProverRwFull.ExternalFuns.op249 (types base)\n        (@PV_B2_E_GammaOriginal.selected (types base) ops)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem ordinary_preserved (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base)) :\n    @ProverRwFull.ExternalFuns.op250 (types base) (selected base request ops) =\n      @ProverRwFull.ExternalFuns.op250 (types base)\n        (@PV_B2_E_GammaOriginal.selected (types base) ops)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Closure.lean",
+      "statement": "theorem three_rows (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base))\n    (b : PV_B2_E_OrdinaryOriginal.Bytes) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op249 (types base) (selected base request ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_GammaOriginal.originalGamma b) \u2227\n    @ProverRwFull.ExternalFuns.op250 (types base) (selected base request ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_OrdinaryOriginal.original b) \u2227\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base request ops) w kappa =\n      PV_B2_E_OrdinaryOriginal.mapResult mapRust\n        (PV_B2_F_MaterializeRequest.original request w (fromNative kappa))"
+    }
+  ],
+  "ambient_context": "Every base ExternalTypes; op25 instantiated to the exact four-field weights structure. Every request : Result Outcome, ops in that carrier, weight and native kappa. No success/canonicality/source-equality premise.",
+  "nonvacuity": "All weights/kappas succeed for ok supplied. ok denied yields exactly native Error::Allocation; fail e and div are preserved. Source kernel success is unconditional. This does not assert every native allocation succeeds.",
+  "native_link_evidence_class": "Reviewed structural source/caller argument plus universal Lean Result equality for every allocation-request context and exact selected native-carrier installation; not fresh Aeneas extraction of the original mutable iterator and not a native execution/OS proof",
+  "native_limits": "Selected candidate source/callback row only; the request is universally quantified, not a new trust item or success premise. Actual native RunJoin installation, OS-failure witness independence and L1/L2/L3 remain P obligations.",
+  "binding": "MATERIALIZE-STRUCTURAL-BINDING.json",
+  "receipt": {
+    "attempt": 40837,
+    "module": "R1Z/PV_B2_F_251Closure",
+    "source_revision": "b98d7dbb865d966437731b7a770b81913e30c206",
+    "source_sha256": "42f9dd91bcf43ce1e1d0efe799cdcb731f99b5d1bd1f23ffa202d58fec0ec1fc",
+    "exit_status": 0,
+    "wall_seconds": 4.158,
+    "peak_rss_kib": 3857264,
+    "swaps": 0,
+    "accepted_axioms": true
+  },
+  "print_axioms": "40837-stdout.log",
+  "resource_family_generalization": {
+    "theorem": "PV_B2_F_ResourceFamilies.selected_heap",
+    "attempt": 40844,
+    "full_statements": [
+      "theorem heap_source (heap : HeapRequest) (w : W) (kappa : Native) :\n    heapCallback heap w kappa = heapOriginal heap w kappa",
+      "theorem box_source (box : BoxRequest) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    boxCallback box v alpha z = boxOriginal box v alpha z",
+      "theorem selected_heap (base : ProverRwFull.ExternalTypes) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base heap box ops) w kappa =\n      heapOriginal heap w kappa",
+      "theorem selected_box (base : ProverRwFull.ExternalTypes) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    @ProverRwFull.ExternalFuns.op252 (types base) (selected base heap box ops) v alpha z =\n      boxOriginal box v alpha z",
+      "theorem dictionaries (base : ProverRwFull.ExternalTypes) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) :\n    selected base heap box ops = originalDictionary base heap box ops",
+      "theorem observations {O : Sort _} (base : ProverRwFull.ExternalTypes)\n    (observe : @ProverRwFull.ExternalFuns (types base) \u2192 O) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) :\n    observe (selected base heap box ops) = observe (originalDictionary base heap box ops)",
+      "theorem heap_nonvacuity (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    \u2203 out, @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) w kappa = ok (.Ok out)",
+      "theorem box_nonvacuity (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    \u2203 out, @ProverRwFull.ExternalFuns.op252 (types base)\n      (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) v alpha z = ok (.Ok out)"
+    ],
+    "HeapRequest": "W \u2192 Native \u2192 Result Outcome",
+    "BoxRequest": "NV \u2192 Array NQ 10 \u2192 Array NP 2 \u2192 Result Unit",
+    "quantifiers": "Every resolver, including input/witness-dependent outcomes; no independence premise. Actual native failure-event witness independence remains a separate P obligation.",
+    "final_composition": "PV_B2_F_FiveRows.five_rows / nonvacuity;40847"
+  },
+  "final_full_statements": [
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_AuditClosure.lean",
+      "namespace": "PV_B2_F_AuditClosure",
+      "statement": "theorem closed_rows (base : ProverRwFull.ExternalTypes) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (b : PV_B2_E_OrdinaryOriginal.Bytes)\n    (w : W) (kappa : E) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) (kind j : Usize) :\n    @ProverRwFull.ExternalFuns.op249 (types base) (selected base heap box ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_GammaOriginal.originalGamma b) \u2227\n    @ProverRwFull.ExternalFuns.op250 (types base) (selected base heap box ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_OrdinaryOriginal.original b) \u2227\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base heap box ops) w kappa =\n      PV_B2_F_ResourceFamilies.heapOriginal heap w kappa \u2227\n    @ProverRwFull.ExternalFuns.op252 (types base) (selected base heap box ops) v alpha z =\n      PV_B2_F_ResourceFamilies.boxOriginal box v alpha z \u2227\n    @ProverRwFull.ExternalFuns.op253 (types base) (selected base heap box ops) w kind j =\n      originalCallback w kind j"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_AuditClosure.lean",
+      "namespace": "PV_B2_F_AuditClosure",
+      "statement": "theorem nonvacuity (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (b : PV_B2_E_OrdinaryOriginal.Bytes)\n    (kappa : E) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    \u2203 w : W, \u2203 g o out q,\n      @ProverRwFull.ExternalFuns.op249 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) b = ok g \u2227\n      @ProverRwFull.ExternalFuns.op250 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) b = ok o \u2227\n      @ProverRwFull.ExternalFuns.op251 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) w kappa = ok (.Ok out) \u2227\n      @ProverRwFull.ExternalFuns.op252 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) v alpha z = ok (.Ok w) \u2227\n      @ProverRwFull.ExternalFuns.op253 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) w 0#usize 0#usize = ok q"
+    }
+  ],
+  "final_context": {
+    "selected_dictionary": "PV_B2_F_RawNative.selected base heap box ops",
+    "types": "PV_B2_F_ConstructorCarrier.types base (exact native weights op25 carrier; all other type fields preserved)",
+    "heap": "HeapRequest := W \u2192 NativeWideExact \u2192 Result Outcome; arbitrary input-dependent family",
+    "box": "BoxRequest := NativeVariant \u2192 Array NativeQM31 10 \u2192 Array NativePoint 2 \u2192 Result Unit; arbitrary input-dependent family",
+    "observer": "Arbitrary whole-record observer transported by RawNative.dictionaries/observations; physical native observation correspondence remains P",
+    "hidden_premises": "No source-equality, validity, canonicality, success or failure-independence hypothesis on complete Result equality",
+    "definitions": [
+      "PV_B2_F_ConstructorCarrier.lean",
+      "PV_B2_F_MaterializeRequest.lean",
+      "PV_B2_F_ConstructorEffect.lean",
+      "PV_B2_F_ResourceFamilies.lean",
+      "PV_B2_F_RawNative.lean"
+    ]
+  },
+  "final_audit": {
+    "status": "PASS",
+    "combined_audit": {
+      "attempt": 40897,
+      "module": "R1Z/PV_B2_F_AuditCombined",
+      "source_revision": "873de0ad25a8f79d1d05aa7ba1592d1410b7e5a9",
+      "source_sha256": "9764ee9ccc047aa08f3b14048a48449e7dd078ae8dfdbd8896e091bcde2d3d32",
+      "exit_status": 0,
+      "wall_seconds": 3.716,
+      "peak_rss_kib": 3878228,
+      "swaps": 0,
+      "accepted_axioms": true,
+      "axiom_queries": 2207,
+      "receipt": "40897.json",
+      "print_axioms": "40897-stdout.log"
+    },
+    "focused_replay": {
+      "attempt": 40898,
+      "module": "R1Z/PV_B2_F_AuditClosure",
+      "source_revision": "873de0ad25a8f79d1d05aa7ba1592d1410b7e5a9",
+      "source_sha256": "8214206912736cee4b142b55dd1d0500166248185d0a22603c2f6c9ce770265e",
+      "exit_status": 0,
+      "wall_seconds": 1.908,
+      "peak_rss_kib": 3870780,
+      "swaps": 0,
+      "accepted_axioms": true,
+      "axiom_queries": 18,
+      "receipt": "40898.json",
+      "print_axioms": "40898-stdout.log"
+    },
+    "first_two_rows": {
+      "attempt": 40800,
+      "module": "R1Z/PV_B2_E_AuditFinal",
+      "source_revision": "39384a97589be3afeb5328eafa7403b316f6d6e6",
+      "source_sha256": "afa7b1241c64fd106f8ef5483f43c1715415b90c664d0acf79d50f115762df42",
+      "exit_status": 0,
+      "wall_seconds": 6.497,
+      "peak_rss_kib": 3866496,
+      "swaps": 0,
+      "accepted_axioms": true,
+      "axiom_queries": 1089,
+      "receipt": "40800.json",
+      "print_axioms": "40800-stdout.log"
+    },
+    "public_queries": 2207,
+    "focused_queries": 18,
+    "standard_axioms_only": true,
+    "full_frozen_privacy_endpoint_replay": false,
+    "scope": "Coherent selected source/callback cohort with cached resolved dependencies; separate final combined audit then focused five-row replay"
+  },
+  "fixture_gate": "FIXTURE-GATE.json",
+  "native_weights_fidelity": "NATIVE-BOX-FIDELITY.json",
+  "all_five_nonvacuity": "For every b/kappa/native variant/raw alpha/raw points, the supplied-success resource families yield one successful constructor weight shared by op251/op253, and both samplers succeed. Exact existential statement is final_full_statements[1].",
+  "closing_statements": [
+    {
+      "declaration": "PV_B2_F_MaterializeRequest.complete_result",
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_MaterializeRequest.lean",
+      "statement": "theorem complete_result (request : Result Outcome) (w : host_weights.Weights) (kappa : E) :\n    PV_B2_F_AllocationEffects.copied request w kappa = original request w kappa",
+      "ambient_variables": [],
+      "imports": [
+        "R1Z.PV_B2_F_AllocationEffects",
+        "R1Z.PV_B2_F_MaterializeFrozen"
+      ]
+    },
+    {
+      "declaration": "PV_B2_F_ResourceFamilies.heap_source",
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ResourceFamilies.lean",
+      "statement": "theorem heap_source (heap : HeapRequest) (w : W) (kappa : Native) :\n    heapCallback heap w kappa = heapOriginal heap w kappa",
+      "ambient_variables": [],
+      "imports": [
+        "R1Z.PV_B2_F_252Closure",
+        "R1Z.PV_B2_F_ConstructorCarrierLaws"
+      ]
+    },
+    {
+      "declaration": "PV_B2_F_251Bridge.source",
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem source (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base request ops) w kappa =\n      PV_B2_E_OrdinaryOriginal.mapResult mapRust\n        (PV_B2_F_MaterializeRequest.original request w (fromNative kappa))",
+      "ambient_variables": [],
+      "imports": [
+        "R1Z.PV_B2_F_MaterializeNative",
+        "R1Z.PV_B2_F_MaterializeRequest"
+      ]
+    },
+    {
+      "declaration": "PV_B2_F_251Closure.three_rows",
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Closure.lean",
+      "statement": "theorem three_rows (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base))\n    (b : PV_B2_E_OrdinaryOriginal.Bytes) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op249 (types base) (selected base request ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_GammaOriginal.originalGamma b) \u2227\n    @ProverRwFull.ExternalFuns.op250 (types base) (selected base request ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_OrdinaryOriginal.original b) \u2227\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base request ops) w kappa =\n      PV_B2_E_OrdinaryOriginal.mapResult mapRust\n        (PV_B2_F_MaterializeRequest.original request w (fromNative kappa))",
+      "ambient_variables": [],
+      "imports": [
+        "R1Z.PV_B2_E_AuditFinal",
+        "R1Z.PV_B2_F_251Bridge"
+      ]
+    },
+    {
+      "declaration": "PV_B2_F_AuditClosure.closed_rows",
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_AuditClosure.lean",
+      "statement": "theorem closed_rows (base : ProverRwFull.ExternalTypes) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (b : PV_B2_E_OrdinaryOriginal.Bytes)\n    (w : W) (kappa : E) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) (kind j : Usize) :\n    @ProverRwFull.ExternalFuns.op249 (types base) (selected base heap box ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_GammaOriginal.originalGamma b) \u2227\n    @ProverRwFull.ExternalFuns.op250 (types base) (selected base heap box ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_OrdinaryOriginal.original b) \u2227\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base heap box ops) w kappa =\n      PV_B2_F_ResourceFamilies.heapOriginal heap w kappa \u2227\n    @ProverRwFull.ExternalFuns.op252 (types base) (selected base heap box ops) v alpha z =\n      PV_B2_F_ResourceFamilies.boxOriginal box v alpha z \u2227\n    @ProverRwFull.ExternalFuns.op253 (types base) (selected base heap box ops) w kind j =\n      originalCallback w kind j",
+      "ambient_variables": [],
+      "imports": [
+        "R1Z.PV_B2_F_AuditCombined",
+        "R1Z.PV_B2_F_FiveRows"
+      ]
+    },
+    {
+      "declaration": "PV_B2_F_AuditClosure.nonvacuity",
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_AuditClosure.lean",
+      "statement": "theorem nonvacuity (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (b : PV_B2_E_OrdinaryOriginal.Bytes)\n    (kappa : E) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    \u2203 w : W, \u2203 g o out q,\n      @ProverRwFull.ExternalFuns.op249 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) b = ok g \u2227\n      @ProverRwFull.ExternalFuns.op250 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) b = ok o \u2227\n      @ProverRwFull.ExternalFuns.op251 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) w kappa = ok (.Ok out) \u2227\n      @ProverRwFull.ExternalFuns.op252 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) v alpha z = ok (.Ok w) \u2227\n      @ProverRwFull.ExternalFuns.op253 (types base)\n        (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) w 0#usize 0#usize = ok q",
+      "ambient_variables": [],
+      "imports": [
+        "R1Z.PV_B2_F_AuditCombined",
+        "R1Z.PV_B2_F_FiveRows"
+      ]
+    }
+  ]
+}

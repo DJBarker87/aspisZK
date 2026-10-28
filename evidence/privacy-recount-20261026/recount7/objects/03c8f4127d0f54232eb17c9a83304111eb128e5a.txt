@@ -1,0 +1,59 @@
+@[defeq] theorem R1Z.PV_CBL_CallbackBundle.op26_source : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns) {P : Type} (inst : core.convert.AsRef P String) (p : String) (q : P),
+  ProverRwFull.ExternalFuns.op26 inst p q = do
+    let path ← inst.as_ref q
+    R1Z.PV_CBL_JoinAdapter.reference p path :=
+fun base ops {P} inst p q => rfl
+@[defeq] theorem R1Z.PV_CBL_AppendBundle.op28_source : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns) (s : String),
+  ProverRwFull.ExternalFuns.op28 s = PV_CBL_StringOwnedReference.string_owned_reference s :=
+fun base ops s => rfl
+@[defeq] theorem R1Z.PV_CBL_AppendBundle.op31_source : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns) (s : String) (t : Str),
+  ProverRwFull.ExternalFuns.op31 s t = R1Z.PV_CBL_StringBytesAdapter.append s t :=
+fun base ops s t => rfl
+theorem R1Z.PV_CB3_Op51Arbitrary.op51_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.wide_exact.WideExact),
+  ProverRwFull.ExternalFuns.op51 x = R1Z.PV_CB3_Op51Source.Raw.wide_bytes_flat x :=
+fun [ProverRwFull.ExternalTypes] ops x => R1Z.PV_CB3_Op51Source.op51_source ops x
+theorem R1Z.PV_AL_SplitSelected.native_callback : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns) (v : Slice U8),
+  ProverRwFull.ExternalFuns.op209 (R1Z.PV_AL_SplitNativeShape.nativeTrait base ops 6) v =
+    ok
+      (R1Z.PV_AL_SplitCarrier.blockSlice (R1Z.PV_AL_SplitNativeShape.Size base 6) v,
+        R1Z.PV_AL_SplitCarrier.tailSlice v) :=
+fun base ops v =>
+  R1Z.PV_AL_SplitSelected.callback base ops (R1Z.PV_AL_SplitNativeShape.Size base 6)
+    (R1Z.PV_AL_SplitNativeShape.nativeTrait base ops 6) (R1Z.PV_AL_SplitNativeShape.native_size base ops) v
+'R1Z.PV_CBL_CallbackBundle.op26_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_AppendBundle.op28_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_AppendBundle.op31_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB3_Op51Arbitrary.op51_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitSelected.native_callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V178.unix_control' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V178.contents' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V178.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V178.asref_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V178.nonvacuous' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V179.complete' does not depend on any axioms
+'R1Z.PV_RL_V179.observer' does not depend on any axioms
+'R1Z.PV_RL_V179.nonvacuous' does not depend on any axioms
+'R1Z.PV_RL_V182.complete' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RL_V182.adapter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V182.nonvacuous' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RL_V195.copy_acc' depends on axioms: [propext]
+'R1Z.PV_RL_V195.chunks_flat' depends on axioms: [propext]
+'R1Z.PV_RL_V195.copyBuffer_result' depends on axioms: [propext]
+'R1Z.PV_RL_V195.full_overwrite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V195.slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V195.all_slots' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RL_V195.width_four' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RL_V195.eight_chunks' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RL_V195.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V195.nonvacuous' does not depend on any axioms
+'R1Z.PV_RL_V233.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V233.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V233.no_overlap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V233.block_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V233.reassembles' depends on axioms: [propext]
+'R1Z.PV_RL_V233.nonvacuous' depends on axioms: [propext]

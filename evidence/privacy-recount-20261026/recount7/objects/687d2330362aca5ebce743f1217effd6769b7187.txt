@@ -1,0 +1,41 @@
+import R1Z.ProverCommitSemanticTransport26
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_ResultPost
+open Aeneas Aeneas.Std Result
+
+/-- Partial correctness retaining machine failure and divergence. -/
+def Post {A : Type} (P : A → Prop) (m : Result A) : Prop :=
+  ∀ a, m = .ok a → P a
+
+theorem ok {A : Type} (P : A → Prop) (a : A) (holds : P a) : Post P (.ok a) := by
+  intro out same
+  cases same
+  exact holds
+
+theorem bind_right {A B : Type} (P : B → Prop) (m : Result A) (k : A → Result B)
+    (continuation : ∀ a, Post P (k a)) : Post P (m >>= k) := by
+  cases m with
+  | fail e => intro out same; cases same
+  | div => intro out same; cases same
+  | ok a => exact continuation a
+
+theorem bind_known {A B : Type} (P : B → Prop) (Q : A → Prop)
+    (m : Result A) (k : A → Result B) (hprefix : Post Q m)
+    (continuation : ∀ a, Q a → Post P (k a)) : Post P (m >>= k) := by
+  cases computation : m with
+  | fail e => intro out same; cases same
+  | div => intro out same; cases same
+  | ok a => exact continuation a (hprefix a computation)
+
+theorem bind_eq_ok {A B : Type} {m : Result A} {k : A → Result B} {out : B}
+    (run : (m >>= k) = .ok out) : ∃ a, m = .ok a ∧ k a = .ok out := by
+  cases computation : m with
+  | fail e => rw [computation] at run; cases run
+  | div => rw [computation] at run; cases run
+  | ok a => exact ⟨a,rfl,by simpa only [computation,bind_tc_ok] using run⟩
+
+#print axioms ok
+#print axioms bind_right
+#print axioms bind_known
+#print axioms bind_eq_ok
+end R1Z.PV_RunJoin_ResultPost
