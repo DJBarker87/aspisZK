@@ -53,10 +53,10 @@ theorem complete_result (input : Pair) : PV_RunJoin_Lane31.lane_root input = mod
     change _ = (do
       let root ← fold PV_RunJoin_Lane31.aspis_statement.pool_v1.format.pool_v1_tree_parent
         (sibling input) (reverse input) [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19] d
-      ok (.Ok root))
+      ok (core.result.Result.Ok root : core.result.Result Digest PV_RunJoin_Lane31.aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1))
     simp only [PV_RunJoin_Lane31.core.result.Result.map_err,BuilderAdmissionStd.mapErr,
       core.result.Result.Insts.CoreOpsTry.branch,lift,bind_tc_ok,
       fold,bind_assoc_eq,PV_RunJoin_Lane31.step,PV_RunJoin_LaneFold31.step]
-    rfl
+    all_goals rfl
 #print axioms complete_result
 end R1Z.PV_RunJoin_LaneDenotation31
