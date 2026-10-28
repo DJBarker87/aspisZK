@@ -53,3 +53,12 @@ commitment update caused kernel memory exhaustion at ZeroRecipient28.valid
 with symbolic PairLeaf fields, then instantiate it. The first commitment is
 irrelevant to occupancy validity. No concrete hash is normalized, no cap is
 raised, and the failed source is not rerun unchanged.
+
+D188 per-function boundary: the new compiler-domain/error proofs split only
+the already identified extracted compiler control flow. Its super-root scan
+reads shared elements; dropping the exhausted iterator state does not discard
+a data write. The one-step tree validator theorem threads the local result
+explicitly; it has no mutable data-borrow restoration. No new Rust-source law
+for a mutable-iterator write body is claimed. Existing source/helper fidelity
+associations are reused as recorded in the predecessor reports; no XR source
+or object is imported or copied.
