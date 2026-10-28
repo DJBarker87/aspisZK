@@ -32,7 +32,7 @@ current=body(sources['raw'],'const unsafe fn current_memory(')
 # Record the complete actual branch/layout calculation for audit; assertions
 # below ensure the nonzero-capacity test and allocation-layout construction.
 assert 'self.cap.as_inner() == 0' in current and 'elem_layout.size() == 0' in current,current
-assert 'Layout::from_size_alignment_unchecked' in current,current
+assert tokens(current)==tokens('''{if elem_layout.size() == 0 || self.cap.as_inner() == 0 {None} else {unsafe {let alloc_size = elem_layout.size().unchecked_mul(self.cap.as_inner());let layout = Layout::from_size_align_unchecked(alloc_size, elem_layout.align());Some((self.ptr.into(), layout))}}}'''),current
 checks.append(dict(file=paths['raw'],anchor='current_memory',body=current,branch_checks=True))
 j=dict(evidence_class='structural (K-1 substitute)',files={k:dict(path=paths[k],sha256=hashlib.sha256(v.encode()).hexdigest()) for k,v in sources.items()},checks=checks,
  type='Vec<u32,Global>; u32 has no user destructor, size 4, alignment 4; Global is zero-sized with no destructor',

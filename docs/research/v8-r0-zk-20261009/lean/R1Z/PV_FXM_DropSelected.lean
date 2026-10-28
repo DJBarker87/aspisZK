@@ -18,12 +18,14 @@ def callback (ops : ExternalFuns) {T : Type} (x : T) : Result Unit :=
 
 theorem installed (ops : ExternalFuns) (v : alloc.vec.Vec U32) :
     @core.mem.drop _ (selected ops) _ v = .ok () := by
-  simp only [core.mem.drop,selected,callback,ite_true]
+  change callback ops v = .ok ()
+  simp only [callback,ite_true]
 
 theorem other_types (ops : ExternalFuns) {T : Type}
     (h : T ≠ alloc.vec.Vec U32) (x : T) :
     (selected ops).op4 x = ops.op4 x := by
-  simp only [selected,callback,h,ite_false]
+  change callback ops x = ops.op4 x
+  simp only [callback,h,ite_false]
 
 /-- Restoring op4 recovers the entire original record, not just a sample of
 fields. Consequently every other callback is literally unchanged. -/
@@ -36,7 +38,6 @@ theorem projection {S F : Type} (ops : ExternalFuns)
     Result.ok (PV_FXM_DropWorld.native free b w).1 =
       @core.mem.drop _ (selected ops) _ v := by
   rw [installed]
-  rfl
 
 /-- The complete execution retains the world effect before running the caller.
 The value projection alone is not the execution-composition theorem. -/
