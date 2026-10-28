@@ -662,53 +662,89 @@
   "LPm_K003": {
     "status": "OPEN",
     "domain": "i<64; len=712+16*i",
-    "gates": [],
+    "gates": [
+      {
+        "name": "selected",
+        "positive": "TIMEOUT",
+        "control": "TIMEOUT",
+        "positive_id": "KNA_K015",
+        "control_id": "KNA_K016",
+        "credit": false
+      }
+    ],
     "next": "For each uncredited byte interval, halve the observation interval while retaining one actual append on arbitrary symbolic len and arbitrary full prefix. Constructor-prefix, length and capacity checks remain obligations. Never enumerate lengths."
   },
   "LPm_K004": {
     "status": "OPEN",
     "domain": "symbolic len<=1704",
-    "gates": [],
+    "gates": [
+      {
+        "name": "append32",
+        "positive": "TIMEOUT",
+        "control": "TIMEOUT",
+        "positive_id": "KNA_K017",
+        "control_id": "KNA_K018",
+        "credit": false
+      }
+    ],
     "next": "For each uncredited byte interval, halve the observation interval while retaining one actual append on arbitrary symbolic len and arbitrary full prefix. Constructor-prefix, length and capacity checks remain obligations. Never enumerate lengths."
   },
   "LPm_K005": {
     "status": "OPEN",
     "domain": "symbolic len<=1732",
-    "gates": [],
+    "gates": [
+      {
+        "name": "append4",
+        "positive": "TIMEOUT",
+        "control": "TIMEOUT",
+        "positive_id": "KNA_K019",
+        "control_id": "KNA_K020",
+        "credit": false
+      }
+    ],
     "next": "For each uncredited byte interval, halve the observation interval while retaining one actual append on arbitrary symbolic len and arbitrary full prefix. Constructor-prefix, length and capacity checks remain obligations. Never enumerate lengths."
   },
   "LPi_K012": {
     "status": "OPEN",
     "domain": "symbolic len<=1720",
-    "gates": [],
+    "gates": [
+      {
+        "name": "append16",
+        "positive": "TIMEOUT",
+        "control": "TIMEOUT",
+        "positive_id": "KNA_K021",
+        "control_id": "KNA_K022",
+        "credit": false
+      }
+    ],
     "next": "For each uncredited byte interval, halve the observation interval while retaining one actual append on arbitrary symbolic len and arbitrary full prefix. Constructor-prefix, length and capacity checks remain obligations. Never enumerate lengths."
   },
   "LPi_K013": {
     "status": "OPEN",
     "domain": "symbolic len<=1704",
-    "gates": [],
+    "gates": [
+      {
+        "name": "append32",
+        "positive": "TIMEOUT",
+        "control": "TIMEOUT",
+        "positive_id": "KNA_K017",
+        "control_id": "KNA_K018",
+        "credit": false
+      }
+    ],
     "next": "For each uncredited byte interval, halve the observation interval while retaining one actual append on arbitrary symbolic len and arbitrary full prefix. Constructor-prefix, length and capacity checks remain obligations. Never enumerate lengths."
   },
   "LPe_K017": {
     "status": "OPEN",
     "gates": [
-      {
-        "name": "query_1_16",
-        "positive": "TIMEOUT",
-        "control": "TIMEOUT",
-        "positive_id": "KNA_K001",
-        "control_id": "KNA_K002",
-        "credit": false
-      },
-      {
-        "name": "query_17_22",
-        "positive": "TIMEOUT",
-        "control": "TIMEOUT",
-        "positive_id": "KNA_K003",
-        "control_id": "KNA_K004",
-        "credit": false
-      }
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
     ],
-    "next": "Actual Vec::from(array128/256), truncate(64+4*i); split retained live-prefix j<len from appended-byte j-len<4 for i=1..15 and i=17..21; then halve uncredited prefix observation windows. Identical KMX configuration and a failing matched control per credited split."
+    "next": "Actual Vec::from(array128/256), truncate(64+4*i), append4; retain i=1..15 or i=17..21 respectively. Halve each uncredited retained-prefix window and keep j<len for constructor and final association. Split the appended4 window into b<2 and 2<=b<4. Every replacement needs an identical failing control; never rerun a timeout unchanged."
   }
 }

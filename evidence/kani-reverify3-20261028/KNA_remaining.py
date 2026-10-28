@@ -21,7 +21,7 @@ for row,name in [('LPm_K003','selected'),('LPm_K004','append32'),('LPm_K005','ap
  p=by.get(name);splits=[by.get(f'{name}_byte_{lo}_{hi}') for lo,hi in [(0,884),(884,1768)]]
  good=p and p['credit'] or all(x and x['credit'] for x in splits)
  rows[row]=dict(status='CONFIRMED' if good else 'OPEN',domain='i<64; len=712+16*i' if name=='selected' else 'symbolic len<='+str({'append32':1704,'append4':1732,'append16':1720}[name]),gates=[x for x in [p]+splits if x],next='For each uncredited byte interval, halve the observation interval while retaining one actual append on arbitrary symbolic len and arbitrary full prefix. Constructor-prefix, length and capacity checks remain obligations. Never enumerate lengths.')
-queries=[by.get('query_1_16'),by.get('query_17_22')]
-rows['LPe_K017']=dict(status='CONFIRMED' if all(x and x['credit'] for x in queries) else 'OPEN',gates=queries,next='Actual Vec::from(array128/256), truncate(64+4*i); split retained live-prefix j<len from appended-byte j-len<4 for i=1..15 and i=17..21; then halve uncredited prefix observation windows. Identical KMX configuration and a failing matched control per credited split.')
+queries=[by.get('query_'+str(cap)+'_'+suffix) for cap,suffixes in [(128,['0_64','64_124','tail']),(256,['0_64','64_128','128_148','tail'])] for suffix in suffixes]
+rows['LPe_K017']=dict(status='CONFIRMED' if all(x and x['credit'] for x in queries) else 'OPEN',gates=queries,next='Actual Vec::from(array128/256), truncate(64+4*i), append4; retain i=1..15 or i=17..21 respectively. Halve each uncredited retained-prefix window and keep j<len for constructor and final association. Split the appended4 window into b<2 and 2<=b<4. Every replacement needs an identical failing control; never rerun a timeout unchanged.')
 (E/'KNA_ROW_CREDITS.json').write_text(json.dumps(rows,indent=2)+'\n')
 print(json.dumps({r:x['status'] for r,x in rows.items()}))
