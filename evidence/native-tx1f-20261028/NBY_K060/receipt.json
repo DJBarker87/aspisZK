@@ -1,0 +1,64 @@
+{
+  "attempt": "NBY_K060",
+  "kind": "kani",
+  "sources": [
+    "NBY_src/Cargo.lock",
+    "NBY_gate.py",
+    "NBY_src/KMX_stubs.rs",
+    "NBY_KMX_copy_stubs.patch",
+    "NBY_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_opening.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_padding.rs"
+  ],
+  "command": [
+    "python3",
+    "NBY_gate.py",
+    "NBY_K060",
+    "verifier::candidate::NBY_padding::NBY_padding_word_continuation_wrong",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 240,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "NBY_K060-graph.json"
+  },
+  "expected_time": "optimized compilation then one native helper/atomic-step SAT gate, no SHA or multiplication",
+  "expected_negative": true,
+  "reservation_retries": 0,
+  "source_revision": "6e7d660d37aa3ab31d660deed2a73effb4d2f087",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 6.8997496599913575,
+  "peak_rss_kib": "349968",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r3a19a1e57c3a4ab78ba9e4591db16588.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "333361152",
+  "source_hashes": {
+    "NBY_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBY_gate.py": "47dc4d065105836e062adf1f3bc11e42411c3966088763a30e6b86162748f495",
+    "NBY_src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "NBY_KMX_copy_stubs.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NBY_src/crates/aspis-r1-cost-probe/src/lib.rs": "45cce6cb4f913f1aaff5554160798b4fe970ecc944aff526b99d7b2f1756c10b",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_opening.rs": "7054741e2b5163858f9a0af1a44818d069a7dd09da8e7378bd3501e01e1fe425",
+    "NBY_src/crates/aspis-r1-cost-probe/src/candidate.rs": "3af02bced74bb2a15d2a269622ae52bc69b190b8d0c9397433bb66c63564bf14",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_padding.rs": "5390bda4b8e4e1ee530d720c9647c241040ef3e048cc17ad8b723c4300cbacd4"
+  },
+  "print_axioms": "N/A: kani"
+}

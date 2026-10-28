@@ -1,0 +1,9 @@
+import NBY_generate as g
+g.pair('parent_read_then_write','''let mut idx:[u32;16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let k:usize=kani::any();kani::assume(i<n&&n<=16&&w<=i&&k<16);let before=idx[k];let source=idx[i];let parent=index_at(&idx,i)>>Arity::Two.bits();idx[w]=parent;''','parent==source/2&&idx[k]==if k==w{source/2}else{before}')
+g.pair('binary_branch_group_domain','''let idx:[u32;16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();kani::assume(i<n&&n<=16);if i+1<n{kani::assume(idx[i]<idx[i+1]);}let paired=i+1<n&&index_at(&idx,i+1)==index_at(&idx,i)^1;let parent=index_at(&idx,i)>>Arity::Two.bits();let next_i=if paired{i+2}else{i+1};''','paired==(i+1<n&&idx[i+1]/2==idx[i]/2)&&parent==idx[i]/2&&next_i<=n&&next_i>i')
+g.pair('node_get_carrier_domain','''let nodes:[u8;5504]=kani::any();let length:usize=kani::any();let at:usize=kani::any();kani::assume(length<=5504&&at<=5504);let selected=nodes[..length].get(at..at+32);''','match selected{Some(w)=>at+32<=length&&w.len()==32&&w.as_ptr()==nodes.as_ptr().wrapping_add(at),None=>at+32>length}')
+g.pair('empty_level_transition','''let idx:[u32;16]=kani::any();let values:[[u8;32];16]=kani::any();let n:usize=kani::any();let w:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(w<=n&&n<=16&&k<16&&c<32);let old_i=idx[k];let old_v=values[k][c];let i=n;let mut next_n=n;if !(i<n){next_n=w;}let next_i=0usize;let next_w=0usize;''','next_n==w&&next_n<=16&&next_w<=next_i&&next_i<=next_n&&idx[k]==old_i&&values[k][c]==old_v')
+# A missing negative control for the imported, unchanged NBV_K039 arity gate.
+g.text+=g.attrs+'''fn NBY_binary_arity_wrong(){assert!(!(Arity::Two.bits()==1&&Arity::Two.width()==2&&Arity::Two.levels()==18));}\n'''
+g.cases.append(('NBY_binary_arity_wrong',True))
+if __name__=='__main__':g.publish('NBY_domains','multiproof.rs',89)
