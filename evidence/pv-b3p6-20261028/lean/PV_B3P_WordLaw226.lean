@@ -18,9 +18,10 @@ theorem complete_word (v : U32) : four v =
     if v < 2147483647#u32 then .ok (.Ok (PV_B3P_ByteLayout226.wordBytes v))
     else .ok (.Err E.Public) := by
   by_cases h : v < 2147483647#u32
-  · simp only [h, ↓reduceIte, four, field_success v _ h, bindR,
+  · simp only [h, ↓reduceIte, four, field_success v 0#usize h, field_success v 1#usize h,
+      field_success v 2#usize h, field_success v 3#usize h, bindR,
       PV_B3P_ByteLayout226.wordBytes] <;> rfl
-  · simp only [h, ↓reduceIte, four, field_reject v _ h, bindR]
+  · simp only [h, ↓reduceIte, four, field_reject v 0#usize h, bindR]
 
 #print axioms complete_word
 end PV_B3P_WordLaw226
