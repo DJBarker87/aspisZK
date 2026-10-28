@@ -25,7 +25,8 @@ theorem previous_block_option (level : Nat) (h : level < 24) (hn : level ≠ 0) 
 
 theorem local_table (i : Nat) (hi : i < 4) :
     ([1,5,9,13] : List Nat)[i]? = some (1+4*i) := by
-  interval_cases i <;> rfl
+  have cases : i = 0 ∨ i = 1 ∨ i = 2 ∨ i = 3 := by omega
+  rcases cases with rfl | rfl | rfl | rfl <;> rfl
 
 theorem helper_bounds (level : Nat) (h : level < 24) :
     forestAux level < 1008 ∧ forestBlock level < 57 := by
