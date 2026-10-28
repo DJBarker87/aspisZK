@@ -25,7 +25,7 @@ theorem error (ops : ExternalFuns)
   simp only [host_sumcheck.merge_evaluations_loop.body,hi,if_true,he,bind_tc_ok,
     core.result.Result.Insts.CoreOpsTry.branch,
     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-    core.convert.FromSame]
+    core.convert.FromSame.from]
 
 /-- Actual source success step; the updated cell is the quotient-selected
 sample, with exact canonical field addition and every other cell retained. -/
