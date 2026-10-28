@@ -272,3 +272,7 @@ native Vec composition and complete structural binding, then its carrier law.
 ## Resume completion
 
 100/100 fresh Lean attempts; zero Kani. Reserved audits36497/36498/36499 all PASS. V229 selected structural closure retained; V243 partial helpers and2884 finite native cases retained without whole-row credit. Five rows and all endpoint/native/side-channel premises remain open. Source and private-object coherence verified; own rebuildable host caches removed after final scope. See FINAL.md and receipt-index-resume.json.
+
+## D373 final resume
+
+Exact base1e826627aa, IDs50500–50599,100 charged Lean attempts (86 pass/14 failed drafts),0 Kani. V243 selected source/value requirement closed with whole-buffer, Vec/error, structural binding and original-carrier packet. V229 retained. V228 safe fixed-array extraction accepted and local geometry/write/measure laws proved; whole-loop value/count and source binding remain open. V241,V245,V244 not advanced. Audits50597–50599 passed;86 project-module hash closure coherent. Final details in FINAL.md and receipt-index-resume2.json. Own rebuildable caches removed after all scopes ended; keys/shared paths untouched. Budget exhausted; no ROWS7/endpoint counterexample; target not yet established.

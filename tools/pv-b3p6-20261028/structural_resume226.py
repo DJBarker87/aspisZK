@@ -176,6 +176,10 @@ assert (D/'lean/PV_B3P_BytesV3Emission226.lean').read_text()==pf
 assert not re.search(r'index_mut|iter_mut|next_back|index_mut_back',f)
 assert re.search(r'pub const P: u32 = 0x7fff_ffff;', (R/'crates/aspis-core/src/field.rs').read_text())
 record['emission_fidelity']=dict(body_edits=False,mutable_writes=0,raw_types_sha256=sha(D/'raw226-v3/Types.lean'),raw_funs_sha256=sha(D/'raw226-v3/Funs.lean'),ported_types_sha256=sha(D/'lean/PV_B3P_BytesV3Types226.lean'),ported_funs_sha256=sha(D/'lean/PV_B3P_BytesV3Emission226.lean'))
+plan_source=(D/'lean/PV_B3P_NativePlan226.lean').read_text().split('def plan (p : reference226.OwnedPublic) : List Step :=',1)[1].split('theorem payload_value',1)[0]
+plan_expected='[\n  .push (if p.withdrawal then 1#u8 else 0#u8),\n  .fields p.anchor.val, .fields p.nullifier.val, .fields [p.asset_id],\n  .push (if p.withdrawal then 0#u8 else 1#u8),\n  .fields (if p.withdrawal then [] else p.recipient.val),\n  .fields p.change.val, .push (if p.withdrawal then 1#u8 else 0#u8),\n  .fields (if p.withdrawal then [p.withdrawal_amount] else []),\n  .bytes (indexSlice p.next_pair_index), .fields (frontier p.frontier),\n  .fields p.next_root.val, .fields (frontier p.next_frontier) ]\n'
+assert toks(plan_source)==toks(plan_expected),'Lean native plan differs from checked native symbolic schedule'
+record['native_plan_source_tokens_match']=True
 record['differences_and_lean_laws']=[
  dict(difference='Read-only native references and semantic Option fields become copied owned fields; unused pool/domain metadata does not occur in the checked native main',laws=['PV_B3P_ProjectV3Law226.project_exact','PV_B3P_PublicCarrier226V3.roundtrip','PV_B3P_PublicCarrier226V3.reverse_roundtrip']),
  dict(difference='Locally mutated Vec becomes owned Vec state threaded through identical push/extend operations; partial error buffers are unobservable because native returns Err and the Vec is local',laws=['PV_B3P_NativeFieldsVec226.complete_result','PV_B3P_NativeSteps226.complete_result','PV_B3P_NativePlan226.complete_result']),
