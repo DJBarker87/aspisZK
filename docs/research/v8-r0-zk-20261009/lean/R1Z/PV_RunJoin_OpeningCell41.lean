@@ -30,7 +30,9 @@ theorem append (ops : ExternalFuns) (w : aspis_core.field.wide_exact.WideExact)
     (Array.to_slice (PV_RunJoin_FlatBytes35.wire w)) out n
     (by change n.val≤32;exact hn) room
   refine ⟨next,?_,hv⟩
-  rw [PV_RunJoin_FlatBytes35.installed ops w]
+  rw [show @aspis_core.field.wide_exact.WideExact.to_le_bytes _
+    (ProverRwP6BodyCandidate.selected ops) w = .ok (PV_RunJoin_FlatBytes35.wire w)
+    from PV_RunJoin_FlatBytes35.installed ops w]
   simp only [bind_tc_ok]
   change (do
     let s ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
