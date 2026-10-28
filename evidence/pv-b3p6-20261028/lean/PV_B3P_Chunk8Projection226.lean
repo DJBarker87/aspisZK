@@ -1,4 +1,5 @@
 import PV_B3P_BytesV3Emission226
+import PV_B3P_ChunkV3Law226
 import PV_B3P_ResultSuccess226
 namespace PV_B3P_Chunk8Projection226
 open Aeneas Aeneas.Std PV_B3P_226V3 PV_B3P_RustResult
@@ -10,8 +11,8 @@ theorem success_cell (p : reference226.OwnedPublic) (base : Usize)
     (j : Usize) (hj : j.val < 8) :
     reference226.byte_at p (Usize.wrapping_add base j) =
       .ok (.Ok (out.val[j.val]'(by rw [out.property]; simpa using hj))) := by
-  unfold reference226.chunk8 at h
-  simp only [lift,bind_tc_ok,try_bind_eq] at h
+  rw [PV_B3P_ChunkV3Law226.complete_result] at h
+  unfold PV_B3P_ChunkV3Law226.spec8 at h
   rw [PV_B3P_ResultSuccess226.bind_success] at h
   obtain ⟨v0,hv0,h⟩ := h
   rw [PV_B3P_ResultSuccess226.bind_success] at h

@@ -1,4 +1,5 @@
 import PV_B3P_BytesV3Emission226
+import PV_B3P_ChunkV3Law226
 import PV_B3P_ResultSuccess226
 namespace PV_B3P_EncodeProjection226
 open Aeneas Aeneas.Std PV_B3P_226V3 PV_B3P_RustResult
