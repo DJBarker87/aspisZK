@@ -1,0 +1,22 @@
+START 51827 R1Z.PV_RunJoin_WorldProjection33
+DONE 51827 R1Z.PV_RunJoin_WorldProjection33 exit 1 wall 0.19 RSS 486981632
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WorldProjection33.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  right (world w)
+in the target expression
+  project world tag (PV_W_Threading.bind left next w) = PV_W_Threading.bind right target (world w)
+
+W V C D E A B : Type
+world : W → V
+tag : C → D
+left : M W C E A
+right : M V D E A
+next : A → M W C E B
+target : A → M V D E B
+head : ∀ (w : W), project world tag (left w) = right (world w)
+tail : ∀ (a : A) (w : W), project world tag (next a w) = target a (world w)
+w : W
+⊢ project world tag (PV_W_Threading.bind left next w) = PV_W_Threading.bind right target (world w)
+'R1Z.PV_RunJoin_WorldProjection33.project_lift' does not depend on any axioms
+'R1Z.PV_RunJoin_WorldProjection33.project_bind' depends on axioms: [sorryAx]
+'R1Z.PV_RunJoin_WorldProjection33.eval_project' depends on axioms: [sorryAx]
+

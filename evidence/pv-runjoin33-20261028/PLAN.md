@@ -23,3 +23,11 @@ structural gate is run or deployed credit inferred from non-deployed features.
 Any new such gate must satisfy lead ruling (x): devnet_spend release, Rust
 1.94.1, r1p-check and aspis-r1-cost-probe/ct-host-prover, resolved features for
 every crate; verifier artifacts use their respective deployed configurations.
+
+## Correction to the historical ELF paragraph
+
+The identity claim above is WITHDRAWN. Its shell invocation did not capture the
+diff command exit separately; the explicit final check exits 1 and lists 21
+crate files differing from the historical gated revision. See
+merge-source-identity.json and FINDING.md. Historical pins do not validate this
+merged tree. No deployed credit is claimed.
