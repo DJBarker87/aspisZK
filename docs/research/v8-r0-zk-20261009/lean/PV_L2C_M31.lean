@@ -15,6 +15,7 @@ theorem subtractP_branch (x : word) :
     subtractP x = if p ≤ x.toNat then x-BitVec.ofNat 32 p else x := by
   unfold subtractP
   split <;> simp_all [BitVec.zero_sub,BitVec.neg_one_eq_allOnes]
+  rfl
 #print axioms subtractP_branch
 
 theorem subtractP_nat (x : word) :
@@ -38,14 +39,14 @@ theorem subtractP_canonical (x : word) (hx : x.toNat<2*p) : canonical (subtractP
 theorem add_nat (x y : word) (hx : canonical x) (hy : canonical y) :
     (add x y).toNat = if p ≤ x.toNat+y.toNat then x.toNat+y.toNat-p else x.toNat+y.toNat := by
   unfold add
-  rw [subtractP_nat,BitVec.toNat_add,Nat.mod_eq_of_lt (show x.toNat+y.toNat<2^32 by unfold canonical at *; omega)]
+  rw [subtractP_nat,BitVec.toNat_add,Nat.mod_eq_of_lt (show x.toNat+y.toNat<2^32 by unfold canonical p at *; omega)]
 #print axioms add_nat
 
 theorem add_canonical (x y : word) (hx : canonical x) (hy : canonical y) :
     canonical (add x y) := by
   unfold canonical
   rw [add_nat x y hx hy]
-  unfold canonical at hx hy
+  unfold canonical p at hx hy
   split <;> omega
 #print axioms add_canonical
 
@@ -55,8 +56,7 @@ theorem add_decode (x y : word) (hx : canonical x) (hy : canonical y) :
   rw [add_nat x y hx hy]
   split
   · rename_i h
-    rw [Nat.cast_sub h,Nat.cast_add]
-    simp
+    rw [Nat.cast_sub h,Nat.cast_add,ZMod.natCast_self,sub_zero]
   · exact Nat.cast_add _ _
 #print axioms add_decode
 end PV_L2C_M31
