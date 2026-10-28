@@ -27,3 +27,12 @@ The fixture honesty theorems provide non-vacuity of that carrier, not a
 substitute for the missing caller association. The admitted but failed full
 withdrawal from runjoin27 lies outside this carrier and is not a checked
 honest guard counterexample. No honest guard counterexample was found.
+
+N3 statement audit: UniversalBuild22.build_eq concludes equality after
+PV_Src_NativeInput.columns / WriterRefine.liftU decode the words into the field.
+It does not itself assert each native U32 is <P. Raw words P and 0 have the
+same field image, so this decoded equality alone cannot discharge canonicality.
+This is a diagnostic of a missing implication, NOT an honest-input guard
+counterexample and NOT a reason to stop the requested counterexample search.
+Checked's digest bounds and the native compiler's raw arithmetic/write range
+invariant must be transported through the real returned bank/column pipeline.
