@@ -3,7 +3,7 @@ namespace PV_B3P_ZeroSource226V3
 open Aeneas Aeneas.Std PV_B3P_226V3
 set_option autoImplicit false
 
-def z : U32 := aspis_core.field.M31.ZERO
+def z : U32 := 0#u32
 def digest : Array U32 8#usize := Array.repeat 8#usize z
 def frontier : Array (Array U32 8#usize) 20#usize := Array.repeat 20#usize digest
 def metadata : Array U8 32#usize := Array.repeat 32#usize 0#u8
@@ -21,7 +21,8 @@ def source (b : Bool) : reference226.Source :=
   else .Transfer ⟨metadata,metadata,0#u64,digest,digest,z,digest,digest⟩ transition
 
 theorem projection (b : Bool) : reference226.project (source b) = .ok (owned b) := by
-  cases b <;> rfl
+  cases b <;> simp only [source,reference226.project,owned,transition,digest,
+    frontier,z,aspis_core.field.M31.ZERO,Bool.false_eq_true,↓reduceIte]
 
 theorem canonical_digest : ∀ m ∈ digest.val, m < 2147483647#u32 := by
   intro m hm
