@@ -27,7 +27,7 @@ if carrier:
  dep={'carrier_preflight_sha256':hashlib.sha256((E/'CARRIER-PREFLIGHT.json').read_bytes()).hexdigest(),'project':pre['project'],'owned_drop':json.loads((E/'35503-submission.json').read_text())}
  for owned in imports:
   if owned=='R1Z.PV_FXM_ZeroWorld':
-   dep['owned_zero']=json.loads((E/'35507-submission.json').read_text())
+   dep['owned_zero']=json.loads((E/'35508-submission.json').read_text())
 fp=hashlib.sha256(json.dumps(dep,sort_keys=True).encode()).hexdigest()
 meta=dict(id=n,module=m,source_sha256=sha,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],cwd=R,text=True).strip(),dependencies=dep,deps_fingerprint=fp)
 (E/f'{n}-submission.json').write_text(json.dumps(meta,indent=2)+'\n')
