@@ -61,6 +61,9 @@ if '.' in module:
  assert srcsha==authority['sha256'],(module,srcsha,authority)
  sub['project_source_authority']=authority
  sub['compile_environment_change']=context['private_output_parent']
+authority=json.loads((H/'project-resolution.json').read_text())['modules'][module]
+assert srcsha==authority['sha256'],(module,srcsha,authority)
+sub['project_source_authority']=authority
 cmd=['timeout','900','python3',str(DRIVER),str(JENV),str(O),str(S),str(O/(module.replace('.','/')+'.olean')),str(p),'7000']
 status=run(label,cmd,'one focused Lean module via pinned run2.py, env J, -M7000; private source/object overlay')
 sub['lean_source_revision']=(H/'proof-revision').read_text().strip() if (H/'proof-revision').exists() else 'see SHA-matched source snapshot and own source authority record'

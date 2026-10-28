@@ -6,6 +6,9 @@ P=H/'source/tools/pv-b3p6-20261028'
 if kind=='kani133':
  cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','proofs::shipped_equals_reference133','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions']
  sys.exit(run('kani133-03',cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; no stubs, unwind1026, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3'}))
+if kind=='native133':
+ cmd=['timeout','180','taskset','--cpu-list','0-3','cargo','test','--release','--manifest-path',str(P/'Cargo.toml'),'--lib','finite_native133','--','--exact','--nocapture']
+ sys.exit(run('native133-01',cmd,'optimized native same-input differential; finite validation, not symbolic proof'))
 if kind=='extract133':
  tools={'/home/dombarker/project-offloads/codex-pv-extract-20261027/charon':'daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8','/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools/aeneas':'562e1f51ef9bea84f62793f21b4d6b48f9ae65c61ec72588170b2c3abdc37f19'}
  for f,h in tools.items(): assert hashlib.sha256(Path(f).read_bytes()).hexdigest()==h

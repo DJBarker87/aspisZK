@@ -23,6 +23,11 @@ theorem reference (base : ExternalTypes) (ops : @ExternalFuns base) :
   rw [PV_B3P_Law133.source]
   rfl
 
+theorem nonvacuity (base : ExternalTypes) (ops : @ExternalFuns base) :
+    ∃ rows : alloc.vec.Vec U16,
+      @ExternalFuns.op133 base (selected base ops) = ok (.Ok rows) :=
+  ⟨value, source base ops⟩
+#print axioms nonvacuity
 #print axioms source
 #print axioms reference
 theorem preserved_op0 (base : ExternalTypes) (ops : @ExternalFuns base) :
