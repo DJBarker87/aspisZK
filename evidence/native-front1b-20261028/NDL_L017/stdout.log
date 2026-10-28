@@ -1,0 +1,18 @@
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.UScalar.mul : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x * ↑y)
+def Aeneas.Std.UScalar.tryMk : (ty : UScalarTy) → ℕ → Result (UScalar ty) :=
+fun ty x => Result.ofOption (UScalar.tryMkOpt ty x) Error.integerOverflow
+@[reducible] def Aeneas.Std.UScalar.check_bounds : UScalarTy → ℕ → Bool :=
+fun ty x => decide (x < 2 ^ ty.numBits)
+NDL_generated/NDL_InspectRuntime.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Usize.size_eq`
+NDL_generated/NDL_InspectRuntime.lean:8:7: error(lean.unknownIdentifier): Unknown constant `UScalar.size_eq`
+def Aeneas.Std.UScalar.tryMkOpt : (ty : UScalarTy) → ℕ → Option (UScalar ty) :=
+fun ty x => if h : UScalar.check_bounds ty x = true then some (UScalar.ofNatCore x ⋯) else none
+NDL_generated/NDL_InspectRuntime.lean:10:7: error(lean.unknownIdentifier): Unknown constant `UScalar.check_boundsOpt`
+theorem Aeneas.Std.Usize.numBits_eq : Usize.numBits = System.Platform.numBits :=
+of_eq_true
+  (Eq.trans (congrFun' (congrArg Eq Usize.numBits_def) System.Platform.numBits) (eq_self System.Platform.numBits))
+NDL_generated/NDL_InspectRuntime.lean:12:7: error(lean.unknownIdentifier): Unknown constant `Usize.size_eq_two_pow`
+NDL_generated/NDL_InspectRuntime.lean:13:7: error(lean.unknownIdentifier): Unknown constant `UScalar.size_eq_two_pow`

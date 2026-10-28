@@ -1,0 +1,31 @@
+theorem Aeneas.Std.UScalar.size_def : ∀ (ty : UScalarTy), UScalar.size ty = 2 ^ ty.numBits :=
+fun ty =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a.1 ty = 2 ^ ty.numBits)
+          (have this := Subtype.ext (Eq.symm wrapped✝.property);
+          this)))
+      (Eq.refl (⟨definition✝, rfl⟩.1 ty)))
+theorem Aeneas.Std.Usize.size_def : Usize.size = 2 ^ Usize.numBits :=
+id
+  (Eq.mpr
+    (id
+      (congrArg (fun _a => _a.1 = 2 ^ Usize.numBits)
+        (have this := Subtype.ext (Eq.symm wrapped✝.property);
+        this)))
+    (Eq.refl ⟨definition✝, rfl⟩.1))
+theorem Aeneas.Std.Usize.numBits_def : Usize.numBits = UScalarTy.Usize.numBits :=
+id
+  (Eq.mpr
+    (id
+      (congrArg (fun _a => _a.1 = UScalarTy.Usize.numBits)
+        (have this := Subtype.ext (Eq.symm wrapped✝.property);
+        this)))
+    (Eq.refl ⟨definition✝, rfl⟩.1))
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+NDL_generated/NDL_InspectSizes.lean:7:7: error(lean.unknownIdentifier): Unknown constant `UScalar.instHAdd`
+theorem Aeneas.Std.Usize.wrapping_add_val_eq : ∀ (x y : Usize),
+  ↑(x.wrapping_add y) = (↑x + ↑y) % UScalar.size UScalarTy.Usize :=
+fun x y => UScalar.wrapping_add_val_eq x y

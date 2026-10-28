@@ -4,9 +4,9 @@
   "claim_scope": "Candidate LOCAL Result/value bridges only; all enclosing caller domains and physical interpretations remain OPEN.",
   "trust_change": "Owner amendment fifth: P6/D188 native contract semantic transport is reclassification, never trust removal.",
   "budget_used": {
-    "kani": 0,
-    "lean": 4,
-    "extract": 0
+    "kani": 8,
+    "lean": 24,
+    "extract": 2
   },
   "members": [
     {
@@ -36,11 +36,22 @@
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::field",
       "dependent_rows": 31,
-      "status": "OPEN",
+      "status": "CLOSED-local",
       "partial_evidence": "K076/K077; NDD_SelectorModel.field_cut",
-      "obstacle": "Only the selected-window/unchanged-Some decoder cut is checked. Instantiate the CLOSED real decoder value/success/carrier law on these SAME bytes, prove canonical caller bytes and offsets, and replace the abstract decoder cut with an admissible native callee bridge. Needs Kani; the conditional Lean selector cut is complete.",
-      "requires_further_kani": true,
-      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+      "obstacle": null,
+      "requires_further_kani": false,
+      "remaining_lean_only_obligation": "Caller canonicality, exact selected inputs, rejected paths outside successful canonical domain, physical interpretation and call edges remain OPEN.",
+      "domain": "source-valid canonical selected32 window; native source envelope len<=2048, i<64, 32*(i+1)<=len; all eight words<P. Enclosing callers still prove byte canonicality on SAME inputs.",
+      "lean_theorem": "NDL_FieldCompose.cohort and selection; NDL_FieldDecode.window",
+      "lean_attempt": "NDL_L024",
+      "kani_attempt": "NDL_K007",
+      "negative_control": "NDL_K008",
+      "extraction": "NDL_E002",
+      "supporting_native": [
+        "NDL_K003",
+        "NDL_K004",
+        "NDL_K005"
+      ]
     },
     {
       "function": "crates/aspis-core/src/field.rs::CM31::from_m31",

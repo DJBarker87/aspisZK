@@ -7,18 +7,18 @@
   },
   "NDL_candidate_overlay": {
     "delta": "evidence/native-front1b-20261028/NDL_LEDGER_DELTA.json",
-    "local_claims": 1,
+    "local_claims": 2,
     "newly_composed_rows": 0,
     "status": "PROPOSED; authoritative NCZ recomputation needs an explicit evidence-snapshot refresh"
   },
   "baseline_revision": "1d7752908191642fc8383c99bbadfb46fab8850c",
   "budget": {
     "extraction_limit": 20,
-    "extraction_used": 0,
+    "extraction_used": 2,
     "kani_limit": 80,
-    "kani_used": 0,
+    "kani_used": 8,
     "lean_limit": 80,
-    "lean_used": 4
+    "lean_used": 24
   },
   "claims": [
     {
@@ -11378,6 +11378,53 @@
     {
       "admissible_local_credit": true,
       "arithmetic_stubs": [],
+      "audit_id": "NDL_K007",
+      "claim_id": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field",
+      "composition_trust": "Owner amendment fifth: P6/D188 native contract semantic transport is reclassification, never trust removal.",
+      "evidence": [
+        "evidence/native-front1b-20261028/NDL_FRONTIER_BRIDGES.md",
+        "evidence/native-front1b-20261028/NDL_LEDGER_DELTA.json",
+        "evidence/native-front1b-20261028/NDL_L024/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K007/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K008/receipt.json",
+        "evidence/native-front1b-20261028/NDL_E002/receipt.json"
+      ],
+      "feature_parity": "PINNED FROZEN BODY; deployed verifier features in NDD_K039/040 graph receipts",
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::field",
+      "limitations": [
+        "Local value/Result bridge only; every caller domain and physical interpretation remains OPEN"
+      ],
+      "medium": "P6 hybrid",
+      "named_hypotheses": [
+        {
+          "discharged_by": null,
+          "name": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+          "statement": "source-valid canonical selected32 window; native source envelope len<=2048, i<64, 32*(i+1)<=len; all eight words<P. Enclosing callers still prove byte canonicality on SAME inputs.; exact same typed inputs and Result/value interpretation in NDL_FieldCompose.cohort and selection; NDL_FieldDecode.window"
+        },
+        {
+          "discharged_by": null,
+          "name": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation",
+          "statement": "Pinned native/reference/cohort type encoding, tool semantic transport, standard library/runtime/ABI and artifact correspondence qualifications remain retained."
+        }
+      ],
+      "profile": "NDL guard SAME-record association",
+      "quarantined_support": [],
+      "receipts": [
+        "evidence/native-front1b-20261028/NDL_L024/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K007/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K008/receipt.json",
+        "evidence/native-front1b-20261028/NDL_E002/receipt.json"
+      ],
+      "replaced_quarantined_support": [],
+      "reported_status": "CLOSED local",
+      "source_claim_text": [
+        "{\"dependent_rows\": 31, \"domain\": \"source-valid canonical selected32 window; native source envelope len<=2048, i<64, 32*(i+1)<=len; all eight words<P. Enclosing callers still prove byte canonicality on SAME inputs.\", \"extraction\": \"NDL_E002\", \"function\": \"crates/aspis-r1-cost-probe/src/weights.rs::field\", \"kani_attempt\": \"NDL_K007\", \"lean_attempt\": \"NDL_L024\", \"lean_theorem\": \"NDL_FieldCompose.cohort and selection; NDL_FieldDecode.window\", \"negative_control\": \"NDL_K008\", \"obstacle\": null, \"partial_evidence\": \"K076/K077; NDD_SelectorModel.field_cut\", \"remaining_lean_only_obligation\": \"Caller canonicality, exact selected inputs, rejected paths outside successful canonical domain, physical interpretation and call edges remain OPEN.\", \"requires_further_kani\": false, \"status\": \"CLOSED-local\", \"supporting_native\": [\"NDL_K003\", \"NDL_K004\", \"NDL_K005\"]}"
+      ],
+      "stub_attributes": []
+    },
+    {
+      "admissible_local_credit": true,
+      "arithmetic_stubs": [],
       "audit_id": "NDD_K039",
       "claim_id": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard",
       "composition_trust": "Owner amendment fifth: P6/D188 native contract semantic transport is reclassification, never trust removal.",
@@ -11432,8 +11479,8 @@
       "conditional_is_not_whole_execution_closure": true,
       "covered_only_by_trust": 0,
       "local_bridge_status": {
-        "CLOSED-CONDITIONAL": 113,
-        "OPEN": 230,
+        "CLOSED-CONDITIONAL": 114,
+        "OPEN": 229,
         "quarantined": 2
       },
       "rows": 345
@@ -11445,8 +11492,8 @@
       "conditional_is_not_whole_execution_closure": true,
       "covered_only_by_trust": 0,
       "local_bridge_status": {
-        "CLOSED-CONDITIONAL": 108,
-        "OPEN": 132,
+        "CLOSED-CONDITIONAL": 109,
+        "OPEN": 131,
         "quarantined": 2
       },
       "rows": 242
@@ -11458,8 +11505,8 @@
       "conditional_is_not_whole_execution_closure": true,
       "covered_only_by_trust": 0,
       "local_bridge_status": {
-        "CLOSED-CONDITIONAL": 221,
-        "OPEN": 362,
+        "CLOSED-CONDITIONAL": 223,
+        "OPEN": 360,
         "quarantined": 4
       },
       "rows": 587
@@ -11467,8 +11514,8 @@
     "unique_functions": {
       "count": 434,
       "local_bridge_status": {
-        "CLOSED-CONDITIONAL": 128,
-        "OPEN": 304,
+        "CLOSED-CONDITIONAL": 129,
+        "OPEN": 303,
         "quarantined": 2
       }
     }
@@ -11525,17 +11572,6 @@
       ]
     ],
     "frontier": [
-      {
-        "all_scc_members": [
-          "crates/aspis-r1-cost-probe/src/weights.rs::field"
-        ],
-        "dependent_functions": 27,
-        "dependent_rows": 31,
-        "open_scc_members": [
-          "crates/aspis-r1-cost-probe/src/weights.rs::field"
-        ],
-        "representative": "crates/aspis-r1-cost-probe/src/weights.rs::field"
-      },
       {
         "all_scc_members": [
           "crates/aspis-core/src/field.rs::qm31_pack_base4"
@@ -12561,6 +12597,17 @@
       },
       {
         "all_scc_members": [
+          "crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products"
+        ],
+        "dependent_functions": 10,
+        "dependent_rows": 12,
+        "open_scc_members": [
+          "crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products"
+        ],
+        "representative": "crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products"
+      },
+      {
+        "all_scc_members": [
           "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs::decode_pool_v1_pair_live_snapshot_v1"
         ],
         "dependent_functions": 10,
@@ -12649,6 +12696,28 @@
       },
       {
         "all_scc_members": [
+          "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot"
+        ],
+        "dependent_functions": 9,
+        "dependent_rows": 11,
+        "open_scc_members": [
+          "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot"
+        ],
+        "representative": "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot"
+      },
+      {
+        "all_scc_members": [
+          "crates/aspis-r1-cost-probe/src/weights.rs::s2_grouped_inactive_pair"
+        ],
+        "dependent_functions": 9,
+        "dependent_rows": 11,
+        "open_scc_members": [
+          "crates/aspis-r1-cost-probe/src/weights.rs::s2_grouped_inactive_pair"
+        ],
+        "representative": "crates/aspis-r1-cost-probe/src/weights.rs::s2_grouped_inactive_pair"
+      },
+      {
+        "all_scc_members": [
           "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs::decode_pair_afterstate_boxed_v1"
         ],
         "dependent_functions": 9,
@@ -12690,6 +12759,17 @@
           "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::new"
         ],
         "representative": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::new"
+      },
+      {
+        "all_scc_members": [
+          "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial"
+        ],
+        "dependent_functions": 8,
+        "dependent_rows": 10,
+        "open_scc_members": [
+          "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial"
+        ],
+        "representative": "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial"
       },
       {
         "all_scc_members": [
@@ -12756,6 +12836,17 @@
           "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::raw"
         ],
         "representative": "crates/aspis-r1-cost-probe/src/verifier.rs::Reader<'a>::raw"
+      },
+      {
+        "all_scc_members": [
+          "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot"
+        ],
+        "dependent_functions": 7,
+        "dependent_rows": 9,
+        "open_scc_members": [
+          "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot"
+        ],
+        "representative": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot"
       },
       {
         "all_scc_members": [
@@ -13014,11 +13105,6 @@
     "highest_impact_open": [
       {
         "dependent_functions": 27,
-        "dependent_rows": 31,
-        "function": "crates/aspis-r1-cost-probe/src/weights.rs::field"
-      },
-      {
-        "dependent_functions": 27,
         "dependent_rows": 29,
         "function": "crates/aspis-core/src/field.rs::qm31_pack_base4"
       },
@@ -13111,6 +13197,11 @@
         "dependent_functions": 14,
         "dependent_rows": 20,
         "function": "crates/aspis-core/src/state_only_private_merkle.rs::private_leaf_hash_with_digest"
+      },
+      {
+        "dependent_functions": 14,
+        "dependent_rows": 20,
+        "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_key_at"
       }
     ],
     "method": "In canonical conservative union graph choose one OPEN/quarantined representative from each terminal SCC under reachability between OPEN SCCs. This is a minimum-cardinality reachability cover of all OPEN functions, not a dynamic/runtime critical path or a sufficient proof set.",
@@ -51556,7 +51647,7 @@
     "evidence/native-front1-20261028/NDD_E005/receipt.json": {
       "bytes": 1978,
       "git_blob": null,
-      "revision": "f61511af58563e559e52b26418d23907df6c0666",
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
       "sha256": "498a035617e552c2a5d977fcc7a347fe1ec47c8f251b123d8b03ef60f5d75e80",
       "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
     },
@@ -51668,14 +51759,14 @@
     "evidence/native-front1-20261028/NDD_K039/receipt.json": {
       "bytes": 3890,
       "git_blob": null,
-      "revision": "f61511af58563e559e52b26418d23907df6c0666",
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
       "sha256": "efab92a6f2dfd46a9c5e1b31766ce199336a83424e66e3431a5c6fc1ba1069f3",
       "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
     },
     "evidence/native-front1-20261028/NDD_K040/receipt.json": {
       "bytes": 3914,
       "git_blob": null,
-      "revision": "f61511af58563e559e52b26418d23907df6c0666",
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
       "sha256": "af0f35856c3f5394bd025c89538b9e544fee4e4eb794ae82586520766bd0aeea",
       "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
     },
@@ -51721,25 +51812,53 @@
       "sha256": "1f533404be7c3e7f49fac4001d010fadbcc145d60875bc011f4d7084c0f113b7",
       "source": "NDD candidate worktree overlay; not adopted by NCZ snapshot"
     },
-    "evidence/native-front1b-20261028/NDL_FRONTIER_BRIDGES.md": {
-      "bytes": 11058,
+    "evidence/native-front1b-20261028/NDL_E002/receipt.json": {
+      "bytes": 2007,
       "git_blob": null,
-      "revision": "f61511af58563e559e52b26418d23907df6c0666",
-      "sha256": "bfe5a955b8e656fdb4e3e8e0745d786ccf41f4312a3d92630d2045e0a7d1634f",
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
+      "sha256": "52eb26113d0f6120e7ff15b6391ea65576168162ead47faff8f0b9f6f57f2352",
+      "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
+    },
+    "evidence/native-front1b-20261028/NDL_FRONTIER_BRIDGES.md": {
+      "bytes": 11069,
+      "git_blob": null,
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
+      "sha256": "f62886b49ac41f1b2e60bdb2cd4fd83920e8fd7de5bb6407731227b4ebd96606",
+      "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
+    },
+    "evidence/native-front1b-20261028/NDL_K007/receipt.json": {
+      "bytes": 4122,
+      "git_blob": null,
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
+      "sha256": "bec2e6c2ed54a81890f7d1d29a8136b554c7905fcdddc103b5823094d408abb5",
+      "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
+    },
+    "evidence/native-front1b-20261028/NDL_K008/receipt.json": {
+      "bytes": 4142,
+      "git_blob": null,
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
+      "sha256": "2c98d9b18b89c6f6e5de05c9c731fc6cd1c4bf41ed61985f96daabc3a4513dfd",
       "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
     },
     "evidence/native-front1b-20261028/NDL_L004/receipt.json": {
       "bytes": 268260,
       "git_blob": null,
-      "revision": "f61511af58563e559e52b26418d23907df6c0666",
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
       "sha256": "e2ebd618bc74e94e332e6d348e6f2197a3b01382f89a6f507344364b2535360d",
       "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
     },
-    "evidence/native-front1b-20261028/NDL_LEDGER_DELTA.json": {
-      "bytes": 19117,
+    "evidence/native-front1b-20261028/NDL_L024/receipt.json": {
+      "bytes": 273479,
       "git_blob": null,
-      "revision": "f61511af58563e559e52b26418d23907df6c0666",
-      "sha256": "65d7ce4453be3ce9238412b983134832b5720bd313206862123ad707920cf6d2",
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
+      "sha256": "eeb42ae729ab780786aa78af853f7ccaffe624fd1c6af7c9a8e5963844473bad",
+      "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
+    },
+    "evidence/native-front1b-20261028/NDL_LEDGER_DELTA.json": {
+      "bytes": 19320,
+      "git_blob": null,
+      "revision": "25a5c2bf252c1bc7ba7f5f89050bda71aa7d8cf9",
+      "sha256": "a113a40e45823a08006776ef28bd69e8b302c4b933550d4c8279547aaac12e28",
       "source": "NDL candidate worktree overlay; not adopted by NCZ snapshot"
     },
     "evidence/native-inv1-20261027/NBI1_INVENTORY.json": {
@@ -86055,7 +86174,6 @@
         "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::scalar_k",
         "crates/aspis-r1-cost-probe/src/verifier.rs::Prepared::new",
         "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_tree_parent",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::empty",
@@ -86328,8 +86446,7 @@
         "crates/aspis-r1-cost-probe/src/verifier.rs::circle_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
-        "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
+        "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row"
       ],
       "receipt_sha256": {},
       "receipts": [],
@@ -86869,15 +86986,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/candidate.rs::query_values->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/candidate.rs::query_values bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -87048,8 +87170,7 @@
         "crates/aspis-r1-cost-probe/src/verifier.rs::circle_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
-        "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
+        "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row"
       ],
       "receipt_sha256": {},
       "receipts": [],
@@ -88135,7 +88256,6 @@
         "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
         "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_tree_parent",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::empty",
@@ -111027,7 +111147,6 @@
         "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::queries",
         "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::scalar",
         "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::scalar_k",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_tree_parent",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::empty",
@@ -117736,8 +117855,10 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim->crates/aspis-r1-cost-probe/src/weights.rs::field",
@@ -117747,7 +117868,10 @@
             "P6"
           ],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -117978,9 +118102,7 @@
         }
       ],
       "no_credit_reason": null,
-      "open_transitive_dependencies": [
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
-      ],
+      "open_transitive_dependencies": [],
       "receipt_sha256": {
         "evidence/kani-diag2-20261028/KNB_K001/receipt.json": "1b97ef8e61e2573927d689453e4af8b558a533d6140b59f6b7494d06e1147a7d",
         "evidence/kani-diag3-20261028/KNC_K003/receipt.json": "5dd4b2d22e4df5771a01a5bb8d41c55575dfd48a1d3553d40e691b0edb3b01e4",
@@ -118428,7 +118550,7 @@
       "trust_rows": []
     },
     {
-      "bridge_status": "OPEN",
+      "bridge_status": "CLOSED-CONDITIONAL",
       "callees": [
         {
           "expression": "E::from_le_bytes(&bytes[i*32..(i+1)*32]).unwrap",
@@ -118487,7 +118609,9 @@
       "canonical_callees": [
         "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_le_bytes"
       ],
-      "claim_ids": [],
+      "claim_ids": [
+        "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+      ],
       "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
       "composed_status": "OPEN",
       "discovery_mentions": [
@@ -118591,11 +118715,22 @@
       "evidence": [
         "docs/research/100bit-spend-path-20261013/evidence/lead-repin-20261022/REPIN.md",
         "docs/research/100bit-spend-path-20261013/evidence/s9-candidate-field-decoder-sourcecut-v1-20261022/README.md",
+        "evidence/native-front1b-20261028/NDL_E002/receipt.json",
+        "evidence/native-front1b-20261028/NDL_FRONTIER_BRIDGES.md",
+        "evidence/native-front1b-20261028/NDL_K007/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K008/receipt.json",
+        "evidence/native-front1b-20261028/NDL_L024/receipt.json",
+        "evidence/native-front1b-20261028/NDL_LEDGER_DELTA.json",
         "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
         "evidence/native-inv2-20261027/NBI2_INVENTORY.md"
       ],
-      "feature_parity": [],
-      "feature_parity_summary": "UNDETERMINED for a whole-body native bridge; see per-claim feature evidence and OPEN/quarantine status",
+      "feature_parity": [
+        {
+          "claim": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field",
+          "status": "PINNED FROZEN BODY; deployed verifier features in NDD_K039/040 graph receipts"
+        }
+      ],
+      "feature_parity_summary": "NDL exact frozen body and inherited deployed verifier feature parity; caller/runtime limits retained",
       "frozen_body_byte_range": [
         745,
         798
@@ -118629,14 +118764,39 @@
       },
       "inventory_id": "crates/aspis-r1-cost-probe/src/weights.rs::field@25",
       "inventory_row": "F196",
-      "medium": [],
-      "named_hypotheses": [],
-      "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
+      "medium": [
+        "P6 hybrid"
+      ],
+      "named_hypotheses": [
+        {
+          "discharged_by": null,
+          "name": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+          "statement": "source-valid canonical selected32 window; native source envelope len<=2048, i<64, 32*(i+1)<=len; all eight words<P. Enclosing callers still prove byte canonicality on SAME inputs.; exact same typed inputs and Result/value interpretation in NDL_FieldCompose.cohort and selection; NDL_FieldDecode.window"
+        },
+        {
+          "discharged_by": null,
+          "name": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation",
+          "statement": "Pinned native/reference/cohort type encoding, tool semantic transport, standard library/runtime/ABI and artifact correspondence qualifications remain retained."
+        }
+      ],
+      "no_credit_reason": null,
       "open_transitive_dependencies": [],
-      "receipt_sha256": {},
-      "receipts": [],
+      "receipt_sha256": {
+        "evidence/native-front1b-20261028/NDL_E002/receipt.json": "52eb26113d0f6120e7ff15b6391ea65576168162ead47faff8f0b9f6f57f2352",
+        "evidence/native-front1b-20261028/NDL_K007/receipt.json": "bec2e6c2ed54a81890f7d1d29a8136b554c7905fcdddc103b5823094d408abb5",
+        "evidence/native-front1b-20261028/NDL_K008/receipt.json": "2c98d9b18b89c6f6e5de05c9c731fc6cd1c4bf41ed61985f96daabc3a4513dfd",
+        "evidence/native-front1b-20261028/NDL_L024/receipt.json": "eeb42ae729ab780786aa78af853f7ccaffe624fd1c6af7c9a8e5963844473bad"
+      },
+      "receipts": [
+        "evidence/native-front1b-20261028/NDL_E002/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K007/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K008/receipt.json",
+        "evidence/native-front1b-20261028/NDL_L024/receipt.json"
+      ],
       "row": "TX1:196",
-      "selected_claims": [],
+      "selected_claims": [
+        "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+      ],
       "source_file": "crates/aspis-r1-cost-probe/src/weights.rs",
       "source_file_sha256": "ab55509e54218a2bfe7dd2d5e1b14216e3303961c16c181ce2e03d40f6b7678b",
       "source_line": 25,
@@ -167847,7 +168007,6 @@
         "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
         "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_tree_parent",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::empty",
@@ -168370,7 +168529,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::double",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -169249,7 +169407,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::double",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -171300,7 +171457,6 @@
         "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
         "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_tree_parent",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::empty",
@@ -172242,7 +172398,6 @@
         "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
         "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_tree_parent",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default",
         "crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::empty",
@@ -190231,8 +190386,7 @@
         "crates/aspis-r1-cost-probe/src/verifier.rs::circle_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
-        "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
+        "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row"
       ],
       "receipt_sha256": {},
       "receipts": [],
@@ -190756,15 +190910,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/candidate.rs::query_values->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/candidate.rs::query_values bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -190939,8 +191098,7 @@
         "crates/aspis-r1-cost-probe/src/verifier.rs::circle_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses",
         "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
-        "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
+        "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row"
       ],
       "receipt_sha256": {},
       "receipts": [],
@@ -191657,7 +191815,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::double",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -192265,7 +192422,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::double",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -205220,15 +205376,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -205343,9 +205504,7 @@
       "medium": [],
       "named_hypotheses": [],
       "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
-      "open_transitive_dependencies": [
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
-      ],
+      "open_transitive_dependencies": [],
       "receipt_sha256": {},
       "receipts": [],
       "row": "TX2:114",
@@ -205856,7 +206015,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::double",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -206147,15 +206305,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation_round",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation_round->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::finish_relation_round bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -206266,8 +206429,7 @@
       "named_hypotheses": [],
       "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
       "open_transitive_dependencies": [
-        "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
+        "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial"
       ],
       "receipt_sha256": {},
       "receipts": [],
@@ -207436,15 +207598,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::polynomial",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::polynomial->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::polynomial bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -207548,9 +207715,7 @@
       "medium": [],
       "named_hypotheses": [],
       "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
-      "open_transitive_dependencies": [
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
-      ],
+      "open_transitive_dependencies": [],
       "receipt_sha256": {},
       "receipts": [],
       "row": "TX2:119",
@@ -211746,15 +211911,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::pair",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/weights.rs::Weights::pair->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/weights.rs::Weights::pair bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -212209,7 +212379,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -213892,7 +214061,7 @@
       "trust_rows": []
     },
     {
-      "bridge_status": "OPEN",
+      "bridge_status": "CLOSED-CONDITIONAL",
       "callees": [
         {
           "cfg": [],
@@ -213954,7 +214123,9 @@
       "canonical_callees": [
         "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_le_bytes"
       ],
-      "claim_ids": [],
+      "claim_ids": [
+        "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+      ],
       "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
       "composed_status": "OPEN",
       "discovery_mentions": [
@@ -214058,11 +214229,22 @@
       "evidence": [
         "docs/research/100bit-spend-path-20261013/evidence/lead-repin-20261022/REPIN.md",
         "docs/research/100bit-spend-path-20261013/evidence/s9-candidate-field-decoder-sourcecut-v1-20261022/README.md",
+        "evidence/native-front1b-20261028/NDL_E002/receipt.json",
+        "evidence/native-front1b-20261028/NDL_FRONTIER_BRIDGES.md",
+        "evidence/native-front1b-20261028/NDL_K007/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K008/receipt.json",
+        "evidence/native-front1b-20261028/NDL_L024/receipt.json",
+        "evidence/native-front1b-20261028/NDL_LEDGER_DELTA.json",
         "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
         "evidence/native-inv2-20261027/NBI2_INVENTORY.md"
       ],
-      "feature_parity": [],
-      "feature_parity_summary": "UNDETERMINED for a whole-body native bridge; see per-claim feature evidence and OPEN/quarantine status",
+      "feature_parity": [
+        {
+          "claim": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field",
+          "status": "PINNED FROZEN BODY; deployed verifier features in NDD_K039/040 graph receipts"
+        }
+      ],
+      "feature_parity_summary": "NDL exact frozen body and inherited deployed verifier feature parity; caller/runtime limits retained",
       "frozen_body_byte_range": [
         745,
         798
@@ -214096,14 +214278,39 @@
       },
       "inventory_id": "crates/aspis-r1-cost-probe/src/weights.rs::field",
       "inventory_row": null,
-      "medium": [],
-      "named_hypotheses": [],
-      "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
+      "medium": [
+        "P6 hybrid"
+      ],
+      "named_hypotheses": [
+        {
+          "discharged_by": null,
+          "name": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+          "statement": "source-valid canonical selected32 window; native source envelope len<=2048, i<64, 32*(i+1)<=len; all eight words<P. Enclosing callers still prove byte canonicality on SAME inputs.; exact same typed inputs and Result/value interpretation in NDL_FieldCompose.cohort and selection; NDL_FieldDecode.window"
+        },
+        {
+          "discharged_by": null,
+          "name": "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation",
+          "statement": "Pinned native/reference/cohort type encoding, tool semantic transport, standard library/runtime/ABI and artifact correspondence qualifications remain retained."
+        }
+      ],
+      "no_credit_reason": null,
       "open_transitive_dependencies": [],
-      "receipt_sha256": {},
-      "receipts": [],
+      "receipt_sha256": {
+        "evidence/native-front1b-20261028/NDL_E002/receipt.json": "52eb26113d0f6120e7ff15b6391ea65576168162ead47faff8f0b9f6f57f2352",
+        "evidence/native-front1b-20261028/NDL_K007/receipt.json": "bec2e6c2ed54a81890f7d1d29a8136b554c7905fcdddc103b5823094d408abb5",
+        "evidence/native-front1b-20261028/NDL_K008/receipt.json": "2c98d9b18b89c6f6e5de05c9c731fc6cd1c4bf41ed61985f96daabc3a4513dfd",
+        "evidence/native-front1b-20261028/NDL_L024/receipt.json": "eeb42ae729ab780786aa78af853f7ccaffe624fd1c6af7c9a8e5963844473bad"
+      },
+      "receipts": [
+        "evidence/native-front1b-20261028/NDL_E002/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K007/receipt.json",
+        "evidence/native-front1b-20261028/NDL_K008/receipt.json",
+        "evidence/native-front1b-20261028/NDL_L024/receipt.json"
+      ],
       "row": "TX2:134",
-      "selected_claims": [],
+      "selected_claims": [
+        "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+      ],
       "source_file": "crates/aspis-r1-cost-probe/src/weights.rs",
       "source_file_sha256": "ab55509e54218a2bfe7dd2d5e1b14216e3303961c16c181ce2e03d40f6b7678b",
       "source_line": 25,
@@ -214364,15 +214571,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -214508,7 +214720,6 @@
       "named_hypotheses": [],
       "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
       "open_transitive_dependencies": [
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::s2_grouped_inactive_pair"
       ],
       "receipt_sha256": {},
@@ -214851,15 +215062,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/weights.rs::partial_dot->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/weights.rs::partial_dot bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -214956,9 +215172,7 @@
       "medium": [],
       "named_hypotheses": [],
       "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
-      "open_transitive_dependencies": [
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
-      ],
+      "open_transitive_dependencies": [],
       "receipt_sha256": {},
       "receipts": [],
       "row": "TX2:137",
@@ -215621,7 +215835,6 @@
       "open_transitive_dependencies": [
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products"
       ],
       "receipt_sha256": {},
@@ -215788,7 +216001,6 @@
       "open_transitive_dependencies": [
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::process_kind",
         "crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products"
       ],
@@ -215864,15 +216076,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/weights.rs::push_byte_products bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         },
         {
@@ -215974,9 +216191,7 @@
       "medium": [],
       "named_hypotheses": [],
       "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
-      "open_transitive_dependencies": [
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
-      ],
+      "open_transitive_dependencies": [],
       "receipt_sha256": {},
       "receipts": [],
       "row": "TX2:141",
@@ -216204,15 +216419,20 @@
         },
         {
           "callee": "crates/aspis-r1-cost-probe/src/weights.rs::field",
-          "callee_claims": [],
-          "callee_local_status": "OPEN",
+          "callee_claims": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field"
+          ],
+          "callee_local_status": "CLOSED-CONDITIONAL",
           "caller": "crates/aspis-r1-cost-probe/src/weights.rs::s2_grouped_inactive_pair",
           "discharged_by": null,
           "id": "call-domain:crates/aspis-r1-cost-probe/src/weights.rs::s2_grouped_inactive_pair->crates/aspis-r1-cost-probe/src/weights.rs::field",
           "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/weights.rs::s2_grouped_inactive_pair bridge owner",
           "owner_packets": [],
           "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-          "required_named_hypotheses": [],
+          "required_named_hypotheses": [
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PacketDomain",
+            "NDL::crates/aspis-r1-cost-probe/src/weights.rs::field.PhysicalInterpretation"
+          ],
           "status": "OPEN"
         }
       ],
@@ -216282,9 +216502,7 @@
       "medium": [],
       "named_hypotheses": [],
       "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
-      "open_transitive_dependencies": [
-        "crates/aspis-r1-cost-probe/src/weights.rs::field"
-      ],
+      "open_transitive_dependencies": [],
       "receipt_sha256": {},
       "receipts": [],
       "row": "TX2:142",
@@ -216728,7 +216946,6 @@
       "named_hypotheses": [],
       "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
       "open_transitive_dependencies": [
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot"
       ],
       "receipt_sha256": {},
@@ -254349,7 +254566,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::double",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -256876,7 +257092,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::double",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -263447,7 +263662,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::double",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -264142,7 +264356,6 @@
         "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
         "crates/aspis-r1-cost-probe/src/weights.rs::double",
         "crates/aspis-r1-cost-probe/src/weights.rs::factored_s2_libra_weights",
-        "crates/aspis-r1-cost-probe/src/weights.rs::field",
         "crates/aspis-r1-cost-probe/src/weights.rs::grouped_inactive_pair",
         "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
         "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",

@@ -1,0 +1,23 @@
+@[reducible] def Aeneas.Std.Usize : Type :=
+UScalar UScalarTy.Usize
+NDL_generated/NDL_InspectOffsets.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Usize.add`
+NDL_generated/NDL_InspectOffsets.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Usize.mul`
+@[irreducible] def Aeneas.Std.Usize.numBits : ℕ :=
+wrapped✝.1
+@[implicit_reducible] def Aeneas.Std.UScalarTy.numBits : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => System.Platform.numBits
+  | UScalarTy.U8 => 8
+  | UScalarTy.U16 => 16
+  | UScalarTy.U32 => 32
+  | UScalarTy.U64 => 64
+  | UScalarTy.U128 => 128
+@[irreducible] def Aeneas.Std.UScalar.size : UScalarTy → ℕ :=
+wrapped✝.1
+NDL_generated/NDL_InspectOffsets.lean:9:7: error(lean.unknownIdentifier): Unknown constant `Usize.tryMk`
+@[irreducible] def Aeneas.Std.Usize.size : ℕ :=
+wrapped✝.1
+theorem Aeneas.Std.Usize.wrapping_mul_val_eq : ∀ (x y : Usize),
+  ↑(x.wrapping_mul y) = ↑x * ↑y % UScalar.size UScalarTy.Usize :=
+fun x y => UScalar.wrapping_mul_val_eq x y
