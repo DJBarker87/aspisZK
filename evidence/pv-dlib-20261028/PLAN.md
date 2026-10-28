@@ -158,3 +158,11 @@ no arbitrary populated Vec native-link credit is claimed.
 Direct shipped generic entry extraction: Charon0, Aeneas2 (structured Drop
 requires destructor semantics). Unlike prior candidate adapters this entry
 is exactly v.try_into() for unconstrained T,N. No extractor guard bypass.
+
+Admission deviation: 42296 refused at03:11:27Z; audit42297 was submitted
+14seconds later before the required180seconds. It too refused and no compiler
+started. This is an avoidable sequencing error, not a resource bypass.
+No further admission before03:14:41.640Z. All focused IDs42200–42296 are used;
+42297 audit refused; remaining reserved IDs42298,42299 only. Corrected
+EncoderMutation source was not compiled; LengthEncoding, BatchPlan,
+BatchBoundary and ArrayOwnership remain drafts.
