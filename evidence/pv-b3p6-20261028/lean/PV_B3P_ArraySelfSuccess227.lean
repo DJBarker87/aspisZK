@@ -6,17 +6,23 @@ set_option autoImplicit false
 /-- Symbolic reflexivity of the actual imported array-comparison body. -/
 theorem list_self {T : Type} (cmp : core.cmp.PartialEq T T)
     (hn : ∀ x, cmp.ne x x = .ok false) (xs : List T) :
-    List.allM (fun (x,y) => do let b ← cmp.ne x y; .ok (¬b)) (xs.zip xs) = .ok true := by
+    List.allM (fun (x,y) => do let b ← cmp.ne x y; .ok (!b)) (xs.zip xs) = .ok true := by
   induction xs with
   | nil => rfl
   | cons x xs ih =>
-    simp only [List.zip_cons_cons,List.allM_cons,hn,bind_tc_ok,↓reduceIte]
+    simp only [List.zip_cons_cons,List.allM_cons,hn,bind_tc_ok,Bool.not_false,↓reduceIte]
     exact ih
+
+theorem bool_not (b : Bool) : decide (¬(b=true)) = !b := by
+  cases b <;> rfl
+
+#print axioms bool_not
 
 theorem array_ne_self {T : Type} {n : Usize} (cmp : core.cmp.PartialEq T T)
     (hn : ∀ x, cmp.ne x x = .ok false) (a : Array T n) :
     core.array.equality.PartialEqArray.ne cmp a a = .ok false := by
   rw [core.array.equality.PartialEqArray.ne,core.array.equality.PartialEqArray.eq]
+  simp only [bool_not]
   rw [if_pos rfl,list_self cmp hn a.val]
   rfl
 
@@ -29,7 +35,7 @@ theorem word_ne_self (x : U32) :
   simp only [core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,
     aspis_core.field.M31.Insts.CoreCmpPartialEqM31,
     aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
-    decide_true,eq_self,bind_tc_ok,Bool.not_true]
+    decide_true,eq_self,bind_tc_ok,not_true_eq_false,decide_false]
 
 theorem bytes_ne_self {n : Usize} (a : Array U8 n) :
     core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a a = .ok false :=
