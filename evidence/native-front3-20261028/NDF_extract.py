@@ -8,7 +8,7 @@ S=B/'NDF_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 (S/'src/lib.rs').write_bytes((B/'NDF_src/crates/aspis-r1-cost-probe/src/NDF_reference.rs').read_bytes())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 parser=os.environ.get('NDF_EXTRACT_PARSER')=='1'
-roots=['crate::batch_key_at_ref','crate::same_batch_index_ref','crate::same_batch_leaf_ref','crate::opening_ref','crate::validated_row_ref','crate::state_ref']
+roots=['crate::batch_key_at_ref','crate::same_batch_index_ref','crate::same_batch_leaf_ref','crate::opening_ref','crate::validated_row_ref','crate::state_ref','crate::framed_ref']
 namespace='NDF_ParserRef' if parser else 'NDF_Reference'
 dest=B/('NDF_parser_extracted' if parser else 'NDF_extracted')
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']

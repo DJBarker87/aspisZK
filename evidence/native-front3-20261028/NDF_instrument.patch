@@ -1,0 +1,84 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -26,6 +26,8 @@
+ }
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::requires(proof.len()==compact::PROOF_BYTES && i<22))]
++#[cfg_attr(kani, kani::ensures(|r| (r.as_ptr() == NDF_candidate::reference::opening_ref(proof,i).as_ptr() && r.len() == 832) != cfg!(NDF_invert_opening)))]
+ fn opening(proof: &[u8], i: usize) -> &[u8] {
+     let at = compact::OFF_OPENINGS + i * OPENING;
+     &proof[at..at + OPENING]
+@@ -133,18 +135,24 @@
+ 
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::requires(index<16))]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NDF_candidate::reference::same_batch_leaf_ref(values,index,leaf)) != cfg!(NDF_invert_same_batch_leaf)))]
+ fn same_batch_leaf(values: &[[u8; 32]; multiproof::MAX_BATCH], index: usize, leaf: [u8; 32]) -> bool {
+     values[index] == leaf
+ }
+ 
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::requires(index<16))]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NDF_candidate::reference::same_batch_index_ref(values,index,expected)) != cfg!(NDF_invert_same_batch_index)))]
+ fn same_batch_index(values: &[u32; multiproof::MAX_BATCH], index: usize, expected: u32) -> bool {
+     values[index] == expected
+ }
+ 
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::requires(index<16))]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NDF_candidate::reference::batch_key_at_ref(keys,index)) != cfg!(NDF_invert_batch_key_at)))]
+ fn batch_key_at(keys: &[u64; multiproof::MAX_BATCH], index: usize) -> u64 {
+     keys[index]
+ }
+@@ -338,3 +346,5 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)] #[path="NDF_candidate.rs"] mod NDF_candidate;
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -120,10 +120,12 @@
+ }
+ 
+ impl<'a> ValidatedRecord<'a> {
++    #[cfg_attr(kani, kani::ensures(|r| (*r == NDF_wire::reference::validated_row_ref(self.row)) != cfg!(NDF_invert_row)))]
+     pub(crate) fn row(&self) -> u8 {
+         self.row
+     }
+ 
++    #[cfg_attr(kani, kani::ensures(|r| (r.as_ptr()==self.framed.as_ptr() && r.len()==self.framed.len()) != cfg!(NDF_invert_framed)))]
+     pub(crate) fn framed(&self) -> &'a [u8] {
+         self.framed
+     }
+@@ -184,6 +186,7 @@
+             next_row: 0,
+         })
+     }
++    #[cfg_attr(kani, kani::ensures(|r| (*r == NDF_wire::reference::state_ref(self.state)) != cfg!(NDF_invert_state)))]
+     pub fn state(&self) -> [u8; 32] {
+         self.state
+     }
+@@ -848,3 +851,5 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)] #[path="NDF_wire.rs"] mod NDF_wire;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+@@ -44,3 +45,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] mod NDF_controls;

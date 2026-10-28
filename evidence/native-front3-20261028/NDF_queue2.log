@@ -1,0 +1,46 @@
+{"attempt": "NDF_E001", "exit_status": 0, "wall_seconds": 0.5946214640280232, "peak_rss_kib": "135696", "swaps": "0", "print_axioms": "N/A: extract"}
+, "crate::same_batch_index_ref", "--start-from", "crate::same_batch_leaf_ref", "--start-from", "crate::opening_ref", "--start-from", "crate::validated_row_ref", "--start-from", "crate::state_ref", "--start-from", "crate::framed_ref", "--dest-file", "/home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_reference.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_ref/Cargo.toml", "--offline", "--release", "--lib", "--jobs", "1"], "toolchain": "nightly-2026-09-17", "aeneas_origin": "b59d5188 extended binary; imported read-only, no tool patches by NCO"}
+   Compiling ndf_reference v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_ref)
+    Finished `release` profile [optimized] target(s) in 0.10s
+["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended", "-sequential", "-no-progress-bar", "-abort-on-error", "-backend", "lean", "-namespace", "NDF_Reference", "-dest", "/home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_extracted", "-subdir", "NDF_Reference", "-split-files", "/home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_reference.llbc"]
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_reference.llbc
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_extracted/NDF_Reference
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_extracted/NDF_Reference/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_extracted/NDF_Reference/Funs.lean
+[[92mInfo[39m ] Total execution time: 0.224104 seconds
+
+{"attempt": "NDF_K028", "exit_status": 0, "wall_seconds": 2.355989141971804, "peak_rss_kib": "219652", "swaps": "0", "print_axioms": "N/A: kani"}
+  |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 0.86s
+Checking harness NDF_controls::array_proof...
+
+VERIFICATION RESULT:
+ ** 0 of 51 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.15301971s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

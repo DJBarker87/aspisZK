@@ -1,0 +1,109 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDF_candidate.rs
+@@ -0,0 +1,27 @@
++use super::*;
++#[path="NDF_reference.rs"] pub(super) mod reference;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof_for_contract(opening)]
++#[kani::unwind(835)]
++fn opening_contract(){let proof:[u8;compact::PROOF_BYTES]=kani::any();let i:usize=kani::any();kani::assume(i<22);let _=opening(&proof,i);}
++#[kani::proof_for_contract(batch_key_at)]
++fn key_contract(){let keys:[u64;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);let _=batch_key_at(&keys,i);}
++#[kani::proof] #[kani::stub_verified(batch_key_at)]
++fn key_caller(){let keys:[u64;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);assert_eq!(batch_key_at(&keys,i),reference::batch_key_at_ref(&keys,i));}
++#[kani::proof] #[kani::stub_verified(batch_key_at)]
++fn key_wrong(){let keys:[u64;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);assert_ne!(batch_key_at(&keys,i),reference::batch_key_at_ref(&keys,i));}
++#[kani::proof_for_contract(same_batch_index)]
++fn index_contract(){let values:[u32;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);let _=same_batch_index(&values,i,kani::any());}
++#[kani::proof] #[kani::stub_verified(same_batch_index)]
++fn index_caller(){let values:[u32;16]=kani::any();let i:usize=kani::any();let v:u32=kani::any();kani::assume(i<16);assert_eq!(same_batch_index(&values,i,v),reference::same_batch_index_ref(&values,i,v));}
++#[kani::proof] #[kani::stub_verified(same_batch_index)]
++fn index_wrong(){let values:[u32;16]=kani::any();let i:usize=kani::any();let v:u32=kani::any();kani::assume(i<16);assert_ne!(same_batch_index(&values,i,v),reference::same_batch_index_ref(&values,i,v));}
++#[kani::proof_for_contract(same_batch_leaf)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn leaf_contract(){let values:[[u8;32];16]=kani::any();let i:usize=kani::any();kani::assume(i<16);let _=same_batch_leaf(&values,i,kani::any());}
++#[kani::proof] #[kani::stub_verified(same_batch_leaf)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn leaf_caller(){let values:[[u8;32];16]=kani::any();let i:usize=kani::any();let v:[u8;32]=kani::any();kani::assume(i<16);assert_eq!(same_batch_leaf(&values,i,v),reference::same_batch_leaf_ref(&values,i,v));}
++#[kani::proof] #[kani::stub_verified(same_batch_leaf)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn leaf_wrong(){let values:[[u8;32];16]=kani::any();let i:usize=kani::any();let v:[u8;32]=kani::any();kani::assume(i<16);assert_ne!(same_batch_leaf(&values,i,v),reference::same_batch_leaf_ref(&values,i,v));}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDF_wire.rs
+@@ -0,0 +1,26 @@
++use super::*;
++#[path="NDF_reference.rs"] pub(super) mod reference;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof_for_contract(ValidatedRecord::row)]
++fn row_contract(){let bytes:[u8;3717]=kani::any();let n:usize=kani::any();kani::assume(n<=3717);let r=ValidatedRecord{row:kani::any(),framed:&bytes[..n]};let _=r.row();}
++#[kani::proof] #[kani::stub_verified(ValidatedRecord::row)]
++fn row_caller(){let bytes:[u8;3717]=kani::any();let n:usize=kani::any();kani::assume(n<=3717);let r=ValidatedRecord{row:kani::any(),framed:&bytes[..n]};assert_eq!(r.row(),reference::validated_row_ref(r.row));}
++#[kani::proof] #[kani::stub_verified(ValidatedRecord::row)]
++fn row_wrong(){let bytes:[u8;3717]=kani::any();let n:usize=kani::any();kani::assume(n<=3717);let r=ValidatedRecord{row:kani::any(),framed:&bytes[..n]};assert_ne!(r.row(),reference::validated_row_ref(r.row));}
++
++#[derive(Clone,Copy)] struct NDF_NoDigest;
++impl aspis_core::digest::Digest32 for NDF_NoDigest {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("getter must not call digest")}}
++#[kani::proof_for_contract(SemanticTranscript::<NDF_NoDigest>::state)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn state_contract(){let r=SemanticTranscript{state:kani::any(),next_row:kani::any(),hash:NDF_NoDigest};let _=r.state();}
++#[kani::proof] #[kani::stub_verified(SemanticTranscript::<NDF_NoDigest>::state)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn state_caller(){let r=SemanticTranscript{state:kani::any(),next_row:kani::any(),hash:NDF_NoDigest};assert_eq!(r.state(),reference::state_ref(r.state));}
++#[kani::proof] #[kani::stub_verified(SemanticTranscript::<NDF_NoDigest>::state)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn state_wrong(){let r=SemanticTranscript{state:kani::any(),next_row:kani::any(),hash:NDF_NoDigest};assert_ne!(r.state(),reference::state_ref(r.state));}
++
++#[kani::proof_for_contract(ValidatedRecord::framed)]
++fn framed_contract(){let bytes:[u8;3717]=kani::any();let n:usize=kani::any();kani::assume(n<=3717);let r=ValidatedRecord{row:kani::any(),framed:&bytes[..n]};let _=r.framed();}
++#[kani::proof] #[kani::stub_verified(ValidatedRecord::framed)]
++fn framed_caller(){let bytes:[u8;3717]=kani::any();let n:usize=kani::any();kani::assume(n<=3717);let r=ValidatedRecord{row:kani::any(),framed:&bytes[..n]};assert_eq!(r.framed(),r.framed);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDF_reference.rs
+@@ -0,0 +1,8 @@
++// Safe Rust value references; extracted with the pilot tool pins.
++pub fn batch_key_at_ref(keys:&[u64;16],index:usize)->u64 { keys[index] }
++pub fn same_batch_index_ref(values:&[u32;16],index:usize,expected:u32)->bool {values[index]==expected}
++pub fn same_batch_leaf_ref(values:&[[u8;32];16],index:usize,leaf:[u8;32])->bool {values[index]==leaf}
++pub fn opening_ref(proof:&[u8],i:usize)->&[u8] {let at=10055+i*832;&proof[at..at+832]}
++pub fn validated_row_ref(row:u8)->u8 {row}
++pub fn state_ref(state:[u8;32])->[u8;32] {state}
++pub fn framed_ref(framed:&[u8])->&[u8] {framed}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDF_controls.rs
+@@ -0,0 +1,36 @@
++#[kani::ensures(|r| *r==x)] fn scalar(x:u64)->u64{x}
++#[kani::ensures(|r| *r!=x)] fn inverted(x:u64)->u64{x}
++#[kani::ensures(|r| *r<=u64::MAX)] fn weak(x:u64)->u64{x}
++#[kani::modifies(&mut x[0])] fn badframe(x:&mut [u64;2])->u64{x[1]=1;0}
++#[kani::proof_for_contract(scalar)] fn scalar_proof(){let _=scalar(kani::any());}
++#[kani::proof_for_contract(inverted)] fn scalar_inverted(){let _=inverted(kani::any());}
++#[kani::proof_for_contract(weak)] fn scalar_weak(){let _=weak(kani::any());}
++#[kani::proof] fn scalar_real(){let x:u64=kani::any();assert_eq!(weak(x),x);}
++#[kani::proof] #[kani::stub_verified(weak)] fn scalar_unimplied(){let x:u64=kani::any();assert_eq!(weak(x),x);}
++#[kani::proof_for_contract(badframe)] fn scalar_frame(){let mut x:[u64;2]=kani::any();let _=badframe(&mut x);}
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_positive(){let a:[u8;32]=kani::any();let mut b:[u8;32]=kani::any();b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<32);assert_eq!(b[i],a[i]);}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_negative(){let a:[u8;32]=kani::any();let mut b:[u8;32]=kani::any();b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<32);assert_ne!(b[i],a[i]);}
++
++#[kani::ensures(|r| *r==x)] fn array(x:[u8;32])->[u8;32]{x}
++#[kani::ensures(|r| *r!=x)] fn array_invert(x:[u8;32])->[u8;32]{x}
++#[kani::ensures(|r| r.len()==32)] fn array_weak(x:[u8;32])->[u8;32]{x}
++#[kani::modifies(&mut x[0])] fn array_badframe(x:&mut [u8;2])->[u8;32]{x[1]=1;[0;32]}
++#[kani::proof_for_contract(array)] #[kani::unwind(35)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn array_proof(){let _=array(kani::any());}
++#[kani::proof_for_contract(array_invert)] #[kani::unwind(35)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn array_inverted(){let _=array_invert(kani::any());}
++#[kani::proof_for_contract(array_weak)] #[kani::unwind(35)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn array_weak_proof(){let _=array_weak(kani::any());}
++#[kani::proof] #[kani::unwind(35)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn array_real(){let x:[u8;32]=kani::any();assert_eq!(array_weak(x),x);}
++#[kani::proof] #[kani::stub_verified(array_weak)] #[kani::unwind(35)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn array_unimplied(){let x:[u8;32]=kani::any();assert_eq!(array_weak(x),x);}
++#[kani::proof_for_contract(array_badframe)] #[kani::unwind(35)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn array_frame(){let mut x:[u8;2]=kani::any();let _=array_badframe(&mut x);}
