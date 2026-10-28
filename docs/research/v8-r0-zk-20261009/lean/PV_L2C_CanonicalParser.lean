@@ -24,7 +24,7 @@ theorem word_roundtrip (x : U32) :
        AspisV8R19.SqueezeOracleBridge.encodeByte (bs 1),
        AspisV8R19.SqueezeOracleBridge.encodeByte (bs 2),
        AspisV8R19.SqueezeOracleBridge.encodeByte (bs 3)] := by
-    apply List.map_injective injective
+    apply (List.map_inj_right (fun a b h => injective h)).mp
     rw [hb]
     simp only [List.map_cons,List.map_nil,AspisV8R19.SqueezeOracleBridge.byte_roundtrip]
     rfl
