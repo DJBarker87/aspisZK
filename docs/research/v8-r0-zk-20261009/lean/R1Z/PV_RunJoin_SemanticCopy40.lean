@@ -3,6 +3,7 @@ import R1Z.PV_RunJoin_CompactStep39
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_SemanticCopy40
 open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes] [ExternalFuns]
 
 /-- A message-free or uncompressed semantic row retains its five-byte header
 and exact payload. The source row-shape law is supplied separately. -/
@@ -14,7 +15,7 @@ theorem row (logical : Slice U8) (out : alloc.vec.Vec U8) (row tag : U8)
       .ok (.Ok (Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size),next) ∧
       next.val=out.val ++ (logical.val.drop at1.val).take 5 ++
         (logical.val.drop (at1.val+5)).take size.val := by
-  have cap := logical.property
+  have cap : logical.length≤Usize.max := logical.property
   have inc : (Usize.wrapping_add at1 5#usize).val=at1.val+5 :=
     PV_RunJoin_CompactStep39.offset at1 5#usize (by change at1.val+5≤Usize.max;omega)
   have endval : (Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size).val=
