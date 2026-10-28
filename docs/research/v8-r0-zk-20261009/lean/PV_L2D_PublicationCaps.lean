@@ -53,11 +53,11 @@ theorem all_slots (queries : List Nat) (batch folded : Bool) (depth : Nat)
 #print axioms all_slots
 
 theorem fixed_padding (queries : List Nat) (batch folded : Bool) (depth : Nat)
-    (domain : ∀ q ∈ queries, q<2^18) (read : Address → Digest) (prefix : List UInt8) :
+    (domain : ∀ q ∈ queries, q<2^18) (read : Address → Digest) (header : List UInt8) :
     let nodes := (emit read (plan 18 depth
       (publication queries (begin_ batch) (end_ batch) folded))).1
-    (prefix ++ nodes ++ List.replicate (32*cap batch folded-nodes.length) 0).length =
-      prefix.length+32*cap batch folded := by
+    (header ++ nodes ++ List.replicate (32*cap batch folded-nodes.length) 0).length =
+      header.length+32*cap batch folded := by
   dsimp only
   have h:=all_slots queries batch folded depth domain
   have hn : (emit read (plan 18 depth
