@@ -53,8 +53,7 @@ theorem native_kind (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     kindDispatch base ops (@block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) ops)
       accepted fallback=accepted := by
   classical
-  simp only [kindDispatch]
-  rw [dif_pos True.intro,if_pos rfl]
+  simp [kindDispatch]
 
 def bufferKind (base : ExternalTypes) (ops : @ExternalFuns (Types base)) (T : Type) :
     @digest.core_api.BufferKindUser (Types base) T block_buffer.Eager
