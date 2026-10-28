@@ -9,11 +9,7 @@ theorem parse (x y : U32) (hx : x.val<2147483647) (hy : y.val<2147483647) :
       (pair (core.num.U32.to_le_bytes x) (core.num.U32.to_le_bytes y))=
       ok (some ⟨x,y⟩) := by
   unfold aspis_core.field.CM31.from_le_bytes
-  change (do
-    let a ← core.slice.index.SliceIndexRangeUsizeSlice.index
-      {start:=0#usize,«end»:=4#usize} (pair (core.num.U32.to_le_bytes x) (core.num.U32.to_le_bytes y))
-    let aa ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 a
-    _) = _
+  simp only [core.slice.index.Slice.index,core.slice.index.SliceIndexRangeUsizeSlice]
   rw [left]
   simp only [bind_tc_ok,copy_array]
   simp only [bind_tc_ok]
