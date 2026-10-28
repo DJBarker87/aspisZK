@@ -36,3 +36,9 @@ rebuilt or substituted. This is a changed environment, not an unchanged retry.
 42201 was not launched: its second admission saw ENOENT for another session's
 vanished cgroup (`session-326995.scope`). Under ruling (p'), wait at least 60 s
 and retry the same unlaunched ID, at most three times. It is not a Lean charge.
+
+42201 retry1 launched after the transient cgroup race; failed before theorem
+checking: the new external link overlay lacked the IR companion for
+Init.Prelude. Same-authority `.ir` companions are now linked read-only and
+hashed separately. No library object was rebuilt. Both focused failures
+are retained and charged. No theorem/row closure is inferred from extraction.
