@@ -13382,3 +13382,19 @@ candidate (10b8afe764, pushed); worktree and branch removed. Acceptance is the r
 pinned this branch at an earlier head, so these closures are confirmed at the next recount, and the
 seven K-1 substitutes are re-verified by stubbed Kani when budgeted. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D361 (Stream B) 2026-10-28 09:01 UTC: two native-effect library jobs launched on the V184 template
+
+With the batch, library and re-link lines merged and the reachability and level-2 lines parked on
+runjoin, two slots go to bucket-(b) standard-library rows whose obligation is a native effect, using
+the template that closed V184 (explicit world carrier, structural stdlib gate, installation in the
+original carrier, non-vacuity, labelled native differential):
+- pv-fxmem (IDs 35500-35599; no Kani): V170 core.mem.drop, V183 Vec.try_reserve_exact, V221 and V222
+  zeroize, including what the structural gate does and does not establish about volatile writes.
+- pv-fxio (IDs 35800-35899; no Kani): V171 File.open, V172 File.sync_all, V175 OpenOptions.open,
+  V176 io::Error.kind, V267 File write_all, V268 io::Error type, V271 File owner/world. OS file
+  semantics may enter only through the existing trust list's OS-kernel contract; T stays exactly
+  entropy_law, entropy_kernel, observation, and any uncovered OS fact is reported as a possible
+  owner trust item rather than assumed.
+V225 (getrandom.fill) stays with the entropy trust fields and the E1/E2 associations. Rows removed
+outright: 0. Privacy target not yet established.
