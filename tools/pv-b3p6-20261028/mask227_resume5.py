@@ -17,6 +17,13 @@ def walk : Nat → Nat → List Nat
 def popcount (mask : Nat) : Nat := ((List.range 16).filter (fun i => mask.testBit i)).length
 
 '''
+s+='''def foldResult {α : Type} (add : α → Nat → Aeneas.Std.Result α) : List Nat → α → Aeneas.Std.Result α
+  | [], initial => .ok initial
+  | index::tail, initial => do
+    let next ← add initial index
+    foldResult add tail next
+
+'''
 for mask in masks:
  bits=[i for i in range(16)if mask&(1<<i)];l='['+','.join(map(str,bits))+']'
  s+=f'theorem walk_{mask} : walk 16 {mask} = {l} := by decide\n'
@@ -28,7 +35,13 @@ for mask in masks:
   rw [walk_{mask}]
   rfl
 '''
- for n in ['walk','complement_off','sum']:s+=f'#print axioms {n}_{mask}\n'
+ chain='    do\n'
+ prev='zero'
+ for j,i in enumerate(bits):
+  chain+=f'      let next{j} ← add {prev} {i}\n';prev=f'next{j}'
+ chain+=f'      .ok {prev}'
+ s+=f'theorem result_{mask} {{α : Type}} (zero : α) (add : α → Nat → Aeneas.Std.Result α) :\n    foldResult add (walk 16 {mask}) zero = ({chain}) := by\n  rw [walk_{mask}]\n  rfl\n'
+ for n in ['walk','complement_off','sum','result']:s+=f'#print axioms {n}_{mask}\n'
 s+='\ndef sourceMasks : List Nat := ['+','.join(map(str,allmasks))+']\n'
 s+='def reachedMasks : List Nat := ['+','.join(map(str,masks))+']\n'
 s+='''theorem table_masks : ∀ mask ∈ sourceMasks, mask ∈ reachedMasks := by decide
