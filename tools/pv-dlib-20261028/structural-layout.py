@@ -12,7 +12,7 @@ print(json.dumps(dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdiges
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3','-'],input=code,text=True,capture_output=True);assert r.returncode==0,r.stderr
 j=json.loads(r.stdout);s=j.pop('source');declarations={}
 for name,representation,expected in [('GenericArrayImplEven','C','parent1:U,parent2:U,_marker:PhantomData<T>,'),('GenericArrayImplOdd','C','parent1:U,parent2:U,data:T,'),('GenericArray','transparent','data:U::ArrayType,')]:
- match=re.search(r'#\[repr\('+representation+r'\)\][\s\S]*?pub struct '+name+r'<[^\n]+>\s*\{([^}]+)\}',s)
+ match=re.search(r'#\[repr\('+representation+r'\)\](?:\s*#\[[^\n]*\])*\s*pub struct '+name+r'<[^\n]+>\s*\{([^}]+)\}',s)
  assert match,name
  assert ''.join(match.group(1).split())==expected,(name,match.group(1))
  declarations[name]=match.group(0)

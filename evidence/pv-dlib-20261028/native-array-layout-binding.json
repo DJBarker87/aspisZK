@@ -5,7 +5,7 @@
   },
   "declarations": {
     "GenericArrayImplEven": "#[repr(C)]\n#[doc(hidden)]\npub struct GenericArrayImplEven<T, U> {\n    parent1: U,\n    parent2: U,\n    _marker: PhantomData<T>,\n}",
-    "GenericArrayImplOdd": "#[repr(C)]\n#[doc(hidden)]\npub struct GenericArrayImplEven<T, U> {\n    parent1: U,\n    parent2: U,\n    _marker: PhantomData<T>,\n}\n\nimpl<T: Clone, U: Clone> Clone for GenericArrayImplEven<T, U> {\n    fn clone(&self) -> GenericArrayImplEven<T, U> {\n        GenericArrayImplEven {\n            parent1: self.parent1.clone(),\n            parent2: self.parent2.clone(),\n            _marker: PhantomData,\n        }\n    }\n}\n\nimpl<T: Copy, U: Copy> Copy for GenericArrayImplEven<T, U> {}\n\n/// Internal type used to generate a struct of appropriate size\n#[allow(dead_code)]\n#[repr(C)]\n#[doc(hidden)]\npub struct GenericArrayImplOdd<T, U> {\n    parent1: U,\n    parent2: U,\n    data: T,\n}",
+    "GenericArrayImplOdd": "#[repr(C)]\n#[doc(hidden)]\npub struct GenericArrayImplOdd<T, U> {\n    parent1: U,\n    parent2: U,\n    data: T,\n}",
     "GenericArray": "#[repr(transparent)]\npub struct GenericArray<T, U: ArrayLength<T>> {\n    data: U::ArrayType,\n}"
   },
   "whole_field_bodies_and_repr_checked": true,
