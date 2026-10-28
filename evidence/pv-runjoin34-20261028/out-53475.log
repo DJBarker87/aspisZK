@@ -1,0 +1,62 @@
+START 53475 R1Z.PV_RunJoin_SampleTail34
+DONE 53475 R1Z.PV_RunJoin_SampleTail34 exit 1 wall 1.64 RSS 4396195840
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SampleTail34.lean:31:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  host_sumcheck.evaluate_assignment_loop.body r rem a (PV_RunJoin_PointArray34.array p) off
+in the target expression
+  (do
+      let cf ←
+        match (PV_RunJoin_PointArray34.array p, off) with
+          | (at2, offset1) => host_sumcheck.evaluate_assignment_loop.body r rem a at2 offset1
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              match x with
+              | (at2, offset1) => host_sumcheck.evaluate_assignment_loop.body r rem a at2 offset1)
+            next
+        | ControlFlow.done out => ok out) =
+    ok (PV_RunJoin_PointArray34.array (ProverCommitSampleTail49.values (n + 1) p (↑r) (↑rem) a ↑off))
+
+case succ
+inst✝ : ExternalTypes
+ops : ExternalFuns
+r rem a : Usize
+hr : ↑r < 10
+hrem : ↑rem = 9 - ↑r
+n : ℕ
+ih :
+  ∀ (p : ℕ → Raw) (off : Usize),
+    ↑off + n = ↑rem →
+      host_sumcheck.evaluate_assignment_loop r rem a (PV_RunJoin_PointArray34.array p) off =
+        ok (PV_RunJoin_PointArray34.array (ProverCommitSampleTail49.values n p (↑r) (↑rem) a ↑off))
+p : ℕ → Raw
+off : Usize
+bound : ↑off + (n + 1) = ↑rem
+ho : ↑off < ↑rem
+inc : ↑(off.wrapping_add 1#usize) = ↑off + 1
+⊢ (do
+      let cf ←
+        match (PV_RunJoin_PointArray34.array p, off) with
+          | (at2, offset1) => host_sumcheck.evaluate_assignment_loop.body r rem a at2 offset1
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              match x with
+              | (at2, offset1) => host_sumcheck.evaluate_assignment_loop.body r rem a at2 offset1)
+            next
+        | ControlFlow.done out => ok out) =
+    ok (PV_RunJoin_PointArray34.array (ProverCommitSampleTail49.values (n + 1) p (↑r) (↑rem) a ↑off))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_SampleTail34.exact_tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

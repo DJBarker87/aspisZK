@@ -1,0 +1,33 @@
+START 53477 R1Z.PV_RunJoin_SampleSource34
+DONE 53477 R1Z.PV_RunJoin_SampleSource34 exit 1 wall 1.61 RSS 4392263680
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SampleSource34.lean:39:92: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+F : Type
+oracleInst : host_sumcheck.Oracle F
+oracle : F
+p : ℕ → Raw
+r assignments i : Usize
+hr : ↑r < 10
+positive : ↑assignments ≠ 0
+sample : UScalar UScalarTy.Usize
+hs : i / assignments = ok sample
+hsv : ↑sample = ↑i / ↑assignments
+assignment : UScalar UScalarTy.Usize
+ha : i % assignments = ok assignment
+hav : ↑assignment = ↑i % ↑assignments
+rem : Usize := Usize.wrapping_sub 9#usize r
+hrem : ↑rem = 9 - ↑r
+⊢ oracleInst.evaluate oracle
+      (PV_RunJoin_PointArray34.array
+        (ProverCommitSampleTail49.values (9 - ↑r)
+          (Function.update p (↑r) (ProverCommitSamplePoint49.word (UScalar.cast UScalarTy.U32 sample))) (↑r) (9 - ↑r)
+          assignment ↑0#usize)) =
+    oracleInst.evaluate oracle
+      (PV_RunJoin_PointArray34.array
+        (ProverCommitSampleTail49.values (9 - ↑r)
+          (Function.update p (↑r) (ProverCommitSamplePoint49.word (UScalar.cast UScalarTy.U32 sample))) (↑r) (9 - ↑r)
+          assignment 0))
+'R1Z.PV_RunJoin_SampleSource34.constructors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SampleSource34.evaluate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
