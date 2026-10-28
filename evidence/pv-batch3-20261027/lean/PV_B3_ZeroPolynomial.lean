@@ -8,11 +8,45 @@ abbrev triple := Array.repeat 3#usize Z
 abbrev polynomial := Array.repeat 28#usize Z
 theorem madd_zero : aspis_core.field.M31.add 0#u32 0#u32 = ok 0#u32 := by with_unfolding_all rfl
 #print axioms madd_zero
--- Nine independent writes use generic constant-array restoration lemmas.
+theorem cast_zero64 : UScalar.cast .U64 0#u32 = 0#u64 := by scalar_tac
+theorem mul_zero64 : Std.U64.wrapping_mul 0#u64 0#u64 = 0#u64 := by with_unfolding_all rfl
+theorem add_zero64 : Std.U64.wrapping_add 0#u64 0#u64 = 0#u64 := by with_unfolding_all rfl
+#print axioms cast_zero64
+#print axioms mul_zero64
+#print axioms add_zero64
+-- Nine independent writes. Restoration is applied in bounded phases; a
+-- generic same-value setter is never put into a recursive simp set.
 theorem accumulate : host_arithmetic.accumulate_channels channels Z Z = ok channels := by
-  simp (disch := decide) only [host_arithmetic.accumulate_channels,
-    aspis_core.field.QM31.ZERO,cadd_zero,madd_zero,
-    index_repeat,mutable_repeat,update_repeat,set_repeat,lift,bind_tc_ok]
+  unfold host_arithmetic.accumulate_channels
+  simp only [aspis_core.field.QM31.ZERO,cadd_zero,madd_zero,bind_tc_ok]
+  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+    lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
+  all_goals try rw [set_repeat]
+  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+    lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
+  all_goals try rw [set_repeat]
+  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+    lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
+  all_goals try rw [set_repeat]
+  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+    lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
+  all_goals try rw [set_repeat]
+  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+    lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
+  all_goals try rw [set_repeat]
+  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+    lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
+  all_goals try rw [set_repeat]
+  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+    lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
+  all_goals try rw [set_repeat]
+  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+    lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
+  all_goals try rw [set_repeat]
+  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+    lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
+  all_goals try rw [set_repeat]
+  all_goals rfl
 
 theorem reconstruct_component : host_arithmetic.reconstruct_component (Array.repeat 3#usize 0#u64) = ok CZero := by
   with_unfolding_all rfl
