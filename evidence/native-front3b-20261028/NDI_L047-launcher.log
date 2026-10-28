@@ -1,0 +1,83 @@
+{"attempt": "NDI_L047", "exit_status": 1, "wall_seconds": 3.790732790948823, "peak_rss_kib": "4401096", "swaps": "0", "print_axioms": ["'NDI_BatchStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDI_BatchStep.done_step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDI_BatchStep.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDI_generated/NDI_BatchStep.lean:25:60: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - h ≥ 0
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  c ≥ 0
+  256*c + d - e ≥ 0
+  b ≥ 0
+  b - d + e ≥ 0
+  0 ≤ a ≤ 16
+  a - d + e ≥ 1
+  a + b - d + e ≤ 22
+where
+ a := ↑↑n
+ b := ↑↑address
+ c := ↑(if tree = 2#usize then ↑u / 4 else ↑u)
+ d := ↑↑next
+ e := ↑↑1#usize
+ f := ↑↑22#usize
+ g := ↑?m.643
+ h := ↑(List.length ?m.642)
+NDI_generated/NDI_BatchStep.lean:24:4: error: Type mismatch: After simplification, term
+  uval
+ has type
+  u = (↑queries)[↑lo + ↑j]
+but is expected to have type
+  u = (↑queries)[↑lo + ↑j]?.getD default
+NDI_generated/NDI_BatchStep.lean
+...
+
+NDI_generated/NDI_BatchStep.lean:39:4: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+keys : Std.Array U64 16#usize
+j : Usize
+value : U64
+k : ℕ
+bound : k < 16
+⊢ k < (↑(keys.set j value)).length
+NDI_generated/NDI_BatchStep.lean:39:76: error: unsolved goals
+case pos
+keys : Std.Array U64 16#usize
+j : Usize
+value : U64
+k : ℕ
+bound : ↑j < 16
+hit : k = ↑j
+⊢ False
+
+case neg
+keys : Std.Array U64 16#usize
+j : Usize
+value : U64
+k : ℕ
+bound : k < 16
+hit : ¬k = ↑j
+⊢ False
+NDI_generated/NDI_BatchStep.lean:41:13: warning: This simp argument is unused:
+  Array.set
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵r̵r̵a̵y̵.̵s̵e̵t̵,̵List.getElem!_eq_getElem?_getD, ̲List.getElem?_set]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_BatchStep.lean:41:54: warning: This simp argument is unused:
+  List.getElem?_set
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵s̵e̵t̵]̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲!̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲?̲_̲g̲e̲t̲D̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDI_BatchStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDI_BatchStep.done_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDI_BatchStep.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r208a703d219e4163b6f092abfae75259.scope; invocation ID: 2253ce7afa6a4a6fa8a98acb93312e97

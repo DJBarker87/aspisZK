@@ -1,0 +1,47 @@
+{"attempt": "NDI_K088", "exit_status": 1, "wall_seconds": 32.307005178998224, "peak_rss_kib": "2594716", "swaps": "0", "print_axioms": "N/A: kani"}
+NDI_NATIVE_INVOCATION NDI_K088
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nu
+...
+e a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 4.30s
+Checking harness verifier::candidate::NDI_candidate::contains_predicate_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 249 failed (8 unreachable)
+Failed Checks: |r| (*r==reference::contains_predicate_ref(x,q)) != cfg!(NDI_invert_contains)
+ File: "crates/aspis-r1-cost-probe/src/NDI_candidate.rs", line 44, in verifier::candidate::NDI_candidate::contains_predicate::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 26.404245s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NDI_candidate::contains_predicate_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-ra3b62990fb1a4945b04b4bfc40dc64df.scope; invocation ID: 1f25325eff9e415faeb210b659044eeb

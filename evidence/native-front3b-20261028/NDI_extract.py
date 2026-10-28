@@ -11,6 +11,7 @@ assert sha(C)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8
 assert sha(A)=='c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958'
 parser=os.environ.get('NDI_EXTRACT_PARSER')=='1'
 jobs={
+ 'predicates':(['crate::window_meta_ref','crate::tail_predicate_ref','crate::contains_predicate_ref','crate::iter_meta_ref'],'NDI_PredicatesRef'),
  'reader_byte':(['crate::raw_byte_ref'],'NDI_ReaderByteRef'),
  'batch':(['crate::batch_word_ref','crate::batch_init_ref','crate::batch_keys_ref','crate::range_ref'],'NDI_BatchRef'),
 }
