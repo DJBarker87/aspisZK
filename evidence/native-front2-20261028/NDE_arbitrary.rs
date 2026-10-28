@@ -6,3 +6,4 @@ impl kani::Arbitrary for crate::field::QM31 {
   Self{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}
  }
 }
+impl kani::Arbitrary for crate::field::M31 {fn any()->Self{Self(kani::any())}}

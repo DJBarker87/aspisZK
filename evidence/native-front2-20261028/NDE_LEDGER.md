@@ -1,15 +1,15 @@
 # Native composition ledger
 
-Frozen source `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; merged evidence snapshot `daf8d2f3bc`.
+Frozen source `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; merged evidence snapshot `1edd48073b`.
 Headline `AspisR1.RPx_Deployed.deployed`. **The deployed 100-bit target remains unestablished.**
 
 This is a machine-validated evidence ledger and conservative call-graph argument. It does not supply new native bridges or Lean caller-domain certificates. Owner amendment fifth is reported as a P6/D188 tool-trust reclassification, never premise removal.
 
 | Inventory | Rows | Local conditional bridges | Local OPEN | Quarantined | Composed OPEN | Trust only |
 |---|---:|---:|---:|---:|---:|---:|
-| TX1 | 345 | 113 | 230 | 2 | 345 | 0 |
+| TX1 | 345 | 119 | 224 | 2 | 345 | 0 |
 | TX2 | 242 | 107 | 133 | 2 | 242 | 0 |
-| all_rows | 587 | 220 | 363 | 4 | 587 | 0 |
+| all_rows | 587 | 226 | 357 | 4 | 587 | 0 |
 
 Unique functions: 434. Shared TX1/TX2 bodies count once only in the union graph; transaction rows keep separate edges/domains.
 
@@ -38,7 +38,7 @@ Every terminal open SCC needs its own representative; no other open SCC can be r
 | `crates/aspis-core/src/field.rs::qm31_from_karatsuba_channel_sums` | 23 |
 | `crates/aspis-r1-cost-probe/src/candidate.rs::opening` | 23 |
 
-Minimum reachability-cover frontier: **129 SCC representatives**. Full members and all graph cycles are in JSON.
+Minimum reachability-cover frontier: **125 SCC representatives**. Full members and all graph cycles are in JSON.
 
 | Frontier representative | Dependent rows | OPEN functions in SCC |
 |---|---:|---:|
@@ -68,7 +68,6 @@ Minimum reachability-cover frontier: **129 SCC representatives**. Full members a
 | `crates/aspis-r1-cost-probe/src/multiproof.rs::sibling_binary_parent` | 20 | 1 |
 | `crates/aspis-r1-cost-probe/src/multiproof.rs::value_at` | 20 | 1 |
 | `crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row` | 20 | 1 |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::empty_root` | 20 | 1 |
 | `crates/aspis-core/src/r0/heap.rs::filled` | 19 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::sum_high` | 19 | 1 |
 | `crates/aspis-core/src/r0/domain.rs::FibreIndex::get` | 18 | 1 |
@@ -78,7 +77,6 @@ Minimum reachability-cover frontier: **129 SCC representatives**. Full members a
 | `crates/aspis-r1-cost-probe/src/fast_domain.rs::table_value` | 18 | 1 |
 | `crates/aspis-r1-cost-probe/src/fast_dots.rs::four_dots_one` | 18 | 1 |
 | `crates/aspis-r1-cost-probe/src/verifier.rs::mark` | 18 | 1 |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::bounded_append_carry` | 18 | 1 |
 | `crates/aspis-statement/src/poseidon2.rs::pow5` | 18 | 1 |
 | `crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record` | 17 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::row` | 17 | 1 |
@@ -99,9 +97,6 @@ Minimum reachability-cover frontier: **129 SCC representatives**. Full members a
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::reconstruct_10` | 16 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::variant_expected_output` | 16 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::copy_residual` | 15 | 1 |
-| `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::link_weight` | 15 | 1 |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::private_public` | 15 | 1 |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::withdrawal_public` | 15 | 1 |
 | `crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::has_no_retirement_slot` | 15 | 1 |
 | `crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::has_no_retirement_slot` | 15 | 1 |
 | `crates/aspis-core/src/field.rs::M31::neg` | 14 | 1 |
@@ -111,7 +106,8 @@ Minimum reachability-cover frontier: **129 SCC representatives**. Full members a
 | `crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::absorb` | 14 | 1 |
 | `crates/aspis-r1-cost-probe/src/verifier.rs::batch_prefix_products` | 14 | 1 |
 | `crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor` | 14 | 1 |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::selected_claim` | 14 | 1 |
+| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::semantic` | 14 | 1 |
+| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::validate_transition` | 14 | 1 |
 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner` | 14 | 1 |
 | `crates/aspis-core/src/state_only_hiding.rs::cm31_mul_r` | 13 | 1 |
 | `crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_value` | 13 | 1 |
@@ -176,6 +172,6 @@ Minimum reachability-cover frontier: **129 SCC representatives**. Full members a
 
 `python3 evidence/native-compledger-20261028/NCZ_validate.py` recomputes bodies, edges, claims, feature/re-credit overlays, receipt hashes, coverage and frontier, then compares the entire ledger and this summary. `--write` deliberately regenerates derived files; it does not make new evidence pass. Present sparse-worktree files must match the pinned Git blobs, and tracked deletions fail. Unmaterialized sparse files are read from immutable Git objects. Each cited artifact is SHA256-pinned. New/changed merged reports require an explicit refreshed snapshot; no silent credit from later branches.
 
-Discovery searched **5223** top-level merged/legacy evidence and design reports. Documentary mentions are discovery pointers, not semantic adoption. Unindexed CLOSED mentions and unresolved historical reference pointers are retained in JSON for audit; an unresolved pointer is never presented as a valid citation. Every cited row artifact must exist and match. The validator checks indexed evidence consistency; it is not a natural-language theorem prover and cannot detect a contradiction hidden in arbitrary new prose without an explicit evidence/schema update.
+Discovery searched **5225** top-level merged/legacy evidence and design reports. Documentary mentions are discovery pointers, not semantic adoption. Unindexed CLOSED mentions and unresolved historical reference pointers are retained in JSON for audit; an unresolved pointer is never presented as a valid citation. Every cited row artifact must exist and match. The validator checks indexed evidence consistency; it is not a natural-language theorem prover and cannot detect a contradiction hidden in arbitrary new prose without an explicit evidence/schema update.
 
 No Rust/Lean/Kani/SBF job ran; no new theorem or axioms. 0/10 Lean status attempts, 0/0 Kani. No shipped files changed, so ELF rebuild was not triggered. No host/cache/key operation. Prior ELF pins remain inherited, not reproduced.

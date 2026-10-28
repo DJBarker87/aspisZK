@@ -7,7 +7,7 @@ namespace NDE_LinearSteps
 abbrev Q := NDE_Reference10.Q
 
 def toOld (q : Q) : NDE_Reference3.Q := ⟨⟨q.c0.a,q.c0.b⟩,⟨q.c1.a,q.c1.b⟩⟩
-def toNative (q : Q) := NDE_VariantBridge.toNative (toOld q)
+abbrev toNative (q : Q) := NDE_VariantBridge.toNative (toOld q)
 
 theorem map_comp {α β γ : Type} (f : β → γ) (g : α → β) (r : Result α) :
     NDE_LiftBridge.mapResult f (NDE_LiftBridge.mapResult g r) =
@@ -28,7 +28,7 @@ theorem add_native (a b : Q) :
     FIq_Native.field.QM31.add (toNative a) (toNative b) := by
   have h := NDE_VariantBridge.add_reference (toOld a) (toOld b)
   rw [← add_port] at h
-  simpa only [map_comp] using h
+  simpa only [map_comp,toNative] using h
 
 theorem sum_step (a b : Q) :
     NDE_LiftBridge.mapResult toNative (NDE_Reference10.sum_step_ref a b) =
@@ -44,7 +44,7 @@ theorem reconstruct_step (a bit : Q) :
             FIq_Native.field.QM31.add (toNative doubled) (toNative bit)) := by
           simp only [NDE_Reference10.reconstruct_step_ref,NDE_RawBridge.map_bind,add_native]
     _ = (do let doubled ← NDE_LiftBridge.mapResult toNative (NDE_Reference10.add_ref a a)
-            FIq_Native.field.QM31.add doubled (toNative bit)) := (bind_map _ _ _).symm
+            FIq_Native.field.QM31.add doubled (toNative bit)) := (bind_map toNative (NDE_Reference10.add_ref a a) (fun d => FIq_Native.field.QM31.add d (toNative bit))).symm
     _ = _ := by rw [add_native]
 
 #print axioms map_comp

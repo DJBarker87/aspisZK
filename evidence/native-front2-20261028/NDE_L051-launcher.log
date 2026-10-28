@@ -1,0 +1,44 @@
+{"attempt": "NDE_L051", "exit_status": 1, "wall_seconds": 1.7192734340205789, "peak_rss_kib": "3022328", "swaps": "0", "print_axioms": ["'NDE_LinearSteps.map_comp' does not depend on any axioms", "'NDE_LinearSteps.bind_map' does not depend on any axioms", "'NDE_LinearSteps.add_port' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDE_LinearSteps.add_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDE_LinearSteps.sum_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDE_LinearSteps.reconstruct_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDE_generated/NDE_LinearSteps.lean:31:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Result FIq_Native.field.QM31)
+    (NDE_LiftBridge.mapResult (fun x => NDE_VariantBridge.toNative (toOld x)) (NDE_Reference10.add_ref a b))
+    ((NDE_VariantBridge.toNative (toOld a)).add (NDE_VariantBridge.toNative (toOld b)))
+but is expected to have type
+  @Eq (Result FIq_Native.field.QM31) (NDE_LiftBridge.mapResult toNative (NDE_Reference10.add_ref a b))
+    ((toNative a).add (toNative b))
+NDE_generated/NDE_LinearSteps.lean:47:65: error: Type mismatch
+  Eq.symm (bind_map ?m.22 ?m.23 ?m.24)
+has type
+  (@Bind.bind Result instBindResult ?m.19 ?m.21 ?m.23 fun x => ?m.24 (?m.22 x)) = d
+...
+NDE_generated/NDE_LinearSteps.lean:31:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Result FIq_Native.field.QM31)
+    (NDE_LiftBridge.mapResult (fun x => NDE_VariantBridge.toNative (toOld x)) (NDE_Reference10.add_ref a b))
+    ((NDE_VariantBridge.toNative (toOld a)).add (NDE_VariantBridge.toNative (toOld b)))
+but is expected to have type
+  @Eq (Result FIq_Native.field.QM31) (NDE_LiftBridge.mapResult toNative (NDE_Reference10.add_ref a b))
+    ((toNative a).add (toNative b))
+NDE_generated/NDE_LinearSteps.lean:47:65: error: Type mismatch
+  Eq.symm (bind_map ?m.22 ?m.23 ?m.24)
+has type
+  (@Bind.bind Result instBindResult ?m.19 ?m.21 ?m.23 fun x => ?m.24 (?m.22 x)) = do
+    let x ← NDE_LiftBridge.mapResult ?m.22 ?m.23
+    ?m.24 x
+but is expected to have type
+  (@Bind.bind Result instBindResult NDE_Reference10.Q FIq_Native.field.QM31 (NDE_Reference10.add_ref a a) fun doubled =>
+      (toNative doubled).add (toNative bit)) =
+    do
+    let doubled ← NDE_LiftBridge.mapResult toNative (NDE_Reference10.add_ref a a)
+    doubled.add (toNative bit)
+'NDE_LinearSteps.map_comp' does not depend on any axioms
+'NDE_LinearSteps.bind_map' does not depend on any axioms
+'NDE_LinearSteps.add_port' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDE_LinearSteps.add_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDE_LinearSteps.sum_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDE_LinearSteps.reconstruct_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf24d66d7b83442bfb86483037e5e5ddb.scope; invocation ID: 0d60638217b24cb8b2e763fe3680a9fc

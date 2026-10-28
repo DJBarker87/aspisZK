@@ -1,0 +1,80 @@
+NDE_generated/NDE_ReconstructTotal.lean:24:61: error: unsolved goals
+c : Capture
+xs : List NQ
+x : NQ
+ih :
+  ∀ (bound : xs.length ≤ Usize.max) (acc : NQ),
+    (∀ x ∈ xs, Canon x) → Canon acc → ∃ out, fold { slice := slice xs bound, i := 0 } acc c = ok out ∧ Canon out
+bound : (xs ++ [x]).length ≤ Usize.max
+acc : NQ
+hc : ∀ x_1 ∈ xs ++ [x], Canon x_1
+ha : Canon acc
+hx : Canon x
+double : FIq_Native.field.QM31
+hd : FIq_Native.field.QM31.add acc acc = ok double
+hcd : Canon double
+right✝¹ : decode double = decode acc + decode acc
+next : FIq_Native.field.QM31
+hn : double.add x = ok next
+hcn : Canon next
+right✝ : decode next = decode double + decode x
+⊢ (let (acc, bit) := (acc, x)
+    do
+    let q ← acc.add acc
+    let q1 ← q.add bit
+    ok (q1, c)) =
+    ok (next, c)
+NDE_generated/NDE_ReconstructTotal.lean:25:17: warning: This simp argument is unused:
+  callback
+
+Hint: Omit it from the simp argument list.
+  simp only [c̵a̵l̵l̵b̵a̵c̵k̵,̵FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut,
+          hd, ̲hn, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDE_generated/NDE_ReconstructTotal.lean:26:8: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [callback,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut,
+          hd̵,̵h̵n, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDE_generated/NDE_ReconstructTotal.lean:26:11: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [callback,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut,
+          hd,h̵n̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDE_generated/NDE_ReconstructTotal.lean:26:14: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [callback,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10.closure.Insts.CoreOpsFunctionFnMutPairQM31SharedQM31QM31.call_mut,
+          hd, ̲hn,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDE_generated/NDE_ReconstructTotal.lean:35:101: error: unsolved goals
+case this
+view : Std.Array NQ 16#usize
+hc : ∀ x ∈ ↑view, Canon x
+hsize : (↑view).length = 16
+⊢ ?m.31
+
+view : Std.Array NQ 16#usize
+hc : ∀ x ∈ ↑view, Canon x
+hsize : (↑view).length = 16
+this : ?m.31 := ?this
+⊢ ∃ out,
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10 view = ok out ∧
+      Canon out ∧ decode out = R0P.valueReconstruct10 fun i => FIv_NativeArray.value view ↑i
+NDE_generated/NDE_ReconstructTotal.lean:37:14: error: unexpected identifier; expected prec
+NDE_generated/NDE_ReconstructTotal.lean:39:83: error: unexpected token ':='; expected ':'
+NDE_generated/NDE_ReconstructTotal.lean:58:67: error: unexpected token ','; expected ':'
+'NDE_ReconstructTotal.fold_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDE_ReconstructTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

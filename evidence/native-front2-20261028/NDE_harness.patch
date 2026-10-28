@@ -69,7 +69,15 @@
  fn initial_variant_selectors(
      variant: CompiledVariant,
      high27: QM31,
-@@ -1133,6 +1153,8 @@
+@@ -533,6 +553,7 @@
+ }
+ 
+ #[inline(never)]
++#[cfg_attr(kani,kani::ensures(|r| (r.0==NDE_native::reference::variant_output_ref(variant==CompiledVariant::Withdrawal)) != cfg!(NDE_simple_invert)))]
+ fn variant_expected_output(variant: CompiledVariant) -> M31 {
+     match variant {
+         CompiledVariant::PrivateTransfer => M31(1),
+@@ -1133,6 +1154,8 @@
  }
  
  #[inline(never)]
@@ -78,7 +86,7 @@
  fn scalar_lanes(
      variant: CompiledVariant,
      withdrawal_amount_present: bool,
-@@ -1196,6 +1218,8 @@
+@@ -1196,6 +1219,8 @@
      packed
  }
  
@@ -87,7 +95,7 @@
  fn selected_claim(
      claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
      point: usize,
-@@ -1205,6 +1229,8 @@
+@@ -1205,6 +1230,8 @@
  }
  
  #[inline(never)]
@@ -96,7 +104,7 @@
  fn copy_variant(variant: CompiledVariant) -> PoolV1PairForestCompiledVariantV1 {
      match variant {
          CompiledVariant::PrivateTransfer => PoolV1PairForestCompiledVariantV1::PrivateTransfer,
-@@ -1324,6 +1350,8 @@
+@@ -1324,6 +1351,8 @@
      Ok((original, c1, mask_only, g))
  }
  
@@ -105,7 +113,7 @@
  fn private_public<'a>(
      public: &PoolV1PrivateTransferPublicV1,
      transition: &'a PoolV1PairLatePublicStatementV1,
-@@ -1342,6 +1370,8 @@
+@@ -1342,6 +1371,8 @@
      }
  }
  
@@ -114,7 +122,7 @@
  fn withdrawal_public<'a>(
      public: &PoolV1WithdrawalPublicV1,
      transition: &'a PoolV1PairLatePublicStatementV1,
-@@ -2328,3 +2358,7 @@
+@@ -2328,3 +2359,7 @@
          }
      }
  }
@@ -131,7 +139,7 @@
 +pub fn claim_ref(claims:&[Q;84],point:usize,column:usize)->Q{claims[point*28+column]}
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NDE_semantic.rs
-@@ -0,0 +1,129 @@
+@@ -0,0 +1,132 @@
 +use super::*;
 +#[path="NDE_reference.rs"] pub(super) mod reference;
 +pub(super) fn to_ref(v:QM31)->reference::Q { reference::Q { c0:reference::C{a:v.c0.a.0,b:v.c0.b.0},c1:reference::C{a:v.c1.a.0,b:v.c1.b.0} } }
@@ -139,6 +147,9 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]
 +#[kani::proof_for_contract(super::lift_m31)]
 +fn NDE_contract(){let v:u32=kani::any();let _=super::lift_m31(M31(v));}
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++#[kani::proof_for_contract(super::variant_expected_output)]
++fn NDE_expected(){let v=if kani::any(){CompiledVariant::Withdrawal}else{CompiledVariant::PrivateTransfer};let _=super::variant_expected_output(v);}
 +pub(super) fn canonical(q:QM31)->bool{q.c0.a.0<0x7fff_ffff&&q.c0.b.0<0x7fff_ffff&&q.c1.a.0<0x7fff_ffff&&q.c1.b.0<0x7fff_ffff}
 +pub(super) fn native_initial(v:CompiledVariant,a:QM31,b:QM31,c:QM31)->(QM31,QM31,QM31,QM31){let r=reference::initial_ref(v==CompiledVariant::Withdrawal,to_ref(a),to_ref(b),to_ref(c));(to_native(r.0),to_native(r.1),to_native(r.2),to_native(r.3))}
 +pub(super) fn native_scalar(v:CompiledVariant,p:bool,i:QM31,o:QM31,t:QM31,w:QM31)->[QM31;2]{let r=reference::scalar_ref(v==CompiledVariant::Withdrawal,p,to_ref(i),to_ref(o),to_ref(t),to_ref(w));[to_native(r[0]),to_native(r[1])]}
@@ -263,7 +274,7 @@
 +}
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NDE_reference.rs
-@@ -0,0 +1,73 @@
+@@ -0,0 +1,89 @@
 +#[derive(Clone, Copy, PartialEq, Eq)]
 +pub struct C { pub a: u32, pub b: u32 }
 +#[derive(Clone, Copy, PartialEq, Eq)]
@@ -337,6 +348,22 @@
 +pub fn row_operands_ref<T:Copy>(high:&[T;64],low:&[T;16],row:usize)->(T,T){(high[row>>4],low[row&15])}
 +pub fn sum_step_ref(acc:Q,next:Q)->Q{add_ref(acc,next)}
 +pub fn reconstruct_step_ref(acc:Q,bit:Q)->Q{add_ref(add_ref(acc,acc),bit)}
++pub fn matrix_cell_ref(a:u32,b:u32,c:u32,d:u32,row:usize)->u64{
++ let a=u64::from(a);let b=u64::from(b);let c=u64::from(c);let d=u64::from(d);
++ match row{0=>2*a+3*b+c+d,1=>a+2*b+3*c+d,2=>a+b+2*c+3*d,3=>3*a+b+c+2*d,_=>panic!("matrix row")}
++}
++pub fn scan_step_ref(flag:bool,cell:u64,bound:u64,row:usize,limb:usize)->(bool,usize,usize,bool){
++ if limb<4{(flag&(cell<bound),row,limb+1,false)}else{(flag,row+1,limb,true)}
++}
++pub fn packed_after_ref(local:[[u64;4];4],bound:u64)->[u64;4]{
++ [local[0][0]+5*bound-local[1][1]+2*local[2][2]-local[2][3]-local[3][2]-2*local[3][3],
++ local[0][1]+local[1][0]+local[2][2]+2*local[2][3]+2*local[3][2]+bound-local[3][3],
++ local[0][2]+2*bound-local[1][3]+local[2][0]-local[3][1],
++ local[0][3]+local[1][2]+local[2][1]+local[3][0]]
++}
++
++pub fn selected_binary_ref<T:Copy>(high:T,zero:T,weight:u32)->T{if weight==1{high}else{zero}}
++pub fn variant_output_ref(withdrawal:bool)->u32{if withdrawal{0}else{1}}
 --- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
 +++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
 @@ -111,6 +111,7 @@
@@ -356,7 +383,15 @@
  fn link_weight(
      link: CompiledPoolV1PairForestLink,
      append_index: u64,
-@@ -1541,3 +1544,7 @@
+@@ -808,6 +811,7 @@
+ 
+ #[cfg(any(test, feature = "pool-v1-pair-forest-copy-selector-tensor-basis-audit"))]
+ #[inline(never)]
++#[cfg_attr(kani,kani::ensures(|r| (*r==NDE_native::reference::selected_binary_ref(high,QM31::ZERO,weight.0)) != cfg!(NDE_simple_invert)))]
+ fn selected_binary_weight(high: QM31, weight: M31) -> QM31 {
+     if weight.0 == 1 {
+         high
+@@ -1541,3 +1545,7 @@
          );
      }
  }
@@ -366,7 +401,7 @@
 +mod NDE_native;
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NDE_copy.rs
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,40 @@
 +use super::*;
 +#[path="NDE_reference.rs"] pub(super) mod reference;
 +pub(super) fn to_ref(v:QM31)->reference::Q { reference::Q { c0:reference::C{a:v.c0.a.0,b:v.c0.b.0},c1:reference::C{a:v.c1.a.0,b:v.c1.b.0} } }
@@ -380,9 +415,7 @@
 +#[kani::stub(aspis_core::field::QM31::mul,crate::NDE_field::qm31)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
 +fn NDE_row(){
-+ let h:[[u32;4];64]=kani::any();let l:[[u32;4];16]=kani::any();
-+ let conv=|a:[u32;4]|to_native(reference::Q{c0:reference::C{a:a[0],b:a[1]},c1:reference::C{a:a[2],b:a[3]}});
-+ let selectors=Selectors{high:h.map(conv),low:l.map(conv)};
++ let selectors=Selectors{high:kani::any(),low:kani::any()};
 + let row:usize=kani::any();kani::assume(row<1024);
 + let (left,right)=reference::row_operands_ref(&selectors.high,&selectors.low,row);
 + kani::assume(row_canonical(left)&&row_canonical(right));
@@ -391,6 +424,21 @@
 + let ok=unsafe{crate::NDE_field::NDE_COUNT==1&&crate::NDE_field::NDE_LEFT==left&&crate::NDE_field::NDE_RIGHT==right&&crate::NDE_field::NDE_REPLY==result};
 + assert!(ok != cfg!(NDE_invert));
 +}
++// Diagnostics isolate the specification/log layer. They prove no native field
++// arithmetic and earn no frontier-member credit.
++#[kani::proof]
++#[kani::unwind(6)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_stub_log(){
++ let x:QM31=kani::any();let y:QM31=kani::any();kani::assume(row_canonical(x)&&row_canonical(y));
++ unsafe{crate::NDE_field::NDE_COUNT=0;}
++ let z=crate::NDE_field::qm31(x,y);
++ let good=unsafe{crate::NDE_field::NDE_COUNT==1&&crate::NDE_field::NDE_LEFT==x&&crate::NDE_field::NDE_RIGHT==y&&crate::NDE_field::NDE_REPLY==z};
++ assert!(good != cfg!(NDE_invert));
++}
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++#[kani::proof_for_contract(super::selected_binary_weight)]
++fn NDE_binary(){let high:QM31=kani::any();let weight:u32=kani::any();let _=super::selected_binary_weight(high,M31(weight));}
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
 +#[kani::proof_for_contract(super::link_weight)]
 +fn NDE_link(){let k:u8=kani::any();let l:u8=kani::any();kani::assume(k<=4&&(k<3||l<64));let i:u64=kani::any();let v=if kani::any(){PoolV1PairForestCompiledVariantV1::Withdrawal}else{PoolV1PairForestCompiledVariantV1::PrivateTransfer};let ep=CompiledPoolV1PairForestEndpoint{row:kani::any(),slot:kani::any(),pattern:kani::any()};let link=CompiledPoolV1PairForestLink{tag:kani::any(),weight_kind:k,weight_level:l,producer:ep,consumer:CompiledPoolV1PairForestEndpoint{row:kani::any(),slot:kani::any(),pattern:kani::any()}};let _=super::link_weight(link,i,v); }
@@ -411,7 +459,61 @@
  fn extension_from_raw_limbs(limbs: [u64; 4]) -> QM31 {
      QM31 {
          c0: CM31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
-@@ -1239,3 +1242,7 @@
+@@ -218,28 +221,51 @@
+     let input = input.map(extension_limbs);
+     let local: [[u64; 4]; 4] = core::array::from_fn(|output| {
+         core::array::from_fn(|limb| {
++            #[cfg(all(kani,any(NDE_scan_step,NDE_packed_after)))]
++            return 0;
++            #[cfg(all(kani,NDE_matrix_step))]
++            if output!=unsafe{NDE_native::NDE_PACKED_ROW} || limb!=unsafe{NDE_native::NDE_PACKED_LIMB}{return 0;}
+             let a = u64::from(input[0][limb]);
+             let b = u64::from(input[1][limb]);
+             let c = u64::from(input[2][limb]);
+             let d = u64::from(input[3][limb]);
+-            match output {
++            let cell=match output {
+                 0 => 2 * a + 3 * b + c + d,
+                 1 => a + 2 * b + 3 * c + d,
+                 2 => a + b + 2 * c + 3 * d,
+                 3 => 3 * a + b + c + 2 * d,
+                 _ => unreachable!(),
+-            }
++            };
++            #[cfg(all(kani,NDE_matrix_step))]
++            unsafe{NDE_native::NDE_MATRIX_REPLY=cell;NDE_native::NDE_MATRIX_COUNT+=1;}
++            cell
+         })
+     });
++    #[cfg(all(kani,NDE_matrix_step))]
++    return [0;4];
++    #[cfg(all(kani,any(NDE_scan_step,NDE_packed_after)))]
++    let local=unsafe{NDE_native::NDE_PACKED_TABLE};
+     let mut all_local_limbs_bounded = true;
++    #[cfg(all(kani,NDE_scan_step))]
++    let mut all_local_limbs_bounded=unsafe{NDE_native::NDE_PACKED_FLAG};
+     let mut output = 0usize;
++    #[cfg(all(kani,NDE_scan_step))]
++    let mut output=unsafe{NDE_native::NDE_PACKED_ROW};
++    #[cfg(all(kani,NDE_packed_after))]
++    let mut output=4usize;
+     while output < 4 {
+         let mut limb = 0usize;
++        #[cfg(all(kani,NDE_scan_step))]
++        let mut limb=unsafe{NDE_native::NDE_PACKED_LIMB};
+         while limb < 4 {
+             all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+             limb += 1;
++            #[cfg(all(kani,NDE_scan_step))]
++            {unsafe{NDE_native::NDE_SCAN_REPLY=(all_local_limbs_bounded,output,limb,false);}return [0;4];}
+         }
+         output += 1;
++        #[cfg(all(kani,NDE_scan_step))]
++        {unsafe{NDE_native::NDE_SCAN_REPLY=(all_local_limbs_bounded,output,limb,true);}return [0;4];}
+     }
+     debug_assert!(all_local_limbs_bounded);
+ 
+@@ -1239,3 +1265,7 @@
          );
      }
  }
@@ -421,7 +523,7 @@
 +mod NDE_native;
 --- /dev/null
 +++ b/crates/aspis-statement/src/NDE_poseidon.rs
-@@ -0,0 +1,10 @@
+@@ -0,0 +1,54 @@
 +use super::*;
 +#[path="NDE_reference.rs"] pub(super) mod reference;
 +pub(super) fn to_ref(v:QM31)->reference::Q { reference::Q { c0:reference::C{a:v.c0.a.0,b:v.c0.b.0},c1:reference::C{a:v.c1.a.0,b:v.c1.b.0} } }
@@ -432,9 +534,53 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]
 +#[kani::proof_for_contract(super::extension_from_raw_limbs)]
 +fn NDE_raw_contract(){let v:[u64;4]=kani::any();kani::assume(v[0]<(1u64<<62)&&v[1]<(1u64<<62)&&v[2]<(1u64<<62)&&v[3]<(1u64<<62));let _=super::extension_from_raw_limbs(v); }
++pub(super) static mut NDE_PACKED_TABLE:[[u64;4];4]=[[0;4];4];
++pub(super) static mut NDE_PACKED_ROW:usize=0;
++pub(super) static mut NDE_PACKED_LIMB:usize=0;
++pub(super) static mut NDE_PACKED_FLAG:bool=true;
++pub(super) static mut NDE_MATRIX_REPLY:u64=0;
++pub(super) static mut NDE_MATRIX_COUNT:usize=0;
++pub(super) static mut NDE_SCAN_REPLY:(bool,usize,usize,bool)=(false,0,0,false);
++#[cfg(NDE_matrix_step)]
++#[kani::proof]
++#[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_matrix_cell(){
++ let input:[QM31;4]=kani::any();
++ for q in input{kani::assume(q.c0.a.0<0x7fff_ffff&&q.c0.b.0<0x7fff_ffff&&q.c1.a.0<0x7fff_ffff&&q.c1.b.0<0x7fff_ffff);}
++ let row:usize=kani::any();let limb:usize=kani::any();kani::assume(row<4&&limb<4);
++ unsafe{NDE_PACKED_ROW=row;NDE_PACKED_LIMB=limb;NDE_MATRIX_COUNT=0;}
++ let cell=|q:QM31|[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0][limb];
++ let expected=reference::matrix_cell_ref(cell(input[0]),cell(input[1]),cell(input[2]),cell(input[3]),row);
++ let _=super::external_local_packed_raw(input);
++ assert!(unsafe{(NDE_MATRIX_COUNT==1&&NDE_MATRIX_REPLY==expected) != cfg!(NDE_window_invert)});
++}
++#[cfg(NDE_scan_step)]
++#[kani::proof]
++#[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_scan_cell(){
++ let table:[[u64;4];4]=kani::any();let flag:bool=kani::any();let row:usize=kani::any();let limb:usize=kani::any();kani::assume(row<4&&limb<=4);
++ unsafe{NDE_PACKED_TABLE=table;NDE_PACKED_ROW=row;NDE_PACKED_LIMB=limb;NDE_PACKED_FLAG=flag;}
++ let cell=if limb<4{table[row][limb]}else{0};
++ let expected=reference::scan_step_ref(flag,cell,7*2147483647,row,limb);
++ let _=super::external_local_packed_raw([QM31::ZERO;4]);
++ assert!(unsafe{(NDE_SCAN_REPLY==expected) != cfg!(NDE_window_invert)});
++}
++#[cfg(NDE_packed_after)]
++#[kani::proof]
++#[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_packed_after(){
++ let table:[[u64;4];4]=kani::any();for row in table{for cell in row{kani::assume(cell<7*2147483647);}}
++ let k:usize=kani::any();kani::assume(k<4);unsafe{NDE_PACKED_TABLE=table;}
++ let expected=reference::packed_after_ref(table,7*2147483647);
++ let out=super::external_local_packed_raw([QM31::ZERO;4]);
++ assert!((out[k]==expected[k]) != cfg!(NDE_window_invert));
++}
 --- /dev/null
 +++ b/crates/aspis-statement/src/NDE_reference.rs
-@@ -0,0 +1,73 @@
+@@ -0,0 +1,89 @@
 +#[derive(Clone, Copy, PartialEq, Eq)]
 +pub struct C { pub a: u32, pub b: u32 }
 +#[derive(Clone, Copy, PartialEq, Eq)]
@@ -508,6 +654,22 @@
 +pub fn row_operands_ref<T:Copy>(high:&[T;64],low:&[T;16],row:usize)->(T,T){(high[row>>4],low[row&15])}
 +pub fn sum_step_ref(acc:Q,next:Q)->Q{add_ref(acc,next)}
 +pub fn reconstruct_step_ref(acc:Q,bit:Q)->Q{add_ref(add_ref(acc,acc),bit)}
++pub fn matrix_cell_ref(a:u32,b:u32,c:u32,d:u32,row:usize)->u64{
++ let a=u64::from(a);let b=u64::from(b);let c=u64::from(c);let d=u64::from(d);
++ match row{0=>2*a+3*b+c+d,1=>a+2*b+3*c+d,2=>a+b+2*c+3*d,3=>3*a+b+c+2*d,_=>panic!("matrix row")}
++}
++pub fn scan_step_ref(flag:bool,cell:u64,bound:u64,row:usize,limb:usize)->(bool,usize,usize,bool){
++ if limb<4{(flag&(cell<bound),row,limb+1,false)}else{(flag,row+1,limb,true)}
++}
++pub fn packed_after_ref(local:[[u64;4];4],bound:u64)->[u64;4]{
++ [local[0][0]+5*bound-local[1][1]+2*local[2][2]-local[2][3]-local[3][2]-2*local[3][3],
++ local[0][1]+local[1][0]+local[2][2]+2*local[2][3]+2*local[3][2]+bound-local[3][3],
++ local[0][2]+2*bound-local[1][3]+local[2][0]-local[3][1],
++ local[0][3]+local[1][2]+local[2][1]+local[3][0]]
++}
++
++pub fn selected_binary_ref<T:Copy>(high:T,zero:T,weight:u32)->T{if weight==1{high}else{zero}}
++pub fn variant_output_ref(withdrawal:bool)->u32{if withdrawal{0}else{1}}
 --- a/crates/aspis-statement/src/lib.rs
 +++ b/crates/aspis-statement/src/lib.rs
 @@ -1,3 +1,4 @@
@@ -559,3 +721,52 @@
 + unsafe{NDE_LEFT=x;NDE_RIGHT=y;NDE_REPLY=out;NDE_COUNT=NDE_COUNT.wrapping_add(1);}
 + out
 +}
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -97,3 +97,6 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)]
++mod NDE_arbitrary;
+--- /dev/null
++++ b/crates/aspis-core/src/NDE_arbitrary.rs
+@@ -0,0 +1,9 @@
++// Scratch-only input generation. Every field is an independent arbitrary u32;
++// canonicality is asserted/assumed only in the caller's explicit domain.
++impl kani::Arbitrary for crate::field::QM31 {
++ fn any()->Self{
++  use crate::field::{M31,CM31};
++  Self{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}
++ }
++}
++impl kani::Arbitrary for crate::field::M31 {fn any()->Self{Self(kani::any())}}
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NDE_terminal.rs"]
++mod NDE_terminal;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NDE_terminal.rs
+@@ -0,0 +1,15 @@
++use super::*;
++fn late()->super::super::pair_tree_profile::PoolV1PairLatePublicStatementV1{
++ use crate::pool_v1::{pair_tree_profile::{PoolV1PairLatePublicStatementV1,PoolV1PairLiveSnapshotV1},pair_terminal::PoolV1PairVerifiedAfterstateV1};
++ PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:kani::any(),frontier:kani::any()},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:kani::any(),next_frontier:kani::any()}}
++}
++fn common()->Box<PoolV1PairForestTerminalCommonV1>{Box::new(PoolV1PairForestTerminalCommonV1{master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),checkpoint_sequence:kani::any(),historical_global_anchor:kani::any(),lane_transition:late()})}
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_transfer_short(){let raw:[u8;8]=kani::any();let len:usize=kani::any();kani::assume(len<=8);let r=super::decode_transfer_statement_boxed_v1(common(),&raw[..len]);let good=matches!(r,Err(PoolV1PairForestTerminalFormatErrorV1::Payment(super::super::payment_relation::PoolV1PaymentStatementFormatError::WrongLength)));assert!(good!=cfg!(NDE_invert));}
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_withdrawal_short(){let raw:[u8;8]=kani::any();let len:usize=kani::any();kani::assume(len<=8);let r=super::decode_withdrawal_statement_boxed_v1(common(),&raw[..len]);let good=matches!(r,Err(PoolV1PairForestTerminalFormatErrorV1::Payment(super::super::payment_relation::PoolV1PaymentStatementFormatError::WrongLength)));assert!(good!=cfg!(NDE_invert));}
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_request_short(){let raw:[u8;8]=kani::any();let len:usize=kani::any();kani::assume(len<=8);let r=super::decode_pool_v1_pair_forest_terminal_request_v1(&raw[..len]);let good=matches!(r,Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength));assert!(good!=cfg!(NDE_invert));}
