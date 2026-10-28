@@ -48,6 +48,13 @@ for old,new in pairs:
  row=dict(historical=old,replay=new,historical_source=paths[old],replay_source=paths[new],historical_sha256=sha(a),replay_sha256=sha(b),identical_after_module_import_rename=same,body_equal_ignoring_comments_whitespace_imports=body(a)==body(b),historical_object_sha256=j[old]['sha256'],replay_object_sha256=u[new]['sha256'])
  if not same:diff.extend(['\n### '+old+' -> '+new+'\n',*difflib.unified_diff(norm.decode().splitlines(True),b.decode().splitlines(True),fromfile=paths[old],tofile=paths[new],n=2)])
  rows.append(row)
+for row in rows:
+ if row['identical_after_module_import_rename']:why='Exact bytes agree after complete import-module token replacement.'
+ elif row['body_equal_ignoring_comments_whitespace_imports']:why='Comments/whitespace differ; full diff retained; no non-import code difference detected.'
+ elif row['historical']=='S1SemanticPhaseV1':why='Historical verifier.Phase abbreviation is removed; replay retains exactly FirstCaller.Phase as RPz7_PhaseIso.Phase. NDO_L006 checks retainedCarrier without axioms. The emitted verifier.Phase remains a distinct nominal carrier.'
+ elif row['historical']=='FIr_FinishComparison':why='Replay explicitly applies observerToFirst at the FinishModel hypothesis and proof call; this is callback transport, not mere import renaming. Existing PhaseIso round trips are reused and checked by NDO_L006; whole execution equivalence is not inferred.'
+ else:why='Observer carrier annotation changes from the historical verifier.Phase alias to RPz7_PhaseIso.Phase. Both historical/replay aliases denote FirstCaller.Phase (NDO_L006 retainedCarrier). This does not identify the emitted producer verifier.Phase or prove all consumer transports; NDO_L002 demonstrates an unchanged witness consumer is ill-typed.'
+ row['difference_analysis']=why
 rows.sort(key=lambda r:r['identical_after_module_import_rename'])
 provenance=json.loads((E/'NDO_PREDECESSOR_SOURCE_PINS.json').read_text())
 for row in rows:
