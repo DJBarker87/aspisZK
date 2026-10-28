@@ -11,7 +11,7 @@ theorem canonical_eq (xs ys : List Nat) (sorted : ys.Pairwise (· < ·))
     (List.pairwise_mergeSort' (· ≤ ·) xs).sublist (List.dedup_sublist _)
   have hne : (canonical xs).Pairwise (· ≠ ·) := List.nodup_dedup _
   have hlt : (canonical xs).Pairwise (· < ·) :=
-    (List.pairwise_and_iff.mpr ⟨hle,hne⟩).imp (fun a b h => by omega)
+    (List.pairwise_and_iff.mpr ⟨hle,hne⟩).imp (fun {_ _} h => by omega)
   apply hlt.eq_of_mem_iff sorted
   intro a
   simpa only [canonical,List.mem_dedup,List.mem_mergeSort] using members a
