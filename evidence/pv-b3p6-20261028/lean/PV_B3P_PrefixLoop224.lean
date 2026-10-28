@@ -48,7 +48,7 @@ theorem complete_loop (view : prefix224.View) (registry : Registry) (append_inde
         rw [loop.eq_1]
         dsimp only
         rw [hs,he]
-        simp only [control,bindR]
+        simp only [PV_B3P_PrefixAction224.control,bindR]
         rw [hnext] at ht
         exact ht
 
