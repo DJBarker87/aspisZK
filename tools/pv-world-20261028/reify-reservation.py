@@ -3,6 +3,7 @@ No source expression is evaluated by this script. Native adequacy is separate.
 """
 from pathlib import Path
 import hashlib,json,re,sys,subprocess
+from proof_tree import proof
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-world-20261028'
 p='docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean'
 b=subprocess.check_output(['git','show','HEAD:'+p],cwd=R);s=b.decode()
@@ -12,7 +13,7 @@ names=[stem+'sync_directory',stem+'DurableStateOnlyMaskNonceStore.reserve_fallib
 short=['syncDirectory','reserveFallible','reserve']
 headers=['(directory : std.path.Path) : P (core.result.Result Unit std.io.error.Error)', '(self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  (statement_digest mask_nonce : Array Aeneas.Std.U8 32#usize) :\n  P ((core.result.Result Bool std.io.error.Error) × aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)', '(self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  (statement_digest mask_nonce : Array Aeneas.Std.U8 32#usize) :\n  P (Bool × aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)']
 output=['import R1Z.PV_W_SourceSyntax\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_W_Reservation\nopen ProverRwFull PV_W_SourceSyntax PV_W_Syntax PV_W_Threading\nopen Aeneas.Std\nvariable [ExternalTypes]\n']
-rows=[]
+rows=[];proofs={}
 for name,new,header in zip(names,short,headers):
  mat=re.search(r'\ndef\s+'+re.escape(name)+r'\s*\(',s);assert mat,name
  start=s.index(':= do',mat.end())+len(':= do\n');end=s.index('\n\n',start);body=s[start:end]
@@ -21,6 +22,7 @@ for name,new,header in zip(names,short,headers):
   if '=> ' in line and line.lstrip().startswith('| '):
    left,right=line.split('=> ',1);lines.extend([left+'=>',' '*(len(line)-len(line.lstrip())+2)+right])
   else:lines.append(line)
+ proofs[new]=proof(lines,names,short)
  out=[];calls=[];i=0
  while i<len(lines):
   line=lines[i];m=re.match(r'^(\s*)let (.*?) ←(.*)$',line)
@@ -45,21 +47,13 @@ for name,new,header in zip(names,short,headers):
   out[-1]+=')'
  output+=['/-- Generated syntax; helpers retain unexecuted source-call thunks. -/\ndef '+new+'\n  '+header+' := do\n'+'\n'.join(out)+'\n']
  rows.append(dict(name=name,body_sha256=hashlib.sha256(body.encode()).hexdigest(),calls=calls,generated=new))
-output.append('''theorem erase_syncDirectory (ops : ExternalFuns) (directory : std.path.Path) :
-    erase ops (syncDirectory directory) =
-      @aspis_prover.state_only_entropy.sync_directory _ ops directory := by
-  unfold syncDirectory aspis_prover.state_only_entropy.sync_directory
-  rw [erase_bind,erase_invoke]
-  apply source_bind_congr
-  intro opened
-  rw [erase_bind,erase_invoke]
-  apply source_bind_congr
-  intro flow
-  cases flow <;> exact erase_invoke ops _ _
-
-#print axioms erase_syncDirectory
-end R1Z.PV_W_Reservation
-''')
+proofheaders=[
+'(ops : ExternalFuns) (directory : std.path.Path) :\n    erase ops (syncDirectory directory) =\n      @'+names[0]+' _ ops directory',
+'(ops : ExternalFuns) (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n    (statement_digest mask_nonce : Array U8 32#usize) :\n    erase ops (reserveFallible self statement_digest mask_nonce) =\n      @'+names[1]+' _ ops self statement_digest mask_nonce',
+'(ops : ExternalFuns) (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n    (statement_digest mask_nonce : Array U8 32#usize) :\n    erase ops (reserve self statement_digest mask_nonce) =\n      @'+names[2]+' _ ops self statement_digest mask_nonce']
+for old,new,h in zip(names,short,proofheaders):
+ output.append('theorem erase_'+new+' '+h+' := by\n  unfold '+new+' '+old+'\n'+proofs[new]+'\n\n#print axioms erase_'+new+'\n')
+output.append('end R1Z.PV_W_Reservation\n')
 target=R/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_Reservation.lean';data='\n'.join(output)
 if '--check' in sys.argv:assert target.read_text()==data
 else:target.write_text(data)
