@@ -11,6 +11,8 @@ def ssh(c):
   (out/f'transport-{time.time_ns()}.log').write_text(r.stdout+r.stderr)
   if k==10:raise RuntimeError('persistent transport failure')
   time.sleep(60)
+prior=ssh(f'test ! -f {D}/{name}/time.log')
+if prior.returncode!=0:raise RuntimeError('Host time.log already exists: recover read-only, never resubmit')
 for k in range(11):
  r=ssh(f'mkdir -p {D}/{name}; python3 {G}/reservation.py {D}/{name}/admission-before.json > {D}/{name}/reservation.log 2>&1')
  for f in ['admission-before.json','reservation.log']:
@@ -30,7 +32,7 @@ for k in range(11):
  if r.returncode==0 and ad.get('allowed') is True:break
  (out/f'refusal-{k}.json').write_text(json.dumps(dict(exit=r.returncode,admission=ad)))
  if k==10:sys.exit(78)
- print('UNCHARGED admission refusal; wait three minutes and use next unused Lean ID',flush=True);sys.exit(78)
+ print('UNCHARGED admission refusal; wait at least180s and retry the SAME unlaunched ID under (m′)',flush=True);sys.exit(78)
 run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',G+'/barrier.py',D+'/'+name+'/admission-barrier.json','/usr/bin/time','-v','-o',D+'/'+name+'/time.log',*cmd]
 # Submission is never automatically repeated after a transport loss.
 r=subprocess.run(['ssh',H,shlex.join(run)+f' > {D}/{name}/output.log 2>&1'],text=True,capture_output=True)

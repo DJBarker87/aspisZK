@@ -12,7 +12,12 @@ for plan in p:
   existing=(E/name/'receipt.json').exists()
   if not existing:(E/(name+'-target.json')).write_text(json.dumps(dict(**plan,negative_control=negative,command=cmd),indent=2))
   if not existing:
-   subprocess.run(['ssh',H,shlex.join(['python3',D+'/freeze-inputs.py',name,plan['package']])],check=True)
+   for transport_attempt in range(11):
+    frozen=subprocess.run(['ssh',H,shlex.join(['python3',D+'/freeze-inputs.py',name,plan['package']])],text=True,capture_output=True)
+    if frozen.returncode!=255:break
+    with (E/'freeze-transport-history.jsonl').open('a') as history:history.write(json.dumps(dict(run=name,exit=255,stderr=frozen.stderr,time=time.time(),attempt=transport_attempt))+'\n')
+    if transport_attempt<10:time.sleep(60)
+   if frozen.returncode:sys.exit('Source-freeze transport/setup failed; no compiler submitted')
    aggregate_refusals=0
    while True:
     q=subprocess.run([sys.executable,str(R/'tools/pv-kstub-20261028/scope.py'),name,'Kani',*cmd])
