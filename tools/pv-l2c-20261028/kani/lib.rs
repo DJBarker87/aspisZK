@@ -1,6 +1,6 @@
 // Control-only native association: the selected native call graph contains
 // row endpoints, counters, indexing and masks, with no field arithmetic.
-#[path="host_forest.rs"]
+#[path="control_cut.rs"]
 mod native;
 
 #[cfg(kani)]

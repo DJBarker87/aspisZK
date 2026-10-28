@@ -17,15 +17,16 @@ p=ssh(f'python3 /home/dombarker/project-offloads/codex-pv-runjoin-20261026/reser
 (d/'reservation.log').write_text(p.stdout+p.stderr);gate=json.loads(p.stdout.strip().splitlines()[-1]);(d/'reservation.json').write_text(json.dumps(gate,indent=2)+'\n')
 if p.returncode!=0 or not gate['allowed']:
  (E/f'refusal-kani-{n}.json').write_text(json.dumps(gate,indent=2)+'\n');print('REFUSED',gate);sys.exit(78)
+assert subprocess.run(['python3',str(R/'tools/pv-l2c-20261028/generate-control-cut.py'),'--check']).returncode==0
 assert ssh(f'mkdir -p {H}/kani').returncode==0
-for f in ['Cargo.toml','lib.rs','host_forest.rs']:
+for f in ['Cargo.toml','lib.rs','host_forest.rs','control_cut.rs']:
  subprocess.run(['scp','-q',str(R/'tools/pv-l2c-20261028/kani'/f),f'{host}:{H}/kani/{f}'],check=True)
 p=subprocess.run(['python3',str(R/'tools/pv-l2c-20261028/native-preflight.py')],capture_output=True,text=True);(d/'source-preflight.log').write_text(p.stdout+p.stderr);assert p.returncode==0,p.stdout+p.stderr
 # Seed only this job's lockfile with the frozen registry versions. Cargo may
 # update its own package section; no dependency source/other workspace is written.
 assert ssh(f'cp /home/dombarker/project-offloads/codex-pv-integ4-20261027/source/Cargo.lock {H}/kani/Cargo.lock').returncode==0
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=l2c-kani-{n}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',f'{H}/evidence/kani-{n}.time','timeout','180','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_TARGET_DIR='+H+'/kani-target','CARGO_BUILD_JOBS=4','CARGO_NET_OFFLINE=true','CARGO_PROFILE_DEV_OPT_LEVEL=3','RUSTFLAGS=-C opt-level=3 -Z mir-opt-level=4 -Z inline-mir=yes','cargo','kani','-Z','unstable-options','--lib','-j','4','--exact','--harness','native_active_rows_match_masks','--output-format','terse','--cbmc-args','--unwinding-assertions','--slice-formula']
-record=dict(target='native_active_rows_match_masks',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),command=cmd,source_sha256={f:hashlib.sha256((R/'tools/pv-l2c-20261028/kani'/f).read_bytes()).hexdigest() for f in ['Cargo.toml','lib.rs','host_forest.rs']},scope='Exact native host_forest bodies and native dependencies; only public row/counter/index/mask control is reachable; no field multiplication; no stubs',expected_time='optimized compilation, then native_active_rows_match_masks finite control verification',print_axioms='N/A: Kani control-only source-helper gate',caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
+record=dict(target='native_active_rows_match_masks',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),command=cmd,source_sha256={f:hashlib.sha256((R/'tools/pv-l2c-20261028/kani'/f).read_bytes()).hexdigest() for f in ['Cargo.toml','lib.rs','host_forest.rs','control_cut.rs']},scope='Verbatim native reachable control cut, native types and constants; generator --check pins every declaration; no field arithmetic and no stubs',expected_time='optimized compilation, then native_active_rows_match_masks finite control verification',print_axioms='N/A: Kani control-only source-helper gate',caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
 (d/'invocation.json').write_text(json.dumps(record,indent=2)+'\n');start=time.monotonic();print('LAUNCH KANI',n,flush=True)
 p=ssh(f'cd {H}/kani && '+shlex.join(cmd)+f' > {H}/evidence/kani-{n}.log 2>&1');record['exit']=p.returncode;record['wall_seconds']=time.monotonic()-start
 for label,path in [('out',f'{H}/evidence/kani-{n}.log'),('time',f'{H}/evidence/kani-{n}.time')]:
