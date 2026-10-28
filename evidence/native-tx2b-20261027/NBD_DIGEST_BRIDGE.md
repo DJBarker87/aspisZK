@@ -1,0 +1,13 @@
+# Digest scanner member bridge — CLOSED locally
+
+Frozen U03 pair_tree_profile::digest_is_canonical and U04 pair_forest_accounts::digest_is_canonical, on EVERY eight-u32 Digest, including invalid M31 representatives. The result is true exactly when every limb is <2147483647, otherwise false; no panic, arithmetic wrap or canonicality assumption is supplied.
+
+NBD_K006 checks one mechanically extracted native loop iteration at arbitrary words and 0<=i<=8; NBD_NATIVE_STEP.json pins the exact frozen body and transformation. The return tuple summarizes the next loop test after a good limb. NBD_DigestNativeStep.source proves that exact tuple is the projection of the emitted Aeneas loop body, including this final-test summary. compose handles termination, early rejection, continuation and the last good limb.
+
+NBD_DigestTrace.exact proves the full remaining-range invariant by induction; total constructs every trace and unique proves its Boolean output unique. NBD_DigestInduction.source independently proves the complete emitted loop's total Result from the same arbitrary words. NBD_DigestTrace.native_result associates each native-step trace with BOTH cohort functions. construct supplies the trace and both results without taking an output or successful-call hypothesis. U04's emitted body equals U03's body by same_scanner; frozen native bodies differ only in the digest/value parameter spelling (checked by NBD_source_audit.py).
+
+Domain transfer: i starts at zero, rejection exits, successful steps increment only below8, and the final i=8 exits; these are exactly the invariant and measure in the Lean proofs. Every Rust M31 limb is an arbitrary u32 here. Thus caller canonicality is an OUTPUT when the returned Boolean is true, not an extra precondition. Every index and increment is bounded; no multiplication stub, whole-buffer Kani loop or finite fixture is used. No U00–U02 bridge is needed: the only arithmetic is raw u32 comparison and index increment. Typed array/read/library semantics retain the existing P6/TrustedStd scope.
+
+Passing Lean: NBD_L004 (induction), L008 (trace, uniqueness, totality), L012 (step association/continuation). Every new theorem has #print axioms; accepted audits contain only propext/Classical.choice/Quot.sound or subsets. Rejected L001–L003/L005–L006/L009–L011 diagnostics receive no proof credit. Full receipts pin command, revision/hash, imports, limits, exit, wall, RSS and swap. K006: exit0,14.473s,619220KiB,swap0;the digest gate has 221 checks, 3 unreachable,0failed. Registry K005's separate151 checks do not establish this scanner.
+
+This closes two local member bridges, not U03/U04, the selected adapter dictionary, source-to-ELF association, a headline premise or S2. No runtime/query law changed.

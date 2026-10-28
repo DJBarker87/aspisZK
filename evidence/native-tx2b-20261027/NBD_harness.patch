@@ -1,0 +1,116 @@
+--- a/crates/aspis-statement/src/pool_v1/verifier_registry.rs
++++ b/crates/aspis-statement/src/pool_v1/verifier_registry.rs
+@@ -817,3 +817,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBD_registry.rs"]
++mod NBD_registry;
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBD_digest.rs"]
++mod NBD_digest;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NBD_terminal.rs"]
++mod NBD_terminal;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBD_registry.rs
+@@ -0,0 +1,33 @@
++// Scratch-only native getter gate. All control fields and slots arbitrary.
++use super::*;
++#[kani::proof]
++fn NBD_registry_getters() {
++    let flags: u8 = kani::any();
++    let status_byte: u8 = kani::any();
++    let activation: u64 = kani::any();
++    let retirement: u64 = kani::any();
++    let slot: u64 = kani::any();
++    let parsed = VerifierEntryStatusV1::try_from(status_byte);
++    assert_eq!(parsed, match status_byte {
++        0 => Ok(VerifierEntryStatusV1::Pending),
++        1 => Ok(VerifierEntryStatusV1::Active),
++        2 => Ok(VerifierEntryStatusV1::Paused),
++        3 => Ok(VerifierEntryStatusV1::Retired),
++        _ => Err(PoolV1VerifierRegistryFormatError::InvalidStatus),
++    });
++    let status = match parsed { Ok(s) => s, Err(_) => return };
++    let v1 = VerifierRegistryV1 { flags, bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any() };
++    let v2 = VerifierRegistryV2 { flags,bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any() };
++    assert_eq!(v1.is_paused(), flags % 2 == 1);
++    assert_eq!(v2.is_paused(), flags % 2 == 1);
++    assert_eq!(v1.is_immutable(), (flags / 2) % 2 == 1);
++    assert_eq!(v2.is_immutable(), (flags / 2) % 2 == 1);
++    let e1 = VerifierRegistryEntryV1 {status,statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:activation,retirement_slot:retirement,policy_binding:kani::any()};
++    let e2 = VerifierRegistryEntryV2 {status,statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:activation,retirement_slot:retirement,policy_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any()};
++    let no_retire = retirement == u64::MAX;
++    let active = status_byte == 1 && activation <= slot && (no_retire || slot < retirement);
++    assert_eq!(e1.has_no_retirement_slot(), no_retire);
++    assert_eq!(e2.has_no_retirement_slot(), no_retire);
++    assert_eq!(e1.is_active_at(slot), active);
++    assert_eq!(e2.is_active_at(slot), active);
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBD_digest.rs
+@@ -0,0 +1,23 @@
++// Frozen loop body, with while replaced by one if and explicit exit state.
++use super::*;
++fn NBD_native_iteration(value: &Digest, mut i: usize) -> (bool, usize, bool) {
++    if i < value.len() {
++        if value[i].0 >= P {
++            return (false, i, true);
++        }
++        i += 1;
++    }
++    (true, i, i == value.len())
++}
++#[kani::proof]
++fn NBD_digest_iteration() {
++    let words: [u32;8] = kani::any();
++    let value = words.map(M31);
++    let i: usize = kani::any();
++    kani::assume(i <= 8);
++    let result = NBD_native_iteration(&value, i);
++    let expected = if i == 8 { (true, i, true) }
++        else if words[i] >= 2147483647 { (false, i, true) }
++        else { (true, i + 1, i + 1 == 8) };
++    assert_eq!(result, expected);
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBD_terminal.rs
+@@ -0,0 +1,21 @@
++use super::*;
++#[kani::proof]
++fn NBD_terminal_getters() {
++    let transfer = crate::pool_v1::PoolV1PrivateTransferPublicV1 {pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],nullifier:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],asset_id:M31(kani::any()),recipient_commitment:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],change_commitment:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]};
++    let withdrawal = crate::pool_v1::PoolV1WithdrawalPublicV1 {pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],nullifier:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]};
++    let common = crate::pool_v1::PoolV1PairForestTerminalCommonV1 {master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),checkpoint_sequence:kani::any(),historical_global_anchor:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],lane_transition:crate::pool_v1::PoolV1PairLatePublicStatementV1 {live_snapshot:crate::pool_v1::PoolV1PairLiveSnapshotV1 {pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],frontier:[[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]]},candidate_afterstate:crate::pool_v1::PoolV1PairVerifiedAfterstateV1 {next_pair_index:kani::any(),next_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],next_frontier:[[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]]}}};
++    let choose: bool = kani::any();
++    let (s,p,kind,n,pool,deployment,seq,anchor,asset) = if choose {
++      (PoolV1PairForestTerminalStatementV1::PrivateTransfer { common, public: transfer }, PoolV1PairForestTerminalPaymentV1::PrivateTransfer(transfer),PoolV1TransitionKind::PrivateTransfer,transfer.nullifier,transfer.pool,transfer.deployment_domain,transfer.anchor_sequence,transfer.anchor_root,transfer.asset_id)
++    } else {
++      (PoolV1PairForestTerminalStatementV1::Withdrawal { common, public: withdrawal },PoolV1PairForestTerminalPaymentV1::Withdrawal(withdrawal),PoolV1TransitionKind::Withdrawal,withdrawal.nullifier,withdrawal.pool,withdrawal.deployment_domain,withdrawal.anchor_sequence,withdrawal.anchor_root,withdrawal.asset_id)
++    };
++    assert_eq!(*s.common(),common);
++    assert_eq!(s.transition_kind(),kind);
++    assert_eq!(*s.nullifier(),n);
++    assert_eq!(p.transition_kind(),kind);
++    assert_eq!(*p.nullifier(),n);
++    assert_eq!(statement_public_common(&s),(pool,deployment,seq,anchor,n,asset));
++    let byte: u8 = kani::any();
++    assert_eq!(transition_kind(byte),match byte { 1=>Ok(PoolV1TransitionKind::PrivateTransfer),2=>Ok(PoolV1TransitionKind::Withdrawal),_=>Err(PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind) });
++}

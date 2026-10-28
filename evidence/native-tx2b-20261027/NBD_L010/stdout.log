@@ -1,0 +1,32 @@
+NBD_generated/NBD_DigestNativeStep.lean:30:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+d : Std.Array U32 8#usize
+i : Usize
+hi : ↑i ≤ 8
+x : Slice U32
+_ : [> let x ← lift d.to_slice <]
+x_post : x = d.to_slice
+⊢ (do
+      let out ←
+        if ↑i < 8 then do
+            let m ← d.index_usize i
+            if 2147483647 ≤ ↑m then ok (done false)
+              else do
+                let i2 ← i + 1#usize
+                ok (cont i2)
+          else ok (done true)
+      ok
+          (match out with
+          | done b => (b, ↑i, true)
+          | cont next => (true, ↑next, decide (↑next = 8)))) ⦃
+    out =>
+    out =
+      if ↑i < 8 then
+        if 2147483647 ≤ if h : ↑i < 8 then ↑(↑d)[↑i] else 0 then (false, ↑i, true) else (true, ↑i + 1, decide (↑i = 7))
+      else (true, ↑i, true) ⦄
+'NBD_DigestNativeStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBD_DigestNativeStep.compose' depends on axioms: [propext, Quot.sound]

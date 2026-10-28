@@ -1,0 +1,9 @@
+# Own runner repairs
+
+NBD_G001 metadata exited 101 before any Kani run: the minimal frozen-source archive omitted the optional path dependency docs/research/v8-r0-zk-20261009/z4. Add only that unchanged frozen path to the same scratch tree and archive list. No manifest/lock/source-body modification, second workspace, launcher/admission change, or validation weakening. The next metadata invocation is a changed-input preflight, not a killed/timed-out rerun.
+
+NBD_L001–L003 are rejected proof drafts (missing decidability and unresolved scalar goals), retained with logs. Their sorryAx diagnostics are excluded; L004 checks the repaired proof with standard axioms only.
+NBD_G002 metadata also exited 101 before Kani: z4's optional transitive c3/check and c3/build manifests were absent. Add those two unchanged frozen crates, then rerun metadata under a fresh attempt. The frozen graph equality check remains mandatory and unchanged.
+NBD_K003 exited 2 in cargo-kani option parsing: --harness-timeout requires -Z unstable-options. This counts as one Kani invocation; no compiler/solver ran. Add only the required option, preserving the 90s harness timeout and fixed scope caps. Its graph passed exactly and Cargo.lock remained unchanged.
+NBD_K004 passed frozen graph/lock validation, then compilation exited 101 before solver: a frozen #[path] module tools/r1-builder-reference/tree.rs was outside the initial archive. Add the unchanged tools/r1-builder-reference path (all three library #[path] consumers share it). This counts as a second Kani invocation; no solver success is claimed.
+The registry gate was strengthened before K004: ALL unrelated record fields are arbitrary too, rather than zero fixtures. Getter/control checks and timeouts are unchanged.

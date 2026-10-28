@@ -1,0 +1,7 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "frozen_loop": "    while i < value.len() {\n        if value[i].0 >= P {\n            return false;\n        }\n        i += 1;\n    }\n",
+  "frozen_loop_sha256": "7162bc49bf067c4d9cbb5ca9823cb909ba23caea297d2d81aee89475feb23abd",
+  "probe": "    if i < value.len() {\n        if value[i].0 >= P {\n            return (false, i, true);\n        }\n        i += 1;\n    }\n",
+  "transformation": "while to if; return false to explicit done(false,index); valid fallthrough retains i+=1; invariant 0<=i<=8. Completion marker after increment is a probe summary, not an extra source branch."
+}
