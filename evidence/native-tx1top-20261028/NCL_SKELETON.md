@@ -79,3 +79,28 @@ native bodies rather than assuming an open lower member.
 Allocation: use the stricter simultaneous limits stated by the prompt: at most
 80 Lean attempts and50 Kani invocations (despite the later60-Kani job figure).
 One capped scope at a time, -M7000,6G/8G/Swap0/Tasks64. Private cache retained.
+
+## Final checked model continuation
+
+NCL_TX1Saved.source now composes the entire checked model milestone with the
+length and actual modeled copy output. It derives saved length1768, exact
+written `bytesOf saved.val`, same raw/suffix/public/semantic/saved cuts, parsed
+S2, actual initial64 zero weights/next0 and the cell-level metadata/frame.
+The zero-scan bounded induction and owned-helper model laws are also checked.
+All30 new theorem roots co-import/audit in L031 with standard axioms only.
+No independent savedSize/zero-scan success/output-equality hypothesis was added.
+
+These additions supersede the earlier milestone's missing model saved-length
+row. They do NOT remove the missing native/lower-unit associations. Cell
+non-aliasing must come from actual runtime geometry; distinct public keys alone
+do not establish disjoint proof/public/checkpoint allocations.
+
+The final lock-topology finding in NCL_LOCK_COPY_FINDING.md qualifies all
+native observations. The graph was frozen at every run, but the scratch lock
+was a symlink rather than the explicitly required private copy. No
+unqualified P6 closure credit is claimed. Corrected setup/gate/lock do not
+retroactively certify the50 already-run invocations.
+
+Final cohort status: L036–L039 check four RPx-preloaded variants only. The
+remaining ten variants have ambiguous L040–L049 submissions and no recovered
+receipts; the full headline co-import is unverified. See NCL_TRANSPORT_STOP.md.

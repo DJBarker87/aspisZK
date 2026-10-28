@@ -44,6 +44,9 @@ print(p.read_text(),end='');sys.exit(r.returncode)
  raise SystemExit('STOP admission error')
 else:raise SystemExit('STOP admission exhausted')
 cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NCL_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-tx1top-cache-20261028:'+X+':'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'Private prefix modules; XRy persistent cache and coherent SInt2; Aeneas objects pinned in NCL_LIBRARY_PIN.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
+if module.startswith('NCL_R_'):
+ cfg['env']['LEAN_PATH'] += ':'+':'.join(json.loads((E/'NCL_RPX_IMPORT_PATHS.json').read_text()))
+ cfg['deps_fingerprint']['scope']='Headline replay import owners; non-import proof bytes unchanged; coherent SInt2 and pinned Aeneas retained'
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 q=E/a/'sources'/src;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(local.read_bytes())
 payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loads((E/'NCL_LAUNCHER_INPUTS.json').read_text()),library_checker=(E/'NCL_pin_library.py').read_text(),inherited_library=json.loads((E/'NCL_LIBRARY_RESOLVED_INHERITED.json').read_text()))
