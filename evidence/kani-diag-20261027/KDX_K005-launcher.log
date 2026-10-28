@@ -1,0 +1,29 @@
+{"attempt": "KDX_K005", "exit_status": 1, "wall_seconds": 2.665620310988743, "peak_rss_kib": "325492", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "8512bceddf114b2917d13a8c5ae4cf755d7b3b8515db84e8d640e26e6033f9ae", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-kani-diag-20261027/KDX_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-kani-diag-20261027/KDX_target", "--lib", "-j", "1", "-Z", "unstable-options", "--harness-timeout", "90s", "--exact", "--harness", "multiproof::KDX_copy::KDX_cells2", "--outp
+...
+nter=((struct _245938854377294055170267892743804952294 *)NULL) + 23 (00000000 00000000 00000000 00000000 00000000 00000000 00000000 00010111)
+
+State 2030 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs function multiproof::KDX_copy::KDX_cells2 line 62 thread 0
+----------------------------------------------------
+  var_91.template.pointer=aspis_r1_cost_probe_13b5395805766875$$aspis_r1_cost_probe$$global$$28$$.0 (00000000 00100011 00000000 00000000 00000000 00000000 00000000 00000000)
+
+State 2031 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs function multiproof::KDX_copy::KDX_cells2 line 62 thread 0
+----------------------------------------------------
+  var_91.args.pointer=((struct _245938854377294055170267892743804952294 *)NULL) + 23 (00000000 00000000 00000000 00000000 00000000 00000000 00000000 00010111)
+
+Violated property:
+  file crates/aspis-r1-cost-probe/src/KDX_copy.rs function multiproof::KDX_copy::KDX_cells2 line 24 thread 0
+  This is a placeholder message; Kani doesn't support message formatted at runtime
+  FALSE
+
+
+
+** 2 of 101 failed (2 iterations)
+VERIFICATION FAILED
+Manual Harness Summary:
+Verification failed for - multiproof::KDX_copy::KDX_cells2
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "8512bceddf114b2917d13a8c5ae4cf755d7b3b8515db84e8d640e26e6033f9ae", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r9b79246206ff47aba38f6ce30ec9a4a5.scope; invocation ID: 29dc630fbc0c49f295daf7958e901245
