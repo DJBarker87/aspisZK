@@ -22,6 +22,10 @@ variable [ExternalTypes]
 set_option allowUnsafeReducibility true in
 attribute [local irreducible] ProverRwFullSampler.install ProverRwCallerBinding.install ProverRwOuterContext.install ProverRwOuterTag.install ProverRwOuterTag.selected ProverRwOuterGuardLeaves.selected ProverRwSuccessHeapInstall.selected ProverRwSuccessErrorInstall.selected ProverRwSuccessNativeNegInstall.selected ProverRwSuccessNativeWideInstall.selected ProverRwBodyNativeWideInstall.selected ProverRwP6TransitionInstall.selected ProverRwP6FlatInstall.selected ProverRwP6BoundaryInstall.selected ProverRwSuccessBodyInterpretation.selected
 
+theorem fingerprints (ops : ExternalFuns) {T : Type} :
+    @ExternalFuns.op255 _ {ops with op112 := ProverRwOuterGuardLeaves.mask,
+      op113 := ProverRwOuterGuardLeaves.factor} T = @ExternalFuns.op255 _ ops T := rfl
+
 theorem guards (ops : ExternalFuns) {T : Type} :
     @ExternalFuns.op255 _ (ProverRwOuterGuardLeaves.selected ops) T = @ExternalFuns.op255 _ ops T := by
   rw [PV_RunJoin_CoefficientGuards45.preservation,
@@ -29,7 +33,7 @@ theorem guards (ops : ExternalFuns) {T : Type} :
     PV_RunJoin_CoefficientBinding45.preservation,
     PV_RunJoin_CoefficientSampler45.preservation,
     PV_RunJoin_CoefficientTagInstall45.preservation,
-    PV_RunJoin_CoefficientContext45.preservation]
+    PV_RunJoin_CoefficientContext45.preservation, fingerprints]
 
 theorem source (ops : ExternalFuns) {T : Type} (copy : core.marker.Copy T) (rows : Array T 1024#usize) :
     @transport.Variant.coefficients _ (ProverRwP6BodyCandidate.selected ops) T copy .S2 rows =
@@ -50,7 +54,8 @@ theorem complete (ops : ExternalFuns) {T : Type} (copy : core.marker.Copy T) (xs
       (ProverCommitArray49.array 1024#usize xs) =
       .ok (ProverCommitArray49.array 1024#usize (fun j => xs (AspisR1.rowNat j))) := by
   rw [source]
-  exact PV_RunJoin_CoefficientArray44.complete copy ProverRwSuccessCoefficientsSource.transport.Variant.S2 xs
+  exact PV_RunJoin_CoefficientArray44.complete copy ProverRwFull.transport.Variant.S2 xs
+#print axioms fingerprints
 #print axioms guards
 #print axioms source
 #print axioms complete
