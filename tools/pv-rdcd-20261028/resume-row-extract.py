@@ -12,6 +12,7 @@ env=dict(os.environ,PATH=str(T)+':/home/dombarker/.cargo/bin:/usr/local/bin:/usr
 m=json.loads(subprocess.check_output(['cargo','metadata','--manifest-path',str(O/'Cargo.toml'),'--offline','--locked','--format-version','1'],env=env,text=True));nodes={n['id']:n for n in m['resolve']['nodes']}
 cmd=[str(T/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from','crate::'+plan['root']]
 for inc in plan['includes']:cmd+=['--include',inc]
+for opaque in plan.get('opaque',[]):cmd+=['--opaque',opaque]
 cmd+=['--dest-file',str(O/(row+'.llbc')),'--','--manifest-path',str(O/'Cargo.toml'),'--release','--offline','--locked','--lib','--jobs','4']
 record=dict(command=cmd,tool_pins=pins,plan=plan,features=[dict(name=p['name'],version=p['version'],features=nodes[p['id']]['features']) for p in m['packages']],profile=dict(name='release',debug_assertions=False,overflow_checks=False,opt_level=3),toolchain=subprocess.check_output(['rustc','-vV'],env=env,text=True),inputs={n:hashlib.sha256((O/n).read_bytes()).hexdigest() for n in ['Cargo.toml','Cargo.lock','lib.rs']},qualification='ruling x prime; no cfg kani or pv_cb_extract; wrapper only calls shipped function')
 (O/'inputs.json').write_text(json.dumps(record,indent=2)+'\n');print('Expected time: optimized cached compilation then '+row+' extraction',flush=True)
