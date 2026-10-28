@@ -31,7 +31,7 @@ theorem tau_shifts (d tau : Nat) (hd : d < 5) (ht : tau < 5) :
 
 /-- Complete scalar comparison used by Range::next; no callback law is assumed. -/
 theorem scalar_lt (a b : Usize) :
-    core.cmp.impls.PartialOrdUsize.lt a b = ok (decide (a.val < b.val)) := rfl
+    core.cmp.impls.PartialOrdUsize.lt a b = decide (a.val < b.val) := rfl
 
 /-- A native usize increment under the range guard is also exact in the
 wrapping model used by the retained extraction. -/
@@ -39,7 +39,8 @@ theorem increment (a b : Usize) (active : a.val < b.val) :
     (Usize.wrapping_add a 1#usize).val = a.val+1 := by
   rw [Usize.wrapping_add_val_eq,Nat.mod_eq_of_lt]
   · rfl
-  · have hn : b.val < UScalar.size .Usize := by
+  · change a.val+1 < UScalar.size .Usize
+    have hn : b.val < UScalar.size .Usize := by
       simpa only [UScalar.val,UScalar.size,UScalarTy.numBits] using b.bv.isLt
     omega
 
