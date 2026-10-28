@@ -2,6 +2,20 @@ import R1Z.PV_DL_BatchPlan
 open Aeneas Aeneas.Std Result
 namespace R1Z.PV_DL_UpdatePlan
 set_option autoImplicit false
+/-- Byte-identical pure specification from V233's SplitObservation source.
+Only its mathematical quotient/take/drop law is reused; its copy-dependent
+Kani source-link credit is suspended under ruling (r). -/
+def v233Specification (v : Slice U8) (size : Usize) : Result (List U8 × List U8) :=
+  if size.val=0 then fail .divisionByZero else
+    ok (v.val.take ((v.val.length/size.val)*size.val),
+        v.val.drop ((v.val.length/size.val)*size.val))
+
+theorem v233_native64 (input : Slice U8) :
+    v233Specification input 64#usize=ok (PV_DL_BatchPlan.bulk input.val) := by
+  unfold v233Specification
+  rw [if_neg (by decide : (64#usize).val≠0)]
+  rfl
+
 structure Plan where
   buffer : List U8
   pos : Nat
@@ -97,6 +111,8 @@ theorem complete {S : Type} (compress : S → List U8 → Result S) (state : S)
   unfold run model
   rw [source_reference]
 
+#print axioms v233Specification
+#print axioms v233_native64
 #print axioms Plan
 #print axioms write
 #print axioms first
