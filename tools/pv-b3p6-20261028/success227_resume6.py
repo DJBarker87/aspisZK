@@ -59,7 +59,6 @@ def emit(mod,source_mod,names,imports):
     tail_expr=tail[1].strip();expr=expr[:tail.start()].strip()
    if m[2]==':=':
     # Pure lets remain definitional lets; no arithmetic evaluation.
-    proof.append('  dsimp only')
     continue
    proof+=['  apply bind','  · '+rule(expr)]
    pat=m[1].strip()

@@ -9,8 +9,6 @@ set_option autoImplicit false
 theorem total_reference_field_qm31_sum_products3_prepared (left : Array reference_field.PreparedQm31Multiplier 3#usize) (right : Array aspis_core.field.QM31 3#usize) :
     Success (reference_field.qm31_sum_products3_prepared left right) := by
   unfold reference_field.qm31_sum_products3_prepared
-  dsimp only
-  dsimp only
   apply bind
   · apply index <;> scalar_tac
   intro q
@@ -75,8 +73,6 @@ theorem total_reference_field_qm31_sum_products3_prepared (left : Array referenc
 theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM31 7#usize) (values : Array aspis_core.field.M31 7#usize) :
     Success (reference_field.qm31_m31_dot weights values) := by
   unfold reference_field.qm31_m31_dot
-  dsimp only
-  dsimp only
   apply bind
   · apply index <;> scalar_tac
   intro m
@@ -86,7 +82,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply index <;> scalar_tac
   intro weight
-  dsimp only
   apply bind
   · exact ok _
   intro i1
@@ -102,7 +97,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw2
-  dsimp only
   apply bind
   · exact ok _
   intro i6
@@ -118,7 +112,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw3
-  dsimp only
   apply bind
   · exact ok _
   intro i11
@@ -134,7 +127,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw4
-  dsimp only
   apply bind
   · exact ok _
   intro i16
@@ -159,7 +151,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply index <;> scalar_tac
   intro weight1
-  dsimp only
   apply bind
   · exact ok _
   intro i21
@@ -175,7 +166,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw6
-  dsimp only
   apply bind
   · exact ok _
   intro i26
@@ -191,7 +181,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw7
-  dsimp only
   apply bind
   · exact ok _
   intro i31
@@ -207,7 +196,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw8
-  dsimp only
   apply bind
   · exact ok _
   intro i36
@@ -232,7 +220,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply index <;> scalar_tac
   intro weight2
-  dsimp only
   apply bind
   · exact ok _
   intro i41
@@ -248,7 +235,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw10
-  dsimp only
   apply bind
   · exact ok _
   intro i46
@@ -264,7 +250,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw11
-  dsimp only
   apply bind
   · exact ok _
   intro i51
@@ -280,7 +265,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw12
-  dsimp only
   apply bind
   · exact ok _
   intro i56
@@ -305,7 +289,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply index <;> scalar_tac
   intro weight3
-  dsimp only
   apply bind
   · exact ok _
   intro i61
@@ -321,7 +304,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw14
-  dsimp only
   apply bind
   · exact ok _
   intro i66
@@ -337,7 +319,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw15
-  dsimp only
   apply bind
   · exact ok _
   intro i71
@@ -353,7 +334,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw16
-  dsimp only
   apply bind
   · exact ok _
   intro i76
@@ -441,7 +421,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro sums4
-  dsimp only
   apply bind
   · apply index <;> scalar_tac
   intro m8
@@ -451,7 +430,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply index <;> scalar_tac
   intro weight4
-  dsimp only
   apply bind
   · exact ok _
   intro i97
@@ -467,7 +445,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw19
-  dsimp only
   apply bind
   · exact ok _
   intro i102
@@ -483,7 +460,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw20
-  dsimp only
   apply bind
   · exact ok _
   intro i107
@@ -499,7 +475,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw21
-  dsimp only
   apply bind
   · exact ok _
   intro i112
@@ -524,7 +499,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply index <;> scalar_tac
   intro weight5
-  dsimp only
   apply bind
   · exact ok _
   intro i117
@@ -540,7 +514,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw23
-  dsimp only
   apply bind
   · exact ok _
   intro i122
@@ -556,7 +529,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw24
-  dsimp only
   apply bind
   · exact ok _
   intro i127
@@ -572,7 +544,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw25
-  dsimp only
   apply bind
   · exact ok _
   intro i132
@@ -597,7 +568,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply index <;> scalar_tac
   intro weight6
-  dsimp only
   apply bind
   · exact ok _
   intro i137
@@ -613,7 +583,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw27
-  dsimp only
   apply bind
   · exact ok _
   intro i142
@@ -629,7 +598,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw28
-  dsimp only
   apply bind
   · exact ok _
   intro i147
@@ -645,7 +613,6 @@ theorem total_reference_field_qm31_m31_dot (weights : Array aspis_core.field.QM3
   apply bind
   · apply update <;> scalar_tac
   intro raw29
-  dsimp only
   apply bind
   · exact ok _
   intro i152
