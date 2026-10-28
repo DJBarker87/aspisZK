@@ -13720,3 +13720,17 @@ value and count invariant and the native binding remain. V241, V245, V244 remain
 prover candidate (039410c906, pushed); the branch was fast-forwarded and continues as b3p6d (IDs
 51900-51999; no Kani): V228, then V241, V245, V244. V229 and V243 enter the ledger at the next
 recount. Rows removed outright: 0. Privacy target not yet established.
+
+## D378 (Stream B) 2026-10-28 15:51 UTC: runjoin34 result; shipped-code identity with the gated candidate confirmed; runjoin35 launched
+
+runjoin34 merged pv-world cleanly and used its 100 attempts (96 passed, 4 failures retained; no Kani;
+three audits with standard axioms). It adds source and world transport proofs; the whole-body
+security-model comparison, the actual runtime/effect and decoder installation, and the composition
+into RustRealRefinement remain open; V038, V045, V163, V165, V167 remain open. The worker withdrew
+its own earlier claim that historical ELF checks validate the merged tree. The lead checked the
+identity directly: git diff 82566acdfb..HEAD under crates/, programs/ and tools/r1-cost-probe is empty
+on both the runjoin branch and the prover candidate, so pv-gate6's stage-A results at 82566acdfb (three
+ELF pins, pinned client, fixtures, 1,000/1,000 differential) apply to both trees unchanged. runjoin35
+(IDs 53400-53499) continues: the concrete body Result comparison at the canonical inputs, the runtime,
+effect and decoder installation on pv-world's calculus, and the composition. Rows removed outright: 0.
+Privacy target not yet established.
