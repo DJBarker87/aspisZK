@@ -2,7 +2,7 @@ import PV_L2C_M31
 set_option autoImplicit false
 namespace PV_L2C_PackedMasks
 
-def insert (s : BitVec 16) (p : Fin 16) : BitVec 16 := s ||| ((1 : BitVec 16) <<< p.val)
+def insert (s : BitVec 16) (p : Fin 16) : BitVec 16 := s ||| ((BitVec.ofNat 16 1) <<< p.val)
 
 theorem inserted_bit (s : BitVec 16) (p q : Fin 16) :
     (insert s p).getLsbD q.val=(s.getLsbD q.val || decide (p=q)) := by
@@ -33,9 +33,9 @@ theorem put_contains (m : Masks) (p q : Fin 1024) :
       simp only [block] at hv
       simp only [bit,Fin.ext_iff]
       omega
-    rw [he]
+    simp only [he]
   · have hpq : p≠q := by intro h;subst p;exact hb rfl
-    simp only [contains,put,hb,if_neg,hpq,decide_false,Bool.or_false]
+    simp only [contains,put,hb,if_false,hpq,decide_false,Bool.or_false]
 #print axioms put_contains
 
 def pack (rows : List (Fin 1024)) (m : Masks) : Masks := rows.foldl put m
