@@ -10,7 +10,7 @@ theorem partition (fuel : Nat) (xs : List Nat) (enough : xs.length≤fuel) :
     (level fuel xs).2.length + xs.length = 2*(level fuel xs).1.length := by
   induction fuel generalizing xs with
   | zero =>
-    have hx : xs=[] := List.length_eq_zero.mp (by omega)
+    have hx : xs=[] := by cases xs <;> simp_all
     simp [hx,level]
   | succ n ih =>
     cases xs with
@@ -49,6 +49,11 @@ theorem cost_step (xs : List Nat) (n : Nat) :
   simp only [occupancy,levels_shift,levels]
   rw [hd]
   rw [Nat.add_comm]
+  congr 1
+  unfold PV_L2D_SlotCaps.missing occupancy
+  apply Finset.sum_congr rfl
+  intro i _hi
+  rw [← levels_shift (i+1) xs, ← levels_shift i xs]
   rfl
 #print axioms cost_step
 
