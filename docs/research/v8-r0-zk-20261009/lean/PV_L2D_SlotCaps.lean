@@ -41,7 +41,7 @@ theorem ordinary (n : Nat → Nat) (k : Nat)
     missing n 18 ≤ 13*k+16 := by
   have ht := telescope n 18 branch
   have hb := bottom n 14 low
-  simp only [Finset.sum_range_succ] at ht hb
+  norm_num only [Finset.sum_range_succ, Finset.sum_range_zero, Nat.reduceAdd] at ht hb
   omega
 #print axioms ordinary
 
@@ -56,7 +56,7 @@ theorem folded (n : Nat → Nat) (k : Nat)
     missing n 18 ≤ 11*k+18 := by
   have ht := telescope n 18 branch
   have hb := bottom n 12 low
-  simp only [Finset.sum_range_succ] at ht hb
+  norm_num only [Finset.sum_range_succ, Finset.sum_range_zero, Nat.reduceAdd] at ht hb
   omega
 #print axioms folded
 
