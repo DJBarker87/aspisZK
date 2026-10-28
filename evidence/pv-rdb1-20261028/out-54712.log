@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_Layout.lean:11:47: error: unsolved goals
+case pos
+wordBits alignBits k i : ℕ
+hm : 2 ^ alignBits - 1 < 2 ^ alignBits
+hz : 0 < 2 ^ alignBits
+hsum :
+  (2 ^ alignBits * k + (2 ^ alignBits - 1)).testBit i =
+    if i < alignBits then (2 ^ alignBits - 1).testBit i else k.testBit (i - alignBits)
+hbase : (2 ^ alignBits * k).testBit i = if i < alignBits then Nat.testBit 0 i else k.testBit (i - alignBits)
+hw : i < wordBits
+ha : i < alignBits
+⊢ True → false = Nat.testBit 0 i
+
+case neg
+wordBits alignBits k i : ℕ
+hm : 2 ^ alignBits - 1 < 2 ^ alignBits
+hz : 0 < 2 ^ alignBits
+hsum :
+  (2 ^ alignBits * k + (2 ^ alignBits - 1)).testBit i =
+    if i < alignBits then (2 ^ alignBits - 1).testBit i else k.testBit (i - alignBits)
+hbase : (2 ^ alignBits * k).testBit i = if i < alignBits then Nat.testBit 0 i else k.testBit (i - alignBits)
+hw : i < wordBits
+ha : ¬i < alignBits
+⊢ True → (k.testBit (i - alignBits) && true) = k.testBit (i - alignBits)
+
+case pos
+wordBits alignBits k i : ℕ
+hm : 2 ^ alignBits - 1 < 2 ^ alignBits
+hz : 0 < 2 ^ alignBits
+hsum :
+  (2 ^ alignBits * k + (2 ^ alignBits - 1)).testBit i =
+    if i < alignBits then (2 ^ alignBits - 1).testBit i else k.testBit (i - alignBits)
+hbase : (2 ^ alignBits * k).testBit i = if i < alignBits then Nat.testBit 0 i else k.testBit (i - alignBits)
+hw : ¬i < wordBits
+ha : i < alignBits
+⊢ False → True
+
+case neg
+wordBits alignBits k i : ℕ
+hm : 2 ^ alignBits - 1 < 2 ^ alignBits
+hz : 0 < 2 ^ alignBits
+hsum :
+  (2 ^ alignBits * k + (2 ^ alignBits - 1)).testBit i =
+    if i < alignBits then (2 ^ alignBits - 1).testBit i else k.testBit (i - alignBits)
+hbase : (2 ^ alignBits * k).testBit i = if i < alignBits then Nat.testBit 0 i else k.testBit (i - alignBits)
+hw : ¬i < wordBits
+ha : ¬i < alignBits
+⊢ False → True
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_Layout.lean:21:27: warning: This simp argument is unused:
+  Nat.testBit_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [Nat.add_zero,̵ ̵N̵a̵t̵.̵t̵e̵s̵t̵B̵i̵t̵_̵z̵e̵r̵o̵] at hbase
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDB1_Layout.padded_mask' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB1_Layout.repeat_complete' does not depend on any axioms
+'R1Z.PV_RDB1_Layout.constructor_guard' depends on axioms: [propext, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
