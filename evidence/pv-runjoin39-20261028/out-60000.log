@@ -1,0 +1,21 @@
+START 60000 R1Z.PV_RunJoin_RunProjection39
+DONE 60000 R1Z.PV_RunJoin_RunProjection39 exit 1 wall 0.19 RSS 486834176
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RunProjection39.lean:20:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  n (world w)
+in the target expression
+  receipt world event (PV_W_Threading.bind m k w) = PV_W_Threading.bind n l (world w)
+
+W V C D E A B : Type
+world : W → V
+event : W → C → D
+m : M W C E A
+n : M V D E A
+k : A → M W C E B
+l : A → M V D E B
+hm : ∀ (w : W), receipt world event (m w) = n (world w)
+hk : ∀ (a : A) (w : W), receipt world event (k a w) = l a (world w)
+w : W
+⊢ receipt world event (PV_W_Threading.bind m k w) = PV_W_Threading.bind n l (world w)
+'R1Z.PV_RunJoin_RunProjection39.bind' depends on axioms: [sorryAx]
+'R1Z.PV_RunJoin_RunProjection39.eval' depends on axioms: [sorryAx]
+

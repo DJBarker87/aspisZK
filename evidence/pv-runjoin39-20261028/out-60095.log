@@ -1,0 +1,24 @@
+START 60095 R1Z.PV_RunJoin_CompactSize39
+DONE 60095 R1Z.PV_RunJoin_CompactSize39 exit 1 wall 1.11 RSS 2696151040
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CompactSize39.lean:19:4: error: Tactic `rfl` failed: The left-hand side
+  ↑out ++ (List.ofFn fun i => List.take 16 (List.drop (0 + 32 * ↑i) ↑logical)).flatten
+is not definitionally equal to the right-hand side
+  ↑out ++ (List.ofFn fun i => List.take 16 (List.drop (32 * ↑i) ↑logical)).flatten
+
+case refine_1
+logical : Slice U8
+out : alloc.vec.Vec U8
+n : ℕ
+length : logical.length = 32 * n
+room : out.length + 16 * n ≤ Usize.max
+zero :
+  ∀ (pos : Usize),
+    ↑pos % 32 = 0 →
+      ↑pos + 32 ≤ logical.length → ∀ (j : Usize), 16 ≤ ↑j → ↑j < 32 → logical.index_usize (pos.wrapping_add j) = ok 0#u8
+next : alloc.vec.Vec U8
+hn : host_compact.compact_values logical out = ok (core.result.Result.Ok (), next)
+hval : ↑next = ↑out ++ PV_RunJoin_CompactLoop39.payload logical 0 n
+⊢ ↑out ++ (List.ofFn fun i => List.take 16 (List.drop (0 + 32 * ↑i) ↑logical)).flatten =
+    ↑out ++ (List.ofFn fun i => List.take 16 (List.drop (32 * ↑i) ↑logical)).flatten
+'R1Z.PV_RunJoin_CompactSize39.encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

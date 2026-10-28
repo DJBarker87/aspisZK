@@ -1,0 +1,55 @@
+START 60006 R1Z.PV_RunJoin_CompactStep39
+DONE 60006 R1Z.PV_RunJoin_CompactStep39 exit 1 wall 1.24 RSS 2699767808
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CompactStep39.lean:31:69: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 16
+  c - e ≥ 0
+  b ≥ 0
+  b - c ≥ -15
+  a ≥ 0
+  a - b ≥ 32
+where
+ a := ↑logical.length
+ b := ↑↑at1
+ c := ↑Usize.max
+ d := ↑out.length
+ e := ↑(↑logical).length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CompactStep39.lean:35:20: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 16
+  b - d ≥ 0
+  a ≥ 0
+  a - e ≤ -1
+  a - e + f ≥ 32
+where
+ a := ↑logical.length
+ b := ↑Usize.max
+ c := ↑out.length
+ d := ↑(↑logical).length
+ e := ↑↑(at1.wrapping_add 16#usize)
+ f := ↑↑16#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CompactStep39.lean:35:43: error: Type mismatch: After simplification, term
+  room
+ has type
+  @LE.le ℕ instLENat (out.length + 16) Usize.max
+but is expected to have type
+  @LE.le ℕ instLENat (out.length + ↑16#usize) Usize.max
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CompactStep39.lean:40:4: error: Type mismatch: After simplification, term
+  hval
+ has type
+  @Eq (List U8) (↑next) (↑out ++ List.take (↑16#usize) (List.drop ↑at1 ↑logical))
+but is expected to have type
+  @Eq (List U8) (↑next) (↑out ++ List.take 16 (List.drop ↑at1 ↑logical))
+'R1Z.PV_RunJoin_CompactStep39.offset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CompactStep39.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CompactStep39.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

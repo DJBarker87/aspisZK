@@ -1,0 +1,21 @@
+START 60002 R1Z.PV_RunJoin_CompactHigh39
+DONE 60002 R1Z.PV_RunJoin_CompactHigh39 exit 1 wall 1.26 RSS 2711085056
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CompactHigh39.lean:26:6: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+logical : Slice U8
+at1 : Usize
+zero : ∀ (j : Usize), 16 ≤ ↑j → ↑j < 32 → logical.index_usize (at1.wrapping_add j) = ok 0#u8
+n : ℕ
+ih : ∀ (high : Usize), ↑high + n = 32 → 16 ≤ ↑high → host_compact.compact_values_loop0_loop0 logical at1 high = ok none
+high : Usize
+bound : ↑high + (n + 1) = 32
+lower : 16 ≤ ↑high
+hh : ↑high < 32
+big : ↑high < UScalar.size UScalarTy.Usize
+⊢ ↑high + ↑1#usize < UScalar.size UScalarTy.Usize
+'R1Z.PV_RunJoin_CompactHigh39.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,57 @@
+START 60009 R1Z.PV_RunJoin_CompactComplete39
+DONE 60009 R1Z.PV_RunJoin_CompactComplete39 exit 1 wall 1.12 RSS 2697224192
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CompactComplete39.lean:23:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 1
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a ≥ 0
+  16*a - b + c ≤ 0
+where
+ a := ↑n
+ b := ↑Usize.max
+ c := ↑out.length
+ d := ↑(32 * n) % ↑↑32#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CompactComplete39.lean:29:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  logical.len % 32#usize
+in the target expression
+  (have i := logical.len;
+    do
+    let i1 ← i % 32#usize
+    if (i1 != 0#usize) = true then ok (core.result.Result.Err compact.CodecError.Length, out)
+      else do
+        let (out1, pending_return) ← host_compact.compact_values_loop0 logical out 0#usize
+        match pending_return with
+          | none => ok (core.result.Result.Ok (), out1)
+          | some r => ok (r, out1)) =
+    ok (core.result.Result.Ok (), next)
+
+logical : Slice U8
+out : alloc.vec.Vec U8
+n : ℕ
+length : logical.length = 32 * n
+room : out.length + 16 * n ≤ Usize.max
+zero :
+  ∀ (pos : Usize),
+    ↑pos % 32 = 0 →
+      ↑pos + 32 ≤ logical.length → ∀ (j : Usize), 16 ≤ ↑j → ↑j < 32 → logical.index_usize (pos.wrapping_add j) = ok 0#u8
+r : UScalar UScalarTy.Usize
+hr : logical.len % 32#usize = ok 0#usize
+hv : ↑r = ↑logical.len % ↑32#usize
+rz : r = 0#usize
+next : alloc.vec.Vec U8
+hn : host_compact.compact_values_loop0 logical out 0#usize = ok (next, none)
+hval : ↑next = ↑out ++ PV_RunJoin_CompactLoop39.payload logical (↑0#usize) n
+⊢ (have i := logical.len;
+    do
+    let i1 ← i % 32#usize
+    if (i1 != 0#usize) = true then ok (core.result.Result.Err compact.CodecError.Length, out)
+      else do
+        let (out1, pending_return) ← host_compact.compact_values_loop0 logical out 0#usize
+        match pending_return with
+          | none => ok (core.result.Result.Ok (), out1)
+          | some r => ok (r, out1)) =
+    ok (core.result.Result.Ok (), next)
+'R1Z.PV_RunJoin_CompactComplete39.encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

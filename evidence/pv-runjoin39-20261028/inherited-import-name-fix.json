@@ -1,0 +1,8 @@
+{
+  "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CompressIterator.lean",
+  "failed_attempt": 60069,
+  "replacement_attempt": 60070,
+  "allowed_change": "local-lean new-modules-only exception for trivial import/name fixes",
+  "diff": "diff --git a/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CompressIterator.lean b/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CompressIterator.lean\nindex bdeffd2b67..3b5a1218fb 100644\n--- a/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CompressIterator.lean\n+++ b/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_CompressIterator.lean\n@@ -1,4 +1,5 @@\n import R1Z.PV_RW_CompressEmission\n+import R1Z.ProverRw19LoopBind\n set_option autoImplicit false\n noncomputable section\n namespace R1Z.PV_RW_CompressIterator\n@@ -18,7 +19,7 @@ def execute (lambda : Q) (remaining : List M) (out power : Q) : Result Q :=\n \n theorem nil (lambda out power : Q) : execute lambda [] out power = ok out := by\n   unfold execute\n-  rw [ProverRwSuccessPowerTotal.loop_bind]\n+  rw [ProverRw19LoopBind.loop_bind]\n   rfl\n \n theorem cons (lambda out power : Q) (value : M) (remaining : List M) :\n@@ -26,7 +27,7 @@ theorem cons (lambda out power : Q) (value : M) (remaining : List M) :\n       let (nextOut,nextPower) \u2190 PV_RW_CompressEmission.generated.shipped_step out power value lambda\n       execute lambda remaining nextOut nextPower) := by\n   unfold execute\n-  rw [ProverRwSuccessPowerTotal.loop_bind]\n+  rw [ProverRw19LoopBind.loop_bind]\n   simp only [step,bind_assoc_eq]\n   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n   rintro \u27e8nextOut,nextPower\u27e9 _\n",
+  "statement_or_definition_changes": false
+}
