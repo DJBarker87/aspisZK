@@ -78,7 +78,13 @@ import NBO_WriterEntry
 #check NBO_AccumulateAssociation.source
 #check NBO_Entry.association
 #check NBO_WriterEntry.same_writer
-#check NBO_QueryDomains.Lower
-#check NBO_FieldSemantics.NBC_Bindings
-#check NBO_ProducerDomains.NBA_NBC
-#check NBO_Entry.NBC_Bounds
+#print NBO_QueryDomains.Lower
+#print NBO_FieldSemantics.NBC_Bindings
+#print NBO_ProducerDomains.NBA_NBC
+#print NBO_Entry.NBC_Bounds
+
+#print NBO_QueryAssociation.reference
+#print NBO_AccumulateAssociation.reference
+#print NBO_AccumulateAssociation.sourceOps
+#print NBO_Composite.source
+#print NBO_Composite.reference
