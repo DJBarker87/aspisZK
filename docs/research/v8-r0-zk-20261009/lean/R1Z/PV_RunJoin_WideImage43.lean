@@ -16,14 +16,14 @@ theorem point (q : Raw) (hq : canonical q) (i : Fin 32) :
       ProverCommitWideBytes48.sourceCell q hq i := by
   dsimp only [source,byte]
   refine Fin.addCases (m := 16) (n := 16) (fun pos => ?_) (fun pos => ?_) i
-  · obtain ⟨⟨l,j⟩,rfl⟩ := finProdFinEquiv.surjective pos
+  · obtain ⟨⟨l,j⟩,rfl⟩ := (finProdFinEquiv : (Fin 4 × Fin 4) ≃ Fin 16).surjective pos
     rw [PV_RunJoin_WidePoint43.model_low]
     have off : (limbByteIndex l j).val=4*(Fin.castAdd 4 l).val+j.val := by
       change j.val+4*l.val=4*l.val+j.val
       omega
     rw [off,PV_RunJoin_WidePoint43.read,PV_RunJoin_WidePoint43.low_word]
     exact congrArg UInt8.ofFin (PV_RunJoin_WordLimb43.limb q.1 hq.1 l j)
-  · obtain ⟨⟨l,j⟩,rfl⟩ := finProdFinEquiv.surjective pos
+  · obtain ⟨⟨l,j⟩,rfl⟩ := (finProdFinEquiv : (Fin 4 × Fin 4) ≃ Fin 16).surjective pos
     rw [PV_RunJoin_WidePoint43.model_high]
     have off : (Fin.natAdd 16 (limbByteIndex l j)).val=4*(Fin.natAdd 4 l).val+j.val := by
       change 16+(j.val+4*l.val)=4*(4+l.val)+j.val
