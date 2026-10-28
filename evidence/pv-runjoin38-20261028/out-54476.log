@@ -1,0 +1,99 @@
+START 54476 R1Z.PV_RunJoin_RoundThread38
+DONE 54476 R1Z.PV_RunJoin_RoundThread38 exit 1 wall 1.91 RSS 4416204800
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundThread38.lean:69:9: error: unsolved goals
+case zero
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H F : Type
+digest : aspis_core.digest.Digest32 H
+oi : host_sumcheck.Oracle F
+oracle : F
+transcript : host_wire.SemanticTranscript H
+output : alloc.vec.Vec U8
+point : Point
+running : Q
+bound : ↑10#usize + 0 = 10
+⊢ (do
+      let r ← oi.evaluate oracle point
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+          if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal, transcript, output)
+            else ok (core.result.Result.Ok (point, running), transcript, output)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+                residual
+          ok (r1, transcript, output)) =
+    do
+    let r ← oi.evaluate oracle point
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+        if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal, transcript, output)
+          else ok (core.result.Result.Ok (point, running), transcript, output)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+              residual
+        ok (r1, transcript, output)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundThread38.lean:81:11: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case succ
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H F : Type
+digest : aspis_core.digest.Digest32 H
+oi : host_sumcheck.Oracle F
+oracle : F
+n : ℕ
+ih :
+  ∀ (round : Usize),
+    ↑round + n = 10 →
+      ∀ (transcript : host_wire.SemanticTranscript H) (output : alloc.vec.Vec U8) (point : Point) (running : Q),
+        host_sumcheck.prove_sumcheck_rounds digest oi transcript output point running round oracle =
+          phase digest oi n transcript output point running round oracle
+round : Usize
+bound : ↑round + (n + 1) = 10
+transcript : host_wire.SemanticTranscript H
+output : alloc.vec.Vec U8
+point : Point
+running : Q
+hn : round ≠ 10#usize
+inc : ↑(round.wrapping_add 1#usize) = ↑round + 1
+⊢ (uncurry fun r =>
+      uncurry fun transcript1 output1 => do
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (point1, running1) := val
+            do
+            let i ← lift (round.wrapping_add 1#usize)
+            host_sumcheck.prove_sumcheck_rounds digest oi transcript1 output1 point1 running1 i oracle
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                  (core.convert.FromSame r1_wire.Error) residual
+            ok (r1, transcript1, output1)) =
+    uncurry fun r =>
+      uncurry fun transcript1 output1 => do
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (point1, running1) := val
+            do
+            let i ← lift (round.wrapping_add 1#usize)
+            phase digest oi n transcript1 output1 point1 running1 i oracle
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                  (core.convert.FromSame r1_wire.Error) residual
+            ok (r1, transcript1, output1)
+'R1Z.PV_RunJoin_RoundThread38.thread' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,36 @@
+START 54407 R1Z.PV_RunJoin_PolyStep38
+DONE 54407 R1Z.PV_RunJoin_PolyStep38 exit 1 wall 1.68 RSS 4402450432
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PolyStep38.lean:34:38: error: Application type mismatch: The argument
+  hi
+has type
+  ↑i < 28
+but is expected to have type
+  ↑i < ↑?m.105
+in the application
+  ProverCommitArray49.index ?m.105 p i hi
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PolyStep38.lean:23:48: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+p : ℕ → Q
+bytes : alloc.vec.Vec U8
+i : Usize
+hi : ↑i < 28
+room : bytes.length + 32 ≤ Usize.max
+hroom : bytes.length + (PV_RunJoin_FlatBytes35.wire (wide (p ↑i))).to_slice.length ≤ Usize.max
+next : alloc.vec.Vec U8
+hnext :
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes (PV_RunJoin_FlatBytes35.wire (wide (p ↑i))).to_slice =
+    ok next
+hval : ↑next = ↑bytes ++ ↑(PV_RunJoin_FlatBytes35.wire (wide (p ↑i))).to_slice
+⊢ (do
+      let q ← (ProverCommitArray49.array 28#usize p).index_usize i
+      let we ← aspis_core.field.wide_exact.WideExact.from_qm31 q
+      let encoded ← we.to_le_bytes
+      let s ← lift encoded.to_slice
+      let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes s
+      let i1 ← lift (i.wrapping_add 1#usize)
+      ok (ControlFlow.cont (bytes1, i1))) =
+    ok (ControlFlow.cont (next, i.wrapping_add 1#usize))
+'R1Z.PV_RunJoin_PolyStep38.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PolyStep38.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

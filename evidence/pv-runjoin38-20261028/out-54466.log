@@ -1,0 +1,33 @@
+START 54466 R1Z.PV_RunJoin_WideLoop38
+DONE 54466 R1Z.PV_RunJoin_WideLoop38 exit 1 wall 1.77 RSS 4412502016
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WideLoop38.lean:19:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 31
+  a ≥ 0
+where
+ a := ↑n
+ b := ↑↑32#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WideLoop38.lean:40:54: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+size : Usize
+f : ℕ → W
+n : ℕ
+ih :
+  ∀ (k : Usize) (bytes : alloc.vec.Vec U8),
+    ↑k + n = ↑size →
+      (↑bytes).length + 32 * n ≤ Usize.max →
+        ∃ next, prover.encoded_slice_loop (input size f) bytes k = ok next ∧ ↑next = ↑bytes ++ payload f (↑k) n
+k : Usize
+bytes : alloc.vec.Vec U8
+bound : ↑k + (n + 1) = ↑size
+room : (↑bytes).length + 32 * (n + 1) ≤ Usize.max
+hk : ↑k < ↑size
+inc : ↑(k.wrapping_add 1#usize) = ↑k + 1
+mid : alloc.vec.Vec U8
+hmid : prover.encoded_slice_loop.body (input size f) bytes k = ok (ControlFlow.cont (mid, k.wrapping_add 1#usize))
+hval : ↑mid = ↑bytes ++ ↑(PV_RunJoin_FlatBytes35.wire (f ↑k))
+⊢ (↑bytes).length + ↑32#usize = (↑bytes).length + 32
+'R1Z.PV_RunJoin_WideLoop38.payload_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_WideLoop38.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

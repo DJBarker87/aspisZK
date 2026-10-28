@@ -1,0 +1,71 @@
+START 54460 R1Z.PV_RunJoin_AccLoop38
+DONE 54460 R1Z.PV_RunJoin_AccLoop38 exit 1 wall 1.81 RSS 4410568704
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_AccLoop38.lean:53:12: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if _a then value (p j) + value scale * ProverCommitScalar48.embed (basis j) else value (p j)) =
+      if ↑k ≤ j ∧ j < ↑k + (n + 1) then value (p j) + value scale * ProverCommitScalar48.embed (basis j)
+      else value (p j)
+Error: Application type mismatch: The argument
+  instDecidableAnd
+has type
+  Decidable (↑k + 1 ≤ j ∧ j < ↑k + 1 + n)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite AspisR1.ExtractedCurrentQM31Exact.QM31Exact _a instDecidableAnd
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+inst✝ : ExternalTypes
+ops : ExternalFuns
+basis : ℕ → U32
+scale : Q
+n : ℕ
+ih :
+  ∀ (k : Usize) (p : ℕ → Q),
+    ↑k + n = 28 →
+      (∀ j < 28, canonical (p j)) →
+        ∃ out,
+          host_sumcheck.interpolation_accumulate_loop (array p) (ProverCommitArray49.array 28#usize basis) scale k =
+              ok (array out) ∧
+            (∀ j < 28, canonical (out j)) ∧
+              ∀ j < 28,
+                value (out j) =
+                  if ↑k ≤ j ∧ j < ↑k + n then value (p j) + value scale * ProverCommitScalar48.embed (basis j)
+                  else value (p j)
+k : Usize
+p : ℕ → Q
+bound : ↑k + (n + 1) = 28
+hp : ∀ j < 28, canonical (p j)
+hk : ↑k < 28
+inc : ↑(k.wrapping_add 1#usize) = ↑k + 1
+z : Q
+hstep :
+  host_sumcheck.interpolation_accumulate_loop.body (ProverCommitArray49.array 28#usize basis) scale (array p) k =
+    ok (ControlFlow.cont (array (Function.update p (↑k) z), k.wrapping_add 1#usize))
+hcz : canonical z
+hvz : value z = value (p ↑k) + value scale * ProverCommitScalar48.embed (basis ↑k)
+out : ℕ → Q
+hout :
+  host_sumcheck.interpolation_accumulate_loop (array (Function.update p (↑k) z))
+      (ProverCommitArray49.array 28#usize basis) scale (k.wrapping_add 1#usize) =
+    ok (array out)
+hcan : ∀ j < 28, canonical (out j)
+hval :
+  ∀ j < 28,
+    value (out j) =
+      if ↑(k.wrapping_add 1#usize) ≤ j ∧ j < ↑(k.wrapping_add 1#usize) + n then
+        value (Function.update p (↑k) z j) + value scale * ProverCommitScalar48.embed (basis j)
+      else value (Function.update p (↑k) z j)
+j : ℕ
+hj : j < 28
+eq : ¬j = ↑k
+tests : (↑k + 1 ≤ j ∧ j < ↑k + 1 + n) = (↑k ≤ j ∧ j < ↑k + (n + 1))
+⊢ (if ↑k + 1 ≤ j ∧ j < ↑k + 1 + n then value (p j) + value scale * ProverCommitScalar48.embed (basis j)
+    else value (p j)) =
+    if ↑k ≤ j ∧ j < ↑k + (n + 1) then value (p j) + value scale * ProverCommitScalar48.embed (basis j) else value (p j)
+'R1Z.PV_RunJoin_AccLoop38.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,67 @@
+START 54470 R1Z.PV_RunJoin_InterpolationRow38
+DONE 54470 R1Z.PV_RunJoin_InterpolationRow38 exit 1 wall 1.74 RSS 4411473920
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_InterpolationRow38.lean:32:2: error: unsolved goals
+case refine_1
+inst✝ : ExternalTypes
+ops : ExternalFuns
+values p : ℕ → Q
+i : Usize
+hi : ↑i < 28
+hp : ∀ k < 28, canonical (p k)
+basis : ℕ → U32
+den : U32
+hbasis : host_sumcheck.interpolation_basis i = ok (ProverCommitM31Array48.array 28#usize basis, den)
+hcb : ∀ k < 28, ProverCommitM31Ops48.canonical (basis k)
+hcd : ProverCommitM31Ops48.canonical den
+hpoly : ProverCommitBasisPolynomial48.poly basis = ProverCommitInterpolationSchedule48.polyProd (↑i) 0 28
+hdd : ProverCommitM31Ops48.decode den = ProverCommitInterpolationSchedule48.denProd (↑i) 0 28
+hn : den ≠ 0#u32
+inv : U32
+hinv : AspisR1ProducerRelease47.inverse_ref den = ok inv
+hcinv : ↑inv < AspisCircleGroupOrder.P
+hdinv : ProverCommitInverse48.decode inv = (ProverCommitInverse48.decode den)⁻¹
+inverse : aspis_core.field.M31.inv den = ok inv
+scale : aspis_core.field.QM31
+hscale : aspis_core.field.QM31.mul_m31 (values ↑i) inv = ok scale
+hcscale : canonical scale
+hdscale : value scale = value (values ↑i) * ProverCommitScalar48.embed inv
+out : ℕ → Q
+hout :
+  host_sumcheck.interpolation_accumulate (array p) (ProverCommitM31Array48.array 28#usize basis) scale = ok (array out)
+hcan : ∀ j < 28, canonical (out j)
+hacc :
+  poly out =
+    poly p +
+      Polynomial.C (value scale) *
+        Polynomial.map ProverCommitInterpolationEmbed48.embed (ProverCommitBasisPolynomial48.poly basis)
+⊢ (let (basis, denominator) := (ProverCommitM31Array48.array 28#usize basis, den)
+    do
+    let m ← denominator.inv
+    let scale ← aspis_core.field.QM31.mul_m31 (values ↑i) m
+    let out1 ← host_sumcheck.interpolation_accumulate (array p) basis scale
+    ok (ControlFlow.cont (out1, i.wrapping_add 1#usize))) =
+    ok (ControlFlow.cont (array out, i.wrapping_add 1#usize))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_InterpolationRow38.lean:35:26: warning: This simp argument is unused:
+  inverse
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵n̵v̵e̵r̵s̵e̵,̵h̵s̵c̵a̵l̵e̵,̵h̵o̵u̵t̵,̵l̵i̵f̵t̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲c̲a̲l̲e̲,̲ ̲h̲o̲u̲t̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_InterpolationRow38.lean:35:34: warning: This simp argument is unused:
+  hscale
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵n̵v̵e̵r̵s̵e̵,̵h̵s̵c̵a̵l̵e̵,̵h̵o̵u̵t̵,̵l̵i̵f̵t̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲n̲v̲e̲r̲s̲e̲,̲ ̲h̲o̲u̲t̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_InterpolationRow38.lean:35:41: warning: This simp argument is unused:
+  hout
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲inverse, ̲hscale,h̵o̵u̵t̵,̵ ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_InterpolationRow38.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_InterpolationRow38.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

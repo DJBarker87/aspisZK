@@ -1,0 +1,89 @@
+START 54441 R1Z.PV_RunJoin_BasisLoop38
+DONE 54441 R1Z.PV_RunJoin_BasisLoop38 exit 1 wall 1.8 RSS 4418756608
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BasisLoop38.lean:29:57: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+inst✝ : ExternalTypes
+ops : ExternalFuns
+j : Usize
+n : ℕ
+ih :
+  ∀ (k : Usize) (left : U8),
+    ↑k = n →
+      ↑left = n →
+        n ≤ 28 →
+          ∀ (basis : MA),
+            host_sumcheck.interpolation_extend_loop basis j k =
+              AspisR1ProducerRelease47.basis_mul basis (UScalar.cast UScalarTy.U32 j) left
+k : Usize
+left : U8
+hk : ↑k = n + 1
+hl : ↑left = n + 1
+bound : n + 1 ≤ 28
+basis : MA
+kp : k > 0#usize
+ln : left ≠ 0#u8
+⊢ ↑(k.wrapping_sub 1#usize) = n
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BasisLoop38.lean:30:54: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+inst✝ : ExternalTypes
+ops : ExternalFuns
+j : Usize
+n : ℕ
+ih :
+  ∀ (k : Usize) (left : U8),
+    ↑k = n →
+      ↑left = n →
+        n ≤ 28 →
+          ∀ (basis : MA),
+            host_sumcheck.interpolation_extend_loop basis j k =
+              AspisR1ProducerRelease47.basis_mul basis (UScalar.cast UScalarTy.U32 j) left
+k : Usize
+left : U8
+hk : ↑k = n + 1
+hl : ↑left = n + 1
+bound : n + 1 ≤ 28
+basis : MA
+kp : k > 0#usize
+ln : left ≠ 0#u8
+kd : ↑(k.wrapping_sub 1#usize) = n
+⊢ ↑(left.wrapping_sub 1#u8) = n
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BasisLoop38.lean:37:4: error: 'change' tactic failed, pattern
+  (do
+      let next ← cell basis (k.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 j)
+      host_sumcheck.interpolation_extend_loop next j (k.wrapping_sub 1#usize)) =
+    do
+    let next ← cell basis (k.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 j)
+    AspisR1ProducerRelease47.basis_mul next (UScalar.cast UScalarTy.U32 j) (left.wrapping_sub 1#u8)
+is not definitionally equal to target
+  (do
+      let cf ←
+        do
+          let basis1 ← cell basis (k.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 j)
+          ok (ControlFlow.cont (basis1, k.wrapping_sub 1#usize))
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              if x.2 > 0#usize then do
+                let basis1 ← host_sumcheck.interpolation_basis_cell x.1 (x.2.wrapping_sub 1#usize) j
+                ok (ControlFlow.cont (basis1, x.2.wrapping_sub 1#usize))
+              else ok (ControlFlow.done x.1))
+            next
+        | ControlFlow.done out => ok out) =
+    do
+    let shifted ← AspisR1ProducerRelease47.predecessor basis (k.wrapping_sub 1#usize)
+    let m ← Array.index_usize basis (k.wrapping_sub 1#usize)
+    let m1 ← m.mul (UScalar.cast UScalarTy.U32 j)
+    let next ← shifted.sub m1
+    let basis1 ← Array.update basis (k.wrapping_sub 1#usize) next
+    AspisR1ProducerRelease47.basis_mul basis1 (UScalar.cast UScalarTy.U32 j) (left.wrapping_sub 1#u8)
+'R1Z.PV_RunJoin_BasisLoop38.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

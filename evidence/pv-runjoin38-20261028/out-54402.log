@@ -1,0 +1,56 @@
+START 54402 R1Z.PV_RunJoin_OracleBridge38
+DONE 54402 R1Z.PV_RunJoin_OracleBridge38 exit 1 wall 1.11 RSS 2710118400
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OracleBridge38.lean:73:20: error: unsolved goals
+case Continue
+inst✝ : ExternalTypes
+ops : ExternalFuns
+terminal : Terminal
+self : host_semantic.SemanticOracle
+point : Std.Array aspis_core.field.QM31 10#usize
+op227 :
+  ∀ (claims : Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize),
+    ExternalFuns.op227 self.public claims point self.challenges = terminal self.public claims point self.challenges
+r : core.result.Result (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) r1_wire.Error
+claims : Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize
+⊢ (do
+      let r1 ← terminal self.public claims point self.challenges
+      let r2 ←
+        core.result.Result.map_err
+            host_semantic.OracleSemanticOracle.evaluate.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r1 ()
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let a ← claims.index_usize 0#usize
+          let mask ← host_semantic.claim_mask_value a point
+          let q ← self.eta.mul val1
+          let q1 ← mask.add q
+          let q2 ← point.index_usize 8#usize
+          let q3 ← point.index_usize 9#usize
+          let q4 ← host_semantic.extra self.d q2 q3
+          let q5 ← q1.add q4
+          ok (core.result.Result.Ok q5)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let r1 ← terminal self.public claims point self.challenges
+    let r2 ←
+      core.result.Result.map_err
+          host_semantic.OracleSemanticOracle.evaluate.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r1 ()
+    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val1 => do
+        let a ← claims.index_usize 0#usize
+        let mask ← host_semantic.claim_mask_value a point
+        let q ← self.eta.mul val1
+        let q1 ← mask.add q
+        let q2 ← point.index_usize 8#usize
+        let q3 ← point.index_usize 9#usize
+        let q4 ← host_semantic.extra self.d q2 q3
+        let q5 ← q1.add q4
+        ok (core.result.Result.Ok q5)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+          (core.convert.FromSame r1_wire.Error) residual
+'R1Z.PV_RunJoin_OracleBridge38.selected_callback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

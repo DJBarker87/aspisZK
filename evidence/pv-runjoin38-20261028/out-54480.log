@@ -1,0 +1,62 @@
+START 54480 R1Z.PV_RunJoin_RuntimeMemory38
+DONE 54480 R1Z.PV_RunJoin_RuntimeMemory38 exit 1 wall 1.13 RSS 2714165248
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RuntimeMemory38.lean:36:50: error: don't know how to synthesize placeholder
+context:
+inst✝ : ExternalTypes
+W S F D DF ZF C : Type
+base : PV_W_TypedEffects.Algebra W (Option C) Error
+memory : Memory W S F D DF ZF
+T✝ x✝ : Type
+v : alloc.vec.Vec T✝
+n : Usize
+w : W
+⊢ Type
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RuntimeMemory38.lean:53:2: error: Type mismatch
+  PV_W_MemoryLift.reserve_world ?m.89 ?m.90 ?m.91 ?m.92 ?m.93 ?m.94 ?m.95 ?m.96 ?m.97 ?m.98 w
+has type
+  (PV_W_MemoryLift.reserve ?m.89 ?m.90 ?m.91 ?m.92 ?m.93 ?m.94 ?m.95 ?m.96 ?m.97 ?m.98 w).world =
+    have e :=
+      PV_FXM_ReserveWorld.reference ?m.91 ?m.92 ?m.93 ?m.94 (PV_FXM_ReserveSelected.buffer ?m.95 ?m.96) (↑?m.97)
+        (?m.89 w);
+    ?m.90 w e.buffer e.world
+but is expected to have type
+  ((algebra base memory).reserve Allocator v n w).world =
+    let e :=
+      PV_FXM_ReserveWorld.reference memory.allocate memory.wordMax memory.byteMax (memory.shape T)
+        (PV_FXM_ReserveSelected.buffer v (memory.metadata w v)) (↑n) (memory.reserveView w);
+    memory.reserveCommit w e.buffer e.world
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RuntimeMemory38.lean:61:72: error: Type mismatch
+  rfl
+has type
+  ?m.26 = ?m.26
+but is expected to have type
+  ((algebra base memory).reserve Allocator v n w).calls = [(w, none)]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RuntimeMemory38.lean:58:8: error: Not a definitional equality: the left-hand side
+  ((algebra base memory).reserve Allocator v n w).calls
+is not definitionally equal to the right-hand side
+  [(w, none)]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RuntimeMemory38.lean:65:62: error: Type mismatch
+  rfl
+has type
+  ?m.25 = ?m.25
+but is expected to have type
+  ((algebra base memory).dropWords v w).calls = [(w, none)]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RuntimeMemory38.lean:63:8: error: Not a definitional equality: the left-hand side
+  ((algebra base memory).dropWords v w).calls
+is not definitionally equal to the right-hand side
+  [(w, none)]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RuntimeMemory38.lean:69:64: error: Type mismatch
+  rfl
+has type
+  ?m.25 = ?m.25
+but is expected to have type
+  ((algebra base memory).zeroArray N v w).calls = [(w, none)]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RuntimeMemory38.lean:67:8: error: Not a definitional equality: the left-hand side
+  ((algebra base memory).zeroArray N v w).calls
+is not definitionally equal to the right-hand side
+  [(w, none)]
+'R1Z.PV_RunJoin_RuntimeMemory38.reserve' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimeMemory38.reserve_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimeMemory38.drop_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimeMemory38.zero_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

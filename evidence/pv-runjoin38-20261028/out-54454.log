@@ -1,0 +1,62 @@
+START 54454 R1Z.PV_RunJoin_BasisFactors38
+DONE 54454 R1Z.PV_RunJoin_BasisFactors38 exit 1 wall 2.28 RSS 4429787136
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BasisFactors38.lean:46:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  host_sumcheck.interpolation_basis_steps basis den d i (j.wrapping_add 1#usize)
+in the target expression
+  host_sumcheck.interpolation_basis_steps basis den d j (j.wrapping_add 1#usize) =
+    AspisR1ProducerRelease47.basis_factors basis den (UScalar.cast UScalarTy.U8 d) (UScalar.cast UScalarTy.U8 j)
+      (U8.wrapping_add (UScalar.cast UScalarTy.U8 j) 1#u8) (left.wrapping_sub 1#u8)
+
+case pos
+inst✝ : ExternalTypes
+ops : ExternalFuns
+i : Usize
+hi : ↑i < 28
+n : ℕ
+ih :
+  ∀ (j d : Usize) (left : U8),
+    ↑j + n = 28 →
+      ↑left = n →
+        ↑d = degree ↑i ↑j →
+          ∀ (basis : MA) (den : U32),
+            host_sumcheck.interpolation_basis_steps basis den d i j =
+              AspisR1ProducerRelease47.basis_factors basis den (UScalar.cast UScalarTy.U8 d)
+                (UScalar.cast UScalarTy.U8 i) (UScalar.cast UScalarTy.U8 j) left
+j d : Usize
+left : U8
+hcount : ↑j + (n + 1) = 28
+hl : ↑left = n + 1
+hd : ↑d = degree ↑i ↑j
+basis : MA
+den : U32
+hj : ↑j < 28
+jn : j ≠ 28#usize
+ln : left ≠ 0#u8
+incj : ↑(j.wrapping_add 1#usize) = ↑j + 1
+decl : ↑(left.wrapping_sub 1#u8) = n
+he : i = j
+hcast : UScalar.cast UScalarTy.U8 i = UScalar.cast UScalarTy.U8 j
+nextDegree : ↑d = degree ↑j ↑(j.wrapping_add 1#usize)
+⊢ host_sumcheck.interpolation_basis_steps basis den d j (j.wrapping_add 1#usize) =
+    AspisR1ProducerRelease47.basis_factors basis den (UScalar.cast UScalarTy.U8 d) (UScalar.cast UScalarTy.U8 j)
+      (U8.wrapping_add (UScalar.cast UScalarTy.U8 j) 1#u8) (left.wrapping_sub 1#u8)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (28 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BasisFactors38.lean:42:20: warning: This simp argument is unused:
+  hcast
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵,̵h̵c̵a̵s̵t̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_BasisFactors38.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
