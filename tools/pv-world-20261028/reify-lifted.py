@@ -25,8 +25,6 @@ CONFIG=[
  ('prover.inactive_sum_k_loop.body','InactiveSumBody'),
  ('prover.opening_inactive_loop.body','OpeningInactiveBody'),
  ('prover.opening_batch_loop.body','OpeningBatchBody'),
- ('prover.fold_cell','FoldCell'),
- ('prover.fold_loop.body','FoldBody'),
  ('prover.derive_private_salts','PrivateSalts'),
  ('prover.prepare_opening','PrepareOpening'),
  ('prover.finish_opening','FinishOpening'),
