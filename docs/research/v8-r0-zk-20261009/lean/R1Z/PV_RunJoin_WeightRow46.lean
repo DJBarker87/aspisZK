@@ -21,7 +21,6 @@ theorem permutation (j : Usize) :
     PV_B2_D_RowSource.digit4,PV_CB3_WeightsMachineRow.row,
     PV_CB3_WeightsMachineRow.digit,hz,PV_CB3_WeightsMachineRow.or_value]
   simp only [show (0#usize).val=0 from rfl,Nat.zero_or]
-  rfl
 
 theorem row (j : Usize) :
     PV_B2_251c1.host_weights.host_row .S2 j=AspisR1InactiveOwner49.owned.row j := by
