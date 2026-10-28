@@ -75,7 +75,8 @@ assert srcsha==authority['sha256'],(module,srcsha,authority)
 sub['project_source_authority']=authority
 cmd=['timeout','900','python3',str(DRIVER),str(JENV),str(O),str(S),str(O/(module.replace('.','/')+'.olean')),str(p),'7000']
 status=run(label,cmd,'one focused Lean module via pinned run2.py, env J, -M7000; private source/object overlay')
-sub['lean_source_revision']=(H/'proof-revision').read_text().strip() if (H/'proof-revision').exists() else 'see SHA-matched source snapshot and own source authority record'
+sub['lean_source_revision']=json.loads((H/'project-resolution.json').read_text())['revision']
+sub['source_revision_kind']='Rust source freeze; exact Lean source revision and h5 blob recorded separately'
 sub['source_authority_record']='project-resolution.json / d324-private-source-authority.json, h5 own HEAD; external h4 verified'
 R=H/label;(R/'source.lean').write_bytes(p.read_bytes());(R/'submission.json').write_text(json.dumps(sub,indent=2)+'\n')
 charged=(R/'receipt/receipt.json').exists()
