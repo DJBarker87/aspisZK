@@ -4,7 +4,7 @@ namespace R1Z.PV_RunJoin_LaneCounts31
 open Aeneas Aeneas.Std Result
 
 theorem count (n : Fin 20) :
-    UScalar.cast .U32 (Usize.ofNatCore n.val (by have := n.isLt; simp; omega)) =
+    UScalar.cast .U32 (Usize.ofNatCore n.val (by have := n.isLt; scalar_tac)) =
       U32.ofNatCore n.val (by have := n.isLt; simp; omega) := by
   apply UScalar.eq_of_val_eq
   rw [UScalar.cast_val_eq]
@@ -14,7 +14,7 @@ theorem count (n : Fin 20) :
 
 theorem shift (index : U32) (n : Fin 20) :
     U32.wrapping_shr index (UScalar.cast .U32
-      (Usize.ofNatCore n.val (by have := n.isLt; simp; omega))) =
+      (Usize.ofNatCore n.val (by have := n.isLt; scalar_tac))) =
       U32.wrapping_shr index (U32.ofNatCore n.val (by have := n.isLt; simp; omega)) :=
   congrArg (U32.wrapping_shr index) (count n)
 #print axioms shift
