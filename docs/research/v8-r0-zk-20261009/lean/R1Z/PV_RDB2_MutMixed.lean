@@ -6,15 +6,15 @@ open PV_RDB2_MutBorrow
 
 theorem disjoint_writes {T : Type} (cells : Nat → T) (a b : Handle) (x y : T)
     (different : a.index ≠ b.index) :
-    set (set cells a.index x) b.index y = set (set cells b.index y) a.index x := by
+    PV_RDB2_MutBorrow.set (PV_RDB2_MutBorrow.set cells a.index x) b.index y = PV_RDB2_MutBorrow.set (PV_RDB2_MutBorrow.set cells b.index y) a.index x := by
   funext i
   by_cases ha : i = a.index
   · subst i
-    simp [set,different,Ne.symm different]
+    simp [PV_RDB2_MutBorrow.set,different,Ne.symm different]
   · by_cases hb : i = b.index
     · subst i
-      simp [set,different,Ne.symm different]
-    · simp only [set,ha,hb,if_false]
+      simp [PV_RDB2_MutBorrow.set,different,Ne.symm different]
+    · simp only [PV_RDB2_MutBorrow.set,ha,hb,if_false]
 
 theorem restore_commutes {T : Type} (current : Cursor T) (a b : Handle) (x y : T)
     (different : a.index ≠ b.index) :
@@ -33,7 +33,7 @@ theorem back_after_front_write {T : Type} (c : Cursor T) (value : T)
       some (c.cells (c.back-1),⟨c.back-1⟩,
         {restore {c with front := c.front+1} ⟨c.front⟩ value with back := c.back-1}) := by
   have different : c.back-1 ≠ c.front := by omega
-  simp only [nextBack,restore,two,if_true,set,different,if_false]
+  simp only [nextBack,restore,two,if_true,PV_RDB2_MutBorrow.set,different,if_false]
 
 #print axioms disjoint_writes
 #print axioms restore_commutes
