@@ -14254,3 +14254,16 @@ Shared obstruction (AGENTS.md section 7): typed byte-memory, ownership and destr
 D362 established that drop cannot be modelled generically without a world. Rather than commission more row wrappers, pv-own is launched to build the interface once (sparse worktree, branch codex/pv-own-20261028 from 1a3cd3de26 with the parked pv-world branch merged in; IDs 61700-61799; 100 Lean, 60 native, 0 Kani). It first writes an interface specification before any Lean: a heap of live allocations with initialized-byte maps and owners, typed views, moves and borrows as ownership transfer, and per-type drop-glue event sequences from the deployed MIR. Allocation goes through the retained runtime/allocator adequacy item, and each fact is marked as proved, tool-trust reclassification or retained. It then proves the generic laws, and refines V229 as the first consumer, then V230, V239 and V178. Any witness-dependent destructor or allocation event is a finding.
 
 V231, V256 and V257 have different blockers and wait for a slot. Rows removed outright: 0. Privacy target not yet established.
+
+## D420 (Stream B) 2026-10-28 23:30 UTC: pv-rjdecb results; helper associations moved to pv-own; pv-rjdecc on the decoders and V047
+
+pv-rjdecb (branch codex/pv-rjdec-20261028, head 11d5d0368b, pushed) used the remaining 85 Lean attempts (79 accepted, 6 rejected), giving 98 Lean attempts and 2 native scopes in total, with no Kani. Audits 61394-61396 passed with standard axioms only. Peak RSS was 4.42 GB, with zero swap. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs; no file over 5 MB; shipped-code diff empty.
+
+The zeroize mismatch of D417 is resolved: the consumed zeroization law now records volatileWrite followed by asmReadBarrier, from the V221/V222 law. The worker proved PV_RJDec_ParserR20.source and ParserR12.source, which equate reified execution erasure with the complete emitted terminal and snapshot parser Results for every input, with rejection branches preserved. These are input-parser laws, not the ROMView decoder laws. It also proved MemoryInstalled.array_complete, Runtime.source through the complete prover entry Result, and the consumer PV_RJDec_V047.consume, which yields the actual statement's witness fibre once the actual statement is shown equal to PV_2TNV_PublicEncoding.x native_handle.
+
+Still OPEN:
+- (a) the native disclosed and observerOracle installations with their complete fibres and Result extension laws;
+- (b) native heap metadata, view and commit, allocator and free, and OS and Drop associations;
+- (c) V047's statement-equals-handle identification.
+
+Item (b) is the shared ownership interface of D419, so it moves to pv-own. pv-rjdecc continues in the same worktree on (a), then (c) only (IDs 61800-61899; 100 Lean, 40 native, 0 Kani). rjdec will be merged into the runjoin branch after runjoin46 finishes, since runjoin46 is committing there now. Rows removed: 0. Privacy target not yet established.
