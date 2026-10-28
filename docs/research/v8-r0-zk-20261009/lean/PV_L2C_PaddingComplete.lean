@@ -35,7 +35,6 @@ theorem complete (active : Fin 1024 → Bool) (d : Fin 1024) (random h1 : Fin 10
   unfold applyPadding
   simp only [ne_eq,not_true_eq_false,or_self,↓reduceIte]
   rw [scan active _ ha]
-  simp only [Except.bind]
   have hz : tableSum (inactiveTable active (rebalance active d (sample active d random))) = zero := by
     simpa only [decide_eq_false_iff_not,not_not] using hs
   rw [hz]
