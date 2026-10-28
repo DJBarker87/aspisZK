@@ -361,3 +361,148 @@ split :
 'AspisR1.KNE_Schedule.native_body_decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
 'AspisR1.KNE_Schedule.returned_decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
 
+{"attempt": "KNE_L010", "exit_status": 1, "wall_seconds": 3.129181928001344, "peak_rss_kib": "4341032", "swaps": "0", "print_axioms": ["'AspisR1.KNE_Composition.compose' depends on axioms: [propext, sorryAx]", "'AspisR1.KNE_Composition.annotate_left' depends on axioms: [propext]", "'AspisR1.KNE_Composition.body_entries' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.KNE_Composition.body_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+KNE_Composition.lean:45:6: error: Type mismatch: After simplification, term
+KNE_Composition.lean:81:2: error: Type mismatch: After simplification, term
+KNE_Composition.lean:45:6: error: Type mismatch: After simplification, term
+  hs
+ has type
+  @Membership.mem Step (List Step) List.instMembership (annotate (List.length before + List.length value) (shape rest))
+    s
+but is expected to have type
+  @Membership.mem Step (List Step) List.instMembership
+    (annotate (List.length before + List.length value) (List.map (fun e => (e.1, List.length e.2)) rest)) s
+KNE_Composition.lean:81:2: error: Type mismatch: After simplification, term
+  flat
+ has type
+  MultiproofConeCanonical.bytesOf ↑body = payload (bodyEmissions (fields p a ⋯ ⋯) (stateOf hp) (stateOf hu))
+but is expected to have type
+  MultiproofConeCanonical.bytesOf ↑body = LPm_CheckpointBody.nativeBody p a ⋯ ⋯ hp hu
+'AspisR1.KNE_Composition.compose' depends on axioms: [propext, sorryAx]
+'AspisR1.KNE_Composition.annotate_left' depends on axioms: [propext]
+'AspisR1.KNE_Composition.body_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.KNE_Composition.body_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"attempt": "KNE_L011", "exit_status": 0, "wall_seconds": 2.5895710500190035, "peak_rss_kib": "4360992", "swaps": "0", "print_axioms": ["'AspisR1.KNE_Composition.compose' depends on axioms: [propext]", "'AspisR1.KNE_Composition.annotate_left' depends on axioms: [propext]", "'AspisR1.KNE_Composition.body_entries' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.KNE_Composition.body_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+
+'AspisR1.KNE_Composition.compose' depends on axioms: [propext]
+'AspisR1.KNE_Composition.annotate_left' depends on axioms: [propext]
+'AspisR1.KNE_Composition.body_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.KNE_Composition.body_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+{"attempt": "KNE_L012", "exit_status": 1, "wall_seconds": 1.9728730799397454, "peak_rss_kib": "4353628", "swaps": "0", "print_axioms": ["'AspisR1.KNE_Leaf.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+KNE_Leaf.lean:43:24: error: maximum recursion depth has been reached
+KNE_Leaf.lean:46:4: error: `simp` made no progress
+KNE_Leaf.lean:50:5: error: unsolved goals
+KNE_Leaf.lean:57:4: error: maximum recursion depth has been reached
+KNE_Leaf.lean:58:41: error: unsolved goals
+KNE_Leaf.lean:11:30: error(lean.unknownIdentifier): Unknown constant `sourceBody`
+KNE_Leaf.lean:43:24: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+KNE_Leaf.lean:46:15: error(lean.unknownIdentifier): Unknown identifier `sourceBody`
+KNE_Leaf.lean:46:4: error: `simp` made no progress
+KNE_Leaf.lean:50:5: error: unsolved goals
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+oracle : Oracle D hash H
+native : Bytes → Bytes → Bytes → Prop
+valid : LocalCorrect native KND_Schedule.schedule
+p : Prepared
+a : Accumulator
+domain : WriterDomain p a
+proof public1 : Slice U8
+hp hu hc : Digest
+body out : Slice U8
+before : Log
+tr : Trace native (bodyEmissions (fields p a ⋯ ⋯) (stateOf hp) (stateOf hu)) [] (bytesOf ↑body)
+checksumWrite : native (bytesOf ↑body) (bytesOf ↑hc) (bytesOf ↑out)
+proofCall : D.digest hash (singletonParts proof) = ok hp
+publicCall : D.digest hash (singletonParts public1) = ok hu
+checksumCall : D.digest hash (checksumParts body) = ok hc
+decoded : bytesOf ↑body = CheckpointBytesDecodeC5.sourceBody p a hp hu
+bodyEq : body = bodySlice p a hp hu
+bodyLen : List.length (bytesOf ↑body) = 1736
+sumMem : { operation := "checksum", len := 1736, cap := 1768, size := 32 } ∈ KND_Schedule.schedule
+⊢ ↑32#usize = 32
+KNE_Leaf.lean:57:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+KNE_Leaf.lean:58:41: error: unsolved goals
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+oracle : Oracle D hash H
+native : Bytes → Bytes → Bytes → Prop
+valid : LocalCorrect native KND_Schedule.schedule
+p : Prepared
+a : Accumulator
+domain : WriterDomain p a
+proof public1 : Slice U8
+hp hu hc : Digest
+body out : Slice U8
+before : Log
+tr : Trace native (bodyEmissions (fields p a ⋯ ⋯) (stateOf hp) (stateOf hu)) [] (bytesOf ↑body)
+checksumWrite : native (bytesOf ↑body) (bytesOf ↑hc) (bytesOf ↑out)
+proofCall : D.digest hash (singletonParts proof) = ok hp
+publicCall : D.digest hash (singletonParts public1) = ok hu
+checksumCall : D.digest hash (checksumParts body) = ok hc
+decoded : bytesOf ↑body = CheckpointBytesDecodeC5.sourceBody p a hp hu
+bodyEq : body = bodySlice p a hp hu
+bodyLen : List.length (bytesOf ↑body) = 1736
+sumMem : { operation := "checksum", len := 1736, cap := 1768, size := 32 } ∈ KND_Schedule.schedule
+append : bytesOf ↑out = bytesOf ↑body ++ bytesOf ↑hc
+output : ↑out = ↑body ++ ↑hc
+outEq : out = finish p a hp hu hc
+h : (↑body).length = 1736
+⊢ 1736 + ↑32#usize = 1768
+'AspisR1.KNE_Leaf.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"attempt": "KNE_L013", "exit_status": 1, "wall_seconds": 2.1158176769968122, "peak_rss_kib": "4351548", "swaps": "0", "print_axioms": ["'AspisR1.KNE_Leaf.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+KNE_Leaf.lean:43:24: error: maximum recursion depth has been reached
+KNE_Leaf.lean:46:4: error: `simp` made no progress
+KNE_Leaf.lean:50:5: error: unsolved goals
+KNE_Leaf.lean:57:4: error: maximum recursion depth has been reached
+KNE_Leaf.lean:11:30: error(lean.unknownIdentifier): Unknown constant `sourceBody`
+KNE_Leaf.lean:43:24: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+KNE_Leaf.lean:46:15: error(lean.unknownIdentifier): Unknown identifier `sourceBody`
+KNE_Leaf.lean:46:4: error: `simp` made no progress
+KNE_Leaf.lean:50:5: error: unsolved goals
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+oracle : Oracle D hash H
+native : Bytes → Bytes → Bytes → Prop
+valid : LocalCorrect native KND_Schedule.schedule
+p : Prepared
+a : Accumulator
+domain : WriterDomain p a
+proof public1 : Slice U8
+hp hu hc : Digest
+body out : Slice U8
+before : Log
+tr : Trace native (bodyEmissions (fields p a ⋯ ⋯) (stateOf hp) (stateOf hu)) [] (bytesOf ↑body)
+checksumWrite : native (bytesOf ↑body) (bytesOf ↑hc) (bytesOf ↑out)
+proofCall : D.digest hash (singletonParts proof) = ok hp
+publicCall : D.digest hash (singletonParts public1) = ok hu
+checksumCall : D.digest hash (checksumParts body) = ok hc
+decoded : bytesOf ↑body = CheckpointBytesDecodeC5.sourceBody p a hp hu
+bodyEq : body = bodySlice p a hp hu
+bodyLen : List.length (bytesOf ↑body) = 1736
+sumMem : { operation := "checksum", len := 1736, cap := 1768, size := 32 } ∈ KND_Schedule.schedule
+⊢ ↑32#usize = 32
+KNE_Leaf.lean:57:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.KNE_Leaf.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"attempt": "KNE_L014", "exit_status": 0, "wall_seconds": 2.121385599952191, "peak_rss_kib": "4378380", "swaps": "0", "print_axioms": ["'AspisR1.KNE_Leaf.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+
+'AspisR1.KNE_Leaf.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+

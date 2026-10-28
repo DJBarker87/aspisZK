@@ -1,0 +1,64 @@
+KNE_Leaf.lean:11:30: error(lean.unknownIdentifier): Unknown constant `sourceBody`
+KNE_Leaf.lean:43:24: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+KNE_Leaf.lean:46:15: error(lean.unknownIdentifier): Unknown identifier `sourceBody`
+KNE_Leaf.lean:46:4: error: `simp` made no progress
+KNE_Leaf.lean:50:5: error: unsolved goals
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+oracle : Oracle D hash H
+native : Bytes → Bytes → Bytes → Prop
+valid : LocalCorrect native KND_Schedule.schedule
+p : Prepared
+a : Accumulator
+domain : WriterDomain p a
+proof public1 : Slice U8
+hp hu hc : Digest
+body out : Slice U8
+before : Log
+tr : Trace native (bodyEmissions (fields p a ⋯ ⋯) (stateOf hp) (stateOf hu)) [] (bytesOf ↑body)
+checksumWrite : native (bytesOf ↑body) (bytesOf ↑hc) (bytesOf ↑out)
+proofCall : D.digest hash (singletonParts proof) = ok hp
+publicCall : D.digest hash (singletonParts public1) = ok hu
+checksumCall : D.digest hash (checksumParts body) = ok hc
+decoded : bytesOf ↑body = CheckpointBytesDecodeC5.sourceBody p a hp hu
+bodyEq : body = bodySlice p a hp hu
+bodyLen : List.length (bytesOf ↑body) = 1736
+sumMem : { operation := "checksum", len := 1736, cap := 1768, size := 32 } ∈ KND_Schedule.schedule
+⊢ ↑32#usize = 32
+KNE_Leaf.lean:57:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+KNE_Leaf.lean:58:41: error: unsolved goals
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+oracle : Oracle D hash H
+native : Bytes → Bytes → Bytes → Prop
+valid : LocalCorrect native KND_Schedule.schedule
+p : Prepared
+a : Accumulator
+domain : WriterDomain p a
+proof public1 : Slice U8
+hp hu hc : Digest
+body out : Slice U8
+before : Log
+tr : Trace native (bodyEmissions (fields p a ⋯ ⋯) (stateOf hp) (stateOf hu)) [] (bytesOf ↑body)
+checksumWrite : native (bytesOf ↑body) (bytesOf ↑hc) (bytesOf ↑out)
+proofCall : D.digest hash (singletonParts proof) = ok hp
+publicCall : D.digest hash (singletonParts public1) = ok hu
+checksumCall : D.digest hash (checksumParts body) = ok hc
+decoded : bytesOf ↑body = CheckpointBytesDecodeC5.sourceBody p a hp hu
+bodyEq : body = bodySlice p a hp hu
+bodyLen : List.length (bytesOf ↑body) = 1736
+sumMem : { operation := "checksum", len := 1736, cap := 1768, size := 32 } ∈ KND_Schedule.schedule
+append : bytesOf ↑out = bytesOf ↑body ++ bytesOf ↑hc
+output : ↑out = ↑body ++ ↑hc
+outEq : out = finish p a hp hu hc
+h : (↑body).length = 1736
+⊢ 1736 + ↑32#usize = 1768
+'AspisR1.KNE_Leaf.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

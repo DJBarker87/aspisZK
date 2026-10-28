@@ -5,7 +5,7 @@ namespace AspisR1.KNE_Leaf
 open Aeneas Aeneas.Std Result
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open CheckpointBytes5Writer CheckpointBytes5Effect CheckpointBytes5Inputs
-open CheckpointBytesBody CheckpointBytesBlocks CheckpointBytesDigest
+open CheckpointBytesDecodeC5 CheckpointBytesBody CheckpointBytesBlocks CheckpointBytesDigest
 open MultiproofConeCanonical KNE_Model KNE_Schedule KNE_Caller KNE_Composition
 open AspisR1Stage2.WireTx2 (singletonParts checksumParts)
 attribute [local irreducible] sourceBody LPm_CheckpointBody.nativeBody
@@ -47,7 +47,7 @@ theorem native_result {Hash : Type}
   have sumMem : (⟨"checksum",1736,1768,32⟩ : KND_Schedule.Step) ∈
       KND_Schedule.schedule := by decide
   have append := valid _ sumMem _ _ _ bodyLen
-    (by simp only [bytesOf,List.length_map,hc.property]) checksumWrite
+    (by simp only [bytesOf,List.length_map,hc.property]; rfl) checksumWrite
   have output : out.val = body.val ++ hc.val := by
     apply MultiproofConeByteEquality.bytes_injective
     simpa only [bytesOf,List.map_append] using append
@@ -60,6 +60,7 @@ theorem native_result {Hash : Type}
     have h : body.val.length = 1736 := by
       simpa only [bytesOf,List.length_map] using bodyLen
     rw [h,hc.property]
+    rfl
   have runEq : run D hash (writer p a proof public1) before =
       ok (out,((before ++ [(singletonParts proof,hp)]) ++
         [(singletonParts public1,hu)]) ++ [(checksumParts body,hc)]) := by
