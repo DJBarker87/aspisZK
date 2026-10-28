@@ -28,6 +28,6 @@ theorem canonical_iff (d : Array U32 8#usize) :
     index_ok_gen d 6#usize (by decide),index_ok_gen d 7#usize (by decide),bind_tc_ok]
   simp only [AspisR1TerminalDecoder.aspis_core.field.P,UScalar.lt_equiv,UScalar.ofNatCore_val_eq]
   split_ifs <;> simp_all only [Result.ok.injEq,decide_eq_true_eq,Bool.false_eq_true,
-    false_iff,true_and,and_false,and_true]
+    false_iff,true_and,false_and,and_false,and_true,not_false_eq_true]
 #print axioms canonical_iff
 end R1Z.PV_RunJoin_PublicDigest29
