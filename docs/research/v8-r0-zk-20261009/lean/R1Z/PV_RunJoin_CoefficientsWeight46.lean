@@ -8,7 +8,6 @@ namespace R1Z.PV_RunJoin_CoefficientsWeight46
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RunJoin_WeightInstalled46
 variable (base : ExternalTypes) (heap : Heap) (box : Box)
-local instance : ExternalTypes := types base
 -- Reducibility hints only; kernel checking and resource limits are unchanged.
 set_option allowUnsafeReducibility true in
 attribute [local irreducible] ProverRwFullSampler.install ProverRwCallerBinding.install ProverRwOuterContext.install ProverRwOuterTag.install ProverRwOuterTag.selected ProverRwOuterGuardLeaves.selected ProverRwSuccessHeapInstall.selected ProverRwSuccessErrorInstall.selected ProverRwSuccessNativeNegInstall.selected ProverRwSuccessNativeWideInstall.selected ProverRwBodyNativeWideInstall.selected ProverRwP6TransitionInstall.selected ProverRwP6FlatInstall.selected ProverRwP6BoundaryInstall.selected ProverRwSuccessBodyInterpretation.selected
@@ -27,16 +26,16 @@ theorem payload_length (p : Nat → Nat → W) (start n : Nat) : (payload p star
   | zero => rfl
   | succ n ih => simp only [payload,List.length_cons,ih]
 
-theorem installed (ops : ExternalFuns) (p : Nat → W) :
-    @transport.Variant.coefficients _ (selected base heap box ops) _
-      (@aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy _ (selected base heap box ops)) .S2 (ProverCommitArray49.array 1024#usize p) =
+theorem installed (ops : @ExternalFuns (types base)) (p : Nat → W) :
+    @transport.Variant.coefficients (types base) (selected base heap box ops) _
+      (@aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy (types base) (selected base heap box ops)) .S2 (ProverCommitArray49.array 1024#usize p) =
         .ok (column p) := by
   exact PV_RunJoin_WeightCoefficient46.complete base heap box ops _ p
 
-theorem complete (ops : ExternalFuns) (p : Nat → Nat → W) (n : Nat)
+theorem complete (ops : @ExternalFuns (types base)) (p : Nat → Nat → W) (n : Nat)
     (out : alloc.vec.Vec Column) (lane : Usize) (bound : lane.val + n = 29)
     (room : out.length + n ≤ Usize.max) :
-    ∃ next, @PV_RunJoin_CoefficientsThread45.phase _ (selected base heap box ops) .S2
+    ∃ next, @PV_RunJoin_CoefficientsThread45.phase (types base) (selected base heap box ops) .S2
       (messages p) n out lane = .ok next ∧ next.val = out.val ++ payload p lane.val n := by
   induction n generalizing out lane with
   | zero => exact ⟨out,rfl,by simp only [payload,List.append_nil]⟩
@@ -50,7 +49,7 @@ theorem complete (ops : ExternalFuns) (p : Nat → Nat → W) (n : Nat)
     obtain ⟨next,hn,hnv⟩ := ih mid (Usize.wrapping_add lane 1#usize) (by rw [inc];omega) (by rw [ml];omega)
     refine ⟨next,?_,?_⟩
     · dsimp only [column] at hm
-      have hs : @PV_RunJoin_CoefficientsThread45.step _ (selected base heap box ops)
+      have hs : @PV_RunJoin_CoefficientsThread45.step (types base) (selected base heap box ops)
           .S2 (messages p) out lane=alloc.vec.Vec.push out (column (p lane.val)) := by
         unfold PV_RunJoin_CoefficientsThread45.step
         rw [read]
