@@ -1,0 +1,24 @@
+{
+  "attempt": "NBJ_R001",
+  "kind": "rust",
+  "sources": [
+    "NBJ_copy_native.rs"
+  ],
+  "command": [
+    "python3",
+    "-c",
+    "import subprocess;from pathlib import Path;subprocess.run(['/home/dombarker/.cargo/bin/rustc','+1.94.1','--version','--verbose'],check=True);subprocess.run(['/home/dombarker/.cargo/bin/rustc','+1.94.1','-C','opt-level=3','-C','overflow-checks=on','NBJ_copy_native.rs','-o','NBJ_copy_native.bin'],check=True);subprocess.run(['./NBJ_copy_native.bin'],check=True)"
+  ],
+  "timeout": 120,
+  "env": {
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "deps_fingerprint": {
+    "dependencies": "Rust std only, no Cargo resolution; pinned rustc1.94.1",
+    "input": "K050 concrete playback values"
+  },
+  "expected_time": "optimized compilation of one tiny Rust fixture, then exact selected-copy execution",
+  "reservation_retries": 0,
+  "source_revision": "60118d557f59ce6a2a7a0fbbcaba0058308bb049",
+  "source_tree_dirty": true
+}

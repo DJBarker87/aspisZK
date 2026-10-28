@@ -5,10 +5,15 @@ NBI_batch_BRIDGE.md: same scratch and chronological digest log, all three
 source root calls, both transaction splits, exact first-error prefix.
 
 K007 checks one arbitrary physical padding iterator position, including the
-terminal suffix; K008 checks scratch zero initialization. Inherited NBI total
-padding induction, batch domains and post-hash dedup gates are reused as-is.
-The exact predicate/iterator source port is being checked separately; no
-future attempt config or kernel draft is credited as passed.
+terminal suffix; K008 checks scratch zero initialization. K044 checks the
+count Option-to-Merkle mapping; K045 checks root-array projection; K046 checks
+one physical slot range/pointer, with arbitrary admitted scalar endpoints.
+K046 does not execute the offset loop. Inherited NBI offset/dedup/domain/total
+iterator proofs are reused read-only.
+NBJ_Padding/Bits/Port derive the exact installed predicate, BOTH directions of
+little-endian zero decoding, the actual physical chunk partition and total
+same-partition scan, including early stop/fail/div and unvisited suffix.
+No final padding result or independently chosen partition is assumed.
 
 ## Exact open members
 

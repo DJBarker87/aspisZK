@@ -7,9 +7,12 @@ splits. No query uniqueness, n<=10 or new caller precondition is added.
 L004 identifies exact installed/native scalar range endpoints for arbitrary
 bytes/lengths, including rejection. L005 constructs the SAME forward producer's
 sorted output and exact zero suffix, using existing sorting induction. K001,
-K003-006 check scalar/window/iterator/zero predecessors. The complete physical
-opening is split by32-byte observer windows after the excluded K002/K010
-failures; see NBJ_OPENING_ASSOCIATION.md and the attempt ledger.
+K003-006 check scalar/window/iterator/zero predecessors. ALL26 positional32-byte
+observer windows pass (K011-031,K039-043). K047 additionally checks actual
+opening pointer/length for arbitrary i<22; its physical source buffer is zero.
+NBJ_WindowCover proves arbitrary-memory coverage/relocation. K002/K010 timed-out
+larger observations are excluded. See NBJ_OPENING_ASSOCIATION.md for exact
+harness classes; zero surroundings are never a caller precondition.
 
 ## Exact open members
 

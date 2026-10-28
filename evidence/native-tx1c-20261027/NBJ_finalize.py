@@ -33,6 +33,10 @@ for name in ['NBJ_target','NBJ_tmp']:
  p=b/name
  if p.exists():
   out['removed'][str(p)]=len(list(p.rglob('*')));shutil.rmtree(p)
+native=b/'NBJ_copy_native.bin'
+if native.exists():
+ out['native_fixture_binary']={{'sha256':hashlib.sha256(native.read_bytes()).hexdigest(),'size':native.stat().st_size}}
+ native.unlink();out['removed'][str(native)]=1
 out['persistent_cache_retained']={h.CACHE!r}
 print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr

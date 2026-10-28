@@ -1,0 +1,14 @@
+// Focused native fixture for the exact K050 concrete values, not a protocol proof.
+fn main() {
+    let mut input = [0u32; 16];
+    input[7] = 1;
+    input[15] = 512;
+    let n = 16usize;
+    let k = 15usize;
+    let mut level = [0u32; 16];
+    level[..n].copy_from_slice(&input[..n]);
+    println!("n={n} k={k} expected={} actual={}", input[k], level[k]);
+    assert_eq!(level[k], input[k]);
+    for j in 0..16 { assert_eq!(level[j], input[j]); }
+    println!("exact K050 copy fixture: all16 coordinates pass");
+}
