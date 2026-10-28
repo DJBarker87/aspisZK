@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_Slice194.lean:36:9: error: unsolved goals
+case zero
+A B : Type
+xs : List A
+ys : List B
+p : core.cmp.PartialEq A B
+lengths : xs.length = ys.length
+i : ℕ
+hi✝ : i ≤ xs.length
+hn : xs.length - xs.length = 0
+hi : xs.length ≤ xs.length
+⊢ ok true = pure true
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_Slice194.lean:53:19: error: unsolved goals
+case succ.ok.true
+A B : Type
+xs : List A
+ys : List B
+p : core.cmp.PartialEq A B
+lengths : xs.length = ys.length
+i✝ : ℕ
+hi✝ : i✝ ≤ xs.length
+n : ℕ
+ih :
+  ∀ (i : ℕ),
+    xs.length - i = n →
+      i ≤ xs.length → loop (body xs ys p) i = List.allM (compare p) ((List.drop i xs).zip (List.drop i ys))
+i : ℕ
+hn : xs.length - i = n + 1
+hi : i ≤ xs.length
+hx : i < xs.length
+hy : i < ys.length
+hn1 : xs.length - (i + 1) = n
+next : loop (body xs ys p) (i + 1) = List.allM (compare p) ((List.drop (i + 1) xs).zip (List.drop (i + 1) ys))
+hne : p.ne xs[i] ys[i] = ok true
+⊢ ok false = pure false
+'R1Z.PV_RDCD_Slice194.increment_safe' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD_Slice194.loop_suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD_Slice194.source_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
