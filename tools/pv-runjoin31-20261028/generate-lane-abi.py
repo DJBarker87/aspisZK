@@ -1,4 +1,8 @@
 from pathlib import Path
+import sys
+def emit(path, text):
+ if '--check' in sys.argv: assert path.read_text()==text, path
+ else: path.write_text(text)
 R=Path(__file__).resolve().parents[2];L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
 s='''import R1Z.PV_RunJoin_LaneFuns31
 import R1Z.PV_RunJoin_OuterABI30
@@ -58,4 +62,4 @@ end R1Z.PV_RunJoin_LaneABI31
 '''
 # Need the class definition for the native dictionary.
 s=s.replace('import R1Z.PV_RunJoin_OuterABI30','import R1Z.PV_RunJoin_OuterExternal30')
-(L/'PV_RunJoin_LaneABI31.lean').write_text(s)
+emit(L/'PV_RunJoin_LaneABI31.lean',s)
