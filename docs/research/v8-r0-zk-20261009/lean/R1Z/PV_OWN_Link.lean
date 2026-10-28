@@ -2,7 +2,7 @@ import Init
 set_option autoImplicit false
 namespace R1Z.PV_OWN_Link
 inductive Kind where
- | spongeCarry (from to : UInt8)
+ | spongeCarry («from» to : UInt8)
  | ownerOutput | nullifierKey | inputSaltHead | inputSaltTail
  | privatePathCurrent (level : UInt8) | privatePathLeft (level : UInt8) | privatePathRight (level : UInt8)
  | valueSource (value : UInt8)

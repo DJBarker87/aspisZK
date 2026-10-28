@@ -13,7 +13,7 @@ lean=R/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWN_Link.lean';ls=lean.read_
 for name,args in expected:
  name=name[0].lower()+name[1:]
  assert re.search(r'\| '+name+r'\b',ls)
- if args:assert '('+' '.join(args)+' : UInt8)' in ls
+ if args:assert '('+' '.join('«from»' if x=='from' else x for x in args)+' : UInt8)' in ls
 struct=s.split('pub struct PoolV1PairCopyRowLinkV1 {',1)[1].split('\n}',1)[0]
 assert re.findall(r'pub (\w+): (\w+)',struct)==[('kind','PoolV1PairCopyRowLinkKindV1'),('producer_row','u16'),('consumer_row','u16')]
 records=[]
