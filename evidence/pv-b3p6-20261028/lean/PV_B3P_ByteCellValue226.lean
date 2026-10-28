@@ -32,7 +32,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       rw [PV_B3P_LayoutRegions226.anchor p i.val hlo hup]
       rw [PV_B3P_DigestRegionValue226V3.anchor p i hlo hup] at h
       rw [PV_B3P_Offset226V3.sub_value i 1#usize (by simpa using hlo)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb2 : i.val < 65
     ·
@@ -41,7 +41,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       rw [PV_B3P_LayoutRegions226.nullifier p i.val hlo hup]
       rw [PV_B3P_DigestRegionValue226V3.nullifier p i hlo hup] at h
       rw [PV_B3P_Offset226V3.sub_value i 33#usize (by simpa using hlo)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb3 : i.val < 69
     ·
@@ -49,7 +49,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 69 := by omega
       rw [PV_B3P_LayoutRegions226.asset p i.val hlo hup]
       rw [PV_B3P_ScalarValue226.asset p i hlo hup] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb4 : i.val < 70
     ·
@@ -67,7 +67,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 102 := by omega
       rw [PV_B3P_LayoutRegions226.recipient p i.val hw hlo hup]
       rw [PV_B3P_LateValue226.recipient p i hw hlo hup] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb6 : i.val < 134
     ·
@@ -75,7 +75,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 134 := by omega
       rw [PV_B3P_LayoutRegions226.change p i.val (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)]
       rw [PV_B3P_LateValue226.change p i (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb7 : i.val < 135
     ·
@@ -101,7 +101,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 783 := by omega
       rw [PV_B3P_LayoutRegions226.frontier p i.val (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)]
       rw [PV_B3P_LateValue226.frontier p i (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb10 : i.val < 815
     ·
@@ -109,13 +109,13 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 815 := by omega
       rw [PV_B3P_LayoutRegions226.next_root p i.val (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)]
       rw [PV_B3P_LateValue226.next_root p i (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     have hlo : 815 ≤ i.val := by omega
     have hup : i.val < 1455 := by omega
     rw [PV_B3P_LayoutRegions226.next_frontier p i.val (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)]
     rw [PV_B3P_LateValue226.next_frontier p i (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)] at h
-    simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+    try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
     split at h <;> cases h <;> rfl
   | true =>
     simp only [hw,Bool.false_eq_true,↓reduceIte] at hlen
@@ -137,7 +137,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       rw [PV_B3P_LayoutRegions226.anchor p i.val hlo hup]
       rw [PV_B3P_DigestRegionValue226V3.anchor p i hlo hup] at h
       rw [PV_B3P_Offset226V3.sub_value i 1#usize (by simpa using hlo)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb2 : i.val < 65
     ·
@@ -146,7 +146,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       rw [PV_B3P_LayoutRegions226.nullifier p i.val hlo hup]
       rw [PV_B3P_DigestRegionValue226V3.nullifier p i hlo hup] at h
       rw [PV_B3P_Offset226V3.sub_value i 33#usize (by simpa using hlo)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb3 : i.val < 69
     ·
@@ -154,7 +154,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 69 := by omega
       rw [PV_B3P_LayoutRegions226.asset p i.val hlo hup]
       rw [PV_B3P_ScalarValue226.asset p i hlo hup] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb4 : i.val < 70
     ·
@@ -172,7 +172,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 102 := by omega
       rw [PV_B3P_LayoutRegions226.change p i.val (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)]
       rw [PV_B3P_LateValue226.change p i (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb6 : i.val < 103
     ·
@@ -191,7 +191,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 107 := by omega
       rw [PV_B3P_LayoutRegions226.amount p i.val hw hlo hup]
       rw [PV_B3P_ScalarValue226.amount p i hw hlo hup] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb8 : i.val < 115
     ·
@@ -206,7 +206,7 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 755 := by omega
       rw [PV_B3P_LayoutRegions226.frontier p i.val (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)]
       rw [PV_B3P_LateValue226.frontier p i (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     by_cases hb10 : i.val < 787
     ·
@@ -214,13 +214,13 @@ theorem success_value (p : reference226.OwnedPublic) (i : Usize) (b : U8)
       have hup : i.val < 787 := by omega
       rw [PV_B3P_LayoutRegions226.next_root p i.val (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)]
       rw [PV_B3P_LateValue226.next_root p i (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)] at h
-      simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+      try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
       split at h <;> cases h <;> rfl
     have hlo : 787 ≤ i.val := by omega
     have hup : i.val < 1427 := by omega
     rw [PV_B3P_LayoutRegions226.next_frontier p i.val (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)]
     rw [PV_B3P_LateValue226.next_frontier p i (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hlo) (by simpa only [hw,Bool.false_eq_true,↓reduceIte] using hup)] at h
-    simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
+    try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢
     split at h <;> cases h <;> rfl
 #print axioms success_value
 end PV_B3P_ByteCellValue226

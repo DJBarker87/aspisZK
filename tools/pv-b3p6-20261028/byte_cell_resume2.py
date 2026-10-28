@@ -43,6 +43,6 @@ for w in [False,True]:
    s+=indent+f'rw [{law}.{reg} p i {extra}{bounds}] at h\n'
    if reg in ['anchor','nullifier']:s+=indent+f'rw [PV_B3P_Offset226V3.sub_value i {lo}#usize (by simpa using hlo)] at h\n'
    if reg=='index':s+=indent+'exact (core.result.Result.Ok.inj (Result.ok.inj h)).symm\n'
-   else:s+=indent+'simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢\n'+indent+'split at h <;> cases h <;> rfl\n'
+   else:s+=indent+'try simp only [hw,Bool.false_eq_true,↓reduceIte] at h ⊢\n'+indent+'split at h <;> cases h <;> rfl\n'
 s+='#print axioms success_value\nend '+ns+'\n'
 (D/(ns+'.lean')).write_text(s)
