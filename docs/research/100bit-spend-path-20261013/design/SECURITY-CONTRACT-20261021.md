@@ -282,3 +282,14 @@ Owner message, 2026-10-28 ~06:45 UTC: "i acceot yiour recommendations". This ado
 2. One aggregation scope above the standing 8 GiB cap. A single job on the build host: MemoryMax 16G, MemoryHigh 14G, MemorySwapMax 0, Lean -M15000, one run, recording target, exit status, wall time, peak RSS, swap, source revision and #print axioms. Its only target is JHn_TX1.accepted1_saved, the join of the two separately compiled halves, which failed at import at 7.27 GB under -M7000 (AGENTS resource rule 4, legitimate final aggregation). The same scope may be reused for the later TX1+TX2 joint assembly, recorded the same way. It may not be reused for any reduction-shaped failure; those are split.
 
 Deployed 100-bit target: not yet established.
+
+## Owner-approved amendment, 2026-10-28 (fifth)
+
+Owner message, 2026-10-28 evening: "take all your recommendatrions". This adopts the lead's recommendations in design/COMPOSITION-TRUST-DECISION-20261028.md and design/STRATEGY-CHECKPOINT-20261028.md:
+
+1. **Composition trust, option A.** "Native contract semantic transport (result projection)" is recorded as an EXPLICIT CLARIFICATION of the existing P6 (Kani) and D188 (Aeneas) tool trust, not as a new kind of trust. It is scoped to the enumerated bodies, references, dictionaries, features, encodings and tool versions in the accepted receipts; its row text is the NCQ_ draft quoted in the decision document. When native contracts and Lean reference proofs replace parts of the `extraction` premise, this is reported as a RECLASSIFICATION (an unchecked algorithmic claim replaced by checked evidence plus this narrow tool-agreement row), never as a premise removed by proof.
+2. **FixturePdaRuntime: deferred.** It is not adopted. It stays a named hypothesis of the fixture-only TX2 non-vacuity theorems until the lead brings it back with the decoders complete.
+3. **Two routes in parallel.** (A) Release route: finish the bounded deployment items (joint real-byte non-vacuity, L186/L188 source-to-ELF and final trust/axiom audit, S10 completeness), so that the release statement reads "machine-checked for the deployed program, conditional on the explicit owner-accepted trust inventory". (B) Trust-reduction route: continue native bridging, using Kani contracts where the pinned tool supports them and a written, audited call-graph composition argument elsewhere.
+4. **Newer Kani: sandbox evaluation only.** A newer Kani release may be evaluated outside the pinned release configuration, for contract support on slice and Vec returns and for loop contracts. Adoption needs a further owner decision, after the K-1, K-2 and contract fidelity controls have been re-run on it.
+
+Deployed 100-bit target: not yet established.

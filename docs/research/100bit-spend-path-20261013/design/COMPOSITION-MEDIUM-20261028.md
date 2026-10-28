@@ -2,7 +2,7 @@
 
 Status: lead method ruling (w), within the owner-approved direct native-bridge route (contract amendment, third). It changes no target, metric or game. The owner may object or narrow it.
 
-**CORRECTION (lead, 2026-10-28, after NCQ_):** the original sentence "It adds no trust item" is SUPERSEDED as unsupported. NCQ_ (evidence/native-topspec-20261028/NCQ_TOPSPEC.md) shows that linking Kani-proved Rust contracts to the headline's native1/native2 needs an explicit cross-tool semantic transport (Kani/CBMC and Charon/Aeneas agree on Rust semantics for the enumerated bodies, plus the recorded association of those Rust entries with native1/native2/op43/hashv). That link is not checkable in Lean. Whether it is a clarification of existing P6/D188 tool trust or a new row is an OWNER decision: design/COMPOSITION-TRUST-DECISION-20261028.md. The correction concerns reporting, not the protocol or the proofs.
+**CORRECTION (lead, 2026-10-28, after NCQ_):** the original sentence "It adds no trust item" is SUPERSEDED as unsupported. NCQ_ (evidence/native-topspec-20261028/NCQ_TOPSPEC.md) shows that linking Kani-proved Rust contracts to the headline's native1/native2 needs an explicit cross-tool semantic transport (Kani/CBMC and Charon/Aeneas agree on Rust semantics for the enumerated bodies, plus the recorded association of those Rust entries with native1/native2/op43/hashv). That link is not checkable in Lean. The owner decided (2026-10-28, amendment fifth): it is an explicit clarification of existing P6/D188 tool trust, scoped to the receipts; uses are reported as reclassification. The correction concerns reporting, not the protocol or the proofs.
 
 ## The obstruction every lane hit
 

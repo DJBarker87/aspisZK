@@ -356,3 +356,7 @@ BatchedWeights::finish is suspended pending per-function checks. Repair route:
 owner decision, D188-FIDELITY-DECISION-20261027.md (recommended: narrow D188
 and bridge those bodies natively as opaque leaves). The inventory text above is
 otherwise unchanged.
+
+## Owner-approved clarification, 2026-10-28 (amendment fifth): native contract semantic transport
+
+Clarifies the existing P6 (Kani) and D188/AeneasExtraction (Charon/Aeneas) tool trust; it is not a new kind of trust. Text: "Native contract semantic transport (result projection). For only the frozen owned TX1 stage1, owned TX2 stage2 and SolanaDigest wrapper bodies, reference bodies, operation dictionaries, features, input/outcome encodings and tool versions enumerated by the accepted receipts, we trust that the Rust execution interpreted by Kani/CBMC and the reference execution interpreted by pinned Charon/Aeneas denote the same Rust language/primitive semantics under the certified common external world. We trust the explicitly recorded association of those Rust entries with the Lean function parameters native1/native2, of the digest wrapper with installed ops.op43, and of the external digest with hashv." Source: evidence/native-topspec-20261028/NCQ_TOPSPEC.md. Uses are reported as reclassification of the `extraction` premise, never as removal. FixturePdaRuntime (evidence/joint-pda-20261028/JHs_TRUST_PROPOSAL.md) is DEFERRED and not adopted.

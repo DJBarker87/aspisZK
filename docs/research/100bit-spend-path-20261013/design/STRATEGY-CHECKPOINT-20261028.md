@@ -2,6 +2,8 @@
 
 Plain-language summary of where the soundness work stands, what the day's results mean, and the choice ahead. Target not yet established.
 
+**OWNER DECISION, 2026-10-28 evening: "take all your recommendatrions". All lead recommendations ADOPTED (option A; PDA item deferred; routes A and B in parallel; newer Kani sandbox evaluation only). Recorded as contract amendment (fifth).**
+
 ## Where we are
 
 - **The headline theorem** (AspisR1.RPx_Deployed.deployed) has no open premises on its own statement (83T/0P/13G, with L154 as the statement parameter). What remains is:

@@ -2,6 +2,8 @@
 
 Status: DECISION REQUESTED. Lead recommendation below. Nothing is adopted until the owner decides.
 
+**OWNER DECISION, 2026-10-28 evening: "take all your recommendatrions". All lead recommendations ADOPTED (option A; PDA item deferred; routes A and B in parallel; newer Kani sandbox evaluation only). Recorded as contract amendment (fifth).**
+
 ## The question in plain terms
 
 The headline treats each deployed transaction as an opaque program (native1, native2) and assumes, as one premise (`extraction`), that it matches the model. The native bridges try to replace that assumption with evidence:
