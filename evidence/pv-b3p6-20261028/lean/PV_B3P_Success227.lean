@@ -84,7 +84,6 @@ theorem loop_total {α β : Type} (body : α → Result (ControlFlow α β))
     intro a ha hm
     obtain ⟨cf,hcf,hstep⟩ := step a ha
     rw [loop.eq_1]
-    dsimp only
     rw [hcf]
     cases cf with
     | done b => exact ok b
