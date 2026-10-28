@@ -41,7 +41,7 @@ theorem next_source (n : Usize) : next n =
     · simp only [UScalar.bv_toNat]
       change n.val - 1 = (2 ^ UScalarTy.Usize.numBits - 1 + n.val) % 2 ^ UScalarTy.Usize.numBits
       have hnsize := n.hSize
-      change n.val < 2 ^ UScalarTy.Usize.numBits at hnsize
+      rw [UScalar.size_def] at hnsize
       rw [show 2 ^ UScalarTy.Usize.numBits - 1 + n.val =
         (n.val - 1) + 2 ^ UScalarTy.Usize.numBits from by omega,
         Nat.add_mod_right, Nat.mod_eq_of_lt (by omega)]
