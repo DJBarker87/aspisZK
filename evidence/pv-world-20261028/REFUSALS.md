@@ -33,3 +33,9 @@ compiler started. Retry is permitted after 11:50:21.293233 UTC.
 compiled successfully with the repaired public-import closure.
 36066 in-scope barrier refused 12:25:35.442703 UTC (aggregate reservation),
 no compiler started. Same-ID retry is permitted after 12:28:35.442703 UTC.
+
+D372: 50434 barrier refusal at 13:39:32 UTC; retried with the same ID.
+The retry was 57.47 seconds early; D372-COOLDOWN-DEVIATION.json records this
+and the wrapper correction. 50452 upload refusal at 13:47:45 UTC consumes
+neither a compiler attempt nor its ID; its full 180-second cooldown is
+now enforced by the wrapper over both upload and barrier refusal records.
