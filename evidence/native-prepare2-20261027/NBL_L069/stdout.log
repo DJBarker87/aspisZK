@@ -1,0 +1,51 @@
+NBL_generated/NBL_QueryHashReplay.lean:19:97: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+before : transcript.Transcript H
+row : U8
+payload : Slice U8
+t : NBL_QueryTrace.Trace D before row payload
+absorbed :
+  run (PreparedHashEffects.absorb effects D before row payload) =
+    ([Event.digest D before.hash (NBA_Transcript.absorbParts before.state t.tag payload) (ok t.absorbed)],
+      ok { state := t.absorbed, hash := before.hash })
+material :
+  run (NBL_QueryEffectFactor.materialize D before.hash t.absorbed) =
+    (NBL_HashReplay.events D before.hash (NBL_MaterialHashReplay.log t.pairs), ok (t.pairs.blocks, t.pairs.advances))
+decoded :
+  NBL_QueryDictionary.boundaries.decode t.pairs.blocks t.pairs.advances =
+    Query31ConcreteMaterializedSchedule.adaptScanResult t.result
+finished :
+  NBA_QueryFactor.finishQuery NBL_QueryDictionary.boundaries D t.afterAbsorb t.pairs.blocks t.pairs.advances =
+    NBL_QueryPort.port t.afterAbsorb t.result
+⊢ (Event.digest D before.hash (NBA_Transcript.absorbParts before.state t.tag payload) (ok t.absorbed) ::
+        List.map (fun event => Event.digest D before.hash event.1 (ok event.2)) (NBL_MaterialHashReplay.log t.pairs),
+      NBA_QueryFactor.finishQuery NBL_QueryDictionary.boundaries D { state := t.absorbed, hash := before.hash }
+        t.pairs.blocks t.pairs.advances) =
+    (Event.digest D before.hash (NBA_Transcript.absorbParts before.state t.tag payload) (ok t.absorbed) ::
+        List.map (fun event => Event.digest D before.hash event.1 (ok event.2)) (NBL_MaterialHashReplay.log t.pairs),
+      NBL_QueryPort.port { state := t.absorbed, hash := before.hash } t.result)
+NBL_generated/NBL_QueryHashReplay.lean:29:46: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵r̵u̵n̵,̵a̵b̵s̵o̵r̵b̵e̵d̵,̵c̵h̵a̵i̵n̵,̵m̵a̵t̵e̵r̵i̵a̵l̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵B̵L̵_̵Q̵u̵e̵r̵y̵Q̵u̵i̵e̵t̵F̵i̵n̵i̵s̵h̵.̵s̵o̵u̵r̵c̵e̵,̵f̵i̵n̵i̵s̵h̵e̵d̵,̵N̵B̵L̵_̵Q̵u̵e̵r̵y̵T̵r̵a̵c̵e̵.̵T̵r̵a̵c̵e̵.̵a̵f̵t̵e̵r̵A̵b̵s̵o̵r̵b̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵B̵L̵_̵H̵a̵s̵h̵R̵e̵p̵l̵a̵y̵.̵e̵v̵e̵n̵t̵s̵,̵l̵o̵g̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵c̵o̵n̵s̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲b̲i̲n̲d̲_̲r̲u̲n̲,̲ ̲a̲b̲s̲o̲r̲b̲e̲d̲,̲ ̲c̲h̲a̲i̲n̲,̲ ̲m̲a̲t̲e̲r̲i̲a̲l̲,̲ ̲N̲B̲L̲_̲Q̲u̲e̲r̲y̲Q̲u̲i̲e̲t̲F̲i̲n̲i̲s̲h̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲f̲i̲n̲i̲s̲h̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲B̲L̲_̲Q̲u̲e̲r̲y̲T̲r̲a̲c̲e̲.̲T̲r̲a̲c̲e̲.̲a̲f̲t̲e̲r̲A̲b̲s̲o̲r̲b̲,̲ ̲N̲B̲L̲_̲H̲a̲s̲h̲R̲e̲p̲l̲a̲y̲.̲e̲v̲e̲n̲t̲s̲,̲ ̲l̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲c̲o̲n̲s̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_QueryHashReplay.lean:30:32: warning: This simp argument is unused:
+  finished
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_run, ̲absorbed, ̲chain, ̲material, ̲Aeneas.Std.uncurry,
+  ̵  ̵ ̵ ̵NBL_QueryQuietFinish.source,f̵i̵n̵i̵s̵h̵e̵d̵,̵
+  ̲ ̲ ̲ ̲ ̲NBL_QueryTrace.Trace.afterAbsorb,
+  ̵  ̵ ̵ ̵NBL_HashReplay.events, ̲log, ̲List.map_cons, ̲List.cons_append,
+  ̲ ̲ ̲ ̲ ̲List.nil_append, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NBL_QueryHashReplay.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBL_QueryHashReplay.length' depends on axioms: [propext, Classical.choice, Quot.sound]

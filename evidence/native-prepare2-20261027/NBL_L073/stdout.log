@@ -1,0 +1,81 @@
+NBL_generated/NBL_PrepareHashTrace.lean:65:11: error(lean.unknownIdentifier): Unknown identifier `preparationEffects`
+NBL_generated/NBL_PrepareHashTrace.lean:46:92: error: unsolved goals
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+pre : r1_wire.Prefix
+beforeSemantic : r1_wire.SemanticTranscript H
+challenges : r1_wire.Challenges
+obs : Option (verifier.Phase → Result Unit)
+sem : r1_semantic.Verified H
+finish :
+  FinishModel.finish AspisS1ExtractedRoundChildren.children
+      { fromFn := @FinishModel.Boundaries.fromFn B, mask := B.mask, add := B.add, mul := B.mul, terminal := B.terminal,
+        circle := B.circle, unwrapRoot := B.unwrapRoot,
+        claims := ClaimsUnrolledFinish.claims (NP6_StdModel.calls (core.result.Result.Ok ())) }
+      D pub pre beforeSemantic challenges obs =
+    ok (core.result.Result.Ok sem)
+proof semantic compact before y1 : Slice U8
+view : AspisR1SelectedWideViewV1.verifier.View
+viewCall : AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = ok (core.result.Result.Ok view)
+len : (↑compact).length = 464
+size : (↑before).length = 928
+checked : LPt_External.compact.check_values compact = ok (core.result.Result.Ok ())
+expanded : LPt_LPn.Expand.NativeTrace (↑compact) (↑before) 29 ↑y1
+hash : H
+old : NBL_PrepareControl.Scratch
+opening : NBL_OpeningTrace.Trace D sem (AspisR1SelectedWideViewV1.preparedView view) hash
+queries : NBL_QueryTrace.Trace D opening.alpha1.block.after 31#u8 view.final_message
+q : Std.Array U32 22#usize
+state : NBL_BlockTrace.Bytes32
+selected : queries.result = ok (core.result.Result.Ok (q, state))
+rhoBlock :
+  Block D
+    (let __src := queries.afterAbsorb;
+    { state := state, hash := __src.hash })
+    32#u8 emptyPayload
+digits : List ℕ
+last : List UInt32
+rho : aspis_core.field.QM31
+division : LPk_Induction.Digits 4 (SamplerBytePass.digits rhoBlock.value) digits last
+packed : NBA_Rho.coordinates rho = digits
+gc :
+  PreparedModel.scalar NBA_Installed.actual.sampling D { state := opening.seed, hash := hash } 27#u8
+      (AspisR1SelectedWideViewV1.preparedView view).y1 true =
+    ok (opening.gamma.value, opening.gamma.block.after)
+kc :
+  PreparedModel.scalar NBA_Installed.actual.sampling D opening.gamma.block.after 28#u8
+      (Array.to_slice opening.inactiveBytes) false =
+    ok (opening.kappa.value, opening.kappa.block.after)
+g : Std.Array LPi_FieldValues.NE 29#usize
+claim : LPi_FieldValues.NE
+native : FIo_Native.weights.powers 29#usize (NBA_Carriers.back opening.gamma.value) = ok g
+powers : NBA_Installed.actual.powers 29#usize opening.gamma.value = ok (mapArray NBA_ClaimCallee.wide g)
+trace :
+  LPq_PreparedTrace.Trace (toClaimSem sem) view.y1 (XRo_Join_Carriers.arr LPq_Powers.claim g)
+    (NBA_Carriers.back (AspisR1SelectedWideViewV1.preparedView view).inactive) (NBA_Carriers.back opening.kappa.value)
+    claim
+canonical : LPi_FieldValues.canonE claim
+claimed :
+  NBA_Installed.actual.claim D sem view.y1 (AspisR1SelectedWideViewV1.preparedView view).inactive
+      (mapArray NBA_ClaimCallee.wide g) opening.kappa.value =
+    ok (core.result.Result.Ok (NBA_ClaimCallee.wide claim))
+qc :
+  NBA_Installed.actual.sampling.queries D opening.alpha1.block.after 31#u8 view.final_message =
+    NBL_QueryPort.port queries.afterAbsorb (ok (core.result.Result.Ok (q, state)))
+rc :
+  PreparedModel.scalar_k NBA_Installed.actual.sampling D
+      (let __src := queries.afterAbsorb;
+      { state := state, hash := __src.hash })
+      32#u8 emptyPayload =
+    ok (rho, rhoBlock.after)
+row : 31#u8 + 1#u8 = ok 32#u8
+⊢ PreparedHashCode.run (NBL_CohortCode.code D sem (AspisR1SelectedWideViewV1.preparedView view) hash old) =
+    (NBL_HashReplay.events D hash (opening.log ++ NBL_QueryHashReplay.log queries ++ rhoBlock.log),
+      ok
+        (core.result.Result.Ok
+            (output sem (AspisR1SelectedWideViewV1.preparedView view) opening.gamma.value opening.kappa.value
+              opening.output.alpha rho q (NBA_ClaimCallee.wide claim) rhoBlock.after),
+          mapArray NBA_ClaimCallee.wide g))
+'AspisR1.NBL_PrepareHashTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
