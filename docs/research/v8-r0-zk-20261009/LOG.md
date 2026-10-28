@@ -14267,3 +14267,22 @@ Still OPEN:
 - (c) V047's statement-equals-handle identification.
 
 Item (b) is the shared ownership interface of D419, so it moves to pv-own. pv-rjdecc continues in the same worktree on (a), then (c) only (IDs 61800-61899; 100 Lean, 40 native, 0 Kani). rjdec will be merged into the runjoin branch after runjoin46 finishes, since runjoin46 is committing there now. Rows removed: 0. Privacy target not yet established.
+
+## D421 (Stream B) 2026-10-28 23:37 UTC: runjoin46 results; rjdec merged into runjoin; runjoin47 launched
+
+runjoin46 (head 98fbd36ac4) used all 100 Lean attempts (77 accepted, 23 rejected; 0 Kani). No limits were raised, and the final cache checks and audits passed with standard axioms only. Lead review: no forbidden constructs or limit options in new sources; no file over 5 MB; shipped-code diff empty. It checked the following:
+- all 22 weight prerequisites;
+- WeightObject46.complete, binding the actual op252 Box Result, the op25 representation, all seven op253 raw Results and the op251 callback on the same object;
+- WeightStored46.complete, which identifies the stored fields with kernelState but does not prove kernelState comes from weights53.new;
+- WeightCell46 and WeightFill46, the reference folds by induction;
+- CoefficientsInstalled46, the 29-column caller under the installed weight dictionary.
+WeightCellSource46 was rejected (61496) and is uncredited. The materialization-loop identification, the constructor binding, the openings and the serialization remain open. Rows removed: 0.
+
+The lead merged codex/pv-rjdec-20261028 at 11d5d0368b into the runjoin branch, which is now 98c07508b3 and pushed. The merge was clean and the shipped-code diff is empty. It brings rjdec's input-parser laws, the zeroize barrier law, the V047 consumer and the candidate. Step (3) stays open in rjdecc and pv-own.
+
+runjoin47 launched (IDs 61900-61999; 100 Lean, 0 Kani). It follows WEIGHT-NEXT.md in order:
+- an explicit-elimination replacement for WeightCellSource46;
+- the materialization-loop identification giving ProverCommitWeightsMaterialBinding53.run;
+- kernelState produced by weights53.new, never assumed;
+- composition into ProverCommitOpeningModel53.exact_result and the publication bytes.
+Step (4) waits for step (3). Privacy target not yet established.
