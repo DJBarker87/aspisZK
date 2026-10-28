@@ -65,7 +65,7 @@ theorem success_cell (p : reference226.OwnedPublic) (base : Usize)
   have houtval : out.val = bs.flatMap (fun a => a.val) := congrArg Subtype.val hout
   rw [← houtval] at hflat
   rw [List.getElem?_eq_getElem (by rw [out.property]; simpa using hr),
-      List.getElem?_eq_getElem (by rw [(bs[r.val/8]'(by omega)).property]; omega)] at hflat
+      List.getElem?_eq_getElem (by rw [(bs[r.val/8]'(by omega)).property]; change r.val % 8 < 8; omega)] at hflat
   have heq := Option.some.inj hflat
   simpa only [hj,heq] using hv
 #print axioms success_cell
