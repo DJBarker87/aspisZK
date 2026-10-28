@@ -1,4 +1,7 @@
 from pathlib import Path
+import sys
+sys.dont_write_bytecode=True
+from NBP_patch_sources import added_patch,pieces
 E=Path(__file__).resolve().parent
 variants=['Parse','Semantic','Transcript','Relation','Merkle','Query','Checkpoint','Allocation']
 s='''static mut NBP_INDEX: usize = 0;
@@ -22,7 +25,6 @@ fn NBP_error_{v}() {{
  kani::cover!(i=={len('r1:error:'+v)-1});
 }}
 '''
-(E/'NBP_error.rs').write_text(s)
 import subprocess,difflib
 p='programs/r1-cost-probe/src/lib.rs';old=subprocess.check_output(['git','show','4bb3b3f5:'+p],text=True)
 new=old+'\n#[cfg(kani)]\nmod NBP_error;\n'

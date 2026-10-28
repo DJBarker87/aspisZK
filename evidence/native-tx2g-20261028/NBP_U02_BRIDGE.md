@@ -1,6 +1,6 @@
-# NBP U02 atomic digest and payment codecs
+# NBP U02 atomic digest and payment codecs — CLOSED local
 
-Status: twelve of sixteen local members CLOSED; four OPEN. No headline premise
+Status: all16 local members CLOSED on the domains below. No headline premise
 removed. RPx_Deployed.deployed, L154 statement parameter, narrowed D188,
 frozen3, RuntimePersistence and approved game fields unchanged. S2 and the
 100-bit deployed target remain unestablished.
@@ -41,10 +41,7 @@ validate_common, validate_pool_v1_private_transfer_public_v1,
 validate_pool_v1_withdrawal_public_v1. Their domains and exact references remain
 those in that handoff.
 
-OPEN: decode_pool_v1_private_transfer_public_v1 and encoder;
-decode_pool_v1_withdrawal_public_v1 and encoder. Their native checks now pass;
-selected full model parent composition remains under validation. U01 remains
-reused CLOSED.
+No U02 member remains open. U01 remains reused CLOSED.
 
 Retained caller dictionary installation, runtime/allocator/SDK/ABI/compiler/P6
 and source-to-ELF boundaries are not removed. No repository crates/programs
@@ -102,3 +99,68 @@ K019–K029 check every used source range and frame on arbitrary pre-state.
 All new memory-copy gates use unwind256≥216, not the low-bound KDX hold shape.
 All accepted new roots print only standard axioms (or none). Exact metrics,
 source/object hashes and revision pins remain in the per-attempt receipts.
+
+## Parent payment codecs — CLOSED local
+
+| Member | Full selected-model Result | Native association | Domain |
+|---|---|---|---|
+| decode_pool_v1_private_transfer_public_v1 | NBP_TransferDecode.result/fixed (L066) | K033 | Every Slice length: wrong lengths reject before reads; exact216 arbitrary bytes use complete native Result/record equality. |
+| decode_pool_v1_withdrawal_public_v1 | NBP_WithdrawalDecode.result/fixed (L061) | K034 | Every Slice length; exact216 arbitrary bytes as above. |
+| encode_pool_v1_private_transfer_public_v1 | NBP_TransferEncode.result (L070) | K031 | All raw public records; exact validator error or full216 output. |
+| encode_pool_v1_withdrawal_public_v1 | NBP_WithdrawalEncode.result (L071) | K032 | All raw public records; exact validator error or full216 output. |
+
+NBP_PaymentModel defines the pure full Results and byte arrays explicitly.
+Decoders retain source order: length, header, transfer's fee/reserved check,
+common fields, recipient/change digest Results, then final validator.
+Withdrawal reads exact amount148..152 and destination152..184. The full
+Result laws include every rejection, not only accepted-class values. No
+successful callee or desired output is supplied. Their ALL-length proof
+inverts the actual fixed-width conversion: its failure returns WrongLength
+before any index; on equality its SAME bytes become the216-byte carrier.
+Native K033/K034 exhaust the exact216-byte class. For every other native
+length, the frozen initial try_into length test rejects parametrically
+before inspecting content; there is no claim that bounded Kani slices
+exhaust arbitrary lengths.
+
+Encoders compose the CLOSED validators/projections, initialize216 zeros,
+use CLOSED encode_common on that SAME pre-state, and write exact suffixes.
+Transfer preserves zero fee148..152 and writes recipient152..184/change184..216;
+withdrawal writes amount148..152/destination152..184/change184..216. Native
+K031/K032 retain the real validators and code bodies with only the CLOSED
+digest serializer substituted as registered. The exact byte/frame laws in
+NBP_ArrayIndex and K019–K029 derive every copy domain; no canonicality is
+required by the serializer, and canonicality is not smuggled in as a caller
+precondition.
+
+The only source loop (digest encoding) uses ONE native arbitrary-prestate
+iteration and the reused Lean induction. No parent216-byte loop exists or
+is unwound; std memory-copy bounds256 cover the largest216-byte carrier.
+All Kani runs validate the frozen dependency graph before execution, run
+offline/optimized, and leave Cargo.lock unchanged. The new copy shapes have
+adequate bounds; inherited K019/K020 credit remains subject to KDX exposure
+review. Compiler/platform/P6/ABI and source-to-ELF association are retained,
+not promoted to a deployed claim. Coherent slots stay43/44.
+
+This closes local U02 source/cohort helpers only. Actual caller dictionary
+installation and the composed S2/deployed soundness theorem are not claimed.
+No XRn_Join or stand-in, new axiom, security assumption, trust item or headline
+premise removal. Existing prepared_claim bridge LPt is reused; this lane
+claims no new closure of prepared_claim. U00's two exact open members remain
+in NBP_U00_BRIDGE.md.
+
+Initial co-import/axioms audit NBP_L073 passes:52 selected roots (including
+EVERY new top theorem), only propext/Classical.choice/Quot.sound or none.
+Command lake env lean -j1 -M7000 -DElab.async=false -R NBP_generated
+-o /home/dombarker/project-offloads/codex-cx-tx2low-cache-20261028/NBP_Audit.olean
+NBP_generated/NBP_Audit.lean. Exit0, wall2.0109406640403904s,
+peakRSS5116504KiB, swap0. Exact source revision,source/direct-object hashes,
+caps and all printed lines are in NBP_L073/receipt.json. This is a focused
+coherent new-module audit, not a new full frozen release replay.
+
+The FINAL byte-matched co-import/axioms audit is NBP_L075: exit0,
+wall1.8260754630318843s, peakRSS5119900KiB,swap0; same52 selected roots and
+standard axioms only. L074 recompiles the exact final DigestDecode source
+whose only difference from L015 was removal of trailing whitespace. L075
+refreshes its dependent audit for that source/artifact correspondence; it is
+not an unchanged regression rerun. NBP_FINAL_SOURCES.json matches EVERY final
+module byte hash to its latest passing source snapshot.

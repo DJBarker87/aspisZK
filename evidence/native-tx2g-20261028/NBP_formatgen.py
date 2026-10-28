@@ -1,4 +1,7 @@
 from pathlib import Path
+import sys
+sys.dont_write_bytecode=True
+from NBP_patch_sources import added_patch,pieces
 import difflib
 E=Path(__file__).resolve().parent
 s='''use core::fmt::Write;
@@ -28,6 +31,5 @@ fn NBP_{part}_{v}() {{
  kani::cover!(i=={len(exp)-1});
 }}
 '''
-p='programs/r1-cost-probe/src/NBP_error.rs';old=(E/'NBP_error.rs').read_text();new=old+s
-(E/'NBP_components.rs').write_text(s)
+p='programs/r1-cost-probe/src/NBP_error.rs';old=added_patch(E/'NBP_error.patch','/NBP_error.rs');new=old+s
 (E/'NBP_components.patch').write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='a/'+p,tofile='b/'+p)))

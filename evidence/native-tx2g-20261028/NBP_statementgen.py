@@ -1,4 +1,7 @@
 from pathlib import Path
+import sys
+sys.dont_write_bytecode=True
+from NBP_patch_sources import added_patch,pieces
 import subprocess,difflib
 E=Path(__file__).resolve().parent
 # Pure, unrolled natural byte spelling for the closed digest serializer.
@@ -45,7 +48,7 @@ fn NBP_store_{name}() {{
 p='crates/aspis-statement/src/pool_v1/payment_relation.rs';old=subprocess.check_output(['git','show','4bb3b3f5:'+p],text=True);new=old+'\n#[cfg(kani)]\nmod NBP_codecs;\n'
 patch=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='a/'+p,tofile='b/'+p))
 patch+=''.join(difflib.unified_diff([],s.splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs'))
-(E/'NBP_statement.rs').write_text(s);(E/'NBP_statement.patch').write_text(patch)
+(E/'NBP_statement.patch').write_text(patch)
 # Native decoder association, each coordinate as well as complete error result.
 old=s
 s+='''fn NBP_raw32(b:&[u8;216],off:usize)->[u8;32] {
@@ -71,5 +74,4 @@ fn NBP_common_decoder() {
 }
 '''
 p='crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs'
-(E/'NBP_statement2.rs').write_text(s[len(old):])
 (E/'NBP_statement2.patch').write_text(''.join(difflib.unified_diff(old.splitlines(True),s.splitlines(True),fromfile='a/'+p,tofile='b/'+p)))

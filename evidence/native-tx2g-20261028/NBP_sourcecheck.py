@@ -6,7 +6,7 @@ with tarfile.open(fileobj=io.BytesIO(arc)) as t: sizes={f.name:f.size for f in t
 code=f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});s=b/'NBP_src';m={m!r};sizes={sizes!r}
-allowed={{'programs/r1-cost-probe/src/lib.rs':b'\\n#[cfg(kani)]\\nmod NBP_error;\\n','crates/aspis-statement/src/pool_v1/payment_relation.rs':b'\\n#[cfg(kani)]\\nmod NBP_codecs;\\n'}}
+allowed={{'programs/r1-cost-probe/src/lib.rs':b'\\n#[cfg(kani)]\\nmod NBP_error;\\n','crates/aspis-statement/src/pool_v1/payment_relation.rs':b'\\n#[cfg(kani)]\\nmod NBP_codecs;\\n','crates/aspis-core/src/r0/heap.rs':b'\\n#[cfg(kani)]\\nmod NBP_filled;\\n'}}
 errors=[];mods=[]
 for name,h in m.items():
  data=(s/name).read_bytes();z=sizes[name]
@@ -18,7 +18,7 @@ print(json.dumps(dict(frozen='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',checked=
 assert not errors
 '''
 for n in range(11):
- r=subprocess.run(['ssh','-o','ConnectTimeout=15',H,'python3 -c '+shlex.quote(code)],capture_output=True,text=True)
+ r=subprocess.run(['ssh','-o','ConnectTimeout=15',H,'python3'],input=code,capture_output=True,text=True)
  with (E/'NBP_SOURCE_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(trial=n,exit=r.returncode,stdout=r.stdout,stderr=r.stderr))+'\n')
  if r.returncode!=255:break
  if n<10:time.sleep(60)

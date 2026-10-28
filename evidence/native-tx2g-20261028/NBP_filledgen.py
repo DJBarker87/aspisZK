@@ -1,4 +1,7 @@
 from pathlib import Path
+import sys
+sys.dont_write_bytecode=True
+from NBP_patch_sources import added_patch,pieces
 import difflib,subprocess
 E=Path(__file__).resolve().parent
 s=''
@@ -23,8 +26,7 @@ fn NBP_filled_zero() {
 p='crates/aspis-core/src/r0/heap.rs';old=subprocess.check_output(['git','show','4bb3b3f5:'+p],text=True);new=old+'\n#[cfg(kani)]\nmod NBP_filled;\n'
 patch=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='a/'+p,tofile='b/'+p))
 patch+=''.join(difflib.unified_diff([],s.splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-core/src/r0/heap/NBP_filled.rs'))
-(E/'NBP_filled.rs').write_text(s);(E/'NBP_filled.patch').write_text(patch)
-old=(E/'NBP_error.rs').read_text()+(E/'NBP_components.rs').read_text()
+old=added_patch(E/'NBP_error.patch','/NBP_error.rs')+added_patch(E/'NBP_components.patch','/NBP_error.rs')
 s='''static mut NBP_FORMAT_PTR:*const u8=core::ptr::null();
 fn NBP_format_reply(_args:core::fmt::Arguments<'_>)->String {
  let s=String::from("x");unsafe{NBP_FORMAT_PTR=s.as_ptr();}s
@@ -47,5 +49,4 @@ fn NBP_error_forward() {
 }
 '''
 p='programs/r1-cost-probe/src/NBP_error.rs'
-(E/'NBP_forward.rs').write_text(s)
 (E/'NBP_forward.patch').write_text(''.join(difflib.unified_diff(old.splitlines(True),(old+s).splitlines(True),fromfile='a/'+p,tofile='b/'+p)))

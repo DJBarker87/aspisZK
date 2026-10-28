@@ -1,0 +1,79 @@
+{
+  "attempt": "NBP_K039",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "70bf383623db36bb71e1bd63eb51e468876f28e9",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "NBP_src/Cargo.toml",
+    "NBP_src/Cargo.lock",
+    "NBP_src/crates/aspis-core/src/r0/heap.rs",
+    "NBP_src/crates/aspis-core/src/r0/heap/NBP_filled.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2g-20261028/NBP_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2g-20261028/NBP_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r0::heap::NBP_filled::NBP_filled_zero",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2g-20261028/NBP_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph": {
+      "resolved_packages": 441,
+      "new_package_tuples": [],
+      "edge_errors": [],
+      "graph_matches_frozen": true,
+      "graph_sha256": "805dbcd7b94dc1578e2c9b1d2b0af5d244790516cc42ef40827aac6f60442e42",
+      "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+    },
+    "harness_patch_sha256": "11975ca1f2e6845af25cf36d0a480606dbc99865869db3f45319c59b60ffaf37",
+    "extra_patch_sha256": null
+  },
+  "expected_time": "optimized dependency compilation then native release leaf r0::heap::NBP_filled::NBP_filled_zero",
+  "exit_status": 0,
+  "wall_seconds": 4.50954311498208,
+  "peak_rss_kib": "593120",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r639209bd7c804992ba15829de9d2ad10.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "665919488",
+  "source_hashes": {
+    "NBP_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "NBP_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBP_src/crates/aspis-core/src/r0/heap.rs": "2c650858628b5c5e72e37b8ba23e55fdc57c6abef0c2f0a99ab5a0447af325c4",
+    "NBP_src/crates/aspis-core/src/r0/heap/NBP_filled.rs": "75f32a72a19fa38f4c03ad03166e83b3e61be26aced80022accbaca50eaec389"
+  },
+  "print_axioms": "N/A: kani"
+}

@@ -26,7 +26,7 @@ SHA, field arithmetic or whole protocol buffer loop is unwound. Unwind64
 exceeds the longest18-byte message. No formatter return/string is assumed.
 
 NBP_ErrorLabels.labels (L041) checks the same eight literal messages against
-NBG_Error.message, no axioms. NBG_Error.transition is imported unchanged: one
+NBG_Error.message, standard propext only. NBG_Error.transition is imported unchanged: one
 exact log transition, preserving its SAME resulting state or fail/div, followed
 by InvalidInstructionData. The full native allocating formatter, string owner/
 cleanup and actual log call association are STILL OPEN; the passing write
@@ -56,3 +56,29 @@ devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
 No keys, other worktrees/prefixes, live session A candidates or shared launchers
 modified. Own persistent cache is retained; no push/merge.
+
+## Terminal native budget and precise subdomains
+
+All40 Kani invocations are now terminal:39 PASS, K001 timeout. No further
+native launch is authorized by this lane's budget.
+
+K035–K038 prove actual filled(n,value) returns Error::Allocation for every
+n > isize::MAX/size_of(T), for T=u8,u32,u64,[u8;32], arbitrary raw values.
+The capacity/size limit rejects before any allocation or resize. These are
+four explicit native failure subdomains, not a proof of arbitrary n.
+K039 proves the zero-count u64 case returns an empty zero-capacity Vec.
+NBC_Filled.result remains the complete model law; native success at arbitrary
+positive sizes and allocator/state/ownership/cleanup association remain OPEN.
+
+K040 passes0/327 failed,1/1 cover: all eight native error tags, actual wrapper,
+exactly one sol_log call with the formatter-returned pointer/length and x byte,
+then InvalidInstructionData. The formatter is explicitly replaced by an owned
+one-byte reply. This is only forwarding/control evidence. LPh_STUBS.md records
+the UNPAIRED formatter substitution as OPEN; the actual formatting allocation,
+owner cleanup and joining the real formatted contents are not discharged.
+No pass or theorem count is promoted to whole-error closure.
+
+NBP_FilledPorts.allocation/zero (L072) reuse NBC's exact model Results for
+those failure/zero ports. Their printed audits use only the three permitted
+standard axioms. They introduce no native success or reserve fidelity premise
+and do not close the arbitrary-positive-size native obligation.

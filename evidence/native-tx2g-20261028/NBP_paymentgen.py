@@ -1,7 +1,10 @@
 from pathlib import Path
+import sys
+sys.dont_write_bytecode=True
+from NBP_patch_sources import added_patch,pieces
 import difflib
 E=Path(__file__).resolve().parent
-old=(E/'NBP_statement.rs').read_text()+(E/'NBP_statement2.rs').read_text()
+old=added_patch(E/'NBP_statement.patch','/NBP_codecs.rs')+added_patch(E/'NBP_statement2.patch','/NBP_codecs.rs')
 s='''fn NBP_t()->PoolV1PrivateTransferPublicV1 { PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NBP_digest(),nullifier:NBP_digest(),asset_id:M31(kani::any()),recipient_commitment:NBP_digest(),change_commitment:NBP_digest()} }
 fn NBP_w()->PoolV1WithdrawalPublicV1 { PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NBP_digest(),nullifier:NBP_digest(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:NBP_digest()} }
 fn NBP_encoded_common_byte(c:CommonPublicV1,withdrawal:bool,j:usize)->u8 {
@@ -58,5 +61,4 @@ fn NBP_withdrawal_decoder() {
 }
 '''
 p='crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs'
-(E/'NBP_payments.rs').write_text(s)
 (E/'NBP_payments.patch').write_text(''.join(difflib.unified_diff(old.splitlines(True),(old+s).splitlines(True),fromfile='a/'+p,tofile='b/'+p)))
