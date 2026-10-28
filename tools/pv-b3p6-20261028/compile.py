@@ -28,6 +28,9 @@ if not is_audit:assert a<42597
 root=H.parent
 collision=[]
 for base,dirs,files in os.walk(root):
+ if Path(base)==H:
+  dirs[:]=[]
+  continue # Own charged IDs are checked by TALLY; retained refusals do not consume IDs (m').
  depth=len(Path(base).relative_to(root).parts)
  if depth>=5: dirs[:]=[]
  dirs[:]=[d for d in dirs if d not in {'target','sbf-target','charon-target','node_modules','.git','source','sources','.lake','objects','lean-objects','lean','generated','src','rebuild-objects'}]
@@ -55,7 +58,12 @@ t['used_ids'].append(a)
 if is_audit:t.setdefault('audit_ids_used',[]).append(a)
 else:t['next_unused_id']=a+1
 state.write_text(json.dumps(t,indent=2)+'\n')
-label=f'lean-{a}';sub=dict(attempt=a,module=module,source_sha256=srcsha,dependency_objects=deps,deps_fingerprint=fp,source_revision=(H/'revision').read_text().strip(),source_revision_kind='Rust source freeze; Lean source is exact SHA snapshot in source.lean',environment='J',environment_sha256=hashlib.sha256(JENV.read_bytes()).hexdigest(),original_environment_sha256=hashlib.sha256(ORIGINAL_JENV.read_bytes()).hexdigest(),private_sources=str(S),private_objects=str(O),shared_sources_written=False)
+label=f'lean-{a}'
+retry=0
+while (H/label).exists():
+ assert not (H/label/'receipt/receipt.json').exists(), 'charged ID cannot be retried'
+ retry+=1;label=f'lean-{a}-r{retry}'
+sub=dict(attempt=a,module=module,source_sha256=srcsha,dependency_objects=deps,deps_fingerprint=fp,source_revision=(H/'revision').read_text().strip(),source_revision_kind='Rust source freeze; Lean source is exact SHA snapshot in source.lean',environment='J',environment_sha256=hashlib.sha256(JENV.read_bytes()).hexdigest(),original_environment_sha256=hashlib.sha256(ORIGINAL_JENV.read_bytes()).hexdigest(),private_sources=str(S),private_objects=str(O),shared_sources_written=False)
 if '.' in module:
  authority=json.loads((H/'project-resolution.json').read_text())['modules'][module]
  assert srcsha==authority['sha256'],(module,srcsha,authority)
@@ -75,6 +83,10 @@ if charged:
  log=(R/'receipt/stdout.log').read_text()+(R/'receipt/stderr.log').read_text()
  rec=json.loads((R/'receipt/receipt.json').read_text());rec.update(sub);rec['print_axioms']=re.findall(r"^.*(?:depends on axioms|does not depend on any axioms).*(?:\n\s+.*)?",log,re.M);rec['charged_lean_attempt']=True;(R/'receipt/receipt.json').write_text(json.dumps(rec,indent=2)+'\n')
  t.setdefault('receipts',[]).append(dict(attempt=a,module=module,exit=status,receipt=str(R/'receipt/receipt.json')))
-else:t.setdefault('refusals',[]).append(dict(attempt=a,module=module,exit=status,charged_lean_attempts=0))
+else:
+ t.setdefault('refusals',[]).append(dict(attempt=a,module=module,exit=status,charged_lean_attempts=0,label=label,ruling='m\u2032'))
+ t['used_ids'].remove(a)
+ if is_audit:t['audit_ids_used'].remove(a)
+ else:t['next_unused_id']=a
 state.write_text(json.dumps(t,indent=2)+'\n');print(json.dumps(dict(attempt=a,module=module,exit=status,charged=charged,lean_attempts=t['lean_attempts'],next_unused_id=t['next_unused_id'])),flush=True)
 sys.exit(status)
