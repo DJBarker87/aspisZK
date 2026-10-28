@@ -9,9 +9,14 @@ theorem reverse_original (input : PV_RunJoin_LaneDenotation31.Pair) (level : Fin
     PV_RunJoin_LaneDenotation31.reverse input level.val =
       !((U32.wrapping_shr input.membership.index
         (UScalar.cast .U32 (Usize.ofNatCore level.val (by have := level.isLt; scalar_tac))) &&& 1#u32) == 0#u32) := by
-  unfold PV_RunJoin_LaneDenotation31.reverse
-  rw [Nat.mod_eq_of_lt level.isLt,PV_RunJoin_LaneCounts31.shift]
-  rfl
+  have hc : U32.ofNatCore (level.val%20)
+      (by have := Nat.mod_lt level.val (by decide : 0<20); scalar_tac) =
+      U32.ofNatCore level.val (by have := level.isLt; scalar_tac) := by
+    apply UScalar.eq_of_val_eq
+    simpa only [U32.ofNatCore_val_eq] using Nat.mod_eq_of_lt level.isLt
+  simp only [PV_RunJoin_LaneDenotation31.reverse,hc,PV_RunJoin_LaneCounts31.shift]
+  all_goals rfl
+
 #print axioms reverse_original
 
 theorem step_original (parent : Digest → Digest → Result Digest)
