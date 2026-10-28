@@ -46,6 +46,7 @@ out+=['','#print axioms mask_sum_total','',
     reference_copy_terminal.constants.ACTIVE_ROW_MASKS block hb
   unfold reference_copy_terminal.active_block227
   rw [hread]
+  simp only [bind_tc_ok]
   by_cases hz : mask != 0#u16
   · simp only [show reference_copy_terminal.constants.ACTIVE_ROW_MASKS.val[block.val]'hlen=mask from rfl,
       hz,↓reduceIte]
