@@ -1,0 +1,32 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1031,7 +1031,7 @@
+ #[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
+ #[kani::stub_verified(strong)]
+-fn parent_domain(){let bytes=[0u8;1768];let mut r=Reader{bytes:&bytes,at:712};let _=strong(&mut r,0);}
++fn parent_domain(){let bytes=[0u8;1768];let mut r=Reader{bytes:&bytes,at:712};let _=weak(&mut r,0);}
+ }
+ 
+ #[cfg(kani)] mod NCI_steps {
+@@ -1106,3 +1106,20 @@
+ assert!(row[k]==other);assert!(row[j]!=before%2147483648+before/2147483648);assert!(row[j]<17179869184);
+ }
+ }
++
++#[cfg(kani)] mod NCI_query_step {
++use super::*;
++fn iteration(queries:&[u32;22],mut i:usize)->Result<usize,Error>{
++        let q=queries[i];
++        if q>=1<<18||queries[..i].contains(&q){return Err(Error::Checkpoint);}
++        i+=1;
++Ok(i)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn duplicate_ok(){let mut q:[u32;22]=kani::any();kani::assume(q[0]<1<<18);q[1]=q[0];let out=iteration(&q,1);assert!(out.is_err()==true);}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn duplicate_wrong(){let mut q:[u32;22]=kani::any();kani::assume(q[0]<1<<18);q[1]=q[0];let out=iteration(&q,1);assert!(out.is_err()!=true);}
++}

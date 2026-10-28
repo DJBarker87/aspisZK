@@ -22,5 +22,24 @@ theorem source_step (ops : Ops) (node old product : aspis_core.field.M31)
     let result ← Array.update basis index value
     ok (cont (nextIter,result))) = _
   rw [Read,bind_tc_ok,Mul,bind_tc_ok,Index,bind_tc_ok,Write,bind_tc_ok]
+
+theorem index_value (n j : Usize) (hn : n.val≤32) (hj : j.val<n.val) :
+    (Usize.wrapping_add n j).val=n.val+j.val := by
+  rw [Usize.wrapping_add_val_eq]
+  apply Nat.mod_eq_of_lt
+  have width : 64≤UScalar.size .Usize := by
+    rcases System.Platform.numBits_eq with h|h <;>
+      simp only [UScalar.size,UScalarTy.numBits,h] <;> decide
+  omega
+
+theorem read_exists (basis : Array aspis_core.field.M31 256#usize) (j : Usize)
+    (hj : j.val<256) : ∃ old, Array.index_usize basis j=ok old := by
+  have width : (256#usize).val=256 := by decide
+  obtain ⟨old,run,_⟩ := WP.spec_imp_exists
+    (Array.index_usize_spec basis j (by simpa only [basis.property,width] using hj))
+  exact ⟨old,run⟩
+
+#print axioms index_value
+#print axioms read_exists
 #print axioms source_step
 end AspisR1.NCI_BasisModelStep

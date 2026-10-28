@@ -1,0 +1,4 @@
+def Aeneas.Std.UScalar.tryMk : (ty : Aeneas.Std.UScalarTy) → ℕ → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun ty x => Aeneas.Std.Result.ofOption (Aeneas.Std.UScalar.tryMkOpt ty x) Aeneas.Std.Error.integerOverflow
+def Aeneas.Std.UScalar.ofNatCore : {ty : Aeneas.Std.UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → Aeneas.Std.UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
