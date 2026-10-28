@@ -3,6 +3,7 @@ import R1Z.PV_RDCD_Defaults194
 import R1Z.PV_CB_TakeRef
 import R1Z.ProverRwFullExternalFuns
 set_option autoImplicit false
+noncomputable section
 namespace R1Z.PV_RDCD_TakeBinding
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RDCD_Defaults194
