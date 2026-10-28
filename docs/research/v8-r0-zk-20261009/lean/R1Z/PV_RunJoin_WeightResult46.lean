@@ -10,6 +10,9 @@ theorem shared_bind {A B C : Type} (f : B → C) (r : Result A) (k : A → Resul
 theorem identity {A : Type} (r : Result A) : mapResult (fun x => x) r=r := by
   cases r <;> rfl
 
+theorem ok_bind {A : Type} (r : Result A) : (r >>= Result.ok)=r := by
+  cases r <;> rfl
+#print axioms ok_bind
 #print axioms shared_bind
 #print axioms identity
 end R1Z.PV_RunJoin_WeightResult46

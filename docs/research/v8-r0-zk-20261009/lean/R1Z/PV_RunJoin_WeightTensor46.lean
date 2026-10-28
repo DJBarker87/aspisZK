@@ -1,4 +1,6 @@
 import R1Z.PV_RunJoin_WeightProduct46
+import R1Z.PV_RunJoin_WeightResult46
+import R1Z.PV_RunJoin_WeightCounters46
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_WeightTensor46
 open Aeneas Aeneas.Std Result PV_RunJoin_WeightCarrier46
@@ -12,7 +14,10 @@ theorem source (rows : Array (Array Q 4#usize) 5#usize) (j : Usize) :
       PV_RunJoin_WeightProduct46.product rows j 5 0#usize
         PV_B2_251c1.aspis_core.field.QM31.ONE := by
   unfold PV_B2_251c1.host_weights.tensor_raw
-  simp only [PV_RunJoin_WeightProduct46.product,lift,bind_tc_ok,bind_assoc,bind_pure]
+  simp only [PV_RunJoin_WeightProduct46.product,lift,bind_tc_ok,
+    PV_RunJoin_WeightCounters46.add0,PV_RunJoin_WeightCounters46.add1,PV_RunJoin_WeightCounters46.add2,PV_RunJoin_WeightCounters46.add3,
+    PV_RunJoin_WeightCounters46.shift0,PV_RunJoin_WeightCounters46.shift1,PV_RunJoin_WeightCounters46.shift2,PV_RunJoin_WeightCounters46.shift3,PV_RunJoin_WeightCounters46.shift4,
+    PV_RunJoin_WeightResult46.ok_bind]
 
 theorem complete (rows : Array (Array Q 4#usize) 5#usize) (j : Usize) :
     AspisR1ProducerRelease47.stored.product (amap (amap toQ) rows) j 0#usize 5#u8
