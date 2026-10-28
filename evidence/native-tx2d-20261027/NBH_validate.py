@@ -59,6 +59,7 @@ source_trees={}
 for n in ['crates','programs']:
  a=git('rev-parse','HEAD:'+n);b=git('rev-parse',REV+':'+n);assert a==b
  assert not git('diff','HEAD','--',n)
+ assert not git('ls-files','--others','--exclude-standard','--',n)
  source_trees[n]={'current':a,'frozen':b,'identical':True}
 # Pin all48 member bodies without rewriting the inherited inventory.
 inv=json.loads(Path('evidence/native-tx2b-20261027/NBD_MEMBERS.json').read_text())
@@ -82,6 +83,16 @@ if (E/'NBH_CACHE_END.json').exists():
  summary.update(cache_start_files=len(start),cache_end_files=len(end),cache_changed_existing=[p for p in start if p in end and start[p]!=end[p]],cache_missing_start=sorted(set(start)-set(end)))
  assert not summary['cache_missing_start']
  assert not [p for p in summary['cache_changed_existing'] if Path(p).name.startswith('NBH_')]
+if (E/'NBH_RESOLVED_LIBRARY_PIN.json').exists():
+ assert json.loads((E/'NBH_RESOLVED_LIBRARY_PIN.json').read_text())['all_resolved_objects_match_pinned_library']
+ summary['actual_Aeneas_resolution_pinned']=True
+if (E/'NBH_HOST_CLEANUP.json').exists():
+ q=json.loads((E/'NBH_HOST_CLEANUP.json').read_text())
+ assert not q['own_live_provers'] and q['persistent_cache_retained'] and q['library_pins_unchanged']
+ summary['host_terminal_cleanup_verified']=True
+if (E/'NBH_NBD_OBJECT_PINS.json').exists():
+ assert all(x['matches'] for x in json.loads((E/'NBH_NBD_OBJECT_PINS.json').read_text()).values())
+ summary['inherited_NBD_objects_match_handoff']=True
 (E/'NBH_ATTEMPTS.jsonl').write_text(''.join(json.dumps({'attempt':a,**r})+'\n' for a,r in sorted(receipts.items())))
 (E/'NBH_VALIDATION.json').write_text(json.dumps(summary,indent=2)+'\n')
 print(json.dumps({k:summary[k] for k in ['status','lean_used','kani_used','metadata_used','lean_passed','kani_passed']}))
