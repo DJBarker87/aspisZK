@@ -65,7 +65,7 @@ theorem success_iff {C E : Type} (bytes : Slice U8)
     obtain ⟨s,hd,hp⟩ := (PV_RunJoin_CodecComposition30.source_iff bytes post).mpr h
     obtain ⟨c,hc⟩ := (hf s).mpr hp
     refine ⟨(s,c),?_⟩
-    unfold run
+    unfold run decode
     rw [hd]
     simp only [bind_tc_ok]
     rw [hc]
