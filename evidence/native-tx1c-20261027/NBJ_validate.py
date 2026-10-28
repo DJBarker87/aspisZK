@@ -32,6 +32,9 @@ for row in rows:
   for line in rc['print_axioms']:
    names=line.split('axioms: [')[-1].rstrip(']').split(', ') if 'axioms: [' in line else []
    assert set(names)<={'propext','Classical.choice','Quot.sound'},(a,line)
+fixture=json.loads((E/'NBJ_R001/receipt.json').read_text())
+assert fixture['exit_status']==0
+assert fixture['source_hashes']['NBJ_copy_native.rs']==sha((E/'NBJ_copy_native.rs.txt').read_bytes())
 for p in D.glob('NBJ_*.lean'):
  assert not re.search(r'\b(sorry|admit|native_decide)\b|^\s*axiom\s|set_option\s+(maxHeartbeats|maxRecDepth)',p.read_text(),re.M),p
 roots=re.findall(r'#print axioms (\S+)',(D/'NBJ_Audit.lean').read_text())
