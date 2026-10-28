@@ -49,7 +49,7 @@ output.append('''theorem erase_syncDirectory (ops : ExternalFuns) (directory : s
     erase ops (syncDirectory directory) =
       @aspis_prover.state_only_entropy.sync_directory _ ops directory := by
   unfold syncDirectory aspis_prover.state_only_entropy.sync_directory
-  repeat' (simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite]; first | rfl | apply congrArg (Aeneas.Std.bind _) | funext x | split)
+  repeat' (try simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite]; first | rfl | apply congrArg (Aeneas.Std.bind _) | funext x | split)
 
 theorem erase_reserveFallible (ops : ExternalFuns)
     (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
@@ -58,7 +58,7 @@ theorem erase_reserveFallible (ops : ExternalFuns)
       @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
         _ ops self statement nonce := by
   unfold reserveFallible aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
-  repeat' (simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite,erase_syncDirectory]; first | rfl | apply congrArg (Aeneas.Std.bind _) | funext x | split)
+  repeat' (try simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite,erase_syncDirectory]; first | rfl | apply congrArg (Aeneas.Std.bind _) | funext x | split)
 
 theorem erase_reserve (ops : ExternalFuns)
     (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
@@ -67,7 +67,7 @@ theorem erase_reserve (ops : ExternalFuns)
       @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
         _ ops self statement nonce := by
   unfold reserve aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
-  repeat' (simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite,erase_reserveFallible]; first | rfl | apply congrArg (Aeneas.Std.bind _) | funext x | split)
+  repeat' (try simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite,erase_reserveFallible]; first | rfl | apply congrArg (Aeneas.Std.bind _) | funext x | split)
 
 #print axioms erase_syncDirectory
 #print axioms erase_reserveFallible
