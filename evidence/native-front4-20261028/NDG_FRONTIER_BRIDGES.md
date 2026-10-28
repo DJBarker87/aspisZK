@@ -1,21 +1,29 @@
 # NDG frontier bridges
 
-All rows initially OPEN. No contract/extraction/model equivalence credit is inferred from names.
+Headline `AspisR1.RPx_Deployed.deployed`; target not yet established. Frozen Rust `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. CLOSED below means **local and conditional on the stated domain/physical interpretation**, never composed SDK or deployed security closure. All caller-domain obligations remain OPEN. Contract semantic transport is owner-approved P6/D188 trust **reclassification**, not removal.
 
-| Function | Dependent rows | Status |
+The four parts are: safe Rust reference, pinned Charon/Aeneas extraction, exact Lean cohort/reference equation, actual frozen-body Kani contract plus failing inverted-ensures control. E001 supplies identity-key, readonly and ID references; E002 supplies length/slice/zero-step references. Native patches exist only in private scratch. Kani used deployed PROGRAM features `pool-adapter,private-leaf-salts`, never `no-entrypoint`; each graph receipt records every crate's resolved features, exact frozen dependency graph, and unchanged lock. Full copy patch SHA256 `bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67`; K001 pointer-copy positive and K002 failing pointer-copy control. No field multiplication, SHA implementation, Option<fn>, or stub_verified composition was used.
+
+| Function | Dependents | Status, four-part evidence and exact boundary |
 |---|---:|---|
-| `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner` | 14 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key` | 13 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok` | 12 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len` | 12 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data` | 11 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_meta_ok` | 10 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id` | 9 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter.rs::registry_program_id` | 9 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common` | 8 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release` | 8 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box` | 8 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box` | 8 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter.rs::scan_proof_buffer` | 7 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero` | 6 | OPEN |
-| `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot` | 6 | OPEN |
+| OwnedAccount::owner |14| CLOSED local: E001 identity_key_ref; L003 `NDG_MetadataBridge.owner`; K003/K004. Domain bytes Err InvalidAccountData and length Ok arbitrary, arbitrary key/owner/flags. K017/K018 additionally checks singleton successful bytes. Arbitrary-length caller payload association OPEN. |
+| OwnedAccount::key |13| CLOSED local: E001 identity_key_ref; L003 `NDG_MetadataBridge.key`; K005/K006. Same restricted domain; K019/K020 adds singleton successful bytes. Arbitrary-length caller association OPEN. |
+| readonly_buffer_meta_ok |12| CLOSED local on all three Bool inputs: E001 readonly_buffer_ref; L003 `NDG_MetadataBridge.buffer`; K013/K014. L004 `readonly_buffer_caller` proves exact model owned call association. Native wrapper/context transport remains explicit. K007/K008 are failed earlier contract encodings, superseded without renaming. |
+| OwnedAccount::data_len |12| CLOSED local for length Ok arbitrary usize, bytes Err InvalidAccountData: E002 length_ref; L007 `NDG_IdentityLaws.length_success`; K022/K023. K025/K026 checks Custom-error observation, not its full contract. L008 `length_total` covers all model errors conditional on op35 clone law. K021 mixed case and K024 error contract timed out; full native error domain OPEN. |
+| OwnedAccount::data |11| CLOSED local for bytes Ok singleton arbitrary byte, length Ok arbitrary or Err Custom: E002 data_ref; L007 `data_reference`; K029/K030. K027/K028 Custom-error observation; K049/K050 empty-vector observation. L008 `data_total` general model law retains op35. Arbitrary native vector lengths/errors, borrow/provenance and caller association OPEN. |
+| readonly_meta_ok |10| CLOSED local all canonical Pubkeys/flags: E001 readonly_ref; L003 `metadata`; K015/K016. Domain includes cohort comparison equal to native byte comparison. L004 `readonly_account_caller` associates owned model call. Concrete installed comparison and caller interpretation retained. |
+| pool_program_id |9| CLOSED local fixed-array body: E001 pool_id_ref, K009/K010; L007 `pool_slot` explicitly represents it at op45. The theorem selects a reference installation; association of that selection to the actual adopted dictionary remains a named physical-interpretation obligation. |
+| registry_program_id |9| CLOSED local fixed-array body: E001 registry_id_ref, K011/K012; L007 `registry_slot`, op46. Same installation qualification as pool ID. |
+| asq8_common |8| OPEN: full nested record/Box carrier and allocator/frame association to the adopted reconstruction is absent. Field-copy identity alone does not transport the returned common record. Needs native projection/copy windows plus full reference extraction/carrier theorem; no body bridge claimed. |
+| decode_lane_from_pool_release |8| OPEN: K045/K046 proves one-byte wrong-length rejection only. Free slot op50 is represented by imported NCV_Install.op50; NCV reports native full observation OPEN. Under ruling(s), remaining work is representability plus actual caller association, including native original reader, root/frontier fields, validation/errors and Box frame; no decoder body proof is demanded merely for a free slot. |
+| transfer_statement_box |8| OPEN: actual statement record construction, moved common/public fields, validator result/error mapping and allocation/frame association need native windows with controlled callee uses plus extracted carrier equality. Other-file validator/decoder results are imported only from merged evidence, not assumed closed. |
+| withdrawal_statement_box |8| OPEN: same full moved-record/validator/error/Box association for Withdrawal variant; transfer evidence cannot establish this variant. |
+| scan_proof_buffer |7| OPEN: K047/K048 proves one-byte wrong-length rejection only. Whole accepted input needs candidate decoder/encoder same-input domains, 688-byte candidate equality, S2 tag and proof_length association and Box/error frame. No whole-buffer unwind attempted. |
+| require_zero |6| OPEN: K033/K034 arbitrary one-byte window at any offset in four-byte backing, K035/K036 empty case, K037/K038 early rejection on arbitrary32-byte prestate. E002 zero_step_ref; L007 `allZero_iff` symbolic list induction and `zero_step_reference`. Native arbitrary-suffix step association, model index/slice relation and native/cohort induction linkage remain; value induction alone is not the native loop proof. |
+| snapshot |6| OPEN: K039/K040 singleton admitted bytes+metadata, K041/K042 wrong-length deferred error, K043/K044 live exclusive-borrow rejection, with failing controls. Full arbitrary admitted lengths/copy windows, related native heap and SDK guard acquire/copy/drop/frame association remain. Existing AdapterRwSdkSnapshots trust-bracket laws explicitly exclude intervening owned allocation; they do not close this function. |
+
+NCC_/NCF_/NCV_/NDB_ imported ruling(s) evidence retains exact open qualifiers: `native-u04c-20261028/NCC_U04_BRIDGE.md`, `native-u04d-20261028/NCF_U04_BRIDGE.md`, `native-decref-20261028/NCV_DECODERS.md`. In particular no SDK caller association is inferred from their reference slot installs or wrong-length decoder pairs. Coherent digest/error slots remain op43/op44.
+
+Findings: getter harness restrictions are stronger than general snapshot callers establish, so no composed credit. K021 timed out92.989s/6470068KiB; K024 timed out93.434s/6455428KiB; swap0, unchanged shapes never rerun and caps never raised. K025 switches to a scalar Custom observation, not an error-contract rerun. K031/K032 are own incorrect harness paths (missing KMX_checks nesting), no proof launched and no fidelity credit; both count against50. They were not renamed to change a verdict. Snapshot matched controls are their own K040/K042/K044, not these lookup errors. No K-2 quarantined harness is credited.
+
+All delivered top theorems print only standard axioms. Receipts have target, argv, revision/source/dependency pins, exit, wall, peak RSS, swap and cgroup caps. L004, L007, L008 discharge remaining model-only access laws; native obligations above require new Kani evidence after budget50/50. Eight Lean compiles and two extraction runs used; no unexplored Lean-only equality is substituted for a missing native association.

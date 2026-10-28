@@ -9,6 +9,8 @@ S=B/'NDG_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 roots=['crate::identity_key_ref','crate::readonly_buffer_ref','crate::readonly_ref','crate::pool_id_ref','crate::registry_id_ref']
 namespace='NDG_Reference'
+if os.environ.get('NDG_EXTRA'):
+ roots=['crate::length_ref','crate::data_ref','crate::zero_step_ref'];namespace='NDG_ReferenceExtra'
 dest=B/'NDG_extracted'
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]

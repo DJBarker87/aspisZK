@@ -1,16 +1,97 @@
 {
   "schema_version": 1,
   "baseline": "evidence/native-compledger-20261028/NCZ_LEDGER.json",
-  "closures": [],
+  "closures": [
+    {
+      "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner",
+      "status": "CLOSED-CONDITIONAL",
+      "domain": "bytes Err InvalidAccountData; length Ok arbitrary; arbitrary key/owner/flags",
+      "theorem": "NDG_MetadataBridge.owner",
+      "kani": [
+        "NDG_K003",
+        "NDG_K004"
+      ],
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
+      "status": "CLOSED-CONDITIONAL",
+      "domain": "bytes Err InvalidAccountData; length Ok arbitrary; arbitrary key/owner/flags",
+      "theorem": "NDG_MetadataBridge.key",
+      "kani": [
+        "NDG_K005",
+        "NDG_K006"
+      ],
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok",
+      "status": "CLOSED-CONDITIONAL",
+      "domain": "all three Bool inputs; exact ProgramError/Unit lift",
+      "theorem": "NDG_MetadataBridge.buffer",
+      "kani": [
+        "NDG_K013",
+        "NDG_K014"
+      ],
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len",
+      "status": "CLOSED-CONDITIONAL",
+      "domain": "length Ok arbitrary usize; bytes Err InvalidAccountData",
+      "theorem": "NDG_IdentityLaws.length_success",
+      "kani": [
+        "NDG_K022",
+        "NDG_K023"
+      ],
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
+      "status": "CLOSED-CONDITIONAL",
+      "domain": "bytes Ok singleton vector; all byte values; length Ok arbitrary or Err Custom",
+      "theorem": "NDG_IdentityLaws.data_reference",
+      "kani": [
+        "NDG_K029",
+        "NDG_K030"
+      ],
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_meta_ok",
+      "status": "CLOSED-CONDITIONAL",
+      "domain": "all canonical Pubkeys and flags; cohort op36 comparison equals native byte comparison",
+      "theorem": "NDG_MetadataBridge.metadata",
+      "kani": [
+        "NDG_K015",
+        "NDG_K016"
+      ],
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id",
+      "status": "CLOSED-CONDITIONAL",
+      "domain": "32-byte return; op45 represented by E001 pool_id_ref; selected installation association retained",
+      "theorem": "NDG_IdentityLaws.pool_slot",
+      "kani": [
+        "NDG_K009",
+        "NDG_K010"
+      ],
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::registry_program_id",
+      "status": "CLOSED-CONDITIONAL",
+      "domain": "32-byte return; op46 represented by E001 registry_id_ref; selected installation association retained",
+      "theorem": "NDG_IdentityLaws.registry_slot",
+      "kani": [
+        "NDG_K011",
+        "NDG_K012"
+      ],
+      "composed_status": "OPEN"
+    }
+  ],
   "open": [
-    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner",
-    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
-    "programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_buffer_meta_ok",
-    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data_len",
-    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
-    "programs/r1-cost-probe/src/r1_pool_adapter.rs::readonly_meta_ok",
-    "programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id",
-    "programs/r1-cost-probe/src/r1_pool_adapter.rs::registry_program_id",
     "programs/r1-cost-probe/src/r1_pool_adapter.rs::asq8_common",
     "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release",
     "programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
@@ -18,5 +99,6 @@
     "programs/r1-cost-probe/src/r1_pool_adapter.rs::scan_proof_buffer",
     "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero",
     "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot"
-  ]
+  ],
+  "composed_status": "OPEN"
 }

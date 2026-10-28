@@ -20,3 +20,8 @@ fn copy_positive(){let src:[u8;32]=kani::any();let mut dst=[0;32];unsafe{core::p
 #[kani::proof] #[kani::unwind(34)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
 fn copy_negative(){let mut src=[0u8;32];src[31]=1;let mut dst=[0;32];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),32)};assert_eq!(dst[31],0);}
+
+#[kani::proof]
+fn lane_wrong_length(){let b=[kani::any::<u8>()];assert_eq!(matches!(decode_lane_from_pool_release(&b),Err(ProgramError::InvalidAccountData)),!cfg!(NDG_negative));}
+#[kani::proof]
+fn scan_wrong_length(){let b=[kani::any::<u8>()];assert_eq!(matches!(scan_proof_buffer(&b),Err(ProgramError::InvalidAccountData)),!cfg!(NDG_negative));}

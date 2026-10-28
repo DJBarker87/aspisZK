@@ -17,6 +17,8 @@ def files():
  n='programs/r1-cost-probe/src/r1_pool_adapter_owned.rs';b=base(n);s=b
  for name in ['key','owner']:
   s=s.replace('    fn '+name+'(',f'    #[cfg_attr(kani, kani::ensures(|r| (*r == &self.{name}) && core::ptr::eq(*r,&self.{name}) != cfg!(NDG_invert_{name}))) ]\n    fn '+name+'(',1)
+ s=s.replace('    fn data_len(', '#[cfg_attr(kani, kani::ensures(|r| (*r == self.length) != cfg!(NDG_invert_data_len)))]\n    fn data_len(',1)
+ s=s.replace('    fn data(', '#[cfg_attr(kani, kani::ensures(|r| (match (&self.bytes,r) { (Ok(b),Ok(v)) => b.as_slice()==*v, (Err(e),Err(f))=>e==f, _=>false }) != cfg!(NDG_invert_data)))]\n    fn data(',1)
  s+='\n#[cfg(kani)]\n#[path="NDG_owned.rs"]\nmod NDG_owned;\n';put(n,s,b)
  for n in ['NDG_reference','NDG_native','NDG_owned']:
   put('programs/r1-cost-probe/src/'+n+'.rs',(E/(n+'.rs.txt')).read_text())
