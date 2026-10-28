@@ -8,6 +8,8 @@ def zfeatures(m):
  z=next(v for v in m['packages'] if v['name']=='zeroize')
  return z,next(v['features'] for v in m['resolve']['nodes'] if v['id']==z['id'])
 z,features=zfeatures(meta);cz,cf=zfeatures(client)
+client_versions={(r['name'],r['version']) for r in client['packages']}
+assert all((r['name'],r['version']) in client_versions for r in meta['packages'] if r['name']!='pv-rjdec-zeroize-probe')
 assert z['version']==cz['version']=='1.9.0' and features==cf,(features,cf)
 commands=[[cargo,'+1.94.1','rustc','--offline','--locked','--release','-j','4','--lib','--','--emit=llvm-ir'],[cargo,'+1.94.1','test','--offline','--locked','--release','-j','4']]
 for i,cmd in enumerate(commands):
