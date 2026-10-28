@@ -6,7 +6,10 @@ open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
 
 theorem scalar_eq (bytes : Array U8 4#usize) :
     aspis_core.field.M31.from_le_bytes bytes =
-      PV_CB_ShippedOp71.aspis_core.field.M31.from_le_bytes bytes := rfl
+      PV_CB_ShippedOp71.aspis_core.field.M31.from_le_bytes bytes := by
+  simp only [aspis_core.field.M31.from_le_bytes, aspis_core.field.P,
+    PV_CB_ShippedOp71.aspis_core.field.M31.from_le_bytes,
+    PV_CB_ShippedOp71.aspis_core.field.P]
 #print axioms scalar_eq
 
 theorem scalar_success (bytes : Array U8 4#usize) (v : U32)
