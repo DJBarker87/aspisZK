@@ -3,7 +3,7 @@ import json,re,hashlib,subprocess
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-dlib-20261028';D='/home/dombarker/project-offloads/codex-pv-dlib-20261028';pins=json.loads((E/'dependency-source-pins.json').read_text());external={j['module']:j for j in json.loads((E/'external-object-manifest.json').read_text())};seen={};passed={}
 for p in E.glob('lean-*/receipt.json'):
  j=json.loads(p.read_text())
- if j.get('exit')==0:passed[j['module']]=j
+ if j.get('exit')==0 and j.get('module'):passed[j['module']]=j
 roots=json.loads((E/'resume-audit-roots.json').read_text())['imports']
 for m in ['R1Z/PV_DL_ResumeAudit','R1Z/PV_DL_ResumeReplay']:
  if m in passed:roots.append(m)
