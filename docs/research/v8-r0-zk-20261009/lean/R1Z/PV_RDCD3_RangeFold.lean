@@ -67,7 +67,9 @@ theorem first_failure {S : Type} (f : S → Nat → Result S)
     (fuel start stop : Nat) (acc : S) (e : Error)
     (active : start < stop) (failed : f acc start = fail e) :
     run f (fuel+1) ⟨start,stop⟩ acc = fail e := by
-  rw [run,next_active _ active,failed,bind_tc_fail]
+  rw [run,next_active _ active]
+  change (f acc start >>= fun acc' => run f fuel ⟨start+1,stop⟩ acc') = fail e
+  rw [failed,bind_tc_fail]
 
 #print axioms next_active
 #print axioms next_empty
