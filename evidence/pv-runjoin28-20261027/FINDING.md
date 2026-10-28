@@ -26,7 +26,9 @@ canonical encoder/decoder, nor the accepted V152–V154 theorem on HonestInput.
 The existing canonical encoder's frontier theorem explicitly excludes this
 probe. An actual caller-to-encoder/decoder association is therefore material;
 it cannot be replaced by compiler success. No such association is assumed.
-This is not a privacy distinguisher and removes no endpoint premise.
+This is not a privacy distinguisher and removes no endpoint premise. It does
+not show that an account decoder or the intended canonical encoder produces
+these raw arguments.
 
 The source mechanism is precise: late_append's tree validation checks that
 inactive frontier slots equal empty roots and reconstructs the root from
