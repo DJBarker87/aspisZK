@@ -1,0 +1,41 @@
+import R1Z.PV_RunJoin_ForestEquality30
+import R1Z.PV_RunJoin_PairChecks29
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_Sentinel31
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+
+theorem two_outputs (first second : Array U32 8#usize)
+    (pair : pair_tree_profile.PoolV1PairLeafWitnessV1)
+    (h : pair_tree_profile.PoolV1PairLeafWitnessV1.two_outputs first second = ok (.Ok pair)) :
+    (second.val[7]!).val ≠ 0 := by
+  unfold pair_tree_profile.PoolV1PairLeafWitnessV1.two_outputs at h
+  pv_peel h with b hb
+  cases b <;> simp only [Bool.false_eq_true,↓reduceIte] at h
+  · cases h
+  · pv_peel h with b1 hb1
+    cases b1 <;> simp only [Bool.false_eq_true,↓reduceIte] at h
+    · cases h
+    · rw [pair_tree_profile.POOL_V1_PAIR_SECOND_SENTINEL_LANE,index_ok second 7#usize (by decide)] at h
+      simp only [bind_tc_ok] at h
+      pv_peel h with b2 hb2
+      cases b2 <;> simp only [Bool.false_eq_true,↓reduceIte] at h
+      · rw [aspis_core.field.M31.ZERO,PV_RunJoin_ForestEquality30.dictionary,
+          PV_RunJoin_RuntimePrimitives30.word_eq] at hb2
+        have hn : second.val[7]! ≠ 0#u32 := by
+          simpa only [Result.ok.injEq,decide_eq_false_iff_not] using hb2
+        intro hz
+        exact hn (UScalar.eq_of_val_eq (by simpa using hz))
+      · cases h
+#print axioms two_outputs
+
+variable {K : Type} [Field K] [CharP K 2147483647]
+theorem field_nonzero (d : Array U32 8#usize) (hc : Canon8 d)
+    (hn : (d.val[7]!).val ≠ 0) : digK (K := K) d 7 ≠ 0 := by
+  intro h
+  apply hn
+  have he : ((d.val[7]!).val : K) = (0 : K) := h
+  exact CharP.natCast_injOn_Iio K 2147483647 (hc 7 (by decide)) (by omega) he
+#print axioms field_nonzero
+end R1Z.PV_RunJoin_Sentinel31

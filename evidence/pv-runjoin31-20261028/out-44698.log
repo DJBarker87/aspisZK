@@ -1,0 +1,25 @@
+theorem R1Z.PV_RunJoin_SnapshotAgreement31.whole : ∀ {K : Type} [inst : Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647] (a b : R1Z.PV_Src_NativeInput.Input),
+  R1Z.PV_Src_NativeInput.run a = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a.compiled) →
+    R1Z.PV_Src_NativeInput.run b = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok b.compiled) →
+      (∀ (j : Fin 20), R0Z.WriterRefine.Canon8 (↑a.snapshot.frontier)[↑j]!) →
+        (∀ (j : Fin 20), R0Z.WriterRefine.Canon8 (↑b.snapshot.frontier)[↑j]!) →
+          R1Z.PV_RunJoin_SemanticChange30.statement a = R1Z.PV_RunJoin_SemanticChange30.statement b →
+            a.snapshot.pool = b.snapshot.pool →
+              a.snapshot.deployment_domain = b.snapshot.deployment_domain → a.snapshot = b.snapshot :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] a b sa sb
+    fa fb same pool domain =>
+  have fields := R1Z.PV_RunJoin_SnapshotAgreement31.agree a b sa sb fa fb same;
+  R1Z.PV_RunJoin_SnapshotAgreement31.snapshot_ext a.snapshot b.snapshot pool domain fields.right.right.right fields.left
+    fields.right.right.left fields.right.left
+'R1Z.PV_RunJoin_SnapshotRoot31.checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RootConstructor31.validated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_AppendCapacity31.nonfull' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LateSnapshot31.checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SnapshotUnique31.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SnapshotUnique31.sequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalWordEq31.word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalWordEq31.digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalWordEq31.frontier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SnapshotAgreement31.agree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SnapshotAgreement31.whole' depends on axioms: [propext, Classical.choice, Quot.sound]

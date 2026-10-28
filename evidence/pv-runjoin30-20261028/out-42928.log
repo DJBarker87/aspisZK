@@ -1,0 +1,9 @@
+'R1Z.PV_RunJoin_IteratorAny30.any_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def Aeneas.Std.core.iter.traits.iterator.IteratorSliceIter : (T : Type) →
+  core.iter.traits.iterator.Iterator (core.slice.iter.Iter T) T :=
+fun T => { next := core.slice.iter.IteratorSliceIter.next }
+@[reducible] def Aeneas.Std.SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter : (T : Type) →
+  (N : Usize) → core.iter.traits.collect.IntoIterator (Std.Array T N) T (core.slice.iter.Iter T) :=
+fun T N =>
+  { iteratorInst := core.iter.traits.iterator.IteratorSliceIter T,
+    into_iter := SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter }

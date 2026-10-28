@@ -1,0 +1,2061 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_FinalAudit24.lean:10:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  CharP PrivacyR1AcctBasis.K 2147483647
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+'R1Z.PV_RunJoin_FinalAudit24.endpoint_input_is_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_FinalAudit24.lean:15:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  CharP PrivacyR1AcctBasis.K 2147483647
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+'R1Z.PV_RunJoin_FinalAudit24.canonical_identification' depends on axioms: [sorryAx]
+def R1Z.PrivacyR1HeadlineDeployedReal.input : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K :=
+R1Z.BuilderSource.prover
+def R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement : {CommitHandle Aux : Type} →
+  R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+    (R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        (rust :
+            R0Z.FsStatement.FSExperiments R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat
+              R1Z.PrivacyR1AcctBasis.F) →
+          [Fintype rust.RealRand] →
+            (rust.Adversary →
+                R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat →
+                  List (List UInt8 × R0Z.FsStatement.OracleAnswer) → R1Z.GamesR1.OProg) →
+              Prop :=
+fun {CommitHandle Aux} template outputs x rust [Fintype rust.RealRand] observer_program =>
+  ∀ (adv : rust.Adversary) (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).Instance),
+    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).public w = x.1 →
+      Nonempty
+        (R1Z.ProverCommitFuelJoin22.RunJoin
+          (fun r =>
+            have v :=
+              rust.real (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                R1Z.PrivacyR1AcctBasis.basis outputs adv x w r;
+            (v, rust.observe adv v))
+          (fun r =>
+            have a := R1Z.RomObserverBin.observerMap rust observer_program adv;
+            have v :=
+              (R1Z.ProverCommitReencode16.experiment
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                    (R1Z.PredicateR1.P_R1
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                      R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                    (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode).real
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs a x w r;
+            (v,
+              (R1Z.ProverCommitReencode16.experiment
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                    (R1Z.PredicateR1.P_R1
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                      R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                    (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode).observe
+                a v))
+          (R1Z.QueryScanRealLazyBound.realBad
+            (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs x).toWire
+            (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs x
+                (R1Z.PrivacyR1AcctModel.seed
+                  (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                      outputs x).toWire
+                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                  R1Z.PhaseWireLog2Bin.opens)).toProver
+            8 (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+            x w)
+          (R1Z.PrivacyR1HeadlineDeployedReal.realSeedQueries template outputs x rust observer_program adv w))
+theorem R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle)
+  (rust :
+    R0Z.FsStatement.FSExperiments R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat R1Z.PrivacyR1AcctBasis.F)
+  [inst : Fintype rust.RealRand] [Nonempty rust.RealRand]
+  (observer_program :
+    rust.Adversary →
+      R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat →
+        List (List UInt8 × R0Z.FsStatement.OracleAnswer) → R1Z.GamesR1.OProg),
+  R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement template outputs x rust observer_program →
+    (∀ (adv : rust.Adversary) (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).Instance),
+        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).public w = x.1 →
+          |R0Z.mean
+                  (R0Z.FsStatement.realTest (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                    R1Z.PrivacyR1AcctBasis.basis outputs rust adv x w) -
+                R0Z.mean
+                  (R0Z.HvzkS.idealTestS
+                    (R1Z.ProverCommitReencode16.experiment
+                      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                      (R1Z.PhaseProtocolInstanceBin.prover
+                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                          R1Z.PrivacyR1AcctBasis.basis outputs x
+                          (R1Z.PrivacyR1AcctModel.seed
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                            R1Z.PhaseWireLog2Bin.opens)).toProver
+                      8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+                      (R1Z.PredicateR1.P_R1
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                        R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+                      (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode)
+                    (R1Z.RomObserverBin.observerMap rust observer_program adv) x
+                    (R0Z.RefPayload.simE (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                      R1Z.PrivacyR1AcctBasis.basis outputs x))| ≤
+            R1Z.PrivacyR1Final.modelError
+                      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                      (R1Z.PhaseProtocolInstanceBin.prover
+                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                          R1Z.PrivacyR1AcctBasis.basis outputs x
+                          (R1Z.PrivacyR1AcctModel.seed
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                            R1Z.PhaseWireLog2Bin.opens)).toProver
+                      R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                    16 / 2 ^ 486 +
+                  R1Z.QueryScanFreshUnion.freshBudget
+                    (8 *
+                        R1Z.GamesR1PBin.n1
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver +
+                      1) +
+                2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+              2 * R1Z.ProverCommitFuelMass22.charge) ∧
+      R1Z.PrivacyR1Final.modelError
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                  16 / 2 ^ 486 +
+                R1Z.QueryScanFreshUnion.freshBudget
+                  (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver +
+                    1) +
+              2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * R1Z.ProverCommitFuelMass22.charge ≤
+          1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+                R1Z.QueryScanFreshUnion.freshBudget
+                  (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver +
+                    1) +
+              2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * R1Z.ProverCommitFuelMass22.charge ∧
+        R1Z.PrivacyR1Final.modelError
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                        (R1Z.PrivacyR1AcctModel.seed
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                    R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ +
+                  16 / 2 ^ 486 +
+                R1Z.QueryScanFreshUnion.freshBudget
+                  (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver +
+                    1) +
+              2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * R1Z.ProverCommitFuelMass22.charge <
+          1 / 2 ^ 100 :=
+fun {CommitHandle Aux} template outputs x rust [⋯] [⋯] observer_program refinement =>
+  have model := R1Z.PrivacyR1HeadlineOwnedClosed.Admitted.FixedObserver.privacy_headline_admitted template outputs x;
+  have caller := R1Z.ProverCommitOwnedEndpoint.caller_law template R1Z.PrivacyR1HeadlineDeployedReal.input outputs x;
+  let ⟨hc₁, right✝⟩ :=
+    R1Z.ProverCommitCallerInstance.budgets
+      (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs x
+          (R1Z.PrivacyR1AcctModel.seed
+            (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs x).toWire
+            R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib R1Z.PhaseWireLog2Bin.opens)).toProver
+      caller
+  let ⟨hc₂, right✝¹⟩ := right✝
+  let ⟨hs₁, right✝²⟩ := right✝¹
+  let ⟨hs₂, right✝³⟩ := right✝²
+  let ⟨hcount, right✝⁴⟩ := right✝³
+  let ⟨hb₁, hb₂⟩ := right✝⁴
+  have hM :=
+    R1Z.ProverCommitModelCore16.read_bound
+      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+          x).toWire
+      (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs x
+          (R1Z.PrivacyR1AcctModel.seed
+            (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs x).toWire
+            R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib R1Z.PhaseWireLog2Bin.opens)).toProver
+      R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ hcount hb₁ hb₂;
+  have hk :=
+    R1Z.QueryScanFreshNumerics.lazy_budget_le_fresh hM
+      (Nat.succ_le_succ
+        (Nat.zero_le
+          (8 *
+            R1Z.GamesR1PBin.n1
+              (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs x).toWire
+              (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs x
+                  (R1Z.PrivacyR1AcctModel.seed
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                    R1Z.PhaseWireLog2Bin.opens)).toProver)));
+  ⟨fun adv w hw =>
+    have hr₀ :=
+      R1Z.ProverCommitFuelJoin22.test_bound (Classical.choice (refinement adv w hw))
+        (fun run => R0Z.FsStatement.bit run.2) (fun x => ⟨R0Z.FsGood.bit_nonneg x.2, R0Z.FsGood.bit_le_one x.2⟩)
+        (2 ^ 64) fun r =>
+        R1Z.ProverCommitObserverQueries19.real_bound
+          (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+              x).toWire
+          (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+              x
+              (R1Z.PrivacyR1AcctModel.seed
+                (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                    outputs x).toWire
+                R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                R1Z.PhaseWireLog2Bin.opens)).toProver
+          8
+          (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+            R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+          (fun h' => R1Z.MaskImageVR1.VR1 h') (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+          R1Z.PrivacyR1AcctBasis.basis outputs
+          (R1Z.ProverCommitReencode16.observer R1Z.ProverCommitReencode16.encode
+            (R1Z.RomObserverBin.observerMap rust observer_program adv))
+          x w r;
+    have hscan :=
+      Eq.mp (congrArg (LE.le (8 * R1Z.QueryScanPrivacyFinal.scanProbability)) (mul_one_div 8 (2 ^ 486)))
+        (mul_le_mul_of_nonneg_left R1Z.QueryScanPrivacyFinal.scan_probability_le
+          (Mathlib.Meta.NormNum.isNat_le_true (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 0))
+            (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 8)) (Eq.refl true)));
+    have hr :=
+      LE.le.trans hr₀
+        (add_le_add
+          (add_le_add
+            (LE.le.trans
+              (R1Z.ProverCommitModelCore16.real_bad_mass (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                outputs x
+                (R1Z.PrivacyR1AcctModel.seed
+                  (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                      outputs x).toWire
+                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib R1Z.PhaseWireLog2Bin.opens)
+                hc₁ hc₂ w)
+              (add_le_add
+                (le_refl
+                  (R1Z.QueryScanRealLazyBound.lazyBudget
+                    (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver)))
+                hscan))
+            (le_refl (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64))))
+          (le_refl R1Z.ProverCommitFuelMass22.charge));
+    let ⟨hpub, hs⟩ := R1Z.PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises w hw
+    have core :=
+      R1Z.ProverCommitModelCore16.core_privacy (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs x
+        (R1Z.PrivacyR1AcctModel.seed
+          (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+              x).toWire
+          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib R1Z.PhaseWireLog2Bin.opens)
+        R1Z.PrivacyR1AcctBasis.packing_laws hpub hs R1Z.ProverCommitSourceDecoder.quotientFibreSize
+        (fun τ =>
+          Eq.mpr
+            (eq_of_heq
+              ((fun α a a' e'_2 a_1 =>
+                  let ⟨⟩ := a'
+                  e'_2)
+                ℕ
+                {e |
+                    R1Z.ProverCommitTapeCompletion.quotientDecode
+                        (fun e =>
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver.tapeOf
+                            e.1 e.2)
+                        e =
+                      some τ}.card
+                {e |
+                    R1Z.ProverCommitTapeCompletion.quotientDecode
+                        (fun e =>
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver.tapeOf
+                            e.1 e.2)
+                        e =
+                      some τ}.card
+                (eq_of_heq
+                  ((fun α s s' e'_2 =>
+                      let ⟨⟩ := s'
+                      e'_2)
+                    ((Fin
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x
+                                (R1Z.PrivacyR1AcctModel.seed
+                                  (R1Z.PhaseProtocolInstanceBin.wire
+                                      (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                          x).length
+                                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                      R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                  R1Z.PhaseWireLog2Bin.opens)).toProver.E₁ →
+                        R0Z.FsStatement.OracleAnswer) ×
+                      (Fin
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x
+                                (R1Z.PrivacyR1AcctModel.seed
+                                  (R1Z.PhaseProtocolInstanceBin.wire
+                                      (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                          x).length
+                                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                      R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                  R1Z.PhaseWireLog2Bin.opens)).toProver.E₂ →
+                        R0Z.FsStatement.OracleAnswer))
+                    {e |
+                      R1Z.ProverCommitTapeCompletion.quotientDecode
+                          (fun e =>
+                            (R1Z.PhaseProtocolInstanceBin.prover
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x
+                                    (R1Z.PrivacyR1AcctModel.seed
+                                      (R1Z.PhaseProtocolInstanceBin.wire
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                      R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                      R1Z.PhaseWireLog2Bin.opens)).toProver.tapeOf
+                              e.1 e.2)
+                          e =
+                        some τ}
+                    {e |
+                      R1Z.ProverCommitTapeCompletion.quotientDecode
+                          (fun e =>
+                            (R1Z.PhaseProtocolInstanceBin.prover
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x
+                                    (R1Z.PrivacyR1AcctModel.seed
+                                      (R1Z.PhaseProtocolInstanceBin.wire
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                      R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                      R1Z.PhaseWireLog2Bin.opens)).toProver.tapeOf
+                              e.1 e.2)
+                          e =
+                        some τ}
+                    (Finset.ext fun e =>
+                      of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Iff
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Membership.mem
+                                      (Finset.filter_congr fun x_1 a =>
+                                        Iff.of_eq
+                                          (Eq.refl
+                                            (R1Z.ProverCommitTapeCompletion.quotientDecode
+                                                (fun e =>
+                                                  (R1Z.PhaseProtocolInstanceBin.prover
+                                                          (R1Z.PrivacyR1AcctModel.base template
+                                                            R1Z.PhaseWireLog2Bin.log)
+                                                          ((R1Z.PrivacyR1AcctModel.base template
+                                                                  R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                              x).length
+                                                          (R1Z.PhaseWireLog2Bin.honest
+                                                            R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                          R1Z.PrivacyR1AcctBasis.basis outputs x
+                                                          (R1Z.PrivacyR1AcctModel.seed
+                                                            (R1Z.PhaseProtocolInstanceBin.wire
+                                                                (R1Z.PrivacyR1AcctModel.base template
+                                                                  R1Z.PhaseWireLog2Bin.log)
+                                                                ((R1Z.PrivacyR1AcctModel.base template
+                                                                        R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                                    x).length
+                                                                (R1Z.PhaseWireLog2Bin.honest
+                                                                  R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                                            R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode
+                                                            R1Z.PhaseWireLog2Bin.fib
+                                                            R1Z.PhaseWireLog2Bin.opens)).data.tapeOf
+                                                    e.1 e.2)
+                                                x_1 =
+                                              some τ))))
+                                    e)
+                                  R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed._simp_1)
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg And
+                                      (R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed._simp_2 e))
+                                    (R1Z.ProverCommitTapeCompletion.quotientDecode
+                                        (fun e =>
+                                          (R1Z.PhaseProtocolInstanceBin.prover
+                                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                  ((R1Z.PrivacyR1AcctModel.base template
+                                                          R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                      x).length
+                                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                                  (R1Z.PrivacyR1AcctModel.seed
+                                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                        ((R1Z.PrivacyR1AcctModel.base template
+                                                                R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                            x).length
+                                                        (R1Z.PhaseWireLog2Bin.honest
+                                                          R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode
+                                                    R1Z.PhaseWireLog2Bin.fib R1Z.PhaseWireLog2Bin.opens)).data.tapeOf
+                                            e.1 e.2)
+                                        e =
+                                      some τ))
+                                  (true_and
+                                    (R1Z.ProverCommitTapeCompletion.quotientDecode
+                                        (fun e =>
+                                          (R1Z.PhaseProtocolInstanceBin.prover
+                                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                  ((R1Z.PrivacyR1AcctModel.base template
+                                                          R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                      x).length
+                                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                                  (R1Z.PrivacyR1AcctModel.seed
+                                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                        ((R1Z.PrivacyR1AcctModel.base template
+                                                                R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                            x).length
+                                                        (R1Z.PhaseWireLog2Bin.honest
+                                                          R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode
+                                                    R1Z.PhaseWireLog2Bin.fib R1Z.PhaseWireLog2Bin.opens)).data.tapeOf
+                                            e.1 e.2)
+                                        e =
+                                      some τ)))))
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Membership.mem
+                                    (Finset.filter_congr fun x_1 a =>
+                                      Iff.of_eq
+                                        (Eq.refl
+                                          (R1Z.ProverCommitTapeCompletion.quotientDecode
+                                              (fun e =>
+                                                (R1Z.PhaseProtocolInstanceBin.prover
+                                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                        ((R1Z.PrivacyR1AcctModel.base template
+                                                                R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                            x).length
+                                                        (R1Z.PhaseWireLog2Bin.honest
+                                                          R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                                                        (R1Z.PrivacyR1AcctModel.seed
+                                                          (R1Z.PhaseProtocolInstanceBin.wire
+                                                              (R1Z.PrivacyR1AcctModel.base template
+                                                                R1Z.PhaseWireLog2Bin.log)
+                                                              ((R1Z.PrivacyR1AcctModel.base template
+                                                                      R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                                  x).length
+                                                              (R1Z.PhaseWireLog2Bin.honest
+                                                                R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode
+                                                          R1Z.PhaseWireLog2Bin.fib
+                                                          R1Z.PhaseWireLog2Bin.opens)).data.tapeOf
+                                                  e.1 e.2)
+                                              x_1 =
+                                            some τ))))
+                                  e)
+                                R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed._simp_1)
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg And (R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed._simp_2 e))
+                                  (R1Z.ProverCommitTapeCompletion.quotientDecode
+                                      (fun e =>
+                                        (R1Z.PhaseProtocolInstanceBin.prover
+                                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                ((R1Z.PrivacyR1AcctModel.base template
+                                                        R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                    x).length
+                                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                R1Z.PrivacyR1AcctBasis.basis outputs x
+                                                (R1Z.PrivacyR1AcctModel.seed
+                                                  (R1Z.PhaseProtocolInstanceBin.wire
+                                                      (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                      ((R1Z.PrivacyR1AcctModel.base template
+                                                              R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                          x).length
+                                                      (R1Z.PhaseWireLog2Bin.honest
+                                                        R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                      R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                                  R1Z.PhaseWireLog2Bin.opens)).data.tapeOf
+                                          e.1 e.2)
+                                      e =
+                                    some τ))
+                                (true_and
+                                  (R1Z.ProverCommitTapeCompletion.quotientDecode
+                                      (fun e =>
+                                        (R1Z.PhaseProtocolInstanceBin.prover
+                                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                ((R1Z.PrivacyR1AcctModel.base template
+                                                        R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                    x).length
+                                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                R1Z.PrivacyR1AcctBasis.basis outputs x
+                                                (R1Z.PrivacyR1AcctModel.seed
+                                                  (R1Z.PhaseProtocolInstanceBin.wire
+                                                      (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                      ((R1Z.PrivacyR1AcctModel.base template
+                                                              R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                          x).length
+                                                      (R1Z.PhaseWireLog2Bin.honest
+                                                        R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                      R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                                  R1Z.PhaseWireLog2Bin.opens)).data.tapeOf
+                                          e.1 e.2)
+                                      e =
+                                    some τ)))))
+                          (iff_self
+                            (R1Z.ProverCommitTapeCompletion.quotientDecode
+                                (fun e =>
+                                  (R1Z.PhaseProtocolInstanceBin.prover
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x
+                                          (R1Z.PrivacyR1AcctModel.seed
+                                            (R1Z.PhaseProtocolInstanceBin.wire
+                                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                ((R1Z.PrivacyR1AcctModel.base template
+                                                        R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                    x).length
+                                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                            R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                            R1Z.PhaseWireLog2Bin.opens)).data.tapeOf
+                                    e.1 e.2)
+                                e =
+                              some τ))))))
+                R1Z.ProverCommitSourceDecoder.quotientFibreSize))
+            (R1Z.ProverCommitCallerInstance.fibres
+              (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs x
+                  (R1Z.PrivacyR1AcctModel.seed
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                    R1Z.PhaseWireLog2Bin.opens)).toProver
+              caller τ))
+        R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂
+        (R1Z.ProverCommitCallerInstance.exhaustion
+          (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+              x
+              (R1Z.PrivacyR1AcctModel.seed
+                (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                    outputs x).toWire
+                R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                R1Z.PhaseWireLog2Bin.opens)).toProver
+          caller)
+        hc₁ hc₂ hs₁ hs₂
+        (R1Z.PrivacyR1AcctModel.wire_coins template R1Z.PhaseWireLog2Bin.log
+          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) outputs x)
+        (R1Z.PhaseWireLog2Bin.batches R1Z.PrivacyR1HeadlineDeployedReal.input outputs x template
+          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode)
+        (R1Z.PhaseWireLog2Bin.ordered_log R1Z.PrivacyR1HeadlineDeployedReal.input outputs x template
+          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode)
+        hcount hb₁ hb₂;
+    have mid :=
+      R1Z.ProverCommitReencode16.privacy_transport
+        (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+            x).toWire
+        (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs x
+            (R1Z.PrivacyR1AcctModel.seed
+              (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs x).toWire
+              R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+              R1Z.PhaseWireLog2Bin.opens)).toProver
+        8 (of_decide_eq_true (id (Eq.refl true)))
+        (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+          R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+        (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode
+        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) outputs x
+        (R0Z.RefPayload.simE (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+          R1Z.PrivacyR1AcctBasis.basis outputs x)
+        (R1Z.PrivacyR1Final.modelError
+          (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+              x).toWire
+          (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis outputs
+              x
+              (R1Z.PrivacyR1AcctModel.seed
+                (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                    outputs x).toWire
+                R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                R1Z.PhaseWireLog2Bin.opens)).toProver
+          R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂)
+        core;
+    have hmid := mid (R1Z.RomObserverBin.observerMap rust observer_program adv) w hw;
+    have t₁ :=
+      abs_sub_le
+        (R0Z.mean
+          (R0Z.FsStatement.realTest (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+            R1Z.PrivacyR1AcctBasis.basis outputs rust adv x w))
+        (R0Z.mean
+          (R0Z.FsStatement.realTest (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+            R1Z.PrivacyR1AcctBasis.basis outputs
+            (R1Z.ProverCommitReencode16.experiment
+              (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs x).toWire
+              (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs x
+                  (R1Z.PrivacyR1AcctModel.seed
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                    R1Z.PhaseWireLog2Bin.opens)).toProver
+              8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+              (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+              (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode)
+            (R1Z.RomObserverBin.observerMap rust observer_program adv) x w))
+        (R0Z.mean
+          (R0Z.HvzkS.idealTestS
+            (R1Z.ProverCommitReencode16.experiment
+              (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs x).toWire
+              (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                  outputs x
+                  (R1Z.PrivacyR1AcctModel.seed
+                    (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                    R1Z.PhaseWireLog2Bin.opens)).toProver
+              8 R1Z.PrivacyR1HeadlineWire2.eight_pos
+              (R1Z.PredicateR1.P_R1 (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+                R1Z.PrivacyR1AcctBasis.basis R1Z.PrivacyR1AcctBasis.packing_laws)
+              (fun h' => R1Z.MaskImageVR1.VR1 h') R1Z.ProverCommitReencode16.encode)
+            (R1Z.RomObserverBin.observerMap rust observer_program adv) x
+            (R0Z.RefPayload.simE (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input).transport
+              R1Z.PrivacyR1AcctBasis.basis outputs x)));
+    have spare :=
+      id
+        (id
+          (le_of_lt
+            (add_pos_of_pos_of_nonneg
+              (add_pos'
+                (div_pos
+                  (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 8))
+                    (Eq.refl (Nat.ble 1 8)))
+                  (pow_pos
+                    (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2))
+                      (Eq.refl (Nat.ble 1 2)))
+                    486))
+                (div_pos
+                  (Nat.cast_pos'.mpr
+                    (pow_pos
+                      (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 2))
+                        (Eq.refl (Nat.ble 1 2)))
+                      64))
+                  (pow_pos
+                    (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2))
+                      (Eq.refl (Nat.ble 1 2)))
+                    256)))
+              (div_nonneg (Nat.cast_nonneg' R1Z.ProverCommitFuelMass22.count)
+                (pow_nonneg (Nat.cast_nonneg' R1Z.ProverCommitFuelMass22.p) R1Z.ProverCommitFuelMass22.k)))));
+    Trans.trans
+      (Trans.trans (Trans.trans (LE.le.trans t₁ (add_le_add hr hmid)) (le_add_of_nonneg_right spare))
+        (Mathlib.Tactic.Ring.of_eq
+          (Mathlib.Tactic.Ring.Common.add_congr
+            (Mathlib.Tactic.Ring.Common.add_congr
+              (Mathlib.Tactic.Ring.Common.add_congr
+                (Mathlib.Tactic.Ring.Common.add_congr
+                  (Mathlib.Tactic.Ring.Common.add_congr
+                    (Mathlib.Tactic.Ring.Common.atom_pf
+                      (R1Z.QueryScanRealLazyBound.lazyBudget
+                        (8 *
+                          R1Z.GamesR1PBin.n1
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            (R1Z.PhaseProtocolInstanceBin.prover
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x
+                                (R1Z.PrivacyR1AcctModel.seed
+                                  (R1Z.PhaseProtocolInstanceBin.wire
+                                      (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                          x).length
+                                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                      R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                  R1Z.PhaseWireLog2Bin.opens)).toProver))
+                      rfl
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              R1Z.QueryScanRealLazyBound.lazyBudget
+                                      (8 *
+                                        R1Z.GamesR1PBin.n1
+                                          (R1Z.PhaseProtocolInstanceBin.wire
+                                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                  x).length
+                                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                          (R1Z.PhaseProtocolInstanceBin.prover
+                                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                  x).length
+                                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                              R1Z.PrivacyR1AcctBasis.basis outputs x
+                                              (R1Z.PrivacyR1AcctModel.seed
+                                                (R1Z.PhaseProtocolInstanceBin.wire
+                                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                    ((R1Z.PrivacyR1AcctModel.base template
+                                                            R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                        x).length
+                                                    (R1Z.PhaseWireLog2Bin.honest
+                                                      R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                                R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                                R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                                    Nat.rawCast 1 *
+                                  Nat.rawCast 1 =
+                                R1Z.QueryScanRealLazyBound.lazyBudget
+                                      (8 *
+                                        R1Z.GamesR1PBin.n1
+                                          (R1Z.PhaseProtocolInstanceBin.wire
+                                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                  x).length
+                                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                          (R1Z.PhaseProtocolInstanceBin.prover
+                                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                  x).length
+                                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                              R1Z.PrivacyR1AcctBasis.basis outputs x
+                                              (R1Z.PrivacyR1AcctModel.seed
+                                                (R1Z.PhaseProtocolInstanceBin.wire
+                                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                    ((R1Z.PrivacyR1AcctModel.base template
+                                                            R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                        x).length
+                                                    (R1Z.PhaseWireLog2Bin.honest
+                                                      R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                                R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                                R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                                    Nat.rawCast 1 *
+                                  _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl
+                          (R1Z.QueryScanRealLazyBound.lazyBudget
+                                (8 *
+                                  R1Z.GamesR1PBin.n1
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    (R1Z.PhaseProtocolInstanceBin.prover
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                                        (R1Z.PrivacyR1AcctModel.seed
+                                          (R1Z.PhaseProtocolInstanceBin.wire
+                                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                  x).length
+                                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                          R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                              Nat.rawCast 1 *
+                            Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.div_congr
+                      (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 8)))
+                      (Mathlib.Tactic.Ring.Common.pow_congr
+                        (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+                        (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 486)))
+                        (Mathlib.Tactic.Ring.Common.pow_add
+                          (Mathlib.Tactic.Ring.Common.single_pow
+                            (Mathlib.Tactic.Ring.Common.pow_prod_atom (Nat.rawCast 2) (Nat.rawCast 486)
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                        (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * _a)
+                                    (Eq.symm rfl)))
+                                (Eq.refl ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1)))))
+                          (Mathlib.Tactic.Ring.Common.pow_zero (Nat.rawCast 2 + 0) rfl)
+                          (Mathlib.Tactic.Ring.Common.add_mul
+                            (Mathlib.Tactic.Ring.Common.mul_add
+                              (Mathlib.Tactic.Ring.Common.mul_pf_left (Nat.rawCast 2 + 0) (Nat.rawCast 486)
+                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                    (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                    (Eq.refl 1))))
+                              (Mathlib.Tactic.Ring.Common.mul_zero
+                                ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1))
+                              (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))
+                            (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))))
+                      (Mathlib.Tactic.Ring.Common.div_pf
+                        (Mathlib.Tactic.Ring.Common.inv_single
+                          (Mathlib.Tactic.Ring.Common.inv_mul (Eq.refl (Nat.rawCast 2 + 0)⁻¹)
+                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                              (Mathlib.Meta.NormNum.IsNNRat.to_isNat
+                                (Mathlib.Meta.NormNum.isNNRat_inv_pos
+                                  (Mathlib.Meta.NormNum.IsNat.to_isNNRat (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)))))
+                            (Eq.symm
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                          (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1))) ▸
+                              Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                    (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                    (Eq.refl 1))))))
+                        (Mathlib.Tactic.Ring.Common.add_mul
+                          (Mathlib.Tactic.Ring.Common.mul_add
+                            (Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 8) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                  (Eq.refl 8))))
+                            (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 8))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0)))
+                          (Mathlib.Tactic.Ring.Common.zero_mul
+                            ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 + 0))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0)))))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                      (R1Z.QueryScanRealLazyBound.lazyBudget
+                            (8 *
+                              R1Z.GamesR1PBin.n1
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                (R1Z.PhaseProtocolInstanceBin.prover
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x
+                                    (R1Z.PrivacyR1AcctModel.seed
+                                      (R1Z.PhaseProtocolInstanceBin.wire
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                      R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                      R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                          Nat.rawCast 1 *
+                        Nat.rawCast 1)
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                        ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0))))
+                  (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64)) rfl
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                              R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * _a)
+                          (Eq.symm rfl)))
+                      (Eq.refl (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                    (R1Z.QueryScanRealLazyBound.lazyBudget
+                          (8 *
+                            R1Z.GamesR1PBin.n1
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                        Nat.rawCast 1 *
+                      Nat.rawCast 1)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                        (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))
+                (Mathlib.Tactic.Ring.Common.atom_pf R1Z.ProverCommitFuelMass22.charge rfl
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                            R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * _a)
+                        (Eq.symm rfl)))
+                    (Eq.refl (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                  (R1Z.QueryScanRealLazyBound.lazyBudget
+                        (8 *
+                          R1Z.GamesR1PBin.n1
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            (R1Z.PhaseProtocolInstanceBin.prover
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x
+                                (R1Z.PrivacyR1AcctModel.seed
+                                  (R1Z.PhaseProtocolInstanceBin.wire
+                                      (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                          x).length
+                                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                      R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                  R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                      Nat.rawCast 1 *
+                    Nat.rawCast 1)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                      (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                        (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))))
+              (Mathlib.Tactic.Ring.Common.atom_pf
+                (R1Z.PrivacyR1Final.modelError
+                  (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                      outputs x).toWire
+                  (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                      outputs x
+                      (R1Z.PrivacyR1AcctModel.seed
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                        R1Z.PhaseWireLog2Bin.opens)).toProver
+                  R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂)
+                rfl
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        R1Z.PrivacyR1Final.modelError
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                (R1Z.PhaseProtocolInstanceBin.prover
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x
+                                    (R1Z.PrivacyR1AcctModel.seed
+                                      (R1Z.PhaseProtocolInstanceBin.wire
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                      R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                      R1Z.PhaseWireLog2Bin.opens)).toProver
+                                R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                              Nat.rawCast 1 *
+                            Nat.rawCast 1 =
+                          R1Z.PrivacyR1Final.modelError
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                (R1Z.PhaseProtocolInstanceBin.prover
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x
+                                    (R1Z.PrivacyR1AcctModel.seed
+                                      (R1Z.PhaseProtocolInstanceBin.wire
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                      R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                      R1Z.PhaseWireLog2Bin.opens)).toProver
+                                R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                              Nat.rawCast 1 *
+                            _a)
+                      (Eq.symm rfl)))
+                  (Eq.refl
+                    (R1Z.PrivacyR1Final.modelError
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver
+                          R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                        Nat.rawCast 1 *
+                      Nat.rawCast 1))))
+              (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                (R1Z.QueryScanRealLazyBound.lazyBudget
+                      (8 *
+                        R1Z.GamesR1PBin.n1
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                    Nat.rawCast 1 *
+                  Nat.rawCast 1)
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                    (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                      (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1)
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                        (R1Z.PrivacyR1Final.modelError
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                (R1Z.PhaseProtocolInstanceBin.prover
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x
+                                    (R1Z.PrivacyR1AcctModel.seed
+                                      (R1Z.PhaseProtocolInstanceBin.wire
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                      R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                      R1Z.PhaseWireLog2Bin.opens)).toProver
+                                R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                              Nat.rawCast 1 *
+                            Nat.rawCast 1 +
+                          0)))))))
+            (Mathlib.Tactic.Ring.Common.add_congr
+              (Mathlib.Tactic.Ring.Common.add_congr
+                (Mathlib.Tactic.Ring.Common.div_congr
+                  (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 8)))
+                  (Mathlib.Tactic.Ring.Common.pow_congr
+                    (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+                    (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 486)))
+                    (Mathlib.Tactic.Ring.Common.pow_add
+                      (Mathlib.Tactic.Ring.Common.single_pow
+                        (Mathlib.Tactic.Ring.Common.pow_prod_atom (Nat.rawCast 2) (Nat.rawCast 486)
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                    (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1)))))
+                      (Mathlib.Tactic.Ring.Common.pow_zero (Nat.rawCast 2 + 0) rfl)
+                      (Mathlib.Tactic.Ring.Common.add_mul
+                        (Mathlib.Tactic.Ring.Common.mul_add
+                          (Mathlib.Tactic.Ring.Common.mul_pf_left (Nat.rawCast 2 + 0) (Nat.rawCast 486)
+                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                (Eq.refl 1))))
+                          (Mathlib.Tactic.Ring.Common.mul_zero ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))
+                        (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                          ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))))
+                  (Mathlib.Tactic.Ring.Common.div_pf
+                    (Mathlib.Tactic.Ring.Common.inv_single
+                      (Mathlib.Tactic.Ring.Common.inv_mul (Eq.refl (Nat.rawCast 2 + 0)⁻¹)
+                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                          (Mathlib.Meta.NormNum.IsNNRat.to_isNat
+                            (Mathlib.Meta.NormNum.isNNRat_inv_pos
+                              (Mathlib.Meta.NormNum.IsNat.to_isNNRat (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)))))
+                        (Eq.symm
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                      (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1))) ▸
+                          Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                (Eq.refl 1))))))
+                    (Mathlib.Tactic.Ring.Common.add_mul
+                      (Mathlib.Tactic.Ring.Common.mul_add
+                        (Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 8)
+                              (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 8))))
+                        (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 8))
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                          ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0)))
+                      (Mathlib.Tactic.Ring.Common.zero_mul
+                        ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 + 0))
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                        ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8 + 0)))))
+                (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64)) rfl
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                            R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * _a)
+                        (Eq.symm rfl)))
+                    (Eq.refl (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                  (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                    (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+              (Mathlib.Tactic.Ring.Common.atom_pf R1Z.ProverCommitFuelMass22.charge rfl
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                          R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * _a)
+                      (Eq.symm rfl)))
+                  (Eq.refl (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1))))
+              (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 8)
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                  (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                  (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                    (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))
+            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+              (R1Z.QueryScanRealLazyBound.lazyBudget
+                    (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                  Nat.rawCast 1 *
+                Nat.rawCast 1)
+              (Mathlib.Tactic.Ring.Common.add_pf_add_overlap
+                (Mathlib.Tactic.Ring.Common.add_overlap_pf (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                  (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                    (Mathlib.Meta.NormNum.isNat_add (Eq.refl HAdd.hAdd) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 8)
+                      (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 8) (Eq.refl 16))))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_overlap
+                  (Mathlib.Tactic.Ring.Common.add_overlap_pf (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64))
+                    (Nat.rawCast 1)
+                    (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                      (Mathlib.Meta.NormNum.isNat_add (Eq.refl HAdd.hAdd) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                        (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 2))))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_overlap
+                    (Mathlib.Tactic.Ring.Common.add_overlap_pf R1Z.ProverCommitFuelMass22.charge (Nat.rawCast 1)
+                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                        (Mathlib.Meta.NormNum.isNat_add (Eq.refl HAdd.hAdd) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                          (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 2))))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (R1Z.PrivacyR1Final.modelError
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver
+                              R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0)))))))
+          (Mathlib.Tactic.Ring.Common.add_congr
+            (Mathlib.Tactic.Ring.Common.add_congr
+              (Mathlib.Tactic.Ring.Common.add_congr
+                (Mathlib.Tactic.Ring.Common.add_congr
+                  (Mathlib.Tactic.Ring.Common.atom_pf
+                    (R1Z.PrivacyR1Final.modelError
+                      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                      (R1Z.PhaseProtocolInstanceBin.prover
+                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                          R1Z.PrivacyR1AcctBasis.basis outputs x
+                          (R1Z.PrivacyR1AcctModel.seed
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                            R1Z.PhaseWireLog2Bin.opens)).toProver
+                      R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂)
+                    rfl
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            R1Z.PrivacyR1Final.modelError
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    (R1Z.PhaseProtocolInstanceBin.prover
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                                        (R1Z.PrivacyR1AcctModel.seed
+                                          (R1Z.PhaseProtocolInstanceBin.wire
+                                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                  x).length
+                                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                                    R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                                  Nat.rawCast 1 *
+                                Nat.rawCast 1 =
+                              R1Z.PrivacyR1Final.modelError
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    (R1Z.PhaseProtocolInstanceBin.prover
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x
+                                        (R1Z.PrivacyR1AcctModel.seed
+                                          (R1Z.PhaseProtocolInstanceBin.wire
+                                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                  x).length
+                                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                          R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                          R1Z.PhaseWireLog2Bin.opens)).toProver
+                                    R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                                  Nat.rawCast 1 *
+                                _a)
+                          (Eq.symm rfl)))
+                      (Eq.refl
+                        (R1Z.PrivacyR1Final.modelError
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver
+                              R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1))))
+                  (Mathlib.Tactic.Ring.Common.div_congr
+                    (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 16)))
+                    (Mathlib.Tactic.Ring.Common.pow_congr
+                      (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+                      (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 486)))
+                      (Mathlib.Tactic.Ring.Common.pow_add
+                        (Mathlib.Tactic.Ring.Common.single_pow
+                          (Mathlib.Tactic.Ring.Common.pow_prod_atom (Nat.rawCast 2) (Nat.rawCast 486)
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                      (Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1)))))
+                        (Mathlib.Tactic.Ring.Common.pow_zero (Nat.rawCast 2 + 0) rfl)
+                        (Mathlib.Tactic.Ring.Common.add_mul
+                          (Mathlib.Tactic.Ring.Common.mul_add
+                            (Mathlib.Tactic.Ring.Common.mul_pf_left (Nat.rawCast 2 + 0) (Nat.rawCast 486)
+                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                  (Eq.refl 1))))
+                            (Mathlib.Tactic.Ring.Common.mul_zero
+                              ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))
+                          (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            ((Nat.rawCast 2 + 0) ^ Nat.rawCast 486 * Nat.rawCast 1 + 0)))))
+                    (Mathlib.Tactic.Ring.Common.div_pf
+                      (Mathlib.Tactic.Ring.Common.inv_single
+                        (Mathlib.Tactic.Ring.Common.inv_mul (Eq.refl (Nat.rawCast 2 + 0)⁻¹)
+                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                            (Mathlib.Meta.NormNum.IsNNRat.to_isNat
+                              (Mathlib.Meta.NormNum.isNNRat_inv_pos
+                                (Mathlib.Meta.NormNum.IsNat.to_isNNRat (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)))))
+                          (Eq.symm
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 =
+                                        (Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * _a)
+                                    (Eq.symm rfl)))
+                                (Eq.refl ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1))) ▸
+                            Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                  (Eq.refl 1))))))
+                      (Mathlib.Tactic.Ring.Common.add_mul
+                        (Mathlib.Tactic.Ring.Common.mul_add
+                          (Mathlib.Tactic.Ring.Common.mul_pf_right (Nat.rawCast 2 + 0)⁻¹ (Nat.rawCast 486)
+                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 16) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1)
+                                (Eq.refl 16))))
+                          (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 16))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16 + 0)))
+                        (Mathlib.Tactic.Ring.Common.zero_mul
+                          ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 1 + 0))
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                          ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16 + 0)))))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_gt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (R1Z.PrivacyR1Final.modelError
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver
+                              R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0))))
+                (Mathlib.Tactic.Ring.Common.atom_pf
+                  (R1Z.QueryScanRealLazyBound.lazyBudget
+                    (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver))
+                  rfl
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          R1Z.QueryScanRealLazyBound.lazyBudget
+                                  (8 *
+                                    R1Z.GamesR1PBin.n1
+                                      (R1Z.PhaseProtocolInstanceBin.wire
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                      (R1Z.PhaseProtocolInstanceBin.prover
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x
+                                          (R1Z.PrivacyR1AcctModel.seed
+                                            (R1Z.PhaseProtocolInstanceBin.wire
+                                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                ((R1Z.PrivacyR1AcctModel.base template
+                                                        R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                    x).length
+                                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                            R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                            R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                                Nat.rawCast 1 *
+                              Nat.rawCast 1 =
+                            R1Z.QueryScanRealLazyBound.lazyBudget
+                                  (8 *
+                                    R1Z.GamesR1PBin.n1
+                                      (R1Z.PhaseProtocolInstanceBin.wire
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                      (R1Z.PhaseProtocolInstanceBin.prover
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x
+                                          (R1Z.PrivacyR1AcctModel.seed
+                                            (R1Z.PhaseProtocolInstanceBin.wire
+                                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                                ((R1Z.PrivacyR1AcctModel.base template
+                                                        R1Z.PhaseWireLog2Bin.log).pubBytes
+                                                    x).length
+                                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                            R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                            R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                                Nat.rawCast 1 *
+                              _a)
+                        (Eq.symm rfl)))
+                    (Eq.refl
+                      (R1Z.QueryScanRealLazyBound.lazyBudget
+                            (8 *
+                              R1Z.GamesR1PBin.n1
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                (R1Z.PhaseProtocolInstanceBin.prover
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x
+                                    (R1Z.PrivacyR1AcctModel.seed
+                                      (R1Z.PhaseProtocolInstanceBin.wire
+                                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                              x).length
+                                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                      R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                      R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                          Nat.rawCast 1 *
+                        Nat.rawCast 1))))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                  (R1Z.QueryScanRealLazyBound.lazyBudget
+                        (8 *
+                          R1Z.GamesR1PBin.n1
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            (R1Z.PhaseProtocolInstanceBin.prover
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x
+                                (R1Z.PrivacyR1AcctModel.seed
+                                  (R1Z.PhaseProtocolInstanceBin.wire
+                                      (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                          x).length
+                                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                      R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                  R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                  R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                      Nat.rawCast 1 *
+                    Nat.rawCast 1)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                    ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16 +
+                      (R1Z.PrivacyR1Final.modelError
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver
+                              R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0)))))
+              (Mathlib.Tactic.Ring.Common.mul_congr
+                (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+                (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64)) rfl
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                            R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * _a)
+                        (Eq.symm rfl)))
+                    (Eq.refl (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                (Mathlib.Tactic.Ring.Common.add_mul
+                  (Mathlib.Tactic.Ring.Common.mul_add
+                    (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64))
+                      (Nat.rawCast 1)
+                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 2)
+                          (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 2))))
+                    (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 2))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 2 + 0)))
+                  (Mathlib.Tactic.Ring.Common.zero_mul
+                    (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                    (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 2 + 0))))
+              (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                (R1Z.QueryScanRealLazyBound.lazyBudget
+                      (8 *
+                        R1Z.GamesR1PBin.n1
+                          (R1Z.PhaseProtocolInstanceBin.wire
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                          (R1Z.PhaseProtocolInstanceBin.prover
+                              (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                              ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                              (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                              R1Z.PrivacyR1AcctBasis.basis outputs x
+                              (R1Z.PrivacyR1AcctModel.seed
+                                (R1Z.PhaseProtocolInstanceBin.wire
+                                    (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                    ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                    (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                    R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                    Nat.rawCast 1 *
+                  Nat.rawCast 1)
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                    (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 2)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (R1Z.PrivacyR1Final.modelError
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver
+                              R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0))))))
+            (Mathlib.Tactic.Ring.Common.mul_congr
+              (Mathlib.Tactic.Ring.cast_pos (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2)))
+              (Mathlib.Tactic.Ring.Common.atom_pf R1Z.ProverCommitFuelMass22.charge rfl
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                          R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * _a)
+                      (Eq.symm rfl)))
+                  (Eq.refl (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1))))
+              (Mathlib.Tactic.Ring.Common.add_mul
+                (Mathlib.Tactic.Ring.Common.mul_add
+                  (Mathlib.Tactic.Ring.Common.mul_pf_right R1Z.ProverCommitFuelMass22.charge (Nat.rawCast 1)
+                    (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                      (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul) (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 2)
+                        (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1) (Eq.refl 2))))
+                  (Mathlib.Tactic.Ring.Common.mul_zero (Nat.rawCast 2))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                    (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 2 + 0)))
+                (Mathlib.Tactic.Ring.Common.zero_mul
+                  (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                  (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 2 + 0))))
+            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+              (R1Z.QueryScanRealLazyBound.lazyBudget
+                    (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver) ^
+                  Nat.rawCast 1 *
+                Nat.rawCast 1)
+              (Mathlib.Tactic.Ring.Common.add_pf_add_lt ((Nat.rawCast 2 + 0)⁻¹ ^ Nat.rawCast 486 * Nat.rawCast 16)
+                (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                  (R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) ^ Nat.rawCast 1 * Nat.rawCast 2)
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                    (R1Z.ProverCommitFuelMass22.charge ^ Nat.rawCast 1 * Nat.rawCast 2)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                      (R1Z.PrivacyR1Final.modelError
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              (R1Z.PhaseProtocolInstanceBin.prover
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x
+                                  (R1Z.PrivacyR1AcctModel.seed
+                                    (R1Z.PhaseProtocolInstanceBin.wire
+                                        (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                        ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes
+                                            x).length
+                                        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input)
+                                        R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                                    R1Z.PrivacyR1HeadlineDeployedReal.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                                    R1Z.PhaseWireLog2Bin.opens)).toProver
+                              R1Z.PrivacyR1AcctModel.L₁ R1Z.PrivacyR1AcctModel.L₂ ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1 +
+                        0)))))))))
+      (add_le_add
+        (add_le_add
+          (add_le_add
+            (le_refl
+              (R1Z.PrivacyR1Final.modelError
+                  (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedReal.input) R1Z.PrivacyR1AcctBasis.basis
+                      outputs x).toWire
+                  (R1Z.PhaseProtocolInstanceBin.prover (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                      ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                      (R1Z.PhaseWireLog2Bin.honest ⋯) ⋯ ⋯ ⋯ ⋯).toProver
+                  ⋯ ⋯ +
+                ⋯))
+            ⋯)
+          ⋯)
+        ⋯),
+    ⋯⟩
+'R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.identification_unsatisfiable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_PaddingCounterexample24.admitted_identification_unsatisfiable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

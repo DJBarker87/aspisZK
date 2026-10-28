@@ -1,0 +1,60 @@
+'R1Z.PV_RunJoin_CarryStop31.bit_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryStop31.lean:48:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  20 - ↑level
+in the target expression
+  ↑level + 1 + R0P.digestTrailingOnes (20 - (↑level + 1)) (↑index >>> (↑level + 1)) =
+    ↑level + R0P.digestTrailingOnes n (↑index >>> ↑level)
+
+case pos
+inst✝ : ExternalLinear
+index : U64
+roots : Roots
+final : Frontier
+result : Digest
+finish : Usize
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (frontier : Frontier) (carry : Digest) (level : Usize),
+      ↑level ≤ 20 →
+        incremental_merkle.tree_reference.OwnedTree.append_one_loop index roots frontier carry level =
+            ok (final, result, finish) →
+          20 - ↑level = m → ↑finish = ↑level + R0P.digestTrailingOnes m (↑index >>> ↑level)
+frontier : Frontier
+carry : Digest
+level : Usize
+bound : ↑level ≤ 20
+hn : 20 - ↑level = n
+active : level < 20#usize
+hl : ↑level < 20
+hbval : ↑(BuilderStdModels.shift64 index level &&& 1#u64) = ↑index >>> ↑level &&& 1
+hb : BuilderStdModels.shift64 index level &&& 1#u64 = 1#u64
+sibling : Std.Array aspis_core.field.M31 8#usize
+hs : Array.index_usize frontier level = ok sibling
+parent : Std.Array aspis_core.field.M31 8#usize
+hp : format.pool_v1_tree_parent sibling carry = ok parent
+h :
+  incremental_merkle.tree_reference.OwnedTree.append_one_loop index roots
+      (Std.Array.set frontier level (↑roots)[↑level]!) parent (level.wrapping_add 1#usize) =
+    ok (final, result, finish)
+hnext : ↑(level.wrapping_add 1#usize) = ↑level + 1
+nextStop :
+  ↑finish =
+    ↑(level.wrapping_add 1#usize) +
+      R0P.digestTrailingOnes (20 - ↑(level.wrapping_add 1#usize)) (↑index >>> ↑(level.wrapping_add 1#usize))
+hbit : ↑index >>> ↑level &&& 1 ≠ 0
+⊢ ↑level + 1 + R0P.digestTrailingOnes (20 - (↑level + 1)) (↑index >>> (↑level + 1)) =
+    ↑level + R0P.digestTrailingOnes n (↑index >>> ↑level)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryStop31.lean:54:36: error(lean.unknownIdentifier): Unknown identifier `level.val`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryStop31.lean:55:25: error: Function expected at
+  Nat.and_le_right
+but this term has type
+  ?m.514 &&& ?m.515 ≤ ?m.515
+
+Note: Expected a function because this term is being applied to the argument
+  (index.val >>> level.val)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryStop31.lean:62:20: error(lean.unknownIdentifier): Unknown identifier `level.val`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryStop31.lean:62:37: error(lean.unknownIdentifier): Unknown identifier `level.val`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryStop31.lean:66:16: error(lean.unknownIdentifier): Unknown identifier `level.val`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryStop31.lean:66:43: error(lean.unknownIdentifier): Unknown identifier `level.val`
+'R1Z.PV_RunJoin_CarryStop31.stop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

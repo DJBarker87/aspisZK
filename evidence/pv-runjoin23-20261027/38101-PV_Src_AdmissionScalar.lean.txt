@@ -1,0 +1,49 @@
+import R1Z.PV_Src_ScalarReduce
+
+/-! Primitive arithmetic facts for the actual extracted common validator. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_AdmissionScalar
+open Aeneas Aeneas.Std Result R0Z.WriterRefine R1J.SpendWitnessMap
+open AspisBuilderAdmissionSource
+
+theorem sub_source (a b : U32) :
+    aspis_core.field.M31.sub a b = R0BlockCopies.m31_sub a b := by
+  simp only [aspis_core.field.M31.sub,R0BlockCopies.m31_sub,
+    aspis_core.field.P,R0BlockCopies.P,lift,bind_tc_ok]
+
+theorem sub_self (a : U32) (ha : a.val < 2147483647) :
+    aspis_core.field.M31.sub a a = ok 0#u32 := by
+  obtain ⟨z,hz,hv⟩ := m31_sub_spec_wide a a ha ha
+  have he : z = 0#u32 := UScalar.eq_of_val_eq (by simpa using hv)
+  rw [sub_source,hz,he]
+
+theorem mul_zero (a : U32) : aspis_core.field.M31.mul 0#u32 a = ok 0#u32 := by
+  simp only [aspis_core.field.M31.mul,lift,bind_tc_ok]
+  rw [PV_Src_ScalarReduce.admission_eq]
+  simp only [bind_tc_ok]
+  congr 1
+  apply UScalar.eq_of_val_eq
+  rw [PV_Src_ScalarReduce.modulo]
+  simp only [U64.wrapping_mul_val_eq,UScalar.cast_val_eq,UScalar.ofNatCore_val_eq,Nat.zero_mod,Nat.zero_mul]
+
+theorem mul_field (a b : U32) :
+    ∃ z, aspis_core.field.M31.mul a b = ok z ∧ z.val < 2147483647 ∧
+      (z.val : F) = (a.val : F) * (b.val : F) := by
+  let prod := U64.wrapping_mul (UScalar.cast .U64 a) (UScalar.cast .U64 b)
+  have hp : prod.val = a.val*b.val :=
+    R0Z.PoseidonRefine.mul64v _ _ _ _ (R0Z.PoseidonRefine.c64 a)
+      (R0Z.PoseidonRefine.c64 b) (by
+        have ha := R0Z.PoseidonRefine.u32lt a
+        have hb := R0Z.PoseidonRefine.u32lt b
+        have h := Nat.mul_lt_mul_of_lt_of_lt ha hb
+        exact h)
+  refine ⟨PV_Src_ScalarReduce.value prod,?_,PV_Src_ScalarReduce.canonical prod,?_⟩
+  · simp only [aspis_core.field.M31.mul,lift,bind_tc_ok,PV_Src_ScalarReduce.admission_eq]
+    rfl
+  · rw [PV_Src_ScalarReduce.modulo,hp,ZMod.natCast_mod,Nat.cast_mul]
+
+#print axioms sub_source
+#print axioms sub_self
+#print axioms mul_zero
+#print axioms mul_field
+end R1Z.PV_Src_AdmissionScalar

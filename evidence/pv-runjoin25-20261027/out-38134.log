@@ -1,0 +1,192 @@
+def R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput : {K : Type} →
+  [inst : Field K] → [CharP K 2147483647] → R1Z.PV_Src_NativeInput.Input → Prop :=
+fun {K} [Field K] [CharP K 2147483647] i =>
+  R1Z.PV_RunJoin_UniversalBuild22.Admission i ∧
+    R1Z.PV_Src_NativeInput.run i = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok i.compiled) ∧
+      R1Z.PV_Src_RecordReference.Checked i ∧ ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑i.snapshot.frontier)[↑l]!
+def R1Z.PV_RunJoin_ConsumerBoundary25.inputs : Unit → R1Z.PV_Src_NativeInput.Input :=
+fun x => R1Z.PV_RunJoin_ConsumerBoundary25.bad
+def R1Z.PV_RunJoin_ConsumerBoundary25.target : {K : Type} →
+  [inst : Field K] →
+    [Fintype K] →
+      [DecidableEq K] →
+        [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+          [inst_4 : CharP K 2147483647] → Unit → R1Z.BuilderCanonical.Instance :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] =>
+  R1Z.PV_RunJoin_UniversalBuild22.toInstance R1Z.PV_RunJoin_ConsumerBoundary25.inputs ⋯
+theorem R1Z.PV_RunJoin_ConsumerBoundary25.identification : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K]
+  [inst_2 : DecidableEq K] [inst_3 : Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647],
+  R1Z.BuilderSource.SourceIdentification R1Z.PV_RunJoin_ConsumerBoundary25.source
+    R1Z.PV_RunJoin_ConsumerBoundary25.target :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] =>
+  { public_eq := fun x => R1Z.PV_RunJoin_PremiseTruth24.variant_public_eq,
+    build_eq := fun x => R1Z.PV_RunJoin_PremiseTruth24.variant_build_eq,
+    transport_eq := R1Z.PV_RunJoin_PremiseTruth24.raw_transport_eq }
+theorem R1Z.PV_RunJoin_ConsumerBoundary25.identification_does_not_imply_honesty : ∀ {K : Type} [inst : Field K]
+  [inst_1 : Fintype K] [inst_2 : DecidableEq K] [inst_3 : Algebra (ZMod AspisCircleGroupOrder.P) K]
+  [inst_4 : CharP K 2147483647],
+  ¬(R1Z.BuilderSource.SourceIdentification R1Z.PV_RunJoin_ConsumerBoundary25.source
+        R1Z.PV_RunJoin_ConsumerBoundary25.target →
+      ∀ (w : Unit), R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput (R1Z.PV_RunJoin_ConsumerBoundary25.inputs w)) :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] h =>
+  R1Z.PV_RunJoin_ConsumerBoundary25.not_honest (h R1Z.PV_RunJoin_ConsumerBoundary25.identification ())
+theorem R1Z.PV_RunJoin_ConsumerUse25.consumer_at_nonhonest : ∀ {F : Subfield R1Z.PrivacyR1AcctBasis.K}
+  (B : R0P.PackBasis F),
+  (R0P.PublicBase F R1Z.PV_RunJoin_ConsumerUse25.x.1 ∧
+      R0Z.HonestValidity.BuilderSoundOn R1Z.PV_RunJoin_ConsumerBoundary25.source B R1Z.PV_RunJoin_ConsumerUse25.x) ∧
+    ¬R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput (R1Z.PV_RunJoin_ConsumerBoundary25.inputs ()) :=
+fun {F} B =>
+  ⟨R1Z.PV_RunJoin_ConsumerUse25.consumer B () R1Z.PV_RunJoin_ConsumerUse25.matching_public,
+    R1Z.PV_RunJoin_ConsumerBoundary25.not_honest⟩
+theorem R1Z.PV_RunJoin_ConsumerUse25.matching_fibre_not_honest : ¬∀
+    (w : R1Z.PV_RunJoin_ConsumerBoundary25.source.Instance),
+    R1Z.PV_RunJoin_ConsumerBoundary25.source.public w = R1Z.PV_RunJoin_ConsumerUse25.x.1 →
+      R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput (R1Z.PV_RunJoin_ConsumerBoundary25.inputs w) :=
+fun h => R1Z.PV_RunJoin_ConsumerBoundary25.not_honest (h () R1Z.PV_RunJoin_ConsumerUse25.matching_public)
+structure R1Z.PV_Src_NativeIdentification.PV_Src_Premises {K : Type} [Field K] [CharP K 2147483647]
+  [R1Z.BuilderForestAdmissionPort.ExternalLinear] [R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+  (inputs : I → R1Z.PV_Src_NativeInput.Input) (transport : Fin 1024 ≃ Fin 1024) : Prop
+number of parameters: 8
+fields:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.compile_call : ∀ (i : I),
+      R1Z.PV_Src_NativeInput.run (inputs i) =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (inputs i).compiled)
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.words : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w)
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.publicCorr : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic records.p)
+          (R1J.SpendWitnessMap.mapPub
+            (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.admission : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R1Z.BuilderSpendRelation.RspendPlus
+          (R1J.SpendWitnessMap.mapPub
+            (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+          (R1Z.BuilderCanonical.liftWitness
+            (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w)))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j
+constructor:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.mk {K : Type} [Field K] [CharP K 2147483647]
+    [R1Z.BuilderForestAdmissionPort.ExternalLinear] [R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+    {inputs : I → R1Z.PV_Src_NativeInput.Input} {transport : Fin 1024 ≃ Fin 1024}
+    (compile_call :
+      ∀ (i : I),
+        R1Z.PV_Src_NativeInput.run (inputs i) =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (inputs i).compiled))
+    (words :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w))
+    (publicCorr :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic records.p)
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i)))))
+    (admission :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R1Z.BuilderSpendRelation.RspendPlus
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+            (R1Z.BuilderCanonical.liftWitness
+              (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w))))
+    (row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j) :
+    R1Z.PV_Src_NativeIdentification.PV_Src_Premises inputs transport
+structure R1Z.BuilderRuntimeJoin.RustRuntimeJoin {K : Type} [Field K] [CharP K 2147483647]
+  (source : R0Z.ZkStatement.HonestProver K) : Type
+number of parameters: 4
+fields:
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.publicInput : source.Instance → R0P.Public R1J.SpendWitnessMap.F
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.witnessRecord : source.Instance → R0Z.WriterRefine.RustWitness
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.publicRecord : source.Instance → R0Z.WriterRefine.RustPublic
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.words : ∀ (w : source.Instance),
+      R0Z.WriterRefine.WitnessOk (self.witnessRecord w)
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.publicCorr : ∀ (w : source.Instance),
+      R0Z.WriterRefine.PubCorr (self.publicRecord w) (R1J.SpendWitnessMap.mapPub (self.publicInput w))
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.admission : ∀ (w : source.Instance),
+      R1Z.BuilderSpendRelation.RspendPlus (R1J.SpendWitnessMap.mapPub (self.publicInput w))
+        (R1Z.BuilderCanonical.liftWitness (R1Z.BuilderRecordCanonical.witness (self.witnessRecord w)))
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.public_eq : ∀ (w : source.Instance),
+      source.public w = R1J.SpendWitnessMap.mapPub (self.publicInput w)
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.raw_trace_eq : ∀ (w : source.Instance),
+      source.build w = R1Z.BuilderRefinement.mergedTrace (self.witnessRecord w) (self.publicRecord w)
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.transport_eq : source.transport = R1Z.BuilderSource.π
+constructor:
+  R1Z.BuilderRuntimeJoin.RustRuntimeJoin.mk {K : Type} [Field K] [CharP K 2147483647]
+    {source : R0Z.ZkStatement.HonestProver K} (publicInput : source.Instance → R0P.Public R1J.SpendWitnessMap.F)
+    (witnessRecord : source.Instance → R0Z.WriterRefine.RustWitness)
+    (publicRecord : source.Instance → R0Z.WriterRefine.RustPublic)
+    (words : ∀ (w : source.Instance), R0Z.WriterRefine.WitnessOk (witnessRecord w))
+    (publicCorr :
+      ∀ (w : source.Instance), R0Z.WriterRefine.PubCorr (publicRecord w) (R1J.SpendWitnessMap.mapPub (publicInput w)))
+    (admission :
+      ∀ (w : source.Instance),
+        R1Z.BuilderSpendRelation.RspendPlus (R1J.SpendWitnessMap.mapPub (publicInput w))
+          (R1Z.BuilderCanonical.liftWitness (R1Z.BuilderRecordCanonical.witness (witnessRecord w))))
+    (public_eq : ∀ (w : source.Instance), source.public w = R1J.SpendWitnessMap.mapPub (publicInput w))
+    (raw_trace_eq :
+      ∀ (w : source.Instance), source.build w = R1Z.BuilderRefinement.mergedTrace (witnessRecord w) (publicRecord w))
+    (transport_eq : source.transport = R1Z.BuilderSource.π) : R1Z.BuilderRuntimeJoin.RustRuntimeJoin source
+structure R1Z.BuilderSource.SourceIdentification {K : Type} [Field K] [CharP K 2147483647]
+  (source : R0Z.ZkStatement.HonestProver K) (toInstance : source.Instance → R1Z.BuilderCanonical.Instance) : Prop
+number of parameters: 5
+fields:
+  R1Z.BuilderSource.SourceIdentification.public_eq : ∀ (w : source.Instance),
+      source.public w = R1Z.BuilderSource.prover.public (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.build_eq : ∀ (w : source.Instance),
+      source.build w = R1Z.BuilderSource.prover.build (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.transport_eq : source.transport = R1Z.BuilderSource.π
+constructor:
+  R1Z.BuilderSource.SourceIdentification.mk {K : Type} [Field K] [CharP K 2147483647]
+    {source : R0Z.ZkStatement.HonestProver K} {toInstance : source.Instance → R1Z.BuilderCanonical.Instance}
+    (public_eq : ∀ (w : source.Instance), source.public w = R1Z.BuilderSource.prover.public (toInstance w))
+    (build_eq : ∀ (w : source.Instance), source.build w = R1Z.BuilderSource.prover.build (toInstance w))
+    (transport_eq : source.transport = R1Z.BuilderSource.π) : R1Z.BuilderSource.SourceIdentification source toInstance
+theorem R1Z.BuilderSource.builder_refinement_D46_D51 : ∀ {K CommitHandle : Type} [inst : Field K] [inst_1 : Fintype K]
+  [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647],
+  4096 < Fintype.card K →
+    ∀ (F : Subfield K) (B : R0P.PackBasis F) (x : R0Z.ZkStatement.Statement K CommitHandle)
+      (source : R0Z.ZkStatement.HonestProver K) (toInstance : source.Instance → R1Z.BuilderCanonical.Instance),
+      R1Z.BuilderSource.SourceIdentification source toInstance → R0Z.HonestValidity.BuilderSoundOn source B x :=
+fun {K CommitHandle} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K]
+    [CharP K 2147483647] hcard F B x source toInstance identification w hw =>
+  Eq.mpr (id (congrArg (fun _a => R0Z.HonestValidity.HonestBuilderSound F x.1 B _a) (identification.build_eq w)))
+    (R1Z.BuilderSource.builderSoundOn hcard F B x (toInstance w) (Eq.trans (Eq.symm (identification.public_eq w)) hw))
+theorem R1Z.BuilderProtocolInstance.join_of_identification : ∀ {CommitHandle : Type}
+  (source : R0Z.ZkStatement.HonestProver AspisWideTower.WideExact)
+  (x : R0Z.ZkStatement.Statement AspisWideTower.WideExact CommitHandle)
+  (toInstance : source.Instance → R1Z.BuilderCanonical.Instance),
+  R1Z.BuilderSource.SourceIdentification source toInstance → R1Z.BuilderProtocolInstance.RustBuilderJoin source x :=
+fun {CommitHandle} source x toInstance identification w hw =>
+  Exists.intro (toInstance w) ⟨Eq.trans (Eq.symm (identification.public_eq w)) hw, identification.build_eq w⟩
+theorem R1Z.PV_Src_Consumer.of_identification : ∀ {CommitHandle : Type} {F : Subfield R1Z.PrivacyR1AcctBasis.K}
+  (B : R0P.PackBasis F) (x : R0Z.ZkStatement.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle)
+  (source : R0Z.ZkStatement.HonestProver R1Z.PrivacyR1AcctBasis.K)
+  (toInstance : source.Instance → R1Z.BuilderCanonical.Instance),
+  R1Z.BuilderSource.SourceIdentification source toInstance → R1Z.PrivacyR1Headline.BuilderPremises source B x :=
+fun {CommitHandle} {F} B x source toInstance identification w hw =>
+  ⟨Eq.mpr (id (congrArg (fun _a => R0P.PublicBase F _a) (Eq.symm hw)))
+      (Eq.mpr (id (congrArg (fun _a => R0P.PublicBase F _a) (identification.public_eq w)))
+        (R1Z.BuilderCanonical.publicBase_map F (↑(toInstance w)).1)),
+    R1Z.BuilderSource.builder_refinement_D46_D51 R1Z.BuilderProtocolInstance.field_large F B x source toInstance
+      identification⟩
+'R1Z.PV_RunJoin_ConsumerBoundary25.identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ConsumerBoundary25.not_honest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ConsumerBoundary25.identification_does_not_imply_honesty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_ConsumerBoundary25.transfer_honest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ConsumerBoundary25.withdrawal_honest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ConsumerUse25.protocol_join_at_nonhonest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ConsumerUse25.source_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ConsumerUse25.consumer_at_nonhonest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ConsumerUse25.matching_fibre_not_honest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FinalAudit24.endpoint_input_is_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FinalAudit24.canonical_identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed' depends on axioms: [propext, Classical.choice, Quot.sound]

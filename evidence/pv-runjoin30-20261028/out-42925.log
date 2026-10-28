@@ -1,0 +1,34 @@
+'R1Z.PV_RunJoin_RuntimeRejections30.mapped_unit' depends on axioms: [propext]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimeRejections30.lean:34:88: error: unsolved goals
+case pos
+pool domain : Std.Array U8 32#usize
+seq : U64
+anchor nullifier : Std.Array U32 8#usize
+asset : U32
+input : PoolV1PairInputNoteWitnessV1
+context : pool_v1.payment_relation.PoolV1PaymentRelationContextV1
+hr : Runtime pool domain seq anchor asset context
+hs : nullifier ∉ ↑context.spent_nullifiers
+hd : Digests input
+hv : Values input
+⊢ (do
+        let r ← input.pair_leaf.require_selected_spendable input.selected_second
+        core.result.Result.map_err
+            (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 PoolV1PairTraceErrorV1) r
+            PoolV1PairTraceErrorV1.PairLeafCtor) =
+      ok (core.result.Result.Ok ()) ↔
+    input.pair_leaf.require_selected_spendable input.selected_second = ok (core.result.Result.Ok ())
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimeRejections30.lean:40:35: warning: This simp argument is unused:
+  mapped_unit
+
+Hint: Omit it from the simp argument list.
+  simp only [result, ̲hr, ̲hs, ̲hd, ̲hv, ̲not_true_eq_false, ̲not_false_eq_true, ̲↓reduceIte,
+        Result.ok.injEq, ̲reduceCtorEq,m̵a̵p̵p̵e̵d̵_̵u̵n̵i̵ ̲t,̵t̵rue_and, ̲false_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_RuntimeRejections30.success_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimeRejections30.runtime_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimeRejections30.spent_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimeRejections30.digest_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimeRejections30.value_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimeRejections30.pair_error' depends on axioms: [propext, Classical.choice, Quot.sound]

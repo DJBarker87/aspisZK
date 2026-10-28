@@ -1,0 +1,46 @@
+LAUNCH 42945 R1Z/PV_RunJoin_CodecOuter30
+'R1Z.PV_RunJoin_CodecOuter30.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CodecOuter30.lean:69:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1 bytes
+in the target expression
+  (do
+      let r ← decode bytes
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err (PreparationError.snapshot e))
+        | core.result.Result.Ok s => do
+          let r ← f (snapshot s)
+          match r with
+            | core.result.Result.Err e => ok (core.result.Result.Err (PreparationError.trace e))
+            | core.result.Result.Ok c => ok (core.result.Result.Ok (s, c))) =
+    ok (core.result.Result.Ok (s, c))
+
+case mpr
+C E : Type
+bytes : Slice U8
+f : pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 → Result (core.result.Result C E)
+post : Snapshot → Prop
+hf : ∀ (s : Snapshot), (∃ c, f (snapshot s) = ok (core.result.Result.Ok c)) ↔ post s
+h : PV_RunJoin_CodecComposition30.Path bytes post
+s : AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+hd :
+  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1 bytes =
+    ok (core.result.Result.Ok s)
+hp : post s
+c : C
+hc : f (snapshot s) = ok (core.result.Result.Ok c)
+⊢ (do
+      let r ← decode bytes
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err (PreparationError.snapshot e))
+        | core.result.Result.Ok s => do
+          let r ← f (snapshot s)
+          match r with
+            | core.result.Result.Err e => ok (core.result.Result.Err (PreparationError.trace e))
+            | core.result.Result.Ok c => ok (core.result.Result.Ok (s, c))) =
+    ok (core.result.Result.Ok (s, c))
+'R1Z.PV_RunJoin_CodecOuter30.success_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CodecOuter30.snapshot_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CodecOuter30.transfer_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CodecOuter30.withdrawal_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+RECEIPT {"attempt": 42945, "exit": 1, "wall_seconds": 2.4714135420508683, "peak_rss_bytes": 4961263616, "swaps": 0, "accepted": false}
