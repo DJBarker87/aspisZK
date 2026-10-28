@@ -58,8 +58,17 @@ theorem mul (a b : K) :
   rfl
 #print axioms copied_mul
 #print axioms mul
+theorem copied_one : to251Q PV_B2_C_WeightsNative.aspis_core.field.QM31.ONE=
+    PV_B2_251c1.aspis_core.field.QM31.ONE := by
+  unfold PV_B2_C_WeightsNative.aspis_core.field.QM31.ONE
+    PV_B2_251c1.aspis_core.field.QM31.ONE
+  rfl
+
 theorem one : AspisR1ProducerRelease47.field.QM31.ONE=
-    toQ PV_B2_C_WeightsNative.aspis_core.field.QM31.ONE :=
-  PV_RunJoin_WeightQuartic46.one
+    toQ PV_B2_C_WeightsNative.aspis_core.field.QM31.ONE := by
+  rw [PV_RunJoin_WeightQuartic46.one]
+  unfold toQ
+  rw [copied_one]
+#print axioms copied_one
 #print axioms one
 end R1Z.PV_RunJoin_WeightKernel46
