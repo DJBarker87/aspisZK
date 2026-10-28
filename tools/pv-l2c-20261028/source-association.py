@@ -3,7 +3,7 @@ from pathlib import Path
 import hashlib,json,subprocess,re
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l2c-20261028'
 spec={
- 'N2':{'crates/aspis-prover/src/state_only_hiding.rs':['sample_mask_h1_padding','balance_qm31_copy_inactive','apply_h1_padding_mask_for_active','check_h1_padding_active','h1_padding_inactive_sum','h1_padding_inactive_step']},
+ 'N2':{'crates/aspis-prover/src/state_only_hiding.rs':['sample_mask_h1_padding','sum_qm31_copy_inactive','inactive_qm31_step','state_only_copy_inactive_sum_qm31','state_only_copy_inactive_sum_m31','balance_qm31_copy_inactive','apply_h1_padding_mask_for_active','check_h1_padding_active','h1_padding_inactive_sum','h1_padding_inactive_step']},
  'N3':{'crates/aspis-core/src/field/ct.rs':['subtract_p','add','sub'],'crates/aspis-r1-cost-probe/src/host_semantic.rs':['check_semantic_columns','check_base_columns','check_base_column','check_secure_column']},
  'N4':{'crates/aspis-prover/src/state_only_hiding.rs':['balance_m31_copy_inactive','sum_m31_copy_inactive','inactive_m31_step','balance_mask_column'],'crates/aspis-r1-cost-probe/src/prover.rs':['audit_masks','inactive_sum_m31','inactive_sum_k','prove_masked_with_attempt']},
  'N5':{'crates/aspis-r1-cost-probe/src/prover_helper_sum.rs':['state_only_copy_helper_sum'],'crates/aspis-r1-cost-probe/src/host_semantic.rs':['build_with_helper_mode']},

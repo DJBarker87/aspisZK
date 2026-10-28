@@ -1,0 +1,36 @@
+{
+  "revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+  "native_path": "crates/aspis-core/src/field/ct.rs",
+  "native_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+  "lean_path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_M31.lean",
+  "lean_sha256": "6ed73c4816a8059b1fdb92e0b958287bdb89f59d018529b060066fcf5517c784",
+  "cuts": [
+    {
+      "name": "subtract_p",
+      "body_sha256": "2f9fa92a0abe5a8dd861273eba2e24bb610a0e6e1a8652c93528575538413901",
+      "native": "let mask = 0u32.wrapping_sub((x >= P) as u32); x.wrapping_sub(P & mask)"
+    },
+    {
+      "name": "add",
+      "body_sha256": "66d9729398c9120fa84cc00ba4a93ce266128ff694e11787ed3cacfb05d03bcc",
+      "native": "subtract_p(a.wrapping_add(b))"
+    },
+    {
+      "name": "sub",
+      "body_sha256": "4f88fc43a8246ebcedc56f2f4dc9fc89f377b4f1cd9819254215d313a72e2c89",
+      "native": "subtract_p(a.wrapping_add(P).wrapping_sub(b))"
+    }
+  ],
+  "classification": "structural small value cut with Lean raw-word laws; not a whole honest guard/source execution refinement",
+  "mapping": [
+    "u32 wrapping add/sub = BitVec 32 add/sub",
+    "P = 2147483647",
+    "comparison to P = toNat comparison",
+    "Boolean cast is 0 or 1",
+    "bitwise AND = BitVec AND"
+  ],
+  "complete_result_bridge": [
+    "PV_L2C_ReferenceArithmetic.m31_add",
+    "PV_L2C_ReferenceSub.m31_sub"
+  ]
+}

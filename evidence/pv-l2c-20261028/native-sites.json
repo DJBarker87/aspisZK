@@ -2,7 +2,7 @@
   "N2": [
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "sample_mask_h1_padding",
@@ -12,7 +12,47 @@
     },
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "sum_qm31_copy_inactive",
+      "line": 235,
+      "body": "fn sum_qm31_copy_inactive(table:&[QM31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->QM31 {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n    let mut sum=QM31::ZERO;\n    let mut row=0;\n    while row<rows {\n        sum=inactive_qm31_step(sum,table,dependent,active,row);\n        row+=1;\n    }\n    sum\n}",
+      "body_sha256": "b194357b35594207687cfe6a9f3f16eae52dc70595ccff9a3029448182a9ef8d"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "inactive_qm31_step",
+      "line": 252,
+      "body": "fn inactive_qm31_step(sum:QM31,table:&[QM31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],row:usize)->QM31 {\n    if !active[row] && row!=dependent {sum.add(table[row])} else {sum}\n}",
+      "body_sha256": "eea0f9cb340eaed1875bfcc739785ae2035cf1e1052f3dfd5593a076182f805b"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "state_only_copy_inactive_sum_qm31",
+      "line": 256,
+      "body": "fn state_only_copy_inactive_sum_qm31(table: &[QM31]) -> Option<QM31> {\n    (table.len() == STATE_ONLY_POSEIDON_TRACE_ROWS).then(|| {\n        let active = copy_active_rows();\n        table\n            .iter()\n            .copied()\n            .enumerate()\n            .filter(|(row, _)| !active[*row])\n            .fold(QM31::ZERO, |sum, (_, value)| sum.add(value))\n    })\n}",
+      "body_sha256": "d6727da9bb52c4cc6b9084353e1a428a15fcd7a58461fabff1c303f5332e1ced"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "state_only_copy_inactive_sum_m31",
+      "line": 268,
+      "body": "fn state_only_copy_inactive_sum_m31(table: &[M31]) -> Option<M31> {\n    (table.len() == STATE_ONLY_POSEIDON_TRACE_ROWS).then(|| {\n        let active = copy_active_rows();\n        table\n            .iter()\n            .copied()\n            .enumerate()\n            .filter(|(row, _)| !active[*row])\n            .fold(M31::ZERO, |sum, (_, value)| sum.add(value))\n    })\n}",
+      "body_sha256": "a857bd8ace5052e38c1d17326f6b0cdd06303dfd77d8ffa19a863b3768ba78a2"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "balance_qm31_copy_inactive",
@@ -22,7 +62,7 @@
     },
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "apply_h1_padding_mask_for_active",
@@ -32,7 +72,7 @@
     },
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "check_h1_padding_active",
@@ -42,7 +82,7 @@
     },
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "h1_padding_inactive_sum",
@@ -52,7 +92,7 @@
     },
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "h1_padding_inactive_step",
@@ -64,7 +104,7 @@
   "N3": [
     {
       "path": "crates/aspis-core/src/field/ct.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "218733bfcb7c87aa3279d62e2c22a448f66dcdd4",
       "file_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
       "function": "subtract_p",
@@ -74,7 +114,7 @@
     },
     {
       "path": "crates/aspis-core/src/field/ct.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "218733bfcb7c87aa3279d62e2c22a448f66dcdd4",
       "file_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
       "function": "add",
@@ -84,7 +124,7 @@
     },
     {
       "path": "crates/aspis-core/src/field/ct.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "218733bfcb7c87aa3279d62e2c22a448f66dcdd4",
       "file_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
       "function": "sub",
@@ -94,7 +134,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
       "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
       "function": "check_semantic_columns",
@@ -104,7 +144,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
       "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
       "function": "check_base_columns",
@@ -114,7 +154,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
       "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
       "function": "check_base_column",
@@ -124,7 +164,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
       "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
       "function": "check_secure_column",
@@ -136,7 +176,7 @@
   "N4": [
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "balance_m31_copy_inactive",
@@ -146,7 +186,7 @@
     },
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "sum_m31_copy_inactive",
@@ -156,7 +196,7 @@
     },
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "inactive_m31_step",
@@ -166,7 +206,7 @@
     },
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
       "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
       "function": "balance_mask_column",
@@ -176,7 +216,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/prover.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "bb75108e2a1690036fc57467a3474d20d69427b4",
       "file_sha256": "f733b3a407fc152474ac01cbb472c01d81f611ab1b5c26a0d18df40f82e73611",
       "function": "audit_masks",
@@ -186,7 +226,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/prover.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "bb75108e2a1690036fc57467a3474d20d69427b4",
       "file_sha256": "f733b3a407fc152474ac01cbb472c01d81f611ab1b5c26a0d18df40f82e73611",
       "function": "inactive_sum_m31",
@@ -196,7 +236,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/prover.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "bb75108e2a1690036fc57467a3474d20d69427b4",
       "file_sha256": "f733b3a407fc152474ac01cbb472c01d81f611ab1b5c26a0d18df40f82e73611",
       "function": "inactive_sum_k",
@@ -206,7 +246,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/prover.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "bb75108e2a1690036fc57467a3474d20d69427b4",
       "file_sha256": "f733b3a407fc152474ac01cbb472c01d81f611ab1b5c26a0d18df40f82e73611",
       "function": "prove_masked_with_attempt",
@@ -218,7 +258,7 @@
   "N5": [
     {
       "path": "crates/aspis-r1-cost-probe/src/prover_helper_sum.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "5d0cfaad17457a6c708228c318ad65ce7023ad9c",
       "file_sha256": "b0ddcf3db5de6003459a042cafaff612259bdfc1c87db1581bb541af22003546",
       "function": "state_only_copy_helper_sum",
@@ -228,7 +268,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
       "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
       "function": "build_with_helper_mode",
@@ -240,7 +280,7 @@
   "N6": [
     {
       "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
       "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
       "function": "interpolate",
@@ -250,7 +290,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
       "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
       "function": "prove_sumcheck_rounds",
@@ -260,7 +300,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
       "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
       "function": "prove_sumcheck_round",
@@ -270,7 +310,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
       "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
       "function": "evaluate_assignment",
@@ -280,7 +320,7 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
-      "source_revision": "2ec46086aa131e56fb80db82ab632db034d2d990",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
       "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
       "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
       "function": "merge_evaluations",
