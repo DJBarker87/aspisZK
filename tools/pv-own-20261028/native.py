@@ -14,7 +14,7 @@ for p in meta['packages']:
 pins=json.loads((D/'native-inputs.json').read_text())
 for x in pins['sources']:
  assert hashlib.sha256(Path(x['host_path']).read_bytes()).hexdigest()==x['sha256'],x
-cmd=['cargo','rustc','--manifest-path',str(P/'Cargo.toml'),'--release','--locked','--bin','own_probe','-j','4','--','--emit=mir','-Zdump-mir=drop_in_place','-Zdump-mir-dir='+str(D/'mir'),'-Zdump-mir-exclude-pass-number']
+cmd=['cargo','rustc','--manifest-path',str(P/'Cargo.toml'),'--release','--locked','--bin','own_probe','-j','4','--','--emit=mir,link','-Zdump-mir=drop_in_place','-Zdump-mir-dir='+str(D/'mir'),'-Zdump-mir-exclude-pass-number']
 print('expected phase: optimized dependency compilation, then MIR emission and finite lifecycle validation',flush=True)
 r=subprocess.run(cmd,env=env);assert r.returncode==0
 r=subprocess.run([str(D/'target/release/own_probe')],capture_output=True,text=True);print(r.stdout,r.stderr,flush=True);assert r.returncode==0
