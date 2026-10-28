@@ -1,5 +1,0 @@
-import AspisR1QueryGeometryActual.Funs
-#print AspisR1QueryGeometryActual.CM31Ops
-#print AspisR1QueryGeometryActual.field.CM31.new
-#print AspisR1QueryGeometryActual.fast_domain.table_value
-#print AspisR1QueryGeometryActual.domain.FibreIndex.get

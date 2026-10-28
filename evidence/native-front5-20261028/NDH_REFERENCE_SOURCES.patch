@@ -1,0 +1,12 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDH_transcript_reference.rs
+@@ -0,0 +1,5 @@
++pub trait NDH_DigestRef: Copy {fn digest(&self,parts:&[&[u8]])->[u8;32];}
++pub fn new_ref<H:NDH_DigestRef>(hash:H,semantic:[u8;32],tag:u8)->([u8;32],H){(hash.digest(&[b"UNPROVED:R1:PRIVATE-SALTED:P3",&[tag],&semantic]),hash)}
++pub fn absorb_ref<H:NDH_DigestRef>(hash:H,state:[u8;32],row:u8,payload:&[u8])->[u8;32]{hash.digest(&[&state,&[0,160+row],&(payload.len() as u32).to_le_bytes(),payload])}
++pub fn parent_ref<H:NDH_DigestRef>(hash:H,children:&[[u8;32];8])->[u8;32]{hash.digest(&[&[24],&children[0],&children[1],&children[2],&children[3],&children[4],&children[5],&children[6],&children[7]])}
++pub fn leaf_ref<H:NDH_DigestRef>(hash:H,tag:u8,value:&[u8],salt:&[u8;32])->[u8;32]{hash.digest(&[&[16,tag],value,salt])}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDH_registry_reference.rs
+@@ -0,0 +1 @@
++pub fn binding_ref(value:&[u8;32])->bool{*value==[0u8;32]}

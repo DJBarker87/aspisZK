@@ -1,0 +1,52 @@
+{"attempt": "NDH_K062", "exit_status": 1, "wall_seconds": 4.502413932001218, "peak_rss_kib": "453632", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+spis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NDH_public.rs:10:19
+   |
+10 | fn new_contract(){aspis_core::r0::domain::FibreIndex::new(kani::any());}
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+   |
+10 | fn new_contract(){let _ = aspis_core::r0::domain::FibreIndex::new(kani::any());}
+   |                   +++++++
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.39s
+Checking harness transcript::NDH_native::new_bytes...
+
+VERIFICATION RESULT:
+ ** 1 of 120 failed (9 unreachable)
+Failed Checks: assertion failed: (p[0][j] == b"UNPROVED:R1:PRIVATE-SALTED:P3"[j]) != true
+ File: "crates/aspis-r1-cost-probe/src/NDH_transcript.rs", line 8, in <transcript::NDH_native::New<'_> as aspis_core::Digest32>::digest
+
+VERIFICATION:- FAILED
+Verification Time: 0.30495077s
+
+Manual Harness Summary:
+Verification failed for - transcript::NDH_native::new_bytes
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r9f6591cfe8f84d38a9c7cdf85aef68af.scope; invocation ID: d533e90a2fcd4219a1691e88eeb6fc6d

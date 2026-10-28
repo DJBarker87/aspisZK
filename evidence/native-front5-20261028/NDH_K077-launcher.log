@@ -1,0 +1,45 @@
+{"attempt": "NDH_K077", "exit_status": 1, "wall_seconds": 3.5742629129672423, "peak_rss_kib": "454444", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-statement/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-statement/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 1.98s
+Checking harness pool_v1::format::NDH_native::policy_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 112 failed
+Failed Checks: |r|
+(match
+(r,crate::NDH_reference::policy_ref(policy.flags,policy.registry_program==[0;32],policy.registry_authority==[0;32],policy.policy_binding==[0;32]))
+{(Ok(()),0)=>true,(Err(PoolV1FormatError::UnsupportedFlags),1)=>true,(Err(PoolV1FormatError::ZeroRequiredBinding),2)=>true,(Err(PoolV1FormatError::InvalidAuthorityMode),3)=>true,_=>false})
+!= true
+ File: "crates/aspis-statement/src/pool_v1/format.rs", line 168, in pool_v1::format::validate_verifier_policy_v1::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.34895694s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::format::NDH_native::policy_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r899bc82f5f9a4653b733b9c6febcc1fd.scope; invocation ID: 04d819219b184cf0a3aca466a8d80856

@@ -34,7 +34,8 @@ def visit(i):
  if i in seen:return
  seen.add(i)
  for d in nodes[i]['dependencies']:visit(d)
-visit(next(p['id'] for p in m['packages'] if p['name']=='aspis-r1-cost-probe-program'))
+root_name=tomllib.loads(Path(manifest).read_text())['package']['name']
+visit(next(p['id'] for p in m['packages'] if p['name']==root_name))
 out=dict(graph_matches_frozen=not added and not(missing-allowed_missing) and not edge_errors,frozen_packages=len(f),resolved_packages=len(actual),new_package_tuples=sorted(added,key=str),missing_package_tuples=sorted(missing,key=str),edge_errors=edge_errors,lock_sha256=frozen,graph_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),selected_closure=[dict(name=pkgs[i]['name'],version=pkgs[i]['version'],source=pkgs[i].get('source'),features=nodes[i]['features']) for i in sorted(seen)])
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n');assert out['graph_matches_frozen'],out
 from NDH_graph import exact_graph

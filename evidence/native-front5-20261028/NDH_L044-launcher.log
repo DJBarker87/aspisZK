@@ -1,0 +1,52 @@
+{"attempt": "NDH_L044", "exit_status": 1, "wall_seconds": 1.365215340978466, "peak_rss_kib": "2626996", "swaps": "0", "print_axioms": ["'NDH_FromFnTotal.from_fn_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDH_FromFnTotal.loop_total' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NDH_generated/NDH_FromFnTotal.lean:47:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (match h : _a with
+      | ok (values, snd) => ok ⟨values, ⋯⟩
+      | fail error => fail error
+      | div => div) =
+      ok ⟨values, len⟩
+Error: Application type mismatch: The argument
+  h
+has type
+  _a = ok (values, snd✝)
+but is expected to have type
+  arrayFromFnLoop N cb (↑N + 1) 0#usize state [] = ok (values, snd✝)
+in the application
+  core.array.from_fn._proof_2 N cb state values snd✝ h
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occ
+...
+*motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+T F : Type
+N : Usize
+cb : core.ops.function.FnMut F Usize T
+state : F
+value : Usize → T
+stable : ∀ (i : Usize), ↑i < ↑N → cb.call_mut state i = ok (value i, state)
+values : List T
+run : arrayFromFnLoop N cb (↑N + 1) 0#usize state [] = ok (values, state)
+len : values.length = ↑N
+⊢ (match h : arrayFromFnLoop N cb (↑N + 1) 0#usize state [] with
+    | ok (values, snd) => ok ⟨values, ⋯⟩
+    | fail error => fail error
+    | div => div) =
+    ok ⟨values, len⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ⟨values, ⋯⟩
+  has type
+    { l // l.length = ↑N }
+  but is expected to have type
+    Std.Array T N
+  in the application
+    ok ⟨values, ⋯⟩
+'NDH_FromFnTotal.from_fn_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDH_FromFnTotal.loop_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r13ef4084c07d496dbbd87ca348ffdae4.scope; invocation ID: 557d3393d296494298ce610b1e7aa8a1

@@ -1,0 +1,56 @@
+NDH_generated/NDH_Cmr.lean:10:65: error(lean.unknownIdentifier): Unknown identifier `bind_tc_pure`
+NDH_generated/NDH_Cmr.lean:9:58: error: unsolved goals
+a b : U32
+⊢ (do
+      let s ← a + b
+      if s ≥ 2147483647#u32 then s - 2147483647#u32 else ok s) =
+    do
+    let s ← a + b
+    if s ≥ 2147483647#u32 then do
+        let s1 ← s - 2147483647#u32
+        ok s1
+      else ok s
+NDH_generated/NDH_Cmr.lean:14:65: error(lean.unknownIdentifier): Unknown identifier `bind_tc_pure`
+NDH_generated/NDH_Cmr.lean:13:58: error: unsolved goals
+a b : U32
+⊢ (do
+      let i ← a + 2147483647#u32
+      let s ← i - b
+      if s ≥ 2147483647#u32 then s - 2147483647#u32 else ok s) =
+    do
+    let i ← a + 2147483647#u32
+    let s ← i - b
+    if s ≥ 2147483647#u32 then do
+        let s1 ← s - 2147483647#u32
+        ok s1
+      else ok s
+NDH_generated/NDH_Cmr.lean:20:38: error(lean.unknownIdentifier): Unknown identifier `bind_tc_assoc`
+NDH_generated/NDH_Cmr.lean:18:72: error: unsolved goals
+a b : U32
+⊢ (do
+      let (x, y) ←
+        do
+          let i ← field.M31.add a a
+          let i1 ← field.M31.sub i b
+          let i2 ← field.M31.add b b
+          let i3 ← field.M31.add a i2
+          ok (i1, i3)
+      ok { a := x, b := y }) =
+    do
+    let m ← field.M31.add a a
+    let m1 ← m.sub b
+    let m2 ← field.M31.add b b
+    let m3 ← field.M31.add a m2
+    ok { a := m1, b := m3 }
+NDH_generated/NDH_Cmr.lean:20:53: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NDH_Reference.cmr_ref, add, sub, state_only_hiding.cm31_mul_r,
+  ̵  ̵ ̵ ̵field.M31.double,
+  ̲  ̲ ̲ ̲field.CM31.new, bind_tc_assoc,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDH_Cmr.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDH_Cmr.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDH_Cmr.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

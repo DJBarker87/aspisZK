@@ -1,6 +1,7 @@
 """Lane-owned serial wrapper around unchanged S2W launchers."""
 from pathlib import Path
 import subprocess,json,sys,time,shlex,hashlib,os
+from NDH_patch import read_input
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-native-front5-20261028';H='dombarker@100.108.41.90'
 a,kind,target=sys.argv[1:];limit=80 if kind=='kani' else (20 if kind=='extract' else 80)
 assert int(a[-3:])<=limit
@@ -39,11 +40,17 @@ if kind=='kani':
  native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NDH_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NDH_target','--lib','--features','private-leaf-salts,optimized-terminal,program-build','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  root=os.environ.get('NDH_ROOT')
  if root:
-  native[native.index('--manifest-path')+1]=B+'/NDH_src/crates/'+root+'/Cargo.toml'
-  native[native.index('--features')+1]='r0' if root=='aspis-core' else 'r0,pool-v1-kernel'
+  native[native.index('--manifest-path')+1]=B+'/NDH_src/'+('programs/r1-cost-probe' if root=='program' else 'crates/'+root)+'/Cargo.toml'
+  native[native.index('--features')+1]='r0' if root=='aspis-core' else ('pool-adapter,private-leaf-salts' if root=='program' else 'pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512')
  command=['python3','NDH_gate.py',a+'.json']
 elif kind=='extract':
- files['NDH_extract.py']=(E/'NDH_extract.py').read_text();files['NDH_src/crates/aspis-r1-cost-probe/src/NDH_reference.rs']=(E/'NDH_reference.rs.txt').read_text();sources=['NDH_extract.py','NDH_src/crates/aspis-r1-cost-probe/src/NDH_reference.rs'];native=[];command=['python3','NDH_extract.py']
+ files['NDH_extract.py']=(E/'NDH_extract.py').read_text();files['NDH_src/crates/aspis-r1-cost-probe/src/NDH_reference.rs']=read_input('NDH_reference.rs');sources=['NDH_extract.py','NDH_src/crates/aspis-r1-cost-probe/src/NDH_reference.rs'];native=[];command=['python3','NDH_extract.py']
+ if os.environ.get('NDH_EXTRA')=='transcript':
+  files['NDH_src/crates/aspis-r1-cost-probe/src/NDH_transcript_reference.rs']=read_input('NDH_transcript_reference.rs')
+  sources.append('NDH_src/crates/aspis-r1-cost-probe/src/NDH_transcript_reference.rs')
+ if os.environ.get('NDH_EXTRA')=='registry':
+  files['NDH_src/crates/aspis-r1-cost-probe/src/NDH_registry_reference.rs']=read_input('NDH_registry_reference.rs')
+  sources.append('NDH_src/crates/aspis-r1-cost-probe/src/NDH_registry_reference.rs')
 else:
  files['NDH_generated/'+target+'.lean']=(E/(target+'.lean')).read_text();sources=['NDH_generated/'+target+'.lean']
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDH_generated','-o','NDH_objects/'+target+'.olean',sources[0]]
@@ -56,6 +63,13 @@ if kind=='lean':
  cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NDH_SOURCE.json').read_text())['library'].items()}
  cfg['deps_fingerprint']['selected_objects'].update(json.loads((E/'NDH_COHERENT_OBJECT_PINS.json').read_text()))
  cfg['deps_fingerprint']['selected_objects'].update({p.replace('/codex-cx-cpilot-cache-20261028/','/codex-cx-front5-cache-20261028/').replace('/codex-cx-leaf-cache-20261027/','/codex-cx-front5-cache-20261028/'):dict(path=p.replace('/codex-cx-cpilot-cache-20261028/','/codex-cx-front5-cache-20261028/').replace('/codex-cx-leaf-cache-20261027/','/codex-cx-front5-cache-20261028/'),sha256=h['selected_sha256']) for p,h in json.loads((E/'NDH_SOURCE.json').read_text())['cache_imports'].items()})
+ own_pin_code=f"""from pathlib import Path
+import json,hashlib
+root=Path({B!r})/'NDH_objects';excluded=root/({target!r}+'.olean')
+print(json.dumps({{str(p):dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in root.rglob('*.olean') if p!=excluded}}))
+"""
+ own_pins=ssh('python3',own_pin_code);assert own_pins.returncode==0,own_pins.stderr
+ cfg['deps_fingerprint']['selected_objects'].update(json.loads(own_pins.stdout))
  cfg['deps_fingerprint']['coherent_object_manifest_sha256']=__import__('hashlib').sha256((E/'NDH_COHERENT_OBJECT_PINS.json').read_bytes()).hexdigest()
  pins=json.loads((E/'NDH_COHERENT_OBJECT_PINS.json').read_text())
  if target=='NDH_Audit':
@@ -92,6 +106,7 @@ r=ssh('python3',code);assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'no receipt; never resubmit'
+if kind=='extract' and 'NDH_EXTRACTION_PINS.json' in out:(E/a/'NDH_EXTRACTION_PINS.json').write_text(out['NDH_EXTRACTION_PINS.json'])
 rc=json.loads(out[a+'/receipt.json'])
 summary=dict(rc);summary['deps_fingerprint']={'receipt':a+'/receipt.json','receipt_sha256':hashlib.sha256((E/a/'receipt.json').read_bytes()).hexdigest()}
 with (E/'NDH_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')

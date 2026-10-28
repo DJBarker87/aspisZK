@@ -1,0 +1,421 @@
+[
+  {
+    "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_div_pass",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K072",
+      "NDH_K073"
+    ],
+    "lean": {
+      "NDH_L041": [
+        "NDH_Qwrite.reference"
+      ],
+      "NDH_L043": [
+        "NDH_Qm31NativeJoin.native_result"
+      ],
+      "NDH_L065": [
+        "NDH_Arithmetic.relation",
+        "NDH_Arithmetic.native_pack",
+        "NDH_Arithmetic.native_cast"
+      ],
+      "NDH_L037": [
+        "NDH_Qm31Result.result"
+      ]
+    },
+    "extraction": "NDH_E003",
+    "domain": "Every initialized eight-u32 rank; initial remainder0 and j8. At each native step remainder<P, j in1..8; quotient fits u32, all writes/untouched coordinates retained; final cast uses remainder<P.",
+    "method": "one native write step + scalar-only LPk K008/K009/K020 + Lean induction/uniqueness",
+    "limits": "No old LPk array/from_fn/copy traversal credit. The native trace is built from local gates and exact source shape; it is not an assumed whole-output equality.",
+    "composed_status": "OPEN"
+  },
+  {
+    "function": "crates/aspis-core/src/r0/merkle.rs::parent_with_digest",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K029",
+      "NDH_K030"
+    ],
+    "lean": {
+      "NDH_L055": [
+        "NDH_HashBridge.parent"
+      ],
+      "NDH_L051": [
+        "NDH_MerkleGrammar.node"
+      ]
+    },
+    "extraction": "NDH_E004",
+    "domain": "Statically selected Digest32 backend; no LegacyHashFn/function-pointer-dependent context. All eight children, each exactly32 bytes; initialized valid references; one digest call with 0x18 and eight child-major slices, returned32-byte reply unchanged.",
+    "method": "native exact call bytes/reply + extracted safe reference + replayed Merkle32Path.nodeInput",
+    "limits": "RuntimeSha256Value/physical interpretation retained; no SHA implementation proof or source-to-ELF claim.",
+    "composed_status": "OPEN"
+  },
+  {
+    "function": "crates/aspis-core/src/state_only_private_merkle.rs::private_leaf_hash_with_digest",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K031",
+      "NDH_K032"
+    ],
+    "lean": {
+      "NDH_L055": [
+        "NDH_HashBridge.leaf"
+      ]
+    },
+    "extraction": "NDH_E004",
+    "domain": "Statically selected Digest32 backend; no LegacyHashFn/function-pointer-dependent context. All tags/salts32; every initialized value slice of length0..416; exactly [0x10,tag], value, salt slices; returned reply unchanged.",
+    "method": "native exact call bytes/reply + extracted safe reference + replayed Merkle32Leaf.leafInput",
+    "limits": "Longer value classes require native widening/window composition. No all-caller domain discharge or hash-value proof.",
+    "composed_status": "OPEN"
+  },
+  {
+    "function": "crates/aspis-r1-cost-probe/src/compact.rs::slot_offset",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K045",
+      "NDH_K046"
+    ],
+    "lean": {
+      "NDH_L008": [
+        "NDH_Slots.reference"
+      ],
+      "NDH_L010": [
+        "NDH_SlotInduction.invariant",
+        "NDH_SlotInduction.completion"
+      ]
+    },
+    "extraction": "NDH_E001",
+    "domain": "slot<=6, including final boundary6. Step invariant i<slot<=6 and at=slotStart(i); initialized offset28359; no wrapping and exact capacities.",
+    "method": "one exact native iteration + extracted reference boundaries + six-slot Lean induction",
+    "limits": "K005/K006 cover only0..1 and are not the full-loop certificate. slot>6 remains outside the domain and panics natively.",
+    "composed_status": "OPEN"
+  },
+  {
+    "function": "crates/aspis-core/src/r0/domain.rs::FibreIndex::get",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K011",
+      "NDH_K012"
+    ],
+    "lean": {
+      "NDH_L005": [
+        "NDH_Geometry.get"
+      ]
+    },
+    "extraction": "NDH_E001",
+    "domain": "Every valid FibreIndex value<262144, from the same usize; private-field carrier identity.",
+    "method": "actual frozen getter contract + extracted scalar reference + exact coherent getter equation",
+    "limits": "",
+    "composed_status": "OPEN"
+  },
+  {
+    "function": "crates/aspis-r1-cost-probe/src/fast_domain.rs::table_value",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K003",
+      "NDH_K004"
+    ],
+    "lean": {
+      "NDH_L028": [
+        "NDH_TableInstalled.reference"
+      ]
+    },
+    "extraction": "NDH_E001",
+    "domain": "All u32 pairs, interpreted in the existing R17CurrentCM31Semantics.operations dictionary; constructor premise discharged by that actual instance.",
+    "method": "actual frozen contract + extracted pair reference + installed coherent CM31 constructor equation",
+    "limits": "No claim about the multiplication field of that dictionary; table_value does not call it.",
+    "composed_status": "OPEN"
+  },
+  {
+    "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::required_binding_is_zero",
+    "status": "OPEN",
+    "local_status": "OPEN",
+    "kani": [
+      "NDH_K063",
+      "NDH_K064"
+    ],
+    "lean": {
+      "NDH_L061": [
+        "NDH_RegistryBinding.reference",
+        "NDH_RegistryBinding.all_zero"
+      ]
+    },
+    "extraction": "NDH_E005",
+    "domain": "All initialized32-byte binding arrays, same byte carrier; reference body is the exact frozen *value==[0u8;32] expression.",
+    "method": "ruling(s) local value representation at the cohort array-equality primitive + actual frozen contract",
+    "limits": "Enclosing registry codecs/validation and their free slots are not closed by this helper.",
+    "composed_status": "OPEN",
+    "component_status": "native helper value/reference representation checked",
+    "open_obligation": "Ruling(s)(ii): association at the actual SDK authentication call point, on the same native arguments/returned record, frame and continuation; chosen-slot/tail equations and source syntax are not this native instance."
+  },
+  {
+    "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::has_no_retirement_slot",
+    "status": "OPEN",
+    "local_status": "OPEN",
+    "kani": [
+      "NDH_K041",
+      "NDH_K042"
+    ],
+    "lean": {
+      "NDH_L062": [
+        "NDH_RegistryPrimitives.retirement_v1"
+      ],
+      "NDH_L064": [
+        "NDH_RegistryActiveSlots.v1_call"
+      ]
+    },
+    "extraction": "NDH_E001",
+    "domain": "All V1 record fields and retirement u64; same record retirement_slot, comparison to u64::MAX; helper represented in the free active-at-slot op30.",
+    "method": "ruling(s) local helper representation + native scalar contract + exact caller field/guard association",
+    "limits": "Whole is_active_at/native parent and final installation in RPx remain separate obligations.",
+    "composed_status": "OPEN",
+    "component_status": "native helper value/reference representation checked",
+    "open_obligation": "Ruling(s)(ii): association at the actual SDK authentication call point, on the same native arguments/returned record, frame and continuation; chosen-slot/tail equations and source syntax are not this native instance."
+  },
+  {
+    "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::has_no_retirement_slot",
+    "status": "OPEN",
+    "local_status": "OPEN",
+    "kani": [
+      "NDH_K043",
+      "NDH_K044"
+    ],
+    "lean": {
+      "NDH_L062": [
+        "NDH_RegistryPrimitives.retirement_v2"
+      ],
+      "NDH_L064": [
+        "NDH_RegistryActiveSlots.v2_call"
+      ]
+    },
+    "extraction": "NDH_E001",
+    "domain": "All V2 record fields and retirement u64; same record retirement_slot, comparison to u64::MAX; helper represented in the free active-at-slot op29.",
+    "method": "ruling(s) local helper representation + native scalar contract + exact caller field/guard association",
+    "limits": "Whole is_active_at/native parent and final installation in RPx remain separate obligations.",
+    "composed_status": "OPEN",
+    "component_status": "native helper value/reference representation checked",
+    "open_obligation": "Ruling(s)(ii): association at the actual SDK authentication call point, on the same native arguments/returned record, frame and continuation; chosen-slot/tail equations and source syntax are not this native instance."
+  },
+  {
+    "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::absorb",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K059",
+      "NDH_K060"
+    ],
+    "lean": {
+      "NDH_L039": [
+        "NDH_TranscriptBridge.absorb_reference"
+      ]
+    },
+    "extraction": "NDH_E004",
+    "domain": "Statically selected Digest32 backend; no LegacyHashFn/function-pointer-dependent context. row<=95; payload length0..3712; initialized state32/payload; exact state, row tag, LE u32 length and payload slices; one digest call; state replaced by unchanged reply.",
+    "method": "native call bytes/reply + extracted reference + exact adopted PublicPreparation.absorb equation",
+    "limits": "Caller domains, runtime SHA value, ABI/physical carriers retained; larger payload/row classes are not credited.",
+    "composed_status": "OPEN"
+  },
+  {
+    "function": "crates/aspis-core/src/state_only_hiding.rs::cm31_mul_r",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K074",
+      "NDH_K075"
+    ],
+    "lean": {
+      "NDH_L036": [
+        "NDH_Cmr.reference"
+      ]
+    },
+    "extraction": "NDH_E003",
+    "domain": "Canonical input limbs a,b<P; actual deployed core r0 feature set, no field multiplication; full emitted Result/value.",
+    "method": "actual frozen contract + extracted scalar if-tree + exact SelectedMaskProbe helper equation",
+    "limits": "Canonicality still must be supplied at each enclosing caller; no caller composition credit.",
+    "composed_status": "OPEN"
+  },
+  {
+    "function": "crates/aspis-r1-cost-probe/src/sampler.rs::decode8",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K055",
+      "NDH_K056"
+    ],
+    "lean": {
+      "NDH_L018": [
+        "NDH_Decode8.reference"
+      ],
+      "NDH_L063": [
+        "NDH_NativeDomains.low_digits_decode_domain"
+      ]
+    },
+    "extraction": "NDH_E002",
+    "domain": "Eight canonical digits<P; complete WideExact limb order and constructor normalization.",
+    "method": "actual frozen contract + extracted identity reference on canonical digits + emitted full constructor equation",
+    "limits": "K047 disproved arbitrary-u32 identity. L063 is the cohort low-digits domain, not a new native low_base_p_digits byte bridge.",
+    "composed_status": "OPEN"
+  },
+  {
+    "function": "crates/aspis-statement/src/pool_v1/format.rs::validate_verifier_policy_v1",
+    "status": "OPEN",
+    "local_status": "OPEN",
+    "kani": [
+      "NDH_K076",
+      "NDH_K077"
+    ],
+    "lean": {
+      "NDH_L023": [
+        "NDH_PolicySlot.at_call"
+      ]
+    },
+    "extraction": "NDH_E003",
+    "domain": "All policy flags and three32-byte bindings; exact native error alternatives; natural zero32 byte interpretation in the free op15 instance.",
+    "method": "ruling(s) op15 representation + actual frozen contract against extracted scalar reference",
+    "limits": "Native policy record/byte association and enclosing owned caller remain explicit; no final dictionary installation claim.",
+    "composed_status": "OPEN",
+    "component_status": "native helper value/reference representation checked",
+    "open_obligation": "Ruling(s)(ii): association at the actual SDK authentication call point, on the same native arguments/returned record, frame and continuation; chosen-slot/tail equations and source syntax are not this native instance. Result<Unit,PoolV1FormatError> shape controls also remain before contract-based call-site substitution."
+  },
+  {
+    "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_immutable",
+    "status": "OPEN",
+    "local_status": "OPEN",
+    "kani": [
+      "NDH_K033",
+      "NDH_K034"
+    ],
+    "lean": {
+      "NDH_L021": [
+        "NDH_RegistrySlots.immutable_v1"
+      ],
+      "NDH_L029": [
+        "NDH_RegistryTail.v1"
+      ]
+    },
+    "extraction": "NDH_E001",
+    "domain": "All native V1 record fields and flags; correct coherent op26, same flags field.",
+    "method": "ruling(s) free-slot instance + native scalar contract + extracted flag reference + exact coherent branch tail",
+    "limits": "Initial inventory/NDH slot labels were reversed. Corrected immutable op26/28, paused op25/27; old L007 instance is superseded for association.",
+    "composed_status": "OPEN",
+    "component_status": "native helper value/reference representation checked",
+    "open_obligation": "Ruling(s)(ii): association at the actual SDK authentication call point, on the same native arguments/returned record, frame and continuation; chosen-slot/tail equations and source syntax are not this native instance."
+  },
+  {
+    "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_paused",
+    "status": "OPEN",
+    "local_status": "OPEN",
+    "kani": [
+      "NDH_K035",
+      "NDH_K036"
+    ],
+    "lean": {
+      "NDH_L021": [
+        "NDH_RegistrySlots.paused_v1"
+      ],
+      "NDH_L029": [
+        "NDH_RegistryTail.v1"
+      ]
+    },
+    "extraction": "NDH_E001",
+    "domain": "All native V1 record fields and flags; correct coherent op25, same flags field.",
+    "method": "ruling(s) free-slot instance + native scalar contract + extracted flag reference + exact coherent branch tail",
+    "limits": "Initial inventory/NDH slot labels were reversed. Corrected immutable op26/28, paused op25/27; old L007 instance is superseded for association.",
+    "composed_status": "OPEN",
+    "component_status": "native helper value/reference representation checked",
+    "open_obligation": "Ruling(s)(ii): association at the actual SDK authentication call point, on the same native arguments/returned record, frame and continuation; chosen-slot/tail equations and source syntax are not this native instance."
+  },
+  {
+    "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_immutable",
+    "status": "OPEN",
+    "local_status": "OPEN",
+    "kani": [
+      "NDH_K037",
+      "NDH_K038"
+    ],
+    "lean": {
+      "NDH_L021": [
+        "NDH_RegistrySlots.immutable_v2"
+      ],
+      "NDH_L029": [
+        "NDH_RegistryTail.v2"
+      ]
+    },
+    "extraction": "NDH_E001",
+    "domain": "All native V2 record fields and flags; correct coherent op28, same flags field.",
+    "method": "ruling(s) free-slot instance + native scalar contract + extracted flag reference + exact coherent branch tail",
+    "limits": "Initial inventory/NDH slot labels were reversed. Corrected immutable op26/28, paused op25/27; old L007 instance is superseded for association.",
+    "composed_status": "OPEN",
+    "component_status": "native helper value/reference representation checked",
+    "open_obligation": "Ruling(s)(ii): association at the actual SDK authentication call point, on the same native arguments/returned record, frame and continuation; chosen-slot/tail equations and source syntax are not this native instance."
+  },
+  {
+    "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_paused",
+    "status": "OPEN",
+    "local_status": "OPEN",
+    "kani": [
+      "NDH_K039",
+      "NDH_K040"
+    ],
+    "lean": {
+      "NDH_L021": [
+        "NDH_RegistrySlots.paused_v2"
+      ],
+      "NDH_L029": [
+        "NDH_RegistryTail.v2"
+      ]
+    },
+    "extraction": "NDH_E001",
+    "domain": "All native V2 record fields and flags; correct coherent op27, same flags field.",
+    "method": "ruling(s) free-slot instance + native scalar contract + extracted flag reference + exact coherent branch tail",
+    "limits": "Initial inventory/NDH slot labels were reversed. Corrected immutable op26/28, paused op25/27; old L007 instance is superseded for association.",
+    "composed_status": "OPEN",
+    "component_status": "native helper value/reference representation checked",
+    "open_obligation": "Ruling(s)(ii): association at the actual SDK authentication call point, on the same native arguments/returned record, frame and continuation; chosen-slot/tail equations and source syntax are not this native instance."
+  },
+  {
+    "function": "crates/aspis-core/src/r0_transcript.rs::QueryScan::finish",
+    "status": "OPEN",
+    "local_status": "OPEN",
+    "kani": [
+      "NDH_K057",
+      "NDH_K058"
+    ],
+    "lean": {
+      "NDH_L013": [
+        "NDH_QueryFinish.reference"
+      ]
+    },
+    "extraction": "NDH_E002",
+    "domain": "accepted_len<=22, draws<=64, all accepted words arbitrary; exact success array or DrawLimitExhausted{accepted,max_draws64}.",
+    "method": "actual frozen fixed-array Result contract + extracted reference + full nominal error/array cohort equation",
+    "limits": "22 coordinates compared explicitly, same specification; K051/K052 memcmp unwind failures excluded. No query uniqueness/index-bound claim.",
+    "composed_status": "OPEN",
+    "component_status": "native contract plus complete reference/cohort Result equation checked",
+    "open_obligation": "Ruling(t): complete fidelity packet for Result<[u32;22],QuerySampleError> is absent (only inverted ensures ran; unimplied stub_verified caller and modifies controls did not). No call-site substitution is admitted."
+  },
+  {
+    "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::new",
+    "status": "CLOSED-CONDITIONAL",
+    "local_status": "CLOSED",
+    "kani": [
+      "NDH_K061",
+      "NDH_K062"
+    ],
+    "lean": {
+      "NDH_L039": [
+        "NDH_TranscriptBridge.new_reference"
+      ]
+    },
+    "extraction": "NDH_E004",
+    "domain": "Statically selected Digest32 backend; no LegacyHashFn/function-pointer-dependent context. All three variants, every semantic state32; deployed private-leaf-salts domain29, one variant tag and state slice; one digest call/reply, hash field preserved.",
+    "method": "native exact call bytes/reply + extracted reference + adopted PublicPreparation.new equation",
+    "limits": "Runtime SHA value/physical interpretation remains; no hash implementation or global transcript-security conclusion.",
+    "composed_status": "OPEN"
+  }
+]

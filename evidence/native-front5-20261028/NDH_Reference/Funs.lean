@@ -139,4 +139,285 @@ def admitted_ref (data : Slice Std.U8) : Result Bool := do
       else ok false
     else ok false
 
+/-- [ndh_reference::finish_ref]:
+    Source: 'src/lib.rs', lines 9:0-9:126
+    Visibility: public -/
+def finish_ref
+  (accepted : Array Std.U32 22#usize) (len : Std.Usize) :
+  Result (core.result.Result (Array Std.U32 22#usize) (Std.Usize × Std.Usize))
+  := do
+  if len = 22#usize
+  then ok (core.result.Result.Ok accepted)
+  else ok (core.result.Result.Err (len, 64#usize))
+
+/-- [ndh_reference::digit_ref]:
+    Source: 'src/lib.rs', lines 10:0-10:123
+    Visibility: public -/
+def digit_ref (d : Std.U32) (add : Std.U32) : Result (Std.U32 × Std.U32) := do
+  let i ← lift (core.convert.num.FromU64U32.from d)
+  let i1 ← lift (core.convert.num.FromU64U32.from add)
+  let n ← i + i1
+  let i2 ← n % 2147483647#u64
+  let i3 ← lift (UScalar.cast .U32 i2)
+  let i4 ← n / 2147483647#u64
+  let i5 ← lift (UScalar.cast .U32 i4)
+  ok (i3, i5)
+
+/-- [ndh_reference::pack8_ref]:
+    Source: 'src/lib.rs', lines 11:0-11:39
+    Visibility: public -/
+def pack8_ref
+  (d : Array Std.U32 8#usize) : Result (Array Std.U32 8#usize) := do
+  ok d
+
+/-- [ndh_reference::absorb_header_ref]:
+    Source: 'src/lib.rs', lines 12:0-12:112
+    Visibility: public -/
+def absorb_header_ref
+  (row : Std.U8) (n : Std.Usize) : Result (Array Std.U8 6#usize) := do
+  let i ← lift (UScalar.cast .U32 n)
+  let l ← lift (core.num.U32.to_le_bytes i)
+  let i1 ← 160#u8 + row
+  let i2 ← Array.index_usize l 0#usize
+  let i3 ← Array.index_usize l 1#usize
+  let i4 ← Array.index_usize l 2#usize
+  let i5 ← Array.index_usize l 3#usize
+  ok (Array.make 6#usize [ 0#u8, i1, i2, i3, i4, i5 ])
+
+/-- [ndh_reference::eq22]:
+    Source: 'src/lib.rs', lines 14:0-14:372
+    Visibility: public -/
+def eq22
+  (a : Array Std.U32 22#usize) (b : Array Std.U32 22#usize) : Result Bool := do
+  let i ← Array.index_usize a 0#usize
+  let i1 ← Array.index_usize b 0#usize
+  if i = i1
+  then
+    let i2 ← Array.index_usize a 1#usize
+    let i3 ← Array.index_usize b 1#usize
+    if i2 = i3
+    then
+      let i4 ← Array.index_usize a 2#usize
+      let i5 ← Array.index_usize b 2#usize
+      if i4 = i5
+      then
+        let i6 ← Array.index_usize a 3#usize
+        let i7 ← Array.index_usize b 3#usize
+        if i6 = i7
+        then
+          let i8 ← Array.index_usize a 4#usize
+          let i9 ← Array.index_usize b 4#usize
+          if i8 = i9
+          then
+            let i10 ← Array.index_usize a 5#usize
+            let i11 ← Array.index_usize b 5#usize
+            if i10 = i11
+            then
+              let i12 ← Array.index_usize a 6#usize
+              let i13 ← Array.index_usize b 6#usize
+              if i12 = i13
+              then
+                let i14 ← Array.index_usize a 7#usize
+                let i15 ← Array.index_usize b 7#usize
+                if i14 = i15
+                then
+                  let i16 ← Array.index_usize a 8#usize
+                  let i17 ← Array.index_usize b 8#usize
+                  if i16 = i17
+                  then
+                    let i18 ← Array.index_usize a 9#usize
+                    let i19 ← Array.index_usize b 9#usize
+                    if i18 = i19
+                    then
+                      let i20 ← Array.index_usize a 10#usize
+                      let i21 ← Array.index_usize b 10#usize
+                      if i20 = i21
+                      then
+                        let i22 ← Array.index_usize a 11#usize
+                        let i23 ← Array.index_usize b 11#usize
+                        if i22 = i23
+                        then
+                          let i24 ← Array.index_usize a 12#usize
+                          let i25 ← Array.index_usize b 12#usize
+                          if i24 = i25
+                          then
+                            let i26 ← Array.index_usize a 13#usize
+                            let i27 ← Array.index_usize b 13#usize
+                            if i26 = i27
+                            then
+                              let i28 ← Array.index_usize a 14#usize
+                              let i29 ← Array.index_usize b 14#usize
+                              if i28 = i29
+                              then
+                                let i30 ← Array.index_usize a 15#usize
+                                let i31 ← Array.index_usize b 15#usize
+                                if i30 = i31
+                                then
+                                  let i32 ← Array.index_usize a 16#usize
+                                  let i33 ← Array.index_usize b 16#usize
+                                  if i32 = i33
+                                  then
+                                    let i34 ← Array.index_usize a 17#usize
+                                    let i35 ← Array.index_usize b 17#usize
+                                    if i34 = i35
+                                    then
+                                      let i36 ← Array.index_usize a 18#usize
+                                      let i37 ← Array.index_usize b 18#usize
+                                      if i36 = i37
+                                      then
+                                        let i38 ←
+                                          Array.index_usize a 19#usize
+                                        let i39 ←
+                                          Array.index_usize b 19#usize
+                                        if i38 = i39
+                                        then
+                                          let i40 ←
+                                            Array.index_usize a 20#usize
+                                          let i41 ←
+                                            Array.index_usize b 20#usize
+                                          if i40 = i41
+                                          then
+                                            let i42 ←
+                                              Array.index_usize a 21#usize
+                                            let i43 ←
+                                              Array.index_usize b 21#usize
+                                            ok (i42 = i43)
+                                          else ok false
+                                        else ok false
+                                      else ok false
+                                    else ok false
+                                  else ok false
+                                else ok false
+                              else ok false
+                            else ok false
+                          else ok false
+                        else ok false
+                      else ok false
+                    else ok false
+                  else ok false
+                else ok false
+              else ok false
+            else ok false
+          else ok false
+        else ok false
+      else ok false
+    else ok false
+  else ok false
+
+/-- [ndh_reference::qwrite_ref]:
+    Source: 'src/lib.rs', lines 15:0-15:93
+    Visibility: public -/
+def qwrite_ref
+  (a : Array Std.U32 8#usize) (q : Std.U32) (r : Std.U64) (j : Std.Usize) :
+  Result ((Array Std.U32 8#usize) × Std.U64 × Std.Usize)
+  := do
+  let i ← j - 1#usize
+  let a1 ← Array.update a i q
+  ok (a1, r, i)
+
+/-- [ndh_reference::eq8]:
+    Source: 'src/lib.rs', lines 16:0-16:135
+    Visibility: public -/
+def eq8
+  (a : Array Std.U32 8#usize) (b : Array Std.U32 8#usize) : Result Bool := do
+  let i ← Array.index_usize a 0#usize
+  let i1 ← Array.index_usize b 0#usize
+  if i = i1
+  then
+    let i2 ← Array.index_usize a 1#usize
+    let i3 ← Array.index_usize b 1#usize
+    if i2 = i3
+    then
+      let i4 ← Array.index_usize a 2#usize
+      let i5 ← Array.index_usize b 2#usize
+      if i4 = i5
+      then
+        let i6 ← Array.index_usize a 3#usize
+        let i7 ← Array.index_usize b 3#usize
+        if i6 = i7
+        then
+          let i8 ← Array.index_usize a 4#usize
+          let i9 ← Array.index_usize b 4#usize
+          if i8 = i9
+          then
+            let i10 ← Array.index_usize a 5#usize
+            let i11 ← Array.index_usize b 5#usize
+            if i10 = i11
+            then
+              let i12 ← Array.index_usize a 6#usize
+              let i13 ← Array.index_usize b 6#usize
+              if i12 = i13
+              then
+                let i14 ← Array.index_usize a 7#usize
+                let i15 ← Array.index_usize b 7#usize
+                ok (i14 = i15)
+              else ok false
+            else ok false
+          else ok false
+        else ok false
+      else ok false
+    else ok false
+  else ok false
+
+/-- [ndh_reference::base_add_ref]:
+    Source: 'src/lib.rs', lines 18:0-18:90
+    Visibility: public -/
+def base_add_ref (a : Std.U32) (b : Std.U32) : Result Std.U32 := do
+  let s ← a + b
+  if s >= 2147483647#u32
+  then s - 2147483647#u32
+  else ok s
+
+/-- [ndh_reference::base_sub_ref]:
+    Source: 'src/lib.rs', lines 19:0-19:101
+    Visibility: public -/
+def base_sub_ref (a : Std.U32) (b : Std.U32) : Result Std.U32 := do
+  let i ← a + 2147483647#u32
+  let s ← i - b
+  if s >= 2147483647#u32
+  then s - 2147483647#u32
+  else ok s
+
+/-- [ndh_reference::cmr_ref]:
+    Source: 'src/lib.rs', lines 20:0-20:109
+    Visibility: public -/
+def cmr_ref (a : Std.U32) (b : Std.U32) : Result (Std.U32 × Std.U32) := do
+  let i ← base_add_ref a a
+  let i1 ← base_sub_ref i b
+  let i2 ← base_add_ref b b
+  let i3 ← base_add_ref a i2
+  ok (i1, i3)
+
+/-- [ndh_reference::policy_ref]:
+    Source: 'src/lib.rs', lines 21:0-21:284
+    Visibility: public -/
+def policy_ref
+  (flags : Std.U8) (program_zero : Bool) (authority_zero : Bool)
+  (binding_zero : Bool) :
+  Result Std.U8
+  := do
+  let i ← lift (~~~ 3#u8)
+  let i1 ← lift (flags &&& i)
+  if i1 != 0#u8
+  then ok 1#u8
+  else
+    if program_zero
+    then ok 2#u8
+    else
+      if binding_zero
+      then ok 2#u8
+      else
+        let i2 ← lift (flags &&& 1#u8)
+        let i3 ← lift (flags &&& 2#u8)
+        if i3 != 0#u8
+        then
+          if i2 != 0#u8
+          then if true != authority_zero
+               then ok 3#u8
+               else ok 0#u8
+          else ok 3#u8
+        else if (i2 != 0#u8) != authority_zero
+             then ok 3#u8
+             else ok 0#u8
+
 end NDH_Reference
