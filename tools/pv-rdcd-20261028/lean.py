@@ -12,7 +12,7 @@ import json,re
 n=ID
 s=Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/evidence/sent.txt').read_text()
 a=[l for l in s.splitlines() if len(l.split())>=3 and l.split()[2]==str(n)]
-b=[str(p) for d in Path('/home/dombarker/project-offloads').glob('codex-pv-*') for p in d.glob('**/*'+str(n)+'*') if p.is_file() and d.name!='codex-pv-rdcd-20261028' and re.search(r'(?<![0-9a-fA-F])'+str(n)+r'(?![0-9a-fA-F])',p.name)]
+b=[str(p) for d in Path('/home/dombarker/project-offloads').glob('codex-pv-*') for p in d.glob('**/*'+str(n)+'*') if (p.is_file() or p.is_dir()) and d.name!='codex-pv-rdcd-20261028' and re.search(r'(?<![0-9a-fA-F])'+str(n)+r'(?![0-9a-fA-F])',p.name)]
 print(json.dumps(dict(shared=a,private=b)))
 assert not a and not b,(a,b)
 '''.replace('ID',str(n))
