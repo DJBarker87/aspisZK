@@ -25,7 +25,8 @@ theorem complete {T P F : Type} (p : NonNull T P)
   refine ⟨o, ?_, hr, h⟩
   unfold deployed
   rw [cast_complete]
-  dsimp only [bind_tc_ok]
+  change (do let out ← PV_RDB1_V184_MoveWorld.nativeWorld b w memory frame
+             ok (historicalCast p, out)) = ok (historicalCast p, o)
   rw [hn]
   rfl
 
