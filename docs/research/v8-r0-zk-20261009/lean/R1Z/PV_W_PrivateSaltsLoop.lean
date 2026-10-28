@@ -33,8 +33,6 @@ theorem source_loop_function (ops : ExternalFuns) (s : State) :
         (sourceHash ops hash) tag count state.1 state.2) :=
     funext (body_source reserved context hash tag count ops)
   rw [bodies]
-  cases s
-  rfl
 
 theorem finite_source (ops : ExternalFuns) (s : State) (result : Aeneas.Std.Result Value)
     (h : PV_W_Loops.SourceExecutes
