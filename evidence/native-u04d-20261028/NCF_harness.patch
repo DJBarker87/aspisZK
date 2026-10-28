@@ -1,0 +1,54 @@
+--- a/crates/aspis-statement/src/pool_v1/verifier_registry.rs
++++ b/crates/aspis-statement/src/pool_v1/verifier_registry.rs
+@@ -837,3 +837,7 @@
+ #[cfg(kani)]
+ #[path = "NCC_slots.rs"]
+ mod NCC_slots;
++
++#[cfg(kani)]
++#[path = "NCF_slots.rs"]
++mod NCF_slots;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NCF_slots.rs
+@@ -0,0 +1,41 @@
++#![allow(non_snake_case,unused_variables)]
++use super::*;
++fn NCF_any_VerifierRegistryV1()->VerifierRegistryV1{VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}}
++fn NCF_any_VerifierRegistryV2()->VerifierRegistryV2{VerifierRegistryV2{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any()}}
++fn NCF_any_VerifierRegistryEntryV1()->VerifierRegistryEntryV1{VerifierRegistryEntryV1{status:NCF_any_status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++fn NCF_any_VerifierRegistryEntryV2()->VerifierRegistryEntryV2{VerifierRegistryEntryV2{status:NCF_any_status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++fn NCF_any_status()->VerifierEntryStatusV1 {match kani::any::<u8>() {0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired}}
++#[kani::proof_for_contract(VerifierRegistryEntryV2::is_active_at)]
++#[kani::unwind(33)]
++fn NCF_op29_contract(){let r=NCF_any_VerifierRegistryEntryV2();let slot:u64=kani::any();r.is_active_at(slot);}
++#[kani::requires(true)]
++#[kani::ensures(|result: &bool| *result != (r.status == VerifierEntryStatusV1::Active && r.activation_slot <= slot && (r.retirement_slot == u64::MAX || slot < r.retirement_slot)))]
++fn NCF_op29_inverse(r:&VerifierRegistryEntryV2,slot:u64)->bool{r.is_active_at(slot)}
++#[kani::proof_for_contract(NCF_op29_inverse)]
++#[kani::unwind(33)]
++fn NCF_op29_contract_negative(){let r=NCF_any_VerifierRegistryEntryV2();let slot:u64=kani::any();NCF_op29_inverse(&r,slot);}
++#[kani::proof]
++#[kani::stub_verified(VerifierRegistryEntryV2::is_active_at)]
++#[kani::unwind(33)]
++fn NCF_op29_contract_use(){let r=NCF_any_VerifierRegistryEntryV2();let slot:u64=kani::any();let got=r.is_active_at(slot);assert_eq!(got,r.status == VerifierEntryStatusV1::Active && r.activation_slot <= slot && (r.retirement_slot == u64::MAX || slot < r.retirement_slot));}
++#[kani::proof]
++#[kani::stub_verified(VerifierRegistryEntryV2::is_active_at)]
++#[kani::unwind(33)]
++fn NCF_op29_contract_use_negative(){let r=NCF_any_VerifierRegistryEntryV2();let slot:u64=kani::any();let got=r.is_active_at(slot);assert_ne!(got,r.status == VerifierEntryStatusV1::Active && r.activation_slot <= slot && (r.retirement_slot == u64::MAX || slot < r.retirement_slot));}
++#[kani::proof_for_contract(VerifierRegistryEntryV1::is_active_at)]
++#[kani::unwind(33)]
++fn NCF_op30_contract(){let r=NCF_any_VerifierRegistryEntryV1();let slot:u64=kani::any();r.is_active_at(slot);}
++#[kani::requires(true)]
++#[kani::ensures(|result: &bool| *result != (r.status == VerifierEntryStatusV1::Active && r.activation_slot <= slot && (r.retirement_slot == u64::MAX || slot < r.retirement_slot)))]
++fn NCF_op30_inverse(r:&VerifierRegistryEntryV1,slot:u64)->bool{r.is_active_at(slot)}
++#[kani::proof_for_contract(NCF_op30_inverse)]
++#[kani::unwind(33)]
++fn NCF_op30_contract_negative(){let r=NCF_any_VerifierRegistryEntryV1();let slot:u64=kani::any();NCF_op30_inverse(&r,slot);}
++#[kani::proof]
++#[kani::stub_verified(VerifierRegistryEntryV1::is_active_at)]
++#[kani::unwind(33)]
++fn NCF_op30_contract_use(){let r=NCF_any_VerifierRegistryEntryV1();let slot:u64=kani::any();let got=r.is_active_at(slot);assert_eq!(got,r.status == VerifierEntryStatusV1::Active && r.activation_slot <= slot && (r.retirement_slot == u64::MAX || slot < r.retirement_slot));}
++#[kani::proof]
++#[kani::stub_verified(VerifierRegistryEntryV1::is_active_at)]
++#[kani::unwind(33)]
++fn NCF_op30_contract_use_negative(){let r=NCF_any_VerifierRegistryEntryV1();let slot:u64=kani::any();let got=r.is_active_at(slot);assert_ne!(got,r.status == VerifierEntryStatusV1::Active && r.activation_slot <= slot && (r.retirement_slot == u64::MAX || slot < r.retirement_slot));}

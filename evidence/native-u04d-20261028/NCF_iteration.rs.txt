@@ -1,0 +1,90 @@
+// Native iterator selection/one write candidate. Original decoder integration is separate.
+fn NCF_le(bytes:&[u8],o:usize)->u64 {
+    (bytes[o] as u64) | ((bytes[o+1] as u64)<<8) | ((bytes[o+2] as u64)<<16) |
+    ((bytes[o+3] as u64)<<24) | ((bytes[o+4] as u64)<<32) |
+    ((bytes[o+5] as u64)<<40) | ((bytes[o+6] as u64)<<48) | ((bytes[o+7] as u64)<<56)
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCF_op48_iterator_step(){
+ let input:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();
+ let lane:usize=kani::any();kani::assume(lane<8);
+ let j:usize=kani::any();kani::assume(j<8);let before=rows[j];
+ let expected=NCF_le(&input,320+8*lane);
+ let got={let mut iter=rows.iter_mut().enumerate();let (i,sequence)=iter.nth(lane).unwrap();
+  assert_eq!(i,lane);let start=320+8*i;
+  *sequence=u64::from_le_bytes(input[start..start+8].try_into().unwrap());
+  true };
+ assert_eq!(rows[lane],expected);
+ assert_eq!(rows[j],if j==lane{expected}else{before});
+ assert_eq!(got,true);
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCF_op48_iterator_step_negative(){
+ let input:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();
+ let lane:usize=kani::any();kani::assume(lane<8);
+ let j:usize=kani::any();kani::assume(j<8);let before=rows[j];
+ let expected=NCF_le(&input,320+8*lane);
+ let got={let mut iter=rows.iter_mut().enumerate();let (i,sequence)=iter.nth(lane).unwrap();
+  assert_eq!(i,lane);let start=320+8*i;
+  *sequence=u64::from_le_bytes(input[start..start+8].try_into().unwrap());
+  true };
+ assert_ne!(rows[lane],expected);
+ assert_eq!(rows[j],if j==lane{expected}else{before});
+ assert_eq!(got,true);
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCF_op49_iterator_step(){
+ let input:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();
+ let lane:usize=kani::any();kani::assume(lane<8);
+ let j:usize=kani::any();kani::assume(j<8);let before=rows[j];
+ let expected=NCF_le(&input,112+8*lane);
+ let got={let mut iter=rows.iter_mut().enumerate();let (i,sequence)=iter.nth(lane).unwrap();
+  assert_eq!(i,lane);let start=112+8*i;
+  *sequence=u64::from_le_bytes(input[start..start+8].try_into().unwrap());
+  *sequence<=262144 };
+ assert_eq!(rows[lane],expected);
+ assert_eq!(rows[j],if j==lane{expected}else{before});
+ assert_eq!(got,expected<=262144);
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCF_op49_iterator_step_negative(){
+ let input:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();
+ let lane:usize=kani::any();kani::assume(lane<8);
+ let j:usize=kani::any();kani::assume(j<8);let before=rows[j];
+ let expected=NCF_le(&input,112+8*lane);
+ let got={let mut iter=rows.iter_mut().enumerate();let (i,sequence)=iter.nth(lane).unwrap();
+  assert_eq!(i,lane);let start=112+8*i;
+  *sequence=u64::from_le_bytes(input[start..start+8].try_into().unwrap());
+  *sequence<=262144 };
+ assert_ne!(rows[lane],expected);
+ assert_eq!(rows[j],if j==lane{expected}else{before});
+ assert_eq!(got,expected<=262144);
+}
