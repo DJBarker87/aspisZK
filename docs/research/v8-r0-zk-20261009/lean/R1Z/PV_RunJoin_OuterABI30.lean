@@ -149,7 +149,7 @@ def contextToAdmission (x : pool_v1.payment_relation.PoolV1PaymentRelationContex
     x.runtime_binding.anchor_sequence,x.runtime_binding.anchor_root,x.runtime_binding.asset_id⟩
   spent_nullifiers := x.spent_nullifiers
 
-def formatFromForest : R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1PaymentStatementFormatError → PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+def formatFromForest : R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1PaymentStatementFormatError → PV_RunJoin_Outer30.pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
   | .WrongLength => .WrongLength
   | .WrongMagic => .WrongMagic
   | .WrongVersion => .WrongVersion
@@ -165,7 +165,7 @@ def formatFromForest : R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.P
   | .InvalidEnvelope => .InvalidEnvelope
   | .EnvelopeMismatch => .EnvelopeMismatch
 
-def leafErrorFromForest : R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 → PV_RunJoin_Outer30.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+def leafErrorFromForest : R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 → PV_RunJoin_Outer30.pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
   | .NonCanonicalCommitment => .NonCanonicalCommitment
   | .NonCanonicalOccupancy => .NonCanonicalOccupancy
   | .NonCanonicalInverse => .NonCanonicalInverse
@@ -191,7 +191,7 @@ def treeErrorFromForest : R1Z.BuilderForestAdmissionPort.pool_v1.incremental_mer
   | .NonCanonicalDigest => .NonCanonicalDigest
   | .NonZeroReserved => .NonZeroReserved
 
-def errorFromForest : R1Z.BuilderForestAdmissionPort.pool_v1.pair_trace.PoolV1PairTraceErrorV1 → PV_RunJoin_Outer30.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+def errorFromForest : R1Z.BuilderForestAdmissionPort.pool_v1.pair_trace.PoolV1PairTraceErrorV1 → PV_RunJoin_Outer30.pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
   | .Statement v0 => .Statement (formatFromForest v0)
   | .PairLeaf v0 => .PairLeaf (leafErrorFromForest v0)
   | .Tree v0 => .Tree (treeErrorFromForest v0)
@@ -215,7 +215,7 @@ def errorFromForest : R1Z.BuilderForestAdmissionPort.pool_v1.pair_trace.PoolV1Pa
   | .CopyLayout => .CopyLayout
   | .CopyImbalance => .CopyImbalance
 
-def formatFromAdmission : AspisBuilderAdmissionSource.pool_v1.payment_relation.PoolV1PaymentStatementFormatError → PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+def formatFromAdmission : AspisBuilderAdmissionSource.pool_v1.payment_relation.PoolV1PaymentStatementFormatError → PV_RunJoin_Outer30.pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
   | .WrongLength => .WrongLength
   | .WrongMagic => .WrongMagic
   | .WrongVersion => .WrongVersion
@@ -231,7 +231,7 @@ def formatFromAdmission : AspisBuilderAdmissionSource.pool_v1.payment_relation.P
   | .InvalidEnvelope => .InvalidEnvelope
   | .EnvelopeMismatch => .EnvelopeMismatch
 
-def leafErrorFromAdmission : AspisBuilderAdmissionSource.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 → PV_RunJoin_Outer30.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+def leafErrorFromAdmission : AspisBuilderAdmissionSource.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 → PV_RunJoin_Outer30.pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
   | .NonCanonicalCommitment => .NonCanonicalCommitment
   | .NonCanonicalOccupancy => .NonCanonicalOccupancy
   | .NonCanonicalInverse => .NonCanonicalInverse
@@ -257,7 +257,7 @@ def treeErrorFromAdmission : AspisBuilderAdmissionSource.pool_v1.incremental_mer
   | .NonCanonicalDigest => .NonCanonicalDigest
   | .NonZeroReserved => .NonZeroReserved
 
-def errorFromAdmission : AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1 → PV_RunJoin_Outer30.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+def errorFromAdmission : AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1 → PV_RunJoin_Outer30.pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
   | .Statement v0 => .Statement (formatFromAdmission v0)
   | .PairLeaf v0 => .PairLeaf (leafErrorFromAdmission v0)
   | .Tree v0 => .Tree (treeErrorFromAdmission v0)
@@ -281,7 +281,7 @@ def errorFromAdmission : AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1Pa
   | .CopyLayout => .CopyLayout
   | .CopyImbalance => .CopyImbalance
 
-def formatToForest : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentStatementFormatError → R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+def formatToForest : PV_RunJoin_Outer30.pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError → R1Z.BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
   | .WrongLength => .WrongLength
   | .WrongMagic => .WrongMagic
   | .WrongVersion => .WrongVersion
@@ -297,7 +297,7 @@ def formatToForest : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentSt
   | .InvalidEnvelope => .InvalidEnvelope
   | .EnvelopeMismatch => .EnvelopeMismatch
 
-def leafErrorToForest : PV_RunJoin_Outer30.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 → R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+def leafErrorToForest : PV_RunJoin_Outer30.pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1 → R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
   | .NonCanonicalCommitment => .NonCanonicalCommitment
   | .NonCanonicalOccupancy => .NonCanonicalOccupancy
   | .NonCanonicalInverse => .NonCanonicalInverse
@@ -308,7 +308,7 @@ def leafErrorToForest : PV_RunJoin_Outer30.pool_v1.pair_tree_profile.PoolV1PairL
   | .OccupiedSentinelZero => .OccupiedSentinelZero
   | .SelectedSlotEmpty => .SelectedSlotEmpty
 
-def errorToForest : PV_RunJoin_Outer30.pool_v1.pair_trace.PoolV1PairTraceErrorV1 → R1Z.BuilderForestAdmissionPort.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+def errorToForest : PV_RunJoin_Outer30.pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1 → R1Z.BuilderForestAdmissionPort.pool_v1.pair_trace.PoolV1PairTraceErrorV1
   | .Statement v0 => .Statement (formatToForest v0)
   | .PairLeaf v0 => .PairLeaf (leafErrorToForest v0)
   | .Tree v0 => .Tree (v0)

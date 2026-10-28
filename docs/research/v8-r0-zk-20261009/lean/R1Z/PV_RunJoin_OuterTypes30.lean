@@ -89,89 +89,89 @@ structure pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 where
   semantic_c1 : state_only_trace.StateOnlyTraceFoundation
   public_statement : pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
 
-/-- [aspis_statement::pool_v1::payment_relation::PoolV1PaymentStatementFormatError]
+/-- [aspis_statement::pool_v1::payment_relation::PV30_PoolV1PaymentStatementFormatError]
     Source: 'crates/aspis-statement/src/pool_v1/payment_relation.rs', lines 128:0-143:1
     Visibility: public -/
 @[discriminant isize]
-inductive pool_v1.payment_relation.PoolV1PaymentStatementFormatError where
-| WrongLength : pool_v1.payment_relation.PoolV1PaymentStatementFormatError
-| WrongMagic : pool_v1.payment_relation.PoolV1PaymentStatementFormatError
-| WrongVersion : pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+inductive pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError where
+| WrongLength : pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
+| WrongMagic : pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
+| WrongVersion : pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
 | WrongTransitionKind :
-  pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+  pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
 | WrongDigestEncoding :
-  pool_v1.payment_relation.PoolV1PaymentStatementFormatError
-| NonZeroReserved : pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+  pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
+| NonZeroReserved : pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
 | ZeroRequiredBinding :
-  pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+  pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
 | InvalidAnchorSequence :
-  pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+  pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
 | NonCanonicalDigest :
-  pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+  pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
 | NonCanonicalAssetId :
-  pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+  pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
 | InvalidWithdrawalAmount :
-  pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+  pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
 | InvalidDestination :
-  pool_v1.payment_relation.PoolV1PaymentStatementFormatError
-| InvalidEnvelope : pool_v1.payment_relation.PoolV1PaymentStatementFormatError
-| EnvelopeMismatch : pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+  pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
+| InvalidEnvelope : pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
+| EnvelopeMismatch : pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
 
-/-- [aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafErrorV1]
+/-- [aspis_statement::pool_v1::pair_tree_profile::PV30_PoolV1PairLeafErrorV1]
     Source: 'crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 78:0-88:1
     Visibility: public -/
 @[discriminant isize]
-inductive pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 where
-| NonCanonicalCommitment : pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
-| NonCanonicalOccupancy : pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
-| NonCanonicalInverse : pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
-| OccupancyNotBoolean : pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
-| SentinelInverseMismatch : pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
-| EmptyInverseNonZero : pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
-| EmptyCommitmentNonZero : pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
-| OccupiedSentinelZero : pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
-| SelectedSlotEmpty : pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+inductive pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1 where
+| NonCanonicalCommitment : pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
+| NonCanonicalOccupancy : pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
+| NonCanonicalInverse : pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
+| OccupancyNotBoolean : pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
+| SentinelInverseMismatch : pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
+| EmptyInverseNonZero : pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
+| EmptyCommitmentNonZero : pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
+| OccupiedSentinelZero : pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
+| SelectedSlotEmpty : pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1
 
-/-- [aspis_statement::pool_v1::pair_trace::PoolV1PairTraceErrorV1]
+/-- [aspis_statement::pool_v1::pair_trace::PV30_PoolV1PairTraceErrorV1]
     Source: 'crates/aspis-statement/src/pool_v1/pair_trace.rs', lines 136:0-159:1
     Visibility: public -/
 @[discriminant isize]
-inductive pool_v1.pair_trace.PoolV1PairTraceErrorV1 where
+inductive pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1 where
 | Statement :
-  pool_v1.payment_relation.PoolV1PaymentStatementFormatError →
-  pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError →
+  pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
 | PairLeaf :
-  pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 →
-  pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  pool_v1.pair_tree_profile.PV30_PoolV1PairLeafErrorV1 →
+  pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
 | Tree :
   pool_v1.incremental_merkle.PoolV1TreeError →
-  pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| Shape : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| WrongVariant : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| RuntimeBinding : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| NullifierAlreadySpent : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| WitnessDigest : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| ValueOutOfRange : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| Conservation : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| HashSchedule : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| SelectedCommitmentMismatch : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| AnchorMismatch : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| NullifierMismatch : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| RecipientCommitmentMismatch : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| ChangeCommitmentMismatch : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| SnapshotBindingMismatch : pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| Shape : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| WrongVariant : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| RuntimeBinding : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| NullifierAlreadySpent : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| WitnessDigest : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| ValueOutOfRange : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| Conservation : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| HashSchedule : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| SelectedCommitmentMismatch : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| AnchorMismatch : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| NullifierMismatch : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| RecipientCommitmentMismatch : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| ChangeCommitmentMismatch : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| SnapshotBindingMismatch : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
 | BlockMismatch :
   Std.U8 →
   Std.U8 →
   Std.U8 →
-  pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
 | AuxiliaryMismatch :
   Std.U16 →
   Std.U8 →
-  pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| MetadataMismatch : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| CopyLayout : pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| CopyImbalance : pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| MetadataMismatch : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| CopyLayout : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
+| CopyImbalance : pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1
 
 /-- [aspis_statement::pool_v1::payment_relation::PoolV1PaymentRuntimeBindingV1]
     Source: 'crates/aspis-statement/src/pool_v1/payment_relation.rs', lines 109:0-117:1
