@@ -3,11 +3,11 @@ pub mod reference133;
 mod proofs {
     #[kani::proof]
     #[kani::unwind(32)]
-    fn shipped_equals_reference133() {
+    fn shipped_equals_reference133_pointwise() {
         let shipped = aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_rows_v1();
         let expected = super::reference133::active_rows();
         match shipped {
-            Ok(rows) => { assert_eq!(rows.len(), 214); for i in 0..214 { assert_eq!(rows[i], expected[i]); } }
+            Ok(rows) => { assert_eq!(rows.len(), 214); let index: u8 = kani::any(); kani::assume(index < 214); let i = usize::from(index); assert_eq!(rows[i], expected[i]); }
             Err(_) => assert!(false, "reference success disagrees with shipped error"),
         }
     }
