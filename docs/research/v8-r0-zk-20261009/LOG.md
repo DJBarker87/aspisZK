@@ -13351,3 +13351,20 @@ with a running cx-* or pv-* scope marked invalid; the gate is judged only on val
 and reported as undecided if there are too few. Stream A also reports a possible second Kani anomaly
 under diagnosis (NBZ_K042 fails obs.is_none() on a literal None; job KNB_), with no credit change on
 either side until it reports. Rows removed outright: 0. Privacy target not yet established.
+
+## D359 (Stream B) 2026-10-28 08:50 UTC: second timing window clean but fully throttled; gate undecided under its pre-registered criterion; owner decision; research pushed in steps
+
+pv-gate7 took one window (marker 08:09:40.9-08:18:55.2 UTC, removed and confirmed absent; the shared
+scanner carried the fix, sha 662a4278…; both retained binaries matched their hashes). All 10 pairs
+were valid (no foreign scope in 50 inventories, so the D358 barrier fix holds) and all 10 were
+thermally throttled. Proof and public bytes, canonical results and ledgers matched throughout.
+Throttled medians: transfer 13.89 s candidate vs 13.92 s shipped (ratio 0.998); withdrawal 13.90 s vs
+13.85 s (ratio 1.004). Under the pre-registered criterion (unthrottled valid pairs only) the gate is
+UNDECIDED; the lead does not change the criterion after the data. The owner packet asks whether to
+accept paired throttled evidence (a throttled median bounds the unthrottled one from above, and
+pairing makes the ratio fair) or to fix the host's cooling and repeat; recommendation: accept, with
+a later unthrottled confirmation. Stage A remains PASS. Evidence 8d12f1e66e on codex/pv-gate6-20261028.
+
+Research was 33 commits ahead (about 170 MB of Stream A evidence) and every push timed out with HTTP
+408; the lead pushed it in seven first-parent steps, and origin/research..research is empty. Rows
+removed outright: 0. Privacy target not yet established.
