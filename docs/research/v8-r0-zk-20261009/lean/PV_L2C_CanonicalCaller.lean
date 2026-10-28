@@ -14,43 +14,43 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
 No guard outcome or extra randomness condition is part of this carrier. -/
 structure Transfer where
   bytes : Slice U8
-  public : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+  pubInput : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
   witness : pool_v1.pair_forest_trace.PoolV1PairForestPrivateTransferWitnessV1
   context : pool_v1.payment_relation.PoolV1PaymentRelationContextV1
   snapshot : PV_RunJoin_CodecOuter30.Snapshot
   compiled : pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
   success : PV_RunJoin_CodecOuter30.run bytes
-    (pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_private_transfer_merged_c1_v1 public witness context) =
+    (pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_private_transfer_merged_c1_v1 pubInput witness context) =
       ok (.Ok (snapshot,compiled))
 
 structure Withdrawal where
   bytes : Slice U8
-  public : pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+  pubInput : pool_v1.payment_relation.PoolV1WithdrawalPublicV1
   witness : pool_v1.pair_forest_trace.PoolV1PairForestWithdrawalWitnessV1
   context : pool_v1.payment_relation.PoolV1PaymentRelationContextV1
   snapshot : PV_RunJoin_CodecOuter30.Snapshot
   compiled : pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
   success : PV_RunJoin_CodecOuter30.run bytes
-    (pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_withdrawal_merged_c1_v1 public witness context) =
+    (pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_withdrawal_merged_c1_v1 pubInput witness context) =
       ok (.Ok (snapshot,compiled))
 
 theorem transfer_entry (t : Transfer) :
     ∃ i : PV_L2C_HonestCaller.Family (K:=K), ∃ root,
       pool_v1.pair_forest_trace.lane_root t.witness.input.pair = ok (.Ok root) ∧
-      i.val = PV_RunJoin_OuterChecked30.transferInput t.public t.witness root
+      i.val = PV_RunJoin_OuterChecked30.transferInput t.pubInput t.witness root
         (PV_RunJoin_CodecOuter30.snapshot t.snapshot) t.compiled := by
   obtain ⟨root,hr,hi⟩ := PV_RunJoin_CanonicalHonest31.transfer (K:=K)
-    t.bytes t.public t.witness t.context t.snapshot t.compiled t.success
+    t.bytes t.pubInput t.witness t.context t.snapshot t.compiled t.success
   exact ⟨⟨_,hi⟩,root,hr,rfl⟩
 #print axioms transfer_entry
 
 theorem withdrawal_entry (t : Withdrawal) :
     ∃ i : PV_L2C_HonestCaller.Family (K:=K), ∃ root,
       pool_v1.pair_forest_trace.lane_root t.witness.input.pair = ok (.Ok root) ∧
-      i.val = PV_RunJoin_OuterChecked30.withdrawalInput t.public t.witness root
+      i.val = PV_RunJoin_OuterChecked30.withdrawalInput t.pubInput t.witness root
         (PV_RunJoin_CodecOuter30.snapshot t.snapshot) t.compiled := by
   obtain ⟨root,hr,hi⟩ := PV_RunJoin_CanonicalHonest31.withdrawal (K:=K)
-    t.bytes t.public t.witness t.context t.snapshot t.compiled t.success
+    t.bytes t.pubInput t.witness t.context t.snapshot t.compiled t.success
   exact ⟨⟨_,hi⟩,root,hr,rfl⟩
 #print axioms withdrawal_entry
 
