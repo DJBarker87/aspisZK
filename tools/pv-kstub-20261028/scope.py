@@ -17,6 +17,16 @@ for k in range(11):
   q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout)
  ad=json.loads((out/'admission-before.json').read_text())
  with (out/'admission-history.jsonl').open('a') as hist:hist.write(json.dumps(dict(exit=r.returncode,admission=ad))+'\n')
+ if ad.get('error'):
+  race=bool(re.search(r'\[Errno (?:2|19)\]',ad['error']))
+  history=[json.loads(x) for x in (out/'admission-history.jsonl').read_text().splitlines()]
+  consecutive=0
+  for item in reversed(history):
+   if re.search(r'\[Errno (?:2|19)\]',item.get('admission',{}).get('error','')):consecutive+=1
+   else:break
+  print('Admission error:',ad['error'],flush=True)
+  if race and consecutive<4:sys.exit(79)
+  sys.exit(70)
  if r.returncode==0 and ad.get('allowed') is True:break
  (out/f'refusal-{k}.json').write_text(json.dumps(dict(exit=r.returncode,admission=ad)))
  if k==10:sys.exit(78)
@@ -36,7 +46,17 @@ else:status=r.returncode
 for f in ['admission-barrier.json','output.log','time.log']:
  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout)
 bar=json.loads((out/'admission-barrier.json').read_text())
-if bar.get('allowed') is not True:print('UNCHARGED barrier refusal');sys.exit(78)
+with (out/'barrier-history.jsonl').open('a') as hist:hist.write(json.dumps(dict(exit=status,admission=bar))+'\n')
+if bar.get('allowed') is not True:
+ print('UNCHARGED barrier refusal',bar.get('error',''),flush=True)
+ if bar.get('error'):
+  history=[json.loads(x) for x in (out/'barrier-history.jsonl').read_text().splitlines()];consecutive=0
+  for item in reversed(history):
+   if re.search(r'\[Errno (?:2|19)\]',item.get('admission',{}).get('error','')):consecutive+=1
+   else:break
+  if re.search(r'\[Errno (?:2|19)\]',bar['error']) and consecutive<4:sys.exit(79)
+  sys.exit(70)
+ sys.exit(78)
 tim=(out/'time.log').read_text();log=(out/'output.log').read_text()
 def field(s):
  m=re.search(s+r':\s*(.+)',tim);return m[1] if m else None

@@ -13,12 +13,17 @@ for plan in p:
   if not existing:(E/(name+'-target.json')).write_text(json.dumps(dict(**plan,negative_control=negative,command=cmd),indent=2))
   if not existing:
    subprocess.run(['ssh',H,shlex.join(['python3',D+'/freeze-inputs.py',name,plan['package']])],check=True)
-   for trial in range(11):
+   aggregate_refusals=0
+   while True:
     q=subprocess.run([sys.executable,str(R/'tools/pv-kstub-20261028/scope.py'),name,'Kani',*cmd])
+    if q.returncode==79:time.sleep(60);continue
     if q.returncode!=78:break
-    if trial<10:time.sleep(180)
+    if aggregate_refusals>=10:break
+    aggregate_refusals+=1;time.sleep(180)
   f=E/name/'receipt.json'
-  if not f.exists():sys.exit('No receipt; infrastructure stop')
+  if not f.exists():
+   if q.returncode==78:print('UNCHARGED retry block exhausted; do compile-free review, wait180s, then return to this unlaunched target');sys.exit(78)
+   sys.exit('Result unresolved; recover submitted scope before any resubmission')
   receipt=json.loads(f.read_text());log=(E/name/'output.log').read_text()
   status='TIMEOUT' if receipt['exit']==124 else 'PASS' if 'VERIFICATION:- SUCCESSFUL' in log or 'VERIFICATION: SUCCESSFUL' in log else 'FAIL' if 'VERIFICATION:- FAILED' in log or 'VERIFICATION: FAILED' in log else 'ERROR'
   outcome=dict(**plan,run=name,negative_control=negative,status=status,receipt=str(f.relative_to(R)))

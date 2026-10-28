@@ -22,7 +22,9 @@ for row in json.loads((E/'table.json').read_text())['rows']:
  for h in row['harnesses']:
   if h['confirmed']:
    neg=h['negative_control'];log=(R/neg['receipt']).parent.joinpath('output.log').read_text()
-   check('assertion failed: left != right' in log,'intended negative assertion '+h['harness'])
+   failures=re.findall(r'^Failed Checks: (.+)$',log,re.M)
+   check(bool(failures) and all('assertion failed:' in f and '!=' in f for f in failures),'intended negative assertion '+h['harness'])
+   check(bool(re.search(r'\*\*\s*1 of \d+ failed',log)),'only intended failure '+h['harness'])
  check(row['status']!='pending','unfinished '+row['row'])
 result=dict(ok=not errors,errors=errors,kani_runs=len(receipts),lean_attempts=2,paths=paths)
 (E/'validation.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2));sys.exit(bool(errors))
