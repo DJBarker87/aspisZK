@@ -22,6 +22,8 @@ open Aeneas Aeneas.Std AspisR1TerminalDecoder PV_W_TypedEffects PV_W_RecursiveLa
 open pool_v1.pair_tree_profile pool_v1.pair_terminal
 variable [ProverRwFull.ExternalTypes]
 
+open Aeneas.Std.Result
+
 def reference (bytes : Slice Std.U8) : Result (core.result.Result pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) := do
   let i := Slice.len bytes
   let i1 ← pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES

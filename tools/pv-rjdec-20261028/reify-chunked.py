@@ -22,6 +22,7 @@ def make(mod,src,fun,header,result,body,args,extra_imports=(),top=None,reference
  imports=[src,'R1Z.PV_W_IfLaws']+list(mapping.values())+list(extra_imports)
  imports=list(dict.fromkeys(imports));text=''.join('import '+i+'\n' for i in imports)+'set_option autoImplicit false\nnoncomputable section\nnamespace '+mod+'\nopen Aeneas Aeneas.Std AspisR1TerminalDecoder PV_W_TypedEffects PV_W_RecursiveLaws\nopen pool_v1.pair_tree_profile pool_v1.pair_terminal\nvariable [ProverRwFull.ExternalTypes]\n\n'
  if reference:
+  text+='open Aeneas.Std.Result\n\n'
   text+='def reference '+header+' : Result '+result+' := do\n'+body+'\n\n'
   fun=mod+'.reference'
  text+='def program '+header+' : P '+result+' := do\n'+emit(node,calls=calls).replace('letI : ExternalFuns := ops','letI : ProverRwFull.ExternalFuns := ops')+'\n\n'

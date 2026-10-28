@@ -18,6 +18,8 @@ open Aeneas Aeneas.Std AspisR1TerminalDecoder PV_W_TypedEffects PV_W_RecursiveLa
 open pool_v1.pair_tree_profile pool_v1.pair_terminal
 variable [ProverRwFull.ExternalTypes]
 
+open Aeneas.Std.Result
+
 def reference (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 : Array U32 8#usize) : Result (core.result.Result pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) := do
   let s15 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 432#usize, «end» := 464#usize }
   let r39 ← pool_v1.pair_terminal.exact 32#usize s15
