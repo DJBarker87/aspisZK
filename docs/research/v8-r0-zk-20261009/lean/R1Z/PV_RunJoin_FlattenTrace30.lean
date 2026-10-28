@@ -46,4 +46,6 @@ theorem flatten_trace (it : core.iter.traits.iterator.Iterator I A)
     apply same_next _ _ _ _ hs
     exact flattenNext_open it conv inner i i' a u hn hu
 #print axioms flatten_trace
+#print Aeneas.Std.core.slice.iter.IteratorSliceIter.next
+#print Aeneas.Std.SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter
 end R1Z.PV_RunJoin_FlattenTrace30

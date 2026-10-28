@@ -38,6 +38,7 @@ theorem success_iff :
     by_cases hd : Digests input <;> by_cases hv : Values input <;>
     simp only [result,hr,hs,hd,hv,not_true_eq_false,not_false_eq_true,↓reduceIte,
       Result.ok.injEq,reduceCtorEq,mapped_unit,true_and,false_and]
+  exact mapped_unit _ _ _
 #print axioms success_iff
 
 theorem runtime_error (h : ¬ Runtime pool domain seq anchor asset context) :

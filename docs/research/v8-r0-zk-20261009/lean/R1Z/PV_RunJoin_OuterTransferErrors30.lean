@@ -56,7 +56,7 @@ def Path
         ) = ok b ∧
         if b
         then
-          (core.result.Result.Err pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.SnapshotBindingMismatch = .Err error)
+          (pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.SnapshotBindingMismatch = error)
         else
           ∃ b1, (
             core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
@@ -64,26 +64,26 @@ def Path
           ) = ok b1 ∧
           if b1
           then
-            (core.result.Result.Err pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.SnapshotBindingMismatch = .Err error)
+            (pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.SnapshotBindingMismatch = error)
           else
             if witness.recipient.value = 0#u32
             then
-              (core.result.Result.Err pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = .Err error)
+              (pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = error)
             else
               if witness.change.value = 0#u32
               then
-                (core.result.Result.Err pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = .Err error)
+                (pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = error)
               else
                 ∃ i, (
                   spend.VALUE_LIMIT
                 ) = ok i ∧
                 if witness.recipient.value >= i
                 then
-                  (core.result.Result.Err pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = .Err error)
+                  (pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = error)
                 else
                   if witness.change.value >= i
                   then
-                    (core.result.Result.Err pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = .Err error)
+                    (pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = error)
                   else
                     ∃ o, (
                       lift (U32.checked_add witness.recipient.value
@@ -95,7 +95,7 @@ def Path
                     ) = ok b2 ∧
                     if b2
                     then
-                      (core.result.Result.Err pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = .Err error)
+                      (pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation = error)
                     else
                       wp (
                       pool_v1.pair_forest_trace.compile_forest_from_copies
@@ -127,13 +127,13 @@ theorem error_iff
   rw [eq_wp]
   unfold pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_private_transfer_merged_c1_v1 Path
   simp only [bind_wp,ite_wp,ok_wp,isRustOk_ok,isRustOk_err,residual_wp,
-    ok_ne_err,residual_eq_wp,Result.ok.injEq,Prod.exists]
+    ok_ne_err,residual_eq_wp,Result.ok.injEq,core.result.Result.Err.injEq,Prod.exists]
   repeat' first
     | rfl
     | (apply exists_congr; intro value)
     | (apply and_congr_right; intro hprefix)
     | (apply R1Z.PV_RunJoin_BranchDomain28.ite_iff <;> intro hcond)
     | (cases value <;> simp only [bind_wp,ite_wp,ok_wp,isRustOk_ok,isRustOk_err,
-        residual_wp,ok_ne_err,residual_eq_wp,Result.ok.injEq,Prod.exists])
+        residual_wp,ok_ne_err,residual_eq_wp,Result.ok.injEq,core.result.Result.Err.injEq,Prod.exists])
 #print axioms error_iff
 end R1Z.PV_RunJoin_OuterTransferErrors30

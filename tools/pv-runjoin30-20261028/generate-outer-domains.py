@@ -16,7 +16,7 @@ for kind,fn in [('Transfer','compile_pool_v1_pair_forest_private_transfer_merged
     binder=t[4:t.index(' ←')];expr=t.split(' ←',1)[1].strip();es=([expr] if expr else [])+[x.strip() for x in body[i+1:j]]
     out += [pad+'∃ '+binder+', (','\n'.join(pad+'  '+x for x in es),pad+') = ok '+binder+' ∧'];i=j;continue
    if t.startswith('ok (core.result.Result.'):
-    expr=' '.join(x.strip() for x in body[i:j]);out.append(pad+('('+expr[len('ok ('):-1]+' = .Err error)' if errors else 'False'));i=j;continue
+    expr=' '.join(x.strip() for x in body[i:j]);out.append(pad+('('+expr[len('ok (core.result.Result.Err '):-1]+' = error)' if errors else 'False'));i=j;continue
    if t.startswith('core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual'):
     expr=' '.join(x.strip() for x in body[i:j]);out.append(pad+('('+expr+' = ok (.Err error))' if errors else 'False'));i=j;continue
    if t.startswith('pool_v1.pair_forest_trace.compile_forest_from_copies'):
@@ -57,6 +57,7 @@ end NS
 '''
   result='pool_v1.pair_forest_trace.'+fn+' public1 witness context snapshot = ok (.Err error)' if errors else '(∃ c, pool_v1.pair_forest_trace.'+fn+' public1 witness context snapshot = ok (.Ok c))'
   for a,b in [('NS',ns),('ARGS',args),('ERRORARG','(error : pool_v1.pair_trace.'+typ+')' if errors else ''),('ERRORVAL','error' if errors else ''),('BODY','\n'.join(out)),('THEOREM',theorem),('RESULT',result),('WP','eq_wp' if errors else 'success_wp'),('FN',fn)]:text=text.replace(a,b)
+  if errors:text=text.replace('Result.ok.injEq,Prod.exists','Result.ok.injEq,core.result.Result.Err.injEq,Prod.exists')
   p=L/(name+'.lean')
   if '--check' in sys.argv:assert p.read_text()==text,p
   else:p.write_text(text)
