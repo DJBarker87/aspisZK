@@ -3,8 +3,8 @@ from pathlib import Path
 import subprocess,json,hashlib,re,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-dlib-20261028'
 D='/home/dombarker/project-offloads/codex-pv-dlib-20261028';H='dombarker@100.108.41.90'
-n=int(sys.argv[1]);m=sys.argv[2];retry=sys.argv[3] if len(sys.argv)>3 else '';assert 42200<=n<=42299
-pins=json.loads((E/'dependency-source-pins.json').read_text());assert m.startswith('R1Z/PV_DL_') or m in pins;assert n<42297 or any(x in m for x in ['Audit','Replay'])
+n=int(sys.argv[1]);m=sys.argv[2];retry=sys.argv[3] if len(sys.argv)>3 else '';assert 43400<=n<=43499
+pins=json.loads((E/'dependency-source-pins.json').read_text());assert m.startswith('R1Z/PV_DL_') or m in pins;assert n<43497 or any(x in m for x in ['Audit','Replay'])
 t=json.loads((E/'TALLY.json').read_text());assert ((n not in t['used_ids']) or (retry and n not in t['lean_charged'])) and len(t['lean_charged'])<100
 p=(R/pins[m]['path']) if m in pins else R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
 s=p.read_bytes();sha=hashlib.sha256(s).hexdigest()

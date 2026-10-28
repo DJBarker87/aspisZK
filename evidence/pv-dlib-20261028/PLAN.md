@@ -171,3 +171,9 @@ Final: audit42298 and replay42299 exit0, standard axioms only. All100IDs
 used;85 chargedLean,15refused IDs;6Kani. Five uncompiled drafts excluded.
 Stop: authorized ID block exhausted, not a row counterexample or ELF mismatch.
 All8row residuals unchanged; no deployed premise or trust change.
+
+RESUME LOG D349: same branch/head c2f6692c0a; fresh 100 Lean/0 Kani,
+IDs43400–43499 only; audit43497–43499. Initial tally retained separately.
+Read new ruling(k'): structural (K-1 substitute) permitted with full source
+check, complete-Result reference law and finite same-input differential.
+First compile is corrected EncoderMutation; no new native source changes.
