@@ -1,0 +1,89 @@
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,4 +1,5 @@
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
++#![cfg_attr(kani, feature(allocator_api))]
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
+ use solana_program::{account_info::AccountInfo,entrypoint::ProgramResult,pubkey::Pubkey,program_error::ProgramError,hash::hashv,msg,log::sol_log_compute_units};
+@@ -188,3 +189,80 @@
+   unsafe{assert!(CALLS==1);}kani::cover!(tag==7);
+  }
+ }
++
++#[cfg(kani)] mod NCB_copy {
++use alloc::vec::Vec;
++// Scratch-only replacements. T: Copy excludes Clone side effects.
++#[inline(never)]
++pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
++    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}
++}
++#[inline(never)]
++pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
++    assert_eq!(dst.len(),src.len());let mut i=0;while i<src.len(){dst[i]=src[i];i+=1;}
++}
++#[inline(never)]
++pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
++#[inline(never)]
++pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
++    dst.reserve(src.len());let mut i=0;while i<src.len(){dst.push(src[i]);i+=1;}
++}
++#[inline(never)]
++pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
++    let mut dst=Vec::with_capacity(src.len());KMX_extend_from_slice(&mut dst,src);dst
++}
++// Match the successful-reallocation byte law, preserving the old allocation on failure.
++// MaybeUninit permits copying spare-capacity bytes without reading them as values.
++pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
++ let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
++ let out=unsafe{alloc::alloc::alloc(new_layout)};
++ if !out.is_null(){
++  let mut i=0;while i<core::cmp::min(layout.size(),new_size){
++   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};
++   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;
++  }
++  unsafe{alloc::alloc::dealloc(ptr,layout)};
++ }
++ out
++}
++
++}
++
++#[cfg(kani)] mod NCB_digest {
++ use super::*;
++ use aspis_core::Digest32;
++ static mut PARTS:*const &[u8]=core::ptr::null();static mut LEN:usize=0;
++ static mut REPLY:[u8;32]=[0;32];static mut CALLS:usize=0;
++ fn reply(parts:&[&[u8]])->solana_program::hash::Hash {unsafe{
++  assert!(CALLS==0);CALLS=1;
++  assert!(parts.len()==LEN);assert!(core::ptr::eq(parts.as_ptr(),PARTS));
++  solana_program::hash::Hash::new_from_array(REPLY)
++ }}
++ #[kani::proof] #[kani::unwind(64)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NCB_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCB_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCB_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCB_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCB_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCB_copy::KMX_realloc)]
++ #[kani::stub(hashv,reply)]
++ fn routing(){
++  let a:[u8;4]=kani::any();let b:[u8;4]=kani::any();let c:[u8;4]=kani::any();
++  let la:usize=kani::any();let lb:usize=kani::any();let lc:usize=kani::any();
++  kani::assume(la<=4&&lb<=4&&lc<=4);let all=[&a[..la],&b[..lb],&c[..lc]];
++  let n:usize=kani::any();kani::assume(n<=3);let parts=&all[..n];let result:[u8;32]=kani::any();
++  unsafe{PARTS=parts.as_ptr();LEN=parts.len();REPLY=result;CALLS=0;}
++  let out=SolanaDigest.digest(parts);let j:usize=kani::any();kani::assume(j<32);
++  assert!(out[j]==result[j]);unsafe{assert!(CALLS==1);}
++ }
++ #[kani::proof] #[kani::unwind(32)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NCB_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCB_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCB_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCB_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCB_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCB_copy::KMX_realloc)]
++ fn copy_negative(){
++  let a:[u32;16]=[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,512];let mut b=[0u32;16];b.copy_from_slice(&a);assert!(b[15]==0);
++ }
++}
