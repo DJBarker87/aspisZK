@@ -1,0 +1,47 @@
+{
+  "row": "V182",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "needle": "pub fn push_str(",
+      "body": "{\n        self.vec.extend_from_slice(string.as_bytes())\n    }",
+      "token_sha256": "ec68c4e9fb2f2ed421587dd5e28af0613d5f8d97dc6418dd906438009a452c07",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "fn push_bytes_reference(",
+      "body": "{s.extend_from_slice(t)}",
+      "token_sha256": "9b41277aa82c6ff0e4d581892e4a2c73080753801668fc94fa3d96278629bc97",
+      "complete_body_tokens_match": true
+    },
+    {
+      "reference_path": "tools/pv-cblib-20261027/lib.rs",
+      "reference_body": "{s.extend_from_slice(t)}",
+      "call_sequence": [
+        "String byte Vec projection",
+        "str::as_bytes",
+        "Vec::extend_from_slice"
+      ],
+      "constants": [],
+      "error_paths": "Same extend_from_slice Result at the byte boundary; no ignored return variant. Native OOM/panic/world are retained residuals."
+    }
+  ],
+  "differences": [
+    {
+      "difference": "Native String/str views vs owned byte Vec/Slice reference; identical single extend_from_slice call.",
+      "proof": "PV_RL_V182.complete"
+    },
+    {
+      "difference": "Encode/decode adapter adds size/UTF8 error branches for Lean carriers outside native String image; retain both Result branches and the source-image condition.",
+      "proof": "PV_RL_V182.adapter; PV_CBL_StringByteObservation.decode_of_bytes; original valid UTF8 2+1 native scope retained"
+    }
+  ],
+  "complete_Result_laws": [
+    "PV_CBL_AppendSource.op31_source",
+    "PV_RL_V182.complete",
+    "PV_RL_V182.adapter"
+  ],
+  "nonvacuity": "PV_RL_V182.nonvacuous; native corpus includes empty, all scalar values, valid UTF8 two-byte initials and ASCII tails",
+  "suspended_Kani": "K-1: retained original evidence; NOT a native link",
+  "boundary": "Candidate value/library primitive interpretation only; original source-image, allocation/world, compiler and deployment residuals retained. No universal machine/compiler refinement is inferred from finite validation."
+}

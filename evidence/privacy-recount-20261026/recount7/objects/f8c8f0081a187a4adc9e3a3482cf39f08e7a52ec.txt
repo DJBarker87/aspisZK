@@ -1,0 +1,15 @@
+import R1Z.PV_RunJoin_AdmissionBoundary23
+import R1Z.PV_RunJoin_AdmittedCarrier23
+set_option autoImplicit false
+#check @R1Z.PV_RunJoin_AdmissionBoundary23.admission_not_derivable
+#check @R1Z.PV_RunJoin_AdmittedCarrier23.public_eq
+#print axioms R1Z.PV_RunJoin_AdmissionBoundary23.bad_not_admitted
+#print axioms R1Z.PV_RunJoin_AdmissionBoundary23.source_instance_not_admitted
+#print axioms R1Z.PV_RunJoin_AdmissionBoundary23.admission_not_derivable
+#print axioms R1Z.PV_RunJoin_AdmittedCarrier23.model_injective
+#print axioms R1Z.PV_RunJoin_AdmittedCarrier23.transfer_witness
+#print axioms R1Z.PV_RunJoin_AdmittedCarrier23.withdrawal_witness
+#print axioms R1Z.PV_RunJoin_AdmittedCarrier23.transfer_admitted
+#print axioms R1Z.PV_RunJoin_AdmittedCarrier23.withdrawal_admitted
+#print axioms R1Z.PV_RunJoin_AdmittedCarrier23.public_eq
+#print axioms R1Z.PV_RunJoin_AdmittedCarrier23.nonempty_both

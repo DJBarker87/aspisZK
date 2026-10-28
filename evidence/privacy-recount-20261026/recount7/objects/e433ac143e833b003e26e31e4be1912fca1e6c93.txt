@@ -1,0 +1,331 @@
+{
+  "baseline": {
+    "row": "V178",
+    "name": "op26 std.path.Path.join",
+    "before": "CLOSED-ON-CANDIDATE",
+    "consequence": "SUSPENDED",
+    "reason": "Native Path::join to owned/slice reference uses reached byte append/copy. The proved JoinAdapter/reference law does not prove the shipped library body without this P6 association.",
+    "closure_theorem": "R1Z.PV_CBL_CallbackBundle.op26_source",
+    "baseline_evidence": [
+      "definition-audit6.json#V178",
+      "rw:docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CBL_CallbackPublication.lean",
+      "rw:evidence/pv-cblib-20261027/OPS.md"
+    ],
+    "supporting_passes": [
+      124,
+      157,
+      164,
+      166
+    ],
+    "reverify_when_validated_stub_available": true,
+    "exposed_supporting_passes": [
+      124,
+      157,
+      164,
+      166
+    ],
+    "unresolved_supporting_passes": []
+  },
+  "observations": [
+    {
+      "harness": "checks::path_join8",
+      "pass_output": "evidence/pv-cb-20261026/kani-join-004/output.log",
+      "pass_output_blob": "f30bdccbb50fdbf217cd90eeb36a219512b383ad",
+      "refs": [
+        "codex/cx-prover-rw-20261023",
+        "codex/pv-dlib-20261028",
+        "codex/pv-b3p6-20261028",
+        "codex/pv-batch2-20261027",
+        "codex/pv-runjoin-20261026",
+        "codex/pv-reach-20261027",
+        "codex/pv-l2c-20261028"
+      ],
+      "receipt": "evidence/pv-cb-20261026/kani-join-004/collected-receipt.json",
+      "receipt_blob": "20f5e1890419269c3fb3c4bc4eeb63d71951bb8e",
+      "command": [
+        "timeout",
+        "180",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "proof/Cargo.toml",
+        "--lib",
+        "--harness",
+        "checks::path_join8",
+        "--solver",
+        "kissat",
+        "--output-format",
+        "terse",
+        "-j",
+        "4"
+      ],
+      "source_revision": "ae7b807bef6155a1e3b7cf91c69fa74542d31cb8",
+      "tool_pins": {
+        "kani": "0.67.0",
+        "cbmc": "6.8.0",
+        "pin_scope": "Historical version/config pins, not a fresh equality check of historical tool binaries. Diagnostic binary SHA256 values are in diagnostics/tool-pins.json.",
+        "output_version_lines": [
+          "Kani Rust Verifier 0.67.0 (cargo plugin)"
+        ]
+      },
+      "ledger_rows": [
+        "V178"
+      ],
+      "ledger_relation": "Candidate/source or supporting native-association scopes. An OPEN row is not a claimed closure; exact closure consequences are recorded separately.",
+      "copy_builtin_reached": true,
+      "property_depends_on_copy": true,
+      "exemption": null,
+      "status": "SUSPENDED under K-1; retained historical evidence, supplies NO native-link credit",
+      "reason": "A nonzero content copy/clone or append is on an admitted source path and the assertion compares resulting contents. Goto root-to-builtin paths are retained. This suspends the native PASS link, not the mathematical reference theorem.",
+      "diagnostic": {
+        "run": "K07",
+        "harness": "checks::path_join8",
+        "metadata_and_paths": "diagnostics/K07/goto-scan.json",
+        "graph": "diagnostics/K07/graphs/checks__path_join8.txt",
+        "goto_sha256": "bf2f4693e6f500e892fe4f90fcac482d675a1cb2acf11c3e8ba5a13f5041a5ac",
+        "graph_sha256": "3dd1c19c4b8fbd78babe7a0362af3cebf82643f1a09ac2307c382d8960dd751d",
+        "bound": 18,
+        "identity_scope": "Retained source package relocated for diagnostic codegen; qualified harness/call chain. No SAT replay, no restoration of native credit."
+      },
+      "evidence_use": "Historical PASS census; may be superseded or partial. Exact row scope is preserved.",
+      "observation_index": 124
+    },
+    {
+      "harness": "join_split::join_one_byte",
+      "pass_output": "evidence/pv-cblib-20261027/resume-join-one-byte-01/output.log",
+      "pass_output_blob": "577dce8aaecc3da5b1d75a8ff533e287bf1a6c97",
+      "refs": [
+        "codex/cx-prover-rw-20261023",
+        "codex/pv-dlib-20261028",
+        "codex/pv-b3p6-20261028",
+        "codex/pv-batch2-20261027",
+        "codex/pv-runjoin-20261026",
+        "codex/pv-reach-20261027",
+        "codex/pv-l2c-20261028"
+      ],
+      "receipt": "evidence/pv-cblib-20261027/resume-join-one-byte-01/collected-receipt.json",
+      "receipt_blob": "68573c48b514af97f4768649c461a3ef39729ece",
+      "command": [
+        "timeout",
+        "180",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+        "RUSTFLAGS=--cfg kani",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-target",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/Cargo.toml",
+        "--lib",
+        "--exact",
+        "--harness",
+        "join_split::join_one_byte",
+        "--solver",
+        "kissat",
+        "--no-assertion-reach-checks",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions",
+        "--slice-formula"
+      ],
+      "source_revision": "c35956a836e39331f77f632b12eca4320000752d",
+      "tool_pins": {
+        "kani": "0.67.0",
+        "cbmc": "6.8.0",
+        "pin_scope": "Historical version/config pins, not a fresh equality check of historical tool binaries. Diagnostic binary SHA256 values are in diagnostics/tool-pins.json.",
+        "output_version_lines": [
+          "Kani Rust Verifier 0.67.0 (cargo plugin)"
+        ]
+      },
+      "ledger_rows": [
+        "V178"
+      ],
+      "ledger_relation": "Candidate/source or supporting native-association scopes. An OPEN row is not a claimed closure; exact closure consequences are recorded separately.",
+      "copy_builtin_reached": true,
+      "property_depends_on_copy": true,
+      "exemption": null,
+      "status": "SUSPENDED under K-1; retained historical evidence, supplies NO native-link credit",
+      "reason": "A nonzero content copy/clone or append is on an admitted source path and the assertion compares resulting contents. Goto root-to-builtin paths are retained. This suspends the native PASS link, not the mathematical reference theorem.",
+      "diagnostic": {
+        "run": "K02",
+        "harness": "join_split::join_one_byte",
+        "metadata_and_paths": "diagnostics/K02/goto-scan.json",
+        "graph": "diagnostics/K02/graphs/join_split__join_one_byte.txt",
+        "goto_sha256": "19adf23c0df90087c8f791be8ed8efad0e0c41957c4a5d2bedd7d17e8715786c",
+        "graph_sha256": "edd6eaa5fea55e519deb1768aed21636b2250892b3f809d9ff91c40234589992",
+        "bound": 6,
+        "identity_scope": "Retained source package relocated for diagnostic codegen; qualified harness/call chain. No SAT replay, no restoration of native credit."
+      },
+      "evidence_use": "Historical PASS census; may be superseded or partial. Exact row scope is preserved.",
+      "observation_index": 157
+    },
+    {
+      "harness": "resume8_links::join_two",
+      "pass_output": "evidence/pv-cblib-20261027/resume8-join-two-r01/output.log",
+      "pass_output_blob": "45d459647b9edd127a7d62644d6b53e1bbede5de",
+      "refs": [
+        "codex/cx-prover-rw-20261023",
+        "codex/pv-dlib-20261028",
+        "codex/pv-b3p6-20261028",
+        "codex/pv-batch2-20261027",
+        "codex/pv-runjoin-20261026",
+        "codex/pv-reach-20261027",
+        "codex/pv-l2c-20261028"
+      ],
+      "receipt": "evidence/pv-cblib-20261027/resume8-join-two-r01/collected-receipt.json",
+      "receipt_blob": "9f283a4dc8d5423b4ef24391ce1a4e3ca427c88d",
+      "command": [
+        "timeout",
+        "180",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+        "RUSTFLAGS=--cfg kani",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-target",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/Cargo.toml",
+        "--lib",
+        "--exact",
+        "--harness",
+        "resume8_links::join_two",
+        "--solver",
+        "kissat",
+        "--no-assertion-reach-checks",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions",
+        "--slice-formula"
+      ],
+      "source_revision": "909c7ca85b31c69d5eaf38108b4fe2e44e2eae84",
+      "tool_pins": {
+        "kani": "0.67.0",
+        "cbmc": "6.8.0",
+        "pin_scope": "Historical version/config pins, not a fresh equality check of historical tool binaries. Diagnostic binary SHA256 values are in diagnostics/tool-pins.json.",
+        "output_version_lines": [
+          "Kani Rust Verifier 0.67.0 (cargo plugin)"
+        ]
+      },
+      "ledger_rows": [
+        "V178"
+      ],
+      "ledger_relation": "Candidate/source or supporting native-association scopes. An OPEN row is not a claimed closure; exact closure consequences are recorded separately.",
+      "copy_builtin_reached": true,
+      "property_depends_on_copy": true,
+      "exemption": null,
+      "status": "SUSPENDED under K-1; retained historical evidence, supplies NO native-link credit",
+      "reason": "A nonzero content copy/clone or append is on an admitted source path and the assertion compares resulting contents. Goto root-to-builtin paths are retained. This suspends the native PASS link, not the mathematical reference theorem.",
+      "diagnostic": {
+        "run": "K02",
+        "harness": "resume8_links::join_two",
+        "metadata_and_paths": "diagnostics/K02/goto-scan.json",
+        "graph": "diagnostics/K02/graphs/resume8_links__join_two.txt",
+        "goto_sha256": "4173f847d059edf5dfb191168eb9713d540ef412dfa5fda8bdc4fe254a4d59f6",
+        "graph_sha256": "c49a971f2669ec83daa7a76281f898847762d135f5f10dccdc7738419927c367",
+        "bound": 8,
+        "identity_scope": "Retained source package relocated for diagnostic codegen; qualified harness/call chain. No SAT replay, no restoration of native credit."
+      },
+      "evidence_use": "Historical PASS census; may be superseded or partial. Exact row scope is preserved.",
+      "observation_index": 164
+    },
+    {
+      "harness": "resume9_links::join_slices_two",
+      "pass_output": "evidence/pv-cblib-20261027/resume9-join-slices-two-r01/output.log",
+      "pass_output_blob": "6ac1aaab20269d486bdd9cfb67602ce2c94890fc",
+      "refs": [
+        "codex/cx-prover-rw-20261023",
+        "codex/pv-dlib-20261028",
+        "codex/pv-b3p6-20261028",
+        "codex/pv-batch2-20261027",
+        "codex/pv-runjoin-20261026",
+        "codex/pv-reach-20261027",
+        "codex/pv-l2c-20261028"
+      ],
+      "receipt": "evidence/pv-cblib-20261027/resume9-join-slices-two-r01/collected-receipt.json",
+      "receipt_blob": "d1faad29c5b9e260afa82e325cddf29781675453",
+      "command": [
+        "timeout",
+        "180",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+        "RUSTFLAGS=--cfg kani",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-target",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/Cargo.toml",
+        "--lib",
+        "--exact",
+        "--harness",
+        "resume9_links::join_slices_two",
+        "--solver",
+        "kissat",
+        "--no-assertion-reach-checks",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions",
+        "--slice-formula"
+      ],
+      "source_revision": "9e58493e141f1917875000b9050b46df2e87707e",
+      "tool_pins": {
+        "kani": "0.67.0",
+        "cbmc": "6.8.0",
+        "pin_scope": "Historical version/config pins, not a fresh equality check of historical tool binaries. Diagnostic binary SHA256 values are in diagnostics/tool-pins.json.",
+        "output_version_lines": [
+          "Kani Rust Verifier 0.67.0 (cargo plugin)"
+        ]
+      },
+      "ledger_rows": [
+        "V178"
+      ],
+      "ledger_relation": "Candidate/source or supporting native-association scopes. An OPEN row is not a claimed closure; exact closure consequences are recorded separately.",
+      "copy_builtin_reached": true,
+      "property_depends_on_copy": true,
+      "exemption": null,
+      "status": "SUSPENDED under K-1; retained historical evidence, supplies NO native-link credit",
+      "reason": "A nonzero content copy/clone or append is on an admitted source path and the assertion compares resulting contents. Goto root-to-builtin paths are retained. This suspends the native PASS link, not the mathematical reference theorem.",
+      "diagnostic": {
+        "run": "K02",
+        "harness": "resume9_links::join_slices_two",
+        "metadata_and_paths": "diagnostics/K02/goto-scan.json",
+        "graph": "diagnostics/K02/graphs/resume9_links__join_slices_two.txt",
+        "goto_sha256": "f1522dec2798ee2507b9ffb177d2143bc99593dcedd538128598a5f722c1fea3",
+        "graph_sha256": "c58464f7f6e53a41ed21ee5ab87490214ee67f23165d99266c85f67dfc7778cd",
+        "bound": 10,
+        "identity_scope": "Retained source package relocated for diagnostic codegen; qualified harness/call chain. No SAT replay, no restoration of native credit."
+      },
+      "evidence_use": "Historical PASS census; may be superseded or partial. Exact row scope is preserved.",
+      "observation_index": 166
+    }
+  ]
+}
