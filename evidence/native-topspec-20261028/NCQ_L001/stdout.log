@@ -1,0 +1,106 @@
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+'AspisR1.NCQ_TopSpec.fields_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCQ_TopSpec.assemble' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCQ_TopSpec.factor_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCQ_TopSpec.digest_source_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCQ_TopSpec.model_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def AspisR1.S2W_ExtractionBoundary.First : Type :=
+Program → Accounts → Slice U8 → Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE)
+@[reducible] def AspisR1.S2W_ExtractionBoundary.Second : Type :=
+Program → Accounts → Slice U8 → Slot → Result (core.result.Result Unit AdapterRw.Cuts.PE)
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops) (native1 : First) (native2 : Second)
+  (hashv : S2W_DigestExtraction.Parts → Result S2W_DigestExtraction.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : Program) (accounts : Accounts) (data : Slice U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2 : ∀ (program : Program) (accounts : Accounts) (data : Slice U8)
+      (slot : Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Slice (Slice U8)), ops.op43 self parts = S2W_DigestExtraction.digest hashv self parts
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops} {native1 : First} {native2 : Second}
+    {hashv : S2W_DigestExtraction.Parts → Result S2W_DigestExtraction.Digest}
+    (stage1 :
+      ∀ (program : Program) (accounts : Accounts) (data : Slice U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : Program) (accounts : Accounts) (data : Slice U8) (slot : Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Slice (Slice U8)),
+        ops.op43 self parts = S2W_DigestExtraction.digest hashv self parts) :
+    S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
+structure AspisR1.S2W_ExtractionBoundary.P1
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.P1.realization : S2Z.Oracle.P1Realization sha256 H
+constructor:
+  AspisR1.S2W_ExtractionBoundary.P1.mk {sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (realization : S2Z.Oracle.P1Realization sha256 H) : P1 sha256 H
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
+  (sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk {hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest}
+    {sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256) : RuntimeSyscall hashv sha256
+def AspisR1.S2Z.Oracle.RuntimeSyscall : (S2Z.Oracle.Parts → Result S2Z.Oracle.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun hashv sha256 =>
+  ∀ (parts : S2Z.Oracle.Parts) (digest : S2Z.Oracle.Digest),
+    hashv parts = ok digest →
+      AspisV8R19.SqueezeOracleBridge.decodeState digest = sha256 (AspisV8R19.SqueezeOracleBridge.flatten parts)
+def AspisR1.S2Z.Oracle.P1Realization : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun sha256 H => ∀ (bytes : AspisV8R19.DuplexFrames.Bytes), sha256 bytes = H bytes
+def AspisR1.S2W_D189Wrappers.first : {A : Type} →
+  First →
+    (S2Trust.Heap (ℕ → S2W_D189Entry.Record) →
+        ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome (ℕ → S2W_D189Entry.Record)) →
+      S2W_D189Wrappers.Allocator A →
+        S2W_D189Entry.Entry →
+          Program →
+            Slice U8 →
+              A →
+                Result
+                  (core.result.Result (alloc.vec.Vec U8 × S2Trust.Heap (ℕ → S2W_D189Entry.Record) × A)
+                    AdapterRw.Cuts.PE) :=
+fun {A} native copy allocator e program data state => do
+  let allocated ←
+    S2W_D189Wrappers.reserve allocator (S2W_D189Wrappers.admittedSizes e 3 S2W_D189Wrappers.firstSizes) state
+  let result ← native program e.first data
+  match result with
+    | core.result.Result.Err error => ok (core.result.Result.Err error)
+    | core.result.Result.Ok saved =>
+      match
+        copy (S2Trust.acquire e.heap (e.heap.accounts 2).1 0 0 S2Trust.Kind.exclusive) (e.heap.accounts 2).1
+          (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved)) with
+      | S2W_TrustedStd.Outcome.panic => fail Error.assertionFailure
+      | S2W_TrustedStd.Outcome.returned written => do
+        let cleaned ← allocator.cleanup allocated
+        ok
+            (core.result.Result.Ok
+              (saved, S2Trust.release written (S2W_WrapperLaws.exclusiveGuard e.heap 2 0 0), cleaned))
+def AspisR1.S2W_D189Wrappers.second : {A : Type} →
+  Second →
+    S2W_D189Wrappers.Allocator A →
+      S2W_D189Entry.Entry →
+        Program →
+          Slice U8 →
+            Slot → A → Result (core.result.Result (S2Trust.Heap (ℕ → S2W_D189Entry.Record) × A) AdapterRw.Cuts.PE) :=
+fun {A} native allocator e program data slot state => do
+  let allocated ←
+    S2W_D189Wrappers.reserve allocator (S2W_D189Wrappers.admittedSizes e 7 S2W_D189Wrappers.secondSizes) state
+  let result ← native program (e.second S2W_D189Wrappers.secondSizes) data slot
+  match result with
+    | core.result.Result.Err error => ok (core.result.Result.Err error)
+    | core.result.Result.Ok PUnit.unit => do
+      let cleaned ← allocator.cleanup allocated
+      ok (core.result.Result.Ok (e.heap, cleaned))
