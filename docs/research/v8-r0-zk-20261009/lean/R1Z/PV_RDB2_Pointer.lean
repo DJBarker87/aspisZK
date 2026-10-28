@@ -101,7 +101,7 @@ theorem next_storage (c : Cursor) (hv : valid c) :
   · have hn : pointer c ≠ endPointer c := by
       intro eq; have := (pointer_eq_end c).mp eq; omega
     exact ⟨some c.values.val[c.position],advance c,
-      by simp only [next,hn,↓reduceIte,h],rfl,rfl,rfl,advance_valid c hv h⟩
+      by simp only [next,hn,↓reduceIte,h,↓reduceDIte],rfl,rfl,rfl,advance_valid c hv h⟩
   · have eq : pointer c = endPointer c := (pointer_eq_end c).mpr (by
       have := hv.2.1; omega)
     exact ⟨none,c,by simp only [next,eq,↓reduceIte],rfl,rfl,rfl,hv⟩
