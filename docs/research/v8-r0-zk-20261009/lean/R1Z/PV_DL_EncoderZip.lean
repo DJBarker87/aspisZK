@@ -17,7 +17,7 @@ theorem coordinate {E : Type} [Inhabited E]
     (q : Array E 1024#usize) (b : Array E 512#usize) (j : Nat) (h : j<512) :
     (entries q b)[j]?=some ((q.val[2*j]!,q.val[2*j+1]!),b.val[j]!) := by
   apply List.getElem?_zip_eq_some.mpr
-  refine ⟨(q.val[2*j]!,q.val[2*j+1]!),b.val[j]!,?_,?_,rfl⟩
+  refine ⟨?_,?_⟩
   · rw [PV_DL_EncoderPairs.coordinate]
     have he : 2*j<q.val.length := by rw [q.property];omega
     have ho : 2*j+1<q.val.length := by rw [q.property];omega
