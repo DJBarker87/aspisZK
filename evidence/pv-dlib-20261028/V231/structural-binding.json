@@ -1,0 +1,106 @@
+{
+  "evidence_class": "structural (K-1 substitute)",
+  "rulings": [
+    "r",
+    "k'"
+  ],
+  "native_finalizer": {
+    "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha2-0.10.9/src/core_api.rs",
+    "body": "{\n        let bs = Self::BlockSize::U64;\n        let bit_len = 8 * (buffer.get_pos() as u64 + bs * self.block_len);\n        buffer.len64_padding_be(bit_len, |b| compress256(&mut self.state, from_ref(b)));\n\n        for (chunk, v) in out.chunks_exact_mut(4).zip(self.state.iter()) {\n            chunk.copy_from_slice(&v.to_be_bytes());\n        }\n    }",
+    "tokens_match": true
+  },
+  "native_padding": {
+    "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs",
+    "body": "{\n        if suffix.len() > BlockSize::USIZE {\n            panic!(\"suffix is too long\");\n        }\n        let pos = self.get_pos();\n        self.buffer[pos] = delim;\n        for b in &mut self.buffer[pos + 1..] {\n            *b = 0;\n        }\n\n        let n = self.size() - suffix.len();\n        if self.size() - pos - 1 < suffix.len() {\n            compress(&self.buffer);\n            let mut block = Block::<BlockSize>::default();\n            block[n..].copy_from_slice(suffix);\n            compress(&block);\n        } else {\n            self.buffer[n..].copy_from_slice(suffix);\n            compress(&self.buffer);\n        }\n        self.set_pos_unchecked(0)\n    }",
+    "tokens_match": true
+  },
+  "sources": {
+    "sha2-0.10.9/src/core_api.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha2-0.10.9/src/core_api.rs",
+      "sha256": "73b160d98bfa6737688875ad73da5e3c2c93582604dc313d208200e12fdab676",
+      "private_copy_sha256": "bc86e116d136512b42cef2a1f21eb2e774c2cd5a1cc6978b0172b2475e9c95d2",
+      "prefix_matches": true
+    },
+    "block-buffer-0.10.4/src/lib.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs",
+      "sha256": "b437252d389042d894b1ef17859b043e827d2bd2a1bca4b5311c67dff565274d",
+      "private_copy_sha256": "fff8784d7ed5025a9d28d47e2e01d2f07c7a3e92fe7f5582150164a280b842a2",
+      "prefix_matches": true
+    },
+    "block-buffer-0.10.4/src/sealed.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/sealed.rs",
+      "sha256": "9327ee3e567ae779b83c2b7f4f3ff56fcb2117163e023e7b0e37759e7e8d1f5c",
+      "private_copy_sha256": "9327ee3e567ae779b83c2b7f4f3ff56fcb2117163e023e7b0e37759e7e8d1f5c",
+      "prefix_matches": true
+    }
+  },
+  "parameterization": {
+    "path": "tools/pv-dlib-20261028/sha-final-helpers.rs",
+    "sha256": "5095f3a7ea72a431a46ca46b28a2b1543911077d1314c2ff444440b66e5980b8",
+    "same_body_tokens_after_two_explicit_renamings": true,
+    "renamings": [
+      "type qualification Self::BlockSize",
+      "compression callback identifier only"
+    ]
+  },
+  "owned_reference": {
+    "path": "tools/pv-dlib-20261028/sha-final-native.rs",
+    "sha256": "df7bf483e7e446dafc3c3af536c46fe376d4671b83307d8dea96c401333675b4",
+    "entry": "owned"
+  },
+  "differences": [
+    {
+      "native": "release u64 arithmetic, big-endian bit-length suffix",
+      "owned": "wrapping arithmetic, explicit eight byte lanes",
+      "proofs": [
+        "PV_DL_LengthEncoding.length_value",
+        "PV_DL_LengthEncoding.suffix_length",
+        "PV_CBL_ShaBitLength.value"
+      ]
+    },
+    {
+      "native": "digest_pad suffixlen8, delim0x80, two-block branch64-pos-1<8",
+      "owned": "owned split8 padding, pos>=56",
+      "proofs": [
+        "PV_DL_ShaBranches.padding",
+        "PV_DL_ShaBranches.suffix_fits",
+        "PV_CBL_PadContentSource.source",
+        "PV_DL_LengthEncoding.source"
+      ]
+    },
+    {
+      "native": "borrowed buffer writes; second block local; reset cursor0",
+      "owned": "explicit returned first-buffer storage and cursor0",
+      "proofs": [
+        "PV_DL_FinalizeParam.source",
+        "PV_DL_ShaRestoration.buffer_restored"
+      ]
+    },
+    {
+      "native": "out.chunks_exact_mut(4).zip(state.iter()); copy_from_slice(be4)",
+      "owned": "ordered flatMap of complete be4 stores",
+      "proofs": [
+        "PV_DL_ShaSerialize.source",
+        "PV_DL_ShaSerialize.length",
+        "PV_DL_ShaBranches.word_chunks",
+        "PV_DL_ShaBranches.word_indices",
+        "PV_DL_ShaRestoration.output_restored"
+      ]
+    },
+    {
+      "native": "GenericArray and Sha core private fields",
+      "owned": "recursively nested native carrier shapes",
+      "proofs": [
+        "PV_DL_StorageBuild.reconstruct",
+        "PV_DL_ShaRestoration.selected_native"
+      ]
+    }
+  ],
+  "compression": "arbitrary Result-valued single-block state transition; native compress256 receives from_ref(block); no backend semantics or backend equality assumed",
+  "complete_result_theorem": "R1Z.PV_DL_ShaFinal.source_reference",
+  "selected_theorem": "R1Z.PV_DL_ShaRestoration.selected_native",
+  "native_domain": "Eager invariant pos<64; buffer64/output32/state8 words; frozen release overflow profile",
+  "finite_validation": "sha-final-native-finite-resume/receipt.json (finite validation only; required before row credit)",
+  "kani": false,
+  "v232_untouched": true
+}
