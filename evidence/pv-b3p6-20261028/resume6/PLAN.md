@@ -12,7 +12,7 @@ prepared-matrix differential; (d) deployed slice caller and pre-inline std cone.
 Shape: reference227 selects84 cells and calls terminal_parts. The latter calls
 composition_parts, equality_value, and eight total field operations. Composition
 checks public amount/transition, selects three16-cell rows and ten mask cells,
-evaluates Poseidon, semantic and copy residuals, then folds24+40 entries using
+evaluates Poseidon, semantic and copy residuals, then folds24+4 entries using
 prepared theta. validate_transition has a20-level loop; no concrete execution
 of the whole body is appropriate. Prove totality/success and bounded index laws
 symbolically. No decide/native_decide for nonvacuity.
