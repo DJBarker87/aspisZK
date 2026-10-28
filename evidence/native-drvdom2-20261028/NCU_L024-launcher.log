@@ -1,0 +1,48 @@
+{"attempt": "NCU_L024", "exit_status": 1, "wall_seconds": 2.7344947699457407, "peak_rss_kib": "5356220", "swaps": "0", "print_axioms": ["'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NCU_WriterPrefix.resume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NCU_WriterPrefix.no_later_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCU_WriterPrefix.lean:66:10: error: 'change' tactic failed, pattern
+  ok (core.result.Result.Err e) = NCU_PrefixTail.finish ops D pub proof hash (ok (core.result.Result.Err e))
+is not definitionally equal to target
+  (let (r2, g1) := (core.result.Result.Err e, g)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r3 ← ops.op20 transport.Variant.S2
+        let cf3 ←
+          match r3 with
+            | core.result.Res
+...
+    let r ←
+      let (r, g) := (core.result.Result.Ok p, g)
+        match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok p => NCU_PrefixTail.tail ops D pub proof split hash p g
+    match r with
+      | core.result.Result.Err error => ok (core.result.Result.Err error)
+      | core.result.Result.Ok (p, a) => do
+        let bytes ← ops.op16 D p a proof pub hash
+        ok (core.result.Result.Ok bytes)
+NCU_WriterPrefix.lean:55:19: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+            core.convert.FromSame.from]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCU_WriterPrefix.lean:59:19: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCU_WriterPrefix.resume' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCU_WriterPrefix.no_later_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf719a9f54c6846d19a2011959a3d4ec7.scope; invocation ID: 31990457c2704675a7fe5b122208f912

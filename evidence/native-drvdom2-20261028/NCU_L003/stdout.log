@@ -1,0 +1,598 @@
+structure AspisR1CurrentCaller.Ops : Type 1
+number of parameters: 0
+fields:
+  AspisR1CurrentCaller.Ops.op0 : Aeneas.Std.Result AspisR1CurrentCaller.aspis_core.field.QM31
+  AspisR1CurrentCaller.Ops.op1 : {T : Type} →
+      Aeneas.Std.core.marker.Copy T →
+        Aeneas.Std.Usize →
+          T →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec T) AspisR1CurrentCaller.aspis_core.r0.Error)
+  AspisR1CurrentCaller.Ops.op2 : AspisR1CurrentCaller.compact.CodecError →
+      Aeneas.Std.Result AspisR1CurrentCaller.verifier.Error
+  AspisR1CurrentCaller.Ops.op3 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1CurrentCaller.transport.Variant AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op4 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op5 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.View AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op6 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          AspisR1CurrentCaller.verifier.Prepared →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              Aeneas.Std.Usize →
+                H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op7 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      AspisR1CurrentCaller.verifier.Prepared →
+        AspisR1CurrentCaller.verifier.Accumulator →
+          Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+            Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+              AspisR1CurrentCaller.verifier.QueryGeometry →
+                AspisR1CurrentCaller.verifier.BatchedWeights →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result
+                        (AspisR1CurrentCaller.verifier.Accumulator × AspisR1CurrentCaller.verifier.BatchedWeights)
+                        AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op8 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.r1_semantic.Verified H →
+          AspisR1CurrentCaller.verifier.View →
+            H →
+              Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Prepared
+                      AspisR1CurrentCaller.verifier.Error ×
+                    Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  AspisR1CurrentCaller.Ops.op9 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            H →
+              Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result (AspisR1CurrentCaller.r1_semantic.Verified H)
+                    AspisR1CurrentCaller.r1_wire.Error)
+  AspisR1CurrentCaller.Ops.op10 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Aeneas.Std.Slice Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op11 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Aeneas.Std.Slice Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op12 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op13 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op14 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op15 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op16 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.verifier.Prepared →
+          AspisR1CurrentCaller.verifier.Accumulator →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 → H → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op17 : AspisR1CurrentCaller.verifier.BatchedWeights →
+      Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+        Aeneas.Std.Result (Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31)
+  AspisR1CurrentCaller.Ops.op18 : Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.BatchedWeights AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op19 : Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.QueryGeometry
+              AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op20 : AspisR1CurrentCaller.transport.Variant →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Accumulator AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op21 : Aeneas.Std.Result Aeneas.Std.Usize
+constructor:
+  AspisR1CurrentCaller.Ops.mk (op0 : Aeneas.Std.Result AspisR1CurrentCaller.aspis_core.field.QM31)
+    (op1 :
+      {T : Type} →
+        Aeneas.Std.core.marker.Copy T →
+          Aeneas.Std.Usize →
+            T →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec T) AspisR1CurrentCaller.aspis_core.r0.Error))
+    (op2 : AspisR1CurrentCaller.compact.CodecError → Aeneas.Std.Result AspisR1CurrentCaller.verifier.Error)
+    (op3 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.transport.Variant AspisR1CurrentCaller.verifier.Error))
+    (op4 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error))
+    (op5 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.View AspisR1CurrentCaller.verifier.Error))
+    (op6 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1CurrentCaller.verifier.Prepared →
+              Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                Aeneas.Std.Usize →
+                  H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error))
+    (op7 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1CurrentCaller.verifier.Prepared →
+          AspisR1CurrentCaller.verifier.Accumulator →
+            Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+              Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+                AspisR1CurrentCaller.verifier.QueryGeometry →
+                  AspisR1CurrentCaller.verifier.BatchedWeights →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result
+                          (AspisR1CurrentCaller.verifier.Accumulator × AspisR1CurrentCaller.verifier.BatchedWeights)
+                          AspisR1CurrentCaller.verifier.Error))
+    (op8 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          AspisR1CurrentCaller.r1_semantic.Verified H →
+            AspisR1CurrentCaller.verifier.View →
+              H →
+                Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Prepared
+                        AspisR1CurrentCaller.verifier.Error ×
+                      Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize))
+    (op9 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              H →
+                Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result (AspisR1CurrentCaller.r1_semantic.Verified H)
+                      AspisR1CurrentCaller.r1_wire.Error))
+    (op10 op11 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.compact.CodecError ×
+              Aeneas.Std.Slice Aeneas.Std.U8))
+    (op12 op13 op14 op15 : Aeneas.Std.Result Aeneas.Std.Usize)
+    (op16 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          AspisR1CurrentCaller.verifier.Prepared →
+            AspisR1CurrentCaller.verifier.Accumulator →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                Aeneas.Std.Slice Aeneas.Std.U8 → H → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8))
+    (op17 :
+      AspisR1CurrentCaller.verifier.BatchedWeights →
+        Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+          Aeneas.Std.Result (Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31))
+    (op18 :
+      Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.BatchedWeights
+            AspisR1CurrentCaller.verifier.Error))
+    (op19 :
+      Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.QueryGeometry
+                AspisR1CurrentCaller.verifier.Error))
+    (op20 :
+      AspisR1CurrentCaller.transport.Variant →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Accumulator AspisR1CurrentCaller.verifier.Error))
+    (op21 : Aeneas.Std.Result Aeneas.Std.Usize) : AspisR1CurrentCaller.Ops
+structure AspisR1.Port3_NativeQueryBody.Ops : Type 1
+number of parameters: 0
+fields:
+  AspisR1.Port3_NativeQueryBody.Ops.op0 : {T F : Type} →
+      (N : Aeneas.Std.Usize) →
+        Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N)
+  AspisR1.Port3_NativeQueryBody.Ops.op1 : AspisR1Stage2.aspis_core.field.QM31 →
+      Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+  AspisR1.Port3_NativeQueryBody.Ops.op2 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+      AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+        Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+  AspisR1.Port3_NativeQueryBody.Ops.op3 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+      AspisR1Stage2.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+  AspisR1.Port3_NativeQueryBody.Ops.op4 : Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeQueryBody.Ops.op5 : Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeQueryBody.Ops.op6 : AspisR1Stage2.aspis_core.field.M31 →
+      AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeQueryBody.Ops.op7 : AspisR1Stage2.aspis_core.field.M31 →
+      AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeQueryBody.Ops.op8 : AspisR1Stage2.aspis_core.field.M31 →
+      Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeQueryBody.Ops.op9 : AspisR1Stage2.aspis_core.field.QM31 →
+      AspisR1Stage2.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.QM31
+  AspisR1.Port3_NativeQueryBody.Ops.op10 : AspisR1Stage2.aspis_core.field.M31 →
+      Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+  AspisR1.Port3_NativeQueryBody.Ops.op11 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8)
+  AspisR1.Port3_NativeQueryBody.Ops.op12 : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31 →
+      Aeneas.Std.Usize → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.QM31
+  AspisR1.Port3_NativeQueryBody.Ops.op13 : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 256#usize →
+      Aeneas.Std.Usize → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31
+  AspisR1.Port3_NativeQueryBody.Ops.op14 : AspisR1Stage2.verifier.BatchedWeights →
+      Aeneas.Std.Usize →
+        AspisR1Stage2.aspis_core.field.QM31 →
+          AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.verifier.BatchedWeights
+  AspisR1.Port3_NativeQueryBody.Ops.op15 : Aeneas.Std.U16 →
+      Aeneas.Std.Usize → AspisR1Stage2.aspis_core.field.wide_exact.WideExact → Aeneas.Std.Result Unit
+  AspisR1.Port3_NativeQueryBody.Ops.op16 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+      Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize →
+        Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize →
+          Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+  AspisR1.Port3_NativeQueryBody.Ops.op17 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+      Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize →
+        Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize →
+          Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+  AspisR1.Port3_NativeQueryBody.Ops.op18 : AspisR1Stage2.verifier.QueryGeometry →
+      Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+  AspisR1.Port3_NativeQueryBody.Ops.op19 : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit) →
+      AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit
+  AspisR1.Port3_NativeQueryBody.Ops.op20 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize →
+        Aeneas.Std.Result (Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+  AspisR1.Port3_NativeQueryBody.Ops.op21 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Usize → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+  AspisR1.Port3_NativeQueryBody.Ops.widePartialEq : Aeneas.Std.core.cmp.PartialEq
+      AspisR1Stage2.aspis_core.field.wide_exact.WideExact AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+constructor:
+  AspisR1.Port3_NativeQueryBody.Ops.mk
+    (op0 :
+      {T F : Type} →
+        (N : Aeneas.Std.Usize) →
+          Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N))
+    (op1 : AspisR1Stage2.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+    (op2 :
+      AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+        AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+          Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+    (op3 :
+      AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+        AspisR1Stage2.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+    (op4 op5 : Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31)
+    (op6 op7 :
+      AspisR1Stage2.aspis_core.field.M31 →
+        AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31)
+    (op8 : AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31)
+    (op9 :
+      AspisR1Stage2.aspis_core.field.QM31 →
+        AspisR1Stage2.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.QM31)
+    (op10 : AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+    (op11 : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8))
+    (op12 :
+      Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31 →
+        Aeneas.Std.Usize → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.QM31)
+    (op13 :
+      Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 256#usize →
+        Aeneas.Std.Usize → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.M31)
+    (op14 :
+      AspisR1Stage2.verifier.BatchedWeights →
+        Aeneas.Std.Usize →
+          AspisR1Stage2.aspis_core.field.QM31 →
+            AspisR1Stage2.aspis_core.field.M31 → Aeneas.Std.Result AspisR1Stage2.verifier.BatchedWeights)
+    (op15 :
+      Aeneas.Std.U16 → Aeneas.Std.Usize → AspisR1Stage2.aspis_core.field.wide_exact.WideExact → Aeneas.Std.Result Unit)
+    (op16 op17 :
+      AspisR1Stage2.aspis_core.field.wide_exact.WideExact →
+        Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize →
+          Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize →
+            Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+    (op18 :
+      AspisR1Stage2.verifier.QueryGeometry →
+        Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize))
+    (op19 :
+      Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit) →
+        AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit)
+    (op20 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize →
+          Aeneas.Std.Result (Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize))
+    (op21 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Usize → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+    (widePartialEq :
+      Aeneas.Std.core.cmp.PartialEq AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+        AspisR1Stage2.aspis_core.field.wide_exact.WideExact) :
+    AspisR1.Port3_NativeQueryBody.Ops
+structure AspisR1PublicPreparation.FinishModel.Boundaries : Type 1
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.FinishModel.Boundaries.fromFn : {T F : Type} →
+      (N : Aeneas.Std.Usize) →
+        Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N)
+  AspisR1PublicPreparation.FinishModel.Boundaries.mask : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31
+        16#usize →
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+        AspisR1PublicPreparation.aspis_core.field.QM31 →
+          Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+            Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.add : AspisR1PublicPreparation.aspis_core.field.QM31 →
+      AspisR1PublicPreparation.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.mul : AspisR1PublicPreparation.aspis_core.field.QM31 →
+      AspisR1PublicPreparation.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.terminal : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          AspisR1PublicPreparation.r1_wire.Challenges →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.QM31
+                AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error)
+  AspisR1PublicPreparation.FinishModel.Boundaries.circle : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      AspisR1PublicPreparation.FinishModel.CircleRow →
+        Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+  AspisR1PublicPreparation.FinishModel.Boundaries.unwrapRoot : Aeneas.Std.core.result.Result
+        (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AspisR1PublicPreparation.FinishModel.Boundaries.claims : AspisR1PublicPreparation.r1_wire.Prefix →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          (Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize)
+          AspisR1PublicPreparation.r1_wire.Error)
+constructor:
+  AspisR1PublicPreparation.FinishModel.Boundaries.mk
+    (fromFn :
+      {T F : Type} →
+        (N : Aeneas.Std.Usize) →
+          Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N))
+    (mask :
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 16#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          AspisR1PublicPreparation.aspis_core.field.QM31 →
+            Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+              Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (add mul :
+      AspisR1PublicPreparation.aspis_core.field.QM31 →
+        AspisR1PublicPreparation.aspis_core.field.QM31 →
+          Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (terminal :
+      AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize →
+          Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+            AspisR1PublicPreparation.r1_wire.Challenges →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.QM31
+                  AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error))
+    (circle :
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        AspisR1PublicPreparation.FinishModel.CircleRow →
+          Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint)
+    (unwrapRoot :
+      Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+        Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (claims :
+      AspisR1PublicPreparation.r1_wire.Prefix →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            (Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize)
+            AspisR1PublicPreparation.r1_wire.Error)) :
+    AspisR1PublicPreparation.FinishModel.Boundaries
+AspisR1CurrentCaller.PrepareReachability.prepare_success (ops : AspisR1CurrentCaller.Ops) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (out : AspisR1CurrentCaller.verifier.Prepared)
+  (scratchIn scratchOut : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  (h :
+    AspisR1CurrentCaller.verifier.candidate.prepare ops D pub proof hash none scratchIn =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratchOut)) :
+  ∃ semantic y1 v sem,
+    ops.op5 proof semantic y1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok v) ∧
+      ops.op9 D pub v.semantic hash none = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) ∧
+        ops.op8 D sem v hash scratchIn = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratchOut)
+NBO_WriterEntry.same_writer (base : VTop_Stages.Ops) (reserved : Bool) (ops : AspisR1.Port3_NativeQueryBody.Ops)
+  (producers : NBO_ProducerDomains.NBA_NBC base ops) (bounds : NBO_Entry.NBC_Bounds base)
+  (lower : NBO_QueryDomains.Lower ops) (bindings : NBO_FieldSemantics.NBC_Bindings ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator)
+  (reached :
+    AspisR1.VTop_Provenance.WriterPrefix (NBO_TopInstall.install base reserved ops) D hash semantic proof split none p
+      a) :
+  ∃ g initial pending geometry after,
+    NBO_Entry.Prelude base reserved D hash semantic proof split p g initial pending geometry ∧
+      NBO_Composite.source ops proof p initial g geometry pending =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, after)) ∧
+        NBO_Composite.reference ops proof p initial g geometry pending =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, after))
+structure NBO_ProducerDomains.NBA_NBC (base : VTop_Stages.Ops) (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 2
+fields:
+  NBO_ProducerDomains.NBA_NBC.prepare : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+      (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+      (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+      (initial : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+      (preparation : Aeneas.Std.core.result.Result VTop_Stages.verifier.Prepared VTop_Stages.verifier.Error)
+      (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+      (p : VTop_Stages.verifier.Prepared),
+      base.op7 D semantic proof hash none initial = Aeneas.Std.Result.ok (preparation, g) →
+        Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch preparation =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue p) →
+          NBO_ProducerDomains.Prepared p g
+  NBO_ProducerDomains.NBA_NBC.geometry : ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+      (split : Aeneas.Std.Usize) (geometry : VTop_Stages.verifier.QueryGeometry),
+      ↑split = 10 →
+        base.op11 queries 0#usize split = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok geometry) →
+          NBO_QueryDomains.GeometryDomain geometry
+  NBO_ProducerDomains.NBA_NBC.scanOpening : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize)
+      (q : Aeneas.Std.Slice Aeneas.Std.U8),
+      base.op4 proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+        ↑i < 10 → ops.op11 proof i = Aeneas.Std.Result.ok q → NBO_CircleDomain.OpeningDomain q
+constructor:
+  NBO_ProducerDomains.NBA_NBC.mk {base : VTop_Stages.Ops} {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (prepare :
+      ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+        (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+        (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+        (initial : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+        (preparation : Aeneas.Std.core.result.Result VTop_Stages.verifier.Prepared VTop_Stages.verifier.Error)
+        (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+        (p : VTop_Stages.verifier.Prepared),
+        base.op7 D semantic proof hash none initial = Aeneas.Std.Result.ok (preparation, g) →
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch preparation =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue p) →
+            NBO_ProducerDomains.Prepared p g)
+    (geometry :
+      ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (split : Aeneas.Std.Usize)
+        (geometry : VTop_Stages.verifier.QueryGeometry),
+        ↑split = 10 →
+          base.op11 queries 0#usize split = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok geometry) →
+            NBO_QueryDomains.GeometryDomain geometry)
+    (scanOpening :
+      ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize) (q : Aeneas.Std.Slice Aeneas.Std.U8),
+        base.op4 proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+          ↑i < 10 → ops.op11 proof i = Aeneas.Std.Result.ok q → NBO_CircleDomain.OpeningDomain q) :
+    NBO_ProducerDomains.NBA_NBC base ops
+AspisR1.NBR_PrepareTotal.source (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix)
+  (beforeSemantic : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges)
+  (obs : Option (AspisR1PublicPreparation.verifier.Phase → Aeneas.Std.Result Unit))
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H)
+  (finish :
+    AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+        { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn B, mask := B.mask, add := B.add,
+          mul := B.mul, terminal := B.terminal, circle := B.circle, unwrapRoot := B.unwrapRoot,
+          claims :=
+            AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ())) }
+        D pub pre beforeSemantic challenges obs =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem))
+  (proof semantic compact before y1 : Aeneas.Std.Slice Aeneas.Std.U8) (view : AspisR1SelectedWideViewV1.verifier.View)
+  (viewCall :
+    AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view))
+  (len : (↑compact).length = 464) (size : (↑before).length = 928)
+  (checked : LPt_External.compact.check_values compact = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+  (expanded :
+    LPt_External.compact.expand_values compact before = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), y1))
+  (full : (↑proof).length = 57607) (total : AspisR1.NBR_BlockConstruct.Total D) (hash : H)
+  (old : AspisR1.NBL_PrepareControl.Scratch) :
+  ∃ opening queries,
+    (∃ result, queries.result = Aeneas.Std.Result.ok result) ∧
+      (∀ (error : AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError),
+          queries.result = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error) →
+            AspisR1PublicPreparation.PreparedHashCode.run
+                (AspisR1.NBL_CohortCode.code D sem (AspisR1SelectedWideViewV1.preparedView view) hash old) =
+              (AspisR1.NBL_HashReplay.events D hash (opening.log ++ AspisR1.NBL_QueryHashReplay.log queries),
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err AspisR1PublicPreparation.verifier.Error.Transcript, old))) ∧
+        ∀ (q : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (state : AspisR1.NBL_BlockTrace.Bytes32),
+          queries.result = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (q, state)) →
+            ∃ rhoBlock rho g claim,
+              FIo_Native.weights.powers 29#usize (AspisR1.NBA_Carriers.back opening.gamma.value) =
+                  Aeneas.Std.Result.ok g ∧
+                AspisR1.LPq_PreparedTrace.Trace (AspisR1ClaimPreparedBridge.toClaimSem sem) view.y1
+                    (XRo_Join_Carriers.arr AspisR1.LPq_Powers.claim g)
+                    (AspisR1.NBA_Carriers.back (AspisR1SelectedWideViewV1.preparedView view).inactive)
+                    (AspisR1.NBA_Carriers.back opening.kappa.value) claim ∧
+                  AspisR1.LPi_FieldValues.canonE claim ∧
+                    AspisR1PublicPreparation.PreparedHashCode.run
+                        (AspisR1.NBL_CohortCode.code D sem (AspisR1SelectedWideViewV1.preparedView view) hash old) =
+                      (AspisR1.NBL_HashReplay.events D hash
+                          (opening.log ++ AspisR1.NBL_QueryHashReplay.log queries ++ rhoBlock.log),
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Ok
+                              (AspisR1PublicPreparation.PreparedScratchReachability.output sem
+                                (AspisR1SelectedWideViewV1.preparedView view) opening.gamma.value opening.kappa.value
+                                opening.output.alpha rho q (AspisR1.NBA_ClaimCallee.wide claim) rhoBlock.after),
+                            AspisR1ClaimPreparedBridge.mapArray AspisR1.NBA_ClaimCallee.wide g))
+AspisR1.NCA_ReturnedScanInputs.source (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof logical semantic y1 : Aeneas.Std.Slice Aeneas.Std.U8) (full : (↑proof).length = 57607)
+  (allocated : (↑logical).length = 14759)
+  (semanticCall :
+    AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+        (AspisR1.NBR_ProducerBuffers.semanticInput proof) (AspisR1.NBR_ProducerBuffers.semanticInitial logical) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), semantic))
+  (y1Call :
+    LPt_External.compact.expand_values (AspisR1.NBR_ProducerBuffers.compactInput proof)
+        (AspisR1.NBR_ProducerBuffers.y1Initial logical) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), y1))
+  (scan : AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑proof))
+  (view : AspisR1SelectedWideViewV1.verifier.View)
+  (viewCall :
+    AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view))
+  (hash : H) (obs : Option (AspisR1PublicPreparation.verifier.Phase → Aeneas.Std.Result Unit))
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H)
+  (verifyCall :
+    AspisR1PublicPreparation.VerifyPrefix.verify
+        (fun {H} =>
+          AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+            { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn B, mask := B.mask, add := B.add,
+              mul := B.mul, terminal := B.terminal, circle := B.circle, unwrapRoot := B.unwrapRoot,
+              claims :=
+                AspisR1.ClaimsUnrolledFinish.claims
+                  (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ())) })
+        D pub semantic hash obs =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem))
+  (total : AspisR1.NBR_BlockConstruct.Total D) (old : AspisR1.NBL_PrepareControl.Scratch) :
+  ∃ finalLogical,
+    ↑finalLogical = ↑semantic ++ ↑y1 ∧
+      (↑finalLogical).length = 14759 ∧
+        AspisR1.NBL_SlicePort.segment finalLogical 0#usize 13831#usize = semantic ∧
+          AspisR1.NBL_SlicePort.segment finalLogical 13831#usize 14759#usize = y1 ∧
+            ∃ rows,
+              AspisR1.PSem_Rows.expandRows 27 0
+                    (AspisR1.MultiproofConeCanonical.bytesOf
+                      (List.drop 32 ↑(AspisR1.NBR_ProducerBuffers.semanticInput proof))) =
+                  some rows ∧
+                AspisR1.MultiproofConeCanonical.bytesOf (List.drop 32 ↑semantic) = rows.flatten ∧
+                  ∃ opening queries,
+                    (∃ result, queries.result = Aeneas.Std.Result.ok result) ∧
+                      (∀ (error : AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError),
+                          queries.result = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error) →
+                            AspisR1PublicPreparation.PreparedHashCode.run
+                                (AspisR1.NBL_CohortCode.code D sem (AspisR1SelectedWideViewV1.preparedView view) hash
+                                  old) =
+                              (AspisR1.NBL_HashReplay.events D hash
+                                  (opening.log ++ AspisR1.NBL_QueryHashReplay.log queries),
+                                Aeneas.Std.Result.ok
+                                  (Aeneas.Std.core.result.Result.Err AspisR1PublicPreparation.verifier.Error.Transcript,
+                                    old))) ∧
+                        ∀ (q : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (state : AspisR1.NBL_BlockTrace.Bytes32),
+                          queries.result = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (q, state)) →
+                            ∃ rhoBlock rho g claim,
+                              FIo_Native.weights.powers 29#usize (AspisR1.NBA_Carriers.back opening.gamma.value) =
+                                  Aeneas.Std.Result.ok g ∧
+                                AspisR1.LPq_PreparedTrace.Trace (AspisR1ClaimPreparedBridge.toClaimSem sem) view.y1
+                                    (XRo_Join_Carriers.arr AspisR1.LPq_Powers.claim g)
+                                    (AspisR1.NBA_Carriers.back (AspisR1SelectedWideViewV1.preparedView view).inactive)
+                                    (AspisR1.NBA_Carriers.back opening.kappa.value) claim ∧
+                                  AspisR1.LPi_FieldValues.canonE claim ∧
+                                    AspisR1PublicPreparation.PreparedHashCode.run
+                                        (AspisR1.NBL_CohortCode.code D sem (AspisR1SelectedWideViewV1.preparedView view)
+                                          hash old) =
+                                      (AspisR1.NBL_HashReplay.events D hash
+                                          (opening.log ++ AspisR1.NBL_QueryHashReplay.log queries ++ rhoBlock.log),
+                                        Aeneas.Std.Result.ok
+                                          (Aeneas.Std.core.result.Result.Ok
+                                              (AspisR1PublicPreparation.PreparedScratchReachability.output sem
+                                                (AspisR1SelectedWideViewV1.preparedView view) opening.gamma.value
+                                                opening.kappa.value opening.output.alpha rho q
+                                                (AspisR1.NBA_ClaimCallee.wide claim) rhoBlock.after),
+                                            AspisR1ClaimPreparedBridge.mapArray AspisR1.NBA_ClaimCallee.wide g))
+NBZ_Folds.circle_total (alpha a b c d : AspisR1Stage2.Stage2E) (quarter qiy qix qixiy : Aeneas.Std.U32)
+  (halpha : NBO_TailDomain.WideCanonical alpha) (ha : NBO_TailDomain.WideCanonical a)
+  (hb : NBO_TailDomain.WideCanonical b) (hc : NBO_TailDomain.WideCanonical c) (hd : NBO_TailDomain.WideCanonical d) :
+  ∃ out,
+    NBZ_Folds.circle alpha a b c d quarter qiy qix qixiy = Aeneas.Std.Result.ok out ∧ NBO_TailDomain.WideCanonical out
+'NBO_WriterEntry.same_writer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBR_PrepareTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCA_ReturnedScanInputs.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_Folds.circle_total' depends on axioms: [propext, Classical.choice, Quot.sound]

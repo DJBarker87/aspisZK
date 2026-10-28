@@ -1,0 +1,54 @@
+{"attempt": "NCU_L008", "exit_status": 1, "wall_seconds": 2.548819722025655, "peak_rss_kib": "5357844", "swaps": "0", "print_axioms": ["'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCU_WriterPrefix.lean:13:3: warning: Variable name `public_bytes` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NCU_WriterPrefix.lean:132:2: error: unsolved goals
+case isFalse
+ops : Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+hash : H
+h✝ : ¬(split != compact.SPLIT) = true
+x : core.result.Result transport.Variant verifier.Error
+⊢ (do
+      let cf ←
+        match x with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow
+...
+     | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec
+                          (fun x =>
+                            Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                          x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec
+                      (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)
+    match r with
+      | core.result.Result.Err v => ok (core.result.Result.Err v)
+      | core.result.Result.Ok (p, a) => do
+        let bytes ← ops.op16 D p a proof pub hash
+        ok (core.result.Result.Ok bytes)
+'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r01f86ddca60646c290767977b1287778.scope; invocation ID: bb7cb42dd54a4e93b9ef5bf95273e473

@@ -1,0 +1,360 @@
+0 {"attempt": "NCU_L040", "exit_status": 0, "wall_seconds": 2.49104349501431, "peak_rss_kib": "5432512", "swaps": "0", "print_axioms": ["'AspisR1.NCU_PrefixTail.factor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_WriterPrefix.resume' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_WriterPrefix.no_later_reject' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.prefix_of_reached' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.control' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.accepted_when_writer_returns' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.NCU_WriterPrefix.Reached : AspisR1CurrentCaller.Ops →
+  {H : Type} →
+    AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+      AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Usize →
+              H → AspisR1CurrentCaller.verifier.Prepared → AspisR1CurrentCaller.verifier.Accumulator → Prop :=
+fun ops {H} D semantic pub proof split hash p a =>
+  AspisR1.NCU_WriterPrefix.beforeWriter ops D semantic pub proof split hash =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a))
+theorem AspisR1.NCU_WriterPrefix.factor : ∀ (ops
+...
+R1Stage2.WireTx2.singletonParts proof, hp)] ++
+                  [(AspisR1Stage2.WireTx2.singletonParts pub, hu)] ++
+                [(AspisR1Stage2.WireTx2.checksumParts body, hc)]) ∧
+        AspisR1.MultiproofConeCanonical.bytesOf ↑out =
+          AspisR1.OraclePortCheckpointAbiC5.encode H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)
+            (AspisR1.MultiproofConeCanonical.bytesOf ↑pub)
+            (AspisR1.CheckpointBytesBlocks.prepared
+              (AspisR1.CheckpointBytesBody.fields (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+                (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯)
+              ⋯)
+            (AspisR1.CheckpointBytesBlocks.accumulator
+              (AspisR1.CheckpointBytesBody.fields (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+                (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯)
+              ⋯)
+'AspisR1.NCU_PrefixTail.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_WriterPrefix.resume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_WriterPrefix.no_later_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.prefix_of_reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.control' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.accepted_when_writer_returns' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+ Running as unit: run-r70da13712e7148d6887ce5a394dd5352.scope; invocation ID: bd51e4943e9544ef958a17c63bff176d
+
+{"exit_status": 0, "wall_seconds": 2.49104349501431, "peak_rss_kib": "5432512", "swaps": "0", "print_axioms": ["'AspisR1.NCU_PrefixTail.factor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_WriterPrefix.resume' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_WriterPrefix.no_later_reject' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.prefix_of_reached' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.control' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.accepted_when_writer_returns' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCU_DriverDomain.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+ residual)
+                                      (fun x => do
+                                        let x ←
+                                          AspisR1CurrentCaller.verifier.candidate.prepare ops D semantic proof hash none
+                                              (Aeneas.Std.Array.repeat 29#usize x)
+                                        let r ←
+                                          match x.1 with
+                                            | Aeneas.Std.core.result.Result.Err e =>
+                                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e)
+                                            | Aeneas.Std.core.result.Result.Ok p =>
+                                              AspisR1.NCU_PrefixTail.tail ops D pub proof split hash p x.2
+                                        match r with
+                                          | Aeneas.Std.core.result.Result.Err error =>
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+                                          | Aeneas.Std.core.result.Result.Ok (p, a) => do
+                                            let bytes ← ops.op16 D p a proof pub hash
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes))
+                                      fun zero =>
+                                      AspisR1.NBA_QueryJoin.bind_same
+                                        (AspisR1CurrentCaller.verifier.candidate.prepare ops D semantic proof hash none
+                                          (Aeneas.Std.Array.repeat 29#usize zero))
+                                        (Aeneas.Std.uncurry fun r2 g1 => do
+                                          let cf2 ←
+                                            match r2 with
+                                              | Aeneas.Std.core.result.Result.Ok v =>
+                                                Aeneas.Std.Result.ok
+                                                  (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                              | Aeneas.Std.core.result.Result.Err e =>
+                                                Aeneas.Std.Result.ok
+                                                  (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                    (Aeneas.Std.core.result.Result.Err e))
+                                          match cf2 with
+                                            | ⋯ => do
+                                              let r3 ← ops.op20 AspisR1CurrentCaller.transport.Variant.S2
+                                              let cf3 ←
+                                                match r3 with
+                                                  | Aeneas.Std.core.result.Result.Ok v =>
+                                                    Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                  | Aeneas.Std.core.result.Result.Err e =>
+                                                    Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                        (Aeneas.Std.core.result.Result.Err e))
+                                              match cf3 with
+                                                | ⋯ => do
+                                                  let i ← AspisR1CurrentCaller.compact.OFF_FOLDED_ROOT ops
+                                                  let i1 ← AspisR1CurrentCaller.compact.OFF_ROUND1 ops
+                                                  let s ←
+                                                    Aeneas.Std.core.slice.index.Slice.index
+                                                        (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                          Aeneas.Std.U8)
+                                                        proof { start := i, «end» := i1 }
+                                                  let r4 ←
+                                                    Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize
+                                                        Aeneas.Std.core.marker.CopyU8 s
+                                                  let folded_root ←
+                                                    Aeneas.Std.core.result.Result.unwrap
+                                                        Aeneas.Std.core.fmt.DebugTryFromSliceError r4
+                                                  let r5 ← ops.op6 D proof val folded_root 0#usize hash
+                                                  let cf4 ←
+                                                    match r5 with
+                                                      | Aeneas.Std.core.result.Result.Ok v =>
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                      | Aeneas.Std.core.result.Result.Err e =>
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                            (Aeneas.Std.core.result.Result.Err e))
+                                                  match cf4 with
+                                                    | ⋯ => do
+                                                      let r6 ← ops.op19 val.queries 0#usize split
+                                                      let cf5 ←
+                                                        match r6 with
+                                                          | Aeneas.Std.core.result.Result.Ok v =>
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+                                                          | Aeneas.Std.core.result.Result.Err e =>
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                (Aeneas.Std.core.result.Result.Err e))
+                                                      match cf5 with
+                                                        | ⋯ => do
+                                                          let r7 ← ops.op18 val1.weights.deref
+                                                          let cf6 ←
+                                                            match r7 with
+                                                              | Aeneas.Std.core.result.Result.Ok v =>
+                                                                Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                    v)
+                                                              | Aeneas.Std.core.result.Result.Err e =>
+                                                                Aeneas.Std.Result.ok
+                                                                  (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                    (Aeneas.Std.core.result.Result.Err e))
+                                                          match cf6 with
+                                                            | ⋯ => do
+                                                              let r8 ← ops.op7 proof val val1 g1 none val2 val3 split
+                                                              let cf7 ←
+                                                                match r8 with
+                                                                  | Aeneas.Std.core.result.Result.Ok v =>
+                                                                    Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                        v)
+                                                                  | Aeneas.Std.core.result.Result.Err ⋯ =>
+                                                                    Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                        (Aeneas.Std.core.result.Result.Err e))
+                                                              ⋯
+                                                            | ⋯ => ⋯
+                                                        | ⋯ => ⋯
+                                                    | ⋯ => ⋯
+                                                | ⋯ => ⋯
+                                            | ⋯ => ⋯)
+                                        ⋯ ⋯))
+                              ⋯ ⋯))
+                    ⋯ ⋯)))
+          ⋯)))
+structure AspisR1.NCU_DriverDomain.Prefix (ops : AspisR1CurrentCaller.Ops) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) : Type
+number of parameters: 7
+fields:
+  AspisR1.NCU_DriverDomain.Prefix.parsed : AspisR1CurrentCaller.transport.Variant
+  AspisR1.NCU_DriverDomain.Prefix.zero : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+  AspisR1.NCU_DriverDomain.Prefix.prepared : AspisR1CurrentCaller.verifier.Prepared
+  AspisR1.NCU_DriverDomain.Prefix.scratch : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+      29#usize
+  AspisR1.NCU_DriverDomain.Prefix.initial : AspisR1CurrentCaller.verifier.Accumulator
+  AspisR1.NCU_DriverDomain.Prefix.root : Aeneas.Std.Array Aeneas.Std.U8 32#usize
+  AspisR1.NCU_DriverDomain.Prefix.geometry : AspisR1CurrentCaller.verifier.QueryGeometry
+  AspisR1.NCU_DriverDomain.Prefix.pending : AspisR1CurrentCaller.verifier.BatchedWeights
+  AspisR1.NCU_DriverDomain.Prefix.out : AspisR1CurrentCaller.verifier.Accumulator
+  AspisR1.NCU_DriverDomain.Prefix.after : AspisR1CurrentCaller.verifier.BatchedWeights
+  AspisR1.NCU_DriverDomain.Prefix.flushed : Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31
+  AspisR1.NCU_DriverDomain.Prefix.rootView : Aeneas.Std.Slice Aeneas.Std.U8
+  AspisR1.NCU_DriverDomain.Prefix.shape : ops.op3 proof =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.parsed)
+  AspisR1.NCU_DriverDomain.Prefix.scan : ops.op4 proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+  AspisR1.NCU_DriverDomain.Prefix.zero_call : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO ops =
+      Aeneas.Std.Result.ok self.zero
+  AspisR1.NCU_DriverDomain.Prefix.prepare : AspisR1CurrentCaller.verifier.candidate.prepare ops D semantic proof hash
+        none (Aeneas.Std.Array.repeat 29#usize self.zero) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.prepared, self.scratch)
+  AspisR1.NCU_DriverDomain.Prefix.root_range : Aeneas.Std.core.slice.index.Slice.index
+        (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+        { start := 7751#usize, «end» := 7783#usize } =
+      Aeneas.Std.Result.ok self.rootView
+  AspisR1.NCU_DriverDomain.Prefix.root_copy : Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize
+        Aeneas.Std.core.marker.CopyU8 self.rootView =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.root)
+  AspisR1.NCU_DriverDomain.Prefix.initial_call : ops.op20 AspisR1CurrentCaller.transport.Variant.S2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.initial)
+  AspisR1.NCU_DriverDomain.Prefix.batch : ops.op6 D proof self.prepared self.root 0#usize hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+  AspisR1.NCU_DriverDomain.Prefix.geometry_call : ops.op19 self.prepared.queries 0#usize 10#usize =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.geometry)
+  AspisR1.NCU_DriverDomain.Prefix.pending_call : ops.op18 self.initial.weights.deref =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.pending)
+  AspisR1.NCU_DriverDomain.Prefix.query : ops.op7 proof self.prepared self.initial self.scratch none self.geometry
+        self.pending 10#usize =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (self.out, self.after))
+  AspisR1.NCU_DriverDomain.Prefix.flush : ops.op17 self.after self.out.weights.deref = Aeneas.Std.Result.ok self.flushed
+constructor:
+  AspisR1.NCU_DriverDomain.Prefix.mk {ops : AspisR1CurrentCaller.Ops} {H : Type}
+    {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H}
+    {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+    {pub proof : Aeneas.Std.Slice Aeneas.Std.U8} {hash : H} (parsed : AspisR1CurrentCaller.transport.Variant)
+    (zero : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact)
+    (prepared : AspisR1CurrentCaller.verifier.Prepared)
+    (scratch : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+    (initial : AspisR1CurrentCaller.verifier.Accumulator) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+    (geometry : AspisR1CurrentCaller.verifier.QueryGeometry) (pending : AspisR1CurrentCaller.verifier.BatchedWeights)
+    (out : AspisR1CurrentCaller.verifier.Accumulator) (after : AspisR1CurrentCaller.verifier.BatchedWeights)
+    (flushed : Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31) (rootView : Aeneas.Std.Slice Aeneas.Std.U8)
+    (shape : ops.op3 proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok parsed))
+    (scan : ops.op4 proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+    (zero_call : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact.ZERO ops = Aeneas.Std.Result.ok zero)
+    (prepare :
+      AspisR1CurrentCaller.verifier.candidate.prepare ops D semantic proof hash none
+          (Aeneas.Std.Array.repeat 29#usize zero) =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok prepared, scratch))
+    (root_range :
+      Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+          proof { start := 7751#usize, «end» := 7783#usize } =
+        Aeneas.Std.Result.ok rootView)
+    (root_copy :
+      Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 rootView =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root))
+    (initial_call :
+      ops.op20 AspisR1CurrentCaller.transport.Variant.S2 =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok initial))
+    (batch : ops.op6 D proof prepared root 0#usize hash = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+    (geometry_call :
+      ops.op19 prepared.queries 0#usize 10#usize = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok geometry))
+    (pending_call : ops.op18 initial.weights.deref = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pending))
+    (query :
+      ops.op7 proof prepared initial scratch none geometry pending 10#usize =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, after)))
+    (flush : ops.op17 after out.weights.deref = Aeneas.Std.Result.ok flushed) :
+    AspisR1.NCU_DriverDomain.Prefix ops D semantic pub proof hash
+AspisR1.NCU_DriverDomain.prefix_of_reached (ops : AspisR1CurrentCaller.Ops) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize) (hash : H)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (start : AspisR1CurrentCaller.compact.OFF_FOLDED_ROOT ops = Aeneas.Std.Result.ok 7751#usize)
+  (finish : AspisR1CurrentCaller.compact.OFF_ROUND1 ops = Aeneas.Std.Result.ok 7783#usize)
+  (reached : AspisR1.NCU_WriterPrefix.Reached ops D semantic pub proof split hash p a) :
+  split = 10#usize ∧
+    ∃ cut,
+      p = cut.prepared ∧
+        a =
+          have __src := cut.out;
+          { weights := ⟨↑cut.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next }
+AspisR1.NCU_DriverDomain.control {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (cut :
+    AspisR1.NCU_DriverDomain.Prefix (AspisR1.DrvC_Installation.currentInstalled c)
+      (AspisR1.DrvC_Installation.currentDigest c) semantic pub proof ()) :
+  (↑(AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed).weights).length = 64 ∧
+    ↑(AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed).next = 10 ∧
+      ∀ x ∈ ↑(AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k cut.flushed), AspisR1.Port3_FlushInstall.Canonical x
+AspisR1.NCU_DriverDomain.domain {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (cut :
+    AspisR1.NCU_DriverDomain.Prefix (AspisR1.DrvC_Installation.currentInstalled c)
+      (AspisR1.DrvC_Installation.currentDigest c) semantic pub proof ())
+  (variant :
+    (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared).variant =
+      OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2)
+  (qb : ∀ (j : Fin 22), ↑(↑(AspisR1.NCT_DriverDomain.writerPrepared cut.prepared).queries)[↑j] < 262144)
+  (canonical :
+    AspisR1.NCT_DriverDomain.NonWeightCanonical
+      (AspisR1.CheckpointBytesBody.fields (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+        (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ qb)) :
+  AspisR1.KNE_Caller.WriterDomain (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+    (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed)
+AspisR1.NCU_DriverDomain.leaf {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (cut :
+    AspisR1.NCU_DriverDomain.Prefix (AspisR1.DrvC_Installation.currentInstalled c)
+      (AspisR1.DrvC_Installation.currentDigest c) semantic pub proof ())
+  (variant :
+    (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared).variant =
+      OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2)
+  (qb : ∀ (j : Fin 22), ↑(↑(AspisR1.NCT_DriverDomain.writerPrepared cut.prepared).queries)[↑j] < 262144)
+  (canonical :
+    AspisR1.NCT_DriverDomain.NonWeightCanonical
+      (AspisR1.CheckpointBytesBody.fields (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+        (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ qb))
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (oracle :
+    AspisR1.CheckpointBytes5Inputs.Oracle
+      (AspisR1.VTop_Checkpoint.digest (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c))) () H)
+  (native : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.DuplexFrames.Bytes → AspisV8R19.DuplexFrames.Bytes → Prop)
+  (valid : AspisR1.KNE_Composition.LocalCorrect native KND_Schedule.schedule)
+  (hp hu hc : AspisR1.CheckpointBytes5Effect.Digest) (body out : Aeneas.Std.Slice Aeneas.Std.U8)
+  (before : AspisR1.CheckpointBytes5Effect.Log)
+  (tr :
+    AspisR1.KNE_Composition.Trace native
+      (AspisR1.KNE_Model.bodyEmissions
+        (AspisR1.CheckpointBytesBody.fields (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+          (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯)
+        (AspisR1.CheckpointBytesDigest.stateOf hp) (AspisR1.CheckpointBytesDigest.stateOf hu))
+      [] (AspisR1.MultiproofConeCanonical.bytesOf ↑body))
+  (checksumWrite :
+    native (AspisR1.MultiproofConeCanonical.bytesOf ↑body) (AspisR1.MultiproofConeCanonical.bytesOf ↑hc)
+      (AspisR1.MultiproofConeCanonical.bytesOf ↑out))
+  (proofCall :
+    (AspisR1.VTop_Checkpoint.digest (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c))).digest ()
+        (AspisR1Stage2.WireTx2.singletonParts proof) =
+      Aeneas.Std.Result.ok hp)
+  (publicCall :
+    (AspisR1.VTop_Checkpoint.digest (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c))).digest ()
+        (AspisR1Stage2.WireTx2.singletonParts pub) =
+      Aeneas.Std.Result.ok hu)
+  (checksumCall :
+    (AspisR1.VTop_Checkpoint.digest (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c))).digest ()
+        (AspisR1Stage2.WireTx2.checksumParts body) =
+      Aeneas.Std.Result.ok hc) :
+  (↑out).length = 1768 ∧
+    out =
+        AspisR1.LPm_CheckpointProgram.returned (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+          (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯ ⋯ ⋯ hp hu hc ∧
+      AspisR1.CheckpointBytes5Effect.run
+            (AspisR1.VTop_Checkpoint.digest (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c)))
+            ()
+            (AspisR1.CheckpointBytes5Writer.writer (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+              (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) proof pub)
+            before =
+          Aeneas.Std.Result.ok
+            (out,
+              before ++ [(AspisR1Stage2.WireTx2.singletonParts proof, hp)] ++
+                  [(AspisR1Stage2.WireTx2.singletonParts pub, hu)] ++
+                [(AspisR1Stage2.WireTx2.checksumParts body, hc)]) ∧
+        AspisR1.MultiproofConeCanonical.bytesOf ↑out =
+          AspisR1.OraclePortCheckpointAbiC5.encode H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)
+            (AspisR1.MultiproofConeCanonical.bytesOf ↑pub)
+            (AspisR1.CheckpointBytesBlocks.prepared
+              (AspisR1.CheckpointBytesBody.fields (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+                (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯)
+              ⋯)
+            (AspisR1.CheckpointBytesBlocks.accumulator
+              (AspisR1.CheckpointBytesBody.fields (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+                (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯)
+              ⋯)
+'AspisR1.NCU_PrefixTail.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_WriterPrefix.resume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_WriterPrefix.no_later_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.prefix_of_reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.control' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.accepted_when_writer_returns' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCU_DriverDomain.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+
