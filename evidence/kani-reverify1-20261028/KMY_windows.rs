@@ -485,3 +485,25 @@ fn KMY_capacity16(){
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 fn KMY_capacity_schedules(){KMY_capacity32();KMY_capacity16();}
+fn raw_append32<const LEN:usize,const CAP:usize,const NEXT:usize>(){
+ let prefix:[u8;80]=kani::any();let source:[u8;32]=kani::any();let mut out=alloc::vec::Vec::with_capacity(CAP);
+ KMX_stubs::KMX_extend_from_slice(&mut out,&prefix[..LEN]);KMX_stubs::KMX_extend_from_slice(&mut out,&source);
+ assert_eq!(out.len(),LEN+32);assert_eq!(out.capacity(),NEXT);let j:usize=kani::any();kani::assume(j<out.len());
+ assert_eq!(out[j],if j<LEN{prefix[j]}else{source[j-LEN]});
+}
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn KMY_digest_prefix_heap(){raw_append32::<16,16,48>();raw_append32::<48,48,96>();raw_append32::<80,96,192>();}
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn KMY_roots_queries_heap(){
+ raw_append32::<0,0,32>();raw_append32::<32,32,64>();
+ let initial:[u8;148]=kani::any();let i:usize=kani::any();kani::assume(i<22);let len=64+4*i;
+ let cap=if i==0{64}else if i<=16{128}else{256};let mut out=alloc::vec::Vec::with_capacity(cap);
+ KMX_stubs::KMX_extend_from_slice(&mut out,&initial[..len]);let q:u32=kani::any();
+ KMX_stubs::KMX_extend_from_slice(&mut out,&q.to_le_bytes());assert_eq!(out.len(),len+4);
+ assert_eq!(out.capacity(),if i<16{128}else{256});let j:usize=kani::any();kani::assume(j<out.len());
+ assert_eq!(out[j],if j<len{initial[j]}else{(q>>(8*(j-len)))as u8});
+}

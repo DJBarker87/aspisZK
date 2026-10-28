@@ -1,43 +1,61 @@
-# KMY window re-verification
+# KMY window re-verification finding
 
-Frozen revision: `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Frozen lock SHA-256: `5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef`.
+**5 CONFIRMED, 0 FAILED, 11 OPEN.** Restore the suspended credit for `expand_values`, `wide_view`, and the two prepared-claim serializer properties. Keep checkpoint/append leaf credit suspended: one of its twelve affected properties is restored, eleven remain open.
 
-Stage 1: original assertions and copy lengths under inspection. No credit restored yet.
+Frozen source: `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Copied frozen lock SHA-256: `5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef`. Pinned Kani 0.67.0 / CBMC 6.8.0, optimized standalone gates, offline graph validation before every invocation and unchanged lock hash afterwards. All changes are scratch/evidence only.
 
-Budget: Kani 0/60, Lean 0/60, Rust 0/5. Host scopes: MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; one at a time. Existing launchers only. No release source changes.
+## Per-harness disposition
 
-## Stage 2: expand_values
+K/L numbers below mean KMY_Kxxx/KMY_Lxxx. Full original names, source hashes and copy inventories are in [KMY_ORIGINALS.json](KMY_ORIGINALS.json). A model theorem alone is never counted as confirmation of a still-unverified heap window.
 
-LPn_K001: window PASS KMY_K006 (explicit validated loop, 16 bytes, arbitrary offset 0..80 in 96 arbitrary bytes); zero window PASS KMY_K007; original slice pointer/length premises PASS KMY_K008. L002 compiles `LPn_step_frame`, exactly the original byte assertion. Source correspondence: the frozen body has one 16-byte copy followed by one 16-byte fill for its sole admitted chunk. `KMY_expand_values.frozen.rs.txt` retains that body. No Rust-to-Lean compiler refinement is claimed.
+| Original / harness | Window and runtime evidence | Lean composition | Result and exact remaining split |
+|---|---|---|---|
+| LPn_K001 / LPn_step_frame | K006: arbitrary-source copy16, arbitrary offset in 96 arbitrary bytes; K007: zero16/frame; K008: original pointer/end/length premises | L002 LPn_step_frame; final expand | **CONFIRMED**. Exactly the original two-window byte formula, return guard and pointer assertions. |
+| LPa_K015 / LPa_view_inactive | K018: arbitrary copy32/frame; K072: decoder on every 32-byte input; K073: exact view body with a decoder boundary, both error/success branches and every original pointer/length assertion | L005 translation, L008 read_window32/decode_window32; final view_input | **CONFIRMED**. Pure decoder receives exactly source bytes; runtime boundary covers every possible decoder result. |
+| LPb_K016 / LPb_wide_six | K011/K012: actual serializer and limb windows; K040–K045: six heap append32 stages with arbitrary prefixes and independent arbitrary canonical input; K074: capacity schedule | L003 wide_six, L007 six_lengths; final six_wide | **CONFIRMED**. Original length192 and raw[j/32][(j%32)/4] byte projection. |
+| LPe_K005 / LPe_wide_six | Same shared 32-byte serializer/append stages as LPb_K016; no duplicate whole-harness replay | Same shared six-window and length theorems | **CONFIRMED**. Original assertions are identical on the selected input domain. |
+| LPm_K001 / weights_iterator | Actual 64-QM31 (1024-byte) copy window: K028/K032 TIMEOUT; iterator continuation K033 TIMEOUT | L006 weights_copy_value only | **OPEN**. Typed 64-element window including exterior frame, then iterator empty/last/interior item and retained-suffix contracts. K064/K067–K069 are unrun drafts, not evidence. |
+| LPm_K003 / selected_reference_write | K017: actual arbitrary-bit scalar serializer window16/frame | L006 selected_reference_write; L007 prefix bound/value/growth laws | **OPEN**. Heap constructor/prefix window and growth at len=712+16*i, i<64, through1720; bind that heap state to the selected shared-reference call. |
+| LPm_K004 / append32 | K018 local32 PASS; full-parent1768 window32 K014 TIMEOUT | L006 append32; L007 prefix/growth laws | **OPEN**. Constructor/prefix and successful reserve/reallocation windows for every len<=1704. |
+| LPm_K005 / query_word_append | K012 limb/shift window4 PASS; K015 arbitrary-offset window4 over all1768 bytes PASS | L006 query_word_append; L007 query bound | **OPEN**. Initial prefix and Vec growth for every len<=1732; copying the four appended bytes is closed. |
+| LPe_K016 / LPe_digest_prefix_cut | Copy16/32 components; K034 exact two-call Ordered oracle PASS | L006 digest_prefix_cut; L007 append/retained-prefix laws | **OPEN**. Three raw-byte heap transitions (len,cap)=(16,16),(48,48),(80,96), including clone16/prefix association. K075 is an unrun prepared split. |
+| LPe_K017 / LPe_roots_queries_cut | K018 raw32 and K012/K015 word4 windows PASS | L009 actual two root windows plus22 query windows, exact152-byte formula | **OPEN**. Heap realization of the two raw roots and all22 query appends/capacity cases. K076 is an unrun prepared split. |
+| LPe_K019 / LPe_semantic_z_cut | K017 scalar16; K050–K059 and K051's stage10–13 results cover all14 distinct heap stages; K074 capacity schedule | L006 semantic_z_cut; final semantic_z and length224 | **CONFIRMED**. Ten semantic-alpha scalars followed by two (x,y) pairs, each with arbitrary full limb inputs and framed arbitrary prefix. |
+| LPf_K027 / LPf_checksum_projection | K018 raw32; K035 exact checksum oracle PASS | L006 checksum_projection; L007 growth | **OPEN**. Initial owned1736-byte Vec window and the retained1736-byte prefix during checksum append/reallocation. Oracle chronology, tag/length and returned answer are closed. |
+| LPi_K012 / put_k_arbitrary_prefix | K017 actual scalar16/window PASS | L006 put_k_arbitrary_prefix; L007 bounds/value/growth | **OPEN**. Heap initialization and growth for arbitrary len<=1720, under the original qbytes auxiliary contract. |
+| LPi_K013 / put_e_arbitrary_prefix | K011 actual canonical WideExact32/window PASS | L006 put_e_arbitrary_prefix; L007 bounds/value/growth | **OPEN**. Heap initialization and growth for arbitrary len<=1704; original auxiliary serializer scope retained. |
+| LPi_K017 / joined_digest_cut_small | K018 raw32; K036 JoinedOracle selected-byte/order/arguments PASS, sizes3/5 | L003 joined_digest exact replacement/remainder/answer formula | **OPEN**. Initial1736-byte heap-body association and final append's retained-prefix reallocation window. |
+| LPi_K018 / joined_digest_cut_physical | K037 same oracle contract PASS, actual argument sizes57607/1880 | Same joined_digest theorem | **OPEN**. Same initial-body and reallocation windows; physical oracle metadata is closed. |
 
-K001 unsupported own option; K003 missing own PATH entry; neither reached verification. K004 passed but optimized trace did not reach the replacement: excluded from mitigation credit. K006 explicitly calls the identical validated loop. L001 failed draft; L002 has only propext, Classical.choice, Quot.sound.
+## Suspended leaves
 
-## Stage 3: wide_view
+| Suspended leaf | Credit decision |
+|---|---|
+| compact::expand_values | **RESTORE**: LPn_K001 closes the sole remaining affected property; earlier KMX-confirmed properties retained. |
+| verifier::candidate::wide_view | **RESTORE**: LPa_K015 reconstructed through copy/read/decoder/view composition. |
+| prepared_claim serializer | **RESTORE** both selected six-value serializer properties, LPb_K016 and LPe_K005. |
+| checkpoint / append stages | **KEEP SUSPENDED**: LPe_K019 restored, eleven affected properties still OPEN as above. |
 
-LPa_K015 remains OPEN. KMY_K009 explicitly reaches the validated loop but the arbitrary 32-byte window over all 57,607 backing bytes times out at 90 seconds (6,473,584 KiB peak RSS). KMY_K010 splits after the copy, retaining the frozen wide_view body and original pointer/layout assertions; it also times out at 90 seconds. No counterexample was produced. Neither is rerun unchanged. Remaining split: prove the 32-byte region and exterior frame separately, then split parse rejection/value acceptance from view slice layout.
+These decisions concern the original selected assertions, with their original auxiliary stubs/assumptions and the validated KMX copy-stub value scope. They do not establish unrelated release-function properties or a general Rust-to-Lean compiler refinement.
 
-## Stage 4: six-wide serializer windows
+## Reconstruction and scope
 
-KMY_K011 PASS: actual frozen WideExact serializer, canonical arbitrary eight limbs, all 32 encoded bytes, then a validated 32-byte copy into arbitrary pre-state at arbitrary offset in a 64-byte parent. Every exterior byte is framed. KMY_K012 PASS: arbitrary four-byte limb window and shift/byte projection. KMY_L003 compiles `wide_six`: six 32-byte windows give exactly `raw[j/32][(j%32)/4][j%4]` for every j<192. It also compiles append length/value and joined-digest composition. All axioms accepted.
+The copied KMX stubs are unchanged. Direct calls explicitly install the validated loop where optimized attributed calls did not reach it (K004 is excluded from mitigation credit). Frozen field overlays change only module routing and byte-copy calls; [KMY_serializer_sources.json](KMY_serializer_sources.json) records original/overlay hashes. The view boundary retains the frozen body and replaces only the pure decoder call with a checked input/result interface. Layout constants are copied from frozen source declarations.
 
-The source overlays are generated from the frozen revision by KMY_prepare_serializers.py; only the module path and explicit validated copy calls change. Original and overlay SHA-256 values are in KMY_serializer_sources.json. These remain value-level composition results; allocation/growth integration is still a separate obligation for the Vec harnesses.
+L002 proves global frame/disjointness and contiguous-window composition. L005 translates local windows to arbitrary global origins. L008 proves equality of all32 decoder input bytes. L003/L006/L007/L009 prove byte projections, append lengths, prefix bounds, to_vec value identity, and successful retained-prefix growth. Actual Vec stages retain arbitrary prefix bytes, rather than assuming a zero prefix. Codec checks retain the originals' full canonical WideExact domain and arbitrary-bit QM31 domain. Capacity schedules are checked by K074; capacity is used only as a split interface, not an added original assertion.
 
-## Stage 5: checkpoint value compositions
+## Execution accounting and failed drafts
 
-KMY_L006 compiles the exact local byte formulas for append32, query-word append, selected reference at 712+16*i, put_k/put_e at arbitrary prefixes, checksum projection, digest prefix, roots/queries and semantic/z. KMY_L005 proves translation of local windows to arbitrary global origins; the global frame law is unbounded in KMY_L002. Each theorem has accepted axioms only. KMY_L004 was a failed draft (reserved identifier and unavailable Mathlib tactic), corrected without changing statements.
+**Kani budget: 60/60 conservatively** =56 admitted invocations (including all setup/compiler failures) +4 extra harnesses selected by K051's substring match. K051 selected stages1,10,11,12,13 and all five passed. K060/K061 redundantly completed stages10/11 while that selection was being inspected; both are retained and counted. K062/K063 were deferred and their already-complete K051 evidence reused. No further Kani launch is authorized by this budget. K075/K076 and the typed-window/iterator drafts are unrun.
 
-KMY_K013/K014: full 1768-byte parent windows16/32 TIMEOUT; KMY_K015: window4 PASS. KMY_K016 failed only the destination initializer's unwind assertion (66 elements with bound65), leaving all value checks undetermined. A corrected actual-QM31 window is KMY_K028. This is a setup-bound failure, not an original-property counterexample. KMY_K017 actual arbitrary-bit QM31 serializer window16 PASS. KMY_K018 local arbitrary-source window32 PASS.
+K001 had an unsupported own command option; K003 an omitted own PATH entry. K016 failed only a66-element initializer unwind with bound65; every value check was undetermined. The corrected typed window and its limb split timed out. K065/K066/K070/K071 failed before verification because our constant extraction omitted FIXED; corrected K072/K073/K074 passed. L001/L004 were failed Lean drafts, corrected by L002/L006. No original byte/property counterexample occurred, so there is no FAILED row or native counterexample replay; Rust runs0/5.
 
-The first three full-array invalid-limb view cases also timed out (K020–K022); K023–K027 were deferred before admission after identifying the shared full-array graph. Replacement splits are local parse acceptance and constant-data pointer metadata (K030/K031).
+All timeouts and failed drafts remain in the receipts. No timeout is interpreted as a counterexample or PASS. The replacement shapes and remaining obligations are explicit above. [KMY_STAGE_NOTES.md](KMY_STAGE_NOTES.md) retains historical progress notes; this file is authoritative.
 
-## Stage 6: concrete six-wide append closure
+## Reproducible evidence
 
-KMY_K040–KMY_K045 all PASS. These are six distinct constant-position heap steps, with arbitrary pre-existing prefix bytes and an arbitrary canonical eight-limb value, at (length,capacity)=(0,0),(32,32),(64,64),(96,128),(128,128),(160,256). Each checks output length, every prefix byte and every appended serializer byte. This replaces KMY_K029's timed-out symbolic stage; no unchanged rerun. KMY_L003's wide_six and KMY_L007's six_lengths compose those steps into exactly the original 192-byte assertion for LPb_K016 and LPe_K005. Their earlier selected-property credit is restored under the validated-stub scope.
+Every attempt has its exact command, source revision/hashes, exit status, wall time, peak RSS, swaps and axioms output in its receipt/stdout/time logs. [KMY_RUNS.json](KMY_RUNS.json) indexes them. Source snapshots are deduplicated by SHA-256 in sources/ and indexed by KMY_SOURCE_ARCHIVE.json. Only accepted propext/Classical.choice/Quot.sound axioms receive proof credit; failed drafts' sorryAx diagnostics receive none.
 
-KMY_L007 also compiles to_vec value identity, generic retained-prefix growth and the original prefix bounds. KMY_K034–KMY_K037 confirm the source-cut oracle chronology/metadata, including physical 57607/1880 inputs; they do not by themselves close the large initial-body/growth bridge. KMY_K038 proves the local arbitrary-bad-limb rejection. KMY_K032 and KMY_K033 timed out after splitting the typed copy and iterator continuation; typed-weight credit remains open.
+Every admitted scope uses MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, one scope at a time, after reservation JSON allowed:true AND exit0. Maximum recorded RSS:6473584 KiB; all recorded swaps0. Frozen dependency graph validation and before/after lock hashes are retained per gate. No shared launcher repair, release-source changes, wallet/key changes or push. Persistent cache `/home/dombarker/project-offloads/codex-cx-kmy-cache-20261028` is retained.
 
-## Stage 7: wide_view decoder boundary closure
-
-KMY_K072 PASS for all 32-byte inputs: actual frozen decoder acceptance iff all eight decoded u32 limbs are canonical, with every accepted limb equal to its byte decoding. KMY_K073 PASS: the frozen wide_view body with only its decoder call parameterized accepts an arbitrary canonical Some(E) or None; it checks the decoder input's exact pointer/length and every original success/error and slice-layout assertion. KMY_L008 proves that reading the global copied window gives the original 32 source bytes, hence every pure decoder receives exactly the same input. Together with K018 and L005, this replaces the timed-out full-array attempts and restores LPa_K015.
-
-K065/K066/K070/K071 were compile-only failures in our constant extraction (missing FIXED); the frozen FIXED declaration was added for the corrected runs. These are retained and counted. K064/K067–K069 are deferred before admission to preserve the run budget for the corrections and fourteen semantic/z stages. No original counterexample was produced.
+Final Lean manifest/axioms audit and cleanup receipt are recorded below after completion.
