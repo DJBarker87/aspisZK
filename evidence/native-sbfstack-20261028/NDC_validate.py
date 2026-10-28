@@ -18,6 +18,8 @@ assert all(not r['present'] and not r['reachable'] and r['classification']=='omi
 for name,pin in J('NDC_TEXT_PINS.json').items():
  b=lzma.decompress((E/(name+'.xz')).read_bytes());assert len(b)==pin['bytes'] and hashlib.sha256(b).hexdigest()==pin['sha256']
  assert (E/(name+'.sha256')).read_text().split()[0]==pin['sha256']
+for name,pin in J('NDC_LOG_PINS.json').items():
+ b=lzma.decompress((E/(name+'.xz')).read_bytes());assert len(b)==pin['bytes'] and hashlib.sha256(b).hexdigest()==pin['sha256']
 for path,row in J('NDC_SOURCE_SLICES.json').items():
  b=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+path]);assert b.decode()==row['text'] and hashlib.sha256(b).hexdigest()==row['sha256']
 assert J('NDC_NATIVE_SOURCE_CHECK.json')['checked']==391 and not J('NDC_NATIVE_SOURCE_CHECK.json')['mismatches']

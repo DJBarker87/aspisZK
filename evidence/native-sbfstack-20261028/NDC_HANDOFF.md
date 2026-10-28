@@ -114,7 +114,8 @@ under `docs/research/100bit-spend-path-20261013/` where needed (DIAGNOSIS and
 S2LeadInterface). No session A live worktree or candidate was modified. Sparse
 checkout remained enabled. No binaries, objects or keys committed.
 
-Stage commits: `a4a97b7e1d` inventory; `a03c7f216f` analysis. The final handoff/receipt
-commit follows. The next owner deliverable is to attach this bounded finding to
+Stage commits: `a4a97b7e1d` inventory; `a03c7f216f` analysis; `2dda24c240` handoff/receipts.
+Final transport cleanup preserves NDC_I002 raw stdout/launch whitespace in `.log.xz`
+with original SHA-256 sidecars and NDC_LOG_PINS.json; no measurement is changed. The next owner deliverable is to attach this bounded finding to
 P7/S10 and retain the separate runtime configuration pin obligation. New scope
 work requires a new budget; nothing is silently resubmitted.
