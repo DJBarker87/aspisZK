@@ -1,0 +1,56 @@
+#[kani::requires(true)]
+#[kani::ensures(|result: &bool| *result != (r.flags & 1 != 0))]
+fn NCF_op25_inverse(r:&VerifierRegistryV1)->bool{r.is_paused()}
+#[kani::proof_for_contract(NCF_op25_inverse)]
+#[kani::unwind(33)]
+fn NCF_op25_contract_negative(){let r=NCF_any_VerifierRegistryV1();NCF_op25_inverse(&r);}
+#[kani::proof]
+#[kani::stub_verified(VerifierRegistryV1::is_paused)]
+#[kani::unwind(33)]
+fn NCF_op25_contract_use(){let r=NCF_any_VerifierRegistryV1();let got=r.is_paused();assert_eq!(got,r.flags & 1 != 0);}
+#[kani::proof]
+#[kani::stub_verified(VerifierRegistryV1::is_paused)]
+#[kani::unwind(33)]
+fn NCF_op25_contract_use_negative(){let r=NCF_any_VerifierRegistryV1();let got=r.is_paused();assert_ne!(got,r.flags & 1 != 0);}
+#[kani::requires(true)]
+#[kani::ensures(|result: &bool| *result != (r.flags & 2 != 0))]
+fn NCF_op26_inverse(r:&VerifierRegistryV1)->bool{r.is_immutable()}
+#[kani::proof_for_contract(NCF_op26_inverse)]
+#[kani::unwind(33)]
+fn NCF_op26_contract_negative(){let r=NCF_any_VerifierRegistryV1();NCF_op26_inverse(&r);}
+#[kani::proof]
+#[kani::stub_verified(VerifierRegistryV1::is_immutable)]
+#[kani::unwind(33)]
+fn NCF_op26_contract_use(){let r=NCF_any_VerifierRegistryV1();let got=r.is_immutable();assert_eq!(got,r.flags & 2 != 0);}
+#[kani::proof]
+#[kani::stub_verified(VerifierRegistryV1::is_immutable)]
+#[kani::unwind(33)]
+fn NCF_op26_contract_use_negative(){let r=NCF_any_VerifierRegistryV1();let got=r.is_immutable();assert_ne!(got,r.flags & 2 != 0);}
+#[kani::requires(true)]
+#[kani::ensures(|result: &bool| *result != (r.flags & 1 != 0))]
+fn NCF_op27_inverse(r:&VerifierRegistryV2)->bool{r.is_paused()}
+#[kani::proof_for_contract(NCF_op27_inverse)]
+#[kani::unwind(33)]
+fn NCF_op27_contract_negative(){let r=NCF_any_VerifierRegistryV2();NCF_op27_inverse(&r);}
+#[kani::proof]
+#[kani::stub_verified(VerifierRegistryV2::is_paused)]
+#[kani::unwind(33)]
+fn NCF_op27_contract_use(){let r=NCF_any_VerifierRegistryV2();let got=r.is_paused();assert_eq!(got,r.flags & 1 != 0);}
+#[kani::proof]
+#[kani::stub_verified(VerifierRegistryV2::is_paused)]
+#[kani::unwind(33)]
+fn NCF_op27_contract_use_negative(){let r=NCF_any_VerifierRegistryV2();let got=r.is_paused();assert_ne!(got,r.flags & 1 != 0);}
+#[kani::requires(true)]
+#[kani::ensures(|result: &bool| *result != (r.flags & 2 != 0))]
+fn NCF_op28_inverse(r:&VerifierRegistryV2)->bool{r.is_immutable()}
+#[kani::proof_for_contract(NCF_op28_inverse)]
+#[kani::unwind(33)]
+fn NCF_op28_contract_negative(){let r=NCF_any_VerifierRegistryV2();NCF_op28_inverse(&r);}
+#[kani::proof]
+#[kani::stub_verified(VerifierRegistryV2::is_immutable)]
+#[kani::unwind(33)]
+fn NCF_op28_contract_use(){let r=NCF_any_VerifierRegistryV2();let got=r.is_immutable();assert_eq!(got,r.flags & 2 != 0);}
+#[kani::proof]
+#[kani::stub_verified(VerifierRegistryV2::is_immutable)]
+#[kani::unwind(33)]
+fn NCF_op28_contract_use_negative(){let r=NCF_any_VerifierRegistryV2();let got=r.is_immutable();assert_ne!(got,r.flags & 2 != 0);}

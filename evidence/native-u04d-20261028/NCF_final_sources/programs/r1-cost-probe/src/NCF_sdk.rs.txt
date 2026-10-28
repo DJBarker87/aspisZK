@@ -1,0 +1,166 @@
+#![allow(non_snake_case,unused_variables)]
+use super::*;
+use aspis_statement::pool_v1::{PoolIdentityV1,VerifierPolicyV1};
+fn NCF_master()->PoolV1PairForestMasterV1{PoolV1PairForestMasterV1{
+ bump:kani::any(),identity:PoolIdentityV1{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:aspis_core::field::M31(kani::any()),deployment_domain:kani::any()},
+ verifier_policy:VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()},
+ initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()}}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::stub_verified(aspis_statement::pool_v1::validate_verifier_policy_v1)]
+#[kani::unwind(33)]
+fn NCF_op15_sdk_point(){let mut master=NCF_master();master.verifier_policy=VerifierPolicyV1{flags:kani::any(),registry_program:registry_program_id(),registry_authority:[0;32],policy_binding:AUDIT_POLICY_BINDING};
+ kani::assume(master.verifier_policy.flags & 1 != 0);
+ let verifier=Pubkey::new_from_array(kani::any());let pool=Pubkey::new_from_array(pool_program_id());
+ let key=Pubkey::new_from_array([1;32]);let owner=Pubkey::new_from_array([2;32]);let mut lamports=0;let mut bytes=[];
+ let account=AccountInfo::new(&key,false,true,&mut lamports,&mut bytes,&owner,false,0);
+ let wrong=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};
+unsafe{aspis_statement::NCF_policy::NCF_expect(&master.verifier_policy);}
+let result=authenticate_invariant_release_registry(&verifier,&pool,&account,&master,&account,&account,kani::any());
+assert_eq!(result,Err(ProgramError::InvalidAccountData));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::stub_verified(aspis_statement::pool_v1::validate_verifier_policy_v1)]
+#[kani::unwind(33)]
+fn NCF_op15_sdk_pointer_negative(){let mut master=NCF_master();master.verifier_policy=VerifierPolicyV1{flags:kani::any(),registry_program:registry_program_id(),registry_authority:[0;32],policy_binding:AUDIT_POLICY_BINDING};
+ kani::assume(master.verifier_policy.flags & 1 != 0);
+ let verifier=Pubkey::new_from_array(kani::any());let pool=Pubkey::new_from_array(pool_program_id());
+ let key=Pubkey::new_from_array([1;32]);let owner=Pubkey::new_from_array([2;32]);let mut lamports=0;let mut bytes=[];
+ let account=AccountInfo::new(&key,false,true,&mut lamports,&mut bytes,&owner,false,0);
+ let wrong=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};
+unsafe{aspis_statement::NCF_policy::NCF_expect(&wrong);}
+let result=authenticate_invariant_release_registry(&verifier,&pool,&account,&master,&account,&account,kani::any());
+assert_eq!(result,Err(ProgramError::InvalidAccountData));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::stub_verified(aspis_statement::pool_v1::validate_verifier_policy_v1)]
+#[kani::unwind(33)]
+fn NCF_op15_sdk_result_negative(){let mut master=NCF_master();master.verifier_policy=VerifierPolicyV1{flags:kani::any(),registry_program:registry_program_id(),registry_authority:[0;32],policy_binding:AUDIT_POLICY_BINDING};
+ kani::assume(master.verifier_policy.flags & 1 != 0);
+ let verifier=Pubkey::new_from_array(kani::any());let pool=Pubkey::new_from_array(pool_program_id());
+ let key=Pubkey::new_from_array([1;32]);let owner=Pubkey::new_from_array([2;32]);let mut lamports=0;let mut bytes=[];
+ let account=AccountInfo::new(&key,false,true,&mut lamports,&mut bytes,&owner,false,0);
+ let wrong=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};
+unsafe{aspis_statement::NCF_policy::NCF_expect(&master.verifier_policy);}
+let result=authenticate_invariant_release_registry(&verifier,&pool,&account,&master,&account,&account,kani::any());
+assert_eq!(result,Ok(()));}
+#[kani::proof_for_contract(aspis_statement::pool_v1::validate_verifier_policy_v1)]
+#[kani::unwind(33)]
+fn NCF_op15_sdk_contract(){let p=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};unsafe{aspis_statement::NCF_policy::NCF_expect(&p);}aspis_statement::pool_v1::validate_verifier_policy_v1(&p);}
+#[kani::requires(true)]
+#[kani::ensures(|r:&Result<(),aspis_statement::pool_v1::PoolV1FormatError>| *r != aspis_statement::NCF_policy::NCF_spec(p))]
+fn NCF_op15_sdk_inverse(p:&VerifierPolicyV1)->Result<(),aspis_statement::pool_v1::PoolV1FormatError>{aspis_statement::pool_v1::validate_verifier_policy_v1(p)}
+#[kani::proof_for_contract(NCF_op15_sdk_inverse)]
+#[kani::unwind(33)]
+fn NCF_op15_sdk_contract_negative(){let p=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};NCF_op15_sdk_inverse(&p);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_sdk_reject(){
+ let n:usize=kani::any();kani::assume(n!=384 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=decode_master_box(input);
+ assert!(matches!(result,Err(ProgramError::InvalidAccountData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_sdk_reject_negative(){
+ let n:usize=kani::any();kani::assume(n!=384 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=decode_master_box(input);
+ assert!(!matches!(result,Err(ProgramError::InvalidAccountData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_sdk_reject(){
+ let n:usize=kani::any();kani::assume(n!=192 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=decode_checkpoint_box(input);
+ assert!(matches!(result,Err(ProgramError::InvalidAccountData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_sdk_reject_negative(){
+ let n:usize=kani::any();kani::assume(n!=192 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=decode_checkpoint_box(input);
+ assert!(!matches!(result,Err(ProgramError::InvalidAccountData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op23_sdk_reject(){
+ let n:usize=kani::any();kani::assume(n!=320 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=validate_asq8(&Pubkey::new_from_array([9;32]), &[],input);
+ assert!(matches!(result,Err(ProgramError::InvalidInstructionData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op23_sdk_reject_negative(){
+ let n:usize=kani::any();kani::assume(n!=320 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=validate_asq8(&Pubkey::new_from_array([9;32]), &[],input);
+ assert!(!matches!(result,Err(ProgramError::InvalidInstructionData)));
+ alloc::alloc::dealloc(p,layout);}
+}

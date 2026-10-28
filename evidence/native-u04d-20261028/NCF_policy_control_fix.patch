@@ -1,0 +1,31 @@
+--- a/NCF_policy.rs.txt
++++ b/NCF_policy.rs.txt
+@@ -12,12 +12,12 @@
+ #[kani::proof_for_contract(validate_verifier_policy_v1)]
+ #[kani::unwind(33)]
+ fn NCF_op15_contract(){let p=NCF_any_policy();unsafe{NCF_expect(&p);}validate_verifier_policy_v1(&p);}
+-#[kani::requires(true)]
++#[kani::requires(core::ptr::eq(p,unsafe{ NCF_EXPECTED }))]
+ #[kani::ensures(|r:&Result<(),PoolV1FormatError>| *r != NCF_spec(p))]
+ fn NCF_inverse(p:&VerifierPolicyV1)->Result<(),PoolV1FormatError>{validate_verifier_policy_v1(p)}
+ #[kani::proof_for_contract(NCF_inverse)]
+ #[kani::unwind(33)]
+-fn NCF_op15_contract_negative(){let p=NCF_any_policy();NCF_inverse(&p);}
++fn NCF_op15_contract_negative(){let p=NCF_any_policy();unsafe{NCF_expect(&p);}NCF_inverse(&p);}
+ #[kani::proof]
+ #[kani::stub_verified(validate_verifier_policy_v1)]
+ #[kani::unwind(33)]
+--- a/NCF_sdk.rs.txt
++++ b/NCF_sdk.rs.txt
+@@ -62,9 +62,9 @@
+ #[kani::proof_for_contract(aspis_statement::pool_v1::validate_verifier_policy_v1)]
+ #[kani::unwind(33)]
+ fn NCF_op15_sdk_contract(){let p=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};unsafe{aspis_statement::NCF_policy::NCF_expect(&p);}aspis_statement::pool_v1::validate_verifier_policy_v1(&p);}
+-#[kani::requires(true)]
++#[kani::requires(core::ptr::eq(p,unsafe{ aspis_statement::NCF_policy::NCF_EXPECTED }))]
+ #[kani::ensures(|r:&Result<(),aspis_statement::pool_v1::PoolV1FormatError>| *r != aspis_statement::NCF_policy::NCF_spec(p))]
+ fn NCF_op15_sdk_inverse(p:&VerifierPolicyV1)->Result<(),aspis_statement::pool_v1::PoolV1FormatError>{aspis_statement::pool_v1::validate_verifier_policy_v1(p)}
+ #[kani::proof_for_contract(NCF_op15_sdk_inverse)]
+ #[kani::unwind(33)]
+-fn NCF_op15_sdk_contract_negative(){let p=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};NCF_op15_sdk_inverse(&p);}
++fn NCF_op15_sdk_contract_negative(){let p=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};unsafe{aspis_statement::NCF_policy::NCF_expect(&p);}NCF_op15_sdk_inverse(&p);}

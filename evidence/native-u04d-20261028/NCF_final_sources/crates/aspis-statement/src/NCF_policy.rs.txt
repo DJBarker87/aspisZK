@@ -1,0 +1,35 @@
+#![allow(non_snake_case,unused_variables)]
+use crate::pool_v1::{VerifierPolicyV1,PoolV1FormatError,validate_verifier_policy_v1};
+pub static mut NCF_EXPECTED:*const VerifierPolicyV1=core::ptr::null();
+pub unsafe fn NCF_expect(p:*const VerifierPolicyV1){NCF_EXPECTED=p;}
+pub fn NCF_spec(p:&VerifierPolicyV1)->Result<(),PoolV1FormatError>{
+ if p.flags & !3 != 0 {Err(PoolV1FormatError::UnsupportedFlags)}
+ else if p.registry_program==[0;32] || p.policy_binding==[0;32] {Err(PoolV1FormatError::ZeroRequiredBinding)}
+ else if (p.flags & 2 != 0 && p.flags & 1 == 0) || ((p.flags & 1 != 0) != (p.registry_authority==[0;32])) {Err(PoolV1FormatError::InvalidAuthorityMode)}
+ else {Ok(())}
+}
+fn NCF_any_policy()->VerifierPolicyV1 {VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()}}
+#[kani::proof_for_contract(validate_verifier_policy_v1)]
+#[kani::unwind(33)]
+fn NCF_op15_contract(){let p=NCF_any_policy();unsafe{NCF_expect(&p);}validate_verifier_policy_v1(&p);}
+#[kani::requires(true)]
+#[kani::ensures(|r:&Result<(),PoolV1FormatError>| *r != NCF_spec(p))]
+fn NCF_inverse(p:&VerifierPolicyV1)->Result<(),PoolV1FormatError>{validate_verifier_policy_v1(p)}
+#[kani::proof_for_contract(NCF_inverse)]
+#[kani::unwind(33)]
+fn NCF_op15_contract_negative(){let p=NCF_any_policy();NCF_inverse(&p);}
+#[kani::proof]
+#[kani::stub_verified(validate_verifier_policy_v1)]
+#[kani::unwind(33)]
+fn NCF_op15_contract_use(){let p=NCF_any_policy();unsafe{NCF_expect(&p);}let got=validate_verifier_policy_v1(&p);assert_eq!(got,NCF_spec(&p));}
+#[kani::proof]
+#[kani::stub_verified(validate_verifier_policy_v1)]
+#[kani::unwind(33)]
+fn NCF_op15_contract_use_negative(){let p=NCF_any_policy();unsafe{NCF_expect(&p);}let got=validate_verifier_policy_v1(&p);assert_ne!(got,NCF_spec(&p));}
+
+// All eight real enum variants; no invented or omitted return carrier.
+impl kani::Arbitrary for PoolV1FormatError {
+ fn any()->Self {let n:u8=kani::any();kani::assume(n<8);match n{
+ 0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::NonZeroReserved,
+ 4=>Self::NonCanonicalAssetId,5=>Self::UnsupportedFlags,6=>Self::ZeroRequiredBinding,_=>Self::InvalidAuthorityMode}}
+}

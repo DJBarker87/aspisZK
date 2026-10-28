@@ -1,0 +1,42 @@
+// Candidate only until paired native runs and arbitrary-byte transport are checked.
+// All references point into an initialized allocator object; no fake fat pointer.
+unsafe fn NCF_reject_slice(n:usize, f:impl FnOnce(&[u8])) {
+    let layout=core::alloc::Layout::array::<u8>(n).unwrap();
+    let p=alloc::alloc::alloc_zeroed(layout);
+    kani::assume(!p.is_null());
+    let j:usize=kani::any();kani::assume(j<n);
+    *p.add(j)=kani::any();
+    let input=core::slice::from_raw_parts(p,n);
+    f(input);
+    alloc::alloc::dealloc(p,layout);
+}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op23_long(){let n:usize=kani::any();kani::assume(n>321 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=crate::pool_v1::decode_pool_v1_pair_forest_terminal_request_v1(input);assert_eq!(got,Err(crate::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1::WrongLength));});}}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op23_long_negative(){let n:usize=kani::any();kani::assume(n>321 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=crate::pool_v1::decode_pool_v1_pair_forest_terminal_request_v1(input);assert_ne!(got,Err(crate::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1::WrongLength));});}}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op31_long(){let n:usize=kani::any();kani::assume(n>129 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=decode_verifier_registry_v1(input);assert_eq!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));});}}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op31_long_negative(){let n:usize=kani::any();kani::assume(n>129 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=decode_verifier_registry_v1(input);assert_ne!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));});}}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op32_long(){let n:usize=kani::any();kani::assume(n>193 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=decode_verifier_registry_entry_v1(input);assert_eq!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));});}}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op32_long_negative(){let n:usize=kani::any();kani::assume(n>193 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=decode_verifier_registry_entry_v1(input);assert_ne!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));});}}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op33_long(){let n:usize=kani::any();kani::assume(n>257 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=decode_verifier_registry_v2(input);assert_eq!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));});}}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op33_long_negative(){let n:usize=kani::any();kani::assume(n>257 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=decode_verifier_registry_v2(input);assert_ne!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));});}}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op34_long(){let n:usize=kani::any();kani::assume(n>321 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=decode_verifier_registry_entry_v2(input);assert_eq!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));});}}
+#[kani::proof]
+#[kani::unwind(2)]
+fn NCF_op34_long_negative(){let n:usize=kani::any();kani::assume(n>321 && n<=isize::MAX as usize);unsafe{NCF_reject_slice(n,|input|{let got=decode_verifier_registry_entry_v2(input);assert_ne!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));});}}
