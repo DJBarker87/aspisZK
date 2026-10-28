@@ -1,0 +1,52 @@
+{"attempt": "NCU_L006", "exit_status": 1, "wall_seconds": 2.7224722990067676, "peak_rss_kib": "5359816", "swaps": "0", "print_axioms": ["'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCU_WriterPrefix.lean:13:3: warning: Variable name `public_bytes` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NCU_WriterPrefix.lean:139:6: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r1 ← ops.op4 proof
+    let cf1 ←
+      match r1 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        verifier.mark none ver
+...
+ops.control_flow.ControlFlow.Break residual =>
+                    match residual with
+                    | core.result.Result.Ok x =>
+                      core.convert.Infallible.rec
+                        (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                        x
+                    | core.result.Result.Err v => ok (core.result.Result.Err v)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                match residual with
+                | core.result.Result.Ok x =>
+                  core.convert.Infallible.rec
+                    (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+                | core.result.Result.Err v => ok (core.result.Result.Err v)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec
+                (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+            | core.result.Result.Err v => ok (core.result.Result.Err v)
+    match r with
+      | core.result.Result.Err v => ok (core.result.Result.Err v)
+      | core.result.Result.Ok (p, a) => do
+        let bytes ← ops.op16 D p a proof pub hash
+        ok (core.result.Result.Ok bytes)
+NCU_WriterPrefix.lean:140:4: error: No goals to be solved
+NCU_WriterPrefix.lean:130:13: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0cd625722ef146ad9e505186d4f51000.scope; invocation ID: 1050199beaa948b8985577c521fe5252

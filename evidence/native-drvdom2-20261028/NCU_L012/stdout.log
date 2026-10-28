@@ -1,0 +1,239 @@
+NCU_WriterPrefix.lean:13:3: warning: Variable name `public_bytes` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NCU_WriterPrefix.lean:132:2: error: unsolved goals
+case isFalse.Ok.Ok
+ops : Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+hash : H
+h✝ : ¬(split != compact.SPLIT) = true
+hx✝ : core.result.Result transport.Variant verifier.Error
+a✝¹ : transport.Variant
+hx : core.result.Result Unit verifier.Error
+a✝ : Unit
+x : aspis_core.field.wide_exact.WideExact
+⊢ ∀
+    (x :
+      core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.wide_exact.WideExact 29#usize),
+    (let (r2, g1) := x
+      do
+      let cf2 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r3 ← ops.op20 transport.Variant.S2
+          let cf3 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf3 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let i ← compact.OFF_FOLDED_ROOT ops
+              let i1 ← compact.OFF_ROUND1 ops
+              let s ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i, «end» := i1 }
+              let r4 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+              let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4
+              let r5 ← ops.op6 D proof val folded_root 0#usize hash
+              let cf4 ←
+                match r5 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf4 with
+                | core.ops.control_flow.ControlFlow.Continue _ => do
+                  let r6 ← ops.op19 val.queries 0#usize split
+                  let cf5 ←
+                    match r6 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf5 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let r7 ← ops.op18 val1.weights.deref
+                      let cf6 ←
+                        match r7 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf6 with
+                        | core.ops.control_flow.ControlFlow.Continue val3 => do
+                          let r8 ← ops.op7 proof val val1 g1 none val2 val3 split
+                          let cf7 ←
+                            match r8 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf7 with
+                            | core.ops.control_flow.ControlFlow.Continue val4 => do
+                              let (s2, deref_mut_back) ← lift val4.1.weights.deref_mut
+                              let s3 ← ops.op17 val4.2 s2
+                              let bytes ←
+                                ops.op16 D val
+                                    { weights := deref_mut_back s3, rhs := val4.1.rhs, power := val4.1.power,
+                                      next := val4.1.next }
+                                    proof pub hash
+                              ok (core.result.Result.Ok bytes)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              match residual with
+                              | core.result.Result.Ok x =>
+                                core.convert.Infallible.rec
+                                  (fun x => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) x
+                              | core.result.Result.Err v => ok (core.result.Result.Err v)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          match residual with
+                          | core.result.Result.Ok x =>
+                            core.convert.Infallible.rec
+                              (fun x => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) x
+                          | core.result.Result.Err v => ok (core.result.Result.Err v)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec
+                          (fun x => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error))
+                      x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result (alloc.vec.Vec U8) verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+      do
+      let x_1 ←
+        match x.1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      let r ←
+        match x_1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r3 ← ops.op20 transport.Variant.S2
+            let cf3 ←
+              match r3 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let i ← compact.OFF_FOLDED_ROOT ops
+                let i1 ← compact.OFF_ROUND1 ops
+                let s ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                      { start := i, «end» := i1 }
+                let r4 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+                let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4
+                let r5 ← ops.op6 D proof val folded_root 0#usize hash
+                let cf4 ←
+                  match r5 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf4 with
+                  | core.ops.control_flow.ControlFlow.Continue _ => do
+                    let r6 ← ops.op19 val.queries 0#usize split
+                    let cf5 ←
+                      match r6 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf5 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                        let r7 ← ops.op18 val1.weights.deref
+                        let cf6 ←
+                          match r7 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                        match cf6 with
+                          | core.ops.control_flow.ControlFlow.Continue val3 => do
+                            let r8 ← ops.op7 proof val val1 x.2 none val2 val3 split
+                            let cf7 ←
+                              match r8 with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                            match cf7 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                let (s2, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                let s3 ← ops.op17 val4.2 s2
+                                ok
+                                    (core.result.Result.Ok
+                                      (val,
+                                        { weights := deref_mut_back s3, rhs := val4.1.rhs, power := val4.1.power,
+                                          next := val4.1.next }))
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                match residual with
+                                | core.result.Result.Ok x =>
+                                  core.convert.Infallible.rec
+                                    (fun x =>
+                                      Result
+                                        (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                                    x
+                                | core.result.Result.Err v => ok (core.result.Result.Err v)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            match residual with
+                            | core.result.Result.Ok x =>
+                              core.convert.Infallible.rec
+                                (fun x =>
+                                  Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                                x
+                            | core.result.Result.Err v => ok (core.result.Result.Err v)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        match residual with
+                        | core.result.Result.Ok x =>
+                          core.convert.Infallible.rec
+                            (fun x =>
+                              Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                            x
+                        | core.result.Result.Err v => ok (core.result.Result.Err v)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    match residual with
+                    | core.result.Result.Ok x =>
+                      core.convert.Infallible.rec
+                        (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error))
+                        x
+                    | core.result.Result.Err v => ok (core.result.Result.Err v)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                match residual with
+                | core.result.Result.Ok x =>
+                  core.convert.Infallible.rec
+                    (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+                | core.result.Result.Err v => ok (core.result.Result.Err v)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec
+                (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+            | core.result.Result.Err v => ok (core.result.Result.Err v)
+      match r with
+        | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.result.Result.Ok (p, a) => do
+          let bytes ← ops.op16 D p a proof pub hash
+          ok (core.result.Result.Ok bytes)
+NCU_WriterPrefix.lean:134:42: warning: This simp argument is unused:
+  verifier.mark
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq, ̲bind_tc_ok,v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+          core.convert.FromSame.from, ̲Aeneas.Std.uncurry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCU_WriterPrefix.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
