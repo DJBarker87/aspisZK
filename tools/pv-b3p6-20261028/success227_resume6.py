@@ -54,6 +54,11 @@ def emit(mod,source_mod,names,imports):
   body='  '+body.lstrip()
   lets=list(re.finditer(r'^  let (.*?)\s*(←|:=)\s*',body,re.M))
   proof=[] if name=='reference_poseidon.global_sums227' else ['  unfold '+name]
+  if name=='reference_terminal.semantic_initial_and_absorption':
+   proof += ['  have rate8 : aspis_statement.poseidon2.RATE.val=8 := by unfold aspis_statement.poseidon2.RATE; rfl',
+    '  have rate9 : (Usize.wrapping_add aspis_statement.poseidon2.RATE 1#usize).val=9 := by',
+    '    have h := PV_B3P_Offset226V3.add_value aspis_statement.poseidon2.RATE 1#usize (by have hsize := usize_1024_size; change aspis_statement.poseidon2.RATE.val+1 < _; omega)',
+    '    simpa only [rate8,show (1#usize).val=1 from rfl] using h']
   if ispack:proof += ['  have hb : Slice.len values ≤ 4#usize := by scalar_tac','  simp only [massert,hb,↓reduceIte,bind_tc_ok]']
   def rule(expr):
    call=expr.split()[0];assert call in mapping,(name,call,expr)

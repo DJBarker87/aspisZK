@@ -156,6 +156,10 @@ theorem total_reference_terminal_absorption_lanes_literal (low : aspis_core.fiel
 theorem total_reference_terminal_semantic_initial_and_absorption (public1 : reference_terminal.SemanticPublic) (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings) (selectors : reference_copy_terminal.Selectors) :
     Success (reference_terminal.semantic_initial_and_absorption public1 openings selectors) := by
   unfold reference_terminal.semantic_initial_and_absorption
+  have rate8 : aspis_statement.poseidon2.RATE.val=8 := by unfold aspis_statement.poseidon2.RATE; rfl
+  have rate9 : (Usize.wrapping_add aspis_statement.poseidon2.RATE 1#usize).val=9 := by
+    have h := PV_B3P_Offset226V3.add_value aspis_statement.poseidon2.RATE 1#usize (by have hsize := usize_1024_size; change aspis_statement.poseidon2.RATE.val+1 < _; omega)
+    simpa only [rate8,show (1#usize).val=1 from rfl] using h
   apply bind
   · apply interval_total <;> scalar_tac
   intro q
