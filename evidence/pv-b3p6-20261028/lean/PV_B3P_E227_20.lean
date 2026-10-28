@@ -24,16 +24,16 @@ def reference_field.qm31_sum_products3_prepared
   Result aspis_core.field.QM31
   := do
   let a := Array.repeat 3#usize 0#u64
-  let sums := Array.repeat 3#usize a
-  let q ← Array.index_usize right 0#usize
-  let right_sum ← aspis_core.field.CM31.add q.c0 q.c1
-  let m ← aspis_core.field.M31.add q.c0.a q.c0.b
-  let m1 ← aspis_core.field.M31.add q.c1.a q.c1.b
-  let m2 ← aspis_core.field.M31.add right_sum.a right_sum.b
-  let pqm ← Array.index_usize left 0#usize
+  let sums : Array (Array Std.U64 3#usize) 3#usize := Array.repeat 3#usize a
+  let q : aspis_core.field.QM31 ← Array.index_usize right 0#usize
+  let right_sum : aspis_core.field.CM31 ← aspis_core.field.CM31.add q.c0 q.c1
+  let m : aspis_core.field.M31 ← aspis_core.field.M31.add q.c0.a q.c0.b
+  let m1 : aspis_core.field.M31 ← aspis_core.field.M31.add q.c1.a q.c1.b
+  let m2 : aspis_core.field.M31 ← aspis_core.field.M31.add right_sum.a right_sum.b
+  let pqm : reference_field.PreparedQm31Multiplier ← Array.index_usize left 0#usize
   let a1 ← Array.index_usize pqm.components 0#usize
-  let m3 ← Array.index_usize a1 0#usize
-  let i ← lift (UScalar.cast .U64 m3)
+  let m3 : aspis_core.field.M31 ← Array.index_usize a1 0#usize
+  let i : Std.U64 ← lift (UScalar.cast .U64 m3)
   let a2 ←
     Array.index_usize
       (Array.make 3#usize [
@@ -43,41 +43,41 @@ def reference_field.qm31_sum_products3_prepared
         (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
         ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
-  let m4 ← Array.index_usize a2 0#usize
-  let i1 ← lift (UScalar.cast .U64 m4)
-  let i2 ← lift (Std.U64.wrapping_mul i i1)
+  let m4 : aspis_core.field.M31 ← Array.index_usize a2 0#usize
+  let i1 : Std.U64 ← lift (UScalar.cast .U64 m4)
+  let i2 : Std.U64 ← lift (Std.U64.wrapping_mul i i1)
   let a3 ← Array.index_usize sums 0#usize
-  let i3 ← Array.index_usize a3 0#usize
-  let i4 ← lift (Std.U64.wrapping_add i3 i2)
+  let i3 : Std.U64 ← Array.index_usize a3 0#usize
+  let i4 : Std.U64 ← lift (Std.U64.wrapping_add i3 i2)
   let (a4, index_mut_back) ← Array.index_mut_usize sums 0#usize
   let a5 ← Array.update a4 0#usize i4
   let a6 ← Array.index_usize pqm.components 0#usize
-  let m5 ← Array.index_usize a6 1#usize
-  let i5 ← lift (UScalar.cast .U64 m5)
-  let m6 ← Array.index_usize a2 1#usize
-  let i6 ← lift (UScalar.cast .U64 m6)
-  let i7 ← lift (Std.U64.wrapping_mul i5 i6)
-  let sums1 := index_mut_back a5
+  let m5 : aspis_core.field.M31 ← Array.index_usize a6 1#usize
+  let i5 : Std.U64 ← lift (UScalar.cast .U64 m5)
+  let m6 : aspis_core.field.M31 ← Array.index_usize a2 1#usize
+  let i6 : Std.U64 ← lift (UScalar.cast .U64 m6)
+  let i7 : Std.U64 ← lift (Std.U64.wrapping_mul i5 i6)
+  let sums1 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back a5
   let a7 ← Array.index_usize sums1 0#usize
-  let i8 ← Array.index_usize a7 1#usize
-  let i9 ← lift (Std.U64.wrapping_add i8 i7)
+  let i8 : Std.U64 ← Array.index_usize a7 1#usize
+  let i9 : Std.U64 ← lift (Std.U64.wrapping_add i8 i7)
   let (a8, index_mut_back1) ← Array.index_mut_usize sums1 0#usize
   let a9 ← Array.update a8 1#usize i9
   let a10 ← Array.index_usize pqm.components 0#usize
-  let m7 ← Array.index_usize a10 2#usize
-  let i10 ← lift (UScalar.cast .U64 m7)
-  let m8 ← Array.index_usize a2 2#usize
-  let i11 ← lift (UScalar.cast .U64 m8)
-  let i12 ← lift (Std.U64.wrapping_mul i10 i11)
-  let sums2 := index_mut_back1 a9
+  let m7 : aspis_core.field.M31 ← Array.index_usize a10 2#usize
+  let i10 : Std.U64 ← lift (UScalar.cast .U64 m7)
+  let m8 : aspis_core.field.M31 ← Array.index_usize a2 2#usize
+  let i11 : Std.U64 ← lift (UScalar.cast .U64 m8)
+  let i12 : Std.U64 ← lift (Std.U64.wrapping_mul i10 i11)
+  let sums2 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back1 a9
   let a11 ← Array.index_usize sums2 0#usize
-  let i13 ← Array.index_usize a11 2#usize
-  let i14 ← lift (Std.U64.wrapping_add i13 i12)
+  let i13 : Std.U64 ← Array.index_usize a11 2#usize
+  let i14 : Std.U64 ← lift (Std.U64.wrapping_add i13 i12)
   let (a12, index_mut_back2) ← Array.index_mut_usize sums2 0#usize
   let a13 ← Array.update a12 2#usize i14
   let a14 ← Array.index_usize pqm.components 1#usize
-  let m9 ← Array.index_usize a14 0#usize
-  let i15 ← lift (UScalar.cast .U64 m9)
+  let m9 : aspis_core.field.M31 ← Array.index_usize a14 0#usize
+  let i15 : Std.U64 ← lift (UScalar.cast .U64 m9)
   let a15 ←
     Array.index_usize
       (Array.make 3#usize [
@@ -87,42 +87,42 @@ def reference_field.qm31_sum_products3_prepared
         (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
         ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
-  let m10 ← Array.index_usize a15 0#usize
-  let i16 ← lift (UScalar.cast .U64 m10)
-  let i17 ← lift (Std.U64.wrapping_mul i15 i16)
-  let sums3 := index_mut_back2 a13
+  let m10 : aspis_core.field.M31 ← Array.index_usize a15 0#usize
+  let i16 : Std.U64 ← lift (UScalar.cast .U64 m10)
+  let i17 : Std.U64 ← lift (Std.U64.wrapping_mul i15 i16)
+  let sums3 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back2 a13
   let a16 ← Array.index_usize sums3 1#usize
-  let i18 ← Array.index_usize a16 0#usize
-  let i19 ← lift (Std.U64.wrapping_add i18 i17)
+  let i18 : Std.U64 ← Array.index_usize a16 0#usize
+  let i19 : Std.U64 ← lift (Std.U64.wrapping_add i18 i17)
   let (a17, index_mut_back3) ← Array.index_mut_usize sums3 1#usize
   let a18 ← Array.update a17 0#usize i19
   let a19 ← Array.index_usize pqm.components 1#usize
-  let m11 ← Array.index_usize a19 1#usize
-  let i20 ← lift (UScalar.cast .U64 m11)
-  let m12 ← Array.index_usize a15 1#usize
-  let i21 ← lift (UScalar.cast .U64 m12)
-  let i22 ← lift (Std.U64.wrapping_mul i20 i21)
-  let sums4 := index_mut_back3 a18
+  let m11 : aspis_core.field.M31 ← Array.index_usize a19 1#usize
+  let i20 : Std.U64 ← lift (UScalar.cast .U64 m11)
+  let m12 : aspis_core.field.M31 ← Array.index_usize a15 1#usize
+  let i21 : Std.U64 ← lift (UScalar.cast .U64 m12)
+  let i22 : Std.U64 ← lift (Std.U64.wrapping_mul i20 i21)
+  let sums4 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back3 a18
   let a20 ← Array.index_usize sums4 1#usize
-  let i23 ← Array.index_usize a20 1#usize
-  let i24 ← lift (Std.U64.wrapping_add i23 i22)
+  let i23 : Std.U64 ← Array.index_usize a20 1#usize
+  let i24 : Std.U64 ← lift (Std.U64.wrapping_add i23 i22)
   let (a21, index_mut_back4) ← Array.index_mut_usize sums4 1#usize
   let a22 ← Array.update a21 1#usize i24
   let a23 ← Array.index_usize pqm.components 1#usize
-  let m13 ← Array.index_usize a23 2#usize
-  let i25 ← lift (UScalar.cast .U64 m13)
-  let m14 ← Array.index_usize a15 2#usize
-  let i26 ← lift (UScalar.cast .U64 m14)
-  let i27 ← lift (Std.U64.wrapping_mul i25 i26)
-  let sums5 := index_mut_back4 a22
+  let m13 : aspis_core.field.M31 ← Array.index_usize a23 2#usize
+  let i25 : Std.U64 ← lift (UScalar.cast .U64 m13)
+  let m14 : aspis_core.field.M31 ← Array.index_usize a15 2#usize
+  let i26 : Std.U64 ← lift (UScalar.cast .U64 m14)
+  let i27 : Std.U64 ← lift (Std.U64.wrapping_mul i25 i26)
+  let sums5 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back4 a22
   let a24 ← Array.index_usize sums5 1#usize
-  let i28 ← Array.index_usize a24 2#usize
-  let i29 ← lift (Std.U64.wrapping_add i28 i27)
+  let i28 : Std.U64 ← Array.index_usize a24 2#usize
+  let i29 : Std.U64 ← lift (Std.U64.wrapping_add i28 i27)
   let (a25, index_mut_back5) ← Array.index_mut_usize sums5 1#usize
   let a26 ← Array.update a25 2#usize i29
   let a27 ← Array.index_usize pqm.components 2#usize
-  let m15 ← Array.index_usize a27 0#usize
-  let i30 ← lift (UScalar.cast .U64 m15)
+  let m15 : aspis_core.field.M31 ← Array.index_usize a27 0#usize
+  let i30 : Std.U64 ← lift (UScalar.cast .U64 m15)
   let a28 ←
     Array.index_usize
       (Array.make 3#usize [
@@ -132,48 +132,48 @@ def reference_field.qm31_sum_products3_prepared
         (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
         ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
-  let m16 ← Array.index_usize a28 0#usize
-  let i31 ← lift (UScalar.cast .U64 m16)
-  let i32 ← lift (Std.U64.wrapping_mul i30 i31)
-  let sums6 := index_mut_back5 a26
+  let m16 : aspis_core.field.M31 ← Array.index_usize a28 0#usize
+  let i31 : Std.U64 ← lift (UScalar.cast .U64 m16)
+  let i32 : Std.U64 ← lift (Std.U64.wrapping_mul i30 i31)
+  let sums6 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back5 a26
   let a29 ← Array.index_usize sums6 2#usize
-  let i33 ← Array.index_usize a29 0#usize
-  let i34 ← lift (Std.U64.wrapping_add i33 i32)
+  let i33 : Std.U64 ← Array.index_usize a29 0#usize
+  let i34 : Std.U64 ← lift (Std.U64.wrapping_add i33 i32)
   let (a30, index_mut_back6) ← Array.index_mut_usize sums6 2#usize
   let a31 ← Array.update a30 0#usize i34
   let a32 ← Array.index_usize pqm.components 2#usize
-  let m17 ← Array.index_usize a32 1#usize
-  let i35 ← lift (UScalar.cast .U64 m17)
-  let m18 ← Array.index_usize a28 1#usize
-  let i36 ← lift (UScalar.cast .U64 m18)
-  let i37 ← lift (Std.U64.wrapping_mul i35 i36)
-  let sums7 := index_mut_back6 a31
+  let m17 : aspis_core.field.M31 ← Array.index_usize a32 1#usize
+  let i35 : Std.U64 ← lift (UScalar.cast .U64 m17)
+  let m18 : aspis_core.field.M31 ← Array.index_usize a28 1#usize
+  let i36 : Std.U64 ← lift (UScalar.cast .U64 m18)
+  let i37 : Std.U64 ← lift (Std.U64.wrapping_mul i35 i36)
+  let sums7 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back6 a31
   let a33 ← Array.index_usize sums7 2#usize
-  let i38 ← Array.index_usize a33 1#usize
-  let i39 ← lift (Std.U64.wrapping_add i38 i37)
+  let i38 : Std.U64 ← Array.index_usize a33 1#usize
+  let i39 : Std.U64 ← lift (Std.U64.wrapping_add i38 i37)
   let (a34, index_mut_back7) ← Array.index_mut_usize sums7 2#usize
   let a35 ← Array.update a34 1#usize i39
   let a36 ← Array.index_usize pqm.components 2#usize
-  let m19 ← Array.index_usize a36 2#usize
-  let i40 ← lift (UScalar.cast .U64 m19)
-  let m20 ← Array.index_usize a28 2#usize
-  let i41 ← lift (UScalar.cast .U64 m20)
-  let i42 ← lift (Std.U64.wrapping_mul i40 i41)
-  let sums8 := index_mut_back7 a35
+  let m19 : aspis_core.field.M31 ← Array.index_usize a36 2#usize
+  let i40 : Std.U64 ← lift (UScalar.cast .U64 m19)
+  let m20 : aspis_core.field.M31 ← Array.index_usize a28 2#usize
+  let i41 : Std.U64 ← lift (UScalar.cast .U64 m20)
+  let i42 : Std.U64 ← lift (Std.U64.wrapping_mul i40 i41)
+  let sums8 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back7 a35
   let a37 ← Array.index_usize sums8 2#usize
-  let i43 ← Array.index_usize a37 2#usize
-  let i44 ← lift (Std.U64.wrapping_add i43 i42)
+  let i43 : Std.U64 ← Array.index_usize a37 2#usize
+  let i44 : Std.U64 ← lift (Std.U64.wrapping_add i43 i42)
   let (a38, index_mut_back8) ← Array.index_mut_usize sums8 2#usize
   let a39 ← Array.update a38 2#usize i44
-  let q1 ← Array.index_usize right 1#usize
-  let right_sum1 ← aspis_core.field.CM31.add q1.c0 q1.c1
-  let m21 ← aspis_core.field.M31.add q1.c0.a q1.c0.b
-  let m22 ← aspis_core.field.M31.add q1.c1.a q1.c1.b
-  let m23 ← aspis_core.field.M31.add right_sum1.a right_sum1.b
-  let pqm1 ← Array.index_usize left 1#usize
+  let q1 : aspis_core.field.QM31 ← Array.index_usize right 1#usize
+  let right_sum1 : aspis_core.field.CM31 ← aspis_core.field.CM31.add q1.c0 q1.c1
+  let m21 : aspis_core.field.M31 ← aspis_core.field.M31.add q1.c0.a q1.c0.b
+  let m22 : aspis_core.field.M31 ← aspis_core.field.M31.add q1.c1.a q1.c1.b
+  let m23 : aspis_core.field.M31 ← aspis_core.field.M31.add right_sum1.a right_sum1.b
+  let pqm1 : reference_field.PreparedQm31Multiplier ← Array.index_usize left 1#usize
   let a40 ← Array.index_usize pqm1.components 0#usize
-  let m24 ← Array.index_usize a40 0#usize
-  let i45 ← lift (UScalar.cast .U64 m24)
+  let m24 : aspis_core.field.M31 ← Array.index_usize a40 0#usize
+  let i45 : Std.U64 ← lift (UScalar.cast .U64 m24)
   let a41 ←
     Array.index_usize
       (Array.make 3#usize [
@@ -184,42 +184,42 @@ def reference_field.qm31_sum_products3_prepared
         (Array.make 3#usize [ right_sum1.a, right_sum1.b, m23 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
         ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
-  let m25 ← Array.index_usize a41 0#usize
-  let i46 ← lift (UScalar.cast .U64 m25)
-  let i47 ← lift (Std.U64.wrapping_mul i45 i46)
-  let sums9 := index_mut_back8 a39
+  let m25 : aspis_core.field.M31 ← Array.index_usize a41 0#usize
+  let i46 : Std.U64 ← lift (UScalar.cast .U64 m25)
+  let i47 : Std.U64 ← lift (Std.U64.wrapping_mul i45 i46)
+  let sums9 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back8 a39
   let a42 ← Array.index_usize sums9 0#usize
-  let i48 ← Array.index_usize a42 0#usize
-  let i49 ← lift (Std.U64.wrapping_add i48 i47)
+  let i48 : Std.U64 ← Array.index_usize a42 0#usize
+  let i49 : Std.U64 ← lift (Std.U64.wrapping_add i48 i47)
   let (a43, index_mut_back9) ← Array.index_mut_usize sums9 0#usize
   let a44 ← Array.update a43 0#usize i49
   let a45 ← Array.index_usize pqm1.components 0#usize
-  let m26 ← Array.index_usize a45 1#usize
-  let i50 ← lift (UScalar.cast .U64 m26)
-  let m27 ← Array.index_usize a41 1#usize
-  let i51 ← lift (UScalar.cast .U64 m27)
-  let i52 ← lift (Std.U64.wrapping_mul i50 i51)
-  let sums10 := index_mut_back9 a44
+  let m26 : aspis_core.field.M31 ← Array.index_usize a45 1#usize
+  let i50 : Std.U64 ← lift (UScalar.cast .U64 m26)
+  let m27 : aspis_core.field.M31 ← Array.index_usize a41 1#usize
+  let i51 : Std.U64 ← lift (UScalar.cast .U64 m27)
+  let i52 : Std.U64 ← lift (Std.U64.wrapping_mul i50 i51)
+  let sums10 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back9 a44
   let a46 ← Array.index_usize sums10 0#usize
-  let i53 ← Array.index_usize a46 1#usize
-  let i54 ← lift (Std.U64.wrapping_add i53 i52)
+  let i53 : Std.U64 ← Array.index_usize a46 1#usize
+  let i54 : Std.U64 ← lift (Std.U64.wrapping_add i53 i52)
   let (a47, index_mut_back10) ← Array.index_mut_usize sums10 0#usize
   let a48 ← Array.update a47 1#usize i54
   let a49 ← Array.index_usize pqm1.components 0#usize
-  let m28 ← Array.index_usize a49 2#usize
-  let i55 ← lift (UScalar.cast .U64 m28)
-  let m29 ← Array.index_usize a41 2#usize
-  let i56 ← lift (UScalar.cast .U64 m29)
-  let i57 ← lift (Std.U64.wrapping_mul i55 i56)
-  let sums11 := index_mut_back10 a48
+  let m28 : aspis_core.field.M31 ← Array.index_usize a49 2#usize
+  let i55 : Std.U64 ← lift (UScalar.cast .U64 m28)
+  let m29 : aspis_core.field.M31 ← Array.index_usize a41 2#usize
+  let i56 : Std.U64 ← lift (UScalar.cast .U64 m29)
+  let i57 : Std.U64 ← lift (Std.U64.wrapping_mul i55 i56)
+  let sums11 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back10 a48
   let a50 ← Array.index_usize sums11 0#usize
-  let i58 ← Array.index_usize a50 2#usize
-  let i59 ← lift (Std.U64.wrapping_add i58 i57)
+  let i58 : Std.U64 ← Array.index_usize a50 2#usize
+  let i59 : Std.U64 ← lift (Std.U64.wrapping_add i58 i57)
   let (a51, index_mut_back11) ← Array.index_mut_usize sums11 0#usize
   let a52 ← Array.update a51 2#usize i59
   let a53 ← Array.index_usize pqm1.components 1#usize
-  let m30 ← Array.index_usize a53 0#usize
-  let i60 ← lift (UScalar.cast .U64 m30)
+  let m30 : aspis_core.field.M31 ← Array.index_usize a53 0#usize
+  let i60 : Std.U64 ← lift (UScalar.cast .U64 m30)
   let a54 ←
     Array.index_usize
       (Array.make 3#usize [
@@ -230,42 +230,42 @@ def reference_field.qm31_sum_products3_prepared
         (Array.make 3#usize [ right_sum1.a, right_sum1.b, m23 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
         ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
-  let m31 ← Array.index_usize a54 0#usize
-  let i61 ← lift (UScalar.cast .U64 m31)
-  let i62 ← lift (Std.U64.wrapping_mul i60 i61)
-  let sums12 := index_mut_back11 a52
+  let m31 : aspis_core.field.M31 ← Array.index_usize a54 0#usize
+  let i61 : Std.U64 ← lift (UScalar.cast .U64 m31)
+  let i62 : Std.U64 ← lift (Std.U64.wrapping_mul i60 i61)
+  let sums12 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back11 a52
   let a55 ← Array.index_usize sums12 1#usize
-  let i63 ← Array.index_usize a55 0#usize
-  let i64 ← lift (Std.U64.wrapping_add i63 i62)
+  let i63 : Std.U64 ← Array.index_usize a55 0#usize
+  let i64 : Std.U64 ← lift (Std.U64.wrapping_add i63 i62)
   let (a56, index_mut_back12) ← Array.index_mut_usize sums12 1#usize
   let a57 ← Array.update a56 0#usize i64
   let a58 ← Array.index_usize pqm1.components 1#usize
-  let m32 ← Array.index_usize a58 1#usize
-  let i65 ← lift (UScalar.cast .U64 m32)
-  let m33 ← Array.index_usize a54 1#usize
-  let i66 ← lift (UScalar.cast .U64 m33)
-  let i67 ← lift (Std.U64.wrapping_mul i65 i66)
-  let sums13 := index_mut_back12 a57
+  let m32 : aspis_core.field.M31 ← Array.index_usize a58 1#usize
+  let i65 : Std.U64 ← lift (UScalar.cast .U64 m32)
+  let m33 : aspis_core.field.M31 ← Array.index_usize a54 1#usize
+  let i66 : Std.U64 ← lift (UScalar.cast .U64 m33)
+  let i67 : Std.U64 ← lift (Std.U64.wrapping_mul i65 i66)
+  let sums13 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back12 a57
   let a59 ← Array.index_usize sums13 1#usize
-  let i68 ← Array.index_usize a59 1#usize
-  let i69 ← lift (Std.U64.wrapping_add i68 i67)
+  let i68 : Std.U64 ← Array.index_usize a59 1#usize
+  let i69 : Std.U64 ← lift (Std.U64.wrapping_add i68 i67)
   let (a60, index_mut_back13) ← Array.index_mut_usize sums13 1#usize
   let a61 ← Array.update a60 1#usize i69
   let a62 ← Array.index_usize pqm1.components 1#usize
-  let m34 ← Array.index_usize a62 2#usize
-  let i70 ← lift (UScalar.cast .U64 m34)
-  let m35 ← Array.index_usize a54 2#usize
-  let i71 ← lift (UScalar.cast .U64 m35)
-  let i72 ← lift (Std.U64.wrapping_mul i70 i71)
-  let sums14 := index_mut_back13 a61
+  let m34 : aspis_core.field.M31 ← Array.index_usize a62 2#usize
+  let i70 : Std.U64 ← lift (UScalar.cast .U64 m34)
+  let m35 : aspis_core.field.M31 ← Array.index_usize a54 2#usize
+  let i71 : Std.U64 ← lift (UScalar.cast .U64 m35)
+  let i72 : Std.U64 ← lift (Std.U64.wrapping_mul i70 i71)
+  let sums14 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back13 a61
   let a63 ← Array.index_usize sums14 1#usize
-  let i73 ← Array.index_usize a63 2#usize
-  let i74 ← lift (Std.U64.wrapping_add i73 i72)
+  let i73 : Std.U64 ← Array.index_usize a63 2#usize
+  let i74 : Std.U64 ← lift (Std.U64.wrapping_add i73 i72)
   let (a64, index_mut_back14) ← Array.index_mut_usize sums14 1#usize
   let a65 ← Array.update a64 2#usize i74
   let a66 ← Array.index_usize pqm1.components 2#usize
-  let m36 ← Array.index_usize a66 0#usize
-  let i75 ← lift (UScalar.cast .U64 m36)
+  let m36 : aspis_core.field.M31 ← Array.index_usize a66 0#usize
+  let i75 : Std.U64 ← lift (UScalar.cast .U64 m36)
   let a67 ←
     Array.index_usize
       (Array.make 3#usize [
@@ -276,48 +276,48 @@ def reference_field.qm31_sum_products3_prepared
         (Array.make 3#usize [ right_sum1.a, right_sum1.b, m23 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
         ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
-  let m37 ← Array.index_usize a67 0#usize
-  let i76 ← lift (UScalar.cast .U64 m37)
-  let i77 ← lift (Std.U64.wrapping_mul i75 i76)
-  let sums15 := index_mut_back14 a65
+  let m37 : aspis_core.field.M31 ← Array.index_usize a67 0#usize
+  let i76 : Std.U64 ← lift (UScalar.cast .U64 m37)
+  let i77 : Std.U64 ← lift (Std.U64.wrapping_mul i75 i76)
+  let sums15 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back14 a65
   let a68 ← Array.index_usize sums15 2#usize
-  let i78 ← Array.index_usize a68 0#usize
-  let i79 ← lift (Std.U64.wrapping_add i78 i77)
+  let i78 : Std.U64 ← Array.index_usize a68 0#usize
+  let i79 : Std.U64 ← lift (Std.U64.wrapping_add i78 i77)
   let (a69, index_mut_back15) ← Array.index_mut_usize sums15 2#usize
   let a70 ← Array.update a69 0#usize i79
   let a71 ← Array.index_usize pqm1.components 2#usize
-  let m38 ← Array.index_usize a71 1#usize
-  let i80 ← lift (UScalar.cast .U64 m38)
-  let m39 ← Array.index_usize a67 1#usize
-  let i81 ← lift (UScalar.cast .U64 m39)
-  let i82 ← lift (Std.U64.wrapping_mul i80 i81)
-  let sums16 := index_mut_back15 a70
+  let m38 : aspis_core.field.M31 ← Array.index_usize a71 1#usize
+  let i80 : Std.U64 ← lift (UScalar.cast .U64 m38)
+  let m39 : aspis_core.field.M31 ← Array.index_usize a67 1#usize
+  let i81 : Std.U64 ← lift (UScalar.cast .U64 m39)
+  let i82 : Std.U64 ← lift (Std.U64.wrapping_mul i80 i81)
+  let sums16 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back15 a70
   let a72 ← Array.index_usize sums16 2#usize
-  let i83 ← Array.index_usize a72 1#usize
-  let i84 ← lift (Std.U64.wrapping_add i83 i82)
+  let i83 : Std.U64 ← Array.index_usize a72 1#usize
+  let i84 : Std.U64 ← lift (Std.U64.wrapping_add i83 i82)
   let (a73, index_mut_back16) ← Array.index_mut_usize sums16 2#usize
   let a74 ← Array.update a73 1#usize i84
   let a75 ← Array.index_usize pqm1.components 2#usize
-  let m40 ← Array.index_usize a75 2#usize
-  let i85 ← lift (UScalar.cast .U64 m40)
-  let m41 ← Array.index_usize a67 2#usize
-  let i86 ← lift (UScalar.cast .U64 m41)
-  let i87 ← lift (Std.U64.wrapping_mul i85 i86)
-  let sums17 := index_mut_back16 a74
+  let m40 : aspis_core.field.M31 ← Array.index_usize a75 2#usize
+  let i85 : Std.U64 ← lift (UScalar.cast .U64 m40)
+  let m41 : aspis_core.field.M31 ← Array.index_usize a67 2#usize
+  let i86 : Std.U64 ← lift (UScalar.cast .U64 m41)
+  let i87 : Std.U64 ← lift (Std.U64.wrapping_mul i85 i86)
+  let sums17 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back16 a74
   let a76 ← Array.index_usize sums17 2#usize
-  let i88 ← Array.index_usize a76 2#usize
-  let i89 ← lift (Std.U64.wrapping_add i88 i87)
+  let i88 : Std.U64 ← Array.index_usize a76 2#usize
+  let i89 : Std.U64 ← lift (Std.U64.wrapping_add i88 i87)
   let (a77, index_mut_back17) ← Array.index_mut_usize sums17 2#usize
   let a78 ← Array.update a77 2#usize i89
-  let q2 ← Array.index_usize right 2#usize
-  let right_sum2 ← aspis_core.field.CM31.add q2.c0 q2.c1
-  let m42 ← aspis_core.field.M31.add q2.c0.a q2.c0.b
-  let m43 ← aspis_core.field.M31.add q2.c1.a q2.c1.b
-  let m44 ← aspis_core.field.M31.add right_sum2.a right_sum2.b
-  let pqm2 ← Array.index_usize left 2#usize
+  let q2 : aspis_core.field.QM31 ← Array.index_usize right 2#usize
+  let right_sum2 : aspis_core.field.CM31 ← aspis_core.field.CM31.add q2.c0 q2.c1
+  let m42 : aspis_core.field.M31 ← aspis_core.field.M31.add q2.c0.a q2.c0.b
+  let m43 : aspis_core.field.M31 ← aspis_core.field.M31.add q2.c1.a q2.c1.b
+  let m44 : aspis_core.field.M31 ← aspis_core.field.M31.add right_sum2.a right_sum2.b
+  let pqm2 : reference_field.PreparedQm31Multiplier ← Array.index_usize left 2#usize
   let a79 ← Array.index_usize pqm2.components 0#usize
-  let m45 ← Array.index_usize a79 0#usize
-  let i90 ← lift (UScalar.cast .U64 m45)
+  let m45 : aspis_core.field.M31 ← Array.index_usize a79 0#usize
+  let i90 : Std.U64 ← lift (UScalar.cast .U64 m45)
   let a80 ←
     Array.index_usize
       (Array.make 3#usize [
@@ -328,42 +328,42 @@ def reference_field.qm31_sum_products3_prepared
         (Array.make 3#usize [ right_sum2.a, right_sum2.b, m44 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
         ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
-  let m46 ← Array.index_usize a80 0#usize
-  let i91 ← lift (UScalar.cast .U64 m46)
-  let i92 ← lift (Std.U64.wrapping_mul i90 i91)
-  let sums18 := index_mut_back17 a78
+  let m46 : aspis_core.field.M31 ← Array.index_usize a80 0#usize
+  let i91 : Std.U64 ← lift (UScalar.cast .U64 m46)
+  let i92 : Std.U64 ← lift (Std.U64.wrapping_mul i90 i91)
+  let sums18 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back17 a78
   let a81 ← Array.index_usize sums18 0#usize
-  let i93 ← Array.index_usize a81 0#usize
-  let i94 ← lift (Std.U64.wrapping_add i93 i92)
+  let i93 : Std.U64 ← Array.index_usize a81 0#usize
+  let i94 : Std.U64 ← lift (Std.U64.wrapping_add i93 i92)
   let (a82, index_mut_back18) ← Array.index_mut_usize sums18 0#usize
   let a83 ← Array.update a82 0#usize i94
   let a84 ← Array.index_usize pqm2.components 0#usize
-  let m47 ← Array.index_usize a84 1#usize
-  let i95 ← lift (UScalar.cast .U64 m47)
-  let m48 ← Array.index_usize a80 1#usize
-  let i96 ← lift (UScalar.cast .U64 m48)
-  let i97 ← lift (Std.U64.wrapping_mul i95 i96)
-  let sums19 := index_mut_back18 a83
+  let m47 : aspis_core.field.M31 ← Array.index_usize a84 1#usize
+  let i95 : Std.U64 ← lift (UScalar.cast .U64 m47)
+  let m48 : aspis_core.field.M31 ← Array.index_usize a80 1#usize
+  let i96 : Std.U64 ← lift (UScalar.cast .U64 m48)
+  let i97 : Std.U64 ← lift (Std.U64.wrapping_mul i95 i96)
+  let sums19 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back18 a83
   let a85 ← Array.index_usize sums19 0#usize
-  let i98 ← Array.index_usize a85 1#usize
-  let i99 ← lift (Std.U64.wrapping_add i98 i97)
+  let i98 : Std.U64 ← Array.index_usize a85 1#usize
+  let i99 : Std.U64 ← lift (Std.U64.wrapping_add i98 i97)
   let (a86, index_mut_back19) ← Array.index_mut_usize sums19 0#usize
   let a87 ← Array.update a86 1#usize i99
   let a88 ← Array.index_usize pqm2.components 0#usize
-  let m49 ← Array.index_usize a88 2#usize
-  let i100 ← lift (UScalar.cast .U64 m49)
-  let m50 ← Array.index_usize a80 2#usize
-  let i101 ← lift (UScalar.cast .U64 m50)
-  let i102 ← lift (Std.U64.wrapping_mul i100 i101)
-  let sums20 := index_mut_back19 a87
+  let m49 : aspis_core.field.M31 ← Array.index_usize a88 2#usize
+  let i100 : Std.U64 ← lift (UScalar.cast .U64 m49)
+  let m50 : aspis_core.field.M31 ← Array.index_usize a80 2#usize
+  let i101 : Std.U64 ← lift (UScalar.cast .U64 m50)
+  let i102 : Std.U64 ← lift (Std.U64.wrapping_mul i100 i101)
+  let sums20 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back19 a87
   let a89 ← Array.index_usize sums20 0#usize
-  let i103 ← Array.index_usize a89 2#usize
-  let i104 ← lift (Std.U64.wrapping_add i103 i102)
+  let i103 : Std.U64 ← Array.index_usize a89 2#usize
+  let i104 : Std.U64 ← lift (Std.U64.wrapping_add i103 i102)
   let (a90, index_mut_back20) ← Array.index_mut_usize sums20 0#usize
   let a91 ← Array.update a90 2#usize i104
   let a92 ← Array.index_usize pqm2.components 1#usize
-  let m51 ← Array.index_usize a92 0#usize
-  let i105 ← lift (UScalar.cast .U64 m51)
+  let m51 : aspis_core.field.M31 ← Array.index_usize a92 0#usize
+  let i105 : Std.U64 ← lift (UScalar.cast .U64 m51)
   let a93 ←
     Array.index_usize
       (Array.make 3#usize [
@@ -374,42 +374,42 @@ def reference_field.qm31_sum_products3_prepared
         (Array.make 3#usize [ right_sum2.a, right_sum2.b, m44 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
         ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
-  let m52 ← Array.index_usize a93 0#usize
-  let i106 ← lift (UScalar.cast .U64 m52)
-  let i107 ← lift (Std.U64.wrapping_mul i105 i106)
-  let sums21 := index_mut_back20 a91
+  let m52 : aspis_core.field.M31 ← Array.index_usize a93 0#usize
+  let i106 : Std.U64 ← lift (UScalar.cast .U64 m52)
+  let i107 : Std.U64 ← lift (Std.U64.wrapping_mul i105 i106)
+  let sums21 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back20 a91
   let a94 ← Array.index_usize sums21 1#usize
-  let i108 ← Array.index_usize a94 0#usize
-  let i109 ← lift (Std.U64.wrapping_add i108 i107)
+  let i108 : Std.U64 ← Array.index_usize a94 0#usize
+  let i109 : Std.U64 ← lift (Std.U64.wrapping_add i108 i107)
   let (a95, index_mut_back21) ← Array.index_mut_usize sums21 1#usize
   let a96 ← Array.update a95 0#usize i109
   let a97 ← Array.index_usize pqm2.components 1#usize
-  let m53 ← Array.index_usize a97 1#usize
-  let i110 ← lift (UScalar.cast .U64 m53)
-  let m54 ← Array.index_usize a93 1#usize
-  let i111 ← lift (UScalar.cast .U64 m54)
-  let i112 ← lift (Std.U64.wrapping_mul i110 i111)
-  let sums22 := index_mut_back21 a96
+  let m53 : aspis_core.field.M31 ← Array.index_usize a97 1#usize
+  let i110 : Std.U64 ← lift (UScalar.cast .U64 m53)
+  let m54 : aspis_core.field.M31 ← Array.index_usize a93 1#usize
+  let i111 : Std.U64 ← lift (UScalar.cast .U64 m54)
+  let i112 : Std.U64 ← lift (Std.U64.wrapping_mul i110 i111)
+  let sums22 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back21 a96
   let a98 ← Array.index_usize sums22 1#usize
-  let i113 ← Array.index_usize a98 1#usize
-  let i114 ← lift (Std.U64.wrapping_add i113 i112)
+  let i113 : Std.U64 ← Array.index_usize a98 1#usize
+  let i114 : Std.U64 ← lift (Std.U64.wrapping_add i113 i112)
   let (a99, index_mut_back22) ← Array.index_mut_usize sums22 1#usize
   let a100 ← Array.update a99 1#usize i114
   let a101 ← Array.index_usize pqm2.components 1#usize
-  let m55 ← Array.index_usize a101 2#usize
-  let i115 ← lift (UScalar.cast .U64 m55)
-  let m56 ← Array.index_usize a93 2#usize
-  let i116 ← lift (UScalar.cast .U64 m56)
-  let i117 ← lift (Std.U64.wrapping_mul i115 i116)
-  let sums23 := index_mut_back22 a100
+  let m55 : aspis_core.field.M31 ← Array.index_usize a101 2#usize
+  let i115 : Std.U64 ← lift (UScalar.cast .U64 m55)
+  let m56 : aspis_core.field.M31 ← Array.index_usize a93 2#usize
+  let i116 : Std.U64 ← lift (UScalar.cast .U64 m56)
+  let i117 : Std.U64 ← lift (Std.U64.wrapping_mul i115 i116)
+  let sums23 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back22 a100
   let a102 ← Array.index_usize sums23 1#usize
-  let i118 ← Array.index_usize a102 2#usize
-  let i119 ← lift (Std.U64.wrapping_add i118 i117)
+  let i118 : Std.U64 ← Array.index_usize a102 2#usize
+  let i119 : Std.U64 ← lift (Std.U64.wrapping_add i118 i117)
   let (a103, index_mut_back23) ← Array.index_mut_usize sums23 1#usize
   let a104 ← Array.update a103 2#usize i119
   let a105 ← Array.index_usize pqm2.components 2#usize
-  let m57 ← Array.index_usize a105 0#usize
-  let i120 ← lift (UScalar.cast .U64 m57)
+  let m57 : aspis_core.field.M31 ← Array.index_usize a105 0#usize
+  let i120 : Std.U64 ← lift (UScalar.cast .U64 m57)
   let a106 ←
     Array.index_usize
       (Array.make 3#usize [
@@ -420,46 +420,46 @@ def reference_field.qm31_sum_products3_prepared
         (Array.make 3#usize [ right_sum2.a, right_sum2.b, m44 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
         ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
-  let m58 ← Array.index_usize a106 0#usize
-  let i121 ← lift (UScalar.cast .U64 m58)
-  let i122 ← lift (Std.U64.wrapping_mul i120 i121)
-  let sums24 := index_mut_back23 a104
+  let m58 : aspis_core.field.M31 ← Array.index_usize a106 0#usize
+  let i121 : Std.U64 ← lift (UScalar.cast .U64 m58)
+  let i122 : Std.U64 ← lift (Std.U64.wrapping_mul i120 i121)
+  let sums24 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back23 a104
   let a107 ← Array.index_usize sums24 2#usize
-  let i123 ← Array.index_usize a107 0#usize
-  let i124 ← lift (Std.U64.wrapping_add i123 i122)
+  let i123 : Std.U64 ← Array.index_usize a107 0#usize
+  let i124 : Std.U64 ← lift (Std.U64.wrapping_add i123 i122)
   let (a108, index_mut_back24) ← Array.index_mut_usize sums24 2#usize
   let a109 ← Array.update a108 0#usize i124
   let a110 ← Array.index_usize pqm2.components 2#usize
-  let m59 ← Array.index_usize a110 1#usize
-  let i125 ← lift (UScalar.cast .U64 m59)
-  let m60 ← Array.index_usize a106 1#usize
-  let i126 ← lift (UScalar.cast .U64 m60)
-  let i127 ← lift (Std.U64.wrapping_mul i125 i126)
-  let sums25 := index_mut_back24 a109
+  let m59 : aspis_core.field.M31 ← Array.index_usize a110 1#usize
+  let i125 : Std.U64 ← lift (UScalar.cast .U64 m59)
+  let m60 : aspis_core.field.M31 ← Array.index_usize a106 1#usize
+  let i126 : Std.U64 ← lift (UScalar.cast .U64 m60)
+  let i127 : Std.U64 ← lift (Std.U64.wrapping_mul i125 i126)
+  let sums25 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back24 a109
   let a111 ← Array.index_usize sums25 2#usize
-  let i128 ← Array.index_usize a111 1#usize
-  let i129 ← lift (Std.U64.wrapping_add i128 i127)
+  let i128 : Std.U64 ← Array.index_usize a111 1#usize
+  let i129 : Std.U64 ← lift (Std.U64.wrapping_add i128 i127)
   let (a112, index_mut_back25) ← Array.index_mut_usize sums25 2#usize
   let a113 ← Array.update a112 1#usize i129
   let a114 ← Array.index_usize pqm2.components 2#usize
-  let m61 ← Array.index_usize a114 2#usize
-  let i130 ← lift (UScalar.cast .U64 m61)
-  let m62 ← Array.index_usize a106 2#usize
-  let i131 ← lift (UScalar.cast .U64 m62)
-  let i132 ← lift (Std.U64.wrapping_mul i130 i131)
-  let sums26 := index_mut_back25 a113
+  let m61 : aspis_core.field.M31 ← Array.index_usize a114 2#usize
+  let i130 : Std.U64 ← lift (UScalar.cast .U64 m61)
+  let m62 : aspis_core.field.M31 ← Array.index_usize a106 2#usize
+  let i131 : Std.U64 ← lift (UScalar.cast .U64 m62)
+  let i132 : Std.U64 ← lift (Std.U64.wrapping_mul i130 i131)
+  let sums26 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back25 a113
   let a115 ← Array.index_usize sums26 2#usize
-  let i133 ← Array.index_usize a115 2#usize
-  let i134 ← lift (Std.U64.wrapping_add i133 i132)
+  let i133 : Std.U64 ← Array.index_usize a115 2#usize
+  let i134 : Std.U64 ← lift (Std.U64.wrapping_add i133 i132)
   let (a116, index_mut_back26) ← Array.index_mut_usize sums26 2#usize
   let a117 ← Array.update a116 2#usize i134
-  let sums27 := index_mut_back26 a117
+  let sums27 : Array (Array Std.U64 3#usize) 3#usize := index_mut_back26 a117
   let a118 ← Array.index_usize sums27 0#usize
-  let m0 ← reference_field.reconstruct_component a118
+  let m0 : aspis_core.field.M31 ← reference_field.reconstruct_component a118
   let a119 ← Array.index_usize sums27 1#usize
-  let m110 ← reference_field.reconstruct_component a119
+  let m110 : aspis_core.field.M31 ← reference_field.reconstruct_component a119
   let a120 ← Array.index_usize sums27 2#usize
-  let m210 ← reference_field.reconstruct_component a120
+  let m210 : aspis_core.field.M31 ← reference_field.reconstruct_component a120
   let c ← reference_field.cm31_mul_r m110
   let c1 ← aspis_core.field.CM31.add m0 c
   let c2 ← aspis_core.field.CM31.sub m210 m0
