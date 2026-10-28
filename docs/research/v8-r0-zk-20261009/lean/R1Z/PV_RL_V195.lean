@@ -32,6 +32,21 @@ theorem full_overwrite (chunks : List (List U8)) (h : chunks.flatten.length=32) 
 /-- The zip has exactly eight four-byte chunks and covers every byte once. -/
 theorem slot (i j : Nat) (hi : i<8) (hj : j<4) :
     4*i+j<32 ∧ (4*i+j)/4=i ∧ (4*i+j)%4=j := by omega
+theorem all_slots (k : Nat) (hk : k<32) :
+    ∃ i j, i<8 ∧ j<4 ∧ k=4*i+j := by
+  exact ⟨k/4,k%4,by omega,by omega,by omega⟩
+theorem width_four (chunks : List (List U8))
+    (hw : ∀ c ∈ chunks, c.length=4) : chunks.flatten.length=chunks.length*4 := by
+  induction chunks with
+  | nil => rfl
+  | cons c cs ih =>
+    have hc := hw c (by simp)
+    have ht : ∀ x ∈ cs, x.length=4 := fun x hx => hw x (by simp [hx])
+    simp only [List.flatten_cons,List.length_append,List.length_cons,ih ht,hc]
+    omega
+theorem eight_chunks (chunks : List (List U8)) (hn : chunks.length=8)
+    (hw : ∀ c ∈ chunks, c.length=4) : chunks.flatten.length=32 := by
+  rw [width_four chunks hw,hn]
 /-- Complete Result transport for the unchanged serializer reference, for any carrier. -/
 theorem complete [ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
     (x : ProverRwFull.aspis_core.field.wide_exact.WideExact) :
@@ -44,6 +59,9 @@ theorem nonvacuous (a b c d e f g h : U32) :
 #print axioms copyBuffer_result
 #print axioms full_overwrite
 #print axioms slot
+#print axioms all_slots
+#print axioms width_four
+#print axioms eight_chunks
 #print axioms complete
 #print axioms nonvacuous
 end R1Z.PV_RL_V195
