@@ -5,7 +5,7 @@ for p in E.glob('lean-*/receipt.json'):
  j=json.loads(p.read_text())
  if j.get('exit')==0 and j.get('module'):passed[j['module']]=j
 roots=json.loads((E/'resume-audit-roots.json').read_text())['imports']
-for m in ['R1Z/PV_DL_ResumeAudit','R1Z/PV_DL_ResumeReplay']:
+for m in ['R1Z/PV_DL_ResumeAudit','R1Z/PV_DL_ResumeReplay','R1Z/PV_DL_ResumeAuditReplay']:
  if m in passed:roots.append(m)
 def visit(m):
  if m in seen:return
