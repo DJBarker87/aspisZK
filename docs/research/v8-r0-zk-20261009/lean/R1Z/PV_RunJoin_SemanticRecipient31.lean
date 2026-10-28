@@ -31,7 +31,7 @@ theorem recipient (i : Input) (success : run i = ok (.Ok i.compiled))
     have hp := PV_RunJoin_UniversalRecords22.publicCorr (K := K) i success frontier r hrecords
     have hpub : (statement (K := K) i).recipient = some (digK p.recipient_commitment) := by
       simp only [statement,publicInput,hreq,PV_Src_Public.canonicalPublic,
-        BuilderPublicProjection.transferPublic,mapPub]
+        BuilderPublicProjection.transferPublic,mapPub,Option.map_some]
       congr 1
       funext j
       simp only [digK,liftU,map_natCast]
