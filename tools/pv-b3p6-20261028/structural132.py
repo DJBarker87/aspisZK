@@ -82,7 +82,7 @@ record=dict(row='V228',op=132,evidence_class='structural (K-1 substitute)',sourc
  finite_validation='native132-resume3-exact: unit input, statement/owned/host/reference complete ordered values; finite validation only',
  trusted_items_added=[],universal_native_machine_equality_claimed=False,row_closed=False)
 if '--finalize' in sys.argv:
- resolution=json.loads((D/'project-resolution.json').read_text());receipts=[]
+ resolution=json.loads((D/'structural132-project-resolution-resume3.json').read_text());receipts=[]
  for f in (D/'receipts-resume3').glob('lean-*/receipt/receipt.json'):
   rr=json.loads(f.read_text());rr['_file']=str(f.relative_to(R));receipts.append(rr)
  checked=[]

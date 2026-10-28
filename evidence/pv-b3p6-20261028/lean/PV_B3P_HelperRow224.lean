@@ -18,17 +18,33 @@ theorem complete_result (r : aspis_statement.logup.CopyLogUpRow) (chi : aspis_co
   rw [specification,PV_B3P_HelperOrder224.four_endpoints]
   unfold reference224.one_row
   simp only [index_zero,index_one,bind_tc_ok]
-  rw [try_bind_eq]
-  rw [PV_B3P_HelperEndpoint224.source]
-  congr 1
-  funext v0
-  rw [try_bind_eq,PV_B3P_HelperEndpoint224.source]
-  congr 1
-  funext v1
-  rw [try_bind_eq,PV_B3P_HelperEndpoint224.source]
-  congr 1
-  funext v2
-  exact PV_B3P_HelperEndpoint224.source _ _ _ _ _
+  simp only [← PV_B3P_HelperEndpoint224.source]
+  change _ = bindR (reference224.endpoint aspis_core.field.QM31.ZERO
+    (zero r.producer_values) (zero r.producer_weights) chi false) (fun v0 =>
+    bindR (reference224.endpoint v0 (one r.producer_values) (one r.producer_weights) chi false) (fun v1 =>
+    bindR (reference224.endpoint v1 (zero r.consumer_values) (zero r.consumer_weights) chi true) (fun v2 =>
+      reference224.endpoint v2 (one r.consumer_values) (one r.consumer_weights) chi true)))
+  cases h0 : reference224.endpoint aspis_core.field.QM31.ZERO
+      (zero r.producer_values) (zero r.producer_weights) chi false with
+  | fail e => rfl
+  | div => rfl
+  | ok x =>
+    cases x with
+    | Err e => rfl
+    | Ok v0 =>
+      simp only [bindR,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+      cases h1 : reference224.endpoint v0 (one r.producer_values) (one r.producer_weights) chi false with
+      | fail e => rfl
+      | div => rfl
+      | ok x =>
+        cases x with
+        | Err e => rfl
+        | Ok v1 =>
+          simp only [bindR,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+          cases h2 : reference224.endpoint v1 (zero r.consumer_values) (zero r.consumer_weights) chi true with
+          | fail e => rfl
+          | div => rfl
+          | ok x => cases x <;> rfl
 
 #print axioms complete_result
 end PV_B3P_HelperRow224
