@@ -46,3 +46,8 @@ introduced; existing outputs are reused, with target/status/wall/RSS/swap/source
 revision/axioms recorded. Lean 0/30, Kani 0/0; Env-J 61600–61699 unused. No host
 scope, release rebuild, wallet/key action or unchanged regression is needed.
 Endpoint premises removed/added/weakened: 0/0/0. Target not yet established.
+
+rows8.json retains historical row fields verbatim. Its new definition_witnesses8
+field links into definition-audit8.json rather than duplicating the full new
+witness arrays, keeping the required JSON artifact below20MiB. The linked audit
+retains every ref/revision/path/blob/SHA/source snapshot/declaration.

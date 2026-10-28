@@ -18,8 +18,7 @@ the binding's reference_equation; the import chain consumes this object. Final
 41494–41499 audits/replay do not recompile the binding. A coherent fingerprint
 and standard axioms do not repair admission. V213 stays OPEN, native credit
 SUSPENDED until a compliant exact-source recompile and dependent validation.
-The failed early 41460 earns no credit. Seven other rdcd restorations retain
-their own scoped evidence; no theorem is declared false by this correction.
+The failed early 41460 earns no credit. Aggregate41494–41499 audits/replay consume the void object and are not accepted as a compliant final manifest. Seven other rdcd restorations retain their independent successful row-specific law/native-gate evidence; no theorem is declared false by this correction.
 
 **D410/V178,V181:** inherited 60309 is void; rdeac explicitly recompiled its
 PV_RDEA_CloneExecution source compliantly at 61101. That repairs this particular

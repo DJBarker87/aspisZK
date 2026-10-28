@@ -1,0 +1,11 @@
+import R1Z.PDict_RemainingDictionary231
+import R1Z.PV_TraceValueInstall
+set_option autoImplicit false
+#check R1Z.PDict_RemainingDictionary231.op78_installed
+#check R1Z.PDict_RemainingDictionary231.op231_installed
+#check R1Z.PDict_RemainingDictionary231.op247_installed
+#print axioms R1Z.PDict_RemainingDictionary231.op78_installed
+#print axioms R1Z.PDict_RemainingDictionary231.op231_installed
+#print axioms R1Z.PDict_RemainingDictionary231.op247_installed
+#print axioms R1Z.PV_TraceValueInstall.source
+#print axioms R1Z.PV_ProverRwP7CoefficientsInstall.source
