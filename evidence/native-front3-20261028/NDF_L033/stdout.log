@@ -1,0 +1,243 @@
+NDF_generated/NDF_AtCompose.lean:20:14: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ←
+      let (_, i) := (tag, size)
+        do
+        let length ← 5#usize + i
+        let end1 ← offset + length
+        let o1 ←
+          core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := end1 }
+        let r ← NCO_ParserRef.core.option.Option.ok_or o1 (NCO_ParserRef.RefError.Length row)
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r1 ← NCO_ParserRef.parse_record_ref row val
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame NCO_ParserRef.RefError) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame NCO_ParserRef.RefError) residual
+    ok (NCO_Framing.result r)
+is not definitionally equal to the right-hand side
+  let (_, i) := (tag, size)
+  do
+  let length ← 5#usize + i
+  let i1 ← offset + length
+  let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+  let r ←
+    AspisR1PrefixAggregateParser.core.option.Option.ok_or o1 (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+        (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+
+case fail
+bytes : Slice U8
+row tag : U8
+offset size len finish : Usize
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok len
+add : offset + len = ok finish
+callee :
+  ∀ (framed : Slice U8),
+    (do
+        let r ← NCO_ParserRef.parse_record_ref row framed
+        ok (NCO_Framing.result r)) =
+      AspisR1PrefixAggregateParser.r1_wire.parse_record row framed
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+e : Error
+selected :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish } =
+    fail e
+⊢ (do
+      let r ←
+        let (_, i) := (tag, size)
+          do
+          let length ← 5#usize + i
+          let end1 ← offset + length
+          let o1 ←
+            core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := offset, «end» := end1 }
+          let r ← NCO_ParserRef.core.option.Option.ok_or o1 (NCO_ParserRef.RefError.Length row)
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let r1 ← NCO_ParserRef.parse_record_ref row val
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                    (core.convert.FromSame NCO_ParserRef.RefError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame NCO_ParserRef.RefError) residual
+      ok (NCO_Framing.result r)) =
+    let (_, i) := (tag, size)
+    do
+    let length ← 5#usize + i
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or o1 (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NDF_generated/NDF_AtCompose.lean:21:11: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ←
+      let (_, i) := (tag, size)
+        do
+        let length ← 5#usize + i
+        let end1 ← offset + length
+        let o1 ←
+          core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := end1 }
+        let r ← NCO_ParserRef.core.option.Option.ok_or o1 (NCO_ParserRef.RefError.Length row)
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r1 ← NCO_ParserRef.parse_record_ref row val
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame NCO_ParserRef.RefError) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame NCO_ParserRef.RefError) residual
+    ok (NCO_Framing.result r)
+is not definitionally equal to the right-hand side
+  let (_, i) := (tag, size)
+  do
+  let length ← 5#usize + i
+  let i1 ← offset + length
+  let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+  let r ←
+    AspisR1PrefixAggregateParser.core.option.Option.ok_or o1 (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+        (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+
+case div
+bytes : Slice U8
+row tag : U8
+offset size len finish : Usize
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok len
+add : offset + len = ok finish
+callee :
+  ∀ (framed : Slice U8),
+    (do
+        let r ← NCO_ParserRef.parse_record_ref row framed
+        ok (NCO_Framing.result r)) =
+      AspisR1PrefixAggregateParser.r1_wire.parse_record row framed
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+selected :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := finish } = div
+⊢ (do
+      let r ←
+        let (_, i) := (tag, size)
+          do
+          let length ← 5#usize + i
+          let end1 ← offset + length
+          let o1 ←
+            core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := offset, «end» := end1 }
+          let r ← NCO_ParserRef.core.option.Option.ok_or o1 (NCO_ParserRef.RefError.Length row)
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let r1 ← NCO_ParserRef.parse_record_ref row val
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                    (core.convert.FromSame NCO_ParserRef.RefError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                (core.convert.FromSame NCO_ParserRef.RefError) residual
+      ok (NCO_Framing.result r)) =
+    let (_, i) := (tag, size)
+    do
+    let length ← 5#usize + i
+    let i1 ← offset + length
+    let o1 ← core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+    let r ←
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or o1 (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NDF_generated/NDF_AtCompose.lean:24:4: error: Invalid alternative name `none`: Expected `refl`
+NDF_generated/NDF_AtCompose.lean:25:4: error: Invalid alternative name `some`: Expected `refl`
+NDF_generated/NDF_AtCompose.lean:23:4: error: Dependent elimination failed: Failed to solve equation
+  ok selected✝ =
+    Decidable.rec (fun h => (fun x => ok none) h)
+      (fun h =>
+        (fun x =>
+            ok
+              (some
+                ⟨List.slice ↑{ start := offset, «end» := finish }.start ↑{ start := offset, «end» := finish }.end
+                    ↑bytes,
+                  ⋯⟩))
+          h)
+      instDecidableAnd
+NDF_generated/NDF_AtCompose.lean:17:84: warning: This simp argument is unused:
+  sum
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲bind_tc_ok, ̲core.option.Option.unwrap, ̲Result.ofOption,s̵u̵m̵,̵ ̲add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDF_generated/NDF_AtCompose.lean:17:88: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲bind_tc_ok, ̲core.option.Option.unwrap, ̲Result.ofOption, ̲sum,̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDF_AtCompose.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

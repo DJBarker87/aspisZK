@@ -9,3 +9,5 @@ exhaustion is not the stopping condition for these mathematical obligations.
 
 No proof in a failing Lean receipt is accepted, including error-recovery
 `#print axioms` output containing sorryAx. Only exit-0 audited modules are used.
+
+Final continuation supersedes stage counts:80 Lean/50 Kani/2 extraction; full reader and PrefixAggregate validator reference equalities complete. Full parser assembly remains OPEN. See NDF_HANDOFF.md and final L080 audit.

@@ -1,0 +1,47 @@
+{"attempt": "NDF_L042", "exit_status": 1, "wall_seconds": 1.6153643759898841, "peak_rss_kib": "2634776", "swaps": "0", "print_axioms": ["'NDF_AtCompose.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDF_generated/NDF_AtCompose.lean:36:20: error: Dependent elimination failed: Failed to solve equation
+  ok reply✝ =
+    match NCO_ParserRef.row_shape_ref row with
+    | ok v =>
+      (fun o => do
+          let r ← NCO_ParserRef.core.option.Option.ok_or o NCO_ParserRef.RefError.InvalidRow
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (tag, size) := val
+              have i := framed.len;
+              do
+              let i1 ← 5#usize + size
+              if (i != i1) = true then ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+                else do
+    
+...
+0 <<< 16#i32
+                      let i12 ← lift (i8 ||| i11)
+                      let i13 ← framed.index_usize 4#usize
+                      let i14 ← lift (UScalar.cast UScalarTy.Usize i13)
+                      let i15 ← i14 <<< 24#i32
+                      let size_wire ← lift (i12 ||| i15)
+                      if (size_wire != size) = true then ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+                        else do
+                          let payload ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) framed
+                                { start := 5#usize }
+                          if row ≥ 14#u8 then do
+                              let r1 ← NCO_ParserRef.validate_ref row payload
+                              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                              match cf1 with
+                                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (Slice U8) (core.convert.FromSame NCO_ParserRef.RefError) residual
+                            else ok (core.result.Result.Ok payload)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                (core.convert.FromSame NCO_ParserRef.RefError) residual)
+        v
+    | fail v => fail v
+    | div => div
+'NDF_AtCompose.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r48d6db92aa1b4d5c8274debb872a461d.scope; invocation ID: 4dd0948117824626ac25b27dec5532ed

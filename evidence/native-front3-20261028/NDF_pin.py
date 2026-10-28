@@ -4,7 +4,7 @@ E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-n
 rows=[json.loads(l) for l in (E/'NDF_ATTEMPTS.jsonl').read_text().splitlines()]
 latest={}
 for r in rows:
- if r['kind']=='lean' and r['exit_status']==0:latest[r['module']]=r
+ if r['kind']=='lean' and r['exit_status']==0 and r['module']!='NDF_Audit':latest[r['module']]=r
 accepted={};imports=[];prints=[]
 for m,r in latest.items():
  p=E/(m+'.lean');sha=r['source_hashes']['NDF_generated/'+m+'.lean']
@@ -33,7 +33,7 @@ for old,v in x['initial']['cache_imports'].items():
 for m,v in x['accepted'].items():
  src=b/'NDF_generated'/(m+'.lean');assert sha(src)==v['source_sha256'],m
  pin(b/'NDF_objects'/(m+'.olean'));sources[m]=dict(path=str(src),sha256=sha(src))
-models=['Port3_BatchStd','Port4B_Opening','AspisR1PublicPreparation/Funs','AspisR1PublicPreparation/Types','NBH_ArrayEq','CheckpointBytes3Reader','OraclePortCkptAbi2Unwrap','R22Stage2ReaderTotal','S1NativeCompactModelV1','S1NativeCompactTypesV1','ExtractedRowShape','AspisR1RowShape/Funs','AspisR1RowShape/Types','AspisR1PrefixAggregateParser/Funs','AspisR1PrefixAggregateParser/Types','Mathlib/Tactic/IntervalCases']
+models=['ExtractedRecordValidator','ExtractedRecordByteCanonicality','ExtractedRecordHighZero','ExtractedPrefixRecordAgreement','Port3_BatchStd','Port4B_Opening','AspisR1PublicPreparation/Funs','AspisR1PublicPreparation/Types','NBH_ArrayEq','CheckpointBytes3Reader','OraclePortCkptAbi2Unwrap','R22Stage2ReaderTotal','S1NativeCompactModelV1','S1NativeCompactTypesV1','ExtractedRowShape','AspisR1RowShape/Funs','AspisR1RowShape/Types','AspisR1PrefixAggregateParser/Funs','AspisR1PrefixAggregateParser/Types','Mathlib/Tactic/IntervalCases']
 for m in models:
  obj=next((root/(m+'.olean') for root in [b/'NDF_objects',cache,c,c/'objects'] if (root/(m+'.olean')).is_file()),None)
  assert obj is not None,m

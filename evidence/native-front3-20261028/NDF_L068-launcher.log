@@ -1,0 +1,52 @@
+{"attempt": "NDF_L068", "exit_status": 1, "wall_seconds": 1.629212838015519, "peak_rss_kib": "2628208", "swaps": "0", "print_axioms": ["'NDF_ChunkGeometry.widths' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDF_ChunkGeometry.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDF_ChunkGeometry.window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDF_generated/NDF_ChunkGeometry.lean:40:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => _a.1[0] = List.take 32 (List.drop (32 * 0) bytes)
+Error: Application type mismatch: The argument
+  List.toChunksExact.eq_def 32 (of_decide_eq_true (id (Eq.refl true))) bytes
+has type
+  List.toChunksExact 32 ⋯ bytes =
+    if _h : bytes.length < 32 then ([], bytes)
+    else
+      match List.toChunksExact 32 ⋯ (List.drop 32 bytes) with
+      | (chunks, rem) => (List.take 32 bytes :: chunks, rem)
+but is expected to have type
+  List.toChunksExact 32 ⋯ bytes = _a
+in the application
+  congrArg Prod.fst (List.toChunksExact.eq_def 32 (of_decide_eq_true (id (Eq.refl true))) bytes)
+
+Explan
+...
+ich can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case succ
+α : Type
+i : ℕ
+ih :
+  ∀ (bytes : List α) (bound : i < bytes.length / 32),
+    (List.toChunksExact 32 ⋯ bytes).1[i] = List.take 32 (List.drop (32 * i) bytes)
+bytes : List α
+bound : i + 1 < bytes.length / 32
+full : ¬bytes.length < 32
+⊢ (if _h : bytes.length < 32 then ([], bytes)
+        else
+          match List.toChunksExact 32 ⋯ (List.drop 32 bytes) with
+          | (chunks, rem) => (List.take 32 bytes :: chunks, rem)).1[i + 1] =
+    List.take 32 (List.drop (32 * (i + 1)) bytes)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 < 32)) true
+  in the application
+    id (Eq.refl true)
+'NDF_ChunkGeometry.widths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDF_ChunkGeometry.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDF_ChunkGeometry.window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2d19d5140451441fb184959b89c575bf.scope; invocation ID: 06f06b3de54f4d1790cd5c822434b2ef

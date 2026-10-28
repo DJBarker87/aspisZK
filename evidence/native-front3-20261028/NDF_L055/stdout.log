@@ -1,0 +1,41 @@
+NDF_generated/NDF_ChunkCheck.lean:42:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 ?q QM31.ZERO
+in the target expression
+  (match some w with
+    | none => ok (core.result.Result.Err (r1_wire.Error.NonCanonical row index))
+    | some w => do
+      let bad ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 w.c1 QM31.ZERO
+      if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row index))
+        else ok (core.result.Result.Ok ())) =
+    ok
+      (if LPl_Kit_Bytes.validChunk 8 true ↑arr = true then core.result.Result.Ok ()
+      else core.result.Result.Err (r1_wire.Error.NonCanonical row index))
+
+case some
+row : U8
+index : Usize
+arr : Std.Array U8 32#usize
+w : wide_exact.WideExact
+call : wide_exact.WideExact.from_le_bytes arr.to_slice = ok (some w)
+valid : LPl_Kit_Bytes.validChunk 8 true ↑arr = true ↔ w.c1 = QM31.ZERO
+⊢ (match some w with
+    | none => ok (core.result.Result.Err (r1_wire.Error.NonCanonical row index))
+    | some w => do
+      let bad ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 w.c1 QM31.ZERO
+      if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row index))
+        else ok (core.result.Result.Ok ())) =
+    ok
+      (if LPl_Kit_Bytes.validChunk 8 true ↑arr = true then core.result.Result.Ok ()
+      else core.result.Result.Err (r1_wire.Error.NonCanonical row index))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NDF_ChunkCheck.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,6 +1,7 @@
 """Check lane evidence and conservative delta; not an NCZ adoption override."""
 from pathlib import Path
-import json,hashlib,collections,importlib.util
+import json,hashlib,collections,importlib.util,sys
+sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;R=E.parent.parent
 load=lambda p:json.loads(p.read_text())
 rows=[json.loads(l) for l in (E/'NDF_ATTEMPTS.jsonl').read_text().splitlines()]
@@ -30,9 +31,9 @@ for m,p in accepted.items():
  assert hashlib.sha256((E/(m+'.lean')).read_bytes()).hexdigest()==p['source_sha256']
  r=by[p['attempt']];assert r['exit_status']==0
  assert 'sorryAx' not in str(r['print_axioms'])
-assert by['NDF_L032']['exit_status']==0
-assert len(by['NDF_L032']['print_axioms'])==29
-for line in by['NDF_L032']['print_axioms']:assert 'sorryAx' not in line
+assert by['NDF_L080']['exit_status']==0
+assert len(by['NDF_L080']['print_axioms'])==59
+for line in by['NDF_L080']['print_axioms']:assert 'sorryAx' not in line
 front=load(E/'NDF_FRONTIER.json');d=load(E/'NDF_LEDGER_DELTA.json')
 assert {r['function'] for r in d['functions']}=={r['representative'] for r in front}
 assert len(d['functions'])==24 and d['new_local_conditional_bridges']==6
@@ -41,5 +42,5 @@ base=load(E/'NDF_LEDGER_BASE.json');copy=dict(base,pending_local_bridge_delta=d)
 (E/'NDF_LEDGER_UPDATED.json').write_text(json.dumps(copy,indent=2,sort_keys=True)+'\n')
 spec=importlib.util.spec_from_file_location('NCZ',R/'evidence/native-compledger-20261028/NCZ_validate.py');nc=importlib.util.module_from_spec(spec);spec.loader.exec_module(nc);nc.validate_invariants(copy)
 assert copy['rows']==base['rows'] and copy['claims']==base['claims']
-result=dict(exit_status=0,attempt_counts=dict(counts),accepted_modules=len(accepted),new_top_theorems=29,local_conditional_bridges=6,composed_closures=0,canonical_ncz_invariants='PASS, unchanged canonical statuses',ncz_recompute='Requires explicit report-corpus/evidence snapshot refresh; retained failing run is not overridden.',remaining_open=18)
+result=dict(exit_status=0,attempt_counts=dict(counts),accepted_modules=len(accepted),new_top_theorems=59,local_conditional_bridges=6,composed_closures=0,canonical_ncz_invariants='PASS, unchanged canonical statuses',ncz_recompute='Requires explicit report-corpus/evidence snapshot refresh; retained failing run is not overridden.',remaining_open=18)
 (E/'NDF_VALIDATION.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))

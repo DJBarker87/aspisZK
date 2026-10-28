@@ -1,0 +1,62 @@
+{"attempt": "NDF_L066", "exit_status": 1, "wall_seconds": 1.3027740890393034, "peak_rss_kib": "2637192", "swaps": "0", "print_axioms": ["'NDF_ChunkGeometry.widths' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDF_ChunkGeometry.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDF_ChunkGeometry.window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDF_generated/NDF_ChunkGeometry.lean:40:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if bytes.length < 32 then ?m.62 else ?m.63
+in the target expression
+  (if _h : bytes.length < 32 then ([], bytes)
+        else
+          match List.toChunksExact 32 ⋯ (List.drop 32 bytes) with
+          | (chunks, rem) => (List.take 32 bytes :: chunks, rem)).1[0] =
+    List.take 32 (List.drop (32 * 0) bytes)
+
+case zero
+α : Type
+bytes : List α
+bound : 0 < bytes.length / 32
+full : ¬bytes.length < 32
+⊢ (if _h : bytes.length < 32 then ([], bytes)
+        else
+          match List.toChunksExact 32 ⋯ (List.drop 32 bytes) with
+          | (chunks, rem) => (List.take 32 bytes :: chu
+...
+   @Eq Bool (decide (0 < 32)) true
+  in the application
+    id (Eq.refl true)
+NDF_generated/NDF_ChunkGeometry.lean:45:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if bytes.length < 32 then ?m.84 else ?m.85
+in the target expression
+  (if _h : bytes.length < 32 then ([], bytes)
+        else
+          match List.toChunksExact 32 ⋯ (List.drop 32 bytes) with
+          | (chunks, rem) => (List.take 32 bytes :: chunks, rem)).1[i + 1] =
+    List.take 32 (List.drop (32 * (i + 1)) bytes)
+
+case succ
+α : Type
+i : ℕ
+ih :
+  ∀ (bytes : List α) (bound : i < bytes.length / 32),
+    (List.toChunksExact 32 ⋯ bytes).1[i] = List.take 32 (List.drop (32 * i) bytes)
+bytes : List α
+bound : i + 1 < bytes.length / 32
+full : ¬bytes.length < 32
+⊢ (if _h : bytes.length < 32 then ([], bytes)
+        else
+          match List.toChunksExact 32 ⋯ (List.drop 32 bytes) with
+          | (chunks, rem) => (List.take 32 bytes :: chunks, rem)).1[i + 1] =
+    List.take 32 (List.drop (32 * (i + 1)) bytes)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 < 32)) true
+  in the application
+    id (Eq.refl true)
+'NDF_ChunkGeometry.widths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDF_ChunkGeometry.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDF_ChunkGeometry.window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ref5778701a604cef8d881d0cc7e93490.scope; invocation ID: 650c0310f08e4a6cb4425dcad3b7a6c2

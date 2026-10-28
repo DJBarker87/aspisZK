@@ -29,3 +29,5 @@ status or validator is overwritten. Our checks do not replace NCZ adoption.
 Security contract/metric/protocol/privacy/two-transaction design unchanged.
 P6/D188 contract transport is retained/reclassified, never removed. No field
 multiplication stub, SHA model, XRn kit, source adoption or ELF rebuild.
+
+Final continuation supersedes stage counts:80 Lean/50 Kani/2 extraction; full reader and PrefixAggregate validator reference equalities complete. Full parser assembly remains OPEN. See NDF_HANDOFF.md and final L080 audit.

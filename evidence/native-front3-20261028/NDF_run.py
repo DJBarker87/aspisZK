@@ -41,12 +41,16 @@ elif kind=='extract':
 else:
  files['NDF_generated/'+target+'.lean']=(E/(target+'.lean')).read_text();sources=['NDF_generated/'+target+'.lean']
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDF_generated','-o','NDF_objects/'+target+'.olean',sources[0]]
-env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NDF_tmp',LEAN_PATH=B+'/NDF_objects:/home/dombarker/project-offloads/codex-cx-front3-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects')
+env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NDF_tmp',LEAN_PATH=B+'/NDF_objects:/home/dombarker/project-offloads/codex-cx-front3-cache-20261028/NCO_objects:/home/dombarker/project-offloads/codex-cx-front3-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects')
 if os.environ.get('NDF_EXTRACT_PARSER'):env['NDF_EXTRACT_PARSER']=os.environ['NDF_EXTRACT_PARSER']
 if os.environ.get('NDF_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NDF_RUST_CFG']
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'source_pinset':'NDF_SOURCE.json','library_pinset':'NDF_SOURCE.json:library'},expected_time='optimized compile then one contract/shape proof; no field multiplication',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 if kind=='lean':
  cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NDF_SOURCE.json').read_text())['library'].items()}
+ for old,v in json.loads((E/'NDF_SOURCE.json').read_text())['cache_imports'].items():
+  if '/NCO_objects/' in old:
+   dest='/home/dombarker/project-offloads/codex-cx-front3-cache-20261028/NCO_objects/'+old.split('/NCO_objects/',1)[1]
+   cfg['deps_fingerprint']['selected_objects'][dest]=dict(path=dest,sha256=v['selected_sha256'])
  if target=='NDF_Audit':
   cfg['deps_fingerprint']['selected_objects']=json.loads((E/'NDF_AUDIT_PINS.json').read_text())['selected_objects']
   files['NDF_AUDIT_PINS.json']=(E/'NDF_AUDIT_PINS.json').read_text()
@@ -61,7 +65,9 @@ import json,hashlib
 b=Path({B!r});files=json.loads({payload!r});xkind={kind!r};xtarget={target!r}
 for n,s in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
-if xkind=='lean':(b/'NDF_objects'/xtarget).parent.mkdir(parents=True,exist_ok=True)
+if xkind=='lean':
+ (b/'NDF_objects'/xtarget).parent.mkdir(parents=True,exist_ok=True)
+ (b/'NDF_tmp').mkdir(exist_ok=True)
 pins=json.loads((b/'NDF_SOURCE_PINS.json').read_text())
 for n in files:
  if n.startswith('NDF_src/'):pins[n[len('NDF_src/'):]]=hashlib.sha256((b/n).read_bytes()).hexdigest()
