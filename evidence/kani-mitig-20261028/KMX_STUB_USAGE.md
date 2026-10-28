@@ -5,6 +5,11 @@ PASS results and six intended wrong-value FAIL results, with unwinding
 assertions enabled. K005 independently validates the slice pair.
 K007 is a compile failure corrected by preserving Vec's allocator parameter.
 
+The patch contains three new files: `KMX_stubs.rs`, `KMX_native.rs` and
+`KMX_CopyMeaning.lean`. Apply it in a scratch directory; place the Rust
+module beside the scratch crate root and compile the Lean file separately.
+Exact admitted validation commands are in K008, R002 and L003 receipts.
+
 `KMX_stubs.rs` is a scratch module; declare it at the crate root. Enable
 `#![feature(allocator_api)]` in that scratch crate (pinned nightly only).
 Compile with `-Z unstable-options -Z stubbing`. Add all applicable attributes:

@@ -20,6 +20,9 @@ for cfg in sorted(E.glob('KMX_[KRL][0-9][0-9][0-9].json')):
  if r['kind']=='lean' and r['exit_status']==0:
   t=(E/a/'stdout.log').read_text();assert '#print axioms' not in t or 'sorryAx' not in t
   assert 'sorryAx' not in t,a
+  audits=re.findall(r'depends on axioms: \[([^\]]*)\]',t)
+  assert len(audits)==5,(a,audits)
+  assert all(set(x.strip() for x in names.split(',') if x.strip())<={'propext','Classical.choice','Quot.sound'} for names in audits),a
  rows.append({k:r.get(k) for k in ['attempt','kind','command','exit_status','wall_seconds','peak_rss_kib','cgroup_memory_peak_bytes','swaps','source_revision','source_hashes','print_axioms']})
 assert sum(p['kind']=='kani' for p in [json.loads(x.read_text()) for x in E.glob('KMX_[KRL][0-9][0-9][0-9].json')])<=80
 patch=(E/'KMX_copy_stubs.patch').read_text()
@@ -29,4 +32,4 @@ for name,path in [('KMX_stubs.rs',E/'KMX_stubs.rs.txt'),('KMX_native.rs',E/'KMX_
  assert actual==path.read_text(),name
 assert all(x['body_unchanged_except_namespace'] for x in json.loads((E/'KMX_REPLAY_BODY_AUDIT.json').read_text()))
 (E/'KMX_LEDGER.json').write_text(json.dumps(rows,indent=2)+'\n')
-print('KMX packet validation PASS:',len(rows),'attempts; K004 explicitly unresolved; K006 outer-timeout after-hash absent')
+print('KMX packet validation PASS:',len(rows),'attempts; K004 retained as pre-Kani input failure; K006 outer-timeout after-hash absent')

@@ -3,7 +3,7 @@
 Frozen release revision: `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Frozen lock SHA-256: `5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef`. Pinned cargo-kani 0.67.0 / CBMC 6.8.0. Scratch-only work; no release-source changes or toolchain adoption.
 
 
-Summary: the one-u32 fixture exhibits a false-PASS on the pinned model. Six loop replacements have paired Kani controls, native differential checks and Lean value laws. Exposure replay outcomes: 5 PASS, 0 FAIL, 10 TIMEOUT, 19 NOT RUN, 24 EXCLUDED. TIMEOUT does not restore earlier proof credit.
+Summary: the one-u32 fixture exhibits a false-PASS on the pinned model. Six loop replacements have paired Kani controls, native differential checks and Lean value laws. Exposure replay outcomes: 18 PASS, 0 FAIL, 16 TIMEOUT, 0 NOT RUN, 24 EXCLUDED. TIMEOUT does not restore earlier proof credit.
 
 ## Configuration map
 
@@ -67,6 +67,9 @@ Each row has independent expected-value and wrong-zero controls. Native R002 che
 | c053 | `u32` | 4 | slice_value_255 / array | 0 / 0 | FAIL K039 / PASS K039 | DISAGREES |
 | c054 | `u32` | 4 | slice_value_256 / array | 0 / 0 | FAIL K039 / PASS K039 | DISAGREES |
 
+Across the 55 tested configurations: 34 DISAGREES, 17 agrees on fixture, 4 TIMEOUT, 0 NOT RUN. The symbolic-length array/slice u32 fixtures also disagree at values 1, 255 and 256 (R005 native controls), so this is not specific to 512. Direct full-array literal copies of one and sixteen u32 elements agree (K037/K038). The source/lowering distinction is observed, not an established internal cause.
+
+
 The observed disagreement includes one u32 (4 bytes), so it is not restricted to the original 64-byte fixture. Flat byte copies and the tested Vec variants must not be generalized to untested shapes. For nested arrays, the original bounds counted outer elements and underbounded equality loops. K030–K035 change those source bounds to 35, covering the 32-byte equality loop, and retain the original failed drafts. Only completed adequately bounded pairs receive a classification. Larger typed-copy timeouts remain inconclusive. Internal model root cause remains open.
 
 ## Validated replacements
@@ -88,7 +91,7 @@ Only rows with a reached copy require mitigation replay. Other audit rows are re
 | LPm_K003 | `verifier::LPm_verifier::selected_reference_write` | TIMEOUT KMX_K018  |
 | LPm_K004 | `verifier::LPm_verifier::append32` | TIMEOUT KMX_K019  |
 | LPm_K005 | `verifier::LPm_verifier::query_word_append` | TIMEOUT KMX_K020  |
-| LPn_K001 | `compact::LPn_expand::LPn_step_frame` | NOT RUN   |
+| LPn_K001 | `compact::LPn_expand::LPn_step_frame` | TIMEOUT KMX_K040  |
 | LPn_K010 | `r1_wire::LPn_decode::LPn_nonvacuity` | PASS KMX_K015  |
 | LPo_K002 | `verifier::candidate::LPo_candidate::LPo_read_round0` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | LPo_K003 | `verifier::candidate::LPo_candidate::LPo_read_root` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
@@ -106,25 +109,25 @@ Only rows with a reached copy require mitigation replay. Other audit rows are re
 | LPe_K017 | `verifier::LPe_verifier::LPe_roots_queries_cut` | TIMEOUT KMX_K025  |
 | LPe_K018 | `verifier::LPe_verifier::LPe_private_put_cut` | PASS KMX_K026  |
 | LPe_K019 | `verifier::LPe_verifier::LPe_semantic_z_cut` | TIMEOUT KMX_K027  |
-| LPf_K027 | `verifier::LPf_verifier::LPf_checksum_projection` | NOT RUN   |
-| LPg_K011 | `compact::LPg_compact::LPg_expand_low` | NOT RUN   |
-| LPg_K012 | `compact::LPg_compact::LPg_expand_high` | NOT RUN   |
-| LPh_K018 | `compact::LPh_compact::LPh_live_before` | NOT RUN   |
-| LPh_K019 | `compact::LPh_compact::LPh_live_low` | NOT RUN   |
-| LPh_K020 | `compact::LPh_compact::LPh_live_high` | NOT RUN   |
-| LPh_K021 | `compact::LPh_compact::LPh_live_after` | NOT RUN   |
+| LPf_K027 | `verifier::LPf_verifier::LPf_checksum_projection` | TIMEOUT KMX_K041  |
+| LPg_K011 | `compact::LPg_compact::LPg_expand_low` | PASS KMX_K042  |
+| LPg_K012 | `compact::LPg_compact::LPg_expand_high` | PASS KMX_K043  |
+| LPh_K018 | `compact::LPh_compact::LPh_live_before` | PASS KMX_K044  |
+| LPh_K019 | `compact::LPh_compact::LPh_live_low` | PASS KMX_K045  |
+| LPh_K020 | `compact::LPh_compact::LPh_live_high` | PASS KMX_K046  |
+| LPh_K021 | `compact::LPh_compact::LPh_live_after` | PASS KMX_K047  |
 | LPh_K027 | `verifier::candidate::LPh_candidate::LPh_nonempty` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | LPh_K028 | `verifier::candidate::LPh_candidate::LPh_empty_backed` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
-| LPi_K005 | `LPi_contracts::q_owned16` | NOT RUN   |
-| LPi_K006 | `LPi_contracts::q_parent32_left` | NOT RUN   |
-| LPi_K007 | `LPi_contracts::q_parent32_right` | NOT RUN   |
-| LPi_K008 | `LPi_contracts::q_parent32_middle` | NOT RUN   |
-| LPi_K009 | `LPi_contracts::q_parent48_middle` | NOT RUN   |
-| LPi_K010 | `LPi_contracts::q_parent48_right` | NOT RUN   |
-| LPi_K012 | `verifier::LPi_verifier::put_k_arbitrary_prefix` | NOT RUN   |
-| LPi_K013 | `verifier::LPi_verifier::put_e_arbitrary_prefix` | NOT RUN   |
-| LPi_K017 | `verifier::LPi_verifier::joined_digest_cut_small` | NOT RUN   |
-| LPi_K018 | `verifier::LPi_verifier::joined_digest_cut_physical` | NOT RUN   |
+| LPi_K005 | `LPi_contracts::q_owned16` | PASS KMX_K048  |
+| LPi_K006 | `LPi_contracts::q_parent32_left` | PASS KMX_K049  |
+| LPi_K007 | `LPi_contracts::q_parent32_right` | PASS KMX_K050  |
+| LPi_K008 | `LPi_contracts::q_parent32_middle` | PASS KMX_K051  |
+| LPi_K009 | `LPi_contracts::q_parent48_middle` | PASS KMX_K052  |
+| LPi_K010 | `LPi_contracts::q_parent48_right` | PASS KMX_K053  |
+| LPi_K012 | `verifier::LPi_verifier::put_k_arbitrary_prefix` | TIMEOUT KMX_K054  |
+| LPi_K013 | `verifier::LPi_verifier::put_e_arbitrary_prefix` | TIMEOUT KMX_K055  |
+| LPi_K017 | `verifier::LPi_verifier::joined_digest_cut_small` | TIMEOUT KMX_K056  |
+| LPi_K018 | `verifier::LPi_verifier::joined_digest_cut_physical` | TIMEOUT KMX_K057  |
 | NP6_K006 | `NP6_construction::NP6_construct_all_errors` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | NP6_K025 | `NP6_ownership::NP6_owned_transfers_and_layout` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | NP6_K026 | `NP6_alloc::NP6_uninit_allocation_outcomes` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
@@ -136,7 +139,7 @@ Only rows with a reached copy require mitigation replay. Other audit rows are re
 | NBI_K020 | `verifier::candidate::NBI_keys::NBI_duplicate_decision` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | NBC_K001 | `verifier::NBC_runtime::NBC_mark_none` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | NBC_K002 | `NBC_runtime::NBC_observer_none` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
-| NBH_K029 | `pool_v1::pair_forest_terminal::NBH_terminal::NBH_asf8_stores_gate` | NOT RUN   |
+| NBH_K029 | `pool_v1::pair_forest_terminal::NBH_terminal::NBH_asf8_stores_gate` | PASS KMX_K058  |
 
 ## Newest release comparison
 
@@ -144,13 +147,34 @@ Only rows with a reached copy require mitigation replay. Other audit rows are re
 
 K029 runs the smallest one-u32 fixture without stubs: expected-512 **FAIL**, wrong-zero **PASS** (0/44 failing checks for the false assertion). The discrepancy therefore persists on this configuration in the newest release. K028 was an own-wrapper option error (omitted `-Z unstable-options`) before verification, corrected for K029. The dependency-free standalone source uses the private driver; the frozen scratch workspace graph is validated offline before invocation and its lock hash checked after. No release-function credit or toolchain upgrade is adopted.
 
+K059 repeats the pair with explicit `RUSTFLAGS=-C opt-level=3` and verbose compiler evidence. The recorded `kani-compiler` command contains `-C opt-level=3`: expected-512 **FAIL**, wrong-zero **PASS** (0/39 failing checks for the false assertion). This optimized result is the final newest-release comparison.
+
 
 ## Execution and limitations
 
 K004 was our omitted-input launcher error: `KMX_native.rs` was uploaded after admission KMX_UPLOAD4. K005 continued successfully; K004 remains a failed pre-Kani attempt, not a verification result. K001/K003/K007 were failed setup drafts. K010 failed on missing harness imports/helpers. K011 exposed additional unused historical contract attributes and incomplete auxiliary stub snapshots; scratch overlays were corrected without changing any selected property. L001/L002 were failed Lean drafts. Receipts, source snapshots, graph validation and exact commands are retained per attempt.
 
-Conservative configured attempts: Kani 39/80; Lean 3/30; Rust 5/15. Each admitted build uses MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, one scope at a time. Cargo graph is validated against the copied frozen lock offline before each gate; before/after hashes are recorded. Optimized Rust profile. Persistent cache retained; no keys touched; no push.
+Conservative configured attempts: Kani 59/80; Lean 3/30; Rust 5/15. Each admitted build uses MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, one scope at a time. Cargo graph is validated against the copied frozen lock offline before each gate; before/after hashes are recorded. Optimized Rust profile. Persistent cache retained; no keys touched; no push.
 
-**Confirmed earlier properties:** LPa_K004, LPl_K015, LPn_K010, LPe_K015, LPe_K018. No complete release-function confirmation is claimed beyond the selected passing properties.
+**Confirmed earlier properties:** LPa_K004, LPl_K015, LPn_K010, LPe_K015, LPe_K018, LPg_K011, LPg_K012, LPh_K018, LPh_K019, LPh_K020, LPh_K021, LPi_K005, LPi_K006, LPi_K007, LPi_K008, LPi_K009, LPi_K010, NBH_K029. No complete release-function confirmation is claimed beyond the selected passing properties.
+
+## Earlier results confirmed, by target
+
+| Target | Confirmed earlier property IDs | Remaining selected properties |
+|---|---|---|
+| compact::expand_values | LPa_K004, LPl_K015, LPg_K011, LPg_K012, LPh_K018, LPh_K019, LPh_K020, LPh_K021 | LPn_K001 TIMEOUT |
+| r1_wire::ValidatedRecord::decode_k | LPn_K010 | none |
+| verifier::checkpoint / append stages | LPe_K015, LPe_K018 | LPm_K001 TIMEOUT, LPm_K003 TIMEOUT, LPm_K004 TIMEOUT, LPm_K005 TIMEOUT, LPe_K016 TIMEOUT, LPe_K017 TIMEOUT, LPe_K019 TIMEOUT, LPf_K027 TIMEOUT, LPi_K012 TIMEOUT, LPi_K013 TIMEOUT, LPi_K017 TIMEOUT, LPi_K018 TIMEOUT |
+| QM31::write_le_bytes (existing CM31 byte stub retained) | LPi_K005, LPi_K006, LPi_K007, LPi_K008, LPi_K009, LPi_K010 | none |
+| candidate::wide_view | none | LPa_K015 TIMEOUT |
+| prepared_claim serializer stages | none | LPb_K016 TIMEOUT, LPe_K005 TIMEOUT |
+| ASF8 stores helper (original local gate, not full release serializer) | NBH_K029 | none |
+
+These confirmations restore only the named harness results under their retained assumptions. No complete P6 leaf, composed bridge or release-function theorem is promoted by this packet. No exposure replay has produced a concrete property counterexample if the FAIL count above is zero; TIMEOUT supplies no counterexample to replay natively. Native wrong-zero refutations for diagnostic fixtures are R002/R003/R005.
+
 
 The K006 outer timeout ended before its in-process after-lock check; this missing contemporaneous check is retained as a limitation. Subsequent graph checks found the pinned lock unchanged. No unchanged timeout was resubmitted. The nested-array retry changes a demonstrably inadequate source bound; no memory cap or timeout was raised. Detailed target, exit status, wall time, peak RSS/cgroup memory, swap, source revision/hashes and axioms are in `KMX_LEDGER.json` and the individual receipts.
+
+## Final audit
+
+496 frozen scratch source files were checked. Only 7 intended scratch parent overlays differ; selected property bodies remain unchanged apart from namespace. No repository crates/programs were edited. All preexisting coherent/cache objects are unchanged. Own Cargo target, native binaries and solver scratch were removed; the persistent cache and installed scratch toolchain were retained. `KMX_CLEANUP.json` records exact hashes and removals. Final exposure table has no NOT RUN rows among the 34 reached-copy targets. No source counterexample was found; 16 TIMEOUT rows remain unconfirmed.
