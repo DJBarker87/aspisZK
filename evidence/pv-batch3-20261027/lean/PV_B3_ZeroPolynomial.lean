@@ -1,4 +1,5 @@
 import PV_B3_ZeroArrays
+import PV_B3_TripleIndexD336
 import PV_B3_SmallUsizeD336
 namespace PV_B3_ZeroPolynomial
 open Aeneas Aeneas.Std Result PV_B3_Copy_117 PV_B3_ZeroArithmetic PV_B3_ZeroArrays
@@ -19,31 +20,31 @@ theorem add_zero64 : Std.U64.wrapping_add 0#u64 0#u64 = 0#u64 := by with_unfoldi
 theorem accumulate : host_arithmetic.accumulate_channels channels Z Z = ok channels := by
   unfold host_arithmetic.accumulate_channels
   simp only [aspis_core.field.QM31.ZERO,cadd_zero,madd_zero,bind_tc_ok]
-  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+  all_goals try simp (disch := decide) only [PV_B3_TripleIndexD336.index,index_repeat,mutable_repeat,update_repeat,
     lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
   all_goals try rw [set_repeat]
-  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+  all_goals try simp (disch := decide) only [PV_B3_TripleIndexD336.index,index_repeat,mutable_repeat,update_repeat,
     lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
   all_goals try rw [set_repeat]
-  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+  all_goals try simp (disch := decide) only [PV_B3_TripleIndexD336.index,index_repeat,mutable_repeat,update_repeat,
     lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
   all_goals try rw [set_repeat]
-  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+  all_goals try simp (disch := decide) only [PV_B3_TripleIndexD336.index,index_repeat,mutable_repeat,update_repeat,
     lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
   all_goals try rw [set_repeat]
-  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+  all_goals try simp (disch := decide) only [PV_B3_TripleIndexD336.index,index_repeat,mutable_repeat,update_repeat,
     lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
   all_goals try rw [set_repeat]
-  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+  all_goals try simp (disch := decide) only [PV_B3_TripleIndexD336.index,index_repeat,mutable_repeat,update_repeat,
     lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
   all_goals try rw [set_repeat]
-  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+  all_goals try simp (disch := decide) only [PV_B3_TripleIndexD336.index,index_repeat,mutable_repeat,update_repeat,
     lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
   all_goals try rw [set_repeat]
-  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+  all_goals try simp (disch := decide) only [PV_B3_TripleIndexD336.index,index_repeat,mutable_repeat,update_repeat,
     lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
   all_goals try rw [set_repeat]
-  all_goals simp (disch := decide) only [index_repeat,mutable_repeat,update_repeat,
+  all_goals try simp (disch := decide) only [PV_B3_TripleIndexD336.index,index_repeat,mutable_repeat,update_repeat,
     lift,cast_zero64,mul_zero64,add_zero64,bind_tc_ok]
   all_goals try rw [set_repeat]
   all_goals rfl
