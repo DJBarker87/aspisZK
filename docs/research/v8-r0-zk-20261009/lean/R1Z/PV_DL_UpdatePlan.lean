@@ -58,7 +58,7 @@ theorem source_reference (buffer : List U8) (pos : Nat) (input : List U8) :
   by_cases h : input.length<64-pos
   · simp only [h,if_true]
   · simp only [h,if_false,PV_DL_BatchPlan.bulk,PV_DL_BatchPlan.events,List.length_drop]
-    simp only [List.drop_drop,Nat.add_comm]
+    simp only [List.drop_drop,Nat.sub_sub]
 
 theorem write_length (buffer bytes : List U8) (pos : Nat)
     (hb : buffer.length=64) (h : pos+bytes.length ≤ 64) :
@@ -83,7 +83,8 @@ theorem shape (buffer input : List U8) (pos : Nat)
   split
   · constructor
     · apply write_length buffer input pos hb;omega
-    · omega
+    · change pos+input.length<64
+      omega
   · have hf := first_length buffer input pos hb hp (by omega)
     have hr := PV_DL_BatchPlan.remainder (input.drop (start pos))
     constructor
