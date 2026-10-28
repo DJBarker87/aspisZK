@@ -44,10 +44,10 @@ theorem current_selector (ops : ExternalFuns)
     rfl
   · rw [PV_FXM_AuditInstall.reserve]
     rfl
-  · rw [PV_FXM_AuditInstall.array]
-    rfl
-  · rw [PV_FXM_AuditInstall.scalar]
-    rfl
+  · exact congrArg PV_W_SourceSyntax.resultOutcome
+      (PV_FXM_AuditInstall.array ops step wordMax byteMax shape metadata encode (reserveView w) a).symm
+  · exact congrArg PV_W_SourceSyntax.resultOutcome
+      (PV_FXM_AuditInstall.scalar ops step wordMax byteMax shape metadata encode (reserveView w) byte).symm
 
 #print axioms current_selector
 end R1Z.PV_W_MemoryCombined
