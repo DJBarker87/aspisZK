@@ -22,6 +22,6 @@ theorem write {A : Type} {n : Nat} (hn : n≤Usize.max) (f : Fin n → A)
   apply List.ext_getElem
   · simp
   · intro i hi hj
-    by_cases h : i=r.val <;> simp [List.getElem_set,h]
+    by_cases h : i=r.val <;> simp [List.getElem_set,h,eq_comm]
 #print axioms write
 end PV_L2C_VecWrite
