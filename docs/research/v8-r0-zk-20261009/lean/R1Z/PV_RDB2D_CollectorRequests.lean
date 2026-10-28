@@ -9,7 +9,9 @@ def second (p : Nat) : Request := ⟨p,127,254,⟨8,alignment2⟩⟩
 def third : Request := ⟨2,0,272,⟨2,alignment2⟩⟩
 
 theorem first_public : publicRequest first=.allocate 1016 2 := rfl
-theorem second_public (p : Nat) : publicRequest (second p)=.reallocate 1016 2 2032 := rfl
+theorem second_public (p : Nat) : publicRequest (second p)=.reallocate 1016 2 2032 := by
+  simp only [publicRequest,second,alignment2_word,show ¬((127:Nat)=0) by omega,ite_false]
+  norm_num
 theorem third_public : publicRequest third=.allocate 544 2 := rfl
 
 theorem retained_length (p : Nat) : (retained p).values.length=64 := by
@@ -47,6 +49,7 @@ theorem second_null {S F : Type} (allocate : Allocator S)
   have hh : allocate ⟨(retained p).address,(retained p).capacity,(retained p).values.length+190,⟨8,alignment2⟩⟩
     (filtered p state).resource.allocator=ok (none,s) := by rw [second_exact]; exact h
   rw [null allocate handler _ _ _ _ _ s hh,second_exact,retained_length]
+  congr 1 <;> omega
 
 
 theorem after_second {S F : Type} (allocate : Allocator S)
@@ -59,6 +62,7 @@ theorem after_second {S F : Type} (allocate : Allocator S)
   have hh : allocate ⟨(retained p1).address,(retained p1).capacity,(retained p1).values.length+190,⟨8,alignment2⟩⟩
     (filtered p1 state).resource.allocator=ok (some p2,s) := by rw [second_exact]; exact h
   rw [success allocate handler _ _ _ _ _ p2 s hh,second_exact]
+  rfl
 
 
 theorem third_null {S F : Type} (allocate : Allocator S)
