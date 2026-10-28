@@ -1,0 +1,27 @@
+START 60231 R1Z.PV_RunJoin_EncodedStep41
+DONE 60231 R1Z.PV_RunJoin_EncodedStep41 exit 1 wall 1.75 RSS 4399403008
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedStep41.lean:16:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑values)[↑i]?
+in the target expression
+  ok (↑values)[↑i] = ok ((some (↑values)[↑i]).getD zero)
+
+inst✝ : ExternalTypes
+values : Slice W
+i : Usize
+hi : ↑i < values.length
+⊢ ok (↑values)[↑i] = ok ((some (↑values)[↑i]).getD zero)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    values
+  has type
+    Slice W
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑values
+'R1Z.PV_RunJoin_EncodedStep41.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodedStep41.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodedStep41.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

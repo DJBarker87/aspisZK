@@ -1,0 +1,25 @@
+START 60228 R1Z.PV_RunJoin_EndpointPost41
+DONE 60228 R1Z.PV_RunJoin_EndpointPost41 exit 1 wall 1.91 RSS 4405514240
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EndpointPost41.lean:69:4: error: Type mismatch: After simplification, term
+  next
+ has type
+  @Post (alloc.vec.Vec U8) (fun next => next.length = out.length + 32 * (n + 1) ∧ HighZero ↑next)
+    (host_semantic.endpoint_bytes_loop columns variant z mid (i.wrapping_add 1#usize))
+but is expected to have type
+  @Post (alloc.vec.Vec U8) (fun next => next.length = out.length + 32 * (n + 1) ∧ HighZero ↑next)
+    (Std.loop
+      (fun x =>
+        if x.2 < 29#usize then do
+          let v ← columns.index_usize x.2
+          let coefficients ← host_semantic.column_coefficients v.deref variant
+          let value ←
+            aspis_core.r0.encoder.eval_message aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField coefficients
+                { x := z.x, y := z.y }
+          let we ← aspis_core.field.wide_exact.WideExact.from_qm31 value
+          let a ← we.to_le_bytes
+          let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x.1 a.to_slice
+          ok (ControlFlow.cont (bytes1, x.2.wrapping_add 1#usize))
+        else ok (ControlFlow.done x.1))
+      (mid, i.wrapping_add 1#usize))
+'R1Z.PV_RunJoin_EndpointPost41.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

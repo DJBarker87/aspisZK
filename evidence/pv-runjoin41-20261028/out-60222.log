@@ -1,0 +1,71 @@
+START 60222 R1Z.PV_RunJoin_ClaimBytes41
+DONE 60222 R1Z.PV_RunJoin_ClaimBytes41 exit 1 wall 9.72 RSS 4430315520
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimBytes41.lean:20:4: error: No goals to be solved
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimBytes41.lean:35:89: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimBytes41.lean:36:99: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimBytes41.lean:41:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  host_semantic.append_claim_bytes out (ProverCommitArray49.array 29#usize (p 0))
+in the target expression
+  (do
+      let bytes1 ←
+        host_semantic.append_claim_bytes (alloc.vec.Vec.with_capacity U8 3712#usize)
+            (ProverCommitArray49.array 29#usize (p ↑0#usize))
+      let a1 ← (ProverCommitArray49.array 3#usize fun i => ProverCommitArray49.array 29#usize (p i)).index_usize 1#usize
+      let bytes2 ← host_semantic.append_claim_bytes bytes1 a1
+      let a2 ← (ProverCommitArray49.array 3#usize fun i => ProverCommitArray49.array 29#usize (p i)).index_usize 2#usize
+      let bytes3 ← host_semantic.append_claim_bytes bytes2 a2
+      host_semantic.append_claim_bytes bytes3 (ProverCommitArray49.array 29#usize extras)) =
+    ok next
+
+case refine_1
+inst✝ : ExternalTypes
+ops : ExternalFuns
+p : ℕ → ℕ → Q
+extras : ℕ → Q
+out : alloc.vec.Vec U8 := alloc.vec.Vec.with_capacity U8 3712#usize
+b0 : alloc.vec.Vec U8
+h0 : host_semantic.append_claim_bytes out (ProverCommitArray49.array 29#usize (p 0)) = ok b0
+v0 : ↑b0 = ↑out ++ payload (p 0) 0 29
+l0 : b0.length = out.length + 928
+b1 : alloc.vec.Vec U8
+h1 : host_semantic.append_claim_bytes b0 (ProverCommitArray49.array 29#usize (p 1)) = ok b1
+v1 : ↑b1 = ↑b0 ++ payload (p 1) 0 29
+l1 : b1.length = b0.length + 928
+b2 : alloc.vec.Vec U8
+h2 : host_semantic.append_claim_bytes b1 (ProverCommitArray49.array 29#usize (p 2)) = ok b2
+v2 : ↑b2 = ↑b1 ++ payload (p 2) 0 29
+l2 : b2.length = b1.length + 928
+next : alloc.vec.Vec U8
+h3 : host_semantic.append_claim_bytes b2 (ProverCommitArray49.array 29#usize extras) = ok next
+v3 : ↑next = ↑b2 ++ payload extras 0 29
+l3 : next.length = b2.length + 928
+⊢ (do
+      let bytes1 ←
+        host_semantic.append_claim_bytes (alloc.vec.Vec.with_capacity U8 3712#usize)
+            (ProverCommitArray49.array 29#usize (p ↑0#usize))
+      let a1 ← (ProverCommitArray49.array 3#usize fun i => ProverCommitArray49.array 29#usize (p i)).index_usize 1#usize
+      let bytes2 ← host_semantic.append_claim_bytes bytes1 a1
+      let a2 ← (ProverCommitArray49.array 3#usize fun i => ProverCommitArray49.array 29#usize (p i)).index_usize 2#usize
+      let bytes3 ← host_semantic.append_claim_bytes bytes2 a2
+      host_semantic.append_claim_bytes bytes3 (ProverCommitArray49.array 29#usize extras)) =
+    ok next
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_ClaimBytes41.row' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ClaimBytes41.encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

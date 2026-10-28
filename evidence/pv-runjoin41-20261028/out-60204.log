@@ -1,0 +1,55 @@
+START 60204 R1Z.PV_RunJoin_OpeningCell41
+DONE 60204 R1Z.PV_RunJoin_OpeningCell41 exit 1 wall 1.63 RSS 4404830208
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningCell41.lean:12:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_OpeningCell41.length`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningCell41.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ExternalFuns.op51 w
+in the target expression
+  (do
+      let bytes ← w.to_le_bytes
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes
+            { «end» := n }
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s) =
+    ok next
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+w : aspis_core.field.wide_exact.WideExact
+out : alloc.vec.Vec U8
+n : Usize
+hn : ↑n ≤ 32
+room : out.length + ↑n ≤ Usize.max
+s : Slice U8
+next : alloc.vec.Vec U8
+hs :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+      (PV_RunJoin_FlatBytes35.wire w).to_slice { «end» := n } =
+    ok s
+hnxt : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s = ok next
+hv : ↑next = ↑out ++ List.take ↑n ↑(PV_RunJoin_FlatBytes35.wire w).to_slice
+⊢ (do
+      let bytes ← w.to_le_bytes
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes
+            { «end» := n }
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s) =
+    ok next
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_OpeningCell41.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OpeningCell41.append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

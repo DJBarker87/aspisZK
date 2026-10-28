@@ -1,0 +1,53 @@
+START 60238 R1Z.PV_RunJoin_EncodedLoop41
+DONE 60238 R1Z.PV_RunJoin_EncodedLoop41 exit 1 wall 1.76 RSS 4404641792
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedLoop41.lean:13:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_EncodedLoop41.length`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedLoop41.lean:44:19: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 32
+  c ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ 0
+  a - c ≥ 1
+  32*a - b - 32*c + d ≤ 32
+where
+ a := ↑values.length
+ b := ↑Usize.max
+ c := ↑↑(i.wrapping_add 1#usize)
+ d := ↑mid.length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedLoop41.lean:52:4: error: unsolved goals
+case succ.refine_2
+inst✝ : ExternalTypes
+ops : ExternalFuns
+values : Slice W
+n : ℕ
+ih :
+  ∀ (i : Usize) (out : alloc.vec.Vec U8),
+    ↑i + n = values.length →
+      out.length + 32 * n ≤ Usize.max →
+        ∃ next, prover.encoded_slice_loop values out i = ok next ∧ ↑next = ↑out ++ payload values (↑i) n
+i : Usize
+out : alloc.vec.Vec U8
+bound : ↑i + (n + 1) = values.length
+room : out.length + 32 * (n + 1) ≤ Usize.max
+hi : ↑i < values.length
+cap : values.length ≤ Usize.max
+inc : ↑(i.wrapping_add 1#usize) = ↑i + ↑1#usize
+mid : alloc.vec.Vec U8
+hm : prover.encoded_slice_loop.body values out i = ok (ControlFlow.cont (mid, i.wrapping_add 1#usize))
+hv : ↑mid = ↑out ++ ↑(PV_RunJoin_FlatBytes35.wire (entry values ↑i))
+ml : mid.length = out.length + 32
+next : alloc.vec.Vec U8
+hn : prover.encoded_slice_loop values mid (i.wrapping_add 1#usize) = ok next
+hnext : ↑next = ↑mid ++ payload values (↑(i.wrapping_add 1#usize)) n
+⊢ ↑out ++ (↑(PV_RunJoin_FlatBytes35.wire (entry values ↑i)) ++ payload values (↑i + ↑1#usize) n) =
+    ↑out ++ (↑(PV_RunJoin_FlatBytes35.wire (entry values ↑i)) ++ payload values (↑i + 1) n)
+'R1Z.PV_RunJoin_EncodedLoop41.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodedLoop41.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

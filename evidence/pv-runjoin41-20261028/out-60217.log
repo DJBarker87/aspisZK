@@ -1,0 +1,29 @@
+START 60217 R1Z.PV_RunJoin_OpeningRow41
+DONE 60217 R1Z.PV_RunJoin_OpeningRow41 exit 1 wall 2.09 RSS 4400828416
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningRow41.lean:39:2: error: unsolved goals
+case refine_2
+inst✝ : ExternalTypes
+ops : ExternalFuns
+p : ℕ → W
+out : alloc.vec.Vec U8
+room : out.length + 120 ≤ Usize.max
+mid : alloc.vec.Vec U8
+hm : prover.append_opening_base_row_loop out (ProverCommitArray49.array 29#usize p) 0#usize = ok mid
+hv : ↑mid = ↑out ++ payload p 4 (↑0#usize) 26
+hl : mid.length = out.length + 104
+next : alloc.vec.Vec U8
+hn :
+  (do
+      let bytes ← aspis_core.field.wide_exact.WideExact.to_le_bytes (p 28)
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes
+            { «end» := 16#usize }
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 mid s) =
+    ok next
+hnv : ↑next = ↑mid ++ piece (p 28) ↑16#usize
+⊢ ↑out ++ (payload p 4 (↑0#usize) 26 ++ piece (p 28) ↑16#usize) = ↑out ++ (payload p 4 0 26 ++ piece (p 28) 16)
+'R1Z.PV_RunJoin_OpeningRow41.base_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OpeningRow41.secure_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OpeningRow41.base' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OpeningRow41.secure' depends on axioms: [propext, Classical.choice, Quot.sound]
+

@@ -1,0 +1,60 @@
+START 60239 R1Z.PV_RunJoin_NodeSlot41
+DONE 60239 R1Z.PV_RunJoin_NodeSlot41 exit 1 wall 1.22 RSS 2709446656
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeSlot41.lean:53:46: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+out : alloc.vec.Vec U8
+cc1 cc2 : host_commitment.Commitment
+tree : host_tree.BinaryTree
+queries : Std.Array U32 22#usize
+batch t : Usize
+⊢ (do
+      let begin1 ← if batch = 0#usize then ok 0#usize else ok compact.SPLIT
+      let end1 ← if batch = 0#usize then ok compact.SPLIT else ok 22#usize
+      let idx ← prover.publication_indices queries begin1 end1 (decide (t = 2#usize))
+      let o ←
+        match ↑t with
+          | 0 => cc1.multiproof idx.deref
+          | 1 => cc2.multiproof idx.deref
+          | x => tree.multiproof idx.deref
+      let r ← core.option.Option.ok_or o verifier.Error.Allocation
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let a ← compact.SLOT_NODES
+          let i2 ← a.index_usize ((Usize.wrapping_mul 3#usize batch).wrapping_add t)
+          massert (val.len ≤ Usize.wrapping_mul 32#usize i2)
+          let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref
+          let out2 ←
+            alloc.vec.Vec.resize core.clone.CloneU8 out1
+                ((out1.len.wrapping_add (Usize.wrapping_mul 32#usize i2)).wrapping_sub val.len) 0#u8
+          ok (core.result.Result.Ok out2)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual) =
+    do
+    let begin1 ← if batch = 0#usize then ok 0#usize else ok compact.SPLIT
+    let end1 ← if batch = 0#usize then ok compact.SPLIT else ok 22#usize
+    let idx ← prover.publication_indices queries begin1 end1 (decide (t = 2#usize))
+    let o ←
+      match ↑t with
+        | 0 => cc1.multiproof idx.deref
+        | 1 => cc2.multiproof idx.deref
+        | x => tree.multiproof idx.deref
+    let r ← core.option.Option.ok_or o verifier.Error.Allocation
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let a ← compact.SLOT_NODES
+        let i2 ← a.index_usize ((Usize.wrapping_mul 3#usize batch).wrapping_add t)
+        massert (val.len ≤ Usize.wrapping_mul 32#usize i2)
+        let x ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref
+        let result ←
+          alloc.vec.Vec.resize core.clone.CloneU8 x
+              ((x.len.wrapping_add (Usize.wrapping_mul 32#usize i2)).wrapping_sub val.len) 0#u8
+        ok (core.result.Result.Ok result)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+'R1Z.PV_RunJoin_NodeSlot41.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

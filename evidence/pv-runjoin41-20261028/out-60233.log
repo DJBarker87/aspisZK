@@ -1,0 +1,85 @@
+START 60233 R1Z.PV_RunJoin_EncodedLoop41
+DONE 60233 R1Z.PV_RunJoin_EncodedLoop41 exit 1 wall 1.82 RSS 4405288960
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedLoop41.lean:18:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 31
+  a ≥ 0
+where
+ a := ↑n
+ b := ↑↑32#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedLoop41.lean:32:61: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - d ≤ -1
+where
+ a := ↑values.length
+ b := ↑Usize.max
+ c := ↑out.length
+ d := ↑(Slice.length ?m.64)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedLoop41.lean:28:9: error: unsolved goals
+case zero
+inst✝ : ExternalTypes
+ops : ExternalFuns
+values : Slice W
+i : Usize
+out : alloc.vec.Vec U8
+bound : ↑i + 0 = values.length
+room : out.length + 32 * 0 ≤ Usize.max
+⊢ (do
+      let cf ← prover.encoded_slice_loop.body values out i
+      match cf with
+        | ControlFlow.cont next => loop (fun x => prover.encoded_slice_loop.body values x.1 x.2) next
+        | ControlFlow.done out => ok out) =
+    ok out
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedLoop41.lean:36:55: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - e ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ -14337
+  a ≥ 0
+  32*a - c + d ≤ -32
+where
+ a := ↑n
+ b := ↑values.length
+ c := ↑Usize.max
+ d := ↑out.length
+ e := ↑(↑values).length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedLoop41.lean:38:42: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+values : Slice W
+n : ℕ
+ih :
+  ∀ (i : Usize) (out : alloc.vec.Vec U8),
+    ↑i + n = values.length →
+      out.length + 32 * n ≤ Usize.max →
+        ∃ next, prover.encoded_slice_loop values out i = ok next ∧ ↑next = ↑out ++ payload values (↑i) n
+i : Usize
+out : alloc.vec.Vec U8
+bound : ↑i + (n + 1) = values.length
+room : out.length + 32 * (n + 1) ≤ Usize.max
+hi : ↑i < values.length
+cap : (↑values).length ≤ Usize.max
+inc : ↑(i.wrapping_add 1#usize) = ↑i + 1
+mid : alloc.vec.Vec U8
+hm : prover.encoded_slice_loop.body values out i = ok (ControlFlow.cont (mid, i.wrapping_add 1#usize))
+hv : ↑mid = ↑out ++ ↑(PV_RunJoin_FlatBytes35.wire (entry values ↑i))
+⊢ (↑out).length + ↑32#usize = (↑out).length + 32
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedLoop41.lean:32:68: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_EncodedStep41.stop ops _ out i (by omega),̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_EncodedLoop41.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodedLoop41.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

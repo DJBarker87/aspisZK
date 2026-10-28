@@ -1,0 +1,135 @@
+START 60210 R1Z.PV_RunJoin_OpeningStep41
+DONE 60210 R1Z.PV_RunJoin_OpeningStep41 exit 1 wall 2.52 RSS 4405104640
+xpected type is
+  Type ?u.12
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:12:53: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.11
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:14:97: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ a ≤ 25
+where
+ a := ↑↑i
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:13:116: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+row : Std.Array W 29#usize
+out : alloc.vec.Vec U8
+i : Usize
+stop : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ (if i < 26#usize then do
+      let we ← row.index_usize i
+      let bytes ← we.to_le_bytes
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes
+            { «end» := 4#usize }
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+      let lane1 ← lift (i.wrapping_add 1#usize)
+      ok (ControlFlow.cont (out1, lane1))
+    else ok (ControlFlow.done out)) =
+    ok (ControlFlow.done out)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:14:104: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵v̵e̵r̵.̵a̵p̵p̵e̵n̵d̵_̵o̵p̵e̵n̵i̵n̵g̵_̵b̵a̵s̵e̵_̵r̵o̵w̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵s̵h̵o̵w̵ ̵¬̵i̵<̵2̵6̵#̵u̵s̵i̵z̵e̵[̲p̲r̲o̲v̲e̲r̲.̲a̲p̲p̲e̲n̲d̲_̲o̲p̲e̲n̲i̲n̲g̲_̲b̲a̲s̲e̲_̲r̲o̲w̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲¬̲i̲ ̲<̲ ̲2̲6̲#̲u̲s̲i̲z̲e̲ from (by change ¬̵i̵.̵v̵a̵l̵<̵2̵6̵;̵o̵m̵e̵g̵a̵)̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵¬̲i̲.̲v̲a̲l̲ ̲<̲ ̲2̲6̲;̲ ̲o̲m̲e̲g̲a̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:28:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 4
+  0 ≤ a ≤ 25
+  a - d ≥ 0
+where
+ a := ↑↑i
+ b := ↑Usize.max
+ c := ↑out.length
+ d := ↑↑29#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:37:9: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ContinuousAffineMap.cont`
+  [apply] `ContinuousAlgHom.cont`
+  [apply] `ContinuousLinearMap.cont`
+  [apply] `ContinuousMultilinearMap.cont`
+  [apply] `HasFTaylorSeriesUpTo.cont`
+  [apply] `HasFTaylorSeriesUpToOn.cont`
+  [apply] `ControlFlow.cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+'R1Z.PV_RunJoin_OpeningStep41.base_stop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OpeningStep41.base_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:44:49: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Type ?u.12) 28
+numerals are polymorphic in Lean, but the numeral `28` cannot be used in a context where the expected type is
+  Type ?u.12
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:44:53: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.11
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:46:99: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ a ≤ 27
+where
+ a := ↑↑i
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:45:118: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+row : Std.Array W 29#usize
+out : alloc.vec.Vec U8
+i : Usize
+stop : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ (if i < 28#usize then do
+      let we ← row.index_usize i
+      let bytes ← we.to_le_bytes
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes
+            { «end» := 16#usize }
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+      let lane1 ← lift (i.wrapping_add 1#usize)
+      ok (ControlFlow.cont (out1, lane1))
+    else ok (ControlFlow.done out)) =
+    ok (ControlFlow.done out)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:46:106: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵v̵e̵r̵.̵a̵p̵p̵e̵n̵d̵_̵o̵p̵e̵n̵i̵n̵g̵_̵s̵e̵c̵u̵r̵e̵_̵r̵o̵w̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵s̵h̵o̵w̵ ̵¬̵i̵<̵2̵8̵#̵u̵s̵i̵z̵e̵[̲p̲r̲o̲v̲e̲r̲.̲a̲p̲p̲e̲n̲d̲_̲o̲p̲e̲n̲i̲n̲g̲_̲s̲e̲c̲u̲r̲e̲_̲r̲o̲w̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲¬̲i̲ ̲<̲ ̲2̲8̲#̲u̲s̲i̲z̲e̲ from (by change ¬̵i̵.̵v̵a̵l̵<̵2̵8̵;̵o̵m̵e̵g̵a̵)̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵¬̲i̲.̲v̲a̲l̲ ̲<̲ ̲2̲8̲;̲ ̲o̲m̲e̲g̲a̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:60:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 16
+  0 ≤ a ≤ 27
+  a - d ≥ 0
+where
+ a := ↑↑i
+ b := ↑Usize.max
+ c := ↑out.length
+ d := ↑↑29#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:69:9: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ContinuousAffineMap.cont`
+  [apply] `ContinuousAlgHom.cont`
+  [apply] `ContinuousLinearMap.cont`
+  [apply] `ContinuousMultilinearMap.cont`
+  [apply] `HasFTaylorSeriesUpTo.cont`
+  [apply] `HasFTaylorSeriesUpToOn.cont`
+  [apply] `ControlFlow.cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+'R1Z.PV_RunJoin_OpeningStep41.secure_stop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OpeningStep41.secure_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

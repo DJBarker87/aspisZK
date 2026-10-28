@@ -1,0 +1,42 @@
+START 60235 R1Z.PV_RunJoin_NodeTail41
+DONE 60235 R1Z.PV_RunJoin_NodeTail41 exit 1 wall 1.58 RSS 2715328512
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTail41.lean:21:65: error: unsolved goals
+out nodes : Bytes
+cap : Usize
+fits : (↑nodes).length ≤ ↑cap
+room : (↑out).length + (↑nodes).length + ↑cap ≤ Usize.max
+after : alloc.vec.Vec U8
+ha : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (alloc.vec.Vec.deref nodes) = ok after
+hv : ↑after = ↑out ++ ↑(alloc.vec.Vec.deref nodes)
+⊢ (↑out).length + (↑(alloc.vec.Vec.deref nodes)).length = (↑out).length + (↑nodes).length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTail41.lean:61:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d ≥ 0
+  d + e ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  c - d - e ≤ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  b - c + d + e ≥ 0
+  b - d - e ≥ 0
+  a ≥ 0
+  a - b + c - d - e ≥ 0
+where
+ a := ↑Usize.max
+ b := ↑↑finalLen
+ c := ↑(↑cap - (↑nodes).length)
+ d := ↑((↑out).length + ↑cap - ((↑out).length + (↑(alloc.vec.Vec.deref nodes)).length))
+ e := ↑(↑(alloc.vec.Vec.deref nodes)).length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTail41.lean:53:58: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [finish, ̲massert, ̲hfits, ̲if_true, ̲ha, ̲bind_tc_ok,l̵i̵f̵t̵,̵ ̲hr]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_NodeTail41.accepts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

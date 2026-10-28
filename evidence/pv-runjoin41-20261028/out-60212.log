@@ -1,0 +1,49 @@
+START 60212 R1Z.PV_RunJoin_OpeningStep41
+DONE 60212 R1Z.PV_RunJoin_OpeningStep41 exit 1 wall 2.71 RSS 4404580352
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:30:2: error: 'change' tactic failed, pattern
+  (do
+      let next ←
+        do
+          let bytes ← aspis_core.field.wide_exact.WideExact.to_le_bytes (p ↑i)
+          let s ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes
+                { «end» := 4#usize }
+          alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+      ok (ControlFlow.cont (next, i.wrapping_add 1#usize))) =
+    ?m.104
+is not definitionally equal to target
+  (do
+      let bytes ← aspis_core.field.wide_exact.WideExact.to_le_bytes (p ↑i)
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes
+            { «end» := 4#usize }
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+      let lane1 ← lift (i.wrapping_add 1#usize)
+      ok (ControlFlow.cont (out1, lane1))) =
+    ok (ControlFlow.cont (next, i.wrapping_add 1#usize))
+'R1Z.PV_RunJoin_OpeningStep41.base_stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OpeningStep41.base_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningStep41.lean:63:2: error: 'change' tactic failed, pattern
+  (do
+      let next ←
+        do
+          let bytes ← aspis_core.field.wide_exact.WideExact.to_le_bytes (p ↑i)
+          let s ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes
+                { «end» := 16#usize }
+          alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+      ok (ControlFlow.cont (next, i.wrapping_add 1#usize))) =
+    ?m.104
+is not definitionally equal to target
+  (do
+      let bytes ← aspis_core.field.wide_exact.WideExact.to_le_bytes (p ↑i)
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes
+            { «end» := 16#usize }
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+      let lane1 ← lift (i.wrapping_add 1#usize)
+      ok (ControlFlow.cont (out1, lane1))) =
+    ok (ControlFlow.cont (next, i.wrapping_add 1#usize))
+'R1Z.PV_RunJoin_OpeningStep41.secure_stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OpeningStep41.secure_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
