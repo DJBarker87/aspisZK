@@ -34,7 +34,8 @@ theorem carry (pub : R0P.Public K) (leafMeaning : R0P.Digest K)
     simp only [lift,bind_tc_ok] at h
     split at h
     · rename_i full
-      have hv : stop.val=20 := congrArg UScalar.val full
+      have hv : stop.val=20 := by
+        simpa only [format.POOL_V1_TREE_DEPTH,UScalar.ofNatCore_val_eq] using congrArg UScalar.val full
       omega
     · have hs : stop.val<20 := by omega
       rw [BuilderRecordsArray.update_gen frontier stop root (by simpa using hs)] at h
