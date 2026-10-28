@@ -1,0 +1,78 @@
+import NBY_OpeningLocality
+import NCE_FirstFailure
+
+set_option autoImplicit false
+namespace AspisR1.NCE_OpeningCuts
+open Aeneas Aeneas.Std Result MultiproofConeRef
+
+/-- One shared caller carrier. The native read cut must preserve these
+actual fields, rather than selecting independent successful child witnesses. -/
+structure Carrier where
+  prepared : VTop_Stages.verifier.Prepared
+  proof : Slice U8
+  scratch : reference.Scratch
+  log : NCE_FirstFailure.Log
+
+abbrev Reader := Carrier → Nat → Result (U8 × Carrier)
+
+/-- ONE selected proof byte/reborrow on arbitrary SAME caller state; no
+whole-opening, accepted child, successful padding or final-log premise.
+A native harness must identify this reader with its actual backing pointer. -/
+def NCE_Native_Opening (reader : Reader) : Prop :=
+  ∀ (s : Carrier) (i w c : Nat), s.proof.val.length = 57607 →
+    i < 22 → w < 26 → c < 32 →
+    reader s (10055+832*i+32*w+c) =
+      ok (s.proof.val[10055+832*i+32*w+c]!,s)
+
+/-- Existing Euclidean window coverage derives the selected reader law at
+any opening coordinate. It does not introduce a second proof allocation. -/
+theorem read_byte (reader : Reader) (cut : NCE_Native_Opening reader)
+    (s : Carrier) (i k : Nat) (size : s.proof.val.length = 57607)
+    (ib : i < 22) (kb : k < 832) :
+    reader s (10055+832*i+k) = ok (s.proof.val[10055+832*i+k]!,s) := by
+  have address : 10055+832*i+32*(k/32)+k%32 = 10055+832*i+k := by omega
+  have read := cut s i (k/32) (k%32) size ib (by omega) (Nat.mod_lt k (by decide))
+  simpa only [address] using read
+
+/-- Source-order read continuation; only one byte is a native obligation.
+Subsequent reads consume the actual preceding returned caller carrier. -/
+def readWindow (reader : Reader) (i : Nat) : Nat → Nat → Carrier → Result (List U8 × Carrier)
+  | 0,_,s => ok ([],s)
+  | width+1,offset,s => do
+      let (byte,after) ← reader s (10055+832*i+offset)
+      let (tail,final) ← readWindow reader i width (offset+1) after
+      ok (byte::tail,final)
+
+/-- A source-specific continuation proof from the one-byte native cut. The
+full opening image is a conclusion and all nonproof caller fields are framed. -/
+theorem read_window (reader : Reader) (cut : NCE_Native_Opening reader)
+    (s : Carrier) (i width offset : Nat) (size : s.proof.val.length = 57607)
+    (ib : i < 22) (span : offset+width ≤ 832) :
+    readWindow reader i width offset s =
+      ok (NBJ_WindowCover.image (fun k => s.proof.val[10055+832*i+k]!) offset width,s) := by
+  induction width generalizing offset s with
+  | zero => simp only [readWindow,NBJ_WindowCover.image,List.ofFn_zero]
+  | succ width ih =>
+    rw [readWindow,read_byte reader cut s i offset size ib (by omega)]
+    simp only [bind_tc_ok]
+    dsimp only
+    rw [ih s (offset+1) size (by omega)]
+    simp only [bind_tc_ok]
+    dsimp only
+    congr 1
+    congr 1
+    simp only [NBJ_WindowCover.image,List.ofFn_succ,Nat.add_assoc,Nat.add_comm,Nat.add_left_comm]
+
+/-- Full selected opening from the SAME immutable proof and caller carrier.
+The raw native load/reborrow association is still the named one-byte cut. -/
+theorem opening (reader : Reader) (cut : NCE_Native_Opening reader)
+    (s : Carrier) (i : Nat) (size : s.proof.val.length = 57607) (ib : i < 22) :
+    readWindow reader i 832 0 s =
+      ok (NBJ_WindowCover.image (fun k => s.proof.val[k]!) (10055+832*i) 832,s) := by
+  rw [read_window reader cut s i 832 0 size ib (by omega)]
+  rw [NBJ_WindowCover.relocation]
+
+#print axioms read_byte
+#print axioms read_window
+#print axioms opening
+end AspisR1.NCE_OpeningCuts

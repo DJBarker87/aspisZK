@@ -1,0 +1,48 @@
+{"attempt": "NCE_L059", "exit_status": 0, "wall_seconds": 1.8115953939268366, "peak_rss_kib": "4416248", "swaps": "0", "print_axioms": []}
+def AspisR1.NCE_AdmissionCuts.NCE_Native_Admission : AspisR1.NCE_AdmissionCuts.Predicate →
+  AspisR1.NCE_AdmissionCuts.Predicate → Prop :=
+fun pair range =>
+  (∀ (s : AspisR1.NCE_OpeningCuts.Carrier) (i : ℕ),
+      ↑s.scratch.n ≤ 16 →
+        i + 1 < ↑s.scratch.n →
+          pair s i = (decide (AspisR1.NCE_AdmissionCuts.index s i < AspisR1.NCE_AdmissionCuts.index s (i + 1)), s)) ∧
+    ∀ (s : AspisR1.NCE_OpeningCuts.Carrier) (i : ℕ),
+      ↑s.scratch.n ≤ 16 → i < ↑s.scratch.n → range s i = (decide (AspisR1.NCE_AdmissionCuts.index s i < 262144), s)
+def AspisR1.NCE_CarrierEffects.NCE_Native_Row : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  AspisR1.NCE_CarrierEffects.
+...
+(caller : AspisR1.NCE_OpeningCuts.Carrier) (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+    (cursor : Aeneas.Std.Usize),
+    ↑cursor < 16 →
+      ∃ out,
+        native caller keys cursor = Aeneas.Std.Result.ok (out, caller) ∧ AspisR1.NBI_Sort.NativeStep keys cursor out
+def AspisR1.NCE_SortCuts.NCE_Native_KeysSort : AspisR1.NCE_SortCuts.Step → Prop :=
+fun native =>
+  ∀ (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (cursor : Aeneas.Std.Usize),
+    ↑cursor < 16 → ∃ out, native keys cursor = Aeneas.Std.Result.ok out ∧ AspisR1.NBI_Sort.NativeStep keys cursor out
+def AspisR1.NCE_VerifierCuts.NCE_Native_Verifier : AspisR1.NCE_VerifierCuts.Entry →
+  AspisR1.NCE_VerifierCuts.Exit → AspisR1.NCE_VerifierCuts.Finish → Prop :=
+fun entry exit finish =>
+  (∀ (s : AspisR1.NCE_OpeningCuts.Carrier) (bytes : ℕ) (valid : Bool),
+      bytes ≤ 5504 →
+        entry s bytes valid = (decide (0 < ↑s.scratch.n ∧ ↑s.scratch.n ≤ 16 ∧ bytes % 32 = 0) && valid, s)) ∧
+    (∀ (s : AspisR1.NCE_OpeningCuts.Carrier) (w : Aeneas.Std.Usize),
+        ↑w ≤ 16 →
+          exit s w =
+            { prepared := s.prepared, proof := s.proof,
+              scratch :=
+                have __src := s.scratch;
+                { idx := __src.idx, val := __src.val, n := w, «at» := __src.at },
+              log := s.log }) ∧
+      ∀ (s : AspisR1.NCE_OpeningCuts.Carrier) (root : AspisR1.NCE_VerifierCuts.Digest)
+        (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+        ↑s.scratch.n ≤ 16 →
+          ↑s.scratch.at ≤ (↑physical).length →
+            (↑physical).length ≤ 5504 →
+              finish s root physical =
+                (decide
+                    (↑s.scratch.n = 1 ∧
+                      ↑(↑s.scratch.idx)[0]! = 0 ∧ (↑s.scratch.val)[0]! = root ∧ ↑s.scratch.at = (↑physical).length),
+                  s)
+
+Running as unit: run-r6513f77de446411bbe7cde49436ce309.scope; invocation ID: 15d27593f78b4eaabe53b962c863f68b

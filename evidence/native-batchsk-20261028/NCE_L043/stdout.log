@@ -1,0 +1,39 @@
+NCE_sources/NCE_KeyProducerCuts.lean:26:14: warning: 'first
+| exact frame
+| exact keys
+| exact cursor
+| exact b
+| exact k' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NCE_sources/NCE_KeyProducerCuts.lean:26:14: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NCE_sources/NCE_KeyProducerCuts.lean:49:40: error: Application type mismatch: The argument
+  queries
+has type
+  ∀ j < 22, ↑(↑caller.prepared.queries)[j]! < 262144
+but is expected to have type
+  canonical ?m.45
+in the application
+  fill_eq native writeCut ?m.44 ?m.45 ?m.46 ?m.47 queries
+NCE_sources/NCE_KeyProducerCuts.lean:46:65: error: unsolved goals
+create : Carrier → ℕ → ℕ → KeyState
+zeroCut : NCE_Native_KeysZero create
+native : KeyState → KeyState
+writeCut : NCE_Native_KeysWrite native
+caller : Carrier
+batch kind : ℕ
+bb : batch < 2
+kb : kind < 3
+queries : ∀ j < 22, ↑(↑caller.prepared.queries)[j]! < 262144
+⊢ array
+        (have initial := { caller := caller, keys := fun x => 0#u64, cursor := 0, batch := batch, kind := kind };
+        fill native (count initial) initial) =
+      Port4B_KeyInstall.keyArray caller.prepared.queries batch kind ∧
+    (have initial := { caller := caller, keys := fun x => 0#u64, cursor := 0, batch := batch, kind := kind };
+        fill native (count initial) initial).caller =
+      caller
+'AspisR1.NCE_KeyProducerCuts.create_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCE_KeyProducerCuts.producer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCE_KeyProducerCuts.producer_sorted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

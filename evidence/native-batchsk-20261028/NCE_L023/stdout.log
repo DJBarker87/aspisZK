@@ -1,0 +1,90 @@
+NCE_sources/NCE_KeyCuts.lean:49:14: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - 256*h ≥ 22
+  0 ≤ f ≤ 2
+  e ≥ 0
+  e - g + 256*h ≥ 1
+where
+ e := ↑(if s.batch = 0 then 10 else 12)
+ f := ↑(native s).kind
+ g := ↑↑((native s).keys s.cursor)
+ h := ↑(if s.kind = 2 then ↑(↑s.caller.prepared.queries)[(if s.batch = 0 then 0 else 10) + s.cursor]! / 4
+  else ↑(↑s.caller.prepared.queries)[(if s.batch = 0 then 0 else 10) + s.cursor]!)
+NCE_sources/NCE_KeyCuts.lean:49:14: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - 256*h ≥ 12
+  0 ≤ f ≤ 2
+  e ≥ 0
+  e - g + 256*h ≥ 1
+where
+ e := ↑(if s.batch = 0 then 10 else 12)
+ f := ↑(native s).kind
+ g := ↑↑((native s).keys s.cursor)
+ h := ↑(if s.kind = 2 then ↑(↑s.caller.prepared.queries)[(if s.batch = 0 then 0 else 10) + s.cursor]! / 4
+  else ↑(↑s.caller.prepared.queries)[(if s.batch = 0 then 0 else 10) + s.cursor]!)
+NCE_sources/NCE_KeyCuts.lean:59:6: error: Type mismatch
+  selected
+has type
+  (native s).keys s.cursor = word s s.cursor
+but is expected to have type
+  (native s).keys s.cursor = NBE_KeyLoop.write (word s) s.keys s.cursor s.cursor
+NCE_sources/NCE_KeyCuts.lean:60:6: error: Type mismatch
+  outside j hit
+has type
+  (native s).keys j = s.keys j
+but is expected to have type
+  (native s).keys j = NBE_KeyLoop.write (word s) s.keys s.cursor j
+NCE_sources/NCE_KeyCuts.lean:87:17: error: unsolved goals
+case succ
+native : KeyState → KeyState
+cut : NCE_Native_KeysWrite native
+fuel : ℕ
+ih :
+  ∀ (s : KeyState),
+    s.batch < 2 →
+      s.kind < 3 →
+        canonical s →
+          s.cursor + fuel ≤ count s →
+            fill native fuel s =
+              { caller := s.caller, keys := NBE_KeyLoop.fill (word s) fuel s.cursor s.keys, cursor := s.cursor + fuel,
+                batch := s.batch, kind := s.kind }
+s : KeyState
+batch : s.batch < 2
+kind : s.kind < 3
+queries : canonical s
+span : s.cursor + (fuel + 1) ≤ count s
+active : s.cursor < count s
+next : KeyState :=
+  { caller := s.caller, keys := NBE_KeyLoop.write (word s) s.keys s.cursor, cursor := s.cursor + 1, batch := s.batch,
+    kind := s.kind }
+nextSpan : next.cursor + fuel ≤ count next
+tail :
+  fill native fuel next =
+    { caller := next.caller, keys := NBE_KeyLoop.fill (word next) fuel next.cursor next.keys,
+      cursor := next.cursor + fuel, batch := next.batch, kind := next.kind }
+cursor : s.cursor + 1 + fuel = s.cursor + (fuel + 1)
+⊢ { caller := s.caller,
+      keys :=
+        NBE_KeyLoop.fill
+          (word
+            { caller := s.caller, keys := NBE_KeyLoop.write (word s) s.keys s.cursor, cursor := s.cursor + 1,
+              batch := s.batch, kind := s.kind })
+          fuel (s.cursor + 1) (NBE_KeyLoop.write (word s) s.keys s.cursor),
+      cursor := s.cursor + (fuel + 1), batch := s.batch, kind := s.kind } =
+    { caller := s.caller,
+      keys := NBE_KeyLoop.fill (word s) fuel (s.cursor + 1) (NBE_KeyLoop.write (word s) s.keys s.cursor),
+      cursor := s.cursor + (fuel + 1), batch := s.batch, kind := s.kind }
+NCE_sources/NCE_KeyCuts.lean:97:20: warning: This simp argument is unused:
+  word
+
+Hint: Omit it from the simp argument list.
+  simp only [next,w̵o̵r̵d̵,̵ ̲NBE_KeyLoop.fill, ̲cursor]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCE_KeyCuts.step_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCE_KeyCuts.fill_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCE_KeyCuts.fill_values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

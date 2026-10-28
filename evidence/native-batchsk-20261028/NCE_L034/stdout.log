@@ -1,0 +1,47 @@
+NCE_sources/NCE_CountInitCuts.lean:44:2: error: No goals to be solved
+NCE_sources/NCE_CountInitCuts.lean:60:2: error: No goals to be solved
+NCE_sources/NCE_CountInitCuts.lean:97:40: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  0 ≤ e ≤ 16
+  e + f - g ≥ 1
+where
+ e := ↑n
+ f := ↑{ source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.cursor
+ g := ↑{ source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.n
+NCE_sources/NCE_CountInitCuts.lean:98:2: error: Tactic `rfl` failed: The left-hand side
+  { source := { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.source,
+    memory :=
+      KMX_CopyMeaning.loop { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.source
+        { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.memory
+        { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.cursor n,
+    cursor := { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.cursor + n,
+    n := { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.n,
+    frame := { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.frame }
+is not definitionally equal to the right-hand side
+  { source := source, memory := NBV_CountInitialization.initialized source n, cursor := n, n := n, frame := frame }
+
+Frame : Type
+create : (ℕ → ℕ) → ℕ → Frame → InitState Frame
+zeroCut : NCE_Native_CountZero create
+copy : InitState Frame → InitState Frame
+copyCut : NCE_Native_CountCopy copy
+source : ℕ → ℕ
+n : ℕ
+frame : Frame
+small : n ≤ 16
+range : ∀ k < n, source k < 262144
+⊢ { source := { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.source,
+      memory :=
+        KMX_CopyMeaning.loop { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.source
+          { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.memory
+          { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.cursor n,
+      cursor := { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.cursor + n,
+      n := { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.n,
+      frame := { source := source, memory := fun x => 0, cursor := 0, n := n, frame := frame }.frame } =
+    { source := source, memory := NBV_CountInitialization.initialized source n, cursor := n, n := n, frame := frame }
+'AspisR1.NCE_CountInitCuts.create_eq' depends on axioms: [Quot.sound]
+'AspisR1.NCE_CountInitCuts.copy_eq' depends on axioms: [Quot.sound]
+'AspisR1.NCE_CountInitCuts.run_eq' depends on axioms: [propext, Quot.sound]
+'AspisR1.NCE_CountInitCuts.initialized' depends on axioms: [propext, sorryAx, Quot.sound]

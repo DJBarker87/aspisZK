@@ -1,0 +1,32 @@
+NCE_sources/NCE_RowStoreCuts.lean:43:75: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 0
+  h ≥ 0
+  g ≥ 32
+  g - h ≤ -1
+  g - i ≤ -1
+  0 ≤ f ≤ 15
+  0 ≤ e ≤ 15
+where
+ e := ↑↑w
+ f := ↑j
+ g := ↑c
+ h := ↑(↑(if j = ↑w then digest else (↑s.scratch.val)[j]!)).length
+ i := ↑↑32#usize
+NCE_sources/NCE_RowStoreCuts.lean:46:8: error: Type mismatch: After simplification, term
+  value
+ has type
+  (↑((↑(native s w parent digest cursor).scratch.val)[j]?.getD default))[c]?.getD default = (↑digest)[c]?.getD default
+but is expected to have type
+  (↑((↑out.scratch.val)[j]?.getD default))[c] = (↑digest)[c]
+NCE_sources/NCE_RowStoreCuts.lean:49:8: error: Type mismatch: After simplification, term
+  value
+ has type
+  (↑((↑(native s w parent digest cursor).scratch.val)[j]?.getD default))[c]?.getD default =
+    (↑((↑s.scratch.val)[j]?.getD default))[c]?.getD default
+but is expected to have type
+  (↑((↑out.scratch.val)[j]?.getD default))[c] = (↑((↑s.scratch.val)[j]?.getD default))[c]
+NCE_sources/NCE_RowStoreCuts.lean:59:4: error: Dependent elimination failed: Failed to solve equation
+  s.scratch.3 = (native s w parent digest cursor).scratch.3
+'AspisR1.NCE_RowStoreCuts.store_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCE_RowStoreCuts.stored_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
