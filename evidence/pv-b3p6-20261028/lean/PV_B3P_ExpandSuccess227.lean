@@ -35,7 +35,7 @@ theorem expand_outer_total {N : Usize} (point : Array aspis_core.field.QM31 10#u
     let len1 := Usize.wrapping_mul len 2#usize
     have hlen1 : len1.val = 2*len.val := by
       have h := usize_mul_value len 2#usize (by change len.val*2 < _; omega)
-      simpa only [Nat.mul_comm] using h
+      simpa only [len1,show (2#usize).val = 2 from rfl,Nat.mul_comm] using h
     let coordinate1 := Usize.wrapping_add coordinate 1#usize
     have hc1 : coordinate1.val = coordinate.val+1 :=
       PV_B3P_Offset226V3.add_value coordinate 1#usize (by
@@ -48,9 +48,11 @@ theorem expand_outer_total {N : Usize} (point : Array aspis_core.field.QM31 10#u
     have hbody : reference_copy_terminal.Selectors.expand_loop0.body point start count
         weights len coordinate = .ok (.cont (weights1,len1,coordinate1)) := by
       simp only [reference_copy_terminal.Selectors.expand_loop0.body,hb,↓reduceIte,
-        lift,bind_tc_ok,hq,hprepared,hweights1]
+        lift,bind_tc_ok,hq,hprepared,hweights1,len1,coordinate1]
     unfold reference_copy_terminal.Selectors.expand_loop0
-    rw [loop.eq_1,hbody]
+    rw [loop.eq_1]
+    dsimp only
+    rw [hbody]
     exact ih weights1 len1 coordinate1 (by omega) (by simpa only [hlen1] using hcap')
 
 theorem expand_total (N : Usize) (point : Array aspis_core.field.QM31 10#usize)
@@ -63,6 +65,7 @@ theorem expand_total (N : Usize) (point : Array aspis_core.field.QM31 10#usize)
   obtain ⟨weights,hweights⟩ := update (Array.repeat N aspis_core.field.QM31.ZERO)
     0#usize aspis_core.field.QM31.ONE (by change 0<N.val; omega)
   unfold reference_copy_terminal.Selectors.expand
+  dsimp only
   rw [hweights]
   exact expand_outer_total point start count count.val (by omega) weights 1#usize start
     (by omega) (by simpa only [show (1#usize).val=1 from rfl,Nat.one_mul] using hcap)
