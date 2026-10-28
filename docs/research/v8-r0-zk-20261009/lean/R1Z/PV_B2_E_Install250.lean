@@ -1,6 +1,7 @@
 import R1Z.PV_B2_E_OrdinaryOriginal
 import R1Z.ProverRwFullExternalFuns
 set_option autoImplicit false
+noncomputable section
 namespace PV_B2_E_Install250
 open Aeneas Aeneas.Std Result ProverRwFull PV_B2_E_OrdinaryOriginal
 variable [ExternalTypes]
@@ -45,267 +46,267 @@ theorem result_observations {O : Sort _} (observe : Result Native → O)
     (ops : ExternalFuns) (b : Bytes) :
     observe ((selected ops).op250 b) = observe (mapResult toNative (original b)) :=
   congrArg observe (selected_callback ops b)
-theorem preserved_0 (ops : ExternalFuns) : (selected ops).op0 = ops.op0 := rfl
-theorem preserved_1 (ops : ExternalFuns) : (selected ops).op1 = ops.op1 := rfl
-theorem preserved_2 (ops : ExternalFuns) : (selected ops).op2 = ops.op2 := rfl
-theorem preserved_3 (ops : ExternalFuns) : (selected ops).op3 = ops.op3 := rfl
-theorem preserved_4 (ops : ExternalFuns) : (selected ops).op4 = ops.op4 := rfl
-theorem preserved_5 (ops : ExternalFuns) : (selected ops).op5 = ops.op5 := rfl
-theorem preserved_6 (ops : ExternalFuns) : (selected ops).op6 = ops.op6 := rfl
-theorem preserved_7 (ops : ExternalFuns) : (selected ops).op7 = ops.op7 := rfl
-theorem preserved_8 (ops : ExternalFuns) : (selected ops).op8 = ops.op8 := rfl
-theorem preserved_9 (ops : ExternalFuns) : (selected ops).op9 = ops.op9 := rfl
-theorem preserved_10 (ops : ExternalFuns) : (selected ops).op10 = ops.op10 := rfl
-theorem preserved_11 (ops : ExternalFuns) : (selected ops).op11 = ops.op11 := rfl
-theorem preserved_12 (ops : ExternalFuns) : (selected ops).op12 = ops.op12 := rfl
-theorem preserved_13 (ops : ExternalFuns) : (selected ops).op13 = ops.op13 := rfl
-theorem preserved_14 (ops : ExternalFuns) : (selected ops).op14 = ops.op14 := rfl
-theorem preserved_15 (ops : ExternalFuns) : (selected ops).op15 = ops.op15 := rfl
-theorem preserved_16 (ops : ExternalFuns) : (selected ops).op16 = ops.op16 := rfl
-theorem preserved_17 (ops : ExternalFuns) : (selected ops).op17 = ops.op17 := rfl
-theorem preserved_18 (ops : ExternalFuns) : (selected ops).op18 = ops.op18 := rfl
-theorem preserved_19 (ops : ExternalFuns) : (selected ops).op19 = ops.op19 := rfl
-theorem preserved_20 (ops : ExternalFuns) : (selected ops).op20 = ops.op20 := rfl
-theorem preserved_21 (ops : ExternalFuns) : (selected ops).op21 = ops.op21 := rfl
-theorem preserved_22 (ops : ExternalFuns) : (selected ops).op22 = ops.op22 := rfl
-theorem preserved_23 (ops : ExternalFuns) : (selected ops).op23 = ops.op23 := rfl
-theorem preserved_24 (ops : ExternalFuns) : (selected ops).op24 = ops.op24 := rfl
-theorem preserved_25 (ops : ExternalFuns) : (selected ops).op25 = ops.op25 := rfl
-theorem preserved_26 (ops : ExternalFuns) : (selected ops).op26 = ops.op26 := rfl
-theorem preserved_27 (ops : ExternalFuns) : (selected ops).op27 = ops.op27 := rfl
-theorem preserved_28 (ops : ExternalFuns) : (selected ops).op28 = ops.op28 := rfl
-theorem preserved_29 (ops : ExternalFuns) : (selected ops).op29 = ops.op29 := rfl
-theorem preserved_30 (ops : ExternalFuns) : (selected ops).op30 = ops.op30 := rfl
-theorem preserved_31 (ops : ExternalFuns) : (selected ops).op31 = ops.op31 := rfl
-theorem preserved_32 (ops : ExternalFuns) : (selected ops).op32 = ops.op32 := rfl
-theorem preserved_33 (ops : ExternalFuns) : (selected ops).op33 = ops.op33 := rfl
-theorem preserved_34 (ops : ExternalFuns) : (selected ops).op34 = ops.op34 := rfl
-theorem preserved_35 (ops : ExternalFuns) : (selected ops).op35 = ops.op35 := rfl
-theorem preserved_36 (ops : ExternalFuns) : (selected ops).op36 = ops.op36 := rfl
-theorem preserved_37 (ops : ExternalFuns) : (selected ops).op37 = ops.op37 := rfl
-theorem preserved_38 (ops : ExternalFuns) : (selected ops).op38 = ops.op38 := rfl
-theorem preserved_39 (ops : ExternalFuns) : (selected ops).op39 = ops.op39 := rfl
-theorem preserved_40 (ops : ExternalFuns) : (selected ops).op40 = ops.op40 := rfl
-theorem preserved_41 (ops : ExternalFuns) : (selected ops).op41 = ops.op41 := rfl
-theorem preserved_42 (ops : ExternalFuns) : (selected ops).op42 = ops.op42 := rfl
-theorem preserved_43 (ops : ExternalFuns) : (selected ops).op43 = ops.op43 := rfl
-theorem preserved_44 (ops : ExternalFuns) : (selected ops).op44 = ops.op44 := rfl
-theorem preserved_45 (ops : ExternalFuns) : (selected ops).op45 = ops.op45 := rfl
-theorem preserved_46 (ops : ExternalFuns) : (selected ops).op46 = ops.op46 := rfl
-theorem preserved_47 (ops : ExternalFuns) : (selected ops).op47 = ops.op47 := rfl
-theorem preserved_48 (ops : ExternalFuns) : (selected ops).op48 = ops.op48 := rfl
-theorem preserved_49 (ops : ExternalFuns) : (selected ops).op49 = ops.op49 := rfl
-theorem preserved_50 (ops : ExternalFuns) : (selected ops).op50 = ops.op50 := rfl
-theorem preserved_51 (ops : ExternalFuns) : (selected ops).op51 = ops.op51 := rfl
-theorem preserved_52 (ops : ExternalFuns) : (selected ops).op52 = ops.op52 := rfl
-theorem preserved_53 (ops : ExternalFuns) : (selected ops).op53 = ops.op53 := rfl
-theorem preserved_54 (ops : ExternalFuns) : (selected ops).op54 = ops.op54 := rfl
-theorem preserved_55 (ops : ExternalFuns) : (selected ops).op55 = ops.op55 := rfl
-theorem preserved_56 (ops : ExternalFuns) : (selected ops).op56 = ops.op56 := rfl
-theorem preserved_57 (ops : ExternalFuns) : (selected ops).op57 = ops.op57 := rfl
-theorem preserved_58 (ops : ExternalFuns) : (selected ops).op58 = ops.op58 := rfl
-theorem preserved_59 (ops : ExternalFuns) : (selected ops).op59 = ops.op59 := rfl
-theorem preserved_60 (ops : ExternalFuns) : (selected ops).op60 = ops.op60 := rfl
-theorem preserved_61 (ops : ExternalFuns) : (selected ops).op61 = ops.op61 := rfl
-theorem preserved_62 (ops : ExternalFuns) : (selected ops).op62 = ops.op62 := rfl
-theorem preserved_63 (ops : ExternalFuns) : (selected ops).op63 = ops.op63 := rfl
-theorem preserved_64 (ops : ExternalFuns) : (selected ops).op64 = ops.op64 := rfl
-theorem preserved_65 (ops : ExternalFuns) : (selected ops).op65 = ops.op65 := rfl
-theorem preserved_66 (ops : ExternalFuns) : (selected ops).op66 = ops.op66 := rfl
-theorem preserved_67 (ops : ExternalFuns) : (selected ops).op67 = ops.op67 := rfl
-theorem preserved_68 (ops : ExternalFuns) : (selected ops).op68 = ops.op68 := rfl
-theorem preserved_69 (ops : ExternalFuns) : (selected ops).op69 = ops.op69 := rfl
-theorem preserved_70 (ops : ExternalFuns) : (selected ops).op70 = ops.op70 := rfl
-theorem preserved_71 (ops : ExternalFuns) : (selected ops).op71 = ops.op71 := rfl
-theorem preserved_72 (ops : ExternalFuns) : (selected ops).op72 = ops.op72 := rfl
-theorem preserved_73 (ops : ExternalFuns) : (selected ops).op73 = ops.op73 := rfl
-theorem preserved_74 (ops : ExternalFuns) : (selected ops).op74 = ops.op74 := rfl
-theorem preserved_75 (ops : ExternalFuns) : (selected ops).op75 = ops.op75 := rfl
-theorem preserved_76 (ops : ExternalFuns) : (selected ops).op76 = ops.op76 := rfl
-theorem preserved_77 (ops : ExternalFuns) : (selected ops).op77 = ops.op77 := rfl
-theorem preserved_78 (ops : ExternalFuns) : (selected ops).op78 = ops.op78 := rfl
-theorem preserved_79 (ops : ExternalFuns) : (selected ops).op79 = ops.op79 := rfl
-theorem preserved_80 (ops : ExternalFuns) : (selected ops).op80 = ops.op80 := rfl
-theorem preserved_81 (ops : ExternalFuns) : (selected ops).op81 = ops.op81 := rfl
-theorem preserved_82 (ops : ExternalFuns) : (selected ops).op82 = ops.op82 := rfl
-theorem preserved_83 (ops : ExternalFuns) : (selected ops).op83 = ops.op83 := rfl
-theorem preserved_84 (ops : ExternalFuns) : (selected ops).op84 = ops.op84 := rfl
-theorem preserved_85 (ops : ExternalFuns) : (selected ops).op85 = ops.op85 := rfl
-theorem preserved_86 (ops : ExternalFuns) : (selected ops).op86 = ops.op86 := rfl
-theorem preserved_87 (ops : ExternalFuns) : (selected ops).op87 = ops.op87 := rfl
-theorem preserved_88 (ops : ExternalFuns) : (selected ops).op88 = ops.op88 := rfl
-theorem preserved_89 (ops : ExternalFuns) : (selected ops).op89 = ops.op89 := rfl
-theorem preserved_90 (ops : ExternalFuns) : (selected ops).op90 = ops.op90 := rfl
-theorem preserved_91 (ops : ExternalFuns) : (selected ops).op91 = ops.op91 := rfl
-theorem preserved_92 (ops : ExternalFuns) : (selected ops).op92 = ops.op92 := rfl
-theorem preserved_93 (ops : ExternalFuns) : (selected ops).op93 = ops.op93 := rfl
-theorem preserved_94 (ops : ExternalFuns) : (selected ops).op94 = ops.op94 := rfl
-theorem preserved_95 (ops : ExternalFuns) : (selected ops).op95 = ops.op95 := rfl
-theorem preserved_96 (ops : ExternalFuns) : (selected ops).op96 = ops.op96 := rfl
-theorem preserved_97 (ops : ExternalFuns) : (selected ops).op97 = ops.op97 := rfl
-theorem preserved_98 (ops : ExternalFuns) : (selected ops).op98 = ops.op98 := rfl
-theorem preserved_99 (ops : ExternalFuns) : (selected ops).op99 = ops.op99 := rfl
-theorem preserved_100 (ops : ExternalFuns) : (selected ops).op100 = ops.op100 := rfl
-theorem preserved_101 (ops : ExternalFuns) : (selected ops).op101 = ops.op101 := rfl
-theorem preserved_102 (ops : ExternalFuns) : (selected ops).op102 = ops.op102 := rfl
-theorem preserved_103 (ops : ExternalFuns) : (selected ops).op103 = ops.op103 := rfl
-theorem preserved_104 (ops : ExternalFuns) : (selected ops).op104 = ops.op104 := rfl
-theorem preserved_105 (ops : ExternalFuns) : (selected ops).op105 = ops.op105 := rfl
-theorem preserved_106 (ops : ExternalFuns) : (selected ops).op106 = ops.op106 := rfl
-theorem preserved_107 (ops : ExternalFuns) : (selected ops).op107 = ops.op107 := rfl
-theorem preserved_108 (ops : ExternalFuns) : (selected ops).op108 = ops.op108 := rfl
-theorem preserved_109 (ops : ExternalFuns) : (selected ops).op109 = ops.op109 := rfl
-theorem preserved_110 (ops : ExternalFuns) : (selected ops).op110 = ops.op110 := rfl
-theorem preserved_111 (ops : ExternalFuns) : (selected ops).op111 = ops.op111 := rfl
-theorem preserved_112 (ops : ExternalFuns) : (selected ops).op112 = ops.op112 := rfl
-theorem preserved_113 (ops : ExternalFuns) : (selected ops).op113 = ops.op113 := rfl
-theorem preserved_114 (ops : ExternalFuns) : (selected ops).op114 = ops.op114 := rfl
-theorem preserved_115 (ops : ExternalFuns) : (selected ops).op115 = ops.op115 := rfl
-theorem preserved_116 (ops : ExternalFuns) : (selected ops).op116 = ops.op116 := rfl
-theorem preserved_117 (ops : ExternalFuns) : (selected ops).op117 = ops.op117 := rfl
-theorem preserved_118 (ops : ExternalFuns) : (selected ops).op118 = ops.op118 := rfl
-theorem preserved_119 (ops : ExternalFuns) : (selected ops).op119 = ops.op119 := rfl
-theorem preserved_120 (ops : ExternalFuns) : (selected ops).op120 = ops.op120 := rfl
-theorem preserved_121 (ops : ExternalFuns) : (selected ops).op121 = ops.op121 := rfl
-theorem preserved_122 (ops : ExternalFuns) : (selected ops).op122 = ops.op122 := rfl
-theorem preserved_123 (ops : ExternalFuns) : (selected ops).op123 = ops.op123 := rfl
-theorem preserved_124 (ops : ExternalFuns) : (selected ops).op124 = ops.op124 := rfl
-theorem preserved_125 (ops : ExternalFuns) : (selected ops).op125 = ops.op125 := rfl
-theorem preserved_126 (ops : ExternalFuns) : (selected ops).op126 = ops.op126 := rfl
-theorem preserved_127 (ops : ExternalFuns) : (selected ops).op127 = ops.op127 := rfl
-theorem preserved_128 (ops : ExternalFuns) : (selected ops).op128 = ops.op128 := rfl
-theorem preserved_129 (ops : ExternalFuns) : (selected ops).op129 = ops.op129 := rfl
-theorem preserved_130 (ops : ExternalFuns) : (selected ops).op130 = ops.op130 := rfl
-theorem preserved_131 (ops : ExternalFuns) : (selected ops).op131 = ops.op131 := rfl
-theorem preserved_132 (ops : ExternalFuns) : (selected ops).op132 = ops.op132 := rfl
-theorem preserved_133 (ops : ExternalFuns) : (selected ops).op133 = ops.op133 := rfl
-theorem preserved_134 (ops : ExternalFuns) : (selected ops).op134 = ops.op134 := rfl
-theorem preserved_135 (ops : ExternalFuns) : (selected ops).op135 = ops.op135 := rfl
-theorem preserved_136 (ops : ExternalFuns) : (selected ops).op136 = ops.op136 := rfl
-theorem preserved_137 (ops : ExternalFuns) : (selected ops).op137 = ops.op137 := rfl
-theorem preserved_138 (ops : ExternalFuns) : (selected ops).op138 = ops.op138 := rfl
-theorem preserved_139 (ops : ExternalFuns) : (selected ops).op139 = ops.op139 := rfl
-theorem preserved_140 (ops : ExternalFuns) : (selected ops).op140 = ops.op140 := rfl
-theorem preserved_141 (ops : ExternalFuns) : (selected ops).op141 = ops.op141 := rfl
-theorem preserved_142 (ops : ExternalFuns) : (selected ops).op142 = ops.op142 := rfl
-theorem preserved_143 (ops : ExternalFuns) : (selected ops).op143 = ops.op143 := rfl
-theorem preserved_144 (ops : ExternalFuns) : (selected ops).op144 = ops.op144 := rfl
-theorem preserved_145 (ops : ExternalFuns) : (selected ops).op145 = ops.op145 := rfl
-theorem preserved_146 (ops : ExternalFuns) : (selected ops).op146 = ops.op146 := rfl
-theorem preserved_147 (ops : ExternalFuns) : (selected ops).op147 = ops.op147 := rfl
-theorem preserved_148 (ops : ExternalFuns) : (selected ops).op148 = ops.op148 := rfl
-theorem preserved_149 (ops : ExternalFuns) : (selected ops).op149 = ops.op149 := rfl
-theorem preserved_150 (ops : ExternalFuns) : (selected ops).op150 = ops.op150 := rfl
-theorem preserved_151 (ops : ExternalFuns) : (selected ops).op151 = ops.op151 := rfl
-theorem preserved_152 (ops : ExternalFuns) : (selected ops).op152 = ops.op152 := rfl
-theorem preserved_153 (ops : ExternalFuns) : (selected ops).op153 = ops.op153 := rfl
-theorem preserved_154 (ops : ExternalFuns) : (selected ops).op154 = ops.op154 := rfl
-theorem preserved_155 (ops : ExternalFuns) : (selected ops).op155 = ops.op155 := rfl
-theorem preserved_156 (ops : ExternalFuns) : (selected ops).op156 = ops.op156 := rfl
-theorem preserved_157 (ops : ExternalFuns) : (selected ops).op157 = ops.op157 := rfl
-theorem preserved_158 (ops : ExternalFuns) : (selected ops).op158 = ops.op158 := rfl
-theorem preserved_159 (ops : ExternalFuns) : (selected ops).op159 = ops.op159 := rfl
-theorem preserved_160 (ops : ExternalFuns) : (selected ops).op160 = ops.op160 := rfl
-theorem preserved_161 (ops : ExternalFuns) : (selected ops).op161 = ops.op161 := rfl
-theorem preserved_162 (ops : ExternalFuns) : (selected ops).op162 = ops.op162 := rfl
-theorem preserved_163 (ops : ExternalFuns) : (selected ops).op163 = ops.op163 := rfl
-theorem preserved_164 (ops : ExternalFuns) : (selected ops).op164 = ops.op164 := rfl
-theorem preserved_165 (ops : ExternalFuns) : (selected ops).op165 = ops.op165 := rfl
-theorem preserved_166 (ops : ExternalFuns) : (selected ops).op166 = ops.op166 := rfl
-theorem preserved_167 (ops : ExternalFuns) : (selected ops).op167 = ops.op167 := rfl
-theorem preserved_168 (ops : ExternalFuns) : (selected ops).op168 = ops.op168 := rfl
-theorem preserved_169 (ops : ExternalFuns) : (selected ops).op169 = ops.op169 := rfl
-theorem preserved_170 (ops : ExternalFuns) : (selected ops).op170 = ops.op170 := rfl
-theorem preserved_171 (ops : ExternalFuns) : (selected ops).op171 = ops.op171 := rfl
-theorem preserved_172 (ops : ExternalFuns) : (selected ops).op172 = ops.op172 := rfl
-theorem preserved_173 (ops : ExternalFuns) : (selected ops).op173 = ops.op173 := rfl
-theorem preserved_174 (ops : ExternalFuns) : (selected ops).op174 = ops.op174 := rfl
-theorem preserved_175 (ops : ExternalFuns) : (selected ops).op175 = ops.op175 := rfl
-theorem preserved_176 (ops : ExternalFuns) : (selected ops).op176 = ops.op176 := rfl
-theorem preserved_177 (ops : ExternalFuns) : (selected ops).op177 = ops.op177 := rfl
-theorem preserved_178 (ops : ExternalFuns) : (selected ops).op178 = ops.op178 := rfl
-theorem preserved_179 (ops : ExternalFuns) : (selected ops).op179 = ops.op179 := rfl
-theorem preserved_180 (ops : ExternalFuns) : (selected ops).op180 = ops.op180 := rfl
-theorem preserved_181 (ops : ExternalFuns) : (selected ops).op181 = ops.op181 := rfl
-theorem preserved_182 (ops : ExternalFuns) : (selected ops).op182 = ops.op182 := rfl
-theorem preserved_183 (ops : ExternalFuns) : (selected ops).op183 = ops.op183 := rfl
-theorem preserved_184 (ops : ExternalFuns) : (selected ops).op184 = ops.op184 := rfl
-theorem preserved_185 (ops : ExternalFuns) : (selected ops).op185 = ops.op185 := rfl
-theorem preserved_186 (ops : ExternalFuns) : (selected ops).op186 = ops.op186 := rfl
-theorem preserved_187 (ops : ExternalFuns) : (selected ops).op187 = ops.op187 := rfl
-theorem preserved_188 (ops : ExternalFuns) : (selected ops).op188 = ops.op188 := rfl
-theorem preserved_189 (ops : ExternalFuns) : (selected ops).op189 = ops.op189 := rfl
-theorem preserved_190 (ops : ExternalFuns) : (selected ops).op190 = ops.op190 := rfl
-theorem preserved_191 (ops : ExternalFuns) : (selected ops).op191 = ops.op191 := rfl
-theorem preserved_192 (ops : ExternalFuns) : (selected ops).op192 = ops.op192 := rfl
-theorem preserved_193 (ops : ExternalFuns) : (selected ops).op193 = ops.op193 := rfl
-theorem preserved_194 (ops : ExternalFuns) : (selected ops).op194 = ops.op194 := rfl
-theorem preserved_195 (ops : ExternalFuns) : (selected ops).op195 = ops.op195 := rfl
-theorem preserved_196 (ops : ExternalFuns) : (selected ops).op196 = ops.op196 := rfl
-theorem preserved_197 (ops : ExternalFuns) : (selected ops).op197 = ops.op197 := rfl
-theorem preserved_198 (ops : ExternalFuns) : (selected ops).op198 = ops.op198 := rfl
-theorem preserved_199 (ops : ExternalFuns) : (selected ops).op199 = ops.op199 := rfl
-theorem preserved_200 (ops : ExternalFuns) : (selected ops).op200 = ops.op200 := rfl
-theorem preserved_201 (ops : ExternalFuns) : (selected ops).op201 = ops.op201 := rfl
-theorem preserved_202 (ops : ExternalFuns) : (selected ops).op202 = ops.op202 := rfl
-theorem preserved_203 (ops : ExternalFuns) : (selected ops).op203 = ops.op203 := rfl
-theorem preserved_204 (ops : ExternalFuns) : (selected ops).op204 = ops.op204 := rfl
-theorem preserved_205 (ops : ExternalFuns) : (selected ops).op205 = ops.op205 := rfl
-theorem preserved_206 (ops : ExternalFuns) : (selected ops).op206 = ops.op206 := rfl
-theorem preserved_207 (ops : ExternalFuns) : (selected ops).op207 = ops.op207 := rfl
-theorem preserved_208 (ops : ExternalFuns) : (selected ops).op208 = ops.op208 := rfl
-theorem preserved_209 (ops : ExternalFuns) : (selected ops).op209 = ops.op209 := rfl
-theorem preserved_210 (ops : ExternalFuns) : (selected ops).op210 = ops.op210 := rfl
-theorem preserved_211 (ops : ExternalFuns) : (selected ops).op211 = ops.op211 := rfl
-theorem preserved_212 (ops : ExternalFuns) : (selected ops).op212 = ops.op212 := rfl
-theorem preserved_213 (ops : ExternalFuns) : (selected ops).op213 = ops.op213 := rfl
-theorem preserved_214 (ops : ExternalFuns) : (selected ops).op214 = ops.op214 := rfl
-theorem preserved_215 (ops : ExternalFuns) : (selected ops).op215 = ops.op215 := rfl
-theorem preserved_216 (ops : ExternalFuns) : (selected ops).op216 = ops.op216 := rfl
-theorem preserved_217 (ops : ExternalFuns) : (selected ops).op217 = ops.op217 := rfl
-theorem preserved_218 (ops : ExternalFuns) : (selected ops).op218 = ops.op218 := rfl
-theorem preserved_219 (ops : ExternalFuns) : (selected ops).op219 = ops.op219 := rfl
-theorem preserved_220 (ops : ExternalFuns) : (selected ops).op220 = ops.op220 := rfl
-theorem preserved_221 (ops : ExternalFuns) : (selected ops).op221 = ops.op221 := rfl
-theorem preserved_222 (ops : ExternalFuns) : (selected ops).op222 = ops.op222 := rfl
-theorem preserved_223 (ops : ExternalFuns) : (selected ops).op223 = ops.op223 := rfl
-theorem preserved_224 (ops : ExternalFuns) : (selected ops).op224 = ops.op224 := rfl
-theorem preserved_225 (ops : ExternalFuns) : (selected ops).op225 = ops.op225 := rfl
-theorem preserved_226 (ops : ExternalFuns) : (selected ops).op226 = ops.op226 := rfl
-theorem preserved_227 (ops : ExternalFuns) : (selected ops).op227 = ops.op227 := rfl
-theorem preserved_228 (ops : ExternalFuns) : (selected ops).op228 = ops.op228 := rfl
-theorem preserved_229 (ops : ExternalFuns) : (selected ops).op229 = ops.op229 := rfl
-theorem preserved_230 (ops : ExternalFuns) : (selected ops).op230 = ops.op230 := rfl
-theorem preserved_231 (ops : ExternalFuns) : (selected ops).op231 = ops.op231 := rfl
-theorem preserved_232 (ops : ExternalFuns) : (selected ops).op232 = ops.op232 := rfl
-theorem preserved_233 (ops : ExternalFuns) : (selected ops).op233 = ops.op233 := rfl
-theorem preserved_234 (ops : ExternalFuns) : (selected ops).op234 = ops.op234 := rfl
-theorem preserved_235 (ops : ExternalFuns) : (selected ops).op235 = ops.op235 := rfl
-theorem preserved_236 (ops : ExternalFuns) : (selected ops).op236 = ops.op236 := rfl
-theorem preserved_237 (ops : ExternalFuns) : (selected ops).op237 = ops.op237 := rfl
-theorem preserved_238 (ops : ExternalFuns) : (selected ops).op238 = ops.op238 := rfl
-theorem preserved_239 (ops : ExternalFuns) : (selected ops).op239 = ops.op239 := rfl
-theorem preserved_240 (ops : ExternalFuns) : (selected ops).op240 = ops.op240 := rfl
-theorem preserved_241 (ops : ExternalFuns) : (selected ops).op241 = ops.op241 := rfl
-theorem preserved_242 (ops : ExternalFuns) : (selected ops).op242 = ops.op242 := rfl
-theorem preserved_243 (ops : ExternalFuns) : (selected ops).op243 = ops.op243 := rfl
-theorem preserved_244 (ops : ExternalFuns) : (selected ops).op244 = ops.op244 := rfl
-theorem preserved_245 (ops : ExternalFuns) : (selected ops).op245 = ops.op245 := rfl
-theorem preserved_246 (ops : ExternalFuns) : (selected ops).op246 = ops.op246 := rfl
-theorem preserved_247 (ops : ExternalFuns) : (selected ops).op247 = ops.op247 := rfl
-theorem preserved_248 (ops : ExternalFuns) : (selected ops).op248 = ops.op248 := rfl
-theorem preserved_249 (ops : ExternalFuns) : (selected ops).op249 = ops.op249 := rfl
-theorem preserved_251 (ops : ExternalFuns) : (selected ops).op251 = ops.op251 := rfl
-theorem preserved_252 (ops : ExternalFuns) : (selected ops).op252 = ops.op252 := rfl
-theorem preserved_253 (ops : ExternalFuns) : (selected ops).op253 = ops.op253 := rfl
-theorem preserved_254 (ops : ExternalFuns) : (selected ops).op254 = ops.op254 := rfl
-theorem preserved_255 (ops : ExternalFuns) : (selected ops).op255 = ops.op255 := rfl
-theorem preserved_256 (ops : ExternalFuns) : (selected ops).op256 = ops.op256 := rfl
-theorem preserved_257 (ops : ExternalFuns) : (selected ops).op257 = ops.op257 := rfl
-theorem preserved_258 (ops : ExternalFuns) : (selected ops).op258 = ops.op258 := rfl
-theorem preserved_259 (ops : ExternalFuns) : (selected ops).op259 = ops.op259 := rfl
-theorem preserved_260 (ops : ExternalFuns) : (selected ops).op260 = ops.op260 := rfl
-theorem preserved_261 (ops : ExternalFuns) : (selected ops).op261 = ops.op261 := rfl
+theorem preserved_0 (ops : ExternalFuns) : @ExternalFuns.op0 _ (selected ops) = @ExternalFuns.op0 _ ops := rfl
+theorem preserved_1 (ops : ExternalFuns) : @ExternalFuns.op1 _ (selected ops) = @ExternalFuns.op1 _ ops := rfl
+theorem preserved_2 (ops : ExternalFuns) : @ExternalFuns.op2 _ (selected ops) = @ExternalFuns.op2 _ ops := rfl
+theorem preserved_3 (ops : ExternalFuns) : @ExternalFuns.op3 _ (selected ops) = @ExternalFuns.op3 _ ops := rfl
+theorem preserved_4 (ops : ExternalFuns) : @ExternalFuns.op4 _ (selected ops) = @ExternalFuns.op4 _ ops := rfl
+theorem preserved_5 (ops : ExternalFuns) : @ExternalFuns.op5 _ (selected ops) = @ExternalFuns.op5 _ ops := rfl
+theorem preserved_6 (ops : ExternalFuns) : @ExternalFuns.op6 _ (selected ops) = @ExternalFuns.op6 _ ops := rfl
+theorem preserved_7 (ops : ExternalFuns) : @ExternalFuns.op7 _ (selected ops) = @ExternalFuns.op7 _ ops := rfl
+theorem preserved_8 (ops : ExternalFuns) : @ExternalFuns.op8 _ (selected ops) = @ExternalFuns.op8 _ ops := rfl
+theorem preserved_9 (ops : ExternalFuns) : @ExternalFuns.op9 _ (selected ops) = @ExternalFuns.op9 _ ops := rfl
+theorem preserved_10 (ops : ExternalFuns) : @ExternalFuns.op10 _ (selected ops) = @ExternalFuns.op10 _ ops := rfl
+theorem preserved_11 (ops : ExternalFuns) : @ExternalFuns.op11 _ (selected ops) = @ExternalFuns.op11 _ ops := rfl
+theorem preserved_12 (ops : ExternalFuns) : @ExternalFuns.op12 _ (selected ops) = @ExternalFuns.op12 _ ops := rfl
+theorem preserved_13 (ops : ExternalFuns) : @ExternalFuns.op13 _ (selected ops) = @ExternalFuns.op13 _ ops := rfl
+theorem preserved_14 (ops : ExternalFuns) : @ExternalFuns.op14 _ (selected ops) = @ExternalFuns.op14 _ ops := rfl
+theorem preserved_15 (ops : ExternalFuns) : @ExternalFuns.op15 _ (selected ops) = @ExternalFuns.op15 _ ops := rfl
+theorem preserved_16 (ops : ExternalFuns) : @ExternalFuns.op16 _ (selected ops) = @ExternalFuns.op16 _ ops := rfl
+theorem preserved_17 (ops : ExternalFuns) : @ExternalFuns.op17 _ (selected ops) = @ExternalFuns.op17 _ ops := rfl
+theorem preserved_18 (ops : ExternalFuns) : @ExternalFuns.op18 _ (selected ops) = @ExternalFuns.op18 _ ops := rfl
+theorem preserved_19 (ops : ExternalFuns) : @ExternalFuns.op19 _ (selected ops) = @ExternalFuns.op19 _ ops := rfl
+theorem preserved_20 (ops : ExternalFuns) : @ExternalFuns.op20 _ (selected ops) = @ExternalFuns.op20 _ ops := rfl
+theorem preserved_21 (ops : ExternalFuns) : @ExternalFuns.op21 _ (selected ops) = @ExternalFuns.op21 _ ops := rfl
+theorem preserved_22 (ops : ExternalFuns) : @ExternalFuns.op22 _ (selected ops) = @ExternalFuns.op22 _ ops := rfl
+theorem preserved_23 (ops : ExternalFuns) : @ExternalFuns.op23 _ (selected ops) = @ExternalFuns.op23 _ ops := rfl
+theorem preserved_24 (ops : ExternalFuns) : @ExternalFuns.op24 _ (selected ops) = @ExternalFuns.op24 _ ops := rfl
+theorem preserved_25 (ops : ExternalFuns) : @ExternalFuns.op25 _ (selected ops) = @ExternalFuns.op25 _ ops := rfl
+theorem preserved_26 (ops : ExternalFuns) : @ExternalFuns.op26 _ (selected ops) = @ExternalFuns.op26 _ ops := rfl
+theorem preserved_27 (ops : ExternalFuns) : @ExternalFuns.op27 _ (selected ops) = @ExternalFuns.op27 _ ops := rfl
+theorem preserved_28 (ops : ExternalFuns) : @ExternalFuns.op28 _ (selected ops) = @ExternalFuns.op28 _ ops := rfl
+theorem preserved_29 (ops : ExternalFuns) : @ExternalFuns.op29 _ (selected ops) = @ExternalFuns.op29 _ ops := rfl
+theorem preserved_30 (ops : ExternalFuns) : @ExternalFuns.op30 _ (selected ops) = @ExternalFuns.op30 _ ops := rfl
+theorem preserved_31 (ops : ExternalFuns) : @ExternalFuns.op31 _ (selected ops) = @ExternalFuns.op31 _ ops := rfl
+theorem preserved_32 (ops : ExternalFuns) : @ExternalFuns.op32 _ (selected ops) = @ExternalFuns.op32 _ ops := rfl
+theorem preserved_33 (ops : ExternalFuns) : @ExternalFuns.op33 _ (selected ops) = @ExternalFuns.op33 _ ops := rfl
+theorem preserved_34 (ops : ExternalFuns) : @ExternalFuns.op34 _ (selected ops) = @ExternalFuns.op34 _ ops := rfl
+theorem preserved_35 (ops : ExternalFuns) : @ExternalFuns.op35 _ (selected ops) = @ExternalFuns.op35 _ ops := rfl
+theorem preserved_36 (ops : ExternalFuns) : @ExternalFuns.op36 _ (selected ops) = @ExternalFuns.op36 _ ops := rfl
+theorem preserved_37 (ops : ExternalFuns) : @ExternalFuns.op37 _ (selected ops) = @ExternalFuns.op37 _ ops := rfl
+theorem preserved_38 (ops : ExternalFuns) : @ExternalFuns.op38 _ (selected ops) = @ExternalFuns.op38 _ ops := rfl
+theorem preserved_39 (ops : ExternalFuns) : @ExternalFuns.op39 _ (selected ops) = @ExternalFuns.op39 _ ops := rfl
+theorem preserved_40 (ops : ExternalFuns) : @ExternalFuns.op40 _ (selected ops) = @ExternalFuns.op40 _ ops := rfl
+theorem preserved_41 (ops : ExternalFuns) : @ExternalFuns.op41 _ (selected ops) = @ExternalFuns.op41 _ ops := rfl
+theorem preserved_42 (ops : ExternalFuns) : @ExternalFuns.op42 _ (selected ops) = @ExternalFuns.op42 _ ops := rfl
+theorem preserved_43 (ops : ExternalFuns) : @ExternalFuns.op43 _ (selected ops) = @ExternalFuns.op43 _ ops := rfl
+theorem preserved_44 (ops : ExternalFuns) : @ExternalFuns.op44 _ (selected ops) = @ExternalFuns.op44 _ ops := rfl
+theorem preserved_45 (ops : ExternalFuns) : @ExternalFuns.op45 _ (selected ops) = @ExternalFuns.op45 _ ops := rfl
+theorem preserved_46 (ops : ExternalFuns) : @ExternalFuns.op46 _ (selected ops) = @ExternalFuns.op46 _ ops := rfl
+theorem preserved_47 (ops : ExternalFuns) : @ExternalFuns.op47 _ (selected ops) = @ExternalFuns.op47 _ ops := rfl
+theorem preserved_48 (ops : ExternalFuns) : @ExternalFuns.op48 _ (selected ops) = @ExternalFuns.op48 _ ops := rfl
+theorem preserved_49 (ops : ExternalFuns) : @ExternalFuns.op49 _ (selected ops) = @ExternalFuns.op49 _ ops := rfl
+theorem preserved_50 (ops : ExternalFuns) : @ExternalFuns.op50 _ (selected ops) = @ExternalFuns.op50 _ ops := rfl
+theorem preserved_51 (ops : ExternalFuns) : @ExternalFuns.op51 _ (selected ops) = @ExternalFuns.op51 _ ops := rfl
+theorem preserved_52 (ops : ExternalFuns) : @ExternalFuns.op52 _ (selected ops) = @ExternalFuns.op52 _ ops := rfl
+theorem preserved_53 (ops : ExternalFuns) : @ExternalFuns.op53 _ (selected ops) = @ExternalFuns.op53 _ ops := rfl
+theorem preserved_54 (ops : ExternalFuns) : @ExternalFuns.op54 _ (selected ops) = @ExternalFuns.op54 _ ops := rfl
+theorem preserved_55 (ops : ExternalFuns) : @ExternalFuns.op55 _ (selected ops) = @ExternalFuns.op55 _ ops := rfl
+theorem preserved_56 (ops : ExternalFuns) : @ExternalFuns.op56 _ (selected ops) = @ExternalFuns.op56 _ ops := rfl
+theorem preserved_57 (ops : ExternalFuns) : @ExternalFuns.op57 _ (selected ops) = @ExternalFuns.op57 _ ops := rfl
+theorem preserved_58 (ops : ExternalFuns) : @ExternalFuns.op58 _ (selected ops) = @ExternalFuns.op58 _ ops := rfl
+theorem preserved_59 (ops : ExternalFuns) : @ExternalFuns.op59 _ (selected ops) = @ExternalFuns.op59 _ ops := rfl
+theorem preserved_60 (ops : ExternalFuns) : @ExternalFuns.op60 _ (selected ops) = @ExternalFuns.op60 _ ops := rfl
+theorem preserved_61 (ops : ExternalFuns) : @ExternalFuns.op61 _ (selected ops) = @ExternalFuns.op61 _ ops := rfl
+theorem preserved_62 (ops : ExternalFuns) : @ExternalFuns.op62 _ (selected ops) = @ExternalFuns.op62 _ ops := rfl
+theorem preserved_63 (ops : ExternalFuns) : @ExternalFuns.op63 _ (selected ops) = @ExternalFuns.op63 _ ops := rfl
+theorem preserved_64 (ops : ExternalFuns) : @ExternalFuns.op64 _ (selected ops) = @ExternalFuns.op64 _ ops := rfl
+theorem preserved_65 (ops : ExternalFuns) : @ExternalFuns.op65 _ (selected ops) = @ExternalFuns.op65 _ ops := rfl
+theorem preserved_66 (ops : ExternalFuns) : @ExternalFuns.op66 _ (selected ops) = @ExternalFuns.op66 _ ops := rfl
+theorem preserved_67 (ops : ExternalFuns) : @ExternalFuns.op67 _ (selected ops) = @ExternalFuns.op67 _ ops := rfl
+theorem preserved_68 (ops : ExternalFuns) : @ExternalFuns.op68 _ (selected ops) = @ExternalFuns.op68 _ ops := rfl
+theorem preserved_69 (ops : ExternalFuns) : @ExternalFuns.op69 _ (selected ops) = @ExternalFuns.op69 _ ops := rfl
+theorem preserved_70 (ops : ExternalFuns) : @ExternalFuns.op70 _ (selected ops) = @ExternalFuns.op70 _ ops := rfl
+theorem preserved_71 (ops : ExternalFuns) : @ExternalFuns.op71 _ (selected ops) = @ExternalFuns.op71 _ ops := rfl
+theorem preserved_72 (ops : ExternalFuns) : @ExternalFuns.op72 _ (selected ops) = @ExternalFuns.op72 _ ops := rfl
+theorem preserved_73 (ops : ExternalFuns) : @ExternalFuns.op73 _ (selected ops) = @ExternalFuns.op73 _ ops := rfl
+theorem preserved_74 (ops : ExternalFuns) : @ExternalFuns.op74 _ (selected ops) = @ExternalFuns.op74 _ ops := rfl
+theorem preserved_75 (ops : ExternalFuns) : @ExternalFuns.op75 _ (selected ops) = @ExternalFuns.op75 _ ops := rfl
+theorem preserved_76 (ops : ExternalFuns) : @ExternalFuns.op76 _ (selected ops) = @ExternalFuns.op76 _ ops := rfl
+theorem preserved_77 (ops : ExternalFuns) : @ExternalFuns.op77 _ (selected ops) = @ExternalFuns.op77 _ ops := rfl
+theorem preserved_78 (ops : ExternalFuns) : @ExternalFuns.op78 _ (selected ops) = @ExternalFuns.op78 _ ops := rfl
+theorem preserved_79 (ops : ExternalFuns) : @ExternalFuns.op79 _ (selected ops) = @ExternalFuns.op79 _ ops := rfl
+theorem preserved_80 (ops : ExternalFuns) : @ExternalFuns.op80 _ (selected ops) = @ExternalFuns.op80 _ ops := rfl
+theorem preserved_81 (ops : ExternalFuns) : @ExternalFuns.op81 _ (selected ops) = @ExternalFuns.op81 _ ops := rfl
+theorem preserved_82 (ops : ExternalFuns) : @ExternalFuns.op82 _ (selected ops) = @ExternalFuns.op82 _ ops := rfl
+theorem preserved_83 (ops : ExternalFuns) : @ExternalFuns.op83 _ (selected ops) = @ExternalFuns.op83 _ ops := rfl
+theorem preserved_84 (ops : ExternalFuns) : @ExternalFuns.op84 _ (selected ops) = @ExternalFuns.op84 _ ops := rfl
+theorem preserved_85 (ops : ExternalFuns) : @ExternalFuns.op85 _ (selected ops) = @ExternalFuns.op85 _ ops := rfl
+theorem preserved_86 (ops : ExternalFuns) : @ExternalFuns.op86 _ (selected ops) = @ExternalFuns.op86 _ ops := rfl
+theorem preserved_87 (ops : ExternalFuns) : @ExternalFuns.op87 _ (selected ops) = @ExternalFuns.op87 _ ops := rfl
+theorem preserved_88 (ops : ExternalFuns) : @ExternalFuns.op88 _ (selected ops) = @ExternalFuns.op88 _ ops := rfl
+theorem preserved_89 (ops : ExternalFuns) : @ExternalFuns.op89 _ (selected ops) = @ExternalFuns.op89 _ ops := rfl
+theorem preserved_90 (ops : ExternalFuns) : @ExternalFuns.op90 _ (selected ops) = @ExternalFuns.op90 _ ops := rfl
+theorem preserved_91 (ops : ExternalFuns) : @ExternalFuns.op91 _ (selected ops) = @ExternalFuns.op91 _ ops := rfl
+theorem preserved_92 (ops : ExternalFuns) : @ExternalFuns.op92 _ (selected ops) = @ExternalFuns.op92 _ ops := rfl
+theorem preserved_93 (ops : ExternalFuns) : @ExternalFuns.op93 _ (selected ops) = @ExternalFuns.op93 _ ops := rfl
+theorem preserved_94 (ops : ExternalFuns) : @ExternalFuns.op94 _ (selected ops) = @ExternalFuns.op94 _ ops := rfl
+theorem preserved_95 (ops : ExternalFuns) : @ExternalFuns.op95 _ (selected ops) = @ExternalFuns.op95 _ ops := rfl
+theorem preserved_96 (ops : ExternalFuns) : @ExternalFuns.op96 _ (selected ops) = @ExternalFuns.op96 _ ops := rfl
+theorem preserved_97 (ops : ExternalFuns) : @ExternalFuns.op97 _ (selected ops) = @ExternalFuns.op97 _ ops := rfl
+theorem preserved_98 (ops : ExternalFuns) : @ExternalFuns.op98 _ (selected ops) = @ExternalFuns.op98 _ ops := rfl
+theorem preserved_99 (ops : ExternalFuns) : @ExternalFuns.op99 _ (selected ops) = @ExternalFuns.op99 _ ops := rfl
+theorem preserved_100 (ops : ExternalFuns) : @ExternalFuns.op100 _ (selected ops) = @ExternalFuns.op100 _ ops := rfl
+theorem preserved_101 (ops : ExternalFuns) : @ExternalFuns.op101 _ (selected ops) = @ExternalFuns.op101 _ ops := rfl
+theorem preserved_102 (ops : ExternalFuns) : @ExternalFuns.op102 _ (selected ops) = @ExternalFuns.op102 _ ops := rfl
+theorem preserved_103 (ops : ExternalFuns) : @ExternalFuns.op103 _ (selected ops) = @ExternalFuns.op103 _ ops := rfl
+theorem preserved_104 (ops : ExternalFuns) : @ExternalFuns.op104 _ (selected ops) = @ExternalFuns.op104 _ ops := rfl
+theorem preserved_105 (ops : ExternalFuns) : @ExternalFuns.op105 _ (selected ops) = @ExternalFuns.op105 _ ops := rfl
+theorem preserved_106 (ops : ExternalFuns) : @ExternalFuns.op106 _ (selected ops) = @ExternalFuns.op106 _ ops := rfl
+theorem preserved_107 (ops : ExternalFuns) : @ExternalFuns.op107 _ (selected ops) = @ExternalFuns.op107 _ ops := rfl
+theorem preserved_108 (ops : ExternalFuns) : @ExternalFuns.op108 _ (selected ops) = @ExternalFuns.op108 _ ops := rfl
+theorem preserved_109 (ops : ExternalFuns) : @ExternalFuns.op109 _ (selected ops) = @ExternalFuns.op109 _ ops := rfl
+theorem preserved_110 (ops : ExternalFuns) : @ExternalFuns.op110 _ (selected ops) = @ExternalFuns.op110 _ ops := rfl
+theorem preserved_111 (ops : ExternalFuns) : @ExternalFuns.op111 _ (selected ops) = @ExternalFuns.op111 _ ops := rfl
+theorem preserved_112 (ops : ExternalFuns) : @ExternalFuns.op112 _ (selected ops) = @ExternalFuns.op112 _ ops := rfl
+theorem preserved_113 (ops : ExternalFuns) : @ExternalFuns.op113 _ (selected ops) = @ExternalFuns.op113 _ ops := rfl
+theorem preserved_114 (ops : ExternalFuns) : @ExternalFuns.op114 _ (selected ops) = @ExternalFuns.op114 _ ops := rfl
+theorem preserved_115 (ops : ExternalFuns) : @ExternalFuns.op115 _ (selected ops) = @ExternalFuns.op115 _ ops := rfl
+theorem preserved_116 (ops : ExternalFuns) : @ExternalFuns.op116 _ (selected ops) = @ExternalFuns.op116 _ ops := rfl
+theorem preserved_117 (ops : ExternalFuns) : @ExternalFuns.op117 _ (selected ops) = @ExternalFuns.op117 _ ops := rfl
+theorem preserved_118 (ops : ExternalFuns) : @ExternalFuns.op118 _ (selected ops) = @ExternalFuns.op118 _ ops := rfl
+theorem preserved_119 (ops : ExternalFuns) : @ExternalFuns.op119 _ (selected ops) = @ExternalFuns.op119 _ ops := rfl
+theorem preserved_120 (ops : ExternalFuns) : @ExternalFuns.op120 _ (selected ops) = @ExternalFuns.op120 _ ops := rfl
+theorem preserved_121 (ops : ExternalFuns) : @ExternalFuns.op121 _ (selected ops) = @ExternalFuns.op121 _ ops := rfl
+theorem preserved_122 (ops : ExternalFuns) : @ExternalFuns.op122 _ (selected ops) = @ExternalFuns.op122 _ ops := rfl
+theorem preserved_123 (ops : ExternalFuns) : @ExternalFuns.op123 _ (selected ops) = @ExternalFuns.op123 _ ops := rfl
+theorem preserved_124 (ops : ExternalFuns) : @ExternalFuns.op124 _ (selected ops) = @ExternalFuns.op124 _ ops := rfl
+theorem preserved_125 (ops : ExternalFuns) : @ExternalFuns.op125 _ (selected ops) = @ExternalFuns.op125 _ ops := rfl
+theorem preserved_126 (ops : ExternalFuns) : @ExternalFuns.op126 _ (selected ops) = @ExternalFuns.op126 _ ops := rfl
+theorem preserved_127 (ops : ExternalFuns) : @ExternalFuns.op127 _ (selected ops) = @ExternalFuns.op127 _ ops := rfl
+theorem preserved_128 (ops : ExternalFuns) : @ExternalFuns.op128 _ (selected ops) = @ExternalFuns.op128 _ ops := rfl
+theorem preserved_129 (ops : ExternalFuns) : @ExternalFuns.op129 _ (selected ops) = @ExternalFuns.op129 _ ops := rfl
+theorem preserved_130 (ops : ExternalFuns) : @ExternalFuns.op130 _ (selected ops) = @ExternalFuns.op130 _ ops := rfl
+theorem preserved_131 (ops : ExternalFuns) : @ExternalFuns.op131 _ (selected ops) = @ExternalFuns.op131 _ ops := rfl
+theorem preserved_132 (ops : ExternalFuns) : @ExternalFuns.op132 _ (selected ops) = @ExternalFuns.op132 _ ops := rfl
+theorem preserved_133 (ops : ExternalFuns) : @ExternalFuns.op133 _ (selected ops) = @ExternalFuns.op133 _ ops := rfl
+theorem preserved_134 (ops : ExternalFuns) : @ExternalFuns.op134 _ (selected ops) = @ExternalFuns.op134 _ ops := rfl
+theorem preserved_135 (ops : ExternalFuns) : @ExternalFuns.op135 _ (selected ops) = @ExternalFuns.op135 _ ops := rfl
+theorem preserved_136 (ops : ExternalFuns) : @ExternalFuns.op136 _ (selected ops) = @ExternalFuns.op136 _ ops := rfl
+theorem preserved_137 (ops : ExternalFuns) : @ExternalFuns.op137 _ (selected ops) = @ExternalFuns.op137 _ ops := rfl
+theorem preserved_138 (ops : ExternalFuns) : @ExternalFuns.op138 _ (selected ops) = @ExternalFuns.op138 _ ops := rfl
+theorem preserved_139 (ops : ExternalFuns) : @ExternalFuns.op139 _ (selected ops) = @ExternalFuns.op139 _ ops := rfl
+theorem preserved_140 (ops : ExternalFuns) : @ExternalFuns.op140 _ (selected ops) = @ExternalFuns.op140 _ ops := rfl
+theorem preserved_141 (ops : ExternalFuns) : @ExternalFuns.op141 _ (selected ops) = @ExternalFuns.op141 _ ops := rfl
+theorem preserved_142 (ops : ExternalFuns) : @ExternalFuns.op142 _ (selected ops) = @ExternalFuns.op142 _ ops := rfl
+theorem preserved_143 (ops : ExternalFuns) : @ExternalFuns.op143 _ (selected ops) = @ExternalFuns.op143 _ ops := rfl
+theorem preserved_144 (ops : ExternalFuns) : @ExternalFuns.op144 _ (selected ops) = @ExternalFuns.op144 _ ops := rfl
+theorem preserved_145 (ops : ExternalFuns) : @ExternalFuns.op145 _ (selected ops) = @ExternalFuns.op145 _ ops := rfl
+theorem preserved_146 (ops : ExternalFuns) : @ExternalFuns.op146 _ (selected ops) = @ExternalFuns.op146 _ ops := rfl
+theorem preserved_147 (ops : ExternalFuns) : @ExternalFuns.op147 _ (selected ops) = @ExternalFuns.op147 _ ops := rfl
+theorem preserved_148 (ops : ExternalFuns) : @ExternalFuns.op148 _ (selected ops) = @ExternalFuns.op148 _ ops := rfl
+theorem preserved_149 (ops : ExternalFuns) : @ExternalFuns.op149 _ (selected ops) = @ExternalFuns.op149 _ ops := rfl
+theorem preserved_150 (ops : ExternalFuns) : @ExternalFuns.op150 _ (selected ops) = @ExternalFuns.op150 _ ops := rfl
+theorem preserved_151 (ops : ExternalFuns) : @ExternalFuns.op151 _ (selected ops) = @ExternalFuns.op151 _ ops := rfl
+theorem preserved_152 (ops : ExternalFuns) : @ExternalFuns.op152 _ (selected ops) = @ExternalFuns.op152 _ ops := rfl
+theorem preserved_153 (ops : ExternalFuns) : @ExternalFuns.op153 _ (selected ops) = @ExternalFuns.op153 _ ops := rfl
+theorem preserved_154 (ops : ExternalFuns) : @ExternalFuns.op154 _ (selected ops) = @ExternalFuns.op154 _ ops := rfl
+theorem preserved_155 (ops : ExternalFuns) : @ExternalFuns.op155 _ (selected ops) = @ExternalFuns.op155 _ ops := rfl
+theorem preserved_156 (ops : ExternalFuns) : @ExternalFuns.op156 _ (selected ops) = @ExternalFuns.op156 _ ops := rfl
+theorem preserved_157 (ops : ExternalFuns) : @ExternalFuns.op157 _ (selected ops) = @ExternalFuns.op157 _ ops := rfl
+theorem preserved_158 (ops : ExternalFuns) : @ExternalFuns.op158 _ (selected ops) = @ExternalFuns.op158 _ ops := rfl
+theorem preserved_159 (ops : ExternalFuns) : @ExternalFuns.op159 _ (selected ops) = @ExternalFuns.op159 _ ops := rfl
+theorem preserved_160 (ops : ExternalFuns) : @ExternalFuns.op160 _ (selected ops) = @ExternalFuns.op160 _ ops := rfl
+theorem preserved_161 (ops : ExternalFuns) : @ExternalFuns.op161 _ (selected ops) = @ExternalFuns.op161 _ ops := rfl
+theorem preserved_162 (ops : ExternalFuns) : @ExternalFuns.op162 _ (selected ops) = @ExternalFuns.op162 _ ops := rfl
+theorem preserved_163 (ops : ExternalFuns) : @ExternalFuns.op163 _ (selected ops) = @ExternalFuns.op163 _ ops := rfl
+theorem preserved_164 (ops : ExternalFuns) : @ExternalFuns.op164 _ (selected ops) = @ExternalFuns.op164 _ ops := rfl
+theorem preserved_165 (ops : ExternalFuns) : @ExternalFuns.op165 _ (selected ops) = @ExternalFuns.op165 _ ops := rfl
+theorem preserved_166 (ops : ExternalFuns) : @ExternalFuns.op166 _ (selected ops) = @ExternalFuns.op166 _ ops := rfl
+theorem preserved_167 (ops : ExternalFuns) : @ExternalFuns.op167 _ (selected ops) = @ExternalFuns.op167 _ ops := rfl
+theorem preserved_168 (ops : ExternalFuns) : @ExternalFuns.op168 _ (selected ops) = @ExternalFuns.op168 _ ops := rfl
+theorem preserved_169 (ops : ExternalFuns) : @ExternalFuns.op169 _ (selected ops) = @ExternalFuns.op169 _ ops := rfl
+theorem preserved_170 (ops : ExternalFuns) : @ExternalFuns.op170 _ (selected ops) = @ExternalFuns.op170 _ ops := rfl
+theorem preserved_171 (ops : ExternalFuns) : @ExternalFuns.op171 _ (selected ops) = @ExternalFuns.op171 _ ops := rfl
+theorem preserved_172 (ops : ExternalFuns) : @ExternalFuns.op172 _ (selected ops) = @ExternalFuns.op172 _ ops := rfl
+theorem preserved_173 (ops : ExternalFuns) : @ExternalFuns.op173 _ (selected ops) = @ExternalFuns.op173 _ ops := rfl
+theorem preserved_174 (ops : ExternalFuns) : @ExternalFuns.op174 _ (selected ops) = @ExternalFuns.op174 _ ops := rfl
+theorem preserved_175 (ops : ExternalFuns) : @ExternalFuns.op175 _ (selected ops) = @ExternalFuns.op175 _ ops := rfl
+theorem preserved_176 (ops : ExternalFuns) : @ExternalFuns.op176 _ (selected ops) = @ExternalFuns.op176 _ ops := rfl
+theorem preserved_177 (ops : ExternalFuns) : @ExternalFuns.op177 _ (selected ops) = @ExternalFuns.op177 _ ops := rfl
+theorem preserved_178 (ops : ExternalFuns) : @ExternalFuns.op178 _ (selected ops) = @ExternalFuns.op178 _ ops := rfl
+theorem preserved_179 (ops : ExternalFuns) : @ExternalFuns.op179 _ (selected ops) = @ExternalFuns.op179 _ ops := rfl
+theorem preserved_180 (ops : ExternalFuns) : @ExternalFuns.op180 _ (selected ops) = @ExternalFuns.op180 _ ops := rfl
+theorem preserved_181 (ops : ExternalFuns) : @ExternalFuns.op181 _ (selected ops) = @ExternalFuns.op181 _ ops := rfl
+theorem preserved_182 (ops : ExternalFuns) : @ExternalFuns.op182 _ (selected ops) = @ExternalFuns.op182 _ ops := rfl
+theorem preserved_183 (ops : ExternalFuns) : @ExternalFuns.op183 _ (selected ops) = @ExternalFuns.op183 _ ops := rfl
+theorem preserved_184 (ops : ExternalFuns) : @ExternalFuns.op184 _ (selected ops) = @ExternalFuns.op184 _ ops := rfl
+theorem preserved_185 (ops : ExternalFuns) : @ExternalFuns.op185 _ (selected ops) = @ExternalFuns.op185 _ ops := rfl
+theorem preserved_186 (ops : ExternalFuns) : @ExternalFuns.op186 _ (selected ops) = @ExternalFuns.op186 _ ops := rfl
+theorem preserved_187 (ops : ExternalFuns) : @ExternalFuns.op187 _ (selected ops) = @ExternalFuns.op187 _ ops := rfl
+theorem preserved_188 (ops : ExternalFuns) : @ExternalFuns.op188 _ (selected ops) = @ExternalFuns.op188 _ ops := rfl
+theorem preserved_189 (ops : ExternalFuns) : @ExternalFuns.op189 _ (selected ops) = @ExternalFuns.op189 _ ops := rfl
+theorem preserved_190 (ops : ExternalFuns) : @ExternalFuns.op190 _ (selected ops) = @ExternalFuns.op190 _ ops := rfl
+theorem preserved_191 (ops : ExternalFuns) : @ExternalFuns.op191 _ (selected ops) = @ExternalFuns.op191 _ ops := rfl
+theorem preserved_192 (ops : ExternalFuns) : @ExternalFuns.op192 _ (selected ops) = @ExternalFuns.op192 _ ops := rfl
+theorem preserved_193 (ops : ExternalFuns) : @ExternalFuns.op193 _ (selected ops) = @ExternalFuns.op193 _ ops := rfl
+theorem preserved_194 (ops : ExternalFuns) : @ExternalFuns.op194 _ (selected ops) = @ExternalFuns.op194 _ ops := rfl
+theorem preserved_195 (ops : ExternalFuns) : @ExternalFuns.op195 _ (selected ops) = @ExternalFuns.op195 _ ops := rfl
+theorem preserved_196 (ops : ExternalFuns) : @ExternalFuns.op196 _ (selected ops) = @ExternalFuns.op196 _ ops := rfl
+theorem preserved_197 (ops : ExternalFuns) : @ExternalFuns.op197 _ (selected ops) = @ExternalFuns.op197 _ ops := rfl
+theorem preserved_198 (ops : ExternalFuns) : @ExternalFuns.op198 _ (selected ops) = @ExternalFuns.op198 _ ops := rfl
+theorem preserved_199 (ops : ExternalFuns) : @ExternalFuns.op199 _ (selected ops) = @ExternalFuns.op199 _ ops := rfl
+theorem preserved_200 (ops : ExternalFuns) : @ExternalFuns.op200 _ (selected ops) = @ExternalFuns.op200 _ ops := rfl
+theorem preserved_201 (ops : ExternalFuns) : @ExternalFuns.op201 _ (selected ops) = @ExternalFuns.op201 _ ops := rfl
+theorem preserved_202 (ops : ExternalFuns) : @ExternalFuns.op202 _ (selected ops) = @ExternalFuns.op202 _ ops := rfl
+theorem preserved_203 (ops : ExternalFuns) : @ExternalFuns.op203 _ (selected ops) = @ExternalFuns.op203 _ ops := rfl
+theorem preserved_204 (ops : ExternalFuns) : @ExternalFuns.op204 _ (selected ops) = @ExternalFuns.op204 _ ops := rfl
+theorem preserved_205 (ops : ExternalFuns) : @ExternalFuns.op205 _ (selected ops) = @ExternalFuns.op205 _ ops := rfl
+theorem preserved_206 (ops : ExternalFuns) : @ExternalFuns.op206 _ (selected ops) = @ExternalFuns.op206 _ ops := rfl
+theorem preserved_207 (ops : ExternalFuns) : @ExternalFuns.op207 _ (selected ops) = @ExternalFuns.op207 _ ops := rfl
+theorem preserved_208 (ops : ExternalFuns) : @ExternalFuns.op208 _ (selected ops) = @ExternalFuns.op208 _ ops := rfl
+theorem preserved_209 (ops : ExternalFuns) : @ExternalFuns.op209 _ (selected ops) = @ExternalFuns.op209 _ ops := rfl
+theorem preserved_210 (ops : ExternalFuns) : @ExternalFuns.op210 _ (selected ops) = @ExternalFuns.op210 _ ops := rfl
+theorem preserved_211 (ops : ExternalFuns) : @ExternalFuns.op211 _ (selected ops) = @ExternalFuns.op211 _ ops := rfl
+theorem preserved_212 (ops : ExternalFuns) : @ExternalFuns.op212 _ (selected ops) = @ExternalFuns.op212 _ ops := rfl
+theorem preserved_213 (ops : ExternalFuns) : @ExternalFuns.op213 _ (selected ops) = @ExternalFuns.op213 _ ops := rfl
+theorem preserved_214 (ops : ExternalFuns) : @ExternalFuns.op214 _ (selected ops) = @ExternalFuns.op214 _ ops := rfl
+theorem preserved_215 (ops : ExternalFuns) : @ExternalFuns.op215 _ (selected ops) = @ExternalFuns.op215 _ ops := rfl
+theorem preserved_216 (ops : ExternalFuns) : @ExternalFuns.op216 _ (selected ops) = @ExternalFuns.op216 _ ops := rfl
+theorem preserved_217 (ops : ExternalFuns) : @ExternalFuns.op217 _ (selected ops) = @ExternalFuns.op217 _ ops := rfl
+theorem preserved_218 (ops : ExternalFuns) : @ExternalFuns.op218 _ (selected ops) = @ExternalFuns.op218 _ ops := rfl
+theorem preserved_219 (ops : ExternalFuns) : @ExternalFuns.op219 _ (selected ops) = @ExternalFuns.op219 _ ops := rfl
+theorem preserved_220 (ops : ExternalFuns) : @ExternalFuns.op220 _ (selected ops) = @ExternalFuns.op220 _ ops := rfl
+theorem preserved_221 (ops : ExternalFuns) : @ExternalFuns.op221 _ (selected ops) = @ExternalFuns.op221 _ ops := rfl
+theorem preserved_222 (ops : ExternalFuns) : @ExternalFuns.op222 _ (selected ops) = @ExternalFuns.op222 _ ops := rfl
+theorem preserved_223 (ops : ExternalFuns) : @ExternalFuns.op223 _ (selected ops) = @ExternalFuns.op223 _ ops := rfl
+theorem preserved_224 (ops : ExternalFuns) : @ExternalFuns.op224 _ (selected ops) = @ExternalFuns.op224 _ ops := rfl
+theorem preserved_225 (ops : ExternalFuns) : @ExternalFuns.op225 _ (selected ops) = @ExternalFuns.op225 _ ops := rfl
+theorem preserved_226 (ops : ExternalFuns) : @ExternalFuns.op226 _ (selected ops) = @ExternalFuns.op226 _ ops := rfl
+theorem preserved_227 (ops : ExternalFuns) : @ExternalFuns.op227 _ (selected ops) = @ExternalFuns.op227 _ ops := rfl
+theorem preserved_228 (ops : ExternalFuns) : @ExternalFuns.op228 _ (selected ops) = @ExternalFuns.op228 _ ops := rfl
+theorem preserved_229 (ops : ExternalFuns) : @ExternalFuns.op229 _ (selected ops) = @ExternalFuns.op229 _ ops := rfl
+theorem preserved_230 (ops : ExternalFuns) : @ExternalFuns.op230 _ (selected ops) = @ExternalFuns.op230 _ ops := rfl
+theorem preserved_231 (ops : ExternalFuns) : @ExternalFuns.op231 _ (selected ops) = @ExternalFuns.op231 _ ops := rfl
+theorem preserved_232 (ops : ExternalFuns) : @ExternalFuns.op232 _ (selected ops) = @ExternalFuns.op232 _ ops := rfl
+theorem preserved_233 (ops : ExternalFuns) : @ExternalFuns.op233 _ (selected ops) = @ExternalFuns.op233 _ ops := rfl
+theorem preserved_234 (ops : ExternalFuns) : @ExternalFuns.op234 _ (selected ops) = @ExternalFuns.op234 _ ops := rfl
+theorem preserved_235 (ops : ExternalFuns) : @ExternalFuns.op235 _ (selected ops) = @ExternalFuns.op235 _ ops := rfl
+theorem preserved_236 (ops : ExternalFuns) : @ExternalFuns.op236 _ (selected ops) = @ExternalFuns.op236 _ ops := rfl
+theorem preserved_237 (ops : ExternalFuns) : @ExternalFuns.op237 _ (selected ops) = @ExternalFuns.op237 _ ops := rfl
+theorem preserved_238 (ops : ExternalFuns) : @ExternalFuns.op238 _ (selected ops) = @ExternalFuns.op238 _ ops := rfl
+theorem preserved_239 (ops : ExternalFuns) : @ExternalFuns.op239 _ (selected ops) = @ExternalFuns.op239 _ ops := rfl
+theorem preserved_240 (ops : ExternalFuns) : @ExternalFuns.op240 _ (selected ops) = @ExternalFuns.op240 _ ops := rfl
+theorem preserved_241 (ops : ExternalFuns) : @ExternalFuns.op241 _ (selected ops) = @ExternalFuns.op241 _ ops := rfl
+theorem preserved_242 (ops : ExternalFuns) : @ExternalFuns.op242 _ (selected ops) = @ExternalFuns.op242 _ ops := rfl
+theorem preserved_243 (ops : ExternalFuns) : @ExternalFuns.op243 _ (selected ops) = @ExternalFuns.op243 _ ops := rfl
+theorem preserved_244 (ops : ExternalFuns) : @ExternalFuns.op244 _ (selected ops) = @ExternalFuns.op244 _ ops := rfl
+theorem preserved_245 (ops : ExternalFuns) : @ExternalFuns.op245 _ (selected ops) = @ExternalFuns.op245 _ ops := rfl
+theorem preserved_246 (ops : ExternalFuns) : @ExternalFuns.op246 _ (selected ops) = @ExternalFuns.op246 _ ops := rfl
+theorem preserved_247 (ops : ExternalFuns) : @ExternalFuns.op247 _ (selected ops) = @ExternalFuns.op247 _ ops := rfl
+theorem preserved_248 (ops : ExternalFuns) : @ExternalFuns.op248 _ (selected ops) = @ExternalFuns.op248 _ ops := rfl
+theorem preserved_249 (ops : ExternalFuns) : @ExternalFuns.op249 _ (selected ops) = @ExternalFuns.op249 _ ops := rfl
+theorem preserved_251 (ops : ExternalFuns) : @ExternalFuns.op251 _ (selected ops) = @ExternalFuns.op251 _ ops := rfl
+theorem preserved_252 (ops : ExternalFuns) : @ExternalFuns.op252 _ (selected ops) = @ExternalFuns.op252 _ ops := rfl
+theorem preserved_253 (ops : ExternalFuns) : @ExternalFuns.op253 _ (selected ops) = @ExternalFuns.op253 _ ops := rfl
+theorem preserved_254 (ops : ExternalFuns) : @ExternalFuns.op254 _ (selected ops) = @ExternalFuns.op254 _ ops := rfl
+theorem preserved_255 (ops : ExternalFuns) : @ExternalFuns.op255 _ (selected ops) = @ExternalFuns.op255 _ ops := rfl
+theorem preserved_256 (ops : ExternalFuns) : @ExternalFuns.op256 _ (selected ops) = @ExternalFuns.op256 _ ops := rfl
+theorem preserved_257 (ops : ExternalFuns) : @ExternalFuns.op257 _ (selected ops) = @ExternalFuns.op257 _ ops := rfl
+theorem preserved_258 (ops : ExternalFuns) : @ExternalFuns.op258 _ (selected ops) = @ExternalFuns.op258 _ ops := rfl
+theorem preserved_259 (ops : ExternalFuns) : @ExternalFuns.op259 _ (selected ops) = @ExternalFuns.op259 _ ops := rfl
+theorem preserved_260 (ops : ExternalFuns) : @ExternalFuns.op260 _ (selected ops) = @ExternalFuns.op260 _ ops := rfl
+theorem preserved_261 (ops : ExternalFuns) : @ExternalFuns.op261 _ (selected ops) = @ExternalFuns.op261 _ ops := rfl
 #print axioms callback
 #print axioms selected
 #print axioms originalDictionary
