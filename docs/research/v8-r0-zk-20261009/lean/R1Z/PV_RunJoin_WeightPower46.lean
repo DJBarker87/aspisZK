@@ -28,18 +28,19 @@ theorem loop (n : Nat) (e64 : U64) (e8 : U8) (he64 : e64.val=n) (he8 : e8.val=n)
       obtain ⟨a1,ha1⟩ : ∃ a1,
           (if n%2≠0 then PV_B2_251c1.aspis_core.field.QM31.mul acc base else ok acc)=ok a1 := by
         by_cases hp : n%2≠0
-        · exact ⟨_,by simp only [hp,if_true,PV_B2_C_251FieldTotal.QM31_mul]⟩
-        · exact ⟨acc,by simp only [hp,if_false]⟩
+        · refine ⟨PV_B2_C_251FieldValue.aspis_core.field.QM31.mul acc base,?_⟩
+          rw [if_pos hp,PV_B2_C_251FieldTotal.QM31_mul]
+        · exact ⟨acc,by rw [if_neg hp]⟩
       obtain ⟨b1,hb1⟩ := PV_B2_D_PowTotal.square base
       have hm : (if ((e8 &&& 1#u8) != 0#u8) then
           AspisR1ProducerRelease47.field.QM31.mul (toQ acc) (toQ base)
           else ok (toQ acc))=ok (toQ a1) := by
         simp only [ProverCommitPowerStep49.condition,he8,decide_eq_true_eq]
         by_cases hp : n%2≠0
-        · simp only [hp,if_true] at ha1 ⊢
+        · rw [if_pos hp] at ha1 ⊢
           rw [PV_RunJoin_WeightQuartic46.mul,ha1]
           rfl
-        · simp only [hp,if_false] at ha1 ⊢
+        · rw [if_neg hp] at ha1 ⊢
           cases Result.ok.inj ha1
           rfl
       have hs : AspisR1ProducerRelease47.field.QM31.square (toQ base)=ok (toQ b1) := by
