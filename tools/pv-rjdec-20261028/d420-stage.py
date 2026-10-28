@@ -24,7 +24,7 @@ def visit(m):
   assert b==subprocess.check_output(['git','show',historical['revision']+':'+historical['path']]),m
   authority='h5 own git-tracked HEAD exact retained predecessor source';extra={'snapshot_authority':'evidence/pv-2tnv-20261028/resume/source-closure.json','historical_pin':historical}
  else:
-  candidates=[m.replace('.','/')+'.lean','lean/'+m.replace('.','/')+'.lean','docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean']
+  candidates=[m.replace('.','/')+'.lean','lean/'+m.replace('.','/')+'.lean','docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean','docs/research/100bit-spend-path-20261013/lean/'+m.replace('.','/')+'.lean']
   paths=[p for p in candidates if p in files]
   if not paths: paths=[p for p in files if p.endswith('/'+m.replace('.','/')+'.lean')]
   if paths:
