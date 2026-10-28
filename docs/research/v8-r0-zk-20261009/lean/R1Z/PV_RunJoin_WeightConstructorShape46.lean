@@ -2,7 +2,8 @@ import R1Z.PV_RunJoin_WeightConstructorThread46
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_WeightConstructorShape46
 open Aeneas Aeneas.Std Result
-open PV_B2_C_ConstructorRows PV_B2_C_WeightsNative
+open PV_B2_C_ConstructorRows (Points Factors row0_total row1_total row2_total row3_total row4_total)
+open PV_B2_C_WeightsNative
 open PV_RunJoin_WeightConstructorThread46
 
 def seed : Factors := Array.repeat 5#usize
