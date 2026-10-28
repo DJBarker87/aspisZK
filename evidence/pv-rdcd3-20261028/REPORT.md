@@ -11,6 +11,6 @@ Composition relying on Aeneas or Kani agreement with Rust semantics is reclassif
 
 ## Section 6 evidence fields
 
-Every actual scope receipt will record exact target, exit status, wall time, peak RSS, swap, source revision and axioms (N/A for source/native checks). None launched yet. Budget: 0/100 Lean attempts; 0/100 native scopes; 0 Kani.
+Every actual scope receipt will record exact target, exit status, wall time, peak RSS, swap, source revision and axioms (N/A for source/native checks). External preflight passed on retry after the full cooldown: exit 0, wall 2.43s, peak 41048 KiB, swap 0; axioms N/A (source check). All 5,673 external objects match h4. Receipt: `external-preflight/receipt.json`. Budget: 0/100 Lean attempts; 1/100 native scopes; 0 Kani.
 
 Endpoint premises removed 0, added 0, changed 0. Privacy target not established. Next deliverable: verify external objects, then bind V260's concrete usize range/fold/index source cone.
