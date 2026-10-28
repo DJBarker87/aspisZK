@@ -151,3 +151,21 @@ source artifact, to keep every compiled/new Lean module under PV_B3P_. The
 exact patch and byte-exact Rust replacements remain pinned. No KMX theorem or
 compiled Stream A object is imported. The selected negative growth control
 and patched op133 recheck are prepared but not yet run. No Kani PASS claimed.
+
+## Exact-patch native recheck priority
+
+42528 is a third zero-charge Result-algebra admission refusal. The idle
+focused queue (verified sleeping with no child) was stopped to prioritize
+finishing op133 under newly available mitigation. No scope was interrupted.
+
+KMX growth negative control01-r2 is admitted after two refusals:exit1,
+19.438s,307408KiB RSS,swap0,cgroup peak513216512bytes,revision5a7d64d577.
+Its sole failed check is the intended false assertion dst[16]==0 at exact
+KMX_stubs.rs:75 (1/395 checks failed); this is not a target-row counterexample.
+Patch SHA bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67;
+Rust replacement SHA ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138.
+The original op133 whole-function pointwise harness is now running as
+kani133-kmx-08 with all six exact copy replacements, native per-loop bounds,
+default1026 for replacement loops and the original assertions/auxiliary domain.
+No business-function replacement. No PASS yet;8 actual Kani runs completed,
+a ninth in progress.17 charged Lean attempts. All six rows remain OPEN.
