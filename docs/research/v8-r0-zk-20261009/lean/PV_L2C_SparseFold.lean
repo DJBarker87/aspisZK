@@ -37,5 +37,6 @@ theorem source_sum {n : Nat} (active : Fin n → Bool) (table : Fin n → Q)
     intro i hi
     exact hc i) zero zero_canonical]
   simp only [List.map_ofFn,tableSum,inactiveTable,Function.comp_def]
+  rfl
 #print axioms source_sum
 end PV_L2C_SparseFold
