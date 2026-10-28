@@ -28,7 +28,8 @@ theorem high (logical : Slice U8) (at1 bad : Usize) (value : U8)
       rw [Usize.wrapping_add_val_eq]
       apply Nat.mod_eq_of_lt
       change first.val+1<UScalar.size .Usize
-      rw [UScalar.size_def,UScalarTy.Usize_numBits_eq]
+      have big := (32#usize).hSize
+      change 32<UScalar.size .Usize at big
       omega
     have next := ih (Usize.wrapping_add first 1#usize) (by rw [inc];omega)
       (fun j hj hbad => prefix j (by rw [inc] at hj;omega) hbad)

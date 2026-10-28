@@ -23,7 +23,8 @@ theorem complete (logical : Slice U8) (at1 : Usize) (n : Nat) (high : Usize)
       rw [Usize.wrapping_add_val_eq]
       apply Nat.mod_eq_of_lt
       change high.val+1<UScalar.size .Usize
-      rw [UScalar.size_def,UScalarTy.Usize_numBits_eq]
+      have big := (32#usize).hSize
+      change 32<UScalar.size .Usize at big
       omega
     have next := ih (Usize.wrapping_add high 1#usize) (by rw [inc];omega) (by rw [inc];omega)
     unfold host_compact.compact_values_loop0_loop0
