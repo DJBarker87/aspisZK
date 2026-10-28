@@ -20,3 +20,5 @@ The whole query caller installation remains open.
 The natural-spec M31 multiplication used by K008 is also recorded in
 LPh_STUBS.md; its domain is selected basis word and node<P, with every other
 array cell arbitrary. Embedding K007 uses no replacement at all.
+
+| NBF_value_reply replacing BatchedWeights::value in finish iteration | S8OwnedP6ValueModel.value_total_model / NBB_Finish.source | K012 is suffix-write context only on an unused raw witness; K013 supplies arbitrary64-row raw backing. Every chosen canonical K reply is considered. Complete value semantics come from the same selected-row K011 routing plus inherited reducer theorem. Global enumerate-count/continuation association remains explicit. |

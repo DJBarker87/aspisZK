@@ -43,6 +43,14 @@ payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loa
 setup=f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});x=json.loads({json.dumps(json.dumps(payload))})
+# Own stricter repeat guard: the inherited backend only scans lean-* names.
+source_hash=hashlib.sha256(x['source'].encode()).hexdigest()
+for receipt in b.glob('NBF_L*/receipt.json'):
+ old=json.loads(receipt.read_text())
+ if old.get('source_hashes')!={{x['src']:source_hash}}:continue
+ objects=old.get('deps_fingerprint',{{}}).get('selected_objects',{{}})
+ if objects and all(Path(v['path']).is_file() and hashlib.sha256(Path(v['path']).read_bytes()).hexdigest()==v['sha256'] for v in objects.values()):
+  raise RuntimeError('Own validation refuses unchanged source+dependencies: '+str(receipt))
 for n in ['S2W_lean_host.py','S2W_run_host.py','lakefile.toml','lean-toolchain','lake-manifest.json']:
  p=b/n;s=x['launchers'][n]
  if p.exists():assert p.read_text()==s,(n,'unchanged backend mismatch')

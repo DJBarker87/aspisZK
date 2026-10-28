@@ -1,0 +1,53 @@
+{"attempt": "NBF_L029", "exit_status": 1, "wall_seconds": 5.4165002409718, "peak_rss_kib": "4401720", "swaps": "0", "print_axioms": ["'NBF_Accumulate.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBF_generated/NBF_Accumulate.lean:64:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let weights1 ←
+      verifier.accumulate_batched_with_node_loop1 (install ops) { start := 0#usize, «end» := 64#usize } a.weights
+          a.power a.next b 64#usize basis
+    let i ← lift (weights1.terms.wrapping_add 1#usize)
+    let we ← (install ops).op3 value a.power
+    let we1 ← (install ops).op2 a.rhs we
+    (install ops).op15 11#u16 a.next we1
+    let q ← (install ops).op9 a.power p.rho
+    let i1 ← lift (a.next.wrapping_add 1#usize)
+    ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })
+is not definitionally equal to the right-hand side
+ 
+...
+late_batched_with_node_loop0 (install ops) one node 64#usize initialized 1#usize) =
+    ok basis
+initial : Std.Array (UScalar UScalarTy.U32) 256#usize
+hinit : (Array.repeat 256#usize 0#u32).update 0#usize 1#u32 = ok initial
+hvalue : initial = (Array.repeat 256#usize 0#u32).set 0#usize 1#u32
+outer : verifier.accumulate_batched_with_node_loop0 (install ops) 1#u32 node 64#usize initial 1#usize = ok basis
+zero : (install ops).op4 = ok 0#u32
+one : (install ops).op5 = ok 1#u32
+⊢ (do
+      let weights1 ←
+        verifier.accumulate_batched_with_node_loop1 (install ops) { start := 0#usize, «end» := 64#usize } a.weights
+            a.power a.next b 64#usize basis
+      let i ← lift (weights1.terms.wrapping_add 1#usize)
+      let we ← (install ops).op3 value a.power
+      let we1 ← (install ops).op2 a.rhs we
+      (install ops).op15 11#u16 a.next we1
+      let q ← (install ops).op9 a.power p.rho
+      let i1 ← lift (a.next.wrapping_add 1#usize)
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    do
+    let term ← lift (mid.terms.wrapping_add 1#usize)
+    let product ← ops.op3 value a.power
+    let rhs ← ops.op2 a.rhs product
+    (install ops).op15 11#u16 a.next rhs
+    let power ← ops.op9 a.power p.rho
+    let next ← lift (a.next.wrapping_add 1#usize)
+    ok ({ weights := a.weights, rhs := rhs, power := power, next := next }, { raw := mid.raw, terms := term })
+NBF_generated/NBF_Accumulate.lean:63:33: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [zero, ̲one, ̲hinit, ̲outer,r̵u̵n̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NBF_Accumulate.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r756c649f8653480b8d8458ad85217eee.scope; invocation ID: 611bb7189f404907bbd45f45bbabc116

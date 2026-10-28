@@ -1,0 +1,51 @@
+{"attempt": "NBF_L030", "exit_status": 1, "wall_seconds": 6.648240616021212, "peak_rss_kib": "4398056", "swaps": "0", "print_axioms": ["'NBF_Accumulate.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBF_generated/NBF_Accumulate.lean:64:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.accumulate_batched_with_node_loop1 (NBF_RowInstall.install (NBF_BasisInstall.install ops))
+    { start := 0#usize, «end» := 64#usize } a.weights a.power a.next b 64#usize basis
+in the target expression
+  (do
+      let weights1 ←
+        verifier.accumulate_batched_with_node_loop1 (install ops) { start := 0#usize, «end» := 64#usize } a.weights
+            a.power a.next b 64#usize basis
+      let i ← lift (weights1.terms.wrapping_add 1#usize)
+      let we ← (install ops).op3 value a.power
+      let we1 ← (install ops).op2 a.rhs we
+      (install ops).op15 11#u16 a.next 
+...
+t 0#usize 1#u32
+outer : verifier.accumulate_batched_with_node_loop0 (install ops) 1#u32 node 64#usize initial 1#usize = ok basis
+zero : (install ops).op4 = ok 0#u32
+one : (install ops).op5 = ok 1#u32
+⊢ (do
+      let weights1 ←
+        verifier.accumulate_batched_with_node_loop1 (install ops) { start := 0#usize, «end» := 64#usize } a.weights
+            a.power a.next b 64#usize basis
+      let i ← lift (weights1.terms.wrapping_add 1#usize)
+      let we ← (install ops).op3 value a.power
+      let we1 ← (install ops).op2 a.rhs we
+      (install ops).op15 11#u16 a.next we1
+      let q ← (install ops).op9 a.power p.rho
+      let i1 ← lift (a.next.wrapping_add 1#usize)
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    do
+    let term ← lift (mid.terms.wrapping_add 1#usize)
+    let product ← ops.op3 value a.power
+    let rhs ← ops.op2 a.rhs product
+    (install ops).op15 11#u16 a.next rhs
+    let power ← ops.op9 a.power p.rho
+    let next ← lift (a.next.wrapping_add 1#usize)
+    ok ({ weights := a.weights, rhs := rhs, power := power, next := next }, { raw := mid.raw, terms := term })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (64 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NBF_Accumulate.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3a8ac4528813486db9ad0aa0b65c63ed.scope; invocation ID: 7c90c5a991194a66988ee6a34662c58f
