@@ -1,0 +1,96 @@
+{
+  "row": "V219",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/state_only_sumcheck.rs",
+      "file_sha256": "e09008daaaea9f35e2a28b85ec06f38dba75dbc9e6741d53a13020123f00d78d",
+      "complete_body": "{\n    \n    \n    \n    \n    const _: () =\n        assert!((STATE_ONLY_SUMCHECK_COEFFICIENTS as u64 + 1) * (P as u64) < (1u64 << 36));\n    let first = polynomial[0];\n    let mut limbs = [\n        2 * u64::from(first.c0.a.0),\n        2 * u64::from(first.c0.b.0),\n        2 * u64::from(first.c1.a.0),\n        2 * u64::from(first.c1.b.0),\n    ];\n    for coefficient in &polynomial[1..] {\n        limbs[0] += u64::from(coefficient.c0.a.0);\n        limbs[1] += u64::from(coefficient.c0.b.0);\n        limbs[2] += u64::from(coefficient.c1.a.0);\n        limbs[3] += u64::from(coefficient.c1.b.0);\n    }\n    QM31 {\n        c0: CM31::new(M31::reduce_u64(limbs[0]), M31::reduce_u64(limbs[1])),\n        c1: CM31::new(M31::reduce_u64(limbs[2]), M31::reduce_u64(limbs[3])),\n    }\n}",
+      "tokens_equal": true,
+      "law": "V219.step_complete,tail_enumeration,complete,all_bounds"
+    },
+    {
+      "owned_reference": "tools/pv-cb3-20261026/reference_p6.rs",
+      "sha256": "1beb9e19eda3c5246fc76f49a74ecce2dd704b3e2636ee3e133c67df35938ab5",
+      "complete_step": "{\n BoundaryAcc { a:s.a+u64::from(x.c0.a.0), b:s.b+u64::from(x.c0.b.0), c:s.c+u64::from(x.c1.a.0), d:s.d+u64::from(x.c1.b.0) }\n}",
+      "complete_body": "{\n let x=p[0];\n let s=BoundaryAcc{a:2*u64::from(x.c0.a.0),b:2*u64::from(x.c0.b.0),c:2*u64::from(x.c1.a.0),d:2*u64::from(x.c1.b.0)};\n let s=boundary_acc_step(p[1],s);\n let s=boundary_acc_step(p[2],s);\n let s=boundary_acc_step(p[3],s);\n let s=boundary_acc_step(p[4],s);\n let s=boundary_acc_step(p[5],s);\n let s=boundary_acc_step(p[6],s);\n let s=boundary_acc_step(p[7],s);\n let s=boundary_acc_step(p[8],s);\n let s=boundary_acc_step(p[9],s);\n let s=boundary_acc_step(p[10],s);\n let s=boundary_acc_step(p[11],s);\n let s=boundary_acc_step(p[12],s);\n let s=boundary_acc_step(p[13],s);\n let s=boundary_acc_step(p[14],s);\n let s=boundary_acc_step(p[15],s);\n let s=boundary_acc_step(p[16],s);\n let s=boundary_acc_step(p[17],s);\n let s=boundary_acc_step(p[18],s);\n let s=boundary_acc_step(p[19],s);\n let s=boundary_acc_step(p[20],s);\n let s=boundary_acc_step(p[21],s);\n let s=boundary_acc_step(p[22],s);\n let s=boundary_acc_step(p[23],s);\n let s=boundary_acc_step(p[24],s);\n let s=boundary_acc_step(p[25],s);\n let s=boundary_acc_step(p[26],s);\n let s=boundary_acc_step(p[27],s);\n QM31{c0:CM31::new(M31::reduce_u64(s.a),M31::reduce_u64(s.b)),c1:CM31::new(M31::reduce_u64(s.c),M31::reduce_u64(s.d))}\n}",
+      "indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "differences": "Native four stack-array updates vs four struct fields; identical ordered inputs/calls. Source loop over indices1..27 vs complete owned unrolling. Proved parametric, no field-success premise."
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "tokens_equal": true,
+      "law": "Pointer.cast_complete; offset bounds; no writes"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn from_ref(",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.from_ref_complete; immutable slice traversal"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn without_provenance(",
+      "complete_body": "{\n        let pointer = crate::ptr::without_provenance(addr.get());\n        \n        unsafe { NonNull { pointer } }\n    }",
+      "selected_release_body": "{\n        let pointer = crate::ptr::without_provenance(addr.get());\n        \n        unsafe { NonNull { pointer } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.without_provenance_complete"
+    }
+  ],
+  "laws": [
+    "PV_RDB1_V219.complete",
+    "PV_RDB1_V219.step_complete",
+    "PV_RDB1_V219.tail_enumeration",
+    "PV_RDB1_V219.all_bounds",
+    "PV_RDB1_PointerConstruct.from_ref_complete"
+  ],
+  "full_Result": "All initial casts/doubles,27 ordered four-limb steps and four final reductions/CM31 constructors have the same deployed implementations and order. overflow_checks=false makes native ordinary +/* the wrapping operations in the retained emission. Parametric proof preserves any Result/failure, not just successful field values.",
+  "effects": "Input polynomial is read-only; only four local u64 stack slots mutate. No mutable borrow from an iterator is written; D188 restoration problem absent. No allocator/destructor/user callback invoked.",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "native_validation": "project-leaves/receipt.json:128 boundary pairs, raw words; reused unchanged; finite only",
+  "original_consumption": "PV_CB3_Op120Source.op120_source and Raw.boundary_flat unchanged; no new input-domain restriction",
+  "retained_boundary": "Original field intrinsic/read and source-image semantics; compiler/binary and L1/L2/L3 obligations retained; conservative panic envelope excluded by all_bounds, shared reduction helpers remain same source-selected callees.",
+  "new_trust_items": [],
+  "kani_credit": false
+}
