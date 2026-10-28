@@ -11,14 +11,14 @@ if n>=35597:assert 'Audit' in m or 'Closure' in m
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');imports=re.findall(r'^import (\S+)',p.read_text(),re.M)
 source=p.read_bytes();sha=hashlib.sha256(source).hexdigest();rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 assert source==subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))])
-previous=E/f'{n}-pre-admission.json'
-if previous.exists():
- from datetime import datetime
- old=json.loads(previous.read_text())
- if old.get('allowed') is False:
-  due=datetime.fromisoformat(old['utc']).timestamp()+180
-  if time.time()<due:
-   print('UNCHARGED cooldown still active',round(due-time.time(),1));sys.exit(78)
+from datetime import datetime
+for previous in [E/f'{n}-pre-admission.json',E/f'lean-{n}/admission-before.json',E/f'lean-{n}/admission-barrier.json']:
+ if previous.exists():
+  old=json.loads(previous.read_text())
+  if old.get('allowed') is False:
+   due=datetime.fromisoformat(old['utc']).timestamp()+180
+   if time.time()<due:
+    print('UNCHARGED cooldown still active',round(due-time.time(),1));sys.exit(78)
 authority=json.loads((E/'CARRIER-FUNS-PREFLIGHT.json').read_text());assert authority['ok']
 closure={}
 def visit(im):
