@@ -26,7 +26,7 @@ theorem nonvacuity [ExternalTypes] (ops : ExternalFuns) :
     toQ PV_B3_ZeroArithmetic.Z,?_⟩
   change callback _ _ = _
   unfold callback
-  rw [left,q_left,PV_B3_ZeroPolyLoop.source]
+  simp only [left,q_left,PV_B3_ZeroPolyLoop.source]
   rfl
 
 #print axioms callback
