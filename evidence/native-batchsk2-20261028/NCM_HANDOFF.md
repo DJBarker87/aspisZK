@@ -1,37 +1,27 @@
-# NCM working handoff
+# NCM handoff
 
-Stage 1 IN PROGRESS. Neither NCM_U09.bridge nor NCM_Batch.bridge is complete.
-Stage 2 has not started. No native fragment is discharged; S2/deployed target
-not yet established. This checkpoint preserves checked components and failed
-attempts rather than claiming an end-to-end bridge.
+Stage 1 COMPLETE. AspisR1.NCM_Batch.bridge (batch0/TX1) and
+AspisR1.NCM_U09.bridge (batch1/TX2) assemble the SAME execution from the
+18 separate NCE per-step hypotheses. Complete statements: NCM_SKELETON.md,
+NCM_Assembly.lean and the two bridge modules; exact input provenance:
+NCM_BatchTypes.Inputs. No whole-child native premise is used.
 
-Checked additions compose the SAME full carrier through native row cuts,
-row/height induction, admission and the final verifier guard, preserving all
-ordered reads and rejection. Count initialization/scan/commit/height cuts
-compose to an all-outcome admission/count result. Actual sorted-key reads
-select the checked opening's value image; the leaf request/reply feeds the
-same post-hash continuation. The full leaf traversal now compiles, deriving
-cursor/room domains and retaining duplicate-error prefixes.
+These are CONDITIONAL/MODEL compositions, not frozen-native instances. All
+18 native fragments remain OPEN. Neither S2 nor RPx_Deployed.deployed is
+established by this packet. Rejection retains chronological reads; scratch
+equality applies on acceptance. Existing trust/target/contract are unchanged.
 
-All these are CONDITIONAL/MODEL results, not instances for frozen native Rust.
-The 18 native NCE hypotheses remain open. No new security/runtime assumption,
-carrier, adversary, metric, numeric target or release pin is adopted. Existing
-NCE modules are imported unchanged; no existing proof is edited. New logical
-view observers do not claim runtime allocation or buffer copies.
+Validation: 72/80 Lean slots (including one conservatively charged dependency
+preflight), 0/50 Kani runs. L070/L071 tops and L072 axiom audit pass; each of
+61 new roots uses only standard axioms. Receipts contain source revision/hash,
+resolved dependency/Aeneas pins, exit, wall, peak RSS, swaps and exact limits.
+Failed elaborations have no proof credit. No timeout/memory kill or cap increase.
 
-Receipts: NCM_ATTEMPTS.jsonl, per-attempt source snapshots/stdout/time/JSON,
-NCM_TARGET.json, imported Aeneas/full cache pins, and NCM_REPAIRS.md. Every
-accepted new root prints only standard axioms. Failed sorryAx reports have no
-credit. Fixed host caps6G/8G/swap0/tasks64; Lean -M7000; serial scopes; no
-memory kill, timeout or increased cap. Pre-launch SSH255 retries are recorded.
+Own batch cache is retained. Shipped crates/programs match frozen4bb3b3f5;
+no Rust, SBF or ELF rebuild ran. ELF pins in NCM_TARGET.json are inherited, not
+newly reproduced. Session A/other workers untouched. No keys touched or push.
 
-No Rust/Kani/SBF/ELF job ran; crates/programs byte-identical to frozen4bb3b3f5.
-Inherited ELF hashes are recorded in NCM_TARGET.json, not newly reproduced.
-No key, account, session A worktree or other worker file touched. Persistent
-own batch cache is retained. No push/merge.
-
-Next: check the actual padding predicate/partition observation and outer
-control observer, connect the constructed sorted witness to the leaf loop,
-then assemble the same-execution tree/tail/three-tree result and two named top
-bridges. Only then commit complete Stage 1 and start native fragments with
-frozen/offline graph checks, exact KMX mitigation and per-shape failing controls.
+Stage 2 follows this commit: actual frozen step/window associations with
+matching failing controls. Frozen offline dependency graph and lock validated
+before/after each Kani run; exact KMX patch when copies are reached; Option<fn>
+results quarantined. Helper-only results do not close the whole fragments.

@@ -1,7 +1,8 @@
-# NCM skeleton assembly (in progress)
+# NCM skeleton assembly
 
-Stage 1 is not yet complete. NCM_U09.bridge and NCM_Batch.bridge do not yet exist.
-No native credit or deployed closure is claimed. Stage 2 is gated on Stage 1.
+Stage 1 COMPLETE: AspisR1.NCM_U09.bridge and AspisR1.NCM_Batch.bridge
+compile and are audited in NCM_L072. These are CONDITIONAL compositions.
+All 18 native fragments remain OPEN; no deployed/native closure is claimed.
 
 Target: AspisR1.RPx_Deployed.deployed, frozen3; L154 is a statement parameter,
 D188 is narrowed; RuntimePersistence remains the approved trust item.
@@ -228,3 +229,48 @@ fun entry exit finish =>
                       ↑(↑s.scratch.idx)[0]! = 0 ∧ (↑s.scratch.val)[0]! = root ∧ ↑s.scratch.at = (↑physical).length),
                   s)
 ```
+
+## Assembly audit
+
+The complete top statements are generated with 18 **separate** native Prop
+parameters by NCM_params.py/NCM_assembly.py; Ops contains function data only.
+NCM_BatchTypes.Inputs contains only original proof length/wire identity,
+canonical actual Prepared queries, its two root projections and the actual
+folded-root argument. The enclosing U00/prepare/resume provenance must establish
+those exact input facts; this packet does not claim those lower native bridges
+closed. Inputs contains no result, successful child, count, padding scan or log.
+
+The old value-only KeysSort family is superseded by KeysSortCarrier; RowStore
+is already included in the complete single-row observation. Both requested
+weak families remain explicit and undischarged in the 18-parameter audit.
+Their redundancy is not counted as premise removal or native discharge.
+
+The direct child observer reads newly issued events from the actual carried
+log by removing only its already-issued initial prefix. It never turns a log
+into Program asks, reruns a digest, erases a rejecting suffix, or substitutes
+an independently selected result. On the proved domain every raw request and
+native leaf continuation returns a checked value, including duplicate error.
+
+Rejected physical scratch is preserved in the native observer. The cohort
+slot discards it on leaf error; equality is therefore asserted for result and
+chronological reads on every outcome, and for scratch on acceptance. Later
+trees are never called after rejection. This is the adopted L166 observation,
+not exact Rust error-enum identity or an unsupported rejected-scratch equality.
+
+## Exact final observation and validation
+
+NCM_Assembly.Claim compares the SAME carrier/proof/Prepared/folded argument
+against the existing cohort three-tree observation. It asserts chronological
+trace equality, equal first failing tree (or acceptance), unchanged Prepared
+and proof, log=old log++issued trace, and scratch equality on acceptance.
+Batch.bridge fixes batch=0; U09.bridge fixes batch=1. No native hypothesis
+asserts a complete tree/batch result. D.digest realization is the named oracle
+law; Inputs is exactly the provenance record printed in NCM_BatchTypes.lean.
+
+Focused tops: L070 Batch exit0, 2.198934s, peak4435136KiB, swaps0;
+L071 U09 exit0, 1.984242s, peak4435256KiB, swaps0. Final audit L072 exit0,
+1.714032s, peak4417024KiB, swaps0. All 61 new theorem roots print subsets
+of propext/Classical.choice/Quot.sound. Source revision at these attempts:
+8270797d0c11f0831e9a97889f08dfe869b23b9e, dirty NCM sources pinned by sha256
+in each receipt. Exact commands/objects/limits are in those receipts.
+This is a focused cached closure audit, not a frozen release manifest replay.

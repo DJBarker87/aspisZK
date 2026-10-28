@@ -1,0 +1,68 @@
+{"attempt": "NCM_L061", "exit_status": 1, "wall_seconds": 2.0297236760379747, "peak_rss_kib": "4427068", "swaps": "0", "print_axioms": ["'AspisR1.NCM_Tree.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCM_sources/NCM_Tree.lean:90:11: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.238 = ?m.238
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NCM_sources/NCM_Tree.lean:90:15: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.242 = ?m.242
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NCM_sources/NCM_Tree.lean:100:12: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.313 = ?m.313
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NCM_sources/NCM_Tree.lean:100:16: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.317 = ?m.317
+but is expected to have type
+  Tr
+...
+k (some next, after)
+final : ∀ (t : reference.Scratch), some next = some t → after.scratch = t
+scratch : after.scratch = next
+tail :
+  eval H
+      (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+        (encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)) nodes after) =
+    eval H
+      (NCM_Tail.model (OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+        (encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)) nodes after)
+tailModel :
+  eval H
+      (NCM_Tail.model (OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+        (encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)) nodes after) =
+    have out := eval H (MultiproofConeVerifyState.tailState parsed batch (↑kind) nodes after.scratch);
+    (out.1, out.2.1,
+      { prepared := after.prepared, proof := after.proof, scratch := out.2.2, log := after.log ++ out.1 })
+observed :
+  eval H
+      (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+        (encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)) nodes after) =
+    have out := eval H (MultiproofConeVerifyState.tailState parsed batch (↑kind) nodes next);
+    (out.1, out.2.1,
+      { prepared := after.prepared, proof := after.proof, scratch := out.2.2, log := after.log ++ out.1 })
+accepted : (eval H (MultiproofConeVerifyState.tailState parsed batch (↑kind) nodes next)).2.1 = true
+⊢ True
+NCM_sources/NCM_Tree.lean:102:17: warning: This simp argument is unused:
+  reset
+
+Hint: Omit it from the simp argument list.
+  simp only [r̵e̵s̵e̵t̵,̵List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_Tree.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r802c9ef7de9842aab3fbc2c25808c70d.scope; invocation ID: 6c5f606daa774aad9cabd117475ba879

@@ -14,3 +14,10 @@ All failed declarations are excluded. Printed sorryAx in failed Lean attempts is
 - L024/L025: pre-launch SSH exit255 recovered through the existing 60-second retry path. No scope was resubmitted.
 - L028-L030: nested do tuple lets obscured the leaf-step rewrite and a dsimp hit a scalar-proof transparency issue. Replaced tuple lets with explicit projections (same data/control), then rewrote the model-key form directly. L031 passed. No new elaboration/resource option or renamed harness.
 - L034: escaped Rust cursor field accidentally used reserved `at` as a pattern variable; renamed only the local Lean binder. L035 passed. No Kani harness/module/function renamed.
+- L036-L037: leaf-loop induction needed explicit list-length and local address/digest reductions; after exposing the actual continued/rejected carrier equalities, L038 passed. The successful scratch and rejected partial scratch are kept distinct.
+- L039/L045-L046: installed FnMut projection and tuple-let reductions hid the padding callback. Exposed the exact source closure call and finished tuple reductions explicitly. L040/L047 passed.
+- L049: decodeByte has Fin256 result, so zero transport needs Fin.val; also parenthesized Boolean inference through an explicit tail equality. L050 passed.
+- L041: outer evaluator required case analysis on the three returned Booleans, rather than evaluating an if under eval. L042 passed.
+- L057: own dependency preflight refused a missing NCM_OuterDirect object before any compiler/scope launch. Charged conservatively as one slot, and scheduled that smallest dependency first. No infrastructure fault or proof result.
+
+- L060/L061: exposed scratch reset and supplied the exact True.intro branch proof; L062 passed. L063 similarly needed explicit True.intro; L064 passed. L066 literal root guard simplification repaired; L067 passed. No statement/domain was strengthened.
