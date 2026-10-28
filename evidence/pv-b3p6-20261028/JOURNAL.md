@@ -220,3 +220,5 @@ The paired final invocation is now submitted: same Source domain, same
 bounds/profile/array model and exact KMX definitions for positive and wrong-byte
 control. It selects two harnesses sequentially(-j1) within one invocation/scope.
 No PASS/native-link credit claimed.11 completed Kani invocations before it.
+
+Final Kani pair kani226-v3-both-01: exit124,900.788s,cgroup peak6778699776bytes,swap0,parentRSS15472KiB. It stopped while checking the matched wrong-byte control; neither control nor positive gate is credited.12/12 invocations spent; Lean work continues. Read-only recovery succeeded after a receipt-transfer SSH timeout and the required60s cooldown.52 Lean attempts charged after42578 diagnostic String API failure. Corrected diagnostic and independent symbolic region/chunk/digest proofs are submitted in a sequential queue. Lead m-prime now keeps unlaunched refused IDs reusable; first42578 refusal was retried under42578-r1 and charged only there. No row removed.
