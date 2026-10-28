@@ -62,3 +62,12 @@ Own control validator initially guessed448 properties; it now requires the
 negative to have the SAME total as the recorded positive,447, and exactly one
 failure. The source/limits/env/attributes/lock checks remain enforced.
 K049 is an unpaired diagnostic and receives no native copy/closure credit.
+
+## Disk-full resume, 2026-10-28
+
+Recovered WIP commit5eab9d4604. Read-only host recovery found all219 submitted
+NBX receipts (119 Lean,50 Kani,50 metadata), each byte-identical to its local
+receipt. No submitted configuration lacks a receipt and no own process remains.
+NBX_RESUME_RECOVERY.json records the comparison. Nothing was resubmitted.
+Disk preflight:8.8GiB available locally; no own evidence file exceeds20MB.
+Budget remaining:1 Lean,0 Kani. All historical failures remain charged.
