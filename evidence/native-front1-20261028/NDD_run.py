@@ -34,6 +34,11 @@ if kind=='kani':
  sources=['NDD_gate.py','NDD_SOURCE_PINS.json','NDD_src/Cargo.lock','NDD_src/crates/aspis-core/src/field.rs','NDD_src/crates/aspis-core/src/field/NDD_field.rs']
  native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NDD_src/crates/aspis-core/Cargo.toml','--target-dir',B+'/NDD_target','--features','r0','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  command=['python3','NDD_gate.py',a+'.json']
+ if os.environ.get('NDD_PACKAGE')=='verifier':
+  native[native.index('--manifest-path')+1]=B+'/NDD_src/crates/aspis-r1-cost-probe/Cargo.toml'
+  native[native.index('--features')+1]='private-leaf-salts,optimized-terminal,program-build'
+  sources+=['NDD_src/crates/aspis-r1-cost-probe/src/multiproof.rs','NDD_src/crates/aspis-r1-cost-probe/src/NDD_multiproof.rs','NDD_src/crates/aspis-r1-cost-probe/src/weights.rs','NDD_src/crates/aspis-r1-cost-probe/src/NDD_weights.rs']
+
 elif kind=='extract':
  files['NDD_extract.py']=(E/'NDD_extract.py').read_text();files['NDD_reference.rs']=(E/'NDD_reference.rs').read_text();sources=['NDD_extract.py','NDD_reference.rs'];native=[];command=['python3','NDD_extract.py']
 else:
@@ -83,3 +88,7 @@ with (E/'NDD_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
 active.unlink()
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
 print(out[a+'/stdout.log'][-1800:],flush=True)
+
+# Do not treat timed-out verification as a completed proof batch.
+if 'timed out' in out[a+'/stdout.log'].lower() or rc['exit_status'] in [124,137]:
+ raise SystemExit('STOP shape: split this timed-out/killed proof before continuing')

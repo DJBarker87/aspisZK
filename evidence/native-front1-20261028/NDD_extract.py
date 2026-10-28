@@ -7,7 +7,7 @@ S=B/'NDD_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 (S/'Cargo.toml').write_text('[package]\nname="nco_reference"\nversion="0.1.0"\nedition="2021"\n[workspace]\n')
 (S/'src/lib.rs').write_bytes((B/'NDD_reference.rs').read_bytes())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-roots=['crate::reduce_u62_ref','crate::m31_neg_ref','crate::cm31_from_ref','crate::cm31_neg_ref','crate::qm31_neg_ref','crate::qm31_zero_ref','crate::bits_ref','crate::index_ref','crate::prepared_ref']
+roots=['crate::reduce_u62_ref','crate::m31_neg_ref','crate::cm31_from_ref','crate::cm31_neg_ref','crate::qm31_neg_ref','crate::qm31_zero_ref','crate::bits_ref','crate::index_ref','crate::prepared_ref','crate::channels_ref','crate::value_ref','crate::root_ref','crate::guard_ref','crate::wide_neg_ref','crate::pack_ref','crate::raw_pack_ref','crate::wellformed_step_ref','crate::double_observed_ref']
 namespace='NDD_Reference'
 dest=B/'NDD_extracted'
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
