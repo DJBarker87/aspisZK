@@ -6,7 +6,8 @@ variable [ExternalTypes] [ExternalFuns]
 
 def finiteByte (b : U8) : Fin 256 := ⟨b.val,by
   have h := b.hSize
-  norm_num [UScalar.size,UScalarTy.numBits] at h
+  simp only [UScalar.size,UScalarTy.numBits,U8.numBits] at h
+  norm_num only at h
   exact h⟩
 def digestList (digest : Array U8 32#usize) : List (Fin 256) := digest.val.map finiteByte
 
