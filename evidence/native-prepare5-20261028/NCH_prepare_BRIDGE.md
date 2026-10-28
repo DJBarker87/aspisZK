@@ -1,5 +1,7 @@
 # NCH TX1 prepare bridge
 
+Final disposition: **OPEN**. Exact residual rows1/2/3/4/6/7 plus statement5's named lower bridges; see NCH_HANDOFF.md for the authoritative final member table. Kani70/70 invocations (final four-target serial batch), Lean6/60, final36-root audit PASS with standard axioms only. No headline premise or 100-bit target is closed by this packet.
+
 OPEN. Continue NCA without re-proving its results. Statements1 and3 are named NCD lane dependencies; no unmerged result receives credit. Statement5 retains NCA locally CLOSED-CONDITIONAL scope. Work order4,6,2,7. Native association and exact lower domains remain obligations.
 
 Stage1 scan prefix: K001 PASS, K002/K003 assertion failures as intended. Actual frozen canonical_scan reaches compact::check_values on the SAME pointer7031/length464 before the first wide check; compact error maps to Parse and returns before that check. An overapproximated successful check reaches the first echeck cut in order. The cut stops with assume(false), so this is a prefix/call-argument law, not full accepted-loop or TX1/mark closure. No observer/function pointer or field product is reached. Statement4 stays OPEN for enclosing accepted TX1, reached scan children and observer behavior.

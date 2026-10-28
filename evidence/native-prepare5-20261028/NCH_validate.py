@@ -23,6 +23,7 @@ for r in rows:
   assert r['copy_patch_sha256']=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
   assert '--locked' not in r['native_command']
   graph=json.loads((E/(a+'-graph-check.json')).read_text());assert graph['graph_matches_frozen']
+  root=next(p for p in graph['selected_closure'] if p['name']=='aspis-r1-cost-probe');assert 'r1p-check' not in root['features']
   assert json.loads((E/(a+'-lock-check.json')).read_text())['unchanged']
   assert not json.loads((E/(a+'-source-check.json')).read_text())['errors']
   ref=json.loads((E/(a+'-source-pin.json')).read_text());assert sha(E/ref['pinset'])==ref['sha256']
@@ -37,6 +38,10 @@ for r in rows:
   elif 'Failed Checks:' in log:label='ASSERTION_FAIL'
   else:label='OTHER_FAIL'
   if a=='NCH_K049' and label=='PASS':label='PASS_QUARANTINED_OPTION_FN'
+  if a=='NCH_K070':
+   multi=json.loads((E/'NCH_K070_RESULTS.json').read_text());assert len(multi['results'])==4
+   assert collections.Counter(multi['results'].values())=={'PASS':2,'FAIL':2}
+   label='MIXED_2_PASS_2_EXPECTED_FAIL'
  else:
   if r['exit_status']==0:
    assert r['print_axioms'] and 'sorryAx' not in log
@@ -47,6 +52,9 @@ for r in rows:
   else:label='FAILED_DRAFT'
  outcomes[r['kind']+':'+label]+=1
  artifacts[a]={'module':r['module'],'exit':r['exit_status'],'wall_seconds':r['wall_seconds'],'peak_rss_kib':r['peak_rss_kib'],'swaps':r['swaps'],'revision':r['source_revision'],'classification':label,'receipt_sha256':sha(receipt),'stdout_sha256':sha(E/a/'stdout.log')}
+for attempt,module in [('NCH_L001','NCH_OpaqueProduct'),('NCH_L002','NCH_WindowLift'),('NCH_L005','NCH_ArrayJoin'),('NCH_L006','NCH_Audit')]:
+ r=json.loads((E/attempt/'receipt.json').read_text());assert r['exit_status']==0
+ assert sha(Path('lean')/(module+'.lean'))==r['source_hashes']['NCH_generated/'+module+'.lean']
 assert not (E/'NCH_ACTIVE.json').exists(),'running attempt remains'
 large=[str(p) for p in E.rglob('*') if p.is_file() and p.stat().st_size>20*1024*1024];assert not large,large
 changed=subprocess.check_output(['git','diff','--name-only','0d728346f9'],text=True).splitlines()
