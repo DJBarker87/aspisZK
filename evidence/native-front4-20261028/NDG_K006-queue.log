@@ -1,0 +1,37 @@
+{"attempt": "NDG_K006", "exit_status": 1, "wall_seconds": 1.9651273469207808, "peak_rss_kib": "215696", "swaps": "0", "print_axioms": "N/A: kani"}
+mx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front4-20261028/NDG_src/programs/r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front4-20261028/NDG_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.33s
+Checking harness r1_pool_adapter::owned::NDG_owned::key_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 169 failed (2 unreachable)
+Failed Checks: |r| (*r == &self.key) && core::ptr::eq(*r,&self.key) != true
+ File: "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs", line 19, in r1_pool_adapter::owned::OwnedAccount::key::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.14968476s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::owned::NDG_owned::key_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
