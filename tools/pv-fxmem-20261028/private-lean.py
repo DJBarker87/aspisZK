@@ -11,6 +11,14 @@ if n>=35597:assert 'Audit' in m or 'Closure' in m
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');imports=re.findall(r'^import (\S+)',p.read_text(),re.M)
 source=p.read_bytes();sha=hashlib.sha256(source).hexdigest();rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 assert source==subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))])
+previous=E/f'{n}-pre-admission.json'
+if previous.exists():
+ from datetime import datetime
+ old=json.loads(previous.read_text())
+ if old.get('allowed') is False:
+  due=datetime.fromisoformat(old['utc']).timestamp()+180
+  if time.time()<due:
+   print('UNCHARGED cooldown still active',round(due-time.time(),1));sys.exit(78)
 # Existing admission tool, before uploading any source.
 G=B+'/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 code=f'mkdir -p {D}/lean-{n}; python3 {G}/reservation.py {D}/lean-{n}/pre-admission.json > {D}/lean-{n}/pre-reservation.log 2>&1; status=$?; cat {D}/lean-{n}/pre-admission.json; exit $status'
