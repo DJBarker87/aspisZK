@@ -1,5 +1,5 @@
 import R1Z.PV_RunJoin_CompilerRejections28
-import R1Z.PV_RunJoin_ControlDomain28
+import R1Z.PV_RunJoin_BranchDomain28
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_RejectionProof28
@@ -41,14 +41,17 @@ theorem error_iff [ExternalLinear] [Records]
     pair_forest_trace.compile_forest_from_copies input out recipient change
       publicInput anchor snapshot = ok (.Err e) ↔
       PV_RunJoin_CompilerRejections28.Path input out recipient change publicInput anchor snapshot e := by
-  rw [eq_wp]
-  unfold pair_forest_trace.compile_forest_from_copies PV_RunJoin_CompilerRejections28.Path
-  simp only [bind_wp,ite_wp,ok_wp,ok_ne_err,residual_eq_wp,Result.ok.injEq,Prod.exists]
-  repeat' first
-    | (apply exists_congr; intro value)
-    | (apply and_congr_right; intro hprefix)
-    | (split <;> simp only [bind_wp,ite_wp,ok_wp,ok_ne_err,residual_eq_wp,
-        Result.ok.injEq,Prod.exists])
-    | rfl
+  rcases publicInput with ⟨pubAnchor,pubNullifier,pubRecipient,pubChange,pubAsset⟩
+  cases pubRecipient <;> rw [eq_wp]
+  all_goals
+    unfold pair_forest_trace.compile_forest_from_copies PV_RunJoin_CompilerRejections28.Path
+    simp only [bind_wp,ite_wp,ok_wp,ok_ne_err,residual_eq_wp,Result.ok.injEq,Prod.exists]
+    repeat' first
+      | rfl
+      | (apply exists_congr; intro value)
+      | (apply and_congr_right; intro hprefix)
+      | (apply PV_RunJoin_BranchDomain28.ite_iff <;> intro hcond)
+      | (cases value <;> simp only [bind_wp,ite_wp,ok_wp,ok_ne_err,residual_eq_wp,
+          Result.ok.injEq,Prod.exists])
 #print axioms error_iff
 end R1Z.PV_RunJoin_RejectionProof28
