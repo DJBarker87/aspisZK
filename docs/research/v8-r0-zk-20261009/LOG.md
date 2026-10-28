@@ -13734,3 +13734,24 @@ ELF pins, pinned client, fixtures, 1,000/1,000 differential) apply to both trees
 (IDs 53400-53499) continues: the concrete body Result comparison at the canonical inputs, the runtime,
 effect and decoder installation on pv-world's calculus, and the composition. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D379 (Stream B) 2026-10-28 16:32 UTC: runjoin35 result; resolution rule for multi-variant generated modules (ruling (h7)); runjoin36 launched
+
+runjoin35 (100 attempts: 89 passed, 11 failures retained; no Kani; three audits with standard axioms;
+117 module compiles in dependency chunks) recorded the empty shipped-code diff against 82566acdfb as
+identity evidence and proved concrete emitted audit and status laws, canonical column decoding, a
+fixed-column copy law and sumcheck point construction. The whole emitted proof and audit Result
+comparison with the security model, the runtime/effect and decoder installation and the
+RustRealRefinement composition remain open; V038, V045, V163, V165, V167 remain open.
+
+Importing the semantic-oracle cone (R1Z.ProverCommitOracle55) met four modules the resolution rules
+did not settle: R1PublicCodecAgreement, AspisR1SelectedMaskProbe.Funs and .Types, and
+AspisR1WithdrawalValidation.Funs; no variant or object was substituted. The lead found that
+R1PublicCodecAgreement is in the env-J inventory (so (h5') already resolves it), that the two
+SelectedMaskProbe modules are named with compiled objects in the import-union host module graph, and
+that none of the four is in the coherent replay manifest, so this cone was never part of a coherent
+privacy closure. Ruling (h7) resolves such generated modules in order: the import-union graph's
+compiled object with (h6)-style hash checks, else the variant the importer's own extraction run
+produced (by hash chain), else a reported cohort gap that stops only the step needing it. runjoin36
+(IDs 54000-54099) applies it, then continues the whole-body Result comparison and the runtime and
+decoder installation. Rows removed outright: 0. Privacy target not yet established.
