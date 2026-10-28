@@ -1,6 +1,7 @@
 from run import H,run
 from pathlib import Path
 import json,hashlib,subprocess,sys
+assert sys.argv[1]==(H/'revision').read_text().strip(),'revision label must equal the frozen owned source revision'
 p=H/'source/tools/pv-b3p6-20261028/v244'
 old=json.loads((H/'features227-resume4.json').read_text())
 cmd=['/home/dombarker/.cargo/bin/cargo','+1.94.1','metadata','--offline','--locked','--format-version','1','--manifest-path',str(p/'Cargo.toml')]
