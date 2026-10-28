@@ -33,6 +33,7 @@ theorem complete (v : V) (alpha : Array K 10#usize) (z : Array Point 2#usize) :
   refine ⟨p,a8,a9,f,hp,h8,h9,hf,?_⟩
   rw [PV_RunJoin_WeightConstructorThread46.complete]
   change run v alpha z=_
+  unfold seed at hf
   simp only [run,hp,h8,h9,hf,bind_tc_ok]
 
 #print axioms rows_total
