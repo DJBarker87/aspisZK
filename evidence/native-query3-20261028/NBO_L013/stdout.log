@@ -1,0 +1,36 @@
+NBO_generated/NBO_GeometryDomain.lean:11:1: error: Application type mismatch: The argument
+  ↑geometry.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.10
+of sort `Type (?u.10 + 1)` in the application
+  @InitialSeg ↑geometry.start
+NBO_generated/NBO_GeometryDomain.lean:11:21: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Prop
+NBO_generated/NBO_GeometryDomain.lean:15:14: error: Application type mismatch: The argument
+  ↑geometry.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.27
+of sort `Type (?u.27 + 1)` in the application
+  @InitialSeg ↑geometry.start
+NBO_generated/NBO_GeometryDomain.lean:15:34: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.26
+NBO_generated/NBO_GeometryDomain.lean:21:8: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+geometry : verifier.QueryGeometry
+domain : NBO_QueryDomains.GeometryDomain geometry
+i : Usize
+active : ↑i < 10
+order : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+offset : ↑(i.wrapping_sub geometry.start) = ↑i
+bound : ↑(i.wrapping_sub geometry.start) < (↑geometry.line_z).length
+x✝ :
+  ∃ y,
+    geometry.line_z.index_usize (i.wrapping_sub geometry.start) = ok y ∧
+      y = (↑geometry.line_z)[↑(i.wrapping_sub geometry.start)]
+⊢ InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+NBO_generated/NBO_GeometryDomain.lean:26:14: error(lean.unknownIdentifier): Unknown constant `node_input`
