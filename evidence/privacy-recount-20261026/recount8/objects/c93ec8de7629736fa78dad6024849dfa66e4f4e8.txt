@@ -1,0 +1,238 @@
+{
+  "row": "V183",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub fn try_reserve_exact(",
+      "complete_body": "{\n        self.buf.try_reserve_exact(self.len, additional)\n    }",
+      "selected_release_body": "{\n        self.buf.try_reserve_exact(self.len, additional)\n    }",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) fn try_reserve_exact(",
+      "complete_body": "{\n        \n        unsafe { self.inner.try_reserve_exact(len, additional, T::LAYOUT) }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { self.inner.try_reserve_exact(len, additional, T::LAYOUT) }\n    }",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "unsafe fn try_reserve_exact(",
+      "complete_body": "{\n        if self.needs_to_grow(len, additional, elem_layout) {\n            \n            unsafe {\n                self.grow_exact(len, additional, elem_layout)?;\n            }\n        }\n        unsafe {\n            \n            hint::assert_unchecked(!self.needs_to_grow(len, additional, elem_layout));\n        }\n        Ok(())\n    }",
+      "selected_release_body": "{\n        if self.needs_to_grow(len, additional, elem_layout) {\n            \n            unsafe {\n                self.grow_exact(len, additional, elem_layout)?;\n            }\n        }\n        unsafe {\n            \n            hint::assert_unchecked(!self.needs_to_grow(len, additional, elem_layout));\n        }\n        Ok(())\n    }",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "unsafe fn grow_exact(",
+      "complete_body": "{\n        if elem_layout.size() == 0 {\n            \n            \n            return Err(CapacityOverflow.into());\n        }\n\n        let cap = len.checked_add(additional).ok_or(CapacityOverflow)?;\n\n        \n        let ptr = unsafe { self.finish_grow(cap, elem_layout)? };\n\n        \n        unsafe { self.set_ptr_and_cap(ptr, cap) };\n        Ok(())\n    }",
+      "selected_release_body": "{\n        if elem_layout.size() == 0 {\n            \n            \n            return Err(CapacityOverflow.into());\n        }\n\n        let cap = len.checked_add(additional).ok_or(CapacityOverflow)?;\n\n        \n        let ptr = unsafe { self.finish_grow(cap, elem_layout)? };\n\n        \n        unsafe { self.set_ptr_and_cap(ptr, cap) };\n        Ok(())\n    }",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn needs_to_grow(",
+      "complete_body": "{\n        additional > self.capacity(elem_layout.size()).wrapping_sub(len)\n    }",
+      "selected_release_body": "{\n        additional > self.capacity(elem_layout.size()).wrapping_sub(len)\n    }",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn finish_grow(",
+      "complete_body": "{\n        let new_layout = layout_array(cap, elem_layout)?;\n\n        let memory = if let Some((ptr, old_layout)) = unsafe { self.current_memory(elem_layout) } {\n            \n            debug_assert!(old_layout.align() == new_layout.align());\n            unsafe {\n                \n                hint::assert_unchecked(old_layout.align() == new_layout.align());\n                self.alloc.grow(ptr, old_layout, new_layout)\n            }\n        } else {\n            self.alloc.allocate(new_layout)\n        };\n\n        \n        match memory {\n            Ok(memory) => Ok(memory),\n            Err(_) => Err(AllocError { layout: new_layout, non_exhaustive: () }.into()),\n        }\n    }",
+      "selected_release_body": "{\n        let new_layout = layout_array(cap, elem_layout)?;\n\n        let memory = if let Some((ptr, old_layout)) = unsafe { self.current_memory(elem_layout) } {\n            \n            debug_assert!(old_layout.align() == new_layout.align());\n            unsafe {\n                \n                hint::assert_unchecked(old_layout.align() == new_layout.align());\n                self.alloc.grow(ptr, old_layout, new_layout)\n            }\n        } else {\n            self.alloc.allocate(new_layout)\n        };\n\n        \n        match memory {\n            Ok(memory) => Ok(memory),\n            Err(_) => Err(AllocError { layout: new_layout, non_exhaustive: () }.into()),\n        }\n    }",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "unsafe fn set_ptr_and_cap(",
+      "complete_body": "{\n        \n        \n        \n        self.ptr = Unique::from(ptr.cast());\n        self.cap = unsafe { Cap::new_unchecked(cap) };\n    }",
+      "selected_release_body": "{\n        \n        \n        \n        self.ptr = Unique::from(ptr.cast());\n        self.cap = unsafe { Cap::new_unchecked(cap) };\n    }",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "anchor": "fn alloc_impl_runtime(",
+      "complete_body": "{\n        match layout.size() {\n            0 => Ok(NonNull::slice_from_raw_parts(layout.dangling(), 0)),\n            \n            size => unsafe {\n                let raw_ptr = if zeroed { alloc_zeroed(layout) } else { alloc(layout) };\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                Ok(NonNull::slice_from_raw_parts(ptr, size))\n            },\n        }\n    }",
+      "selected_release_body": "{\n        match layout.size() {\n            0 => Ok(NonNull::slice_from_raw_parts(layout.dangling(), 0)),\n            \n            size => unsafe {\n                let raw_ptr = if zeroed { alloc_zeroed(layout) } else { alloc(layout) };\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                Ok(NonNull::slice_from_raw_parts(ptr, size))\n            },\n        }\n    }",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn layout_array(",
+      "complete_body": "{\n    \n    match elem_layout.repeat(cap) {\n        Ok((layout, _pad)) => Ok(layout),\n        Err(_) => Err(CapacityOverflow.into()),\n    }\n}",
+      "selected_release_body": "{\n    \n    match elem_layout.repeat(cap) {\n        Ok((layout, _pad)) => Ok(layout),\n        Err(_) => Err(CapacityOverflow.into()),\n    }\n}",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "anchor": "fn grow_impl_runtime(",
+      "complete_body": "{\n        debug_assert!(\n            new_layout.size() >= old_layout.size(),\n            \"`new_layout.size()` must be greater than or equal to `old_layout.size()`\"\n        );\n\n        match old_layout.size() {\n            0 => self.alloc_impl(new_layout, zeroed),\n\n            \n            \n            old_size if old_layout.align() == new_layout.align() => unsafe {\n                let new_size = new_layout.size();\n\n                \n                hint::assert_unchecked(new_size >= old_layout.size());\n\n                let raw_ptr = realloc(ptr.as_ptr(), old_layout, new_size);\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                if zeroed {\n                    raw_ptr.add(old_size).write_bytes(0, new_size - old_size);\n                }\n                Ok(NonNull::slice_from_raw_parts(ptr, new_size))\n            },\n\n            \n            \n            \n            \n            \n            old_size => unsafe {\n                let new_ptr = self.alloc_impl(new_layout, zeroed)?;\n                ptr::copy_nonoverlapping(ptr.as_ptr(), new_ptr.as_mut_ptr(), old_size);\n                self.deallocate(ptr, old_layout);\n                Ok(new_ptr)\n            },\n        }\n    }",
+      "selected_release_body": "{\n        debug_assert!(\n            new_layout.size() >= old_layout.size(),\n            \"`new_layout.size()` must be greater than or equal to `old_layout.size()`\"\n        );\n\n        match old_layout.size() {\n            0 => self.alloc_impl(new_layout, zeroed),\n\n            \n            \n            old_size if old_layout.align() == new_layout.align() => unsafe {\n                let new_size = new_layout.size();\n\n                \n                hint::assert_unchecked(new_size >= old_layout.size());\n\n                let raw_ptr = realloc(ptr.as_ptr(), old_layout, new_size);\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                if zeroed {\n                    raw_ptr.add(old_size).write_bytes(0, new_size - old_size);\n                }\n                Ok(NonNull::slice_from_raw_parts(ptr, new_size))\n            },\n\n            \n            \n            \n            \n            \n            old_size => unsafe {\n                let new_ptr = self.alloc_impl(new_layout, zeroed)?;\n                ptr::copy_nonoverlapping(ptr.as_ptr(), new_ptr.as_mut_ptr(), old_size);\n                self.deallocate(ptr, old_layout);\n                Ok(new_ptr)\n            },\n        }\n    }",
+      "tokens_equal": true,
+      "law": "V183.complete and embedded ReserveWorld/Facts/Primitive: complete rejection,allocation,reallocation,capacity,copy and failure state laws"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs",
+      "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+      "anchor": "pub const fn repeat(",
+      "complete_body": "{\n        let padded = self.pad_to_align();\n        if let Ok(repeated) = padded.repeat_packed(n) {\n            Ok((repeated, padded.size()))\n        } else {\n            Err(LayoutError)\n        }\n    }",
+      "selected_release_body": "{\n        let padded = self.pad_to_align();\n        if let Ok(repeated) = padded.repeat_packed(n) {\n            Ok((repeated, padded.size()))\n        } else {\n            Err(LayoutError)\n        }\n    }",
+      "tokens_equal": true,
+      "law": "Layout.pad_element; V183.element_repeat_complete (exact Result including LayoutError)"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs",
+      "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+      "anchor": "pub const fn pad_to_align(",
+      "complete_body": "{\n        \n        \n        \n        \n        let new_size = self.size_rounded_up_to_custom_align(self.align);\n\n        \n        unsafe { Layout::from_size_align_unchecked(new_size, self.align()) }\n    }",
+      "selected_release_body": "{\n        \n        \n        \n        \n        let new_size = self.size_rounded_up_to_custom_align(self.align);\n\n        \n        unsafe { Layout::from_size_align_unchecked(new_size, self.align()) }\n    }",
+      "tokens_equal": true,
+      "law": "Layout.pad_element proves no change for element layouts"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs",
+      "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+      "anchor": "const fn size_rounded_up_to_custom_align(",
+      "complete_body": "{\n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        unsafe {\n            let align_m1 = unchecked_sub(align.as_usize(), 1);\n            unchecked_add(self.size, align_m1) & !align_m1\n        }\n    }",
+      "selected_release_body": "{\n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        unsafe {\n            let align_m1 = unchecked_sub(align.as_usize(), 1);\n            unchecked_add(self.size, align_m1) & !align_m1\n        }\n    }",
+      "tokens_equal": true,
+      "law": "Layout.padded_mask (actual bit mask at arbitrary word width)"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs",
+      "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+      "anchor": "pub const fn repeat_packed(",
+      "complete_body": "{\n        if let Some(size) = self.size.checked_mul(n) {\n            \n            Layout::from_size_alignment(size, self.align)\n        } else {\n            Err(LayoutError)\n        }\n    }",
+      "selected_release_body": "{\n        if let Some(size) = self.size.checked_mul(n) {\n            \n            Layout::from_size_alignment(size, self.align)\n        } else {\n            Err(LayoutError)\n        }\n    }",
+      "tokens_equal": true,
+      "law": "packed checked multiplication and byte/alignment limit retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs",
+      "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+      "anchor": "const fn from_size_alignment(",
+      "complete_body": "{\n        if size > Self::max_size_for_align(align) {\n            return Err(LayoutError);\n        }\n\n        \n        Ok(Layout { size, align })\n    }",
+      "selected_release_body": "{\n        if size > Self::max_size_for_align(align) {\n            return Err(LayoutError);\n        }\n\n        \n        Ok(Layout { size, align })\n    }",
+      "tokens_equal": true,
+      "law": "Layout.constructor_guard: exact inverse guard/error mapping"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs",
+      "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+      "anchor": "const fn max_size_for_align(",
+      "complete_body": "{\n        \n\n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n\n        \n        \n        unsafe { unchecked_sub(isize::MAX as usize + 1, align.as_usize()) }\n    }",
+      "selected_release_body": "{\n        \n\n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n\n        \n        \n        unsafe { unchecked_sub(isize::MAX as usize + 1, align.as_usize()) }\n    }",
+      "tokens_equal": true,
+      "law": "ReserveLayout.aligned_limit; original power2 Alignment and padded-layout invariant"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn new(",
+      "complete_body": "{\n        if !ptr.is_null() {\n            \n            Some(unsafe { Self::new_unchecked(ptr) })\n        } else {\n            None\n        }\n    }",
+      "selected_release_body": "{\n        if !ptr.is_null() {\n            \n            Some(unsafe { Self::new_unchecked(ptr) })\n        } else {\n            None\n        }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.checked_complete; allocated_complete preserves null/error/private world state"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const unsafe fn new_unchecked(",
+      "complete_body": "{\n        \n        unsafe {\n            assert_unsafe_precondition!(\n                check_language_ub,\n                \"NonNull::new_unchecked requires that the pointer is non-null\",\n                (ptr: *mut () = ptr as *mut ()) => !ptr.is_null()\n            );\n            NonNull { pointer: ptr as _ }\n        }\n    }",
+      "selected_release_body": "{\n        \n        unsafe {\n            assert_unsafe_precondition!(\n                check_language_ub,\n                \"NonNull::new_unchecked requires that the pointer is non-null\",\n                (ptr: *mut () = ptr as *mut ()) => !ptr.is_null()\n            );\n            NonNull { pointer: ptr as _ }\n        }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.checked_success: precondition true on every call from checked allocation"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn slice_from_raw_parts(",
+      "complete_body": "{\n        \n        unsafe { Self::new_unchecked(super::slice_from_raw_parts_mut(data.as_ptr(), len)) }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { Self::new_unchecked(super::slice_from_raw_parts_mut(data.as_ptr(), len)) }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.slice_complete; allocation byte metadata exact"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn without_provenance(",
+      "complete_body": "{\n        let pointer = crate::ptr::without_provenance(addr.get());\n        \n        unsafe { NonNull { pointer } }\n    }",
+      "selected_release_body": "{\n        let pointer = crate::ptr::without_provenance(addr.get());\n        \n        unsafe { NonNull { pointer } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.without_provenance_complete; input NonZero alignment"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn from_ref(",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.from_ref_complete; transparent same provenance/address"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn from_mut(",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: r as *mut T } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: r as *mut T } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.from_mut_complete; transparent same provenance/address"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "tokens_equal": true,
+      "law": "Pointer.cast_complete"
+    }
+  ],
+  "old_gate_sha256": "3bc00b0e1765cce729ea5b833b8cdab7f0f274c5d4b2ce9faa52ca07f39371ee",
+  "changed_rules": [
+    "Layout::repeat instead of repeat_packed: actual mask is identity on padded Rust element layouts",
+    "NonNull slice constructor instead of cast_slice: same data/provenance/metadata; nullable allocation Result unchanged",
+    "Global realloc raw pointer ABI: deployed raw primitive inputs are address,old requested layout,new byte size"
+  ],
+  "laws": [
+    "PV_RDB1_V183.complete",
+    "PV_RDB1_V183.element_repeat_complete",
+    "PV_RDB1_V183.physical_effect",
+    "PV_RDB1_V183_ReserveFacts.finish_effects",
+    "PV_RDB1_V183_ReserveFacts.overflow_world",
+    "PV_RDB1_V183_ReserveWorld.allocation_error",
+    "PV_RDB1_PointerConstruct.allocated_complete"
+  ],
+  "deployed_configuration": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73",
+    "toolchain": "1.94.1",
+    "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind"
+  },
+  "native_validation": "native-reserve/receipt.json:2160 paired injected-failure/overflow/ZST cases; reused unchanged; finite only",
+  "retained_boundary": "Valid owned buffer and actual Rust element layout; explicit raw allocator/reallocator primitive including preservation of old bytes on successful grow, failure leaves allocation/header/data intact but private allocator state can change; compiler/binary/side-channel obligations unchanged. No Kani credit.",
+  "unresolved_conservative_edges": "Root calls and required helper bodies resolved above. Language intrinsics, panic/UB branches excluded on valid buffers, and generic allocator primitive retain the original semantic boundary; no whole-machine adequacy claim.",
+  "new_trust_items": []
+}

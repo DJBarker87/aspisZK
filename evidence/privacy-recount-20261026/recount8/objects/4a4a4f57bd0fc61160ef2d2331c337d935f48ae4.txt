@@ -1,0 +1,68 @@
+{
+  "checks": [
+    {
+      "path": "core/src/num/uint_macros.rs",
+      "item": "pub const fn wrapping_add(",
+      "old_file_sha256": "27b60f61c397a3e42930743c72fdbd01497f3d04bd5ab8cc65a53747fa236454",
+      "deployed_file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "old_body": "{\n            intrinsics::wrapping_add(self, rhs)\n        }",
+      "deployed_body": "{\n            intrinsics::wrapping_add(self, rhs)\n        }",
+      "body_tokens_identical": true
+    },
+    {
+      "path": "core/src/num/uint_macros.rs",
+      "item": "pub const fn wrapping_sub(",
+      "old_file_sha256": "27b60f61c397a3e42930743c72fdbd01497f3d04bd5ab8cc65a53747fa236454",
+      "deployed_file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "old_body": "{\n            intrinsics::wrapping_sub(self, rhs)\n        }",
+      "deployed_body": "{\n            intrinsics::wrapping_sub(self, rhs)\n        }",
+      "body_tokens_identical": true
+    },
+    {
+      "path": "core/src/num/uint_macros.rs",
+      "item": "pub const fn wrapping_mul(",
+      "old_file_sha256": "27b60f61c397a3e42930743c72fdbd01497f3d04bd5ab8cc65a53747fa236454",
+      "deployed_file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "old_body": "{\n            intrinsics::wrapping_mul(self, rhs)\n        }",
+      "deployed_body": "{\n            intrinsics::wrapping_mul(self, rhs)\n        }",
+      "body_tokens_identical": true
+    },
+    {
+      "path": "core/src/slice/index.rs",
+      "item": "fn index(self, slice: &[T])",
+      "old_file_sha256": "1bf3c8e2dacb8d09393c5ac7d51fd8496e4d270e583c40979c5c6364b59e2ea9",
+      "deployed_file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "old_body": "{\n        \n        &(*slice)[self]\n    }",
+      "deployed_body": "{\n        \n        &(*slice)[self]\n    }",
+      "body_tokens_identical": true
+    },
+    {
+      "native": "prover_shared::compress_tagged_tuple",
+      "owned": "original finite differential compress::compress",
+      "difference": "alpha rename out to compressed only",
+      "complete_body_tokens_equal_after_alpha_rename": true,
+      "owned_sha256": "dfa4d2c654fcd09ed2a6c4595d34c226c7541b716090957d7be7914fd080b14e"
+    }
+  ],
+  "selection": {
+    "artifact": "devnet_spend",
+    "project_features_reference": "native-leaves/receipt.json",
+    "core_ct_enabled": true,
+    "core_audit_instrumentation_disabled": true,
+    "fields": [
+      "CM31.from_m31",
+      "QM31.from_cm31",
+      "QM31.add",
+      "QM31.mul",
+      "QM31.mul_m31"
+    ],
+    "owned_lean": "PV_RDB2_Applied_00_P through PV_RDB2_Applied_25_compress",
+    "complete_result": "R1Z.PV_RDB2_Compress.complete/installed",
+    "no_allocation_in_helper": true,
+    "no_mutable_borrow_in_helper": true,
+    "pointer_boundary": "intrinsic shared slice indexing; arrayOutOfBounds on rejection; loop guard excludes rejection at every reached read",
+    "excluded_envelope": "NonNull/SIMD/allocator/formatting symbols from the old original-logup conservative crate envelope are not calls in the actual candidate index-helper body. No law for those symbols is inferred from this exclusion."
+  },
+  "profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "toolchain": "rustc1.94.1"
+}

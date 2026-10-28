@@ -1,0 +1,179 @@
+{
+  "row": "V182",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/string.rs",
+      "file_sha256": "4436d55804bbac0c1691a251042ff82e30b5eab0d4d0bebc20b016b60a0c07a7",
+      "anchor": "pub fn push_str(",
+      "complete_body": "{\n        self.vec.extend_from_slice(string.as_bytes())\n    }",
+      "selected_release_body": "{\n        self.vec.extend_from_slice(string.as_bytes())\n    }",
+      "tokens_equal": true,
+      "law": "V182.complete; V182.world_complete"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/str/mod.rs",
+      "file_sha256": "268aca13038b131f5916f353634b6b5b5d8f4b3c440873e4ac7c6df23e1c4121",
+      "anchor": "pub const fn as_bytes(",
+      "complete_body": "{\n        \n        unsafe { mem::transmute(self) }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { mem::transmute(self) }\n    }",
+      "tokens_equal": true,
+      "law": "same data/length UTF8 byte view; original String source-image restriction retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub fn extend_from_slice(",
+      "complete_body": "{\n        self.spec_extend(other.iter())\n    }",
+      "selected_release_body": "{\n        self.spec_extend(other.iter())\n    }",
+      "tokens_equal": true,
+      "law": "concrete T=u8 TrivialClone specialization; no user Clone effects"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/spec_extend.rs",
+      "file_sha256": "3fe360593838f78efa608d281a7d74b394e60cd9dcbf65a9d08a45f8e2dbf60f",
+      "complete_body": "{\n        let slice = iterator.as_slice();\n        unsafe { self.append_elements(slice) };\n    }",
+      "law": "ByteSlice.fresh_view; no elements consumed before appending; Vec IntoIter specialization is NOT selected"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "anchor": "pub const fn iter(",
+      "complete_body": "{\n        Iter::new(self)\n    }",
+      "selected_release_body": "{\n        Iter::new(self)\n    }",
+      "tokens_equal": true,
+      "law": "ByteSlice.fresh_view"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "complete_body": "{\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_ref(slice).cast();\n        \n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+      "law": "ByteSlice.fresh_view,fat_cast_complete,distance; u8 nonZST branch; metadata read before sized cast"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "anchor": "pub fn as_slice(&self)",
+      "complete_body": "{\n        self.make_slice()\n    }",
+      "selected_release_body": "{\n        self.make_slice()\n    }",
+      "tokens_equal": true,
+      "law": "fresh iterator unchanged metadata/data"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "file_sha256": "3d02121faa057f039d2d677829b2d8e04d1d772c6891b5b5c66514e4e7f185dc",
+      "anchor": "fn make_slice(",
+      "complete_body": "{\n                \n                \n                \n                unsafe { from_raw_parts(self.ptr.as_ptr(), len!(self)) }\n            }",
+      "selected_release_body": "{\n                \n                \n                \n                unsafe { from_raw_parts(self.ptr.as_ptr(), len!(self)) }\n            }",
+      "tokens_equal": true,
+      "law": "ByteSlice.fresh_view,distance and original valid-slice intrinsic relation"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "unsafe fn append_elements(",
+      "complete_body": "{\n        let count = other.len();\n        self.reserve(count);\n        let len = self.len();\n        unsafe { ptr::copy_nonoverlapping(other as *const T, self.as_mut_ptr().add(len), count) };\n        self.len += count;\n    }",
+      "selected_release_body": "{\n        let count = other.len();\n        self.reserve(count);\n        let len = self.len();\n        unsafe { ptr::copy_nonoverlapping(other as *const T, self.as_mut_ptr().add(len), count) };\n        self.len += count;\n    }",
+      "tokens_equal": true,
+      "law": "Append.reserve_values,reserve_capacity,error_no_copy,success_values,memory_frame; count metadata equals source length"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub fn reserve(",
+      "complete_body": "{\n        self.buf.reserve(self.len, additional);\n    }",
+      "selected_release_body": "{\n        self.buf.reserve(self.len, additional);\n    }",
+      "tokens_equal": true,
+      "law": "same old length/request count"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) fn reserve(",
+      "complete_body": "{\n        \n        unsafe { self.inner.reserve(len, additional, T::LAYOUT) }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { self.inner.reserve(len, additional, T::LAYOUT) }\n    }",
+      "tokens_equal": true,
+      "law": "u8 layout size1 align1; no ZST or custom allocator branch"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "unsafe fn reserve(",
+      "complete_body": "{\n        \n        \n        \n        \n        #[cold]\n        unsafe fn do_reserve_and_handle<A: Allocator>(\n            slf: &mut RawVecInner<A>,\n            len: usize,\n            additional: usize,\n            elem_layout: Layout,\n        ) {\n            \n            if let Err(err) = unsafe { slf.grow_amortized(len, additional, elem_layout) } {\n                handle_error(err);\n            }\n        }\n\n        if self.needs_to_grow(len, additional, elem_layout) {\n            unsafe {\n                do_reserve_and_handle(self, len, additional, elem_layout);\n            }\n        }\n    }",
+      "selected_release_body": "{\n        \n        \n        \n        \n        #[cold]\n        unsafe fn do_reserve_and_handle<A: Allocator>(\n            slf: &mut RawVecInner<A>,\n            len: usize,\n            additional: usize,\n            elem_layout: Layout,\n        ) {\n            \n            if let Err(err) = unsafe { slf.grow_amortized(len, additional, elem_layout) } {\n                handle_error(err);\n            }\n        }\n\n        if self.needs_to_grow(len, additional, elem_layout) {\n            unsafe {\n                do_reserve_and_handle(self, len, additional, elem_layout);\n            }\n        }\n    }",
+      "tokens_equal": true,
+      "law": "Append.reserve and V182.world_complete: apply same actual panic/abort handler to same error/world before copy"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "unsafe fn grow_amortized(",
+      "complete_body": "{\n        \n        debug_assert!(additional > 0);\n\n        if elem_layout.size() == 0 {\n            \n            \n            return Err(CapacityOverflow.into());\n        }\n\n        \n        let required_cap = len.checked_add(additional).ok_or(CapacityOverflow)?;\n\n        \n        \n        let cap = cmp::max(self.cap.as_inner() * 2, required_cap);\n        let cap = cmp::max(min_non_zero_cap(elem_layout.size()), cap);\n\n        \n        \n        \n        let ptr = unsafe { self.finish_grow(cap, elem_layout)? };\n\n        \n        unsafe { self.set_ptr_and_cap(ptr, cap) };\n        Ok(())\n    }",
+      "selected_release_body": "{\n        \n        debug_assert!(additional > 0);\n\n        if elem_layout.size() == 0 {\n            \n            \n            return Err(CapacityOverflow.into());\n        }\n\n        \n        let required_cap = len.checked_add(additional).ok_or(CapacityOverflow)?;\n\n        \n        \n        let cap = cmp::max(self.cap.as_inner() * 2, required_cap);\n        let cap = cmp::max(min_non_zero_cap(elem_layout.size()), cap);\n\n        \n        \n        \n        let ptr = unsafe { self.finish_grow(cap, elem_layout)? };\n\n        \n        unsafe { self.set_ptr_and_cap(ptr, cap) };\n        Ok(())\n    }",
+      "tokens_equal": true,
+      "law": "Append.growthCapacity,growth_required,doubled_cap_no_wrap; layout guard/allocator effects from V183"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn min_non_zero_cap(",
+      "complete_body": "{\n    if size == 1 {\n        8\n    } else if size <= 1024 {\n        4\n    } else {\n        1\n    }\n}",
+      "selected_release_body": "{\n    if size == 1 {\n        8\n    } else if size <= 1024 {\n        4\n    } else {\n        1\n    }\n}",
+      "tokens_equal": true,
+      "law": "u8 floor8 exactly; Nat multiplication commutation changes no value"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn handle_error(",
+      "complete_body": "{\n    match e.kind() {\n        CapacityOverflow => capacity_overflow(),\n        AllocError { layout, .. } => handle_alloc_error(layout),\n    }\n}",
+      "selected_release_body": "{\n    match e.kind() {\n        CapacityOverflow => capacity_overflow(),\n        AllocError { layout, .. } => handle_alloc_error(layout),\n    }\n}",
+      "tokens_equal": true,
+      "law": "no returning error swallowed: panic or allocation abort occurs before copy/len update"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn from_ref(",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.from_ref_complete; ByteSlice.fat_cast_complete"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "tokens_equal": true,
+      "law": "Pointer.cast_complete"
+    }
+  ],
+  "owned_reference": {
+    "complete_body": "{s.extend_from_slice(t)}",
+    "sha256": "96c4e2bd80bfee8d3be92e6e6cea8810945433abb113da2c73b13175a138f84d"
+  },
+  "inherited_deployed_layout_and_allocator": "v183-deployed-binding.json (all checked file hashes revalidated)",
+  "laws": [
+    "PV_RDB1_V182.complete",
+    "PV_RDB1_V182.adapter_complete",
+    "PV_RDB1_V182.world_complete",
+    "PV_RDB1_Append.reserve_capacity",
+    "PV_RDB1_Append.error_no_copy",
+    "PV_RDB1_Append.success_values",
+    "PV_RDB1_Append.memory_frame",
+    "PV_RDB1_ByteSlice.fresh_view"
+  ],
+  "before_after": "Same original String byte-adapter complete Result law and source-image qualifications. Native execution additionally retains reserve capacity/address,copy extent and allocator/private state; no allocation failure is promoted to ok. Existing abort/compiler/runtime/side-channel conditions remain P, not new T.",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "native_validation": "native-append/receipt.json:5679337 pairs; reused unchanged; finite only",
+  "retained_boundary": "Original library intrinsic/runtime carrier relation, allocation abort and source-image/UTF8 restrictions; compiler/binary and L1/L2/L3 retained. Same handler model applies the deployed error origin; no promise about reference-file panic backtraces.",
+  "new_trust_items": [],
+  "kani_credit": false
+}

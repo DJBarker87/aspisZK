@@ -1,0 +1,28 @@
+import R1Z.PV_RunJoin_UniversalBuild22
+import R1Z.PV_RunJoin_UniversalCompilerFrame22
+import R1Z.PV_RunJoin_PayloadAssociation22
+
+#print axioms R1Z.PV_RunJoin_UniversalRecords22.dictionary
+#print axioms R1Z.PV_RunJoin_UniversalRecords22.newRecords
+#print axioms R1Z.PV_RunJoin_UniversalRecords22.returned
+#print axioms R1Z.PV_RunJoin_UniversalRecords22.public_record
+#print axioms R1Z.PV_RunJoin_UniversalRecords22.snapshot
+#print axioms R1Z.PV_RunJoin_UniversalRecords22.words
+#print axioms R1Z.PV_RunJoin_UniversalRecords22.publicCorr
+#print axioms R1Z.PV_RunJoin_UniversalPublic22.projection
+#print axioms R1Z.PV_RunJoin_UniversalPublic22.public_eq
+#print axioms R1Z.PV_RunJoin_UniversalBuild22.toInstance
+#print axioms R1Z.PV_RunJoin_UniversalBuild22.public_eq
+#print axioms R1Z.PV_RunJoin_UniversalBuild22.returned_bank
+#print axioms R1Z.PV_RunJoin_UniversalBuild22.build_eq
+#print axioms R1Z.PV_RunJoin_UniversalBuild22.transport_eq
+#print axioms R1Z.PV_RunJoin_UniversalBuild22.identification
+#print axioms R1Z.PV_RunJoin_UniversalCompilerFrame22.payload
+#print axioms R1Z.PV_RunJoin_UniversalCompilerFrame22.native
+#print axioms R1Z.PV_RunJoin_PayloadAssociation22.run_preserved
+#print axioms R1Z.PV_RunJoin_PayloadAssociation22.public_preserved
+#print axioms R1Z.PV_RunJoin_PayloadAssociation22.records_preserved
+#print axioms R1Z.PV_RunJoin_PayloadAssociation22.payload_ne
+#print axioms R1Z.PV_RunJoin_PayloadAssociation22.no_return
+#print axioms R1Z.PV_RunJoin_PayloadAssociation22.admission_preserved
+#print axioms R1Z.PV_RunJoin_PayloadAssociation22.admission_does_not_fix_payload

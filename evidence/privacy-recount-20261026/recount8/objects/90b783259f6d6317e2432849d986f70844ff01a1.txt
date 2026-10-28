@@ -1,0 +1,152 @@
+{
+  "row": "V178",
+  "status": "FINDING",
+  "checks": [
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/path.rs",
+      "file_sha256": "82494a72a204e7e60d2511300d3eb0ef8ce10ff73b14b570d9949088c48eda9a",
+      "anchor": "fn _push(",
+      "complete_body": "{\n        \n        let buf = self.inner.as_encoded_bytes();\n        let mut need_sep = buf.last().map(|c| !is_sep_byte(*c)).unwrap_or(false);\n\n        \n        let comps = self.components();\n\n        if comps.prefix_len() > 0\n            && comps.prefix_len() == comps.path.len()\n            && comps.prefix.unwrap().is_drive()\n        {\n            need_sep = false\n        }\n\n        let need_clear = if cfg!(target_os = \"cygwin\") {\n            \n            \n            path.prefix().is_some()\n        } else {\n            \n            path.is_absolute() || path.prefix().is_some()\n        };\n\n        \n        if need_clear {\n            self.inner.truncate(0);\n\n        \n        } else if comps.prefix_verbatim() && !path.inner.is_empty() {\n            let mut buf: Vec<_> = comps.collect();\n            for c in path.components() {\n                match c {\n                    Component::RootDir => {\n                        buf.truncate(1);\n                        buf.push(c);\n                    }\n                    Component::CurDir => (),\n                    Component::ParentDir => {\n                        if let Some(Component::Normal(_)) = buf.last() {\n                            buf.pop();\n                        }\n                    }\n                    _ => buf.push(c),\n                }\n            }\n\n            let mut res = OsString::new();\n            let mut need_sep = false;\n\n            for c in buf {\n                if need_sep && c != Component::RootDir {\n                    res.push(MAIN_SEP_STR);\n                }\n                res.push(c.as_os_str());\n\n                need_sep = match c {\n                    Component::RootDir => false,\n                    Component::Prefix(prefix) => {\n                        !prefix.parsed.is_drive() && prefix.parsed.len() > 0\n                    }\n                    _ => true,\n                }\n            }\n\n            self.inner = res;\n            return;\n\n        \n        } else if path.has_root() {\n            let prefix_len = self.components().prefix_remaining();\n            self.inner.truncate(prefix_len);\n\n        \n        } else if need_sep {\n            self.inner.push(MAIN_SEP_STR);\n        }\n\n        self.inner.push(path);\n    }",
+      "selected_release_body": "{\n        \n        let buf = self.inner.as_encoded_bytes();\n        let mut need_sep = buf.last().map(|c| !is_sep_byte(*c)).unwrap_or(false);\n\n        \n        let comps = self.components();\n\n        if comps.prefix_len() > 0\n            && comps.prefix_len() == comps.path.len()\n            && comps.prefix.unwrap().is_drive()\n        {\n            need_sep = false\n        }\n\n        let need_clear = if cfg!(target_os = \"cygwin\") {\n            \n            \n            path.prefix().is_some()\n        } else {\n            \n            path.is_absolute() || path.prefix().is_some()\n        };\n\n        \n        if need_clear {\n            self.inner.truncate(0);\n\n        \n        } else if comps.prefix_verbatim() && !path.inner.is_empty() {\n            let mut buf: Vec<_> = comps.collect();\n            for c in path.components() {\n                match c {\n                    Component::RootDir => {\n                        buf.truncate(1);\n                        buf.push(c);\n                    }\n                    Component::CurDir => (),\n                    Component::ParentDir => {\n                        if let Some(Component::Normal(_)) = buf.last() {\n                            buf.pop();\n                        }\n                    }\n                    _ => buf.push(c),\n                }\n            }\n\n            let mut res = OsString::new();\n            let mut need_sep = false;\n\n            for c in buf {\n                if need_sep && c != Component::RootDir {\n                    res.push(MAIN_SEP_STR);\n                }\n                res.push(c.as_os_str());\n\n                need_sep = match c {\n                    Component::RootDir => false,\n                    Component::Prefix(prefix) => {\n                        !prefix.parsed.is_drive() && prefix.parsed.len() > 0\n                    }\n                    _ => true,\n                }\n            }\n\n            self.inner = res;\n            return;\n\n        \n        } else if path.has_root() {\n            let prefix_len = self.components().prefix_remaining();\n            self.inner.truncate(prefix_len);\n\n        \n        } else if need_sep {\n            self.inner.push(MAIN_SEP_STR);\n        }\n\n        self.inner.push(path);\n    }",
+      "tokens_equal": true,
+      "law": "V178.truncate_complete,zero_boundary,push_complete; Linux prefix branches absent"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/path.rs",
+      "file_sha256": "82494a72a204e7e60d2511300d3eb0ef8ce10ff73b14b570d9949088c48eda9a",
+      "anchor": "pub fn join<P:",
+      "complete_body": "{\n        self._join(path.as_ref())\n    }",
+      "selected_release_body": "{\n        self._join(path.as_ref())\n    }",
+      "tokens_equal": true,
+      "law": "AsRef evaluation retained before clone"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/path.rs",
+      "file_sha256": "82494a72a204e7e60d2511300d3eb0ef8ce10ff73b14b570d9949088c48eda9a",
+      "anchor": "fn _join(",
+      "complete_body": "{\n        let mut buf = self.to_path_buf();\n        buf.push(path);\n        buf\n    }",
+      "selected_release_body": "{\n        let mut buf = self.to_path_buf();\n        buf.push(path);\n        buf\n    }",
+      "tokens_equal": true,
+      "law": "V178.join_repaired; clone occurs even on absolute path"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/path.rs",
+      "file_sha256": "82494a72a204e7e60d2511300d3eb0ef8ce10ff73b14b570d9949088c48eda9a",
+      "anchor": "pub fn to_path_buf(",
+      "complete_body": "{\n        PathBuf::from(self.inner.to_os_string())\n    }",
+      "selected_release_body": "{\n        PathBuf::from(self.inner.to_os_string())\n    }",
+      "tokens_equal": true,
+      "law": "owned clone before push"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/ffi/os_str.rs",
+      "file_sha256": "2ce61f1e3d24243fe740bc3497181643d7f3ec13ebcbed72b94650ca650c139d",
+      "anchor": "pub fn to_os_string(",
+      "complete_body": "{\n        OsString { inner: self.inner.to_owned() }\n    }",
+      "selected_release_body": "{\n        OsString { inner: self.inner.to_owned() }\n    }",
+      "tokens_equal": true,
+      "law": "preserve byte allocation and clone error"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/os_str/bytes.rs",
+      "file_sha256": "d9021060718a6b8c0e2c5462c5dd3cc7be76fb9c92aa35efd85d4e2445d1de41",
+      "anchor": "pub fn to_owned(",
+      "complete_body": "{\n        Buf { inner: self.inner.to_vec() }\n    }",
+      "selected_release_body": "{\n        Buf { inner: self.inner.to_vec() }\n    }",
+      "tokens_equal": true,
+      "law": "base cloned, never skipped for absolute path"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/os_str/bytes.rs",
+      "file_sha256": "d9021060718a6b8c0e2c5462c5dd3cc7be76fb9c92aa35efd85d4e2445d1de41",
+      "anchor": "pub fn push_slice(",
+      "complete_body": "{\n        self.inner.extend_from_slice(&s.inner)\n    }",
+      "selected_release_body": "{\n        self.inner.extend_from_slice(&s.inner)\n    }",
+      "tokens_equal": true,
+      "law": "V182 reserve-copy law; no String UTF8 assumption on Unix byte carrier"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/ffi/os_str.rs",
+      "file_sha256": "2ce61f1e3d24243fe740bc3497181643d7f3ec13ebcbed72b94650ca650c139d",
+      "anchor": "pub fn truncate(",
+      "complete_body": "{\n        self.as_os_str().inner.check_public_boundary(len);\n        \n        unsafe { self.inner.truncate_unchecked(len) };\n    }",
+      "selected_release_body": "{\n        self.as_os_str().inner.check_public_boundary(len);\n        \n        unsafe { self.inner.truncate_unchecked(len) };\n    }",
+      "tokens_equal": true,
+      "law": "V178.zero_boundary: index0 exits before any UTF8 or indexing slow path"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/os_str/bytes.rs",
+      "file_sha256": "d9021060718a6b8c0e2c5462c5dd3cc7be76fb9c92aa35efd85d4e2445d1de41",
+      "anchor": "fn truncate_unchecked(",
+      "complete_body": "{\n        self.inner.truncate(len);\n    }",
+      "selected_release_body": "{\n        self.inner.truncate(len);\n    }",
+      "tokens_equal": true,
+      "law": "V178.truncate_complete"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub fn truncate(",
+      "complete_body": "{\n        \n        \n        \n        \n        \n        \n        \n        unsafe {\n            \n            \n            \n            if len > self.len {\n                return;\n            }\n            let remaining_len = self.len - len;\n            let s = ptr::slice_from_raw_parts_mut(self.as_mut_ptr().add(len), remaining_len);\n            self.len = len;\n            ptr::drop_in_place(s);\n        }\n    }",
+      "selected_release_body": "{\n        \n        \n        \n        \n        \n        \n        \n        unsafe {\n            \n            \n            \n            if len > self.len {\n                return;\n            }\n            let remaining_len = self.len - len;\n            let s = ptr::slice_from_raw_parts_mut(self.as_mut_ptr().add(len), remaining_len);\n            self.len = len;\n            ptr::drop_in_place(s);\n        }\n    }",
+      "tokens_equal": true,
+      "law": "V178.byte_drops,retained_header; u8 has no destructor; old bytes unchanged"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/path.rs",
+      "file_sha256": "82494a72a204e7e60d2511300d3eb0ef8ce10ff73b14b570d9949088c48eda9a",
+      "anchor": "fn prefix_len(",
+      "complete_body": "{\n        if !HAS_PREFIXES {\n            return 0;\n        }\n        self.prefix.as_ref().map(Prefix::len).unwrap_or(0)\n    }",
+      "selected_release_body": "{\n        if !HAS_PREFIXES {\n            return 0;\n        }\n        self.prefix.as_ref().map(Prefix::len).unwrap_or(0)\n    }",
+      "tokens_equal": true,
+      "law": "Linux HAS_PREFIXES=false"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/path.rs",
+      "file_sha256": "82494a72a204e7e60d2511300d3eb0ef8ce10ff73b14b570d9949088c48eda9a",
+      "anchor": "fn prefix_verbatim(",
+      "complete_body": "{\n        if !HAS_PREFIXES {\n            return false;\n        }\n        self.prefix.as_ref().map(Prefix::is_verbatim).unwrap_or(false)\n    }",
+      "selected_release_body": "{\n        if !HAS_PREFIXES {\n            return false;\n        }\n        self.prefix.as_ref().map(Prefix::is_verbatim).unwrap_or(false)\n    }",
+      "tokens_equal": true,
+      "law": "Linux false, excludes Windows component collection/normalization"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/path/unix.rs",
+      "file_sha256": "2e97c767dcef566a69d7fd98a768be6d758d089fd10158d20653f236eb903d70",
+      "anchor": "pub fn parse_prefix(",
+      "complete_body": "{\n    None\n}",
+      "selected_release_body": "{\n    None\n}",
+      "tokens_equal": true,
+      "law": "Linux prefix absent"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/path/unix.rs",
+      "file_sha256": "2e97c767dcef566a69d7fd98a768be6d758d089fd10158d20653f236eb903d70",
+      "anchor": "pub fn is_sep_byte(",
+      "complete_body": "{\n    b == b'/'\n}",
+      "selected_release_body": "{\n    b == b'/'\n}",
+      "tokens_equal": true,
+      "law": "Unix slash constant exact"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/os_str/bytes.rs",
+      "file_sha256": "d9021060718a6b8c0e2c5462c5dd3cc7be76fb9c92aa35efd85d4e2445d1de41",
+      "complete_body": "{\n        if index == 0 || index == self.inner.len() {\n            return;\n        }\n        if index < self.inner.len()\n            && (self.inner[index - 1].is_ascii() || self.inner[index].is_ascii())\n        {\n            return;\n        }\n\n        slow_path(&self.inner, index);\n\n        \n        \n        \n        \n        #[track_caller]\n        #[inline(never)]\n        fn slow_path(bytes: &[u8], index: usize) {\n            let (before, after) = bytes.split_at(index);\n\n            \n            \n            let after = after.get(..4).unwrap_or(after);\n            match str::from_utf8(after) {\n                Ok(_) => return,\n                Err(err) if err.valid_up_to() != 0 => return,\n                Err(_) => (),\n            }\n\n            for len in 2..=4.min(index) {\n                let before = &before[index - len..];\n                if str::from_utf8(before).is_ok() {\n                    return;\n                }\n            }\n\n            panic!(\"byte index {index} is not an OsStr boundary\");\n        }\n    }",
+      "law": "V178.zero_boundary; unconditional return for index0 excludes entire remaining body"
+    }
+  ],
+  "original_gate_sha256": "3f8f39a7bf562d2bacd5191091c6e8dd862e1ec7f585fe8374bbef8f7cc0799d",
+  "old_reference": "{\n    if path.len()>0 && path[0]==b'/' {\n        out.extend_from_slice(path);\n    } else {\n        out.extend_from_slice(base);\n        if base.len()>0 && base[base.len()-1]!=b'/' {out.push(b'/');}\n        out.extend_from_slice(path);\n    }\n}",
+  "law": "PV_RDB1_V178.join_repaired/clone_failure",
+  "inherited": "V182 byte append and V170 pointer/slice/drop; every checked source hash revalidated",
+  "obstruction": "Native always clones base; original absolute-path reference skips clone. Distinct allocation request trace observed for base=base/path=/. Full arbitrary-world/Result equality to old reference false. Historical contents-only claim explicitly retained allocation effects as residual; that narrower claim not refuted.",
+  "repaired_statement": "Clone base first, then truncate0 or append separator and append path, with the same allocator and error handlers. For any complete-Result clone/append operations sourceJoin equals repaired reference including failure and world.",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "toolchain": "1.94.1",
+  "profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "native": "result-effect-witness/receipt.json; native-join/receipt.json finite only",
+  "new_trust_items": []
+}

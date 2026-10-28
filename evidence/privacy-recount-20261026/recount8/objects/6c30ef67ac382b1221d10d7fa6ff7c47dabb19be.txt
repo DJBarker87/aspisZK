@@ -1,0 +1,56 @@
+import R1Z.PV_RunJoin_InstalledCausalHeadline
+import R1Z.PV_RunJoin_JoinedCausalHeadline
+import R1Z.PV_RunJoin_TrustLedger
+import R1Z.PV_RunJoin_TrustSeparation
+import R1Z.PV_RunJoin_TrustProjection
+import R1Z.PV_RunJoin_SourceSelectionContract
+import R1Z.PV_RunJoin_SelectedAdmission
+import R1Z.PV_RunJoin_NativeSelectedInputs
+import R1Z.PV_RunJoin_InstalledTransport
+/-! Final cached statement/axioms audit. This does not replay the release
+source closure and does not install the missing actual runtime/boundary. -/
+#print R1Z.PV_RunJoin_TrustItems
+#print R1Z.PV_RunJoin_TrustEndpoint.ProofObligations
+#print R1Z.PV_RunJoin_TrustLedger.RemainingProofs
+#check @R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord
+#print R1Z.PV_RunJoin_SelectedAdmission.Remainder
+#check @R1Z.PV_RunJoin_NativeSelectedInputs.inputs
+#check @R1Z.PV_RunJoin_InstalledTransport.endpoint_row_call
+#check @R1Z.PV_RunJoin_TrustEndpoint.privacy_headline_deployed_candidate
+#check @R1Z.PV_RunJoin_TrustLedger.privacy_headline_deployed_candidate
+#print axioms R1Z.PV_RunJoin_TrustBoundary.outcomes_of_identity
+#print axioms R1Z.PV_RunJoin_TrustBoundary.identity_of_outcomes
+#print axioms R1Z.PV_RunJoin_TrustBoundary.replayIdentity
+#print axioms R1Z.PV_RunJoin_TrustBoundary.model_satisfies
+#print axioms R1Z.PV_RunJoin_TrustBoundary.observation_projection
+#print axioms R1Z.PV_RunJoin_TrustBoundary.initial_projection
+#print axioms R1Z.PV_RunJoin_TrustBoundary.calls_projection
+#print axioms R1Z.PV_RunJoin_TrustBoundary.final_projection
+#print axioms R1Z.PV_RunJoin_TrustBoundary.filesystem_projection
+#print axioms R1Z.PV_RunJoin_TrustBoundary.payload_projection
+#print axioms R1Z.PV_RunJoin_TrustBoundary.event_projection
+#print axioms R1Z.PV_RunJoin_TrustFixtures.satisfies
+#print axioms R1Z.PV_RunJoin_TrustFixtures.both_fibres
+#print axioms R1Z.PV_RunJoin_TrustFixtures.error_is_admitted
+#print axioms R1Z.PV_RunJoin_TrustFixtures.error_tag
+#print axioms R1Z.PV_RunJoin_TrustSeparation.satisfies
+#print axioms R1Z.PV_RunJoin_TrustSeparation.trace_refinement_is_separate
+#print axioms R1Z.PV_RunJoin_TrustSeparation.no_implicit_availability
+#print axioms R1Z.PV_RunJoin_TrustEndpoint.complete_view
+#print axioms R1Z.PV_RunJoin_TrustEndpoint.toPremises
+#print axioms R1Z.PV_RunJoin_TrustEndpoint.privacy_headline_deployed_candidate
+#print axioms R1Z.PV_RunJoin_TrustLedger.candidate_proofs
+#print axioms R1Z.PV_RunJoin_TrustLedger.privacy_headline_deployed_candidate
+#print axioms R1Z.PV_RunJoin_SourceSelectionContract.installed_row
+#print axioms R1Z.PV_RunJoin_SourceSelectionContract.selected_public
+#print axioms R1Z.PV_RunJoin_SelectedAdmission.toPremises
+#print axioms R1Z.PV_RunJoin_NativeSelectedInputs.same_selected_compilation
+#print axioms R1Z.PV_RunJoin_NativeSelectedInputs.full_ledger_source
+#print axioms R1Z.PV_RunJoin_InstalledTransport.endpoint_row_call
+#print axioms R1Z.PV_RunJoin_InstalledTransport.endpoint_transport
+
+#print R1Z.PV_RunJoin_SourceSelectionContract.Data
+#print R1Z.PV_RunJoin_InstalledFamily.PublicBinding
+#print axioms R1Z.PV_RunJoin_CausalTrustLedger.initial_and_causal
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.identity
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.public_iff

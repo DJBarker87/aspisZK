@@ -1,0 +1,117 @@
+import R1Z.PV_RunJoin_StoreContinuationResidual
+import R1Z.PV_RunJoin_AvailabilityExcludesFailure
+import R1Z.PV_RunJoin_AvailableOption
+import R1Z.PV_RunJoin_BodyFootprint
+import R1Z.PV_RunJoin_ByteBlindResidual
+import R1Z.PV_RunJoin_FailurePremiseObstruction
+import R1Z.PV_RunJoin_GenericSourceCaller
+import R1Z.PV_RunJoin_InitialCapacity
+import R1Z.PV_RunJoin_KernelResidual
+import R1Z.PV_RunJoin_LedgerBody
+import R1Z.PV_RunJoin_LedgerBodyFrames
+import R1Z.PV_RunJoin_LedgerBodyStrict
+import R1Z.PV_RunJoin_LedgerHandleObstruction
+import R1Z.PV_RunJoin_LedgerHistory
+import R1Z.PV_RunJoin_LedgerResidual
+import R1Z.PV_RunJoin_LedgerStrict
+import R1Z.PV_RunJoin_LedgerWorld
+import R1Z.PV_RunJoin_LedgerWorldFields
+import R1Z.PV_RunJoin_LedgerWorldInvariant
+import R1Z.PV_RunJoin_OsFailure
+import R1Z.PV_RunJoin_OsFailureEndpoint
+import R1Z.PV_RunJoin_PairElimination
+import R1Z.PV_RunJoin_PublicFailureEndpoint
+import R1Z.PV_RunJoin_PublicFailureMixture
+import R1Z.PV_RunJoin_PublicFailureOption
+import R1Z.PV_RunJoin_PureSourceLift
+import R1Z.PV_RunJoin_ReservationFootprint
+import R1Z.PV_RunJoin_ReservationGuards
+import R1Z.PV_RunJoin_ReserveHandleFields
+import R1Z.PV_RunJoin_ReserveStoreFrame
+import R1Z.PV_RunJoin_ResultPost
+import R1Z.PV_RunJoin_ResultTransport
+import R1Z.PV_RunJoin_SourceAccount
+import R1Z.PV_RunJoin_SourceBoundary
+import R1Z.PV_RunJoin_SourceConstructor
+import R1Z.PV_RunJoin_SourceEndpoint
+import R1Z.PV_RunJoin_SourceFailureIndependence
+import R1Z.PV_RunJoin_SourceOsFailure
+import R1Z.PV_RunJoin_TapeBoundary
+
+-- Focused cached-source axioms audit; not a frozen dependency-closure replay.
+#print axioms R1Z.PV_RunJoin_AvailabilityExcludesFailure.available_excludes_first_failure
+#print axioms R1Z.PV_RunJoin_AvailableOption.privacy_headline_from_premises_available
+#print axioms R1Z.PV_RunJoin_BodyFootprint.with_attempt
+#print axioms R1Z.PV_RunJoin_BodyFootprint.caller
+#print axioms R1Z.PV_RunJoin_ByteBlindResidual.schedule_ignores_secret
+#print axioms R1Z.PV_RunJoin_ByteBlindResidual.initial_ledger_of_rest
+#print axioms R1Z.PV_RunJoin_FailurePremiseObstruction.no_premises_on_safe_log_disagreement
+#print axioms R1Z.PV_RunJoin_GenericSourceCaller.source_eq
+#print axioms R1Z.PV_RunJoin_InitialCapacity.provider_coordinates
+#print axioms R1Z.PV_RunJoin_InitialCapacity.capacity
+#print axioms R1Z.PV_RunJoin_KernelResidual.kernels_iff_native_uniform
+#print axioms R1Z.PV_RunJoin_KernelResidual.arbitrary_density_not_certified
+#print axioms R1Z.PV_RunJoin_LedgerBody.native_ledger_shape
+#print axioms R1Z.PV_RunJoin_LedgerBodyFrames.frames
+#print axioms R1Z.PV_RunJoin_LedgerBodyStrict.entered_strict
+#print axioms R1Z.PV_RunJoin_LedgerBodyStrict.no_entry_iff_unchanged
+#print axioms R1Z.PV_RunJoin_LedgerHandleObstruction.no_handle_only_projection
+#print axioms R1Z.PV_RunJoin_LedgerHandleObstruction.no_fixed_dictionary_fresh_then_duplicate
+#print axioms R1Z.PV_RunJoin_LedgerHistory.create_length
+#print axioms R1Z.PV_RunJoin_LedgerHistory.chain_length_ge
+#print axioms R1Z.PV_RunJoin_LedgerHistory.record_length
+#print axioms R1Z.PV_RunJoin_LedgerHistory.inject_length
+#print axioms R1Z.PV_RunJoin_LedgerHistory.ask_length
+#print axioms R1Z.PV_RunJoin_LedgerResidual.ledger_iff_split
+#print axioms R1Z.PV_RunJoin_LedgerStrict.reserve_history_strict
+#print axioms R1Z.PV_RunJoin_LedgerStrict.reserve_ne
+#print axioms R1Z.PV_RunJoin_LedgerWorld.source_projection
+#print axioms R1Z.PV_RunJoin_LedgerWorldFields.writeback
+#print axioms R1Z.PV_RunJoin_LedgerWorldFields.native_return
+#print axioms R1Z.PV_RunJoin_LedgerWorldInvariant.initial
+#print axioms R1Z.PV_RunJoin_LedgerWorldInvariant.callback
+#print axioms R1Z.PV_RunJoin_LedgerWorldInvariant.caller
+#print axioms R1Z.PV_RunJoin_OsFailure.execute_failure
+#print axioms R1Z.PV_RunJoin_OsFailure.witness_independent
+#print axioms R1Z.PV_RunJoin_OsFailure.outside_bad_iff
+#print axioms R1Z.PV_RunJoin_OsFailure.conditional_disagreement
+#print axioms R1Z.PV_RunJoin_OsFailureEndpoint.PV_RunJoin_OsFailure
+#print axioms R1Z.PV_RunJoin_PairElimination.cases_pair
+#print axioms R1Z.PV_RunJoin_PublicFailureEndpoint.failure_views_agree
+#print axioms R1Z.PV_RunJoin_PublicFailureEndpoint.privacy_headline_public_failure
+#print axioms R1Z.PV_RunJoin_PublicFailureMixture.bound
+#print axioms R1Z.PV_RunJoin_PublicFailureOption.failure_views_agree
+#print axioms R1Z.PV_RunJoin_PublicFailureOption.failure_witness_independent
+#print axioms R1Z.PV_RunJoin_PublicFailureOption.bound_unchanged
+#print axioms R1Z.PV_RunJoin_PureSourceLift.source_law
+#print axioms R1Z.PV_RunJoin_PureSourceLift.provider_frame
+#print axioms R1Z.PV_RunJoin_PureSourceLift.client_frame
+#print axioms R1Z.PV_RunJoin_ReservationFootprint.after_checks
+#print axioms R1Z.PV_RunJoin_ReservationFootprint.reserve_build
+#print axioms R1Z.PV_RunJoin_ReservationGuards.source_eq
+#print axioms R1Z.PV_RunJoin_ReservationGuards.preserves
+#print axioms R1Z.PV_RunJoin_ReserveHandleFields.fallible_directory
+#print axioms R1Z.PV_RunJoin_ReserveHandleFields.fallible_last_error
+#print axioms R1Z.PV_RunJoin_ReserveHandleFields.reset_eq
+#print axioms R1Z.PV_RunJoin_ReserveHandleFields.fallible_same_handle
+#print axioms R1Z.PV_RunJoin_ReserveStoreFrame.fallible_store
+#print axioms R1Z.PV_RunJoin_ResultPost.ok
+#print axioms R1Z.PV_RunJoin_ResultPost.bind_right
+#print axioms R1Z.PV_RunJoin_ResultPost.bind_known
+#print axioms R1Z.PV_RunJoin_ResultPost.bind_eq_ok
+#print axioms R1Z.PV_RunJoin_ResultTransport.map_comp
+#print axioms R1Z.PV_RunJoin_ResultTransport.bind_map
+#print axioms R1Z.PV_RunJoin_SourceAccount.provider_frame
+#print axioms R1Z.PV_RunJoin_SourceAccount.ledger_frame
+#print axioms R1Z.PV_RunJoin_SourceBoundary.source_V045
+#print axioms R1Z.PV_RunJoin_SourceBoundary.native_fill_V336
+#print axioms R1Z.PV_RunJoin_SourceConstructor.source_body
+#print axioms R1Z.PV_RunJoin_SourceEndpoint.toPremises
+#print axioms R1Z.PV_RunJoin_SourceEndpoint.privacy_headline_from_source_inputs
+#print axioms R1Z.PV_RunJoin_SourceFailureIndependence.source_witness_independent
+#print axioms R1Z.PV_RunJoin_SourceOsFailure.factory_os_error
+#print axioms R1Z.PV_RunJoin_SourceOsFailure.client_on_factory_error
+#print axioms R1Z.PV_RunJoin_TapeBoundary.toPremises
+#print axioms R1Z.PV_RunJoin_TapeBoundary.privacy_headline_with_tape
+
+#print axioms R1Z.PV_RunJoin_StoreContinuationResidual.mask_error_closure_transport

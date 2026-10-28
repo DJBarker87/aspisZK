@@ -1,0 +1,15 @@
+import R1Z.PV_RunJoin_SourceEndpoint
+import R1Z.PV_RunJoin_AvailableOption
+import R1Z.PV_RunJoin_PublicFailureEndpoint
+set_option autoImplicit false
+#print R1Z.PV_RunJoin_SourceEndpoint.Residual.E1_V329
+#print R1Z.PV_RunJoin_SourceEndpoint.Residual.native_ledger_V337
+#print R1Z.PV_RunJoin_SourceEndpoint.Residual.byte_blind_V338
+#print R1Z.PV_RunJoin_SourceEndpoint.Residual.kernels_V339
+#print R1Z.PV_RunJoin_SourceEndpoint.Residual.disclosed_V038
+#print R1Z.PV_RunJoin_SourceEndpoint.Residual.observerOracle_V038
+#print axioms R1Z.PV_RunJoin_SourceBoundary.source_V045
+#print axioms R1Z.PV_RunJoin_SourceBoundary.native_fill_V336
+#print axioms R1Z.PV_RunJoin_AvailableOption.privacy_headline_from_premises_available
+
+#print axioms R1Z.PV_RunJoin_PublicFailureEndpoint.privacy_headline_public_failure

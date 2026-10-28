@@ -1,0 +1,117 @@
+import R1Z.PDict_Array32
+import R1Z.PV_RunJoin_AfterstateAgreement32
+import R1Z.PV_RunJoin_AppendDeterminism32
+import R1Z.PV_RunJoin_AttemptProjection32
+import R1Z.PV_RunJoin_CanonicalBinding32
+import R1Z.PV_RunJoin_CommonObserver32
+import R1Z.PV_RunJoin_CommonSample32
+import R1Z.PV_RunJoin_HonestLedger32
+import R1Z.PV_RunJoin_HonestPremises32
+import R1Z.PV_RunJoin_HonestReservation32
+import R1Z.PV_RunJoin_LaneAudit32
+import R1Z.PV_RunJoin_LedgerCaller32
+import R1Z.PV_RunJoin_LedgerFrame32
+import R1Z.PV_RunJoin_NativeCallerFrame32
+import R1Z.PV_RunJoin_NativePublicInverse32
+import R1Z.PV_RunJoin_NativeSnapshotAgreement32
+import R1Z.PV_RunJoin_OutputAgreement32
+import R1Z.PV_RunJoin_PreparationContext32
+import R1Z.PV_RunJoin_PreparedCaller32
+import R1Z.PV_RunJoin_PreparedLedger32
+import R1Z.PV_RunJoin_PreparedPair32
+import R1Z.PV_RunJoin_PreparedPublicAgreement32
+import R1Z.PV_RunJoin_PublicAgreement32
+import R1Z.PV_RunJoin_RetryFrame32
+import R1Z.PV_RunJoin_RetryProjection32
+import R1Z.PV_RunJoin_RunJoinMap32
+import R1Z.PV_RunJoin_SelectedCoordinates32
+import R1Z.PV_RunJoin_SnapshotPreflight32
+
+/-! Final focused audit of accepted runjoin32 proof additions. The endpoint,
+lane and NativeSnapshot31 audits have their separate once-only receipts.
+This audit neither installs a runtime nor discharges the retained P laws. -/
+#print axioms R1Z.PDict_Array32.op211_installed
+#print axioms R1Z.PV_RunJoin_AfterstateAgreement32.afterstate
+#print axioms R1Z.PV_RunJoin_AfterstateAgreement32.transition
+#print axioms R1Z.PV_RunJoin_AppendDeterminism32.returned
+#print axioms R1Z.PV_RunJoin_AppendDeterminism32.unique
+#print axioms R1Z.PV_RunJoin_AttemptProjection32.step
+#print axioms R1Z.PV_RunJoin_AttemptProjection32.client
+#print axioms R1Z.PV_RunJoin_CanonicalBinding32.transfer
+#print axioms R1Z.PV_RunJoin_CanonicalBinding32.withdrawal
+#print axioms R1Z.PV_RunJoin_CommonObserver32.complete_pair
+#print axioms R1Z.PV_RunJoin_CommonSample32.execute
+#print axioms R1Z.PV_RunJoin_CommonSample32.complete_view
+#print axioms R1Z.PV_RunJoin_HonestLedger32.prefix_result
+#print axioms R1Z.PV_RunJoin_HonestLedger32.ledger
+#print axioms R1Z.PV_RunJoin_HonestPremises32.premises
+#print axioms R1Z.PV_RunJoin_HonestPremises32.record_eq
+#print axioms R1Z.PV_RunJoin_HonestPremises32.target_eq
+#print axioms R1Z.PV_RunJoin_HonestPremises32.identification
+#print axioms R1Z.PV_RunJoin_HonestReservation32.full_public
+#print axioms R1Z.PV_RunJoin_HonestReservation32.public_bytes
+#print axioms R1Z.PV_RunJoin_LaneDenotation31.complete_result
+#print axioms R1Z.PV_RunJoin_CanonicalInput31.transfer
+#print axioms R1Z.PV_RunJoin_CanonicalInput31.withdrawal
+#print axioms R1Z.PV_RunJoin_SemanticAppendRoot31.root
+#print axioms R1Z.PV_RunJoin_SemanticAppendCarry31.carry
+#print axioms R1Z.PV_RunJoin_AppendBinding31.append
+#print axioms R1Z.PV_RunJoin_SemanticRecipient31.recipient
+#print axioms R1Z.PV_RunJoin_SemanticSentinel31.sentinel
+#print axioms R1Z.PV_RunJoin_HonestPackage31.honest
+#print axioms R1Z.PV_RunJoin_CanonicalHonest31.transfer
+#print axioms R1Z.PV_RunJoin_CanonicalHonest31.withdrawal
+#print axioms R1Z.PV_RunJoin_CanonicalCoverage31.transfer_iff
+#print axioms R1Z.PV_RunJoin_CanonicalCoverage31.withdrawal_iff
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.identification
+#print axioms R1Z.PV_RunJoin_LedgerCaller32.complete_public
+#print axioms R1Z.PV_RunJoin_LedgerCaller32.complete_compiled
+#print axioms R1Z.PV_RunJoin_LedgerCaller32.coordinates
+#print axioms R1Z.PV_RunJoin_LedgerFrame32.returned
+#print axioms R1Z.PV_RunJoin_LedgerFrame32.coordinates
+#print axioms R1Z.PV_RunJoin_NativeCallerFrame32.complete_public
+#print axioms R1Z.PV_RunJoin_NativeCallerFrame32.complete_compiled
+#print axioms R1Z.PV_RunJoin_NativeCallerFrame32.same_transition
+#print axioms R1Z.PV_RunJoin_NativeCallerFrame32.transition_frame
+#print axioms R1Z.PV_RunJoin_NativeCallerFrame32.compiler_frame
+#print axioms R1Z.PV_RunJoin_NativePublicInverse32.transfer_roundtrip
+#print axioms R1Z.PV_RunJoin_NativePublicInverse32.withdrawal_roundtrip
+#print axioms R1Z.PV_RunJoin_NativePublicInverse32.target_transfer_roundtrip
+#print axioms R1Z.PV_RunJoin_NativePublicInverse32.target_withdrawal_roundtrip
+#print axioms R1Z.PV_RunJoin_NativePublicInverse32.from_public_roundtrip
+#print axioms R1Z.PV_RunJoin_NativePublicInverse32.from_input_roundtrip
+#print axioms R1Z.PV_RunJoin_NativePublicInverse32.target_transition_roundtrip
+#print axioms R1Z.PV_RunJoin_NativePublicInverse32.to_public_roundtrip
+#print axioms R1Z.PV_RunJoin_NativePublicInverse32.injective
+#print axioms R1Z.PV_RunJoin_NativeSnapshotAgreement32.snapshots
+#print axioms R1Z.PV_RunJoin_NativeSnapshotAgreement32.caller_live
+#print axioms R1Z.PV_RunJoin_NativeSnapshotAgreement32.callers_agree
+#print axioms R1Z.PV_RunJoin_OutputAgreement32.output
+#print axioms R1Z.PV_RunJoin_OutputAgreement32.unique
+#print axioms R1Z.PV_RunJoin_PreparationContext32.transfer_binding
+#print axioms R1Z.PV_RunJoin_PreparationContext32.transfer_root_ignored
+#print axioms R1Z.PV_RunJoin_PreparationContext32.withdrawal_binding
+#print axioms R1Z.PV_RunJoin_PreparationContext32.withdrawal_root_ignored
+#print axioms R1Z.PV_RunJoin_PreparedCaller32.transfer
+#print axioms R1Z.PV_RunJoin_PreparedCaller32.withdrawal
+#print axioms R1Z.PV_RunJoin_PreparedLedger32.transfer
+#print axioms R1Z.PV_RunJoin_PreparedLedger32.withdrawal
+#print axioms R1Z.PV_RunJoin_PreparedPair32.transfer
+#print axioms R1Z.PV_RunJoin_PreparedPair32.withdrawal
+#print axioms R1Z.PV_RunJoin_PreparedPublicAgreement32.transfer
+#print axioms R1Z.PV_RunJoin_PreparedPublicAgreement32.withdrawal
+#print axioms R1Z.PV_RunJoin_PublicAgreement32.raw
+#print axioms R1Z.PV_RunJoin_PublicAgreement32.honest
+#print axioms R1Z.PV_RunJoin_RetryFrame32.run
+#print axioms R1Z.PV_RunJoin_RetryProjection32.run
+#print axioms R1Z.PV_RunJoin_RetryProjection32.eight
+#print axioms R1Z.PV_RunJoin_RunJoinMap32.map
+#print axioms R1Z.PV_RunJoin_RunJoinMap32.observer_pair
+#print axioms R1Z.PV_RunJoin_RunJoinMap32.same_coupling
+#print axioms R1Z.PV_RunJoin_SelectedCoordinates32.public_coordinate
+#print axioms R1Z.PV_RunJoin_SelectedCoordinates32.caller_public
+#print axioms R1Z.PV_RunJoin_SelectedCoordinates32.caller_columns
+#print axioms R1Z.PV_RunJoin_NativeSnapshot31.from_input
+#print axioms R1Z.PV_RunJoin_NativeSnapshot31.actual
+#print axioms R1Z.PV_RunJoin_NativeSnapshot31.caller
+#print axioms R1Z.PV_RunJoin_SnapshotAgreement31.whole

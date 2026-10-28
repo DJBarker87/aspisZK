@@ -1,0 +1,3 @@
+# Effective launcher controls
+
+Read-only inspection during this stage confirms the shared launcher executable line uses TasksMax=64, although its older header/common ruling says128. MemoryHigh6G/MemoryMax8G/MemorySwapMax0 remain unchanged. No launcher file was edited. Future check.py receipts record the executable TasksMax and the read-only launcher SHA. Earlier receipts'128 describes the standing common contract, not an observed per-scope task counter; it is not evidence that an actual scope used128. Both64 and128 were accepted for this shared Lean route. Rust/Kani scope receipts retain measured64 throughout.

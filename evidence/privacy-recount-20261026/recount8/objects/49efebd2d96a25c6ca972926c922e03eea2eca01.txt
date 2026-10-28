@@ -1,0 +1,66 @@
+import R1Z.PV_RDEAC_FullClone
+open Aeneas Aeneas.Std
+namespace R1Z.PV_RDEAC_FullJoin
+open PV_RDB1_V183_ReserveWorld PV_RDEA_StatefulPath
+open PV_RDEAC_FullAppend
+
+def advance {S F : Type} (e : Execution U8 S F)
+    (next : Buffer U8 → World S F → Execution U8 S F) : Execution U8 S F :=
+  match e.returned with
+  | .error _ => e
+  | .ok () => next e.buffer e.world
+
+theorem erase_advance {S F : Type} (e : Execution U8 S F)
+    (next : Buffer U8 → World S F → Execution U8 S F) :
+    erase (advance e next)=bind (erase e) (fun b w => erase (next b w)) := by
+  cases e with
+  | mk returned b w => cases returned <;> rfl
+
+def returning {S F : Type} (b : Buffer U8) (w : World S F) : Execution U8 S F := ⟨.ok (),b,w⟩
+
+def clear {S F : Type} (b : Buffer U8) (w : World S F) : Execution U8 S F :=
+  ⟨.ok (),PV_RDB1_V178.cleared b,PV_RDB1_V178.dropBytes b.values.length w⟩
+
+theorem erase_returning {S F : Type} (b : Buffer U8) (w : World S F) :
+    erase (returning b w)=(.ok b,w) := rfl
+
+theorem erase_clear {S F : Type} (b : Buffer U8) (w : World S F) :
+    erase (clear b w)=PV_RDEA_StatefulPath.clear b w := rfl
+
+def push {S F : Type} (step : Request → S → Option Nat × S) (shape : Shape)
+    (absolute needSep : Bool) (b : Buffer U8) (path : List U8) (w : World S F) : Execution U8 S F :=
+  advance (if absolute then clear b w else returning b w) fun b w =>
+  advance (if !absolute && needSep then append step shape b [47#u8] w else returning b w) fun b w =>
+  append step shape b path w
+
+theorem push_projection {S F : Type} (step : Request → S → Option Nat × S) (shape : Shape)
+    (absolute needSep : Bool) (b : Buffer U8) (path : List U8) (w : World S F) :
+    erase (push step shape absolute needSep b path w)=
+      sourcePush (PV_RDEA_AppendExecution.append step shape) absolute needSep b path w := by
+  cases absolute <;> cases needSep <;>
+    simp only [push,sourcePush,Bool.not_false,Bool.not_true,Bool.false_and,
+      Bool.true_and,Bool.false_eq_true,if_false,if_true,erase_advance,
+      erase_returning,erase_clear,PV_RDEAC_FullAppend.projection]
+
+def join {S F : Type} (step : Request → S → Option Nat × S) (shape : Shape)
+    (address : Nat) (absolute needSep : Bool) (base path : List U8) (w : World S F) : Execution U8 S F :=
+  advance (PV_RDEAC_FullClone.clone step shape address base w)
+    (fun b w => push step shape absolute needSep b path w)
+
+theorem projection {S F : Type} (step : Request → S → Option Nat × S) (shape : Shape)
+    (address : Nat) (absolute needSep : Bool) (base path : List U8) (w : World S F) :
+    erase (join step shape address absolute needSep base path w)=
+      sourceJoin (PV_RDEA_CloneExecution.clone step shape address)
+        (PV_RDEA_AppendExecution.append step shape) absolute needSep base path w := by
+  unfold join sourceJoin
+  rw [erase_advance,PV_RDEAC_FullClone.projection]
+  apply congrArg
+  funext b w
+  exact push_projection step shape absolute needSep b path w
+
+#print axioms erase_returning
+#print axioms erase_clear
+#print axioms erase_advance
+#print axioms push_projection
+#print axioms projection
+end R1Z.PV_RDEAC_FullJoin

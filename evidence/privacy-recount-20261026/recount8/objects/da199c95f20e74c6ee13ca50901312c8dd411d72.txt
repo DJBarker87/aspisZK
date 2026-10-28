@@ -1,0 +1,128 @@
+{
+  "row": "V246",
+  "deployed_loop": {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs",
+    "file_sha256": "593d979a6199781887d8878755dc19562e8df15b7ea4eecad248a1c0209fb61e",
+    "body": "default fn equal(&self, other: &[B]) -> bool {\n        if self.len() != other.len() {\n            return false;\n        }\n\n        // Implemented as explicit indexing rather\n        // than zipped iterators for performance reasons.\n        // See PR https://github.com/rust-lang/rust/pull/116846\n        // FIXME(const_hack): make this a `for idx in 0..self.len()` loop.\n        let mut idx = 0;\n        while idx < self.len() {\n            // bound checks are optimized away\n            if self[idx] != other[idx] {\n                return false;\n            }\n            idx += 1;\n        }\n\n        true\n    }",
+    "body_token_sha256": "69881d0cae2e08d17583fd057fb350a723f85e72c073d0d4521dd4938fe0f209",
+    "law": "R1Z.PV_RDCD_Slice194.loop_suffix/source_model; R1Z.PV_RDCD_SliceArrayBinding.array_binding/no_index_failure"
+  },
+  "source_pins": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs",
+      "sha256": "593d979a6199781887d8878755dc19562e8df15b7ea4eecad248a1c0209fb61e"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/equality.rs",
+      "sha256": "27e91a10f2678bfe552c0628c63f474a1b5575d31c212d26314b90538948d418"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs",
+      "sha256": "f94d6401c6bd086f99c93014d6e936ff7c8573157939a1a07f9bd78930ae86db"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp/bytewise.rs",
+      "sha256": "75cd708d12d08e3c5e531ce8235b66dbe6742ca42282600dbab7e9b6f267155b"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+      "sha256": "03fc14126dab7d78688d6fab1d954cc116357f349652a37dee5b044d45e0bbea"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "sha256": "660f00d91fb08e809b8f00a7e3917d546cf2097e6ea4b59b951e0dc8cc03e7af"
+    }
+  ],
+  "emitted_field_census": [
+    [
+      "next_pair_index",
+      "Std.U64"
+    ],
+    [
+      "next_root",
+      "Array aspis_core.field.M31 8#usize"
+    ],
+    [
+      "next_frontier",
+      "Array (Array aspis_core.field.M31 8#usize) 20#usize"
+    ],
+    [
+      "pool",
+      "Array Std.U8 32#usize"
+    ],
+    [
+      "deployment_domain",
+      "Array Std.U8 32#usize"
+    ],
+    [
+      "sequence",
+      "Std.U64"
+    ],
+    [
+      "next_pair_index",
+      "Std.U64"
+    ],
+    [
+      "current_root",
+      "Array aspis_core.field.M31 8#usize"
+    ],
+    [
+      "frontier",
+      "Array (Array aspis_core.field.M31 8#usize) 20#usize"
+    ]
+  ],
+  "concrete_array_instances": [
+    "[u8;32]:BytewiseEq u8 (V216 exact-source binding)",
+    "[M31;8]:generic SlicePartialEq, M31 derived eq and default ne",
+    "[[M31;8];20]:generic SlicePartialEq recursively"
+  ],
+  "source_body_changes": "1.94.1 generic equal slices replaces1.98 pointer/length equal_same_length. New checked-index loop proved, with length-equality and in-range increment invariants; every ne Result failure/divergence preserved",
+  "primitive_boundary": "checked indexing, immutable array-to-slice representation, Rust scalar operations/raw_eq/transmute and compiler-cohort D381/D386 retained; no new trust field",
+  "qualification": "New source-law binding, not a replacement for an original structural gate. Original native route is pinned extraction at final committed selectors.",
+  "indexing_source_comparison": [
+    {
+      "typed_impl": "SliceIndex<[T]> for usize",
+      "cohorts": [
+        {
+          "toolchain": "nightly-2026-06-01",
+          "text": "{\n    type Output = T;\n\n    #[inline]\n    fn get(self, slice: &[T]) -> Option<&T> {\n        if self < slice.len() {\n            // SAFETY: `self` is checked to be in bounds.\n            unsafe { Some(slice_get_unchecked(slice, self)) }\n        } else {\n            None\n        }\n    }\n\n    #[inline]\n    fn get_mut(self, slice: &mut [T]) -> Option<&mut T> {\n        if self < slice.len() {\n            // SAFETY: `self` is checked to be in bounds.\n            unsafe { Some(slice_get_unchecked(slice, self)) }\n        } else {\n            None\n        }\n    }\n\n    #[inline]\n    #[track_caller]\n    unsafe fn get_unchecked(self, slice: *const [T]) -> *const T {\n        assert_unsafe_precondition!(\n            check_language_ub, // okay because of the `assume` below\n            \"slice::get_unchecked requires that the index is within the slice\",\n            (this: usize = self, len: usize = slice.len()) => this < len\n        );\n        // SAFETY: the caller guarantees that `slice` is not dangling, so it\n        // cannot be longer than `isize::MAX`. They also guarantee that\n        // `self` is in bounds of `slice` so `self` cannot overflow an `isize`,\n        // so the call to `add` is safe.\n        unsafe {\n            // Use intrinsics::assume instead of hint::assert_unchecked so that we don't check the\n            // precondition of this function twice.\n            crate::intrinsics::assume(self < slice.len());\n            slice_get_unchecked(slice, self)\n        }\n    }\n\n    #[inline]\n    #[track_caller]\n    unsafe fn get_unchecked_mut(self, slice: *mut [T]) -> *mut T {\n        assert_unsafe_precondition!(\n            check_library_ub,\n            \"slice::get_unchecked_mut requires that the index is within the slice\",\n            (this: usize = self, len: usize = slice.len()) => this < len\n        );\n        // SAFETY: see comments for `get_unchecked` above.\n        unsafe { slice_get_unchecked(slice, self) }\n    }\n\n    #[inline]\n    fn index(self, slice: &[T]) -> &T {\n        // N.B., use intrinsic indexing\n        &(*slice)[self]\n    }\n\n    #[inline]\n    fn index_mut(self, slice: &mut [T]) -> &mut T {\n        // N.B., use intrinsic indexing\n        &mut (*slice)[self]\n    }\n}",
+          "token_sha256": "064b5fc6acb1d6d003ad3ea0c1835ac3bdc8e1c12be2a712c9a73c18e4f791c8",
+          "file_sha256": "1bf3c8e2dacb8d09393c5ac7d51fd8496e4d270e583c40979c5c6364b59e2ea9"
+        },
+        {
+          "toolchain": "1.94.1",
+          "text": "{\n    type Output = T;\n\n    #[inline]\n    fn get(self, slice: &[T]) -> Option<&T> {\n        if self < slice.len() {\n            // SAFETY: `self` is checked to be in bounds.\n            unsafe { Some(slice_get_unchecked(slice, self)) }\n        } else {\n            None\n        }\n    }\n\n    #[inline]\n    fn get_mut(self, slice: &mut [T]) -> Option<&mut T> {\n        if self < slice.len() {\n            // SAFETY: `self` is checked to be in bounds.\n            unsafe { Some(slice_get_unchecked(slice, self)) }\n        } else {\n            None\n        }\n    }\n\n    #[inline]\n    #[track_caller]\n    unsafe fn get_unchecked(self, slice: *const [T]) -> *const T {\n        assert_unsafe_precondition!(\n            check_language_ub, // okay because of the `assume` below\n            \"slice::get_unchecked requires that the index is within the slice\",\n            (this: usize = self, len: usize = slice.len()) => this < len\n        );\n        // SAFETY: the caller guarantees that `slice` is not dangling, so it\n        // cannot be longer than `isize::MAX`. They also guarantee that\n        // `self` is in bounds of `slice` so `self` cannot overflow an `isize`,\n        // so the call to `add` is safe.\n        unsafe {\n            // Use intrinsics::assume instead of hint::assert_unchecked so that we don't check the\n            // precondition of this function twice.\n            crate::intrinsics::assume(self < slice.len());\n            slice_get_unchecked(slice, self)\n        }\n    }\n\n    #[inline]\n    #[track_caller]\n    unsafe fn get_unchecked_mut(self, slice: *mut [T]) -> *mut T {\n        assert_unsafe_precondition!(\n            check_library_ub,\n            \"slice::get_unchecked_mut requires that the index is within the slice\",\n            (this: usize = self, len: usize = slice.len()) => this < len\n        );\n        // SAFETY: see comments for `get_unchecked` above.\n        unsafe { slice_get_unchecked(slice, self) }\n    }\n\n    #[inline]\n    fn index(self, slice: &[T]) -> &T {\n        // N.B., use intrinsic indexing\n        &(*slice)[self]\n    }\n\n    #[inline]\n    fn index_mut(self, slice: &mut [T]) -> &mut T {\n        // N.B., use intrinsic indexing\n        &mut (*slice)[self]\n    }\n}",
+          "token_sha256": "064b5fc6acb1d6d003ad3ea0c1835ac3bdc8e1c12be2a712c9a73c18e4f791c8",
+          "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460"
+        }
+      ],
+      "all_method_bodies_identical": true
+    },
+    {
+      "typed_impl": "SliceIndex<[T]> for ops::RangeFull",
+      "cohorts": [
+        {
+          "toolchain": "nightly-2026-06-01",
+          "text": "{\n    type Output = [T];\n\n    #[inline]\n    fn get(self, slice: &[T]) -> Option<&[T]> {\n        Some(slice)\n    }\n\n    #[inline]\n    fn get_mut(self, slice: &mut [T]) -> Option<&mut [T]> {\n        Some(slice)\n    }\n\n    #[inline]\n    unsafe fn get_unchecked(self, slice: *const [T]) -> *const [T] {\n        slice\n    }\n\n    #[inline]\n    unsafe fn get_unchecked_mut(self, slice: *mut [T]) -> *mut [T] {\n        slice\n    }\n\n    #[inline]\n    fn index(self, slice: &[T]) -> &[T] {\n        slice\n    }\n\n    #[inline]\n    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        slice\n    }\n}",
+          "token_sha256": "bdd5f2a27a46201cb737e6a3d274f6ff24b900f3dc5a72428fdbe149c5eafd53",
+          "file_sha256": "1bf3c8e2dacb8d09393c5ac7d51fd8496e4d270e583c40979c5c6364b59e2ea9"
+        },
+        {
+          "toolchain": "1.94.1",
+          "text": "{\n    type Output = [T];\n\n    #[inline]\n    fn get(self, slice: &[T]) -> Option<&[T]> {\n        Some(slice)\n    }\n\n    #[inline]\n    fn get_mut(self, slice: &mut [T]) -> Option<&mut [T]> {\n        Some(slice)\n    }\n\n    #[inline]\n    unsafe fn get_unchecked(self, slice: *const [T]) -> *const [T] {\n        slice\n    }\n\n    #[inline]\n    unsafe fn get_unchecked_mut(self, slice: *mut [T]) -> *mut [T] {\n        slice\n    }\n\n    #[inline]\n    fn index(self, slice: &[T]) -> &[T] {\n        slice\n    }\n\n    #[inline]\n    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        slice\n    }\n}",
+          "token_sha256": "bdd5f2a27a46201cb737e6a3d274f6ff24b900f3dc5a72428fdbe149c5eafd53",
+          "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460"
+        }
+      ],
+      "all_method_bodies_identical": true
+    }
+  ]
+}

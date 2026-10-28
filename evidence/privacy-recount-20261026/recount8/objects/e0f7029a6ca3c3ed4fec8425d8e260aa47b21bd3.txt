@@ -1,0 +1,100 @@
+{
+  "checks": [
+    {
+      "family": "typed RawVec<T,A>::new_in",
+      "cohort": "evidence",
+      "body": "{\n        // Check assumption made in `current_memory`\n        const { assert!(T::LAYOUT.size() % T::LAYOUT.align() == 0) };\n        Self { inner: RawVecInner::new_in(alloc, Alignment::of::<T>()), _marker: PhantomData }\n    }",
+      "source_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "proof": "R1Z.PV_RDB2C_TypedRawVec.complete; no_allocation; zst_capacity; non_zst_capacity",
+      "calls": [
+        "RawVecInner::new_in(alloc, Alignment::of::<T>())"
+      ],
+      "allocations": [],
+      "marker": "PhantomData has no runtime contents",
+      "constant_assertion": "Rust real-type layout padded to its alignment; compile-time assertion, no runtime allocation"
+    },
+    {
+      "family": "typed RawVec<T,A>::new_in",
+      "cohort": "deployed",
+      "body": "{\n        // Check assumption made in `current_memory`\n        const { assert!(T::LAYOUT.size() % T::LAYOUT.align() == 0) };\n        Self { inner: RawVecInner::new_in(alloc, Alignment::of::<T>()), _marker: PhantomData }\n    }",
+      "source_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "proof": "R1Z.PV_RDB2C_TypedRawVec.complete; no_allocation; zst_capacity; non_zst_capacity",
+      "calls": [
+        "RawVecInner::new_in(alloc, Alignment::of::<T>())"
+      ],
+      "allocations": [],
+      "marker": "PhantomData has no runtime contents",
+      "constant_assertion": "Rust real-type layout padded to its alignment; compile-time assertion, no runtime allocation"
+    },
+    {
+      "family": "Box::new",
+      "cohort": "evidence",
+      "source_sha256": "1f6e4bbdb6025d8dd92546e3171b4e98d961e966757034622113f1edd7834d92",
+      "body": "{\n        // This is `Box::new_uninit` but inlined to avoid build time regressions.\n        let ptr = box_new_uninit(<T as SizedTypeProperties>::LAYOUT) as *mut T;\n        // Nothing below can panic so we do not have to worry about deallocating `ptr`.\n        // SAFETY: we just allocated the box to store `x`.\n        unsafe { core::intrinsics::write_via_move(ptr, x) };\n        // SAFETY: we just initialized `b`.\n        unsafe { mem::transmute(ptr) }\n    }",
+      "calls": [
+        "box_new_uninit(Layout::new::<T>())",
+        "write_via_move(ptr,x)",
+        "transmute(ptr)"
+      ],
+      "intrinsic_lowering": "NOT inferred from this source body; requires pinned compiler MIR association",
+      "proof": "R1Z.PV_RDB2C_Box.complete applies only once lowering is associated"
+    },
+    {
+      "family": "Box::new",
+      "cohort": "deployed",
+      "source_sha256": "25d54ba919797977110ff0e5b4c4c4cec15c42ecfae3e37f6d8ed0c6fc13fe65",
+      "body": "{\n        return box_new(x);\n    }",
+      "calls": [
+        "box_new(x)"
+      ],
+      "intrinsic_lowering": "NOT inferred from this source body; requires pinned compiler MIR association",
+      "proof": "R1Z.PV_RDB2C_Box.complete applies only once lowering is associated"
+    },
+    {
+      "family": "frozen project source",
+      "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+      "sha256": "ab55509e54218a2bfe7dd2d5e1b14216e3303961c16c181ce2e03d40f6b7678b"
+    },
+    {
+      "family": "frozen project source",
+      "path": "crates/aspis-r1-cost-probe/src/host_weights.rs",
+      "sha256": "f34c93324e91a1055aa8a2f27c3bc672eac96517a2d6edb72ed3960832856a7d"
+    },
+    {
+      "family": "frozen project source",
+      "path": "crates/aspis-core/src/r0/heap.rs",
+      "sha256": "67153a3fb69c839160855a9b8fdb886fbd1eac90f4dc686260f23a85e346e4f9"
+    },
+    {
+      "family": "V258 allocation path",
+      "public_n": 1024,
+      "element": "WideExact",
+      "order": [
+        "powers7 (stack only)",
+        "Vec::new (no request)",
+        "try_reserve_exact(1024)",
+        "on failure return Error::Allocation before resize/iteration",
+        "resize(1024, WideExact::ZERO)",
+        "mutable iteration"
+      ],
+      "request_count": "one nonzero request; resize fits exact reserved capacity; no realloc; early allocation failure retains private allocator post-state",
+      "public_factorization": "literal 1024 * size_of::<WideExact>(), align_of::<WideExact>(); order independent of self and kappa",
+      "remaining": "complete emitted/owned materialize mutable continuation and concrete arithmetic association"
+    },
+    {
+      "family": "V259 allocation path",
+      "order": [
+        "pure fixed-array constructor arithmetic",
+        "box_from_parts",
+        "Box::new"
+      ],
+      "public_factorization": "one Layout::new::<Weights>(), independent of values; no realloc",
+      "failure": "allocation abort, not Error::Allocation; no returning initialized box on failure",
+      "remaining": "pinned compiler intrinsic lowering and complete constructor source/callback association"
+    }
+  ],
+  "toolchain": "1.94.1",
+  "configuration": "associated deployed features/profile in project-pins configuration receipt; no Rust compile in this scope",
+  "restored": [],
+  "trust": "reclassification within existing tool trust, not premise removal; runtime/allocator primitive adequacy retained by name"
+}

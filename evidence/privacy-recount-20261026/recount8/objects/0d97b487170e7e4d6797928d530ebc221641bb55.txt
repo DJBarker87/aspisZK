@@ -1,0 +1,73 @@
+{
+  "row": "V164",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/prover_shared.rs",
+      "file_sha256": "d514d8032a93216b2aac442901a5cad148a114166b5c815a79e817ba7c1333f4",
+      "complete_body": "{\n    let mut compressed = QM31::from_cm31(CM31::from_m31(tag));\n    let mut power = lambda;\n    let mut i = 0usize;\n    while i < values.len() {\n        compressed = compressed.add(power.mul_m31(values[i]));\n        power = power.mul(lambda);\n        i = i.wrapping_add(1);\n    }\n    compressed\n}",
+      "owned_body": "{\n    let mut out = QM31::from_cm31(CM31::from_m31(tag));\n    let mut power = lambda;\n    let mut i = 0usize;\n    while i < values.len() {\n        out = out.add(power.mul_m31(values[i]));\n        power = power.mul(lambda);\n        i = i.wrapping_add(1);\n    }\n    out\n}",
+      "owned_sha256": "dfa4d2c654fcd09ed2a6c4595d34c226c7541b716090957d7be7914fd080b14e",
+      "body_binding": "alpha rename compressed->out only; same types, helper calls/order, constants, bounds and wrapping increment",
+      "law": "PV_RDB1_V164.complete"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "tokens_equal": true,
+      "law": "Pointer.cast_complete; offset_cast; offset_bounds; no_wrap"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn from_ref(",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.from_ref_complete; no write or allocation"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn without_provenance(",
+      "complete_body": "{\n        let pointer = crate::ptr::without_provenance(addr.get());\n        \n        unsafe { NonNull { pointer } }\n    }",
+      "selected_release_body": "{\n        let pointer = crate::ptr::without_provenance(addr.get());\n        \n        unsafe { NonNull { pointer } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.without_provenance_complete; no integer exposure of a live reference"
+    },
+    {
+      "file": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "binding": "same deployed QM31/CM31/M31/ct implementations and features for source and owned reference; exact project-all-source-match proof retained"
+    },
+    {
+      "file": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field/ct.rs",
+      "file_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "binding": "same deployed QM31/CM31/M31/ct implementations and features for source and owned reference; exact project-all-source-match proof retained"
+    }
+  ],
+  "laws": [
+    "PV_RDB1_V164.complete",
+    "PV_RDB1_V164.index_bounds",
+    "PV_RDB1_V164.pointer_read_complete",
+    "PV_RDB1_Pointer.cast_complete",
+    "PV_RDB1_PointerConstruct.from_ref_complete",
+    "PV_RDB1_PointerConstruct.without_provenance_complete"
+  ],
+  "complete_Result": "Both loops bind the same scale,add,mul helpers in the same order, at the same indices. The parametric loop proof preserves every Result variant and divergence; it is not a successful-output-only equation.",
+  "effects": "Read-only values slice; local accumulator/power/index updated, no allocator/destructor/user callback or input mutation. Existing compiler/binary and side-channel obligations remain.",
+  "original_consumption": "PV_Op223_Source.op223_p6 and P_source_p6; PV_Op223_V164.refinement retained unchanged including P_proof_bytes/reservation",
+  "conservative_edges": "Valid index bound excludes panic-formatting envelope; all changed pointer constructors checked explicitly. Intrinsic loads/offsets retain original valid-slice carrier interpretation. No unresolved edge promoted to native helper adequacy.",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "native_validation": "project-leaves/receipt.json:768 compressor pairs, reused unchanged; finite only",
+  "new_trust_items": [],
+  "kani_credit": false
+}

@@ -1,0 +1,82 @@
+{
+  "row": "V181",
+  "status": "FINDING",
+  "checks": [
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/string.rs",
+      "file_sha256": "4436d55804bbac0c1691a251042ff82e30b5eab0d4d0bebc20b016b60a0c07a7",
+      "anchor": "pub fn with_capacity(",
+      "complete_body": "{\n        String { vec: Vec::with_capacity(capacity) }\n    }",
+      "selected_release_body": "{\n        String { vec: Vec::with_capacity(capacity) }\n    }",
+      "tokens_equal": true,
+      "law": "V181.complete; V181Finding.overflow_world"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub const fn with_capacity(",
+      "complete_body": "{\n        Self::with_capacity_in(capacity, Global)\n    }",
+      "selected_release_body": "{\n        Self::with_capacity_in(capacity, Global)\n    }",
+      "tokens_equal": true,
+      "law": "Global selected"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub fn with_capacity_in(",
+      "complete_body": "{\n        Vec { buf: RawVec::with_capacity_in(capacity, alloc), len: 0 }\n    }",
+      "selected_release_body": "{\n        Vec { buf: RawVec::with_capacity_in(capacity, alloc), len: 0 }\n    }",
+      "tokens_equal": true,
+      "law": "V181.empty_value; capacity representation retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) fn with_capacity_in(",
+      "complete_body": "{\n        Self {\n            inner: RawVecInner::with_capacity_in(capacity, alloc, T::LAYOUT),\n            _marker: PhantomData,\n        }\n    }",
+      "selected_release_body": "{\n        Self {\n            inner: RawVecInner::with_capacity_in(capacity, alloc, T::LAYOUT),\n            _marker: PhantomData,\n        }\n    }",
+      "tokens_equal": true,
+      "law": "u8 layout size1 align1"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "complete_body": "{\n        match Self::try_allocate_in(capacity, AllocInit::Uninitialized, alloc, elem_layout) {\n            Ok(this) => {\n                unsafe {\n                    \n                    hint::assert_unchecked(!this.needs_to_grow(0, capacity, elem_layout));\n                }\n                this\n            }\n            Err(err) => handle_error(err),\n        }\n    }",
+      "law": "V181.complete; same handler and allocator error/private world retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn try_allocate_in(",
+      "complete_body": "{\n        \n        \n        let layout = match layout_array(capacity, elem_layout) {\n            Ok(layout) => layout,\n            Err(_) => return Err(CapacityOverflow.into()),\n        };\n\n        \n        if layout.size() == 0 {\n            return Ok(Self::new_in(alloc, elem_layout.alignment()));\n        }\n\n        let result = match init {\n            AllocInit::Uninitialized => alloc.allocate(layout),\n            #[cfg(not(no_global_oom_handling))]\n            AllocInit::Zeroed => alloc.allocate_zeroed(layout),\n        };\n        let ptr = match result {\n            Ok(ptr) => ptr,\n            Err(_) => return Err(AllocError { layout, non_exhaustive: () }.into()),\n        };\n\n        \n        \n        \n        Ok(Self {\n            ptr: Unique::from(ptr.cast()),\n            cap: unsafe { Cap::new_unchecked(capacity) },\n            alloc,\n        })\n    }",
+      "selected_release_body": "{\n        \n        \n        let layout = match layout_array(capacity, elem_layout) {\n            Ok(layout) => layout,\n            Err(_) => return Err(CapacityOverflow.into()),\n        };\n\n        \n        if layout.size() == 0 {\n            return Ok(Self::new_in(alloc, elem_layout.alignment()));\n        }\n\n        let result = match init {\n            AllocInit::Uninitialized => alloc.allocate(layout),\n            #[cfg(not(no_global_oom_handling))]\n            AllocInit::Zeroed => alloc.allocate_zeroed(layout),\n        };\n        let ptr = match result {\n            Ok(ptr) => ptr,\n            Err(_) => return Err(AllocError { layout, non_exhaustive: () }.into()),\n        };\n\n        \n        \n        \n        Ok(Self {\n            ptr: Unique::from(ptr.cast()),\n            cap: unsafe { Cap::new_unchecked(capacity) },\n            alloc,\n        })\n    }",
+      "tokens_equal": true,
+      "law": "V181.complete; zero_world; V183 layout/pointer/allocator effects"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn handle_error(",
+      "complete_body": "{\n    match e.kind() {\n        CapacityOverflow => capacity_overflow(),\n        AllocError { layout, .. } => handle_alloc_error(layout),\n    }\n}",
+      "selected_release_body": "{\n    match e.kind() {\n        CapacityOverflow => capacity_overflow(),\n        AllocError { layout, .. } => handle_alloc_error(layout),\n    }\n}",
+      "tokens_equal": true,
+      "law": "overflow panics; OOM abort retained, never mapped to ok"
+    }
+  ],
+  "old_reference": "{ String::new() }",
+  "repaired_reference": "{\n    let mut value = String::new();\n    value.reserve_exact(n);\n    value\n}",
+  "repaired_law": "PV_RDB1_V181.complete/with_handlers",
+  "obstruction": "Old reference always returns empty; deployed n=isize::MAX+1 panics before allocation. No unconditional native complete-Result association to old reference. Returning empty-value and historical bounded/source-image claims not refuted.",
+  "lean": [
+    "54734-receipt.json",
+    "54736-receipt.json"
+  ],
+  "inherited_deployed_laws": "v183-deployed-binding.json: every file hash revalidated",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "toolchain": "1.94.1",
+  "profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "new_trust_items": []
+}

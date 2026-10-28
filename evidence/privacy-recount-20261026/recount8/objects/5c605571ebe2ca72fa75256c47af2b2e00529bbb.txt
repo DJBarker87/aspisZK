@@ -1,0 +1,5 @@
+import R1Z.PV_RunJoin_NullifierControl17
+#print R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0
+#check R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0.eq_1
+#check R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0.eq_def
+#print R1Z.BuilderForestAdmissionPort.poseidon2.hash_fields_with_trace_loop0_loop0
