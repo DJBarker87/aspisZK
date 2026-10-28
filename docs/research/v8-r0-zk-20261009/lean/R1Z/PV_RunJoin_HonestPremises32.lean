@@ -46,10 +46,15 @@ theorem target_eq (i : Honest (K := K)) :
 
 theorem identification : BuilderSource.SourceIdentification
     (source_honest (K := K)) target := by
-  have h := PV_Src_NativeIdentification.identification (premises (K := K))
-  have ht : PV_Src_NativeIdentification.toInstance (premises (K := K)) = target :=
-    funext target_eq
-  rw [ht] at h
-  exact h
+  refine ⟨?_,?_,?_⟩
+  · intro i
+    exact (PV_Src_NativeIdentification.public_eq premises i).trans
+      (congrArg (fun w : BuilderCanonical.Instance (K := K) => BuilderSource.prover.public w)
+        (target_eq i))
+  · intro i
+    exact (PV_Src_NativeIdentification.build_eq premises i).trans
+      (congrArg (fun w : BuilderCanonical.Instance (K := K) => BuilderSource.prover.build w)
+        (target_eq i))
+  · exact PV_Src_NativeIdentification.transport_eq premises
 #print axioms identification
 end R1Z.PV_RunJoin_HonestPremises32
