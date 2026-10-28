@@ -20,3 +20,9 @@ Own transport wrapper was tightened to serialize all SSH, including read-only sn
 Allocator Result<Vec<[u64;4]>,Error>: K038/K039 contract/inverted ensures PASS/FAIL; K040/K041 weak/real PASS; K042 verified weak substitution COMPILE FAILURE (exact Result<Vec<...>,Error> lacks Arbitrary); K043 modifies violation FAILS. K044/K045 and the downstream allocator contract queue are not admitted. No synthetic carrier or unsafe Vec construction is substituted. Full allocation/view/ownership remains open.
 
 K046 failed compilation before the intended Result control: the unselected actual-decoder caller annotations already required a contract on M31::from_le_bytes. Own input repair installs the cfg(kani)-only contract before compiling the module, with the frozen decoder body unchanged. K046 gets no semantic credit. Later attempts use fresh IDs and snapshot exact direct/inverted annotations.
+
+Repaired Result<u32,Error> controls K047/K048/K049 all FAIL as required (inverted ensures, modifies, unimplied stub caller); direct/weak contracts and real body were already green. The exhaustive Error generator is now present. No underlying Result body or carrier changed.
+
+K050–K053 row getter and K054–K057 power getter: callee contracts PASS, inverted-ensures controls FAIL, verified wrapper caller PASS, caller false assertion FAIL. These check forwarding wrappers around the real native getters. They do not install a verified replacement inside the full native update_residue_row loop and do not discharge the Vec frame.
+
+K058 actual M31::from_le_bytes contract PASS; K059 same actual function/harness with inverted contract FAILS. Only the Kani contract annotation changes in the core scratch source; the frozen function body is unchanged. K060 native full608-byte base decoder window under stub_verified PASS with both slot3/term25 and rejection covers. Its matched K061 control remains to be audited. The Option<M31> fidelity controls were run first.
