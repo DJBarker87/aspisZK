@@ -29,21 +29,52 @@ theorem note3 (s : Array U32 8#usize) (hs : Canon8 s) : Canon8 (noteC3R s) := by
 theorem chunks (w : RustWitness) (p : RustPublic)
     (hw : R1Z.BuilderRecordCanonical.CanonicalWords w) (ha : p.asset.val < 2147483647)
     (h : Nat) : Canon8 ((chunksOf w p).schunk h) := by
-  unfold chunksOf
-  dsimp only
-  split_ifs
-  · exact hw.sk
-  · exact PV_L2C_ComputedDigestRange.fallback _ (PV_L2C_ComputedDigestRange.owner w)
-  · exact note2 _ _ _ (by have := hw.shape.values.1;omega) ha hw.salt
-  · exact note3 _ hw.salt
-  · exact hw.salt
-  · exact hw.recipientOwner
-  · exact note2 _ _ _ (by have := hw.shape.values.2.1;omega) ha hw.recipientSalt
-  · exact note3 _ hw.recipientSalt
-  · exact hw.changeOwner
-  · exact note2 _ _ _ (by have := hw.shape.values.2.2;omega) ha hw.changeSalt
-  · exact note3 _ hw.changeSalt
-  · exact zero8_canon
+  change Canon8 (if h = 0 ∨ h = 25 then w.sk else if h = 1 then okOr (ownerD w) zero8 else if h = 2 then noteC2R w.inputValue p.asset w.salt else if h = 3 then noteC3R w.salt else if h = 26 then w.salt else if h = 27 then w.recipientOwner else if h = 28 then noteC2R w.outputValue p.asset w.recipientSalt else if h = 29 then noteC3R w.recipientSalt else if h = 30 then w.changeOwner else if h = 31 then noteC2R w.changeValue p.asset w.changeSalt else if h = 32 then noteC3R w.changeSalt else zero8)
+  by_cases h0 : h = 0 ∨ h = 25
+  · rw [if_pos h0]
+    exact hw.sk
+  rw [if_neg h0]
+  by_cases h1 : h = 1
+  · rw [if_pos h1]
+    exact PV_L2C_ComputedDigestRange.fallback _ (PV_L2C_ComputedDigestRange.owner w)
+  rw [if_neg h1]
+  by_cases h2 : h = 2
+  · rw [if_pos h2]
+    exact note2 _ _ _ (by have := hw.shape.values.1;omega) ha hw.salt
+  rw [if_neg h2]
+  by_cases h3 : h = 3
+  · rw [if_pos h3]
+    exact note3 _ hw.salt
+  rw [if_neg h3]
+  by_cases h4 : h = 26
+  · rw [if_pos h4]
+    exact hw.salt
+  rw [if_neg h4]
+  by_cases h5 : h = 27
+  · rw [if_pos h5]
+    exact hw.recipientOwner
+  rw [if_neg h5]
+  by_cases h6 : h = 28
+  · rw [if_pos h6]
+    exact note2 _ _ _ (by have := hw.shape.values.2.1;omega) ha hw.recipientSalt
+  rw [if_neg h6]
+  by_cases h7 : h = 29
+  · rw [if_pos h7]
+    exact note3 _ hw.recipientSalt
+  rw [if_neg h7]
+  by_cases h8 : h = 30
+  · rw [if_pos h8]
+    exact hw.changeOwner
+  rw [if_neg h8]
+  by_cases h9 : h = 31
+  · rw [if_pos h9]
+    exact note2 _ _ _ (by have := hw.shape.values.2.2;omega) ha hw.changeSalt
+  rw [if_neg h9]
+  by_cases h10 : h = 32
+  · rw [if_pos h10]
+    exact note3 _ hw.changeSalt
+  rw [if_neg h10]
+  exact zero8_canon
 #print axioms chunks
 
 theorem ordered (a b : Array U32 8#usize) (bit : Bool) (ha : Canon8 a) (hb : Canon8 b) :
