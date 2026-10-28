@@ -37,9 +37,11 @@ theorem expand_inner_total {N : Usize}
     simp only [j,k,k1] at hparent hw1 hw2
     refine ⟨.cont (w2,j),?_,?_,?_⟩
     · simp only [reference_copy_terminal.Selectors.expand_loop0_loop0.body,hb,
-        ↓reduceIte,lift,bind_tc_ok,hparent,hright,hleft,hw1,hw2]
-    · omega
-    · omega
+        ↓reduceIte,lift,bind_tc_ok,hparent,hright,hleft,hw1,hw2,j,k,k1]
+    · change 2*j.val ≤ N.val
+      omega
+    · change j.val < i.val
+      omega
   · have hb : ¬ i > 0#usize := by scalar_tac
     refine ⟨.done w,?_,True.intro⟩
     simp only [reference_copy_terminal.Selectors.expand_loop0_loop0.body,hb,↓reduceIte]

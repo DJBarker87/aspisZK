@@ -80,5 +80,7 @@ emit('PV_B3P_EqualitySuccess227','PV_B3P_P227_12',[
  'reference_terminal.equality_factor','reference_terminal.equality_value'],['PV_B3P_P227_12'])
 emit('PV_B3P_AccumulateSuccess227','PV_B3P_P227_00',['reference_field.accumulate_prepared227'],['PV_B3P_P227_00'])
 emit('PV_B3P_DotSuccess227','PV_B3P_P227_01',['reference_field.qm31_sum_products3_prepared','reference_field.qm31_m31_dot'],['PV_B3P_P227_01','PV_B3P_RefFieldSuccess227','PV_B3P_AccumulateSuccess227'])
+emit('PV_B3P_PoseidonBaseSuccess227','PV_B3P_P227_02',[
+ 'reference_poseidon.pow5','reference_poseidon.extension_limbs','reference_poseidon.extension_from_raw_limbs','reference_poseidon.add_global227','reference_poseidon.global_sums227'],['PV_B3P_P227_02'])
 if '--check'not in sys.argv:(D/'resume6/success-generator.json').write_text(json.dumps(records,indent=2)+'\n')
 print(json.dumps(dict(theorems=len(records),check='--check'in sys.argv)))

@@ -24,9 +24,11 @@ theorem reverse1_total (semantic : Array aspis_core.field.QM31 24#usize)
     obtain ⟨next,hnext⟩ := qadd mulval readval
     refine ⟨.cont (next,j),?_,?_,?_⟩
     · simp only [reference_terminal.composition_parts_loop1.body,hb,↓reduceIte,lift,bind_tc_ok,hmul,
-        reference_terminal.read227,hread,hnext]
-    · omega
-    · omega
+        reference_terminal.read227,hread,hnext,j]
+    · change j.val ≤ 24
+      omega
+    · change j.val < i.val
+      omega
   · have hb : ¬ i > 0#usize := by scalar_tac
     refine ⟨.done acc,?_,True.intro⟩
     simp only [reference_terminal.composition_parts_loop1.body,hb,↓reduceIte]
@@ -52,9 +54,11 @@ theorem reverse2_total (poseidon : Array aspis_core.field.QM31 4#usize)
     obtain ⟨next,hnext⟩ := qadd mulval readval
     refine ⟨.cont (next,j),?_,?_,?_⟩
     · simp only [reference_terminal.composition_parts_loop2.body,hb,↓reduceIte,lift,bind_tc_ok,hmul,
-        reference_terminal.read227,hread,hnext]
-    · omega
-    · omega
+        reference_terminal.read227,hread,hnext,j]
+    · change j.val ≤ 4
+      omega
+    · change j.val < i.val
+      omega
   · have hb : ¬ i > 0#usize := by scalar_tac
     refine ⟨.done acc,?_,True.intro⟩
     simp only [reference_terminal.composition_parts_loop2.body,hb,↓reduceIte]
