@@ -1,0 +1,61 @@
+{
+  "attempt": "NBV_K002",
+  "kind": "kani",
+  "sources": [
+    "NBV_src/Cargo.lock",
+    "NBV_gate.py",
+    "NBV_src/KMX_stubs.rs",
+    "NBV_KMX_copy_stubs.patch",
+    "NBV_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NBV_src/crates/aspis-r1-cost-probe/src/NBV_multiproof.rs",
+    "NBV_src/crates/aspis-r1-cost-probe/src/multiproof.rs"
+  ],
+  "command": [
+    "python3",
+    "NBV_gate.py",
+    "NBV_K002",
+    "multiproof::NBV_multiproof::NBV_count_copy_wrong",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 240,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx1e-20261028/NBV_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "NBV_K002-graph.json"
+  },
+  "expected_time": "optimized compilation then one native helper/atomic-step SAT gate, no SHA or multiplication",
+  "reservation_retries": 0,
+  "source_revision": "1672ab0c0a8a445bb8481c4c94bc44118f68108a",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 6.154984842054546,
+  "peak_rss_kib": "333712",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rbb40f1fb280142af8c76d4fb04dd566e.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "310652928",
+  "source_hashes": {
+    "NBV_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBV_gate.py": "7c53567517485d07202df3eed495ca4aef79c46f1c521cb71a5dbc51b11e10cd",
+    "NBV_src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "NBV_KMX_copy_stubs.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NBV_src/crates/aspis-r1-cost-probe/src/lib.rs": "45cce6cb4f913f1aaff5554160798b4fe970ecc944aff526b99d7b2f1756c10b",
+    "NBV_src/crates/aspis-r1-cost-probe/src/NBV_multiproof.rs": "c852816e73697def656e14cc2c6459283f3838498274878c1537f1a8aa5a32d5",
+    "NBV_src/crates/aspis-r1-cost-probe/src/multiproof.rs": "ddffab49dd7632ae2014d014dcef881b5c5bf12e26aefd5aa17a0a67421f27ac"
+  },
+  "print_axioms": "N/A: kani"
+}

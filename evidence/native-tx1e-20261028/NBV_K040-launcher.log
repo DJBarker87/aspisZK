@@ -1,0 +1,31 @@
+{"attempt": "NBV_K040", "exit_status": 0, "wall_seconds": 10.97421542700613, "peak_rss_kib": "358704", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "09e690ba814c3a96ca5af074a1c9d4ce8719d2d945a0a939c8d2930a9ddbaa6b", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-tx1e-20261028/NBV_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-native-tx1e-20261028/NBV_target", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--exact", "--harness", "verifier::candidate:
+...
+Check 188: core::slice::IterMut::<'_, ()>::post_inc_start.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:108:33 in function core::slice::IterMut::<'_, ()>::post_inc_start
+
+Check 189: core::slice::IterMut::<'_, ()>::post_inc_start.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:108:33 in function core::slice::IterMut::<'_, ()>::post_inc_start
+
+Check 190: core::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer.1
+	 - Status: SUCCESS
+	 - Description: "same object violation in this >= origin"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:712:21 in function core::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime
+
+
+SUMMARY:
+ ** 0 of 190 failed (8 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 3.009699s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "09e690ba814c3a96ca5af074a1c9d4ce8719d2d945a0a939c8d2930a9ddbaa6b", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 0}
+
+Running as unit: run-rce05b1101718436a9093d376a0a6dd07.scope; invocation ID: 97bffc48cea44c5b907c53244f271251
