@@ -13489,3 +13489,24 @@ endpoint only), enriches the world with the process-local state destructors and 
 (or cites fxmem2's proof that the reached destructors are trivial or pure), proves the threading
 theorem over the extracted control flow, keeps the OS facts as owner findings, and closes the effect
 rows that rest only on that. Rows removed outright: 0. Privacy target not yet established.
+
+## D365 (Stream B) 2026-10-28 10:45 UTC: stubbed Kani re-verification of the five K-1 rows: three confirmed, two unconfirmed by timeout, no disagreement
+
+pv-kstub (recovered after its disk-full death; reconciled against host receipts without rerunning a
+completed harness) re-ran the copy-exposed harnesses behind V178, V179, V182, V195 and V233 with
+exactly Stream A's KMX_copy_stubs.patch (sha256 bcdf749b…) and the validated stub module
+KMX_stubs.rs (sha256 ad8efb63…, as recorded in Stream A's KMX_LEDGER.json; Stream A's later KMZ_
+tree records its placed stub file as c282a127…). Every positive run has a matched negative control,
+and every control FAILED as required:
+- V179: string_ascii8, string_scalar, string_path PASS -> stubbed Kani confirmed.
+- V195: wide_flat, all_carriers PASS -> confirmed.
+- V233: split64_coordinate_lo and _hi PASS -> confirmed.
+- V178: path_join8, join_one_byte, join_two, join_slices_two TIMEOUT (900 s) -> unconfirmed.
+- V182: push_ascii1 and string_push PASS, push_bytes TIMEOUT -> unconfirmed. Its append harness used
+  one actual append at symbolic prefix length n <= 2 and tail length m <= 1 (Stream A's KMZ_ note);
+  the original domain is recovered at n = 2, m = 1.
+No stubbed result disagrees with pv-relink's structural links or with the native differentials. A
+timeout gives no credit, so V178 and V182 keep only their structural (K-1 substitute) links; V179,
+V195 and V233 now have both a structural link and a confirmed stubbed Kani link. Final focused audit
+44710 passes with standard axioms. Merged into the prover candidate (71b2f97c53, pushed); worktree
+and branch removed. Rows removed outright: 0. Privacy target not yet established.
