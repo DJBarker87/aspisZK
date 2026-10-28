@@ -11,7 +11,8 @@ p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
 imports=re.findall(r'^import (\S+)',p.read_text(),re.M)
 carrier = imports != ['Init']
 if carrier:
- pre=json.loads((E/'CARRIER-PREFLIGHT.json').read_text());assert pre['ok']
+ carrier_path=E/('CARRIER-FUNS-PREFLIGHT.json' if 'R1Z.ProverRwFullFuns' in imports else 'CARRIER-PREFLIGHT.json')
+ pre=json.loads(carrier_path.read_text());assert pre['ok']
 H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads';D=B+'/codex-pv-fxmem-20261028'
 G=B+'/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 def prelaunch(args):
@@ -24,10 +25,12 @@ def prelaunch(args):
 
 sha=hashlib.sha256(p.read_bytes()).hexdigest();dep=pre if carrier else next(x for x in pre['external'] if x['module']=='Init')
 if carrier:
- dep={'carrier_preflight_sha256':hashlib.sha256((E/'CARRIER-PREFLIGHT.json').read_bytes()).hexdigest(),'project':pre['project'],'owned_drop':json.loads((E/'35503-submission.json').read_text())}
+ dep={'carrier_preflight_sha256':hashlib.sha256(carrier_path.read_bytes()).hexdigest(),'project':pre['project'],'owned_drop':json.loads((E/'35503-submission.json').read_text())}
  for owned in imports:
   if owned=='R1Z.PV_FXM_ZeroWorld':
    dep['owned_zero']=json.loads((E/'35508-submission.json').read_text())
+  if owned=='R1Z.PV_FXM_ZeroSelected':
+   dep['owned_zero_selected']=json.loads((E/'35510-submission.json').read_text())
 fp=hashlib.sha256(json.dumps(dep,sort_keys=True).encode()).hexdigest()
 meta=dict(id=n,module=m,source_sha256=sha,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],cwd=R,text=True).strip(),dependencies=dep,deps_fingerprint=fp)
 (E/f'{n}-submission.json').write_text(json.dumps(meta,indent=2)+'\n')
