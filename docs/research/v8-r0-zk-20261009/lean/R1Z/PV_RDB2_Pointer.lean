@@ -40,7 +40,7 @@ def pointer (c : Cursor) : Pointer := ⟨c.allocation,c.base+4*c.position⟩
 def endPointer (c : Cursor) : Pointer := ⟨c.allocation,c.base+4*c.values.val.length⟩
 def valid (c : Cursor) : Prop :=
   0 < c.base ∧ c.position ≤ c.values.val.length ∧
-  c.base+4*c.values.val.length < 2^64
+  c.base+4*c.values.val.length < 2^64 ∧ 4*c.values.val.length < 2^63
 
 def advance (c : Cursor) : Cursor := {c with position := c.position+1}
 def abstract (c : Cursor) : core.slice.iter.Iter U32 := ⟨c.values,c.position⟩
@@ -65,15 +65,15 @@ theorem advance_address (c : Cursor) :
 
 theorem advance_valid (c : Cursor) (hv : valid c)
     (h : c.position < c.values.val.length) : valid (advance c) := by
-  rcases hv with ⟨hb,hp,he⟩
-  exact ⟨hb,by simp only [advance]; omega,he⟩
+  rcases hv with ⟨hb,hp,he,hs⟩
+  exact ⟨hb,by simp only [advance]; omega,he,hs⟩
 
 theorem read_bounds (c : Cursor) (hv : valid c)
     (h : c.position < c.values.val.length) :
     0 < (pointer c).address ∧
     (pointer c).address+4 ≤ (endPointer c).address ∧
     (pointer c).address+4 < 2^64 := by
-  rcases hv with ⟨hb,hp,he⟩
+  rcases hv with ⟨hb,hp,he,hs⟩
   simp only [pointer,endPointer]
   omega
 
@@ -81,16 +81,17 @@ theorem read_bounds (c : Cursor) (hv : valid c)
 theorem next_complete (c : Cursor) (hv : valid c) :
     (do let (value,c') ← next c; ok (value,abstract c')) =
       core.slice.iter.IteratorSliceIter.next (abstract c) := by
-  rcases hv with ⟨hb,hp,he⟩
+  rcases hv with ⟨hb,hp,he,hs⟩
   by_cases h : c.position < c.values.val.length
   · have hn : pointer c ≠ endPointer c := by
       intro eq; have := (pointer_eq_end c).mp eq; omega
     simp only [next,hn,↓reduceIte,h,abstract,advance,bind_tc_ok,
       core.slice.iter.IteratorSliceIter.next]
-    simp only [h,↓reduceDIte]
+    simp only [Slice.len_val,Slice.length,h,↓reduceDIte,Slice.getElem_Nat_eq]
+    rfl
   · have eq : pointer c = endPointer c := (pointer_eq_end c).mpr (by omega)
     simp only [next,eq,↓reduceIte,abstract,bind_tc_ok,
-      core.slice.iter.IteratorSliceIter.next,h,↓reduceDIte]
+      core.slice.iter.IteratorSliceIter.next,Slice.len_val,Slice.length,h,↓reduceDIte]
 
 /-- A shared next never changes the backing slice, including exhaustion. -/
 theorem next_storage (c : Cursor) (hv : valid c) :

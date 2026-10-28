@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Pointer.lean:86:2: error: unsolved goals
+case pos
+c : Cursor
+hb : 0 < c.base
+hp : c.position ≤ (↑c.values).length
+he : c.base + 4 * (↑c.values).length < 2 ^ 64
+h : c.position < (↑c.values).length
+hn : pointer c ≠ endPointer c
+⊢ (do
+      let __x ←
+        ok
+            (some (↑c.values)[c.position],
+              { allocation := c.allocation, base := c.base, position := c.position + 1, values := c.values })
+      ok (__x.1, { slice := __x.2.values, i := __x.2.position })) =
+    if h : c.position < ↑c.values.len then ok (some c.values[c.position], { slice := c.values, i := c.position + 1 })
+    else ok (none, { slice := c.values, i := c.position })
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Pointer.lean:91:2: error: unsolved goals
+case neg
+c : Cursor
+hb : 0 < c.base
+hp : c.position ≤ (↑c.values).length
+he : c.base + 4 * (↑c.values).length < 2 ^ 64
+h : ¬c.position < (↑c.values).length
+eq : pointer c = endPointer c
+⊢ ok (none, { slice := c.values, i := c.position }) =
+    if h : c.position < ↑c.values.len then ok (some c.values[c.position], { slice := c.values, i := c.position + 1 })
+    else ok (none, { slice := c.values, i := c.position })
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Pointer.lean:88:53: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵h̵n̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵h̵,̵a̵b̵s̵t̵r̵a̵c̵t̵,̵a̵d̵v̵a̵n̵c̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲n̲e̲x̲t̲,̲ ̲h̲n̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲h̲,̲ ̲a̲b̲s̲t̲r̲a̲c̲t̲,̲ ̲a̲d̲v̲a̲n̲c̲e̲,̲ core.slice.iter.IteratorSliceIter.next]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Pointer.lean:90:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵↓reduceDIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Pointer.lean:93:45: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵n̵e̵x̵t̵,̵e̵q̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵a̵b̵s̵t̵r̵a̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵.̵n̵e̵x̵t̵,̵h̵,̵↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲n̲e̲x̲t̲,̲ ̲e̲q̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲a̲b̲s̲t̲r̲a̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲S̲l̲i̲c̲e̲I̲t̲e̲r̲.̲n̲e̲x̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲D̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Pointer.lean:93:47: warning: This simp argument is unused:
+  ↓reduceDIte
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵n̵e̵x̵t̵,̵e̵q̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵a̵b̵s̵t̵r̵a̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵.̵n̵e̵x̵t̵,̵h̵,̵↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲n̲e̲x̲t̲,̲ ̲e̲q̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲a̲b̲s̲t̲r̲a̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲S̲l̲i̲c̲e̲I̲t̲e̲r̲.̲n̲e̲x̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Pointer.lean:103:6: error: unsolved goals
+c : Cursor
+hv : valid c
+h : c.position < (↑c.values).length
+hn : pointer c ≠ endPointer c
+⊢ (if h_1 : True then ok (some (↑c.values)[c.position], advance c) else fail Error.undef) =
+    ok (some (↑c.values)[c.position], advance c)
+'R1Z.PV_RDB2_Pointer.cast_complete' does not depend on any axioms
+'R1Z.PV_RDB2_Pointer.pack_projection' does not depend on any axioms
+'R1Z.PV_RDB2_Pointer.pointer_eq_end' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2_Pointer.advance_address' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDB2_Pointer.advance_valid' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDB2_Pointer.read_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2_Pointer.next_complete' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_RDB2_Pointer.next_storage' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-41103/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-41103/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-objects/R1Z/PV_RDB2_Pointer.olean", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Pointer.lean", "7000"], "exit": 1, "wall": "0:01.32", "peak_rss_kib": "2585116", "swap": "0", "source_revision": "99109903a413431b26f8127ba4c7a1eef727effe", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}
