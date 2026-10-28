@@ -9,3 +9,7 @@ NCG_K001: full-carrier eight-call pilot TIMEOUT (90 s harness limit; total113.03
 NCG_L001: NCG_CallLog compiled, exit0,2.355 s,4435980 KiB,swap0. Both substitute/base_substitution print [propext,Classical.choice,Quot.sound]. These are explicit semantic-substitution templates, not native execution existence.
 
 Next split: native one source coordinate update after decoder/coefficient read; those reads retain NBZ's paired native gates. Arbitrary eight-word pre-state and arbitrary coordinate remain. Native call-site composition is still required.
+
+## Post-read split
+
+NCG_K002 single-coordinate PASS; K003 deliberately false output routing FAILS. K004 eight-coordinate PASS (20.751s,637736KiB,swap0). The source prestate is arbitrary within inherited phase bounds; scalar/coefficient inputs are canonical; there is no constraint at all on the logged U64 replies. This is the local add-product fragment after decoder/read, not the full-carrier read/update association. The native decoder/read cuts and their existing matched controls are imported from NBZ. Full installation stays open.
