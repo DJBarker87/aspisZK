@@ -1,0 +1,50 @@
+--- a/crates/aspis-statement/src/pool_v1/verifier_registry.rs
++++ b/crates/aspis-statement/src/pool_v1/verifier_registry.rs
+@@ -88,10 +88,14 @@
+ }
+ 
+ impl VerifierRegistryV1 {
++    #[cfg_attr(kani, kani::requires(true))]
++    #[cfg_attr(kani, kani::ensures(|result: &bool| *result == (self.flags & 1 != 0)))]
+     pub fn is_paused(&self) -> bool {
+         self.flags & POOL_V1_VERIFIER_REGISTRY_FLAG_PAUSED != 0
+     }
+ 
++    #[cfg_attr(kani, kani::requires(true))]
++    #[cfg_attr(kani, kani::ensures(|result: &bool| *result == (self.flags & 2 != 0)))]
+     pub fn is_immutable(&self) -> bool {
+         self.flags & POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE != 0
+     }
+@@ -144,10 +148,14 @@
+ }
+ 
+ impl VerifierRegistryV2 {
++    #[cfg_attr(kani, kani::requires(true))]
++    #[cfg_attr(kani, kani::ensures(|result: &bool| *result == (self.flags & 1 != 0)))]
+     pub fn is_paused(&self) -> bool {
+         self.flags & POOL_V1_VERIFIER_REGISTRY_FLAG_PAUSED != 0
+     }
+ 
++    #[cfg_attr(kani, kani::requires(true))]
++    #[cfg_attr(kani, kani::ensures(|result: &bool| *result == (self.flags & 2 != 0)))]
+     pub fn is_immutable(&self) -> bool {
+         self.flags & POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE != 0
+     }
+@@ -188,6 +196,8 @@
+         self.retirement_slot == POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT
+     }
+ 
++    #[cfg_attr(kani, kani::requires(true))]
++    #[cfg_attr(kani, kani::ensures(|result: &bool| *result == (self.status == VerifierEntryStatusV1::Active && self.activation_slot <= slot && (self.retirement_slot == u64::MAX || slot < self.retirement_slot))))]
+     pub fn is_active_at(&self, slot: u64) -> bool {
+         self.status == VerifierEntryStatusV1::Active
+             && self.activation_slot <= slot
+@@ -210,6 +220,8 @@
+     }
+ 
+     /// The exact active-interval predicate used by Pool V1 authorization.
++    #[cfg_attr(kani, kani::requires(true))]
++    #[cfg_attr(kani, kani::ensures(|result: &bool| *result == (self.status == VerifierEntryStatusV1::Active && self.activation_slot <= slot && (self.retirement_slot == u64::MAX || slot < self.retirement_slot))))]
+     pub fn is_active_at(&self, slot: u64) -> bool {
+         self.status == VerifierEntryStatusV1::Active
+             && self.activation_slot <= slot
