@@ -101,7 +101,7 @@ def sequence {S X E : Type} : List (Action S X E Unit) → Action S X E Unit
 def dropPod {S X E : Type} : Action S X E Unit := lift (.ok ())
 def dropVecPod {S X E : Type}
  (dealloc : Nat → Request → S → Outcome E Unit × S) (t : Token) (c : Cell) : Action S X E Unit :=
- free dealloc t c
+ if c.size=0 then dropPod else free dealloc t c
 
 def dropString {S X E : Type}
  (dealloc : Nat → Request → S → Outcome E Unit × S) (t : Token) (c : Cell) : Action S X E Unit :=

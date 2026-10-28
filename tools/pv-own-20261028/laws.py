@@ -10,13 +10,13 @@ add('InitLive', '''(k : Codec T) (t : Token) (c : Cell) (s : Nat) (v : T) (m : M
  (h:Live m t c) : Live (writeTyped k t c s v m) t (store c s k.width (k.encode v)) := by
  exact ⟨put_same _ _ _,h.2.1,h.2.2⟩''')
 add('InitOwned', '''(k : Codec T) (t : Token) (c : Cell) (slot s : Nat) (v : T) (m : Memory)
- (h:Owned m slot t c) : Owned (writeTyped k t c s v m) slot (store c s k.width (k.encode v)) := by
+ (h:Owned m slot t c) : Owned (writeTyped k t c s v m) slot t (store c s k.width (k.encode v)) := by
  exact ⟨⟨put_same _ _ _,h.1.2.1,h.1.2.2⟩,h.2.1,h.2.2⟩''')
 add('InitReadable', '''(k : Codec T) (t : Token) (c : Cell) (slot s : Nat) (v : T) (m : Memory)
- (h:Readable m slot t c) : Readable (writeTyped k t c s v m) slot (store c s k.width (k.encode v)) := by
+ (h:Readable m slot t c) : Readable (writeTyped k t c s v m) slot t (store c s k.width (k.encode v)) := by
  exact ⟨⟨⟨put_same _ _ _,h.1.1.2.1,h.1.1.2.2⟩,h.1.2.1,h.1.2.2⟩,h.2⟩''')
 add('InitWritable', '''(k : Codec T) (t : Token) (c : Cell) (slot s : Nat) (v : T) (m : Memory)
- (h:Writable m slot t c) : Writable (writeTyped k t c s v m) slot (store c s k.width (k.encode v)) := by
+ (h:Writable m slot t c) : Writable (writeTyped k t c s v m) slot t (store c s k.width (k.encode v)) := by
  exact ⟨⟨⟨put_same _ _ _,h.1.1.2.1,h.1.1.2.2⟩,h.1.2.1,h.1.2.2⟩,h.2⟩''')
 add('InitView', '''(k : Codec T) (t : Token) (c : Cell) (s : Nat) (v : T) (m : Memory)
  (h:Live m t c) (fits:Fits c s k.width) : View k (writeTyped k t c s v m) t s v := by
