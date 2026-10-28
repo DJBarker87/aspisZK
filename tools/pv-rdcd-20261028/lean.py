@@ -8,11 +8,11 @@ s=p.read_bytes();assert s==subprocess.check_output(['git','show','HEAD:'+str(p.r
 meta=dict(attempt=n,module=m,source_path=str(p.relative_to(R)),source_sha256=hashlib.sha256(s).hexdigest(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],text=True).strip(),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),authority='own tracked h5 project dependency or new PV_RDCD module; external closure preflight 5673 objects')
 # Check the ID column, not substrings inside object hashes.
 code='''from pathlib import Path
-import json
+import json,re
 n=ID
 s=Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/evidence/sent.txt').read_text()
 a=[l for l in s.splitlines() if len(l.split())>=3 and l.split()[2]==str(n)]
-b=[str(p) for d in Path('/home/dombarker/project-offloads').glob('codex-pv-*') for p in d.glob('**/*'+str(n)+'*') if p.is_file() and d.name!='codex-pv-rdcd-20261028']
+b=[str(p) for d in Path('/home/dombarker/project-offloads').glob('codex-pv-*') for p in d.glob('**/*'+str(n)+'*') if p.is_file() and d.name!='codex-pv-rdcd-20261028' and re.search(r'(?<![0-9a-fA-F])'+str(n)+r'(?![0-9a-fA-F])',p.name)]
 print(json.dumps(dict(shared=a,private=b)))
 assert not a and not b,(a,b)
 '''.replace('ID',str(n))
