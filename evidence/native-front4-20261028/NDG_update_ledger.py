@@ -35,6 +35,11 @@ for suffix,which,pos,neg,theorem,domain in rows:
 for tx in ['TX1','TX2','all_rows']:
  chosen=[r for r in d['rows'] if tx=='all_rows' or r['transaction']==tx]
  d['coverage'][tx]['local_bridge_status']=dict(collections.Counter(r['bridge_status'] for r in chosen))
+status_by_function={r['function']:r['bridge_status'] for r in d['rows']}
+d['coverage']['unique_functions']['local_bridge_status']=dict(collections.Counter(status_by_function.values()))
+for r in d['rows']:
+ for o in r['caller_domain_obligations']:
+  if o.get('callee') in status_by_function:o['callee_local_status']=status_by_function[o['callee']]
 d['NDG_overlay']={'baseline_sha256':hashlib.sha256(base.read_bytes()).hexdigest(),'scope':'local conditional evidence only; baseline critical_path graph retained as historical ranking, not recomputed or adopted','closures':closures}
 (E/'NDG_LEDGER.json').write_text(json.dumps(d,indent=2)+'\n')
 (E/'NDG_LEDGER_DELTA.json').write_text(json.dumps(dict(schema_version=1,baseline=str(base.relative_to(R)),closures=closures,open=[r['representative'] for r in inv if r['representative'] not in {c['function'] for c in closures}],composed_status='OPEN'),indent=2)+'\n')

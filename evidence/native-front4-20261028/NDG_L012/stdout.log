@@ -1,0 +1,59 @@
+NDG_generated/NDG_ZeroStep.lean:31:12: error: Tactic `rfl` failed: The left-hand side
+  ok
+    (ControlFlow.done
+      (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+is not definitionally equal to the right-hand side
+  if byte b ↑i ≠ 0#u8 then
+    ok
+      (ControlFlow.done
+        (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+  else ok (ControlFlow.cont next)
+
+case isTrue
+b : Slice U8
+i : Usize
+cap : (↑b).length ≤ 65536
+bound : ↑i < (↑b).length
+next : Usize := i.wrapping_add 1#usize
+value : ↑next = ↑i + 1
+h : i < b.len
+h✝ : (byte b ↑i != 0#u8) = true
+⊢ ok
+      (ControlFlow.done
+        (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized))) =
+    if byte b ↑i ≠ 0#u8 then
+      ok
+        (ControlFlow.done
+          (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+    else ok (ControlFlow.cont next)
+NDG_generated/NDG_ZeroStep.lean:31:12: error: Tactic `rfl` failed: The left-hand side
+  do
+    let index1 ← lift (i.wrapping_add 1#usize)
+    ok (ControlFlow.cont index1)
+is not definitionally equal to the right-hand side
+  if byte b ↑i ≠ 0#u8 then
+    ok
+      (ControlFlow.done
+        (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+  else ok (ControlFlow.cont next)
+
+case isFalse
+b : Slice U8
+i : Usize
+cap : (↑b).length ≤ 65536
+bound : ↑i < (↑b).length
+next : Usize := i.wrapping_add 1#usize
+value : ↑next = ↑i + 1
+h : i < b.len
+h✝ : ¬(byte b ↑i != 0#u8) = true
+⊢ (do
+      let index1 ← lift (i.wrapping_add 1#usize)
+      ok (ControlFlow.cont index1)) =
+    if byte b ↑i ≠ 0#u8 then
+      ok
+        (ControlFlow.done
+          (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+    else ok (ControlFlow.cont next)
+'NDG_ZeroStep.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDG_ZeroStep.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDG_ZeroStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
