@@ -48,6 +48,7 @@ theorem unique [ExternalLinear] (a b : pair_forest_copy_builder.CopyRecords)
   cases trees
   have nexts := core.result.Result.Ok.inj (Result.ok.inj (haa.symm.trans hab))
   have hn := congrArg (fun x => x.1) nexts
+  change na = nb at hn
   rw [hoa,hob,hn]
 #print axioms unique
 end R1Z.PV_RunJoin_AppendDeterminism32
