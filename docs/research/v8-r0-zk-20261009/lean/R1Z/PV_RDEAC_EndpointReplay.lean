@@ -1,8 +1,7 @@
--- Corrected after ID61199: qualified the copied endpoint name.
--- This corrected replay source has not been compiled; the 100-attempt budget is exhausted.
 import R1Z.PV_RDEAC_Axioms
 open Aeneas Aeneas.Std Result ProverRwFull
 namespace R1Z.PV_RDEAC_EndpointReplay
+open PV_RDEAC_EndpointInstance (endpoint)
 open PV_RDB1_V183_ReserveWorld PV_CBL_StringBytesAdapter PV_CBL_CallbackBundle
 open PV_RDEAC_NameText PV_RDEAC_PublishedTail PV_RDEAC_JoinValue
 
@@ -15,12 +14,12 @@ theorem physical {S F R : Type} (base : ExternalTypes) (ops : @ExternalFuns (App
     let e := PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w
     let nameRun := PV_RDEA_ReservationExecution.run step shape nameAddress (digest.val.map PV_RDEAC_NibbleModel.byte) w
     (match e.returned with
-     | .error (.allocError layout) => PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom panic next=oom layout e.world
-     | .error .capacityOverflow => PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom panic next=panic e.world
+     | .error (.allocError layout) => endpoint base self digest step free shape nameAddress joinAddress w oom panic next=oom layout e.world
+     | .error .capacityOverflow => endpoint base self digest step free shape nameAddress joinAddress w oom panic next=panic e.world
      | .ok () => ∃ nameBuffer after,
        nameRun=(.ok nameBuffer,after) ∧ nameBuffer.values=encodeList (basenameText digest.val) ∧ nameBuffer.capacity=69 ∧
        after.frame=e.world.frame ∧ after.history=e.world.history ∧
-       PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom panic next=
+       endpoint base self digest step free shape nameAddress joinAddress w oom panic next=
          PV_RDEAC_JoinHandlers.consume free nameBuffer
           (PV_RDEAC_FullJoin.join step shape joinAddress false
             (needsSeparator (encodeList (directory base self))) (encodeList (directory base self)) nameBuffer.values after) oom panic next) ∧
