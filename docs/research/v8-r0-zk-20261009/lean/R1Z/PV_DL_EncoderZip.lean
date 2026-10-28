@@ -19,8 +19,8 @@ theorem coordinate {E : Type} [Inhabited E]
   apply List.getElem?_zip_eq_some.mpr
   refine ⟨?_,?_⟩
   · rw [PV_DL_EncoderPairs.coordinate]
-    have he : 2*j<q.val.length := by rw [q.property];omega
-    have ho : 2*j+1<q.val.length := by rw [q.property];omega
+    have he : 2*j<q.val.length := by rw [q.property];change 2*j<1024;omega
+    have ho : 2*j+1<q.val.length := by rw [q.property];change 2*j+1<1024;omega
     simp only [List.getElem?_eq_getElem he,List.getElem?_eq_getElem ho,
       PV_CBL_PadListFacts.get_bang q.val _ he,PV_CBL_PadListFacts.get_bang q.val _ ho]
     rfl
