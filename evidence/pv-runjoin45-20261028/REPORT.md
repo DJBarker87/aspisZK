@@ -69,7 +69,9 @@ removal. Op227 is not the sole remaining refinement gap.
 ## Boundaries and admission
 
 Endpoint premises removed/added/weakened/changed: **0/0/0/0**. V038, V045, V163,
-V165, V167 and V244 remain. All eight PV_RunJoin_Premises fields are unchanged:
+V165, V167 and V244 remain. No new whole-row credit is claimed for V262/op255
+or V258–V260/op251–op253; local source association and private prerequisite
+validation retain their narrower scopes. All eight PV_RunJoin_Premises fields are unchanged:
 source_V045, E1_V329, native_fill_V336, native_ledger_V337, byte_blind_V338,
 kernels_V339, disclosed_V038 and observerOracle_V038. TrustItems remains exactly
 entropy_law, entropy_kernel and observation.
