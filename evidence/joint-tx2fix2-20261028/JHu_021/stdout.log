@@ -1,0 +1,36 @@
+JHu_Checkpoint.lean:26:98: error: unsolved goals
+len : (↑JHg_DataForest.value).length = 192
+⊢ core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 176#usize } JHg_DataForest.value =
+    ok (JHg_DataForest.value.drop 176#usize)
+JHu_Checkpoint.lean:30:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+JHu_Checkpoint.lean:54:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NCV_ArrayFrame.coord (Array.repeat ?m.369 ?m.370) j
+in the target expression
+  ↑(NCV_ArrayFrame.coord (NCV_Carrier.fromCheckpoint JHg_AccountValues.checkpoint).lane_sequences j) ≤ 1048576
+
+case seqValid
+len : (↑JHg_DataForest.value).length = 192
+j : ℕ
+hj : j < 8
+⊢ ↑(NCV_ArrayFrame.coord (NCV_Carrier.fromCheckpoint JHg_AccountValues.checkpoint).lane_sequences j) ≤ 1048576
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JHu_Checkpoint.lean:54:45: error: Type mismatch: After simplification, term
+  hj
+ has type
+  j < 8
+but is expected to have type
+  j < ↑?m.369
+'AspisR1.JHu_Checkpoint.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHu_Checkpoint.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
