@@ -15,15 +15,20 @@ theorem backward_bound (r : Range) (h : r.start.val < r.«end».val) :
 
 theorem next_back (r : Range) :
     core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back core.iter.range.StepUsize r = backward r := by
-  simp [core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
+  by_cases h : r.start.val < r.«end».val
+  · have hb : 1 ≤ r.«end».val := (backward_bound r h).1
+    simp [core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
     core.iter.range.StepUsize,core.iter.range.UScalarStep,
-    core.iter.range.UScalarStep.backward_checked,backward]
+    core.iter.range.UScalarStep.backward_checked,backward, core.cmp.impls.PartialOrdUsize.lt,h,hb]
+  · simp [core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
+      core.iter.range.StepUsize,core.iter.range.UScalarStep,backward,
+      core.cmp.impls.PartialOrdUsize.lt,h]
 
 theorem reverse_dispatch (r : core.iter.adapters.rev.Rev Range) :
     core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
       (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) r = (do
-        let (o,it) ← backward r.iter
-        ok (o,⟨it⟩)) := by
+        let next ← backward r.iter
+        ok (next.1,⟨next.2⟩)) := by
   simp only [core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next,
     core.ops.range.Range.Insts.DoubleEndedIterator,next_back]
 
