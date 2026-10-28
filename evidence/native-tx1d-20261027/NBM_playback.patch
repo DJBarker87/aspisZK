@@ -1,15 +1,18 @@
 --- a/crates/aspis-r1-cost-probe/src/multiproof.rs
 +++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
-@@ -354,3 +354,6 @@
+@@ -354,3 +354,7 @@
          assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
      }
  }
 +
 +#[cfg(kani)]
++#[path = "NBM_copy.rs"]
 +mod NBM_copy;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBM_copy.rs
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,51 @@
++use alloc::{vec, vec::Vec};
++
 +#[kani::proof] #[kani::unwind(2)]
 +fn NBJ_count_copy_prefix(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
 +

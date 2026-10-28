@@ -4,7 +4,7 @@ E=Path(__file__).resolve().parent;sys.path.insert(0,str(E));import NBM_host as h
 r=h.remote_py(f'''from pathlib import Path
 import json,hashlib
 b=Path({h.B!r});out={{}}
-for name in ['NBM_R001-graph.json','NBM_R001-metadata.stderr']:
+for name in [a+suffix for a in ['NBM_R001','NBM_R002','NBM_R003','NBM_K001'] for suffix in ['-graph.json','-metadata.stderr']]:
  p=b/name
  if p.exists():out[name]=p.read_text()
 print(json.dumps(out))''');assert r.returncode==0,r.stderr
@@ -18,3 +18,7 @@ patch+=''.join(difflib.unified_diff([],s.splitlines(True),fromfile='/dev/null',t
 old=(R/'evidence/native-tx1c-20261027/NBJ_K050/stdout.log').read_text().split('```')[1].strip()
 assert old in s
 (E/'NBM_PLAYBACK_IDENTITY.json').write_text(json.dumps(dict(generated_test_sha256=hashlib.sha256(old.encode()).hexdigest(),verbatim_test_retained=True,generated_test_origin='evidence/native-tx1c-20261027/NBJ_K050/stdout.log',prior_harness='NBJ_count_copy_prefix',only_module_renamed='multiproof::NBM_copy',input_words=[0]*7+[1]+[0]*7+[512],n=16,k=15),indent=2)+'\n')
+
+new=(E/'NBM_K001/stdout.log').read_text().split('```')[1].strip()
+assert new.split('let concrete_vals:')[1]==old.split('let concrete_vals:')[1]
+p=E/'NBM_PLAYBACK_IDENTITY.json';d=json.loads(p.read_text());d.update(regenerated_test_origin='NBM_K001/stdout.log',regenerated_body_identical=True,regenerated_difference='containing module in generated doc comment only');p.write_text(json.dumps(d,indent=2)+'\n')

@@ -35,3 +35,11 @@ Each uses a separate admitted scope, MemoryHigh6G/MemoryMax8G/MemorySwapMax0/Tas
 ## Minimal reproducer and limits
 
 `NBM_copy.rs.txt` contains one three-input copy harness and Kani's generated test. `NBM_playback.patch` installs only its cfg(kani) module in a scratch projection of frozen Rust4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. It needs no digest, field stub, protocol loop or cryptographic input. Use the frozen Cargo.lock, offline graph validation, and the pinned Kani0.67.0 playback command above with the recorded optimization profiles. The original failing verification is NBJ_K050; an NBM minimal diagnostic regeneration is recorded separately. No bridge theorem may cite this copy gate as passing.
+
+## Independent regeneration
+
+NBM_K001 uses the same scratch harness with explicit `-Z concrete-playback --concrete-playback print`. It again reports1/47 failed,4 unreachable and regenerates the EXACT SAME concrete vectors and executable test body as K050 (only containing-module doc comment differs). Exit1,wall31.582527408s,RSS533944KiB,swap0,source revision98dbd1b1a4f63167598cd98a91c576a597515247 plus exact source hashes. Frozen graph/lock checks pass. This is a failed-property diagnostic,not a timeout rerun or bridge pass. R003 has already executed that same generated body natively; no unchanged native rerun is needed.
+
+## Final object inventory note
+
+All coherent/Aeneas initial objects are unchanged. The final persistent-cache inventory records one other-worker replacement,NBK_Audit.olean,with both hashes; additions and counts are explicit in NBM_PIN_COMPARISON.json. No Lean attempt ran,no cache object was consumed by this job,and no NBM object/cache write occurred. The own final comparison initially asserted even unrelated parallel cache objects could not change; that assertion was repaired to record every delta and still reject changed coherent/Aeneas/NBM objects. No compilation was rerun. Cleanup had already completed:own scopes terminal,NBM_target/NBM_tmp removed,persistent cache retained. Tool pin:Kani0.67.0's native playback uses rustc1.93.0-nightly53732d5e0/LLVM21.1.5;client1.94.1 was inventoried,not substituted for playback. No claim that playback used the client compiler.
