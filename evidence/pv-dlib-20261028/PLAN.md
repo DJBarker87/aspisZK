@@ -53,3 +53,7 @@ Pinned isolated shipped wrapper attempt: Charon succeeds, but unchanged
 pinned Aeneas rejects its LLBC at the fail-closed escaping-reference/structured
 Drop preflight. The rejected candidate is retained; it is not a false-row
 counterexample or a stop. Continue P6 with an owned generic moved-core reference.
+
+42206–42209 passed (generic owned reference plus private h5 type dependencies).
+42210 pre-upload admission refused at 00:55:36.450630Z: aggregate reservations;
+no compiler started. Next resource admission no earlier than 00:58:36.450630Z.
