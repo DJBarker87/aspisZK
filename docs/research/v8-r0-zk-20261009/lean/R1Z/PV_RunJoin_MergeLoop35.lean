@@ -9,7 +9,14 @@ open PV_RunJoin_FieldData34 PV_RunJoin_MergeArray35 PV_RunJoin_MergeFold35
 variable [ExternalTypes]
 
 theorem increment (i : Usize) (small : i.val<14336) :
-    (Usize.wrapping_add i 1#usize).val=i.val+1 := by scalar_tac
+    (Usize.wrapping_add i 1#usize).val=i.val+1 := by
+  rw [Usize.wrapping_add_val_eq]
+  change (i.val+1)%UScalar.size .Usize=i.val+1
+  apply Nat.mod_eq_of_lt
+  have hsize : 2^32≤UScalar.size .Usize := by
+    rw [UScalar.size_def]
+    exact Nat.pow_le_pow_right (by decide) System.Platform.le_numBits
+  omega
 
 /-- Entire actual sequential merge on a canonical successful evaluation
 array. The worker evaluation law is separate; no semantic oracle is assumed
@@ -36,7 +43,7 @@ theorem complete (ops : ExternalFuns) (n : Nat) (count a i : Usize)
     have inc := increment i (by omega)
     obtain ⟨s,q,hs,hq,hd,step⟩ := PV_RunJoin_MergeStep35.success ops _ a count i p
       (by exact hi) positive (samples _ hi) (es i.val)
-      (slice_values count _ i hi) hp (he _ hi)
+      (slice_values count (fun j => core.result.Result.Ok (es j)) i hi) hp (he _ hi)
     obtain ⟨out,hout,hc,hm⟩ := ih (Usize.wrapping_add i 1#usize)
       (Function.update p s.val q) (by rw [inc];omega) (canonical_update p s.val q hp hq)
     refine ⟨out,?_,hc,?_⟩
