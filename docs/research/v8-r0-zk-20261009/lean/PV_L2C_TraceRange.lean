@@ -12,16 +12,18 @@ structure PublicWords (p : RustPublic) : Prop where
 variable (w : RustWitness) (p : RustPublic)
     (hw : R1Z.BuilderRecordCanonical.CanonicalWords w) (hp : PublicWords p)
 
+include hw hp in
 theorem block (n : Nat) (hn : n < 57) : Canonical (blockR w p n) := by
   exact fallback _ _ (zeros 256#usize) (fun b hb =>
     PV_L2C_WriterChainRange.records w p hw hp.asset hp.frontier hp.empty n hn b hb)
 #print axioms block
 
+include hw hp in
 theorem cell (c : Fin 29) (r : Fin 1024) : (copyCell w p c r).val < 2147483647 := by
   unfold copyCell
   have hr := r.isLt
   split_ifs with hc hblock hpath
-  · exact block w p hw hp (r.val/16) (by omega) _ (by simp;omega)
+  · exact block w p hw hp (r.val/16) (by omega) _ (by change (r.val%16)*16+c.val < 256;omega)
   · exact fallback (pathR w p) _ (zeros 1536#usize)
       (fun b hb => PV_L2C_AuxRange.path w p hw.shape b hb) _ (by simp;omega)
   · exact fallback (auxR w p) _ (zeros 256#usize)
@@ -29,6 +31,7 @@ theorem cell (c : Fin 29) (r : Fin 1024) : (copyCell w p c r).val < 2147483647 :
   · change 0 < 2147483647;omega
 #print axioms cell
 
+include hw hp in
 theorem stable : Canonical (stableBank w p) := by
   intro k hk
   have hk' : k < 16384 := by simpa using hk
@@ -38,13 +41,14 @@ theorem stable : Canonical (stableBank w p) := by
   · exact cell w p hw hp _ _
 #print axioms stable
 
+include hw hp in
 theorem late : Canonical (lateBank w p) := by
   intro k hk
   have hk' : k < 16384 := by simpa using hk
   rw [lateBank,arrT_get _ k hk']
   split_ifs with hl
   · unfold LateRow at hl
-    exact block w p hw hp (k%1024/16) (by omega) _ (by simp;omega)
+    exact block w p hw hp (k%1024/16) (by omega) _ (by change (k%1024%16)*16+k/1024 < 256;omega)
   · change 0 < 2147483647;omega
 #print axioms late
 
@@ -63,6 +67,7 @@ theorem merge (stable late out : Array U32 16384#usize)
   · exact hs k hk
 #print axioms merge
 
+include hw hp in
 theorem merged (c : Fin 29) (r : Fin 1024) :
     (copyCellMerged w p c r).val < 2147483647 := by
   unfold copyCellMerged

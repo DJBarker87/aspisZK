@@ -1,0 +1,75 @@
+{
+  "attempt": 50349,
+  "module": "PV_L2C_AuxRange",
+  "source_sha256": "31f22768c089c5df53e536d68e8bbe5e0fb76fb9cc9c05fdc705480a94d126e4",
+  "origin": {
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_AuxRange.lean",
+    "git_blob": "438f58c39812c3ab62dc0ae51a10e86bd3161784",
+    "authority": "h5 own git-tracked HEAD"
+  },
+  "source_revision": "a035c79c3252fb42c706284db01fe3b8e5578ba1",
+  "exit": 0,
+  "wall_seconds": 2.366684618056752,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T13:53:26.564359+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 25635586048,
+    "projected_reserved_bytes": 34225520640
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-50346",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in [n for line in re.findall(r'^\\s*(?:(?:public|private)\\s+)?import[ \\t]+([^\\n]+)',x['source'],re.M) for n in line.split()]:\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "50346"
+  ],
+  "dependencies": {
+    "PV_L2C_ChunkRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ChunkRange.olean",
+      "sha256": "73217aa3ae289b6281c46fc431cb03e8fcbc8cd6d4428a3013bac43a5086ee77"
+    },
+    "PV_L2C_OccRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_OccRange.olean",
+      "sha256": "6c32daec36dfe820c8827ed0a4f1283bfc46e3f1db97e6a975e6f660bde252dc"
+    },
+    "PV_L2C_PathRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PathRange.olean",
+      "sha256": "56e2538f6eafdd3cd9deff197f222f02d6d93c9b2c1a7f9af138cefdd06e0006"
+    },
+    "PV_L2C_ValueRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ValueRange.olean",
+      "sha256": "67c360ebf859905c1c965d2e430265e466e1f70d9067520625c15d2bb5cc8096"
+    }
+  },
+  "deps_fingerprint": "d7453f0e88ada1359d656c88d5e12068f6fbbcc5da90add6db3237048e1d2f46",
+  "axioms": [
+    "'PV_L2C_AuxRange.inverse' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_AuxRange.input' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AuxRange.output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AuxRange.aux' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AuxRange.path' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "peak_rss_bytes": 5028605952,
+  "swaps": "0",
+  "host_wall": "0:02.36",
+  "accepted": true
+}
