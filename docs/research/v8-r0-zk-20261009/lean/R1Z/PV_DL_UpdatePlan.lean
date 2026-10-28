@@ -44,8 +44,7 @@ theorem source_reference (buffer : List U8) (pos : Nat) (input : List U8) :
   by_cases h : input.length<64-pos
   · simp only [h,if_true]
   · simp only [h,if_false,PV_DL_BatchPlan.bulk,PV_DL_BatchPlan.events,List.length_drop]
-    rw [List.drop_drop]
-    rw [Nat.add_comm ((input.length-start pos)/64*64) (start pos)]
+    simp only [List.drop_drop,Nat.add_comm]
 
 theorem write_length (buffer bytes : List U8) (pos : Nat)
     (hb : buffer.length=64) (h : pos+bytes.length≤64) :
