@@ -1,0 +1,92 @@
+{
+  "row": "V216",
+  "cohorts": [
+    {
+      "toolchain": "nightly-2026-06-01",
+      "files": {
+        "array/equality.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/equality.rs",
+          "sha256": "8765b16c3149dcfcf531e2f5724bfc1d2e518a05742d1333d53ed7eee4f0ae78"
+        },
+        "cmp/bytewise.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp/bytewise.rs",
+          "sha256": "75cd708d12d08e3c5e531ce8235b66dbe6742ca42282600dbab7e9b6f267155b"
+        },
+        "intrinsics/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs",
+          "sha256": "03dda038cf27a27058e4e3476b5eee5605e712112c2093f8218d4708036947fe"
+        }
+      },
+      "bodies": {
+        "array_partial_eq": {
+          "text": "fn eq(&self, other: &[U; N]) -> bool {\n        SpecArrayEq::spec_eq(self, other)\n    }",
+          "token_sha256": "e24128a6fcd095d5d516e05d735f01c5a2aab4cb67d6ff53bf48362c0f7bada6"
+        },
+        "bytewise_specialization": {
+          "text": "fn spec_eq(a: &[T; N], b: &[U; N]) -> bool {\n        // SAFETY: Arrays are compared element-wise, and don't add any padding\n        // between elements, so when the elements are `BytewiseEq`, we can\n        // compare the entire array at once.\n        unsafe { crate::intrinsics::raw_eq(a, crate::mem::transmute(b)) }\n    }",
+          "token_sha256": "9348496a34136b9001dd8f45b47f628b3243797411dd2b4223d0a89c3215cd6c"
+        },
+        "BytewiseEq_trait_and_all_impls": {
+          "text": "use crate::num::NonZero;\n\n/// Types where `==` & `!=` are equivalent to comparing their underlying bytes.\n///\n/// Importantly, this means no floating-point types, as those have different\n/// byte representations (like `-0` and `+0`) which compare as the same.\n/// Since byte arrays are `Eq`, that implies that these types are probably also\n/// `Eq`, but that's not technically required to use this trait.\n///\n/// `Rhs` is *de facto* always `Self`, but the separate parameter is important\n/// to avoid the `specializing impl repeats parameter` error when consuming this.\n///\n/// # Safety\n///\n/// - `Self` and `Rhs` have no padding.\n/// - `Self` and `Rhs` have the same layout (size and alignment).\n/// - Neither `Self` nor `Rhs` have provenance, so integer comparisons are correct.\n/// - `<Self as PartialEq<Rhs>>::{eq,ne}` are equivalent to comparing the bytes.\n#[rustc_specialization_trait]\npub(crate) const unsafe trait BytewiseEq<Rhs = Self>:\n    [const] PartialEq<Rhs> + Sized\n{\n}\n\nmacro_rules! is_bytewise_comparable {\n    ($($t:ty),+ $(,)?) => {$(\n        unsafe impl const BytewiseEq for $t {}\n    )+};\n}\n\n// SAFETY: All the ordinary integer types have no padding, and are not pointers.\nis_bytewise_comparable!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);\n\n// SAFETY: These have *niches*, but no *padding* and no *provenance*,\n// so we can compare them directly.\nis_bytewise_comparable!(bool, char, super::Ordering);\n\n// SAFETY: Similarly, the `NonZero` type has a niche, but no undef and no pointers,\n// and they compare like their underlying numeric type.\nis_bytewise_comparable!(\n    NonZero<u8>,\n    NonZero<u16>,\n    NonZero<u32>,\n    NonZero<u64>,\n    NonZero<u128>,\n    NonZero<usize>,\n    NonZero<i8>,\n    NonZero<i16>,\n    NonZero<i32>,\n    NonZero<i64>,\n    NonZero<i128>,\n    NonZero<isize>,\n);\n\n// SAFETY: The `NonZero` type has the \"null\" optimization guaranteed, and thus\n// are also safe to equality-compare bitwise inside an `Option`.\n// The way `PartialOrd` is defined for `Option` means that this wouldn't work\n// for `<` or `>` on the signed types, but since we only do `==` it's fine.\nis_bytewise_comparable!(\n    Option<NonZero<u8>>,\n    Option<NonZero<u16>>,\n    Option<NonZero<u32>>,\n    Option<NonZero<u64>>,\n    Option<NonZero<u128>>,\n    Option<NonZero<usize>>,\n    Option<NonZero<i8>>,\n    Option<NonZero<i16>>,\n    Option<NonZero<i32>>,\n    Option<NonZero<i64>>,\n    Option<NonZero<i128>>,\n    Option<NonZero<isize>>,\n);\n\nmacro_rules! is_bytewise_comparable_array_length {\n    ($($n:literal),+ $(,)?) => {$(\n        // SAFETY: Arrays have no padding between elements, so if the elements are\n        // `BytewiseEq`, then the whole array can be too.\n        unsafe impl<T: BytewiseEq<U>, U> BytewiseEq<[U; $n]> for [T; $n] {}\n    )+};\n}\n\n// Frustratingly, this can't be made const-generic as it gets\n//    error: specializing impl repeats parameter `N`\n// so just do it for a couple of plausibly-common ones.\nis_bytewise_comparable_array_length!(0, 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64);\n",
+          "token_sha256": "8c180f66e6c25cdf113aaf1c734cf8ddd3757cb566d89c272b2e88e302f6e541"
+        },
+        "raw_eq_intrinsic_declaration": {
+          "text": "pub const unsafe fn raw_eq<T>(a: &T, b: &T) -> bool;",
+          "token_sha256": "79c046963da0b08fce94679f44fae6c769ad2b3c326eb07b13c73dc0e5fd3611"
+        }
+      }
+    },
+    {
+      "toolchain": "1.94.1",
+      "files": {
+        "array/equality.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/equality.rs",
+          "sha256": "27e91a10f2678bfe552c0628c63f474a1b5575d31c212d26314b90538948d418"
+        },
+        "cmp/bytewise.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp/bytewise.rs",
+          "sha256": "75cd708d12d08e3c5e531ce8235b66dbe6742ca42282600dbab7e9b6f267155b"
+        },
+        "intrinsics/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs",
+          "sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+        }
+      },
+      "bodies": {
+        "array_partial_eq": {
+          "text": "fn eq(&self, other: &[U; N]) -> bool {\n        SpecArrayEq::spec_eq(self, other)\n    }",
+          "token_sha256": "e24128a6fcd095d5d516e05d735f01c5a2aab4cb67d6ff53bf48362c0f7bada6"
+        },
+        "bytewise_specialization": {
+          "text": "fn spec_eq(a: &[T; N], b: &[U; N]) -> bool {\n        // SAFETY: Arrays are compared element-wise, and don't add any padding\n        // between elements, so when the elements are `BytewiseEq`, we can\n        // compare the entire array at once.\n        unsafe { crate::intrinsics::raw_eq(a, crate::mem::transmute(b)) }\n    }",
+          "token_sha256": "9348496a34136b9001dd8f45b47f628b3243797411dd2b4223d0a89c3215cd6c"
+        },
+        "BytewiseEq_trait_and_all_impls": {
+          "text": "use crate::num::NonZero;\n\n/// Types where `==` & `!=` are equivalent to comparing their underlying bytes.\n///\n/// Importantly, this means no floating-point types, as those have different\n/// byte representations (like `-0` and `+0`) which compare as the same.\n/// Since byte arrays are `Eq`, that implies that these types are probably also\n/// `Eq`, but that's not technically required to use this trait.\n///\n/// `Rhs` is *de facto* always `Self`, but the separate parameter is important\n/// to avoid the `specializing impl repeats parameter` error when consuming this.\n///\n/// # Safety\n///\n/// - `Self` and `Rhs` have no padding.\n/// - `Self` and `Rhs` have the same layout (size and alignment).\n/// - Neither `Self` nor `Rhs` have provenance, so integer comparisons are correct.\n/// - `<Self as PartialEq<Rhs>>::{eq,ne}` are equivalent to comparing the bytes.\n#[rustc_specialization_trait]\npub(crate) const unsafe trait BytewiseEq<Rhs = Self>:\n    [const] PartialEq<Rhs> + Sized\n{\n}\n\nmacro_rules! is_bytewise_comparable {\n    ($($t:ty),+ $(,)?) => {$(\n        unsafe impl const BytewiseEq for $t {}\n    )+};\n}\n\n// SAFETY: All the ordinary integer types have no padding, and are not pointers.\nis_bytewise_comparable!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);\n\n// SAFETY: These have *niches*, but no *padding* and no *provenance*,\n// so we can compare them directly.\nis_bytewise_comparable!(bool, char, super::Ordering);\n\n// SAFETY: Similarly, the `NonZero` type has a niche, but no undef and no pointers,\n// and they compare like their underlying numeric type.\nis_bytewise_comparable!(\n    NonZero<u8>,\n    NonZero<u16>,\n    NonZero<u32>,\n    NonZero<u64>,\n    NonZero<u128>,\n    NonZero<usize>,\n    NonZero<i8>,\n    NonZero<i16>,\n    NonZero<i32>,\n    NonZero<i64>,\n    NonZero<i128>,\n    NonZero<isize>,\n);\n\n// SAFETY: The `NonZero` type has the \"null\" optimization guaranteed, and thus\n// are also safe to equality-compare bitwise inside an `Option`.\n// The way `PartialOrd` is defined for `Option` means that this wouldn't work\n// for `<` or `>` on the signed types, but since we only do `==` it's fine.\nis_bytewise_comparable!(\n    Option<NonZero<u8>>,\n    Option<NonZero<u16>>,\n    Option<NonZero<u32>>,\n    Option<NonZero<u64>>,\n    Option<NonZero<u128>>,\n    Option<NonZero<usize>>,\n    Option<NonZero<i8>>,\n    Option<NonZero<i16>>,\n    Option<NonZero<i32>>,\n    Option<NonZero<i64>>,\n    Option<NonZero<i128>>,\n    Option<NonZero<isize>>,\n);\n\nmacro_rules! is_bytewise_comparable_array_length {\n    ($($n:literal),+ $(,)?) => {$(\n        // SAFETY: Arrays have no padding between elements, so if the elements are\n        // `BytewiseEq`, then the whole array can be too.\n        unsafe impl<T: BytewiseEq<U>, U> BytewiseEq<[U; $n]> for [T; $n] {}\n    )+};\n}\n\n// Frustratingly, this can't be made const-generic as it gets\n//    error: specializing impl repeats parameter `N`\n// so just do it for a couple of plausibly-common ones.\nis_bytewise_comparable_array_length!(0, 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64);\n",
+          "token_sha256": "8c180f66e6c25cdf113aaf1c734cf8ddd3757cb566d89c272b2e88e302f6e541"
+        },
+        "raw_eq_intrinsic_declaration": {
+          "text": "pub const unsafe fn raw_eq<T>(a: &T, b: &T) -> bool;",
+          "token_sha256": "79c046963da0b08fce94679f44fae6c769ad2b3c326eb07b13c73dc0e5fd3611"
+        }
+      }
+    }
+  ],
+  "identity": {
+    "array_partial_eq": true,
+    "bytewise_specialization": true,
+    "BytewiseEq_trait_and_all_impls": true,
+    "raw_eq_intrinsic_declaration": true
+  },
+  "instantiation": "u8,u8,N=32; BytewiseEq<u8> from exact identical macro impl file; two arrays only",
+  "source_cone": [
+    "derived context eq",
+    "u64 primitive equality",
+    "[u8;32] PartialEq::eq",
+    "u8 SpecArrayEq::spec_eq",
+    "raw_eq and transmute compiler primitives"
+  ],
+  "excluded_branch": "Generic slice equality is not selected for u8; no claim that slice/cmp.rs bodies are unchanged",
+  "primitive_boundary": "raw_eq/transmute and primitive scalar equality retain their existing Rust semantics/compiler-cohort boundary D381/D386; no LLVM or binary law is added",
+  "qualification": "source identity of complete reached runtime method bodies; const impl grammar moves between versions; no new checker credited as original"
+}
