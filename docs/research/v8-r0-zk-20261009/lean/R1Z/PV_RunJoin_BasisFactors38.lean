@@ -1,3 +1,4 @@
+import R1Z.PV_RunJoin_BasisEquation38
 import R1Z.PV_RunJoin_BasisExtend38
 import R1Z.PV_RunJoin_InterpolationCounters38
 set_option autoImplicit false
@@ -22,15 +23,17 @@ theorem source (ops : ExternalFuns) (n : Nat) (i j d : Usize) (left : U8)
     have lz : left=0#u8 := by scalar_tac
     subst j
     subst left
-    rw [host_sumcheck.interpolation_basis_steps,AspisR1ProducerRelease47.basis_factors]
+    rw [PV_RunJoin_BasisEquation38.step,AspisR1ProducerRelease47.basis_factors]
     simp only [↓reduceIte]
   | succ n ih =>
     have hj : j.val<28 := by omega
     have jn : j≠28#usize := by scalar_tac
     have ln : left≠0#u8 := by scalar_tac
     have incj := PV_RunJoin_MergeLoop35.increment j (by omega)
-    have decl : (U8.wrapping_sub left 1#u8).val=n := by scalar_tac
-    rw [host_sumcheck.interpolation_basis_steps,AspisR1ProducerRelease47.basis_factors]
+    have decl : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)]
+      omega
+    rw [PV_RunJoin_BasisEquation38.step,AspisR1ProducerRelease47.basis_factors]
     simp only [jn,ln,↓reduceIte]
     by_cases he : i=j
     · have hcast : UScalar.cast .U8 i=UScalar.cast .U8 j := congrArg _ he
