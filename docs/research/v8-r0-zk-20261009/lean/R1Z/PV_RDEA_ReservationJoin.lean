@@ -23,7 +23,7 @@ theorem relative (digest : List (Fin 256)) : isAbsolute (PV_RDEA_NameBytes.bytes
 
 /-- The absolute/relative branch is derived from the actual encoded bytes,
 including when digest bytes depend on witness data. -/
-theorem prefix {S F : Type} (step : Request → S → Option Nat × S)
+theorem request_prefix {S F : Type} (step : Request → S → Option Nat × S)
     (shape : Shape) (width : shape.width=1) (address : Nat)
     (digest : List (Fin 256)) (length : digest.length=32)
     (base : List U8) (needSep : Bool) (w : World S F) :
@@ -35,8 +35,8 @@ theorem prefix {S F : Type} (step : Request → S → Option Nat × S)
   have h := PV_RDEA_JoinRequests.join_requests_prefix step shape width address
     (isAbsolute (PV_RDEA_NameBytes.bytes digest)) needSep base (PV_RDEA_NameBytes.bytes digest) w
   rw [relative,PV_RDEA_NameBytes.byte_length,length] at h
-  exact h
+  simpa only [relative,PV_RDEA_ProtocolSites.requestWord,PV_RDEA_ProtocolSites.argumentLength] using h
 
 #print axioms relative
-#print axioms prefix
+#print axioms request_prefix
 end R1Z.PV_RDEA_ReservationJoin
