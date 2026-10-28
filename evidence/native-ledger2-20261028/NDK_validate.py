@@ -696,7 +696,7 @@ def main():
                 'reports_searched': expected['discovery']['report_count'],
                 'critical_frontier_size': len(expected['critical_path']['frontier']),
                 'unresolved_historical_pointers': len(expected['discovery']['unresolved_references']),
-                'lean_used': 0, 'kani_used': 0}))
+                'lean_used': 0, 'kani_used': 0}), end='')
 
 
 if __name__ == '__main__':

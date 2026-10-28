@@ -217,7 +217,7 @@ def summary(d, original):
     # replacing the obsolete reproduction instructions and snapshot-specific prose.
     graph=original.split('## Critical path\n',1)[1].split('## Reproduction and boundaries',1)[0]
     lines.append(graph)
-    return '\n'.join(lines)+'\n'
+    return '\n'.join(lines).rstrip()+'\n'
 
 
 def finish_refresh(d):

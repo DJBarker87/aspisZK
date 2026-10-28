@@ -159,4 +159,4 @@ receipt = {
 (HERE / 'NDK_TEST_RECEIPT.json').write_text(ncz.dump(receipt))
 print(ncz.dump({'exit_status': 0, 'tests_passed': len(results),
                 'wall_seconds': receipt['wall_seconds'],
-                'peak_rss_bytes_macos': usage.ru_maxrss, 'swaps': usage.ru_nswap}))
+                'peak_rss_bytes_macos': usage.ru_maxrss, 'swaps': usage.ru_nswap}), end='')

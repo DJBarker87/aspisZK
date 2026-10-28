@@ -273,5 +273,3 @@ Minimum reachability-cover frontier: **130 SCC representatives**. Full members a
 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero` | 6 | 1 |
 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot` | 6 | 1 |
 | `programs/r1-cost-probe/src/pool_route.rs::admitted` | 2 | 1 |
-
-
