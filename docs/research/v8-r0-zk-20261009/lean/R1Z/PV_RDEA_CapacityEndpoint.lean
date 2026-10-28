@@ -48,21 +48,21 @@ theorem literal_failure {S F : Type} (step : Request → S → Option Nat × S)
 /-- The constructor continuation receives its actual buffer and world only on
 success. The failure handler receives the exact error and post-request world. -/
 def consume {S F R : Type} (e : Execution U8 S F)
-    (failure : Error → World S F → R)
+    (failure : PV_RDB1_V183_ReserveWorld.Error → World S F → R)
     (success : Buffer U8 → World S F → R) : R :=
   match e.returned with
   | .error err => failure err e.world
   | .ok () => success e.buffer e.world
 
 theorem failure_consumed {S F R : Type} (e : Execution U8 S F)
-    (failure : Error → World S F → R) (success : Buffer U8 → World S F → R)
-    (err : Error) (h : e.returned=.error err) :
+    (failure : PV_RDB1_V183_ReserveWorld.Error → World S F → R) (success : Buffer U8 → World S F → R)
+    (err : PV_RDB1_V183_ReserveWorld.Error) (h : e.returned=.error err) :
     consume e failure success=failure err e.world := by
   simp only [consume,h]
 
 theorem endpoint_repaired {S F R : Type} (step : Request → S → Option Nat × S)
     (shape : Shape) (width : shape.width=1) (address n : Nat) (w : World S F)
-    (failure : Error → World S F → R)
+    (failure : PV_RDB1_V183_ReserveWorld.Error → World S F → R)
     (success : Buffer U8 → World S F → R) :
     consume (PV_RDB1_V181.deployed step 18446744073709551615
       9223372036854775807 shape address n w) failure success =
@@ -87,7 +87,7 @@ theorem all_sizes {S F : Type} (step : Request → S → Option Nat × S)
   split <;> try simp [sizes]
   split <;> try simp [sizes]
   split <;> try simp [sizes]
-  exact finish_sizes step shape address n w |>.trans (by rw [width])
+  simpa only [width,sizes] using finish_sizes step shape address n w
 
 #print axioms finish_sizes
 #print axioms literal_sizes
