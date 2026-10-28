@@ -21,7 +21,7 @@ theorem digest (a b : Array U32 8#usize) (ha : Canon8 a) (hb : Canon8 b)
   apply BuilderRecordCanonical.array_ext
   intro j hj
   have hj8 : j<8 := by simpa only [UScalar.ofNatCore_val_eq] using hj
-  apply word _ _ (ha j hj8) (hb j hj8)
+  apply word (K := K) _ _ (ha j hj8) (hb j hj8)
   exact congrFun h ⟨j,hj8⟩
 #print axioms digest
 
@@ -32,6 +32,6 @@ theorem frontier (a b : Array (Array U32 8#usize) 20#usize)
   apply BuilderRecordCanonical.array_ext
   intro j hj
   have hj20 : j<20 := by simpa only [UScalar.ofNatCore_val_eq] using hj
-  exact digest _ _ (ha ⟨j,hj20⟩) (hb ⟨j,hj20⟩) (h ⟨j,hj20⟩)
+  exact digest (K := K) _ _ (ha ⟨j,hj20⟩) (hb ⟨j,hj20⟩) (h ⟨j,hj20⟩)
 #print axioms frontier
 end R1Z.PV_RunJoin_CanonicalWordEq31
