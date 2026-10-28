@@ -20,7 +20,7 @@ theorem complete (ops : ExternalFuns) (p : Nat → Nat → W) :
     simpa only [alloc.vec.Vec.with_capacity,List.nil_append,show (0#usize).val=0 from rfl] using hv
   refine ⟨out,?_,image,?_⟩
   · unfold prover.opening_coefficients
-    rw [PV_RunJoin_CoefficientsThread45.complete .S2 (messages p) _ 0#usize 29 (by
+    rw [@PV_RunJoin_CoefficientsThread45.complete _ (ProverRwP6BodyCandidate.selected ops) .S2 (messages p) _ 0#usize 29 (by
       rw [messages,Array.length_to_slice]
       change 29≤14336
       omega) (by

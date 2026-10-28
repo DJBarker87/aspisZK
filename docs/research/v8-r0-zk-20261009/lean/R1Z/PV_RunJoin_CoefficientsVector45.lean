@@ -46,7 +46,8 @@ theorem complete (ops : ExternalFuns) (p : Nat → Nat → W) (n : Nat)
     have inc := PV_RunJoin_MergeLoop35.increment lane (by omega)
     obtain ⟨next,hn,hnv⟩ := ih mid (Usize.wrapping_add lane 1#usize) (by rw [inc];omega) (by rw [ml];omega)
     refine ⟨next,?_,?_⟩
-    · have hs := PV_RunJoin_CoefficientsCell45.step ops (messages p) out lane (p lane.val) read
+    · dsimp only [column] at hm
+      have hs := PV_RunJoin_CoefficientsCell45.step ops (messages p) out lane (p lane.val) read
       simp only [PV_RunJoin_CoefficientsThread45.phase,hs,hm,bind_tc_ok]
       exact hn
     · rw [hnv,hmv,inc,payload,List.append_assoc,List.singleton_append]
