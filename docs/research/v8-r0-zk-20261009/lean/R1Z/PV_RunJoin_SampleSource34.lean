@@ -58,7 +58,7 @@ theorem evaluate (ops : ExternalFuns) {F : Type} (oracleInst : host_sumcheck.Ora
   simp only [bind_tc_ok]
   rw [PV_RunJoin_SampleTail34.exact_tail ops (9-r.val) _ r rem assignment 0#usize hr hrem
     (by change 0+(9-r.val)=rem.val;omega)]
-  simp only [bind_tc_ok,hrem,ProverCommitSamplePoint49.point]
+  simp only [bind_tc_ok,hrem,ProverCommitSamplePoint49.point,show (0#usize).val=0 from rfl]
 
 #print axioms constructors
 #print axioms evaluate
