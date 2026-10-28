@@ -9,9 +9,9 @@ set_option autoImplicit false
 '''
 specs=[('recipient','70','102','p.recipient.val','70#usize','PV_B3P_DigestValue226V3.complete_result',False),
  ('change','(if p.withdrawal then 70 else 102)','(if p.withdrawal then 102 else 134)','p.change.val','(if p.withdrawal then 70#usize else 102#usize)','PV_B3P_DigestValue226V3.complete_result',None),
- ('frontier','(if p.withdrawal then 115 else 143)','(if p.withdrawal then 755 else 783)','frontier p.frontier','(if p.withdrawal then 115#usize else 143#usize)','PV_B3P_FrontierValue226.complete_result',None),
+ ('frontier','(if p.withdrawal then 115 else 143)','(if p.withdrawal then 755 else 783)','PV_B3P_ByteLayout226V3.frontier p.frontier','(if p.withdrawal then 115#usize else 143#usize)','PV_B3P_FrontierValue226.complete_result',None),
  ('next_root','(if p.withdrawal then 755 else 783)','(if p.withdrawal then 787 else 815)','p.next_root.val','(if p.withdrawal then 115#usize else 143#usize)','PV_B3P_DigestValue226V3.complete_result',640),
- ('next_frontier','(if p.withdrawal then 787 else 815)','(if p.withdrawal then 1427 else 1455)','frontier p.next_frontier','(if p.withdrawal then 115#usize else 143#usize)','PV_B3P_FrontierValue226.complete_result',672)]
+ ('next_frontier','(if p.withdrawal then 787 else 815)','(if p.withdrawal then 1427 else 1455)','PV_B3P_ByteLayout226V3.frontier p.next_frontier','(if p.withdrawal then 115#usize else 143#usize)','PV_B3P_FrontierValue226.complete_result',672)]
 for name,lo,hi,field,start,law,extra in specs:
  offset=f'Usize.wrapping_sub i {start}'
  if type(extra)==int:offset=f'Usize.wrapping_sub ({offset}) {extra}#usize'

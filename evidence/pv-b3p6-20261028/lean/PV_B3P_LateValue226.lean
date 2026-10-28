@@ -44,8 +44,8 @@ theorem change (p : reference226.OwnedPublic) (i : Usize)
 theorem frontier (p : reference226.OwnedPublic) (i : Usize)
     (lo : (if p.withdrawal then 115 else 143) ≤ i.val) (hi : i.val < (if p.withdrawal then 755 else 783)) :
     reference226.byte_at p i =
-      if (frontier p.frontier)[(i.val-(if p.withdrawal then 115 else 143))/4]?.getD 0#u32 < 2147483647#u32 then
-        .ok (.Ok ((fields (frontier p.frontier))[i.val-(if p.withdrawal then 115 else 143)]?.getD 0#u8))
+      if (PV_B3P_ByteLayout226V3.frontier p.frontier)[(i.val-(if p.withdrawal then 115 else 143))/4]?.getD 0#u32 < 2147483647#u32 then
+        .ok (.Ok ((fields (PV_B3P_ByteLayout226V3.frontier p.frontier))[i.val-(if p.withdrawal then 115 else 143)]?.getD 0#u8))
       else .ok (.Err aspis_core.state_only_prefix.r0.Error.Public) := by
   have hoff : (Usize.wrapping_sub i (if p.withdrawal then 115#usize else 143#usize)).val = i.val-(if p.withdrawal then 115 else 143) := by
     cases hw : p.withdrawal <;> simp only [hw,Bool.false_eq_true,↓reduceIte] at lo hi ⊢
@@ -82,8 +82,8 @@ theorem next_root (p : reference226.OwnedPublic) (i : Usize)
 theorem next_frontier (p : reference226.OwnedPublic) (i : Usize)
     (lo : (if p.withdrawal then 787 else 815) ≤ i.val) (hi : i.val < (if p.withdrawal then 1427 else 1455)) :
     reference226.byte_at p i =
-      if (frontier p.next_frontier)[(i.val-(if p.withdrawal then 787 else 815))/4]?.getD 0#u32 < 2147483647#u32 then
-        .ok (.Ok ((fields (frontier p.next_frontier))[i.val-(if p.withdrawal then 787 else 815)]?.getD 0#u8))
+      if (PV_B3P_ByteLayout226V3.frontier p.next_frontier)[(i.val-(if p.withdrawal then 787 else 815))/4]?.getD 0#u32 < 2147483647#u32 then
+        .ok (.Ok ((fields (PV_B3P_ByteLayout226V3.frontier p.next_frontier))[i.val-(if p.withdrawal then 787 else 815)]?.getD 0#u8))
       else .ok (.Err aspis_core.state_only_prefix.r0.Error.Public) := by
   have hoff : (Usize.wrapping_sub (Usize.wrapping_sub i (if p.withdrawal then 115#usize else 143#usize)) 672#usize).val = i.val-(if p.withdrawal then 787 else 815) := by
     cases hw : p.withdrawal <;> simp only [hw,Bool.false_eq_true,↓reduceIte] at lo hi ⊢
