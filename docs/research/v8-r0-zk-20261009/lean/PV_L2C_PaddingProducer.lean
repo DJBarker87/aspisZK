@@ -1,4 +1,5 @@
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Data.Fintype.Fin
 set_option autoImplicit false
 namespace PV_L2C_PaddingProducer
 variable {A : Type} [AddCommGroup A]
