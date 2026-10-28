@@ -13168,3 +13168,25 @@ substitute)" so that recounts distinguish it, and re-verified by Kani once Strea
 stub exists. dlib2 (100 attempts; no Kani; IDs 43400-43499) supplies the native links in the order
 V201, V187, then the six digest wrappers with the compression function as a parameter. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D350 (Stream B) 2026-10-28 03:32 UTC: V256-V260 closed on the candidate; batch 2 merged and retired; full adoption gate with timing launched
+
+batch2g (42 of 60 attempts; no Kani, so finding K-1 does not reach it) closes all five batch-2 rows on
+the candidate: V256 (op249 gamma sampler), V257 (op250 ordinary sampler), V258 (op251 weights
+materialisation), V259 (op252 constructor), V260 (op253 raw). The sampler audit and replay 40800, the
+combined audit 40897 (2,207 queries) and the focused five-row replay 40898 pass with standard axioms;
+all ten ordered fixture outputs match 73070ddd51. A retained boxed-allocation counterexample led to an
+authorized caller repair under D187 route (ii) that keeps the frozen weights allocation at the prover
+caller; all six ELF rebuilds matched their pins. Native comparisons are finite validation. Endpoint
+premises removed 0; T unchanged.
+
+Merged into the prover candidate (82566acdfb, pushed); git auto-merged crates/aspis-r1-cost-probe/src/
+prover.rs (batch 2 and batch 3 both edit it), and the lead type-checked the prover_rw_gate example and
+devnet_spend with their recipe features before pushing. Worktree and branch removed.
+
+Batches 1-3 are now all on the candidate, so pv-gate6 (no source change) runs the full adoption gate
+on 82566acdfb: three ELF pins, the pinned client build, the fixture gate, the 1,000-pair differential
+against c57a344726, and then, only if those pass, the quiet-window timing gate (marker written first
+with until = start + 1500 s and a deletion trap, drain at most 10 minutes, paired alternating runs with
+throttle counters, gate median under 15 s and ratio at most 1.10 per fixture). Stream A was told in
+advance. Rows removed outright: 0. Privacy target not yet established.
