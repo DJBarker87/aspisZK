@@ -15,3 +15,8 @@ including its actual selected-value equality, remains byte-identical to frozen.
 The new wrapper quantifies over both gate branches. The90s harness limit and
 all caps are unchanged. This is a source/shape change; none of the failed
 aggregate-assertion shapes is rerun unchanged. Outcome is recorded separately.
+
+Outcome: K029 still timed out at90s (exit1,wall102.004043041s,
+peak1089752KiB,swaps0). The attempted decomposition is excluded. It does not
+confirm memcmp as the cause and does not close the broader native caller.
+No further query shape is rerun unchanged.

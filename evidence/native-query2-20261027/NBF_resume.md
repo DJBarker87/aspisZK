@@ -1,24 +1,29 @@
-# Live continuation checklist
+# Final handoff — budget exhausted; bridge OPEN
 
-All work remains on codex/cx-native-query2-20261027; no pushes/merges.
-Accepted Lean through L038. K019 circle scale routing is the next launched gate.
-K001 type error, K006/K010 unwind errors, K014–K017 timeout: excluded.
-L027 accidental unchanged replay: no credit; own runner guard now rejects it.
-No cap/timeout changes. Current direct query composite is OPEN.
+Branch codex/cx-native-query2-20261027. No push or merge. Read
+NBF_query_BRIDGE.md first for exact established claims and remaining domains.
+Kani30/30; Lean46/100. No active prover or pending submitted scope. Do not
+launch another Kani run under this budget. All25 NBF modules and the final
+L046 co-import/47-theorem standard-axiom audit are checked. Import them and
+all inherited NBB modules; re-prove nothing.
 
-Remaining drafted Lean, in dependency order:
-NBF_QueryLoop (imports checked QueryInitial), NBF_Node, NBF_QueryNode,
-NBF_FinishTrace. Each needs focused compile and standard-axiom prints.
-Then one final co-import audit of accepted public top theorems.
+Next work requires a new allocation: split native query_values and the
+accumulation tail further, establish SAME actual dictionaries and every-caller
+producer domains, discharge native capacity coverage, then interpret the full
+finish Enumerate/back continuation and compose the enclosing Result/writer.
+K014–K017/K019/K021/K029/K030 timeout shapes cannot be rerun unchanged. No
+whole-Vec frame harness; retain one arbitrary native step plus Lean induction.
+No multiplication correctness in Kani; use LPh_STUBS.md paired theorems.
 
-Final receipt work must archive every K source snapshot as a patch with
-NBF_archive.py, collect all prefix/cache/library object hashes, validate frozen
-crates/programs/lock, record exact budgets, remove only OWN Rust target and
-solver temps. Keep persistent leaf cache forever. Retain all source and receipts;
-no .olean/binary/ELF commit. Native scratch harnesses final deliverable should
-be patches plus receipts. No shipped file changed, so no ELF rebuild trigger.
+NBF_HARNESS_STATUS.json separates historical passes, failures and NOT_RUN.
+NBF_QueryDependencies.md names required unmerged lane statements explicitly.
+The model constructor/loop theorem is not a native whole-result refinement.
+No headline premise removed; narrowed D188 remains unchanged.
 
-Independent native work can continue after a timeout: split one expression or
-call cut; never unchanged shape, never multiplier equivalence in Kani, no
-whole-buffer loops. Field stubs are paired in LPh_STUBS.md. All own authoring
-scripts may be repaired but shared S2H/S2W infrastructure stays byte-identical.
+Terminal source, graph, library and selected-object checks are retained.
+Original cleanup failed its global-cache invariant on other-prefix
+NBD_DigestTrace.olean. NBF_CLEANUP_FINDING.json preserves both hashes and the
+failure; direct41 selected dependency and219 Aeneas checks match but imply no
+full transitive release replay. Persistent leaf cache MUST NOT be deleted.
+Own Rust target and solver temps are gone. Scratch sources and all receipts
+remain; committed Rust is patches only. No shipped changes or ELF rebuild.

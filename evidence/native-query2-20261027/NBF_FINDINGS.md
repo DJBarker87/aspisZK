@@ -24,10 +24,19 @@ These are proof coverage findings, not shipped verifier bugs or changed trust.
 ## Later native iterator evidence
 
 K025 proves mutable next/exhaustion on arbitrary suffix state. K026 proves the
-actual Enumerate ordinal/address and exhaustion using a native constant-time
+actual Enumerate ordinal/address and exhaustion using a native
 nth seed; no64-row body is executed. K027 performs ONE actual Enumerate
 next/store step on arbitrary backing contents, recording SAME value owner,
 index and exactly one call (zero at exhaustion), with arbitrary observation
 row/limb framed. These improve finding3's native context. The formal full
 Port3_NativeFlushBody iterator/back-continuation association and every-caller
 installation remain OPEN; the finding is narrowed, not silently deleted.
+
+## Terminal budget and shared cache finding
+
+K030 accumulation tail timed out; budget30/30 is exhausted. Composite OPEN.
+Original cleanup exit1 is preserved in NBF_CLEANUP_FINDING.json: other-prefix
+NBD_DigestTrace.olean changed while all initial files remained. We did not
+write it. Direct selected41 objects and resolved219 Aeneas objects match;
+this does not establish a full transitive release replay. No global cache
+immutability claim is made. Cache retained; own Rust target removed.

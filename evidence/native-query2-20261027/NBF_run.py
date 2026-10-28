@@ -6,7 +6,7 @@ assert not (E/attempt/'receipt.json').exists()
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 env={'TMPDIR':B+'/NBF_tmp','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1'}
 base=dict(source_revision=rev,source_tree_dirty=True,sources=['NBF_src/Cargo.lock','NBF_src/Cargo.toml','NBF_src/crates/aspis-r1-cost-probe/src/verifier.rs','NBF_src/crates/aspis-r1-cost-probe/src/NBF_harness.rs'],env=env)
-if (E/'NBF_query.rs.txt').exists():
+if (E/'NBF_query.rs.txt').exists() or '+++ b/crates/aspis-r1-cost-probe/src/NBF_query.rs' in (E/'NBF_harness.patch').read_text():
  base['sources']+=['NBF_src/crates/aspis-r1-cost-probe/src/candidate.rs','NBF_src/crates/aspis-r1-cost-probe/src/NBF_query.rs']
 r=py(f'from pathlib import Path;Path({(B+"/NBF_tmp")!r}).mkdir(exist_ok=True)');assert r.returncode==0
 before=ssh('sha256sum '+B+'/NBF_src/Cargo.lock');assert before.returncode==0

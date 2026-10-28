@@ -1,5 +1,7 @@
 from pathlib import Path
-import json,hashlib,re,subprocess,ast
+import json,hashlib,re,subprocess,ast,time,resource,platform,datetime
+from NBF_payloads import read_payload
+started=time.monotonic()
 E=Path(__file__).resolve().parent;root=Path.cwd()
 rows=[];errors=[]
 limits={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
@@ -49,7 +51,16 @@ for n in changed:
  if not (n.startswith('evidence/native-query2-20261027/') or n.startswith('docs/research/100bit-spend-path-20261013/lean/NBF_')):errors.append(['outside assigned prefix',n])
 tracked=subprocess.check_output(['git','ls-files','evidence/native-query2-20261027','docs/research/100bit-spend-path-20261013/lean/NBF_*'],text=True).splitlines()
 if any(Path(n).suffix in ['.pyc','.olean','.o','.a','.so','.elf'] for n in tracked):errors.append('tracked binary')
+cleanup=json.loads((E/'NBF_CLEANUP_FINDING.json').read_text())
+assert cleanup['summary']['rust_target_absent'] and cleanup['persistent_cache_retained']
+assert not cleanup['initial_objects_missing']
+assert all(not row['directly_selected_by_passed_NBF_compiles'] for row in cleanup['changes'])
+deps=json.loads((E/'NBF_SELECTED_DEPENDENCIES.json').read_text());assert not deps['errors']
 terminal=json.loads((E/'NBF_TERMINAL_SOURCE.json').read_text())
+for name in ['NBF_harness.rs','NBF_query.rs']:
+ actual=hashlib.sha256(read_payload(name).encode()).hexdigest()
+ if actual!=terminal['source_hashes']['crates/aspis-r1-cost-probe/src/'+name]['sha256']:errors.append([name,'final patch payload hash'])
+
 if terminal['errors'] or terminal['live_provers'] or not terminal['local_frozen_release_unchanged']:errors.append('terminal source/prover inventory')
 archive=json.loads((E/'NBF_ARCHIVE.json').read_text())
 for r in kani:
@@ -57,7 +68,8 @@ for r in kani:
  if {n:v['sha256'] for n,v in archive.get(r['attempt'],{}).items()}!=r['source_hashes']:errors.append([r['attempt'],'archive hashes'])
 def summary(rs):return dict(attempts=len(rs),passes=sum(r['exit_status']==0 for r in rs),failures=sum(r['exit_status']!=0 for r in rs),redundant=sum(r['redundant'] for r in rs),wall_seconds=sum(r['wall_seconds'] for r in rs),peak_rss_kib=max(int(r['peak_rss_kib']) for r in rs),swaps=sum(int(r['swaps']) for r in rs))
 assert len(lean)<=100 and len(kani)<=30
-out=dict(status='OPEN',headline='AspisR1.RPx_Deployed.deployed',headline_premises_removed=0,L154='statement parameter',trust='narrowed D188 unchanged',lean=summary(lean),kani=summary(kani),metadata=summary(meta),budgets=dict(lean_max=100,kani_max=30,kani_exhausted=len(kani)==30),final_audit='NBF_L046',public_theorems=len(names),errors=errors,recorded_deviations=['one redundant L027 compile','read-only SSH overlap recorded in NBF_TRANSPORT_NOTE.md'],attempts=rows)
+out=dict(status='OPEN',validation_status='FINDINGS_RETAINED',worker_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',global_cache_unchanged=cleanup['global_cache_unchanged'],cache_drift=cleanup['changes'],direct_selected_dependencies_unchanged=not deps['errors'],headline='AspisR1.RPx_Deployed.deployed',headline_premises_removed=0,L154='statement parameter',trust='narrowed D188 unchanged',lean=summary(lean),kani=summary(kani),metadata=summary(meta),budgets=dict(lean_max=100,kani_max=30,kani_exhausted=len(kani)==30),final_audit='NBF_L046',public_theorems=len(names),errors=errors,recorded_deviations=['one redundant L027 compile','read-only SSH overlap recorded in NBF_TRANSPORT_NOTE.md'],attempts=rows)
+out['static_validation']=dict(target='NBF receipt/source/domain audit',exit_status=int(bool(errors)),wall_seconds=time.monotonic()-started,peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/(1024 if platform.system()=='Darwin' else 1),swaps=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),axioms='N/A: read-only Python audit; exact formal prints in NBF_L046',at_utc=datetime.datetime.now(datetime.timezone.utc).isoformat())
 (E/'NBF_VERIFICATION.json').write_text(json.dumps(out,indent=2)+'\n')
 (E/'NBF_attempts.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in rows))
 assert not errors,errors

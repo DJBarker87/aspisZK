@@ -1,0 +1,1399 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,5 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)] #[path="NBF_harness.rs"] mod NBF_harness;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBF_harness.rs
+@@ -0,0 +1,1133 @@
++use super::*;
++use aspis_core::field::CM31;
++static mut NBF_PTR: *mut [u64;4] = core::ptr::null_mut();
++static mut NBF_POWER: [u32;4] = [0;4];
++static mut NBF_BASIS:u32=0;
++static mut NBF_FLUSH:bool=false;
++static mut NBF_CALLS:usize=0;
++// Context-only overapproximation. No row contents are read or modified here.
++// NBB_Row.source supplies actual row semantics on its phase/canonical domain.
++fn NBF_context(row:&mut[u64;4],power:K,basis:M31,flush:bool) {
++ unsafe {NBF_PTR=row;NBF_POWER=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];NBF_BASIS=basis.0;NBF_FLUSH=flush;NBF_CALLS+=1;}
++}
++#[kani::proof]
++#[kani::stub(super::update_residue_row,NBF_context)]
++fn NBF_index_context() {
++ let backing:Box<[[u64;4];64]>=Box::new(kani::any());
++ let slice:Box<[[u64;4]]>=backing;
++ let raw=Vec::from(slice);
++ let index:usize=kani::any();kani::assume(index<64);
++ let terms:usize=kani::any();let p:[u32;4]=kani::any();let basis:u32=kani::any();
++ let power=K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}};
++ let ptr=raw.as_ptr();let cap=raw.capacity();
++ let mut weights=BatchedWeights{raw,terms};weights.push(index,power,M31(basis));
++ assert_eq!(weights.raw.as_ptr(),ptr);assert_eq!(weights.raw.len(),64);assert_eq!(weights.raw.capacity(),cap);assert_eq!(weights.terms,terms);
++ unsafe {assert_eq!(NBF_PTR,ptr.add(index) as *mut [u64;4]);assert_eq!(NBF_POWER,p);assert_eq!(NBF_BASIS,basis);assert_eq!(NBF_FLUSH,terms&3==3);assert_eq!(NBF_CALLS,1);}
++ kani::cover!(index==0);kani::cover!(index==63);kani::cover!(terms&3==3);
++}
++
++static mut NBF_REPLY:[u64;4]=[0;4];
++// One selected row write; every returned row is considered. No field multiply.
++fn NBF_write(row:&mut[u64;4],_power:K,_basis:M31,_flush:bool) {
++ let reply:[u64;4]=kani::any();unsafe {NBF_REPLY=reply;} *row=reply;
++}
++#[kani::proof]
++#[kani::stub(super::update_residue_row,NBF_write)]
++fn NBF_single_row_write() {
++ let backing:Box<[[u64;4];64]>=Box::new(kani::any());
++ let slice:Box<[[u64;4]]>=backing;let raw=Vec::from(slice);
++ let i:usize=kani::any();kani::assume(i<64);
++ let j:usize=kani::any();kani::assume(j<64);
++ let k:usize=kani::any();kani::assume(k<4);
++ let before=raw[j][k];let ptr=raw.as_ptr();let capacity=raw.capacity();let terms:usize=kani::any();
++ let mut weights=BatchedWeights{raw,terms};
++ weights.push(i,K::ZERO,M31::ZERO);
++ assert_eq!(weights.raw.len(),64);assert_eq!(weights.raw.capacity(),capacity);assert_eq!(weights.raw.as_ptr(),ptr);assert_eq!(weights.terms,terms);
++ unsafe {assert_eq!(weights.raw[j][k],if i==j {NBF_REPLY[k]} else {before});}
++ kani::cover!(i!=j);kani::cover!(i==j);kani::cover!(i==63);kani::cover!(i==0);
++}
++
++// Native release row-loop iteration, factored verbatim at its loop boundary.
++// The Vec push remains actual except its row leaf; no complete loop executes.
++fn NBF_row_iteration(a:&Accumulator,weights:&mut BatchedWeights,basis:&[M31;256],j:usize) {
++ let width=a.weights.len();
++ weights.push(j,a.power,basis_at(basis,j));
++ crate::trace::value(12,a.next*width+j,E::from_qm31(accumulated_weight_at(&a.weights,j)));
++ crate::trace::value(13,a.next*width+j,E::from_m31(basis_at(basis,j)));
++}
++fn NBF_arbitrary_k()->K {
++ let p:[u32;4]=kani::any();K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}}
++}
++// Field carriers have no invalid bit patterns; map initialization is irrelevant
++// to the checked iteration and is bounded explicitly.
++#[kani::proof]
++#[kani::unwind(257)]
++#[kani::stub(super::update_residue_row,NBF_context)]
++fn NBF_row_iteration_context() {
++ let backing:Box<[[u64;4];64]>=Box::new(kani::any());
++ let slice:Box<[[u64;4]]>=backing;let raw=Vec::from(slice);
++ let mut basis=[M31::ZERO;256];
++ let j:usize=kani::any();kani::assume(j<64);
++ let b:u32=kani::any();basis[j]=M31(b);
++ // Context gate observes no unselected weight. Arbitrary selected value and
++ // arbitrary row contents; Vec width is the SAME native width used by traces.
++ let mut output=alloc::vec![K::ZERO;64];output[j]=NBF_arbitrary_k();
++ let next:usize=kani::any();kani::assume(next<10);
++ let terms:usize=kani::any();let power=NBF_arbitrary_k();
++ let a=Accumulator{weights:output,rhs:E::ZERO,power,next};
++ let mut pending=BatchedWeights{raw,terms};let ptr=pending.raw.as_ptr();
++ NBF_row_iteration(&a,&mut pending,&basis,j);
++ unsafe {assert_eq!(NBF_PTR,ptr.add(j) as *mut [u64;4]);assert_eq!(NBF_BASIS,b);assert_eq!(NBF_FLUSH,terms&3==3);assert_eq!(NBF_CALLS,1);}
++ assert_eq!(pending.terms,terms);assert_eq!(pending.raw.len(),64);
++ assert_eq!(a.next,next);assert_eq!(a.weights.len(),64);
++ kani::cover!(j==0);kani::cover!(j==63);kani::cover!(next==9);
++}
++
++#[kani::proof]
++#[kani::unwind(9)]
++fn NBF_embeddings() {
++ let p:[u32;4]=kani::any();for x in p {kani::assume(x<2147483647);}
++ let q=K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}};
++ let words=E::from_qm31(q).to_limbs();
++ assert_eq!(words[0],p[0]);assert_eq!(words[1],p[1]);assert_eq!(words[2],p[2]);assert_eq!(words[3],p[3]);assert_eq!(words[4],0);assert_eq!(words[5],0);assert_eq!(words[6],0);assert_eq!(words[7],0);
++ let m:u32=kani::any();kani::assume(m<2147483647);
++ let words=E::from_m31(M31(m)).to_limbs();
++ assert_eq!(words[0],m);assert_eq!(words[1],0);assert_eq!(words[2],0);assert_eq!(words[3],0);assert_eq!(words[4],0);assert_eq!(words[5],0);assert_eq!(words[6],0);assert_eq!(words[7],0);
++ kani::cover!(m==2147483646);kani::cover!(p[3]==2147483646);
++}
++
++static mut NBF_MUL_X:u32=0;
++static mut NBF_MUL_Y:u32=0;
++static mut NBF_MUL_OUT:u32=0;
++fn NBF_basis_mul(x:M31,y:M31)->M31 {
++ assert!(x.0<2147483647);assert!(y.0<2147483647);
++ let out:u32=kani::any();kani::assume(out as u64==(x.0 as u64*y.0 as u64)%2147483647);
++ unsafe {NBF_MUL_X=x.0;NBF_MUL_Y=y.0;NBF_MUL_OUT=out;}M31(out)
++}
++// One literal native inner basis-loop iteration; no full basis loop executes.
++fn NBF_basis_iteration(basis:&mut[M31;256],node:M31,n:usize,j:usize) {
++ basis[n+j]=basis[j].mul(node);
++}
++#[kani::proof]
++#[kani::stub(aspis_core::field::M31::mul,NBF_basis_mul)]
++fn NBF_basis_iteration_frame() {
++ let mut basis:[M31;256]=[
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any()),
++ M31(kani::any())
++ ];
++ let n:usize=kani::any();kani::assume(n>0&&n<=128);
++ let j:usize=kani::any();kani::assume(j<n);
++ let k:usize=kani::any();kani::assume(k<256);
++ let node:u32=kani::any();kani::assume(node<2147483647);
++ kani::assume(basis[j].0<2147483647);let old=basis[j].0;let before=basis[k].0;
++ NBF_basis_iteration(&mut basis,M31(node),n,j);
++ unsafe {assert_eq!(NBF_MUL_X,old);assert_eq!(NBF_MUL_Y,node);
++ assert_eq!(basis[k].0,if k==n+j {NBF_MUL_OUT} else {before});}
++ kani::cover!(n==1);kani::cover!(n==32);kani::cover!(n==128);kani::cover!(k!=n+j);kani::cover!(k==n+j);
++}
++
++fn NBF_init_iteration(raw:&mut Vec<[u64;4]>,weights:&[K],index:usize) {
++ let w=weights[index];
++ raw[index]=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];
++}
++#[kani::proof]
++fn NBF_init_iteration_frame() {
++ let backing:Box<[[u64;4];64]>=Box::new(kani::any());let slice:Box<[[u64;4]]>=backing;let mut raw=Vec::from(slice);
++ let weights:[K;64]=[
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k()
++ ];
++ let i:usize=kani::any();kani::assume(i<64);
++ let j:usize=kani::any();kani::assume(j<64);
++ let k:usize=kani::any();kani::assume(k<4);
++ let before=raw[j][k];let p=raw.as_ptr();let cap=raw.capacity();
++ let w=weights[i];let words=[w.c0.a.0,w.c0.b.0,w.c1.a.0,w.c1.b.0];
++ NBF_init_iteration(&mut raw,&weights,i);
++ assert_eq!(raw.len(),64);assert_eq!(raw.capacity(),cap);assert_eq!(raw.as_ptr(),p);
++ assert_eq!(raw[j][k],if i==j {words[k]as u64} else {before});
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i!=j);
++}
++
++static mut NBF_REDUCE_CALLS:usize=0;
++static mut NBF_REDUCE_IN:[u64;4]=[0;4];
++static mut NBF_REDUCE_OUT:[u32;4]=[0;4];
++fn NBF_reduce_reply(x:u64)->M31 {
++ let out:u32=kani::any();kani::assume(out<2147483647);
++ unsafe {let k=NBF_REDUCE_CALLS;assert!(k<4);NBF_REDUCE_IN[k]=x;NBF_REDUCE_OUT[k]=out;NBF_REDUCE_CALLS+=1;}M31(out)
++}
++#[kani::proof]
++#[kani::unwind(5)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,NBF_reduce_reply)]
++fn NBF_value_routing() {
++ let backing:Box<[[u64;4];64]>=Box::new([
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>()
++]);let slice:Box<[[u64;4]]>=backing;let raw=Vec::from(slice);
++ let i:usize=kani::any();kani::assume(i<64);
++ let k:usize=kani::any();kani::assume(k<4);let word=raw[i][k];
++ let terms:usize=kani::any();let b=BatchedWeights{raw,terms};let out=b.value(i);
++ let words=[out.c0.a.0,out.c0.b.0,out.c1.a.0,out.c1.b.0];
++ unsafe {assert_eq!(NBF_REDUCE_CALLS,4);assert_eq!(NBF_REDUCE_IN[k],word);assert_eq!(words[k],NBF_REDUCE_OUT[k]);}
++ assert_eq!(b.terms,terms);assert_eq!(b.raw.len(),64);
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(k==3);
++}
++
++static mut NBF_VALUE_I:usize=0;
++static mut NBF_VALUE_CALLS:usize=0;
++static mut NBF_VALUE_PTR:*const BatchedWeights=core::ptr::null();
++static mut NBF_VALUE_OUT:[u32;4]=[0;4];
++fn NBF_value_reply(b:&BatchedWeights,i:usize)->K {
++ let words:[u32;4]=kani::any();for x in words {kani::assume(x<2147483647);}
++ unsafe {NBF_VALUE_I=i;NBF_VALUE_PTR=b;NBF_VALUE_OUT=words;NBF_VALUE_CALLS+=1;}
++ K{c0:CM31{a:M31(words[0]),b:M31(words[1])},c1:CM31{a:M31(words[2]),b:M31(words[3])}}
++}
++#[kani::proof]
++#[kani::unwind(5)]
++#[kani::stub(super::BatchedWeights::value,NBF_value_reply)]
++fn NBF_finish_iteration_frame() {
++ let mut output:[K;64]=[
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k()
++ ];
++ let i:usize=kani::any();kani::assume(i<64);
++ let j:usize=kani::any();kani::assume(j<64);
++ let k:usize=kani::any();kani::assume(k<4);
++ let q=output[j];let before=[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0][k];
++ let terms:usize=kani::any();
++ let backing:Box<[[u64;4]]>=Box::new([
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>()
++]);
++ let raw=Vec::from(backing);
++ let b=BatchedWeights{raw,terms};
++ let ptr=output.as_ptr();
++ {let mut suffix=output[i..].iter_mut();let w=suffix.next().unwrap();*w=b.value(i);}
++ let q=output[j];let after=[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0][k];
++ unsafe{assert_eq!(NBF_VALUE_I,i);assert_eq!(after,if i==j {NBF_VALUE_OUT[k]} else {before});}
++ assert_eq!(output.as_ptr(),ptr);assert_eq!(output.len(),64);assert_eq!(b.terms,terms);
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i!=j);
++}
++
++mod NBF_field {
++use super::*;
++use aspis_core::field::{QM31,WideExact};
++const MOD:u64=2147483647;
++fn m(a:u32,b:u32)->u32{((u64::from(a)*u64::from(b))%MOD)as u32}
++fn a(x:u32,y:u32)->u32{((u64::from(x)+u64::from(y))%MOD)as u32}
++fn d(x:u32,y:u32)->u32{((u64::from(x)+MOD-u64::from(y))%MOD)as u32}
++fn cw(x:CM31)->[u32;2]{[x.a.0,x.b.0]}
++fn qw(x:QM31)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn c(x:[u32;2])->CM31{CM31{a:M31(x[0]),b:M31(x[1])}}
++fn q(x:[u32;4])->QM31{QM31{c0:c([x[0],x[1]]),c1:c([x[2],x[3]])}}
++fn ca(x:[u32;2],y:[u32;2])->[u32;2]{[a(x[0],y[0]),a(x[1],y[1])]}
++fn cd(x:[u32;2],y:[u32;2])->[u32;2]{[d(x[0],y[0]),d(x[1],y[1])]}
++fn cm(x:[u32;2],y:[u32;2])->[u32;2]{let t=m(x[0],y[0]);let u=m(x[1],y[1]);
++ let cross=(((u64::from(x[0])+u64::from(x[1]))*(u64::from(y[0])+u64::from(y[1])))%MOD)as u32;
++ [d(t,u),d(d(cross,t),u)]}
++fn cr(x:[u32;2])->[u32;2]{[d(a(x[0],x[0]),x[1]),a(x[0],a(x[1],x[1]))]}
++fn qa(x:[u32;4],y:[u32;4])->[u32;4]{core::array::from_fn(|i|a(x[i],y[i]))}
++fn qd(x:[u32;4],y:[u32;4])->[u32;4]{core::array::from_fn(|i|d(x[i],y[i]))}
++fn qm(x:[u32;4],y:[u32;4])->[u32;4]{let x0=[x[0],x[1]];let x1=[x[2],x[3]];let y0=[y[0],y[1]];let y1=[y[2],y[3]];
++ let t=cm(x0,y0);let u=cm(x1,y1);let v=cm(ca(x0,x1),ca(y0,y1));let lo=ca(t,cr(u));let hi=cd(cd(v,t),u);[lo[0],lo[1],hi[0],hi[1]]}
++fn domain<const N:usize>(x:[u32;N]){for i in 0..N{assert!(u64::from(x[i])<MOD,"LPh field stub domain");}}
++fn chosen<const N:usize>(value:[u32;N])->[u32;N]{let out:[u32;N]=kani::any();for i in 0..N{kani::assume(out[i]==value[i]);kani::assume(u64::from(out[i])<MOD);}out}
++pub fn m31(x:M31,y:M31)->M31{domain([x.0,y.0]);let z=M31(chosen([m(x.0,y.0)])[0]);unsafe {let i=MC;assert!(i<8);MX[i]=x.0;MY[i]=y.0;MO[i]=z.0;MC+=1;}z}
++pub fn cm31(x:CM31,y:CM31)->CM31{domain(cw(x));domain(cw(y));c(chosen(cm(cw(x),cw(y))))}
++pub fn qm31(x:QM31,y:QM31)->QM31{domain(qw(x));domain(qw(y));let z=q(chosen(qm(qw(x),qw(y))));unsafe{let i=QC;assert!(i<4);QX[i]=qw(x);QY[i]=qw(y);QO[i]=qw(z);QC+=1;}z}
++pub fn scalar(x:QM31,y:M31)->QM31{domain(qw(x));domain([y.0]);let z=q(chosen(qw(x).map(|v|m(v,y.0))));unsafe {let i=SC;assert!(i<16);SX[i]=qw(x);SY[i]=y.0;SO[i]=qw(z);SC+=1;}z}
++pub fn by_r(x:CM31)->CM31{domain(cw(x));c(chosen(cr(cw(x))))}
++pub fn wide(x:WideExact,y:WideExact)->WideExact{domain(x.to_limbs());domain(y.to_limbs());
++ let x0=qw(x.c0());let x1=qw(x.c1());let y0=qw(y.c0());let y1=qw(y.c1());
++ let t=qm(x0,y0);let u=qm(x1,y1);let cross=qm(qa(x0,x1),qa(y0,y1));let r=cr([u[2],u[3]]);
++ let lo=qa(t,[r[0],r[1],u[0],u[1]]);let hi=qd(qd(cross,t),u);
++ let z=WideExact::from_limbs(chosen([lo[0],lo[1],lo[2],lo[3],hi[0],hi[1],hi[2],hi[3]])).unwrap();unsafe {let i=WC;assert!(i<4);WX[i]=x.to_limbs();WY[i]=y.to_limbs();WO[i]=z.to_limbs();WC+=1;}z}
++
++pub static mut QC:usize=0;pub static mut QX:[[u32;4];4]=[[0;4];4];pub static mut QY:[[u32;4];4]=[[0;4];4];pub static mut QO:[[u32;4];4]=[[0;4];4];
++pub static mut MC:usize=0;pub static mut MX:[u32;8]=[0;8];pub static mut MY:[u32;8]=[0;8];pub static mut MO:[u32;8]=[0;8];
++pub static mut SC:usize=0;pub static mut SX:[[u32;4];16]=[[0;4];16];pub static mut SY:[u32;16]=[0;16];pub static mut SO:[[u32;4];16]=[[0;4];16];
++pub static mut WC:usize=0;pub static mut WX:[[u32;8];4]=[[0;8];4];pub static mut WY:[[u32;8];4]=[[0;8];4];pub static mut WO:[[u32;8];4]=[[0;8];4];
++}
++
++fn NBF_fold_any_e()->E {
++ let words:[u32;8]=kani::any();for x in words {kani::assume(x<2147483647);}E::from_limbs(words).unwrap()
++}
++fn NBF_fold_inverse()->[M31;5] {
++ let x:[u32;5]=kani::any();for v in x {kani::assume(v<2147483647);}x.map(M31)
++}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++#[kani::stub(aspis_core::field::WideExact::mul,NBF_field::wide)]
++fn NBF_circle_scale_routing() {
++ let alpha=NBF_fold_any_e();let inputs=[NBF_fold_any_e(),NBF_fold_any_e(),NBF_fold_any_e(),NBF_fold_any_e()];let inverse=NBF_fold_inverse();
++ let h:usize=kani::any();kani::assume(h<4);let k:usize=kani::any();kani::assume(k<8);
++ let [a,b,c,d]=inputs;
++ let sums=[a.add(b).add(c).add(d),a.sub(b).sub(c).add(d),a.add(b).sub(c).sub(d),a.sub(b).add(c).sub(d)];
++ let _=circle_fold_with_inverses(alpha,inputs,&inverse);
++ unsafe {
++ assert_eq!(NBF_field::SC,8);assert_eq!(NBF_field::MC,4);assert_eq!(NBF_field::WC,3);
++ assert_eq!(NBF_field::SX[2*h+k/4][k%4],sums[h].to_limbs()[k]);
++ let scale=if h==0 {536870912} else if h==1 {NBF_field::MO[0]} else if h==2 {NBF_field::MO[1]} else {NBF_field::MO[3]};
++ assert_eq!(NBF_field::SY[2*h+k/4],scale);
++ assert_eq!(NBF_field::MX[0],536870912);assert_eq!(NBF_field::MY[0],inverse[1].0);
++ assert_eq!(NBF_field::MX[1],536870912);assert_eq!(NBF_field::MY[1],inverse[0].0);
++ assert_eq!(NBF_field::MX[2],536870912);assert_eq!(NBF_field::MY[2],inverse[0].0);
++ assert_eq!(NBF_field::MX[3],NBF_field::MO[2]);assert_eq!(NBF_field::MY[3],inverse[1].0);
++ }
++ kani::cover!(h==0);kani::cover!(h==3);kani::cover!(k==7);
++}
++
++#[kani::proof]
++fn NBF_range_arbitrary_prestate() {
++ let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=end);
++ let mut it=start..end;let result=it.next();
++ if start<end {assert_eq!(result,Some(start));assert_eq!(it.start,start+1);}
++ else {assert!(result.is_none());assert_eq!(it.start,start);}
++ assert_eq!(it.end,end);
++ kani::cover!(start==63&&end==64);kani::cover!(start==127&&end==128);kani::cover!(start==end);
++}
++
++fn NBF_scalar_result(group:usize)->E {
++ unsafe {let a=NBF_field::SO[2*group];let b=NBF_field::SO[2*group+1];E::from_limbs([a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3]]).unwrap()}
++}
++// Literal native subexpressions after decomposition. All inputs are arbitrary
++// canonical carriers; each field multiplication is a Lean-discharged stub.
++fn NBF_fragment_case(which:u8) {
++ let [a,b,c,d]=[NBF_fold_any_e(),NBF_fold_any_e(),NBF_fold_any_e(),NBF_fold_any_e()];
++ let inv=NBF_fold_inverse();let ix=if which<4 {inv[0]} else {inv[2]};let iy=if which<4 {inv[1]} else {inv[3]};let iz=inv[4];let half=M31(1073741824);
++ let k:usize=kani::any();kani::assume(k<8);
++ let out=match which {
++  0=>a.add(b).add(c).add(d).mul_m31(QUARTER),
++  1=>a.sub(b).sub(c).add(d).mul_m31(QUARTER.mul(iy)),
++  2=>a.add(b).sub(c).sub(d).mul_m31(QUARTER.mul(ix)),
++  3=>a.sub(b).add(c).sub(d).mul_m31(QUARTER.mul(ix).mul(iy)),
++  4=>a.add(b).sub(c).sub(d).mul_m31(QUARTER.mul(iz)),
++  5=>a.sub(b).mul_m31(half.mul(ix)),
++  6=>d.sub(c).mul_m31(half.mul(iy)),
++  7=>{let c0=a.sub(b).mul_m31(half.mul(ix));let c1=d.sub(c).mul_m31(half.mul(iy));c0.add(c1).mul_m31(half)},
++  _=>{let c0=a.sub(b).mul_m31(half.mul(ix));let c1=d.sub(c).mul_m31(half.mul(iy));c0.sub(c1).mul_m31(half.mul(iz))}
++ };
++ let group=if which<7 {0}else{2};
++ let expected=match which {
++  0=>a.add(b).add(c).add(d),1=>a.sub(b).sub(c).add(d),2|4=>a.add(b).sub(c).sub(d),
++  3=>a.sub(b).add(c).sub(d),5=>a.sub(b),6=>d.sub(c),
++  7=>NBF_scalar_result(0).add(NBF_scalar_result(1)),
++  _=>NBF_scalar_result(0).sub(NBF_scalar_result(1))
++ };
++ unsafe {
++ assert_eq!(NBF_field::SC,2*(group+1));
++ assert_eq!(NBF_field::SX[2*group+k/4][k%4],expected.to_limbs()[k]);
++ let scale=if which==0 {536870912} else if which==3 {NBF_field::MO[1]} else if which==7 {1073741824} else if which>=8 {NBF_field::MO[2]} else {NBF_field::MO[0]};
++ assert_eq!(NBF_field::SY[2*group+k/4],scale);
++ assert_eq!(out.to_limbs()[k],NBF_field::SO[2*group+k/4][k%4]);
++ let muls=if which==0 {0} else if which==3||which==7 {2} else if which>=8 {3} else {1};
++ assert_eq!(NBF_field::MC,muls);
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++fn NBF_circle_h0(){NBF_fragment_case(0)}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++fn NBF_circle_h1(){NBF_fragment_case(1)}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++fn NBF_circle_h2(){NBF_fragment_case(2)}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++fn NBF_circle_h3(){NBF_fragment_case(3)}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++fn NBF_line_h2(){NBF_fragment_case(4)}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++fn NBF_line_c0(){NBF_fragment_case(5)}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++fn NBF_line_c1(){NBF_fragment_case(6)}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++fn NBF_line_h1(){NBF_fragment_case(7)}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NBF_field::scalar)]
++fn NBF_line_h3(){NBF_fragment_case(8)}
++
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::WideExact::mul,NBF_field::wide)]
++fn NBF_horner_step() {
++ let h=NBF_fold_any_e();let alpha=NBF_fold_any_e();let r=NBF_fold_any_e();
++ let k:usize=kani::any();kani::assume(k<8);
++ let out=h.add(alpha.mul(r));
++ unsafe {
++ assert_eq!(NBF_field::WC,1);
++ assert_eq!(NBF_field::WX[0][k],alpha.to_limbs()[k]);assert_eq!(NBF_field::WY[0][k],r.to_limbs()[k]);
++ let product=E::from_limbs(NBF_field::WO[0]).unwrap();
++ assert_eq!(out.to_limbs()[k],h.add(product).to_limbs()[k]);assert!(out.to_limbs()[k]<2147483647);
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++fn NBF_accumulate_tail(a:&mut Accumulator,value:E,rho:K,pending:&mut BatchedWeights) {
++ pending.terms+=1;
++ a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);
++ a.power=a.power.mul(rho);a.next+=1;
++}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::QM31::mul,NBF_field::qm31)]
++fn NBF_tail_routing() {
++ let next:usize=kani::any();kani::assume(next<10);let k:usize=kani::any();kani::assume(k<8);
++ let power=NBF_fold_any_e().c0();let rho=NBF_fold_any_e().c0();let rhs=NBF_fold_any_e();let value=NBF_fold_any_e();
++ let owned:Box<[K]>=Box::new([
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k(),
++ NBF_arbitrary_k()
++]);
++ let backing:Box<[[u64;4]]>=Box::new([
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>()
++]);
++ let mut a=Accumulator{weights:Vec::from(owned),rhs,power,next};let mut pending=BatchedWeights{raw:Vec::from(backing),terms:next};
++ let wp=a.weights.as_ptr();let rp=pending.raw.as_ptr();let wc=a.weights.capacity();let rc=pending.raw.capacity();
++ NBF_accumulate_tail(&mut a,value,rho,&mut pending);
++ unsafe {
++ assert_eq!(NBF_field::QC,3);
++ let low=value.c0();let high=value.c1();
++ let low=[low.c0.a.0,low.c0.b.0,low.c1.a.0,low.c1.b.0];let high=[high.c0.a.0,high.c0.b.0,high.c1.a.0,high.c1.b.0];
++ let pp=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];let rr=[rho.c0.a.0,rho.c0.b.0,rho.c1.a.0,rho.c1.b.0];
++ assert_eq!(NBF_field::QX[0][k%4],low[k%4]);assert_eq!(NBF_field::QX[1][k%4],high[k%4]);
++ assert_eq!(NBF_field::QY[0][k%4],pp[k%4]);assert_eq!(NBF_field::QY[1][k%4],pp[k%4]);
++ assert_eq!(NBF_field::QX[2][k%4],pp[k%4]);assert_eq!(NBF_field::QY[2][k%4],rr[k%4]);
++ let lo=NBF_field::QO[0];let hi=NBF_field::QO[1];let product=E::from_limbs([lo[0],lo[1],lo[2],lo[3],hi[0],hi[1],hi[2],hi[3]]).unwrap();
++ assert_eq!(a.rhs.to_limbs()[k],rhs.add(product).to_limbs()[k]);
++ let pow=a.power;let pow=[pow.c0.a.0,pow.c0.b.0,pow.c1.a.0,pow.c1.b.0];assert_eq!(pow[k%4],NBF_field::QO[2][k%4]);
++ }
++ assert_eq!(a.next,next+1);assert_eq!(pending.terms,a.next);
++ assert_eq!(a.weights.as_ptr(),wp);assert_eq!(pending.raw.as_ptr(),rp);assert_eq!(a.weights.len(),64);assert_eq!(pending.raw.len(),64);assert_eq!(a.weights.capacity(),wc);assert_eq!(pending.raw.capacity(),rc);
++ kani::cover!(next==0);kani::cover!(next==9);kani::cover!(k==7);
++}
++
++static mut NBF_DECODE_PTR:*const u8=core::ptr::null();static mut NBF_DECODE_I:usize=0;static mut NBF_DECODE_OUT:E=E::ZERO;
++fn NBF_decode_reply(bytes:&[u8],i:usize)->E {
++ unsafe {assert_eq!(bytes.len(),128);NBF_DECODE_PTR=bytes.as_ptr();NBF_DECODE_I=i;let out=NBF_fold_any_e();NBF_DECODE_OUT=out;out}
++}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(crate::weights::field,NBF_decode_reply)]
++fn NBF_query_closure_iteration() {
++ let opening:[u8;832]=[kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>(),kani::any::<u8>()];let mut values=[NBF_fold_any_e(),NBF_fold_any_e(),NBF_fold_any_e(),NBF_fold_any_e()];
++ let i:usize=kani::any();kani::assume(i<4);let j:usize=kani::any();kani::assume(j<4);let k:usize=kani::any();kani::assume(k<8);
++ let before=values[j].to_limbs()[k];values[i]=crate::weights::field(&opening[672..800],i);
++ unsafe{assert_eq!(NBF_DECODE_PTR,opening.as_ptr().add(672));assert_eq!(NBF_DECODE_I,i);assert_eq!(values[j].to_limbs()[k],if i==j {NBF_DECODE_OUT.to_limbs()[k]} else {before});}
++ kani::cover!(i==0);kani::cover!(i==3);kani::cover!(i!=j);
++}
++fn NBF_compare_cut(folded:E,values:[E;4],u:usize)->Result<E,Error> {
++ if folded!=values[u%4] {return Err(Error::Query);}
++ Ok(values[u%4])
++}
++#[kani::proof]
++#[kani::unwind(9)]
++fn NBF_query_compare_cut() {
++ let folded=NBF_fold_any_e();let values=[NBF_fold_any_e(),NBF_fold_any_e(),NBF_fold_any_e(),NBF_fold_any_e()];
++ let u:usize=kani::any();kani::assume(u<262144);let k:usize=kani::any();kani::assume(k<8);
++ let selected=values[u%4];let result=NBF_compare_cut(folded,values,u);
++ if folded!=selected {assert!(matches!(result,Err(Error::Query)));}
++ else {assert_eq!(result.unwrap().to_limbs()[k],folded.to_limbs()[k]);}
++ kani::cover!(folded==selected);kani::cover!(folded!=selected);
++}
++#[kani::proof]
++#[kani::unwind(9)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_field::m31)]
++fn NBF_node_native_cut() {
++ let z:u32=kani::any();kani::assume(z<2147483647);let z=M31(z);
++ let node=z.mul(z).double().sub(M31::ONE);
++ unsafe {assert_eq!(NBF_field::MC,1);assert_eq!(NBF_field::MX[0],z.0);assert_eq!(NBF_field::MY[0],z.0);assert_eq!(node,M31(NBF_field::MO[0]).double().sub(M31::ONE));}
++ assert!(node.0<2147483647);kani::cover!(z==M31::ZERO);kani::cover!(z.0==2147483646);
++}
++
++#[kani::proof]
++fn NBF_mut_next_prestate() {
++ let mut out:[K;64]=[NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k()];let ptr=out.as_mut_ptr();
++ let i:usize=kani::any();kani::assume(i<=64);
++ let mut iter=out[i..].iter_mut();let result=iter.next();
++ if i<64 {assert_eq!(result.unwrap() as *mut K,unsafe{ptr.add(i)});assert_eq!(iter.len(),63-i);}
++ else {assert!(result.is_none());assert_eq!(iter.len(),0);}
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i==64);
++}
++#[kani::proof]
++fn NBF_enumerate_next_prestate() {
++ let mut out:[K;64]=[NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k()];let ptr=out.as_mut_ptr();let i:usize=kani::any();kani::assume(i<=64);
++ let mut iter=out.iter_mut().enumerate();if i>0 {let _=iter.nth(i-1);}
++ let result=iter.next();
++ if i<64 {let(j,w)=result.unwrap();assert_eq!(j,i);assert_eq!(w as *mut K,unsafe{ptr.add(i)});assert_eq!(iter.len(),63-i);}
++ else {assert!(result.is_none());assert_eq!(iter.len(),0);}
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i==64);
++}
++#[kani::proof]
++#[kani::unwind(5)]
++#[kani::stub(super::BatchedWeights::value,NBF_value_reply)]
++fn NBF_enumerate_store_prestate() {
++ let mut out:[K;64]=[NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k()];let i:usize=kani::any();kani::assume(i<=64);let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);
++ let q=out[j];let before=[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0][k];
++ let backing:Box<[[u64;4]]>=Box::new([kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()]);let terms:usize=kani::any();let b=BatchedWeights{raw:Vec::from(backing),terms};
++ {let mut iter=out.iter_mut().enumerate();if i>0 {let _=iter.nth(i-1);}if let Some((index,w))=iter.next(){*w=b.value(index);}}
++ let q=out[j];let after=[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0][k];
++ if i<64 {unsafe {assert_eq!(NBF_VALUE_CALLS,1);assert_eq!(NBF_VALUE_I,i);assert_eq!(NBF_VALUE_PTR,&b as *const BatchedWeights);assert_eq!(after,if i==j {NBF_VALUE_OUT[k]} else {before});}}
++ else {assert_eq!(after,before);unsafe{assert_eq!(NBF_VALUE_CALLS,0);}}
++ assert_eq!(b.terms,terms);assert_eq!(b.raw.len(),64);
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i==64);kani::cover!(i!=j);
++}
++#[kani::proof]
++fn NBF_init_body_prestate() {
++ let backing:Box<[[u64;4]]>=Box::new([kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()]);let mut raw=Vec::from(backing);let weights:[K;64]=[NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k(),NBF_arbitrary_k()];
++ let mut index:usize=kani::any();kani::assume(index<=64);let oldIndex=index;
++ let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);let before=raw[j][k];
++ let mut chosen=0;let active=index<weights.len();if active {let w=weights[index];chosen=[w.c0.a.0,w.c0.b.0,w.c1.a.0,w.c1.b.0][k]as u64;raw[index]=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];index+=1;}
++ assert_eq!(index,oldIndex+usize::from(active));assert_eq!(raw[j][k],if active&&j==oldIndex {chosen}else{before});assert_eq!(raw.len(),64);
++ kani::cover!(oldIndex==0);kani::cover!(oldIndex==63);kani::cover!(oldIndex==64);
++}
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,5 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)] #[path="NBF_query.rs"] mod NBF_query;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBF_query.rs
+@@ -0,0 +1,244 @@
++use super::*;
++use aspis_core::field::CM31;
++static mut NBF_EVENTS:u8=0;
++static mut NBF_I:usize=0;
++static mut NBF_OPEN_PTR:*const u8=core::ptr::null();
++static mut NBF_FOLDED:E=E::ZERO;
++static mut NBF_VALUES:[E;4]=[E::ZERO;4];
++static mut NBF_ALPHA:E=E::ZERO;
++static mut NBF_INV:[M31;5]=[M31::ZERO;5];
++static mut NBF_NODE:M31=M31::ZERO;
++static mut NBF_DOTS:[E;4]=[E::ZERO;4];
++static mut NBF_LINE:E=E::ZERO;
++static mut NBF_ALPHA1:E=E::ZERO;
++static mut NBF_NEXT_OUT:usize=0;
++static mut NBF_TERM_OUT:usize=0;
++static mut NBF_RHS_OUT:E=E::ZERO;
++static mut NBF_POWER_OUT:K=K::ZERO;
++fn NBF_open(proof:&[u8],i:usize)->&[u8] {
++ unsafe {assert_eq!(NBF_EVENTS,0);NBF_EVENTS=1;NBF_I=i;NBF_OPEN_PTR=proof.as_ptr();} proof
++}
++fn NBF_dots(q:&[u8],_g:&[E;29])->[E;4] {
++ unsafe {assert_eq!(NBF_EVENTS,1);NBF_EVENTS=2;assert_eq!(q.as_ptr(),NBF_OPEN_PTR);NBF_DOTS}
++}
++fn NBF_inverse(_geometry:&QueryGeometry,i:usize)->&[M31;5] {
++ unsafe {assert_eq!(NBF_EVENTS,2);NBF_EVENTS=3;assert_eq!(i,NBF_I);&NBF_INV}
++}
++fn NBF_circle(alpha:E,dots:[E;4],inverse:&[M31;5])->E {
++ unsafe {assert_eq!(NBF_EVENTS,3);NBF_EVENTS=4;assert_eq!((alpha).to_limbs()[0],(NBF_ALPHA).to_limbs()[0]);assert_eq!((alpha).to_limbs()[1],(NBF_ALPHA).to_limbs()[1]);assert_eq!((alpha).to_limbs()[2],(NBF_ALPHA).to_limbs()[2]);assert_eq!((alpha).to_limbs()[3],(NBF_ALPHA).to_limbs()[3]);assert_eq!((alpha).to_limbs()[4],(NBF_ALPHA).to_limbs()[4]);assert_eq!((alpha).to_limbs()[5],(NBF_ALPHA).to_limbs()[5]);assert_eq!((alpha).to_limbs()[6],(NBF_ALPHA).to_limbs()[6]);assert_eq!((alpha).to_limbs()[7],(NBF_ALPHA).to_limbs()[7]);assert_eq!((dots[0]).to_limbs()[0],(NBF_DOTS[0]).to_limbs()[0]);assert_eq!((dots[0]).to_limbs()[1],(NBF_DOTS[0]).to_limbs()[1]);assert_eq!((dots[0]).to_limbs()[2],(NBF_DOTS[0]).to_limbs()[2]);assert_eq!((dots[0]).to_limbs()[3],(NBF_DOTS[0]).to_limbs()[3]);assert_eq!((dots[0]).to_limbs()[4],(NBF_DOTS[0]).to_limbs()[4]);assert_eq!((dots[0]).to_limbs()[5],(NBF_DOTS[0]).to_limbs()[5]);assert_eq!((dots[0]).to_limbs()[6],(NBF_DOTS[0]).to_limbs()[6]);assert_eq!((dots[0]).to_limbs()[7],(NBF_DOTS[0]).to_limbs()[7]);assert_eq!((dots[1]).to_limbs()[0],(NBF_DOTS[1]).to_limbs()[0]);assert_eq!((dots[1]).to_limbs()[1],(NBF_DOTS[1]).to_limbs()[1]);assert_eq!((dots[1]).to_limbs()[2],(NBF_DOTS[1]).to_limbs()[2]);assert_eq!((dots[1]).to_limbs()[3],(NBF_DOTS[1]).to_limbs()[3]);assert_eq!((dots[1]).to_limbs()[4],(NBF_DOTS[1]).to_limbs()[4]);assert_eq!((dots[1]).to_limbs()[5],(NBF_DOTS[1]).to_limbs()[5]);assert_eq!((dots[1]).to_limbs()[6],(NBF_DOTS[1]).to_limbs()[6]);assert_eq!((dots[1]).to_limbs()[7],(NBF_DOTS[1]).to_limbs()[7]);assert_eq!((dots[2]).to_limbs()[0],(NBF_DOTS[2]).to_limbs()[0]);assert_eq!((dots[2]).to_limbs()[1],(NBF_DOTS[2]).to_limbs()[1]);assert_eq!((dots[2]).to_limbs()[2],(NBF_DOTS[2]).to_limbs()[2]);assert_eq!((dots[2]).to_limbs()[3],(NBF_DOTS[2]).to_limbs()[3]);assert_eq!((dots[2]).to_limbs()[4],(NBF_DOTS[2]).to_limbs()[4]);assert_eq!((dots[2]).to_limbs()[5],(NBF_DOTS[2]).to_limbs()[5]);assert_eq!((dots[2]).to_limbs()[6],(NBF_DOTS[2]).to_limbs()[6]);assert_eq!((dots[2]).to_limbs()[7],(NBF_DOTS[2]).to_limbs()[7]);assert_eq!((dots[3]).to_limbs()[0],(NBF_DOTS[3]).to_limbs()[0]);assert_eq!((dots[3]).to_limbs()[1],(NBF_DOTS[3]).to_limbs()[1]);assert_eq!((dots[3]).to_limbs()[2],(NBF_DOTS[3]).to_limbs()[2]);assert_eq!((dots[3]).to_limbs()[3],(NBF_DOTS[3]).to_limbs()[3]);assert_eq!((dots[3]).to_limbs()[4],(NBF_DOTS[3]).to_limbs()[4]);assert_eq!((dots[3]).to_limbs()[5],(NBF_DOTS[3]).to_limbs()[5]);assert_eq!((dots[3]).to_limbs()[6],(NBF_DOTS[3]).to_limbs()[6]);assert_eq!((dots[3]).to_limbs()[7],(NBF_DOTS[3]).to_limbs()[7]);assert_eq!(inverse[0].0,NBF_INV[0].0);assert_eq!(inverse[1].0,NBF_INV[1].0);assert_eq!(inverse[2].0,NBF_INV[2].0);assert_eq!(inverse[3].0,NBF_INV[3].0);assert_eq!(inverse[4].0,NBF_INV[4].0);NBF_FOLDED}
++}
++fn NBF_field(q:&[u8],s:usize)->E {
++ unsafe {assert_eq!(NBF_EVENTS,4+s as u8);NBF_EVENTS+=1;assert_eq!(q.as_ptr(),NBF_OPEN_PTR.add(672));assert_eq!(q.len(),128);NBF_VALUES[s]}
++}
++fn NBF_line(alpha:E,values:[E;4],inverse:&[M31;5])->E {
++ unsafe {assert_eq!(NBF_EVENTS,8);NBF_EVENTS=9;assert_eq!((alpha).to_limbs()[0],(NBF_ALPHA1).to_limbs()[0]);assert_eq!((alpha).to_limbs()[1],(NBF_ALPHA1).to_limbs()[1]);assert_eq!((alpha).to_limbs()[2],(NBF_ALPHA1).to_limbs()[2]);assert_eq!((alpha).to_limbs()[3],(NBF_ALPHA1).to_limbs()[3]);assert_eq!((alpha).to_limbs()[4],(NBF_ALPHA1).to_limbs()[4]);assert_eq!((alpha).to_limbs()[5],(NBF_ALPHA1).to_limbs()[5]);assert_eq!((alpha).to_limbs()[6],(NBF_ALPHA1).to_limbs()[6]);assert_eq!((alpha).to_limbs()[7],(NBF_ALPHA1).to_limbs()[7]);assert_eq!((values[0]).to_limbs()[0],(NBF_VALUES[0]).to_limbs()[0]);assert_eq!((values[0]).to_limbs()[1],(NBF_VALUES[0]).to_limbs()[1]);assert_eq!((values[0]).to_limbs()[2],(NBF_VALUES[0]).to_limbs()[2]);assert_eq!((values[0]).to_limbs()[3],(NBF_VALUES[0]).to_limbs()[3]);assert_eq!((values[0]).to_limbs()[4],(NBF_VALUES[0]).to_limbs()[4]);assert_eq!((values[0]).to_limbs()[5],(NBF_VALUES[0]).to_limbs()[5]);assert_eq!((values[0]).to_limbs()[6],(NBF_VALUES[0]).to_limbs()[6]);assert_eq!((values[0]).to_limbs()[7],(NBF_VALUES[0]).to_limbs()[7]);assert_eq!((values[1]).to_limbs()[0],(NBF_VALUES[1]).to_limbs()[0]);assert_eq!((values[1]).to_limbs()[1],(NBF_VALUES[1]).to_limbs()[1]);assert_eq!((values[1]).to_limbs()[2],(NBF_VALUES[1]).to_limbs()[2]);assert_eq!((values[1]).to_limbs()[3],(NBF_VALUES[1]).to_limbs()[3]);assert_eq!((values[1]).to_limbs()[4],(NBF_VALUES[1]).to_limbs()[4]);assert_eq!((values[1]).to_limbs()[5],(NBF_VALUES[1]).to_limbs()[5]);assert_eq!((values[1]).to_limbs()[6],(NBF_VALUES[1]).to_limbs()[6]);assert_eq!((values[1]).to_limbs()[7],(NBF_VALUES[1]).to_limbs()[7]);assert_eq!((values[2]).to_limbs()[0],(NBF_VALUES[2]).to_limbs()[0]);assert_eq!((values[2]).to_limbs()[1],(NBF_VALUES[2]).to_limbs()[1]);assert_eq!((values[2]).to_limbs()[2],(NBF_VALUES[2]).to_limbs()[2]);assert_eq!((values[2]).to_limbs()[3],(NBF_VALUES[2]).to_limbs()[3]);assert_eq!((values[2]).to_limbs()[4],(NBF_VALUES[2]).to_limbs()[4]);assert_eq!((values[2]).to_limbs()[5],(NBF_VALUES[2]).to_limbs()[5]);assert_eq!((values[2]).to_limbs()[6],(NBF_VALUES[2]).to_limbs()[6]);assert_eq!((values[2]).to_limbs()[7],(NBF_VALUES[2]).to_limbs()[7]);assert_eq!((values[3]).to_limbs()[0],(NBF_VALUES[3]).to_limbs()[0]);assert_eq!((values[3]).to_limbs()[1],(NBF_VALUES[3]).to_limbs()[1]);assert_eq!((values[3]).to_limbs()[2],(NBF_VALUES[3]).to_limbs()[2]);assert_eq!((values[3]).to_limbs()[3],(NBF_VALUES[3]).to_limbs()[3]);assert_eq!((values[3]).to_limbs()[4],(NBF_VALUES[3]).to_limbs()[4]);assert_eq!((values[3]).to_limbs()[5],(NBF_VALUES[3]).to_limbs()[5]);assert_eq!((values[3]).to_limbs()[6],(NBF_VALUES[3]).to_limbs()[6]);assert_eq!((values[3]).to_limbs()[7],(NBF_VALUES[3]).to_limbs()[7]);assert_eq!(inverse[0].0,NBF_INV[0].0);assert_eq!(inverse[1].0,NBF_INV[1].0);assert_eq!(inverse[2].0,NBF_INV[2].0);assert_eq!(inverse[3].0,NBF_INV[3].0);assert_eq!(inverse[4].0,NBF_INV[4].0);NBF_LINE}
++}
++fn NBF_m31(x:M31,y:M31)->M31 {
++ assert!(x.0<2147483647);assert!(y.0<2147483647);
++ let out:u32=kani::any();kani::assume(out as u64==((x.0 as u64*y.0 as u64)%2147483647));M31(out)
++}
++// Query caller association only: records the exact reached child arguments.
++// NBF_AccumulateDomain is an explicit remaining callee bridge, not a pass.
++fn NBF_accumulate(_p:&Prepared,a:&mut Accumulator,node:M31,value:E,pending:&mut BatchedWeights) {
++ unsafe {assert_eq!(NBF_EVENTS,9);NBF_EVENTS=10;NBF_NODE=node;assert_eq!((value).to_limbs()[0],(NBF_LINE).to_limbs()[0]);assert_eq!((value).to_limbs()[1],(NBF_LINE).to_limbs()[1]);assert_eq!((value).to_limbs()[2],(NBF_LINE).to_limbs()[2]);assert_eq!((value).to_limbs()[3],(NBF_LINE).to_limbs()[3]);assert_eq!((value).to_limbs()[4],(NBF_LINE).to_limbs()[4]);assert_eq!((value).to_limbs()[5],(NBF_LINE).to_limbs()[5]);assert_eq!((value).to_limbs()[6],(NBF_LINE).to_limbs()[6]);assert_eq!((value).to_limbs()[7],(NBF_LINE).to_limbs()[7]);assert_eq!(a.next,NBF_I);}
++ assert_eq!(pending.terms,a.next);
++ assert_eq!(pending.raw.len(),64);assert_eq!(a.weights.len(),64);
++ unsafe {a.next=NBF_NEXT_OUT;pending.terms=NBF_TERM_OUT;a.rhs=NBF_RHS_OUT;a.power=NBF_POWER_OUT;}
++}
++fn NBF_any_e()->E {
++ let words:[u32;8]=kani::any();
++ for x in words {kani::assume(x<2147483647);}
++ E::from_limbs(words).unwrap()
++}
++fn NBF_raw_k()->K {
++ let p:[u32;4]=kani::any();K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}}
++}
++fn NBF_query_full_case(reject:bool) {
++ let next:usize=kani::any();kani::assume(next<10);
++ let u:u32=kani::any();kani::assume(u<262144);
++ let mut queries=[0u32;22];queries[next]=u;
++ let alpha=NBF_any_e();let alpha1=NBF_any_e();let fold=NBF_any_e();let vals=[NBF_any_e(),NBF_any_e(),NBF_any_e(),NBF_any_e()];
++ let z:u32=kani::any();kani::assume(z<2147483647);
++ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[alpha,alpha1],rho:K::ZERO,queries,semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
++ let weights:[K;64]=[
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k(),
++ NBF_raw_k()
++ ];
++ let a=Accumulator{weights:Vec::from(weights),rhs:NBF_any_e(),power:NBF_any_e().c0(),next};
++ let mut zs=alloc::vec![M31::ZERO;10];zs[next]=M31(z);
++ let geometry=QueryGeometry{start:0,inverses:Vec::new(),line_z:zs};
++ let backing:Box<[[u64;4]]>=Box::new([
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>()
++ ]);
++ let pending=BatchedWeights{raw:Vec::from(backing),terms:next};
++ let proof:[u8;832]=[0;832];
++ unsafe {NBF_ALPHA=alpha;NBF_ALPHA1=alpha1;NBF_FOLDED=fold;NBF_VALUES=vals;
++ NBF_DOTS=[NBF_any_e(),NBF_any_e(),NBF_any_e(),NBF_any_e()];NBF_LINE=NBF_any_e();
++ NBF_NEXT_OUT=kani::any();NBF_TERM_OUT=kani::any();NBF_RHS_OUT=NBF_any_e();NBF_POWER_OUT=NBF_any_e().c0();}
++ kani::assume((fold!=vals[(u%4)as usize])==reject);
++ let result=query_values(&proof,&p,a,&[E::ZERO;29],None,&geometry,pending);
++ let rejected=matches!(result,Err(Error::Query));
++ if fold!=vals[(u%4)as usize] {assert!(matches!(result,Err(Error::Query)));unsafe{assert_eq!(NBF_EVENTS,8);}}
++ else {let(a,b)=result.unwrap();unsafe{assert_eq!(a.next,NBF_NEXT_OUT);assert_eq!(b.terms,NBF_TERM_OUT);assert_eq!((a.rhs).to_limbs()[0],(NBF_RHS_OUT).to_limbs()[0]);assert_eq!((a.rhs).to_limbs()[1],(NBF_RHS_OUT).to_limbs()[1]);assert_eq!((a.rhs).to_limbs()[2],(NBF_RHS_OUT).to_limbs()[2]);assert_eq!((a.rhs).to_limbs()[3],(NBF_RHS_OUT).to_limbs()[3]);assert_eq!((a.rhs).to_limbs()[4],(NBF_RHS_OUT).to_limbs()[4]);assert_eq!((a.rhs).to_limbs()[5],(NBF_RHS_OUT).to_limbs()[5]);assert_eq!((a.rhs).to_limbs()[6],(NBF_RHS_OUT).to_limbs()[6]);assert_eq!((a.rhs).to_limbs()[7],(NBF_RHS_OUT).to_limbs()[7]);assert_eq!(a.power.c0.a.0,NBF_POWER_OUT.c0.a.0);assert_eq!(a.power.c0.b.0,NBF_POWER_OUT.c0.b.0);assert_eq!(a.power.c1.a.0,NBF_POWER_OUT.c1.a.0);assert_eq!(a.power.c1.b.0,NBF_POWER_OUT.c1.b.0);assert_eq!(NBF_EVENTS,10);} }
++ kani::cover!(rejected);kani::cover!(!rejected);
++}
++
++#[kani::proof]
++#[kani::unwind(30)]
++#[kani::stub(super::opening,NBF_open)]
++#[kani::stub(crate::fast_dots::four_dots,NBF_dots)]
++#[kani::stub(crate::verifier::QueryGeometry::for_query,NBF_inverse)]
++#[kani::stub(crate::verifier::circle_fold_with_inverses,NBF_circle)]
++#[kani::stub(crate::weights::field,NBF_field)]
++#[kani::stub(crate::verifier::line_fold_with_inverses,NBF_line)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_m31)]
++#[kani::stub(crate::verifier::accumulate_batched_with_node,NBF_accumulate)]
++fn NBF_query_full_reject(){NBF_query_full_case(true)}
++#[kani::proof]
++#[kani::unwind(30)]
++#[kani::stub(super::opening,NBF_open)]
++#[kani::stub(crate::fast_dots::four_dots,NBF_dots)]
++#[kani::stub(crate::verifier::QueryGeometry::for_query,NBF_inverse)]
++#[kani::stub(crate::verifier::circle_fold_with_inverses,NBF_circle)]
++#[kani::stub(crate::weights::field,NBF_field)]
++#[kani::stub(crate::verifier::line_fold_with_inverses,NBF_line)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_m31)]
++#[kani::stub(crate::verifier::accumulate_batched_with_node,NBF_accumulate)]
++fn NBF_query_full_accept(){NBF_query_full_case(false)}
++
++#[kani::proof]
++#[kani::unwind(30)]
++#[kani::stub(super::opening,NBF_open)]
++#[kani::stub(crate::fast_dots::four_dots,NBF_dots)]
++#[kani::stub(crate::verifier::QueryGeometry::for_query,NBF_inverse)]
++#[kani::stub(crate::verifier::circle_fold_with_inverses,NBF_circle)]
++#[kani::stub(crate::weights::field,NBF_field)]
++#[kani::stub(crate::verifier::line_fold_with_inverses,NBF_line)]
++#[kani::stub(aspis_core::field::M31::mul,NBF_m31)]
++#[kani::stub(crate::verifier::accumulate_batched_with_node,NBF_accumulate)]
++fn NBF_query_coordinate_asserts(){NBF_query_full_case(kani::any())}

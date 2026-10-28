@@ -1,11 +1,12 @@
 from NBF_host import *
+from NBF_payloads import read_payload
 import hashlib,difflib
 admit('NBF_SYNC'+str(max([int(p.name.split('-')[0][8:]) for p in E.glob('NBF_SYNC*-reservation.json')]+[0])+1).zfill(3))
 rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 f='crates/aspis-r1-cost-probe/src/verifier.rs'
 original=subprocess.check_output(['git','show',rev+':'+f],text=True)
 marker='\n#[cfg(kani)] #[path="NBF_harness.rs"] mod NBF_harness;\n'
-harness=(E/'NBF_harness.rs.txt').read_text()
+harness=read_payload('NBF_harness.rs')
 patch=''.join(difflib.unified_diff(original.splitlines(True),(original+marker).splitlines(True),fromfile='a/'+f,tofile='b/'+f))
 patch+=''.join(difflib.unified_diff([],harness.splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-r1-cost-probe/src/NBF_harness.rs'))
 (E/'NBF_harness.patch').write_text(patch)
@@ -22,7 +23,8 @@ assert r.returncode==0,r.stderr
 f2='crates/aspis-r1-cost-probe/src/candidate.rs'
 o2=subprocess.check_output(['git','show',rev+':'+f2],text=True)
 m2='\n#[cfg(kani)] #[path="NBF_query.rs"] mod NBF_query;\n'
-h2=(E/'NBF_query.rs.txt').read_text() if (E/'NBF_query.rs.txt').exists() else ''
+try:h2=read_payload('NBF_query.rs')
+except FileNotFoundError:h2=''
 if h2:
  patch+=''.join(difflib.unified_diff(o2.splitlines(True),(o2+m2).splitlines(True),fromfile='a/'+f2,tofile='b/'+f2))
  patch+=''.join(difflib.unified_diff([],h2.splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-r1-cost-probe/src/NBF_query.rs'))
