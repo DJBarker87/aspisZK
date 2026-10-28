@@ -1,0 +1,234 @@
+{
+  "row": "V187",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "fn try_from(mut vec: Vec<T, A>)",
+      "complete_body": "{\n        if vec.len() != N {\n            return Err(vec);\n        }\n\n        \n        unsafe { vec.set_len(0) };\n\n        \n        \n        \n        \n        \n        let array = unsafe { ptr::read(vec.as_ptr() as *const [T; N]) };\n        Ok(array)\n    }",
+      "selected_release_body": "{\n        if vec.len() != N {\n            return Err(vec);\n        }\n\n        \n        unsafe { vec.set_len(0) };\n\n        \n        \n        \n        \n        \n        let array = unsafe { ptr::read(vec.as_ptr() as *const [T; N]) };\n        Ok(array)\n    }",
+      "tokens_equal": true,
+      "law": "V187.complete; rejection occurs before any ownership change"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "fn into_iter(self) -> Self::IntoIter",
+      "complete_body": "{\n        unsafe {\n            let me = ManuallyDrop::new(self);\n            let alloc = ManuallyDrop::new(ptr::read(me.allocator()));\n            let buf = me.buf.non_null();\n            let begin = buf.as_ptr();\n            let end = if T::IS_ZST {\n                begin.wrapping_byte_add(me.len())\n            } else {\n                begin.add(me.len()) as *const T\n            };\n            let cap = me.buf.capacity();\n            IntoIter { buf, phantom: PhantomData, cap, alloc, ptr: buf, end }\n        }\n    }",
+      "selected_release_body": "{\n        unsafe {\n            let me = ManuallyDrop::new(self);\n            let alloc = ManuallyDrop::new(ptr::read(me.allocator()));\n            let buf = me.buf.non_null();\n            let begin = buf.as_ptr();\n            let end = if T::IS_ZST {\n                begin.wrapping_byte_add(me.len())\n            } else {\n                begin.add(me.len()) as *const T\n            };\n            let cap = me.buf.capacity();\n            IntoIter { buf, phantom: PhantomData, cap, alloc, ptr: buf, end }\n        }\n    }",
+      "tokens_equal": true,
+      "law": "allocation/pointer/capacity/allocator moved, not cloned; ZST end count encoded modulo pointer width"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/into_iter.rs",
+      "file_sha256": "cd31180b395f914d4707b9b9a1a450b1ca8676ccccdbc75410f96756d2db801a",
+      "anchor": "fn next(&mut self) -> Option<T>",
+      "complete_body": "{\n        let ptr = if T::IS_ZST {\n            if self.ptr.as_ptr() == self.end as *mut T {\n                return None;\n            }\n            \n            \n            self.end = self.end.wrapping_byte_sub(1);\n            self.ptr\n        } else {\n            if self.ptr == non_null!(self.end, T) {\n                return None;\n            }\n            let old = self.ptr;\n            self.ptr = unsafe { old.add(1) };\n            old\n        };\n        Some(unsafe { ptr.read() })\n    }",
+      "selected_release_body": "{\n        let ptr = if T::IS_ZST {\n            if self.ptr.as_ptr() == self.end as *mut T {\n                return None;\n            }\n            \n            \n            self.end = self.end.wrapping_byte_sub(1);\n            self.ptr\n        } else {\n            if self.ptr == non_null!(self.end, T) {\n                return None;\n            }\n            let old = self.ptr;\n            self.ptr = unsafe { old.add(1) };\n            old\n        };\n        Some(unsafe { ptr.read() })\n    }",
+      "tokens_equal": true,
+      "law": "V187Iterator.zst_empty,zst_step,fill_exact; initialized read followed by one ownership-count decrement"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/into_iter.rs",
+      "file_sha256": "cd31180b395f914d4707b9b9a1a450b1ca8676ccccdbc75410f96756d2db801a",
+      "anchor": "fn size_hint(&self)",
+      "complete_body": "{\n        let exact = if T::IS_ZST {\n            self.end.addr().wrapping_sub(self.ptr.as_ptr().addr())\n        } else {\n            unsafe { non_null!(self.end, T).offset_from_unsigned(self.ptr) }\n        };\n        (exact, Some(exact))\n    }",
+      "selected_release_body": "{\n        let exact = if T::IS_ZST {\n            self.end.addr().wrapping_sub(self.ptr.as_ptr().addr())\n        } else {\n            unsafe { non_null!(self.end, T).offset_from_unsigned(self.ptr) }\n        };\n        (exact, Some(exact))\n    }",
+      "tokens_equal": true,
+      "law": "exact remaining count; after N steps zero, before step k remaining N-k"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/into_iter.rs",
+      "file_sha256": "cd31180b395f914d4707b9b9a1a450b1ca8676ccccdbc75410f96756d2db801a",
+      "anchor": "fn as_raw_mut_slice(",
+      "complete_body": "{\n        ptr::slice_from_raw_parts_mut(self.ptr.as_ptr(), self.len())\n    }",
+      "selected_release_body": "{\n        ptr::slice_from_raw_parts_mut(self.ptr.as_ptr(), self.len())\n    }",
+      "tokens_equal": true,
+      "law": "empty live region after exact_transfer; no T destructor calls"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/into_iter.rs",
+      "file_sha256": "cd31180b395f914d4707b9b9a1a450b1ca8676ccccdbc75410f96756d2db801a",
+      "anchor": "Drop for IntoIter<T, A>",
+      "complete_body": "{\n    fn drop(&mut self) {\n        struct DropGuard<'a, T, A: Allocator>(&'a mut IntoIter<T, A>);\n\n        impl<T, A: Allocator> Drop for DropGuard<'_, T, A> {\n            fn drop(&mut self) {\n                unsafe {\n                    \n                    let alloc = ManuallyDrop::take(&mut self.0.alloc);\n                    \n                    let _ = RawVec::from_nonnull_in(self.0.buf, self.0.cap, alloc);\n                }\n            }\n        }\n\n        let guard = DropGuard(self);\n        \n        unsafe {\n            ptr::drop_in_place(guard.0.as_raw_mut_slice());\n        }\n        \n    }\n}",
+      "selected_release_body": "{\n    fn drop(&mut self) {\n        struct DropGuard<'a, T, A: Allocator>(&'a mut IntoIter<T, A>);\n\n        impl<T, A: Allocator> Drop for DropGuard<'_, T, A> {\n            fn drop(&mut self) {\n                unsafe {\n                    \n                    let alloc = ManuallyDrop::take(&mut self.0.alloc);\n                    \n                    let _ = RawVec::from_nonnull_in(self.0.buf, self.0.cap, alloc);\n                }\n            }\n        }\n\n        let guard = DropGuard(self);\n        \n        unsafe {\n            ptr::drop_in_place(guard.0.as_raw_mut_slice());\n        }\n        \n    }\n}",
+      "tokens_equal": true,
+      "law": "V187.successful_world; identical saved buffer/capacity/allocator finalized once after empty live region"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "anchor": "pub const fn from_fn<",
+      "complete_body": "{\n    try_from_fn(NeverShortCircuit::wrap_mut_1(f)).0\n}",
+      "selected_release_body": "{\n    try_from_fn(NeverShortCircuit::wrap_mut_1(f)).0\n}",
+      "tokens_equal": true,
+      "law": "V187Iterator.fill: forward generator indexed from zero"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "anchor": "pub const fn try_from_fn<",
+      "complete_body": "{\n    let mut array = [const { MaybeUninit::uninit() }; N];\n    match try_from_fn_erased(&mut array, cb) {\n        ControlFlow::Break(r) => FromResidual::from_residual(r),\n        ControlFlow::Continue(()) => {\n            \n            try { unsafe { MaybeUninit::array_assume_init(array) } }\n        }\n    }\n}",
+      "selected_release_body": "{\n    let mut array = [const { MaybeUninit::uninit() }; N];\n    match try_from_fn_erased(&mut array, cb) {\n        ControlFlow::Break(r) => FromResidual::from_residual(r),\n        ControlFlow::Continue(()) => {\n            \n            try { unsafe { MaybeUninit::array_assume_init(array) } }\n        }\n    }\n}",
+      "tokens_equal": true,
+      "law": "complete initialized output; NeverShortCircuit excludes Break"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "anchor": "const fn try_from_fn_erased<",
+      "complete_body": "{\n    let mut guard = Guard { array_mut: buffer, initialized: 0 };\n\n    while guard.initialized < guard.array_mut.len() {\n        let item = generator(guard.initialized).branch()?;\n\n        \n        unsafe { guard.push_unchecked(item) };\n    }\n\n    mem::forget(guard);\n    ControlFlow::Continue(())\n}",
+      "selected_release_body": "{\n    let mut guard = Guard { array_mut: buffer, initialized: 0 };\n\n    while guard.initialized < guard.array_mut.len() {\n        let item = generator(guard.initialized).branch()?;\n\n        \n        unsafe { guard.push_unchecked(item) };\n    }\n\n    mem::forget(guard);\n    ControlFlow::Continue(())\n}",
+      "tokens_equal": true,
+      "law": "V187Iterator.fill_exact,next_bounds; guard forgotten after exact initialization; no guard-drop in admitted executions"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "anchor": "unsafe fn push_unchecked(",
+      "complete_body": "{\n        \n        \n        \n        unsafe {\n            self.array_mut.get_unchecked_mut(self.initialized).write(item);\n            self.initialized = self.initialized.unchecked_add(1);\n        }\n    }",
+      "selected_release_body": "{\n        \n        \n        \n        unsafe {\n            self.array_mut.get_unchecked_mut(self.initialized).write(item);\n            self.initialized = self.initialized.unchecked_add(1);\n        }\n    }",
+      "tokens_equal": true,
+      "law": "V187Iterator.fill_exact,initialized_count,next_bounds; explicit write not erased by borrowed projection"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/try_trait.rs",
+      "file_sha256": "8c3347dd45bbbae19c3bae2c6fb7b2f39e1a05a27cd15fcb4ed8f2d82be5dfd0",
+      "anchor": "fn wrap_mut_1<A, F>",
+      "complete_body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+      "selected_release_body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+      "tokens_equal": true,
+      "law": "no effect; generator wrapper"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/try_trait.rs",
+      "file_sha256": "8c3347dd45bbbae19c3bae2c6fb7b2f39e1a05a27cd15fcb4ed8f2d82be5dfd0",
+      "anchor": "fn call_mut(&mut self, (args,): (A,))",
+      "complete_body": "{\n        NeverShortCircuit((self.f)(args))\n    }",
+      "selected_release_body": "{\n        NeverShortCircuit((self.f)(args))\n    }",
+      "tokens_equal": true,
+      "law": "one generator call, no extra effects"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/try_trait.rs",
+      "file_sha256": "8c3347dd45bbbae19c3bae2c6fb7b2f39e1a05a27cd15fcb4ed8f2d82be5dfd0",
+      "anchor": "fn branch(self) -> ControlFlow<NeverShortCircuitResidual, T>",
+      "complete_body": "{\n        ControlFlow::Continue(self.0)\n    }",
+      "selected_release_body": "{\n        ControlFlow::Continue(self.0)\n    }",
+      "tokens_equal": true,
+      "law": "no Break/error introduced by from_fn"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+      "file_sha256": "296e9937df5c429a4c7370e1bb6e5a1a6052ba549754e6fdef754db103a0b002",
+      "anchor": "pub const fn expect(",
+      "complete_body": "{\n        match self {\n            Some(val) => val,\n            None => expect_failed(msg),\n        }\n    }",
+      "selected_release_body": "{\n        match self {\n            Some(val) => val,\n            None => expect_failed(msg),\n        }\n    }",
+      "tokens_equal": true,
+      "law": "fill_exact proves Some on every reached generator call; no expect panic"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs",
+      "file_sha256": "7d588bf99e1bd7293b4b9c40fd71a6d5ed71ec6945920b166fc0c90547785702",
+      "anchor": "pub const unsafe fn array_assume_init<",
+      "complete_body": "{\n        \n        \n        \n        \n        \n        unsafe {\n            intrinsics::assert_inhabited::<[T; N]>();\n            intrinsics::transmute_unchecked(array)\n        }\n    }",
+      "selected_release_body": "{\n        \n        \n        \n        \n        \n        unsafe {\n            intrinsics::assert_inhabited::<[T; N]>();\n            intrinsics::transmute_unchecked(array)\n        }\n    }",
+      "tokens_equal": true,
+      "law": "fully initialized array representation; inhabited by exactly N already owned values, no Inhabited T assumption"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) unsafe fn from_nonnull_in(",
+      "complete_body": "{\n        \n        unsafe {\n            let ptr = ptr.cast();\n            let capacity = new_cap::<T>(capacity);\n            Self { inner: RawVecInner::from_nonnull_in(ptr, capacity, alloc), _marker: PhantomData }\n        }\n    }",
+      "selected_release_body": "{\n        \n        unsafe {\n            let ptr = ptr.cast();\n            let capacity = new_cap::<T>(capacity);\n            Self { inner: RawVecInner::from_nonnull_in(ptr, capacity, alloc), _marker: PhantomData }\n        }\n    }",
+      "tokens_equal": true,
+      "law": "pointer representation law; no allocation, saved cap/allocator reconstructed"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "unsafe fn from_nonnull_in(ptr: NonNull<u8>",
+      "complete_body": "{\n        Self { ptr: Unique::from(ptr), cap, alloc }\n    }",
+      "selected_release_body": "{\n        Self { ptr: Unique::from(ptr), cap, alloc }\n    }",
+      "tokens_equal": true,
+      "law": "same allocation identity/capacity/allocator"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn new_cap<T>",
+      "complete_body": "{\n    if T::IS_ZST { ZERO_CAP } else { unsafe { Cap::new_unchecked(cap) } }\n}",
+      "selected_release_body": "{\n    if T::IS_ZST { ZERO_CAP } else { unsafe { Cap::new_unchecked(cap) } }\n}",
+      "tokens_equal": true,
+      "law": "ZST capacity usize::MAX is external; stored zero means no free; nonZST saved cap retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "tokens_equal": true,
+      "law": "PV_RDB1_Pointer.cast_complete"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const unsafe fn add(",
+      "complete_body": "{\n        \n        \n        \n        \n        unsafe { NonNull { pointer: intrinsics::offset(self.as_ptr(), count) } }\n    }",
+      "selected_release_body": "{\n        \n        \n        \n        \n        unsafe { NonNull { pointer: intrinsics::offset(self.as_ptr(), count) } }\n    }",
+      "tokens_equal": true,
+      "law": "PV_RDB1_Pointer.offset_bounds/no_wrap; cursor reaches at most one-past"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const unsafe fn read(",
+      "complete_body": "{\n        \n        unsafe { ptr::read(self.as_ptr()) }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { ptr::read(self.as_ptr()) }\n    }",
+      "tokens_equal": true,
+      "law": "initialized owned read; no copy of ownership retained in live iterator"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "reason": "same deployed intrinsic/deallocator source as V170 and V184 bindings; generic allocator finish primitive retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "reason": "same deployed intrinsic/deallocator source as V170 and V184 bindings; generic allocator finish primitive retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "reason": "same deployed intrinsic/deallocator source as V170 and V184 bindings; generic allocator finish primitive retained"
+    }
+  ],
+  "owned_reference": {
+    "body": "{\n    if v.len()!=N {return Err(v);}\n    let mut iter=v.into_iter();\n    Ok(core::array::from_fn(|_|iter.next().expect(\"length checked\")))\n}",
+    "sha256": "1c7754557217eac663113065d3f6945c1581bcbfd6e3b620236bf88da50f5737"
+  },
+  "laws": [
+    "PV_RDB1_V187.complete",
+    "PV_RDB1_V187.value_result",
+    "PV_RDB1_V187.rejected_world",
+    "PV_RDB1_V187.successful_world",
+    "PV_RDB1_V187Iterator.fill_exact",
+    "PV_RDB1_V187Iterator.zst_empty",
+    "PV_RDB1_V187Iterator.zst_step"
+  ],
+  "effects": "Error length returns original Vec/world before iterator construction. Success transfers every T once, no remaining live T, drops same saved allocator/buffer/capacity once. No allocator failure erased: finish is an arbitrary shared Result-valued primitive.",
+  "D188": "No Aeneas emission of mutable-element loop is credited. The complete push_unchecked write and initialized counter increment are explicitly bound to the structural fill loop.",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "toolchain": "1.94.1",
+  "native_validation": "native-array/receipt.json: 606 nonCopy and 99 ZST paired cases, reused unchanged; finite only",
+  "retained_boundary": "Original op36 generic value/ownership source law; explicit intrinsic memory and valid allocation relation; generic allocator primitive; compiler, binary and side-channel obligations retained",
+  "kani_credit": false
+}

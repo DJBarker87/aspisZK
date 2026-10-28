@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,subprocess,re,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdb1-20261028';D='/home/dombarker/project-offloads/codex-pv-rdb1-20261028';H='dombarker@100.108.41.90'
-for name in ['v184-deployed-binding.json','v170-deployed-binding.json','preflight.json']:
+for name in ['v184-deployed-binding.json','v170-deployed-binding.json','v187-deployed-binding.json','preflight.json']:
  r=subprocess.run(['ssh',H,'cat '+D+'/'+name],capture_output=True,check=True);(E/name).write_bytes(r.stdout)
 fsha=hashlib.sha256((E/'resolved-features.json').read_bytes()).hexdigest()
 for p in E.glob('*-submission.json'):
