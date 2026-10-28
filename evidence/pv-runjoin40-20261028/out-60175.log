@@ -1,0 +1,47 @@
+START 60175 R1Z.PV_RunJoin_CompactRejectComplete40
+DONE 60175 R1Z.PV_RunJoin_CompactRejectComplete40 exit 1 wall 1.15 RSS 2705600512
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CompactRejectComplete40.lean:43:34: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_RunJoin_CompactLoop39.payload logical 0 k).length
+in the target expression
+  (↑out).length + (PV_RunJoin_CompactLoop39.payload logical (↑0#usize) k).length = (↑out).length + 16 * k
+
+case refine_2
+logical : Slice U8
+out : alloc.vec.Vec U8
+total k : ℕ
+length : logical.length = 32 * total
+badAt bad : Usize
+value : U8
+location : ↑badAt = 32 * k
+cell_bound : ↑badAt + 32 ≤ logical.length
+room : out.length + 16 * k ≤ Usize.max
+bad_lo : 16 ≤ ↑bad
+bad_hi : ↑bad < 32
+nonzero : value ≠ 0#u8
+read_bad : logical.index_usize (badAt.wrapping_add bad) = ok value
+before_bad : ∀ (j : Usize), 16 ≤ ↑j → ↑j < ↑bad → logical.index_usize (badAt.wrapping_add j) = ok 0#u8
+prior :
+  ∀ (pos : Usize), ↑pos < ↑badAt → ∀ (j : Usize), 16 ≤ ↑j → ↑j < 32 → logical.index_usize (pos.wrapping_add j) = ok 0#u8
+next : alloc.vec.Vec U8
+hn :
+  host_compact.compact_values_loop0 logical out 0#usize =
+    ok (next, some (core.result.Result.Err compact.CodecError.NonZeroHigh))
+hbytes : ↑next = ↑out ++ PV_RunJoin_CompactLoop39.payload logical (↑0#usize) k
+r : UScalar UScalarTy.Usize
+hr : logical.len % 32#usize = ok 0#usize
+hv : ↑r = ↑logical.len % ↑32#usize
+rz : r = 0#usize
+⊢ (↑out).length + (PV_RunJoin_CompactLoop39.payload logical (↑0#usize) k).length = (↑out).length + 16 * k
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out
+  has type
+    alloc.vec.Vec U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑out
+'R1Z.PV_RunJoin_CompactRejectComplete40.reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

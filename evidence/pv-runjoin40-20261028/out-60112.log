@@ -1,0 +1,111 @@
+START 60112 R1Z.PV_RunJoin_SemanticCopy40
+DONE 60112 R1Z.PV_RunJoin_SemanticCopy40 exit 1 wall 2.0 RSS 4412899328
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticCopy40.lean:43:2: error: unsolved goals
+case refine_1
+inst✝ : ExternalTypes
+ops : ExternalFuns
+logical : Slice U8
+out : alloc.vec.Vec U8
+row tag : U8
+at1 size : Usize
+shape : r1_wire.row_shape row = ok (some (tag, size))
+small : ↑row < 14
+bound : ↑at1 + 5 + ↑size ≤ logical.length
+room : out.length + 5 + ↑size ≤ Usize.max
+this : ExternalFuns := ProverRwP6BodyCandidate.selected ops
+cap : logical.length ≤ Usize.max
+inc : ↑(at1.wrapping_add 5#usize) = ↑at1 + 5
+endval : ↑((at1.wrapping_add 5#usize).wrapping_add size) = ↑at1 + 5 + ↑size
+head : Slice U8
+mid : alloc.vec.Vec U8
+hh :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) logical
+      { start := at1, «end» := at1.wrapping_add 5#usize } =
+    ok head
+hm : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out head = ok mid
+hmid : ↑mid = ↑out ++ List.take (↑(at1.wrapping_add 5#usize) - ↑at1) (List.drop ↑at1 ↑logical)
+midlen : mid.length = out.length + 5
+payload : Slice U8
+next : alloc.vec.Vec U8
+hp :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) logical
+      { start := at1.wrapping_add 5#usize, «end» := (at1.wrapping_add 5#usize).wrapping_add size } =
+    ok payload
+hn : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 mid payload = ok next
+hnext :
+  ↑next =
+    ↑mid ++
+      List.take (↑((at1.wrapping_add 5#usize).wrapping_add size) - ↑(at1.wrapping_add 5#usize))
+        (List.drop ↑(at1.wrapping_add 5#usize) ↑logical)
+ho : core.option.Option.ok_or (some (tag, size)) compact.CodecError.Length = ok (core.result.Result.Ok (tag, size))
+⊢ (let (_, size) := (tag, size)
+    if decide False = true then do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) logical
+            { start := at1.wrapping_add 5#usize, «end» := (at1.wrapping_add 5#usize).wrapping_add size }
+      let (r1, out2) ← host_compact.compact_values s1 mid
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          ok (core.result.Result.Ok ((at1.wrapping_add 5#usize).wrapping_add size), out2)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Usize
+                (core.convert.FromSame compact.CodecError) residual
+          ok (r2, out2)
+    else do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) logical
+            { start := at1.wrapping_add 5#usize, «end» := (at1.wrapping_add 5#usize).wrapping_add size }
+      let out2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 mid s1
+      ok (core.result.Result.Ok ((at1.wrapping_add 5#usize).wrapping_add size), out2)) =
+    ok (core.result.Result.Ok ((at1.wrapping_add 5#usize).wrapping_add size), next)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticCopy40.lean:46:57: warning: This simp argument is unused:
+  Bool.decide_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵o̵s̵t̵_̵c̵o̵m̵p̵a̵c̵t̵.̵c̵o̵m̵p̵a̵c̵t̵_̵s̵e̵m̵a̵n̵t̵i̵c̵_̵r̵o̵w̵,̵s̵h̵a̵p̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵o̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵h̵h̵,̵h̵m̵,̵h̵o̵s̵t̵_̵c̵o̵m̵p̵a̵c̵t̵.̵c̵o̵m̵p̵a̵c̵t̵_̵r̵o̵w̵,̵[̲h̲o̲s̲t̲_̲c̲o̲m̲p̲a̲c̲t̲.̲c̲o̲m̲p̲a̲c̲t̲_̲s̲e̲m̲a̲n̲t̲i̲c̲_̲r̲o̲w̲,̲ ̲s̲h̲a̲p̲e̲,̲ ̲h̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲h̲h̲,̲ ̲h̲m̲,̲ ̲h̲o̲s̲t̲_̲c̲o̲m̲p̲a̲c̲t̲.̲c̲o̲m̲p̲a̲c̲t̲_̲r̲o̲w̲,̲
+      show ¬̵r̵o̵w̵≥̵1̵4̵#̵u̵8̵¬̲r̲o̲w̲ ̲≥̲ ̲1̲4̲#̲u̲8̲ from (by change ¬̵r̵o̵w̵.̵v̵a̵l̵≥̵1̵4̵;̵o̵m̵e̵g̵a̵)̵,̵B̵o̵o̵l̵.̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵h̵p̵,̵h̵n̵]̵¬̲r̲o̲w̲.̲v̲a̲l̲ ̲≥̲ ̲1̲4̲;̲ ̲o̲m̲e̲g̲a̲)̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲h̲p̲,̲ ̲h̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticCopy40.lean:46:75: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [host_compact.compact_semantic_row, ̲shape,
+  ̵  ̵ ̵ ̵ ̵ ̵ho,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, ̲lift, ̲hh, ̲hm, ̲host_compact.compact_row,
+       ̵ ̵show ¬row ̲≥ ̲14#u8 from (by change ¬row.val ̲≥ ̲14; ̲omega), ̲Bool.decide_false,↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵ ̲hp, ̲hn]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticCopy40.lean:46:86: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [host_compact.compact_semantic_row, ̲shape,
+  ̵  ̵ ̵ ̵ ̵ ̵ho,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, ̲lift, ̲hh, ̲hm, ̲host_compact.compact_row,
+       ̵ ̵show ¬row ̲≥ ̲14#u8 from (by change ¬row.val ̲≥ ̲14; ̲omega), ̲Bool.decide_false, ̲↓reduceIte, ̲hp̵,̵h̵n]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticCopy40.lean:46:89: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [host_compact.compact_semantic_row, ̲shape,
+  ̵  ̵ ̵ ̵ ̵ ̵ho,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, ̲lift, ̲hh, ̲hm, ̲host_compact.compact_row,
+       ̵ ̵show ¬row ̲≥ ̲14#u8 from (by change ¬row.val ̲≥ ̲14; ̲omega), ̲Bool.decide_false, ̲↓reduceIte, ̲hp,̵h̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_SemanticCopy40.row' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

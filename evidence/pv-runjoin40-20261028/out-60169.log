@@ -1,0 +1,40 @@
+START 60169 R1Z.PV_RunJoin_SemanticComplete40
+DONE 60169 R1Z.PV_RunJoin_SemanticComplete40 exit 1 wall 1.73 RSS 4406022144
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticComplete40.lean:32:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ e ≤ 31
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b - c ≥ 32
+where
+ a := ↑Usize.max
+ b := ↑out.length
+ c := ↑records.flatten.length
+ d := ↑(↑out).length
+ e := ↑↑32#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticComplete40.lean:35:18: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+logical : Slice U8
+out : alloc.vec.Vec U8
+records : List (List U8)
+length : logical.length = 13831
+domain : Domain ops logical 27#u8 32#usize 0#u8 records
+room : out.length + 32 + records.flatten.length ≤ Usize.max
+this : ExternalFuns := ProverRwP6BodyCandidate.selected ops
+layout : compact.LOGICAL_SEMANTIC = ok 13831#usize
+lenword : logical.len = 13831#usize
+s : Slice U8
+mid : alloc.vec.Vec U8
+hs : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) logical { «end» := 32#usize } = ok s
+hm : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s = ok mid
+hmid : ↑mid = ↑out ++ List.take ↑32#usize ↑logical
+midlen : mid.length = out.length + 32
+next : alloc.vec.Vec U8
+hn : host_compact.compact_semantic_loop logical mid 27#u8 32#usize 0#u8 = ok (core.result.Result.Ok (), next)
+hnext : ↑next = ↑mid ++ records.flatten
+⊢ ↑out ++ (List.take ↑32#usize ↑logical ++ records.flatten) = ↑out ++ List.take 32 ↑logical ++ records.flatten
+'R1Z.PV_RunJoin_SemanticComplete40.encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

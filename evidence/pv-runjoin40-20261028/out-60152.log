@@ -1,0 +1,30 @@
+START 60152 R1Z.PV_RunJoin_SemanticStep40
+DONE 60152 R1Z.PV_RunJoin_SemanticStep40 exit 1 wall 1.76 RSS 4402774016
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticStep40.lean:11:56: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+logical : Slice U8
+count : U8
+out mid : alloc.vec.Vec U8
+at1 at2 : Usize
+row : U8
+more : row < count
+source : host_compact.compact_semantic_row logical out row at1 = ok (core.result.Result.Ok at2, mid)
+⊢ (let (r, out1) := (core.result.Result.Ok at2, mid)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => ok (ControlFlow.cont (out1, val, row.wrapping_add 1#u8))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame compact.CodecError) residual
+        ok (ControlFlow.done (r1, out1))) =
+    ok (ControlFlow.cont (mid, at2, row.wrapping_add 1#u8))
+'R1Z.PV_RunJoin_SemanticStep40.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticStep40.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticStep40.trailing' depends on axioms: [propext, Classical.choice, Quot.sound]
+

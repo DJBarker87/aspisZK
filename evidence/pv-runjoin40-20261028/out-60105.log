@@ -1,0 +1,26 @@
+START 60105 R1Z.PV_RunJoin_ZeroWord40
+DONE 60105 R1Z.PV_RunJoin_ZeroWord40 exit 1 wall 1.7 RSS 4394946560
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ZeroWord40.lean:7:2: error: Tactic `decide` failed for proposition
+  ↑(core.num.U32.to_le_bytes 0#u32) = [0#u8, 0#u8, 0#u8, 0#u8]
+because its `Decidable` instance
+  instDecidableEqList ↑(core.num.U32.to_le_bytes 0#u32) [0#u8, 0#u8, 0#u8, 0#u8]
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instance `instDecidableEqList`, reduction got stuck at the `Decidable` instance
+  match ↑(core.num.U32.to_le_bytes 0#u32) with
+  | [] =>
+    match [0#u8, 0#u8, 0#u8, 0#u8] with
+    | [] => isTrue ⋯
+    | head :: tail => isFalse ⋯
+  | a :: «as» =>
+    match [0#u8, 0#u8, 0#u8, 0#u8] with
+    | [] => isFalse ⋯
+    | b :: bs =>
+      match decEq a b with
+      | isTrue hab =>
+        match «as».hasDecEq bs with
+        | isTrue habs => isTrue ⋯
+        | isFalse nabs => isFalse ⋯
+      | isFalse nab => isFalse ⋯
+'R1Z.PV_RunJoin_ZeroWord40.bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
