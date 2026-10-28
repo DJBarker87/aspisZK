@@ -12974,3 +12974,16 @@ the same unlaunched ID after 60 s, at most three times, then stop. batch2f resum
 remaining 22 attempts: universal copy equality and allocation transport for ops 249-253, the
 V256-V260 bridges by the structural route, the fixture-byte gate and the combined audit, finishing
 whole rows before partial ones. Rows removed outright: 0. Privacy target not yet established.
+
+## D340 (Stream B) 2026-10-28 00:29 UTC: batch2f: V256 and V257 proved, pending their final audit; batch2g launched
+
+batch2f (10 charged compiles; ID 39887 reused successfully under ruling (p'); no Rust change) proved
+universal original/copy Result equality and installation in the native carrier for ops 249 (V256,
+gamma sampler) and 250 (V257, ordinary sampler), with value laws, non-vacuity and the other
+callbacks unchanged; the native differential matched on 4,402 inputs per sampler (finite
+validation). It stopped when its ID block ran out (three uncharged reservation refusals consumed IDs)
+with 12 attempts unspent, so the combined audit and focused replay for V256/V257 never launched; the
+two rows are not credited until they pass. V258-V260 and the fixture-byte gate remain open. batch2g
+(60 attempts; IDs 40800-40899) runs the V256/V257 audit and replay first, then op251's transport and
+V258, then V259 and V260 by the structural route, then the fixture-byte gate and a final combined
+audit. Rows removed outright: 0. Privacy target not yet established.
