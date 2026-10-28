@@ -4,7 +4,7 @@ This uses, without changing, the existing reservation/barrier tools.
 """
 from pathlib import Path
 from cooldown import check_ready,refuse
-import hashlib, json, re, shlex, subprocess, sys
+import hashlib, json, re, shlex, subprocess, sys, datetime
 R=Path(__file__).resolve().parents[2]
 E=R/'evidence/pv-dlib-20261028'
 D='/home/dombarker/project-offloads/codex-pv-dlib-20261028'
@@ -15,11 +15,19 @@ name,phase,*cmd=sys.argv[1:]
 assert re.fullmatch(r'[a-zA-Z0-9_-]+',name) and cmd
 out=E/name;out.mkdir(exist_ok=True)
 assert not (out/'receipt.json').exists()
-def ssh(c):return subprocess.run(['ssh',H,c],text=True,capture_output=True)
+def ssh(c):
+ r=subprocess.run(['ssh',H,c],text=True,capture_output=True)
+ with (out/'ssh-events.jsonl').open('a') as log:
+  log.write(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),command=c,exit=r.returncode,stdout=r.stdout,stderr=r.stderr))+'\n')
+ return r
 r=ssh(f'mkdir -p {D}/{name}; python3 {G}/reservation.py {D}/{name}/admission-before.json > {D}/{name}/reservation.log 2>&1')
+if r.returncode==255:
+ print('PRE-LAUNCH TRANSPORT FAILURE; no compiler submitted; standing rule(p) recovery applies');sys.exit(255)
 for f in ['admission-before.json','reservation.log']:
  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
-ad=json.loads((out/'admission-before.json').read_text())
+try:ad=json.loads((out/'admission-before.json').read_text())
+except json.JSONDecodeError:
+ print('MISSING ADMISSION ARTIFACT; no compiler submitted; local-lean rule7 permits one delayed retry');sys.exit(76)
 if r.returncode!=0 or ad.get('allowed') is not True:
  refuse('scope pre-admission '+name,{k:ad.get(k) for k in ['utc','allowed','error']})
  print('UNCHARGED REFUSAL',r.returncode,{k:ad.get(k) for k in ['utc','allowed','error','bounded_reserved_bytes','safe_limit_bytes']});sys.exit(78)
