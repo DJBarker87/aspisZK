@@ -3,7 +3,8 @@ set_option autoImplicit false
 namespace R1Z.PV_RunJoin_WeightMap46
 open Aeneas Aeneas.Std Result
 open PV_B2_F_ConstructorCarrier (amap)
-abbrev mapResult := PV_B2_E_OrdinaryOriginal.mapResult
+abbrev mapResult {A B : Type} (f : A → B) (r : Result A) : Result B :=
+  PV_B2_E_OrdinaryOriginal.mapResult f r
 
 theorem map_bind {A B C D : Type} (f : A → B) (g : C → D)
     (r : Result A) (k : A → Result C) (l : B → Result D)
