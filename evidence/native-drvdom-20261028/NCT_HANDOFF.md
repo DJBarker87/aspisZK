@@ -42,3 +42,44 @@ The printed roots use only propext/Classical.choice/Quot.sound. Full statements
 and receipt are NCT_L001/stdout.log and NCT_L001/receipt.json. Both seed caches
 were COPIED to the own retained cache; per-file source hashes are NCT_CACHE_COPY.json.
 No shared cache was written. This focused audit is not a release replay.
+
+## Stage 2: strongest checked domain assembly
+
+`lean/NCT_DriverDomain.lean` defines `Reached c p a` as the existence of one
+NCL cut on `currentInstalled c/currentDigest c`, with p/a exactly the carrier
+maps of cut.prepared and the SAME cut.out after replacing weights by cut.flushed.
+It is not a new model implementation or a declaration of native reachability.
+`of_accepted` constructs it using NCL_DriverCuts.accepted. `replay` uses
+NCL_DriverForward.source with the SAME semantic/pub/proof/saved, under the same
+two offset equations. The predicate itself contains cuts; offset equations
+are required for their replay, rather than silently asserted by its definition.
+
+`control` assembles the existing Tx1Q_Execution.Run from those exact cut
+carriers using the existing initial/pending/geometry/query/flush transports.
+Tx1Q_Control.fields supplies next10, weights64 and canonical flushed weights.
+`reached_weights` transfers those coordinate inequalities to the writer's raw
+weight fields. No arithmetic recurrence or child control fact is reproved.
+
+After (conditional):
+`established c variant queries canonical : DriverEstablishedDomain (Reached c)`.
+The three RETAINED, unproved gates quantify over the SAME Reached c:
+1. p.variant=S2;
+2. each of the 22 p.queries is <262144;
+3. `NonWeightCanonical (fields p a derived_size derived_queries)`:
+   gamma, kappa, both alpha, rho, ten semanticAlpha, four coordinates, claim,
+   rhs and power are canonical.
+The record is explicitly organisation, not discharge. We do not claim the
+remaining gates are impossible to derive with further preparation/arithmetic
+proofs; they are not conclusions of the audited NCL cut/replay interfaces.
+
+Discharged: weight length, next and all 64 weight canonicality obligations.
+Retained: S2/query bounds/non-weight canonicality. pm/am are the SAME exact
+`CheckpointBytesBlocks.prepared/accumulator` built from those raw fields, with
+both provenance equalities rfl. This does not identify pm/am with a selected
+transcript's semantic execution; KNE's existential contract does not ask that.
+
+NCT_L002 failed on an existential binder syntax error; error-recovery sorryAx
+outputs receive ZERO credit. Rejected source is retained. NCT_L003 passed the
+initial assembly; NCT_L004 passed the strengthened weight-canonicality assembly,
+exit0, 2.393719s, peak RSS5381180KiB, swaps0, revisiond97db4e276 plus source
+hash in receipt. Every six new theorem roots has standard axioms only.
