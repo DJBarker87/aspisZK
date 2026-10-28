@@ -64,6 +64,7 @@ theorem reserve_capacity {S F : Type} (step : Request → S → Option Nat × S)
   unfold reserve
   split
   · intro h
+    change b.values.length+n ≤ b.capacity
     have hf := b.fits
     omega
   · split
