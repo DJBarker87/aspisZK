@@ -24,7 +24,8 @@ theorem canonical_result {S : Type} (next : S → Result (word × S)) (fuel : Na
     rw [scalar] at h
     pv_peel h with pair hp
     rcases pair with ⟨raw,after⟩
-    dsimp only at h
+    change (if (raw &&& BitVec.ofNat 32 p).toNat < p then
+      ok (.ok (raw &&& BitVec.ofNat 32 p),after) else scalar next n after) = ok (.ok v,s1) at h
     split at h
     · cases h;assumption
     · exact ih after h

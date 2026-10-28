@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_StateSampler.lean:28:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (let (raw, s1) := (raw, after)
+    if BitVec.toNat (raw &&& BitVec.ofNat 32 p) < p then ok (Except.ok (raw &&& BitVec.ofNat 32 p), s1)
+    else scalar next n s1) =
+    ok (Except.ok v, s1)
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case succ
+S : Type
+next : S → Result (word × S)
+s1 : S
+v : word
+n : ℕ
+ih : ∀ (s : S), scalar next n s = ok (Except.ok v, s1) → canonical v
+s : S
+raw : word
+after : S
+hp : next s = ok (raw, after)
+h :
+  (let (raw, s1) := (raw, after)
+    if BitVec.toNat (raw &&& BitVec.ofNat 32 p) < p then ok (Except.ok (raw &&& BitVec.ofNat 32 p), s1)
+    else scalar next n s1) =
+    ok (Except.ok v, s1)
+⊢ canonical v
+'PV_L2C_StateSampler.canonical_result' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_L2C_StateSampler.bind_returned' depends on axioms: [propext]
+'PV_L2C_StateSampler.secure_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1
