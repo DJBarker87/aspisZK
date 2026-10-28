@@ -14129,3 +14129,13 @@ Stream A decided under its delegation (C3-BIN, "16 GiB scope use for consumers o
 The lead read the entry and checked the three runner hashes on the host (reservation_agg16.py d6d40da5, S2W_lean_host_agg16.py 9b325ab0, S2W_run_host_agg16.py 8165ccff). The entry settles memory scope only. Whether privacy may rely on the witness stays with the owner.
 
 pv-2tnv launched (sparse worktree, branch codex/pv-2tnv-20261028 from candidate 96f705ea1a; IDs 60900-60999; 60 Lean at the normal caps; 0 Kani; at most one 16 GiB compile, run by the lead). Its job is to determine which of the vacuity suspects V045, V046 and V047 the joint witness can address. It is then to prove the strongest honest privacy-side non-vacuity statement, with FixturePdaRuntime base as an explicit hypothesis reported as not discharged. All bridging is done at the normal caps against a locally restated conclusion. A single consumer module then applies JHx_Joint.source; the lead runs that compile after Stream A confirms there is no overlap. Rows removed: 0. Privacy target not yet established.
+
+## D408 (Stream B) 2026-10-28 21:45 UTC: pv-2tnv first run (missing bridge identified); pv-2tnvb relaunched on the part that does not need RustRealRefinement
+
+pv-2tnv (head d13b5f585b, pushed) stopped at the missing-bridge condition without spending Lean attempts. The joint witness proves conditional TX1+TX2 wrapper acceptance. It does not identify a deployed rust instance, inhabit rust.Adversary, associate the native public input with a canonical witness, or supply RustRealRefinement. Its REPORT.md ("Carrier audit and exact missing bridge") fixes the headline's carriers and states the needed same-execution association in literal endpoint terms. V045, V046 and V047 remain retained. FixturePdaRuntime base is not discharged and was not added to T. No AGG16 compile was requested.
+
+pv-2tnvb relaunched in the same worktree on the part of the bridge that does not depend on RustRealRefinement, which belongs to the runjoin line and is imported read-only, never duplicated:
+(1) the source-grounded encoding of the joint fixture's inputs into the headline's public statement and a canonical witness;
+(2) the same-execution association with the joint witness's wrapper runs;
+(3) an adversary-carrier inhabitant, as far as it can be identified without the refinement.
+Each is a normal-cap theorem conditional on the restated joint conclusion, with FixturePdaRuntime explicit. The single AGG16 consumer is staged only when its sole remaining input is JHx_Joint.source. Rows removed: 0. Privacy target not yet established.
