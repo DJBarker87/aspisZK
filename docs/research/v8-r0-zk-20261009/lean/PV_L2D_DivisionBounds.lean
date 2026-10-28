@@ -8,7 +8,7 @@ def dividend (remainder limb : Nat) := remainder*B+limb
 
 theorem dividend_bound (r x : Nat) (hr : r<P) (hx : x<B) :
     dividend r x<P*B := by
-  unfold dividend
+  norm_num only [dividend,P,B] at *
   omega
 #print axioms dividend_bound
 
@@ -73,6 +73,6 @@ theorem pass_bounds (r : Nat) (xs : List Nat) (hr : r<P) (hx : ∀ x∈xs,x<B) :
 /-- The native dividend decomposition is lossless at every word. -/
 theorem step_reconstruct (r x : Nat) :
     (step r x).quotient*P+(step r x).remainder=dividend r x := by
-  exact Nat.div_add_mod _ _
+  simpa only [step,Nat.mul_comm] using Nat.div_add_mod (dividend r x) P
 #print axioms step_reconstruct
 end PV_L2D_DivisionBounds
