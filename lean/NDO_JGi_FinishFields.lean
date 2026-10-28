@@ -1,4 +1,5 @@
 import RPz7_S1SemanticFinishModelV1
+import NDO_PhaseIdentity
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 namespace AspisR1.JGi_FinishFields
@@ -25,7 +26,7 @@ theorem source (R : RoundModel.Boundaries) (B : FinishModel.Boundaries)
     {H : Type} (D : aspis_core.Digest32 H)
     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
     (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
-    (obs : Option (verifier.Phase → Result Unit)) (out : r1_semantic.Verified H)
+    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (out : r1_semantic.Verified H)
     (h : FinishModel.finish R B D pub pre before challenges obs = ok (.Ok out)) :
     ∃ (record25 record26 : r1_wire.ValidatedRecord),
       B.claims pre=ok (.Ok out.claims) ∧
