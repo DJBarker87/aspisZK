@@ -42,5 +42,6 @@ for a in rs:
  result.append(dict(ref=a['ref'],path=a['path'],target=target,exit=exit,wall=wall,peak_rss=rss,rss_unit='bytes' if 'peak_rss_bytes' in v else 'KiB',swap=sw,source_revision=rev,axiom_reports=len(re.findall(r"depends on axioms:|does not depend on any axioms",axtext)),axioms_standard=True))
 (P/'receipt-audit7.json').write_text(json.dumps(result,indent=2)+'\n')
 (P/'native-pin-checks7.json').write_text(json.dumps(checks,indent=2)+'\n')
+patch=read('research','evidence/kani-mitig-20261028/KMX_copy_stubs.patch');assert hashlib.sha256(patch.encode()).hexdigest()=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
 (P/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('receipts',len(result),'source hash checks',len(checks),'mismatches',[x for x in checks if not x['matches']])

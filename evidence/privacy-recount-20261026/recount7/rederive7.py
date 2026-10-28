@@ -5,6 +5,7 @@ for r in rows:
  a=audit[r['id']];r['recount6_closure_theorem']=r.get('closure_theorem');r['recount6_closure_route']=r.get('closure_route');r['recount6_bucket']=r['dependency_bucket'];r['recount7_status']=r['recount6_status'];r['recount7_class']=r['recount6_class'];r['definition_witnesses7']=a['sources'];r['definition_changed7']=a['changed_from6'];r['recount7_evidence']=['definition-audit7.json#'+r['id'],'../recount6/rows6.json#'+r['id']]
  r['recount7_basis']='Exact pinned defining statements/guards and supporting source bytes inspected; prior scoped derivation retained. '+r.get('meaning',r['name'])+'. '+r.get('rationale',r['recount6_basis'])
  r['residual7']='Prior quantified/model/native/deployment residual retained at recount6/rows6.json#'+r['id']
+ if r['recount6_status']=='CLOSED-ON-CANDIDATE':r['recount7_basis']='Prior scoped candidate closure CONFIRMED on re-read unchanged law '+str(r.get('closure_theorem'))+'; native evidence class '+str(r.get('closure_route'))+'. Exact quantifiers, guards, nonvacuity and residuals remain as derived in recount6/rows6.json#'+r['id']+'. '+r.get('meaning',r['name'])
  if a['changed_from6']:r['recount7_basis']+=' Changed defining file is historical LOG reporting, not a changed formal statement; D301–D356 dispositions are in CORRECTIONS7.md.'
  # Re-read closing laws as full source statements, not labels; keep original sources.
  th=r.get('closure_theorem') if r['recount6_status']=='CLOSED-ON-CANDIDATE' else r.get('theorem','').split(' + ')[0] if r['recount6_status']=='CLOSED-ON-RESEARCH' else None
@@ -111,7 +112,7 @@ for r in rows:
  else:assert r['dependency_bucket'] in 'abcd'
 (P/'import-closures7.json').write_text(json.dumps(closures,indent=2)+'\n')
 (P/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-(P/'rows7.json').write_text(json.dumps(rows,indent=2)+'\n')
+(P/'rows7.json').write_text(json.dumps(rows,indent=1)+'\n')
 t=dict(rows=len(rows),classes=dict(collections.Counter(r['recount7_class'] for r in rows)),statuses=dict(collections.Counter(r['recount7_status'] for r in rows)),open_dependencies=dict(collections.Counter(r['dependency_bucket'] for r in rows if r['recount7_status']=='OPEN')),closure_routes=dict(collections.Counter(r.get('closure_route') for r in rows if r['recount7_status']=='CLOSED-ON-CANDIDATE')),all_row_imports=dict(collections.Counter(r['in_headline_closure7'] for r in rows)),candidate_closure_imports=dict(collections.Counter(r['in_headline_closure7'] for r in rows if r['recount7_status']=='CLOSED-ON-CANDIDATE')),premises_removed_added_weakened=[0,0,0],raw_family_identification='unsatisfiable',honest_family_identification='discharged',observer_logs_errors='coverage gap')
 (P/'totals7.json').write_text(json.dumps(t,indent=2)+'\n')
 lines=['# Recount 7 2026-10-28 (B)','','Every row re-derived by METHOD7 at immutable pins. Historical fields and exact scopes retained. Source/native classes and hypotheses/nonvacuity are in recount7/closure-audit7.json; all full source witnesses in manifest.json. Raw-family identification and honest-family discharge are separate facts. Target not yet established.','','| Row / class6 →7 / name | Status6 →7 | OPEN bucket | in headline closure? | Derivation, residual and evidence |','|---|---|---|---|---|']

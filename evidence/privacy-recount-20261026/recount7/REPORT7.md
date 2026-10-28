@@ -172,4 +172,3 @@ paths, K-1 classes and observer gap. No Stream A/soundness edit, merge, push,
 wallet/key/account action. Next deliverables: owner scope/observer decisions,
 canonical preparation→HonestInput, concrete V038/V045 and final adoption gates.
 **Target not yet established.**
-
