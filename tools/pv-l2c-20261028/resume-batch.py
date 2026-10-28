@@ -21,6 +21,9 @@ for idx,m in enumerate(names):
  assert not (E/f'receipt-{a}.json').exists(),a
  if m in sources:
   body=sources[m];origin=resolution[m]
+  if origin['authority']=='h5 own git-tracked HEAD':
+   current=subprocess.check_output(['git','show',rev+':'+origin['path']],text=True)
+   assert body==current, 'Stale source resolution: '+m+'; rerun resume-resolve.py'
  else:
   p='docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean';body=(R/p).read_text();origin=dict(path=p,git_blob=subprocess.check_output(['git','rev-parse',rev+':'+p],text=True).strip(),authority='h5 own git-tracked HEAD')
  spec.append(dict(attempt=a,module=m,source=body,source_sha256=hashlib.sha256(body.encode()).hexdigest(),origin=origin,source_revision=rev))

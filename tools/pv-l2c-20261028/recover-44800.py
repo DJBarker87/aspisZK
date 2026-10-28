@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,subprocess,hashlib,re,datetime
+import json,subprocess,hashlib,re,datetime,sys
 R=Path.cwd(); E=R/'evidence/pv-l2c-20261028/resume-d355'; H='/home/dombarker/project-offloads/codex-pv-l2c-20261028'
 D=E/'batch-44800';spec=json.loads((D/'manifest.json').read_text());gate=json.loads((D/'reservation.json').read_text());cmd=json.loads((D/'command.json').read_text())
 def ssh(c):return subprocess.run(['ssh','dombarker@100.108.41.90',c],capture_output=True,text=True)
