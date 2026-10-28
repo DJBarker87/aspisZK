@@ -2,6 +2,7 @@ import R1Z.PV_DL_EncoderControl
 import R1Z.PV_DL_EncoderPairs
 import R1Z.ProverRwFullExternalFuns
 open Aeneas Aeneas.Std Result ProverRwFull
+noncomputable section
 namespace R1Z.PV_DL_EncoderSelected
 set_option autoImplicit false
 variable [types : ExternalTypes]
