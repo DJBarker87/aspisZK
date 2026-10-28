@@ -6,11 +6,28 @@ roots=['/home/dombarker/project-offloads/codex-cx-tx2mid-cache-20261028','/home/
 code='from pathlib import Path; import json; print(json.dumps(sorted(set(str(p.relative_to(Path(r)))[:-6].replace("/", ".") for r in '+repr(roots)+' for p in Path(r).rglob("*.olean")))))'
 r=subprocess.run(['ssh','-o','ConnectTimeout=15','dombarker@100.108.41.90','python3 -c '+__import__('shlex').quote(code)],capture_output=True,text=True)
 assert r.returncode==0,r.stderr
+# Exact original sources selected by the replayed headline predecessor; no
+# namespace/source reconstruction from renamed replay files.
+replay=json.loads(Path('evidence/replay-dry8-20261026/RPz7_plan.json').read_text())
+verification=json.loads(Path('evidence/replay-dry8-20261026/RPz7_final-verification.json').read_text())
+authority={r['original']:(r['original_source'],r['original_sha256']) for r in replay['rows']}
+for row in verification['selected_reused_source_checks']:
+ if row.get('selected_source') and row.get('expected_sha256'):
+  authority[row['module']]=(row['selected_source'],row['expected_sha256'])
 have=set(json.loads(r.stdout));plan=[];seen=set()
 def visit(m):
  if m in have or m in seen:return
  seen.add(m)
  p=next((p for base in ['lean','docs/research/100bit-spend-path-20261013/lean'] if (p:=Path(base)/Path(m.replace('.','/')+'.lean')).is_file()),None)
+ if p is None and m in authority:
+  name,pin=authority[m];p=Path(name)
+  assert p.is_file(),('pinned source absent',m,name)
+  actual=__import__('hashlib').sha256(p.read_bytes()).hexdigest()
+  assert actual==pin,('pinned source drift',m,actual,pin)
+  selection=E/'NBS_DEP_SOURCE_SELECTION.json'
+  records=json.loads(selection.read_text()) if selection.exists() else {}
+  records[m]=dict(source=name,sha256=actual,authority='RPz7 original planning/reused source selection; replay-dry9 selected-source check')
+  selection.write_text(json.dumps(records,indent=2)+'\n')
  if p is None:
   candidates=list(Path('docs/research/100bit-spend-path-20261013/lean').rglob(m.replace('.','/')+'.lean'))
   if not candidates:

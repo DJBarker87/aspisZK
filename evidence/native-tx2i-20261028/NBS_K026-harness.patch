@@ -1,0 +1,17 @@
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -64,12 +64,12 @@
+   assert!(v.len()==m+1&&v.as_ptr()==ptr);let j:usize=kani::any();kani::assume(j<=m);assert!(v[j]==if j==m{value}else{old[j]});
+  }
+  static mut EXPECT:usize=0;static mut CALLS:u8=0;
+- fn denied(v:&mut Vec<u32>,n:usize)->Result<(),alloc::collections::TryReserveError>{
++ fn denied<T,A:alloc::alloc::Allocator>(v:&mut Vec<T,A>,n:usize)->Result<(),alloc::collections::TryReserveError>{
+   unsafe{assert!(n==EXPECT);assert!(CALLS==0);CALLS=1;}
+   assert!(v.len()==0&&v.capacity()==0);
+   let mut error=Vec::<u32>::new();Err(error.try_reserve(usize::MAX).unwrap_err())
+  }
+- fn forbidden_resize(_: &mut Vec<u32>,_:usize,_:u32){assert!(false);}
++ fn forbidden_resize<T:Clone,A:alloc::alloc::Allocator>(_: &mut Vec<T,A>,_:usize,_:T){assert!(false);}
+  #[kani::proof] #[kani::unwind(4)]
+  #[kani::stub(Vec::<u32>::try_reserve_exact,denied)] #[kani::stub(Vec::<u32>::resize,forbidden_resize)]
+  fn reserve_denied(){

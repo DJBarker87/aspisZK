@@ -1,0 +1,90 @@
+from pathlib import Path
+import subprocess,difflib,hashlib,json
+E=Path(__file__).resolve().parent;p='crates/aspis-r1-cost-probe/src/verifier.rs';s=subprocess.check_output(['git','show','4bb3b3f5:'+p],text=True)
+assert 'prefixes.push(product);\n        product=product.mul(value);\n        index+=1;' in s
+assert 'flat_inverse[i]=suffix_inverse.mul(prefixes[i]);\n            suffix_inverse=suffix_inverse.mul(flat[i]);' in s
+assert 'core::array::from_fn(|j|flat_inverse[5*i+j])' in s
+(E/'NBS_GEOMETRY_WINDOWS.json').write_text(json.dumps(dict(source=p,revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',file_sha256=hashlib.sha256(s.encode()).hexdigest(),windows=['prefixes.push(product); product=product.mul(value); index+=1;','flat_inverse[i]=suffix_inverse.mul(prefixes[i]); suffix_inverse=suffix_inverse.mul(flat[i]);','core::array::from_fn(|j|flat_inverse[5*i+j])'],scope='one iteration on arbitrary scalar/vector pre-state; never full protocol loops'),indent=2)+'\n')
+t=r'''
+#[cfg(kani)]
+mod NBS_geometry {
+ use super::*;
+ const P:u32=2147483647;
+ static mut CALLS:u8=0;static mut LEFT:[u32;2]=[0;2];static mut RIGHT:[u32;2]=[0;2];static mut REPLY:[u32;2]=[0;2];
+ fn base_mul(x:M31,y:M31)->M31 {
+  assert!(x.0<P&&y.0<P);
+  let z:u32=kani::any();kani::assume(u64::from(z)==u64::from(x.0).wrapping_mul(u64::from(y.0))%u64::from(P));
+  unsafe{let at=usize::from(CALLS);assert!(at<2);LEFT[at]=x.0;RIGHT[at]=y.0;REPLY[at]=z;CALLS+=1;}
+  M31(z)
+ }
+ fn no_mul(_:M31,_:M31)->M31 {assert!(false);M31::ZERO}
+ fn no_fibre(_:usize)->Result<domain::FibreIndex,aspis_core::r0::Error>{assert!(false);Err(aspis_core::r0::Error::IndexOutOfRange)}
+ #[kani::proof] #[kani::unwind(4)] #[kani::stub(M31::mul,no_mul)]
+ fn prefix_empty(){let (p,x)=batch_prefix_products(&[]);assert!(p.len()==0);assert!(x==M31::ONE);}
+ #[kani::proof] #[kani::unwind(112)] #[kani::stub(M31::mul,base_mul)]
+ fn prefix_step(){
+  let raw:[u32;110]=kani::any();let old:[u32;110]=kani::any();
+  let flat=raw.map(M31);let mut prefixes:Vec<M31>=old.map(M31).into();
+  let mut index:usize=kani::any();kani::assume(index<110);let before=index;
+  prefixes.truncate(index);let ptr=prefixes.as_ptr();
+  let mut product=M31(kani::any());kani::assume(product.0<P&&flat[index].0<P);let previous=product.0;
+  unsafe{CALLS=0;}
+  if index<flat.len(){let value=flat[index];prefixes.push(product);product=product.mul(value);index+=1;}
+  assert!(index==before+1&&prefixes.len()==before+1);assert!(prefixes.as_ptr()==ptr);
+  let j:usize=kani::any();kani::assume(j<index);
+  assert!(prefixes[j].0==if j==before{previous}else{old[j]});
+  unsafe{assert!(CALLS==1);assert!(LEFT[0]==previous&&RIGHT[0]==raw[before]);assert!(product.0==REPLY[0]);}
+ }
+ #[kani::proof] #[kani::unwind(112)] #[kani::stub(M31::mul,base_mul)]
+ fn backward_step(){
+  let flat:[u32;110]=kani::any();let prefixes:[u32;110]=kani::any();let old:[u32;110]=kani::any();
+  let mut flat_inverse:Vec<M31>=old.map(M31).into();let i:usize=kani::any();kani::assume(i<110);
+  let flat=flat.map(M31);let prefixes=prefixes.map(M31);
+  let mut suffix_inverse=M31(kani::any());let suffix=suffix_inverse.0;
+  kani::assume(suffix<P&&prefixes[i].0<P&&flat[i].0<P);
+  let ptr=flat_inverse.as_ptr();unsafe{CALLS=0;}
+  flat_inverse[i]=suffix_inverse.mul(prefixes[i]);
+  suffix_inverse=suffix_inverse.mul(flat[i]);
+  assert!(flat_inverse.len()==110&&flat_inverse.as_ptr()==ptr);
+  let j:usize=kani::any();kani::assume(j<110);
+  unsafe{assert!(CALLS==2);assert!(LEFT[0]==suffix&&RIGHT[0]==prefixes[i].0);assert!(LEFT[1]==suffix&&RIGHT[1]==flat[i].0);
+   assert!(flat_inverse[j].0==if j==i{REPLY[0]}else{old[j]});assert!(suffix_inverse.0==REPLY[1]);}
+ }
+ #[kani::proof] #[kani::unwind(112)]
+ fn group_pack(){
+  let raw:[u32;110]=kani::any();let flat_inverse:Vec<M31>=raw.map(M31).into();
+  let i:usize=kani::any();kani::assume(i<22);
+  let group:[M31;5]=core::array::from_fn(|j|flat_inverse[5*i+j]);
+  let j:usize=kani::any();kani::assume(j<5);assert!(group[j].0==raw[5*i+j]);
+ }
+ #[kani::proof] #[kani::unwind(6)]
+ fn nonzero_guard(){
+  let raw:[u32;5]=kani::any();let values=raw.map(M31);
+  let rejects=values.iter().any(|x|*x==M31::ZERO);
+  assert!(rejects==(raw[0]==0||raw[1]==0||raw[2]==0||raw[3]==0||raw[4]==0));
+ }
+ #[kani::proof] #[kani::unwind(4)] #[kani::stub(M31::mul,no_mul)] #[kani::stub(domain::FibreIndex::new,no_fibre)]
+ fn invalid_range(){
+  let queries:[u32;22]=kani::any();let start:usize=kani::any();let end:usize=kani::any();kani::assume(start>end||end>22);
+  assert!(matches!(QueryGeometry::for_range(&queries,start,end),Err(Error::Query)));
+ }
+ #[kani::proof] #[kani::unwind(4)] #[kani::stub(M31::mul,no_mul)] #[kani::stub(domain::FibreIndex::new,no_fibre)]
+ fn empty_range(){
+  let queries:[u32;22]=kani::any();let start:usize=kani::any();kani::assume(start<=22);
+  let out=QueryGeometry::for_range(&queries,start,start).unwrap();assert!(out.start==start);assert!(out.inverses.len()==0&&out.line_z.len()==0);
+ }
+ #[kani::proof] #[kani::unwind(16)]
+ fn query_accessor(){
+  let a:[u32;5]=kani::any();let b:[u32;5]=kani::any();
+  let geo=QueryGeometry{start:kani::any(),inverses:alloc::vec![a.map(M31),b.map(M31)],line_z:Vec::new()};
+  let index:usize=kani::any();kani::assume(index>=geo.start&&index-geo.start<2);
+  let out=geo.for_query(index);let j:usize=kani::any();kani::assume(j<5);
+  assert!(core::ptr::eq(out,&geo.inverses[index-geo.start]));assert!(out[j].0==if index==geo.start{a[j]}else{b[j]});
+ }
+ #[kani::proof] #[kani::unwind(3)]
+ fn reverse_first(){let n:usize=kani::any();kani::assume(n>0&&n<=110);let mut it=(0..n).rev();assert!(it.next()==Some(n-1));}
+ #[kani::proof] #[kani::unwind(3)]
+ fn reverse_last(){let mut it=(0usize..1).rev();assert!(it.next()==Some(0));assert!(it.next()==None);}
+}
+'''
+(E/'NBS_geometry.patch').write_text(''.join(difflib.unified_diff(s.splitlines(True),(s+t).splitlines(True),fromfile='a/'+p,tofile='b/'+p)))

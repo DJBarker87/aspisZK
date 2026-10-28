@@ -1,0 +1,62 @@
+{"attempt": "NBS_K013", "exit_status": 0, "wall_seconds": 23.33209080202505, "peak_rss_kib": "586536", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+warning: module `NBQ_powers` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/weights.rs:402:5
+    |
+402 | mod NBQ_powers {
+    |     ^^^^^^^^^^ help: convert the identifier to snake case: `nbq_powers`
+
+warning: module `NBQ_field` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/weights.rs:464:5
+    |
+464 | mod NBQ_field {
+    |     ^^^^^^^^^ help: convert the identifier to snake case: `nbq_field`
+
+warning: module `NBQ_emul` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/weights.rs:405:5
+    |
+405 | mod NBQ_emul {
+    |     ^^^^^^^^ help: convert the identifier to snake case: `nbq_emul`
+
+warning: module `NBS_geometry` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:531:5
+    |
+531 | mod NBS_geometry {
+    |     ^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_geometry`
+
+warning: module `NBS_geometry_cuts` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:611:18
+    |
+611 | #[cfg(kani)] mod NBS_geometry_cuts {
+    |                  ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_geometry_cuts`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.33s
+Checking harness verifier::NBS_geometry_cuts::prefix_write...
+
+VERIFICATION RESULT:
+ ** 0 of 515 failed (8 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 19.17448s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rbd6c210e84a243a59faae114cf8643e9.scope; invocation ID: 76b4d6235e4844ec9cbceeb430547646
