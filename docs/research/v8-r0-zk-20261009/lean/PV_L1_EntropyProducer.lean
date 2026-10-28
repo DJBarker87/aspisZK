@@ -41,7 +41,10 @@ theorem source_replay (nonce : Array U8 32#usize) (p after : Tape) (status : Sta
     (ProverRwRngOwnerCertificate.universal_cap16 nonce p).2 after status executed
   refine ⟨states,path,?_,cursor,bound,available⟩
   have count : after.used.val-p.used.val = drawCount states := by omega
-  simp only [produce,executed,bind_tc_ok,count,replayEvents,history,List.flatMap_map]
+  simp only [produce,executed,bind_tc_ok]
+  dsimp only
+  rw [count]
+  simp only [drawEvents,replayEvents,history,List.flatMap_map]
   rfl
 #print axioms source_replay
 end PV_L1_EntropyProducer

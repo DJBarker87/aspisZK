@@ -3,7 +3,22 @@ from pathlib import Path
 import json,subprocess,shlex
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l1-20261028'
 x=json.loads((E/'focused-resolution.json').read_text());sources=json.loads((E/'focused-project-sources.json').read_text());mods={m:v for m,v in x['resolved'].items() if 'imports' in v}
-records={v['module']:v for p in (R/'evidence/pv-runjoin32-20261028').glob('modules-*.json') for v in json.loads(p.read_text()) if v.get('accepted')}
+# Read-only receipt recovery: runjoin's live retained cache contains later
+# completed objects than the committed index. Only exact selected source hashes
+# and complete recorded fingerprints may be reused below.
+recover=r'''import pathlib,json,sys
+pins=json.load(sys.stdin);p=pathlib.Path('/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/evidence');out={}
+for f in sorted(p.glob('results-*.json')):
+ for v in json.load(open(f)):
+  m=v['module']
+  if v.get('accepted') and m in pins and v['source_sha256']==pins[m]['sha256']:
+   v['recovered_receipt_path']=str(f);out[m]=v
+print(json.dumps(out))
+'''
+r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(recover)],input=json.dumps(mods),text=True,capture_output=True)
+assert r.returncode==0,r.stderr
+(E/'recovered-runjoin-receipts.json').write_text(r.stdout)
+records=json.loads(r.stdout)
 reuse={m:records[m] for m in mods if m in records and records[m]['source_sha256']==mods[m]['sha256']}
 external=json.loads((E/'external-authority.json').read_text())
 code=r'''import sys,json,pathlib,hashlib
