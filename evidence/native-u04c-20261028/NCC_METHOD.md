@@ -1,0 +1,15 @@
+# NCC method and audit scope
+
+No NBX result is re-proved. Stage 1 uses two actual calls, two independently generated full typed arguments constrained equal, and independent ambient states. The six getter negative controls change one meaningful argument byte (flags xor 1/2 or activation_slot xor 1), then assert equality of returns. These controls test argument sensitivity rather than merely negating a successful conjunction.
+
+The getter argument consists of the full typed record (and u64 slot for op29/30). Padding is not an initialized Rust value and is not read as bytes. Each ambient state is arbitrary; an arbitrary coordinate is observed before/after. The input field observation uses an arbitrary coordinate. The immutable references also rule out safe Rust writes to the argument; no claim is made about arbitrary invalid references or concurrent runtime mutation.
+
+All future native gates use the same frozen Cargo.lock and complete normalized package/edge graph. NCC_gate.py moves the metadata validation inside the same capped scope as Kani; the shared S2W runner and reservation tool remain unchanged. This own-controller repair removes extra transport/metadata scopes without weakening validation. It records the metadata output hash, stderr, patch hash and pre/post lock hashes. No private copy stub is introduced.
+
+The pilot controls use only new cfg(kani) functions. Wrong postcondition: actual getter wrapper with inverse result. Weak replacement: actual getter wrapper with True postcondition, then an exact-bit caller assertion that is not entailed. Modifies: two separately allocated mutable bytes, only the first declared writable, both written. Their failures must be semantic counterexamples, not compilation failures, unsupported-construct failures, timeouts or unwinding failures.
+
+No whole-caller native association follows merely from passing these controls. Each slot remains OPEN until its actual SDK caller's same-argument invocation and result consumption are established.
+
+Transport repair: the first batch controller was interrupted during its prelaunch upload retry sleep, before any NCC_K002+ submission. Admission recovered after four 255 errors; the large upload command then failed repeatedly with reset/closed connections. Own upload now sends the exact payload via python3 stdin and records its SHA-256 and every transport result. No prover was resubmitted or infrastructure edited.
+
+Second transport repair: a later small reservation query also hung, so payload size is NOT established as the cause. Own prelaunch/read-only transport now has a 90-second wall bound; timed-out transport is recorded with actual_exit=null, then the required 60-second retry, up to ten retries. Submitted proofs have no such transport timeout or resubmission. The graph is pinned by SHA-256 of the canonical COMPLETE frozen graph rather than retransmitting 240 KB of JSON. Host metadata still computes all packages and edges; comparison is equally strict. The local original and canonical digest are retained. Only a common run template and target list are uploaded; this is controller serialization, not a launcher change.
