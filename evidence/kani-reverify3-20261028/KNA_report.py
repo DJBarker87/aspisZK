@@ -31,6 +31,8 @@ for row in order:
   if row=='LPm_K005':text+=' Retain the original u32 little-endian shift/byte formula.'
   if row=='LPi_K012':text+=' Retain the original qbytes auxiliary contract and scalar16 byte projection.'
   if row=='LPi_K013':text+=' Retain canonical WideExact auxiliary serializer scope and eight-limb byte projection.'
+ if row not in ['LPf_K027','LPi_K017','LPi_K018']:
+  text+=' Exact next replacements: '+ '; '.join((x.get('name','absolute byte j')+': '+', '.join(f'[{a},{b})' for a,b in x['next_split'])) for x in r['remaining'])+'.'
  lines.append('| '+row+' | '+text+' |')
 lines += ['', '## Lean composition and native corroboration','',
 '38 focused modules and the single final manifest pass. L001 failed on the reserved binder `prefix`; L002 compiles its renamed replacement. The failed source is archived by hash. The redundant standalone capacity audit was excluded from the final manifest to preserve the 40-attempt budget; query capacity domains and growth premises remain in the focused row modules. KNA_Capacity.lean is **UNRUN**.', '',
