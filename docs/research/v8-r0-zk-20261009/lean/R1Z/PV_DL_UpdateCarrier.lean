@@ -47,6 +47,28 @@ theorem compression_call {T N : Type} (update : T → Blocks N → Result T)
   unfold compress
   rw [dif_pos (by rw [block_count];exact le_trans (Nat.div_le_self _ _) bound)]
 
+theorem native_batch_bound (buffer input : List U8) (pos : Nat)
+    (hb : buffer.length=64) (hp : pos<64) (hi : input.length ≤ Usize.max)
+    (batch : List U8) (h : batch∈(PV_DL_UpdatePlan.value buffer pos input).batches) :
+    batch.length ≤ Usize.max := by
+  by_cases hn : input.length<64-pos
+  · simp only [PV_DL_UpdatePlan.value,if_pos hn,List.not_mem_nil] at h
+  · simp only [PV_DL_UpdatePlan.value,if_neg hn,List.mem_append] at h
+    rcases h with first|bulk
+    · by_cases hz : pos=0
+      · simp only [hz,if_true,List.not_mem_nil] at first
+      · simp only [hz,if_false,List.mem_singleton] at first
+        subst batch
+        rw [PV_DL_UpdatePlan.first_length buffer input pos hb hp (by omega)]
+        scalar_tac
+    · unfold PV_DL_BatchPlan.events at bulk
+      split at bulk
+      · simp only [List.not_mem_nil] at bulk
+      · simp only [List.mem_singleton] at bulk
+        subst batch
+        simp only [PV_DL_BatchPlan.bulk,List.length_take,List.length_drop]
+        omega
+
 def encode {T : Type} (result : T × List U8 × Nat) : Result (Wrapper T (Storage U8 6)) :=
   if h : result.2.2<256 then
     ok ⟨result.1,⟨PV_DL_StorageBuild.build 6 (fun i => result.2.1[i]!),
@@ -91,6 +113,7 @@ theorem decoded {T : Type} (state : T) (buffer : List U8) (pos : Nat)
 #print axioms block_decoding
 #print axioms decoded_blocks
 #print axioms compression_call
+#print axioms native_batch_bound
 #print axioms encode
 #print axioms callback
 #print axioms value
