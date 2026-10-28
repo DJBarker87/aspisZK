@@ -1,0 +1,101 @@
+{
+  "row": "V178",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "needle": "pub fn join<P:",
+      "body": "{\n        self._join(path.as_ref())\n    }",
+      "token_sha256": "99bebd4b352da0dc1efd0a732dfb4a34f0b285e57ae1a7faaeb0741f9287c063",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "fn _join(",
+      "body": "{\n        let mut buf = self.to_path_buf();\n        buf.push(path);\n        buf\n    }",
+      "token_sha256": "69bdfb188b26abc7e33466fa52db4b87b3f0f8322c49f8a4fe0006fc5ecc7f35",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "fn _push(",
+      "body": "{\n        \n        let buf = self.inner.as_encoded_bytes();\n        let mut need_sep = buf.last().map(|c| !is_sep_byte(*c)).unwrap_or(false);\n\n        \n        let comps = self.components();\n\n        if comps.prefix_len() > 0\n            && comps.prefix_len() == comps.path.len()\n            && comps.prefix.unwrap().is_drive()\n        {\n            need_sep = false\n        }\n\n        let need_clear = if cfg!(target_os = \"cygwin\") {\n            \n            \n            path.prefix().is_some()\n        } else {\n            \n            path.is_absolute() || path.prefix().is_some()\n        };\n\n        \n        if need_clear {\n            self.inner.clear();\n\n        \n        } else if comps.prefix_verbatim() && !path.inner.is_empty() {\n            let mut buf: Vec<_> = comps.collect();\n            for c in path.components() {\n                match c {\n                    Component::RootDir => {\n                        buf.truncate(1);\n                        buf.push(c);\n                    }\n                    Component::CurDir => (),\n                    Component::ParentDir => {\n                        if let Some(Component::Normal(_)) = buf.last() {\n                            buf.pop();\n                        }\n                    }\n                    _ => buf.push(c),\n                }\n            }\n\n            let mut res = OsString::new();\n            let mut need_sep = false;\n\n            for c in buf {\n                if need_sep && c != Component::RootDir {\n                    res.push(MAIN_SEPARATOR_STR);\n                }\n                res.push(c.as_os_str());\n\n                need_sep = match c {\n                    Component::RootDir => false,\n                    Component::Prefix(prefix) => {\n                        !prefix.parsed.is_drive() && prefix.parsed.len() > 0\n                    }\n                    _ => true,\n                }\n            }\n\n            self.inner = res;\n            return;\n\n        \n        } else if path.has_root() {\n            let prefix_len = self.components().prefix_remaining();\n            self.inner.truncate(prefix_len);\n\n        \n        } else if need_sep {\n            self.inner.push(MAIN_SEPARATOR_STR);\n        }\n\n        self.inner.push(path);\n    }",
+      "token_sha256": "65d226853a3702b654f1d75e0f180f89e20d730b07fe023f21edaa193a4772ce",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "fn join_slices_reference(",
+      "body": "{\n    if path.len()>0 && path[0]==b'/' {\n        out.extend_from_slice(path);\n    } else {\n        out.extend_from_slice(base);\n        if base.len()>0 && base[base.len()-1]!=b'/' {out.push(b'/');}\n        out.extend_from_slice(path);\n    }\n}",
+      "token_sha256": "72fa61f29ea70c55405ddfc71acc393a3087ae9f9f103bc66a0f6e72a0761fde",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "pub fn push<P:",
+      "body": "{\n        self._push(path.as_ref())\n    }",
+      "token_sha256": "401794a5aa3d0f36ed107d2461bd8262304e96376cce019f461f0b7fdd7d67b7",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "pub fn to_path_buf(",
+      "body": "{\n        PathBuf::from(self.inner.to_os_string())\n    }",
+      "token_sha256": "31c252f75ab72f70cde018a0e057c74b3703113e0eefcfb14bb6d496b9806a2b",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "fn prefix_len(",
+      "body": "{\n        if !HAS_PREFIXES {\n            return 0;\n        }\n        self.prefix.as_ref().map(Prefix::len).unwrap_or(0)\n    }",
+      "token_sha256": "7295510562b6ed8cb9b9393ef2a6f007e1b3296321cfc98f7d7a8ff204c56883",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "fn prefix_verbatim(",
+      "body": "{\n        if !HAS_PREFIXES {\n            return false;\n        }\n        self.prefix.as_ref().map(Prefix::is_verbatim).unwrap_or(false)\n    }",
+      "token_sha256": "e25de9beb136715980d12d11f8486382bdfca9c00e573447094763e1c223d2bc",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "pub fn parse_prefix(",
+      "body": "{\n    None\n}",
+      "token_sha256": "8a70fafed4dc2998515d370eae4d75509b8fef6cceca86ad0bc17f93f8ce461d",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "pub(crate) fn is_absolute(",
+      "body": "{\n    if cfg!(any(unix, target_os = \"hermit\", target_os = \"wasi\", target_os = \"motor\")) {\n        path.has_root()\n    } else {\n        path.has_root() && path.prefix().is_some()\n    }\n}",
+      "token_sha256": "30ad47566c3f5db0a5398dd0592ee9eafa11c36775a38914ff0b8235ddf5d85f",
+      "complete_body_tokens_match": true
+    },
+    {
+      "unix_source_sha256": "4b45f1634f9d5e53e5ad0007ed1092cec8e86a214027b18d478dc80ba191c032",
+      "source": "use crate::ffi::OsStr;\nuse crate::path::{Path, PathBuf, Prefix};\nuse crate::{env, io};\n\npath_separator_bytes!(b'/');\n\n#[inline]\npub const fn is_verbatim_sep(b: u8) -> bool {\n    is_sep_byte(b)\n}\n\n#[inline]\npub fn parse_prefix(_: &OsStr) -> Option<Prefix<'_>> {\n    None\n}\n\npub const HAS_PREFIXES: bool = false;\n\n/// Make a POSIX path absolute without changing its semantics.\npub(crate) fn absolute(path: &Path) -> io::Result<PathBuf> {\n    // This is mostly a wrapper around collecting `Path::components`, with\n    // exceptions made where this conflicts with the POSIX specification.\n    // See 4.13 Pathname Resolution, IEEE Std 1003.1-2017\n    // https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_13\n\n    // Get the components, skipping the redundant leading \".\" component if it exists.\n    let mut components = path.strip_prefix(\".\").unwrap_or(path).components();\n    let path_os = path.as_os_str().as_encoded_bytes();\n\n    let mut normalized = if path.is_absolute() {\n        // \"If a pathname begins with two successive <slash> characters, the\n        // first component following the leading <slash> characters may be\n        // interpreted in an implementation-defined manner, although more than\n        // two leading <slash> characters shall be treated as a single <slash>\n        // character.\"\n        if path_os.starts_with(b\"//\") && !path_os.starts_with(b\"///\") {\n            components.next();\n            PathBuf::from(\"//\")\n        } else {\n            PathBuf::new()\n        }\n    } else {\n        env::current_dir()?\n    };\n    normalized.extend(components);\n\n    // \"Interfaces using pathname resolution may specify additional constraints\n    // when a pathname that does not name an existing directory contains at\n    // least one non- <slash> character and contains one or more trailing\n    // <slash> characters\".\n    // A trailing <slash> is also meaningful if \"a symbolic link is\n    // encountered during pathname resolution\".\n    if path_os.ends_with(b\"/\") {\n        normalized.push(\"\");\n    }\n\n    Ok(normalized)\n}\n\npub(crate) fn is_absolute(path: &Path) -> bool {\n    if cfg!(any(unix, target_os = \"hermit\", target_os = \"wasi\", target_os = \"motor\")) {\n        path.has_root()\n    } else {\n        path.has_root() && path.prefix().is_some()\n    }\n}\n"
+    },
+    {
+      "reference_path": "tools/pv-cblib-20261027/lib.rs",
+      "reference_body": "{\n    if path.len()>0 && path[0]==b'/' {\n        out.extend_from_slice(path);\n    } else {\n        out.extend_from_slice(base);\n        if base.len()>0 && base[base.len()-1]!=b'/' {out.push(b'/');}\n        out.extend_from_slice(path);\n    }\n}",
+      "reference_sha256": "c2db2d06bdce130f706dbd3d262a01a8a99266dd008be1f8499b16dc3e8364e1"
+    }
+  ],
+  "differences": [
+    {
+      "difference": "Unix removes Windows/Cygwin branches: prefix absent, verbatim false, has_root iff leading slash; no lexical normalization.",
+      "proof": "PV_RL_V178.unix_control"
+    },
+    {
+      "difference": "Native clones base before push, then clears it on absolute path; owned reference skips the discarded copy. Same result contents; allocation effects stay residual.",
+      "proof": "PV_RL_V178.contents"
+    },
+    {
+      "difference": "Raw Unix byte paths vs UTF8 String adapter. Native finite validation includes invalid UTF8, while callback claim retains its original valid UTF8 carrier restriction.",
+      "proof": "PV_CBL_JoinAdapter.decode_output; no source-image enlargement"
+    },
+    {
+      "difference": "Generic AsRef Result evaluated before join; its failure must propagate unchanged.",
+      "proof": "PV_RL_V178.asref_result"
+    }
+  ],
+  "complete_Result_laws": [
+    "PV_CBL_CallbackBundle.op26_source",
+    "PV_CBL_JoinAdapter.decode_output",
+    "PV_RL_V178.complete"
+  ],
+  "nonvacuity": "PV_RL_V178.nonvacuous; native corpus covers empty, relative, absolute, slash and non-ASCII cases",
+  "suspended_Kani": "K-1: retained original evidence; NOT a native link",
+  "boundary": "Candidate value/library primitive interpretation only; original source-image, allocation/world, compiler and deployment residuals retained. No universal machine/compiler refinement is inferred from finite validation."
+}

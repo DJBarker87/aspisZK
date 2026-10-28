@@ -1,0 +1,32 @@
+import R1Z.PV_CBL_LibraryShapeTypes
+import R1Z.ProverRwFullFuns
+open Aeneas Aeneas.Std Result
+noncomputable section
+namespace R1Z.PV_AL_TypenumSize
+open ProverRwFull
+set_option autoImplicit false
+
+/-- Literal typenum uint.rs USIZE expression: B::U8 as usize | U::USIZE << 1.
+Only the unsigned-size constants used by the consumed callback are installed. -/
+def unsigned {U B : Type} (u : typenum.marker_traits.Unsigned U)
+    (b : typenum.marker_traits.Bit B) : Result Usize := do
+  let bit ← b.U8
+  let n ← u.USIZE
+  let shifted ← lift (Usize.wrapping_shl n 1#u32)
+  ok ((UScalar.cast .Usize bit) ||| shifted)
+
+@[reducible] def selected (base : ExternalTypes)
+    (ops : @ExternalFuns (PV_CBL_LibraryShapeTypes.selectedTypes base)) :
+    @ExternalFuns (PV_CBL_LibraryShapeTypes.selectedTypes base) :=
+  letI : ExternalTypes := PV_CBL_LibraryShapeTypes.selectedTypes base
+  {ops with op156 := unsigned,op178 := ok 0#usize,op192 := ok 1#u8,op202 := ok 0#u8}
+
+theorem uint_source (base : ExternalTypes)
+    (ops : @ExternalFuns (PV_CBL_LibraryShapeTypes.selectedTypes base))
+    {U B : Type} (u : typenum.marker_traits.Unsigned U) (b : typenum.marker_traits.Bit B) :
+    @ExternalFuns.op156 (PV_CBL_LibraryShapeTypes.selectedTypes base) (selected base ops) U B u b=unsigned u b := rfl
+
+#print axioms unsigned
+#print axioms selected
+#print axioms uint_source
+end R1Z.PV_AL_TypenumSize
