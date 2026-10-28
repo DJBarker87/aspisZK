@@ -25,8 +25,6 @@ theorem conversion_bytes (block : Bytes) (word : Fin 8) : slice block word=array
   · intro i hi hi'
     simp only [slice,List.getElem_take,List.getElem_drop,List.getElem_ofFn,
       array,offset] at *
-    congr 1
-    apply Fin.ext
 #print axioms conversion_bytes
 
 /-- Both source forms pass exactly the same four bytes to from_le_bytes;
