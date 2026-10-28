@@ -78,3 +78,14 @@ and preserves outer Aeneas fail/div. NDB's primary helper laws refer to E008.
 No whole native==f_ref theorem, conditional equality axiom, P6 instance, or
 headline/security closure has been added. Runtime/heap/ABI/source-to-ELF
 boundaries are retained. Option A would be a trust RECLASSIFICATION, not removal.
+
+## Final audit and stop
+
+Both budgets exhausted:60 Kani/30 Lean. L030 passes all49 new top theorems
+and six inherited dictionary selections using standard axioms only. There are
+21 proof modules plus the command-only audit module; delivery matches their
+accepted source snapshots. NDB_VALIDATION.json passes. All731 archived frozen
+paths match; all219 resolved Aeneas objects are pinned;22 checked NDB objects
+are retained in the existing cache. See NDB_HANDOFF.md for exact exclusions,
+member-by-member native/Lean remainder, source/ELF boundaries and cleanup.
+All three decoder statuses remain OPEN.
