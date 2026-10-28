@@ -147,9 +147,6 @@ def reference226.project
   let out18 ← reference226.project_frontier_level out17 transition 18#usize
   reference226.project_frontier_level out18 transition 19#usize
 
-/-- [pv_b3p6_reference::reference226::public_bytes]:
-    Source: 'reference226.rs', lines 314:0-316:1
-    Visibility: public -/
 
 end PV_B3P_226
 #print axioms PV_B3P_226.reference226.project

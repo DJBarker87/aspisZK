@@ -12,6 +12,8 @@ assert len(starts)==len(names)
 parts={};records=[]
 for i,m in enumerate(starts):
  segment=body[m.start():starts[i+1].start() if i+1<len(starts) else len(body)]
+ segment=re.sub(r'/--.*?-/\s*','',segment,flags=re.S) # source-location documentation only; a dangling doc comment requires a declaration
+ if i==0: segment='@[global_simps, irreducible, rust_const \"aspis_core::field::{aspis_core::field::M31}::ZERO\"]\n'+segment
  parts.setdefault(names[i],[]).append((m[1],segment));records.append({'declaration':ns+'.'+m[1],'module':names[i],'exact_body_sha256':hashlib.sha256(segment.encode()).hexdigest()})
 for module,items in parts.items():
  header=''.join('import '+m+'\n' for m in imports[module])+f'open Aeneas Aeneas.Std Result ControlFlow Error\nset_option maxRecDepth 2048\nset_option maxHeartbeats 1000000\nnamespace {ns}\n'

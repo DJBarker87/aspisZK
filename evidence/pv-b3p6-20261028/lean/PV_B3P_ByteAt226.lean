@@ -136,8 +136,6 @@ def reference226.byte_at
                             let i11 ← j % 4#usize
                             reference226.field_byte i10 i11
 
-/-- [pv_b3p6_reference::reference226::chunk]:
-    Source: 'reference226.rs', lines 94:0-161:1 -/
 
 end PV_B3P_226
 #print axioms PV_B3P_226.reference226.byte_at

@@ -328,8 +328,6 @@ def reference226.encode_owned
       ((Array (Array Std.U8 64#usize) 23#usize) × Std.Usize)
       (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual
 
-/-- [pv_b3p6_reference::reference226::project_frontier_level]:
-    Source: 'reference226.rs', lines 293:0-311:1 -/
 
 end PV_B3P_226
 #print axioms PV_B3P_226.reference226.encode_owned

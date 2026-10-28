@@ -79,9 +79,6 @@ def reference226.project_frontier_level
   let a49 := index_mut_back15 a47
   ok { out with frontier := a48, next_frontier := a49 }
 
-/-- [pv_b3p6_reference::reference226::project]:
-    Source: 'reference226.rs', lines 192:0-290:1
-    Visibility: public -/
 
 end PV_B3P_226
 #print axioms PV_B3P_226.reference226.project_frontier_level

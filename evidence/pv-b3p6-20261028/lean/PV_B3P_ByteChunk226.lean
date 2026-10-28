@@ -1436,9 +1436,6 @@ def reference226.chunk
       (Array Std.U8 64#usize) (core.convert.FromSame
       aspis_core.state_only_prefix.r0.Error) residual
 
-/-- [pv_b3p6_reference::reference226::encode_owned]:
-    Source: 'reference226.rs', lines 163:0-190:1
-    Visibility: public -/
 
 end PV_B3P_226
 #print axioms PV_B3P_226.reference226.chunk
