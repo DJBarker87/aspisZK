@@ -1,0 +1,63 @@
+{"attempt": "NBA_L023", "exit_status": 1, "wall_seconds": 3.1293879079748876, "peak_rss_kib": "2636424", "swaps": "0", "print_axioms": ["'AspisR1.NBA_QueryTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NBA_QueryTrace.unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBA_generated/NBA_QueryTrace.lean:26:16: error: unsolved goals
+case exhausted
+xs : List U32
+s✝ final : State
+stop : Option Bool
+s : State
+⊢ (match
+      let (o, iter1) := (none, [])
+      match o with
+      | none => ok (done (s, some false))
+      | some candidate =>
+        if s.accepted_len = 22#usize then ok (done (s, none))
+        else
+          if s.draws = 64#usize then ok (done (s, none))
+          else do
+            let i ← s.draws + 1#usize
+            let sl ←
+              core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                  s.accepted { «end» := s.accepted_len }
+            let b ← core.slice.Slice.contains cor
+...
+          if p.2.accepted_len = 22#usize then ok (done (p.2, none))
+                else
+                  if p.2.draws = 64#usize then ok (done (p.2, none))
+                  else do
+                    let i ← p.2.draws + 1#usize
+                    let sl ←
+                      core.array.Array.index
+                          (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) p.2.accepted
+                          { «end» := p.2.accepted_len }
+                    let b ← core.slice.Slice.contains core.cmp.PartialEqU32 sl candidate
+                    if b = true then
+                        ok (cont (iter1, { accepted := p.2.accepted, accepted_len := p.2.accepted_len, draws := i }))
+                      else do
+                        let a ← p.2.accepted.update p.2.accepted_len candidate
+                        let i1 ← p.2.accepted_len + 1#usize
+                        ok (cont (iter1, { accepted := a, accepted_len := i1, draws := i })))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (s, none)
+NBA_generated/NBA_QueryTrace.lean:55:4: error: 'change' tactic failed, pattern
+  (do
+      let st ← body (stdOps listNext) (x :: xs) s
+      match st with
+        | done v => ok v
+        | cont v => loop step v) =
+    ?m.179
+is not definitionally equal to target
+  (match body (stdOps listNext) (x :: xs, s).1 (x :: xs, s).2 with
+    | ok r =>
+      match r with
+      | cont x => loop (fun p => body (stdOps listNext) p.1 p.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (final, stop)
+'AspisR1.NBA_QueryTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBA_QueryTrace.unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfd126b5dfad049b6af5bae31e73af7ed.scope; invocation ID: 2003c731c3cc4479b32b0c24df78837e

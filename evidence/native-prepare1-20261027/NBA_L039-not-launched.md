@@ -1,0 +1,1 @@
+Backend dependency preflight exited1 before Lean: Query31MaterializedSchedule has no coherent selected object. No compile and no timeout. Do not build the stale private namespace module. Replacement NBA_QueryFactor factors the actual PublicPreparation QueriesModel directly and proves its equality; NBA_Materialize imports that prefix module.

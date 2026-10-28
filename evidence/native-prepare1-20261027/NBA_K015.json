@@ -1,0 +1,57 @@
+{
+  "attempt": "NBA_K015",
+  "kind": "kani",
+  "module": "r0_transcript::NBA_query::NBA_word_decode",
+  "sources": [
+    "NBA_src/crates/aspis-core/src/NBA_query_core.rs",
+    "NBA_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NBA_src/crates/aspis-core/src/r0_transcript.rs",
+    "NBA_src/crates/aspis-core/src/NBA_query_core.rs",
+    "NBA_src/Cargo.toml",
+    "NBA_src/Cargo.lock"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-prepare1-20261027/NBA_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-prepare1-20261027/NBA_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r0_transcript::NBA_query::NBA_word_decode",
+    "--output-format",
+    "terse",
+    "--features",
+    "r0"
+  ],
+  "timeout": 180,
+  "source_revision": "8bfeeb4080a8f0638598f61117228c4f5be6c9b6",
+  "source_tree_dirty": true,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-prepare1-20261027/NBA_tmp"
+  },
+  "deps_fingerprint": {
+    "scope": "frozen native source selected by NBA_SOURCE.json; graph audit before every run; arbitrary callee return overapproximations"
+  },
+  "expected_time": "optimized Kani compilation then native call routing; no arithmetic elimination",
+  "reservation_retries": 0
+}

@@ -1,0 +1,70 @@
+{"attempt": "NBA_L020", "exit_status": 1, "wall_seconds": 2.761151102022268, "peak_rss_kib": "2641244", "swaps": "0", "print_axioms": ["'AspisR1.NBA_QueryStep.unique' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NBA_QueryStep.update' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NBA_QueryStep.fresh' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NBA_QueryStep.val_mem' depends on axioms: [propext, Quot.sound]", "'AspisR1.NBA_QueryStep.duplicate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NBA_QueryStep.valid' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NBA_generated/NBA_QueryStep.lean:29:55: error: Type mismatch: After simplification, term
+  hlen
+ has type
+  @LT.lt ℕ instLTNat (↑s.accepted_len) 22
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑s.accepted_len ↑22#usize
+NBA_generated/NBA_QueryStep.lean:42:4: error: unsolved goals
+case refine_2
+xs : List U32
+s next : State
+x : U32
+hlen : ↑s.accepted_len < 22
+hdraw : ↑s.draws < 64
+hfresh : ↑x ∉ acceptedPrefix s
+frame : Frame s next x false
+d n : UScalar UScalarTy.Usize
+a : Std.Array U32 22#usize
+hd : s.draws + 1#usize = ok d
+vd : ↑d = ↑s.draws + 1
+hn : s.accepted_len + 1#usize = ok n
+vn : ↑n = ↑s.accepted_len + 1
+ha : s.accepted.update s.accepted_len x = ok a
+hbody : body (stdOps listNext)
+...
+eryStep.lean:42:57: warning: This simp argument is unused:
+  Array.set
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵s̵a̵m̵e̵A̵r̵r̵a̵y̵,̵A̵r̵r̵a̵y̵.̵s̵e̵t̵]̵[̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲s̲a̲m̲e̲A̲r̲r̲a̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_QueryStep.lean:60:85: error: Application type mismatch: The argument
+  small
+has type
+  ↑s.draws + ↑1#usize ≤ Usize.max
+but is expected to have type
+  ↑s.draws + ↑1#usize ≤ UScalar.max UScalarTy.Usize
+in the application
+  UScalar.add_spec small
+NBA_generated/NBA_QueryStep.lean:63:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  c ≥ 0
+  -63 ≤ c - e ≤ 0
+  b ≥ 0
+  b - e ≥ 0
+  0 ≤ a ≤ 21
+  a - f ≥ 1
+where
+ a := ↑↑s.accepted_len
+ b := ↑Usize.max
+ c := ↑↑1#usize
+ e := ↑↑d
+ f := ↑↑22#usize
+NBA_generated/NBA_QueryStep.lean:69:4: error: Type mismatch: After simplification, term
+  value
+ has type
+  @Eq (List U32) (↑sl) (List.take (↑s.accepted_len - 0) (List.drop 0 ↑s.accepted))
+but is expected to have type
+  @Eq (List U32) (↑sl) (List.take ↑s.accepted_len ↑s.accepted)
+'AspisR1.NBA_QueryStep.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBA_QueryStep.update' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBA_QueryStep.fresh' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBA_QueryStep.val_mem' depends on axioms: [propext, Quot.sound]
+'AspisR1.NBA_QueryStep.duplicate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBA_QueryStep.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6bf418322a9240c2855f30a7373c5ca8.scope; invocation ID: 93a73cb9ee844f889819cbceffbca70d

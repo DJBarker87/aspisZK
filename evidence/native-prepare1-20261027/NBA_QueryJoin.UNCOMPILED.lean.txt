@@ -1,0 +1,16 @@
+import NBA_QueryFactor
+namespace AspisR1.NBA_QueryFactor
+open Aeneas Aeneas.Std Result AspisR1PublicPreparation
+theorem source (B : QueriesModel.Boundaries) {H : Type}
+    (D : aspis_core.Digest32 H) (self : transcript.Transcript H) (row : U8) (payload : Slice U8) :
+    QueriesModel.queries B D self row payload=queriesFactored B D self row payload := by
+  change (do let next ← transcript.Transcript.absorb D self row payload
+             materializeThen D next.hash next.state (fun p => finishQuery B D next p.1 p.2)) =
+    (do let next ← transcript.Transcript.absorb D self row payload
+        let p ← materialize D next.hash next.state
+        finishQuery B D next p.1 p.2)
+  apply congrArg (fun k => (transcript.Transcript.absorb D self row payload >>= k))
+  funext next
+  exact (distribute D next.hash next.state (fun p => finishQuery B D next p.1 p.2)).symm
+#print axioms source
+end AspisR1.NBA_QueryFactor

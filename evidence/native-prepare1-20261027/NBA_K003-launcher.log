@@ -1,0 +1,51 @@
+{"attempt": "NBA_K003", "exit_status": 1, "wall_seconds": 104.54201825498603, "peak_rss_kib": "2017128", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-prepare1-20261027/NBA_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`,
+...
+-2024/static-mut-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBA_new_challenges` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:71:4
+   |
+71 | fn NBA_new_challenges(){context::<0>()}
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_new_challenges`
+
+warning: function `NBA_new_tail` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:78:4
+   |
+78 | fn NBA_new_tail(){context::<1>()}
+   |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_new_tail`
+
+warning: function `NBA_new_semantic_frame` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:85:4
+   |
+85 | fn NBA_new_semantic_frame(){context::<2>()}
+   |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_new_semantic_frame`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 7.48s
+Checking harness verifier::NBA_verifier::NBA_new_challenges...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - verifier::NBA_verifier::NBA_new_challenges
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rb4ac40e55bec48f1b265b91aa20db0fb.scope; invocation ID: 59cd34ec82254f0bb4b0f0cdb485ff22

@@ -1,0 +1,58 @@
+{"attempt": "NBA_L041", "exit_status": 1, "wall_seconds": 7.663129088003188, "peak_rss_kib": "4744648", "swaps": "0", "print_axioms": ["'AspisR1.NBA_QueryFactor.distribute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBA_generated/NBA_QueryFactor.lean:300:81: error: unsolved goals
+α H : Type
+D : aspis_core.Digest32 H
+hash : H
+state : Std.Array U8 32#usize
+k : Std.Array (Std.Array U8 32#usize) 8#usize × Std.Array (Std.Array U8 32#usize) 8#usize → Result α
+⊢ (do
+      let x ← lift state.to_slice
+      let x_1 ← lift (Array.make 1#usize [1#u8] materialize._proof_6).to_slice
+      let x ← lift (Array.make 2#usize [x, x_1] ⋯).to_slice
+      let x ← D.digest hash x
+      let x_2 ← (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).index_mut_usize 0#usize
+      let p ←
+        let (_, index_mut_back) := x_2
+          do
+          let s3 ← lift state.to_slice
+          let s4 ← lift (Array.make 1#usize [2#u8] m
+...
+ let s33 ← lift state4.to_slice
+    let s34 ← lift (Array.make 1#usize [2#u8] materialize._proof_11).to_slice
+    let s35 ← lift (Array.make 2#usize [s33, s34] ⋯).to_slice
+    let a12 ← D.digest hash s35
+    let blocks12 ← blocks10.update 5#usize a12
+    let state5 ← blocks12.index_usize 5#usize
+    let s36 ← lift state5.to_slice
+    let s37 ← lift (Array.make 1#usize [1#u8] materialize._proof_6).to_slice
+    let s38 ← lift (Array.make 2#usize [s36, s37] ⋯).to_slice
+    let a13 ← D.digest hash s38
+    let blocks13 ← blocks11.update 6#usize a13
+    let s39 ← lift state5.to_slice
+    let s40 ← lift (Array.make 1#usize [2#u8] materialize._proof_11).to_slice
+    let s41 ← lift (Array.make 2#usize [s39, s40] ⋯).to_slice
+    let a14 ← D.digest hash s41
+    let blocks14 ← blocks12.update 6#usize a14
+    let state6 ← blocks14.index_usize 6#usize
+    let s42 ← lift state6.to_slice
+    let s43 ← lift (Array.make 1#usize [1#u8] materialize._proof_6).to_slice
+    let s44 ← lift (Array.make 2#usize [s42, s43] ⋯).to_slice
+    let a15 ← D.digest hash s44
+    let blocks15 ← blocks13.update 7#usize a15
+    let s45 ← lift state6.to_slice
+    let s46 ← lift (Array.make 1#usize [2#u8] materialize._proof_11).to_slice
+    let s47 ← lift (Array.make 2#usize [s45, s46] ⋯).to_slice
+    let a16 ← D.digest hash s47
+    let blocks16 ← blocks14.update 7#usize a16
+    let _ ← blocks16.index_usize 7#usize
+    k (blocks15, blocks16)
+NBA_generated/NBA_QueryFactor.lean:302:27: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NBA_QueryFactor.distribute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rde4dbd2c1d84402ca85a56d2b8764fe8.scope; invocation ID: 3736bc2b10f74a55b72283fc699605e8

@@ -1,0 +1,58 @@
+{"attempt": "NBA_K016", "exit_status": 0, "wall_seconds": 15.32527442096034, "peak_rss_kib": "677528", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-prepare1-20261027/NBA_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`,
+...
+ng: function `NBA_word` should have a snake case name
+  --> crates/aspis-core/src/NBA_query_core.rs:24:4
+   |
+24 | fn NBA_word(block:&[u8;32],i:usize)->u32{let j=4*i;u32::from_le_bytes([block[j],block[j+1],block[j+2],block[j+3]])&(QUERY_BOUND-1)}
+   |    ^^^^^^^^ help: convert the identifier to snake case: `nba_word`
+
+warning: function `NBA_word_decode` should have a snake case name
+  --> crates/aspis-core/src/NBA_query_core.rs:26:4
+   |
+26 | fn NBA_word_decode(){
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_word_decode`
+
+warning: function `NBA_outer_step` should have a snake case name
+  --> crates/aspis-core/src/NBA_query_core.rs:31:4
+   |
+31 | fn NBA_outer_step(k:usize,stop:bool,advances:&[[u8;32];8],selected:&mut[u8;32])->bool{if stop{*selected=advances[k];return true;}false}
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_outer_step`
+
+warning: function `NBA_driver_step` should have a snake case name
+  --> crates/aspis-core/src/NBA_query_core.rs:33:4
+   |
+33 | fn NBA_driver_step(){
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_driver_step`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 9.88s
+Checking harness r0_transcript::NBA_query::NBA_driver_step...
+
+VERIFICATION RESULT:
+ ** 0 of 29 failed
+
+ ** 2 of 2 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 2.2708673s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r671d760b49a642b1a2a594dce4b43989.scope; invocation ID: 62f0e56492ea4572b004464b148e2aa7

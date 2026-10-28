@@ -1,0 +1,290 @@
+NBA_generated/NBA_TraceReplay.lean:17:70: error: failed to synthesize
+  Decidable (32#usize + 224#usize = ok 256#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NBA_generated/NBA_TraceReplay.lean:18:58: error: failed to synthesize
+  Decidable (30#u8 + 1#u8 = ok 31#u8)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NBA_generated/NBA_TraceReplay.lean:19:58: error: failed to synthesize
+  Decidable (31#u8 + 1#u8 = ok 32#u8)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NBA_generated/NBA_TraceReplay.lean:23:19: error: unsolved goals
+case single
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+out : verifier.Prepared
+scratch old : Std.Array aspis_core.field.WideExact 29#usize
+start t1 t2 t3 : transcript.Transcript H
+bytes : Bytes32
+gamma kappa alpha0 : Wide
+hseed : transcript.Transcript.new D hash sem.transcript.state v.variant = ok start
+hg : PreparedModel.scalar NBA_Installed.actual.sampling D start 27#u8 v.y1 true = ok (gamma, t1)
+hbytes : NBA_Installed.actual.sampling.toBytes v.inactive = ok bytes
+hk : PreparedModel.scalar NBA_Installed.actual.sampling D t1 28#u8 (Array.to_slice bytes) false = ok (kappa, t2)
+ha : PreparedModel.scalar NBA_Installed.actual.sampling D t2 29#u8 v.round0 false = ok (alpha0, t3)
+cap : 32#usize + 224#usize = ok 256#usize
+single : 30#u8 + 1#u8 = ok 31#u8
+double : 31#u8 + 1#u8 = ok 32#u8
+hf : v.variant.folds = ok 1#usize
+qs : Std.Array U32 22#usize
+afterQueries last : transcript.Transcript H
+rho : QM
+claim : Wide
+hq : NBA_Installed.actual.sampling.queries D t3 30#u8 v.final_message = ok (core.result.Result.Ok qs, afterQueries)
+hr : PreparedModel.scalar_k NBA_Installed.actual.sampling D afterQueries 31#u8 emptyPayload = ok (rho, last)
+hp : NBA_Installed.actual.powers 29#usize gamma = ok scratch
+hc : NBA_Installed.actual.claim D sem v.y1 v.inactive scratch kappa = ok (core.result.Result.Ok claim)
+he : out = output sem v gamma kappa (Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯) rho qs claim last
+row : (if 30#u8 = 30#u8 then 31#u8 else 32#u8) = 31#u8
+⊢ (let (gamma, t1) := (gamma, t1)
+    do
+    let (kappa, t2) ← PreparedModel.scalar NBA_Installed.actual.sampling D t1 28#u8 (Array.to_slice bytes) false
+    let (alpha0, t3) ← PreparedModel.scalar NBA_Installed.actual.sampling D t2 29#u8 v.round0 false
+    let (r, t4) ← NBA_Installed.actual.sampling.queries D t3 30#u8 v.final_message
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (rho, t5) ← PreparedModel.scalar_k NBA_Installed.actual.sampling D t4 31#u8 (Std.Array.empty U8).to_slice
+        let g1 ← NBA_Installed.actual.powers 29#usize gamma
+        let r1 ← NBA_Installed.actual.claim D sem v.y1 v.inactive g1 kappa
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 =>
+            ok
+              (core.result.Result.Ok
+                  { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                    alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho, queries := val,
+                    semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                g1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (core.convert.FromSame verifier.Error) residual
+            ok (r2, g1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (core.convert.FromSame verifier.Error) residual
+        ok (r1, old)) =
+    ok
+      (core.result.Result.Ok
+          { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+            alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho, queries := qs,
+            semantic_alpha := sem.alpha, z := sem.z, claim := claim, state := last.state },
+        scratch)
+NBA_generated/NBA_TraceReplay.lean:30:69: error: unsolved goals
+case double
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+out : verifier.Prepared
+scratch old : Std.Array aspis_core.field.WideExact 29#usize
+start t1 t2 t3 : transcript.Transcript H
+bytes : Bytes32
+gamma kappa alpha0 : Wide
+hseed : transcript.Transcript.new D hash sem.transcript.state v.variant = ok start
+hg : PreparedModel.scalar NBA_Installed.actual.sampling D start 27#u8 v.y1 true = ok (gamma, t1)
+hbytes : NBA_Installed.actual.sampling.toBytes v.inactive = ok bytes
+hk : PreparedModel.scalar NBA_Installed.actual.sampling D t1 28#u8 (Array.to_slice bytes) false = ok (kappa, t2)
+ha : PreparedModel.scalar NBA_Installed.actual.sampling D t2 29#u8 v.round0 false = ok (alpha0, t3)
+cap : 32#usize + 224#usize = ok 256#usize
+single : 30#u8 + 1#u8 = ok 31#u8
+double : 31#u8 + 1#u8 = ok 32#u8
+hf : v.variant.folds = ok 2#usize
+root : Bytes32
+b1 b2 : alloc.vec.Vec U8
+alpha1 : Wide
+afterAlpha : transcript.Transcript H
+hroot : core.option.Option.unwrap v.folded_root = ok root
+hb1 :
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 256#usize) (Array.to_slice root) =
+    ok b1
+hb2 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 b1 v.round1 = ok b2
+halpha : PreparedModel.scalar NBA_Installed.actual.sampling D t3 30#u8 b2.deref false = ok (alpha1, afterAlpha)
+qs : Std.Array U32 22#usize
+afterQueries last : transcript.Transcript H
+rho : QM
+claim : Wide
+hq :
+  NBA_Installed.actual.sampling.queries D afterAlpha 31#u8 v.final_message = ok (core.result.Result.Ok qs, afterQueries)
+hr : PreparedModel.scalar_k NBA_Installed.actual.sampling D afterQueries 32#u8 emptyPayload = ok (rho, last)
+hp : NBA_Installed.actual.powers 29#usize gamma = ok scratch
+hc : NBA_Installed.actual.claim D sem v.y1 v.inactive scratch kappa = ok (core.result.Result.Ok claim)
+he : out = output sem v gamma kappa (Array.make 2#usize [alpha0, alpha1] ⋯) rho qs claim last
+row : (if 31#u8 = 30#u8 then 31#u8 else 32#u8) = 32#u8
+⊢ (let (gamma, t1) := (gamma, t1)
+    do
+    let (kappa, t2) ← PreparedModel.scalar NBA_Installed.actual.sampling D t1 28#u8 (Array.to_slice bytes) false
+    let (alpha0, t3) ← PreparedModel.scalar NBA_Installed.actual.sampling D t2 29#u8 v.round0 false
+    let (we, t4) ← PreparedModel.scalar NBA_Installed.actual.sampling D t3 30#u8 b2.deref false
+    let (r, t5) ← NBA_Installed.actual.sampling.queries D t4 31#u8 v.final_message
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (rho, t6) ← PreparedModel.scalar_k NBA_Installed.actual.sampling D t5 32#u8 (Std.Array.empty U8).to_slice
+        let g1 ← NBA_Installed.actual.powers 29#usize gamma
+        let r1 ← NBA_Installed.actual.claim D sem v.y1 v.inactive g1 kappa
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 =>
+            ok
+              (core.result.Result.Ok
+                  { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                    alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val, semantic_alpha := sem.alpha,
+                    z := sem.z, claim := val1, state := t6.state },
+                g1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (core.convert.FromSame verifier.Error) residual
+            ok (r2, g1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+              (core.convert.FromSame verifier.Error) residual
+        ok (r1, old)) =
+    ok
+      (core.result.Result.Ok
+          { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+            alpha := Array.make 2#usize [alpha0, alpha1] ⋯, rho := rho, queries := qs, semantic_alpha := sem.alpha,
+            z := sem.z, claim := claim, state := last.state },
+        scratch)
+NBA_generated/NBA_TraceReplay.lean:21:83: warning: This simp argument is unused:
+  hk
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.SemanticTranscript.impl.state, ̲hseed, ̲bind_tc_ok, ̲hg, ̲hbytes, ̲lift, ̲hk̵,̵h̵a]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:21:86: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.SemanticTranscript.impl.state, ̲hseed, ̲bind_tc_ok, ̲hg, ̲hbytes, ̲lift, ̲hk,̵h̵a̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:28:74: warning: This simp argument is unused:
+  hq
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲show ¬(1#usize ̲= ̲2#usize) by decide, ̲↓reduceIte,h̵q̵,̵
+        core.result.Result.Insts.CoreOpsTry.branch, ̲single, ̲lift, ̲hr, ̲emptyPayload, ̲hp, ̲hc, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:29:56: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲show ¬(1#usize ̲= ̲2#usize) by decide, ̲↓reduceIte, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲single,l̵i̵f̵t̵,̵ ̲hr, ̲emptyPayload, ̲hp, ̲hc, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:29:61: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲show ¬(1#usize ̲= ̲2#usize) by decide, ̲↓reduceIte, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲single, ̲lift,h̵r̵,̵ ̲emptyPayload, ̲hp, ̲hc, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:29:64: warning: This simp argument is unused:
+  emptyPayload
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲show ¬(1#usize ̲= ̲2#usize) by decide, ̲↓reduceIte, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲single, ̲lift, ̲hr,e̵m̵p̵t̵y̵P̵a̵y̵l̵o̵a̵d̵,̵ ̲hp, ̲hc, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:29:77: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲show ¬(1#usize ̲= ̲2#usize) by decide, ̲↓reduceIte, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲single, ̲lift, ̲hr, ̲emptyPayload, ̲hp̵,̵h̵c, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:29:80: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲show ¬(1#usize ̲= ̲2#usize) by decide, ̲↓reduceIte, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲single, ̲lift, ̲hr, ̲emptyPayload, ̲hp,h̵c̵,̵ ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:35:44: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲↓reduceIte, ̲cap,l̵i̵f̵t̵,̵ ̲hroot, ̲hb1, ̲hb2, ̲halpha, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲double, ̲hr, ̲emptyPayload, ̲hp, ̲hc, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:35:63: warning: This simp argument is unused:
+  halpha
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲↓reduceIte, ̲cap, ̲lift, ̲hroot, ̲hb1, ̲hb2, ̲ha̵l̵p̵h̵a̵,̵h̵q,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲double, ̲hr, ̲emptyPayload, ̲hp, ̲hc, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:35:70: warning: This simp argument is unused:
+  hq
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲↓reduceIte, ̲cap, ̲lift, ̲hroot, ̲hb1, ̲hb2, ̲halpha,h̵q̵,̵
+        core.result.Result.Insts.CoreOpsTry.branch, ̲double, ̲hr, ̲emptyPayload, ̲hp, ̲hc, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:36:56: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲↓reduceIte, ̲cap, ̲lift, ̲hroot, ̲hb1, ̲hb2, ̲halpha, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲double,h̵r̵,̵ ̲emptyPayload, ̲hp, ̲hc, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:36:59: warning: This simp argument is unused:
+  emptyPayload
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲↓reduceIte, ̲cap, ̲lift, ̲hroot, ̲hb1, ̲hb2, ̲halpha, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲double, ̲hr,e̵m̵p̵t̵y̵P̵a̵y̵l̵o̵a̵d̵,̵ ̲hp, ̲hc, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:36:72: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲↓reduceIte, ̲cap, ̲lift, ̲hroot, ̲hb1, ̲hb2, ̲halpha, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲double, ̲hr, ̲emptyPayload, ̲hp̵,̵h̵c, ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_TraceReplay.lean:36:75: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [hf, ̲bind_tc_ok, ̲↓reduceIte, ̲cap, ̲lift, ̲hroot, ̲hb1, ̲hb2, ̲halpha, ̲hq,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲double, ̲hr, ̲emptyPayload, ̲hp,h̵c̵,̵ ̲output]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NBA_TraceReplay.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBA_TraceReplay.unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
