@@ -23,8 +23,8 @@ theorem scalar_canonical (fuel : Nat) (xs : List word) (v : word) (rest : List w
       unfold scan at h
       split at h
       · rename_i hc
-        have he := Option.some.inj h
-        exact he.1 ▸ hc
+        have he := congrArg Prod.fst (Option.some.inj h)
+        exact he ▸ hc
       · exact ih ws h
 #print axioms scalar_canonical
 
