@@ -3,7 +3,7 @@ from pathlib import Path
 import json,subprocess,hashlib,time,sys,shlex
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-kstub-20261028';D='/home/dombarker/project-offloads/codex-pv-kstub-20261028';H='dombarker@100.108.41.90'
 names=['AppendDomain','CopyWindows','CopyEquality','AppendCoordinates','OptionCoordinates','SplitCoverage','AppendBridge','Final'];pins=[]
-for i,n in enumerate(names,44702):
+for i,n in enumerate(names,44703):
  module='PV_KStub_'+n;p=R/'tools/pv-kstub-20261028'/(module+'.lean');rel=str(p.relative_to(R));data=p.read_bytes();tracked=subprocess.check_output(['git','show','HEAD:'+rel],cwd=R);assert data==tracked
  pins.append(dict(id=i,module=module,path=rel,blob=subprocess.check_output(['git','rev-parse','HEAD:'+rel],cwd=R,text=True).strip(),sha256=hashlib.sha256(data).hexdigest(),revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source=data.decode()))
 (E/'lean-continuation-plan.json').write_text(json.dumps([{k:v for k,v in p.items() if k!='source'} for p in pins],indent=2)+'\n')
@@ -19,13 +19,13 @@ for base in Path('/home/dombarker/project-offloads').glob('codex-pv-*'):
   depth=len(Path(root).relative_to(base).parts)
   dirs[:]=[d for d in dirs if d not in ['target','node_modules','.git','sources','lean-sources','native','src','lean-objects','objects'] and depth<3]
   for name in dirs+files:
-   if any(re.search(r'(?<!\\d)'+str(p['id'])+r'(?!\\d)',name) for p in pins):used.append(str(Path(root)/name))
+   if any(re.search(r'(?<![A-Za-z0-9])'+str(p['id'])+r'(?![A-Za-z0-9])',name) for p in pins):used.append(str(Path(root)/name))
 for base in ['aspis-fs-generic-20261006','r1-privacy-build-integration-20261019']:
  for relative in ['sent.txt','evidence/sent.txt']:
   sent=Path('/home/dombarker/project-offloads')/base/relative
   if sent.exists():
    for line in sent.read_text().splitlines():
-    if any(re.search(r'(?<!\\d)'+str(p['id'])+r'(?!\\d)',line) for p in pins):used.append(str(sent)+':'+line)
+    if any(re.search(r'(?<![A-Za-z0-9])'+str(p['id'])+r'(?![A-Za-z0-9])',line) for p in pins):used.append(str(sent)+':'+line)
 assert not used,used
 checks=[]
 for x in json.loads((D/'external-object-manifest.json').read_text()):

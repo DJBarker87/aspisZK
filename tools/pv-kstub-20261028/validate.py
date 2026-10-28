@@ -40,4 +40,4 @@ for x in json.loads((E/'per-run-kmx-audit.json').read_text())['runs']:
 check(not any(p.stat().st_size>20*1024*1024 for p in E.rglob('*') if p.is_file()),'file-size cap')
 check(not json.loads((E/'observer-pattern-audit.json').read_text())['matching_harnesses'],'observer pattern review')
 result=dict(ok=not errors,errors=errors,kani_runs=len(receipts),lean_attempts=len(lean_receipts),paths=paths)
-(E/'validation.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2));sys.exit(bool(errors))
+(E/'validation.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:v for k,v in result.items() if k!='paths'},indent=2));sys.exit(bool(errors))
