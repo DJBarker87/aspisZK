@@ -1,0 +1,43 @@
+{"attempt": "NDB_K007", "exit_status": 0, "wall_seconds": 1.7381301330169663, "peak_rss_kib": "233820", "swaps": "0", "print_axioms": "N/A: kani"}
+{"tool_pins": {"kani": {"path": "/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "version": "kani 0.67.0", "sha256": "683f3ad1216e67686a39b2fcd6dc661f5090574f55fde9dd407966dca42cbfad"}, "cbmc": {"path": "/home/dombarker/.kani/kani-0.67.0/bin/cbmc", "version": "6.8.0 (cbmc-6.8.0)", "sha256": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973"}}}
+{"kani_command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe/Cargo.toml", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "-Z", "function-contracts", "--harness-timeout", "90s", "--exact", "--harn
+...
+nvert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 0.58s
+Checking harness r1_pool_adapter::NDB_native::NDB_canonical_digest...
+
+VERIFICATION RESULT:
+ ** 0 of 116 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.5040885s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r066aaf3a44004decbf18709c8cb40f36.scope; invocation ID: eea8cb79f4234257ab8e5e2409838ca6

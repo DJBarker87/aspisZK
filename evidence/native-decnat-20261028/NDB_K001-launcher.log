@@ -1,0 +1,41 @@
+{"attempt": "NDB_K001", "exit_status": 1, "wall_seconds": 50.84606370597612, "peak_rss_kib": "534948", "swaps": "0", "print_axioms": "N/A: kani"}
+{"tool_pins": {"kani": {"path": "/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "version": "kani 0.67.0", "sha256": "683f3ad1216e67686a39b2fcd6dc661f5090574f55fde9dd407966dca42cbfad"}, "cbmc": {"path": "/home/dombarker/.kani/kani-0.67.0/bin/cbmc", "version": "6.8.0 (cbmc-6.8.0)", "sha256": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973"}}}
+{"kani_command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe/Cargo.toml", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "-Z", "function-contracts", "--harness-timeout", "90s", "--exact", "--harn
+...
+entrypoint`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: this warning originates in the macro `$crate::custom_panic_default` which comes from the expansion of the macro `solana_program::entrypoint` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unused import: `Phase`
+ --> programs/r1-cost-probe/src/lib.rs:4:42
+  |
+4 | use aspis_r1_cost_probe::verifier::{self,Phase};
+  |                                          ^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `log::sol_log_compute_units`
+ --> programs/r1-cost-probe/src/lib.rs:6:133
+  |
+6 | ...:Pubkey,program_error::ProgramError,hash::hashv,msg,log::sol_log_compute_units};
+  |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `hash::hashv` and `msg`
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:46:5
+   |
+46 |     hash::hashv, msg, program, program_error::ProgramError, pubkey::Pubkey, sysvar::Sysvar,
+   |     ^^^^^^^^^^^  ^^^
+
+warning: use of deprecated module `solana_program::bpf_loader_upgradeable`: Use solana-loader-v3-interface instead
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:45:32
+   |
+45 |     account_info::AccountInfo, bpf_loader_upgradeable, clock::Clock, entrypoint::ProgramResult,
+   |                                ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+For more information about this error, try `rustc --explain E0583`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 1 previous error; 7 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-rb636c354a58941a598ff326393e51641.scope; invocation ID: 402b36543a994280b149f13f9cfce380

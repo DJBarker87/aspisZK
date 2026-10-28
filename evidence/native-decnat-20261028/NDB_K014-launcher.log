@@ -1,0 +1,39 @@
+{"attempt": "NDB_K014", "exit_status": 101, "wall_seconds": 272.58663036406506, "peak_rss_kib": "6531984", "swaps": "0", "print_axioms": "N/A: kani"}
+{"tool_pins": {"kani": {"path": "/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "version": "kani 0.67.0", "sha256": "683f3ad1216e67686a39b2fcd6dc661f5090574f55fde9dd407966dca42cbfad"}, "cbmc": {"path": "/home/dombarker/.kani/kani-0.67.0/bin/cbmc", "version": "6.8.0 (cbmc-6.8.0)", "sha256": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973"}}}
+{"kani_command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe/Cargo.toml", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "-Z", "function-contracts", "--harness-timeout", "90s", "--exact", "--harn
+...
+elp: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.67s
+Checking harness r1_pool_adapter::NDB_native::NDB_frontier_iterator...
+
+thread 'main' (2143811) panicked at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/kani-verifier-0.67.0/src/lib.rs:159:38:
+No exit code?
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+Running as unit: run-r6c1a54fdb36745c69a412ee188df10b0.scope; invocation ID: 7efca23f246e4e4b8a45ba7ffdba413e

@@ -19,3 +19,21 @@ elaboration failure; proof statement strength is unchanged. This concerns E010
 CastRef; NCV_Install still selects E008 Reference, so no native or installed-slot
 credit follows. Receipt records standard axioms only, exit0, wall1.229s,
 RSS2639728KiB, swap0, source revision, imports and library pins.
+
+## Stage 2: primary reference support
+
+NDB_L002–L015 develop the ACTUAL E008 selected reference, without silently
+reassigning E010 credit: original word32/word64 and bytes32 window laws, complete
+sequence and frontier induction, digest iteration/assembly and source-digest
+transport, plus exact window geometry. L009/L011 failed drafts are excluded;
+L010/L012 repairs pass. Accepted audits use standard axioms only.
+
+Native K005/006 closes the full 104-byte policy decoder body comparison,
+K007/008 the full unrolled native canonical digest specification, K009/010
+master iterator and K011/012 checkpoint iterator one-step associations. Each
+positive has its intended assertion-only failing inverse. K003/004 is the
+exact-KMX fidelity pair. K013 positive passes, but K014 negative stalled
+(CBMC defunct; own driver stopped at272.6s); this pair has NO credit.
+
+The top decoders remain OPEN. A copy/pointer frame theorem and a child body
+comparison do not establish full-domain native wrapper/allocator association.

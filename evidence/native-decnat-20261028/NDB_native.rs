@@ -75,7 +75,7 @@ fn NDB_frontier_iterator(){let raw:[[u32;8];20]=kani::any();let mut frontier=raw
 #[kani::stub(<[u8]>::to_vec,crate::NDB_KMX::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::NDB_KMX::KMX_realloc)]
 #[kani::unwind(34)]
-fn NDB_sequence_any_iterator(){let seq:[u64;8]=kani::any();let k:usize=kani::any();kani::assume(k<8);let mut it=seq.iter().skip(k);let value=it.next().unwrap();let law=(*value>POOL_V1_PAIR_CAPACITY)==(seq[k]>1048576)&&it.as_slice()==&seq[k+1..];assert!(law!=NDB_INVERSE,"NDB semantic law");}
+fn NDB_sequence_any_iterator(){let seq:[u64;8]=kani::any();let k:usize=kani::any();kani::assume(k<8);let mut it=seq[k..].iter();let value=it.next().unwrap();let law=(*value>POOL_V1_PAIR_CAPACITY)==(seq[k]>1048576)&&it.as_slice()==&seq[k+1..];assert!(law!=NDB_INVERSE,"NDB semantic law");}
 
 #[kani::proof]
 #[kani::stub(<[u8]>::copy_from_slice,crate::NDB_KMX::KMX_copy_from_slice)]
@@ -85,7 +85,7 @@ fn NDB_sequence_any_iterator(){let seq:[u64;8]=kani::any();let k:usize=kani::any
 #[kani::stub(<[u8]>::to_vec,crate::NDB_KMX::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::NDB_KMX::KMX_realloc)]
 #[kani::unwind(34)]
-fn NDB_reserved_any_iterator(){let b:[u8;16]=kani::any();let k:usize=kani::any();kani::assume(k<16);let mut it=b.iter().skip(k);let byte=it.next().unwrap();let law=(*byte!=0)==(b[k]!=0)&&it.as_slice()==&b[k+1..];assert!(law!=NDB_INVERSE,"NDB semantic law");}
+fn NDB_reserved_any_iterator(){let b:[u8;16]=kani::any();let k:usize=kani::any();kani::assume(k<16);let mut it=b[k..].iter();let byte=it.next().unwrap();let law=(*byte!=0)==(b[k]!=0)&&it.as_slice()==&b[k+1..];assert!(law!=NDB_INVERSE,"NDB semantic law");}
 
 #[kani::proof]
 #[kani::stub(<[u8]>::copy_from_slice,crate::NDB_KMX::KMX_copy_from_slice)]
