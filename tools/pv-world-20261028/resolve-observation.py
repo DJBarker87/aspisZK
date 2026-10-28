@@ -59,6 +59,7 @@ def visit(m):
  for d in deps:visit(d)
  order.append(m)
 visit('R1Z.PV_RunJoin_TrustItems')
+visit('R1Z.PV_RunJoin_OsWorldFrames')
 j=dict(root='R1Z.PV_RunJoin_TrustItems',source_revision=rev,modules=rows,order=order,errors=errors)
 (E/'observation-resolution.json').write_text(json.dumps(j,indent=2)+'\n')
 print(json.dumps(dict(project=len(rows),h5=sum(x.get('authority')=='h5' for x in rows.values()),errors=errors)))
