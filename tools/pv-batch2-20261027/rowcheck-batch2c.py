@@ -1,7 +1,7 @@
 """Optimized finite source/copy gate; restore the scratch test byte-for-byte."""
 from pathlib import Path
 import subprocess,hashlib,json,sys,time
-H=Path('/home/dombarker/project-offloads/codex-pv-batch2-20261027');S=H/'candidate/src';D=H/'batch2c-rowcheck';D.mkdir(exist_ok=False)
+H=Path('/home/dombarker/project-offloads/codex-pv-batch2-20261027');S=H/'candidate/src';D=H/('batch2f-box-native-'+sys.argv[2] if len(sys.argv)>2 and sys.argv[1]=='--box-boundary' else 'batch2c-rowcheck');D.mkdir(exist_ok=False)
 p=S/'crates/aspis-r1-cost-probe/src/host_weights.rs';original=p.read_bytes()
 test=r'''
 #[cfg(test)]
@@ -48,8 +48,12 @@ mod pv_b2_resume_checks {
  }
 }
 '''
+if len(sys.argv)>1 and sys.argv[1]=='--box-boundary':test=(H/'box-tests-batch2f.rs').read_text()
 (D/'scratch-tests.rs.txt').write_text(test)
 cmd=['cargo','test','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--lib','--','pv_b2_resume_checks','--test-threads=1','--nocapture']
+if len(sys.argv)>1 and sys.argv[1]=='--box-boundary':
+ cmd[cmd.index('pv_b2_resume_checks')]='pv_b2_box_boundary'
+ cmd=['taskset','--cpu-list','0-3',*cmd]
 (D/'command.json').write_text(json.dumps(dict(command=cmd,source_revision=(H/'candidate/source-revision.txt').read_text().strip(),source_sha256=hashlib.sha256(original).hexdigest(),expected_time='optimized Rust test compilation followed by finite row/copy comparison; no elimination'),indent=2)+'\n')
 try:
  p.write_bytes(original+test.encode())
