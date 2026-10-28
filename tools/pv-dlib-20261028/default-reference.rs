@@ -51,3 +51,17 @@ pub fn finalize_reference<C: Compression<State=[u32;8]>>(mut state: [u32;8],bloc
 
 // No destructor is invoked: core is moved into the returned owned snapshot.
 pub fn wrap_reference<T>(core:T) -> (T,[u8;64],usize) { (core,[0;64],0) }
+
+// Compression-event trace of SHA-256 padding, independent of either backend.
+pub fn padding_reference(mut buffer:[u8;64],pos:usize,bit_len:u64)
+    -> ([[u8;64];2],usize,[u8;64]) {
+    let mut events=[[0;64];2];let mut count=0;
+    buffer[pos]=128;
+    let mut i=pos+1;
+    while i<64 {buffer[i]=0;i+=1;}
+    if pos>=56 {events[count]=buffer;count+=1;buffer=[0;64];}
+    let mut j=0;
+    while j<8 {buffer[56+j]=(bit_len>>(8*(7-j))) as u8;j+=1;}
+    events[count]=buffer;count+=1;
+    (events,count,buffer)
+}

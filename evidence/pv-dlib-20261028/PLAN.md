@@ -57,3 +57,13 @@ counterexample or a stop. Continue P6 with an owned generic moved-core reference
 42206–42209 passed (generic owned reference plus private h5 type dependencies).
 42210 pre-upload admission refused at 00:55:36.450630Z: aggregate reservations;
 no compiler started. Next resource admission no earlier than 00:58:36.450630Z.
+
+42211–42215 passed. 42216 second admission refused at
+00:59:33.062645Z (aggregate reservation). No compiler started for that ID.
+Next resource admission no earlier than 01:02:33.062645Z, with fresh ID 42217.
+
+The update reference relates active buffer prefixes, not dead suffix bytes:
+block-buffer's batched path may leave different bytes outside `get_data()`.
+A raw full-buffer equality would be too strong. The planned padding event gate
+must show that these dead suffix bytes are overwritten before compression.
+No raw-state/native equivalence is claimed from active-prefix equality alone.

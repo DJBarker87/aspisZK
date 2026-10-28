@@ -37,3 +37,6 @@ pub fn native_default() -> sha2::Sha256 { Default::default() }
         assert_eq!(buffer.get_pos(),rp);
     }
 }
+
+#[cfg(kani)] #[path="update-gate.rs"] mod update_gate;
+#[cfg(kani)] #[path="padding-gate.rs"] mod padding_gate;
