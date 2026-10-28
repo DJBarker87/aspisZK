@@ -18,21 +18,24 @@ theorem equation (fs : Factors) (slot d : Usize) (row : Array K 4#usize) :
       let m ← Array.index_usize fs slot
       let m1 ← Array.update m d row
       ok (Aeneas.Std.Array.set fs slot m1)) := by
-  unfold write
-  rw [PV_RunJoin_WeightBorrow46.complete]
+  exact PV_RunJoin_WeightBorrow46.complete fs slot
+    (fun m back => do let m1 ← Array.update m d row;ok (back m1))
 #print axioms equation
 
 theorem read_set (fs : Factors) (slot : Usize) (m : Matrix) (hs : slot.val<5) :
     Array.index_usize (Aeneas.Std.Array.set fs slot m) slot=ok m := by
   unfold Array.index_usize
   have hb : slot.val<fs.val.length := by rw [fs.property];exact hs
-  simp only [Array.getElem?_Usize_eq,Array.set,List.getElem?_set_self hb]
+  change (match (fs.val.set slot.val m)[slot.val]? with
+    | none => Result.fail .arrayOutOfBounds | some v => Result.ok v)=ok m
+  rw [List.getElem?_set_self hb]
 #print axioms read_set
 
 theorem overwrite (fs : Factors) (slot : Usize) (m m1 : Matrix) :
     Aeneas.Std.Array.set (Aeneas.Std.Array.set fs slot m) slot m1=
       Aeneas.Std.Array.set fs slot m1 := by
   apply Subtype.ext
-  simp only [Array.set,List.set_set]
+  change (fs.val.set slot.val m).set slot.val m1=fs.val.set slot.val m1
+  simp only [List.set_set]
 #print axioms overwrite
 end R1Z.PV_RunJoin_WeightFactorWrite47
