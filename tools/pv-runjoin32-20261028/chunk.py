@@ -37,8 +37,17 @@ intent=dict(attempt=a,chunk=idx,modules=mods,source_revision=plan['source_revisi
 (E/f'submission-{a}.json').write_text(json.dumps(intent,indent=2)+'\n')
 print('LAUNCH',a,'chunk',idx,len(mods),'modules',flush=True)
 # Never retry this SSH call; a lost connection requires original-log recovery.
-start=time.monotonic();r=subprocess.run(['ssh',host,shlex.join(cmd)+f' > {P}/evidence/out-{a}.log 2>&1'],capture_output=True,text=True)
-(E/f'transport-{a}.json').write_text(json.dumps(dict(exit=r.returncode,stdout=r.stdout,stderr=r.stderr,wall=time.monotonic()-start),indent=2)+'\n')
+start=time.monotonic()
+remote='bash -o pipefail -c '+shlex.quote(shlex.join(cmd)+f' 2>&1 | tee {P}/evidence/out-{a}.log')
+proc=subprocess.Popen(['ssh',host,remote],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+stream=[]
+for line in proc.stdout:
+ stream.append(line)
+ if line.startswith(('START','DONE','CHUNK','RECEIPT')):print(line.rstrip(),flush=True)
+rc=proc.wait()
+class Result:pass
+r=Result();r.returncode=rc
+(E/f'transport-{a}.json').write_text(json.dumps(dict(exit=rc,stdout=''.join(stream),stderr='',wall=time.monotonic()-start),indent=2)+'\n')
 for n in ['out','time']:
  q=ssh(f'cat {P}/evidence/{n}-{a}.log');assert q.returncode==0,q.stderr
  (E/f'{n}-{a}.log').write_text(q.stdout)
