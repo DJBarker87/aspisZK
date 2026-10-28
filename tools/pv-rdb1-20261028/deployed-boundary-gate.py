@@ -1,0 +1,22 @@
+from gate_common import *
+F=D.parent/'codex-pv-fscan-20261028';p=F/'src/crates/aspis-core/src/state_only_sumcheck.rs';s=p.read_text()
+actual=body(s,'pub fn state_only_boundary_sum(')
+want='''{const _:()=assert!((STATE_ONLY_SUMCHECK_COEFFICIENTS as u64+1)*(P as u64)<(1u64<<36));let first=polynomial[0];let mut limbs=[2*u64::from(first.c0.a.0),2*u64::from(first.c0.b.0),2*u64::from(first.c1.a.0),2*u64::from(first.c1.b.0),];for coefficient in &polynomial[1..] {limbs[0]+=u64::from(coefficient.c0.a.0);limbs[1]+=u64::from(coefficient.c0.b.0);limbs[2]+=u64::from(coefficient.c1.a.0);limbs[3]+=u64::from(coefficient.c1.b.0);}QM31 {c0:CM31::new(M31::reduce_u64(limbs[0]),M31::reduce_u64(limbs[1])),c1:CM31::new(M31::reduce_u64(limbs[2]),M31::reduce_u64(limbs[3])),}}'''
+assert tok(actual)==tok(want),actual
+assert 'pub const STATE_ONLY_SUMCHECK_DEGREE: usize = 27;' in s
+assert 'pub const STATE_ONLY_SUMCHECK_COEFFICIENTS: usize = STATE_ONLY_SUMCHECK_DEGREE + 1;' in s
+assert 'pub type StateOnlySumcheckPolynomial = [QM31; STATE_ONLY_SUMCHECK_COEFFICIENTS];' in s
+checks.append(dict(file=str(p),file_sha256=hashlib.sha256(s.encode()).hexdigest(),complete_body=actual,tokens_equal=True,law='V219.step_complete,tail_enumeration,complete,all_bounds'))
+reference=(D/'boundary-owned.rs').read_text();step=body(reference,'pub fn boundary_acc_step(')
+assert tok(step)==tok('{BoundaryAcc {a:s.a+u64::from(x.c0.a.0),b:s.b+u64::from(x.c0.b.0),c:s.c+u64::from(x.c1.a.0),d:s.d+u64::from(x.c1.b.0)}}')
+owned=body(reference,'pub fn boundary_flat(')
+expected='{let x=p[0];let s=BoundaryAcc{a:2*u64::from(x.c0.a.0),b:2*u64::from(x.c0.b.0),c:2*u64::from(x.c1.a.0),d:2*u64::from(x.c1.b.0)};'
+expected+=''.join('let s=boundary_acc_step(p['+str(i)+'],s);' for i in range(1,28))
+expected+='QM31{c0:CM31::new(M31::reduce_u64(s.a),M31::reduce_u64(s.b)),c1:CM31::new(M31::reduce_u64(s.c),M31::reduce_u64(s.d))}}'
+assert tok(owned)==tok(expected),owned
+checks.append(dict(owned_reference='tools/pv-cb3-20261026/reference_p6.rs',sha256=hashlib.sha256(reference.encode()).hexdigest(),complete_step=step,complete_body=owned,indices=list(range(1,28)),differences='Native four stack-array updates vs four struct fields; identical ordered inputs/calls. Source loop over indices1..27 vs complete owned unrolling. Proved parametric, no field-success premise.'))
+check('core/src/ptr/non_null.rs','pub const fn cast<U>', '{unsafe {NonNull {pointer:self.as_ptr() as *mut U}}}','Pointer.cast_complete; offset bounds; no writes')
+check('core/src/ptr/non_null.rs','pub const fn from_ref(', '{unsafe {NonNull {pointer:r as *const T}}}','PointerConstruct.from_ref_complete; immutable slice traversal')
+check('core/src/ptr/non_null.rs','pub const fn without_provenance(', '{let pointer=crate::ptr::without_provenance(addr.get());unsafe {NonNull {pointer}}}','PointerConstruct.without_provenance_complete')
+j=dict(row='V219',evidence_class='structural (K-1 substitute)',checks=checks,laws=['PV_RDB1_V219.complete','PV_RDB1_V219.step_complete','PV_RDB1_V219.tail_enumeration','PV_RDB1_V219.all_bounds','PV_RDB1_PointerConstruct.from_ref_complete'],full_Result='All initial casts/doubles,27 ordered four-limb steps and four final reductions/CM31 constructors have the same deployed implementations and order. overflow_checks=false makes native ordinary +/* the wrapping operations in the retained emission. Parametric proof preserves any Result/failure, not just successful field values.',effects='Input polynomial is read-only; only four local u64 stack slots mutate. No mutable borrow from an iterator is written; D188 restoration problem absent. No allocator/destructor/user callback invoked.',features=dict(path='resolved-features.json',sha256=hashlib.sha256((D/'resolved-features.json').read_bytes()).hexdigest()),toolchain='1.94.1',profile='release opt3; debug_assertions=false; overflow_checks=false; panic=unwind',native_validation='project-leaves/receipt.json:128 boundary pairs, raw words; reused unchanged; finite only',original_consumption='PV_CB3_Op120Source.op120_source and Raw.boundary_flat unchanged; no new input-domain restriction',retained_boundary='Original field intrinsic/read and source-image semantics; compiler/binary and L1/L2/L3 obligations retained; conservative panic envelope excluded by all_bounds, shared reduction helpers remain same source-selected callees.',new_trust_items=[],kani_credit=False)
+(D/'v219-deployed-binding.json').write_text(json.dumps(j,indent=2)+'\n');print('PASS V219 complete deployed polynomial boundary traversal/step/reference binding')
