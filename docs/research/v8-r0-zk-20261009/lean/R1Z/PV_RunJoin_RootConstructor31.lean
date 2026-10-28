@@ -20,7 +20,7 @@ theorem owned [ExternalLinear] (index : U64) (root : Digest) (frontier : Frontie
     exact hr
 #print axioms owned
 
-theorem public [ExternalLinear] (index : U64) (root : Digest) (frontier : Frontier)
+theorem validated [ExternalLinear] (index : U64) (root : Digest) (frontier : Frontier)
     (roots : Roots) (tree : incremental_merkle.IncrementalMerkleTreeV1)
     (h : incremental_merkle.IncrementalMerkleTreeV1.from_parts_with_empty_roots index root frontier roots = ok (.Ok tree)) :
     incremental_merkle.tree_reference.validate_owned ⟨index,root,frontier⟩ roots = ok (.Ok ()) := by
@@ -29,7 +29,7 @@ theorem public [ExternalLinear] (index : U64) (root : Digest) (frontier : Fronti
   cases result with
   | Err error => cases h
   | Ok made => exact owned index root frontier roots made hr
-#print axioms public
+#print axioms validated
 
 theorem bound [ExternalLinear] (tree : incremental_merkle.IncrementalMerkleTreeV1)
     (roots : Roots) (capacity : U64)
