@@ -36,7 +36,7 @@ theorem complete (ops : ExternalFuns) (c : Nat → Nat → Raw) (p z : Nat → R
       (hdy.trans (hd _ hr).symm)
     rw [same] at hy
     obtain ⟨mid,hm,hmv⟩ := PV_RunJoin_Vector44.push out (current (source (z row.val))) (by omega)
-    have ml : mid.length = out.length + 1 := by rw [show mid.length=mid.val.length from rfl,hmv,List.length_append,List.length_singleton];rfl
+    have ml : mid.length = out.length + 1 := by rw [show mid.length=mid.val.length from rfl,hmv,List.length_append,List.length_singleton]
     have inc := PV_RunJoin_MergeLoop35.increment row (by omega)
     obtain ⟨next,hn,hnv⟩ := ih mid (Usize.wrapping_add row 1#usize) (by rw [inc];omega) (by rw [ml];omega)
     refine ⟨next,?_,?_⟩
