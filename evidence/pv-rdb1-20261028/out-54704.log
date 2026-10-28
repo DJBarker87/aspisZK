@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_V184Bridge.lean:27:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RDB1_V184_MoveWorld.nativeWorld b w memory frame
+in the target expression
+  (let (q, w') := (historicalCast p, w)
+    do
+    let o ← PV_RDB1_V184_MoveWorld.nativeWorld b w' memory frame
+    ok (q, o)) =
+    ok (historicalCast p, o)
+
+T P F : Type
+p : NonNull T P
+b : PV_RDB1_V184_PopWorld.Buffer T
+w : PV_RDB1_V184_PopWorld.World
+memory : PV_RDB1_V184_MoveMemory.Memory
+frame : F
+width : ℕ
+o : PV_RDB1_V184_MoveMemory.Observation T F
+hn : PV_RDB1_V184_MoveWorld.nativeWorld b w memory frame = ok o
+hr : PV_RDB1_V184_MoveWorld.referenceWorld b w memory frame width = ok o
+h :
+  o.returned = (↑b.value).getLast? ∧
+    ↑o.remaining = (↑b.value).dropLast ∧
+      o.buffer = b.address ∧ o.capacity = b.capacity ∧ o.world = w ∧ o.memory = memory ∧ o.frame = frame
+⊢ (let (q, w') := (historicalCast p, w)
+    do
+    let o ← PV_RDB1_V184_MoveWorld.nativeWorld b w' memory frame
+    ok (q, o)) =
+    ok (historicalCast p, o)
+'R1Z.PV_RDB1_V184Bridge.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

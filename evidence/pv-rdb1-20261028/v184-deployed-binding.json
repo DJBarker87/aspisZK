@@ -1,0 +1,231 @@
+{
+  "row": "V184",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub struct NonNull",
+      "complete_body": "{\n    \n    \n    pointer: *const T,\n}",
+      "selected_release_body": "{\n    \n    \n    pointer: *const T,\n}",
+      "tokens_equal": true,
+      "law": "repr transparent pointer wrapper"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn as_ptr",
+      "complete_body": "{\n        \n\n        \n        \n        \n        unsafe { mem::transmute::<Self, *mut T>(self) }\n    }",
+      "selected_release_body": "{\n        \n\n        \n        \n        \n        unsafe { mem::transmute::<Self, *mut T>(self) }\n    }",
+      "tokens_equal": true,
+      "law": "transparent representation; no pointer-to-integer conversion"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "tokens_equal": true,
+      "law": "PV_RDB1_Pointer.cast_complete; cast_observation"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/unique.rs",
+      "file_sha256": "5fc859c1d29cd48ce15d675401fbf87a60f88c25d2658e2fac67bba757b4031e",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        \n        Unique { pointer: self.pointer.cast(), _marker: PhantomData }\n    }",
+      "selected_release_body": "{\n        \n        \n        Unique { pointer: self.pointer.cast(), _marker: PhantomData }\n    }",
+      "tokens_equal": true,
+      "law": "cast_complete, zero-size PhantomData"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/unique.rs",
+      "file_sha256": "5fc859c1d29cd48ce15d675401fbf87a60f88c25d2658e2fac67bba757b4031e",
+      "anchor": "pub const fn as_non_null_ptr",
+      "complete_body": "{\n        self.pointer\n    }",
+      "selected_release_body": "{\n        self.pointer\n    }",
+      "tokens_equal": true,
+      "law": "transparent projection"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) const fn ptr(",
+      "complete_body": "{\n        self.inner.ptr()\n    }",
+      "selected_release_body": "{\n        self.inner.ptr()\n    }",
+      "tokens_equal": true,
+      "law": "pointer projections/cast law; capacity unchanged (usize::MAX for ZST)"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn ptr<T>",
+      "complete_body": "{\n        self.non_null::<T>().as_ptr()\n    }",
+      "selected_release_body": "{\n        self.non_null::<T>().as_ptr()\n    }",
+      "tokens_equal": true,
+      "law": "pointer projections/cast law; capacity unchanged (usize::MAX for ZST)"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn non_null<T>",
+      "complete_body": "{\n        self.ptr.cast().as_non_null_ptr()\n    }",
+      "selected_release_body": "{\n        self.ptr.cast().as_non_null_ptr()\n    }",
+      "tokens_equal": true,
+      "law": "pointer projections/cast law; capacity unchanged (usize::MAX for ZST)"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) const fn capacity(",
+      "complete_body": "{\n        self.inner.capacity(size_of::<T>())\n    }",
+      "selected_release_body": "{\n        self.inner.capacity(size_of::<T>())\n    }",
+      "tokens_equal": true,
+      "law": "pointer projections/cast law; capacity unchanged (usize::MAX for ZST)"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn capacity(&self, elem_size",
+      "complete_body": "{\n        if elem_size == 0 { usize::MAX } else { self.cap.as_inner() }\n    }",
+      "selected_release_body": "{\n        if elem_size == 0 { usize::MAX } else { self.cap.as_inner() }\n    }",
+      "tokens_equal": true,
+      "law": "pointer projections/cast law; capacity unchanged (usize::MAX for ZST)"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/niche_types.rs",
+      "file_sha256": "9adb5202e2b7649696d4745b162fb461faad2dc8110d493f9dcba34a09be503d",
+      "anchor": "pub const fn as_inner",
+      "complete_body": "{\n                \n                \n                unsafe { crate::mem::transmute(self) }\n            }",
+      "selected_release_body": "{\n                \n                \n                unsafe { crate::mem::transmute(self) }\n            }",
+      "tokens_equal": true,
+      "law": "transparent UsizeNoHighBit unwrapping; no arithmetic/effect"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub const fn as_ptr(",
+      "complete_body": "{\n        \n        \n        self.buf.ptr()\n    }",
+      "selected_release_body": "{\n        \n        \n        self.buf.ptr()\n    }",
+      "tokens_equal": true,
+      "law": "retained valid-vector invariant and direct header/pointer projection"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub const fn capacity(",
+      "complete_body": "{\n        self.buf.capacity()\n    }",
+      "selected_release_body": "{\n        self.buf.capacity()\n    }",
+      "tokens_equal": true,
+      "law": "retained valid-vector invariant and direct header/pointer projection"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub const fn len(",
+      "complete_body": "{\n        let len = self.len;\n\n        \n        \n        \n        unsafe { intrinsics::assume(len <= T::MAX_SLICE_LEN) };\n\n        len\n    }",
+      "selected_release_body": "{\n        let len = self.len;\n\n        \n        \n        \n        unsafe { intrinsics::assume(len <= T::MAX_SLICE_LEN) };\n\n        len\n    }",
+      "tokens_equal": true,
+      "law": "retained valid-vector invariant and direct header/pointer projection"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub fn pop(",
+      "complete_body": "{\n        if self.len == 0 {\n            None\n        } else {\n            unsafe {\n                self.len -= 1;\n                core::hint::assert_unchecked(self.len < self.capacity());\n                Some(ptr::read(self.as_ptr().add(self.len())))\n            }\n        }\n    }",
+      "selected_release_body": "{\n        if self.len == 0 {\n            None\n        } else {\n            unsafe {\n                self.len -= 1;\n                core::hint::assert_unchecked(self.len < self.capacity());\n                Some(ptr::read(self.as_ptr().add(self.len())))\n            }\n        }\n    }",
+      "tokens_equal": true,
+      "law": "PV_RDB1_V184.complete; last_bounds; read_address"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs",
+      "file_sha256": "a50ae219d63dc49bb2da48fa9bc607e3e1227c556376a00ae6e906205051073d",
+      "anchor": "pub const unsafe fn add(",
+      "complete_body": "{\n        #[cfg(debug_assertions)]\n        #[inline]\n        #[rustc_allow_const_fn_unstable(const_eval_select)]\n        const fn runtime_add_nowrap(this: *const (), count: usize, size: usize) -> bool {\n            const_eval_select!(\n                @capture { this: *const (), count: usize, size: usize } -> bool:\n                if const {\n                    true\n                } else {\n                    let Some(byte_offset) = count.checked_mul(size) else {\n                        return false;\n                    };\n                    let (_, overflow) = this.addr().overflowing_add(byte_offset);\n                    byte_offset <= (isize::MAX as usize) && !overflow\n                }\n            )\n        }\n\n        #[cfg(debug_assertions)] \n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::add requires that the address calculation does not overflow\",\n            (\n                this: *const () = self as *const (),\n                count: usize = count,\n                size: usize = size_of::<T>(),\n            ) => runtime_add_nowrap(this, count, size)\n        );\n\n        \n        unsafe { intrinsics::offset(self, count) }\n    }",
+      "selected_release_body": "{\n        \n\n        \n\n        \n        unsafe { intrinsics::offset(self, count) }\n    }",
+      "tokens_equal": true,
+      "law": "PV_RDB1_Pointer.offset_cast, offset_bounds, offset_zst, no_wrap; retained valid owned allocation domain"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "anchor": "pub const unsafe fn read<T>",
+      "complete_body": "{\n    \n    \n    \n\n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\n    \n    unsafe {\n        #[cfg(debug_assertions)] \n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::read requires that the pointer argument is aligned and non-null\",\n            (\n                addr: *const () = src as *const (),\n                align: usize = align_of::<T>(),\n                is_zst: bool = T::IS_ZST,\n            ) => ub_checks::maybe_is_aligned_and_not_null(addr, align, is_zst)\n        );\n        crate::intrinsics::read_via_copy(src)\n    }\n}",
+      "selected_release_body": "{\n    \n    \n    \n\n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\n    \n    unsafe {\n        \n        crate::intrinsics::read_via_copy(src)\n    }\n}",
+      "tokens_equal": true,
+      "law": "retained initialized readSlot meaning; backing bytes unchanged"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/hint.rs",
+      "file_sha256": "a77ef6e2a7a562d2e10321e56edcbf63204ea5ceec1d8245e673fc9425010133",
+      "anchor": "pub const unsafe fn assert_unchecked(",
+      "complete_body": "{\n    \n    unsafe {\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"hint::assert_unchecked must never be called when the condition is false\",\n            (cond: bool = cond) => cond,\n        );\n        crate::intrinsics::assume(cond);\n    }\n}",
+      "selected_release_body": "{\n    \n    unsafe {\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"hint::assert_unchecked must never be called when the condition is false\",\n            (cond: bool = cond) => cond,\n        );\n        crate::intrinsics::assume(cond);\n    }\n}",
+      "tokens_equal": true,
+      "law": "PV_RDB1_Pointer.last_bounds; false precondition branch unreachable"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub fn remove(",
+      "complete_body": "{\n        #[cold]\n        #[cfg_attr(not(panic = \"immediate-abort\"), inline(never))]\n        #[track_caller]\n        #[optimize(size)]\n        fn assert_failed(index: usize, len: usize) -> ! {\n            panic!(\"removal index (is {index}) should be < len (is {len})\");\n        }\n\n        match self.try_remove(index) {\n            Some(elem) => elem,\n            None => assert_failed(index, self.len()),\n        }\n    }",
+      "selected_release_body": "{\n        #[cold]\n        #[cfg_attr(not(panic = \"immediate-abort\"), inline(never))]\n        #[track_caller]\n        #[optimize(size)]\n        fn assert_failed(index: usize, len: usize) -> ! {\n            panic!(\"removal index (is {index}) should be < len (is {len})\");\n        }\n\n        match self.try_remove(index) {\n            Some(elem) => elem,\n            None => assert_failed(index, self.len()),\n        }\n    }",
+      "tokens_equal": true,
+      "law": "MoveFacts.last_bound excludes None/panic"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub fn try_remove(",
+      "complete_body": "{\n        let len = self.len();\n        if index >= len {\n            return None;\n        }\n        unsafe {\n            \n            let ret;\n            {\n                \n                let ptr = self.as_mut_ptr().add(index);\n                \n                \n                ret = ptr::read(ptr);\n\n                \n                ptr::copy(ptr.add(1), ptr, len - index - 1);\n            }\n            self.set_len(len - 1);\n            Some(ret)\n        }\n    }",
+      "selected_release_body": "{\n        let len = self.len();\n        if index >= len {\n            return None;\n        }\n        unsafe {\n            \n            let ret;\n            {\n                \n                let ptr = self.as_mut_ptr().add(index);\n                \n                \n                ret = ptr::read(ptr);\n\n                \n                ptr::copy(ptr.add(1), ptr, len - index - 1);\n            }\n            self.set_len(len - 1);\n            Some(ret)\n        }\n    }",
+      "tokens_equal": true,
+      "law": "MoveLast.remove_last; MoveMemory.last_copy; one-past bounds for zero-count copy"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub const fn as_mut_ptr(",
+      "complete_body": "{\n        \n        \n        self.buf.ptr()\n    }",
+      "selected_release_body": "{\n        \n        \n        self.buf.ptr()\n    }",
+      "tokens_equal": true,
+      "law": "same pointer law as as_ptr"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub unsafe fn set_len(",
+      "complete_body": "{\n        ub_checks::assert_unsafe_precondition!(\n            check_library_ub,\n            \"Vec::set_len requires that new_len <= capacity()\",\n            (new_len: usize = new_len, capacity: usize = self.capacity()) => new_len <= capacity\n        );\n\n        self.len = new_len;\n    }",
+      "selected_release_body": "{\n        ub_checks::assert_unsafe_precondition!(\n            check_library_ub,\n            \"Vec::set_len requires that new_len <= capacity()\",\n            (new_len: usize = new_len, capacity: usize = self.capacity()) => new_len <= capacity\n        );\n\n        self.len = new_len;\n    }",
+      "tokens_equal": true,
+      "law": "shorten; last_bounds proves precondition"
+    }
+  ],
+  "old_cast": {
+    "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+    "body": "{\n        \n        unsafe { transmute(self.as_ptr() as *mut U) }\n    }",
+    "sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd"
+  },
+  "reference_sha256": "519a2ffc66444e8e0140b974ada0fdc30ac2d93ae9e73b1db8638f6a94cd1659",
+  "complete_Result_law": "R1Z.PV_RDB1_V184.complete",
+  "pointer_law": "R1Z.PV_RDB1_Pointer.cast_complete",
+  "resolved_edges": {
+    "assert_unchecked::precondition_check": "last_bounds proves cond true; no panic",
+    "check_language_ub/runtime": "optional branch cannot fail because condition is true",
+    "niche_types::as_inner": "complete transparent unwrap checked",
+    "panic_nounwind_fmt/runtime": "unreachable from valid pop/remove-last",
+    "const_ptr::add": "complete release body is intrinsic offset; bounds/no_wrap law with original valid-buffer relation"
+  },
+  "retained_boundary": "Initialized-slot read, transparent representation, raw cast/offset/copy intrinsic semantics, valid runtime carrier, compiler/executable, allocator and side channels unchanged. No new trust field. No allocator or destructor call in pop/remove-last.",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "native_differential": [
+    "native-pop/receipt.json",
+    "native-pop-zst/receipt.json"
+  ],
+  "kani_credit": false
+}
