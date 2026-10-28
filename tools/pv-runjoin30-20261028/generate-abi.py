@@ -3,7 +3,7 @@ import json,re,subprocess,sys,hashlib
 R=Path(__file__).resolve().parents[2];L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z';E=R/'evidence/pv-runjoin30-20261028'
 pin=json.loads((R/'evidence/pv-runjoin29-20261028/focused-resolution.json').read_text())['resolved']['R1Z.BuilderAdmissionExtracted']
 a=subprocess.check_output(['git','cat-file','blob',pin['git_blob']]).decode()
-f=(L/'BuilderForestAdmissionPort.lean').read_text();o=(L/'PV_RunJoin_OuterTypes30.lean').read_text()
+f=(L/'BuilderForestAdmissionPort.lean').read_text();o=(E/'pv30-outer-aeneas-03-generated/Types.lean').read_text()
 text='''import R1Z.PV_RunJoin_OuterTypes30
 import R1Z.BuilderAdmissionCommon
 set_option autoImplicit false
@@ -50,6 +50,9 @@ for n,t in [('format','pool_v1.payment_relation.PoolV1PaymentStatementFormatErro
   if name in ['Statement','PairLeaf']:rhs=[dict(Statement='format',PairLeaf='leafError')[name]+'ToForest v0']
   text+='  | .'+name+(' '+' '.join(args) if args else '')+' => .'+name+(' ('+') ('.join(rhs)+')' if rhs else '')+'\n'
 text+='\nend R1Z.PV_RunJoin_OuterABI30\n'
+for v in ['PoolV1PaymentStatementFormatError','PoolV1PairLeafErrorV1','PoolV1PairTraceErrorV1']:
+ for ns in ['pool_v1.payment_relation.','pool_v1.pair_tree_profile.','pool_v1.pair_trace.']:
+  text=text.replace(O+ns+v,O+ns+'PV30_'+v)
 p=L/'PV_RunJoin_OuterABI30.lean'
 if '--check' in sys.argv:assert p.read_text()==text
 else:p.write_text(text)
