@@ -4,7 +4,7 @@ namespace PV_L2C_VecShape
 open Aeneas Aeneas.Std Result PV_L2C_VecRead
 
 theorem length {A : Type} {n : Nat} (hn : n≤Usize.max) (f : Fin n → A) :
-    alloc.vec.Vec.len (vector hn f)=Usize.ofNatCore n hn := by
+    alloc.vec.Vec.len (vector hn f)=Usize.ofNatCore n (by scalar_tac) := by
   apply UScalar.eq_of_val_eq
   change (List.ofFn f).length=n
   exact List.length_ofFn
