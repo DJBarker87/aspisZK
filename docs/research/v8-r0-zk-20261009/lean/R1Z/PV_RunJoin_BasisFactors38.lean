@@ -39,7 +39,7 @@ theorem source (ops : ExternalFuns) (n : Nat) (i j d : Usize) (left : U8)
     simp only [jn,ln,↓reduceIte]
     by_cases he : i=j
     · have hcast : UScalar.cast .U8 i=UScalar.cast .U8 j := congrArg _ he
-      simp only [he,hcast,↓reduceIte,lift,bind_tc_ok]
+      simp only [if_pos he,if_pos hcast,lift,bind_tc_ok]
       have nextDegree : d.val=degree j.val (Usize.wrapping_add j 1#usize).val := by
         rw [incj,skipped_degree]
         simpa only [he] using hd
