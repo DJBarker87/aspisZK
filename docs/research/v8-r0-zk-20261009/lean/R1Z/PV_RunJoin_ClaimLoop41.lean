@@ -16,7 +16,7 @@ theorem complete (ops : ExternalFuns) (p : Nat → Q) (n : Nat)
     (i : Usize) (bytes : alloc.vec.Vec U8) (bound : i.val+n=29)
     (room : bytes.val.length+32*n≤Usize.max) :
     ∃ next, @host_semantic.append_claim_bytes_loop _ (ProverRwP6BodyCandidate.selected ops)
-      (ProverCommitArray49.array 29#usize p) bytes i = .ok next ∧
+      bytes (ProverCommitArray49.array 29#usize p) i = .ok next ∧
       next.val=bytes.val ++ payload p i.val n := by
   induction n generalizing i bytes with
   | zero =>

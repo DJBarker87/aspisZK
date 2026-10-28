@@ -37,6 +37,7 @@ theorem base (ops : ExternalFuns) (p : Nat → W) (out : alloc.vec.Vec U8)
     simp only [bind_tc_ok]
     exact hn
   · rw [hnv,hv,baseBytes,List.append_assoc]
+    rfl
 
 theorem secure (ops : ExternalFuns) (p : Nat → W) (out : alloc.vec.Vec U8)
     (room : out.length+32≤Usize.max) :
