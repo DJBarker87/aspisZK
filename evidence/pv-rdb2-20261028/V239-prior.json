@@ -1,0 +1,2466 @@
+{
+  "id": "V239",
+  "name": "op222 aspis_statement.constraints_v4.multilinear_evaluate_qm31",
+  "class": "B",
+  "known_cause_classes": [
+    "A",
+    "B",
+    "D"
+  ],
+  "suspension": "RETAINED",
+  "artifact": "devnet_spend native client; no SBF/ELF re-credit",
+  "per_function": [
+    {
+      "function": "alloc::layout_array(_1: usize, _2: core::alloc::Layout) -> Result<core::alloc::Layout, TryReserveError>",
+      "old_sha256": "ec57ef6692ee43e361477cf5ca2d14c3e11e19db89ca218e2167a5ff8542286d",
+      "deployed_sha256": "b88fff926960ff33f5b875d1faffae2ee530e2d6535ce5580dbed87cca7181b3",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "B",
+      "meaning": "actual source item or enclosing impl differs; see diff (before cfg evaluation)",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/alloc/src/raw_vec/mod.rs",
+          "line": 896,
+          "end_line": 902,
+          "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+          "body_sha256": "bac77e32e3eb176e28d5aa190254a1c9b8f9de15abf00e8fe6fbb7425e6904c4",
+          "item_sha256": "98ae491be74260d217e57212fe54cb715511f48ca2a08b32daeff2fe51be2fc5",
+          "attrs": [
+            "#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]",
+            "#[inline]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/alloc/src/raw_vec/mod.rs",
+          "line": 867,
+          "end_line": 873,
+          "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+          "body_sha256": "40856525f69b7cfcfeca477adfa9a84b8ca87ec9fc63f70248f5c1f71d782739",
+          "item_sha256": "7edb89265f1727c9e280a1284e39036921f6ade9a21ea27e921a8bd7a3aa5748",
+          "attrs": [
+            "#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]",
+            "#[inline]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": "--- evidence/library/alloc/src/raw_vec/mod.rs\n+++ deployed/library/alloc/src/raw_vec/mod.rs\n@@ -1,8 +1,8 @@\n \n const fn layout_array(cap: usize, elem_layout: Layout) -> Result<Layout, TryReserveError> {\n-    // This is only used with `elem_layout`s which are those of real rust types,\n-    // which lets us use the much-simpler `repeat_packed`.\n-    debug_assert!(elem_layout.size() == elem_layout.pad_to_align().size());\n-\n-    elem_layout.repeat_packed(cap).map_err(const |_| CapacityOverflow.into())\n+    // FIXME(const-hack) return to using `map` and `map_err` once `const_closures` is implemented\n+    match elem_layout.repeat(cap) {\n+        Ok((layout, _pad)) => Ok(layout),\n+        Err(_) => Err(CapacityOverflow.into()),\n+    }\n }",
+      "details_ref": "classification/functions.json.xz#alloc::layout_array(_1: usize, _2: core::alloc::Layout) -> Result<core::alloc::Layout, TryReserveError>"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::capacity(_1: &RawVecInner<A>, _2: usize) -> usize",
+      "old_sha256": "22a24b6d46dfdf9ab28ec82d558f4f1c7336455f12a8daf01e71f3a177c45bc6",
+      "deployed_sha256": "812b44a833c8e936707731c043ab5438c1762c16ae8280b1e2b2e54e4911c346",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/alloc/src/raw_vec/mod.rs",
+          "line": 618,
+          "end_line": 620,
+          "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+          "body_sha256": "efea9701a0380bbc36b6494fbd07a20af1f7770a6d2f29ca85514fed639c054e",
+          "item_sha256": "10bd44bbe954c5d0a36d9c8f6b9593121a6f8351c01a1a6e77b299d908e6ee36",
+          "attrs": [
+            "#[inline]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/alloc/src/raw_vec/mod.rs",
+          "line": 601,
+          "end_line": 603,
+          "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+          "body_sha256": "efea9701a0380bbc36b6494fbd07a20af1f7770a6d2f29ca85514fed639c054e",
+          "item_sha256": "10bd44bbe954c5d0a36d9c8f6b9593121a6f8351c01a1a6e77b299d908e6ee36",
+          "attrs": [
+            "#[inline]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::capacity(_1: &RawVecInner<A>, _2: usize) -> usize"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::current_memory(_1: &RawVecInner<A>, _2: core::alloc::Layout) -> Option<(NonNull<u8>, core::alloc::Layout)>",
+      "old_sha256": "4064ab8551494f1741feb23b18169960de9362a2718c272dee53c4404c039f63",
+      "deployed_sha256": "73e14b3b24fd25ef0bb2540ed8263ca2c349da75a3d4de3bc02662f076e32501",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/alloc/src/raw_vec/mod.rs",
+          "line": 633,
+          "end_line": 647,
+          "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+          "body_sha256": "5cc0bb19ba1efc7e00632cb9a0b91b24e067dbed9dbdddf7d2cabe6f2384f9e4",
+          "item_sha256": "a151890a8f8b9bef5570d7fef2085fad44badb675759b481a51174f0a1cbb75d",
+          "attrs": [
+            "#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]",
+            "#[inline]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/alloc/src/raw_vec/mod.rs",
+          "line": 616,
+          "end_line": 630,
+          "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+          "body_sha256": "5cc0bb19ba1efc7e00632cb9a0b91b24e067dbed9dbdddf7d2cabe6f2384f9e4",
+          "item_sha256": "a151890a8f8b9bef5570d7fef2085fad44badb675759b481a51174f0a1cbb75d",
+          "attrs": [
+            "#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]",
+            "#[inline]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::current_memory(_1: &RawVecInner<A>, _2: core::alloc::Layout) -> Option<(NonNull<u8>, core::alloc::Layout)>"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::non_null(_1: &RawVecInner<A>) -> NonNull<T>",
+      "old_sha256": "f21e019a32b9d882cf973eeb1a0d25386c1c37d372b36f021f5e58ad881f5ebd",
+      "deployed_sha256": "1dbccea5ea180a23d124756635a02a239b031ed8696afc33a5cc0af6caf0432b",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/alloc/src/raw_vec/mod.rs",
+          "line": 613,
+          "end_line": 615,
+          "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+          "body_sha256": "b8fecd9b6a1276e51a5870d3e7327c759f550275f057b1b572cc4a079027184e",
+          "item_sha256": "cb00432fd0902b6f0e231db15f94ae691b6c15e7f982bb238b252a87ea2a7026",
+          "attrs": [
+            "#[inline]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/alloc/src/raw_vec/mod.rs",
+          "line": 596,
+          "end_line": 598,
+          "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+          "body_sha256": "b8fecd9b6a1276e51a5870d3e7327c759f550275f057b1b572cc4a079027184e",
+          "item_sha256": "cb00432fd0902b6f0e231db15f94ae691b6c15e7f982bb238b252a87ea2a7026",
+          "attrs": [
+            "#[inline]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::non_null(_1: &RawVecInner<A>) -> NonNull<T>"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::set_ptr_and_cap(_1: &mut RawVecInner<A>, _2: NonNull<[u8]>, _3: usize) -> ()",
+      "old_sha256": "8612fad84e32a232805144c6445f5b0822469621a27b5be30807acd7e9ef9a22",
+      "deployed_sha256": "10b6432b8e09e89255d59890b5bfa71cafdce5872e314fe0ed4ac129eea734d7",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/alloc/src/raw_vec/mod.rs",
+          "line": 772,
+          "end_line": 778,
+          "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+          "body_sha256": "cfc6c2c2fefbe57dfc1ed56cda528e0e80133e31b6f4d318fffed89a7ae74525",
+          "item_sha256": "d206a31557efd3aff45c92d554f97032c6fbac59417504719edb1c908f485876",
+          "attrs": [
+            "#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]",
+            "#[inline]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/alloc/src/raw_vec/mod.rs",
+          "line": 741,
+          "end_line": 747,
+          "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+          "body_sha256": "cfc6c2c2fefbe57dfc1ed56cda528e0e80133e31b6f4d318fffed89a7ae74525",
+          "item_sha256": "d206a31557efd3aff45c92d554f97032c6fbac59417504719edb1c908f485876",
+          "attrs": [
+            "#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]",
+            "#[inline]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::set_ptr_and_cap(_1: &mut RawVecInner<A>, _2: NonNull<[u8]>, _3: usize) -> ()"
+    },
+    {
+      "function": "aspis_statement::multilinear_evaluate_qm31::{closure#0}(_1: &mut {closure@crates/aspis-statement/src/constraints_v4.rs:789:31: 789:51}, _2: aspis_core::field::QM31, _3: (usize, aspis_core::field::QM31)) -> aspis_core::field::QM31",
+      "old_sha256": "db83a8b49627cf5a7967510b1a251bceb0ef4484866d03ca657fd05a072df8b5",
+      "deployed_sha256": "c7e9fa8617c561ebddd5edd009a3ce9ddf96dd40cdb6af8c3688333d4f9474dc",
+      "source": "own cohort MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "Rust/compiler lowering 1.98 to 1.94.1",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": null,
+      "project_source": {
+        "path": "crates/aspis-statement/src/constraints_v4.rs",
+        "line": 782,
+        "end_line": 793,
+        "item_sha256": "7b04a287fcc876545676ebaca71d482bb5cc6dd024224287581a1140ac1952d6",
+        "file_pin": {
+          "path": "crates/aspis-statement/src/constraints_v4.rs",
+          "sha256": "264921454f5ddd97184944b149b7f41ed791230413ba80fe09eb9be7059d1ba5",
+          "size": 155981
+        },
+        "cohort_association": "same frozen source mirror verified by original scan; both printed MIR identities present",
+        "kind": "function_item"
+      },
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#aspis_statement::multilinear_evaluate_qm31::{closure#0}(_1: &mut {closure@crates/aspis-statement/src/constraints_v4.rs:789:31: 789:51}, _2: aspis_core::field::QM31, _3: (usize, aspis_core::field::QM31)) -> aspis_core::field::QM31"
+    },
+    {
+      "function": "aspis_statement::sparse_eq_weights::{closure#0}(_1: &mut {closure@crates/aspis-statement/src/constraints_v4.rs:605:21: 605:28}, _2: &&aspis_core::field::QM31) -> bool",
+      "old_sha256": "3ca1be0402f50b20fe808fb3b2ae06846d004957a59aca3ee9279c035bb27cd6",
+      "deployed_sha256": "599ab7c9c346a6708d60f0a73f37b9f2e204ff2796554cb5ef9b51ab738c8b88",
+      "source": "own cohort MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "Rust/compiler lowering 1.98 to 1.94.1",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": null,
+      "project_source": {
+        "path": "crates/aspis-statement/src/constraints_v4.rs",
+        "line": 601,
+        "end_line": 627,
+        "item_sha256": "a1529a549a632d678b7954016cea7b542234ec5acc1d2fd7f17245bbb741dd78",
+        "file_pin": {
+          "path": "crates/aspis-statement/src/constraints_v4.rs",
+          "sha256": "264921454f5ddd97184944b149b7f41ed791230413ba80fe09eb9be7059d1ba5",
+          "size": 155981
+        },
+        "cohort_association": "same frozen source mirror verified by original scan; both printed MIR identities present",
+        "kind": "function_item"
+      },
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#aspis_statement::sparse_eq_weights::{closure#0}(_1: &mut {closure@crates/aspis-statement/src/constraints_v4.rs:605:21: 605:28}, _2: &&aspis_core::field::QM31) -> bool"
+    },
+    {
+      "function": "core::cell::<library/core/src/cell.rs::impl<T: ?Sized> UnsafeCell<T>>::get(_1: &UnsafeCell<T>) -> *mut T",
+      "old_sha256": "7590beb2f0b4bc228327fcfd21b8a7d602f6f5358025c9f312bed8f71e82ae59",
+      "deployed_sha256": "f400f92a9e62090ac1dd5bd307ef5728659cec8c54cda1f9cda5edaef9c9db9c",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/cell.rs",
+          "line": 2443,
+          "end_line": 2448,
+          "file_sha256": "5563d8b0fb32bd5f337b6aa91e82a86cfa60bd3d9b820d731291c1249f8e2cc2",
+          "body_sha256": "63411b6df13552da1367b31d89f57217cd390ce938db445605544b1046dafaca",
+          "item_sha256": "c4a2a96e70987f48504a2798604d151c95976fe5f5e0ce997d927882e188131e",
+          "attrs": [
+            "#[rustc_should_not_be_called_on_const_items]",
+            "#[rustc_never_returns_null_ptr]",
+            "#[rustc_as_ptr]",
+            "#[rustc_const_stable(feature = \"const_unsafecell_get\", since = \"1.32.0\")]",
+            "#[stable(feature = \"rust1\", since = \"1.0.0\")]",
+            "#[inline(always)]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/cell.rs",
+          "line": 2420,
+          "end_line": 2425,
+          "file_sha256": "6c07cb708a463f2a4a1b13d79a46fa510c04da38429ac078f4a7dcb44b29db5a",
+          "body_sha256": "63411b6df13552da1367b31d89f57217cd390ce938db445605544b1046dafaca",
+          "item_sha256": "c4a2a96e70987f48504a2798604d151c95976fe5f5e0ce997d927882e188131e",
+          "attrs": [
+            "#[rustc_should_not_be_called_on_const_items]",
+            "#[rustc_never_returns_null_ptr]",
+            "#[rustc_as_ptr]",
+            "#[rustc_const_stable(feature = \"const_unsafecell_get\", since = \"1.32.0\")]",
+            "#[stable(feature = \"rust1\", since = \"1.0.0\")]",
+            "#[inline(always)]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#core::cell::<library/core/src/cell.rs::impl<T: ?Sized> UnsafeCell<T>>::get(_1: &UnsafeCell<T>) -> *mut T"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::align(_1: &Layout) -> usize",
+      "old_sha256": "c3d3c5fc604cf07429c87ef7ca1c5f1c1d09d925dc6af25a32a20c56d8de5d02",
+      "deployed_sha256": "637aacda9dce17b82665444ff16043c585ae9758f973d746d9d76714fa94825f",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/alloc/layout.rs",
+          "line": 187,
+          "end_line": 189,
+          "file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+          "body_sha256": "9879048b2e983cbd74b70e01b9c89b1838fccb4f40a4a829393549d111098bed",
+          "item_sha256": "82f46638a76fbc0807047bab544c4c050507f3972b4e1065d2b0a0d91320e362",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns the minimum alignment, \\\n                  without modifying the layout\"]",
+            "#[rustc_const_stable(feature = \"const_alloc_layout_size_align\", since = \"1.50.0\")]",
+            "#[stable(feature = \"alloc_layout\", since = \"1.28.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/alloc/layout.rs",
+          "line": 152,
+          "end_line": 154,
+          "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+          "body_sha256": "9879048b2e983cbd74b70e01b9c89b1838fccb4f40a4a829393549d111098bed",
+          "item_sha256": "82f46638a76fbc0807047bab544c4c050507f3972b4e1065d2b0a0d91320e362",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns the minimum alignment, \\\n                  without modifying the layout\"]",
+            "#[rustc_const_stable(feature = \"const_alloc_layout_size_align\", since = \"1.50.0\")]",
+            "#[stable(feature = \"alloc_layout\", since = \"1.28.0\")]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::align(_1: &Layout) -> usize"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::alignment(_1: &Layout) -> alignment::Alignment",
+      "old_sha256": "a04e9b4c038c93d99f6ece79ae0902d43497e24c617a0bb7bf3c701a1b55c26f",
+      "deployed_sha256": "5322150d06cc12afcd88c64d977abe060c2054a1d2dd6d3133c1eab180613bd0",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/alloc/layout.rs",
+          "line": 197,
+          "end_line": 199,
+          "file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+          "body_sha256": "b65311d89d24a8dea5b6087207849b908e8a814acdfaf3cff3711ac62127e9f4",
+          "item_sha256": "d9ee2e0c8005dbb1a850e06c93689482fa05d28e1c8440396ee82ba779d1c459",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns the minimum alignment, without modifying the layout\"]",
+            "#[unstable(feature = \"ptr_alignment_type\", issue = \"102070\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/alloc/layout.rs",
+          "line": 515,
+          "end_line": 517,
+          "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+          "body_sha256": "b65311d89d24a8dea5b6087207849b908e8a814acdfaf3cff3711ac62127e9f4",
+          "item_sha256": "d9ee2e0c8005dbb1a850e06c93689482fa05d28e1c8440396ee82ba779d1c459",
+          "attrs": [
+            "#[inline]",
+            "#[doc(hidden)]",
+            "#[unstable(issue = \"none\", feature = \"std_internals\")]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::alignment(_1: &Layout) -> alignment::Alignment"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_align_unchecked(_1: usize, _2: usize) -> Layout",
+      "old_sha256": "f8826045c14ccd0ad49c09be302b62528bf996ee6709eab47d3c96cb7567ae3e",
+      "deployed_sha256": "3afb89972b16128eb472fbfa3f926dec5a44f156f073d02d3d732ec614fec2d0",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/alloc/layout.rs",
+          "line": 132,
+          "end_line": 144,
+          "file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+          "body_sha256": "a69ba0d2f744bc66eb88054745e12be3932cd450b8dcb3ceffc8323cb45c2ae6",
+          "item_sha256": "542082a9c69122b05c7f1209e5b1d3e4c25a608da531a96c61000efcd310308a",
+          "attrs": [
+            "#[track_caller]",
+            "#[inline]",
+            "#[must_use]",
+            "#[rustc_const_stable(feature = \"const_alloc_layout_unchecked\", since = \"1.36.0\")]",
+            "#[stable(feature = \"alloc_layout\", since = \"1.28.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/alloc/layout.rs",
+          "line": 121,
+          "end_line": 133,
+          "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+          "body_sha256": "a69ba0d2f744bc66eb88054745e12be3932cd450b8dcb3ceffc8323cb45c2ae6",
+          "item_sha256": "542082a9c69122b05c7f1209e5b1d3e4c25a608da531a96c61000efcd310308a",
+          "attrs": [
+            "#[track_caller]",
+            "#[inline]",
+            "#[must_use]",
+            "#[rustc_const_stable(feature = \"const_alloc_layout_unchecked\", since = \"1.36.0\")]",
+            "#[stable(feature = \"alloc_layout\", since = \"1.28.0\")]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_align_unchecked(_1: usize, _2: usize) -> Layout"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment(_1: usize, _2: alignment::Alignment) -> result::Result<Layout, LayoutError>",
+      "old_sha256": "db1d03ee59ae0e452a4ca90c7a3fdc21e1556c0705c2e66630868706402d04a4",
+      "deployed_sha256": "cbd7b49f42ce0f8e0987f0508ee91e458a5a0cfd3fc6de030ca15a171e7d388a",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "B",
+      "meaning": "actual source item or enclosing impl differs; see diff (before cfg evaluation)",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/alloc/layout.rs",
+          "line": 109,
+          "end_line": 119,
+          "file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+          "body_sha256": "95f8503d5e4049311372f17373a2b2926189eff215c954763fbb813224d83f52",
+          "item_sha256": "ce99e028f04e3abc9fe90381d375626741c582aaa145c59874dcb8666225489d",
+          "attrs": [
+            "#[inline]",
+            "#[unstable(feature = \"ptr_alignment_type\", issue = \"102070\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/alloc/layout.rs",
+          "line": 101,
+          "end_line": 108,
+          "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+          "body_sha256": "ff8ed0da9a185b1437ec169549491c2bafd099a1f405a10ce74ae6061db408b5",
+          "item_sha256": "6b673216bfdcfda23f3f4393810611438b6e8299680c2b5a71bcd54fc7527363",
+          "attrs": [
+            "#[inline]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": "--- evidence/library/core/src/alloc/layout.rs\n+++ deployed/library/core/src/alloc/layout.rs\n@@ -1,12 +1,9 @@\n impl Layout \n-pub const fn from_size_alignment(\n-        size: usize,\n-        alignment: Alignment,\n-    ) -> Result<Self, LayoutError> {\n-        if Layout::is_size_alignment_valid(size, alignment) {\n-            // SAFETY: Layout::size invariants checked above.\n-            Ok(Layout { size, align: alignment })\n-        } else {\n-            Err(LayoutError)\n+const fn from_size_alignment(size: usize, align: Alignment) -> Result<Self, LayoutError> {\n+        if size > Self::max_size_for_align(align) {\n+            return Err(LayoutError);\n         }\n+\n+        // SAFETY: Layout::size invariants checked above.\n+        Ok(Layout { size, align })\n     }",
+      "details_ref": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment(_1: usize, _2: alignment::Alignment) -> result::Result<Layout, LayoutError>"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::is_size_align_valid(_1: usize, _2: usize) -> bool",
+      "old_sha256": "efa6dd80b1332b1df8e829b003ad3d3a6f1c4915362c8158377d635c7fe44f15",
+      "deployed_sha256": "ba9c513616c44da7e873271899a199eed3802fc5c121ce965164577d71b900b4",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "B",
+      "meaning": "actual source item or enclosing impl differs; see diff (before cfg evaluation)",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/alloc/layout.rs",
+          "line": 69,
+          "end_line": 72,
+          "file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+          "body_sha256": "7c28f5d0a5045d8aeaa342b1d5576205dc4408d204d7fb5041bd1e4b856da3af",
+          "item_sha256": "42bace8120c677bff2900114f50a2136f63f02fc96b396949cd2f9810d0119a3",
+          "attrs": [
+            "#[inline]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/alloc/layout.rs",
+          "line": 69,
+          "end_line": 75,
+          "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+          "body_sha256": "3be9ef6d0e09456ccee11c2692abc1723b4c97c91974a24b902de2ac26b60ee5",
+          "item_sha256": "c0f7d7903e924e41df1c3020ccd1b4e16256f158e83805c75d009e846c116b01",
+          "attrs": [
+            "#[inline]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": "--- evidence/library/core/src/alloc/layout.rs\n+++ deployed/library/core/src/alloc/layout.rs\n@@ -1,5 +1,8 @@\n impl Layout \n const fn is_size_align_valid(size: usize, align: usize) -> bool {\n-        let Some(alignment) = Alignment::new(align) else { return false };\n-        Self::is_size_alignment_valid(size, alignment)\n+        let Some(align) = Alignment::new(align) else { return false };\n+        if size > Self::max_size_for_align(align) {\n+            return false;\n+        }\n+        true\n     }",
+      "details_ref": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::is_size_align_valid(_1: usize, _2: usize) -> bool"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::pad_to_align(_1: &Layout) -> Layout",
+      "old_sha256": "74299e8955356312d8ec25491ef282cea4bf094012a654dcec8f84b75cfa7749",
+      "deployed_sha256": "e1a1f925e2a8d272d49ba5e19b914cfc9f6f54987e6b1f834195ccb4c5d75c3d",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "B",
+      "meaning": "actual source item or enclosing impl differs; see diff (before cfg evaluation)",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/alloc/layout.rs",
+          "line": 381,
+          "end_line": 390,
+          "file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+          "body_sha256": "4f98988a5221bde8a09008370bc9135d6d73a5aad4373d5f70b455787c8d93c3",
+          "item_sha256": "a08a77edf6e6b18150e615d04982923637775f1386afaef81ff0723ba0d987cd",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns a new `Layout`, \\\n                  without modifying the original\"]",
+            "#[rustc_const_stable(feature = \"const_alloc_layout\", since = \"1.85.0\")]",
+            "#[stable(feature = \"alloc_layout_manipulation\", since = \"1.44.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/alloc/layout.rs",
+          "line": 320,
+          "end_line": 329,
+          "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+          "body_sha256": "68224456b823c87d9ed726383dd34f09922bc6b050ff76ebb02ac5aaa093f378",
+          "item_sha256": "fc5e9f995797ae18854f2a3ebcae4afe4b527e52a284800eb8306e10a008226a",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns a new `Layout`, \\\n                  without modifying the original\"]",
+            "#[rustc_const_stable(feature = \"const_alloc_layout\", since = \"1.85.0\")]",
+            "#[stable(feature = \"alloc_layout_manipulation\", since = \"1.44.0\")]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": "--- evidence/library/core/src/alloc/layout.rs\n+++ deployed/library/core/src/alloc/layout.rs\n@@ -4,8 +4,8 @@\n         // > `size`, when rounded up to the nearest multiple of `align`,\n         // > must not overflow isize (i.e., the rounded value must be\n         // > less than or equal to `isize::MAX`)\n-        let new_size = self.size_rounded_up_to_custom_alignment(self.align);\n+        let new_size = self.size_rounded_up_to_custom_align(self.align);\n \n         // SAFETY: padded size is guaranteed to not exceed `isize::MAX`.\n-        unsafe { Layout::from_size_alignment_unchecked(new_size, self.alignment()) }\n+        unsafe { Layout::from_size_align_unchecked(new_size, self.align()) }\n     }",
+      "details_ref": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::pad_to_align(_1: &Layout) -> Layout"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::repeat(_1: &Layout, _2: usize) -> result::Result<(Layout, usize), LayoutError>",
+      "old_sha256": "fc93b6c05af4d6b8bd3b9a44dc6f143a06b0da3fce74c52c809e7b55da759d6c",
+      "deployed_sha256": "130b12f275367ca7a70f48f97d9791f5101ece829d62c0cf6a599ce0d3f5a06e",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "B",
+      "meaning": "actual source item or enclosing impl differs; see diff (before cfg evaluation)",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/alloc/layout.rs",
+          "line": 429,
+          "end_line": 444,
+          "file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+          "body_sha256": "bcc9312f3a124a9511140a4c5a25347c4615d9e6deb4dc21682dbb818056f148",
+          "item_sha256": "631c2b2cc2aa70f11309e30006d0259c5e524f5976e1da9ffe7688c4efdab432",
+          "attrs": [
+            "#[inline]",
+            "#[rustc_const_stable(feature = \"alloc_layout_extra\", since = \"1.95.0\")]",
+            "#[stable(feature = \"alloc_layout_extra\", since = \"1.95.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/alloc/layout.rs",
+          "line": 360,
+          "end_line": 367,
+          "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+          "body_sha256": "047c839c9b224d140c70677acacbeddf4420ce10aa0480755c4c0fb65327802d",
+          "item_sha256": "2bf6127d31849e64b0804264862b5668862be81532e5443736159ff540954c17",
+          "attrs": [
+            "#[inline]",
+            "#[unstable(feature = \"alloc_layout_extra\", issue = \"55724\")]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": "--- evidence/library/core/src/alloc/layout.rs\n+++ deployed/library/core/src/alloc/layout.rs\n@@ -1,17 +1,9 @@\n impl Layout \n pub const fn repeat(&self, n: usize) -> Result<(Self, usize), LayoutError> {\n-        // FIXME(const-hack): the following could be way shorter with `?`\n         let padded = self.pad_to_align();\n-        let Ok(result) = (if let Some(k) = n.checked_sub(1) {\n-            let Ok(repeated) = padded.repeat_packed(k) else {\n-                return Err(LayoutError);\n-            };\n-            repeated.extend_packed(*self)\n+        if let Ok(repeated) = padded.repeat_packed(n) {\n+            Ok((repeated, padded.size()))\n         } else {\n-            debug_assert!(n == 0);\n-            self.repeat_packed(0)\n-        }) else {\n-            return Err(LayoutError);\n-        };\n-        Ok((result, padded.size()))\n+            Err(LayoutError)\n+        }\n     }",
+      "details_ref": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::repeat(_1: &Layout, _2: usize) -> result::Result<(Layout, usize), LayoutError>"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::repeat_packed(_1: &Layout, _2: usize) -> result::Result<Layout, LayoutError>",
+      "old_sha256": "f703dc2c4c6dd74f2e020c90c8835f9cfbbc1828ac0679753e4af3cee15af0b2",
+      "deployed_sha256": "ddb810548b4d64392229e10ed18afd5b8a843bc4602def1894626b711d873d81",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/alloc/layout.rs",
+          "line": 526,
+          "end_line": 533,
+          "file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+          "body_sha256": "909d1229b8c0d81cdb22b8d4daf3efa105713a9002205167104f230c022c2dc2",
+          "item_sha256": "1ac7e2db798c3e800d248a2b93b1ed80140c0a15526e95538af5d6079570906d",
+          "attrs": [
+            "#[inline]",
+            "#[rustc_const_stable(feature = \"alloc_layout_extra\", since = \"1.95.0\")]",
+            "#[stable(feature = \"alloc_layout_extra\", since = \"1.95.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/alloc/layout.rs",
+          "line": 448,
+          "end_line": 455,
+          "file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+          "body_sha256": "909d1229b8c0d81cdb22b8d4daf3efa105713a9002205167104f230c022c2dc2",
+          "item_sha256": "1ac7e2db798c3e800d248a2b93b1ed80140c0a15526e95538af5d6079570906d",
+          "attrs": [
+            "#[inline]",
+            "#[unstable(feature = \"alloc_layout_extra\", issue = \"55724\")]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::repeat_packed(_1: &Layout, _2: usize) -> result::Result<Layout, LayoutError>"
+    },
+    {
+      "function": "core::niche_types::<library/core/src/num/niche_types.rs::impl $name>::new_unchecked(_1: usize) -> UsizeNoHighBit",
+      "old_sha256": "4828380a16acb61b350a2e004bb56c8dc3b13279de34ccea2637428cfe541b0b",
+      "deployed_sha256": "980b2311a214b36b3cbd646135079d0fb4b02b1ba2d02964fa819f00fe7e7554",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "D",
+      "meaning": "source symbol or macro expansion not uniquely mapped",
+      "source_evidence": null,
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#core::niche_types::<library/core/src/num/niche_types.rs::impl $name>::new_unchecked(_1: usize) -> UsizeNoHighBit"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::cast(_1: NonNull<T>) -> NonNull<U>",
+      "old_sha256": "d53aeda2c5683761614bc20916b140f5e0efa838dd5dbdf42c4f8953d77a8648",
+      "deployed_sha256": "5cf3997320d81f182c4411ec0bdcf196b9dce8955be1989af89815c511b6c425",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "B",
+      "meaning": "actual source item or enclosing impl differs; see diff (before cfg evaluation)",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/ptr/non_null.rs",
+          "line": 499,
+          "end_line": 502,
+          "file_sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd",
+          "body_sha256": "512a67fb3b354ed3d5b1302e6a5fc9107e02cd1863f489d6ebcfffaa1dd5252c",
+          "item_sha256": "e9b65d4d18d4f7855f2e5db7b34be8a61af5bfab1a04be4f3a12f7758ef03fda",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns the result of the operation, \\\n                  without modifying the original\"]",
+            "#[rustc_const_stable(feature = \"const_nonnull_cast\", since = \"1.36.0\")]",
+            "#[stable(feature = \"nonnull_cast\", since = \"1.27.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/ptr/non_null.rs",
+          "line": 503,
+          "end_line": 506,
+          "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+          "body_sha256": "80ebf7613d4a28d6c9e2a1a2c9112bc190cf694a00420c2c25811033f90590f4",
+          "item_sha256": "328b65c8285b5ec6a62866811b0e50f565e37a0bf2125c00bbd1512269545d8f",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns the result of the operation, \\\n                  without modifying the original\"]",
+            "#[rustc_const_stable(feature = \"const_nonnull_cast\", since = \"1.36.0\")]",
+            "#[stable(feature = \"nonnull_cast\", since = \"1.27.0\")]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": "--- evidence/library/core/src/ptr/non_null.rs\n+++ deployed/library/core/src/ptr/non_null.rs\n@@ -1,5 +1,5 @@\n impl<T: PointeeSized> NonNull<T> \n pub const fn cast<U>(self) -> NonNull<U> {\n         // SAFETY: `self` is a `NonNull` pointer which is necessarily non-null\n-        unsafe { transmute(self.as_ptr() as *mut U) }\n+        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n     }",
+      "details_ref": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::cast(_1: NonNull<T>) -> NonNull<U>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_ref(_1: &T) -> NonNull<T>",
+      "old_sha256": "87d36bdb72090560d5969d172ab77125ac487ed29e374cd6dac7415e5d622150",
+      "deployed_sha256": "a69d6d8631559da12319d1ecd7c152159b39a3f3a6bba8740186ef1100ec1662",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "B",
+      "meaning": "actual source item or enclosing impl differs; see diff (before cfg evaluation)",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/ptr/non_null.rs",
+          "line": 279,
+          "end_line": 282,
+          "file_sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd",
+          "body_sha256": "1ccad83241e9127bd828e9cfa1b217f29598493c610aeb8a229dbad1a8e4fda3",
+          "item_sha256": "a895ff025a2bbe9c941f5d36824af359e5884261093582e2e6ad2b5a002d1f2e",
+          "attrs": [
+            "#[inline]",
+            "#[rustc_const_stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]",
+            "#[stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/ptr/non_null.rs",
+          "line": 283,
+          "end_line": 286,
+          "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+          "body_sha256": "5b9ab0e40c66582f20255243065b8c32261f7af302898378ec7ecae5b496a87f",
+          "item_sha256": "1752de165220c75ef772b1d4f38ccbaaf7c03a4f2a1ebab8ba5e7327e4063986",
+          "attrs": [
+            "#[inline]",
+            "#[rustc_const_stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]",
+            "#[stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": "--- evidence/library/core/src/ptr/non_null.rs\n+++ deployed/library/core/src/ptr/non_null.rs\n@@ -1,5 +1,5 @@\n impl<T: PointeeSized> NonNull<T> \n pub const fn from_ref(r: &T) -> Self {\n         // SAFETY: A reference cannot be null.\n-        unsafe { transmute(r as *const T) }\n+        unsafe { NonNull { pointer: r as *const T } }\n     }",
+      "details_ref": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_ref(_1: &T) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: Sized> NonNull<T>>::without_provenance(_1: NonZero<usize>) -> NonNull<T>",
+      "old_sha256": "1b7c20c5ecc763c9aa3b44adfa167f7085b4557da6f58ca3cae93bc05ae444ba",
+      "deployed_sha256": "61c83d353384647ab80ec32d4e3aa3f23520ea37c08d89191be90df7b00e6270",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "B",
+      "meaning": "actual source item or enclosing impl differs; see diff (before cfg evaluation)",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/ptr/non_null.rs",
+          "line": 98,
+          "end_line": 101,
+          "file_sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd",
+          "body_sha256": "7c2c69291f92ba9e03ba2e0881036d35e5598884c857c353291c12606a9c840b",
+          "item_sha256": "a0253ebacd015354a8740e972ad57978180ed167969e568bfd8b29f33039f99a",
+          "attrs": [
+            "#[inline]",
+            "#[must_use]",
+            "#[rustc_const_stable(feature = \"nonnull_provenance\", since = \"1.89.0\")]",
+            "#[stable(feature = \"nonnull_provenance\", since = \"1.89.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/ptr/non_null.rs",
+          "line": 102,
+          "end_line": 106,
+          "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+          "body_sha256": "992988e771c2ee257835fbe5bcef1aeea9bad3f5a28e38a0e17b27dcf8253cd0",
+          "item_sha256": "c46c956da2a39b00a07f09befde48e023b5e3931d2fc63a5998e44dce241ec81",
+          "attrs": [
+            "#[inline]",
+            "#[must_use]",
+            "#[rustc_const_stable(feature = \"nonnull_provenance\", since = \"1.89.0\")]",
+            "#[stable(feature = \"nonnull_provenance\", since = \"1.89.0\")]"
+          ]
+        }
+      },
+      "project_source": null,
+      "diff": "--- evidence/library/core/src/ptr/non_null.rs\n+++ deployed/library/core/src/ptr/non_null.rs\n@@ -1,5 +1,6 @@\n impl<T: Sized> NonNull<T> \n pub const fn without_provenance(addr: NonZero<usize>) -> Self {\n-        // SAFETY: we know `addr` is non-zero and all nonzero integers are valid raw pointers.\n-        unsafe { transmute(addr) }\n+        let pointer = crate::ptr::without_provenance(addr.get());\n+        // SAFETY: we know `addr` is non-zero.\n+        unsafe { NonNull { pointer } }\n     }",
+      "details_ref": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: Sized> NonNull<T>>::without_provenance(_1: NonZero<usize>) -> NonNull<T>"
+    },
+    {
+      "function": "std::rust_oom::{closure#0}(_1: {closure@library/std/src/alloc.rs:424:55: 424:57}) -> !",
+      "old_sha256": "5f6237ec598f7a7dab7c0a3cbe100c93c019368830caa6b28bae6355eda1ebb2",
+      "deployed_sha256": "1b31b3cb690395592471cffac146087272a6e6f64a6c3cdfe7de8302d0029361",
+      "source": "sysroot/dependency MIR",
+      "reached_in": [
+        "old",
+        "deployed"
+      ],
+      "selects_difference": "compiler/sysroot 1.98 to 1.94.1 (full instructions retained; no behavioural inequivalence inferred)",
+      "source_class": "A",
+      "meaning": "per-function source identity only, not row A",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/std/src/alloc.rs",
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/alloc.rs",
+          "line": 423,
+          "end_line": 431,
+          "file_sha256": "2d22c4f49121716ba9eda233d097746c11e51b387a868f5fce83d6f1e52becf6",
+          "item_sha256": "7514c874bcee8ed023103b84bdf7b29b5b508c0ee59064cc7efc9bfcb3b47010",
+          "body_sha256": "ef4aadd287ea62d4d09fc427354972fb329d50fc057508e67ae1be489aaefe93"
+        },
+        "deployed": {
+          "key": "deployed/library/std/src/alloc.rs",
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/alloc.rs",
+          "line": 423,
+          "end_line": 431,
+          "file_sha256": "b48015cc69035ec2c689dfc8567ea9a854f639015cd870fe5de383f1b1ce3f47",
+          "item_sha256": "7514c874bcee8ed023103b84bdf7b29b5b508c0ee59064cc7efc9bfcb3b47010",
+          "body_sha256": "ef4aadd287ea62d4d09fc427354972fb329d50fc057508e67ae1be489aaefe93"
+        }
+      },
+      "project_source": null,
+      "diff": null,
+      "details_ref": "classification/functions.json.xz#std::rust_oom::{closure#0}(_1: {closure@library/std/src/alloc.rs:424:55: 424:57}) -> !"
+    }
+  ],
+  "reached_source_inventory": [
+    {
+      "function": "alloc::capacity_overflow() -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::capacity_overflow() -> !"
+    },
+    {
+      "function": "alloc::collections::<impl at library/alloc/src/collections/mod.rs:132:1: 132:41>::clone(_1: &TryReserveErrorKind) -> TryReserveErrorKind",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::collections::<impl at library/alloc/src/collections/mod.rs:132:1: 132:41>::clone(_1: &TryReserveErrorKind) -> TryReserveErrorKind"
+    },
+    {
+      "function": "alloc::collections::<library/alloc/src/collections/mod.rs::impl TryReserveError>::kind(_1: &TryReserveError) -> TryReserveErrorKind",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::collections::<library/alloc/src/collections/mod.rs::impl TryReserveError>::kind(_1: &TryReserveError) -> TryReserveErrorKind"
+    },
+    {
+      "function": "alloc::collections::<library/alloc/src/collections/mod.rs::impl const Clone for TryReserveErrorKind>::clone(_1: &TryReserveErrorKind) -> TryReserveErrorKind",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::collections::<library/alloc/src/collections/mod.rs::impl const Clone for TryReserveErrorKind>::clone(_1: &TryReserveErrorKind) -> TryReserveErrorKind"
+    },
+    {
+      "function": "alloc::handle_alloc_error(_1: core::alloc::Layout) -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::handle_alloc_error(_1: core::alloc::Layout) -> !"
+    },
+    {
+      "function": "alloc::handle_error(_1: TryReserveError) -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::handle_error(_1: TryReserveError) -> !"
+    },
+    {
+      "function": "alloc::layout_array(_1: usize, _2: core::alloc::Layout) -> Result<core::alloc::Layout, TryReserveError>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::layout_array(_1: usize, _2: core::alloc::Layout) -> Result<core::alloc::Layout, TryReserveError>"
+    },
+    {
+      "function": "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>"
+    },
+    {
+      "function": "alloc::min_non_zero_cap(_1: usize) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::min_non_zero_cap(_1: usize) -> usize"
+    },
+    {
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>"
+    },
+    {
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:48:35: 48:39}, _2: &Handle<NodeRef<Immut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &V)",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:48:35: 48:39}, _2: &Handle<NodeRef<Immut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &V)"
+    },
+    {
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>"
+    },
+    {
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)"
+    },
+    {
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K, V, NodeType> Handle<NodeRef<marker::ValMut<'a>, K, V, NodeType>, marker::KV>>::into_kv_valmut(_1: Handle<NodeRef<ValMut<'_>, K, V, NodeType>, KV>) -> (&K, &mut V)",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K, V, NodeType> Handle<NodeRef<marker::ValMut<'a>, K, V, NodeType>, marker::KV>>::into_kv_valmut(_1: Handle<NodeRef<ValMut<'_>, K, V, NodeType>, KV>) -> (&K, &mut V)"
+    },
+    {
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K, V, Type> NodeRef<marker::ValMut<'a>, K, V, Type>>::into_key_val_mut_at(_1: NodeRef<ValMut<'_>, K, V, Type>, _2: usize) -> (&K, &mut V)",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K, V, Type> NodeRef<marker::ValMut<'a>, K, V, Type>>::into_key_val_mut_at(_1: NodeRef<ValMut<'_>, K, V, Type>, _2: usize) -> (&K, &mut V)"
+    },
+    {
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)"
+    },
+    {
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, Type> NodeRef<marker::Immut<'a>, K, V, Type>>::into_leaf(_1: NodeRef<Immut<'_>, K, V, Type>) -> &LeafNode<K, V>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, Type> NodeRef<marker::Immut<'a>, K, V, Type>>::into_leaf(_1: NodeRef<Immut<'_>, K, V, Type>) -> &LeafNode<K, V>"
+    },
+    {
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<BorrowType, K, V, Type> NodeRef<BorrowType, K, V, Type>>::as_leaf_ptr(_1: &NodeRef<BorrowType, K, V, Type>) -> *mut LeafNode<K, V>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::node::<library/alloc/src/collections/btree/node.rs::impl<BorrowType, K, V, Type> NodeRef<BorrowType, K, V, Type>>::as_leaf_ptr(_1: &NodeRef<BorrowType, K, V, Type>) -> *mut LeafNode<K, V>"
+    },
+    {
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<BorrowType, K, V, Type> NodeRef<BorrowType, K, V, Type>>::len(_1: &NodeRef<BorrowType, K, V, Type>) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::node::<library/alloc/src/collections/btree/node.rs::impl<BorrowType, K, V, Type> NodeRef<BorrowType, K, V, Type>>::len(_1: &NodeRef<BorrowType, K, V, Type>) -> usize"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:170:1: 170:68>::grow_one(_1: &mut RawVec<T, A>) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:170:1: 170:68>::grow_one(_1: &mut RawVec<T, A>) -> ()"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:170:1: 170:68>::with_capacity_in(_1: usize, _2: A) -> RawVec<T, A>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:170:1: 170:68>::with_capacity_in(_1: usize, _2: A) -> RawVec<T, A>"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::finish_grow(_1: &RawVecInner<A>, _2: usize, _3: core::alloc::Layout) -> Result<NonNull<[u8]>, TryReserveError>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::finish_grow(_1: &RawVecInner<A>, _2: usize, _3: core::alloc::Layout) -> Result<NonNull<[u8]>, TryReserveError>"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::grow_amortized(_1: &mut RawVecInner<A>, _2: usize, _3: usize, _4: core::alloc::Layout) -> Result<(), TryReserveError>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::grow_amortized(_1: &mut RawVecInner<A>, _2: usize, _3: usize, _4: core::alloc::Layout) -> Result<(), TryReserveError>"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::grow_one(_1: &mut RawVecInner<A>, _2: core::alloc::Layout) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::grow_one(_1: &mut RawVecInner<A>, _2: core::alloc::Layout) -> ()"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::try_allocate_in(_1: usize, _2: AllocInit, _3: A, _4: core::alloc::Layout) -> Result<RawVecInner<A>, TryReserveError>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::try_allocate_in(_1: usize, _2: AllocInit, _3: A, _4: core::alloc::Layout) -> Result<RawVecInner<A>, TryReserveError>"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::with_capacity_in(_1: usize, _2: A, _3: core::alloc::Layout) -> RawVecInner<A>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::with_capacity_in(_1: usize, _2: A, _3: core::alloc::Layout) -> RawVecInner<A>"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::finish_grow(_1: &RawVecInner<A>, _2: usize, _3: core::alloc::Layout) -> Result<NonNull<[u8]>, TryReserveError>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::finish_grow(_1: &RawVecInner<A>, _2: usize, _3: core::alloc::Layout) -> Result<NonNull<[u8]>, TryReserveError>"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::grow_amortized(_1: &mut RawVecInner<A>, _2: usize, _3: usize, _4: core::alloc::Layout) -> Result<(), TryReserveError>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::grow_amortized(_1: &mut RawVecInner<A>, _2: usize, _3: usize, _4: core::alloc::Layout) -> Result<(), TryReserveError>"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::grow_one(_1: &mut RawVecInner<A>, _2: core::alloc::Layout) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::grow_one(_1: &mut RawVecInner<A>, _2: core::alloc::Layout) -> ()"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::try_allocate_in(_1: usize, _2: AllocInit, _3: A, _4: core::alloc::Layout) -> Result<RawVecInner<A>, TryReserveError>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::try_allocate_in(_1: usize, _2: AllocInit, _3: A, _4: core::alloc::Layout) -> Result<RawVecInner<A>, TryReserveError>"
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::with_capacity_in(_1: usize, _2: A, _3: core::alloc::Layout) -> RawVecInner<A>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::with_capacity_in(_1: usize, _2: A, _3: core::alloc::Layout) -> RawVecInner<A>"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::allocator(_1: &RawVecInner<A>) -> &A",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::allocator(_1: &RawVecInner<A>) -> &A"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::capacity(_1: &RawVecInner<A>, _2: usize) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::capacity(_1: &RawVecInner<A>, _2: usize) -> usize"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::current_memory(_1: &RawVecInner<A>, _2: core::alloc::Layout) -> Option<(NonNull<u8>, core::alloc::Layout)>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::current_memory(_1: &RawVecInner<A>, _2: core::alloc::Layout) -> Option<(NonNull<u8>, core::alloc::Layout)>"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::needs_to_grow(_1: &RawVecInner<A>, _2: usize, _3: usize, _4: core::alloc::Layout) -> bool",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::needs_to_grow(_1: &RawVecInner<A>, _2: usize, _3: usize, _4: core::alloc::Layout) -> bool"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::new_in(_1: A, _2: core::mem::Alignment) -> RawVecInner<A>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::new_in(_1: A, _2: core::mem::Alignment) -> RawVecInner<A>"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::new_in(_1: A, _2: core::ptr::Alignment) -> RawVecInner<A>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::new_in(_1: A, _2: core::ptr::Alignment) -> RawVecInner<A>"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::non_null(_1: &RawVecInner<A>) -> NonNull<T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::non_null(_1: &RawVecInner<A>) -> NonNull<T>"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::ptr(_1: &RawVecInner<A>) -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::ptr(_1: &RawVecInner<A>) -> *mut T"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::set_ptr_and_cap(_1: &mut RawVecInner<A>, _2: NonNull<[u8]>, _3: usize) -> ()",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::set_ptr_and_cap(_1: &mut RawVecInner<A>, _2: NonNull<[u8]>, _3: usize) -> ()"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<T, A: Allocator> RawVec<T, A>>::allocator(_1: &RawVec<T, A>) -> &A",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<T, A: Allocator> RawVec<T, A>>::allocator(_1: &RawVec<T, A>) -> &A"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<T, A: Allocator> RawVec<T, A>>::capacity(_1: &RawVec<T, A>) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<T, A: Allocator> RawVec<T, A>>::capacity(_1: &RawVec<T, A>) -> usize"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<T, A: Allocator> RawVec<T, A>>::non_null(_1: &RawVec<T, A>) -> NonNull<T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<T, A: Allocator> RawVec<T, A>>::non_null(_1: &RawVec<T, A>) -> NonNull<T>"
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<T, A: Allocator> RawVec<T, A>>::ptr(_1: &RawVec<T, A>) -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<T, A: Allocator> RawVec<T, A>>::ptr(_1: &RawVec<T, A>) -> *mut T"
+    },
+    {
+      "function": "alloc::rt_error(_1: core::alloc::Layout) -> !",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::rt_error(_1: core::alloc::Layout) -> !"
+    },
+    {
+      "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>"
+    },
+    {
+      "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next::{closure#0}(_1: {closure@library/alloc/src/collections/btree/set.rs:1884:30: 1884:38}, _2: (&T, &SetValZST)) -> &T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next::{closure#0}(_1: {closure@library/alloc/src/collections/btree/set.rs:1884:30: 1884:38}, _2: (&T, &SetValZST)) -> &T"
+    },
+    {
+      "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next::{closure#0}(_1: {closure@library/alloc/src/collections/btree/set.rs:1888:30: 1888:38}, _2: (&T, &SetValZST)) -> &T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next::{closure#0}(_1: {closure@library/alloc/src/collections/btree/set.rs:1888:30: 1888:38}, _2: (&T, &SetValZST)) -> &T"
+    },
+    {
+      "function": "alloc::vec::<impl at library/alloc/src/vec/mod.rs:3789:1: 3789:53>::deref(_1: &Vec<T, A>) -> &[T]",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::vec::<impl at library/alloc/src/vec/mod.rs:3789:1: 3789:53>::deref(_1: &Vec<T, A>) -> &[T]"
+    },
+    {
+      "function": "alloc::vec::<impl at library/alloc/src/vec/mod.rs:3800:1: 3800:56>::deref_mut(_1: &mut Vec<T, A>) -> &mut [T]",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::vec::<impl at library/alloc/src/vec/mod.rs:3800:1: 3800:56>::deref_mut(_1: &mut Vec<T, A>) -> &mut [T]"
+    },
+    {
+      "function": "alloc::vec::<impl at library/alloc/src/vec/mod.rs:908:1: 908:65>::push(_1: &mut Vec<T, A>, _2: T) -> ()",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<impl at library/alloc/src/vec/mod.rs:908:1: 908:65>::push(_1: &mut Vec<T, A>, _2: T) -> ()"
+    },
+    {
+      "function": "alloc::vec::<impl at library/alloc/src/vec/mod.rs:908:1: 908:65>::push_mut(_1: &mut Vec<T, A>, _2: T) -> &mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<impl at library/alloc/src/vec/mod.rs:908:1: 908:65>::push_mut(_1: &mut Vec<T, A>, _2: T) -> &mut T"
+    },
+    {
+      "function": "alloc::vec::<impl at library/alloc/src/vec/mod.rs:908:1: 908:65>::with_capacity_in(_1: usize, _2: A) -> Vec<T, A>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<impl at library/alloc/src/vec/mod.rs:908:1: 908:65>::with_capacity_in(_1: usize, _2: A) -> Vec<T, A>"
+    },
+    {
+      "function": "alloc::vec::<impl at library/alloc/src/vec/mod.rs:918:1: 918:65>::push(_1: &mut Vec<T, A>, _2: T) -> ()",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<impl at library/alloc/src/vec/mod.rs:918:1: 918:65>::push(_1: &mut Vec<T, A>, _2: T) -> ()"
+    },
+    {
+      "function": "alloc::vec::<impl at library/alloc/src/vec/mod.rs:918:1: 918:65>::push_mut(_1: &mut Vec<T, A>, _2: T) -> &mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<impl at library/alloc/src/vec/mod.rs:918:1: 918:65>::push_mut(_1: &mut Vec<T, A>, _2: T) -> &mut T"
+    },
+    {
+      "function": "alloc::vec::<impl at library/alloc/src/vec/mod.rs:918:1: 918:65>::with_capacity_in(_1: usize, _2: A) -> Vec<T, A>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<impl at library/alloc/src/vec/mod.rs:918:1: 918:65>::with_capacity_in(_1: usize, _2: A) -> Vec<T, A>"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<'a, T, A: Allocator> IntoIterator for &'a Vec<T, A>>::into_iter(_1: &Vec<T, A>) -> core::slice::Iter<'_, T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<'a, T, A: Allocator> IntoIterator for &'a Vec<T, A>>::into_iter(_1: &Vec<T, A>) -> core::slice::Iter<'_, T>"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<'a, T, A: Allocator> IntoIterator for &'a mut Vec<T, A>>::into_iter(_1: &mut Vec<T, A>) -> core::slice::IterMut<'_, T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<'a, T, A: Allocator> IntoIterator for &'a mut Vec<T, A>>::into_iter(_1: &mut Vec<T, A>) -> core::slice::IterMut<'_, T>"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> IntoIterator for Vec<T, A>>::into_iter(_1: Vec<T, A>) -> vec::into_iter::IntoIter<T, A>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> IntoIterator for Vec<T, A>>::into_iter(_1: Vec<T, A>) -> vec::into_iter::IntoIter<T, A>"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::allocator(_1: &Vec<T, A>) -> &A",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::allocator(_1: &Vec<T, A>) -> &A"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::as_mut_ptr(_1: &mut Vec<T, A>) -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::as_mut_ptr(_1: &mut Vec<T, A>) -> *mut T"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::as_mut_slice(_1: &mut Vec<T, A>) -> &mut [T]",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::as_mut_slice(_1: &mut Vec<T, A>) -> &mut [T]"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::as_ptr(_1: &Vec<T, A>) -> *const T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::as_ptr(_1: &Vec<T, A>) -> *const T"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::as_slice(_1: &Vec<T, A>) -> &[T]",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::as_slice(_1: &Vec<T, A>) -> &[T]"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::len(_1: &Vec<T, A>) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::len(_1: &Vec<T, A>) -> usize"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> ops::Deref for Vec<T, A>>::deref(_1: &Vec<T, A>) -> &[T]",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> ops::Deref for Vec<T, A>>::deref(_1: &Vec<T, A>) -> &[T]"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> ops::DerefMut for Vec<T, A>>::deref_mut(_1: &mut Vec<T, A>) -> &mut [T]",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> ops::DerefMut for Vec<T, A>>::deref_mut(_1: &mut Vec<T, A>) -> &mut [T]"
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T> Vec<T>>::with_capacity(_1: usize) -> Vec<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#alloc::vec::<library/alloc/src/vec/mod.rs::impl<T> Vec<T>>::with_capacity(_1: usize) -> Vec<T>"
+    },
+    {
+      "function": "aspis_core::ct::add(_1: u32, _2: u32) -> u32",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::ct::add(_1: u32, _2: u32) -> u32"
+    },
+    {
+      "function": "aspis_core::ct::sub(_1: u32, _2: u32) -> u32",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::ct::sub(_1: u32, _2: u32) -> u32"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::add(_1: CM31, _2: CM31) -> CM31",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::add(_1: CM31, _2: CM31) -> CM31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::mul(_1: CM31, _2: CM31) -> CM31",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::mul(_1: CM31, _2: CM31) -> CM31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::sub(_1: CM31, _2: CM31) -> CM31",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::sub(_1: CM31, _2: CM31) -> CM31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::add(_1: M31, _2: M31) -> M31",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::add(_1: M31, _2: M31) -> M31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::double(_1: M31) -> M31",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::double(_1: M31) -> M31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::mul(_1: M31, _2: M31) -> M31",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::mul(_1: M31, _2: M31) -> M31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::reduce_u64(_1: u64) -> M31",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::reduce_u64(_1: u64) -> M31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::sub(_1: M31, _2: M31) -> M31",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::sub(_1: M31, _2: M31) -> M31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::add(_1: QM31, _2: QM31) -> QM31",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::add(_1: QM31, _2: QM31) -> QM31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::mul(_1: QM31, _2: QM31) -> QM31",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::mul(_1: QM31, _2: QM31) -> QM31"
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::sub(_1: QM31, _2: QM31) -> QM31",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::sub(_1: QM31, _2: QM31) -> QM31"
+    },
+    {
+      "function": "aspis_core::field::<impl at crates/aspis-core/src/field.rs:22:23: 22:32>::eq(_1: &M31, _2: &M31) -> bool",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::field::<impl at crates/aspis-core/src/field.rs:22:23: 22:32>::eq(_1: &M31, _2: &M31) -> bool"
+    },
+    {
+      "function": "aspis_core::field::<impl at crates/aspis-core/src/field.rs:254:23: 254:32>::eq(_1: &CM31, _2: &CM31) -> bool",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::field::<impl at crates/aspis-core/src/field.rs:254:23: 254:32>::eq(_1: &CM31, _2: &CM31) -> bool"
+    },
+    {
+      "function": "aspis_core::field::<impl at crates/aspis-core/src/field.rs:431:23: 431:32>::eq(_1: &QM31, _2: &QM31) -> bool",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::field::<impl at crates/aspis-core/src/field.rs:431:23: 431:32>::eq(_1: &QM31, _2: &QM31) -> bool"
+    },
+    {
+      "function": "aspis_core::field::mul_by_r(_1: CM31) -> CM31",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::field::mul_by_r(_1: CM31) -> CM31"
+    },
+    {
+      "function": "aspis_core::reduce64(_1: u64) -> u32",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::reduce64(_1: u64) -> u32"
+    },
+    {
+      "function": "aspis_core::reduce_u64(_1: u64) -> u32",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#aspis_core::reduce_u64(_1: u64) -> u32"
+    },
+    {
+      "function": "aspis_core::subtract_p(_1: u32) -> u32",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_core::subtract_p(_1: u32) -> u32"
+    },
+    {
+      "function": "aspis_statement::multilinear_evaluate_qm31(_1: &[aspis_core::field::QM31], _2: &[aspis_core::field::QM31; 10]) -> Option<aspis_core::field::QM31>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_statement::multilinear_evaluate_qm31(_1: &[aspis_core::field::QM31], _2: &[aspis_core::field::QM31; 10]) -> Option<aspis_core::field::QM31>"
+    },
+    {
+      "function": "aspis_statement::multilinear_evaluate_qm31::{closure#0}(_1: &mut {closure@crates/aspis-statement/src/constraints_v4.rs:789:31: 789:51}, _2: aspis_core::field::QM31, _3: (usize, aspis_core::field::QM31)) -> aspis_core::field::QM31",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_statement::multilinear_evaluate_qm31::{closure#0}(_1: &mut {closure@crates/aspis-statement/src/constraints_v4.rs:789:31: 789:51}, _2: aspis_core::field::QM31, _3: (usize, aspis_core::field::QM31)) -> aspis_core::field::QM31"
+    },
+    {
+      "function": "aspis_statement::sparse_eq_weights(_1: &[aspis_core::field::QM31; 10]) -> Vec<(usize, aspis_core::field::QM31)>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_statement::sparse_eq_weights(_1: &[aspis_core::field::QM31; 10]) -> Vec<(usize, aspis_core::field::QM31)>"
+    },
+    {
+      "function": "aspis_statement::sparse_eq_weights::{closure#0}(_1: &mut {closure@crates/aspis-statement/src/constraints_v4.rs:605:21: 605:28}, _2: &&aspis_core::field::QM31) -> bool",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#aspis_statement::sparse_eq_weights::{closure#0}(_1: &mut {closure@crates/aspis-statement/src/constraints_v4.rs:605:21: 605:28}, _2: &&aspis_core::field::QM31) -> bool"
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::as_nonzero_usize(_1: alignment::Alignment) -> NonZero<usize>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::as_nonzero_usize(_1: alignment::Alignment) -> NonZero<usize>"
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::as_usize(_1: alignment::Alignment) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::as_usize(_1: alignment::Alignment) -> usize"
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::new(_1: usize) -> Option<alignment::Alignment>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::new(_1: usize) -> Option<alignment::Alignment>"
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::new_unchecked(_1: usize) -> alignment::Alignment",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::new_unchecked(_1: usize) -> alignment::Alignment"
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::new_unchecked::precondition_check(_1: usize) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::new_unchecked::precondition_check(_1: usize) -> ()"
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::as_nonzero(_1: alignment::Alignment) -> NonZero<usize>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::as_nonzero(_1: alignment::Alignment) -> NonZero<usize>"
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::as_usize(_1: alignment::Alignment) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::as_usize(_1: alignment::Alignment) -> usize"
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::new(_1: usize) -> Option<alignment::Alignment>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::new(_1: usize) -> Option<alignment::Alignment>"
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::new_unchecked(_1: usize) -> alignment::Alignment",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::new_unchecked(_1: usize) -> alignment::Alignment"
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::new_unchecked::precondition_check(_1: usize) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::new_unchecked::precondition_check(_1: usize) -> ()"
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl const From<Alignment> for usize>::from(_1: alignment::Alignment) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::alignment::<library/core/src/ptr/alignment.rs::impl const From<Alignment> for usize>::from(_1: alignment::Alignment) -> usize"
+    },
+    {
+      "function": "core::assert_failed(_1: AssertKind, _2: &T, _3: &U, _4: Option<Arguments<'_>>) -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::assert_failed(_1: AssertKind, _2: &T, _3: &U, _4: Option<Arguments<'_>>) -> !"
+    },
+    {
+      "function": "core::assert_failed_inner(_1: AssertKind, _2: &dyn fmt::Debug, _3: &dyn fmt::Debug, _4: Option<Arguments<'_>>) -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::assert_failed_inner(_1: AssertKind, _2: &dyn fmt::Debug, _3: &dyn fmt::Debug, _4: Option<Arguments<'_>>) -> !"
+    },
+    {
+      "function": "core::assert_unchecked(_1: bool) -> ()",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::assert_unchecked(_1: bool) -> ()"
+    },
+    {
+      "function": "core::assert_unchecked::precondition_check(_1: bool) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::assert_unchecked::precondition_check(_1: bool) -> ()"
+    },
+    {
+      "function": "core::atomic::<library/core/src/sync/atomic.rs::impl const From<$int_type> for $atomic_type>::from(_1: usize) -> Atomic<usize>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::atomic::<library/core/src/sync/atomic.rs::impl const From<$int_type> for $atomic_type>::from(_1: usize) -> Atomic<usize>"
+    },
+    {
+      "function": "core::atomic::<library/core/src/sync/atomic.rs::impl<T> AtomicPtr<T>>::load(_1: &AtomicPtr<T>, _2: atomic::Ordering) -> *mut T",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::atomic::<library/core/src/sync/atomic.rs::impl<T> AtomicPtr<T>>::load(_1: &AtomicPtr<T>, _2: atomic::Ordering) -> *mut T"
+    },
+    {
+      "function": "core::atomic::<library/core/src/sync/atomic.rs::impl<T> AtomicPtr<T>>::new(_1: *mut T) -> AtomicPtr<T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::atomic::<library/core/src/sync/atomic.rs::impl<T> AtomicPtr<T>>::new(_1: *mut T) -> AtomicPtr<T>"
+    },
+    {
+      "function": "core::atomic::<library/core/src/sync/atomic.rs::impl<T> AtomicPtr<T>>::null() -> Atomic<*mut T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::atomic::<library/core/src/sync/atomic.rs::impl<T> AtomicPtr<T>>::null() -> Atomic<*mut T>"
+    },
+    {
+      "function": "core::atomic::<library/core/src/sync/atomic.rs::impl<T> AtomicPtr<T>>::null() -> AtomicPtr<T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::atomic::<library/core/src/sync/atomic.rs::impl<T> AtomicPtr<T>>::null() -> AtomicPtr<T>"
+    },
+    {
+      "function": "core::atomic::atomic_load(_1: *const T, _2: atomic::Ordering) -> T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::atomic::atomic_load(_1: *const T, _2: atomic::Ordering) -> T"
+    },
+    {
+      "function": "core::cell::<library/core/src/cell.rs::impl<T: ?Sized> UnsafeCell<T>>::get(_1: &UnsafeCell<T>) -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::cell::<library/core/src/cell.rs::impl<T: ?Sized> UnsafeCell<T>>::get(_1: &UnsafeCell<T>) -> *mut T"
+    },
+    {
+      "function": "core::cell::<library/core/src/cell.rs::impl<T> UnsafeCell<T>>::new(_1: T) -> UnsafeCell<T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::cell::<library/core/src/cell.rs::impl<T> UnsafeCell<T>>::new(_1: T) -> UnsafeCell<T>"
+    },
+    {
+      "function": "core::check_language_ub() -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::check_language_ub() -> bool"
+    },
+    {
+      "function": "core::check_language_ub::runtime() -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::check_language_ub::runtime() -> bool"
+    },
+    {
+      "function": "core::cmp::Ord::max(_1: Self, _2: Self) -> Self",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::cmp::Ord::max(_1: Self, _2: Self) -> Self"
+    },
+    {
+      "function": "core::cmp::PartialOrd::lt(_1: &Self, _2: &Rhs) -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::cmp::PartialOrd::lt(_1: &Self, _2: &Rhs) -> bool"
+    },
+    {
+      "function": "core::cmp::impls::<impl at library/core/src/cmp.rs:2048:5: 2048:28>::max(_1: bool, _2: bool) -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::cmp::impls::<impl at library/core/src/cmp.rs:2048:5: 2048:28>::max(_1: bool, _2: bool) -> bool"
+    },
+    {
+      "function": "core::cmp::impls::<library/core/src/cmp.rs::impl const Ord for bool>::max(_1: bool, _2: bool) -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::cmp::impls::<library/core/src/cmp.rs::impl const Ord for bool>::max(_1: bool, _2: bool) -> bool"
+    },
+    {
+      "function": "core::convert::<library/core/src/convert/mod.rs::impl<T, U> const Into<U> for T where     U: [const] From<T>,>::into(_1: T) -> U",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::convert::<library/core/src/convert/mod.rs::impl<T, U> const Into<U> for T where     U: [const] From<T>,>::into(_1: T) -> U"
+    },
+    {
+      "function": "core::convert::num::<library/core/src/convert/num.rs::impl const From<$small> for $large>::from(_1: u16) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::convert::num::<library/core/src/convert/num.rs::impl const From<$small> for $large>::from(_1: u16) -> usize"
+    },
+    {
+      "function": "core::convert::num::<library/core/src/convert/num.rs::impl const From<$small> for $large>::from(_1: u8) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::convert::num::<library/core/src/convert/num.rs::impl const From<$small> for $large>::from(_1: u8) -> usize"
+    },
+    {
+      "function": "core::convert::num::<library/core/src/convert/num.rs::impl const From<bool> for $int>::from(_1: bool) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::convert::num::<library/core/src/convert/num.rs::impl const From<bool> for $int>::from(_1: bool) -> usize"
+    },
+    {
+      "function": "core::copied::<library/core/src/iter/adapters/copied.rs::impl<'a, I, T: 'a> ExactSizeIterator for Copied<I> where     I: ExactSizeIterator<Item = &'a T>,     T: Copy,>::len(_1: &Copied<I>) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::copied::<library/core/src/iter/adapters/copied.rs::impl<'a, I, T: 'a> ExactSizeIterator for Copied<I> where     I: ExactSizeIterator<Item = &'a T>,     T: Copy,>::len(_1: &Copied<I>) -> usize"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::addr(_1: vector::Simd<*const T, N>) -> vector::Simd<usize, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::addr(_1: vector::Simd<*const T, N>) -> vector::Simd<usize, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::cast(_1: vector::Simd<*const T, N>) -> vector::Simd<*const U, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::cast(_1: vector::Simd<*const T, N>) -> vector::Simd<*const U, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::is_null(_1: vector::Simd<*const T, N>) -> masks::Mask<isize, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::is_null(_1: vector::Simd<*const T, N>) -> masks::Mask<isize, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*const T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*const T, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::addr(_1: vector::Simd<*const T, N>) -> vector::Simd<usize, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::addr(_1: vector::Simd<*const T, N>) -> vector::Simd<usize, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::cast(_1: vector::Simd<*const T, N>) -> vector::Simd<*const U, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::cast(_1: vector::Simd<*const T, N>) -> vector::Simd<*const U, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::is_null(_1: vector::Simd<*const T, N>) -> masks::Mask<isize, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::is_null(_1: vector::Simd<*const T, N>) -> masks::Mask<isize, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*const T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*const T, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::cast(_1: vector::Simd<*mut T, N>) -> vector::Simd<*mut U, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::cast(_1: vector::Simd<*mut T, N>) -> vector::Simd<*mut U, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::cast_const(_1: vector::Simd<*mut T, N>) -> vector::Simd<*const T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::cast_const(_1: vector::Simd<*mut T, N>) -> vector::Simd<*const T, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::is_null(_1: vector::Simd<*mut T, N>) -> masks::Mask<isize, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::is_null(_1: vector::Simd<*mut T, N>) -> masks::Mask<isize, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*mut T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*mut T, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::cast(_1: vector::Simd<*mut T, N>) -> vector::Simd<*mut U, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::cast(_1: vector::Simd<*mut T, N>) -> vector::Simd<*mut U, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::cast_const(_1: vector::Simd<*mut T, N>) -> vector::Simd<*const T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::cast_const(_1: vector::Simd<*mut T, N>) -> vector::Simd<*const T, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::is_null(_1: vector::Simd<*mut T, N>) -> masks::Mask<isize, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::is_null(_1: vector::Simd<*mut T, N>) -> masks::Mask<isize, N>"
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*mut T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*mut T, N>"
+    },
+    {
+      "function": "core::ctpop(_1: T) -> u32",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::ctpop(_1: T) -> u32"
+    },
+    {
+      "function": "core::enumerate::<library/core/src/iter/adapters/enumerate.rs::impl<I> Iterator for Enumerate<I> where     I: Iterator,>::fold::enumerate(_1: usize, _2: impl FnMut(Acc, (usize, T)) -> Acc) -> {closure@library/core/src/iter/adapters/enumerate.rs:139:13: 139:29}",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::enumerate::<library/core/src/iter/adapters/enumerate.rs::impl<I> Iterator for Enumerate<I> where     I: Iterator,>::fold::enumerate(_1: usize, _2: impl FnMut(Acc, (usize, T)) -> Acc) -> {closure@library/core/src/iter/adapters/enumerate.rs:139:13: 139:29}"
+    },
+    {
+      "function": "core::enumerate::<library/core/src/iter/adapters/enumerate.rs::impl<I> Iterator for Enumerate<I> where     I: Iterator,>::next(_1: &mut Enumerate<I>) -> Option<(usize, <I as iterator::Iterator>::Item)>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::enumerate::<library/core/src/iter/adapters/enumerate.rs::impl<I> Iterator for Enumerate<I> where     I: Iterator,>::next(_1: &mut Enumerate<I>) -> Option<(usize, <I as iterator::Iterator>::Item)>"
+    },
+    {
+      "function": "core::enumerate::<library/core/src/iter/adapters/enumerate.rs::impl<I> Iterator for Enumerate<I> where     I: Iterator,>::try_fold::enumerate(_1: &mut usize, _2: impl FnMut(Acc, (usize, T)) -> R + 'a) -> {closure@library/core/src/iter/adapters/enumerate.rs:118:13: 118:29}",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::enumerate::<library/core/src/iter/adapters/enumerate.rs::impl<I> Iterator for Enumerate<I> where     I: Iterator,>::try_fold::enumerate(_1: &mut usize, _2: impl FnMut(Acc, (usize, T)) -> R + 'a) -> {closure@library/core/src/iter/adapters/enumerate.rs:118:13: 118:29}"
+    },
+    {
+      "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>"
+    },
+    {
+      "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::new(_1: &[u8; N], _2: &[Argument<'_>; M]) -> Arguments<'_>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::new(_1: &[u8; N], _2: &[Argument<'_>; M]) -> Arguments<'_>"
+    },
+    {
+      "function": "core::intrinsics::atomic_load(_1: *const T) -> T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::intrinsics::atomic_load(_1: *const T) -> T"
+    },
+    {
+      "function": "core::intrinsics::simd::simd_splat(_1: U) -> T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::intrinsics::simd::simd_splat(_1: U) -> T"
+    },
+    {
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+    },
+    {
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>"
+    },
+    {
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>"
+    },
+    {
+      "function": "core::iterator::Iterator::lt(_1: Self, _2: I) -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::iterator::Iterator::lt(_1: Self, _2: I) -> bool"
+    },
+    {
+      "function": "core::iterator::Iterator::partial_cmp(_1: Self, _2: I) -> Option<cmp::Ordering>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::iterator::Iterator::partial_cmp(_1: Self, _2: I) -> Option<cmp::Ordering>"
+    },
+    {
+      "function": "core::iterator::Iterator::partial_cmp::{closure#0}(_1: &mut {closure@library/core/src/iter/traits/iterator.rs:3736:36: 3736:42}, _2: <Self as iterator::Iterator>::Item, _3: <I as collect::IntoIterator>::Item) -> Option<cmp::Ordering>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::iterator::Iterator::partial_cmp::{closure#0}(_1: &mut {closure@library/core/src/iter/traits/iterator.rs:3736:36: 3736:42}, _2: <Self as iterator::Iterator>::Item, _3: <I as collect::IntoIterator>::Item) -> Option<cmp::Ordering>"
+    },
+    {
+      "function": "core::iterator::Iterator::partial_cmp::{closure#0}(_1: &mut {closure@library/core/src/iter/traits/iterator.rs:3814:36: 3814:42}, _2: <Self as iterator::Iterator>::Item, _3: <I as collect::IntoIterator>::Item) -> Option<cmp::Ordering>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::iterator::Iterator::partial_cmp::{closure#0}(_1: &mut {closure@library/core/src/iter/traits/iterator.rs:3814:36: 3814:42}, _2: <Self as iterator::Iterator>::Item, _3: <I as collect::IntoIterator>::Item) -> Option<cmp::Ordering>"
+    },
+    {
+      "function": "core::iterator::Iterator::rev(_1: Self) -> Rev<Self>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::iterator::Iterator::rev(_1: Self) -> Rev<Self>"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::align(_1: &Layout) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::align(_1: &Layout) -> usize"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::alignment(_1: &Layout) -> alignment::Alignment",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::alignment(_1: &Layout) -> alignment::Alignment"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_align_unchecked(_1: usize, _2: usize) -> Layout",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_align_unchecked(_1: usize, _2: usize) -> Layout"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_align_unchecked::precondition_check(_1: usize, _2: usize) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_align_unchecked::precondition_check(_1: usize, _2: usize) -> ()"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment(_1: usize, _2: alignment::Alignment) -> result::Result<Layout, LayoutError>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment(_1: usize, _2: alignment::Alignment) -> result::Result<Layout, LayoutError>"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment_unchecked(_1: usize, _2: alignment::Alignment) -> Layout",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment_unchecked(_1: usize, _2: alignment::Alignment) -> Layout"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment_unchecked::precondition_check(_1: usize, _2: alignment::Alignment) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment_unchecked::precondition_check(_1: usize, _2: alignment::Alignment) -> ()"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::is_size_align_valid(_1: usize, _2: usize) -> bool",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::is_size_align_valid(_1: usize, _2: usize) -> bool"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::is_size_alignment_valid(_1: usize, _2: alignment::Alignment) -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::is_size_alignment_valid(_1: usize, _2: alignment::Alignment) -> bool"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::max_size_for_align(_1: alignment::Alignment) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::max_size_for_align(_1: alignment::Alignment) -> usize"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::max_size_for_alignment(_1: alignment::Alignment) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::max_size_for_alignment(_1: alignment::Alignment) -> usize"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::pad_to_align(_1: &Layout) -> Layout",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::pad_to_align(_1: &Layout) -> Layout"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::repeat(_1: &Layout, _2: usize) -> result::Result<(Layout, usize), LayoutError>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::repeat(_1: &Layout, _2: usize) -> result::Result<(Layout, usize), LayoutError>"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::repeat_packed(_1: &Layout, _2: usize) -> result::Result<Layout, LayoutError>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::repeat_packed(_1: &Layout, _2: usize) -> result::Result<Layout, LayoutError>"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::size(_1: &Layout) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::size(_1: &Layout) -> usize"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::size_rounded_up_to_custom_align(_1: &Layout, _2: alignment::Alignment) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::size_rounded_up_to_custom_align(_1: &Layout, _2: alignment::Alignment) -> usize"
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::size_rounded_up_to_custom_alignment(_1: &Layout, _2: alignment::Alignment) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::layout::<library/core/src/alloc/layout.rs::impl Layout>::size_rounded_up_to_custom_alignment(_1: &Layout, _2: alignment::Alignment) -> usize"
+    },
+    {
+      "function": "core::location::<library/core/src/panic/location.rs::impl<'a> Location<'a>>::caller() -> &Location<'_>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::location::<library/core/src/panic/location.rs::impl<'a> Location<'a>>::caller() -> &Location<'_>"
+    },
+    {
+      "function": "core::manually_drop::<impl at library/core/src/mem/manually_drop.rs:273:1: 273:48>::deref(_1: &ManuallyDrop<T>) -> &T",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::manually_drop::<impl at library/core/src/mem/manually_drop.rs:273:1: 273:48>::deref(_1: &ManuallyDrop<T>) -> &T"
+    },
+    {
+      "function": "core::manually_drop::<library/core/src/mem/manually_drop.rs::impl<T: ?Sized> const Deref for ManuallyDrop<T>>::deref(_1: &ManuallyDrop<T>) -> &T",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::manually_drop::<library/core/src/mem/manually_drop.rs::impl<T: ?Sized> const Deref for ManuallyDrop<T>>::deref(_1: &ManuallyDrop<T>) -> &T"
+    },
+    {
+      "function": "core::manually_drop::<library/core/src/mem/manually_drop.rs::impl<T> ManuallyDrop<T>>::new(_1: T) -> ManuallyDrop<T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::manually_drop::<library/core/src/mem/manually_drop.rs::impl<T> ManuallyDrop<T>>::new(_1: T) -> ManuallyDrop<T>"
+    },
+    {
+      "function": "core::mask_impl::<library/core/src/../../portable-simd/crates/core_simd/src/masks/full_masks.rs::impl<T, const N: usize> From<Mask<T, N>> for Simd<T, N> where     T: MaskElement,     LaneCount<N>: SupportedLaneCount,>::from(_1: mask_impl::Mask<T, N>) -> vector::Simd<T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::mask_impl::<library/core/src/../../portable-simd/crates/core_simd/src/masks/full_masks.rs::impl<T, const N: usize> From<Mask<T, N>> for Simd<T, N> where     T: MaskElement,     LaneCount<N>: SupportedLaneCount,>::from(_1: mask_impl::Mask<T, N>) -> vector::Simd<T, N>"
+    },
+    {
+      "function": "core::maybe_dangling::<library/core/src/mem/maybe_dangling.rs::impl<P: ?Sized> MaybeDangling<P>>::as_ref(_1: &MaybeDangling<P>) -> &P",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::maybe_dangling::<library/core/src/mem/maybe_dangling.rs::impl<P: ?Sized> MaybeDangling<P>>::as_ref(_1: &MaybeDangling<P>) -> &P"
+    },
+    {
+      "function": "core::maybe_dangling::<library/core/src/mem/maybe_dangling.rs::impl<P: ?Sized> MaybeDangling<P>>::new(_1: P) -> MaybeDangling<P>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::maybe_dangling::<library/core/src/mem/maybe_dangling.rs::impl<P: ?Sized> MaybeDangling<P>>::new(_1: P) -> MaybeDangling<P>"
+    },
+    {
+      "function": "core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::as_mut_ptr(_1: &mut maybe_uninit::MaybeUninit<T>) -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::as_mut_ptr(_1: &mut maybe_uninit::MaybeUninit<T>) -> *mut T"
+    },
+    {
+      "function": "core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::as_ptr(_1: &maybe_uninit::MaybeUninit<T>) -> *const T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::as_ptr(_1: &maybe_uninit::MaybeUninit<T>) -> *const T"
+    },
+    {
+      "function": "core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::assume_init(_1: maybe_uninit::MaybeUninit<T>) -> T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::assume_init(_1: maybe_uninit::MaybeUninit<T>) -> T"
+    },
+    {
+      "function": "core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::assume_init_mut(_1: &mut maybe_uninit::MaybeUninit<T>) -> &mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::assume_init_mut(_1: &mut maybe_uninit::MaybeUninit<T>) -> &mut T"
+    },
+    {
+      "function": "core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::assume_init_ref(_1: &maybe_uninit::MaybeUninit<T>) -> &T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::assume_init_ref(_1: &maybe_uninit::MaybeUninit<T>) -> &T"
+    },
+    {
+      "function": "core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::uninit() -> maybe_uninit::MaybeUninit<T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::maybe_uninit::<library/core/src/mem/maybe_uninit.rs::impl<T> MaybeUninit<T>>::uninit() -> maybe_uninit::MaybeUninit<T>"
+    },
+    {
+      "function": "core::mem::align_of() -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::mem::align_of() -> usize"
+    },
+    {
+      "function": "core::mem::replace(_1: &mut T, _2: T) -> T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::mem::replace(_1: &mut T, _2: T) -> T"
+    },
+    {
+      "function": "core::niche_types::<library/core/src/num/niche_types.rs::impl $name>::as_inner(_1: UsizeNoHighBit) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::niche_types::<library/core/src/num/niche_types.rs::impl $name>::as_inner(_1: UsizeNoHighBit) -> usize"
+    },
+    {
+      "function": "core::niche_types::<library/core/src/num/niche_types.rs::impl $name>::new_unchecked(_1: usize) -> UsizeNoHighBit",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::niche_types::<library/core/src/num/niche_types.rs::impl $name>::new_unchecked(_1: usize) -> UsizeNoHighBit"
+    },
+    {
+      "function": "core::non_null::<impl at library/core/src/ptr/non_null.rs:1746:1: 1746:59>::from(_1: Unique<T>) -> NonNull<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<impl at library/core/src/ptr/non_null.rs:1746:1: 1746:59>::from(_1: Unique<T>) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<impl at library/core/src/ptr/non_null.rs:1755:1: 1755:56>::from(_1: &mut T) -> NonNull<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<impl at library/core/src/ptr/non_null.rs:1755:1: 1755:56>::from(_1: &mut T) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<impl at library/core/src/ptr/non_null.rs:1767:1: 1767:52>::from(_1: &T) -> NonNull<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<impl at library/core/src/ptr/non_null.rs:1767:1: 1767:52>::from(_1: &T) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::as_ptr(_1: NonNull<T>) -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::as_ptr(_1: NonNull<T>) -> *mut T"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::cast(_1: NonNull<T>) -> NonNull<U>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::cast(_1: NonNull<T>) -> NonNull<U>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_mut(_1: &mut T) -> NonNull<T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_mut(_1: &mut T) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_raw_parts(_1: NonNull<impl super::Thin>, _2: <T as ptr::metadata::Pointee>::Metadata) -> NonNull<T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_raw_parts(_1: NonNull<impl super::Thin>, _2: <T as ptr::metadata::Pointee>::Metadata) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_ref(_1: &T) -> NonNull<T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_ref(_1: &T) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::new_unchecked(_1: *mut T) -> NonNull<T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::new_unchecked(_1: *mut T) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::new_unchecked::precondition_check(_1: *mut ()) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::new_unchecked::precondition_check(_1: *mut ()) -> ()"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::read(_1: NonNull<T>) -> T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::read(_1: NonNull<T>) -> T"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::read_unaligned(_1: NonNull<T>) -> T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::read_unaligned(_1: NonNull<T>) -> T"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::write(_1: NonNull<T>, _2: T) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::write(_1: NonNull<T>, _2: T) -> ()"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> const From<&T> for NonNull<T>>::from(_1: &T) -> NonNull<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> const From<&T> for NonNull<T>>::from(_1: &T) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> const From<&mut T> for NonNull<T>>::from(_1: &mut T) -> NonNull<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> const From<&mut T> for NonNull<T>>::from(_1: &mut T) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> const From<Unique<T>> for NonNull<T>>::from(_1: Unique<T>) -> NonNull<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> const From<Unique<T>> for NonNull<T>>::from(_1: Unique<T>) -> NonNull<T>"
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: Sized> NonNull<T>>::without_provenance(_1: NonZero<usize>) -> NonNull<T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::non_null::<library/core/src/ptr/non_null.rs::impl<T: Sized> NonNull<T>>::without_provenance(_1: NonZero<usize>) -> NonNull<T>"
+    },
+    {
+      "function": "core::nonzero::<library/core/src/num/nonzero.rs::impl<T> NonZero<T> where     T: ZeroablePrimitive,>::get(_1: NonZero<T>) -> T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::nonzero::<library/core/src/num/nonzero.rs::impl<T> NonZero<T> where     T: ZeroablePrimitive,>::get(_1: NonZero<T>) -> T"
+    },
+    {
+      "function": "core::null() -> *const T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::null() -> *const T"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl u32>::wrapping_add(_1: u32, _2: u32) -> u32",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl u32>::wrapping_add(_1: u32, _2: u32) -> u32"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl u32>::wrapping_sub(_1: u32, _2: u32) -> u32",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl u32>::wrapping_sub(_1: u32, _2: u32) -> u32"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl u8>::wrapping_add(_1: u8, _2: u8) -> u8",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl u8>::wrapping_add(_1: u8, _2: u8) -> u8"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::checked_add(_1: usize, _2: usize) -> Option<usize>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl usize>::checked_add(_1: usize, _2: usize) -> Option<usize>"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::checked_mul(_1: usize, _2: usize) -> Option<usize>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl usize>::checked_mul(_1: usize, _2: usize) -> Option<usize>"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::count_ones(_1: usize) -> u32",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl usize>::count_ones(_1: usize) -> u32"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::is_power_of_two(_1: usize) -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl usize>::is_power_of_two(_1: usize) -> bool"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::overflowing_mul(_1: usize, _2: usize) -> (usize, bool)",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl usize>::overflowing_mul(_1: usize, _2: usize) -> (usize, bool)"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::unchecked_mul(_1: usize, _2: usize) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl usize>::unchecked_mul(_1: usize, _2: usize) -> usize"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::unchecked_mul::precondition_check(_1: usize, _2: usize) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl usize>::unchecked_mul::precondition_check(_1: usize, _2: usize) -> ()"
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::wrapping_sub(_1: usize, _2: usize) -> usize",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::num::<library/core/src/num/mod.rs::impl usize>::wrapping_sub(_1: usize, _2: usize) -> usize"
+    },
+    {
+      "function": "core::option::<impl at library/core/src/option.rs:2438:1: 2438:57>::eq(_1: &Option<T>, _2: &Option<T>) -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::option::<impl at library/core/src/option.rs:2438:1: 2438:57>::eq(_1: &Option<T>, _2: &Option<T>) -> bool"
+    },
+    {
+      "function": "core::option::<impl at library/core/src/option.rs:2769:1: 2769:37>::branch(_1: Option<T>) -> ControlFlow<Option<Infallible>, T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::option::<impl at library/core/src/option.rs:2769:1: 2769:37>::branch(_1: Option<T>) -> ControlFlow<Option<Infallible>, T>"
+    },
+    {
+      "function": "core::option::<impl at library/core/src/option.rs:2791:1: 2791:75>::from_residual(_1: Option<Infallible>) -> Option<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::option::<impl at library/core/src/option.rs:2791:1: 2791:75>::from_residual(_1: Option<Infallible>) -> Option<T>"
+    },
+    {
+      "function": "core::option::<impl at library/core/src/option.rs:2803:1: 2803:61>::from_residual(_1: Yeet<()>) -> Option<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::option::<impl at library/core/src/option.rs:2803:1: 2803:61>::from_residual(_1: Yeet<()>) -> Option<T>"
+    },
+    {
+      "function": "core::option::<library/core/src/option.rs::impl<T: [const] PartialEq> const PartialEq for Option<T>>::eq(_1: &Option<T>, _2: &Option<T>) -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::option::<library/core/src/option.rs::impl<T: [const] PartialEq> const PartialEq for Option<T>>::eq(_1: &Option<T>, _2: &Option<T>) -> bool"
+    },
+    {
+      "function": "core::option::<library/core/src/option.rs::impl<T> Option<T>>::expect(_1: Option<T>, _2: &str) -> T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::option::<library/core/src/option.rs::impl<T> Option<T>>::expect(_1: Option<T>, _2: &str) -> T"
+    },
+    {
+      "function": "core::option::<library/core/src/option.rs::impl<T> Option<T>>::ok_or(_1: Option<T>, _2: E) -> result::Result<T, E>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::option::<library/core/src/option.rs::impl<T> Option<T>>::ok_or(_1: Option<T>, _2: E) -> result::Result<T, E>"
+    },
+    {
+      "function": "core::option::<library/core/src/option.rs::impl<T> const ops::FromResidual<Option<convert::Infallible>> for Option<T>>::from_residual(_1: Option<Infallible>) -> Option<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::option::<library/core/src/option.rs::impl<T> const ops::FromResidual<Option<convert::Infallible>> for Option<T>>::from_residual(_1: Option<Infallible>) -> Option<T>"
+    },
+    {
+      "function": "core::option::<library/core/src/option.rs::impl<T> const ops::Try for Option<T>>::branch(_1: Option<T>) -> ControlFlow<Option<Infallible>, T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::option::<library/core/src/option.rs::impl<T> const ops::Try for Option<T>>::branch(_1: Option<T>) -> ControlFlow<Option<Infallible>, T>"
+    },
+    {
+      "function": "core::panic_info::<library/core/src/panic/panic_info.rs::impl<'a> PanicInfo<'a>>::new(_1: &Arguments<'_>, _2: &Location<'_>, _3: bool, _4: bool) -> PanicInfo<'_>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::panic_info::<library/core/src/panic/panic_info.rs::impl<'a> PanicInfo<'a>>::new(_1: &Arguments<'_>, _2: &Location<'_>, _3: bool, _4: bool) -> PanicInfo<'_>"
+    },
+    {
+      "function": "core::panic_nounwind_fmt(_1: Arguments<'_>, _2: bool) -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::panic_nounwind_fmt(_1: Arguments<'_>, _2: bool) -> !"
+    },
+    {
+      "function": "core::panic_nounwind_fmt::runtime(_1: Arguments<'_>, _2: bool) -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::panic_nounwind_fmt::runtime(_1: Arguments<'_>, _2: bool) -> !"
+    },
+    {
+      "function": "core::panicking::panic(_1: &str) -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::panicking::panic(_1: &str) -> !"
+    },
+    {
+      "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::panicking::panic_fmt(_1: Arguments<'_>) -> !"
+    },
+    {
+      "function": "core::poll::<library/core/src/task/poll.rs::impl<T, E, F: From<E>> ops::FromResidual<Result<convert::Infallible, E>>     for Poll<Option<Result<T, F>>>>::from_residual(_1: result::Result<Infallible, E>) -> Poll<Option<result::Result<T, F>>>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::poll::<library/core/src/task/poll.rs::impl<T, E, F: From<E>> ops::FromResidual<Result<convert::Infallible, E>>     for Poll<Option<Result<T, F>>>>::from_residual(_1: result::Result<Infallible, E>) -> Poll<Option<result::Result<T, F>>>"
+    },
+    {
+      "function": "core::poll::<library/core/src/task/poll.rs::impl<T, E, F: From<E>> ops::FromResidual<Result<convert::Infallible, E>> for Poll<Result<T, F>>>::from_residual(_1: result::Result<Infallible, E>) -> Poll<result::Result<T, F>>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::poll::<library/core/src/task/poll.rs::impl<T, E, F: From<E>> ops::FromResidual<Result<convert::Infallible, E>> for Poll<Result<T, F>>>::from_residual(_1: result::Result<Infallible, E>) -> Poll<result::Result<T, F>>"
+    },
+    {
+      "function": "core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::addr(_1: *const T) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::addr(_1: *const T) -> usize"
+    },
+    {
+      "function": "core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::cast(_1: *const T) -> *const U",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::cast(_1: *const T) -> *const U"
+    },
+    {
+      "function": "core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::is_null(_1: *const T) -> bool",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::is_null(_1: *const T) -> bool"
+    },
+    {
+      "function": "core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::is_null::runtime(_1: *const u8) -> bool",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::is_null::runtime(_1: *const u8) -> bool"
+    },
+    {
+      "function": "core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::read(_1: *const T) -> T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::read(_1: *const T) -> T"
+    },
+    {
+      "function": "core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::read_unaligned(_1: *const T) -> T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::read_unaligned(_1: *const T) -> T"
+    },
+    {
+      "function": "core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T> *const [T]>::get_unchecked(_1: *const [T], _2: I) -> *const <I as SliceIndex<[T]>>::Output",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T> *const [T]>::get_unchecked(_1: *const [T], _2: I) -> *const <I as SliceIndex<[T]>>::Output"
+    },
+    {
+      "function": "core::ptr::metadata::from_raw_parts(_1: *const impl Thin, _2: <T as ptr::metadata::Pointee>::Metadata) -> *const T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::metadata::from_raw_parts(_1: *const impl Thin, _2: <T as ptr::metadata::Pointee>::Metadata) -> *const T"
+    },
+    {
+      "function": "core::ptr::metadata::from_raw_parts_mut(_1: *mut impl Thin, _2: <T as ptr::metadata::Pointee>::Metadata) -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::metadata::from_raw_parts_mut(_1: *mut impl Thin, _2: <T as ptr::metadata::Pointee>::Metadata) -> *mut T"
+    },
+    {
+      "function": "core::ptr::metadata::metadata(_1: *const T) -> <T as ptr::metadata::Pointee>::Metadata",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::metadata::metadata(_1: *const T) -> <T as ptr::metadata::Pointee>::Metadata"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::add(_1: *mut T, _2: usize) -> *mut T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::add(_1: *mut T, _2: usize) -> *mut T"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::cast(_1: *mut T) -> *mut U",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::cast(_1: *mut T) -> *mut U"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::cast_const(_1: *mut T) -> *const T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::cast_const(_1: *mut T) -> *const T"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::is_null(_1: *mut T) -> bool",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::is_null(_1: *mut T) -> bool"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::read(_1: *mut T) -> T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::read(_1: *mut T) -> T"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::read_unaligned(_1: *mut T) -> T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::read_unaligned(_1: *mut T) -> T"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::with_metadata_of(_1: *mut T, _2: *const U) -> *mut U",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::with_metadata_of(_1: *mut T, _2: *const U) -> *mut U"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::wrapping_byte_add(_1: *mut T, _2: usize) -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::wrapping_byte_add(_1: *mut T, _2: usize) -> *mut T"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::write(_1: *mut T, _2: T) -> ()",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::write(_1: *mut T, _2: T) -> ()"
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T> *mut [T]>::get_unchecked_mut(_1: *mut [T], _2: I) -> *mut <I as SliceIndex<[T]>>::Output",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T> *mut [T]>::get_unchecked_mut(_1: *mut [T], _2: I) -> *mut <I as SliceIndex<[T]>>::Output"
+    },
+    {
+      "function": "core::ptr::null_mut() -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::null_mut() -> *mut T"
+    },
+    {
+      "function": "core::ptr::read(_1: *const T) -> T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::ptr::read(_1: *const T) -> T"
+    },
+    {
+      "function": "core::ptr::read_unaligned(_1: *const T) -> T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::ptr::read_unaligned(_1: *const T) -> T"
+    },
+    {
+      "function": "core::ptr::write(_1: *mut T, _2: T) -> ()",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::ptr::write(_1: *mut T, _2: T) -> ()"
+    },
+    {
+      "function": "core::range::iter::<library/core/src/range/iter.rs::impl<A: Step> IntoIterator for Range<A>>::into_iter(_1: range::Range<A>) -> RangeIter<A>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::range::iter::<library/core/src/range/iter.rs::impl<A: Step> IntoIterator for Range<A>>::into_iter(_1: range::Range<A>) -> RangeIter<A>"
+    },
+    {
+      "function": "core::result::<impl at library/core/src/result.rs:2167:1: 2167:43>::branch(_1: result::Result<T, E>) -> ControlFlow<result::Result<Infallible, E>, T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::result::<impl at library/core/src/result.rs:2167:1: 2167:43>::branch(_1: result::Result<T, E>) -> ControlFlow<result::Result<Infallible, E>, T>"
+    },
+    {
+      "function": "core::result::<library/core/src/result.rs::impl<T, E, F: [const] From<E>> const ops::FromResidual<Result<convert::Infallible, E>>     for Result<T, F>>::from_residual(_1: result::Result<Infallible, E>) -> result::Result<T, F>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::result::<library/core/src/result.rs::impl<T, E, F: [const] From<E>> const ops::FromResidual<Result<convert::Infallible, E>>     for Result<T, F>>::from_residual(_1: result::Result<Infallible, E>) -> result::Result<T, F>"
+    },
+    {
+      "function": "core::result::<library/core/src/result.rs::impl<T, E, F: [const] From<E>> const ops::FromResidual<ops::Yeet<E>> for Result<T, F>>::from_residual(_1: Yeet<E>) -> result::Result<T, F>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::result::<library/core/src/result.rs::impl<T, E, F: [const] From<E>> const ops::FromResidual<ops::Yeet<E>> for Result<T, F>>::from_residual(_1: Yeet<E>) -> result::Result<T, F>"
+    },
+    {
+      "function": "core::result::<library/core/src/result.rs::impl<T, E> Result<T, E>>::map_err(_1: result::Result<T, E>, _2: O) -> result::Result<T, F>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::result::<library/core/src/result.rs::impl<T, E> Result<T, E>>::map_err(_1: result::Result<T, E>, _2: O) -> result::Result<T, F>"
+    },
+    {
+      "function": "core::result::<library/core/src/result.rs::impl<T, E> const ops::Try for Result<T, E>>::branch(_1: result::Result<T, E>) -> ControlFlow<result::Result<Infallible, E>, T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::result::<library/core/src/result.rs::impl<T, E> const ops::Try for Result<T, E>>::branch(_1: result::Result<T, E>) -> ControlFlow<result::Result<Infallible, E>, T>"
+    },
+    {
+      "function": "core::rev::<library/core/src/iter/adapters/rev.rs::impl<T> Rev<T>>::new(_1: T) -> Rev<T>",
+      "source_class": "B",
+      "reference": "classification/functions.json.xz#core::rev::<library/core/src/iter/adapters/rev.rs::impl<T> Rev<T>>::new(_1: T) -> Rev<T>"
+    },
+    {
+      "function": "core::rt::<library/core/src/fmt/rt.rs::impl Argument<'_>>::new_debug(_1: &T) -> Argument<'_>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::rt::<library/core/src/fmt/rt.rs::impl Argument<'_>>::new_debug(_1: &T) -> Argument<'_>"
+    },
+    {
+      "function": "core::rt::<library/core/src/fmt/rt.rs::impl Argument<'_>>::new_display(_1: &T) -> Argument<'_>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::rt::<library/core/src/fmt/rt.rs::impl Argument<'_>>::new_display(_1: &T) -> Argument<'_>"
+    },
+    {
+      "function": "core::simd_cast_ptr(_1: T) -> U",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::simd_cast_ptr(_1: T) -> U"
+    },
+    {
+      "function": "core::simd_shuffle(_1: T, _2: T, _3: U) -> V",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::simd_shuffle(_1: T, _2: T, _3: U) -> V"
+    },
+    {
+      "function": "core::slice::<library/core/src/slice/mod.rs::impl<T> [T]>::iter(_1: &[T]) -> slice::iter::Iter<'_, T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::slice::<library/core/src/slice/mod.rs::impl<T> [T]>::iter(_1: &[T]) -> slice::iter::Iter<'_, T>"
+    },
+    {
+      "function": "core::slice::<library/core/src/slice/mod.rs::impl<T> [T]>::iter_mut(_1: &mut [T]) -> slice::iter::IterMut<'_, T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::slice::<library/core/src/slice/mod.rs::impl<T> [T]>::iter_mut(_1: &mut [T]) -> slice::iter::IterMut<'_, T>"
+    },
+    {
+      "function": "core::slice::<library/core/src/slice/mod.rs::impl<T> [T]>::len(_1: &[T]) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::slice::<library/core/src/slice/mod.rs::impl<T> [T]>::len(_1: &[T]) -> usize"
+    },
+    {
+      "function": "core::slice::iter::<library/core/src/slice/iter.rs::impl<'a, T> IntoIterator for &'a [T]>::into_iter(_1: &[T]) -> slice::iter::Iter<'_, T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::slice::iter::<library/core/src/slice/iter.rs::impl<'a, T> IntoIterator for &'a [T]>::into_iter(_1: &[T]) -> slice::iter::Iter<'_, T>"
+    },
+    {
+      "function": "core::slice::iter::<library/core/src/slice/iter.rs::impl<'a, T> Iter<'a, T>>::new(_1: &[T]) -> slice::iter::Iter<'_, T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::slice::iter::<library/core/src/slice/iter.rs::impl<'a, T> Iter<'a, T>>::new(_1: &[T]) -> slice::iter::Iter<'_, T>"
+    },
+    {
+      "function": "core::slice::iter::<library/core/src/slice/iter.rs::impl<'a, T> IterMut<'a, T>>::new(_1: &mut [T]) -> slice::iter::IterMut<'_, T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::slice::iter::<library/core/src/slice/iter.rs::impl<'a, T> IterMut<'a, T>>::new(_1: &mut [T]) -> slice::iter::IterMut<'_, T>"
+    },
+    {
+      "function": "core::splat_rt(_1: T) -> vector::Simd<T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::splat_rt(_1: T) -> vector::Simd<T, N>"
+    },
+    {
+      "function": "core::str::<library/core/src/str/mod.rs::impl str>::as_bytes(_1: &str) -> &[u8]",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::str::<library/core/src/str/mod.rs::impl str>::as_bytes(_1: &str) -> &[u8]"
+    },
+    {
+      "function": "core::str::<library/core/src/str/mod.rs::impl str>::as_ptr(_1: &str) -> *const u8",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::str::<library/core/src/str/mod.rs::impl str>::as_ptr(_1: &str) -> *const u8"
+    },
+    {
+      "function": "core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize"
+    },
+    {
+      "function": "core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize"
+    },
+    {
+      "function": "core::swizzle::Swizzle::swizzle(_1: vector::Simd<T, M>) -> vector::Simd<T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::swizzle::Swizzle::swizzle(_1: vector::Simd<T, M>) -> vector::Simd<T, N>"
+    },
+    {
+      "function": "core::transmute_copy(_1: &Src) -> Dst",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::transmute_copy(_1: &Src) -> Dst"
+    },
+    {
+      "function": "core::unique::<impl at library/core/src/ptr/unique.rs:194:1: 194:55>::from(_1: &mut T) -> Unique<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::unique::<impl at library/core/src/ptr/unique.rs:194:1: 194:55>::from(_1: &mut T) -> Unique<T>"
+    },
+    {
+      "function": "core::unique::<impl at library/core/src/ptr/unique.rs:206:1: 206:59>::from(_1: NonNull<T>) -> Unique<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::unique::<impl at library/core/src/ptr/unique.rs:206:1: 206:59>::from(_1: NonNull<T>) -> Unique<T>"
+    },
+    {
+      "function": "core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> Unique<T>>::as_non_null_ptr(_1: Unique<T>) -> NonNull<T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> Unique<T>>::as_non_null_ptr(_1: Unique<T>) -> NonNull<T>"
+    },
+    {
+      "function": "core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> Unique<T>>::cast(_1: Unique<T>) -> Unique<U>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> Unique<T>>::cast(_1: Unique<T>) -> Unique<U>"
+    },
+    {
+      "function": "core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> Unique<T>>::from_non_null(_1: NonNull<T>) -> Unique<T>",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> Unique<T>>::from_non_null(_1: NonNull<T>) -> Unique<T>"
+    },
+    {
+      "function": "core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> const From<&mut T> for Unique<T>>::from(_1: &mut T) -> Unique<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> const From<&mut T> for Unique<T>>::from(_1: &mut T) -> Unique<T>"
+    },
+    {
+      "function": "core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> const From<NonNull<T>> for Unique<T>>::from(_1: NonNull<T>) -> Unique<T>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> const From<NonNull<T>> for Unique<T>>::from(_1: NonNull<T>) -> Unique<T>"
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> From<[T; N]> for Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::from(_1: [T; N]) -> vector::Simd<T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> From<[T; N]> for Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::from(_1: [T; N]) -> vector::Simd<T, N>"
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::from_array(_1: [T; N]) -> vector::Simd<T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::from_array(_1: [T; N]) -> vector::Simd<T, N>"
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::load(_1: *const [T; N]) -> vector::Simd<T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::load(_1: *const [T; N]) -> vector::Simd<T, N>"
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::splat(_1: T) -> vector::Simd<T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::splat(_1: T) -> vector::Simd<T, N>"
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     T: SimdElement,>::splat(_1: T) -> vector::Simd<T, N>",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     T: SimdElement,>::splat(_1: T) -> vector::Simd<T, N>"
+    },
+    {
+      "function": "core::without_provenance(_1: usize) -> *const T",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#core::without_provenance(_1: usize) -> *const T"
+    },
+    {
+      "function": "core::without_provenance_mut(_1: usize) -> *mut T",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#core::without_provenance_mut(_1: usize) -> *mut T"
+    },
+    {
+      "function": "std::__rust_alloc_error_handler(_1: usize, _2: usize) -> !",
+      "source_class": "D",
+      "reference": "classification/functions.json.xz#std::__rust_alloc_error_handler(_1: usize, _2: usize) -> !"
+    },
+    {
+      "function": "std::rust_oom(_1: core::alloc::Layout) -> !",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#std::rust_oom(_1: core::alloc::Layout) -> !"
+    },
+    {
+      "function": "std::rust_oom::{closure#0}(_1: {closure@library/std/src/alloc.rs:424:55: 424:57}) -> !",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#std::rust_oom::{closure#0}(_1: {closure@library/std/src/alloc.rs:424:55: 424:57}) -> !"
+    },
+    {
+      "function": "std::select::<library/std/src/sync/mpmc/select.rs::impl From<usize> for Selected>::from(_1: usize) -> Selected",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#std::select::<library/std/src/sync/mpmc/select.rs::impl From<usize> for Selected>::from(_1: usize) -> Selected"
+    },
+    {
+      "function": "std::select::<library/std/src/sync/mpmc/select.rs::impl Into<usize> for Selected>::into(_1: Selected) -> usize",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#std::select::<library/std/src/sync/mpmc/select.rs::impl Into<usize> for Selected>::into(_1: Selected) -> usize"
+    },
+    {
+      "function": "std::sys::process::unix::unix::<library/std/src/sys/process/unix/unix.rs::impl Into<ExitStatus> for ExitStatusError>::into(_1: sys::process::unix::unix::ExitStatusError) -> sys::process::unix::unix::ExitStatus",
+      "source_class": "A-function",
+      "reference": "classification/functions.json.xz#std::sys::process::unix::unix::<library/std/src/sys/process/unix/unix.rs::impl Into<ExitStatus> for ExitStatusError>::into(_1: sys::process::unix::unix::ExitStatusError) -> sys::process::unix::unix::ExitStatus"
+    }
+  ],
+  "additional_consumed_byte_sources": [],
+  "consumed_byte_scope": null,
+  "structural_rerun": {
+    "status": "SOURCE GUARD DISAGREEMENT; ORIGINAL CHECKER UNRECOVERED",
+    "source_guard": {
+      "row": "V239",
+      "checks": [
+        {
+          "function": "alloc::layout_array(_1: usize, _2: core::alloc::Layout) -> Result<core::alloc::Layout, TryReserveError>",
+          "source_class": "B",
+          "source": {
+            "evidence": {
+              "key": "evidence/library/alloc/src/raw_vec/mod.rs",
+              "line": 896,
+              "end_line": 902,
+              "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+              "body_sha256": "bac77e32e3eb176e28d5aa190254a1c9b8f9de15abf00e8fe6fbb7425e6904c4",
+              "item_sha256": "98ae491be74260d217e57212fe54cb715511f48ca2a08b32daeff2fe51be2fc5",
+              "attrs": [
+                "#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]",
+                "#[inline]"
+              ]
+            },
+            "deployed": {
+              "key": "deployed/library/alloc/src/raw_vec/mod.rs",
+              "line": 867,
+              "end_line": 873,
+              "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+              "body_sha256": "40856525f69b7cfcfeca477adfa9a84b8ca87ec9fc63f70248f5c1f71d782739",
+              "item_sha256": "7edb89265f1727c9e280a1284e39036921f6ade9a21ea27e921a8bd7a3aa5748",
+              "attrs": [
+                "#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]",
+                "#[inline]"
+              ]
+            }
+          },
+          "evidence_item": "const fn layout_array(cap: usize, elem_layout: Layout) -> Result<Layout, TryReserveError> {\n    // This is only used with `elem_layout`s which are those of real rust types,\n    // which lets us use the much-simpler `repeat_packed`.\n    debug_assert!(elem_layout.size() == elem_layout.pad_to_align().size());\n\n    elem_layout.repeat_packed(cap).map_err(const |_| CapacityOverflow.into())\n}",
+          "deployed_item": "const fn layout_array(cap: usize, elem_layout: Layout) -> Result<Layout, TryReserveError> {\n    // FIXME(const-hack) return to using `map` and `map_err` once `const_closures` is implemented\n    match elem_layout.repeat(cap) {\n        Ok((layout, _pad)) => Ok(layout),\n        Err(_) => Err(CapacityOverflow.into()),\n    }\n}",
+          "status": "SOURCE GATE DISAGREEMENT"
+        }
+      ],
+      "status": "SOURCE GATE DISAGREEMENT",
+      "original_checker_recovered": false,
+      "gate": "First fail-closed source-association guard of the requested structural transfer: complete old pinned reached-source item must still match before applying its historical law.",
+      "meaning": "Reject source-law transfer and stop this row. Not a demonstrated output/semantic/privacy failure; not a new full structural equivalence proof."
+    },
+    "source_guard_scope": "classify-closure-guards",
+    "root_pin_preflight": "classify-root-gates/results.json in classification/captures.json.xz",
+    "scope": "Only source-association preflight replayed; do not call this a complete native/reference structural law.",
+    "reason": "Historical link was an extraction/Kani/manual source argument, or its full executable structural/check provenance was not recovered and rebound. The source hashes and finite native results do not discharge this gap."
+  },
+  "native_rerun": [
+    {
+      "scope": "classify-project-multilinear",
+      "receipt": "classify-project-multilinear/receipt.json",
+      "exit": 0,
+      "classification": "finite same-input native differential; no unbounded/native-machine credit"
+    }
+  ],
+  "replay_complete": false,
+  "replay_attempt_recorded": true,
+  "stopped_for_row": true,
+  "stop_reason": "Complete old reached-source item differs on deployed source; fail-closed source guard rejected before applying historical law. The standalone original structural checker remains unrecovered.",
+  "residuals": [
+    "131 unresolved conservative-MIR edges retained",
+    "At least one matched changed function has unresolved source attribution"
+  ],
+  "original_unresolved_ref": "reached-audit.json.xz#V239"
+}
