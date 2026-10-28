@@ -46,3 +46,10 @@ matching root, original positive input/amount/change, and no cached payload
 mutation. It calls the actual outer withdrawal compiler and snapshot codec.
 This is investigation of requirements1–2, not native RunJoin/refinement work
 under requirement4. No outcome has yet been observed.
+
+Retained resource failure38162: direct reuse of pair_valid for a first-
+commitment update caused kernel memory exhaustion at ZeroRecipient28.valid
+(peak7,340,810,240bytes). Replacement: first prove PairValidity28.replace_first
+with symbolic PairLeaf fields, then instantiate it. The first commitment is
+irrelevant to occupancy validity. No concrete hash is normalized, no cap is
+raised, and the failed source is not rerun unchanged.

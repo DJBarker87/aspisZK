@@ -1,4 +1,4 @@
-import R1Z.PV_RunJoin_FixtureRecords
+import R1Z.PV_RunJoin_PairValidity28
 import R1Z.PV_RunJoin_TransferSentinel
 set_option autoImplicit false
 noncomputable section
@@ -19,7 +19,9 @@ def base : Public M := { PV_RunJoin_FixtureRecords.base false with
 def statement : Public M := attachAppend base
   (nodeCompress (noteCommitment (digest 300) 0 77 (digest 400)) base.change)
 
-theorem valid : pair.Valid := pair_valid
+theorem valid : pair.Valid :=
+  PV_RunJoin_PairValidity28.replace_first PV_RunJoin_FixtureRecords.pair
+    (noteCommitment (ownerKey (digest 10)) 400 77 (digest 100)) pair_valid
 #print axioms valid
 
 theorem input_relation : InputWitnessCore.Relation statement witness.inputValue.val
