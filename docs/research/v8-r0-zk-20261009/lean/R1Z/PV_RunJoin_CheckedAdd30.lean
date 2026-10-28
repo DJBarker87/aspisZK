@@ -25,9 +25,30 @@ theorem option_ne_false (a b : Option U32) :
 theorem value (a b c : U32) (h : U32.checked_add a b = some c) :
     a.val+b.val=c.val := by
   unfold U32.checked_add core.num.checked_add_UScalar at h
-  split at h
-  · cases h
-    rfl
-  · cases h
+  generalize he : (a+b : Result U32) = r at h
+  cases r with
+  | ok z =>
+    change some z = some c at h
+    cases Option.some.inj h
+    have hv := UScalar.add_equiv a b
+    rw [he] at hv
+    exact hv.2.1.symm
+  | fail e => change none = some c at h; cases h
+  | div => change none = some c at h; cases h
 #print axioms value
+
+theorem iff_value (a b c : U32) : U32.checked_add a b = some c ↔ a.val+b.val=c.val := by
+  constructor
+  · exact value a b c
+  · intro he
+    obtain ⟨z,hz,hv⟩ : ∃ z : U32, (a+b : Result U32)=ok z ∧ z.val=a.val+b.val := by
+      apply WP.spec_imp_exists
+      apply UScalar.add_spec
+      rw [he]
+      scalar_tac
+    have hez : z=c := UScalar.eq_of_val_eq (hv.trans he)
+    unfold U32.checked_add core.num.checked_add_UScalar
+    rw [hz,hez]
+    rfl
+#print axioms iff_value
 end R1Z.PV_RunJoin_CheckedAdd30

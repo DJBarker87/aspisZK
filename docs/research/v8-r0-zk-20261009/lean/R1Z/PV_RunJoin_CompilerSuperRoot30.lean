@@ -1,4 +1,4 @@
-import R1Z.PV_RunJoin_SuperRootScan30
+import R1Z.PV_RunJoin_SuperRootCall30
 import R1Z.PV_Src_CompilerTactic
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_CompilerSuperRoot30
@@ -19,7 +19,7 @@ theorem canonical [ExternalLinear] [Records]
   cases pr <;> unfold pair_forest_trace.compile_forest_from_copies at h
   all_goals
     repeat' first
-      | exact PV_RunJoin_SuperRootScan30.scan_false input.super_root_siblings _ (by assumption)
+      | (apply PV_RunJoin_SuperRootCall30.checked input.super_root_siblings <;> assumption)
       | (pv_peel h with value hvalue)
       | exact False.elim (PV_Src_ResultControl.error_ne_ok _ _ h)
       | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
