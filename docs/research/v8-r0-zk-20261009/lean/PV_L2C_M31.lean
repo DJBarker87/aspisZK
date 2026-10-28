@@ -59,4 +59,55 @@ theorem add_decode (x y : word) (hx : canonical x) (hy : canonical y) :
     rw [Nat.cast_sub h,Nat.cast_add,ZMod.natCast_self,sub_zero]
   · exact Nat.cast_add _ _
 #print axioms add_decode
+theorem subtractP_decode (x : word) : decode (subtractP x)=decode x := by
+  unfold decode
+  rw [subtractP_nat]
+  split
+  · rename_i h
+    rw [Nat.cast_sub h,ZMod.natCast_self,sub_zero]
+  · rfl
+#print axioms subtractP_decode
+
+theorem sub_input_nat (x y : word) (hx : canonical x) (hy : canonical y) :
+    (x + BitVec.ofNat 32 p - y).toNat=x.toNat+p-y.toNat := by
+  have hs : (x + BitVec.ofNat 32 p).toNat=x.toNat+p := by
+    rw [BitVec.toNat_add]
+    simp only [BitVec.toNat_ofNat]
+    unfold canonical p at hx
+    omega
+  rw [BitVec.toNat_sub,hs]
+  unfold canonical p at hx hy
+  omega
+#print axioms sub_input_nat
+
+theorem sub_canonical (x y : word) (hx : canonical x) (hy : canonical y) :
+    canonical (sub x y) := by
+  apply subtractP_canonical
+  rw [sub_input_nat x y hx hy]
+  unfold canonical at hx hy
+  omega
+#print axioms sub_canonical
+
+theorem sub_decode (x y : word) (hx : canonical x) (hy : canonical y) :
+    decode (sub x y)=decode x-decode y := by
+  unfold sub
+  rw [subtractP_decode]
+  unfold decode
+  rw [sub_input_nat x y hx hy]
+  have hle : y.toNat≤x.toNat+p := by unfold canonical at hy; omega
+  rw [Nat.cast_sub hle,Nat.cast_add,ZMod.natCast_self,add_zero]
+#print axioms sub_decode
+
+theorem decode_injective (x y : word) (hx : canonical x) (hy : canonical y)
+    (h : decode x=decode y) : x=y := by
+  apply BitVec.eq_of_toNat_eq
+  have hv := congrArg ZMod.val h
+  simpa only [decode,ZMod.val_natCast_of_lt hx,ZMod.val_natCast_of_lt hy] using hv
+#print axioms decode_injective
+
+theorem zero_guard (x : word) (hx : canonical x) (hzero : decode x=0) :
+    decide (x≠0)=false := by
+  have h : x=0 := decode_injective x 0 hx (by unfold canonical p; decide) hzero
+  simp [h]
+#print axioms zero_guard
 end PV_L2C_M31

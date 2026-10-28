@@ -56,4 +56,13 @@ theorem balanced_sum {n : Nat} (active : Fin n → Bool) (d : Fin n)
         simp
   rw [hsum,neg_add_cancel]
 #print axioms balanced_sum
+/-- The two rejection predicates are both false for every successfully sampled
+and balanced padding. No assumption is made about the random values. -/
+theorem padding_guards {n : Nat} (active : Fin n → Bool) (d : Fin n)
+    (random : Fin n → A) (hd : active d=false) :
+    (∀ i, active i=true → balanced active d (sampled active d random) i=0) ∧
+      inactiveSum active (balanced active d (sampled active d random))=0 :=
+  ⟨fun i hi => balanced_active active d random hd i hi,
+    balanced_sum active d _ hd⟩
+#print axioms padding_guards
 end PV_L2C_PaddingProducer
