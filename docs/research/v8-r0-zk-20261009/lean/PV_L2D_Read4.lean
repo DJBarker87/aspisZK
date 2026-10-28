@@ -27,7 +27,6 @@ theorem conversion_bytes (block : Bytes) (word : Fin 8) : slice block word=array
       array,offset] at *
     congr 1
     apply Fin.ext
-    omega
 #print axioms conversion_bytes
 
 /-- Both source forms pass exactly the same four bytes to from_le_bytes;
