@@ -1,0 +1,91 @@
+{
+  "attempt": "NDD_K027",
+  "kind": "kani",
+  "module": "multiproof::NDD_multiproof::bits_contract",
+  "sources": [
+    "NDD_gate.py",
+    "NDD_SOURCE_PINS.json",
+    "NDD_src/Cargo.lock",
+    "NDD_src/crates/aspis-core/src/field.rs",
+    "NDD_src/crates/aspis-core/src/field/NDD_field.rs",
+    "NDD_src/crates/aspis-r1-cost-probe/src/multiproof.rs",
+    "NDD_src/crates/aspis-r1-cost-probe/src/NDD_multiproof.rs",
+    "NDD_src/crates/aspis-r1-cost-probe/src/weights.rs",
+    "NDD_src/crates/aspis-r1-cost-probe/src/NDD_weights.rs"
+  ],
+  "command": [
+    "python3",
+    "NDD_gate.py",
+    "NDD_K027.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "multiproof::NDD_multiproof::bits_contract",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg NDD_bits",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_objects:/home/dombarker/project-offloads/codex-cx-front1-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects"
+  },
+  "timeout": 180,
+  "source_revision": "a68bbd57c0b7007b0313a79b7aae8467d2d68b3d",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "source_pinset": "NDD_SOURCE.json",
+    "library_pinset": "NDD_SOURCE.json:library"
+  },
+  "expected_time": "optimized compile then one contract/shape proof; no field multiplication",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "exit_status": 0,
+  "wall_seconds": 2.1599061149172485,
+  "peak_rss_kib": "213748",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r6d4a054f4942478dbe623c639b44498e.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "199954432",
+  "source_hashes": {
+    "NDD_gate.py": "22cc576f43b6de2d90bd235fa88d4fba0013c53cdd3bd3927223f5f93699d976",
+    "NDD_SOURCE_PINS.json": "04e02ec7f03beffba4c54ce8bc124d72dfbb8f4b26ead723990842522207f085",
+    "NDD_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NDD_src/crates/aspis-core/src/field.rs": "911f342cb685fe29aab05b7efddde7f218df9ec07dc72475d9789f88279fb6aa",
+    "NDD_src/crates/aspis-core/src/field/NDD_field.rs": "c92e88a967e4f5e210be5f662e06a2d01b306120e541e2043b1963996d45783e",
+    "NDD_src/crates/aspis-r1-cost-probe/src/multiproof.rs": "fcc1bfb75bf1009ccf3d23efe6de476a057b6d453780219a57fe3e863b54747e",
+    "NDD_src/crates/aspis-r1-cost-probe/src/NDD_multiproof.rs": "c990f64388c44709e326c600b64bd26b38df81bb751f4a29188a377979d46420",
+    "NDD_src/crates/aspis-r1-cost-probe/src/weights.rs": "9377be1a0343fb7eb9df9fb10f57fdde0522355609446de36d4b4b8b53065292",
+    "NDD_src/crates/aspis-r1-cost-probe/src/NDD_weights.rs": "1d4e36b96b1fbb9f5496db95feb4488b9d25059be37d933abdb7f21f0a3c2fc9"
+  },
+  "print_axioms": "N/A: kani"
+}

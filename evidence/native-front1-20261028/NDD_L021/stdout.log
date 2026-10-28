@@ -1,0 +1,25 @@
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Array T N → Aeneas.Std.Array U N → Aeneas.Std.Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Aeneas.Std.Result.ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else Aeneas.Std.Result.ok false
+def FIo_Native.transport.Variant.Insts.CoreCmpPartialEqVariant.eq : FIo_Native.transport.Variant →
+  FIo_Native.transport.Variant → Aeneas.Std.Result Bool :=
+fun self other =>
+  have self1 := self.read_discriminant;
+  have other1 := other.read_discriminant;
+  Aeneas.Std.Result.ok (decide (self1 = other1))
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → Aeneas.Std.Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some x => Aeneas.Std.Result.ok x

@@ -1,0 +1,38 @@
+NDD_generated/NDD_SelectorModel.lean:15:74: error: unsolved goals
+T : Type
+decode : Slice U8 → Result (Option T)
+bytes : Slice U8
+i lo next hi : Usize
+selected : Slice U8
+value : T
+hlo : i * 32#usize = ok lo
+hn : i + 1#usize = ok next
+hhi : next * 32#usize = ok hi
+hs :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := lo, «end» := hi } =
+    ok selected
+hd : decode selected = ok (some value)
+⊢ (do
+      let s ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := lo, «end» := hi } bytes
+      let o ← decode s
+      match o with
+        | some x => ok x
+        | none => fail Error.panic) =
+    ok value
+NDD_generated/NDD_SelectorModel.lean:16:60: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1WeightsFieldCurrent.weights.field, ̲hlo, ̲hn, ̲hhi, ̲hs̵,̵h̵d,
+  ̵  ̵ ̵ ̵core.option.Option.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDD_generated/NDD_SelectorModel.lean:16:63: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1WeightsFieldCurrent.weights.field, ̲hlo, ̲hn, ̲hhi, ̲hs,h̵d̵,̵
+  ̵  ̵ ̵ ̵core.option.Option.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDD_SelectorModel.field_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

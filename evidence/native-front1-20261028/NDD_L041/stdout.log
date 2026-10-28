@@ -1,0 +1,51 @@
+NDD_generated/NDD_PackComposition.lean:32:71: error: unsolved goals
+values : Slice field.QM31
+⊢ (do
+      massert (values.len ≤ 4#usize)
+      let x ←
+        core.array.Array.index_mut
+            (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice field.QM31))
+            (Array.repeat 4#usize field.QM31.ZERO) { «end» := values.len }
+      let q ←
+        let (s, index_mut_back) := x
+          do
+          let s1 ← core.slice.Slice.copy_from_slice field.QM31.Insts.CoreMarkerCopy s values
+          let v0 ← (index_mut_back s1).index_usize 0#usize
+          let v1 ← (index_mut_back s1).index_usize 1#usize
+          let v2 ← (index_mut_back s1).index_usize 2#usize
+          let v3 ← (index_mut_back s1).index_usize 3#usize
+          tail v0 v1 v2 v3
+      ok (words q)) =
+    do
+    massert (values.len ≤ 4#usize)
+    let x ←
+      core.array.Array.index_mut
+          (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice field.QM31))
+          (Array.repeat 4#usize field.QM31.ZERO) { «end» := values.len }
+    let (v0, v1, v2, v3) ←
+      let (s, index_mut_back) := x
+        do
+        let s1 ← core.slice.Slice.copy_from_slice field.QM31.Insts.CoreMarkerCopy s values
+        let v0 ← (index_mut_back s1).index_usize 0#usize
+        let v1 ← (index_mut_back s1).index_usize 1#usize
+        let v2 ← (index_mut_back s1).index_usize 2#usize
+        let v3 ← (index_mut_back s1).index_usize 3#usize
+        ok (v0, v1, v2, v3)
+    NDD_Reference.pack_ref (Array.make 4#usize [words v0, words v1, words v2, words v3] ⋯)
+NDD_generated/NDD_PackComposition.lean:34:38: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵a̵d̵d̵i̵n̵g̵C̵u̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵←̵[̲p̲a̲d̲d̲i̲n̲g̲C̲u̲t̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲←̲ reference_tail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDD_generated/NDD_PackComposition.lean:34:49: warning: This simp argument is unused:
+  ← reference_tail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵a̵d̵d̵i̵n̵g̵C̵u̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵←̵ ̵r̵e̵f̵e̵r̵e̵n̵c̵e̵_̵t̵a̵i̵l̵]̵[̲p̲a̲d̲d̲i̲n̲g̲C̲u̲t̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDD_PackComposition.source_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

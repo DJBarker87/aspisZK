@@ -1,0 +1,83 @@
+{
+  "attempt": "NDD_K038",
+  "kind": "kani",
+  "module": "field::NDD_field::pack_contract",
+  "sources": [
+    "NDD_gate.py",
+    "NDD_SOURCE_PINS.json",
+    "NDD_src/Cargo.lock",
+    "NDD_src/crates/aspis-core/src/field.rs",
+    "NDD_src/crates/aspis-core/src/field/NDD_field.rs"
+  ],
+  "command": [
+    "python3",
+    "NDD_gate.py",
+    "NDD_K038.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_target",
+    "--features",
+    "r0",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "field::NDD_field::pack_contract",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg NDD_negative_pack",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_objects:/home/dombarker/project-offloads/codex-cx-front1-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects"
+  },
+  "timeout": 180,
+  "source_revision": "a68bbd57c0b7007b0313a79b7aae8467d2d68b3d",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "source_pinset": "NDD_SOURCE.json",
+    "library_pinset": "NDD_SOURCE.json:library"
+  },
+  "expected_time": "optimized compile then one contract/shape proof; no field multiplication",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "exit_status": 1,
+  "wall_seconds": 95.639795813011,
+  "peak_rss_kib": "636640",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rd80827127b4b443dbaa47966997dea32.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "787996672",
+  "source_hashes": {
+    "NDD_gate.py": "22cc576f43b6de2d90bd235fa88d4fba0013c53cdd3bd3927223f5f93699d976",
+    "NDD_SOURCE_PINS.json": "bfe63d2cc6839b10799d80651e63393de9038582191dbbb6135a917956e695fa",
+    "NDD_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NDD_src/crates/aspis-core/src/field.rs": "60eb182acfe28c1950a6facf249e2e00931d65dbf8562a92f4c020c635f6912c",
+    "NDD_src/crates/aspis-core/src/field/NDD_field.rs": "17e92a80b7f47acd65eb01791e9263d829d5422f2af1ca68f9ab16186427b040"
+  },
+  "print_axioms": "N/A: kani"
+}

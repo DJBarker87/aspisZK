@@ -1,0 +1,47 @@
+{"attempt": "NDD_K023", "exit_status": 1, "wall_seconds": 4.778625235077925, "peak_rss_kib": "506164", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_src/crates/aspis-core/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_src/crates/aspis-core/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front1-20261028/NDD_src/crates/aspis-core/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 1.92s
+Checking harness field::NDD_field::qneg_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 178 failed (1 unreachable)
+Failed Checks: |r|
+NDD_field::verdict_qneg(NDD_field::limbs(*r) ==
+NDD_field::reference::qm31_neg_ref(NDD_field::limbs(self)))
+ File: "crates/aspis-core/src/field.rs", line 927, in field::QM31::neg::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.5122012s
+
+Manual Harness Summary:
+Verification failed for - field::NDD_field::qneg_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-reb17dc76646e4ace81bb5748ebee11cd.scope; invocation ID: d1b3fddd7a1f40388ab22732a2d96472
