@@ -70,6 +70,10 @@ def bufferKind (base : ExternalTypes) (ops : @ExternalFuns (Types base)) (T : Ty
       (dispatch (updater base uc) (ops.op216 bk uc less nz))
       (ops.op216 bk uc less nz)}
 
+theorem retained_kind (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
+    @block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) (selected base ops)=
+      @block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) ops := rfl
+
 theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     {T N1 O : Type}
     (uc : @digest.core_api.UpdateCore (Types base) T N1 (Storage U8 6))
@@ -97,5 +101,6 @@ theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base)
 #print axioms native_kind
 #print axioms bufferKind
 #print axioms selected
+#print axioms retained_kind
 #print axioms selected_native
 end R1Z.PV_DL_UpdateSelected
