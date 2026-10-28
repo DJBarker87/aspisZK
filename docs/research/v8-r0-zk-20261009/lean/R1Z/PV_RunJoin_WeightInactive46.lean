@@ -36,8 +36,10 @@ theorem complete (w : W) (hs : w.variant=.S2) (j : Usize) :
       | div => simp only [hb,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_div]
       | ok b =>
         simp only [hb,lift,bind_tc_ok]
-        split <;> simp only [mapResult,PV_B2_E_OrdinaryOriginal.mapResult,PV_RunJoin_WeightQuartic46.one,
-          PV_RunJoin_WeightQuartic46.zero]
+        by_cases hc : (U16.wrapping_shr m (UScalar.cast .U32 b) &&& 1#u16)=0#u16
+        all_goals simp only [hc,decide_true,decide_false,if_true,if_false,
+          Bool.false_eq_true,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,
+          PV_RunJoin_WeightQuartic46.one,PV_RunJoin_WeightQuartic46.zero]
 #print axioms masks
 #print axioms complete
 end R1Z.PV_RunJoin_WeightInactive46
