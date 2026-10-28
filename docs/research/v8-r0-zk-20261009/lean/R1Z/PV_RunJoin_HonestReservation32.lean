@@ -13,7 +13,7 @@ variable (base : ExternalTypes) (a b : Honest (K := K))
     (pool : a.val.snapshot.pool=b.val.snapshot.pool)
     (domain : a.val.snapshot.deployment_domain=b.val.snapshot.deployment_domain)
 
-include same header pool domain
+include base same header pool domain
 
 theorem full_public : PV_Src_NativeInput.publicInput a.val=PV_Src_NativeInput.publicInput b.val := by
   have h := congrArg (PV_RunJoin_NativePublicInverse32.unPublic base)
