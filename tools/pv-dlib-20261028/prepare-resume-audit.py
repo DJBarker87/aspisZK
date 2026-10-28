@@ -40,6 +40,7 @@ theorem sha (compress : PV_DL_ShaFinal.State → List U8 → Result PV_DL_ShaFin
   PV_DL_ShaFinal.source_reference compress core buffer pos h
 ''']
 lines+=['#print axioms '+r['closing_theorem'] for r in closed]
+if 'R1Z/PV_DL_NativeCohort' in passed:lines+=['#print axioms R1Z.PV_DL_NativeCohort.slots']
 lines+=['#print axioms encoder','#print axioms vector','#print axioms sha','end R1Z.PV_DL_ResumeReplay']
 (root/'R1Z/PV_DL_ResumeReplay.lean').write_text('\n'.join(lines)+'\n')
 (E/'resume-audit-roots.json').write_text(json.dumps(dict(imports=imports,checked_declarations=checks,rows_replayed=[r['row'] for r in closed],open_rows=[r['row'] for r in rows if not r['residual_removed']],scope='green current-source matches only; no uncompiled draft and no finite test promoted to theorem'),indent=2)+'\n')
