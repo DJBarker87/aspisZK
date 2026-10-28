@@ -33,7 +33,7 @@ theorem complete {S F : Type} (step : Request → S → Option Nat × S)
   · subst n
     simp only [deployed,reference,native,growExact,empty,List.length_nil,
       Nat.zero_mul,Nat.zero_add,Nat.sub_self,gt_iff_lt,Nat.not_lt_zero,
-      hz,ite_false,ite_true]
+      ite_false,ite_true]
   · have hn : 0<n := by omega
     simp only [deployed,reference,native,growExact,empty,List.length_nil,
       Nat.zero_add,Nat.sub_self,byte_width,Nat.mul_one,hn,hz,
