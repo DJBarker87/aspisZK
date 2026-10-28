@@ -11,7 +11,7 @@ theorem length {A : Type} {n : Nat} (hn : n≤Usize.max) (f : Fin n → A) :
 #print axioms length
 
 theorem active_read (f : Fin 1024 → Bool) (r : Usize) (hr : r.val<1024) :
-    Aeneas.Std.Array.index_usize (active f) r=ok (f ⟨r.val,hr⟩) := by
+    Aeneas.Std.Array.index_usize (active (n:=1024#usize) f) r=ok (f ⟨r.val,hr⟩) := by
   have hr' : r.val<(1024#usize).val := by scalar_tac
   exact read_active (n:=1024#usize) f r hr'
 #print axioms active_read
