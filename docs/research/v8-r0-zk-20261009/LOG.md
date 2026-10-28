@@ -13951,3 +13951,18 @@ on the compiler-cohort boundary already with the owner (D381/D386) and differing
 separate 1.94.1 law (the re-verification jobs' method); Kani and native differentials stay on 1.94.1.
 b3p6f (its unspent 100 attempts; IDs 42000-42099) takes V244 first under (x'), then V241 and V245.
 Rows removed outright: 0. Privacy target not yet established.
+
+## D391 (Stream B) 2026-10-28 18:16 UTC: runjoin39 result; Stream B env-J ID ranges exhausted, 60000-69999 requested from Stream A
+
+runjoin39 (100 attempts; three final audits with standard axioms; no Kani; no source change) proves
+complete source interpolation, the sample-to-polynomial payload composition, round threading,
+wide-cell serialization and the construction of the initialised prover effect runtime, and states the
+op227 continuation bridge conditionally without claiming the semantic-oracle closure. Still open: both
+complete ROMView decoders, native helper-effect associations, complete commitments and openings and
+published-proof serialization, and the RustRealRefinement composition; V038, V045, V163, V165, V167
+and V244 remain. Branch pushed (dd676046f3).
+
+A fresh scan finds no unused 100-block left in Stream B's ranges (35000-44999, 50000-54999) apart from
+52xxx, which is excluded after earlier cross-job reuse; 28000-29999 stays reserved for the final
+replay. The lead asked Stream A to agree that Stream B uses 60000-69999 under the same rules; the next
+runjoin run waits for that agreement. Rows removed outright: 0. Privacy target not yet established.
