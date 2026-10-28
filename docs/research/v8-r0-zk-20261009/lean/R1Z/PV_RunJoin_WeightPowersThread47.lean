@@ -25,6 +25,7 @@ theorem more {N : Usize} (x p : E) (out : Array E N) (i : Usize)
   apply PV_B2_C_PowersTotal.step
   simp only [prover_powers.powers_loop.body,if_pos hi,Array.index_mut_usize,
     hr,bind_tc_ok,lift,if_pos hm,PV_B2_C_251WideTotal.WideExact_mul]
+  rfl
 #print axioms more
 
 theorem last {N : Usize} (x p : E) (out : Array E N) (i : Usize)
@@ -35,6 +36,7 @@ theorem last {N : Usize} (x p : E) (out : Array E N) (i : Usize)
       ok (.cont (Aeneas.Std.Array.set out i p,p,Usize.wrapping_add i 1#usize)) := by
     simp only [prover_powers.powers_loop.body,if_pos hi,Array.index_mut_usize,
       hr,bind_tc_ok,lift,if_neg hm]
+    rfl
   rw [PV_B2_C_PowersTotal.step x out _ p p i hb]
   exact PV_B2_C_PowersTotal.done x _ p _ hm
 #print axioms last
