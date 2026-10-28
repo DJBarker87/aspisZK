@@ -9,6 +9,9 @@ def complexBytes (x y : U32) : Array U8 8#usize :=
     have hx := (core.num.U32.to_le_bytes x).property
     have hy := (core.num.U32.to_le_bytes y).property
     simp only [PV_L2C_ParserSlices.pair,List.length_append]
+    change (core.num.U32.to_le_bytes x).val.length+(core.num.U32.to_le_bytes y).val.length=8
+    have hx' : (core.num.U32.to_le_bytes x).val.length=4 := hx
+    have hy' : (core.num.U32.to_le_bytes y).val.length=4 := hy
     omega⟩
 
 theorem complex_parse (x y : U32) (hx : x.val<2147483647) (hy : y.val<2147483647) :
@@ -31,6 +34,6 @@ theorem parse (a b c d : U32) (ha : a.val<2147483647) (hb : b.val<2147483647)
     core.option.Option.Insts.CoreOpsTry_traitTry.branch]
   rw [PV_L2C_ParserHalves8.right]
   simp only [bind_tc_ok,complex_parse c d hc hd]
-  rfl
+
 #print axioms parse
 end PV_L2C_QParser
