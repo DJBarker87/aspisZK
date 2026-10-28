@@ -77,3 +77,63 @@ exact dirty-source SHA in receipt. Seven roots standard axioms only.
 Budget used11/50 Lean,0 Kani. Next: audit the remaining slots against the
 requested arithmetic lane results and retain explicit counterexamples to any
 universal primitive closure claim before final handoff.
+
+# Stage 4 — independent power row and obstruction audit
+
+All assigned members were attempted; unconditional closure remains unestablished.
+`domain_iff` proves the complete WriterDomain on this prefix equivalent to the
+three residual field groups. `leaf_of_primitives` gives the unchanged leaf with
+no output-field hypotheses, but explicitly retains the two actual-primitive
+laws. This alternative is conditional and must never be reported as discharge
+of those laws. L017 passes the final primary module: exit0,3.481995595s,
+RSS5414984KiB,swap0; all nine roots have only standard axioms.
+
+`NDA_PowerDomain.on_prefix` isolates power independently of rhs/line/geometry
+arithmetic: only canonicality preservation of op9 and the already-proved rho
+are required. Its `of_binding` uses NBO_FieldSemantics.power_total on the actual
+primitive's canonical operands. L014 rejected inference draft, L015 passes:
+exit0,2.486060789s,RSS5377492KiB,swap0.
+`NDA_LaneDomains.of_bindings` transports the existing NBO NBC_Bindings to three
+canonicality laws; line_result uses NBZ_Folds.line_total with canonical alpha
+and its same four input values. All domains are explicit; this does NOT justify
+an unconditional op16 law from a conditional line theorem. NCG_HornerLog.three
+records local product/add association, not an equality for c.query.op16.
+L016 passes: exit0,3.505121492s,RSS5324444KiB,swap0.
+
+`NDA_Obstructions` proves the unrefined primitive types admit a circle reply
+with a limb equal to p, and independently noncanonical op2/op3/op9/op16 replies.
+Each proposed universal primitive law fails on that record. L012 rejected
+layout draft; L013 passes: exit0,3.724013152s,RSS5346632KiB,swap0,standard axioms.
+These are NOT full-driver counterexamples or evidence of a frozen Rust bug.
+They prevent treating arbitrary Configuration fields as proved arithmetic.
+
+## Residual member audit / reason for stopping below 80% if unchanged
+
+- S2: CLOSED by actual sourceView_variant and retained output equation.
+- All22 bounds and distinctness: CLOSED by actual installed sampler/decoder.
+- gamma/kappa/alpha/rho/semanticAlpha/claim: CLOSED on the SAME preparation.
+- Coordinates: attempted through both actual semantic circle calls. Only their
+  primitive's canonical-return law remains. Configuration imposes no such law;
+  circle_free refutes its derivation from the carrier alone. SAP's installed
+  circle result concerns F3M_CircleSource.install B; substituting it without
+  an equality would change the task's dictionary. Required next fact: the
+  two actual retained circle returns are canonical, or the primitive law.
+- rhs: attempted via one actual query iteration and induction. Required next
+  facts are actual op3/op2 canonicality and op16's line-value canonicality on
+  the reached inputs. NBO/NBW/NBZ prove concrete functions, conditional bindings
+  and canonical-input domains; NCG supplies local log substitutions. None binds
+  arbitrary c.query to those functions. add_free/mulE_free/line_free refute the
+  corresponding blanket primitive inference. The exact residual output fact
+  remains CanonicalWide inventory.rhs; no native theorem is assumed to get it.
+- power: independently attempted despite rhs blockage. Only actual op9
+  canonicality preservation remains; NBO's local equality discharges it if
+  supplied. op9 is retained unchanged; mulK_free refutes deriving its law from
+  Configuration alone. Exact residual: Canonical inventory.power.
+
+There is no unattempted independent member of this job left. Recompiling the
+same free-slot obligations cannot supply the missing actual-instance bindings.
+The requested fallback (exact remaining premise, proved equivalent to the full
+domain) is delivered. No impossibility theorem about every full Prefix is
+claimed. Further progress needs concrete retained-operation laws/instantiation,
+not an unchanged prover run or a higher resource cap. No Kani is required for
+the completed model implications; native association remains outside this lane.

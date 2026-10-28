@@ -1,0 +1,41 @@
+{"attempt": "NDA_L014", "exit_status": 1, "wall_seconds": 3.672171773039736, "peak_rss_kib": "5296580", "swaps": "0", "print_axioms": ["'AspisR1.NDA_PowerDomain.canonical_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NDA_PowerDomain.of_binding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NDA_PowerDomain.step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NDA_PowerDomain.calls' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NDA_PowerDomain.on_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDA_PowerDomain.lean:85:65: error: Application type mismatch: The argument
+  actual
+has type
+  Port2_QueryLoop.Calls
+    (fun a b =>
+      verifier.candidate.query_values (Tx1Q_QueryBridge.leaves c.query) proof (Tx1Q_Carriers.prepared cut.prepared) a
+        (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch) none (Tx1Q_Carriers.geometry cut.geometry) b)
+    (↑10#usize) (Tx1Q_Carriers.accumulator cut.initial) (Tx1Q_Carriers.pending cut.pending)
+    (Tx1Q_Carriers.accumulator cut.out) (Tx1Q_Carriers.pending cut.after)
+    (↑10#usize - ↑(Tx1Q_Carriers.accumulator cut.initial).next)
+but is expected to have type
+  Port2_QueryLoop.Calls
+    (fun a b =>
+      verifier.candidate.query_values c.query pr
+...
+hInstall.Canonical (Tx1Q_Carriers.accumulator cut.initial).power ∧
+        Port4C_QueryArithmetic.CanonE (Tx1Q_Carriers.accumulator cut.initial).rhs ∧
+          CheckpointBytes5Output.accumulator (Tx1Q_Carriers.accumulator cut.initial) = QueryAccumulator.initial
+qry :
+  AspisR1Stage2.verifier.candidate.query_loop (verifier.candidate.query_values (Tx1Q_QueryBridge.leaves c.query)) proof
+      (Tx1Q_Carriers.prepared cut.prepared) (Tx1Q_Carriers.accumulator cut.initial)
+      (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch) (Tx1Q_Carriers.observer none)
+      (Tx1Q_Carriers.geometry cut.geometry) (Tx1Q_Carriers.pending cut.pending) 10#usize =
+    ok (core.result.Result.Ok (Tx1Q_Carriers.accumulator cut.out, Tx1Q_Carriers.pending cut.after))
+actual :
+  Port2_QueryLoop.Calls
+    (fun a b =>
+      verifier.candidate.query_values (Tx1Q_QueryBridge.leaves c.query) proof (Tx1Q_Carriers.prepared cut.prepared) a
+        (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch) none (Tx1Q_Carriers.geometry cut.geometry) b)
+    (↑10#usize) (Tx1Q_Carriers.accumulator cut.initial) (Tx1Q_Carriers.pending cut.pending)
+    (Tx1Q_Carriers.accumulator cut.out) (Tx1Q_Carriers.pending cut.after)
+    (↑10#usize - ↑(Tx1Q_Carriers.accumulator cut.initial).next)
+⊢ Port3_FlushInstall.Canonical (Tx1Q_Carriers.accumulator cut.out).power
+'AspisR1.NDA_PowerDomain.canonical_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.of_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.on_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf878f894d4d144e7a005eb7a2471be65.scope; invocation ID: d469a6b8c34b42c2a5ab5aef922f2962

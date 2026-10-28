@@ -1,0 +1,93 @@
+import NDA_QueryCanonical
+import NBO_FieldSemantics
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NDA_PowerDomain
+open Aeneas Aeneas.Std Result AspisR1Stage2 Port3_NativeQueryBody
+
+/-- Transport the query lane's finite-limb predicate without changing it. -/
+theorem canonical_iff (q : aspis_core.field.QM31) :
+    NBF_PowerStep.Canonical q ↔ Port3_FlushInstall.Canonical q := by
+  constructor
+  · intro h
+    exact ⟨h ⟨0,by decide⟩,h ⟨1,by decide⟩,h ⟨2,by decide⟩,h ⟨3,by decide⟩⟩
+  · intro h j
+    fin_cases j
+    · exact h.1
+    · exact h.2.1
+    · exact h.2.2.1
+    · exact h.2.2.2
+
+def Law (ops : Ops) : Prop :=
+  ∀ x y z, Port3_FlushInstall.Canonical x → Port3_FlushInstall.Canonical y →
+    ops.op9 x y = ok z → Port3_FlushInstall.Canonical z
+
+/-- The existing lane theorem discharges power's domain under its local
+op9 binding. No op2/op3/line/geometry interpretation is needed. -/
+theorem of_binding (ops : Ops)
+    (binding : ∀ x y, NBF_PowerStep.Canonical x → NBF_PowerStep.Canonical y →
+      ops.op9 x y = NBO_FieldSemantics.power x y) : Law ops := by
+  intro x y z hx hy call
+  rw [binding x y ((canonical_iff x).mpr hx) ((canonical_iff y).mpr hy)] at call
+  obtain ⟨out,run,canon⟩ := NBO_FieldSemantics.power_total x y
+    ((canonical_iff x).mpr hx) ((canonical_iff y).mpr hy)
+  have same := Result.ok.inj (run.symm.trans call)
+  exact (canonical_iff z).mp (same ▸ canon)
+
+theorem step (ops : Ops) (law : Law ops) (proof : Slice U8)
+    (p : verifier.Prepared) (a out : verifier.Accumulator)
+    (g : Array Stage2E 29#usize) (obs : Option (verifier.Phase → Result Unit))
+    (geo : verifier.QueryGeometry) (b bout : verifier.BatchedWeights)
+    (rho : Port3_FlushInstall.Canonical p.rho) (power : Port3_FlushInstall.Canonical a.power)
+    (call : verifier.candidate.query_values ops proof p a g obs geo b = ok (.Ok (out,bout))) :
+    Port3_FlushInstall.Canonical out.power := by
+  obtain ⟨o⟩ := Port4C_QueryValues.observed ops proof p a out g obs geo b bout call
+  obtain ⟨product,_,_,mulK,_,_⟩ :=
+    Port4C_QueryValues.accumulated ops p a out o.node o.value b bout o.accumulate
+  exact law _ _ _ power rho mulK
+
+theorem calls (ops : Ops) (law : Law ops) (proof : Slice U8)
+    (p : verifier.Prepared) (g : Array Stage2E 29#usize)
+    (obs : Option (verifier.Phase → Result Unit)) (geo : verifier.QueryGeometry)
+    (stop : Nat) (a out : verifier.Accumulator) (b bout : verifier.BatchedWeights) (n : Nat)
+    (rho : Port3_FlushInstall.Canonical p.rho) (power : Port3_FlushInstall.Canonical a.power)
+    (actual : Port2_QueryLoop.Calls
+      (fun a b => verifier.candidate.query_values ops proof p a g obs geo b)
+      stop a b out bout n) : Port3_FlushInstall.Canonical out.power := by
+  induction actual with
+  | done => exact power
+  | step active returned tail ih =>
+    exact ih (step ops law proof p _ _ g obs geo _ _ rho power returned)
+
+theorem on_prefix {F C : Type} (c : DrvC_Installation.Configuration F C)
+    (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8)
+    (cut : NCU_DriverDomain.Prefix (DrvC_Installation.currentInstalled c)
+      (DrvC_Installation.currentDigest c) semantic pub proof ())
+    (law : Law c.query)
+    (rho : Port3_FlushInstall.Canonical (Tx1Q_Carriers.prepared cut.prepared).rho) :
+    Port3_FlushInstall.Canonical (Tx1Q_Carriers.accumulator cut.out).power := by
+  have initCall := Tx1Q_PrefixInstall.initial_success c.reserved cut.initial cut.initial_call
+  have init := Tx1Q_Initial.fields c.reserved (Tx1Q_Carriers.accumulator cut.initial) initCall
+  have qry := Tx1Q_Install.query_success (Tx1Q_QueryBridge.leaves c.query) proof cut.prepared
+    cut.initial cut.out cut.scratch none cut.geometry cut.pending cut.after 10#usize cut.query
+  rw [Tx1Q_QueryBridge.release_leaves,Port3_NativeQueryFrame.loop_eq] at qry
+  have actual := Port2_QueryLoop.source_calls
+    (verifier.candidate.query_values (Tx1Q_QueryBridge.leaves c.query)) proof
+    (Tx1Q_Carriers.prepared cut.prepared) (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch)
+    none (Tx1Q_Carriers.geometry cut.geometry) 10#usize
+    (fun a a1 b b1 h => (Port3_NativeQueryFrame.query_fields (Tx1Q_QueryBridge.leaves c.query)
+      proof (Tx1Q_Carriers.prepared cut.prepared) a a1 (Tx1Q_Carriers.arr Tx1Q_Carriers.e cut.scratch)
+      none (Tx1Q_Carriers.geometry cut.geometry) b b1 h).2.2)
+    (Tx1Q_Carriers.accumulator cut.initial) (Tx1Q_Carriers.accumulator cut.out)
+    (Tx1Q_Carriers.pending cut.pending) (Tx1Q_Carriers.pending cut.after)
+    (by rw [init.2.1]; decide) qry
+  exact calls (Tx1Q_QueryBridge.leaves c.query) law proof _ _ none _ 10 _ _ _ _ _ rho init.2.2.1 actual
+
+#print axioms canonical_iff
+#print axioms of_binding
+#print axioms step
+#print axioms calls
+#print axioms on_prefix
+end AspisR1.NDA_PowerDomain
+end

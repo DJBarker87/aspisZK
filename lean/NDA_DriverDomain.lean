@@ -137,6 +137,22 @@ theorem domain (c : Configuration F C)
     (preparation c semantic pub proof cut).2.1
   exact (remaining_iff c semantic pub proof cut).mpr ⟨coordinates,rhs,power⟩
 
+/-- The reduced premise is also exactly equivalent to the full writer domain
+on this prefix; control/weight/shape/query facts are all already discharged. -/
+theorem domain_iff (c : Configuration F C)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8)
+    (cut : NCU_DriverDomain.Prefix (currentInstalled c) (currentDigest c) semantic pub proof ()) :
+    KNE_Caller.WriterDomain (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) ↔
+      (∀ j, OraclePortCkptAbi4Decode.Canonical ((inventory c semantic pub proof cut).coordinates j)) ∧
+      OraclePortCkptAbi4Decode.CanonicalWide (inventory c semantic pub proof cut).rhs ∧
+      OraclePortCkptAbi4Decode.Canonical (inventory c semantic pub proof cut).power := by
+  constructor
+  · intro h
+    exact ⟨h.canonical.coordinates,h.canonical.rhs,h.canonical.power⟩
+  · rintro ⟨coordinates,rhs,power⟩
+    exact domain c semantic pub proof cut coordinates rhs power
+
 /-- Primitive laws suffice for every residual field. They are NOT proved for
 arbitrary Configuration. No output domain is assumed in this composition. -/
 theorem canonical_of_primitives (c : Configuration F C)
@@ -212,6 +228,47 @@ theorem leaf
     H oracle native valid hp hu hc body out before tr checksumWrite proofCall publicCall checksumCall
 end Leaf
 #print axioms leaf
+
+section Leaf
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open CheckpointBytes5Effect CheckpointBytes5Inputs CheckpointBytesDigest MultiproofConeCanonical
+open KNE_Model KNE_Composition
+open AspisR1Stage2.WireTx2 (singletonParts checksumParts)
+/-- Alternative export with no caller-output field assumptions. The actual
+primitive laws remain explicit and must be instantiated; this is conditional. -/
+theorem leaf_of_primitives
+(c : Configuration F C)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8) (cut : NCU_DriverDomain.Prefix (currentInstalled c) (currentDigest c) semantic pub proof ())
+    (circle : NDA_CircleCanonical.Law c.boundaries)
+    (query : NDA_QueryCanonical.Laws c.query)
+
+    (H : Bytes → State) (oracle : Oracle (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))) () H)
+    (native : Bytes → Bytes → Bytes → Prop)
+    (valid : LocalCorrect native KND_Schedule.schedule)
+    (hp hu hc : Digest) (body out : Slice U8) (before : Log)
+    (tr : Trace native (bodyEmissions (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (domain_of_primitives c semantic pub proof cut circle query).size (domain_of_primitives c semantic pub proof cut circle query).queriesBound)
+      (stateOf hp) (stateOf hu)) [] (bytesOf body.val))
+    (checksumWrite : native (bytesOf body.val) (bytesOf hc.val) (bytesOf out.val))
+    (proofCall : (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))).digest () (singletonParts proof) = ok hp)
+    (publicCall : (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))).digest () (singletonParts pub) = ok hu)
+    (checksumCall : (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))).digest () (checksumParts body) = ok hc) :
+    out.val.length = 1768 ∧
+    out = LPm_CheckpointProgram.returned (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (domain_of_primitives c semantic pub proof cut circle query).size (domain_of_primitives c semantic pub proof cut circle query).queriesBound
+      (domain_of_primitives c semantic pub proof cut circle query).canonical (domain_of_primitives c semantic pub proof cut circle query).next hp hu hc ∧
+    run (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))) () (writer (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) proof pub) before =
+      ok (out,((before ++ [(singletonParts proof,hp)]) ++
+        [(singletonParts pub,hu)]) ++ [(checksumParts body,hc)]) ∧
+    bytesOf out.val = OraclePortCheckpointAbiC5.encode H (bytesOf proof.val) (bytesOf pub.val)
+      (CheckpointBytesBlocks.prepared (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (domain_of_primitives c semantic pub proof cut circle query).size (domain_of_primitives c semantic pub proof cut circle query).queriesBound) (domain_of_primitives c semantic pub proof cut circle query).canonical)
+      (CheckpointBytesBlocks.accumulator (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (domain_of_primitives c semantic pub proof cut circle query).size (domain_of_primitives c semantic pub proof cut circle query).queriesBound) (domain_of_primitives c semantic pub proof cut circle query).canonical) := by
+  exact NCU_DriverDomain.leaf c semantic pub proof cut (preparation c semantic pub proof cut).1
+    (preparation c semantic pub proof cut).2.1
+    (canonical_of_primitives c semantic pub proof cut circle query)
+    H oracle native valid hp hu hc body out before tr checksumWrite proofCall publicCall checksumCall
+end Leaf
+#print axioms leaf_of_primitives
+#print axioms domain_iff
 
 #print axioms domain_of_primitives
 #print axioms remaining_iff

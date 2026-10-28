@@ -1,0 +1,72 @@
+import NDA_DriverDomain
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NDA_Obstructions
+open Aeneas Aeneas.Std Result
+abbrev Q := AspisR1Stage2.aspis_core.field.QM31
+abbrev E := AspisR1Stage2.Stage2E
+
+def zeroQ : Q := ⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩
+def badQ : Q := ⟨⟨2147483647#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩
+def zeroE : E := ⟨zeroQ,zeroQ⟩
+def badE : E := ⟨badQ,zeroQ⟩
+
+theorem zero_canonical : Port3_FlushInstall.Canonical zeroQ := by
+  exact ⟨Nat.zero_lt_succ _,Nat.zero_lt_succ _,Nat.zero_lt_succ _,Nat.zero_lt_succ _⟩
+theorem zero_wide_canonical : Port4C_QueryArithmetic.CanonE zeroE :=
+  ⟨zero_canonical,zero_canonical⟩
+theorem bad_not_canonical : ¬ Port3_FlushInstall.Canonical badQ := by
+  intro h
+  exact (Nat.lt_irrefl 2147483647) h.1
+
+theorem bad_wide_not_canonical : ¬ Port4C_QueryArithmetic.CanonE badE := by
+  intro h
+  exact bad_not_canonical h.1
+
+def badPoint : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint :=
+  ⟨⟨⟨2147483647#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩,
+    ⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩⟩
+
+/-- The Configuration carrier alone does not validate its circle slot. This
+is a primitive-domain counterexample, not a full accepted-driver execution. -/
+theorem circle_free (B : AspisR1PublicPreparation.FinishModel.Boundaries) :
+    ¬ NDA_CircleCanonical.Law {B with circle := fun _ _ => ok badPoint} := by
+  intro law
+  have h := law (Array.repeat 32#usize 0#u8) .First _ rfl
+  exact (Nat.lt_irrefl 2147483647) h.1.1
+
+/-- The retained query slots independently admit noncanonical replies. -/
+theorem add_free (ops : Port3_NativeQueryBody.Ops) :
+    ¬ NDA_QueryCanonical.Laws {ops with op2 := fun _ _ => ok badE} := by
+  intro law
+  exact bad_wide_not_canonical (law.addE zeroE zeroE badE
+    zero_wide_canonical zero_wide_canonical rfl)
+
+theorem mulE_free (ops : Port3_NativeQueryBody.Ops) :
+    ¬ NDA_QueryCanonical.Laws {ops with op3 := fun _ _ => ok badE} := by
+  intro law
+  exact bad_wide_not_canonical (law.mulE zeroE zeroQ badE
+    zero_wide_canonical zero_canonical rfl)
+
+theorem mulK_free (ops : Port3_NativeQueryBody.Ops) :
+    ¬ NDA_QueryCanonical.Laws {ops with op9 := fun _ _ => ok badQ} := by
+  intro law
+  exact bad_not_canonical (law.mulK zeroQ zeroQ badQ zero_canonical zero_canonical rfl)
+
+theorem line_free (ops : Port3_NativeQueryBody.Ops) :
+    ¬ NDA_QueryCanonical.Laws {ops with op16 := fun _ _ _ => ok badE} := by
+  intro law
+  exact bad_wide_not_canonical (law.line zeroE (Array.repeat 4#usize zeroE)
+    (Array.repeat 5#usize 0#u32) badE rfl)
+
+#print axioms zero_canonical
+#print axioms zero_wide_canonical
+#print axioms bad_not_canonical
+#print axioms bad_wide_not_canonical
+#print axioms circle_free
+#print axioms add_free
+#print axioms mulE_free
+#print axioms mulK_free
+#print axioms line_free
+end AspisR1.NDA_Obstructions
+end
