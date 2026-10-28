@@ -14,7 +14,7 @@ theorem same_counter_iff (m c i j : Nat) :
   · intro h
     change i%m=j%m at h
     change (c+i)%m=(c+j)%m
-    simp only [Nat.add_mod,h]
+    rw [Nat.add_mod c i m,Nat.add_mod c j m,h]
 #print axioms same_counter_iff
 
 theorem first_cycle_unique (m c i j : Nat) (hi : i<m) (hj : j<m)
