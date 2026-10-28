@@ -94,7 +94,7 @@ def parse(lines,base=None):
    branches.append((pattern,parse(child)));i=j
   return Node('match',discr=t[6:-5].strip(),branches=branches)
  expr='\n'.join(x.strip() for x in lines)
- return Node('pure' if t.startswith('ok ') else 'call',expr=expr[3:] if t.startswith('ok ') else expr)
+ return Node('pure' if (t=='ok' or t.startswith('ok ')) else 'call',expr=expr[3:] if (t=='ok' or t.startswith('ok ')) else expr)
 
 def spaces(text,n):return '\n'.join(' '*n+x for x in text.splitlines())
 

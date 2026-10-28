@@ -1,4 +1,4 @@
-import R1Z.PV_W_Callbacks
+import R1Z.PV_W_StructuredBinds
 import R1Z.PV_W_RecursiveLaws
 set_option autoImplicit false
 noncomputable section
@@ -50,17 +50,14 @@ def program
   let b2 ← invoke "aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq" (fun ops =>
       letI : ExternalFuns := ops
       aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq q3 q1)
-  invoke "ok" (fun ops =>
-    letI : ExternalFuns := ops
-    ok
-    {
+  pure {
     c1_columns_inactive_balanced,
     mask_only_columns_inactive_balanced,
     d_inactive_balanced := b,
     g_inactive_balanced := b1,
     h1_padding_inactive_balanced := b2,
     h1_total_balanced := true
-    })
+    }
 
 theorem erase_program (ops : ExternalFuns)
   (c1 : Slice (alloc.vec.Vec aspis_core.field.M31))
@@ -144,7 +141,7 @@ theorem erase_program (ops : ExternalFuns)
                         ·
                           exact erase_invoke ops _ _
                         · intro b2
-                          exact erase_invoke ops _ _
+                          rfl
 
 #print axioms erase_program
 end R1Z.PV_W_R_AuditMasks
