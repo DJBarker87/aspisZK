@@ -82,7 +82,9 @@ theorem shape (j : Usize) : suffix0 j 0#usize = PV_CB3_WeightsMachineRow.row j :
   dsimp only [PV_RunJoin_CoefficientDigit044.digit,PV_RunJoin_CoefficientDigit144.digit,
     PV_RunJoin_CoefficientDigit244.digit,PV_RunJoin_CoefficientDigit344.digit,
     PV_RunJoin_CoefficientDigit444.digit,PV_CB3_WeightsMachineRow.row,PV_CB3_WeightsMachineRow.digit]
-  rw [shift_zero _ (PV_CB3_WeightsMachineRow.digit_bound j 6#u32 (by decide))]
+  have hb : (Usize.wrapping_shr j 6#u32 &&& 3#usize).val < 4 :=
+    PV_CB3_WeightsMachineRow.digit_bound j 6#u32 (by decide)
+  rw [shift_zero (Usize.wrapping_shr j 6#u32 &&& 3#usize) hb]
 
 theorem row (v : transport.Variant) (j : Usize) :
     transport.Variant.row v j = .ok (PV_CB3_WeightsMachineRow.row j) := by
