@@ -55,6 +55,17 @@ theorem source_bind_congr {A B : Type} (m : Aeneas.Std.Result A)
     Aeneas.Std.bind m left = Aeneas.Std.bind m right :=
   congrArg (Aeneas.Std.bind m) (funext h)
 
+/-- Restrict proof search to a syntactic bind on both sides. Unrestricted
+higher-order congrArg search can invent binds and loop at a non-bind goal. -/
+open Lean Elab Tactic in
+elab "pv_source_bind" : tactic => do
+  let target ← instantiateMVars (← getMainTarget)
+  unless target.isAppOfArity ``Eq 3 do throwError "expected equality"
+  let args := target.getAppArgs
+  let isBind (e : Expr) := e.isAppOf ``Aeneas.Std.bind || e.isAppOf ``Bind.bind
+  unless isBind args[1]! && isBind args[2]! do throwError "expected two source binds"
+  evalTactic (← `(tactic| (apply source_bind_congr; intro x)))
+
 theorem erase_pure {A : Type} (ops : ExternalFuns) (a : A) :
     erase ops (Program.pure a : P A) = .ok a := rfl
 

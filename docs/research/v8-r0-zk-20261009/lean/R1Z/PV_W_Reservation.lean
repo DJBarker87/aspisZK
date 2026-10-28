@@ -178,10 +178,7 @@ theorem erase_syncDirectory (ops : ExternalFuns) (directory : std.path.Path) :
   | rw [erase_bind]
   | rw [erase_invoke]
   | rw [erase_pure]
-  | (match goal with
-     | ⊢ Aeneas.Std.bind ?m ?left = Aeneas.Std.bind ?m ?right =>
-       apply source_bind_congr
-       intro x)
+  | pv_source_bind
   | funext x
   | split
 
@@ -198,10 +195,7 @@ theorem erase_reserveFallible (ops : ExternalFuns)
   | rw [erase_invoke]
   | rw [erase_pure]
   | rw [erase_syncDirectory]
-  | (match goal with
-     | ⊢ Aeneas.Std.bind ?m ?left = Aeneas.Std.bind ?m ?right =>
-       apply source_bind_congr
-       intro x)
+  | pv_source_bind
   | funext x
   | split
 
@@ -218,10 +212,7 @@ theorem erase_reserve (ops : ExternalFuns)
   | rw [erase_invoke]
   | rw [erase_pure]
   | rw [erase_reserveFallible]
-  | (match goal with
-     | ⊢ Aeneas.Std.bind ?m ?left = Aeneas.Std.bind ?m ?right =>
-       apply source_bind_congr
-       intro x)
+  | pv_source_bind
   | funext x
   | split
 
