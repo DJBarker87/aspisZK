@@ -1,4 +1,5 @@
 import PV_B3_ZeroArrays
+import PV_B3_SmallUsizeD336
 namespace PV_B3_ZeroPolynomial
 open Aeneas Aeneas.Std Result PV_B3_Copy_117 PV_B3_ZeroArithmetic PV_B3_ZeroArrays
 set_option autoImplicit false
@@ -10,7 +11,7 @@ theorem madd_zero : aspis_core.field.M31.add 0#u32 0#u32 = ok 0#u32 := by with_u
 -- Nine independent writes use generic constant-array restoration lemmas.
 theorem accumulate : host_arithmetic.accumulate_channels channels Z Z = ok channels := by
   simp (disch := decide) only [host_arithmetic.accumulate_channels,
-    aspis_core.field.QM31.ZERO,cadd_zero,madd_zero,triple_repeat,
+    aspis_core.field.QM31.ZERO,cadd_zero,madd_zero,
     index_repeat,mutable_repeat,update_repeat,set_repeat,lift,bind_tc_ok]
 
 theorem reconstruct_component : host_arithmetic.reconstruct_component (Array.repeat 3#usize 0#u64) = ok CZero := by
@@ -20,7 +21,7 @@ theorem reconstruct_component : host_arithmetic.reconstruct_component (Array.rep
 theorem reconstruct : host_arithmetic.reconstruct_channels channels = ok Z := by
   simp (disch := decide) only [host_arithmetic.reconstruct_channels,
     index_repeat,reconstruct_component,hostr_zero,cadd_zero,csub_zero,bind_tc_ok]
-  rfl
+  with_unfolding_all rfl
 
 theorem product3 : host_arithmetic.qm31_sum_products3 triple triple = ok Z := by
   simp (disch := decide) only [host_arithmetic.qm31_sum_products3,index_repeat,
@@ -32,61 +33,89 @@ theorem triple_eq : Array.make 3#usize [Z,Z,Z] = triple := rfl
 #print axioms reconstruct
 #print axioms product3
 #print axioms triple_eq
-theorem start0 : Usize.wrapping_mul 4#usize 0#usize = 0#usize := by scalar_tac
+theorem start0 : Usize.wrapping_mul 4#usize 0#usize = 0#usize :=
+  PV_B3_SmallUsizeD336.mul _ _ _ (by decide)
 #print axioms start0
-theorem offset0_1 : Usize.wrapping_add 0#usize 1#usize = 1#usize := by scalar_tac
+theorem offset0_1 : Usize.wrapping_add 0#usize 1#usize = 1#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset0_1
-theorem offset0_2 : Usize.wrapping_add 0#usize 2#usize = 2#usize := by scalar_tac
+theorem offset0_2 : Usize.wrapping_add 0#usize 2#usize = 2#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset0_2
-theorem offset0_3 : Usize.wrapping_add 0#usize 3#usize = 3#usize := by scalar_tac
+theorem offset0_3 : Usize.wrapping_add 0#usize 3#usize = 3#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset0_3
-theorem start1 : Usize.wrapping_mul 4#usize 1#usize = 4#usize := by scalar_tac
+theorem start1 : Usize.wrapping_mul 4#usize 1#usize = 4#usize :=
+  PV_B3_SmallUsizeD336.mul _ _ _ (by decide)
 #print axioms start1
-theorem offset1_1 : Usize.wrapping_add 4#usize 1#usize = 5#usize := by scalar_tac
+theorem offset1_1 : Usize.wrapping_add 4#usize 1#usize = 5#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset1_1
-theorem offset1_2 : Usize.wrapping_add 4#usize 2#usize = 6#usize := by scalar_tac
+theorem offset1_2 : Usize.wrapping_add 4#usize 2#usize = 6#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset1_2
-theorem offset1_3 : Usize.wrapping_add 4#usize 3#usize = 7#usize := by scalar_tac
+theorem offset1_3 : Usize.wrapping_add 4#usize 3#usize = 7#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset1_3
-theorem start2 : Usize.wrapping_mul 4#usize 2#usize = 8#usize := by scalar_tac
+theorem start2 : Usize.wrapping_mul 4#usize 2#usize = 8#usize :=
+  PV_B3_SmallUsizeD336.mul _ _ _ (by decide)
 #print axioms start2
-theorem offset2_1 : Usize.wrapping_add 8#usize 1#usize = 9#usize := by scalar_tac
+theorem offset2_1 : Usize.wrapping_add 8#usize 1#usize = 9#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset2_1
-theorem offset2_2 : Usize.wrapping_add 8#usize 2#usize = 10#usize := by scalar_tac
+theorem offset2_2 : Usize.wrapping_add 8#usize 2#usize = 10#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset2_2
-theorem offset2_3 : Usize.wrapping_add 8#usize 3#usize = 11#usize := by scalar_tac
+theorem offset2_3 : Usize.wrapping_add 8#usize 3#usize = 11#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset2_3
-theorem start3 : Usize.wrapping_mul 4#usize 3#usize = 12#usize := by scalar_tac
+theorem start3 : Usize.wrapping_mul 4#usize 3#usize = 12#usize :=
+  PV_B3_SmallUsizeD336.mul _ _ _ (by decide)
 #print axioms start3
-theorem offset3_1 : Usize.wrapping_add 12#usize 1#usize = 13#usize := by scalar_tac
+theorem offset3_1 : Usize.wrapping_add 12#usize 1#usize = 13#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset3_1
-theorem offset3_2 : Usize.wrapping_add 12#usize 2#usize = 14#usize := by scalar_tac
+theorem offset3_2 : Usize.wrapping_add 12#usize 2#usize = 14#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset3_2
-theorem offset3_3 : Usize.wrapping_add 12#usize 3#usize = 15#usize := by scalar_tac
+theorem offset3_3 : Usize.wrapping_add 12#usize 3#usize = 15#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset3_3
-theorem start4 : Usize.wrapping_mul 4#usize 4#usize = 16#usize := by scalar_tac
+theorem start4 : Usize.wrapping_mul 4#usize 4#usize = 16#usize :=
+  PV_B3_SmallUsizeD336.mul _ _ _ (by decide)
 #print axioms start4
-theorem offset4_1 : Usize.wrapping_add 16#usize 1#usize = 17#usize := by scalar_tac
+theorem offset4_1 : Usize.wrapping_add 16#usize 1#usize = 17#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset4_1
-theorem offset4_2 : Usize.wrapping_add 16#usize 2#usize = 18#usize := by scalar_tac
+theorem offset4_2 : Usize.wrapping_add 16#usize 2#usize = 18#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset4_2
-theorem offset4_3 : Usize.wrapping_add 16#usize 3#usize = 19#usize := by scalar_tac
+theorem offset4_3 : Usize.wrapping_add 16#usize 3#usize = 19#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset4_3
-theorem start5 : Usize.wrapping_mul 4#usize 5#usize = 20#usize := by scalar_tac
+theorem start5 : Usize.wrapping_mul 4#usize 5#usize = 20#usize :=
+  PV_B3_SmallUsizeD336.mul _ _ _ (by decide)
 #print axioms start5
-theorem offset5_1 : Usize.wrapping_add 20#usize 1#usize = 21#usize := by scalar_tac
+theorem offset5_1 : Usize.wrapping_add 20#usize 1#usize = 21#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset5_1
-theorem offset5_2 : Usize.wrapping_add 20#usize 2#usize = 22#usize := by scalar_tac
+theorem offset5_2 : Usize.wrapping_add 20#usize 2#usize = 22#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset5_2
-theorem offset5_3 : Usize.wrapping_add 20#usize 3#usize = 23#usize := by scalar_tac
+theorem offset5_3 : Usize.wrapping_add 20#usize 3#usize = 23#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset5_3
-theorem start6 : Usize.wrapping_mul 4#usize 6#usize = 24#usize := by scalar_tac
+theorem start6 : Usize.wrapping_mul 4#usize 6#usize = 24#usize :=
+  PV_B3_SmallUsizeD336.mul _ _ _ (by decide)
 #print axioms start6
-theorem offset6_1 : Usize.wrapping_add 24#usize 1#usize = 25#usize := by scalar_tac
+theorem offset6_1 : Usize.wrapping_add 24#usize 1#usize = 25#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset6_1
-theorem offset6_2 : Usize.wrapping_add 24#usize 2#usize = 26#usize := by scalar_tac
+theorem offset6_2 : Usize.wrapping_add 24#usize 2#usize = 26#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset6_2
-theorem offset6_3 : Usize.wrapping_add 24#usize 3#usize = 27#usize := by scalar_tac
+theorem offset6_3 : Usize.wrapping_add 24#usize 3#usize = 27#usize :=
+  PV_B3_SmallUsizeD336.add _ _ _ (by decide)
 #print axioms offset6_3
 theorem block0 : host_arithmetic.evaluate_state_only_polynomial.block_value polynomial triple 0#usize = ok Z := by
   simp (disch := decide) only [host_arithmetic.evaluate_state_only_polynomial.block_value,
