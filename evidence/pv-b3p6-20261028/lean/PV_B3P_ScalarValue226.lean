@@ -46,7 +46,6 @@ theorem index_list (v : U64) (j : Usize) (hj : j.val < 8) :
     simpa only [indexBytes,List.length_cons,List.length_nil] using hj
   rw [PV_B3P_EndianVerified226V3.index_bytes]
   rw [List.getElem?_eq_getElem (by rw [(core.num.U64.to_le_bytes v).property]; simpa using hj)]
-  change PV_B3P_ScalarRegions226.indexLane v j = (core.num.U64.to_le_bytes v).val[j.val]
   exact PV_B3P_IndexLane226.native_value v j hj
 
 theorem index (p : reference226.OwnedPublic) (i : Usize)
