@@ -1,0 +1,79 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1028,3 +1028,76 @@
+ #[kani::stub_verified(strong)]
+ fn strong_wrong(){let bytes:[u8;64]=kani::any();let start:usize=kani::any();kani::assume(start<=48);let mut r=Reader{bytes:&bytes,at:start};let out=strong(&mut r);let j:usize=kani::any();kani::assume(j<16);assert!(out[j]!=bytes[start+j]);}
+ }
++
++#[cfg(kani)] mod NCI_steps {
++use super::*;
++static mut LOG:[u32;3]=[0;3];
++static mut CALLS:usize=0;
++fn mul(x:M31,y:M31)->M31{let reply:u32=kani::any();kani::assume(reply<2147483647);unsafe{LOG=[x.0,y.0,reply];CALLS+=1;}M31(reply)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(aspis_core::field::M31::mul,mul)]
++fn basis_ok(){
++let mut basis=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++let stage:usize=kani::any();kani::assume(stage<6);let n=1usize<<stage;let j:usize=kani::any();kani::assume(j<n);
++let node=M31(kani::any());kani::assume(node.0<2147483647&&basis[j].0<2147483647);
++let k:usize=kani::any();kani::assume(k<256&&k!=n+j);let before=basis[k];let left=basis[j];
++basis[n+j]=basis[j].mul(node);
++let log=unsafe{LOG};assert!(unsafe{CALLS}==1&&log[0]==left.0&&log[1]==node.0);
++assert!(basis[k]==before);assert!(basis[n+j].0==log[2]);assert!(basis[n+j].0<2147483647);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(aspis_core::field::M31::mul,mul)]
++fn basis_wrong(){
++let mut basis=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++let stage:usize=kani::any();kani::assume(stage<6);let n=1usize<<stage;let j:usize=kani::any();kani::assume(j<n);
++let node=M31(kani::any());kani::assume(node.0<2147483647&&basis[j].0<2147483647);
++let k:usize=kani::any();kani::assume(k<256&&k!=n+j);let before=basis[k];let left=basis[j];
++basis[n+j]=basis[j].mul(node);
++let log=unsafe{LOG};assert!(unsafe{CALLS}==1&&log[0]==left.0&&log[1]==node.0);
++assert!(basis[k]==before);assert!(basis[n+j].0!=log[2]);assert!(basis[n+j].0<2147483647);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(aspis_core::field::M31::mul,mul)]
++fn node_ok(){
++let mut node=M31(kani::any());kani::assume(node.0<2147483647);let before=node;
++node=node.mul(node).double().sub(M31::ONE);
++let log=unsafe{LOG};assert!(unsafe{CALLS}==1&&log[0]==before.0&&log[1]==before.0);
++let sum=(log[2] as u64)*2;let doubled=if sum>=2147483647{sum-2147483647}else{sum};
++let expected=if doubled==0{2147483646}else{doubled-1};
++assert!((node.0 as u64)==expected);assert!(node.0<2147483647);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(aspis_core::field::M31::mul,mul)]
++fn node_wrong(){
++let mut node=M31(kani::any());kani::assume(node.0<2147483647);let before=node;
++node=node.mul(node).double().sub(M31::ONE);
++let log=unsafe{LOG};assert!(unsafe{CALLS}==1&&log[0]==before.0&&log[1]==before.0);
++let sum=(log[2] as u64)*2;let doubled=if sum>=2147483647{sum-2147483647}else{sum};
++let expected=if doubled==0{2147483646}else{doubled-1};
++assert!((node.0 as u64)!=expected);assert!(node.0<2147483647);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn flush_ok(){
++let mut row:[u64;4]=kani::any();let j:usize=kani::any();kani::assume(j<4);let k:usize=kani::any();kani::assume(k<4&&k!=j);let before=row[j];let other=row[k];let limb=&mut row[j];
++*limb=(*limb&0x7fff_ffff)+(*limb>>31);
++assert!(row[k]==other);assert!(row[j]==before%2147483648+before/2147483648);assert!(row[j]<17179869184);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn flush_wrong(){
++let mut row:[u64;4]=kani::any();let j:usize=kani::any();kani::assume(j<4);let k:usize=kani::any();kani::assume(k<4&&k!=j);let before=row[j];let other=row[k];let limb=&mut row[j];
++*limb=(*limb&0x7fff_ffff)+(*limb>>31);
++assert!(row[k]==other);assert!(row[j]!=before%2147483648+before/2147483648);assert!(row[j]<17179869184);
++}
++}
