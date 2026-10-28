@@ -121,3 +121,16 @@ fn same_input_finite226() {
         }; finite(bad);
     }
 }
+
+// Same fixtures as PV_B3P_Fidelity226, to audit all emitted mutable writes.
+#[test]
+fn emission_fixture226() {
+    for withdrawal in [false,true] {
+        let source=fixture(withdrawal);
+        let bytes=match source {
+            Source::Transfer(p,t) => Public::Transfer(&p,&t).public_bytes(),
+            Source::Withdrawal(p,t) => Public::Withdrawal(&p,&t).public_bytes(),
+        }.unwrap();
+        println!("{}=({}, {:?})",if withdrawal {"WITHDRAWAL"} else {"TRANSFER"},bytes.len(),bytes);
+    }
+}

@@ -106,3 +106,26 @@ the outer reservation (exit78,allowedfalse; zero Kani runs). After the full
 180s cooldown,06-r1 passes outer admission but the inside barrier refuses
 because another scope races into the reservation; no compiler starts. Wait
 another180s and retry a fresh label. Counts remain8 charged Lean/5 Kani.
+
+## Serializer continuation and updated lead rulings
+
+Owned serializer extraction charon226-02/aeneas226-02 accepts the actual
+public_bytes root. The borrowed projection candidate's abstraction failure is
+retained. The accepted candidate moves an owned Source, serializes23 explicit
+64-byte chunks, and preserves all16 mutable array restoration continuations.
+Native226-01 passes four same-input cases (both variants and rejected inputs),
+finite validation only. Emission/native validation is still pending.
+
+42509 Output133,42510 Result133,42512 Extensionality133 pass;42508/11 are
+zero-charge refusals.42514 BytesTypes226 rejects an unsupported discriminant
+attribute; removed metadata only, without changing constructors.42513/15/16/17
+are zero-charge admission refusals. Next unused ID42518;12 charged compiles.
+Seven actual Kani runs, no PASS:06-r2 and07 time out at900s. Auxiliary u8
+index in07 is supported by the checked extensionality theorem; no input
+restriction was used. No checked counterexample to a target row exists.
+
+Read new rulings(r),(k'),(r') and pin the exact KMX patch/usage from research.
+Copy-dependent PASS results require that patch and a failing negative control.
+No native link is inferred from the failed or timed-out gates here. Evidence
+class for any future structural fallback will be structural (K-1 substitute).
+All six rows remain OPEN. T retains its original three fields.
