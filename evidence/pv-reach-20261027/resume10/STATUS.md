@@ -1,13 +1,13 @@
-# pv-reach10 resumed, LOG D335
+# pv-reach10 / LOG D335 complete at budget limit
 
-Start df48db9f6c; exact worktree and branch retained. Fresh budget 100 Lean,
-0 Kani; IDs 40400–40499, final audits 40497–40499. V404/V405 remain OPEN.
-No XR module imports or definitions are authorized. No shipped changes.
+100/100 charged Lean attempts, IDs 40400–40499; 83 accepted / 17 retained failures;
+246 Lean process invocations; 0 Kani. All 152 authorized native prerequisites
+passed as six chunks. Reserved audits A/B/C passed with standard axioms only.
+Final read-only cache check: zero mismatches across 7,332 checks, including
+5,673 external objects. No XR module/model or other-job object introduced.
 
-h6 preflight: all 152 missing modules have candidate paths in the runjoin
-cache. None has an identical literal LEAN_PATH prefix to the selected
-private environment. Consequently no candidate satisfies h6(3); no other-job
-object is loaded. Source receipt matches and transitive availability are
-recorded per module. Build all 152 in six topological chunks of at most 30,
-under the explicit resumed dependency authorization. All 5,673 h4 effective
-external object hashes verified before first compile; zero mismatches.
+V404 OPEN → OPEN; V405 OPEN → OPEN. No endpoint premise, deployment condition
+or T field removed/added/weakened. Actual complete invocation coverage,
+exclusions, minimality, native whole-client success and full native joint
+non-vacuity remain open. V404/V405 comparison deferred. Target not established.
+See FINAL-REPORT.md, native-hypothesis-review.md and next-deliverable.md.

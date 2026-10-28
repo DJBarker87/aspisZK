@@ -25,3 +25,28 @@ model is weakened. The selected outer dictionary remains explicit; these
 source equations do not establish arbitrary ExternalFuns native association.
 All seven actual universal exclusions and complete minimal reached sets remain
 open unless later receipts and a source invocation certificate establish them.
+
+The unchanged native boundary types, now importable in the private cache, are:
+
+```lean
+compile_call : ∀ withdrawal,
+  @R1Z.PV_Src_NativeInput.run external records (inputs withdrawal) =
+    Aeneas.Std.Result.ok (.Ok (inputs withdrawal).compiled)
+association : R1Z.PV_Src_PublicDeploymentAssociation.Association records inputs
+external_law : R1Z.PV_Src_ExternalAssociation.Associated external
+records_law : R1Z.PV_Src_RecordAssociation.Associated external records
+```
+
+The two exact association predicates are jointly inhabited for the reference
+choices at 40414. This is not joint native non-vacuity of the four-item tuple.
+The public association at 40444 is conditional on the compiler-call law for
+the Bool-indexed compiled family. That compiler law has not been instantiated
+on actual native runs. Audit's full typed statements: out-40498.log.
+
+The source client-to-op231 claim at 40488 assumes only the exact lower
+reservation/material Result equation in addition to the four source prefixes;
+it does not assume successful whole-client execution. StoreSuccess10,
+LayoutSuccess10 and AfterSuccessB10 construct their respective lower results
+from explicitly ordered replies, and PreReserved10 discharges fresh self-key
+reservation. Their complete composition and actual native hypothesis
+instantiation remain open. No P field is removed from the deployed endpoint.

@@ -12,7 +12,7 @@ h6(3). No candidate was promoted from source/path presence alone. The old
 endpoint 669-object record did not supply provenance for this additional
 cohort. Per-module source-record availability, transitive dependency
 availability and candidate environment checks are recorded. No other-job
-compiled object was loaded. All 5,673 effective h4 external objects matched
+cache object was introduced under h6; the inherited approved base was reused. All 5,673 effective h4 external objects matched
 before the first compile.
 
 The repaired AfterChecksB10 theorem keeps the entire actual reservation and
