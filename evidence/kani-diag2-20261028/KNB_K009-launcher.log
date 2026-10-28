@@ -1,0 +1,52 @@
+{"attempt": "KNB_K009", "exit_status": 1, "wall_seconds": 7.797410828003194, "peak_rss_kib": "424840", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+on::<fn(verifier::Phase)>::is_some.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+Check 58: core::option::Option::<fn(verifier::Phase)>::is_some.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+
+SUMMARY:
+ ** 1 of 58 failed (1 unreachable)
+Failed Checks: assertion failed: obs.is_none()
+ File: "crates/aspis-r1-cost-probe/src/NBZ_native.rs", line 5, in verifier::candidate::NBZ_native::NBZ_mark_none
+
+VERIFICATION:- FAILED
+Verification Time: 0.86097944s
+
+Concrete playback unit test for `verifier::candidate::NBZ_native::NBZ_return_carriers`:
+```
+/// Test generated for harness `verifier::candidate::NBZ_native::NBZ_return_carriers` 
+///
+/// Check for `assertion`: "assertion failed: obs.is_none()"
+
+#[test]
+fn kani_concrete_playback_NBZ_return_carriers_1159042547442012873() {
+    let concrete_vals: Vec<Vec<u8>> = vec![
+        // 1ul
+        vec![1, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    kani::concrete_playback_run(concrete_vals, NBZ_return_carriers);
+}
+```
+INFO: To automatically add the concrete playback unit test(s) to the src code, run Kani with `--concrete-playback=inplace`.
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBZ_native::NBZ_return_carriers
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-re68103f6ba4a4908a21212d3d96e9427.scope; invocation ID: 8301a9e8126546f9a898a4810fd9ac48

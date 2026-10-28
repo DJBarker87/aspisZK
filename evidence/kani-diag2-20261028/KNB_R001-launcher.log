@@ -1,0 +1,44 @@
+{"attempt": "KNB_R001", "exit_status": 0, "wall_seconds": 92.77783982804976, "peak_rss_kib": "552648", "swaps": "0", "print_axioms": "N/A: rust"}
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-kani-diag2-20261028/KNB_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `sol
+...
+e/src/KNB_playback.rs:568:4
+    |
+568 | fn KNB_native_counterexample() {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knb_native_counterexample`
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-r1-cost-probe/src/KNB_playback.rs:580:20
+    |
+580 |  unsafe{assert_eq!(KNB_MARK_CALLS,1);}
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-r1-cost-probe/src/KNB_playback.rs:582:22
+    |
+582 |  unsafe { assert_eq!(KNB_CURSOR, KNB_BYTES.len()); }
+    |                      ^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: `aspis-r1-cost-probe` (lib test) generated 36 warnings (run `cargo fix --lib -p aspis-r1-cost-probe --tests` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 32s
+     Running unittests src/lib.rs (KNB_target_native/release/deps/aspis_r1_cost_probe-7abb547f9a0478ce)
+
+running 1 test
+test verifier::candidate::KNB_playback::KNB_native_counterexample ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.00s
+
+
+Running as unit: run-re355f6eebae746a4b330db5bc577e144.scope; invocation ID: 6ec2730fe8064b06ad2a54d044ec227b

@@ -1,0 +1,52 @@
+{"attempt": "KNB_GR001", "exit_status": 0, "wall_seconds": 0.18419765203725547, "peak_rss_kib": "100836", "swaps": "0"}
+{"attempt": "KNB_R001", "exit_status": 0, "wall_seconds": 92.77783982804976, "peak_rss_kib": "552648", "swaps": "0"}
+creating a shared reference to mutable static
+   --> crates/aspis-r1-cost-probe/src/KNB_playback.rs:560:52
+    |
+560 |  match phase {Phase::Query(i)=>unsafe{assert_eq!(i,KNB_Q);},_=>panic!("wrong phase")}
+    |                                                    ^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+    = note: `#[warn(static_mut_refs)]` (part of `#[warn(rust_2024_compatibility)]`) on by default
+
+warning: function `KNB_after_accumulation` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/KNB_playback.rs:563:4
+    |
+563 | fn KNB_after_accumulation(a:Accumulator,pending:BatchedWeights,i:usize,obs:Observer)->Result<(Accumulator,BatchedWeights),Error>{
+    |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knb_after_accumulation`
+
+warning: function `KNB_native_counterexample` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/KNB_playback.rs:568:4
+    |
+568 | fn KNB_native_counterexample() {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knb_native_counterexample`
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-r1-cost-probe/src/KNB_playback.rs:580:20
+    |
+580 |  unsafe{assert_eq!(KNB_MARK_CALLS,1);}
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-r1-cost-probe/src/KNB_playback.rs:582:22
+    |
+582 |  unsafe { assert_eq!(KNB_CURSOR, KNB_BYTES.len()); }
+    |                      ^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: `aspis-r1-cost-probe` (lib test) generated 36 warnings (run `cargo fix --lib -p aspis-r1-cost-probe --tests` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 32s
+     Running unittests src/lib.rs (KNB_target_native/release/deps/aspis_r1_cost_probe-7abb547f9a0478ce)
+
+running 1 test
+test verifier::candidate::KNB_playback::KNB_native_counterexample ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.00s
+
+
