@@ -57,17 +57,19 @@ theorem native_kind (base : ExternalTypes) (ops : @ExternalFuns (Types base))
 
 def bufferKind (base : ExternalTypes) (ops : @ExternalFuns (Types base)) (T : Type) :
     @digest.core_api.BufferKindUser (Types base) T block_buffer.Eager
-      (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6) :=
-  ⟨⟨PV_AL_SplitNativeShape.nativeTrait base ops 6⟩,
+      (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6) := by
+  letI : ExternalTypes := Types base
+  exact ⟨⟨PV_AL_SplitNativeShape.nativeTrait base ops 6⟩,
     @block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) ops⟩
 
 @[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
     @ExternalFuns (Types base) :=
   letI : ExternalTypes := Types base
-  {ops with op216 := fun bk uc less nz =>
-    kindDispatch base ops bk.block_bufferBufferKindInst
-      (dispatch (updater base uc) (ops.op216 bk uc less nz))
-      (ops.op216 bk uc less nz)}
+  {ops with
+    op216 := fun bk uc less nz =>
+      kindDispatch base ops bk.block_bufferBufferKindInst
+        (dispatch (updater base uc) (ops.op216 bk uc less nz))
+        (ops.op216 bk uc less nz)}
 
 theorem retained_kind (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
     @block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) (selected base ops)=
@@ -84,8 +86,7 @@ theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base)
       T block_buffer.Eager (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6)
       N1 (Storage U8 6) O (bufferKind base ops T) uc less nz self input=
       PV_DL_UpdateCarrier.value (updater base uc) self input := by
-  change (kindDispatch base ops
-    (@block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) ops) _ _) self input=_
+  simp only [selected,bufferKind]
   rw [native_kind]
   exact dispatch_source (updater base uc)
     (@ExternalFuns.op216 (Types base) ops T block_buffer.Eager
