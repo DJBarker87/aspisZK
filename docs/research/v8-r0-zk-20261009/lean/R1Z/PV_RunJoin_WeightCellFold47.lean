@@ -14,6 +14,9 @@ def finite {A B C : Type} (mul : A → B → Result C) (add : C → C → Result
     let next ← add sum product
     finite mul add n kp raw (Usize.wrapping_add kind 1#usize) next
 
+theorem pure_result {A : Type} (a : A) : (pure a : Result A)=ok a := rfl
+#print axioms pure_result
+
 theorem seven {A B C : Type} (mul : A → B → Result C) (add : C → C → Result C)
     (a0 a1 a2 a3 a4 a5 a6 : A) (b0 b1 b2 b3 b4 b5 b6 : B) (sum : C) :
     finite mul add 7 (Array.make 7#usize [a0,a1,a2,a3,a4,a5,a6])
@@ -29,8 +32,7 @@ theorem seven {A B C : Type} (mul : A → B → Result C) (add : C → C → Res
     PV_RunJoin_WeightCounters46.add2,PV_RunJoin_WeightCounters46.add3,
     PV_RunJoin_WeightCellIndices46.add4,PV_RunJoin_WeightCellIndices46.add5,
     bind_tc_ok,List.foldlM_cons,List.foldlM_nil,bind_assoc,
-    PV_RunJoin_WeightResult46.ok_bind]
-  rfl
+    pure_result,PV_RunJoin_WeightResult46.ok_bind]
 
 #print axioms seven
 
