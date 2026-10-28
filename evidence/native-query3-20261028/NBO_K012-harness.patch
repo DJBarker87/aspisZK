@@ -1,0 +1,255 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,5 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)] #[path="NBO_native.rs"] mod NBO_native;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBO_native.rs
+@@ -0,0 +1,244 @@
++use super::*;
++static mut NBO_EVENT:usize=0;
++static mut NBO_COORD:usize=0;
++static mut NBO_Q:usize=0;
++static mut NBO_ALPHA:E=E::ZERO;
++static mut NBO_DOTS:[E;4]=[E::ZERO;4];
++static mut NBO_INV:[M31;5]=[M31::ZERO;5];
++static mut NBO_FOLD:E=E::ZERO;
++static mut NBO_VALUES:[E;4]=[E::ZERO;4];
++static mut NBO_PROOF:*const u8=core::ptr::null();
++static mut NBO_G:*const E=core::ptr::null();
++static mut NBO_GEOM:*const QueryGeometry=core::ptr::null();
++fn NBO_any_e()->E {let w:[u32;8]=kani::any();
++ kani::assume(w[0]<2147483647);kani::assume(w[1]<2147483647);kani::assume(w[2]<2147483647);kani::assume(w[3]<2147483647);
++ kani::assume(w[4]<2147483647);kani::assume(w[5]<2147483647);kani::assume(w[6]<2147483647);kani::assume(w[7]<2147483647);
++ E::from_limbs(w).unwrap()}
++fn NBO_open(proof:&[u8],i:usize)->&[u8] {unsafe {assert_eq!(NBO_EVENT,0);NBO_EVENT=1;assert_eq!(i,NBO_Q);assert_eq!(proof.as_ptr(),NBO_PROOF);}proof}
++fn NBO_dots(q:&[u8],g:&[E;29])->[E;4] {unsafe {assert_eq!(NBO_EVENT,1);NBO_EVENT=2;assert_eq!(q.as_ptr(),NBO_PROOF);assert_eq!(g.as_ptr(),NBO_G);NBO_DOTS}}
++fn NBO_inverse(geometry:&QueryGeometry,i:usize)->&[M31;5] {unsafe {assert_eq!(NBO_EVENT,2);NBO_EVENT=3;assert_eq!(geometry as *const _,NBO_GEOM);assert_eq!(i,NBO_Q);&NBO_INV}}
++fn NBO_circle(alpha:E,dots:[E;4],inverse:&[M31;5])->E {unsafe {
++ assert_eq!(NBO_EVENT,3);NBO_EVENT=4;let k=NBO_COORD;
++ assert_eq!(alpha.to_limbs()[k],NBO_ALPHA.to_limbs()[k]);
++ assert_eq!(dots[0].to_limbs()[k],NBO_DOTS[0].to_limbs()[k]);
++ assert_eq!(dots[1].to_limbs()[k],NBO_DOTS[1].to_limbs()[k]);
++ assert_eq!(dots[2].to_limbs()[k],NBO_DOTS[2].to_limbs()[k]);
++ assert_eq!(dots[3].to_limbs()[k],NBO_DOTS[3].to_limbs()[k]);
++ assert_eq!(inverse[k%5],NBO_INV[k%5]);NBO_FOLD}}
++fn NBO_field(q:&[u8],s:usize)->E {unsafe {assert_eq!(NBO_EVENT,4+s);NBO_EVENT+=1;
++ assert_eq!(q.len(),128);assert_eq!(q.as_ptr(),NBO_PROOF.add(672));NBO_VALUES[s]}}
++// Literal frozen prefix. The only carrier factoring is a.next -> next.
++fn NBO_prefix(proof:&[u8],p:&Prepared,next:usize,g:&[E;29],geometry:&QueryGeometry)->Result<(E,[E;4],[M31;5]),Error>{
++    let i = next;
++    let u = p.queries[i] as usize;
++    let q = opening(proof, i);
++    let dots = crate::fast_dots::four_dots(q, g);
++    crate::trace::value(9, 4 * i, dots[0]);
++    crate::trace::value(9, 4 * i + 1, dots[1]);
++    crate::trace::value(9, 4 * i + 2, dots[2]);
++    crate::trace::value(9, 4 * i + 3, dots[3]);
++    let inverse = *geometry.for_query(i);
++    let folded = circle_fold_with_inverses(p.alpha[0], dots, &inverse);
++    crate::trace::value(10, 2 * i, folded);
++    let values = core::array::from_fn(|s| field(&q[672..800], s));
++    if folded != values[u % 4] {
++        return Err(Error::Query);
++    }
++    Ok((folded,values,inverse))
++}
++fn NBO_prefix_case(){
++ let next:usize=kani::any();kani::assume(next<10);let u:u32=kani::any();kani::assume(u<262144);
++ let k:usize=kani::any();kani::assume(k<8);let mut queries=[0;22];queries[next]=u;
++ let alpha=NBO_any_e();let folded=NBO_any_e();let values=[NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e()];
++ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[alpha,NBO_any_e()],rho:K::ZERO,queries,semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
++ let proof:[u8;832]=kani::any();let g:[E;29]=[NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e()];
++ let geometry=QueryGeometry{start:kani::any(),inverses:Vec::new(),line_z:Vec::new()};
++ unsafe {NBO_Q=next;NBO_COORD=k;NBO_PROOF=proof.as_ptr();NBO_G=g.as_ptr();NBO_GEOM=&geometry;NBO_ALPHA=alpha;
++ NBO_DOTS=[NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e()];
++ NBO_INV=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ NBO_FOLD=folded;NBO_VALUES=values;}
++ let out=NBO_prefix(&proof,&p,next,&g,&geometry);
++ if folded!=values[(u%4)as usize] {assert!(matches!(out,Err(Error::Query)));}
++ else {let(f,v,inv)=out.unwrap();assert_eq!(f.to_limbs()[k],folded.to_limbs()[k]);
++ let j:usize=kani::any();kani::assume(j<4);assert_eq!(v[j].to_limbs()[k],values[j].to_limbs()[k]);
++ unsafe{assert_eq!(inv[k%5],NBO_INV[k%5]);}}
++ unsafe{assert_eq!(NBO_EVENT,8);}
++ kani::cover!(folded==values[(u%4)as usize]);kani::cover!(folded!=values[(u%4)as usize]);
++}
++#[kani::proof]
++#[kani::unwind(1024)]
++#[kani::stub(super::opening,NBO_open)]
++#[kani::stub(crate::fast_dots::four_dots,NBO_dots)]
++#[kani::stub(crate::verifier::QueryGeometry::for_query,NBO_inverse)]
++#[kani::stub(crate::verifier::circle_fold_with_inverses,NBO_circle)]
++#[kani::stub(crate::weights::field,NBO_field)]
++fn NBO_prefix_all_g(){NBO_prefix_case()}
++
++// Capacity is arbitrary throughout the native allocation layout domain.
++// This checks one indexed slice setter, never the query or row loop.
++#[kani::proof]
++#[kani::unwind(4096)]
++fn NBO_capacity_row() {
++ let cap:usize=kani::any();kani::assume(cap>=64);kani::assume(cap<=isize::MAX as usize/core::mem::size_of::<[u64;4]>());
++ let initial:[[u64;4];64]=[kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()];
++ let mut raw:Vec<[u64;4]>=Vec::with_capacity(cap);raw.extend_from_slice(&initial);
++ assert_eq!(raw.len(),64);assert_eq!(raw.capacity(),cap);let ptr=raw.as_ptr();
++ let i:usize=kani::any();kani::assume(i<64);let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);
++ let new:[u64;4]=kani::any();let before=raw[j][k];
++ raw[i]=new;
++ assert_eq!(raw.len(),64);assert_eq!(raw.capacity(),cap);assert_eq!(raw.as_ptr(),ptr);
++ assert_eq!(raw[j][k],if i==j {new[k]}else{before});
++ kani::cover!(cap==64);kani::cover!(cap>64);kani::cover!(i!=j);
++}
++
++static mut NBO_ALPHA1:E=E::ZERO;
++static mut NBO_LINE:E=E::ZERO;
++static mut NBO_LINE_CALLS:usize=0;
++fn NBO_line(alpha:E,values:[E;4],inverse:&[M31;5])->E {unsafe {
++ NBO_LINE_CALLS+=1;let k=NBO_COORD;assert_eq!(alpha.to_limbs()[k],NBO_ALPHA1.to_limbs()[k]);
++ assert_eq!(values[0].to_limbs()[k],NBO_VALUES[0].to_limbs()[k]);
++ assert_eq!(values[1].to_limbs()[k],NBO_VALUES[1].to_limbs()[k]);
++ assert_eq!(values[2].to_limbs()[k],NBO_VALUES[2].to_limbs()[k]);
++ assert_eq!(values[3].to_limbs()[k],NBO_VALUES[3].to_limbs()[k]);
++ assert_eq!(inverse[k%5],NBO_INV[k%5]);NBO_LINE}}
++// Literal source continuation up to the node field-operation cut.
++fn NBO_line_geometry(alpha:E,values:[E;4],inverse:&[M31;5],i:usize,geometry:&QueryGeometry)->(E,M31) {
++ let folded=line_fold_with_inverses(alpha,values,inverse);
++ crate::trace::value(10,2*i+1,folded);
++ let z=geometry.line_z[i-geometry.start];
++ (folded,z)
++}
++#[kani::proof]
++#[kani::unwind(1024)]
++#[kani::stub(crate::verifier::line_fold_with_inverses,NBO_line)]
++fn NBO_line_geometry_routing() {
++ let i:usize=kani::any();kani::assume(i<10);let start:usize=kani::any();kani::assume(start<=i);
++ let k:usize=kani::any();kani::assume(k<8);let alpha=NBO_any_e();let line=NBO_any_e();
++ let values=[NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e()];
++ let inverse=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ let zs:[u32;10]=kani::any();
++ let geometry=QueryGeometry{start,inverses:Vec::new(),line_z:Vec::from([
++ M31(zs[0]),M31(zs[1]),M31(zs[2]),M31(zs[3]),M31(zs[4]),M31(zs[5]),M31(zs[6]),M31(zs[7]),M31(zs[8]),M31(zs[9])])};
++ unsafe{NBO_COORD=k;NBO_ALPHA1=alpha;NBO_LINE=line;NBO_VALUES=values;NBO_INV=inverse;}
++ let(out,z)=NBO_line_geometry(alpha,values,&inverse,i,&geometry);
++ assert_eq!(out.to_limbs()[k],line.to_limbs()[k]);assert_eq!(z.0,zs[i-start]);
++ assert_eq!(geometry.start,start);assert_eq!(geometry.line_z.len(),10);
++ unsafe{assert_eq!(NBO_LINE_CALLS,1);}
++ kani::cover!(start==i);kani::cover!(i==9);kani::cover!(start<i);
++}
++// Counter/assignment cut after rhs and power have returned. All returned
++// carriers are unconstrained here; their operations and domains remain explicit.
++#[kani::proof]
++#[kani::unwind(1024)]
++fn NBO_tail_assignment() {
++ let mut next:usize=kani::any();kani::assume(next<10);let mut terms:usize=kani::any();kani::assume(terms==next);
++ let old=next;let mut rhs=NBO_any_e();let old_rhs=rhs;let returned_rhs=NBO_any_e();
++ let mut power=K::ZERO;let returned_power=NBO_any_e().c0();let k:usize=kani::any();kani::assume(k<8);
++ terms+=1;
++ assert_eq!(rhs.to_limbs()[k],old_rhs.to_limbs()[k]);
++ rhs=returned_rhs;crate::trace::value(11,next,rhs);
++ power=returned_power;next+=1;
++ assert_eq!(next,old+1);assert_eq!(terms,next);assert_eq!(rhs.to_limbs()[k],returned_rhs.to_limbs()[k]);
++ let words=|q:K|[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0];assert_eq!(words(power)[k%4],words(returned_power)[k%4]);
++ kani::cover!(old==0);kani::cover!(old==9);
++}
++
++fn NBO_project_capacity<T:Copy,const N:usize>(initial:[T;N],cap:usize) {
++ kani::assume(cap>=N);kani::assume(cap<=isize::MAX as usize/core::mem::size_of::<T>());
++ let mut v:Vec<T>=Vec::with_capacity(cap);v.extend_from_slice(&initial);
++ let ptr=v.as_ptr();assert_eq!(v.len(),N);assert_eq!(v.capacity(),cap);
++ {let s:&[T]=&v;assert_eq!(s.len(),N);assert_eq!(s.as_ptr(),ptr);}
++ {let s:&mut[T]=&mut v;assert_eq!(s.len(),N);assert_eq!(s.as_ptr(),ptr);}
++ assert_eq!(v.len(),N);assert_eq!(v.capacity(),cap);assert_eq!(v.as_ptr(),ptr);
++ kani::cover!(cap==N);kani::cover!(cap>N);
++}
++#[kani::proof]
++#[kani::unwind(4096)]
++fn NBO_capacity_raw_projection(){NBO_project_capacity([kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()],kani::any());}
++#[kani::proof]
++#[kani::unwind(4096)]
++fn NBO_capacity_weight_projection(){NBO_project_capacity([K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}}],kani::any());}
++#[kani::proof]
++#[kani::unwind(4096)]
++fn NBO_capacity_line_projection(){NBO_project_capacity([M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],kani::any());}
++#[kani::proof]
++#[kani::unwind(4096)]
++fn NBO_capacity_inverse_projection(){NBO_project_capacity([[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]],kani::any());}
++
++static mut NBO_ROW_PTR:*const [u64;4]=core::ptr::null();
++static mut NBO_ROW_FLUSH:bool=false;
++static mut NBO_ROW_POWER:K=K::ZERO;
++static mut NBO_ROW_BASIS:M31=M31::ZERO;
++static mut NBO_ROW_REPLY:[u64;4]=[0;4];
++static mut NBO_ROW_CALLS:usize=0;
++fn NBO_update(row:&mut[u64;4],power:K,basis:M31,flush:bool) {unsafe {
++ assert_eq!(NBO_ROW_CALLS,0);NBO_ROW_CALLS=1;assert_eq!(row as *const _,NBO_ROW_PTR);
++ assert_eq!(flush,NBO_ROW_FLUSH);assert_eq!(basis,NBO_ROW_BASIS);
++ let k=NBO_COORD%4;let words=|q:K|[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0];
++ assert_eq!(words(power)[k],words(NBO_ROW_POWER)[k]);*row=NBO_ROW_REPLY;}}
++// Frozen BatchedWeights::push body with its native Vec slice projection
++// factored at the dereference cut, and all other expressions unchanged.
++fn NBO_push_borrowed(raw:&mut[[u64;4]],terms:usize,index:usize,power:K,basis:M31) {
++ let flush=terms&3==3;
++ update_residue_row(&mut raw[index],power,basis,flush);
++}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(crate::verifier::update_residue_row,NBO_update)]
++fn NBO_borrowed_push_frame() {
++ let mut raw:[[u64;4];64]=[kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()];let terms:usize=kani::any();let i:usize=kani::any();kani::assume(i<64);
++ let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);
++ let before=raw[j][k];let power=K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}};let basis=M31(kani::any());let reply:[u64;4]=kani::any();
++ unsafe{NBO_ROW_PTR=raw.as_ptr().add(i);NBO_ROW_FLUSH=terms&3==3;NBO_ROW_POWER=power;NBO_ROW_BASIS=basis;NBO_ROW_REPLY=reply;NBO_COORD=k;}
++ NBO_push_borrowed(&mut raw,terms,i,power,basis);
++ assert_eq!(raw[j][k],if i==j {reply[k]}else{before});unsafe{assert_eq!(NBO_ROW_CALLS,1);}
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i!=j);kani::cover!(terms&3==3);kani::cover!(terms&3!=3);
++}
++static mut NBO_REDUCE_INPUT:[u64;4]=[0;4];
++static mut NBO_REDUCE_OUTPUT:[u32;4]=[0;4];
++static mut NBO_REDUCE_CALLS:usize=0;
++fn NBO_reduce(x:u64)->M31 {unsafe {let i=NBO_REDUCE_CALLS;assert!(i<4);NBO_REDUCE_CALLS+=1;assert_eq!(x,NBO_REDUCE_INPUT[i]);M31(NBO_REDUCE_OUTPUT[i])}}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,NBO_reduce)]
++fn NBO_finish_one_store() {
++ let raw:[[u64;4];64]=[kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()];let b=BatchedWeights{raw:Vec::from(raw),terms:kani::any()};
++ let mut out:[K;64]=[K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}}];
++ let i:usize=kani::any();kani::assume(i<=64);let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);
++ let words=|q:K|[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0];let before=words(out[j])[k];
++ let returned:[u32;4]=kani::any();kani::assume(returned[0]<2147483647);kani::assume(returned[1]<2147483647);kani::assume(returned[2]<2147483647);kani::assume(returned[3]<2147483647);
++ unsafe{NBO_REDUCE_OUTPUT=returned;if i<64 {NBO_REDUCE_INPUT=b.raw[i];}}
++ {let mut iter=out.iter_mut().enumerate();if i>0 {let _=iter.nth(i-1);}if let Some((index,w))=iter.next(){*w=b.value(index);}}
++ assert_eq!(words(out[j])[k],if i<64&&i==j {returned[k]}else{before});
++ unsafe{assert_eq!(NBO_REDUCE_CALLS,if i<64 {4}else{0});}
++ assert_eq!(b.raw.len(),64);
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i==64);kani::cover!(i!=j);
++}
++
++fn NBO_never_line(_a:E,_v:[E;4],_i:&[M31;5])->E {panic!("reject must not reach line fold")}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(super::opening,NBO_open)]
++#[kani::stub(crate::fast_dots::four_dots,NBO_dots)]
++#[kani::stub(crate::verifier::QueryGeometry::for_query,NBO_inverse)]
++#[kani::stub(crate::verifier::circle_fold_with_inverses,NBO_circle)]
++#[kani::stub(crate::weights::field,NBO_field)]
++#[kani::stub(crate::verifier::line_fold_with_inverses,NBO_never_line)]
++fn NBO_actual_query_reject() {
++ let next:usize=kani::any();kani::assume(next<10);let u:u32=kani::any();kani::assume(u<262144);
++ let k:usize=kani::any();kani::assume(k<8);let mut queries=[0;22];queries[next]=u;
++ let alpha=NBO_any_e();let folded=NBO_any_e();let values=[NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e()];
++ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[alpha,NBO_any_e()],rho:K::ZERO,queries,semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
++ let proof:[u8;832]=kani::any();let g:[E;29]=[NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e()];
++ let geometry=QueryGeometry{start:kani::any(),inverses:Vec::new(),line_z:Vec::new()};
++ let a=Accumulator{weights:Vec::from([K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}}]),rhs:NBO_any_e(),power:NBO_any_e().c0(),next};
++ let pending=BatchedWeights{raw:Vec::from([kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()]),terms:kani::any()};
++ unsafe {NBO_Q=next;NBO_COORD=k;NBO_PROOF=proof.as_ptr();NBO_G=g.as_ptr();NBO_GEOM=&geometry;NBO_ALPHA=alpha;
++ NBO_DOTS=[NBO_any_e(),NBO_any_e(),NBO_any_e(),NBO_any_e()];
++ NBO_INV=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ NBO_FOLD=folded;NBO_VALUES=values;}
++ kani::assume(folded!=values[(u%4)as usize]);
++ let result=query_values(&proof,&p,a,&g,None,&geometry,pending);
++ assert!(matches!(result,Err(Error::Query)));unsafe{assert_eq!(NBO_EVENT,8);}
++ kani::cover!(next==0);kani::cover!(next==9);kani::cover!(u%4==0);kani::cover!(u%4==3);
++}

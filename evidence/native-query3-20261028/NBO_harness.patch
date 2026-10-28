@@ -8,7 +8,7 @@
 +#[cfg(kani)] #[path="NBO_native.rs"] mod NBO_native;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBO_native.rs
-@@ -0,0 +1,573 @@
+@@ -0,0 +1,770 @@
 +use super::*;
 +static mut NBO_EVENT:usize=0;
 +static mut NBO_COORD:usize=0;
@@ -581,4 +581,201 @@
 + let y=x.mul_m31(M31(scalar));
 + unsafe{assert_eq!(NBO_SCALAR_CALLS,2);assert_eq!(NBO_SCALAR_INPUT[k/4][k%4],x.to_limbs()[k]);assert_eq!(NBO_SCALAR_SCALE[k/4],scalar);assert_eq!(y.to_limbs()[k],NBO_SCALAR_OUTPUT[k/4][k%4]);}
 + kani::cover!(k==0);kani::cover!(k==7);kani::cover!(scalar==0);kani::cover!(scalar==2147483646);
++}
++
++// ONE literal basis iteration on an arbitrary pre-state, including all other
++//255 arbitrary cells. Copy bound covers the entire1024-byte basis backing.
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_m31_canonical_reply)]
++fn NBO_basis_store_full_copy_bound(){
++ let mut basis:[M31;256]=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];let n:usize=kani::any();kani::assume(n>=1&&n<=128);
++ let j:usize=kani::any();kani::assume(j<n);let i:usize=kani::any();kani::assume(i<256);
++ let node:u32=kani::any();kani::assume(node<2147483647);kani::assume(basis[j].0<2147483647);
++ let old=basis[i];let input=basis[j];
++ basis[n+j]=basis[j].mul(M31(node));
++ unsafe{assert_eq!(NBO_MUL_CALLS,1);assert_eq!(NBO_MUL_X,input);assert_eq!(NBO_MUL_Y.0,node);assert_eq!(basis[i],if i==n+j {NBO_MUL_OUT}else{old});}
++ kani::cover!(n==1);kani::cover!(n==128);kani::cover!(j==127);kani::cover!(i==n+j);kani::cover!(i!=n+j);
++}
++#[kani::proof]
++#[kani::unwind(4096)]
++fn NBO_range_next_bounded(){
++ let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=256);kani::assume(end<=256);
++ let mut iter=start..end;let result=iter.next();
++ if start<end {assert_eq!(result,Some(start));assert_eq!(iter.start,start+1);}
++ else {assert_eq!(result,None);assert_eq!(iter.start,start);}
++ assert_eq!(iter.end,end);
++ kani::cover!(start==0&&end==128);kani::cover!(start==end);kani::cover!(start>end);
++}
++#[kani::proof]
++#[kani::unwind(4096)]
++fn NBO_basis_initializer(){
++ let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let n=1usize;
++ let i:usize=kani::any();kani::assume(i<256);
++ assert_eq!(basis[i],if i==0 {M31::ONE}else{M31::ZERO});assert_eq!(n,1);
++ kani::cover!(i==0);kani::cover!(i==255);
++}
++// ONE outer post-inner continuation. The returned basis is not rebuilt.
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_m31_canonical_reply)]
++fn NBO_basis_outer_after_inner(){
++ let mut n:usize=kani::any();kani::assume(n>=1&&n<=32);let oldn=n;
++ let mut node:u32=kani::any();kani::assume(node<2147483647);let oldnode=node;
++ node=M31(node).mul(M31(node)).double().sub(M31::ONE).0;n*=2;
++ assert_eq!(n,2*oldn);assert!(n<=64);assert!(node<2147483647);
++ unsafe{assert_eq!(NBO_MUL_CALLS,1);assert_eq!(NBO_MUL_X.0,oldnode);assert_eq!(NBO_MUL_Y.0,oldnode);assert_eq!(node,NBO_MUL_OUT.double().sub(M31::ONE).0);}
++ kani::cover!(oldn==1);kani::cover!(oldn==32);
++}
++
++fn NBO_any_q()->K {let w:[u32;4]=kani::any();kani::assume(w[0]<2147483647);kani::assume(w[1]<2147483647);kani::assume(w[2]<2147483647);kani::assume(w[3]<2147483647);NBO_qfrom(w)}
++static mut NBO_ROW_TRACE_CALLS:usize=0;
++static mut NBO_ROW_TRACE_INDEX:usize=0;
++static mut NBO_ROW_WEIGHT_WORDS:[u32;4]=[0;4];
++fn NBO_row_trace(slot:u16,index:usize,value:E){unsafe{
++ let call=NBO_ROW_TRACE_CALLS;assert!(call<2);NBO_ROW_TRACE_CALLS+=1;assert_eq!(index,NBO_ROW_TRACE_INDEX);
++ let k=NBO_COORD;assert_eq!(slot,if call==0 {12}else{13});
++ let expected=if call==0 {if k<4 {NBO_ROW_WEIGHT_WORDS[k]}else{0}}else{if k==0 {NBO_ROW_BASIS.0}else{0}};
++ assert_eq!(value.to_limbs()[k],expected);
++}}
++// Frozen release ONE-row body. cfg(prover) is false in the adopted builds.
++fn NBO_row_body(a:&Accumulator,weights:&mut BatchedWeights,basis:&[M31;256],j:usize,width:usize){
++ weights.push(j,a.power,basis_at(basis,j));
++ crate::trace::value(12,a.next*width+j,E::from_qm31(accumulated_weight_at(&a.weights,j)));
++ crate::trace::value(13,a.next*width+j,E::from_m31(basis_at(basis,j)));
++}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(crate::verifier::update_residue_row,NBO_update)]
++#[kani::stub(crate::trace::value,NBO_row_trace)]
++fn NBO_full_row_body(){
++ let next:usize=kani::any();kani::assume(next<10);let terms:usize=kani::any();let j:usize=kani::any();kani::assume(j<64);let i:usize=kani::any();kani::assume(i<64);let k:usize=kani::any();kani::assume(k<8);
++ let a=Accumulator{weights:Vec::from([NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q(),NBO_any_q()]),rhs:NBO_any_e(),power:NBO_any_q(),next};
++ let mut weights=BatchedWeights{raw:Vec::from([kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()]),terms};let basis:[M31;256]=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];kani::assume(basis[j].0<2147483647);
++ let reply:[u64;4]=kani::any();let old=weights.raw[i][k%4];let aptr=a.weights.as_ptr();let bptr=weights.raw.as_ptr();
++ unsafe{NBO_COORD=k;NBO_ROW_PTR=weights.raw.as_ptr().add(j);NBO_ROW_FLUSH=terms&3==3;NBO_ROW_POWER=a.power;NBO_ROW_BASIS=basis[j];NBO_ROW_REPLY=reply;NBO_ROW_TRACE_INDEX=next*64+j;NBO_ROW_WEIGHT_WORDS=NBO_qwords(a.weights[j]);}
++ NBO_row_body(&a,&mut weights,&basis,j,64);
++ assert_eq!(weights.raw[i][k%4],if i==j {reply[k%4]}else{old});assert_eq!(weights.terms,terms);assert_eq!(weights.raw.len(),64);assert_eq!(a.weights.as_ptr(),aptr);assert_eq!(weights.raw.as_ptr(),bptr);
++ unsafe{assert_eq!(NBO_ROW_CALLS,1);assert_eq!(NBO_ROW_TRACE_CALLS,2);}
++ kani::cover!(j==0);kani::cover!(j==63);kani::cover!(i!=j);kani::cover!(k==0);kani::cover!(k==7);
++}
++// ONE literal constructor while-body on arbitrary reached backing contents.
++#[kani::proof]
++#[kani::unwind(4096)]
++fn NBO_initializer_borrowed_step(){
++ let weights:[K;64]=[NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>())];let mut raw:[[u64;4];64]=[kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()];let mut index:usize=kani::any();kani::assume(index<=64);let old_index=index;
++ let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);let before=raw[j][k];let mut chosen=0;
++ if index<weights.len(){let w=weights[index];chosen=NBO_qwords(w)[k]as u64;raw[index]=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];index+=1;}
++ assert_eq!(index,old_index+usize::from(old_index<64));assert_eq!(raw[j][k],if old_index<64&&old_index==j {chosen}else{before});
++ kani::cover!(old_index==0);kani::cover!(old_index==63);kani::cover!(old_index==64);kani::cover!(old_index!=j);
++}
++static mut NBO_FINISH_SELF:*const BatchedWeights=core::ptr::null();
++static mut NBO_FINISH_INDEX:usize=0;
++static mut NBO_FINISH_VALUE:K=K::ZERO;
++static mut NBO_FINISH_CALLS:usize=0;
++fn NBO_finish_value_reply(b:&BatchedWeights,index:usize)->K {unsafe{
++ assert_eq!(b as *const _,NBO_FINISH_SELF);assert_eq!(index,NBO_FINISH_INDEX);assert_eq!(b.raw.len(),64);NBO_FINISH_CALLS+=1;NBO_FINISH_VALUE
++}}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(crate::verifier::BatchedWeights::value,NBO_finish_value_reply)]
++fn NBO_finish_vec_capacity_step(){
++ let cap:usize=kani::any();kani::assume(cap>=64&&cap<=isize::MAX as usize/core::mem::size_of::<K>());
++ let initial:[K;64]=[NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>()),NBO_qfrom(kani::any::<[u32;4]>())];let mut weights:Vec<K>=Vec::with_capacity(cap);weights.extend_from_slice(&initial);
++ let b=BatchedWeights{raw:Vec::from([kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()]),terms:kani::any()};let i:usize=kani::any();kani::assume(i<=64);let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);
++ let before=NBO_qwords(weights[j])[k];let ptr=weights.as_ptr();let result=NBO_any_q();
++ unsafe{NBO_FINISH_SELF=&b;NBO_FINISH_INDEX=i;NBO_FINISH_VALUE=result;}
++ {let mut iter=weights.as_mut_slice().iter_mut().enumerate();if i>0{let _=iter.nth(i-1);}if let Some((index,w))=iter.next(){*w=b.value(index);}}
++ assert_eq!(weights.as_ptr(),ptr);assert_eq!(weights.len(),64);assert_eq!(weights.capacity(),cap);assert_eq!(NBO_qwords(weights[j])[k],if i<64&&i==j {NBO_qwords(result)[k]}else{before});
++ unsafe{assert_eq!(NBO_FINISH_CALLS,if i<64{1}else{0});}
++ kani::cover!(cap==64);kani::cover!(cap>64);kani::cover!(i==63);kani::cover!(i==64);kani::cover!(i!=j);
++}
++
++const _: ()=assert!(!cfg!(feature="prover"));
++static mut NBO_SCALE_CALLS:usize=0;
++static mut NBO_SCALE_X:[u32;3]=[0;3];static mut NBO_SCALE_Y:[u32;3]=[0;3];static mut NBO_SCALE_OUT:[u32;3]=[0;3];
++fn NBO_scale_spec(x:M31,y:M31)->M31{
++ assert!(x.0<2147483647);assert!(y.0<2147483647);let out:u32=kani::any();
++ kani::assume(out as u64==(x.0 as u64*y.0 as u64)%2147483647);kani::assume(out<2147483647);
++ unsafe{let i=NBO_SCALE_CALLS;assert!(i<3);NBO_SCALE_CALLS+=1;NBO_SCALE_X[i]=x.0;NBO_SCALE_Y[i]=y.0;NBO_SCALE_OUT[i]=out;}M31(out)
++}
++// Native pre-scalar cuts. Cases7/8 start AFTER the SAME c0/c1 scale calls:
++// a,b are those returned canonical values, not the opening's original a,b.
++fn NBO_coefficient_cut(which:u8,a:E,b:E,c:E,d:E,inverse:[M31;5])->(E,M31){
++ let quarter=M31(536870912);let half=M31(1073741824);
++ match which{
++ 0=>(a.add(b).add(c).add(d),quarter),
++ 1=>(a.sub(b).sub(c).add(d),quarter.mul(inverse[1])),
++ 2=>(a.add(b).sub(c).sub(d),quarter.mul(inverse[0])),
++ 3=>(a.sub(b).add(c).sub(d),quarter.mul(inverse[0]).mul(inverse[1])),
++ 4=>(a.add(b).sub(c).sub(d),quarter.mul(inverse[4])),
++ 5=>(a.sub(b),half.mul(inverse[2])),
++ 6=>(d.sub(c),half.mul(inverse[3])),
++ 7=>(a.add(b),half),
++ _=>(a.sub(b),half.mul(inverse[4]))
++ }
++}
++fn NBO_coefficient_case(which:u8){
++ let a=NBO_any_e();let b=NBO_any_e();let c=NBO_any_e();let d=NBO_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=NBO_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(NBO_SCALE_CALLS,count);
++ if count==0 {assert_eq!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(NBO_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(NBO_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(NBO_SCALE_X[1],NBO_SCALE_OUT[0]);assert_eq!(NBO_SCALE_Y[1],inv[1]);}
++ assert_eq!(scale.0,NBO_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_scale_spec)]
++fn NBO_coeff_common_h0(){NBO_coefficient_case(0);}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_scale_spec)]
++fn NBO_coeff_circle_h1(){NBO_coefficient_case(1);}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_scale_spec)]
++fn NBO_coeff_circle_h2(){NBO_coefficient_case(2);}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_scale_spec)]
++fn NBO_coeff_circle_h3(){NBO_coefficient_case(3);}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_scale_spec)]
++fn NBO_coeff_line_h2(){NBO_coefficient_case(4);}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_scale_spec)]
++fn NBO_coeff_line_c0(){NBO_coefficient_case(5);}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_scale_spec)]
++fn NBO_coeff_line_c1(){NBO_coefficient_case(6);}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_scale_spec)]
++fn NBO_coeff_line_h1(){NBO_coefficient_case(7);}
++#[kani::proof]
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,NBO_scale_spec)]
++fn NBO_coeff_line_h3(){NBO_coefficient_case(8);}
++
++// ONE Horner pre-multiply cut shared by all three source nesting sites.
++fn NBO_horner_argument(alpha:E,h:E,previous_product:E)->(E,E){(alpha,h.add(previous_product))}
++#[kani::proof]
++#[kani::unwind(4096)]
++fn NBO_horner_argument_cut(){
++ let alpha=NBO_any_e();let h=NBO_any_e();let previous=NBO_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let(receiver,arg)=NBO_horner_argument(alpha,h,previous);
++ assert_eq!(receiver.to_limbs()[k],alpha.to_limbs()[k]);assert!(arg.to_limbs()[k]<2147483647);
++ kani::cover!(k==0);kani::cover!(k==7);
 +}

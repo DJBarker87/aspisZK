@@ -1,6 +1,6 @@
 # NBO replacement and native partition ledger
 
-No multiplication replacement is introduced. All field multiplication stays in the inherited Lean discharge/NBC field-source association boundary; NBF/LPh_STUBS.md is reused unchanged. No field multiplication equivalence is proved in Kani.
+Every multiplication replacement is paired with the inherited emitted-definition value theorem in LPh_STUBS.md. The separate NBC field-source dictionary association remains explicit. The inherited NBF table is reused unchanged. No field multiplication equivalence is proved in Kani.
 
 | Replacement | Required semantic pairing | Exact native credit |
 |---|---|---|
@@ -21,3 +21,7 @@ K003 combined capacity/store timed out and receives no pass. It is replaced by c
 NBO_mark_none is paired with native K017 (actual mark(None,Query(i)), i<10) and retained AspisR1.Port3_QueryStage.mark_none; new NBO_Release.mark_none reuses it. The replacement ASSERTS obs.is_none and records the actual phase/ordinal. No some-observer contract is claimed. K019 passes its arbitrary post-accumulation carrier context; K018 with broader mutable-callee substitution timed out and is excluded. K020 uses an input-observing accumulation replacement only: it proves exact reached arguments, not the callee's mutation or returned semantics. K019 supplies the separate arbitrary after-return continuation on full64-row carriers.
 
 NBO_K015/K021 run the actual frozen opening callee on arbitrary57607-byte proof, eliminating the 832-byte q/proof alias restriction of earlier routing gates. K021 is the full actual query_values rejection context. K022 full accepted forward-call context with exact natural M31 stub times out and is excluded, even with the redundant canonical return bound. No timeout increase or unchanged retry.
+
+K023 passes actual WideExact::mul_m31 dispatch with only QM31::mul_m31 replaced. K024 proves one basis write with the exact natural M31 replacement, K025 Range.next, K026 basis initialization and one slot, and K027 one outer-loop node/doubling step. K028 proves ONE actual release row body: actual basis/weight reads and embeddings, exact ordered residue updates at next*64+j, and the full other-row frame; residue-update semantic pairing remains NBB. K029 covers ONE initializer iteration including stop. K030 combined arbitrary-capacity finish step timed out; no combined pass is claimed. Capacity projection, slice step and Lean continuation induction remain separate facts.
+
+K031-K039 check literal pre-scalar coefficient call cuts, including all arguments, inverse slots, order and canonical input domains. They execute actual E addition/subtraction and use only the exact natural M31 replacement for scalar operations. K040 checks ONE Horner multiplication argument cut, executing the actual E addition but no multiplication. These are local native associations, not complete fold or whole-query equalities. K040 credit is subject to its terminal receipt.
