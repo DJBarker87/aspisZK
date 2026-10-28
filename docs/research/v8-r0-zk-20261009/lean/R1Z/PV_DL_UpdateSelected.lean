@@ -1,5 +1,6 @@
 import R1Z.PV_DL_UpdateCarrier
 import R1Z.PV_DL_DefaultCallback
+import R1Z.PV_AL_SplitNativeShape
 open Aeneas Aeneas.Std Result ProverRwFull
 noncomputable section
 namespace R1Z.PV_DL_UpdateSelected
@@ -33,28 +34,67 @@ def updater (base : ExternalTypes) {T N A : Type}
     T → Slice (GenericArray U8 N A) → Result T :=
   @digest.core_api.UpdateCore.update_blocks (Types base) T N A uc
 
+/-- Dictionary selection is nominally erased in the emitted types: both
+Eager and Lazy markers are Unit. Compare the complete original dictionary,
+then discharge the test at the actual generated Eager constructor. -/
+def kindDispatch (base : ExternalTypes) (ops : @ExternalFuns (Types base))
+    {K R : Type} (kind : @block_buffer.BufferKind (Types base) K)
+    (accepted fallback : R) : R := by
+  classical
+  by_cases hk : K=block_buffer.Eager
+  · subst K
+    by_cases hc : kind=@block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) ops
+    · exact accepted
+    · exact fallback
+  · exact fallback
+
+theorem native_kind (base : ExternalTypes) (ops : @ExternalFuns (Types base))
+    {R : Type} (accepted fallback : R) :
+    kindDispatch base ops (@block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) ops)
+      accepted fallback=accepted := by
+  classical
+  simp only [kindDispatch]
+  rw [dif_pos True.intro,if_pos rfl]
+
+def bufferKind (base : ExternalTypes) (ops : @ExternalFuns (Types base)) (T : Type) :
+    @digest.core_api.BufferKindUser (Types base) T block_buffer.Eager
+      (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6) :=
+  ⟨⟨PV_AL_SplitNativeShape.nativeTrait base ops 6⟩,
+    @block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) ops⟩
+
 @[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
     @ExternalFuns (Types base) :=
   letI : ExternalTypes := Types base
-  {ops with op216 := fun bk uc less nz => dispatch (updater base uc) (ops.op216 bk uc less nz)}
+  {ops with op216 := fun bk uc less nz =>
+    kindDispatch base ops bk.block_bufferBufferKindInst
+      (dispatch (updater base uc) (ops.op216 bk uc less nz))
+      (ops.op216 bk uc less nz)}
 
 theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base))
-    {T K N0 N1 O : Type}
-    (bk : @digest.core_api.BufferKindUser (Types base) T K N0 (Storage U8 6))
+    {T N1 O : Type}
     (uc : @digest.core_api.UpdateCore (Types base) T N1 (Storage U8 6))
-    (less : typenum.type_operators.IsLess N0 (PV_DL_DefaultCallback.Limit base) O)
+    (less : typenum.type_operators.IsLess (PV_AL_SplitNativeShape.Size base 6)
+      (PV_DL_DefaultCallback.Limit base) O)
     (nz : typenum.marker_traits.NonZero O)
     (self : Wrapper T (Storage U8 6)) (input : Slice U8) :
     @ExternalFuns.op216 (Types base) (selected base ops)
-      T K N0 (Storage U8 6) N1 (Storage U8 6) O bk uc less nz self input=
-      PV_DL_UpdateCarrier.value (updater base uc) self input :=
-  dispatch_source (updater base uc)
-    (@ExternalFuns.op216 (Types base) ops T K N0 (Storage U8 6) N1 (Storage U8 6) O bk uc less nz) self input
+      T block_buffer.Eager (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6)
+      N1 (Storage U8 6) O (bufferKind base ops T) uc less nz self input=
+      PV_DL_UpdateCarrier.value (updater base uc) self input := by
+  change kindDispatch base ops _ _ _=_
+  rw [native_kind]
+  exact dispatch_source (updater base uc)
+    (@ExternalFuns.op216 (Types base) ops T block_buffer.Eager
+      (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6) N1 (Storage U8 6) O
+      (bufferKind base ops T) uc less nz) self input
 
 #print axioms Types
 #print axioms dispatch
 #print axioms dispatch_source
 #print axioms updater
+#print axioms kindDispatch
+#print axioms native_kind
+#print axioms bufferKind
 #print axioms selected
 #print axioms selected_native
 end R1Z.PV_DL_UpdateSelected
