@@ -1,7 +1,8 @@
 use aspis_core::field::{M31,P};
 use aspis_statement::{derive_owner_key,poseidon2::Digest,pool_v1::{*,pair_trace::PoolV1PairInputNoteWitnessV1,pair_forest_trace::*}};
 include!("guard_cut.rs");
-include!("frozen_empty_roots.rs");
+#[path="frozen_empty_roots.rs"] mod frozen;
+use frozen::POOL_V1_PAIR_EMPTY_ROOTS;
 fn digest(seed:u32)->Digest {core::array::from_fn(|i|M31((seed+17*i as u32+1)%P))}
 fn canonical(d:&Digest){assert!(d.iter().all(|x|x.0<P))}
 fn main(){
