@@ -1,4 +1,4 @@
-use aspis_core::field::{M31,QM31,P},digest::LegacyHashFn;
+use aspis_core::{field::{M31,QM31,P},digest::LegacyHashFn};
 use aspis_statement::{derive_owner_key,poseidon2::Digest,pool_v1::{*,pair_trace::PoolV1PairInputNoteWitnessV1,pair_forest_trace::*}};
 fn digest(seed:u32)->Digest {core::array::from_fn(|i|M31(seed+17*i as u32+1))}
 include!("guard_cut.rs");
