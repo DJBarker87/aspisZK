@@ -13,6 +13,22 @@ theorem copy_acc (chunks : List (List U8)) (acc : List U8) :
   | cons c cs ih => simp only [copies,ih,List.flatten_cons,List.append_assoc]
 theorem chunks_flat (chunks : List (List U8)) : copies [] chunks=chunks.flatten := by
   rw [copy_acc]; rfl
+/-- Overwrite disjoint chunks of a preallocated buffer, retaining its suffix. -/
+def copyBuffer (prefix suffix : List U8) : List (List U8) → List U8
+  | [] => prefix++suffix
+  | chunk::rest => copyBuffer (prefix++chunk) (suffix.drop chunk.length) rest
+theorem copyBuffer_result (chunks : List (List U8)) (prefix suffix : List U8) :
+    copyBuffer prefix suffix chunks=
+      prefix++chunks.flatten++suffix.drop chunks.flatten.length := by
+  induction chunks generalizing prefix suffix with
+  | nil => simp [copyBuffer]
+  | cons c cs ih =>
+    simp only [copyBuffer,ih,List.flatten_cons,List.length_append,List.drop_drop]
+    simp only [List.append_assoc]
+theorem full_overwrite (chunks : List (List U8)) (h : chunks.flatten.length=32) :
+    copyBuffer [] (List.replicate 32 (0#u8)) chunks=chunks.flatten := by
+  rw [copyBuffer_result,h]
+  simp
 /-- The zip has exactly eight four-byte chunks and covers every byte once. -/
 theorem slot (i j : Nat) (hi : i<8) (hj : j<4) :
     4*i+j<32 ∧ (4*i+j)/4=i ∧ (4*i+j)%4=j := by omega
@@ -25,6 +41,8 @@ theorem nonvacuous (a b c d e f g h : U32) :
     (PV_CB3_Op51Arbitrary.carrier a b c d e f g h).c1.c1.b = h := rfl
 #print axioms copy_acc
 #print axioms chunks_flat
+#print axioms copyBuffer_result
+#print axioms full_overwrite
 #print axioms slot
 #print axioms complete
 #print axioms nonvacuous
