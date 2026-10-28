@@ -15,8 +15,9 @@ theorem returned (i j : Iter) (p : Usize × Slice U32) (hs : 0 < i.iter.size)
     j.iter.size = i.iter.size ∧
     j.iter.remaining.val.length < i.iter.remaining.val.length := by
   unfold next core.iter.adapters.enumerate.IteratorEnumerate.next at h
-  simp only [core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice] at h
-  change (do
+  simp only [core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice,
+    core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice.next] at h
+  with_unfolding_all change (do
     let (o,it) ← BuilderForestStd.chunksNext i.iter
     match o with
     | none => ok (none,{i with iter := it})
