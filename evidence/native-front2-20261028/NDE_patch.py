@@ -28,6 +28,20 @@ def files():
   if prefix=='semantic':
    attrs='#[cfg_attr(kani,kani::requires(point<3&&column<28))]\n#[cfg_attr(kani,kani::ensures(|r|(*r==NDE_native::claim_reference::claim_ref(claims,point,column)) != cfg!(NDE_invert)))]\n'
    s=s.replace('fn selected_claim(',attrs+'fn selected_claim(',1)
+  if prefix=='semantic':
+   begin='fn bounded_append_carry(mut index: u64) -> usize {\n    let mut carry = 0usize;'
+   assert begin in s
+   s=s.replace(begin,begin+'\n    #[cfg(all(kani,NDE_carry_step))]\n    let mut carry = unsafe{NDE_native::NDE_CARRY};',1)
+   point='        carry += 1;\n    }\n    carry'
+   assert point in s
+   s=s.replace(point,'        carry += 1;\n        #[cfg(all(kani,NDE_carry_step))]\n        {NDE_native::carry_record(index); return carry;}\n    }\n    carry',1)
+  if prefix=='semantic':
+   for fn,check in [('private_public','private_matches'),('withdrawal_public','withdrawal_matches')]:
+    attrs='#[cfg_attr(kani,kani::requires(unsafe{NDE_native::NDE_PUBLIC_INDEX<32}))]\n#[cfg_attr(kani,kani::ensures(|r|NDE_native::'+check+'(r,public,transition) != cfg!(NDE_invert)))]\n'
+    s=s.replace("fn "+fn+"<'a>(",attrs+"fn "+fn+"<'a>(",1)
+  if prefix=='semantic':
+   attrs='#[cfg_attr(kani,kani::requires(level<21&&unsafe{NDE_native::NDE_ROOT_INDEX<8}))]\n#[cfg_attr(kani,kani::ensures(|r|(r[unsafe{NDE_native::NDE_ROOT_INDEX}].0==NDE_native::reference::empty_root_ref(level)[unsafe{NDE_native::NDE_ROOT_INDEX}]) != cfg!(NDE_invert)))]\n'
+   s=s.replace('fn empty_root(',attrs+'fn empty_root(',1)
   module='NDE_'+prefix
   s+='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod NDE_native;\n'
   out[n]=s
@@ -44,16 +58,19 @@ pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31
   if prefix=='poseidon':
    harness+='#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::extension_from_raw_limbs)]\nfn NDE_raw_contract(){let v:[u64;4]=kani::any();kani::assume(v[0]<(1u64<<62)&&v[1]<(1u64<<62)&&v[2]<(1u64<<62)&&v[3]<(1u64<<62));let _=super::extension_from_raw_limbs(v); }\n'
   if prefix=='semantic':
-   harness+=(E/'NDE_semantic_extra.rs').read_text()+(E/'NDE_semantic_index.rs').read_text()
+   harness+=(E/'NDE_semantic_extra.rs').read_text()+(E/'NDE_semantic_index.rs').read_text()+(E/'NDE_carry_native.rs').read_text()+(E/'NDE_public_native.rs').read_text()+(E/'NDE_root_native.rs').read_text()
    out['crates/aspis-statement/src/pool_v1/NDE_claim_reference.rs']=(E/'NDE_claim_reference.rs').read_text()
   if prefix=='copy':
+   harness+=(E/'NDE_row_native.rs').read_text()
    harness+='#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::link_weight)]\nfn NDE_link(){let k:u8=kani::any();let l:u8=kani::any();kani::assume(k<=4&&(k<3||l<64));let i:u64=kani::any();let v=if kani::any(){PoolV1PairForestCompiledVariantV1::Withdrawal}else{PoolV1PairForestCompiledVariantV1::PrivateTransfer};let ep=CompiledPoolV1PairForestEndpoint{row:kani::any(),slot:kani::any(),pattern:kani::any()};let link=CompiledPoolV1PairForestLink{tag:kani::any(),weight_kind:k,weight_level:l,producer:ep,consumer:CompiledPoolV1PairForestEndpoint{row:kani::any(),slot:kani::any(),pattern:kani::any()}};let _=super::link_weight(link,i,v); }\n'
   out['crates/aspis-statement/src/'+dirname+module+'.rs']=harness
   out['crates/aspis-statement/src/'+dirname+'NDE_reference.rs']=(E/'NDE_reference.rs').read_text()
  # Root allocator feature required by exact KMX code.
  n='crates/aspis-statement/src/lib.rs';s=subprocess.check_output(['git','show',REV+':'+n],text=True)
  s='#![cfg_attr(kani, feature(allocator_api))]\n'+s+'\n#[cfg(kani)]\n#[path="../../../KMX_stubs.rs"]\nmod NDE_kmx;\n'
+ s+='\n#[cfg(kani)]\nmod NDE_field;\n'
  out[n]=s
+ out['crates/aspis-statement/src/NDE_field.rs']=(E/'NDE_field.rs').read_text()
  patch=''
  for n,s in out.items():
   old=subprocess.run(['git','show',REV+':'+n],capture_output=True,text=True)

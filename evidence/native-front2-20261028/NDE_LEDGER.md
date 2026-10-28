@@ -1,15 +1,15 @@
 # Native composition ledger
 
-Frozen source `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; merged evidence snapshot `c9aca4ca91`.
+Frozen source `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; merged evidence snapshot `daf8d2f3bc`.
 Headline `AspisR1.RPx_Deployed.deployed`. **The deployed 100-bit target remains unestablished.**
 
 This is a machine-validated evidence ledger and conservative call-graph argument. It does not supply new native bridges or Lean caller-domain certificates. Owner amendment fifth is reported as a P6/D188 tool-trust reclassification, never premise removal.
 
 | Inventory | Rows | Local conditional bridges | Local OPEN | Quarantined | Composed OPEN | Trust only |
 |---|---:|---:|---:|---:|---:|---:|
-| TX1 | 345 | 110 | 233 | 2 | 345 | 0 |
+| TX1 | 345 | 113 | 230 | 2 | 345 | 0 |
 | TX2 | 242 | 107 | 133 | 2 | 242 | 0 |
-| all_rows | 587 | 217 | 366 | 4 | 587 | 0 |
+| all_rows | 587 | 220 | 363 | 4 | 587 | 0 |
 
 Unique functions: 434. Shared TX1/TX2 bodies count once only in the union graph; transaction rows keep separate edges/domains.
 
@@ -38,7 +38,7 @@ Every terminal open SCC needs its own representative; no other open SCC can be r
 | `crates/aspis-core/src/field.rs::qm31_from_karatsuba_channel_sums` | 23 |
 | `crates/aspis-r1-cost-probe/src/candidate.rs::opening` | 23 |
 
-Minimum reachability-cover frontier: **132 SCC representatives**. Full members and all graph cycles are in JSON.
+Minimum reachability-cover frontier: **129 SCC representatives**. Full members and all graph cycles are in JSON.
 
 | Frontier representative | Dependent rows | OPEN functions in SCC |
 |---|---:|---:|
@@ -83,7 +83,6 @@ Minimum reachability-cover frontier: **132 SCC representatives**. Full members a
 | `crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::record` | 17 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::Selectors::row` | 17 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::copy_tag_coordinate_dot` | 17 | 1 |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::initial_variant_selectors` | 17 | 1 |
 | `crates/aspis-statement/src/pool_v1/verifier_registry.rs::required_binding_is_zero` | 17 | 1 |
 | `crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_limb` | 17 | 1 |
 | `crates/aspis-core/src/field.rs::QM31::is_zero` | 16 | 1 |
@@ -102,7 +101,6 @@ Minimum reachability-cover frontier: **132 SCC representatives**. Full members a
 | `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::copy_residual` | 15 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::link_weight` | 15 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::private_public` | 15 | 1 |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::scalar_lanes` | 15 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::withdrawal_public` | 15 | 1 |
 | `crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::has_no_retirement_slot` | 15 | 1 |
 | `crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::has_no_retirement_slot` | 15 | 1 |
@@ -113,7 +111,6 @@ Minimum reachability-cover frontier: **132 SCC representatives**. Full members a
 | `crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::absorb` | 14 | 1 |
 | `crates/aspis-r1-cost-probe/src/verifier.rs::batch_prefix_products` | 14 | 1 |
 | `crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor` | 14 | 1 |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::copy_variant` | 14 | 1 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::selected_claim` | 14 | 1 |
 | `programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::owner` | 14 | 1 |
 | `crates/aspis-core/src/state_only_hiding.rs::cm31_mul_r` | 13 | 1 |

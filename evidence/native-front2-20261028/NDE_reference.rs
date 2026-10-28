@@ -54,3 +54,18 @@ pub fn empty_root_ref(level:usize)->[u32;8]{POOL_V1_PAIR_EMPTY_ROOTS_V1[level]}
 pub fn link_weight_ref(kind:u8,level:u8,index:u64,withdraw:bool)->u32 {
  match kind {0=>1,1=>if withdraw{0}else{1},2=>if withdraw{1}else{0},3=>1-((index>>level)&1) as u32,4=>((index>>level)&1) as u32,_=>panic!("invalid link weight")}
 }
+pub fn carry_ref(mut index:u64)->usize {
+ let mut carry=0usize;
+ while carry<20 {if index&1==0{return carry;}index>>=1u32;carry+=1;}
+ carry
+}
+pub fn carry_step_ref(index:u64,carry:usize)->(u64,usize,bool){
+ if carry<20 {if index&1==0{(index,carry,false)}else{(index>>1u32,carry+1,true)}}else{(index,carry,false)}
+}
+pub fn option_root(x:Option<u8>)->Option<u8>{x}
+pub struct PrivateInput<P,D,A>{pub pool:P,pub domain:P,pub anchor:D,pub nullifier:D,pub asset:A,pub recipient:D,pub change:D}
+pub struct WithdrawalInput<P,D,A>{pub pool:P,pub domain:P,pub anchor:D,pub nullifier:D,pub asset:A,pub amount:u32,pub change:D}
+pub struct PublicRef<'a,P,D,A,T>{pub withdraw:bool,pub pool:P,pub domain:P,pub anchor:D,pub nullifier:D,pub asset:A,pub recipient:Option<D>,pub change:D,pub amount:Option<u32>,pub transition:&'a T}
+pub fn private_public_ref<P,D,A,T>(p:PrivateInput<P,D,A>,t:&T)->PublicRef<'_,P,D,A,T>{PublicRef{withdraw:false,pool:p.pool,domain:p.domain,anchor:p.anchor,nullifier:p.nullifier,asset:p.asset,recipient:Some(p.recipient),change:p.change,amount:None,transition:t}}
+pub fn withdrawal_public_ref<P,D,A,T>(p:WithdrawalInput<P,D,A>,t:&T)->PublicRef<'_,P,D,A,T>{PublicRef{withdraw:true,pool:p.pool,domain:p.domain,anchor:p.anchor,nullifier:p.nullifier,asset:p.asset,recipient:None,change:p.change,amount:Some(p.amount),transition:t}}
+pub fn row_operands_ref<T:Copy>(high:&[T;64],low:&[T;16],row:usize)->(T,T){(high[row>>4],low[row&15])}

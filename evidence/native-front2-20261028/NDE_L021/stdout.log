@@ -1,0 +1,24 @@
+NDE_generated/NDE_ClaimBridge.lean:11:23: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NDE_generated/NDE_ClaimBridge.lean:15:29: error: unsolved goals
+a : Std.Array Q 84#usize
+i : Usize
+⊢ (match
+      match Option.map toRef (↑a)[↑i]? with
+      | none => fail Error.arrayOutOfBounds
+      | some x => ok x with
+    | ok x => ok { c0 := { a := x.c0.a, b := x.c0.b }, c1 := { a := x.c1.a, b := x.c1.b } }
+    | fail e => fail e
+    | div => div) =
+    match (↑a)[↑i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+NDE_generated/NDE_ClaimBridge.lean:16:75: warning: This simp argument is unused:
+  toRef
+
+Hint: Omit it from the simp argument list.
+  simp [Array.index_usize, claimsToRef, NDE_LiftBridge.mapResult, fromRef,̵ ̵t̵o̵R̵e̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDE_ClaimBridge.index_transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,49 @@
+{"attempt": "NDE_K030", "exit_status": 1, "wall_seconds": 86.6095005730167, "peak_rss_kib": "4185020", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> crates/aspis-statement/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> crates/aspis-statement/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.61s
+Checking harness pool_v1::pair_forest_semantic_terminal::NDE_native::NDE_private_public...
+
+VERIFICATION RESULT:
+ ** 1 of 539 failed (3 unreachable)
+Failed Checks: |r|NDE_native::private_matches(r,public,transition) != cfg!(NDE_invert)
+ File: "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs", line 1341, in pool_v1::pair_forest_semantic_terminal::private_public::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 82.55779s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_semantic_terminal::NDE_native::NDE_private_public
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r54b09c321e4d4878993d2b3fa60c2379.scope; invocation ID: ed1475081aef49d0be3ac1b553a273ca

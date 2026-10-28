@@ -1,0 +1,26 @@
+from pathlib import Path
+import json
+E=Path(__file__).resolve().parent
+jobs=[
+('pool_v1/pair_forest_copy_terminal.rs::link_weight',19,20,[41],5,'NDE_LinkBridge.link_weight','weight_kind <= 4 and (weight_kind < 3 or weight_level < 64); all unused link fields unrestricted'),
+('pool_v1/pair_forest_semantic_terminal.rs::selected_claim',21,22,[32,42],4,'NDE_ClaimResult.selected_claim','point < 3, column < 28; all 84 four-word claims unrestricted'),
+('pool_v1/pair_forest_semantic_terminal.rs::bounded_append_carry',35,36,[24,36],7,'NDE_CarryInduction.carry_reference','every u64 index, caller starts carry=0; arbitrary one-step carry; induction invariant carry.val + fuel = 20'),
+('pool_v1/pair_forest_semantic_terminal.rs::empty_root',33,34,[34,37],4,'NDE_EmptyBridge.empty_root','level < 21; arbitrary result limb < 8, full fixed-array equality by bounded extensionality'),
+('pool_v1/pair_forest_semantic_terminal.rs::private_public',29,30,[27,34,35,43,44],8,'NDE_PublicBridge.private_public','every typed payment and transition record; arbitrary observation byte j<32 and limb j&7; exact scalar fields, option tags, values, and transition reference identity'),
+('pool_v1/pair_forest_semantic_terminal.rs::withdrawal_public',31,32,[27,34,35,43,44],8,'NDE_PublicBridge.withdrawal_public','every typed payment and transition record; arbitrary observation byte j<32 and limb j&7; exact scalar fields, option tags, values, and transition reference identity')]
+d=json.loads((E/'NDE_LEDGER_DELTA.json').read_text());s=json.loads((E/'NDE_SUPPLEMENTAL.json').read_text());p=E/'NDE_FRONTIER_BRIDGES.md';text=p.read_text()
+for suffix,pos,neg,ls,extract,theorem,domain in jobs:
+ f='crates/aspis-statement/src/'+suffix
+ row=next(r for r in d['rows'] if r['function']==f)
+ row.clear();row.update(dict(function=f,status='CLOSED',scope='local on the stated domain; enclosing caller, physical interpretation and release ABI remain OPEN',domain=domain,reference=f'NDE_E{extract:03} source snapshot and extracted reference',extraction=f'NDE_E{extract:03}',lean=theorem,lean_attempts=ls,positive=pos,negative=neg,copy_fidelity=[8,9],stubs='exact KMX only; no arithmetic stubs in this member; no stub_verified uses',callee_domain='Actual non-library callees execute. Field products are not reached. Carry uses an actual single native iteration with ghost prestate/exit instrumentation; exact body erasure and Lean finite induction, not a whole-buffer run. Library map of a fixed eight-element root is checked at one arbitrary output limb and paired with the existing map identity induction.'))
+ old=next(l for l in text.splitlines() if l.startswith('| `'+f+'`'))
+ text=text.replace(old,'| `'+f+'` | CLOSED locally | '+domain+'; '+theorem+f'; E{extract:03}, K{pos:03}/K{neg:03}, '+','.join(f'L{x:03}' for x in ls)+' |')
+ s.append(dict(id='NDE::'+suffix.split('::')[-1],function=f,packet='native-front2-20261028',medium='Kani native contract or single-step log with matched failing control',reference_medium='NCO-pinned reference extraction plus exact cohort equality and stated induction/window composition',domain=domain+'; '+theorem+'; enclosing caller/physical association OPEN',positive=[pos],negative=[neg],shape_positive=[8],shape_negative=[9],lean=ls,reports=['NDE_FRONTIER_BRIDGES.md','NDE_LEDGER_DELTA.json'],additional_receipts=[f'evidence/native-front2-20261028/NDE_E{extract:03}/receipt.json'],feature_status='DEPLOYED: isolated library graph and exact optimized statement features in positive and negative graph-check files; SBF/ABI boundary retained',admit=True))
+text+='''
+The carry source hook changes only cfg(kani,NDE_carry_step): arbitrary carry is injected at loop entry and the first odd step records its index then returns. Removing those hook blocks restores the frozen body exactly. K035/K036 explicitly add exact KMX replacement; K023/K024 are superseded narrower-copy receipts. L024 connects the observed step to E007 loop.body; L036 proves both extracted and cohort loops terminate with identical result by induction on the invariant carry.val+fuel=20. E006 is an excluded Option-language-item extraction failure; E007 adds an unused identity root to make the required standard Option item reachable, without changing the carry reference or tool.
+
+K025–K028 are excluded full-array comparison drafts: builtin memcmp unwinding failure, no closure/control credit. Replacement K029–K032 compare one arbitrary byte/limb. L034/L035/L043 prove array, option and complete record extensionality; L044 proves j&7=j on the entire digest index domain and admits that domain in j<32. L027 identifies the generic extracted public-reference constructors with the exact cohort constructors on original records. Typed transition pointer identity is checked natively; no byte-havoc adapter or returned-reference substitution is claimed.
+
+K018 is excluded: own harness used private kani::any_raw. K019 repairs only the input generator using public arbitrary scalar arrays; every projection input remains arbitrary. Link/claim Lean drafts L018/L021/L029/L030/L031/L033/L038/L039 are excluded; L041/L042 are the successful replacements. No failed draft is imported by an accepted module.
+'''
+(E/'NDE_LEDGER_DELTA.json').write_text(json.dumps(d,indent=2)+'\n');(E/'NDE_SUPPLEMENTAL.json').write_text(json.dumps(s,indent=2)+'\n');p.write_text(text)
