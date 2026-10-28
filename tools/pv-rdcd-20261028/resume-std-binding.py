@@ -17,7 +17,7 @@ def body(s,marker):
 for version in ['nightly-2026-06-01','1.94.1']:
  root=Path('/home/dombarker/.rustup/toolchains')/(version+'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src')
  rec=dict(toolchain=version,files={},bodies={})
- for f in ['option.rs','num/uint_macros.rs','num/mod.rs']:
+ for f in ['option.rs','num/uint_macros.rs','num/mod.rs','convert/num.rs']:
   p=root/f;s=p.read_text();rec['files'][f]=dict(path=str(p),sha256=sha(p.read_bytes()))
   if f=='option.rs':
    for n in ['fn branch(self) -> ControlFlow<Self::Residual, Self::Output>','fn from_residual(residual: Option<convert::Infallible>) -> Self']:
@@ -26,12 +26,16 @@ for version in ['nightly-2026-06-01','1.94.1']:
   elif f=='num/uint_macros.rs':
    for n in ['wrapping_add','wrapping_sub','wrapping_mul','wrapping_shr']:
     v=body(s,'pub const fn '+n+'(');rec['bodies'][n]=dict(text=v,token_sha256=sha('\0'.join(tokens(v)).encode()))
+  elif f=='convert/num.rs':
+   v=body(s,'fn from(small: $Small) -> Self');rec['bodies']['FromU32U64_macro_body']=dict(text=v,token_sha256=sha('\0'.join(tokens(v)).encode()))
+   assert 'impl_from!(u32 => u64,' in s
   else:
    for ty in ['u32','u64']:
     a=s.index('impl '+ty+' {');b=s.index('uint_impl!',a);brace=s.index('{',b);e=brace+1;depth=1
     while depth:
      depth+=(s[e]=='{')-(s[e]=='}');e+=1
-    v=s[b:e];rec['bodies']['uint_impl! '+ty]=dict(text=v,token_sha256=sha('\0'.join(tokens(v)).encode()))
+    v=s[b:e];assert 'Self = '+ty in v and 'ActualT = '+ty in v
+    rec['bodies']['uint_impl! '+ty]=dict(text=v,token_sha256=sha('\0'.join(tokens(v)).encode()))
  out.append(rec)
 # Whole macro arguments include docs for unrelated new carryless methods.
 for c in out:
@@ -41,4 +45,4 @@ for c in out:
   c['bodies']['reached macro binding '+ty]=dict(text=ty+':BITS='+str(bits),token_sha256=sha((ty+':BITS='+str(bits)).encode()))
 comparisons={k:out[0]['bodies'][k]['token_sha256']==out[1]['bodies'][k]['token_sha256'] for k in out[0]['bodies']}
 result=dict(cohorts=out,identical= comparisons,qualification='Exact typed Option methods and selected wrapping method bodies; macro invocation difference must be reviewed before whole-row transfer. Rust intrinsic semantics remain a compiler boundary, no intrinsic implementation is proved by this source comparison.')
-(O/'std-binding.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(comparisons,indent=2))
+(O/'std-closure-binding.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(comparisons,indent=2))
