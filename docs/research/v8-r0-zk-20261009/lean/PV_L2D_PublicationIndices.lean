@@ -13,8 +13,8 @@ def insert (x : Nat) : List Nat → List Nat
 /-- The native Vec guard checks at==len first, so a missing getElem? is
 exactly the unconditional insertion-at-end case. -/
 def sourceInsert (x : Nat) (xs : List Nat) : List Nat :=
-  let at := seek x xs
-  if xs[at]? = some x then xs else xs.insertIdx at x
+  let pos :=  seek x xs
+  if xs[pos]? = some x then xs else xs.insertIdx pos x
 
 theorem seek_bound (x : Nat) (xs : List Nat) : seek x xs≤xs.length := by
   induction xs with
