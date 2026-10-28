@@ -35,9 +35,7 @@ theorem consumed {S F R : Type} (step : Request → S → Option Nat × S)
     | .ok () => do let value ← PV_CBL_CapacityValue.reference u; next value e.world) := by
   dsimp only
   unfold PV_RDEA_CapacityEndpoint.consume
-  split
-  · rfl
-  · rw [decoded_constructor step shape width address n u w]
+  split <;> simp_all only [decoded_constructor step shape width address n u w]
 
 #print axioms decoded_constructor
 #print axioms consumed
