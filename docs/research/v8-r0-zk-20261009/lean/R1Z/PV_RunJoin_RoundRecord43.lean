@@ -28,7 +28,6 @@ theorem post (ops : ExternalFuns) {H F : Type} (hash : aspis_core.digest.Digest3
   simp only [lift,bind_tc_ok]
   apply PV_RunJoin_ResultPost41.bind
   intro zero
-  simp only [lift,bind_tc_ok]
   apply PV_RunJoin_ResultPost41.bind
   intro evaluations
   apply PV_RunJoin_ResultPost41.bind
