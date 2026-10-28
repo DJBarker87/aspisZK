@@ -1,0 +1,11 @@
+import R1Z.PV_RunJoin_AdmittedReturnCounterexample23
+set_option autoImplicit false
+#check @R1Z.PV_RunJoin_AdmittedReturnCounterexample23.universal_guarded_return_false
+#print axioms R1Z.PV_RunJoin_AdmittedReturnCounterexample23.admitted
+#print axioms R1Z.PV_RunJoin_AdmittedReturnCounterexample23.checked
+#print axioms R1Z.PV_RunJoin_AdmittedReturnCounterexample23.frontier
+#print axioms R1Z.PV_RunJoin_AdmittedReturnCounterexample23.actual_return
+#print axioms R1Z.PV_RunJoin_AdmittedReturnCounterexample23.not_cached_return
+#print axioms R1Z.PV_RunJoin_AdmittedReturnCounterexample23.universal_return_false
+#print axioms R1Z.PV_RunJoin_AdmittedReturnCounterexample23.universal_guarded_return_false
+#print axioms R1Z.PV_RunJoin_AdmittedReturnCounterexample23.admitted_carrier_return_false

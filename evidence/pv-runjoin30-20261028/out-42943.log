@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SliceTrace30.lean:14:16: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+'R1Z.PV_RunJoin_SliceTrace30.drop_cons' depends on axioms: [propext]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SliceTrace30.lean:19:11: error: Tactic `rfl` failed: The left-hand side
+  List.drop i []
+is not definitionally equal to the right-hand side
+  []
+
+case nil
+T : Type
+i : ℕ
+h : [].length ≤ i
+⊢ List.drop i [] = []
+'R1Z.PV_RunJoin_SliceTrace30.drop_nil' depends on axioms: [propext, sorryAx]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SliceTrace30.lean:33:6: error: Tactic `apply` failed: could not unify the conclusion of `FiniteTrace.step ?m.49 ?m.50 (↑s)[i] (List.drop (i + 1) ↑s)`
+  FiniteTrace ?m.48 ?m.49 ((↑s)[i] :: List.drop (i + 1) ↑s)
+with the goal
+  FiniteTrace (core.iter.traits.iterator.IteratorSliceIter T) { slice := s, i := i } ((↑s)[i] :: List.drop (i + 1) ↑s)
+
+Note: The full type of `FiniteTrace.step ?m.49 ?m.50 (↑s)[i] (List.drop (i + 1) ↑s)` is
+  core.iter.traits.iterator.Iterator.next ?m.48 ?m.49 = ok (some (↑s)[i], ?m.50) →
+    FiniteTrace ?m.48 ?m.50 (List.drop (i + 1) ↑s) → FiniteTrace ?m.48 ?m.49 ((↑s)[i] :: List.drop (i + 1) ↑s)
+
+case pos
+T : Type
+s : Slice T
+remaining : ℕ
+ih :
+  ∀ m < remaining,
+    ∀ (i : ℕ),
+      (↑s).length - i = m →
+        FiniteTrace (core.iter.traits.iterator.IteratorSliceIter T) { slice := s, i := i } (List.drop i ↑s)
+i : ℕ
+he : (↑s).length - i = remaining
+hi : i < (↑s).length
+⊢ FiniteTrace (core.iter.traits.iterator.IteratorSliceIter T) { slice := s, i := i } ((↑s)[i] :: List.drop (i + 1) ↑s)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SliceTrace30.lean:40:6: error: Tactic `apply` failed: could not unify the conclusion of `FiniteTrace.done ?m.84 ?m.85`
+  FiniteTrace ?m.83 ?m.84 []
+with the goal
+  FiniteTrace (core.iter.traits.iterator.IteratorSliceIter T) { slice := s, i := i } []
+
+Note: The full type of `FiniteTrace.done ?m.84 ?m.85` is
+  core.iter.traits.iterator.Iterator.next ?m.83 ?m.84 = ok (none, ?m.85) → FiniteTrace ?m.83 ?m.84 []
+
+case neg
+T : Type
+s : Slice T
+remaining : ℕ
+ih :
+  ∀ m < remaining,
+    ∀ (i : ℕ),
+      (↑s).length - i = m →
+        FiniteTrace (core.iter.traits.iterator.IteratorSliceIter T) { slice := s, i := i } (List.drop i ↑s)
+i : ℕ
+he : (↑s).length - i = remaining
+hi : ¬i < (↑s).length
+⊢ FiniteTrace (core.iter.traits.iterator.IteratorSliceIter T) { slice := s, i := i } []
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SliceTrace30.lean:33:29: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SliceTrace30.lean:33:35: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SliceTrace30.lean:40:29: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SliceTrace30.lean:40:35: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+'R1Z.PV_RunJoin_SliceTrace30.slice_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SliceTrace30.array_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

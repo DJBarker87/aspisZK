@@ -1,0 +1,25 @@
+//! Owned proof reference; frozen source is never edited.
+use aspis_core::field::M31;
+use aspis_statement::{poseidon2::Digest, pool_v1::{
+    pair_trace::{PoolV1PairInputNoteWitnessV1, PoolV1PairTraceErrorV1}, pool_v1_tree_parent,
+}};
+
+pub fn step(current: Digest, sibling: Digest, reverse: bool) -> Digest {
+    if reverse {
+        pool_v1_tree_parent(&sibling, &current)
+    } else {
+        pool_v1_tree_parent(&current, &sibling)
+    }
+}
+
+pub fn lane_root(input: PoolV1PairInputNoteWitnessV1) -> Result<Digest, PoolV1PairTraceErrorV1> {
+    let mut current = input.pair_leaf.leaf_digest().map_err(PoolV1PairTraceErrorV1::PairLeaf)?;
+    for level in 0..20 {
+        let sibling = input.membership.siblings[level];
+        current = step(current, sibling, ((input.membership.index >> level) & 1) != 0);
+    }
+    Ok(current)
+}
+
+// Retain the concrete field type in the extraction closure.
+pub fn field_word(x: M31) -> u32 { x.0 }

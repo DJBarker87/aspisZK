@@ -1,0 +1,82 @@
+LAUNCH 42951 R1Z/PV_RunJoin_OuterBounds30
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_OuterBounds30.lean:8:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_OuterBounds30.bound_of_guard`:
+  [LaneRoot]
+  [BuilderForestAdmissionPort.ExternalLinear]
+  [BuilderForestAdmissionPort.Records]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [LaneRoot] [BuilderForestAdmissionPort.ExternalLinear] [BuilderForestAdmissionPort.Records] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'R1Z.PV_RunJoin_OuterBounds30.bound_of_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_OuterBounds30.lean:30:7: warning: 'have _test : Bool := value' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_OuterBounds30.lean:30:35: warning: '(cases value) <;> simp only [Bool.false_eq_true, ↓reduceIte] at h' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_OuterBounds30.lean:30:35: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PV_RunJoin_OuterBounds30.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_OuterBounds30.lean:50:7: warning: 'have _test : Bool := value' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_OuterBounds30.lean:50:35: warning: '(cases value) <;> simp only [Bool.false_eq_true, ↓reduceIte] at h' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_OuterBounds30.lean:50:35: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PV_RunJoin_OuterBounds30.withdrawal_change' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_OuterBounds30.lean:56:25: error: unsolved goals
+case Continue
+inst✝² : LaneRoot
+inst✝¹ : BuilderForestAdmissionPort.ExternalLinear
+inst✝ : BuilderForestAdmissionPort.Records
+p : pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+value✝ : pool_v1.payment_relation.CommonPublicV1
+hvalue✝¹ : pool_v1.payment_relation.withdrawal_common p = ok value✝
+value : core.result.Result Unit pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
+hvalue✝ : pool_v1.payment_relation.validate_common value✝ = ok value
+_test :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError) Unit
+a✝ : Unit
+hvalue : core.result.Result.Insts.CoreOpsTry.branch value = ok (core.ops.control_flow.ControlFlow.Continue a✝)
+h :
+  (match core.ops.control_flow.ControlFlow.Continue a✝ with
+    | core.ops.control_flow.ControlFlow.Continue a =>
+      if p.amount = 0#u32 then
+        ok
+          (core.result.Result.Err
+            pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount)
+      else do
+        let i ← spend.VALUE_LIMIT
+        if p.amount ≥ i then
+            ok
+              (core.result.Result.Err
+                pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount)
+          else
+            have a := Array.repeat 32#usize 0#u8;
+            do
+            let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 p.destination_token_account a
+            if b = true then
+                ok
+                  (core.result.Result.Err
+                    pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError.InvalidDestination)
+              else do
+                let b1 ← pool_v1.payment_relation.digest_is_canonical p.change_commitment
+                if b1 = true then ok (core.result.Result.Ok ())
+                  else
+                    ok
+                      (core.result.Result.Err
+                        pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError.NonCanonicalDigest)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+        (core.convert.FromSame pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError) residual) =
+    ok (core.result.Result.Ok ())
+⊢ ↑p.amount < 2 ^ 30
+'R1Z.PV_RunJoin_OuterBounds30.withdrawal_public' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OuterBounds30.withdrawal_amount' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+RECEIPT {"attempt": 42951, "exit": 1, "wall_seconds": 3.485612374730408, "peak_rss_bytes": 4269404160, "swaps": 0, "accepted": false}

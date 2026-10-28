@@ -1,0 +1,105 @@
+'R1Z.PV_RunJoin_RuntimePrimitives30.word_eq' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:15:76: error: unsolved goals
+case pos
+a b : U32
+h : a = b
+⊢ (do
+      let __do_lift ← aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq b b
+      ok !__do_lift) =
+    ok false
+
+case neg
+a b : U32
+h : ¬a = b
+⊢ (do
+      let __do_lift ← aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq a b
+      ok !__do_lift) =
+    ok true
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:16:79: warning: This simp argument is unused:
+  word_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [core.cmp.PartialEq.ne.trait_default, ̲core.cmp.PartialEq.ne.default,w̵o̵r̵d̵_̵e̵q̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:16:87: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.cmp.PartialEq.ne.trait_default, ̲core.cmp.PartialEq.ne.default, ̲word_eq,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_RuntimePrimitives30.word_ne' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_RunJoin_RuntimePrimitives30.compare_result' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:36:34: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp_all ̵[̵L̵i̵s̵t̵.̵a̵l̵l̵M̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:43:23: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵c̵o̵m̵p̵a̵r̵e̵_̵r̵e̵s̵u̵l̵t̵,̵i̵h̵[̲c̲o̲m̲p̲a̲r̲e̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲i̲h̲ ys ht]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:44:14: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵c̵o̵m̵p̵a̵r̵e̵_̵r̵e̵s̵u̵l̵t̵,̵h̵e̵]̵[̲c̲o̲m̲p̲a̲r̲e̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲h̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:36:45: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:44:43: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+'R1Z.PV_RunJoin_RuntimePrimitives30.list_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:56:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ok (decide _a) = ok (decide (a = b))
+Error: Application type mismatch: The argument
+  instDecidableEqList ↑a ↑b
+has type
+  Decidable (↑a = ↑b)
+but is expected to have type
+  Decidable _a
+in the application
+  @decide _a (instDecidableEqList ↑a ↑b)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+n : Usize
+a b : Std.Array U32 n
+ha : a.length = ↑n
+hb : b.length = ↑n
+he : ↑a = ↑b ↔ a = b
+⊢ ok (decide (↑a = ↑b)) = ok (decide (a = b))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array U32 n
+  but is expected to have type
+    { l // l.length = ↑n }
+  in the application
+    ↑a
+'R1Z.PV_RunJoin_RuntimePrimitives30.array_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimePrimitives30.array_ne' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RuntimePrimitives30.bytes_ne' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RuntimePrimitives30.lean:79:4: error: 'change' tactic failed, pattern
+  (do
+      let b ← core.array.equality.PartialEqArray.eq wordInst x y
+      if b = true then ok true else List.anyM (?m.55 b PUnit.unit) ys) =
+    ?m.30
+is not definitionally equal to target
+  List.anyM ((Array.Insts.CoreCmpPartialEqArray n wordInst).eq x) (y :: ys) = ok (decide (x ∈ y :: ys))
+'R1Z.PV_RunJoin_RuntimePrimitives30.list_contains' depends on axioms: [propext, sorryAx]
+'R1Z.PV_RunJoin_RuntimePrimitives30.contains' depends on axioms: [propext, sorryAx]
