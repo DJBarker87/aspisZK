@@ -31,10 +31,15 @@ checks=[]
 for x in json.loads((D/'external-object-manifest.json').read_text()):
  if x['module']=='Init' or x['module'].startswith('Init/') or x['module']=='Std' or x['module'].startswith('Std/'):
   h=hashlib.sha256(Path(x['path']).read_bytes()).hexdigest();assert h==x['object_sha256'],x['module'];checks.append(dict(module=x['module'],sha256=h,ok=True))
+private_cache=[]
+for module,expected in [('PV_KStub_CopyMeaning','2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'),('PV_KStub_WindowFrame','37fc1b48fa430b433b4c7e875fe7690fffb9eda336da549dc3570cd5a9c50911')]:
+ source=D/(module+'.lean');obj=D/'lean-objects'/(module+'.olean')
+ assert hashlib.sha256(source.read_bytes()).hexdigest()==expected
+ private_cache.append(dict(module=module,source_sha256=expected,object_sha256=hashlib.sha256(obj.read_bytes()).hexdigest(),original_receipt='44700' if module.endswith('CopyMeaning') else '44701'))
 for p in pins:
  assert hashlib.sha256(p['source'].encode()).hexdigest()==p['sha256'];(D/(p['module']+'.lean')).write_text(p['source'])
 env=json.loads((D/'env-J.json').read_text());env['LEAN_PATH']=str(D/'lean-objects')+':'+env['LEAN_PATH'];(D/'env-J-continuation.json').write_text(json.dumps(env,indent=2))
-record=dict(receipt_directories_scanned=scanned,ids=[p['id'] for p in pins],other_receipt_conflicts=used,external_objects=checks,private_dependency_sources=[p['module'] for p in pins]+['PV_KStub_CopyMeaning','PV_KStub_WindowFrame'])
+record=dict(private_cache=private_cache,receipt_directories_scanned=scanned,ids=[p['id'] for p in pins],other_receipt_conflicts=used,external_objects=checks,private_dependency_sources=[p['module'] for p in pins]+['PV_KStub_CopyMeaning','PV_KStub_WindowFrame'])
 (D/'lean-continuation-preflight.json').write_text(json.dumps(record,indent=2));print(json.dumps(record))
 '''.replace('PAYLOAD',repr(json.dumps(pins)))
 for k in range(11):

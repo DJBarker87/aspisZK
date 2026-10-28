@@ -30,5 +30,11 @@ for row in json.loads((E/'table.json').read_text())['rows']:
    check(bool(failures) and all('assertion failed:' in f and '!=' in f for f in failures),'intended negative assertion '+h['harness'])
    check(bool(re.search(r'\*\*\s*1 of \d+ failed',log)),'only intended failure '+h['harness'])
  check(row['status']!='pending','unfinished '+row['row'])
+for x in json.loads((E/'comparison-inputs.json').read_text()):
+ check(hashlib.sha256((R/x['structural_binding']).read_bytes()).hexdigest()==x['binding_sha256'],'structural binding '+x['row'])
+for x in json.loads((E/'per-run-kmx-audit.json').read_text())['runs']:
+ check(hashlib.sha256((R/x['path']).read_bytes()).hexdigest()==x['stub_sha256'],'exact per-run stub '+x['run'])
+check(not any(p.stat().st_size>20*1024*1024 for p in E.rglob('*') if p.is_file()),'file-size cap')
+check(not json.loads((E/'observer-pattern-audit.json').read_text())['matching_harnesses'],'observer pattern review')
 result=dict(ok=not errors,errors=errors,kani_runs=len(receipts),lean_attempts=len(lean_receipts),paths=paths)
 (E/'validation.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2));sys.exit(bool(errors))
