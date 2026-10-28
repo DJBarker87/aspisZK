@@ -24,7 +24,7 @@ theorem post (ops : ExternalFuns) {H T1 T2 : Type}
     Post (fun next : (core.result.Result (host_semantic.BuiltSemantics H) r1_wire.Error) × T2 =>
       match next.1 with
       | .Err _ => True
-      | .Ok built => ∃ records, PV_RunJoin_SemanticDomain40.Domain ops
+      | .Ok built => built.bytes.length=13831 ∧ ∃ records, PV_RunJoin_SemanticDomain40.Domain ops
           (alloc.vec.Vec.deref built.bytes) 27#u8 32#usize 0#u8 records)
       (@host_semantic.build_with_helper_mode _ (ProverRwP6BodyCandidate.selected ops)
         H T1 T2 hash helperInst commitInst public1 c1 d g padding helper commitments initialHash variant) := by
@@ -317,7 +317,7 @@ theorem post (ops : ExternalFuns) {H T1 T2 : Type}
                                             cases equalPoints with
                                             | true => trivial
                                             | false =>
-                                              exact PV_RunJoin_LayoutPieces43.domain ops (alloc.vec.Vec.deref b9)
-                                                b5.val b6.val b7.val b8.val lb5 hm hs piece25 piece26
+                                              exact ⟨lb9, PV_RunJoin_LayoutPieces43.domain ops (alloc.vec.Vec.deref b9)
+                                                b5.val b6.val b7.val b8.val lb5 hm hs piece25 piece26⟩
 #print axioms post
 end R1Z.PV_RunJoin_CallerDomain43

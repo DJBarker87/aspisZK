@@ -26,7 +26,7 @@ theorem post (ops : ExternalFuns) {H T1 T2 : Type}
     Post (fun next : (core.result.Result (host_semantic.BuiltSemantics H) r1_wire.Error) × T2 =>
       match next.1 with
       | .Err _ => True
-      | .Ok built => ∃ records, PV_RunJoin_SemanticDomain40.Domain ops
+      | .Ok built => built.bytes.length=13831 ∧ ∃ records, PV_RunJoin_SemanticDomain40.Domain ops
           (alloc.vec.Vec.deref built.bytes) 27#u8 32#usize 0#u8 records)
       (@host_semantic.build_with_helper_mode _ (ProverRwP6BodyCandidate.selected ops)
         H T1 T2 hash helperInst commitInst public1 c1 d g padding helper commitments initialHash variant) := by
@@ -164,7 +164,7 @@ obtain ⟨endpointLen,endpointHigh⟩ := ep""")
 circle_record(26,'endpointBytes','endpointLen','endpointHigh','b8','b9','t8','t9','z1')
 bind('equalPoints')
 emit('cases equalPoints with\n| true => trivial\n| false =>');indent+=2
-emit("""exact PV_RunJoin_LayoutPieces43.domain ops (alloc.vec.Vec.deref b9)
-  b5.val b6.val b7.val b8.val lb5 hm hs piece25 piece26""")
+emit("""exact ⟨lb9, PV_RunJoin_LayoutPieces43.domain ops (alloc.vec.Vec.deref b9)
+  b5.val b6.val b7.val b8.val lb5 hm hs piece25 piece26⟩""")
 s+='\n'.join(lines)+'\n#print axioms post\nend R1Z.PV_RunJoin_CallerDomain43\n'
 (root/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_CallerDomain43.lean').write_text(s)
