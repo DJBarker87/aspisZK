@@ -1,0 +1,197 @@
+'AspisR1.JHl_CurrentWeights.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHl_SemanticBytes.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHl_ZBytes.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHl_CurrentWeights.source : ∀ (p : AspisR1CurrentCaller.verifier.Prepared)
+  (input scratch : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  (initial out : AspisR1CurrentCaller.verifier.Accumulator)
+  (pending after : AspisR1CurrentCaller.verifier.BatchedWeights) (g : AspisR1CurrentCaller.verifier.QueryGeometry)
+  (flushed : Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31),
+  AspisR1CurrentCaller.verifier.candidate.prepare AspisR1.JGr_Geometry.installed AspisR1.JGr_Geometry.digest
+        (AspisR1CurrentCaller.FirstComposition.toCurrentPublic AspisR1.JFs_PublicSerialization.value)
+        AspisR1.JFx_NativeBytes.proof () none input =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, scratch) →
+    p.queries = AspisR1.JFq_Queries.value →
+      AspisR1.JGr_Geometry.installed.op20 AspisR1CurrentCaller.transport.Variant.S2 =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok initial) →
+        AspisR1.JGr_Geometry.installed.op18 initial.weights.deref =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pending) →
+          AspisR1.JGr_Geometry.installed.op19 p.queries 0#usize 10#usize =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok g) →
+            AspisR1.JGr_Geometry.installed.op7 AspisR1.JFx_NativeBytes.proof p initial scratch none g pending 10#usize =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, after)) →
+              AspisR1.JGr_Geometry.installed.op17 after out.weights.deref = Aeneas.Std.Result.ok flushed →
+                ∀ (j : Fin 64),
+                  ∃ q,
+                    (↑flushed)[↑j]? = some q ∧
+                      AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.k q) =
+                          AspisR1.JHl_WeightFormula.totalAt 10 ↑j ∧
+                        AspisR1.Port3_FlushInstall.Canonical (AspisR1.Tx1Q_Carriers.k q) :=
+fun p input scratch initial out pending after g flushed prepare queries init pend geo query flush =>
+  let ⟨alpha, right✝⟩ := AspisR1.JHk_PowerInputs.source p input scratch g prepare queries geo
+  let ⟨rho, right✝¹⟩ := right✝
+  let ⟨powers, geometry⟩ := right✝¹
+  let ⟨size, right✝²⟩ := AspisR1.JHa_Pending.source initial pending init pend
+  let ⟨zero, right✝³⟩ := right✝²
+  let ⟨crhs, right✝⁴⟩ := right✝³
+  let ⟨cpower, right✝⁵⟩ := right✝⁴
+  let ⟨history, phase⟩ := right✝⁵
+  have crho :=
+    Eq.mpr (id (congrArg (fun _a => AspisR1.Port3_FlushInstall.Canonical _a) rho)) AspisR1.JFn_AccumulatorCanonical.rho;
+  have native := AspisR1.JHk_CurrentQuery.source p initial out scratch g pending after query;
+  have initialPower :=
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            AspisR1.CheckpointBytes5Output.ofK _a =
+              AspisR1.JHk_RhsFacts.power ↑(AspisR1.Tx1Q_Carriers.accumulator initial).next)
+          (AspisR1.JGw_InitialFacts.source initial init).right.right.left))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => AspisR1.CheckpointBytes5Output.ofK AspisR1.Port2_Initial.oneK = AspisR1.JHk_RhsFacts.power ↑_a)
+            zero))
+        (Eq.refl (AspisR1.CheckpointBytes5Output.ofK AspisR1.Port2_Initial.oneK)));
+  let ⟨sum, h✝⟩ :=
+    AspisR1.JHl_WeightLoop.source (AspisR1.Tx1Q_Carriers.prepared p)
+      (AspisR1.Port3_PendingInstall.owned (AspisR1.Tx1Q_Carriers.accumulator initial).weights.deref) queries alpha rho
+      crho 10 (AspisR1.Tx1Q_Carriers.accumulator initial) (AspisR1.Tx1Q_Carriers.pending pending)
+      (S7Kani3CallerTrace.initialSum
+        (AspisR1.Port3_PendingInstall.owned (AspisR1.Tx1Q_Carriers.accumulator initial).weights.deref))
+      (Eq.mpr (id (congrArg (fun _a => ↑_a + 10 = 10) zero)) (Eq.refl (↑0#usize + 10))) size crhs cpower history
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              AspisR1.S7JoinRowsTrace.Progress (↑_a) 0
+                (AspisR1.Port3_RowsInstall.toBW (AspisR1.Tx1Q_Carriers.pending pending)))
+            zero))
+        phase)
+      (fun j =>
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a => _a = AspisR1.JHl_WeightFormula.totalAt ↑(AspisR1.Tx1Q_Carriers.accumulator initial).next ↑j)
+              (AspisR1.JHl_InitialSum.source initial init j)))
+          (Eq.mpr (id (congrArg (fun _a => 0 = AspisR1.JHl_WeightFormula.totalAt ↑_a ↑j) zero)) (Eq.refl 0)))
+      initialPower (AspisR1.Tx1Q_Carriers.accumulator out) (AspisR1.Tx1Q_Carriers.pending after)
+      (Eq.mp
+        (congrArg
+          (fun _a =>
+            AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop AspisR1.JHa_QueryLoop.ops
+                AspisR1.JFx_NativeBytes.proof (AspisR1.Tx1Q_Carriers.prepared p)
+                (AspisR1.Tx1Q_Carriers.accumulator initial) AspisR1.JFr_TX2_Powers.value none _a
+                (AspisR1.Tx1Q_Carriers.pending pending) 10#usize =
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Ok
+                  (AspisR1.Tx1Q_Carriers.accumulator out, AspisR1.Tx1Q_Carriers.pending after)))
+          geometry)
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop AspisR1.JHa_QueryLoop.ops
+                  AspisR1.JFx_NativeBytes.proof (AspisR1.Tx1Q_Carriers.prepared p)
+                  (AspisR1.Tx1Q_Carriers.accumulator initial) _a none (AspisR1.Tx1Q_Carriers.geometry g)
+                  (AspisR1.Tx1Q_Carriers.pending pending) 10#usize =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok
+                    (AspisR1.Tx1Q_Carriers.accumulator out, AspisR1.Tx1Q_Carriers.pending after)))
+            powers)
+          native))
+  let ⟨trace, right✝⁶⟩ := h✝
+  let ⟨progress, right✝⁷⟩ := right✝⁶
+  let ⟨sums, weights⟩ := right✝⁷
+  have nativeFlush :=
+    AspisR1.Tx1Q_Install.flush_success after out.weights.deref flushed
+      (Eq.mp
+        (congrArg (fun _a => _a after out.weights.deref = Aeneas.Std.Result.ok flushed)
+          AspisR1.JGw_InstalledSlots.flush)
+        flush);
+  have oldEq :=
+    id
+      (Eq.mpr (id (congrArg (fun _a => _a.deref = (AspisR1.Tx1Q_Carriers.accumulator initial).weights.deref) weights))
+        (Eq.refl (AspisR1.Tx1Q_Carriers.accumulator initial).weights.deref));
+  fun j =>
+  let ⟨q, h✝¹⟩ :=
+    AspisR1.JHl_FlushSum.source (AspisR1.Tx1Q_Carriers.accumulator initial).weights.deref
+      (AspisR1.Tx1Q_Carriers.pending after) (AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k flushed) sum size
+      progress.right.left trace
+      (Eq.mp
+        (congrArg
+          (fun _a =>
+            AspisR1.Port3_FlushInstall.flush (AspisR1.Tx1Q_Carriers.pending after) _a =
+              Aeneas.Std.Result.ok (AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k flushed))
+          oldEq)
+        nativeFlush)
+      j
+  let ⟨hget, right✝⁸⟩ := h✝¹
+  let ⟨meaning, canonical⟩ := right✝⁸
+  id
+    (fun hget =>
+      Option.casesOn (motive := fun t =>
+        (↑flushed)[↑j]? = t →
+          ∃ q,
+            (↑flushed)[↑j]? = some q ∧
+              AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.k q) = AspisR1.JHl_WeightFormula.totalAt 10 ↑j ∧
+                AspisR1.Port3_FlushInstall.Canonical (AspisR1.Tx1Q_Carriers.k q))
+        (↑flushed)[↑j]?
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            (↑flushed)[↑j]? = x →
+              ∃ q,
+                x = some q ∧
+                  AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.k q) =
+                      AspisR1.JHl_WeightFormula.totalAt 10 ↑j ∧
+                    AspisR1.Port3_FlushInstall.Canonical (AspisR1.Tx1Q_Carriers.k q))
+            (fun hc =>
+              let ⟨⟩ := some q
+              Eq.mp (congrFun' (congrArg Eq (congrArg (Option.map AspisR1.Tx1Q_Carriers.k) hc)) (some q))
+                (Eq.mp (congrArg (fun _a => _a = some q) List.getElem?_map) hget))
+            (Eq.symm h) (Eq.refl (↑flushed)[↑j]?))
+        (fun x h =>
+          Eq.ndrec (motive := fun x =>
+            (↑flushed)[↑j]? = x →
+              ∃ q,
+                x = some q ∧
+                  AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.k q) =
+                      AspisR1.JHl_WeightFormula.totalAt 10 ↑j ∧
+                    AspisR1.Port3_FlushInstall.Canonical (AspisR1.Tx1Q_Carriers.k q))
+            (fun hc =>
+              Eq.ndrec (motive := fun q =>
+                AspisR1.CheckpointBytes5Output.ofK q = AspisR1.JHl_SumField.value sum ↑j →
+                  AspisR1.Port3_FlushInstall.Canonical q →
+                    ∃ q,
+                      some x = some q ∧
+                        AspisR1.CheckpointBytes5Output.ofK (AspisR1.Tx1Q_Carriers.k q) =
+                            AspisR1.JHl_WeightFormula.totalAt 10 ↑j ∧
+                          AspisR1.Port3_FlushInstall.Canonical (AspisR1.Tx1Q_Carriers.k q))
+                (fun meaning canonical => Exists.intro x ⟨rfl, ⟨Eq.trans meaning (sums j), canonical⟩⟩)
+                (Eq.mp
+                  (Eq.trans (congrFun' (congrArg Eq (congrArg (Option.map AspisR1.Tx1Q_Carriers.k) hc)) (some q))
+                    (Option.some.injEq (AspisR1.Tx1Q_Carriers.k x) q))
+                  (Eq.mp (congrArg (fun _a => _a = some q) List.getElem?_map) hget))
+                meaning canonical)
+            (Eq.symm h) (Eq.refl (↑flushed)[↑j]?))
+        (Eq.refl (↑flushed)[↑j]?))
+    hget
+class AspisR1.JHe_SHARealization : Prop
+number of parameters: 0
+fields:
+  AspisR1.JHe_SHARealization.tree0 : ∀ (i : Fin 157),
+      AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs0.input i) = AspisR1.JHe_SHAInputs0.expected i
+  AspisR1.JHe_SHARealization.tree1 : ∀ (i : Fin 157),
+      AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs1.input i) = AspisR1.JHe_SHAInputs1.expected i
+  AspisR1.JHe_SHARealization.tree2 : ∀ (i : Fin 139),
+      AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs2.input i) = AspisR1.JHe_SHAInputs2.expected i
+constructor:
+  AspisR1.JHe_SHARealization.mk
+    (tree0 :
+      ∀ (i : Fin 157),
+        AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs0.input i) = AspisR1.JHe_SHAInputs0.expected i)
+    (tree1 :
+      ∀ (i : Fin 157),
+        AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs1.input i) = AspisR1.JHe_SHAInputs1.expected i)
+    (tree2 :
+      ∀ (i : Fin 139),
+        AspisR1.JFp_SHADigest.digest (AspisR1.JHe_SHAInputs2.input i) = AspisR1.JHe_SHAInputs2.expected i) :
+    AspisR1.JHe_SHARealization

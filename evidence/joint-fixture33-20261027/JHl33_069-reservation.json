@@ -1,0 +1,23 @@
+{
+  "requested_bytes": 8589934592,
+  "allowed": true,
+  "utc": 1793153950.9198751,
+  "populated_scopes": [
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r32f2bcca9f4b4ee8857bdec01ebc01ca.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py /home/dombarker/project-offloads/codex-pv-dlib-20261028/kani-update-03/admission-barrier.json /usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-dlib-20261028/kani-update-03/time.log timeout 900 taskset --cpu-list 0-3 env PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin CARGO_BUILD_JOBS=4 CARGO_PROFILE_DEV_OPT_LEVEL=3 CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false RUSTFLAGS=--cfg kani CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-dlib-20261028/kani-target cargo kani --manifest-path /home/dombarker/project-offloads/codex-pv-dlib-20261028/native-proof/Cargo.toml --lib --exact --harness update_gate::wrapper_update_events --solver kissat --output-format terse -j 4 -Z unstable-options --cbmc-args --unwinding-assertions",
+        "",
+        "cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 132 --external-sat-solver kissat --slice-formula --unwinding-assertions /home/dombarker/project-offloads/codex-pv-dlib-20261028/kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_dlib_native_default-5ffe3f51cfa2ae03__RNvNtCsZlXEzaijk2_22pv_dlib_native_default11update_gate21wrapper_update_events.out --verbosity 9 --json-ui"
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 6844403712
+    }
+  ],
+  "bounded_reserved_bytes": 8589934592,
+  "all_populated_scopes_bounded": true,
+  "safe_limit_bytes": 59055800320,
+  "print_axioms": "N/A: read-only resource preflight"
+}
