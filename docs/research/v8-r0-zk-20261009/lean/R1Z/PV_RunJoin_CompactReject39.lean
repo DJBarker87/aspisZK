@@ -9,7 +9,7 @@ theorem high (logical : Slice U8) (at1 bad : Usize) (value : U8)
     (bad_bound : bad.val<32) (nonzero : value≠0#u8)
     (read_bad : Slice.index_usize logical (Usize.wrapping_add at1 bad)=.ok value)
     (n : Nat) (first : Usize) (bound : first.val+n=bad.val)
-    (prefix : ∀ j : Usize, first.val≤j.val → j.val<bad.val →
+    (before_bad : ∀ j : Usize, first.val≤j.val → j.val<bad.val →
       Slice.index_usize logical (Usize.wrapping_add at1 j)=.ok 0#u8) :
     host_compact.compact_values_loop0_loop0 logical at1 first =
       .ok (some (.Err compact.CodecError.NonZeroHigh)) := by
@@ -32,12 +32,12 @@ theorem high (logical : Slice U8) (at1 bad : Usize) (value : U8)
       change 32<UScalar.size .Usize at big
       omega
     have next := ih (Usize.wrapping_add first 1#usize) (by rw [inc];omega)
-      (fun j hj hbad => prefix j (by rw [inc] at hj;omega) hbad)
+      (fun j hj hbad => before_bad j (by rw [inc] at hj;omega) hbad)
     unfold host_compact.compact_values_loop0_loop0
     rw [ProverRw19LoopBind.loop_bind]
     simp only [host_compact.compact_values_loop0_loop0.body,
       show first<32#usize from (by change first.val<32;omega),↓reduceIte,
-      lift,bind_tc_ok,prefix first (Nat.le_refl _) hh]
+      lift,bind_tc_ok,before_bad first (Nat.le_refl _) hh]
     exact next
 
 #print axioms high
