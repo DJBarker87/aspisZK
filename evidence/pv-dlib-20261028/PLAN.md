@@ -42,3 +42,7 @@ checking: the new external link overlay lacked the IR companion for
 Init.Prelude. Same-authority `.ir` companions are now linked read-only and
 hashed separately. No library object was rebuilt. Both focused failures
 are retained and charged. No theorem/row closure is inferred from extraction.
+
+42202 upload admission refused 2026-10-28T00:43:54.652398Z (no compiler).
+Next resource admission must be no earlier than 00:46:54.652398Z; use 42203
+for the next focused Lean submission. Other scopes also wait for that point.
