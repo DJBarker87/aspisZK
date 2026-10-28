@@ -144,3 +144,26 @@ only records explicitly marked confirmed_not_launched (historical record stays).
 The same33 has been rescheduled under(m-prime), single driver active; do not
 launch another scope. No source rerun or extra charge; budget remains70/100.
 SemanticAppendRoot31 passed32; SemanticAppendCarry31 still uncompiled pending33.
+
+SemanticAppendCarry31 passed44633 after confirmed prehost intent recovery.
+OutputPairMeaning31 passed44637; AppendBinding31 passed44638 (variant-output
+premise explicit). An SCP255 before38's compiler exposed check=True bypassing
+transport retries; own wrapper fixed at6f9fce0c82, waited60s and repeated only the
+unlaunched upload; no compiler rerun. Source upload failure receipt is retained.
+Current single driver44639 RecipientLift31. Budget73charged(45accepted,28rejected),
+27remaining before39. Next40 SemanticRecipient31,41 TwoOutputSentinel31,
+42 CompilerSentinel31,43 SemanticSentinel31,44 HonestPackage31,45 CanonicalHonest31;
+then exact owner coverage before V038/V045, preserving97-99 for audits.
+
+RecipientLift31 passed39, SemanticRecipient31 failed40 on Option.map unfolding,
+changed at2af028f23c and passed41. Current single driver42 TwoOutputSentinel31.
+Budget76charged(47accepted,29rejected),24remaining before42. Next43
+CompilerSentinel31,44 SemanticSentinel31,45 HonestPackage31,46 CanonicalHonest31,
+then coverage before V038/V045. Keep97-99 for audits. No endpoint premise change.
+
+TwoOutputSentinel31 failed42(direct equality adapter), failed43(usize index),
+changed then passed44. Current single driver45 CompilerSentinel31; admission
+refused10:05:07UTC before launch, full180s wait, SAME ID retry under m-prime.
+Budget79charged(48accepted,31rejected),21remaining before45. Next46
+SemanticSentinel31,47 HonestPackage31,48 CanonicalHonest31,49 coverage; preserve
+97-99 audits, then only after coverage V038/V045. No endpoint premise change.

@@ -27,3 +27,11 @@ OutputPairMeaning31 and AppendBinding31 remain candidates; the latter keeps the
 variant-output clause explicit. Recipient, sentinel, unconditional canonical
 HonestInput and exact owner coverage follow in order. V038/V045 are untouched.
 No deployed premise was removed/added/weakened/changed; T remains three fields.
+
+OutputPairMeaning31 passed44637 and AppendBinding31.append passed44638. The
+latter has an explicit variantOutput premise, with every append-specific fact
+discharged. RecipientLift31 passed44639 and SemanticRecipient31.recipient passed
+44641 after the retained Option.map elaboration failure44640. The transfer route
+can now discharge that premise from successful preparation; withdrawal's amount
+variant law was already checked in SemanticOptions30. No semantic output binding
+is assumed at the future canonical-route consumer.

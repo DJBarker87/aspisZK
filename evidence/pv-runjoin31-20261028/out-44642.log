@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_TwoOutputSentinel31.lean:28:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+in the target expression
+  aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq (↑second)[↑7#usize]! aspis_core.field.M31.ZERO = ok false
+
+case true.true.false
+first second : Std.Array U32 8#usize
+leaf : pair_tree_profile.PoolV1PairLeafWitnessV1
+hb✝ : pair_tree_profile.digest_is_canonical first = ok true
+hb : pair_tree_profile.digest_is_canonical second = ok true
+hc : Canon8 second
+hz : aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq (↑second)[↑7#usize]! aspis_core.field.M31.ZERO = ok false
+h :
+  (do
+      let m ← aspis_core.field.M31.inv (↑second)[↑7#usize]!
+      let r ←
+        { first_commitment := first, second_occupied := aspis_core.field.M31.ONE, second_commitment := second,
+              second_occupancy_inverse := m }.validate
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          ok
+            (core.result.Result.Ok
+              { first_commitment := first, second_occupied := aspis_core.field.M31.ONE, second_commitment := second,
+                second_occupancy_inverse := m })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pair_tree_profile.PoolV1PairLeafWitnessV1 (core.convert.FromSame pair_tree_profile.PoolV1PairLeafErrorV1)
+            residual) =
+    ok (core.result.Result.Ok leaf)
+⊢ (↑second)[7]! ≠ 0#u32
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_TwoOutputSentinel31.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
