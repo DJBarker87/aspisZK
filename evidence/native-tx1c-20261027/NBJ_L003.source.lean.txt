@@ -1,0 +1,49 @@
+import NBJ_Opening
+
+set_option autoImplicit false
+namespace AspisR1.NBJ_Address
+open Aeneas Aeneas.Std Result
+
+def startWord (i : Usize) (bound : i.val < 22) : Usize :=
+  UScalar.ofNat (NBJ_Opening.start i.val) (by
+    have h := NBJ_Opening.address_bounds i.val bound
+    unfold NBJ_Opening.start NBJ_Opening.finish at *
+    scalar_tac)
+
+def finishWord (i : Usize) (bound : i.val < 22) : Usize :=
+  UScalar.ofNat (NBJ_Opening.finish i.val) (by
+    have h := NBJ_Opening.address_bounds i.val bound
+    unfold NBJ_Opening.finish NBJ_Opening.start at *
+    scalar_tac)
+
+/-- Native scalar endpoints associate to the exact installed range operation,
+for arbitrary physical bytes and lengths, including a range rejection. -/
+theorem opening_range (proof : Slice U8) (i : Usize) (bound : i.val < 22) :
+    Port4B_Opening.opening proof i =
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+        proof {start := startWord i bound, «end» := finishWord i bound} := by
+  have cap : 57607 < UScalar.size .Usize := by rw [UScalar.size_def]; scalar_tac
+  have mul : (Usize.wrapping_mul i 832#usize).val = i.val * 832 := by
+    rw [Usize.wrapping_mul_val_eq]
+    apply Nat.mod_eq_of_lt
+    change i.val * 832 < UScalar.size .Usize
+    omega
+  have first : Usize.wrapping_add 10055#usize (Usize.wrapping_mul i 832#usize) =
+      startWord i bound := by
+    apply UScalar.eq_of_val_eq
+    rw [Usize.wrapping_add_val_eq,mul]
+    change (10055+i.val*832)%UScalar.size .Usize = 10055+i.val*832
+    exact Nat.mod_eq_of_lt (by omega)
+  have last : Usize.wrapping_add (startWord i bound) 832#usize = finishWord i bound := by
+    apply UScalar.eq_of_val_eq
+    rw [Usize.wrapping_add_val_eq]
+    change (10055+i.val*832+832)%UScalar.size .Usize = 10055+i.val*832+832
+    exact Nat.mod_eq_of_lt (by omega)
+  change core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+    proof {start := Usize.wrapping_add 10055#usize (Usize.wrapping_mul i 832#usize),
+      «end» := Usize.wrapping_add
+        (Usize.wrapping_add 10055#usize (Usize.wrapping_mul i 832#usize)) 832#usize} = _
+  rw [first,last]
+
+#print axioms opening_range
+end AspisR1.NBJ_Address

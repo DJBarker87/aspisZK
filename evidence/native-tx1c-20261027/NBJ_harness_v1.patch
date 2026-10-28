@@ -1,0 +1,28 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBJ_keys.rs
+@@ -0,0 +1,15 @@
++
++use super::*;
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_scalar(){
++ let i:usize=kani::any();kani::assume(i<22);
++ let at=compact::OFF_OPENINGS+i*OPENING;let end=at+OPENING;
++ assert_eq!(at,10055+832*i);assert_eq!(end,10055+832*(i+1));assert!(at<=end && end<=57607);assert_eq!(end-at,832);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_range_position(){
++ // One arbitrary observed byte; no fully symbolic 57607-byte allocation.
++ let i:usize=kani::any();let c:usize=kani::any();let byte:u8=kani::any();kani::assume(i<22 && c<832);
++ let mut proof=[0u8;57607];let at=10055+832*i;proof[at+c]=byte;
++ let q=&proof[at..at+832];assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[at..].as_ptr());assert_eq!(q[c],byte);
++}
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,7 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NBJ_keys.rs"]
++mod NBJ_keys;
