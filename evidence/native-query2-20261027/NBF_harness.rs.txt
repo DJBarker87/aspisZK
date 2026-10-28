@@ -14,7 +14,8 @@ fn NBF_context(row:&mut[u64;4],power:K,basis:M31,flush:bool) {
 #[kani::stub(super::update_residue_row,NBF_context)]
 fn NBF_index_context() {
  let backing:Box<[[u64;4];64]>=Box::new(kani::any());
- let raw=Vec::from(backing);
+ let slice:Box<[[u64;4]]>=backing;
+ let raw=Vec::from(slice);
  let index:usize=kani::any();kani::assume(index<64);
  let terms:usize=kani::any();let p:[u32;4]=kani::any();let basis:u32=kani::any();
  let power=K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}};
