@@ -67,6 +67,7 @@ if r.returncode==255:
  status=int(q.stdout.split(':')[-1])
 else:status=r.returncode
 collect(['admission-barrier.json','output.log','time.log'])
+launch_clock.write_text(json.dumps(dict(epoch=time.time(),target=name,basis='after completion/collection; conservative launch cooldown'))+'\n')
 bar=json.loads((out/'admission-barrier.json').read_text())
 with (out/'barrier-history.jsonl').open('a') as hist:hist.write(json.dumps(dict(exit=status,admission=bar))+'\n')
 if bar.get('allowed') is not True:
