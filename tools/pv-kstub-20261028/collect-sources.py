@@ -17,7 +17,12 @@ for rel,s in json.loads(q.stdout).items():
  p=E/rel
  if p.exists():assert p.read_text()==s,'Immutable source snapshot changed: '+rel
  else:p.write_text(s)
+patch=(E/'KMX_copy_stubs.patch').read_text()
+block=patch.split('diff --git a/KMX_stubs.rs b/KMX_stubs.rs\n',1)[1].split('diff --git ',1)[0]
+exact=''.join(line[1:]+'\n' for line in block.splitlines() if line.startswith('+') and not line.startswith('+++')).encode()
+expected=hashlib.sha256(exact).hexdigest()
+assert expected=='ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138'
 audit=[]
 for p in sorted(E.glob('K??/KMX_stubs.rs.txt')):
- h=hashlib.sha256(p.read_bytes()).hexdigest();assert h=='c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9';audit.append(dict(run=p.parent.name,path=str(p.relative_to(R)),stub_sha256=h))
-(E/'per-run-kmx-audit.json').write_text(json.dumps(dict(patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67',runs=audit),indent=2)+'\n');print('Collected immutable source freezes for',len(audit),'runs')
+ h=hashlib.sha256(p.read_bytes()).hexdigest();assert p.read_bytes()==exact and h==expected;audit.append(dict(run=p.parent.name,path=str(p.relative_to(R)),stub_sha256=h))
+(E/'per-run-kmx-audit.json').write_text(json.dumps(dict(patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67',literal_patch_module_sha256=expected,runs=audit),indent=2)+'\n');print('Collected immutable source freezes for',len(audit),'runs')

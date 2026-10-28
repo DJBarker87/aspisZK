@@ -40,6 +40,20 @@
               "negative_control": true,
               "status": "TIMEOUT",
               "receipt": "evidence/pv-kstub-20261028/K03/receipt.json"
+            },
+            {
+              "package": "cb",
+              "harness": "path_join8",
+              "row": "V178",
+              "index": 124,
+              "window": null,
+              "body_sha256": "4500efba3a2e6b580462a584c28183f6e86741273c1e17baecaa70204436fe9b",
+              "negative": "path_join8_negative",
+              "negative_control": true,
+              "run": "K30",
+              "status": "FAIL",
+              "receipt": "evidence/pv-kstub-20261028/K30/receipt.json",
+              "source_change": "K30-change.json"
             }
           ],
           "positive": {
@@ -63,10 +77,11 @@
             "window": null,
             "body_sha256": "4500efba3a2e6b580462a584c28183f6e86741273c1e17baecaa70204436fe9b",
             "negative": "path_join8_negative",
-            "run": "K03",
             "negative_control": true,
-            "status": "TIMEOUT",
-            "receipt": "evidence/pv-kstub-20261028/K03/receipt.json"
+            "run": "K30",
+            "status": "FAIL",
+            "receipt": "evidence/pv-kstub-20261028/K30/receipt.json",
+            "source_change": "K30-change.json"
           },
           "confirmed": false
         },
@@ -846,7 +861,7 @@
     },
     {
       "row": "V233",
-      "status": "pending",
+      "status": "stubbed Kani confirmed",
       "harnesses": [
         {
           "package": "split",
@@ -920,10 +935,61 @@
           "index": 117,
           "window": "hi",
           "body_sha256": "0555eb6eaa7cd049c6681930c466d3a49f9c0f8613e3e1485792ec3528539674",
-          "attempts": [],
-          "positive": null,
-          "negative_control": null,
-          "confirmed": false
+          "attempts": [
+            {
+              "package": "split",
+              "harness": "split64_coordinate_hi",
+              "negative": "split64_coordinate_hi_negative",
+              "row": "V233",
+              "index": 117,
+              "window": "hi",
+              "body_sha256": "0555eb6eaa7cd049c6681930c466d3a49f9c0f8613e3e1485792ec3528539674",
+              "run": "K28",
+              "negative_control": false,
+              "status": "PASS",
+              "receipt": "evidence/pv-kstub-20261028/K28/receipt.json"
+            },
+            {
+              "package": "split",
+              "harness": "split64_coordinate_hi",
+              "negative": "split64_coordinate_hi_negative",
+              "row": "V233",
+              "index": 117,
+              "window": "hi",
+              "body_sha256": "0555eb6eaa7cd049c6681930c466d3a49f9c0f8613e3e1485792ec3528539674",
+              "run": "K29",
+              "negative_control": true,
+              "status": "FAIL",
+              "receipt": "evidence/pv-kstub-20261028/K29/receipt.json"
+            }
+          ],
+          "positive": {
+            "package": "split",
+            "harness": "split64_coordinate_hi",
+            "negative": "split64_coordinate_hi_negative",
+            "row": "V233",
+            "index": 117,
+            "window": "hi",
+            "body_sha256": "0555eb6eaa7cd049c6681930c466d3a49f9c0f8613e3e1485792ec3528539674",
+            "run": "K28",
+            "negative_control": false,
+            "status": "PASS",
+            "receipt": "evidence/pv-kstub-20261028/K28/receipt.json"
+          },
+          "negative_control": {
+            "package": "split",
+            "harness": "split64_coordinate_hi",
+            "negative": "split64_coordinate_hi_negative",
+            "row": "V233",
+            "index": 117,
+            "window": "hi",
+            "body_sha256": "0555eb6eaa7cd049c6681930c466d3a49f9c0f8613e3e1485792ec3528539674",
+            "run": "K29",
+            "negative_control": true,
+            "status": "FAIL",
+            "receipt": "evidence/pv-kstub-20261028/K29/receipt.json"
+          },
+          "confirmed": true
         }
       ],
       "structural_evidence": "structural (K-1 substitute)",

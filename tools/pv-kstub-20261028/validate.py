@@ -22,12 +22,15 @@ for f in receipts:
  if name=='K01':continue
  check('--exact' in target,'exact selector '+name);check('--unwinding-assertions' in target,'unwinding '+name);check('0-3' in target,'CPU '+name)
  log=(f.parent/'output.log').read_text();check(len(re.findall(r'Checking harness ',log))==1,'one root '+name)
+subprocess.run([sys.executable,str(R/'tools/pv-kstub-20261028/audit-controls.py')],check=True)
+control_audit={x['run']:x for x in json.loads((E/'control-source-audit.json').read_text())}
 for row in json.loads((E/'table.json').read_text())['rows']:
  for h in row['harnesses']:
   if h['confirmed']:
    neg=h['negative_control'];log=(R/neg['receipt']).parent.joinpath('output.log').read_text()
    failures=re.findall(r'^Failed Checks: (.+)$',log,re.M)
-   check(bool(failures) and all('assertion failed:' in f and '!=' in f for f in failures),'intended negative assertion '+h['harness'])
+   audit=control_audit.get(neg['run'],{})
+   check(bool(failures) and audit.get('source_delta_verified') and audit.get('same_bound_and_exact_kmx_stubs'),'intended negative assertion '+h['harness'])
    check(bool(re.search(r'\*\*\s*1 of \d+ failed',log)),'only intended failure '+h['harness'])
  check(row['status']!='pending','unfinished '+row['row'])
 for x in json.loads((E/'comparison-inputs.json').read_text()):
