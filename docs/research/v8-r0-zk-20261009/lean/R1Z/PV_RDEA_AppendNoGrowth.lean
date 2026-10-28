@@ -16,9 +16,16 @@ theorem complete {S F : Type} (step : Request → S → Option Nat × S)
       (.ok (appended b tail fits),
         {w with memory:=PV_RDB1_Append.writeTail b.address b.values.length tail w.memory}) := by
   have enough : tail.length≤b.capacity-b.values.length := by omega
+  have hr : PV_RDB1_Append.reserve step 18446744073709551615 9223372036854775807 shape b tail.length w =
+      ⟨.ok (),b,w⟩ := by
+    simp only [PV_RDB1_Append.reserve,enough,ite_true]
   unfold PV_RDEA_AppendExecution.append
-  simp only [PV_RDB1_Append.reserve,enough,ite_true]
-  rfl
+  dsimp only
+  split <;> rename_i h
+  · rw [hr] at h
+    cases h
+  · simp only [hr]
+    rfl
 
 theorem header {S F : Type} (step : Request → S → Option Nat × S)
     (shape : Shape) (b : Buffer U8) (tail : List U8) (w : World S F)
