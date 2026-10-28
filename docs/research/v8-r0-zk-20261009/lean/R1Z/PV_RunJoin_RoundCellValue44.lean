@@ -21,7 +21,7 @@ theorem complete (ops : ExternalFuns) (count : Usize) (q w xs : Nat → Raw)
         terms q w (PV_RunJoin_RoundTerms44.children n d s t) k := by
   induction n generalizing xs t with
   | zero =>
-    exact ⟨xs,rfl,hxs,fun k hk => by rfl⟩
+    exact ⟨xs,rfl,hxs,fun k hk => by simp only [PV_RunJoin_RoundTerms44.children,ProverCommitCounterList48.counters,List.map_nil,terms,add_zero]⟩
   | succ n ih =>
     obtain ⟨next,hn,hcn,hdn⟩ := PV_RunJoin_RoundBodyValue44.step ops count q w xs hq hw hxs d s t hd size hs (by omega)
     obtain ⟨ys,hy,hcy,hdy⟩ := ih next hcn (Usize.wrapping_add t 1#usize)
