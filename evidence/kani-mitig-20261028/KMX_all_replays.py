@@ -26,13 +26,21 @@ for row in ex:
 needed=[x for x in plan if x['original'].startswith('LPi_')]
 base=next(x for x in inventory if '/LPm_K003/' in x['receipt'])
 choices=[(sha,v) for sha,v in sources.items() if sha in base['source_hashes'].values() and Path(v['path']).name=='LPi_contracts.rs']
-sha,v=choices[0]
-if ('aspis-r1-cost-probe','lib','KMX_LPi_contracts') not in modules:modules[('aspis-r1-cost-probe','lib','KMX_LPi_contracts')]=(sha,v['text'])
+sha,v=max(((sha,v) for sha,v in sources.items() if Path(v['path']).name=='LPi_contracts.rs'),key=lambda x:len(x[1]['text']))
+modules[('aspis-r1-cost-probe','lib','KMX_LPi_contracts')]=(sha,v['text'])
 # LPm calls qbytes in shared LPi module; ensure qbytes is present in selected original.
+# LPf helper dependency from the same frozen diagnostic receipt.
+sha,v=next((sha,v) for sha,v in sources.items() if Path(v['path']).name=='LPf_replay.rs')
+modules[('aspis-r1-cost-probe','lib','KMX_LPf_replay')]=(sha,v['text'])
 payload={}
 for (crate,parent,mod),(sha,text) in modules.items():
  text=rename(text)
+ if mod=='KMX_LPf_replay':text=re.sub(r'#\[kani::proof_for_contract\([^\n]+\n', '', text)
+ if mod=='KMX_LPf_verifier':
+  pieces=text.split('#[kani::proof]')
+  text=pieces[0]+''.join((part[part.index('fn '):] if 'kani::stub_verified' in part.split('fn ')[0] else '#[kani::proof]'+part) for part in pieces[1:])
  text=text.replace('aspis_r1_cost_probe::','crate::')
+ if mod=='KMX_LPb_harnesses':text=text.replace('use super::*;', 'use aspis_core::field::{WideExact as E,QM31 as K,M31,CM31};\nuse crate::{fast_pairing,weights::{field,powers}};')
  text=text.replace('#[kani::proof]','#[kani::proof]\n'+attrs)
  # Raise bounds only for selected harnesses, including macro-generated cases.
  for p in plan:
