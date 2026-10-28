@@ -14236,3 +14236,21 @@ The remaining obligation is privacy-relevant in its own right. The 23 recorded r
 Whether these outputs can occur on an honest run, and whether their occurrence or content depends on witness data, is not established. Together with the core::fmt glue found in the op227 cone (D414), this is the client-side half of the D348 log and error observer coverage gap. V178 and V181 are parked on it after 300 attempts across three rounds. They resume when that question is either answered by a reachability and provenance proof or decided by the owner.
 
 Recount 8 launched (pv-recount8, sparse worktree from research 19c1bd58b7; IDs 61600-61699; statement checks only). It re-derives every row at pins (candidate de194795b3 and the live branches) and independently confirms or rejects each restoration since recount 7. It applies the fifth-amendment reclassification rule and rulings rdea-1, rdcd3-1 and (t). It records D414 to D417, adds the deployed-verifier release item, and extends the owner packet's D348 item with the client-side error, formatting and backtrace evidence. Rows removed outright: 0. Privacy target not yet established.
+
+## D419 (Stream B) 2026-10-28 23:29 UTC: pv-rdb2d results (no row restored); shared ownership interface identified; pv-own launched
+
+pv-rdb2d (head 5e0e281e9d) used all 100 Lean attempts (84 passed, 16 failed), 9 native scopes and no Kani. The statement and axioms audits and the final focused model replay passed with standard axioms only and zero swap. All six rows remain SUSPENDED, with no finding. The blockers:
+- V229: typed byte-memory, ownership and destructor correspondence for the native collector.
+- V230: depends on V229 plus concrete shift, OR and array association.
+- V256 and V257: association with the original frozen iterator continuations.
+- V231: concrete SHA mutable handles and compression backend.
+- V239: pruning, field operations, initialized Vec ownership and public-point transport.
+One process deviation was recorded: a read-only admission preflight retried 28 s after a refusal, launching no compiler. A guard now prevents it. Lead review: nothing outside the worker's prefixes and evidence; no forbidden constructs; no large files. The supporting laws were merged into the candidate as 1a3cd3de26 and pushed, and the worktree was removed.
+
+Shared obstruction (AGENTS.md section 7): typed byte-memory, ownership and destructor correspondence for the deployed runtime has now stopped four lines:
+- V229, V230 and V239 here;
+- V178 in pv-rdeac (owned-argument cleanup);
+- the world line, where world3 left native ownership and backend adequacy open (D374).
+D362 established that drop cannot be modelled generically without a world. Rather than commission more row wrappers, pv-own is launched to build the interface once (sparse worktree, branch codex/pv-own-20261028 from 1a3cd3de26 with the parked pv-world branch merged in; IDs 61700-61799; 100 Lean, 60 native, 0 Kani). It first writes an interface specification before any Lean: a heap of live allocations with initialized-byte maps and owners, typed views, moves and borrows as ownership transfer, and per-type drop-glue event sequences from the deployed MIR. Allocation goes through the retained runtime/allocator adequacy item, and each fact is marked as proved, tool-trust reclassification or retained. It then proves the generic laws, and refines V229 as the first consumer, then V230, V239 and V178. Any witness-dependent destructor or allocation event is a finding.
+
+V231, V256 and V257 have different blockers and wait for a slot. Rows removed outright: 0. Privacy target not yet established.
