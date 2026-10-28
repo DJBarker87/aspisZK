@@ -9,7 +9,7 @@ theorem usize_1024_size : 1024 < UScalar.size .Usize := by
   rw [UScalar.size_def]
   scalar_tac
 
-theorem checked_add_exact (x y z : Usize) (h : x.val+y.val=z.val) : x+y=.ok z := by
+theorem checked_add_exact (x y z : Usize) (h : x.val+y.val=z.val) : (x+y : Result Usize) = .ok z := by
   obtain ⟨s,hs,hval⟩ := WP.spec_imp_exists
     (UScalar.add_spec (x:=x) (y:=y) (by rw [h]; scalar_tac))
   have heq : s=z := UScalar.eq_of_val_eq (by omega)
