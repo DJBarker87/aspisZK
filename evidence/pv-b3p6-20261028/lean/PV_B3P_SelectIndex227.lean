@@ -12,8 +12,12 @@ def cell (claims : Claims) (i : Nat) (hi : i < 84) : aspis_core.field.QM31 :=
 theorem index_value {α : Type} {n : Usize} (xs : Array α n) (i : Usize)
     (hi : i.val < n.val) :
     Array.index_usize xs i = .ok (xs.val[i.val]'(by simpa [xs.property] using hi)) := by
-  obtain ⟨v,hv,hval⟩ := WP.spec_imp_exists (Array.index_usize_spec xs i hi)
-  simpa only [hval] using hv
+  have hlen : i.val < xs.val.length := by simpa [xs.property] using hi
+  unfold Array.index_usize
+  change (match xs.val[i.val]? with
+    | none => Result.fail Error.arrayOutOfBounds
+    | some x => Result.ok x) = Result.ok (xs.val[i.val]'hlen)
+  rw [List.getElem?_eq_getElem hlen]
 
 theorem claim_value (claims : Claims) (i : Usize) (hi : i.val < 84) :
     reference_terminal.claim227 claims i = .ok (cell claims i.val hi) := by
