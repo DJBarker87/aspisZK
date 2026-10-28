@@ -43,10 +43,14 @@ else:
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDI_generated','-o','NDI_objects/'+target+'.olean',sources[0]]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NDI_tmp',LEAN_PATH=B+'/NDI_objects:/home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_objects:/home/dombarker/project-offloads/codex-cx-front3-cache-20261028/NCO_objects:/home/dombarker/project-offloads/codex-cx-front3-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects')
 if os.environ.get('NDI_EXTRACT_PARSER'):env['NDI_EXTRACT_PARSER']=os.environ['NDI_EXTRACT_PARSER']
+if os.environ.get('NDI_PROGRAM'):
+ native[native.index('--manifest-path')+1]=B+'/NDI_src/programs/r1-cost-probe/Cargo.toml'
+ native[native.index('--features')+1]='pool-adapter,private-leaf-salts'
+ env['NDI_PROGRAM']='1'
 if os.environ.get('NDI_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NDI_RUST_CFG']
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'source_pinset':'NDI_SOURCE.json','library_pinset':'NDI_SOURCE.json:library'},expected_time='optimized compile then one contract/shape proof; no field multiplication',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 if kind=='lean':
- cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NDI_SOURCE.json').read_text())['library'].items()}
+ cfg['deps_fingerprint']['selected_objects']=dict(json.loads((E/'NDI_SOURCE.json').read_text())['inherited_object_pins']['selected_objects'])
  for old,v in json.loads((E/'NDI_SOURCE.json').read_text())['cache_imports'].items():
   if '/NCO_objects/' in old:
    dest='/home/dombarker/project-offloads/codex-cx-front3-cache-20261028/NCO_objects/'+old.split('/NCO_objects/',1)[1]
@@ -64,7 +68,9 @@ code=f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});files=json.loads({payload!r});xkind={kind!r};xtarget={target!r}
 for n,s in files.items():
- p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
+ p=b/n;p.parent.mkdir(parents=True,exist_ok=True)
+ if p.is_symlink():p.unlink()
+ p.write_text(s)
 if xkind=='lean':
  (b/'NDI_objects'/xtarget).parent.mkdir(parents=True,exist_ok=True)
  (b/'NDI_tmp').mkdir(exist_ok=True)

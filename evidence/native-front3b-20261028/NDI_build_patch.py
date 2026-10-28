@@ -9,10 +9,16 @@ def files():
   if name=='lib':s='#![cfg_attr(kani, feature(allocator_api))]\n'+s+'\n#[cfg(kani)] mod NDI_controls;\n'
   if name=='r1_wire':
    s=s.replace('pub(crate) fn row(&self)', '#[cfg_attr(kani,kani::ensures(|r| (*r==NDI_wire::reference::validated_row_ref(self.row)) != cfg!(NDI_invert_row)))]\n    pub(crate) fn row(&self)')
+   s=s.replace('pub fn state(&self)', '#[cfg_attr(kani,kani::ensures(|r| (*r==NDI_wire::reference::state_ref(self.state)) != cfg!(NDI_invert_state)))]\n    pub fn state(&self)')
    s+='\n#[cfg(kani)] #[path="NDI_wire.rs"] mod NDI_wire;\n'
+   s+='\n#[cfg(kani)] pub fn NDI_state_for_backend<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->[u8;32] {SemanticTranscript{hash,state,next_row}.state()}\n' 
+  if name=='verifier':s+='\n#[cfg(kani)] #[path="NDI_verifier.rs"] mod NDI_verifier;\n'
   out[p]=s
- for name in ['wire','reference','controls']:
+ for name in ['wire','reference','controls','verifier']:
   out['crates/aspis-r1-cost-probe/src/NDI_'+name+'.rs']=(E/('NDI_'+name+'.rs')).read_text()
+ p='programs/r1-cost-probe/src/lib.rs'
+ out[p]='#![cfg_attr(kani, feature(allocator_api))]\n'+subprocess.check_output(['git','show',F+':'+p],text=True)+'\n#[cfg(kani)] mod NDI_program;\n'
+ out['programs/r1-cost-probe/src/NDI_program.rs']=(E/'NDI_program.rs').read_text()
  return out
 if __name__=='__main__':
  patch=[]

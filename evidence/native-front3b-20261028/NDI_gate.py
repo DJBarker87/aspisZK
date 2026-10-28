@@ -11,7 +11,9 @@ pins=json.loads((B/'NDI_SOURCE_PINS.json').read_text())
 errors=[n for n,h in pins.items() if sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
-r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--manifest-path',str(S/'crates/aspis-r1-cost-probe/Cargo.toml'),'--features','private-leaf-salts,optimized-terminal,program-build'],cwd=S,capture_output=True,text=True)
+manifest='programs/r1-cost-probe' if os.environ.get('NDI_PROGRAM') else 'crates/aspis-r1-cost-probe'
+features='pool-adapter,private-leaf-salts' if os.environ.get('NDI_PROGRAM') else 'private-leaf-salts,optimized-terminal,program-build'
+r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--manifest-path',str(S/manifest/'Cargo.toml'),'--features',features],cwd=S,capture_output=True,text=True)
 (B/(a+'-graph.stderr')).write_text(r.stderr)
 assert r.returncode==0,r.stderr
 m=json.loads(next(l for l in r.stdout.splitlines() if l.startswith('{')))
@@ -33,7 +35,7 @@ def visit(i):
  if i in seen:return
  seen.add(i)
  for d in nodes[i]['dependencies']:visit(d)
-visit(next(p['id'] for p in m['packages'] if p['name']=='aspis-r1-cost-probe'))
+visit(next(p['id'] for p in m['packages'] if p['name']==('aspis-r1-cost-probe-program' if os.environ.get('NDI_PROGRAM') else 'aspis-r1-cost-probe')))
 out=dict(graph_matches_frozen=not added and not(missing-allowed_missing) and not edge_errors,frozen_packages=len(f),resolved_packages=len(actual),new_package_tuples=sorted(added,key=str),missing_package_tuples=sorted(missing,key=str),edge_errors=edge_errors,lock_sha256=frozen,graph_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),all_crate_features=[dict(name=p['name'],version=p['version'],features=nodes[p['id']]['features']) for p in m['packages']],selected_closure=[dict(name=pkgs[i]['name'],version=pkgs[i]['version'],source=pkgs[i].get('source'),features=nodes[i]['features']) for i in sorted(seen)])
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n');assert out['graph_matches_frozen'],out
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
