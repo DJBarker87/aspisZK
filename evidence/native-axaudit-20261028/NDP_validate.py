@@ -18,6 +18,9 @@ for label,attempt,previous,count,nreach in [('Headline','NDP_R005','NDJ_R002',12
  stem='NDP_'+label;p=E/attempt
  receipt=json.loads((p/'receipt.json').read_text());assert receipt['exit_status']==0 and str(receipt['swaps'])=='0'
  assert receipt['limits']['memory.swap.max']=='0' and receipt['limits']['pids.max']=='64'
+ expected_limits=('6442450944','8589934592','-M7000') if label=='Headline' else ('15032385536','17179869184','-M15000')
+ assert (receipt['limits']['memory.high'],receipt['limits']['memory.max'])==expected_limits[:2]
+ assert expected_limits[2] in receipt['command']
  for name,digest in receipt['source_hashes'].items():
   assert sha((p/'sources'/name).read_bytes())==digest
   assert sha((E/name).read_bytes())==digest
@@ -56,16 +59,27 @@ for label,attempt,previous,count,nreach in [('Headline','NDP_R005','NDJ_R002',12
   b=(E/rel).read_bytes();files[rel]={'sha256':sha(b),'bytes':len(b)}
 all_names=sorted(set().union(*(set(x) for x in inventories.values())))
 axioms=[];tool_only=[]
+differing_shared=[]
 for name in all_names:
- variants=[inv[name] for inv in inventories.values() if name in inv]
- assert len({(v['module'],v['type_expr'],tuple(v['level_params'])) for v in variants})==1,('incompatible axiom variants',name)
- v=variants[0]
- imported={k:bool(inv.get(name,{}).get('in_root_import_closure')) for k,inv in inventories.items()}
- reachable={k:bool(inv.get(name,{}).get('reachable')) for k,inv in inventories.items()}
- category='a' if name in STANDARD else 'c' if any(reachable.values()) else 'b'
- row={k:v[k] for k in ['name','module','level_params','type','type_expr']}
- row.update(classification=category,imported_by=imported,reachable_from=reachable,evidence={k:{'attempt':summaries[k]['attempt'],'complete_raw_kernel_walk':True,'visited_file':summaries[k]['reachable_file'],'visited_uncompressed_sha256':summaries[k]['reachable_uncompressed_sha256'],'name_present':reachable[k]} for k in summaries})
- (axioms if any(imported.values()) else tool_only).append(row)
+ groups={}
+ for label,inv in inventories.items():
+  if name not in inv:continue
+  v=inv[name];key=(v['module'],v['type_expr'],tuple(v['level_params']))
+  groups.setdefault(key,[]).append(label)
+ if len(groups)>1:differing_shared.append(name)
+ for key,labels in groups.items():
+  v=inventories[labels[0]][name]
+  imported={k:k in labels and bool(inv[name]['in_root_import_closure']) for k,inv in inventories.items()}
+  reachable={k:k in labels and bool(inv[name]['reachable']) for k,inv in inventories.items()}
+  category='a' if name in STANDARD else 'c' if any(reachable.values()) else 'b'
+  row={k:v[k] for k in ['name','module','level_params','type','type_expr']}
+  row.update(classification=category,declared_in_forests=labels,imported_by=imported,reachable_from=reachable,evidence={k:{'attempt':summaries[k]['attempt'],'complete_raw_kernel_walk':True,'visited_file':summaries[k]['reachable_file'],'visited_uncompressed_sha256':summaries[k]['reachable_uncompressed_sha256'],'name_present':bool(inventories[k].get(name,{}).get('reachable')),'same_name_different_declaration':k not in labels and name in inventories[k]} for k in summaries})
+  (axioms if any(imported.values()) else tool_only).append(row)
+for label,inv in inventories.items():
+ reconstructed={x['name']:x for x in axioms if x['imported_by'][label]}
+ expected={n:v for n,v in inv.items() if v['in_root_import_closure']}
+ assert set(reconstructed)==set(expected)
+ assert all(reconstructed[n]['type_expr']==v['type_expr'] and reconstructed[n]['module']==v['module'] for n,v in expected.items())
 nonstandard_reached=[x['name'] for x in axioms if x['classification']=='c']
 assert not nonstandard_reached,nonstandard_reached
 seed=json.loads((E/'NDP_SEED_VERIFICATION.json').read_text())
@@ -74,7 +88,7 @@ assert seed['seed_manifest_sha256']==sha(manifest)
 pins=json.loads(manifest)
 assert seed['artifacts_verified']==sum(len(r['artifacts']) for r in pins['objects'])
 counts=dict(collections.Counter(x['classification'] for x in axioms))
-out={'schema':'NDP_AXIOMS/v1','finding_first':'No reachable nonstandard axiom; raw constant dependency graphs agree with both #print axioms results.','scope':'Every axiom declaration in the actual transitive import closures; audit-tool-only imports explicitly separated','classification_key':{'a':'Lean core standard: propext, Classical.choice, Quot.sound','b':'Imported declaration unreachable from both roots, established by exhaustive raw kernel graph traversal','c':'Reachable nonstandard: investigate contradiction with printed axiom results'},'roots':summaries,'closure_union_modules':len(set.union(*closures.values())),'counts':counts,'axioms':axioms,'tool_only_axioms':tool_only,'seed_verification':seed,'evidence_files':files,'limitations':['Cached objects, not a fresh coherent closure rebuild','Imported objects and Lean kernel/toolchain remain trusted','Explicit theorem hypotheses and runtime/native/artifact boundaries are not discharged by an axiom audit','Separate predecessor forests; no compatible combined environment claimed']}
+out={'schema':'NDP_AXIOMS/v1','finding_first':'No reachable nonstandard axiom; raw constant dependency graphs agree with both #print axioms results.','scope':'Every axiom declaration in the actual transitive import closures; audit-tool-only imports explicitly separated','classification_key':{'a':'Lean core standard: propext, Classical.choice, Quot.sound','b':'Imported declaration unreachable from both roots, established by exhaustive raw kernel graph traversal','c':'Reachable nonstandard: investigate contradiction with printed axiom results'},'roots':summaries,'closure_union_modules':len(set.union(*closures.values())),'unique_axiom_names':len({x['name'] for x in axioms}),'shared_names_with_distinct_declarations':differing_shared,'counts':counts,'axioms':axioms,'tool_only_axioms':tool_only,'seed_verification':seed,'evidence_files':files,'limitations':['Cached objects, not a fresh coherent closure rebuild','Imported objects and Lean kernel/toolchain remain trusted','Explicit theorem hypotheses and runtime/native/artifact boundaries are not discharged by an axiom audit','Separate predecessor forests; no compatible combined environment claimed']}
 encoded=json.dumps(out,indent=2,ensure_ascii=False)+'\n'
 if '--check' in sys.argv:assert (E/'NDP_AXIOMS.json').read_text()==encoded
 else:(E/'NDP_AXIOMS.json').write_text(encoded)
