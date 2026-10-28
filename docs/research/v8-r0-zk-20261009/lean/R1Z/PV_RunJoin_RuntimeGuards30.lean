@@ -35,6 +35,13 @@ def result (pool domain : Array U8 32#usize) (seq : U64)
       pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 PoolV1PairTraceErrorV1)
       r PoolV1PairTraceErrorV1.PairLeafCtor
 
+theorem errors_or {α : Type} (p q : Prop) [Decidable p] [Decidable q]
+    (error rest : α) :
+    (if p then error else if q then error else rest) =
+      (if p ∨ q then error else rest) := by
+  by_cases hp : p <;> by_cases hq : q <;> simp only [hp,hq,↓reduceIte,or_true,or_false]
+#print axioms errors_or
+
 theorem source_result (pool domain : Array U8 32#usize) (seq : U64)
     (anchor nullifier : Array U32 8#usize) (asset : U32)
     (input : PoolV1PairInputNoteWitnessV1)
@@ -56,7 +63,17 @@ theorem source_result (pool domain : Array U8 32#usize) (seq : U64)
   have hshift : U32.wrapping_shl 1#u32 20#u32 = 1048576#u32 := rfl
   rw [hshift]
   simp only [UScalar.le_equiv,UScalar.ofNatCore_val_eq,hz]
-  split_ifs <;> simp_all
-  all_goals omega
+  have hbad : b=true ↔ ¬ (∀ l, l < 20 → Canon8 input.membership.siblings.val[l]!) := by
+    constructor
+    · intro ht hm
+      have hf := hb.mpr hm
+      rw [ht] at hf
+      cases hf
+    · intro hn
+      cases b with
+      | false => exact False.elim (hn (hb.mp rfl))
+      | true => rfl
+  simp only [hbad,bne_iff_ne,not_and_or,not_lt,Nat.le_zero,← errors_or,ite_not]
+
 #print axioms source_result
 end R1Z.PV_RunJoin_RuntimeGuards30
