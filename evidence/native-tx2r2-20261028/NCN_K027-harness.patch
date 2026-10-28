@@ -1,0 +1,36 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -17,6 +17,7 @@
+ pub const SECOND_QUERY_BYTES:usize=4*32+32+6*7*32;
+ pub const CHECKPOINT_FIXED:usize=16+32*3+64+32*4+16+88+160+64+32*2+16+32;
+ #[derive(Debug,Clone,Copy,PartialEq,Eq)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation,
+     /// Host prover only (LOG D38.3): this attempt's challenges fail the public
+     /// P_R1 check. Carries no challenge and no conjunct.
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -20,6 +20,7 @@
+ 
+ /// M31 base field element, canonical representation in [0, P).
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub struct M31(pub u32);
+ 
+ /// 1/2 in M31 (P is odd, so (P+1)/2 = 2^30).
+@@ -252,6 +253,7 @@
+ 
+ /// CM31 = M31[i] / (i^2 + 1). Element a + b*i.
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub struct CM31 {
+     pub a: M31,
+     pub b: M31,
+@@ -429,6 +431,7 @@
+ 
+ /// QM31 = CM31[u] / (u^2 - (2 + i)). Element c0 + c1*u. (stwo parameterization)
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ pub struct QM31 {
+     pub c0: CM31,
+     pub c1: CM31,

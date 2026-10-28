@@ -24,3 +24,21 @@ No cryptographic assumption, native model carrier, security game or metric
 changed. Frozen Rust 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387 unchanged in repo.
 Exact commands/pins/exit/wall/RSS/swap are in NCN_ATTEMPTS.jsonl and receipts;
 Kani axioms: not applicable. No ELF build trigger occurred.
+
+## Stage 2: width32 split and Result contracts
+
+NCN_K016/K017 and K018/K019 close the actual raw32 windows on the prefix
+class 80+32*i (i<7) and tail class 632+32*i (i<2), respectively. Arbitrary
+source/returned byte, source frame, pointer and cursor are checked as above.
+This exact nine-site cover replaces the timed-out arbitrary-cursor shape;
+it does not assert arbitrary-cursor raw32 totality.
+
+NCN_K020 inverted ensures FAIL and K021 modifies violation FAIL are the first
+two Result<K,Error> fidelity controls. NCN_K022 proves the actual Reader::k
+weak cursor contract on the full1768 allocation: bounded cursor advances16,
+including Err. NCN_K023 real zero-byte call is Ok. NCN_K024 cannot codegen
+stub_verified because QM31/Error lack Arbitrary; no native credit. The owned
+scratch repair adds cfg(kani)-only Arbitrary derives to the three field records
+and Error. No repository shipped file is modified, and no source-body or domain
+is changed. The unimplied-under-stub and call-site cursor controls remain pending.
+A weak cursor contract never supplies byte or canonical-output correspondence.

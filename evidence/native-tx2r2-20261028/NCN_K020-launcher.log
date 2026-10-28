@@ -1,0 +1,50 @@
+{"attempt": "NCN_K020", "exit_status": 1, "wall_seconds": 33.24330676998943, "peak_rss_kib": "5877752", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+owth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: function `Reader_k_contract` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/verifier.rs:1344:4
+     |
+1344 | fn Reader_k_contract(){let bytes:[u8;1768]=kani::any();let start:usize=kani::any();let mut r=Reader{bytes:&bytes,at:start};let _=r...
+     |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `reader_k_contract`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.46s
+Checking harness verifier::NCN_result::inverted_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 209 failed
+Failed Checks: |_:&Result<K,Error>| r.at!=old(r.at)+16
+ File: "crates/aspis-r1-cost-probe/src/verifier.rs", line 1327, in verifier::NCN_result::inverted::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 29.96818s
+
+Manual Harness Summary:
+Verification failed for - verifier::NCN_result::inverted_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rd3de3f63fbb849918352eb01171c4c7d.scope; invocation ID: 9dc47e4a6347428f9d6f0d7d9ef188f5
