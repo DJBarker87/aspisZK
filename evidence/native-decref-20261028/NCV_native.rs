@@ -61,3 +61,7 @@ fn NCV_copy_positive(){let s:[u8;16]=kani::any();let mut d=[0u8;16];d.copy_from_
 #[kani::stub(alloc::alloc::realloc,crate::NCV_KMX::KMX_realloc)]
 #[kani::unwind(18)]
 fn NCV_copy_negative(){let s=[1u8;16];let mut d=[0u8;16];d.copy_from_slice(&s);assert_eq!(d[15],0);}
+
+#[path="NCV_fragments.rs"] mod NCV_fragments;
+
+#[path="NCV_box.rs"] mod NCV_box;

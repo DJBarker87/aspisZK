@@ -1,0 +1,27 @@
+{"attempt": "NCV_L015", "exit_status": 0, "wall_seconds": 1.1489345220616087, "peak_rss_kib": "2626684", "swaps": "0", "print_axioms": []}
+Aeneas.Std.Array.update_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α)
+  (hbound : ↑i < v.length) : v.update i x ⦃ nv => nv = v.set i x ⦄
+Aeneas.Std.Array.index_usize_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄
+Aeneas.Std.Array.update.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α) : Result (Std.Array α n)
+List.getElem_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} (h : j < (l.set i a).length) :
+  (l.set i a)[j] = if i = j then a else l[j]
+List.getElem_set_self.{u_1} {α : Type u_1} {l : List α} {i : ℕ} {a : α} (h : i < (l.set i a).length) :
+  (l.se
+...
+Aeneas.Std.Array.update_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α)
+  (hbound : ↑i < v.length) : v.update i x ⦃ nv => nv = v.set i x ⦄
+Aeneas.Std.Array.index_usize_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄
+Aeneas.Std.Array.update.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α) : Result (Std.Array α n)
+List.getElem_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} (h : j < (l.set i a).length) :
+  (l.set i a)[j] = if i = j then a else l[j]
+List.getElem_set_self.{u_1} {α : Type u_1} {l : List α} {i : ℕ} {a : α} (h : i < (l.set i a).length) :
+  (l.set i a)[i] = a
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+
+Running as unit: run-r905998857c8d4ceb8026647319e36aa5.scope; invocation ID: bac7c125a25440538c4917e0ed7d3ef7

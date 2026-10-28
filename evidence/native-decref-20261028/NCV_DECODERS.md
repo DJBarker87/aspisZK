@@ -73,3 +73,41 @@ and explicit negative-property source generation to avoid rebuilding unchanged
 dependencies when toggling a control flag. From L007 onward direct imported
 object hashes accompany the frozen cache manifest and all resolved Aeneas pins.
 Lead launchers/admission tooling and shared objects remain unchanged.
+
+## Stage 3: native disposition and symbolic loop laws
+
+Native budget is exhausted:60/60 configured Kani invocations, including failures.
+No Box call-site substitution or new function-pointer/Option<fn> credit exists.
+K027–K044 selected no harness due an own validator variable collision; all18
+are excluded and charged (NCV_RUNNER_FINDING.md). The stricter corrected wrapper
+asserts requested/actual target equality. No infrastructure repair was made.
+
+K045/K046 prove/control the ACTUAL frozen `decode_pool_identity_v1` against
+reference identity on every144-byte input, collapsing error variants to Unit
+as required by the enclosing wrapper. K047/K048 prove/control the ACTUAL
+`validate_verifier_policy_v1` success/rejection predicate on every full typed
+policy. These are ordinary body comparisons, not verified function contracts
+or actual enclosing-call associations. No ghost-pointer precondition exists.
+
+K049–K060 are six paired one-window/fragment checks: four-byte word,
+eight-byte word, one sequence write/frame on arbitrary typed pre-state,
+checkpoint sequence write/capacity, one lane frontier guard, final empty-root
+guard. Every inverse fails exactly its intended assertion. These are fragment
+results, not proofs of the original iterators' arbitrary pre-state association.
+All used deployed features, frozen graph/lock checks, exact KMX patch and the
+K002/K003 copy fidelity pair. LPh-style arithmetic-stub table is empty: no field
+multiplication or syscall stub is used.
+
+Both references are retained separately. E010's NCV_CastRef uses safe checked
+field casts; its dead cast-error fallback is explicit and the symbolic valid-
+window lemmas prove that branch unreachable. E009's unwrap_failed template is
+excluded; E010 emits no external template. L023/L024 compile this variant.
+The original E008 NCV_Reference remains the primary NCV_Install body selection;
+no native equality result is silently reassigned to E010.
+
+Accepted symbolic laws include zero/equality scans, array write/frame induction,
+field casts/word reads, full reference sequence assembly, canonical digest
+assembly, and sequence-capacity/zero scans. Exact successful target receipts
+and audits are in the journal. L045 evaluates all eight master and checkpoint
+sequence rows on the actual fixture bytes by row laws, not buffer reduction.
+The three complete decoder observations remain OPEN.

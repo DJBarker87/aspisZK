@@ -1,0 +1,15 @@
+Aeneas.Std.Array.index_mut_usize_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_mut_usize i ⦃ x back => x = (↑v)[↑i] ∧ back = v.set i ⦄
+def Aeneas.Std.Array.index_mut_usize.{u} : {α : Type u} →
+  {n : Usize} → Std.Array α n → Usize → Result (α × (α → Std.Array α n)) :=
+fun {α} {n} v i => do
+  let x ← v.index_usize i
+  ok (x, v.set i)
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+NCV_generated/NCV_FrontierInfo.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.shiftRight_spec`
+Aeneas.Std.UScalar.shiftRight {ty : UScalarTy} (x : UScalar ty) (s : ℕ) : Result (UScalar ty)
+NCV_generated/NCV_FrontierInfo.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.shr_spec`

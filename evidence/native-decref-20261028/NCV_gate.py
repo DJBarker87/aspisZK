@@ -13,6 +13,7 @@ assert before=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef
 assert hashlib.sha256((B/'NCV_KMX_copy_stubs.patch').read_bytes()).hexdigest()=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
 
 assert hashlib.sha256((S/'KMX_stubs.rs').read_bytes()).hexdigest()=='ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138'
+for name,expected_hash in {'KMX_native.rs':'cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880','KMX_CopyMeaning.lean':'2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'}.items():assert hashlib.sha256((S/name).read_bytes()).hexdigest()==expected_hash
 r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--manifest-path',str(S/'programs/r1-cost-probe/Cargo.toml'),'--features','pool-adapter,private-leaf-salts','--locked','--offline','--format-version','1'],capture_output=True,text=True)
 (B/(a+'-metadata.stderr')).write_text(r.stderr);assert r.returncode==0,r.stderr
 m=json.loads(next(l for l in r.stdout.splitlines() if l.startswith('{') and '"packages"' in l));k={p['id']:json.dumps([p['name'],p['version'],p.get('source')],separators=(',',':')) for p in m['packages']}
@@ -25,7 +26,8 @@ program=h.startswith('r1_pool_adapter::')
 manifest=S/('programs/r1-cost-probe/Cargo.toml' if program else 'crates/aspis-statement/Cargo.toml')
 cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',str(manifest),'--lib','-j','1','-Z','unstable-options','-Z','stubbing','-Z','function-contracts','--harness-timeout','90s','--exact','--harness',h,'--output-format','terse']
 if program:cmd+=['--features','pool-adapter,private-leaf-salts']
-print(json.dumps(dict(kani_command=cmd)),flush=True)
+assert cmd[cmd.index('--harness')+1]==sys.argv[2], 'own runner target mismatch'
+print(json.dumps(dict(kani_command=cmd,requested_harness=sys.argv[2],target_matches=True)),flush=True)
 r=subprocess.run(cmd)
 after=hashlib.sha256(lock.read_bytes()).hexdigest();x.update(lock_after_sha256=after,lock_unchanged=after==before,kani_exit=r.returncode)
 (B/(a+'-graph.json')).write_text(json.dumps(x,indent=2));assert after==before,'STOP lock drift'

@@ -1,0 +1,12 @@
+NCV_generated/NCV_ScanRun.lean:10:76: error: Application type mismatch: The argument
+  none
+has type
+  ∀ (body : Usize → Result (ControlFlow Usize (Option Bool))) (n : ℕ),
+    (∀ (i : Usize), ↑i < n → ∃ next, ↑next = ↑i + 1 ∧ body i = ok (ControlFlow.cont next)) →
+      (∀ (i : Usize), n ≤ ↑i → body i = ok (ControlFlow.done Option.none)) →
+        ∀ (i : Usize), ↑i ≤ n → loop body i = ok Option.none
+of sort `Prop` but is expected to have type
+  Option Bool
+of sort `Type` in the application
+  ok ⋯
+'NCV_ScanRun.none' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

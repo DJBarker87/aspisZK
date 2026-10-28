@@ -1,0 +1,46 @@
+NCV_generated/NCV_DigestRun.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NCV_CastRef.digest_loop b s (Array.repeat 8#usize 0#u32) 0#usize
+in the target expression
+  (have out := Array.repeat 8#usize 0#u32;
+    do
+    let (out1, pending_return) ← NCV_CastRef.digest_loop b s out 0#usize
+    match pending_return with
+      | none => ok (core.result.Result.Ok out1)
+      | some r => ok r) =
+    ok (core.result.Result.Ok target)
+
+b : Slice U8
+s : Usize
+target : Std.Array U32 8#usize
+read : ℕ → Std.Array U8 4#usize
+cap : (↑b).length ≤ 768
+fit : ↑s + 32 ≤ (↑b).length
+fields : ∀ k < 8, List.take 4 (List.drop (↑s + 4 * k) ↑b) = ↑(read k)
+values : ∀ k < 8, core.num.U32.from_le_bytes (read k) = NCV_ArrayFrame.coord target k
+canonical : ∀ k < 8, ↑(core.num.U32.from_le_bytes (read k)) < 2147483647
+steps :
+  ∀ (a : Std.Array U32 8#usize) (i : Usize),
+    ↑i < ↑8#usize →
+      ∃ next,
+        ↑next = ↑i + 1 ∧
+          NCV_CastRef.digest_loop.body b s a i = ok (ControlFlow.cont (a.set i (NCV_ArrayFrame.coord target ↑i), next))
+call : NCV_CastRef.digest_loop b s (Array.repeat 8#usize 0#u32) 0#usize = ok (target, none)
+⊢ (have out := Array.repeat 8#usize 0#u32;
+    do
+    let (out1, pending_return) ← NCV_CastRef.digest_loop b s out 0#usize
+    match pending_return with
+      | none => ok (core.result.Result.Ok out1)
+      | some r => ok r) =
+    ok (core.result.Result.Ok target)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NCV_DigestRun.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

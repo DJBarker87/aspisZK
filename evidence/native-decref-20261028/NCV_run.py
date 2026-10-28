@@ -9,8 +9,22 @@ def launch(a,kind,target,files,command,sources,timeout=180,extra=None):
  assert not (E/'NCV_ACTIVE.json').exists(),'unresolved submitted attempt'
  t.admit(a)
  env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NCV_tmp',CARGO_TARGET_DIR=B+'/NCV_target',LEAN_PATH=B+'/NCV_objects:/home/dombarker/project-offloads/codex-cx-decref-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects')
- cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=timeout,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'frozen_source':t.REV},expected_time='optimized compilation or one named solver/proof step; no whole-buffer native loop proof')
+ cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=timeout,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'frozen_source':t.REV},expected_time=('Optimized compilation, then solver gate '+target if kind=='kani' else 'One focused '+kind+' target '+target))
  if kind=='lean':
+  import re
+  imports=[i for source in files.values() for i in re.findall(r'^import (\S+)',source,re.M)]
+  query='''from pathlib import Path
+import json,hashlib
+roots=ROOTS
+x={}
+for n in IMPORTS:
+ p=next((Path(root)/(n.replace('.','/')+'.olean') for root in roots if (Path(root)/(n.replace('.','/')+'.olean')).is_file()),None)
+ if p is not None:x[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+print(json.dumps(x))
+'''.replace('ROOTS',repr(env['LEAN_PATH'].split(':'))).replace('IMPORTS',repr(imports))
+  r=t.py(query);assert r.returncode==0,r.stderr
+  cfg['deps_fingerprint']['direct_import_objects']=json.loads(r.stdout)
+  cfg['deps_fingerprint']['cache_import_manifest_sha256']=hashlib.sha256((E/'NCV_SETUP_PINS.json').read_bytes()).hexdigest()
   cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NCV_SETUP_PINS.json').read_text())['library'].items()}
  if extra:cfg.update(extra)
  files[a+'.json']=json.dumps(cfg,indent=2)
@@ -44,13 +58,16 @@ print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
 if __name__=='__main__':
  a,kind,target=sys.argv[1:]
  if kind=='extract':
-  files={n:(E/n).read_text() for n in ['NCV_extract.py','NCV_reference.rs']}
+  files={n:(E/n).read_text() for n in ['NCV_extract.py','NCV_reference.rs','NCV_cast_reference.rs']}
   launch(a,kind,target,files,['python3','NCV_extract.py']+([] if target=='NCV_Reference' else target.split(',')),list(files))
  elif kind=='kani':
+  import os
+  if os.environ.get('NCV_CASE') in ['version','encoding','lanes','depth'] and target.endswith('NCV_master_contract'):
+   raise SystemExit('Retired full-buffer master header shape after K024; use one-window fragments plus Lean composition')
   from NCV_instrument import files as native_files
   files={'NCV_src/'+n:s for n,s in native_files().items()}
   files['NCV_gate.py']=(E/'NCV_gate.py').read_text();files['NCV_frozen_graph.sha256']=(E/'NCV_frozen_graph.sha256').read_text()
-  launch(a,kind,target,files,['python3','NCV_gate.py',a,target],list(files)+['NCV_src/Cargo.lock','NCV_KMX_copy_stubs.patch'],600,{'env':dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='--cfg ncv_negative' if __import__('os').environ.get('NCV_NEGATIVE') else '',TMPDIR=B+'/NCV_tmp',CARGO_TARGET_DIR=B+'/NCV_target')})
+  launch(a,kind,target,files,['python3','NCV_gate.py',a,target],list(files)+['NCV_src/Cargo.lock','NCV_KMX_copy_stubs.patch'],600,{'env':dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NCV_tmp',CARGO_TARGET_DIR=B+'/NCV_target')})
  elif kind=='lean':
   f='NCV_generated/'+target+'.lean';files={f:(E/'NCV_generated'/ (target+'.lean')).read_text()}
   launch(a,kind,target,files,['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NCV_generated','-o','NCV_objects/'+target+'.olean',f],[f])
