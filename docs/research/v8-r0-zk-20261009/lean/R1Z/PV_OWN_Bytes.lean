@@ -20,7 +20,9 @@ theorem outside (old value : Bytes) (start width i : Nat)
   have hh:¬(start≤i ∧ i<start+width) := by omega
   simp [overwrite,hh]
 theorem empty (old value : Bytes) (start : Nat) : overwrite old start 0 value=old := by
-  funext i; simp [overwrite]
+  funext i
+  apply outside
+  omega
 theorem shadow (old a b : Bytes) (start width : Nat) :
     overwrite (overwrite old start width a) start width b=overwrite old start width b := by
   funext i; by_cases h:start≤i ∧ i<start+width <;> simp [overwrite,h]
