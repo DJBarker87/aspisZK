@@ -24,7 +24,10 @@ theorem q_reverse (q : SQ) : toQ (fromQ q)=q := by
 theorem map_roundtrip {α β : Type} {n : Usize} (f : α → β) (g : β → α)
     (h : ∀ a,g (f a)=a) (xs : Array α n) : mapArray g (mapArray f xs)=xs := by
   apply Subtype.ext
-  simp only [mapArray,List.map_map,Function.comp_def,h,List.map_id_fun]
+  simp only [mapArray,List.map_map,Function.comp_def,h]
+  induction xs.val with
+  | nil => rfl
+  | cons x xs ih => exact congrArg (List.cons x) ih
 
 theorem q_array_roundtrip {n : Usize} (xs : Array PQ n) :
     mapArray fromQ (mapArray toQ xs)=xs := map_roundtrip toQ fromQ q_roundtrip xs
