@@ -54,12 +54,18 @@ theorem complete_source (next : S → Draw S W) (n retry : Nat) (s : S) :
     · have he := ih (retry+1) (next s).after
       have hc := congrArg Prod.fst he
       have hv := congrArg Prod.snd he
+      change (sample next n (retry+1) (next s).after).consumed =
+        (PV_L2B_SourceWords.source n (stream next n (next s).after)).1 at hc
+      change (sample next n (retry+1) (next s).after).value =
+        (PV_L2B_SourceWords.source n (stream next n (next s).after)).2 at hv
       simp [sample,stream,PV_L2B_SourceWords.source,h,hc,hv]
 #print axioms complete_source
 
 theorem consumed_bound (next : S → Draw S W) (n retry : Nat) (s : S) :
     (sample next n retry s).consumed≤n := by
   have h := congrArg Prod.fst (complete_source next n retry s)
+  change (sample next n retry s).consumed =
+    (PV_L2B_SourceWords.source n (stream next n s)).1 at h
   rw [h]
   exact PV_L2B_SourceWords.source_consumed_bound n _
 #print axioms consumed_bound
