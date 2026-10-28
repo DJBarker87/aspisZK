@@ -19,7 +19,7 @@ theorem pattern_limb_total (pattern : reference_copy_terminal.CompiledPoolV1Pair
   have hcol : col.val<16 := hp col (List.getElem_mem _)
   unfold reference_copy_terminal.pattern_limb227
   rw [hk]
-  dsimp only
+  simp only [bind_tc_ok]
   by_cases hb : pattern.kinds.val[limb.val]'(by rw [pattern.kinds.property]; exact hl)=1#u8
   · simp only [hb,↓reduceIte]
     rw [hc]

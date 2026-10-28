@@ -29,7 +29,7 @@ for variant in ['compstdcone','partsstdcone','stdcone']:
    for v in o:walk(v,caller,context)
  for i,f in fs.items():walk(f.get('body'),i)
  interesting=[e for e in edges if any(t in e['callee_name']for t in ['fmt','panic','unwrap_failed','slice_index_fail','copy_from_slice']) or 'fmt'in e['caller_name']]
- out.append(dict(variant=variant,llbc_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),files=files,names=names,call_edges=edges,format_and_panic_edges=interesting,format_references=refs))
+ out.append(dict(variant=variant,llbc_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),files=files,names=names,call_edges=edges,format_and_panic_edges=interesting,format_references=refs,formatting_bodies=[f for i,f in fs.items() if names[i].startswith('core::fmt')],formatting_globals=[g for g in x['global_decls'] if g and 'fmt' in str(g['item_meta']['name'])]))
 (H/'format227-llbc-resume7.json').write_text(json.dumps(out,indent=2)+'\n')
 for r in out:
  print(r['variant'])

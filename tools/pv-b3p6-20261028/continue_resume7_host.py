@@ -16,7 +16,7 @@ def invoke(cmd):
  return 78
 
 if sys.argv[1]=='llvm':raise SystemExit(invoke(['python3','llvm227_resume7_host.py']))
-order=json.loads((H/'bootstrap.json').read_text())
+order=sys.argv[2:] if sys.argv[1]=='modules' else json.loads((H/'bootstrap.json').read_text())
 for module in order:
  if (H/'lean-objects'/(module+'.olean')).exists():continue
  r=invoke(['python3','compile_resume7.py',module])
