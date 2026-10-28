@@ -11,7 +11,8 @@ def recipe {E F : Type} (leaf : Result (core.result.Result Digest E))
     (mapError : E → F) (parent : Digest → Digest → Result Digest)
     (sibling : Nat → Digest) (reverse : Nat → Bool) (levels : List Nat) :
     Result (core.result.Result Digest F) := do
-  match ← leaf with
+  let r ← leaf
+  match r with
   | .Err e => ok (.Err (mapError e))
   | .Ok d =>
       let root ← fold parent sibling reverse levels d
