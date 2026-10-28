@@ -61,6 +61,9 @@ def visit(m):
   if m in explicit:
    assert ps[0] in tracked
    assert hashlib.sha256(git(head+':'+ps[0])).hexdigest()==explicit[m]['sha256'],m
+  if not ps:ps=[p for p in tracked if p.endswith('/'+suffix) or p.endswith('/'+m+'.lean.txt') or p.endswith('/'+m+'.lean')]
+  if not ps and m.split('.')[-1] not in ['Funs','Types']:
+   ps=[p for p in tracked if p.endswith('/'+m.split('.')[-1]+'.lean')]
   if not ps:ps=[p for p in tracked if p.endswith('/'+suffix+'.txt')]
   if not ps:
    ps=[p for p in tracked if p.endswith('/'+m.split('.')[-1]+'.lean.txt') and ('namespace '+m) in git(head+':'+p).decode()]
