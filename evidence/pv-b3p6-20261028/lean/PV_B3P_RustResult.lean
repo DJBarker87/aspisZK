@@ -52,6 +52,21 @@ theorem try_eq {α β E : Type} (r : core.result.Result α E)
       bindR (.ok r) k := by
   cases r <;> rfl
 
+theorem try_bind_eq {α β E : Type} (x : Result (core.result.Result α E))
+    (k : α → Result (core.result.Result β E)) :
+    (do
+      let r ← x
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => k a
+      | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            β (core.convert.FromSame E) residual) = bindR x k := by
+  cases x with
+  | ok r => exact try_eq r k
+  | fail e => rfl
+  | div => rfl
+
 theorem mapR_bindR {α β γ E : Type} (x : Result (core.result.Result α E))
     (f : α → Result (core.result.Result β E)) (g : β → γ) :
     mapR g (bindR x f) = bindR x (fun a => mapR g (f a)) := bindR_assoc x f _
@@ -69,6 +84,7 @@ theorem error_tag {α β E : Type} (e : E) (f : α → Result (core.result.Resul
 #print axioms bindR_outer
 #print axioms mapR_outer
 #print axioms try_eq
+#print axioms try_bind_eq
 #print axioms mapR_bindR
 #print axioms fail_tag
 #print axioms div_tag
