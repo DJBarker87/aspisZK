@@ -19,7 +19,7 @@ theorem cells_value (buffer input : List U8) (bound : input.length≤buffer.leng
     | nil => simp only [List.length_nil,List.length_cons] at bound;omega
     | cons b buffer =>
       simp only [cells,List.length_cons,List.drop_succ_cons,List.cons_append]
-      rw [ih buffer (by simpa only [List.length_cons] using bound)]
+      rw [ih buffer (by simp only [List.length_cons] at bound;omega)]
 
 def loop (buffer : List U8) (pos : Nat) (input : List U8) : List U8 :=
   buffer.take pos++cells (buffer.drop pos) input
