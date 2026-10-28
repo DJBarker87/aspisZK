@@ -49,52 +49,15 @@ output.append('''theorem erase_syncDirectory (ops : ExternalFuns) (directory : s
     erase ops (syncDirectory directory) =
       @aspis_prover.state_only_entropy.sync_directory _ ops directory := by
   unfold syncDirectory aspis_prover.state_only_entropy.sync_directory
-  repeat' first
-  | rfl
-  | rw [erase_bind]
-  | rw [erase_invoke]
-  | rw [erase_pure]
-  | congr 1
-  | funext x
-  | split
-
-theorem erase_reserveFallible (ops : ExternalFuns)
-    (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
-    (statement nonce : Array U8 32#usize) :
-    erase ops (reserveFallible self statement nonce) =
-      @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
-        _ ops self statement nonce := by
-  unfold reserveFallible aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
-  repeat' first
-  | rfl
-  | rw [erase_bind]
-  | rw [erase_invoke]
-  | rw [erase_pure]
-  | rw [erase_syncDirectory]
-  | congr 1
-  | funext x
-  | split
-
-theorem erase_reserve (ops : ExternalFuns)
-    (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
-    (statement nonce : Array U8 32#usize) :
-    erase ops (reserve self statement nonce) =
-      @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
-        _ ops self statement nonce := by
-  unfold reserve aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
-  repeat' first
-  | rfl
-  | rw [erase_bind]
-  | rw [erase_invoke]
-  | rw [erase_pure]
-  | rw [erase_reserveFallible]
-  | congr 1
-  | funext x
-  | split
+  rw [erase_bind,erase_invoke]
+  apply source_bind_congr
+  intro opened
+  rw [erase_bind,erase_invoke]
+  apply source_bind_congr
+  intro flow
+  cases flow <;> exact erase_invoke ops _ _
 
 #print axioms erase_syncDirectory
-#print axioms erase_reserveFallible
-#print axioms erase_reserve
 end R1Z.PV_W_Reservation
 ''')
 target=R/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_Reservation.lean';data='\n'.join(output)
