@@ -69,6 +69,12 @@ fn main() {
    let full=aspis_r1_cost_probe::prover::prove_masked_fixture(actual_public,&compiled,aspis_r1_cost_probe::transport::Variant::S2,aspis_prover::HOST_HASH,&[29;32]);
    assert!(matches!(full,Err(aspis_r1_cost_probe::verifier::Error::Semantic)));
    println!("actual_prove_masked_fixture=Err(Semantic); variant=S2; fixture_seed=[29;32]");
+   let attempt=aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce([31;32]).unwrap();
+   let mut durable=aspis_prover::state_only_entropy::DurableStateOnlyMaskNonceStore::open("canonical-n3-probe3-nonces").unwrap();
+   let secure=aspis_r1_cost_probe::prover::prove_masked_attempt(actual_public,&compiled,aspis_r1_cost_probe::transport::Variant::S2,aspis_prover::HOST_HASH,attempt,&mut durable);
+   assert!(matches!(secure,Err(aspis_r1_cost_probe::verifier::Error::Semantic)));
+   assert!(durable.last_error().is_none());
+   println!("actual_prove_masked_attempt=Err(Semantic); entropy=OS_generate_for_mask_nonce; nonce=[31;32]; durable_reservation_io_error=None");
    println!("PUBLIC={public:?}\nWITNESS={witness:?}\nSNAPSHOT={snapshot:?}\nSNAPSHOT_BYTES={bytes:?}");
    assert_eq!(compiled.semantic_c1.c1[0][27*16+12].0,P);
    assert!(!bad_cells.is_empty(),"counterexample must reach the actual noncanonical raw guard predicate");
