@@ -2,7 +2,8 @@ from pathlib import Path
 import subprocess,os,json,re,hashlib
 D=Path('/home/dombarker/project-offloads/codex-pv-rdb2c-20261028');P=D/'weights-fixture'
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'],RUSTUP_TOOLCHAIN='1.94.1',CARGO_TARGET_DIR=str(D/'target-weights'),CARGO_BUILD_JOBS='4',RUSTC_BOOTSTRAP='1',RUSTFLAGS='-Zdump-mir=box_from_parts -Zdump-mir-dir='+str(D/'box-mir'))
-cmd=['cargo','rustc','--manifest-path',str(P/'Cargo.toml'),'--release','--locked','-p','aspis-r1-cost-probe','--features','ct-host-prover,r1p-check','--lib','-j','4','-v','--','--emit=llvm-ir']
+env['RUSTFLAGS']+=' --emit=llvm-ir,link'
+cmd=['cargo','build','--manifest-path',str(P/'Cargo.toml'),'--release','--locked','--bin','fixture','-j','4','-v']
 print('expected phase: optimized compilation to obtain missing intrinsic-lowering LLVM artifact; no native test rerun',flush=True)
 j=json.loads((D/'weights-inputs.json').read_text());j.update(command=cmd,reason='runtime MIR still calls Box::new; LLVM is needed to audit the actual box_new allocation/write lowering',expected_phase='optimized compiler diagnostic emission, not proof generation or elimination')
 (D/'box-llvm-inputs.json').write_text(json.dumps(j,indent=2))
