@@ -26,7 +26,7 @@ theorem complete (q : Plumbing) (byte : U8)
     (step q byte).events=q.events++[q.buffer.set q.pos byte] := by
   simp only [step,h,if_true]
 
-theorem partial (q : Plumbing) (byte : U8)
+theorem pending (q : Plumbing) (byte : U8)
     (h : Usize.wrapping_add q.pos 1#usize≠64#usize) :
     (step q byte).events=q.events := by
   simp only [step,if_neg h]
@@ -36,5 +36,5 @@ theorem partial (q : Plumbing) (byte : U8)
 #print axioms fold
 #print axioms append
 #print axioms complete
-#print axioms partial
+#print axioms pending
 end R1Z.PV_DL_UpdateEvents

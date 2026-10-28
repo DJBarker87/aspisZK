@@ -65,3 +65,30 @@ pub fn padding_reference(mut buffer:[u8;64],pos:usize,bit_len:u64)
     events[count]=buffer;count+=1;
     (events,count,buffer)
 }
+
+// The actual batched callback interface: each byte slice is a sequence of
+// complete 64-byte blocks, and each call boundary is retained.
+pub trait BatchCompression {
+    type State:Copy;
+    fn compress(state:Self::State,blocks:&[u8])->Self::State;
+}
+pub fn update_batch_reference<C:BatchCompression>(mut state:C::State,
+    mut buffer:[u8;64],pos:usize,input:&[u8]) -> (C::State,[u8;64],usize) {
+    let n=input.len();let rem=64-pos;
+    if n<rem {
+        let mut i=0;while i<n {buffer[pos+i]=input[i];i+=1;}
+        return (state,buffer,pos+n);
+    }
+    let mut start=0;
+    if pos!=0 {
+        let mut i=0;while i<rem {buffer[pos+i]=input[i];i+=1;}
+        state=C::compress(state,&buffer);
+        start=rem;
+    }
+    let full=(n-start)/64;
+    let end=start+full*64;
+    if full!=0 {state=C::compress(state,&input[start..end]);}
+    let left=n-end;
+    let mut j=0;while j<left {buffer[j]=input[end+j];j+=1;}
+    (state,buffer,left)
+}
