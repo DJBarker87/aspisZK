@@ -123,3 +123,9 @@ QM31 native-versus-owned comparisons plus changed-write/sparse q[2] witnesses.
 Its dependency core's 89 Rust/TOML files byte-match this branch; it uses a
 read-only source dependency and this job's own optimized target directory.
 It is not a Kani gate and will run only after the active scope finishes.
+
+Kani update-coordinate-04 also exited 124 after 900 s (wall 15:00.71), with
+optimized compilation 0.37 s and no verification/counterexample result. Both
+update candidates are retained; no third same-bound Kani update run is planned.
+V236 is still OPEN at native correspondence. Continue with independent padding
+and Lean proofs; do not treat a failed candidate as a false-row counterexample.
