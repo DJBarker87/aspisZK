@@ -5,9 +5,9 @@ open Aeneas Aeneas.Std Result PV_CB_ShippedOp71
 /-- The real scalar byte primitives, rather than a codec-success premise. -/
 theorem word_roundtrip (x : U32) :
     core.num.U32.from_le_bytes (core.num.U32.to_le_bytes x)=x := by
-  cases x
+  apply UScalar.eq_of_val_eq
   simp [core.num.U32.from_le_bytes,core.num.U32.to_le_bytes,
-    List.map_map,Function.comp_def,BitVec.fromLEBytes,BitVec.toLEBytes]
+    UScalar.val,BitVec.cast,List.map_map,Function.comp_def,BitVec.fromLEBytes,BitVec.toLEBytes]
 #print axioms word_roundtrip
 
 /-- The actual extracted native >=P branch takes its accepting arm. -/
