@@ -26,7 +26,7 @@ assert charged<100
 # Ruling (p-prime): a vanished cgroup before launch keeps the same unlaunched ID.
 prior_admission=json.loads((E/f'refusal-{A}.json').read_text()) if (E/f'refusal-{A}.json').exists() else {}
 scan_race=bool(re.search(r'(?:FileNotFoundError|OSError): \[Errno (?:2|19)\]',prior_admission.get('error','')))
-launched=any(json.loads(l).get('attempt')==A for l in (E/'launches.jsonl').read_text().splitlines()) if (E/'launches.jsonl').exists() else False
+launched=any(json.loads(l).get('attempt')==A and not json.loads(l).get('confirmed_not_launched',False) for l in (E/'launches.jsonl').read_text().splitlines()) if (E/'launches.jsonl').exists() else False
 assert not launched and not (E/f'receipt-{A}.json').exists(), 'compiler already launched under ID'
 # Ruling m-prime: prelaunch metadata/refusals do not consume an ID.
 if (E/f'refusal-{A}.json').exists():
