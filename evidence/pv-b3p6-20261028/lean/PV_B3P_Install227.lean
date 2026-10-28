@@ -1,4 +1,5 @@
 import PV_B3P_Carrier227
+import PV_B3P_P227_14
 namespace PV_B3P_Install227
 open Aeneas Aeneas.Std ProverRwFull
 set_option autoImplicit false
@@ -38,6 +39,27 @@ theorem source (base : ExternalTypes) (ops : @ExternalFuns (Types base))
         (PV_B3P_Carrier227.mapArray (PV_B3P_Carrier227.mapArray PV_B3P_Carrier227.toQ) claims)
         (PV_B3P_Carrier227.mapArray PV_B3P_Carrier227.toQ point)
         (PV_B3P_Carrier227.challenges c)) := rfl
+
+/-- A closed installation of the checked emitted reference, with no callback
+parameter left in the installed operation. Native structural correspondence and
+successful nonvacuity remain separate obligations. -/
+@[reducible] def actual (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
+    @ExternalFuns (Types base) :=
+  selected base ops PV_B3P_227.reference_terminal.reference227
+
+theorem actual_source (base : ExternalTypes) (ops : @ExternalFuns (Types base))
+    (p : @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (Types base))
+    (claims : Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+    (point : Array aspis_core.field.QM31 10#usize)
+    (c : aspis_core.state_only_prefix.r0.Challenges) :
+    @ExternalFuns.op227 (Types base) (actual base ops) p claims point c =
+      transport (PV_B3P_227.reference_terminal.reference227
+        (PV_B3P_Carrier227.semantic base p)
+        (PV_B3P_Carrier227.mapArray (PV_B3P_Carrier227.mapArray PV_B3P_Carrier227.toQ) claims)
+        (PV_B3P_Carrier227.mapArray PV_B3P_Carrier227.toQ point)
+        (PV_B3P_Carrier227.challenges c)) := rfl
+
+#print axioms actual_source
 
 theorem error_tag (e : SourceError) : transport (.ok (.Err e)) = .ok (.Err e) := rfl
 theorem fail_tag (e : Aeneas.Std.Error) : transport (.fail e) = .fail e := rfl
