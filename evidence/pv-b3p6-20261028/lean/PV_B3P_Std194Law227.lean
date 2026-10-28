@@ -22,16 +22,16 @@ theorem u16_usize_result (small : U16) :
 
 theorem u16_usize_value (small : U16) :
     (UScalar.cast .Usize small).val = small.val := by
-  simp only [UScalar.cast_val_eq]
-  scalar_tac
+  simp only [UScalar.cast_val_eq, UScalarTy.Usize_numBits_eq]
+  rcases System.Platform.numBits_eq with h | h <;> rw [h] <;> scalar_tac
 
 theorem u8_usize_result (small : U8) :
     std194227.from_u8_usize small = .ok (UScalar.cast .Usize small) := rfl
 
 theorem u8_usize_value (small : U8) :
     (UScalar.cast .Usize small).val = small.val := by
-  simp only [UScalar.cast_val_eq]
-  scalar_tac
+  simp only [UScalar.cast_val_eq, UScalarTy.Usize_numBits_eq]
+  rcases System.Platform.numBits_eq with h | h <;> rw [h] <;> scalar_tac
 
 #print axioms u32_u64_result
 #print axioms u32_u64_value
