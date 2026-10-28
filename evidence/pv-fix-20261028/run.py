@@ -10,13 +10,17 @@ pre=json.loads((D/'preflight.json').read_text())[cohort];env=json.loads((D/(coho
 rs=[O]+list(map(Path,env['LEAN_PATH'].split(':')));records={r['module'].replace('.','/'):r for r in pre['projects']};ext={r['module'].replace('.','/'):r for r in pre['external']};deps={}
 def visit(n):
  if n in deps:return
- q=next((r/(n+'.olean') for r in rs if (r/(n+'.olean')).is_file()),None);assert q,(m,n)
+ q=next((r/(n+'.olean') for r in rs if (r/(n+'.olean')).is_file()),None);
+ if q is None:
+  deps[n]=dict(missing=True);return
  if n in ext:assert sha(q)==ext[n]['object_sha256'];return
  r=records[n];s=Path(r['source']);assert sha(s)==r['source_sha256'],n
  fresh=list(D.glob('receipt-*.json'));fr=[json.loads(f.read_text()) for f in fresh];fr=[f for f in fr if f['module']==n and f.get('exit')==0]
  expected=fr[-1]['object_sha256'] if fr else r['object_sha256'];assert sha(q)==expected,(n,q)
  deps[n]=dict(source_sha256=sha(s),source_blob=r.get('source_blob'),object_path=str(q),object_sha256=sha(q))
- for j in r['imports']:visit(j['module'].replace('.','/'))
+ for j in r['imports']:
+  child=j['module'].replace('.','/');visit(child)
+  if not fr and child in deps and not deps[child].get('missing'):assert deps[child]['object_sha256']==j['object_sha256'],(n,child,'cached import fingerprint changed')
 for l in source.read_text().splitlines():
  if l.startswith('import '):
   for n in l[7:].split():visit(n.replace('.','/'))

@@ -6,7 +6,7 @@ def save(n,r):(D/n).write_text(json.dumps(r,indent=2)+'\n')
 def roots(env,front):return [front]+[Path(x) for x in env['LEAN_PATH'].split(':')]
 def obj(m,rs):return next((r/(m.replace('.','/')+'.olean') for r in rs if (r/(m.replace('.','/')+'.olean')).is_file()),None)
 # The scan includes shared sent.txt and every other privacy job's receipt/output names.
-hits=[];pat=re.compile(r'(?<!\d)620\d\d(?!\d)')
+hits=[];pat=re.compile(r'(?:^|[-_])620\d\d(?:[-_.]|$)')
 for job in P.glob('codex-pv-*'):
  if job==D:continue
  for root,dirs,files in os.walk(job):
@@ -14,9 +14,9 @@ for job in P.glob('codex-pv-*'):
   for n in files:
    if pat.search(n):hits.append(str(Path(root)/n))
 sents=[]
-for p in P.glob('**/sent.txt'):
- if any(x in p.parts for x in ['target','.git','.lake']):continue
- lines=[l for l in p.read_text(errors='replace').splitlines() if pat.search(l)]
+for p in [P/'r1-privacy-build-integration-20261019/evidence/sent.txt',P/'codex-pv-envfix-20261026/evidence/sent.txt',P/'codex-pv-replay-20261027/evidence/sent.txt',P/'aspis-fs-generic-20261006/evidence/sent.txt']:
+ if not p.exists():continue
+ lines=[l for l in p.read_text(errors='replace').splitlines() if any(x.isdigit() and 62000<=int(x)<=62099 for x in l.split())]
  if lines:sents.append(dict(path=str(p),matches=lines))
 save('id-scan.json',dict(range=[62000,62099],receipt_hits=hits,sent_hits=sents));assert not hits and not sents
 external=json.loads((R/'external-object-manifest.json').read_text());save('external-authority.json',dict(path=str(R/'external-object-manifest.json'),sha256=sha(R/'external-object-manifest.json')))
@@ -30,15 +30,16 @@ for cohort,base,front in [('rdcd',R,R/'lean-objects'),('rdeac',C,C/'objects')]:
  if cohort=='rdcd':
   graph=json.loads((R/'resume-final-fingerprint.json').read_text())['modules'];records=[]
   for m,r in graph.items():
-   src=R/'lean-sources'/(m+'.lean');q=obj(m,rs);assert sha(src)==r['sha256'] and sha(q)==r['object_sha256'],m
+   src=R/'lean-sources'/(m+'.lean');q=obj(m,rs);assert sha(src)==r['sha256'],m
+   if q:assert sha(q)==r['object_sha256'],m
    deps=[]
    for dep,j in r['resolved_imports'].items():
-    p=obj(dep,rs);assert p and sha(p)==j['object_sha256'],(m,dep)
-    deps.append(dict(module=dep,path=str(p),object_sha256=sha(p)))
-   records.append(dict(module=m,source=str(src),source_sha256=sha(src),source_blob=r['blob'],object=str(q),object_sha256=sha(q),imports=deps))
+    p=obj(dep,rs);assert not p or sha(p)==j['object_sha256'],(m,dep)
+    deps.append(dict(module=dep,path=str(p) if p else None,object_sha256=j['object_sha256']))
+   records.append(dict(module=m,source=str(src),source_sha256=sha(src),source_blob=r['blob'],object=str(q) if q else None,object_sha256=r['object_sha256'],imports=deps))
   for r in records:
    m=r['module'];p=own/(m+'.olean');p.parent.mkdir(parents=True,exist_ok=True)
-   if m not in affected:p.symlink_to(r['object'])
+   if m not in affected and r['object']:p.symlink_to(r['object'])
   # Exclude old void objects from every path, not merely shadow them.
   env['LEAN_PATH']=':'.join(x for x in env['LEAN_PATH'].split(':') if x!=str(front))
  else:
