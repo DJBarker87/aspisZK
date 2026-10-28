@@ -1,0 +1,52 @@
+{
+  "row": "V257",
+  "operation": 250,
+  "status": "CLOSED_SELECTED_CANDIDATE_SOURCE_CALLBACK",
+  "combined_audit_and_focused_replay": 40800,
+  "receipt": "40800.json",
+  "statements": [
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_OrdinaryOriginal.lean",
+      "statement": "theorem copy_equal_original (b : Bytes) :\n    PV_B2_C_Sampler.host_sampler.ordinary_sample b = original b"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_Install250.lean",
+      "statement": "theorem selected_callback (ops : ExternalFuns) (b : Bytes) :\n    (selected ops).op250 b = mapResult toNative (original b)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_Install250.lean",
+      "statement": "theorem nonfailure (ops : ExternalFuns) (b : Bytes) :\n    \u2203 out, (selected ops).op250 b = ok out"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_Install250.lean",
+      "statement": "theorem value_law (ops : ExternalFuns) (b : Bytes) :\n    \u2203 a : Digits, (selected ops).op250 b = ok (toNative (PV_B2_C_ArrayDigits.raw a)) \u2227\n      AspisR1.ExtractedQM31SamplerIndexedGeneratedBridge.values a =\n        AspisR1.SamplerNatModel.ordinaryDigits (AspisR1.SourceSamplerByteRank.rank b)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_Install250.lean",
+      "statement": "theorem nonvacuity (ops : ExternalFuns) :\n    \u2203 out, (selected ops).op250 (Array.repeat 32#usize 0#u8) = ok out"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_Install250.lean",
+      "statement": "theorem dictionaries (ops : ExternalFuns) : selected ops = originalDictionary ops"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_Install250.lean",
+      "statement": "theorem observations {O : Sort _} (observe : ExternalFuns \u2192 O) (ops : ExternalFuns) :\n    observe (selected ops) = observe (originalDictionary ops)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_AuditClosure.lean",
+      "statement": "theorem sampler_rows (ops : ExternalFuns) (b : Bytes) :\n    (PV_B2_E_GammaOriginal.selected ops).op249 b =\n      mapResult toNative (PV_B2_E_GammaOriginal.originalGamma b) \u2227\n    (PV_B2_E_GammaOriginal.selected ops).op250 b =\n      mapResult toNative (original b)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_AuditClosure.lean",
+      "statement": "theorem dictionary_observations {O : Sort _} (observe : ExternalFuns \u2192 O)\n    (ops : ExternalFuns) :\n    observe (PV_B2_E_GammaOriginal.selected ops) =\n      observe (PV_B2_E_GammaOriginal.originalDictionary ops)"
+    }
+  ],
+  "nonvacuity": "For every supplied ExternalFuns dictionary the selected callback succeeds at the zero block; all-input success is also proved; no success/canonicality/native equality premise.",
+  "native_link_evidence_class": "Reviewed structural frozen-source representation plus universal Lean complete Result equality to that representation and exact native-carrier installation. Finite optimized differential is supporting fidelity evidence, not universal native execution refinement.",
+  "structural_binding": "../batch2e/ORDINARY-STRUCTURAL-BINDING.json",
+  "native_fidelity": "../batch2e/SAMPLER-FIDELITY.json",
+  "native_receipt": "../batch2e/NATIVE-RECEIPT.json",
+  "scope": "Selected source/callback instance only. Endpoint/deployment premises, native RunJoin V165/V167 and physical L1/L2/L3 remain.",
+  "source_revision": "39384a97589be3afeb5328eafa7403b316f6d6e6"
+}
