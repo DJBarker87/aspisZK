@@ -1,4 +1,4 @@
-# KMX copy mitigation finding — interrupted, incomplete
+# KMX copy mitigation finding — work in progress
 
 Frozen release revision: `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`.
 Frozen lock SHA-256: `5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef`.
@@ -19,22 +19,15 @@ K001: compilation failure (no verification result). K003: compilation failure,
 missing `-Z stubbing` (no stub validation). K004: launcher failure before Kani,
 no terminal receipt; unresolved and never resubmitted.
 
-## Mandatory stop
+## Resumption and input repair
 
-`S2W_run_host.py`, line 12, failed while snapshotting configured sources:
-
-```
-FileNotFoundError: [Errno 2] No such file or directory:
-/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_src/crates/aspis-r1-cost-probe/src/KMX_native.rs
-```
-
-See `KMX_K004-launcher.log`, `KMX_K004_UNRESOLVED.json`, and
-`KMX_TRANSPORT.jsonl`. The scope command exited 1. Admission had exit 0 and
-`allowed:true`; the failure was not a refusal or transient transport exit 255.
-The launcher produced no terminal receipt, wall/RSS/swap measurements, or Kani
-result. Operating rule 5 requires stopping and reporting launcher/host failures
-for the lead to fix; no infrastructure repair or further launch was attempted.
-The next attempt must have a new identifier after the lead resolves the blocker.
+Rule 11 applies to K004: the omitted `KMX_native.rs` was our input error.
+Uploaded it after admission KMX_UPLOAD4 and continued with new attempt K005;
+K004 remains a failed launcher attempt, never resubmitted. K005 runs both
+slice-stub controls with `-Z stubbing`: expected **PASS**, wrong-value **FAIL**.
+Receipt: `KMX_K005/receipt.json` (3.259 s, 370028 KiB, swap 0).
+Frozen graph validation accepted 441 resolved packages, no new packages or
+invalid edges; before/after lock hashes match the pinned lock.
 
 ## Configuration map
 
