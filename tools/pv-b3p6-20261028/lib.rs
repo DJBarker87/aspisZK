@@ -1,3 +1,9 @@
+#![cfg_attr(kani, feature(allocator_api))]
+#[cfg(kani)]
+extern crate alloc;
+#[cfg(kani)]
+#[path="kmx/KMX_stubs.rs"]
+mod KMX_stubs;
 pub mod reference133;
 #[cfg(kani)]
 mod proofs {

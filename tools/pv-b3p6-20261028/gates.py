@@ -47,3 +47,11 @@ if kind in ('kani226transfer','kani226withdrawal'):
  (H/'tmp').mkdir(exist_ok=True)
  cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','native226::'+variant,'--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions','--symex-cache-dereferences']
  sys.exit(run('kani226-'+variant+'-01',cmd,'optimized compilation then no-stub native complete-Result serializer check; universal auxiliary u16 index, unwind65, small-width arithmetic only',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
+
+if kind=='kmxcontrols':
+ (H/'tmp').mkdir(exist_ok=True)
+ cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--harness','KMX_stubs::KMX_checks::','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','-Z','stubbing','--cbmc-args','--unwinding-assertions']
+ sys.exit(run('kmx-controls-01',cmd,'exact lead KMX patch paired positive and intended-negative controls; optimized compilation, no business-function replacement',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
+if kind=='fidelitynative226':
+ cmd=['timeout','180','taskset','--cpu-list','0-3','cargo','test','--release','--manifest-path',str(P/'Cargo.toml'),'--lib','native226::emission_fixture226','--','--exact','--nocapture']
+ sys.exit(run('native226-emission-01',cmd,'optimized same-input fixture output for emission/native comparison; finite validation, missing evidence artifact'))
