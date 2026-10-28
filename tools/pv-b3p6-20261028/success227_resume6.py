@@ -76,7 +76,8 @@ def emit(mod,source_mod,names,imports):
     assert tail,(name,'tail missing')
     tail_expr=tail[1].strip();expr=expr[:tail.start()].strip()
    if m[2]==':=':
-    # Pure lets remain definitional lets; no arithmetic evaluation.
+    # Preserve the already checked restoration-let proof text.
+    if name=='reference_field.accumulate_prepared227':proof.append('  dsimp only')
     continue
    if name=='reference_terminal.semantic_initial_and_absorption' and expr.split()[0]=='lift':
     proof+=['  rw [PV_B3P_PureBind227.lift_bind]']
