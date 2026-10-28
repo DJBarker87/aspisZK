@@ -10,10 +10,10 @@ def chunks {E : Type} : List E → List (E×E)
 
 theorem length {E : Type} (xs : List E) : (chunks xs).length=xs.length/2 := by
   cases xs with
-  | nil => rfl
+  | nil => simp [chunks]
   | cons a xs =>
     cases xs with
-    | nil => rfl
+    | nil => simp [chunks]
     | cons b tail =>
       have ih := length tail
       simp only [chunks,List.length_cons] at *
@@ -25,19 +25,18 @@ theorem coordinate {E : Type} (i : Nat) (xs : List E) :
   induction i generalizing xs with
   | zero =>
     cases xs with
-    | nil => rfl
+    | nil => simp [chunks]
     | cons a xs => cases xs <;> rfl
   | succ i ih =>
     cases xs with
-    | nil => rfl
+    | nil => simp [chunks]
     | cons a xs =>
       cases xs with
-      | nil => simp
+      | nil => simp [chunks]
       | cons b tail =>
         have he : 2*(i+1)=2*i+2 := by omega
         have ho : 2*(i+1)+1=2*i+3 := by omega
         simp only [chunks,List.getElem?_cons_succ,ih,he,ho]
-        rfl
 
 theorem message_count {E : Type} (xs : List E) (h : xs.length=1024) :
     (chunks xs).length=512 := by rw [length,h]
