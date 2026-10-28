@@ -3,8 +3,7 @@
 This uses, without changing, the existing reservation/barrier tools.
 """
 from pathlib import Path
-def check_ready(): pass
-def refuse(*args): pass
+from cooldown import check_ready, refuse
 import hashlib, json, re, shlex, subprocess, sys, datetime
 R=Path(__file__).resolve().parents[2]
 E=R/'evidence/pv-rdb2d-20261028'
