@@ -5,12 +5,12 @@ open Aeneas Aeneas.Std
 
 /-- Total encoding; on admitted target-size layouts this is exact. -/
 def usize (n : Nat) : Usize :=
-  Usize.ofNatCore (n % (Usize.max+1))
-    (Nat.le_of_lt_succ (Nat.mod_lt n (Nat.zero_lt_succ Usize.max)))
+  Usize.ofNatCore (n % (2 ^ UScalarTy.Usize.numBits))
+    (Nat.mod_lt n (by positivity))
 
-theorem usize_exact (n : Nat) (h : n≤Usize.max) : (usize n).val=n := by
-  change n % (Usize.max+1)=n
-  exact Nat.mod_eq_of_lt (Nat.lt_succ_of_le h)
+theorem usize_exact (n : Nat) (h : n<2^UScalarTy.Usize.numBits) : (usize n).val=n := by
+  change n % (2^UScalarTy.Usize.numBits)=n
+  exact Nat.mod_eq_of_lt h
 
 inductive Error where
   | capacityOverflow
@@ -139,7 +139,9 @@ theorem values_preserved {T S F : Type} (step : Request → S → Option Nat × 
   split <;> try rfl
   split <;> try rfl
   split <;> try rfl
-  split <;> rfl
+  dsimp only
+  cases step ⟨b.address,b.capacity,b.values.length+additional,shape⟩ w.allocator with
+  | mk p s => cases p <;> rfl
 
 theorem no_growth {T S F : Type} (step : Request → S → Option Nat × S)
     (wordMax byteMax : Nat) (shape : Shape) (b : Buffer T)
