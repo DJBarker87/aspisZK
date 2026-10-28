@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_EncodedStep41
+import R1Z.PV_RunJoin_CompactStep39
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_EncodedLoop41
