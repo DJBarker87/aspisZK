@@ -27,13 +27,20 @@ for i in range(60300,60400):
  out=D/f'out-{i}.log';sf=D/f'sha-{i}.txt';tm=D/f'time-{i}.log'
  if not out.exists():continue
  txt=out.read_text();line=sf.read_text().strip() if sf.exists() else '';parts=line.split(maxsplit=1);digest=parts[0] if parts else None
- module=Path(parts[1]).stem if len(parts)>1 else None;path=sources.get(module)
+ module=Path(parts[1]).stem if len(parts)>1 else None
+ if module is None:
+  mm=re.search(r'/R1Z/([^/:]+)\.lean:',txt);module=mm[1] if mm else None
+  if module:
+   pin=next((x for x in json.loads((D/'actual-source-closure.json').read_text())['modules'] if x['module']=='R1Z.'+module),None)
+   if pin:digest=pin['sha256']
+ path=sources.get(module)
  t=timing(tm);status=t['exit_status'];err=[x for x in txt.splitlines() if 'error:' in x or 'error(' in x]
  axioms=[x for x in txt.splitlines() if 'depends on axioms:' in x or 'does not depend on any axioms' in x]
  ok=status=='0' and not err and not any('sorryAx' in x for x in axioms)
  row=dict(attempt=i,target='R1Z.'+module if module else None,source_path=path,source_sha256=digest,**t,credited_proof=ok,operationally_compliant=i!=60309,print_axioms=axioms,errors=err,caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,lean_M=7000),cohort='private coherent actual-source prefix' if i in range(60340,60380) or i in [60385,60386,60387,60388,60389,60390,60391,60392,60393,60399] else 'standing env-J physical prefix')
  if path and digest:row.update(authority(path,digest))
  if not axioms:row['print_axioms_note']='N/A: source/definition dependency compilation or pre-elaboration failure; see exact target and status'
+ if not sf.exists():row['source_hash_origin']='Recovered from unchanged private source authority/preflight; no launcher SHA capture; import failed before elaboration'
  row['command']='run2.py private-env-J.json actual-objects actual-sources TARGET.olean SOURCE.lean 7000' if row['cohort'].startswith('private') else f'run-joint.sh {i} R1Z/{module} J 7000 8'
  rows.append(row)
 (D/'attempts.json').write_text(json.dumps(rows,indent=2)+'\n')
@@ -41,12 +48,13 @@ assert len(rows)<=100
 # Native names are recorded scopes, including conservative charges for barrier-only refusals.
 native=[]
 for name in ['native01','build','build03','build04','build04-retry','inventory','machine-inventory','machine-relocations','stdlib-ir','ir-linked-inventory','stdlib-inlined-sites','root-preopt','stdlib-inlined-sites-v2','site-reconciliation','stdlib-callers','machine-stdlib-callers','runtime-unit-closure','diagnostic-source-pins','collect-receipts']:
- t=D/(name+'-time.log')
+ actual_name={'machine-inventory':'machine','ir-linked-inventory':'ir-linked','stdlib-inlined-sites':'stdlib-sites'}.get(name,name)
+ t=D/(actual_name+'-time.log')
  if not t.exists():
   alt={'build04-retry':'build04-time.log','native01':'native01-time.log'}.get(name)
   if alt:t=D/alt
- barrier=D/(name+'-barrier.json');bj=json.loads(barrier.read_text()) if barrier.exists() else None
- native.append(dict(scope=name,**timing(t),barrier_allowed=bj.get('allowed') if bj else None,limits=bj.get('own_limits') if bj else None,source_revision='713a92729abc0bb55677dd2ea7d2107490b5cd24' if name.startswith('build') or name=='root-preopt' else 'scripts pinned in current evidence directory',print_axioms='N/A: native/read-only analysis',note='Internal barrier refused before compiler; conservatively charged scope' if name=='build04' else None))
+ barrier=D/(actual_name+'-barrier.json');bj=json.loads(barrier.read_text()) if barrier.exists() else None
+ native.append(dict(scope=name,**(timing(Path('/nonexistent')) if name=='build04' else timing(t)),barrier_allowed=bj.get('allowed') if bj else None,limits=bj.get('own_limits') if bj else None,source_revision='713a92729abc0bb55677dd2ea7d2107490b5cd24' if name.startswith('build') or name=='root-preopt' else 'scripts pinned in current evidence directory',print_axioms='N/A: native/read-only analysis',note='Internal barrier refused before compiler; conservatively charged scope' if name=='build04' else None))
 (D/'native-scopes.json').write_text(json.dumps(native,indent=2)+'\n')
 summary=dict(lean_attempts=len(rows),lean_success=sum(x['credited_proof'] for x in rows),lean_failed=sum(not x['credited_proof'] for x in rows),native_scopes_conservatively_charged=len(native),kani=0,missing_source_revision=[x['attempt'] for x in rows if x.get('source_revision') is None],peak_lean_rss_KiB=max(int(x['peak_rss_KiB']) for x in rows if x['peak_rss_KiB']),swaps=sum(int(x['swaps']) for x in rows if x['swaps']))
 (D/'final-summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary))

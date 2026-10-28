@@ -1,0 +1,1260 @@
+[
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/fmt.rs",
+    "sha256": "1c4e8c95da13bb474845fb1e122f7cd3147db94b5225c56b93a922f7da9a6119",
+    "excerpts": []
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/string.rs",
+    "sha256": "4436d55804bbac0c1691a251042ff82e30b5eab0d4d0bebc20b016b60a0c07a7",
+    "excerpts": [
+      {
+        "line": 573,
+        "text": [
+          "    }",
+          "",
+          "    /// Converts a slice of bytes to a string, including invalid characters.",
+          "    ///",
+          "    /// Strings are made of bytes ([`u8`]), and a slice of bytes",
+          "    /// ([`&[u8]`][byteslice]) is made of bytes, so this function converts",
+          "    /// between the two. Not all byte slices are valid strings, however: strings",
+          "    /// are required to be valid UTF-8. During this conversion,",
+          "    /// `from_utf8_lossy()` will replace any invalid UTF-8 sequences with",
+          "    /// [`U+FFFD REPLACEMENT CHARACTER`][U+FFFD], which looks like this: \ufffd",
+          "    ///",
+          "    /// [byteslice]: prim@slice",
+          "    /// [U+FFFD]: core::char::REPLACEMENT_CHARACTER",
+          "    ///",
+          "    /// If you are sure that the byte slice is valid UTF-8, and you don't want",
+          "    /// to incur the overhead of the conversion, there is an unsafe version",
+          "    /// of this function, [`from_utf8_unchecked`], which has the same behavior",
+          "    /// but skips the checks.",
+          "    ///",
+          "    /// [`from_utf8_unchecked`]: String::from_utf8_unchecked"
+        ]
+      },
+      {
+        "line": 602,
+        "text": [
+          "    /// # Examples",
+          "    ///",
+          "    /// Basic usage:",
+          "    ///",
+          "    /// ```",
+          "    /// // some bytes, in a vector",
+          "    /// let sparkle_heart = vec![240, 159, 146, 150];",
+          "    ///",
+          "    /// let sparkle_heart = String::from_utf8_lossy(&sparkle_heart);",
+          "    ///",
+          "    /// assert_eq!(\"\ud83d\udc96\", sparkle_heart);",
+          "    /// ```",
+          "    ///",
+          "    /// Incorrect bytes:",
+          "    ///",
+          "    /// ```",
+          "    /// // some invalid bytes",
+          "    /// let input = b\"Hello \\xF0\\x90\\x80World\";",
+          "    /// let output = String::from_utf8_lossy(input);",
+          "    ///"
+        ]
+      },
+      {
+        "line": 612,
+        "text": [
+          "    /// assert_eq!(\"\ud83d\udc96\", sparkle_heart);",
+          "    /// ```",
+          "    ///",
+          "    /// Incorrect bytes:",
+          "    ///",
+          "    /// ```",
+          "    /// // some invalid bytes",
+          "    /// let input = b\"Hello \\xF0\\x90\\x80World\";",
+          "    /// let output = String::from_utf8_lossy(input);",
+          "    ///",
+          "    /// assert_eq!(\"Hello \ufffdWorld\", output);",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[stable(feature = \"rust1\", since = \"1.0.0\")]",
+          "    pub fn from_utf8_lossy(v: &[u8]) -> Cow<'_, str> {",
+          "        let mut iter = v.utf8_chunks();",
+          "",
+          "        let Some(chunk) = iter.next() else {",
+          "            return Cow::Borrowed(\"\");"
+        ]
+      },
+      {
+        "line": 619,
+        "text": [
+          "    /// let input = b\"Hello \\xF0\\x90\\x80World\";",
+          "    /// let output = String::from_utf8_lossy(input);",
+          "    ///",
+          "    /// assert_eq!(\"Hello \ufffdWorld\", output);",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[stable(feature = \"rust1\", since = \"1.0.0\")]",
+          "    pub fn from_utf8_lossy(v: &[u8]) -> Cow<'_, str> {",
+          "        let mut iter = v.utf8_chunks();",
+          "",
+          "        let Some(chunk) = iter.next() else {",
+          "            return Cow::Borrowed(\"\");",
+          "        };",
+          "        let first_valid = chunk.valid();",
+          "        if chunk.invalid().is_empty() {",
+          "            debug_assert_eq!(first_valid.len(), v.len());",
+          "            return Cow::Borrowed(first_valid);",
+          "        }",
+          ""
+        ]
+      },
+      {
+        "line": 650,
+        "text": [
+          "        }",
+          "",
+          "        Cow::Owned(res)",
+          "    }",
+          "",
+          "    /// Converts a [`Vec<u8>`] to a `String`, substituting invalid UTF-8",
+          "    /// sequences with replacement characters.",
+          "    ///",
+          "    /// See [`from_utf8_lossy`] for more details.",
+          "    ///",
+          "    /// [`from_utf8_lossy`]: String::from_utf8_lossy",
+          "    ///",
+          "    /// Note that this function does not guarantee reuse of the original `Vec`",
+          "    /// allocation.",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// Basic usage:",
+          "    ///",
+          "    /// ```"
+        ]
+      },
+      {
+        "line": 652,
+        "text": [
+          "        Cow::Owned(res)",
+          "    }",
+          "",
+          "    /// Converts a [`Vec<u8>`] to a `String`, substituting invalid UTF-8",
+          "    /// sequences with replacement characters.",
+          "    ///",
+          "    /// See [`from_utf8_lossy`] for more details.",
+          "    ///",
+          "    /// [`from_utf8_lossy`]: String::from_utf8_lossy",
+          "    ///",
+          "    /// Note that this function does not guarantee reuse of the original `Vec`",
+          "    /// allocation.",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// Basic usage:",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(string_from_utf8_lossy_owned)]",
+          "    /// // some bytes, in a vector"
+        ]
+      },
+      {
+        "line": 662,
+        "text": [
+          "    /// Note that this function does not guarantee reuse of the original `Vec`",
+          "    /// allocation.",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// Basic usage:",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(string_from_utf8_lossy_owned)]",
+          "    /// // some bytes, in a vector",
+          "    /// let sparkle_heart = vec![240, 159, 146, 150];",
+          "    ///",
+          "    /// let sparkle_heart = String::from_utf8_lossy_owned(sparkle_heart);",
+          "    ///",
+          "    /// assert_eq!(String::from(\"\ud83d\udc96\"), sparkle_heart);",
+          "    /// ```",
+          "    ///",
+          "    /// Incorrect bytes:",
+          "    ///",
+          "    /// ```"
+        ]
+      },
+      {
+        "line": 666,
+        "text": [
+          "    ///",
+          "    /// Basic usage:",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(string_from_utf8_lossy_owned)]",
+          "    /// // some bytes, in a vector",
+          "    /// let sparkle_heart = vec![240, 159, 146, 150];",
+          "    ///",
+          "    /// let sparkle_heart = String::from_utf8_lossy_owned(sparkle_heart);",
+          "    ///",
+          "    /// assert_eq!(String::from(\"\ud83d\udc96\"), sparkle_heart);",
+          "    /// ```",
+          "    ///",
+          "    /// Incorrect bytes:",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(string_from_utf8_lossy_owned)]",
+          "    /// // some invalid bytes",
+          "    /// let input: Vec<u8> = b\"Hello \\xF0\\x90\\x80World\".into();",
+          "    /// let output = String::from_utf8_lossy_owned(input);"
+        ]
+      },
+      {
+        "line": 674,
+        "text": [
+          "    /// let sparkle_heart = String::from_utf8_lossy_owned(sparkle_heart);",
+          "    ///",
+          "    /// assert_eq!(String::from(\"\ud83d\udc96\"), sparkle_heart);",
+          "    /// ```",
+          "    ///",
+          "    /// Incorrect bytes:",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(string_from_utf8_lossy_owned)]",
+          "    /// // some invalid bytes",
+          "    /// let input: Vec<u8> = b\"Hello \\xF0\\x90\\x80World\".into();",
+          "    /// let output = String::from_utf8_lossy_owned(input);",
+          "    ///",
+          "    /// assert_eq!(String::from(\"Hello \ufffdWorld\"), output);",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[unstable(feature = \"string_from_utf8_lossy_owned\", issue = \"129436\")]",
+          "    pub fn from_utf8_lossy_owned(v: Vec<u8>) -> String {",
+          "        if let Cow::Owned(string) = String::from_utf8_lossy(&v) {"
+        ]
+      },
+      {
+        "line": 677,
+        "text": [
+          "    /// ```",
+          "    ///",
+          "    /// Incorrect bytes:",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(string_from_utf8_lossy_owned)]",
+          "    /// // some invalid bytes",
+          "    /// let input: Vec<u8> = b\"Hello \\xF0\\x90\\x80World\".into();",
+          "    /// let output = String::from_utf8_lossy_owned(input);",
+          "    ///",
+          "    /// assert_eq!(String::from(\"Hello \ufffdWorld\"), output);",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[unstable(feature = \"string_from_utf8_lossy_owned\", issue = \"129436\")]",
+          "    pub fn from_utf8_lossy_owned(v: Vec<u8>) -> String {",
+          "        if let Cow::Owned(string) = String::from_utf8_lossy(&v) {",
+          "            string",
+          "        } else {",
+          "            // SAFETY: `String::from_utf8_lossy`'s contract ensures that if"
+        ]
+      },
+      {
+        "line": 683,
+        "text": [
+          "    /// // some invalid bytes",
+          "    /// let input: Vec<u8> = b\"Hello \\xF0\\x90\\x80World\".into();",
+          "    /// let output = String::from_utf8_lossy_owned(input);",
+          "    ///",
+          "    /// assert_eq!(String::from(\"Hello \ufffdWorld\"), output);",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[unstable(feature = \"string_from_utf8_lossy_owned\", issue = \"129436\")]",
+          "    pub fn from_utf8_lossy_owned(v: Vec<u8>) -> String {",
+          "        if let Cow::Owned(string) = String::from_utf8_lossy(&v) {",
+          "            string",
+          "        } else {",
+          "            // SAFETY: `String::from_utf8_lossy`'s contract ensures that if",
+          "            // it returns a `Cow::Borrowed`, it is a valid UTF-8 string.",
+          "            // Otherwise, it returns a new allocation of an owned `String`, with",
+          "            // replacement characters for invalid sequences, which is returned",
+          "            // above.",
+          "            unsafe { String::from_utf8_unchecked(v) }",
+          "        }"
+        ]
+      },
+      {
+        "line": 684,
+        "text": [
+          "    /// let input: Vec<u8> = b\"Hello \\xF0\\x90\\x80World\".into();",
+          "    /// let output = String::from_utf8_lossy_owned(input);",
+          "    ///",
+          "    /// assert_eq!(String::from(\"Hello \ufffdWorld\"), output);",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[unstable(feature = \"string_from_utf8_lossy_owned\", issue = \"129436\")]",
+          "    pub fn from_utf8_lossy_owned(v: Vec<u8>) -> String {",
+          "        if let Cow::Owned(string) = String::from_utf8_lossy(&v) {",
+          "            string",
+          "        } else {",
+          "            // SAFETY: `String::from_utf8_lossy`'s contract ensures that if",
+          "            // it returns a `Cow::Borrowed`, it is a valid UTF-8 string.",
+          "            // Otherwise, it returns a new allocation of an owned `String`, with",
+          "            // replacement characters for invalid sequences, which is returned",
+          "            // above.",
+          "            unsafe { String::from_utf8_unchecked(v) }",
+          "        }",
+          "    }"
+        ]
+      },
+      {
+        "line": 685,
+        "text": [
+          "    /// let output = String::from_utf8_lossy_owned(input);",
+          "    ///",
+          "    /// assert_eq!(String::from(\"Hello \ufffdWorld\"), output);",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[unstable(feature = \"string_from_utf8_lossy_owned\", issue = \"129436\")]",
+          "    pub fn from_utf8_lossy_owned(v: Vec<u8>) -> String {",
+          "        if let Cow::Owned(string) = String::from_utf8_lossy(&v) {",
+          "            string",
+          "        } else {",
+          "            // SAFETY: `String::from_utf8_lossy`'s contract ensures that if",
+          "            // it returns a `Cow::Borrowed`, it is a valid UTF-8 string.",
+          "            // Otherwise, it returns a new allocation of an owned `String`, with",
+          "            // replacement characters for invalid sequences, which is returned",
+          "            // above.",
+          "            unsafe { String::from_utf8_unchecked(v) }",
+          "        }",
+          "    }",
+          ""
+        ]
+      },
+      {
+        "line": 688,
+        "text": [
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[unstable(feature = \"string_from_utf8_lossy_owned\", issue = \"129436\")]",
+          "    pub fn from_utf8_lossy_owned(v: Vec<u8>) -> String {",
+          "        if let Cow::Owned(string) = String::from_utf8_lossy(&v) {",
+          "            string",
+          "        } else {",
+          "            // SAFETY: `String::from_utf8_lossy`'s contract ensures that if",
+          "            // it returns a `Cow::Borrowed`, it is a valid UTF-8 string.",
+          "            // Otherwise, it returns a new allocation of an owned `String`, with",
+          "            // replacement characters for invalid sequences, which is returned",
+          "            // above.",
+          "            unsafe { String::from_utf8_unchecked(v) }",
+          "        }",
+          "    }",
+          "",
+          "    /// Decode a native endian UTF-16\u2013encoded vector `v` into a `String`,",
+          "    /// returning [`Err`] if `v` contains any invalid data.",
+          "    ///"
+        ]
+      },
+      {
+        "line": 732,
+        "text": [
+          "            ret.push(c);",
+          "        }",
+          "        Ok(ret)",
+          "    }",
+          "",
+          "    /// Decode a native endian UTF-16\u2013encoded slice `v` into a `String`,",
+          "    /// replacing invalid data with [the replacement character (`U+FFFD`)][U+FFFD].",
+          "    ///",
+          "    /// Unlike [`from_utf8_lossy`] which returns a [`Cow<'a, str>`],",
+          "    /// `from_utf16_lossy` returns a `String` since the UTF-16 to UTF-8",
+          "    /// conversion requires a memory allocation.",
+          "    ///",
+          "    /// [`from_utf8_lossy`]: String::from_utf8_lossy",
+          "    /// [`Cow<'a, str>`]: crate::borrow::Cow \"borrow::Cow\"",
+          "    /// [U+FFFD]: core::char::REPLACEMENT_CHARACTER",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// ```",
+          "    /// // \ud834\udd1emus<invalid>ic<invalid>"
+        ]
+      },
+      {
+        "line": 736,
+        "text": [
+          "",
+          "    /// Decode a native endian UTF-16\u2013encoded slice `v` into a `String`,",
+          "    /// replacing invalid data with [the replacement character (`U+FFFD`)][U+FFFD].",
+          "    ///",
+          "    /// Unlike [`from_utf8_lossy`] which returns a [`Cow<'a, str>`],",
+          "    /// `from_utf16_lossy` returns a `String` since the UTF-16 to UTF-8",
+          "    /// conversion requires a memory allocation.",
+          "    ///",
+          "    /// [`from_utf8_lossy`]: String::from_utf8_lossy",
+          "    /// [`Cow<'a, str>`]: crate::borrow::Cow \"borrow::Cow\"",
+          "    /// [U+FFFD]: core::char::REPLACEMENT_CHARACTER",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// ```",
+          "    /// // \ud834\udd1emus<invalid>ic<invalid>",
+          "    /// let v = &[0xD834, 0xDD1E, 0x006d, 0x0075,",
+          "    ///           0x0073, 0xDD1E, 0x0069, 0x0063,",
+          "    ///           0xD834];",
+          "    ///"
+        ]
+      },
+      {
+        "line": 798,
+        "text": [
+          "                .collect::<Result<_, _>>()",
+          "                .map_err(|_| FromUtf16Error(())),",
+          "        }",
+          "    }",
+          "",
+          "    /// Decode a UTF-16LE\u2013encoded slice `v` into a `String`, replacing",
+          "    /// invalid data with [the replacement character (`U+FFFD`)][U+FFFD].",
+          "    ///",
+          "    /// Unlike [`from_utf8_lossy`] which returns a [`Cow<'a, str>`],",
+          "    /// `from_utf16le_lossy` returns a `String` since the UTF-16 to UTF-8",
+          "    /// conversion requires a memory allocation.",
+          "    ///",
+          "    /// [`from_utf8_lossy`]: String::from_utf8_lossy",
+          "    /// [`Cow<'a, str>`]: crate::borrow::Cow \"borrow::Cow\"",
+          "    /// [U+FFFD]: core::char::REPLACEMENT_CHARACTER",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// Basic usage:",
+          "    ///"
+        ]
+      },
+      {
+        "line": 802,
+        "text": [
+          "",
+          "    /// Decode a UTF-16LE\u2013encoded slice `v` into a `String`, replacing",
+          "    /// invalid data with [the replacement character (`U+FFFD`)][U+FFFD].",
+          "    ///",
+          "    /// Unlike [`from_utf8_lossy`] which returns a [`Cow<'a, str>`],",
+          "    /// `from_utf16le_lossy` returns a `String` since the UTF-16 to UTF-8",
+          "    /// conversion requires a memory allocation.",
+          "    ///",
+          "    /// [`from_utf8_lossy`]: String::from_utf8_lossy",
+          "    /// [`Cow<'a, str>`]: crate::borrow::Cow \"borrow::Cow\"",
+          "    /// [U+FFFD]: core::char::REPLACEMENT_CHARACTER",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// Basic usage:",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(str_from_utf16_endian)]",
+          "    /// // \ud834\udd1emus<invalid>ic<invalid>",
+          "    /// let v = &[0x34, 0xD8, 0x1E, 0xDD, 0x6d, 0x00, 0x75, 0x00,"
+        ]
+      },
+      {
+        "line": 873,
+        "text": [
+          "                .collect::<Result<_, _>>()",
+          "                .map_err(|_| FromUtf16Error(())),",
+          "        }",
+          "    }",
+          "",
+          "    /// Decode a UTF-16BE\u2013encoded slice `v` into a `String`, replacing",
+          "    /// invalid data with [the replacement character (`U+FFFD`)][U+FFFD].",
+          "    ///",
+          "    /// Unlike [`from_utf8_lossy`] which returns a [`Cow<'a, str>`],",
+          "    /// `from_utf16le_lossy` returns a `String` since the UTF-16 to UTF-8",
+          "    /// conversion requires a memory allocation.",
+          "    ///",
+          "    /// [`from_utf8_lossy`]: String::from_utf8_lossy",
+          "    /// [`Cow<'a, str>`]: crate::borrow::Cow \"borrow::Cow\"",
+          "    /// [U+FFFD]: core::char::REPLACEMENT_CHARACTER",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// Basic usage:",
+          "    ///"
+        ]
+      },
+      {
+        "line": 877,
+        "text": [
+          "",
+          "    /// Decode a UTF-16BE\u2013encoded slice `v` into a `String`, replacing",
+          "    /// invalid data with [the replacement character (`U+FFFD`)][U+FFFD].",
+          "    ///",
+          "    /// Unlike [`from_utf8_lossy`] which returns a [`Cow<'a, str>`],",
+          "    /// `from_utf16le_lossy` returns a `String` since the UTF-16 to UTF-8",
+          "    /// conversion requires a memory allocation.",
+          "    ///",
+          "    /// [`from_utf8_lossy`]: String::from_utf8_lossy",
+          "    /// [`Cow<'a, str>`]: crate::borrow::Cow \"borrow::Cow\"",
+          "    /// [U+FFFD]: core::char::REPLACEMENT_CHARACTER",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// Basic usage:",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(str_from_utf16_endian)]",
+          "    /// // \ud834\udd1emus<invalid>ic<invalid>",
+          "    /// let v = &[0xD8, 0x34, 0xDD, 0x1E, 0x00, 0x6d, 0x00, 0x75,"
+        ]
+      },
+      {
+        "line": 2233,
+        "text": [
+          "    #[stable(feature = \"from_utf8_error_as_bytes\", since = \"1.26.0\")]",
+          "    pub fn as_bytes(&self) -> &[u8] {",
+          "        &self.bytes[..]",
+          "    }",
+          "",
+          "    /// Converts the bytes into a `String` lossily, substituting invalid UTF-8",
+          "    /// sequences with replacement characters.",
+          "    ///",
+          "    /// See [`String::from_utf8_lossy`] for more details on replacement of",
+          "    /// invalid sequences, and [`String::from_utf8_lossy_owned`] for the",
+          "    /// `String` function which corresponds to this function.",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(string_from_utf8_lossy_owned)]",
+          "    /// // some invalid bytes",
+          "    /// let input: Vec<u8> = b\"Hello \\xF0\\x90\\x80World\".into();",
+          "    /// let output = String::from_utf8(input).unwrap_or_else(|e| e.into_utf8_lossy());",
+          "    ///"
+        ]
+      },
+      {
+        "line": 2234,
+        "text": [
+          "    pub fn as_bytes(&self) -> &[u8] {",
+          "        &self.bytes[..]",
+          "    }",
+          "",
+          "    /// Converts the bytes into a `String` lossily, substituting invalid UTF-8",
+          "    /// sequences with replacement characters.",
+          "    ///",
+          "    /// See [`String::from_utf8_lossy`] for more details on replacement of",
+          "    /// invalid sequences, and [`String::from_utf8_lossy_owned`] for the",
+          "    /// `String` function which corresponds to this function.",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(string_from_utf8_lossy_owned)]",
+          "    /// // some invalid bytes",
+          "    /// let input: Vec<u8> = b\"Hello \\xF0\\x90\\x80World\".into();",
+          "    /// let output = String::from_utf8(input).unwrap_or_else(|e| e.into_utf8_lossy());",
+          "    ///",
+          "    /// assert_eq!(String::from(\"Hello \ufffdWorld\"), output);"
+        ]
+      },
+      {
+        "line": 2240,
+        "text": [
+          "    ///",
+          "    /// See [`String::from_utf8_lossy`] for more details on replacement of",
+          "    /// invalid sequences, and [`String::from_utf8_lossy_owned`] for the",
+          "    /// `String` function which corresponds to this function.",
+          "    ///",
+          "    /// # Examples",
+          "    ///",
+          "    /// ```",
+          "    /// #![feature(string_from_utf8_lossy_owned)]",
+          "    /// // some invalid bytes",
+          "    /// let input: Vec<u8> = b\"Hello \\xF0\\x90\\x80World\".into();",
+          "    /// let output = String::from_utf8(input).unwrap_or_else(|e| e.into_utf8_lossy());",
+          "    ///",
+          "    /// assert_eq!(String::from(\"Hello \ufffdWorld\"), output);",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[unstable(feature = \"string_from_utf8_lossy_owned\", issue = \"129436\")]",
+          "    pub fn into_utf8_lossy(self) -> String {",
+          "        const REPLACEMENT: &str = \"\\u{FFFD}\";"
+        ]
+      },
+      {
+        "line": 2249,
+        "text": [
+          "    /// // some invalid bytes",
+          "    /// let input: Vec<u8> = b\"Hello \\xF0\\x90\\x80World\".into();",
+          "    /// let output = String::from_utf8(input).unwrap_or_else(|e| e.into_utf8_lossy());",
+          "    ///",
+          "    /// assert_eq!(String::from(\"Hello \ufffdWorld\"), output);",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[cfg(not(no_global_oom_handling))]",
+          "    #[unstable(feature = \"string_from_utf8_lossy_owned\", issue = \"129436\")]",
+          "    pub fn into_utf8_lossy(self) -> String {",
+          "        const REPLACEMENT: &str = \"\\u{FFFD}\";",
+          "",
+          "        let mut res = {",
+          "            let mut v = Vec::with_capacity(self.bytes.len());",
+          "",
+          "            // `Utf8Error::valid_up_to` returns the maximum index of validated",
+          "            // UTF-8 bytes. Copy the valid bytes into the output buffer.",
+          "            v.extend_from_slice(&self.bytes[..self.error.valid_up_to()]);",
+          "",
+          "            // SAFETY: This is safe because the only bytes present in the buffer"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs",
+    "sha256": "ff56f0d7f3ce245b6171f2b742bfa07e1a7596158e43a9917a0340c7e9eb8a27",
+    "excerpts": []
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/error.rs",
+    "sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+    "excerpts": []
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/pal/unix/os.rs",
+    "sha256": "df9d59ba3042ed5dc3aa62c1bebefd1000cc511f40bc9a2642fb26e29ffab008",
+    "excerpts": []
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/pal/unix/mod.rs",
+    "sha256": "c71c1298c20cdfa96b9831cd2b51f75b0333a50e49188ab5fddd1945e82df312",
+    "excerpts": []
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/backtrace/src/symbolize/gimli/elf.rs",
+    "sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+    "excerpts": []
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/process.rs",
+    "sha256": "6384b820420b1488380a289554f230640acc44e8db81d356db50ee7bd6c8a1fa",
+    "excerpts": [
+      {
+        "line": 1446,
+        "text": [
+          "    /// use std::process::{Command, Stdio};",
+          "    ///",
+          "    /// let output = Command::new(\"echo\")",
+          "    ///     .arg(\"Hello, world!\")",
+          "    ///     .stdout(Stdio::piped())",
+          "    ///     .output()",
+          "    ///     .expect(\"Failed to execute command\");",
+          "    ///",
+          "    /// assert_eq!(String::from_utf8_lossy(&output.stdout), \"Hello, world!\\n\");",
+          "    /// // Nothing echoed to console",
+          "    /// ```",
+          "    ///",
+          "    /// With stdin:",
+          "    ///",
+          "    /// ```no_run",
+          "    /// use std::io::Write;",
+          "    /// use std::process::{Command, Stdio};",
+          "    ///",
+          "    /// let mut child = Command::new(\"rev\")",
+          "    ///     .stdin(Stdio::piped())"
+        ]
+      },
+      {
+        "line": 1468,
+        "text": [
+          "    ///     .expect(\"Failed to spawn child process\");",
+          "    ///",
+          "    /// let mut stdin = child.stdin.take().expect(\"Failed to open stdin\");",
+          "    /// std::thread::spawn(move || {",
+          "    ///     stdin.write_all(\"Hello, world!\".as_bytes()).expect(\"Failed to write to stdin\");",
+          "    /// });",
+          "    ///",
+          "    /// let output = child.wait_with_output().expect(\"Failed to read stdout\");",
+          "    /// assert_eq!(String::from_utf8_lossy(&output.stdout), \"!dlrow ,olleH\");",
+          "    /// ```",
+          "    ///",
+          "    /// Writing more than a pipe buffer's worth of input to stdin without also reading",
+          "    /// stdout and stderr at the same time may cause a deadlock.",
+          "    /// This is an issue when running any program that doesn't guarantee that it reads",
+          "    /// its entire stdin before writing more than a pipe buffer's worth of output.",
+          "    /// The size of a pipe buffer varies on different targets.",
+          "    ///",
+          "    #[must_use]",
+          "    #[stable(feature = \"process\", since = \"1.0.0\")]",
+          "    pub fn piped() -> Stdio {"
+        ]
+      },
+      {
+        "line": 1498,
+        "text": [
+          "    /// use std::process::{Command, Stdio};",
+          "    ///",
+          "    /// let output = Command::new(\"echo\")",
+          "    ///     .arg(\"Hello, world!\")",
+          "    ///     .stdout(Stdio::inherit())",
+          "    ///     .output()",
+          "    ///     .expect(\"Failed to execute command\");",
+          "    ///",
+          "    /// assert_eq!(String::from_utf8_lossy(&output.stdout), \"\");",
+          "    /// // \"Hello, world!\" echoed to console",
+          "    /// ```",
+          "    ///",
+          "    /// With stdin:",
+          "    ///",
+          "    /// ```no_run",
+          "    /// use std::process::{Command, Stdio};",
+          "    /// use std::io::{self, Write};",
+          "    ///",
+          "    /// let output = Command::new(\"rev\")",
+          "    ///     .stdin(Stdio::inherit())"
+        ]
+      },
+      {
+        "line": 1539,
+        "text": [
+          "    /// use std::process::{Command, Stdio};",
+          "    ///",
+          "    /// let output = Command::new(\"echo\")",
+          "    ///     .arg(\"Hello, world!\")",
+          "    ///     .stdout(Stdio::null())",
+          "    ///     .output()",
+          "    ///     .expect(\"Failed to execute command\");",
+          "    ///",
+          "    /// assert_eq!(String::from_utf8_lossy(&output.stdout), \"\");",
+          "    /// // Nothing echoed to console",
+          "    /// ```",
+          "    ///",
+          "    /// With stdin:",
+          "    ///",
+          "    /// ```no_run",
+          "    /// use std::process::{Command, Stdio};",
+          "    ///",
+          "    /// let output = Command::new(\"rev\")",
+          "    ///     .stdin(Stdio::null())",
+          "    ///     .stdout(Stdio::piped())"
+        ]
+      },
+      {
+        "line": 1554,
+        "text": [
+          "    /// use std::process::{Command, Stdio};",
+          "    ///",
+          "    /// let output = Command::new(\"rev\")",
+          "    ///     .stdin(Stdio::null())",
+          "    ///     .stdout(Stdio::piped())",
+          "    ///     .output()",
+          "    ///     .expect(\"Failed to execute command\");",
+          "    ///",
+          "    /// assert_eq!(String::from_utf8_lossy(&output.stdout), \"\");",
+          "    /// // Ignores any piped-in input",
+          "    /// ```",
+          "    #[must_use]",
+          "    #[stable(feature = \"process\", since = \"1.0.0\")]",
+          "    pub fn null() -> Stdio {",
+          "        Stdio(imp::Stdio::Null)",
+          "    }",
+          "",
+          "    /// Returns `true` if this requires [`Command`] to create a new pipe.",
+          "    ///",
+          "    /// # Example"
+        ]
+      },
+      {
+        "line": 1673,
+        "text": [
+          "    ///",
+          "    /// let cat = Command::new(\"cat\")",
+          "    ///     .arg(\"-\")",
+          "    ///     .stdin(reverse.stderr.unwrap()) // Converted into a Stdio here",
+          "    ///     .output()",
+          "    ///     .expect(\"failed echo command\");",
+          "    ///",
+          "    /// assert_eq!(",
+          "    ///     String::from_utf8_lossy(&cat.stdout),",
+          "    ///     \"rev: cannot open non_existing_file.txt: No such file or directory\\n\"",
+          "    /// );",
+          "    /// ```",
+          "    fn from(child: ChildStderr) -> Stdio {",
+          "        Stdio::from_inner(child.into_inner().into())",
+          "    }",
+          "}",
+          "",
+          "#[stable(feature = \"stdio_from\", since = \"1.20.0\")]",
+          "impl From<fs::File> for Stdio {",
+          "    /// Converts a [`File`](fs::File) into a [`Stdio`]."
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/process/tests.rs",
+    "sha256": "c35e6a89e4352463731a5599a171ede670ee7813753dcdb41ac17f82e9d38444",
+    "excerpts": [
+      {
+        "line": 348,
+        "text": [
+          "    // default places such as /bin or /usr/bin. So we need to pass through",
+          "    // PATH to our sub-process.",
+          "    let mut cmd = env_cmd();",
+          "    cmd.env_clear().env(\"RUN_TEST_NEW_ENV\", \"123\");",
+          "    if let Some(p) = env::var_os(\"PATH\") {",
+          "        cmd.env(\"PATH\", &p);",
+          "    }",
+          "    let result = cmd.output().unwrap();",
+          "    let output = String::from_utf8_lossy(&result.stdout).to_string();",
+          "",
+          "    assert!(",
+          "        output.contains(\"RUN_TEST_NEW_ENV=123\"),",
+          "        \"didn't find RUN_TEST_NEW_ENV inside of:\\n\\n{output}\",",
+          "    );",
+          "}",
+          "",
+          "#[test]",
+          "#[cfg_attr(",
+          "    any(target_os = \"vxworks\", all(target_vendor = \"apple\", not(target_os = \"macos\"))),",
+          "    ignore = \"no shell available\""
+        ]
+      },
+      {
+        "line": 363,
+        "text": [
+          "",
+          "#[test]",
+          "#[cfg_attr(",
+          "    any(target_os = \"vxworks\", all(target_vendor = \"apple\", not(target_os = \"macos\"))),",
+          "    ignore = \"no shell available\"",
+          ")]",
+          "fn test_add_to_env() {",
+          "    let result = env_cmd().env(\"RUN_TEST_NEW_ENV\", \"123\").output().unwrap();",
+          "    let output = String::from_utf8_lossy(&result.stdout).to_string();",
+          "",
+          "    assert!(",
+          "        output.contains(\"RUN_TEST_NEW_ENV=123\"),",
+          "        \"didn't find RUN_TEST_NEW_ENV inside of:\\n\\n{output}\"",
+          "    );",
+          "}",
+          "",
+          "#[test]",
+          "#[cfg_attr(",
+          "    any(target_os = \"vxworks\", all(target_vendor = \"apple\", not(target_os = \"macos\"))),",
+          "    ignore = \"no shell available\""
+        ]
+      },
+      {
+        "line": 392,
+        "text": [
+          "    unsafe {",
+          "        env::set_var(\"RUN_TEST_NEW_ENV2\", \"456\");",
+          "    }",
+          "    let result = cmd.output().unwrap();",
+          "    unsafe {",
+          "        env::remove_var(\"RUN_TEST_NEW_ENV2\");",
+          "    }",
+          "",
+          "    let output = String::from_utf8_lossy(&result.stdout).to_string();",
+          "",
+          "    assert!(",
+          "        output.contains(\"RUN_TEST_NEW_ENV1=123\"),",
+          "        \"didn't find RUN_TEST_NEW_ENV1 inside of:\\n\\n{output}\"",
+          "    );",
+          "    assert!(",
+          "        output.contains(\"RUN_TEST_NEW_ENV2=456\"),",
+          "        \"didn't find RUN_TEST_NEW_ENV2 inside of:\\n\\n{output}\"",
+          "    );",
+          "}",
+          ""
+        ]
+      },
+      {
+        "line": 632,
+        "text": [
+          "    let output = Command::new(&script_path)",
+          "        .arg(\"fellow Rustaceans\")",
+          "        .stdout(crate::process::Stdio::piped())",
+          "        .spawn()",
+          "        .unwrap()",
+          "        .wait_with_output()",
+          "        .unwrap();",
+          "    assert!(output.status.success());",
+          "    assert_eq!(String::from_utf8_lossy(&output.stdout).trim(), \"Hello, fellow Rustaceans!\");",
+          "}",
+          "",
+          "// See issue #95178",
+          "#[test]",
+          "#[cfg(windows)]",
+          "fn run_canonical_bat_script() {",
+          "    let tempdir = crate::test_helpers::tmpdir();",
+          "    let script_path = tempdir.join(\"hello.cmd\");",
+          "",
+          "    crate::fs::write(&script_path, \"@echo Hello, %~1!\").unwrap();",
+          ""
+        ]
+      },
+      {
+        "line": 653,
+        "text": [
+          "    let output = Command::new(&script_path.canonicalize().unwrap())",
+          "        .arg(\"fellow Rustaceans\")",
+          "        .stdout(crate::process::Stdio::piped())",
+          "        .spawn()",
+          "        .unwrap()",
+          "        .wait_with_output()",
+          "        .unwrap();",
+          "    assert!(output.status.success());",
+          "    assert_eq!(String::from_utf8_lossy(&output.stdout).trim(), \"Hello, fellow Rustaceans!\");",
+          "}",
+          "",
+          "#[test]",
+          "fn terminate_exited_process() {",
+          "    let mut cmd = if cfg!(target_os = \"android\") {",
+          "        let mut p = shell_cmd();",
+          "        p.args(&[\"-c\", \"true\"]);",
+          "        p",
+          "    } else {",
+          "        known_command()",
+          "    };"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/os_str/bytes.rs",
+    "sha256": "d9021060718a6b8c0e2c5462c5dd3cc7be76fb9c92aa35efd85d4e2445d1de41",
+    "excerpts": [
+      {
+        "line": 311,
+        "text": [
+          "",
+          "    #[inline]",
+          "    pub fn to_str(&self) -> Result<&str, crate::str::Utf8Error> {",
+          "        str::from_utf8(&self.inner)",
+          "    }",
+          "",
+          "    #[inline]",
+          "    pub fn to_string_lossy(&self) -> Cow<'_, str> {",
+          "        String::from_utf8_lossy(&self.inner)",
+          "    }",
+          "",
+          "    #[inline]",
+          "    pub fn to_owned(&self) -> Buf {",
+          "        Buf { inner: self.inner.to_vec() }",
+          "    }",
+          "",
+          "    #[inline]",
+          "    pub fn clone_into(&self, buf: &mut Buf) {",
+          "        self.inner.clone_into(&mut buf.inner)",
+          "    }"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/solid.rs",
+    "sha256": "649c8c8a12bb474e042bfd153c792763903022ce2cffa8c1640ed883750d8304",
+    "excerpts": [
+      {
+        "line": 17,
+        "text": [
+          "pub fn is_interrupted(code: i32) -> bool {",
+          "    crate::sys::net::is_interrupted(code)",
+          "}",
+          "",
+          "pub fn decode_error_kind(code: i32) -> io::ErrorKind {",
+          "    error::decode_error_kind(code)",
+          "}",
+          "",
+          "pub fn error_string(errno: i32) -> String {",
+          "    if let Some(name) = error::error_name(errno) { name.to_owned() } else { format!(\"{errno}\") }",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/unix.rs",
+    "sha256": "3007a63d24d2730a86de4e811c88d4cfd4dce37d5400057578b642786c5657a2",
+    "excerpts": [
+      {
+        "line": 154,
+        "text": [
+          "        // clause",
+          "        x if x == libc::EAGAIN || x == libc::EWOULDBLOCK => WouldBlock,",
+          "",
+          "        _ => Uncategorized,",
+          "    }",
+          "}",
+          "",
+          "/// Gets a detailed string description for the given error number.",
+          "pub fn error_string(errno: i32) -> String {",
+          "    const TMPBUF_SZ: usize = 128;",
+          "",
+          "    unsafe extern \"C\" {",
+          "        #[cfg_attr(",
+          "            all(",
+          "                any(",
+          "                    target_os = \"linux\",",
+          "                    target_os = \"hurd\",",
+          "                    target_env = \"newlib\",",
+          "                    target_os = \"cygwin\"",
+          "                ),"
+        ]
+      },
+      {
+        "line": 184,
+        "text": [
+          "    unsafe {",
+          "        if strerror_r(errno as c_int, p, buf.len()) < 0 {",
+          "            panic!(\"strerror_r failure\");",
+          "        }",
+          "",
+          "        let p = p as *const _;",
+          "        // We can't always expect a UTF-8 environment. When we don't get that luxury,",
+          "        // it's better to give a low-quality error message than none at all.",
+          "        String::from_utf8_lossy(CStr::from_ptr(p).to_bytes()).into()",
+          "    }",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/sgx.rs",
+    "sha256": "204b8b6cd7f1fd50bfff09e3463fc22b4ee266cc82c9734a09f9cb45d0e73c18",
+    "excerpts": [
+      {
+        "line": 57,
+        "text": [
+          "        io::ErrorKind::Uncategorized",
+          "    } else if code == Error::UnexpectedEof as _ {",
+          "        io::ErrorKind::UnexpectedEof",
+          "    } else {",
+          "        io::ErrorKind::Uncategorized",
+          "    }",
+          "}",
+          "",
+          "pub fn error_string(errno: i32) -> String {",
+          "    if errno == RESULT_SUCCESS {",
+          "        \"operation successful\".into()",
+          "    } else if ((Error::UserRangeStart as _)..=(Error::UserRangeEnd as _)).contains(&errno) {",
+          "        format!(\"user-specified error {errno:08x}\")",
+          "    } else {",
+          "        decode_error_kind(errno).as_str().into()",
+          "    }",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/windows.rs",
+    "sha256": "725569e98f4cf2eec09d2322797143a2e0f291871aee75a971a0c9a7e0d1cf47",
+    "excerpts": [
+      {
+        "line": 87,
+        "text": [
+          "        c::WSAENETUNREACH => NetworkUnreachable,",
+          "        c::WSAEDQUOT => QuotaExceeded,",
+          "",
+          "        _ => Uncategorized,",
+          "    }",
+          "}",
+          "",
+          "/// Gets a detailed string description for the given error number.",
+          "pub fn error_string(mut errnum: i32) -> String {",
+          "    let mut buf = [0 as c::WCHAR; 2048];",
+          "",
+          "    unsafe {",
+          "        let mut module = ptr::null_mut();",
+          "        let mut flags = 0;",
+          "",
+          "        // NTSTATUS errors may be encoded as HRESULT, which may returned from",
+          "        // GetLastError. For more information about Windows error codes, see",
+          "        // `[MS-ERREF]`: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/0642cb2f-2075-4469-918c-4441e69c548a",
+          "        if (errnum & c::FACILITY_NT_BIT as i32) != 0 {",
+          "            // format according to https://support.microsoft.com/en-us/help/259693"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/teeos.rs",
+    "sha256": "e525a7cdf2580ff5be2d0f0165e414736dbe8968ca72f12334c5e4188404beb2",
+    "excerpts": [
+      {
+        "line": 62,
+        "text": [
+          "        // but different values on others, so we can't use a match",
+          "        // clause",
+          "        x if x == libc::EAGAIN || x == libc::EWOULDBLOCK => WouldBlock,",
+          "",
+          "        _ => Uncategorized,",
+          "    }",
+          "}",
+          "",
+          "pub fn error_string(_errno: i32) -> String {",
+          "    \"error string unimplemented\".to_string()",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/uefi.rs",
+    "sha256": "7f18a32806a2e16c2c3753d2e4024953fc8a3df67cfd4811ae7b42c0285292cc",
+    "excerpts": [
+      {
+        "line": 57,
+        "text": [
+          "        Status::TIMEOUT => io::ErrorKind::TimedOut,",
+          "        Status::UNSUPPORTED => io::ErrorKind::Unsupported,",
+          "        Status::VOLUME_FULL => io::ErrorKind::StorageFull,",
+          "        Status::WRITE_PROTECTED => io::ErrorKind::ReadOnlyFilesystem,",
+          "        _ => io::ErrorKind::Uncategorized,",
+          "    }",
+          "}",
+          "",
+          "pub fn error_string(errno: io::RawOsError) -> String {",
+          "    // Keep the List in Alphabetical Order",
+          "    // The Messages are taken from UEFI Specification Appendix D - Status Codes",
+          "    #[rustfmt::skip]",
+          "    let msg = match Status::from_usize(errno) {",
+          "        Status::ABORTED => \"The operation was aborted.\",",
+          "        Status::ACCESS_DENIED => \"Access was denied.\",",
+          "        Status::ALREADY_STARTED => \"The protocol has already been started.\",",
+          "        Status::BAD_BUFFER_SIZE => \"The buffer was not the proper size for the request.\",",
+          "        Status::BUFFER_TOO_SMALL => \"The buffer is not large enough to hold the requested data. The required buffer size is returned in the appropriate parameter when this error occurs.\",",
+          "        Status::COMPROMISED_DATA => \"The security status of the data is unknown or compromised and the data must be updated or replaced to restore a valid security status.\",",
+          "        Status::CONNECTION_FIN => \"The receiving operation fails because the communication peer has closed the connection and there is no more data in the receive buffer of the instance.\","
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/hermit.rs",
+    "sha256": "bef993c1bd809b1dd931958a7e634c4f09730d42e48dfed8b001a19d5aefc155",
+    "excerpts": [
+      {
+        "line": 33,
+        "text": [
+          "        hermit_abi::errno::ENOTCONN => io::ErrorKind::NotConnected,",
+          "        hermit_abi::errno::EPERM => io::ErrorKind::PermissionDenied,",
+          "        hermit_abi::errno::EPIPE => io::ErrorKind::BrokenPipe,",
+          "        hermit_abi::errno::ETIMEDOUT => io::ErrorKind::TimedOut,",
+          "        _ => io::ErrorKind::Uncategorized,",
+          "    }",
+          "}",
+          "",
+          "pub fn error_string(errno: i32) -> String {",
+          "    hermit_abi::error_string(errno).to_string()",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/motor.rs",
+    "sha256": "17644893b3cc87a306114c8370cb3224b11147a2bf8f8e8bf52360a8aefdc80d",
+    "excerpts": [
+      {
+        "line": 60,
+        "text": [
+          "        moto_rt::Error::FileTooLarge => io::ErrorKind::FileTooLarge,",
+          "        moto_rt::Error::NotConnected => io::ErrorKind::NotConnected,",
+          "        moto_rt::Error::StorageFull => io::ErrorKind::StorageFull,",
+          "        moto_rt::Error::InvalidData => io::ErrorKind::InvalidData,",
+          "        _ => io::ErrorKind::Uncategorized,",
+          "    }",
+          "}",
+          "",
+          "pub fn error_string(errno: RawOsError) -> String {",
+          "    let error: moto_rt::Error = match errno {",
+          "        x if x < 0 => moto_rt::Error::Unknown,",
+          "        x if x > u16::MAX.into() => moto_rt::Error::Unknown,",
+          "        x => (x as moto_rt::ErrorCode).into(), /* u16 */",
+          "    };",
+          "    format!(\"{}\", error)",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/xous.rs",
+    "sha256": "589c53d1d1e147305cf4e57240b6aaf78122528e213203d95d7507bca8a79fe8",
+    "excerpts": [
+      {
+        "line": 15,
+        "text": [
+          "pub fn is_interrupted(_code: i32) -> bool {",
+          "    false",
+          "}",
+          "",
+          "pub fn decode_error_kind(_code: i32) -> crate::io::ErrorKind {",
+          "    crate::io::ErrorKind::Uncategorized",
+          "}",
+          "",
+          "pub fn error_string(errno: i32) -> String {",
+          "    Into::<XousError>::into(errno).to_string()",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/wasi.rs",
+    "sha256": "27b1adaf8d08fd10a3f57032a9418fdb7fd0acf98178bf0815d22e50e60cba8a",
+    "excerpts": [
+      {
+        "line": 70,
+        "text": [
+          "        libc::EOPNOTSUPP => Unsupported,",
+          "        libc::EACCES | libc::EPERM => PermissionDenied,",
+          "        libc::EWOULDBLOCK => WouldBlock,",
+          "",
+          "        _ => Uncategorized,",
+          "    }",
+          "}",
+          "",
+          "pub fn error_string(errno: i32) -> String {",
+          "    let mut buf = [0 as libc::c_char; 1024];",
+          "",
+          "    let p = buf.as_mut_ptr();",
+          "    unsafe {",
+          "        if libc::strerror_r(errno as libc::c_int, p, buf.len()) < 0 {",
+          "            panic!(\"strerror_r failure\");",
+          "        }",
+          "        str::from_utf8(CStr::from_ptr(p).to_bytes()).unwrap().to_owned()",
+          "    }",
+          "}"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/generic.rs",
+    "sha256": "cab6bdab6efdf561b548ea81c532278839d0c89d5cb59dd21b303824de9e725d",
+    "excerpts": [
+      {
+        "line": 13,
+        "text": [
+          "pub fn is_interrupted(_code: i32) -> bool {",
+          "    false",
+          "}",
+          "",
+          "pub fn decode_error_kind(_code: i32) -> crate::io::ErrorKind {",
+          "    crate::io::ErrorKind::Uncategorized",
+          "}",
+          "",
+          "pub fn error_string(_errno: i32) -> String {",
+          "    \"operation successful\".to_string()",
+          "}"
+        ]
+      }
+    ]
+  }
+]
