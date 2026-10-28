@@ -116,7 +116,7 @@ theorem no_trace_decoder (r : Outcome E A) (w : W) (c : C) :
       decode r = [(w,c)] ∧ decode r = [(w,c),(w,c)] := by
   intro ⟨decode,one,two⟩
   have lengths := congrArg List.length (one.symm.trans two)
-  exact Nat.noConfusion lengths
+  exact (by decide : (1 : Nat) ≠ 2) lengths
 
 #print axioms bind_assoc
 #print axioms lift_frame
