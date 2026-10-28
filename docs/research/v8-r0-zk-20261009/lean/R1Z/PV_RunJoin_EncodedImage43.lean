@@ -35,6 +35,7 @@ theorem payload (count : Usize) (p : Nat → Raw) (n start : Nat)
     congr 1
     unfold image
     congr 1
+    apply congrArg List.ofFn
     funext i
     have off : start+1+i.val=start+i.succ.val := by simp only [Fin.val_succ];omega
     simp only [off]
