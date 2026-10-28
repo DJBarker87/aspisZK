@@ -44,3 +44,16 @@ fn mask_step227(values:[QM31;16],index:usize,sum:QM31,complement:bool)->QM31 {
 '''
 (P/'reference_copy_terminal.rs').write_text(s)
 p=Path('evidence/pv-b3p6-20261028/reference-copy227-resume5.json');r=json.loads(p.read_text());r['reference_sha256']=hashlib.sha256(s.encode()).hexdigest();r['active_change']='active_block227 owns selector copy; mask_step227 owns values and isolates scalar add/sub branch; unchanged guard and operation order';p.write_text(json.dumps(r,indent=2)+'\n')
+import re
+text=(P/'host_copy_terminal_constants.rs').read_text();m=re.search(r'const ACTIVE_ROW_MASKS: \[u16; 64\] = \[([^]]+)\]',text);assert m
+masks=[int(v.strip())for v in m[1].split(',')if v.strip()];assert len(masks)==64
+unique=sorted(set(masks));assert all(mask.bit_count()<=8 for mask in unique)
+a=s.index('fn selector_mask_sum_16(');b=s.index('\n#[derive',a)
+new='fn selector_mask_sum_16(values:[QM31;16],mask:u16)->QM31 {\n    match mask {\n'
+for mask in unique:
+    bits=[i for i in range(16)if mask&(1<<i)]
+    new+=f'        {mask} => QM31::ZERO'+''.join(f'.add(values[{i}])'for i in bits)+',\n'
+new+='        _ => panic!("outside frozen active mask set"),\n    }\n}\n'
+s=s[:a]+new+s[b:]
+(P/'reference_copy_terminal.rs').write_text(s)
+p=Path('evidence/pv-b3p6-20261028/reference-copy227-resume5.json');r=json.loads(p.read_text());r['reference_sha256']=hashlib.sha256(s.encode()).hexdigest();r['mask_specialization']=dict(all64_masks=masks,unique_masks=unique,popcounts={str(mask):mask.bit_count()for mask in unique},calls='only active_block227 with frozen mask table indexed before call',branch='all reached masks have count_ones<=8, so original complement=false',order='ZERO followed by additions at increasing set-bit indices, exactly repeated trailing_zeros/clear-lowest-bit traversal',default='unreachable on frozen64 table; Lean law outstanding');p.write_text(json.dumps(r,indent=2)+'\n')

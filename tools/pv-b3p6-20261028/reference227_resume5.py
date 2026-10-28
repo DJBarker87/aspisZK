@@ -247,3 +247,15 @@ fn absorption_lane227(lane:usize,low:QM31,fixed:QM31,chunk_two:QM31,chunk_eight:
 record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
 record['absorption_change']='scalar absorption_lane227 isolates unchanged three-way lane branch and arithmetic chain'
 Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
+s=s.replace('source.next_pair_index.checked_add(1) != Some(after.next_pair_index)','checked_next227(source.next_pair_index,after.next_pair_index)')
+s+='\nfn checked_next227(index:u64,next:u64)->bool { match index.checked_add(1) { Some(value)=>value!=next,None=>true } }\n'
+(P/'reference_terminal.rs').write_text(s)
+record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
+record['option_change']='checked_next227 explicitly matches checked_add result instead of Option inequality; scalar law outstanding'
+Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
+s=s.replace('evaluate_state_only_poseidon_oracle_projected, StateOnlyPoseidonOpenings,','StateOnlyPoseidonOpenings,')
+s=s+'\nuse crate::reference_poseidon::evaluate_state_only_poseidon_oracle_projected;\n'
+(P/'reference_terminal.rs').write_text(s)
+record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
+record['poseidon_change']='owned projected Poseidon copy; source and structural change records in reference-poseidon227-resume5.json and reference-field227-resume5.json'
+Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')

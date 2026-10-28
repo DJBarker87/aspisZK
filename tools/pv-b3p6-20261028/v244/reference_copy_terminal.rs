@@ -129,18 +129,17 @@ fn lift_m31(value: M31) -> QM31 {
 }
 
 #[inline(always)]
-fn selector_mask_sum_16(values: [QM31; 16], mut mask: u16) -> QM31 {
-    let complement = mask.count_ones() > 8;
-    if complement {
-        mask = !mask;
+fn selector_mask_sum_16(values:[QM31;16],mask:u16)->QM31 {
+    match mask {
+        1749 => QM31::ZERO.add(values[0]).add(values[2]).add(values[4]).add(values[6]).add(values[7]).add(values[9]).add(values[10]),
+        2048 => QM31::ZERO.add(values[11]),
+        2049 => QM31::ZERO.add(values[0]).add(values[11]),
+        4097 => QM31::ZERO.add(values[0]).add(values[12]),
+        6144 => QM31::ZERO.add(values[11]).add(values[12]),
+        6145 => QM31::ZERO.add(values[0]).add(values[11]).add(values[12]),
+        26214 => QM31::ZERO.add(values[1]).add(values[2]).add(values[5]).add(values[6]).add(values[9]).add(values[10]).add(values[13]).add(values[14]),
+        _ => panic!("outside frozen active mask set"),
     }
-    let mut sum = if complement { QM31::ONE } else { QM31::ZERO };
-    while mask != 0 {
-        let index = mask.trailing_zeros() as usize;
-        sum = mask_step227(values,index,sum,complement);
-        mask &= mask - 1;
-    }
-    sum
 }
 
 #[derive(Clone, Copy)]

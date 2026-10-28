@@ -56,7 +56,7 @@ use aspis_core::{
 use aspis_statement::{
     poseidon2::{Digest, DIGEST_ELEMS, MERKLE_NODE_COMPRESSION_V3_TWEAK, POSEIDON2_WIDTH, RATE},
     state_only_poseidon::{
-        evaluate_state_only_poseidon_oracle_projected, StateOnlyPoseidonOpenings,
+        StateOnlyPoseidonOpenings,
         StateOnlyPoseidonSelectors,
     },
 };
@@ -289,7 +289,7 @@ fn validate_transition(
         || source.deployment_domain != public.deployment_domain
         || source.sequence != source.next_pair_index
         || source.next_pair_index >= POOL_V1_PAIR_CAPACITY
-        || source.next_pair_index.checked_add(1) != Some(after.next_pair_index)
+        || checked_next227(source.next_pair_index,after.next_pair_index)
     {
         return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition);
     }
@@ -2575,3 +2575,7 @@ fn absorption_lane227(lane:usize,low:QM31,fixed:QM31,chunk_two:QM31,chunk_eight:
     let blocks=if lane<2 {fixed} else if lane<RATE {fixed.add(chunk_two)} else {fixed.add(chunk_two).add(chunk_eight).add(nodes)};
     low.mul(blocks).mul(opened)
 }
+
+fn checked_next227(index:u64,next:u64)->bool { match index.checked_add(1) { Some(value)=>value!=next,None=>true } }
+
+use crate::reference_poseidon::evaluate_state_only_poseidon_oracle_projected;
