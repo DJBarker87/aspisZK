@@ -1,10 +1,11 @@
 import R1Z.PV_RunJoin_CompilerRejections28
+import R1Z.PV_RunJoin_ControlDomain28
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_RejectionProof28
 open Aeneas Aeneas.Std Result
 open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
-open PV_RunJoin_ResultDomain28
+open PV_RunJoin_ResultDomain28 PV_RunJoin_ControlDomain28
 
 theorem eq_wp {α : Type} (m : Result α) (a : α) :
     m = ok a ↔ wp m (fun x => x = a) := by
@@ -42,6 +43,12 @@ theorem error_iff [ExternalLinear] [Records]
       PV_RunJoin_CompilerRejections28.Path input out recipient change publicInput anchor snapshot e := by
   rw [eq_wp]
   unfold pair_forest_trace.compile_forest_from_copies PV_RunJoin_CompilerRejections28.Path
-  simp only [bind_wp,ok_wp,ok_ne_err,residual_eq_wp,Result.ok.injEq]
+  simp only [bind_wp,ite_wp,ok_wp,ok_ne_err,residual_eq_wp,Result.ok.injEq,Prod.exists]
+  repeat' first
+    | (apply exists_congr; intro value)
+    | (apply and_congr_right; intro prefix)
+    | (split <;> simp only [bind_wp,ite_wp,ok_wp,ok_ne_err,residual_eq_wp,
+        Result.ok.injEq,Prod.exists])
+    | rfl
 #print axioms error_iff
 end R1Z.PV_RunJoin_RejectionProof28
