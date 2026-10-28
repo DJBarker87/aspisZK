@@ -18,6 +18,7 @@ theorem success {T S F : Type} (allocate : Allocator S) (handler : Handler S F)
     request allocate handler shape b n state next =
       next p (afterRequest ⟨b.address,b.capacity,b.values.length+n,shape⟩ (some p) s state) := by
   simp only [request,issue,h,bind_tc_ok,finish,afterRequest]
+  rfl
 
 theorem null {T S F : Type} (allocate : Allocator S) (handler : Handler S F)
     (shape : Shape) (b : Buffer T) (n : Nat) (state : State S F)
@@ -27,6 +28,7 @@ theorem null {T S F : Type} (allocate : Allocator S) (handler : Handler S F)
       abortWith handler ((b.values.length+n)*shape.width)
         (afterRequest ⟨b.address,b.capacity,b.values.length+n,shape⟩ none s state) := by
   simp only [request,issue,h,bind_tc_ok,finish,afterRequest]
+  rfl
 
 theorem primitive_fail {T S F : Type} (allocate : Allocator S) (handler : Handler S F)
     (shape : Shape) (b : Buffer T) (n : Nat) (state : State S F)
