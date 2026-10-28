@@ -31,3 +31,7 @@ Kani70/70 configured:69 scoped invocations plus K001 precompiler setup failure. 
 NCA_L021 / lean/NCA_Audit.lean PASS, exit0, wall2.074737588991411s, peakRSS5342924KiB, swaps0; source revisionc5c77272b84c013dc3d0e8d08620ac186b05dc00 (dirty exact source archived in receipt), target SHA25648e11599e002558d425b42fae0ec6c9d9c849102e1c9920dbf3897faeafa3412. All29 printed roots use only standard propext/Classical.choice/Quot.sound or fewer. Exact6G high/8G max/swap0/tasks64 scope, -M7000, no complete frozen manifest replay or ELF rebuild claimed.
 
 Postflight: all480 inherited cache objects and219 resolved Aeneas library objects hash-identical; own cache and memoized Rust target retained. No live own target process; only lane-owned solver temporary files removed. Receipt/source/graph/lock integrity check passed for all90 terminal scope receipts; one precompiler failure is explicit. Working changes are confined to NCA modules and this evidence directory.
+
+## Capacity-error recovery 1
+
+Recovered commit 80d523d4d2 and reconciled all91 unique ledger entries: Kani70/70 configured, Lean21/80. No new prover launch or unchanged regression was run. NCA_validate_final.py passed again as an evidence-only integrity check. The remaining member-by-member native blockers in NCA_STAGE8.md are unchanged; no independent Lean-only obligation was found. NCA_RESUME1.json records the recovery and lossless transport-log archive (xz -6 equivalent, SHA256 and verified roundtrip) required by the20MB evidence rule. No source, trust, artifact or closure claim changed.
