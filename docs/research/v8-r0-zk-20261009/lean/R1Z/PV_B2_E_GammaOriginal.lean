@@ -50,8 +50,6 @@ theorem copy_equal_original (b : Bytes) :
   obtain ⟨c,hc,hcv⟩ := gamma_digits_success originalOps refines b old ho
   have hac : a = c := values_injective (hv.trans hcv.symm)
   subst c
-  obtain ⟨d,_,hcanon,_,_,_⟩ := gamma_rank_success originalOps refines b old ho
-  obtain ⟨d1,_,hv1⟩ := gamma_digits_success originalOps refines b old ho
   -- Obtain canonicality at the exact final digit array using the common value law.
   have ha : Canonical a := by
     unfold Canonical
