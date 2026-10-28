@@ -21,8 +21,7 @@ body=definition('low_base_p_digits_loop1_loop0.body').replace('def host_sampler.
 proof='''
 theorem division_body (q : Words) (r : U64) (j : Usize) :
     divisionBody q r j=host_sampler.low_base_p_digits_loop1_loop0.body q r j := by
-  simp only [divisionBody,host_sampler.low_base_p_digits_loop1_loop0.body,borrow,bind_assoc_eq,bind_tc_ok]
-  rfl
+  simp only [divisionBody,host_sampler.low_base_p_digits_loop1_loop0.body,borrow,bind_assoc_eq,bind_tc_ok] <;> rfl
 #print axioms division_body
 end R1Z.PV_RDB2D_SamplerRestoration
 '''
@@ -31,8 +30,7 @@ body=definition('add_small_base_p_loop.body').replace('def host_sampler.add_smal
 proof='''
 theorem carry_body (q : Words) (r : U32) (j : Usize) :
     carryBody q r j=host_sampler.add_small_base_p_loop.body q r j := by
-  simp only [carryBody,host_sampler.add_small_base_p_loop.body,borrow,bind_assoc_eq,bind_tc_ok]
-  rfl
+  simp only [carryBody,host_sampler.add_small_base_p_loop.body,borrow,bind_assoc_eq,bind_tc_ok] <;> rfl
 #print axioms carry_body
 end R1Z.PV_RDB2D_SamplerRestoration
 '''

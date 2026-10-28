@@ -36,7 +36,6 @@ def divisionBody
 
 theorem division_body (q : Words) (r : U64) (j : Usize) :
     divisionBody q r j=host_sampler.low_base_p_digits_loop1_loop0.body q r j := by
-  simp only [divisionBody,host_sampler.low_base_p_digits_loop1_loop0.body,borrow,bind_assoc_eq,bind_tc_ok]
-  rfl
+  simp only [divisionBody,host_sampler.low_base_p_digits_loop1_loop0.body,borrow,bind_assoc_eq,bind_tc_ok] <;> rfl
 #print axioms division_body
 end R1Z.PV_RDB2D_SamplerRestoration

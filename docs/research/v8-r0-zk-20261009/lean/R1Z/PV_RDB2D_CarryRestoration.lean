@@ -26,7 +26,6 @@ def carryBody
 
 theorem carry_body (q : Words) (r : U32) (j : Usize) :
     carryBody q r j=host_sampler.add_small_base_p_loop.body q r j := by
-  simp only [carryBody,host_sampler.add_small_base_p_loop.body,borrow,bind_assoc_eq,bind_tc_ok]
-  rfl
+  simp only [carryBody,host_sampler.add_small_base_p_loop.body,borrow,bind_assoc_eq,bind_tc_ok] <;> rfl
 #print axioms carry_body
 end R1Z.PV_RDB2D_SamplerRestoration
