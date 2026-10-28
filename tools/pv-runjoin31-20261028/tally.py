@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin31-20261028'
-rows=[json.loads(p.read_text()) for p in sorted(E.glob('receipt-*.json'))]
+rows=[json.loads(p.read_text()) for p in sorted(E.glob('receipt-[0-9]*.json'))]
 used=[json.loads(p.read_text()) for p in E.glob('used-*.json')]
 ref=[p.name for p in E.glob('*refusal*.json')]
 assert all(44600<=r['attempt']<=44699 for r in rows+used)
