@@ -1,0 +1,48 @@
+import PV_L1_ResultCoercion
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace PV_L1_Source_035
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open PV_L1_Logged
+variable [ExternalTypes] [ExternalFuns]
+
+/-- Source-parametric phase entry and complete Result. Remaining loop and
+opaque/native event edges are recorded in source-frontier.json. -/
+def produce
+  (c1 : Slice (alloc.vec.Vec aspis_core.field.M31))
+  (masks : Array Std.U16 64#usize) (c1_columns_inactive_balanced : Std.Usize)
+  (column : Std.Usize) :
+  Logged (ControlFlow (Std.Usize × Std.Usize) Std.Usize)
+  := do
+  let _ ← observe .balanceAudit 0 (ok ())
+  let i := Slice.len c1
+  if column < i
+  then
+    let v ← Slice.index_usize c1 column
+    let s := alloc.vec.Vec.deref v
+    let m ← prover.inactive_sum_m31 s masks
+    let m1 ← aspis_core.field.M31.ZERO
+    let b ← aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq m m1
+    let c1_columns_inactive_balanced1 ←
+      if b
+      then ok (Std.Usize.wrapping_add c1_columns_inactive_balanced 1#usize)
+      else ok c1_columns_inactive_balanced
+    let column1 ← Aeneas.Std.lift (Std.Usize.wrapping_add column 1#usize)
+    ok (cont (c1_columns_inactive_balanced1, column1))
+  else ok (done c1_columns_inactive_balanced)
+
+theorem complete_result
+  (c1 : Slice (alloc.vec.Vec aspis_core.field.M31))
+  (masks : Array Std.U16 64#usize) (c1_columns_inactive_balanced : Std.Usize)
+  (column : Std.Usize) : :
+  erase (produce c1 masks c1_columns_inactive_balanced column) = prover.audit_masks_loop0.body c1 masks c1_columns_inactive_balanced column := by
+  unfold produce prover.audit_masks_loop0.body
+  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  repeat' first
+    | rfl
+    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+      intro value called
+    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+#print axioms complete_result
+end PV_L1_Source_035

@@ -1,0 +1,63 @@
+import PV_L1_ResultCoercion
+import R1Z.ProverRwFullFuns
+import PV_L1_Source_071
+set_option autoImplicit false
+noncomputable section
+namespace PV_L1_Source_072
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open PV_L1_Logged
+variable [ExternalTypes] [ExternalFuns]
+
+/-- Source-parametric phase entry and complete Result. Remaining loop and
+opaque/native event edges are recorded in source-frontier.json. -/
+def produce
+  {T0 : Type}
+  (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Std.Usize (core.result.Result
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error))
+  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled :
+  aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : transport.Variant)
+  (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
+  (nonce_store :
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  (next_attempt : T0) :
+  Logged ((core.result.Result prover.RetriedProof verifier.Error) ×
+    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  := do
+  let _ ← observe .callback 0 (ok ())
+  let b ←
+    core.cmp.PartialEq.ne.trait_default
+      transport.Variant.Insts.CoreCmpPartialEqVariant variant
+      transport.Variant.S2
+  if b
+  then ok (core.result.Result.Err verifier.Error.Semantic, nonce_store)
+  else
+    PV_L1_Source_071.produce
+      coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst
+      public1 compiled variant hash nonce_store next_attempt 0#usize
+
+theorem complete_result
+  {T0 : Type}
+  (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Std.Usize (core.result.Result
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error))
+  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled :
+  aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : transport.Variant)
+  (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
+  (nonce_store :
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  (next_attempt : T0) : :
+  erase (produce (T0 := T0) coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt) = prover.prove_masked_retrying_with (T0 := T0) coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt := by
+  unfold produce prover.prove_masked_retrying_with
+  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_071.complete_result]
+  repeat' first
+    | rfl
+    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+      intro value called
+    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_071.complete_result]
+#print axioms complete_result
+end PV_L1_Source_072

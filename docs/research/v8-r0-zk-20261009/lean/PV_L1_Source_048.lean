@@ -1,0 +1,33 @@
+import PV_L1_ResultCoercion
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace PV_L1_Source_048
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open PV_L1_Logged
+variable [ExternalTypes] [ExternalFuns]
+
+/-- Source-parametric phase entry and complete Result. Remaining loop and
+opaque/native event edges are recorded in source-frontier.json. -/
+def produce
+  (coefficients : Array aspis_core.field.QM31 1024#usize)
+  (a : aspis_core.field.QM31) (b : aspis_core.field.QM31) :
+  Logged aspis_core.field.QM31
+  := do
+  let _ ← observe .semanticCanonical 0 (ok ())
+  let sum ← aspis_core.field.QM31.ZERO
+  host_semantic.extra_loop0 sum coefficients a b sum 0#usize
+
+theorem complete_result
+  (coefficients : Array aspis_core.field.QM31 1024#usize)
+  (a : aspis_core.field.QM31) (b : aspis_core.field.QM31) : :
+  erase (produce coefficients a b) = host_semantic.extra coefficients a b := by
+  unfold produce host_semantic.extra
+  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  repeat' first
+    | rfl
+    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+      intro value called
+    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+#print axioms complete_result
+end PV_L1_Source_048

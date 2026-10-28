@@ -1,0 +1,33 @@
+import PV_L1_ResultCoercion
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace PV_L1_Source_045
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open PV_L1_Logged
+variable [ExternalTypes] [ExternalFuns]
+
+/-- Source-parametric phase entry and complete Result. Remaining loop and
+opaque/native event edges are recorded in source-frontier.json. -/
+def produce
+  (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
+  (variant : transport.Variant) (z : aspis_core.circle.SecureCirclePoint) :
+  Logged (alloc.vec.Vec Std.U8)
+  := do
+  let _ ← observe .semanticCanonical 0 (ok ())
+  let bytes := alloc.vec.Vec.with_capacity Std.U8 928#usize
+  host_semantic.endpoint_bytes_loop columns variant z bytes 0#usize
+
+theorem complete_result
+  (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
+  (variant : transport.Variant) (z : aspis_core.circle.SecureCirclePoint) : :
+  erase (produce columns variant z) = host_semantic.endpoint_bytes columns variant z := by
+  unfold produce host_semantic.endpoint_bytes
+  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  repeat' first
+    | rfl
+    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+      intro value called
+    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+#print axioms complete_result
+end PV_L1_Source_045

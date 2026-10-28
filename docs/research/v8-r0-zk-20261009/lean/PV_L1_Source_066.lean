@@ -1,0 +1,61 @@
+import PV_L1_ResultCoercion
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace PV_L1_Source_066
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open PV_L1_Logged
+variable [ExternalTypes] [ExternalFuns]
+
+/-- Source-parametric phase entry and complete Result. Remaining loop and
+opaque/native event edges are recorded in source-frontier.json. -/
+def produce
+  (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
+  (point : Array aspis_core.field.QM31 10#usize) :
+  Logged (core.result.Result (Array (Array aspis_core.field.QM31 29#usize)
+    3#usize) r1_wire.Error)
+  := do
+  let _ ← observe .semanticCanonical 0 (ok ())
+  let points ← r1_wire.statement_points point
+  let a ← Array.index_usize points 0#usize
+  let r ← host_semantic.claims_at_point columns a
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+  | core.ops.control_flow.ControlFlow.Continue val =>
+    let a1 ← Array.index_usize points 1#usize
+    let r1 ← host_semantic.claims_at_point columns a1
+    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf1 with
+    | core.ops.control_flow.ControlFlow.Continue val1 =>
+      let a2 ← Array.index_usize points 2#usize
+      let r2 ← host_semantic.claims_at_point columns a2
+      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+      match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val2 =>
+        ok (core.result.Result.Ok (Array.make 3#usize [ val, val1, val2 ]))
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+          (core.convert.FromSame r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+        (core.convert.FromSame r1_wire.Error) residual
+  | core.ops.control_flow.ControlFlow.Break residual =>
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+      (core.convert.FromSame r1_wire.Error) residual
+
+theorem complete_result
+  (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
+  (point : Array aspis_core.field.QM31 10#usize) : :
+  erase (produce columns point) = host_semantic.point_claims columns point := by
+  unfold produce host_semantic.point_claims
+  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  repeat' first
+    | rfl
+    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+      intro value called
+    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+#print axioms complete_result
+end PV_L1_Source_066

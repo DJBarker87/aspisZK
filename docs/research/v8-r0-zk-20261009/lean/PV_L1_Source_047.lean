@@ -1,0 +1,40 @@
+import PV_L1_ResultCoercion
+import R1Z.ProverRwFullFuns
+import PV_L1_Source_046
+set_option autoImplicit false
+noncomputable section
+namespace PV_L1_Source_047
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open PV_L1_Logged
+variable [ExternalTypes] [ExternalFuns]
+
+/-- Source-parametric phase entry and complete Result. Remaining loop and
+opaque/native event edges are recorded in source-frontier.json. -/
+def produce
+  (claims : Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+  (extras : Array aspis_core.field.QM31 29#usize) :
+  Logged (alloc.vec.Vec Std.U8)
+  := do
+  let _ ← observe .semanticCanonical 0 (ok ())
+  let bytes := alloc.vec.Vec.with_capacity Std.U8 3712#usize
+  let a ← Array.index_usize claims 0#usize
+  let bytes1 ← host_semantic.append_claim_bytes bytes a
+  let a1 ← Array.index_usize claims 1#usize
+  let bytes2 ← host_semantic.append_claim_bytes bytes1 a1
+  let a2 ← Array.index_usize claims 2#usize
+  let bytes3 ← host_semantic.append_claim_bytes bytes2 a2
+  PV_L1_Source_046.produce bytes3 extras
+
+theorem complete_result
+  (claims : Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+  (extras : Array aspis_core.field.QM31 29#usize) : :
+  erase (produce claims extras) = host_semantic.claim_bytes claims extras := by
+  unfold produce host_semantic.claim_bytes
+  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_046.complete_result]
+  repeat' first
+    | rfl
+    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+      intro value called
+    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_046.complete_result]
+#print axioms complete_result
+end PV_L1_Source_047

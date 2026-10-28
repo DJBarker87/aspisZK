@@ -1,0 +1,48 @@
+import PV_L1_ResultCoercion
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace PV_L1_Source_061
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open PV_L1_Logged
+variable [ExternalTypes] [ExternalFuns]
+
+/-- Source-parametric phase entry and complete Result. Remaining loop and
+opaque/native event edges are recorded in source-frontier.json. -/
+def produce
+  (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) (lane : Std.Usize)
+  :
+  Logged (ControlFlow Std.Usize (Option (core.result.Result Unit
+    r1_wire.Error)))
+  := do
+  let _ ← observe .semanticCanonical 0 (ok ())
+  if lane < 26#usize
+  then
+    let v ← Array.index_usize c1 lane
+    let s := alloc.vec.Vec.deref v
+    let r ← host_semantic.check_base_column s
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+    | core.ops.control_flow.ControlFlow.Continue _ =>
+      let lane1 ← Aeneas.Std.lift (Std.Usize.wrapping_add lane 1#usize)
+      ok (cont lane1)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      let r1 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          Unit (core.convert.FromSame r1_wire.Error) residual
+      ok (done (some r1))
+  else ok (done none)
+
+theorem complete_result
+  (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) (lane : Std.Usize)
+  : :
+  erase (produce c1 lane) = host_semantic.check_base_columns_loop.body c1 lane := by
+  unfold produce host_semantic.check_base_columns_loop.body
+  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  repeat' first
+    | rfl
+    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+      intro value called
+    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+#print axioms complete_result
+end PV_L1_Source_061
