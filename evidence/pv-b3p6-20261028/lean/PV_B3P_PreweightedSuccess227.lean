@@ -1,4 +1,5 @@
 import PV_B3P_HostPackSuccess227
+import PV_B3P_PureBind227
 import PV_B3P_P227_08
 import PV_B3P_Offset226V3
 namespace PV_B3P_Success227
@@ -56,8 +57,17 @@ theorem preweighted_step {N : Usize} (packed : Array aspis_core.field.QM31 24#us
   obtain ⟨next,hnext⟩ := update packed i value (by scalar_tac)
   refine ⟨next,?_⟩
   simp only [base] at hq0 hq1 hq2 hq3
-  simp only [reference_terminal.add_preweighted_loop.body,hi,↓reduceIte,lift,bind_tc_ok,
-    hq0,hq1,hq2,hq3,hw0,hw1,hw2,hw3,hold,hgroup,hvalue,hnext]
+  unfold reference_terminal.add_preweighted_loop.body
+  rw [if_pos hi]
+  rw [PV_B3P_PureBind227.lift_bind, PV_B3P_PureBind227.lift_bind, PV_B3P_PureBind227.lift_bind]
+  rw [hq0,bind_tc_ok,hw0,bind_tc_ok]
+  rw [PV_B3P_PureBind227.lift_bind, PV_B3P_PureBind227.lift_bind]
+  rw [hq1,bind_tc_ok,hw1,bind_tc_ok]
+  rw [PV_B3P_PureBind227.lift_bind, PV_B3P_PureBind227.lift_bind]
+  rw [hq2,bind_tc_ok,hw2,bind_tc_ok]
+  rw [PV_B3P_PureBind227.lift_bind, PV_B3P_PureBind227.lift_bind]
+  rw [hq3,bind_tc_ok,hw3,bind_tc_ok]
+  rw [hold,bind_tc_ok,PV_B3P_PureBind227.lift_bind,hgroup,bind_tc_ok,hvalue,bind_tc_ok,hnext]
 
 #print axioms preweighted_step
 
