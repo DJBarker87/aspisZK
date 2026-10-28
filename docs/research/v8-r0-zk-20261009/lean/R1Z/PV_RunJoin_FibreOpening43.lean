@@ -47,7 +47,11 @@ theorem step_exact (ops : ExternalFuns) (c : host_commitment.Commitment)
     @PV_RunJoin_FibreFillThread43.step _ (ProverRwP6BodyCandidate.selected ops) c u values j=
       step ops c u values j := by
   unfold PV_RunJoin_FibreFillThread43.step step
-  simp only [PV_RunJoin_OpeningLane43.complete]
+  apply congrArg (Aeneas.Std.bind _)
+  funext lane
+  apply congrArg (Aeneas.Std.bind _)
+  funext word
+  rw [PV_RunJoin_OpeningLane43.complete ops word u]
 
 theorem phase_exact (ops : ExternalFuns) (n : Nat) (c : host_commitment.Commitment)
     (u : aspis_core.r0.domain.FibreIndex) (values : Matrix) (j : Usize) :
@@ -56,7 +60,7 @@ theorem phase_exact (ops : ExternalFuns) (n : Nat) (c : host_commitment.Commitme
   induction n generalizing values j with
   | zero => rfl
   | succ n ih =>
-    simp only [PV_RunJoin_FibreFillThread43.phase,phase,step_exact]
+    rw [PV_RunJoin_FibreFillThread43.phase,phase,step_exact ops c u values j]
     apply congrArg (Aeneas.Std.bind (step ops c u values j))
     funext next
     exact ih next (Usize.wrapping_add j 1#usize)
@@ -67,7 +71,7 @@ theorem values_complete (ops : ExternalFuns) (n : Nat) (c : host_commitment.Comm
     @host_commitment.fill_opening_values _ (ProverRwP6BodyCandidate.selected ops) c u values j=
       phase ops n c u values j := by
   letI : ExternalFuns := ProverRwP6BodyCandidate.selected ops
-  rw [PV_RunJoin_FibreFillThread43.thread n c u values j bound small,phase_exact]
+  rw [PV_RunJoin_FibreFillThread43.thread n c u values j bound small,phase_exact ops n c u values j]
 
 /-- The actual constructor is the ordered finite stored-word fill, followed
 by the exact path-slot update. No successful helper Result is a premise. -/
