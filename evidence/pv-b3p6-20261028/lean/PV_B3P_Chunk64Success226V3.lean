@@ -3,6 +3,10 @@ import PV_B3P_Repeat226
 namespace PV_B3P_Chunk64Success226V3
 open Aeneas Aeneas.Std PV_B3P_226V3
 set_option autoImplicit false
+-- Same syntactic-depth allowance as the pinned 64-read emission. This proof
+-- composes eight opaque byte chunks and 64 bounded reads, with no recurrence
+-- or field arithmetic reduction.
+set_option maxRecDepth 2048
 
 theorem success (p : reference226.OwnedPublic) (base : Usize)
     (h : ∀ j : Usize, ∃ v, reference226.byte_at p j = .ok (.Ok v)) :

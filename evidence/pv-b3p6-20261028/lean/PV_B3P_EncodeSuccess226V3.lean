@@ -2,6 +2,7 @@ import PV_B3P_Chunk64Success226V3
 namespace PV_B3P_EncodeSuccess226V3
 open Aeneas Aeneas.Std PV_B3P_226V3
 set_option autoImplicit false
+set_option maxRecDepth 2048
 
 theorem success (p : reference226.OwnedPublic)
     (h : ∀ j : Usize, ∃ v, reference226.byte_at p j = .ok (.Ok v)) :
