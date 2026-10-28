@@ -13087,3 +13087,28 @@ remain open, so the owner coverage sentence is not yet written; V038/V045 were n
 pushed (e79a804202). runjoin31 (fresh 100 attempts; IDs 42900-42999) composes the codec results with
 runjoin29's inner-compiler characterisation to finish those three steps. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D346 (Stream B) 2026-10-28 02:21 UTC: Kani finding K-1 adopted: Stream B credit suspended for Kani passes that depend on a reached copy builtin; exposure scan launched
+
+Stream A reported finding K-1 (research 0c282f7952;
+docs/research/100bit-spend-path-20261013/design/KANI-FIDELITY-FINDING-20261028.md;
+evidence/kani-diag-20261027/KDX_FINDING.md): under the pinned cargo-kani 0.67.0 / CBMC 6.8.0, a
+16-element u32 copy_from_slice into a zeroed array loses its last element in CBMC's builtin memcpy, and
+the false assertion level[15] == 0 is VERIFIED with unwind 17 and explicit --unwinding-assertions,
+while native execution gives 512. An adequate unwind and --no-array-field-sensitivity do not remove it;
+the root cause is open. This contradicts Kani's soundness for one builtin, which every bounded P6
+native link trusts.
+
+Correction for accuracy (no permission needed): Stream B adopts Stream A's suspension. Ruling (r):
+a Kani PASS whose asserted property depends on the result of a reached memory copy (copy_from_slice,
+clone_from_slice, copy_nonoverlapping, array or slice clone, to_vec, extend_from_slice, ptr::copy, Vec
+growth) is not evidence until re-verified, and any row closure or bridge resting on one is
+suspended; harnesses that reach no copy, or reject before it on the admitted domain, keep their
+standing. Rows likely affected include V181/V182 (String push_str), V233 (kani-split64-02), possibly
+V184 (the pop gate) and some cblib library rows; closures by extraction plus Lean, or by the
+structural route, are not affected unless their link uses such a PASS. pv-kscan (IDs 43200-43299; 10
+diagnostic Kani runs; no source change) applies Stream A's KDX method to every Kani PASS Stream B cites
+on research, the candidate and the live branches, and lists for each row whether it is suspended or
+stands by an independent non-Kani route. Re-verification waits for Stream A's validated element-wise
+copy stub (job KMX_), so that both streams use one fix. Rows removed outright: 0. Privacy target not
+yet established.
