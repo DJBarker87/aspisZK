@@ -9,6 +9,8 @@ variable [ExternalTypes]
 its raw input requires the normalization performed by from_qm31. Only this
 fixed 16-byte zero suffix is reduced, not a polynomial or field recurrence. -/
 theorem high_half (q : Q) : (cell q).drop 16=List.replicate 16 (0#u8) := by
+  simp only [cell,PV_RunJoin_FlatBytes35.wire,wide,Array.make,
+    List.drop_succ_cons,List.drop_zero]
   rfl
 
 theorem split (q : Q) : cell q=(cell q).take 16 ++ List.replicate 16 (0#u8) := by
