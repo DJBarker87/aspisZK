@@ -2,7 +2,7 @@
 
 Source `03905a52594fadc50a1c00ab3f240a79632e8ffd`; branch `codex/pv-integ4-20261027`. No implementation source edits. Target not yet established.
 
-Resumed under the lead elapsed-time ruling; stage 3 PASS, differential pending. Timing gate was expressly excluded from execution by the task. All native builds use serial capped scopes (6G/8G, swap0, TasksMax64), optimized -j4; preflight and in-scope admission require allowed:true and exit0. IDs39500–39599 reserved but no Lean compilation planned. Kani0.
+Resumed under the lead elapsed-time ruling; stage 3 and the 1,000-pair differential PASS; cost projection pending. Timing gate was expressly excluded from execution by the task. All native builds use serial capped scopes (6G/8G, swap0, TasksMax64), optimized -j4; preflight and in-scope admission require allowed:true and exit0. IDs39500–39599 reserved but no Lean compilation planned. Kani0.
 
 ## Stage 1: verifier ELFs — PASS
 
@@ -36,9 +36,13 @@ Proof/public/ledger bytes and deterministic canonical result records match for b
 
 `fixture-comparison.json` retains every raw/deterministic hash,size,record and ledger file hash; comparison exits2. These uncoordinated single samples are not the quiet-window timing gate and establish no timing pass.
 
-## Stage 4: 1,000-pair differential — RUNNING (resume)
+## Stage 4: 1,000-pair whole-prover differential — PASS
 
-The original handoff stopped before differential submission. Following the resume ruling, fresh optimized baseline and candidate harnesses were built and source-verified (6,521/7,290 files, no disagreements). Seeds6000–6999 are now executing under the inherited command; no final differential result is claimed yet. The inherited whole-prover command, seeds6000–6999, pinned shipped controlc57a344726 and required600 complete proof pairs are preserved in TIMING-PLAN.md for a follow-up after the record criterion is resolved.
+Fresh coins6000–6999 against shipped `c57a344726745387efb38d1571d885c69ce829ee`, candidate runtime source `03905a52594fadc50a1c00ab3f240a79632e8ffd`. The inherited command in TIMING-PLAN.md completed exit0,12,610.878s,620,468KiB peak process RSS,6,444,756,992-byte cgroup peak,swap0. Caps6G/8G/swap0/TasksMax64; maximum3 prover processes. Resource final: no OOM or task-limit events. Twenty ten-minute resource reviews record continuing completed cases under the original cap.
+
+All1,000 pairs passed:600 complete proof pairs,100 rejected-prefix pairs (within600),400 matched error-result pairs,4 complete oracle-log pairs(6006,6007,6010,6011). Public/proof/oracle bytes and deterministic records match. `combined/record-ledger-audit.json` additionally confirms1,000 canonical record and ledger pairs; all1,000 raw result records are byte-identical too. The differential harness emits no elapsed field. The harness and comparator are byte-identical between revisions. Both exported source sets match git (6,521/7,290 files); build/toolchain/binary/runner pins, comparisons, records, logs and resource receipts are retained under `combined/`.
+
+No case was rerun. A separate post-run audit failed before reading the corpus because its script upload had been refused (exit78, overlooked when a following progress command returned0). The cooldown elapsed while the admitted differential continued; a fresh upload admission succeeded, supplying the missing inputs before the distinct successful audit. Failed/refused receipts remain in `audit-corpus-scope-001/`, `upload-final-tools/`; successful receipts are `audit-corpus-inputs-present-002/`, `upload-final-tools-retry/`. This was not a differential disagreement or a repeated differential cohort.
 
 ## Stage 5: recorded cost projection — PARTIAL; no timing run
 
