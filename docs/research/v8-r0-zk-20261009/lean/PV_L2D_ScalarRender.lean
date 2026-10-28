@@ -49,6 +49,7 @@ theorem trace_render (next : S → Draw S W) (clock : S → C) (tick : C → C)
           simp [hv,Nat.ne_of_gt hp]
       simp only [sample,h,ite_false,render,hb]
       rw [trace s,hr,step s]
+      simp only [List.cons_append]
 #print axioms trace_render
 
 /-- Accepted values are absent from the rendered trace: the count and the

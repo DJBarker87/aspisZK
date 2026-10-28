@@ -1,0 +1,52 @@
+'PV_L2D_ScalarRender.positive_when_running' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2D_ScalarRender.some_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding/sources/PV_L2D_ScalarRender.lean:42:4: error: unsolved goals
+case neg
+S C W : Type
+next : S → Draw S W
+clock : S → C
+tick : C → C
+wordTrace : C → List W
+step : ∀ (s : S), clock (next s).after = tick (clock s)
+trace : ∀ (s : S), (next s).events = wordTrace (clock s)
+n : ℕ
+ih :
+  ∀ (retry : ℕ) (s : S),
+    (sample next n retry s).events =
+      render tick wordTrace (sample next n retry s).consumed retry (clock s) (sample next n retry s).value.isSome
+retry : ℕ
+s : S
+h : ¬PV_L2B_SourceWords.candidate (next s).word < 2147483647
+hr :
+  (sample next n (retry + 1) (next s).after).events =
+    render tick wordTrace (sample next n (retry + 1) (next s).after).consumed (retry + 1) (clock (next s).after)
+      (sample next n (retry + 1) (next s).after).value.isSome
+hb :
+  ((sample next n (retry + 1) (next s).after).value.isSome &&
+      decide ((sample next n (retry + 1) (next s).after).consumed = 0)) =
+    false
+⊢ Event.cap retry true ::
+      (List.map Event.word (wordTrace (clock s)) ++
+        Event.accept false ::
+          render tick wordTrace (sample next n (retry + 1) (next s).after).consumed (retry + 1) (tick (clock s))
+            (sample next n (retry + 1) (next s).after).value.isSome) =
+    Event.cap retry true :: List.map Event.word (wordTrace (clock s)) ++
+      Event.accept false ::
+        render tick wordTrace (sample next n (retry + 1) (next s).after).consumed (retry + 1) (tick (clock s))
+          (sample next n (retry + 1) (next s).after).value.isSome
+/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding/sources/PV_L2D_ScalarRender.lean:46:24: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵v̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding/sources/PV_L2D_ScalarRender.lean:49:16: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  simp [h̵v̵,̵Nat.ne_of_gt hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2D_ScalarRender.trace_render' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_L2D_ScalarRender.same_count_trace' depends on axioms: [propext, sorryAx, Quot.sound]
