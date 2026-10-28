@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBW_native.rs
-@@ -0,0 +1,1115 @@
+@@ -0,0 +1,1125 @@
 +extern crate alloc;
 +include!("KMX_stubs.rs");
 +use super::*;
@@ -1093,6 +1093,7 @@
 +
 +#[kani::unwind(32)]
 +fn NBW_capacity_finish_window(){
++ NBW_capacity_raw_window_case();
 + let cap:usize=kani::any();kani::assume(cap>=64&&cap<=isize::MAX as usize/core::mem::size_of::<K>());
 + let old=NBW_any_q();let reply=NBW_any_q();let mut weights=Vec::<K>::with_capacity(cap);weights.push(old);let ptr=weights.as_ptr();
 + let index:usize=kani::any();kani::assume(index<64);
@@ -1115,6 +1116,15 @@
 + let q=NBW_any_q();let mut raw:[u64;4]=kani::any();let k:usize=kani::any();kani::assume(k<4);
 + let w=q;raw=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];
 + assert_eq!(raw[k],NBW_qwords(q)[k]as u64);kani::cover!(k==0);kani::cover!(k==3);
++}
++
++fn NBW_capacity_raw_window_case(){
++ let cap:usize=kani::any();kani::assume(cap>=64&&cap<=isize::MAX as usize/core::mem::size_of::<[u64;4]>());
++ let old:[u64;4]=kani::any();let reply:[u64;4]=kani::any();let mut raw=Vec::<[u64;4]>::with_capacity(cap);raw.push(old);let ptr=raw.as_ptr();
++ let k:usize=kani::any();kani::assume(k<4);let before=raw[0][k];assert_eq!(before,old[k]);
++ {let row=&mut raw.as_mut_slice()[0];*row=reply;}
++ assert_eq!(raw[0][k],reply[k]);assert_eq!(raw.len(),1);assert_eq!(raw.capacity(),cap);assert_eq!(raw.as_ptr(),ptr);
++ kani::cover!(cap==64);kani::cover!(cap>64);kani::cover!(k==3);
 +}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/KMX_stubs.rs
