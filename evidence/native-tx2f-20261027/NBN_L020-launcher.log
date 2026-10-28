@@ -1,0 +1,55 @@
+{"attempt": "NBN_L020", "exit_status": 1, "wall_seconds": 2.787734526966233, "peak_rss_kib": "5350740", "swaps": "0", "print_axioms": ["'NBN_LateFactor.bind_ext' depends on axioms: [propext, Quot.sound]", "'NBN_LateFactor.raw_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBN_generated/NBN_LateFactor.lean:58:4: error: Tactic `apply` failed: could not unify the conclusion of `@bind_ext`
+  (do
+      let x ← ?r
+      ?f x) =
+    do
+    let x ← ?r
+    ?g x
+with the goal
+  (let (r, s16) := (core.result.Result.Ok PUnit.unit, live)
+    do
+    let r1 ←
+      match r with
+        | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+        | core.result.Result.Err e => do
+          let t ←
+            encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+                () e
+          ok (core.result.Result.Err t)
+    let cf ←
+      match r1 with
+        | c
+...
+   let s18 ← lift val.to_slice
+            let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 s18
+            ok (core.result.Result.Ok (), index_mut_back6 s19)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r4 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+            ok (r4, back s16)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r4 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+        ok (r4, back s16)) =
+    let (r, s16) := (core.result.Result.Ok PUnit.unit, live)
+    match r with
+    | core.result.Result.Err e =>
+      ok (core.result.Result.Err (PoolV1PairLatePublicStatementErrorV1.Snapshot e), back s16)
+    | core.result.Result.Ok a => do
+      let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate
+      match r2 with
+        | core.result.Result.Err e =>
+          ok (core.result.Result.Err (PoolV1PairLatePublicStatementErrorV1.Afterstate e), back s16)
+        | core.result.Result.Ok bytes => do
+          let (dest, back2) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back s16)
+                { start := i7 }
+          let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 dest bytes.to_slice
+          ok (core.result.Result.Ok (), back2 copied)
+'NBN_LateFactor.bind_ext' depends on axioms: [propext, Quot.sound]
+'NBN_LateFactor.raw_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7180245856a34ca6ab6f170bb860919e.scope; invocation ID: 8d01ea57f3da43b3a0a0f1a2c7b5da59

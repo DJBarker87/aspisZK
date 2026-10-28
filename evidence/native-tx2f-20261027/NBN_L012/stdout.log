@@ -1,0 +1,24 @@
+NBN_generated/NBN_LateTail.lean:53:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NBN_generated/NBN_LateTail.lean:75:10: error: unsolved goals
+case Err
+s : Statement
+output : Slice U8
+size : output.length = 1520
+len : (↑output).length = 1520
+add : 32#usize + 800#usize = ok 832#usize
+e : NBH_LiveValidator.Error
+hv : NBH_LiveValidator.result s.live_snapshot = core.result.Result.Err e
+⊢ List.take 32 ↑output ++ (List.take 800 (List.take 800 (List.drop 32 ↑output)) ++ List.drop 832 ↑output) = ↑output
+def List.setSlice!.{u_1} : {α : Type u_1} → List α → ℕ → List α → List α :=
+fun {α} s i s' =>
+  have s0 := List.take i s;
+  have n := min s'.length (s.length - i);
+  have s1 := List.take n s';
+  have s2 := List.drop (i + n) s;
+  s0 ++ s1 ++ s2
+def Aeneas.Std.Slice.setSlice!.{u} : {α : Type u} → Slice α → ℕ → List α → Slice α :=
+fun {α} s i s' => ⟨(↑s).setSlice! i s', ⋯⟩
+'NBN_LateTail.live_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBN_LateTail.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

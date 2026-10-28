@@ -1,0 +1,152 @@
+NBN_generated/NBN_LateFactor.lean:59:4: error: Tactic `apply` failed: could not unify the conclusion of `@bind_ext`
+  (do
+      let x ← ?r
+      ?f x) =
+    do
+    let x ← ?r
+    ?g x
+with the goal
+  (let (r, s16) := (core.result.Result.Ok PUnit.unit, live)
+    do
+    let r1 ←
+      match r with
+        | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+        | core.result.Result.Err e => do
+          let t ←
+            encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+                () e
+          ok (core.result.Result.Err t)
+    let cf ←
+      match r1 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate
+        let r3 ←
+          match r2 with
+            | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+            | core.result.Result.Err e => do
+              let t ←
+                encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+                    () e
+              ok (core.result.Result.Err t)
+        let cf1 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (s17, index_mut_back6) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back s16)
+                  { start := i7 }
+            let s18 ← lift val.to_slice
+            let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 s18
+            ok (core.result.Result.Ok (), index_mut_back6 s19)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r4 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+            ok (r4, back s16)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r4 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+        ok (r4, back s16)) =
+    let (r, s16) := (core.result.Result.Ok PUnit.unit, live)
+    match r with
+    | core.result.Result.Err e =>
+      ok (core.result.Result.Err (PoolV1PairLatePublicStatementErrorV1.Snapshot e), back s16)
+    | core.result.Result.Ok a => do
+      let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate
+      match r2 with
+        | core.result.Result.Err e =>
+          ok (core.result.Result.Err (PoolV1PairLatePublicStatementErrorV1.Afterstate e), back s16)
+        | core.result.Result.Ok bytes => do
+          let (dest, back2) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back s16)
+                { start := i7 }
+          let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 dest bytes.to_slice
+          ok (core.result.Result.Ok (), back2 copied)
+
+Note: The full type of `@bind_ext` is
+  ∀ {α β : Type} (r : Result α) (f g : α → Result β),
+    (∀ (x : α), f x = g x) →
+      (do
+          let x ← r
+          f x) =
+        do
+        let x ← r
+        g x
+
+case Ok.unit
+s : PoolV1PairLatePublicStatementV1
+output : Slice U8
+i7 : UScalar UScalarTy.Usize
+input : Slice U8
+back : Slice U8 → Slice U8
+live : Slice U8
+⊢ (let (r, s16) := (core.result.Result.Ok PUnit.unit, live)
+    do
+    let r1 ←
+      match r with
+        | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+        | core.result.Result.Err e => do
+          let t ←
+            encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+                () e
+          ok (core.result.Result.Err t)
+    let cf ←
+      match r1 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate
+        let r3 ←
+          match r2 with
+            | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+            | core.result.Result.Err e => do
+              let t ←
+                encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+                    () e
+              ok (core.result.Result.Err t)
+        let cf1 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (s17, index_mut_back6) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back s16)
+                  { start := i7 }
+            let s18 ← lift val.to_slice
+            let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 s18
+            ok (core.result.Result.Ok (), index_mut_back6 s19)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r4 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+            ok (r4, back s16)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r4 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+        ok (r4, back s16)) =
+    let (r, s16) := (core.result.Result.Ok PUnit.unit, live)
+    match r with
+    | core.result.Result.Err e =>
+      ok (core.result.Result.Err (PoolV1PairLatePublicStatementErrorV1.Snapshot e), back s16)
+    | core.result.Result.Ok a => do
+      let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate
+      match r2 with
+        | core.result.Result.Err e =>
+          ok (core.result.Result.Err (PoolV1PairLatePublicStatementErrorV1.Afterstate e), back s16)
+        | core.result.Result.Ok bytes => do
+          let (dest, back2) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back s16)
+                { start := i7 }
+          let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 dest bytes.to_slice
+          ok (core.result.Result.Ok (), back2 copied)
+'NBN_LateFactor.bind_ext' depends on axioms: [propext, Quot.sound]
+'NBN_LateFactor.raw_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
