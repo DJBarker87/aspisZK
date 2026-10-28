@@ -1,0 +1,66 @@
+{
+  "evidence_class": "structural (K-1 substitute)",
+  "ruling": "k'",
+  "source_binding": "structural-binding.json",
+  "native_array_layout": "../native-array-layout-binding.json",
+  "kernel_proofs": [
+    {
+      "module": "DefaultBuffer",
+      "receipt": "lean-42220/receipt.json",
+      "source_sha256": "7fa7bc37689a7928c9c90f5d452dba3fac487e97fdb23fe533322f24afb2b0dd",
+      "axioms": [
+        "'R1Z.PV_DL_DefaultBuffer.zeroStorage' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultBuffer.initial' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultBuffer.model' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultBuffer.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultBuffer.success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultBuffer.failure' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultBuffer.divergence' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultBuffer.nonvacuous' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultBuffer.position' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "DefaultLaw",
+      "receipt": "lean-42205/receipt.json",
+      "source_sha256": "e06af909b54bd4a5d15f9d1145dd70b40952f689eb4fbf8b58aa0d8793c753fd",
+      "axioms": [
+        "'R1Z.PV_DL_DefaultLaw.initialState' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultLaw.snapshot' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultLaw.source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultLaw.nonvacuous' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultLaw.empty_position' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultLaw.zero_blocks' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultLaw.backend_independent' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "WrapLaw",
+      "receipt": "lean-42230/receipt.json",
+      "source_sha256": "856cfdce290545b0132f0744bb8604bfb8c9f21b8241fc4ee2dfd22af4a8ecea",
+      "axioms": [
+        "'R1Z.PV_DL_WrapLaw.observe' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_WrapLaw.observeReference' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_WrapLaw.source_reference' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "DefaultNative",
+      "receipt": "lean-42239/receipt.json",
+      "source_sha256": "800a449860d2170de5c0b172264735368472d00729bad4cdb99e9468bb11c4d4",
+      "axioms": [
+        "'R1Z.PV_DL_DefaultNative.bufferKind' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultNative.native_callback' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_DefaultNative.consumed' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    }
+  ],
+  "finite_validation": "../wrappers-native-combined-resume4/receipt.json",
+  "finite_scope": "4 paired same-input non-Copy Drop-core native/owned default constructors; core callback exactly once,64zero bytes,pos0,exactly-once final drop; finite validation only",
+  "complete_result_theorem": "R1Z.PV_DL_DefaultNative.native_callback",
+  "closing_theorem": "R1Z.PV_DL_DefaultNative.consumed",
+  "guard": "Original selected native64-byte storage and size constructor; core Default remains an arbitrary complete-Result parameter. Derive field order core then buffer, original size0 error path checked and native64 guard discharged.",
+  "compression": "Original complete-Result callbacks remain parameters; no backend semantics or equality assumed; V232 untouched.",
+  "reverify_kani": "Lead patch available under r-prime; exact-patch and failing negative-control re-verification pending future Kani budget. No Kani run or copy-dependent PASS credited in this resume.",
+  "trust_fields_added": 0
+}
