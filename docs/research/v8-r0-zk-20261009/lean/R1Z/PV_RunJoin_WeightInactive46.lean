@@ -1,5 +1,5 @@
 import R1Z.PV_RunJoin_WeightRow46
-import R1Z.PV_RunJoin_WeightMap46
+import R1Z.PV_RunJoin_WeightQuartic46
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_WeightInactive46
 open Aeneas Aeneas.Std Result PV_RunJoin_WeightCarrier46
@@ -36,7 +36,8 @@ theorem complete (w : W) (hs : w.variant=.S2) (j : Usize) :
       | div => simp only [hb,mapResult,bind_tc_div]
       | ok b =>
         simp only [hb,lift,bind_tc_ok]
-        split <;> rfl
+        split <;> simp only [mapResult,PV_RunJoin_WeightQuartic46.one,
+          PV_RunJoin_WeightQuartic46.zero]
 #print axioms masks
 #print axioms complete
 end R1Z.PV_RunJoin_WeightInactive46

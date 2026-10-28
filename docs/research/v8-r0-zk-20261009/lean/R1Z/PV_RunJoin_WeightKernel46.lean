@@ -58,4 +58,8 @@ theorem mul (a b : K) :
   rfl
 #print axioms copied_mul
 #print axioms mul
+theorem one : AspisR1ProducerRelease47.field.QM31.ONE=
+    toQ PV_B2_C_WeightsNative.aspis_core.field.QM31.ONE :=
+  PV_RunJoin_WeightQuartic46.one
+#print axioms one
 end R1Z.PV_RunJoin_WeightKernel46

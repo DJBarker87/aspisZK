@@ -20,7 +20,7 @@ theorem complete (p : Array K 10#usize) :
     AspisR1ProducerRelease47.points.absorption (amap toQ p)=
       mapResult (amap toQ) (run p) := by
   unfold AspisR1ProducerRelease47.points.absorption run
-  rw [PV_RunJoin_WeightMap46.index]
+  rw [PV_RunJoin_WeightKernel46.one,PV_RunJoin_WeightMap46.index]
   symm
   apply map_bind toQ (amap toQ)
   intro q

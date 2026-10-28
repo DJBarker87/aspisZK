@@ -58,4 +58,15 @@ theorem mul (a b : Q) :
   exact mul_value a b
 #print axioms mul_value
 #print axioms mul
+theorem one : AspisR1ProducerRelease47.field.QM31.ONE=
+    toQ PV_B2_251c1.aspis_core.field.QM31.ONE := by
+  unfold AspisR1ProducerRelease47.field.QM31.ONE PV_B2_251c1.aspis_core.field.QM31.ONE
+  rfl
+
+theorem zero : AspisR1ProducerRelease47.field.QM31.ZERO=
+    toQ PV_B2_251c1.aspis_core.field.QM31.ZERO := by
+  unfold AspisR1ProducerRelease47.field.QM31.ZERO PV_B2_251c1.aspis_core.field.QM31.ZERO
+  rfl
+#print axioms one
+#print axioms zero
 end R1Z.PV_RunJoin_WeightQuartic46
