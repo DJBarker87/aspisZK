@@ -30,9 +30,9 @@ theorem consumed {S F R : Type} (step : Request → S → Option Nat × S)
       9223372036854775807 shape address n w
     PV_RDEA_CapacityEndpoint.consume e failure
       (fun b world => do let value ← decode b; next value world) =
-    match e.returned with
+    (match e.returned with
     | .error err => failure err e.world
-    | .ok () => do let value ← PV_CBL_CapacityValue.reference u; next value e.world := by
+    | .ok () => do let value ← PV_CBL_CapacityValue.reference u; next value e.world) := by
   dsimp only
   unfold PV_RDEA_CapacityEndpoint.consume
   split

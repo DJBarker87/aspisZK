@@ -43,7 +43,7 @@ for p in sorted(T.glob('*.ll')):
    if current:
     refs=set(x.strip('"') for x in re.findall(sym,line));refs.discard(current)
     graph[current].update(refs)
-    if re.search(r'\b(call|invoke)\b',line) and not refs:
+    if not line.lstrip().startswith(';') and re.search(r'\b(call|invoke)\b',line) and not refs:
      indirect.append(dict(caller=current,file=str(p),line=n,text=line.strip()))
     if line.startswith('}'):current=None
 roots=[s for s,v in name.items() if v=='devnet_spend::main']
@@ -60,7 +60,7 @@ for s,refs in graph.items():
 # treating it as unreachable. Precompiled sysroot bodies are a separate cone.
 missing=[dict(symbol=s,name=name.get(s)) for s in sorted(reach) if s not in definitions and s not in graph and not s.startswith(('llvm.','anon.'))]
 result=dict(roots=[dict(symbol=s,name=name.get(s)) for s in roots],defined_functions=len(definitions),reachable_symbols=len(reach),direct_target_calls=targetcalls,unresolved_reachable=missing,indirect_calls=[x for x in indirect if x['caller'] in reach],complete=False,limitation='Unresolved indirect dispatch and precompiled sysroot bodies prevent an exhaustive reachable-call certificate. MIR candidates include uninstantiated/unreachable generic functions; they are not all reachable.')
-(D/'ir-reachability.json').write_text(json.dumps(result,indent=2)+'\n')
-with lzma.open(D/'ir-graph.json.xz','wt') as f:json.dump(dict(names=name,edges={k:sorted(v) for k,v in graph.items()},reachable=sorted(reach)),f)
+(D/'ir-reachability-v2.json').write_text(json.dumps(result,indent=2)+'\n')
+with lzma.open(D/'ir-graph-v2.json.xz','wt') as f:json.dump(dict(names=name,edges={k:sorted(v) for k,v in graph.items()},reachable=sorted(reach)),f)
 (D/'ir-mir-pins.json').write_text(json.dumps(dict(mir=pins,llvm=pinsll),indent=2)+'\n')
 print(json.dumps(dict(mir_candidates=len(candidates),llvm_definitions=len(definitions),roots=result['roots'],reachable=len(reach),direct_target_calls=len(targetcalls),unresolved=len(missing),indirect=len(result['indirect_calls']))))
