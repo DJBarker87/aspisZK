@@ -85,3 +85,12 @@ and NCX_ResultObservations recover full records and exact Result equality from
 all valid coordinate observations. These are symbolic model composition laws.
 NCX_JHuObservations exports the exact two observations in JHu's NCV-before-NCX
 order, proves dictionary commutation, and retains op38/op43/op44 and NCV slots.
+
+Final evidence: NCX_VALIDATION.json verifies26 current modules,120 new theorem
+statements,9 extracted definitions and reconstruction of all40 native patches.
+L041/L042 audits pass with standard axioms only. K004–015 patch recovery from
+immutable host snapshots is recorded in NCX_PATCH_RECOVERY.json; no receipt or
+proof was changed. NCX_POSTFLIGHT.json confirms498 source/root pins,219 resolved
+Aeneas objects,692 unchanged imported cache files and26 retained own objects.
+See NCX_HANDOFF.md for exact remaining rows, budget/stop justification, audited
+scope limitations, resource metrics and inherited ELF pins. Target not established.
