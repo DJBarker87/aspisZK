@@ -1,0 +1,34 @@
+import JHv_Wrapper
+import JHv_ByteSHA
+import JHe_SHARealization
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHv_TX2
+open Aeneas Aeneas.Std Result
+open JHv_Configuration JHu_FixturePdaRuntime
+
+/-- All three byte SHA equations are already proved. This stronger fixture
+result therefore needs only the explicit, deferred seven-call PDA runtime law. -/
+theorem accepted2_runtime (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) (slot : U64)
+    (runtime : FixturePdaRuntime base) :
+    S2W_D189Wrappers.second (JHe_Natives.second (adapter base) stage)
+      CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier
+      JHb_DataRequest.value (.Ok slot) ()=ok (.Ok (JHg_World.e2.heap,())) :=
+  JHv_Wrapper.source base stage slot runtime JHv_ByteSHA.source
+#print axioms accepted2_runtime
+
+/-- Requested certificate interface, on the exact TX1 SDK and saved-byte world.
+The 453 tree equations are needed by TX1; TX2 itself has the stronger runtime-only
+result above. No account/registry/validator/acceptance observation is assumed. -/
+theorem accepted2 [trees : JHe_SHARealization]
+    (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) (slot : U64)
+    (runtime : FixturePdaRuntime base) :
+    S2W_D189Wrappers.second (JHe_Natives.second (adapter base) stage)
+      CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier
+      JHb_DataRequest.value (.Ok slot) ()=ok (.Ok (JHg_World.e2.heap,())) :=
+  accepted2_runtime base stage slot runtime
+#print axioms accepted2
+set_option pp.proofs false in
+#print accepted2
+end AspisR1.JHv_TX2
+end

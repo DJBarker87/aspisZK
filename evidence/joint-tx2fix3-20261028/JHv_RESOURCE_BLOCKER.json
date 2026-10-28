@@ -1,0 +1,23 @@
+{
+  "attempt": "JHv_027",
+  "exact_module": "JHv_Wrapper.lean",
+  "stage": 2,
+  "exit_status": 134,
+  "wall_seconds": 5.961092847050168,
+  "peak_rss_kib": 7226936,
+  "swaps": 0,
+  "error": "lean::memory_exception: excessive memory consumption detected at 'interpreter'",
+  "result": "No theorem or axioms output. Wrapper not checked. No larger-cap or unchanged retry.",
+  "source_snapshot": "JHv_027/sources/JHv_Wrapper.lean",
+  "source_revision": "4b3be47f50",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64,
+    "Lean": "-M7000"
+  },
+  "diagnosis": "JHv_Validation plus JHi_TX2 import union. Local source graph has 5892 module names. Removing JHe_Natives entirely removes 535 names, but its definition owners are needed to state the exact SDK target. This is a source-graph diagnosis, not measured per-module memory attribution.",
+  "proposed_change": "The unapplied JHv_PROPOSED_IMPORT_TRIM.patch was investigated read-only. JHv_IMPORT_DIAGNOSIS.json shows it removes only JGr_Geometry itself (1 of 5892 names); the referenced definition owners pull the large closure back in. Rejected as an adequate resource repair. No sufficient in-scope import split was identified; no unchanged retry or cap increase.",
+  "stage_4": "Not entered; this is not the owner-approved Stage 4 aggregation exception."
+}
