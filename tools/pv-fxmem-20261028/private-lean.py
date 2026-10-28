@@ -19,6 +19,20 @@ if previous.exists():
   due=datetime.fromisoformat(old['utc']).timestamp()+180
   if time.time()<due:
    print('UNCHARGED cooldown still active',round(due-time.time(),1));sys.exit(78)
+authority=json.loads((E/'CARRIER-FUNS-PREFLIGHT.json').read_text());assert authority['ok']
+closure={}
+def visit(im):
+ if not im.startswith('R1Z.') or im in closure:return
+ key=im.replace('.','/')
+ if key in authority['project']:file=R/authority['project'][key]['path']
+ else:
+  assert im.startswith('R1Z.PV_FXM_') or im=='R1Z.PDict_ReserveErrorSource',im
+  file=R/'docs/research/v8-r0-zk-20261009/lean'/(key+'.lean')
+ data=file.read_bytes();rel=str(file.relative_to(R))
+ assert data==subprocess.check_output(['git','show','HEAD:'+rel])
+ closure[im]=dict(path=rel,sha256=hashlib.sha256(data).hexdigest(),blob=subprocess.check_output(['git','rev-parse','HEAD:'+rel],text=True).strip())
+ for dep in re.findall(r'^import (\S+)',data.decode(),re.M):visit(dep)
+for im in imports:visit(im)
 # Existing admission tool, before uploading any source.
 G=B+'/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 code=f'mkdir -p {D}/lean-{n}; python3 {G}/reservation.py {D}/lean-{n}/pre-admission.json > {D}/lean-{n}/pre-reservation.log 2>&1; status=$?; cat {D}/lean-{n}/pre-admission.json; exit $status'
@@ -31,14 +45,27 @@ import json,hashlib
 b=Path(BASE);d=Path(DIR);e=json.loads((b/'r1-privacy-build-integration-20261019/env/J.json').read_text());shared=b/'aspis-joint-20261019/objects'
 e['LEAN_PATH']=str(shared)+':'+e['LEAN_PATH'];(d/'env-private-J.json').write_text(json.dumps(e))
 (d/'lean-objects/R1Z').mkdir(parents=True,exist_ok=True);(d/'lean-sources/R1Z').mkdir(parents=True,exist_ok=True)
+links={}
+for m,x in CLOSURE.items():
+ rel=m.replace('.','/')+'.olean';dst=d/'lean-objects'/rel
+ if dst.exists() and not dst.is_symlink():
+  sp=d/'lean-sources'/(m.replace('.','/')+'.lean')
+  assert hashlib.sha256(sp.read_bytes()).hexdigest()==x['sha256'],m
+  links[m]=dict(path=str(dst),sha256=hashlib.sha256(dst.read_bytes()).hexdigest(),source=x,origin='own private compiled object')
+ else:
+  sp=b/'aspis-joint-20261019/sources'/(m.replace('.','/')+'.lean');obj=shared/rel
+  assert hashlib.sha256(sp.read_bytes()).hexdigest()==x['sha256'] and obj.exists(),m
+  dst.parent.mkdir(parents=True,exist_ok=True)
+  if not dst.exists():dst.symlink_to(obj)
+  links[m]=dict(path=str(dst),sha256=hashlib.sha256(dst.read_bytes()).hexdigest(),source=x,origin=str(obj))
 roots=[d/'lean-objects',shared]+[Path(p) for p in e['LEAN_PATH'].split(':')]
 deps={}
 for m in IMPORTS:
  p=next((r/(m.replace('.','/')+'.olean') for r in roots if (r/(m.replace('.','/')+'.olean')).exists()),None)
  if p is None:raise SystemExit('missing imported object '+m)
  deps[m]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
-print(json.dumps(dict(env=e,dependencies=deps)))
-'''.replace('BASE',repr(B)).replace('DIR',repr(D)).replace('IMPORTS',repr(imports))
+print(json.dumps(dict(env=e,dependencies=deps,linked_project_closure=links)))
+'''.replace('BASE',repr(B)).replace('DIR',repr(D)).replace('IMPORTS',repr(imports)).replace('CLOSURE',repr(closure))
 r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True);assert r.returncode==0,r.stderr
 pre=json.loads(r.stdout)
 # Check direct imports against the recorded authority. Their complete closure
