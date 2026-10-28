@@ -32,6 +32,7 @@ theorem step (ops : ExternalFuns) (values p : Nat → Q) (i : Usize) (hi : i.val
   · unfold host_sumcheck.interpolate_loop.body
     simp only [show i<28#usize from hi,↓reduceIte,hbasis,bind_tc_ok]
     rw [read values i hi]
+    dsimp only
     simp only [bind_tc_ok,inverse,hscale,hout,lift]
   · change ProverCommitM31Ops48.decode inv=(ProverCommitM31Ops48.decode den)⁻¹ at hdinv
     rw [hacc,hdscale,ProverCommitInterpolationEmbed48.source_embed,hdinv,hdd,hpoly]
