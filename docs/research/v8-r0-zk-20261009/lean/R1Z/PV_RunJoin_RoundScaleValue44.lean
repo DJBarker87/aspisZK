@@ -48,7 +48,7 @@ theorem complete (ops : ExternalFuns) (xs : Nat → Raw) :
   dsimp only [array,ProverCommitArray49.array]
   apply congrArg List.ofFn
   funext k
-  have h : 0 ≤ k.val ∧ k.val < 0+7 := by have := k.isLt;omega
+  have h : 0 ≤ k.val ∧ k.val < 0+7 := ⟨Nat.zero_le _,k.isLt⟩
   simp only [PV_RunJoin_IntervalMap44.map,show (0#usize).val=0 from rfl,if_pos h]
 #print axioms step
 #print axioms phase
