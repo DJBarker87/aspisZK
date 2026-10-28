@@ -152,7 +152,7 @@ def Path [ExternalLinear] [Records]
                         (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
                         aspis_core.field.M31 8#usize) i
                       ) = ok f ∧
-                      ∃ b6 unused, (
+                      ∃ (b6 : Bool) unused, (
                         core.iter.traits.iterator.Iterator.any.default
                         (core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
                         (core.iter.traits.iterator.IteratorSliceIter (Array
@@ -291,7 +291,7 @@ def Path [ExternalLinear] [Records]
                           (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter
                           aspis_core.field.M31 8#usize) i
                         ) = ok f ∧
-                        ∃ b7 unused, (
+                        ∃ (b7 : Bool) unused, (
                           core.iter.traits.iterator.Iterator.any.default
                           (core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator
                           (core.iter.traits.iterator.IteratorSliceIter (Array
