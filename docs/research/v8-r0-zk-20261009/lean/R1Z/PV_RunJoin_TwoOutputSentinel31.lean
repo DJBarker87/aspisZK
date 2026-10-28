@@ -26,7 +26,7 @@ theorem source (first second : Array U32 8#usize)
       cases zero <;> simp only [Bool.false_eq_true,↓reduceIte] at h
       · refine ⟨hc,?_⟩
         unfold aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq at hz
-        simpa only [aspis_core.field.M31.ZERO,Result.ok.injEq,decide_eq_false_iff_not] using hz
+        simpa only [aspis_core.field.M31.ZERO,Result.ok.injEq,decide_eq_false_iff_not,UScalar.ofNatCore_val_eq] using hz
       · cases h
 #print axioms source
 end R1Z.PV_RunJoin_TwoOutputSentinel31
