@@ -1,0 +1,56 @@
+{
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=pv36-metadata",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin36-extraction/capped.py",
+    "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin36-extraction",
+    "metadata"
+  ],
+  "admission": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T17:03:43.920959+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 17045651456,
+    "projected_reserved_bytes": 25635586048
+  },
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "+1.94.1",
+    "metadata",
+    "--locked",
+    "--offline",
+    "--format-version",
+    "1",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin36-extraction/input/tools/r1-cost-probe/Cargo.toml",
+    "--features",
+    "r1p-check,aspis-r1-cost-probe/ct-host-prover"
+  ],
+  "cwd": "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin36-extraction/input",
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin"
+  },
+  "source_revision": "1135ec947f86a1d3e375092b9f99e3b5db6fc164",
+  "extraction_toolchain": "nightly-2026-06-01 (recorded separately from deployed 1.94.1)",
+  "deployed_toolchain": "1.94.1",
+  "profile": "release, opt-level=3, overflow-checks=false, debug-assertions=false",
+  "expected_time": "Cargo metadata only, no compilation",
+  "feature_graph": "metadata/out.log",
+  "extractor_pin_authority": "evidence/pv-cb3-20261026/retained-extractor-pins.txt"
+}

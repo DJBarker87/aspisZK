@@ -1,0 +1,44 @@
+
+FILE prompt-pv-runjoin30.txt
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/prompt-pv-runjoin29.txt and obey it in full (same worktree EXACTLY /Users/dominic/ZK/.worktrees/pv-runjoin, same branch, same rules), including every LEAD RULING in pv-common.txt. Then read your evidence/pv-runjoin28-20261027/REPORT.md and FINDING.md.
+
+RESUME of runjoin29 (LOG D342), head a4e8f7dbad. Budget: 34 Lean compile attempts remaining plus 30 more (64 total), 0 Kani. Env-J IDs: 38183-38193 first, then 42300-42399 (verified unused; audit IDs 42397-42399).
+Accepted: the inner-compiler success/error characterisation, payload packaging, the zero-change transfer rejection (now in the owner packet alongside withdrawals), and the noncanonical-frontier finding for the raw wrapper. LEAD RULING: the honest pipeline is the CANONICAL route, in which the snapshot is decoded by the snapshot codec (which rejects noncanonical frontier words) before the wrapper; the raw wrapper on noncanonical words is not an honest route and stays recorded as a finding. Continue:
+1. Characterise the outer preparation domain along the canonical route (codec, then wrapper, then inner compiler): exactly which admitted (statement, witness) pairs succeed, each rejection guard proved with its error.
+2. Prove that every successful canonical-route preparation yields an HonestInput.
+3. State the coverage sentence for the owner: the honest-family V152-V154 theorem covers exactly the admitted pairs that the canonical route prepares (today: positive change for both spend kinds, plus whatever else step 1 finds).
+4. Only then V038/V045 toward RustRealRefinement.
+Same stop rules; a failed candidate lemma is retained and is not a stop.
+
+FILE prompt-pv-runjoin29.txt
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/prompt-pv-runjoin23.txt and obey it in full (same worktree EXACTLY /Users/dominic/ZK/.worktrees/pv-runjoin, same branch, same rules), including every LEAD RULING in pv-common.txt. Then read your evidence/pv-runjoin27-20261027/REPORT.md and FINDING.md.
+
+RESUME of runjoin28 (LOG D338), head d73d800f26. Remaining budget: 57 Lean compile attempts, 0 Kani. Env-J IDs: the unused remainder of 38141-38193 (final audit IDs 38194-38196).
+Your full-withdrawal finding is accepted and is with the owner (owner packet, D338): either the honest-user domain is "spends whose preparation succeeds" (today: positive change), or the frozen compiler changes. Do NOT assume either outcome. The following is needed under both:
+1. EXACT PREPARATION DOMAIN: characterise, by checked theorems over the extracted/identified compiler route, the set of admitted (statement, witness) pairs for which preparation succeeds (for example: RspendPlus and change.value > 0 for withdrawals, and whatever the transfer route requires), and prove the converse direction for every guard you list (each guard's failure gives the stated error). If there are further rejections beyond zero change, list each with a checked instance.
+2. SUCCESSFUL OUTPUT IS HONEST: prove that whenever preparation succeeds, its output satisfies HonestInput (Admission, full compiler return equal to the cached compiled payload with both Result layers, Checked, canonical frontier words).
+3. Combine: every admitted pair in the preparation domain yields an honest input, so the V152-V154 honest-family theorem covers exactly that domain. State the resulting coverage sentence for the owner.
+4. Only after 1-3: native execution and observable agreement toward RustRealRefinement (V038, V045).
+Same stop rules; a failed candidate lemma is retained and is not a stop.
+
+FILE prompt-pv-runjoin23.txt
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/prompt-pv-runjoin19.txt and obey it in full (same worktree EXACTLY /Users/dominic/ZK/.worktrees/pv-runjoin, same branch, same rules), including every LEAD RULING in pv-common.txt ((h4) with SCOPE, (h5), (p)). Then read your evidence/pv-runjoin21-20261027/REPORT.md and STAGE1-SELECTION.md.
+
+RESUME of runjoin22 (LOG D320), head 16de372145. Fresh budget: 100 Lean compile attempts, 0 Kani. Env-J IDs 38900-38999 ONLY (verified unused; audit IDs 38997-38999).
+
+LEAD REDIRECTION (read carefully). Your STAGE1 finding is accepted: Selection.selected is a caller-supplied data field, the frozen RealR1_client selects nothing, and no deployment selector artifact exists in the frozen source (the shipped client is a devnet fixture harness; client scope is an open owner item, V396). Stop looking for a "deployment-selected i". The rows you have been targeting are UNIVERSAL statements, per their recorded meanings in rows5.json: V152 "actual builder public projection equals canonical map", V153 "actual builder raw trace equals canonical merged trace", V154 "actual S2 transport equals pi/D18" (BuilderSource.lean#SourceIdentification), and V038 is quantified over every common sample. Fixture facts cannot remove them; fixture facts are NON-VACUITY witnesses (relevant to V047, the canonical witness/public fibre).
+Work, in order:
+1. Read BuilderSource.lean#SourceIdentification and state the exact quantifiers of V152-V154.
+2. Prove V152 (public_eq) for EVERY admitted input, lifting your general records identification (runjoin17, all arguments), the symbolic bank composition (64adb93457) and the compiler-return/transition proofs from fixture-specific to universal form by named symbolic lemmas (no kernel reduction of whole runs; AGENTS.md formal rules 2-3). Then V153 (build_eq), then V154 (transport_eq).
+3. Use the two fixtures only as non-vacuity instances of the universal statements and of V047's fibre on those public inputs.
+4. If a universal step is false for some admitted input, construct it and report it as a checked counterexample (that IS a stop).
+Also: audit 38299 failed importing AspisV8R19.SamplerClosureProductCorrectness; resolve it under the rulings ((h5) if git-tracked in your worktree and absent from EJR/freeze) before the final audit. Name rows removed and endpoint premises removed, quoting recount 5. Same stop rules otherwise; a failed candidate lemma is retained and is not a stop.
+
+FILE prompt-pv-runjoin19.txt
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-common.txt first and obey it, including every LEAD RULING (a)-(o), (h') and the new (h'') at its end, and read pv-host-restored.flag there. Worktree: EXACTLY /Users/dominic/ZK/.worktrees/pv-runjoin (do not move it), branch codex/pv-runjoin-20261026, head 8c9ec5f63f. Read evidence/pv-runjoin17-20261027/REPORT.md first. Env-J IDs: the unused remainder of 50900-51999 (tally from your receipt index; never 28000-29999). Budget: 100 Lean compile attempts, 0 Kani; one capped scope at a time. No shipped-code change of any kind.
+
+RESUME of runjoin18 (LOG D305). Proved: production two-chunk nullifier on both fixtures, both output-pair source results, both CopyRecords.append_root results, 42 numeric certificates, conditional bank-row completeness and zero-index frontier validation. Open, in this order:
+1. Endpoint axiom audit: resolve AspisR1ProducerRelease47.Funs and its import closure under ruling (h''), build privately, rerun the endpoint #print axioms audit once, and record the result. If a closure module is pinned by neither record, stop that step only, report the module, and continue with step 2.
+2. Full late_append execution and the 57-block bank validation, by named per-block lemmas (AGENTS.md formal rules 2-3; no kernel reduction of the whole bank).
+3. The compiler-return equation at the actual selected i, the full selected-i transition equality, the deployed public binding, then the P-and-hypothetical-T non-vacuity witness.
+Name the privacy ledger rows each step would remove (V038, V045, V047, V152-V154 and any other) and whether any endpoint premise is removed. No sorry/admit/native_decide/implemented_by/axiom; never write shared env-J sources; never add a T field. Commit path-limited after each stage. Use the whole budget; stop on removal, exhaustion, or a checked counterexample to a ledger row statement as written in ROWS5/rows5.json (a failed candidate lemma or reference is not a stop: retain it and continue). Report: per-step status, P before/after, row counts, endpoint premises removed/added/weakened, receipts (target, exit, wall, peak RSS, swap, revision, #print axioms), next deliverable. Target not yet established until the lead says otherwise.
