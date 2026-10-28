@@ -14008,3 +14008,17 @@ high-byte rejection and the full-receipt projection. Both native ROMView decoder
 associations, complete commitments, openings and serialization, and the RustRealRefinement composition
 remain; the op227 bridge stays conditional. Branch pushed (62414c5784). runjoin41 (IDs 60100-60199)
 continues in that order. Rows removed outright: 0. Privacy target not yet established.
+
+## D395 (Stream B) 2026-10-28 19:12 UTC: runjoin41 result: compact serialization source laws; runjoin42 launched
+
+runjoin41 (100 attempts: 78 accepted, 22 rejected; no Kani; three audits with standard axioms; resumed
+once from a WIP snapshot after a capacity relaunch) proves at source level: PolyPublish40.encode, the
+actual 28-coefficient encoder composed with compact_values (success, exact ordered low-half payload,
+448 bytes); SemanticComplete40.encode, the complete successful compact_semantic Result with exact
+ordered bytes on an explicit source byte domain (SemanticDomain40.Domain, with no loop-success or
+model-equality premise); and the rejection paths (non-cell-aligned length; a nonzero high byte after k
+valid cells, retaining exactly their low halves; a semantic buffer of the wrong length before any
+copying). No large concrete recurrence was reduced. Open: establishing SemanticDomain40.Domain for the
+actual caller, query and node openings and publish_compact, the native ROMView decoders and helper
+associations, and the final proof-byte equation. runjoin42 (IDs 60200-60299) continues in that order.
+Rows removed outright: 0. Privacy target not yet established.
