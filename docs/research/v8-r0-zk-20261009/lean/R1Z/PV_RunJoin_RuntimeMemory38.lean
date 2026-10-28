@@ -31,9 +31,9 @@ variable {W S F D DF ZF C : Type}
 def algebra (base : PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
     (memory : Memory W S F D DF ZF) : PV_W_ReachedThreading.Algebra W (Option C) where
   base := base
-  reserve := fun _ v n w =>
+  reserve := fun {T} _ v n w =>
     PV_W_MemoryLift.reserve memory.reserveView memory.reserveCommit memory.allocate
-      memory.wordMax memory.byteMax (memory.shape _) v (memory.metadata w v) n memory.encode w
+      memory.wordMax memory.byteMax (memory.shape T) v (memory.metadata w v) n memory.encode w
   dropWords := fun v w => PV_W_MemoryLift.dropWords memory.dropView memory.dropCommit
     memory.free (memory.dropBuffer w v) w
   zeroArray := fun N v w => PV_W_MemoryLift.zeroArray memory.zeroView memory.zeroCommit
@@ -50,7 +50,8 @@ theorem reserve (base : PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
       let e := PV_FXM_ReserveWorld.reference memory.allocate memory.wordMax memory.byteMax
         (memory.shape T) (PV_FXM_ReserveSelected.buffer v (memory.metadata w v)) n.val (memory.reserveView w)
       memory.reserveCommit w e.buffer e.world :=
-  PV_W_MemoryLift.reserve_world _ _ _ _ _ _ _ _ _ _ w
+  PV_W_MemoryLift.reserve_world memory.reserveView memory.reserveCommit memory.allocate
+    memory.wordMax memory.byteMax (memory.shape T) v (memory.metadata w v) n memory.encode w
 
 /-- Reached allocation, drop and volatile-zero effects retain their own
 pre-world call, including inner allocation errors. No OS-silence or native
