@@ -3,6 +3,12 @@ from pathlib import Path
 import sys,hashlib,json
 kind=sys.argv[1]
 P=H/'source/tools/pv-b3p6-20261028'
+def admission_label(base):
+ label=base;i=0
+ while (H/label).exists():
+  assert not (H/label/'receipt/receipt.json').exists(), 'charged gate cannot be rerun unchanged: '+label
+  i+=1;label=base+'-r'+str(i)
+ return label
 if kind in ('kani133','kmxcontrols'):
  patch=H/'source/evidence/pv-b3p6-20261028/KMX_copy_stubs.patch'
  stubs=P/'kmx/KMX_stubs.rs'
@@ -15,7 +21,7 @@ if kind=='kani133':
  (H/'tmp').mkdir(exist_ok=True)
  bounds=json.loads((H/'bounds133.json').read_text())
  cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','proofs::shipped_equals_reference133_pointwise','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','-Z','stubbing','--cbmc-args','--symex-cache-dereferences','--reachability-slice-fb','--unwinding-assertions','--unwindset',','.join(k+':'+str(v['bound']) for k,v in bounds['loops'].items())]
- sys.exit(run('kani133-kmx-08',cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; exact lead KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67, default unwind1026 for replacement copy/realloc loops with per-loop bounds, universal auxiliary u8 index, forward/backward reachability slicing, dereference cache, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
+ sys.exit(run(admission_label('kani133-kmx-08'),cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; exact lead KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67, default unwind1026 for replacement copy/realloc loops with per-loop bounds, universal auxiliary u8 index, forward/backward reachability slicing, dereference cache, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
 if kind=='loops133':
  artifacts=list((H/'target/kani').glob('**/*shipped_equals_reference133.out'))
  assert len(artifacts)==1,artifacts
@@ -59,7 +65,7 @@ if kind in ('kani226transfer','kani226withdrawal'):
 if kind=='kmxcontrols':
  (H/'tmp').mkdir(exist_ok=True)
  cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','KMX_stubs::KMX_checks::KMX_growth_wrong','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','-Z','stubbing','--cbmc-args','--unwinding-assertions']
- sys.exit(run('kmx-growth-negative-01',cmd,'exact lead KMX patch paired positive and intended-negative controls; optimized compilation, no business-function replacement',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
+ sys.exit(run(admission_label('kmx-growth-negative-01'),cmd,'exact lead KMX patch paired positive and intended-negative controls; optimized compilation, no business-function replacement',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
 if kind=='fidelitynative226':
  cmd=['timeout','180','taskset','--cpu-list','0-3','cargo','test','--release','--manifest-path',str(P/'Cargo.toml'),'--lib','native226::emission_fixture226','--','--exact','--nocapture']
  sys.exit(run('native226-emission-01',cmd,'optimized same-input fixture output for emission/native comparison; finite validation, missing evidence artifact'))
