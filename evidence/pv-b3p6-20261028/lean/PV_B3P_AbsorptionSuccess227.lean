@@ -1,5 +1,6 @@
 import PV_B3P_Success227
 import PV_B3P_SemanticBasicsSuccess227
+import PV_B3P_PureBind227
 namespace PV_B3P_Success227
 open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
@@ -411,9 +412,7 @@ theorem total_reference_terminal_semantic_initial_and_absorption (public1 : refe
   apply bind
   · apply update <;> scalar_tac
   intro output17
-  apply bind
-  · exact ok _
-  intro i
+  rw [PV_B3P_PureBind227.lift_bind]
   apply bind
   · apply index <;> scalar_tac
   intro q58
@@ -423,9 +422,7 @@ theorem total_reference_terminal_semantic_initial_and_absorption (public1 : refe
   apply bind
   · apply qsub
   intro q60
-  apply bind
-  · exact ok _
-  intro i1
+  rw [PV_B3P_PureBind227.lift_bind]
   apply bind
   · apply update <;> scalar_tac
   intro output18

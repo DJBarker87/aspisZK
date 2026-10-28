@@ -73,6 +73,9 @@ def emit(mod,source_mod,names,imports):
    if m[2]==':=':
     # Pure lets remain definitional lets; no arithmetic evaluation.
     continue
+   if name=='reference_terminal.semantic_initial_and_absorption' and expr.split()[0]=='lift':
+    proof+=['  rw [PV_B3P_PureBind227.lift_bind]']
+    continue
    proof+=['  apply bind','  · '+rule(expr)]
    pat=m[1].strip()
    if pat.startswith('('):proof+=['  intro pair','  rcases pair with ⟨'+pat[1:-1]+'⟩']
@@ -98,6 +101,6 @@ emit('PV_B3P_PoseidonBaseSuccess227','PV_B3P_P227_02',[
 emit('PV_B3P_GlobalSumsSuccess227','PV_B3P_P227_02',['reference_poseidon.global_sums227'],['PV_B3P_PoseidonBaseSuccess227'])
 emit('PV_B3P_HostPackSuccess227','PV_B3P_E227_10',['host_terminal_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
 emit('PV_B3P_RefPackSuccess227','PV_B3P_E227_19',['reference_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
-emit('PV_B3P_AbsorptionSuccess227','PV_B3P_P227_09',['reference_terminal.absorption_lanes_literal','reference_terminal.semantic_initial_and_absorption'],['PV_B3P_SemanticBasicsSuccess227'])
+emit('PV_B3P_AbsorptionSuccess227','PV_B3P_P227_09',['reference_terminal.absorption_lanes_literal','reference_terminal.semantic_initial_and_absorption'],['PV_B3P_SemanticBasicsSuccess227','PV_B3P_PureBind227'])
 if '--check'not in sys.argv:(D/'resume6/success-generator.json').write_text(json.dumps(records,indent=2)+'\n')
 print(json.dumps(dict(theorems=len(records),check='--check'in sys.argv)))
