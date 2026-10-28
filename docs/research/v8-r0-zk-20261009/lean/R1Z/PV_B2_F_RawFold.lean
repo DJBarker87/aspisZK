@@ -22,13 +22,11 @@ theorem tensor_source (factors : Array (Array K 4#usize) 5#usize) (j : Usize) :
     host_weights.tensor_raw factors j = tensor factors j := by
   dsimp only [host_weights.tensor_raw,tensor]
   simp only [List.foldlM_cons,List.foldlM_nil,bind_assoc,bind_pure,lift,bind_tc_ok]
-  rfl
 
 theorem point_source (points : Array K 10#usize) (r : Usize) :
     host_weights.point_raw points r = point points r := by
   dsimp only [host_weights.point_raw,point]
   simp only [List.foldlM_cons,List.foldlM_nil,bind_assoc,bind_pure]
-  rfl
 #print axioms tensor_source
 #print axioms point_source
 end PV_B2_F_RawFold

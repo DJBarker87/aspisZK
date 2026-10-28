@@ -3,6 +3,10 @@ set_option autoImplicit false
 namespace PV_B2_F_RawOriginal
 open Aeneas Aeneas.Std Result PV_B2_251c1
 abbrev K := aspis_core.field.QM31
+local instance : DecidableEq transport.Variant := fun v w => by
+  cases v <;> cases w
+  all_goals first | exact isTrue rfl | exact isFalse (by intro h; cases h)
+
 
 def inactive (w : host_weights.Weights) (j : Usize) : Result K := do
   let r ← host_weights.host_row w.variant j
@@ -21,8 +25,8 @@ def extra (w : host_weights.Weights) (j : Usize) : Result K := do
   else ok aspis_core.field.QM31.ZERO
 
 def tensor (w : host_weights.Weights) (kind j : Usize) : Result K := do
-  let row := if kind < 4#usize then Usize.wrapping_sub kind 1#usize
-             else Usize.wrapping_sub kind 2#usize
+  let row ← if kind < 4#usize then ok (Usize.wrapping_sub kind 1#usize)
+             else ok (Usize.wrapping_sub kind 2#usize)
   let factors ← Array.index_usize w.factors row
   PV_B2_F_RawFold.tensor factors j
 
@@ -41,7 +45,8 @@ def original (w : host_weights.Weights) (kind j : Usize) : Result K :=
 
 theorem variant_eq (v : transport.Variant) :
     transport.Variant.Insts.CoreCmpPartialEqVariant.eq v .D = ok (decide (v=.D)) := by
-  cases v <;> rfl
+  cases v <;> simp [transport.Variant.Insts.CoreCmpPartialEqVariant.eq,
+    transport.Variant.read_discriminant] <;> scalar_tac
 #print axioms variant_eq
 
 theorem source (w : host_weights.Weights) (kind j : Usize) :
@@ -49,12 +54,14 @@ theorem source (w : host_weights.Weights) (kind j : Usize) :
   by_cases h0 : kind=0#usize
   · simp only [host_weights.raw_value,original,h0,if_true,inactive,lift,bind_tc_ok]
   by_cases h4 : kind=4#usize
-  · simp only [host_weights.raw_value,original,h0,h4,if_false,if_true,extra,lift,bind_tc_ok]
+  · subst kind
+    simp only [host_weights.raw_value,original,
+      show ¬ (4#usize=0#usize) from by decide,if_false,if_true,extra,lift,bind_tc_ok]
   by_cases h1 : kind≥1#usize <;> by_cases h3 : kind≤3#usize <;>
     by_cases hv : w.variant=transport.Variant.D <;>
     simp only [host_weights.raw_value,original,h0,h4,h1,h3,hv,if_true,if_false,
       variant_eq,decide_true,decide_false,lift,bind_tc_ok,tensor,point,
-      and_true,and_false,true_and,false_and,
+      and_true,and_false,true_and,false_and,Bool.false_eq_true,
       PV_B2_F_RawFold.tensor_source,PV_B2_F_RawFold.point_source] <;> rfl
 #print axioms source
 end PV_B2_F_RawOriginal

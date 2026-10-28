@@ -29,7 +29,8 @@ def original (event : Outcome) (w : host_weights.Weights) (kappa : E) : Result R
 
 theorem zero_suffix : PV_B2_F_ArrayMutation.ZeroSuffix zeros 0 := by
   intro i _ hi
-  simp [zeros,Array.repeat,hi]
+  change (List.replicate 1024 aspis_core.field.wide_exact.WideExact.ZERO)[i]? = _
+  rw [List.getElem?_replicate,if_pos hi]
 
 theorem equal (event : Outcome) (w : host_weights.Weights) (kappa : E) :
     copied event w kappa = original event w kappa := by
@@ -38,6 +39,7 @@ theorem equal (event : Outcome) (w : host_weights.Weights) (kappa : E) :
   | supplied =>
     obtain ⟨k,hk⟩ := PV_B2_C_Powers7Total.source kappa
     have hm := PV_B2_F_OriginalMutation.loop w k zeros 0#usize zero_suffix
+    simp only [show (0#usize).val=0 from by scalar_tac,Nat.sub_zero] at hm
     have hc := PV_B2_F_MutationModel.source w kappa zeros
     unfold copied original
     simp only [pv_b2_materialize,host_weights.Weights.materialize,hc,
@@ -52,7 +54,7 @@ theorem denied (w : host_weights.Weights) (kappa : E) :
 theorem supplied (w : host_weights.Weights) (kappa : E) :
     ∃ out, copied .supplied w kappa = ok (.Ok out) := by
   obtain ⟨out,ho⟩ := PV_B2_D_MaterializeTotal.source w kappa zeros
-  exact ⟨out,by simp only [copied,ho,bind_tc_ok]⟩
+  exact ⟨out,by simp only [copied,ho,bind_tc_ok]; rfl⟩
 #print axioms zero_suffix
 #print axioms equal
 #print axioms denied

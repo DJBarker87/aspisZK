@@ -3,7 +3,8 @@ from pathlib import Path
 import sys
 L=Path('docs/research/v8-r0-zk-20261009/lean/R1Z')
 errors=['Parse','Semantic','Transcript','Relation','Merkle','Query','Checkpoint','Allocation','Rejected','AttemptsExhausted','Entropy']
-s='''import R1Z.PV_B2_F_AllocationTransport
+s='''import R1Z.PV_B2_F_AllocationEffects
+import R1Z.PV_B2_F_MaterializeFrozen
 import R1Z.PV_B2_E_GammaOriginal
 set_option autoImplicit false
 noncomputable section
@@ -31,56 +32,63 @@ def toError : PV_B2_251c1.verifier.Error → ProverRwFull.verifier.Error
   | .Ok out => .Ok (toVec out)
   | .Err e => .Err (toError e)
 
-def types (base : ProverRwFull.ExternalTypes) : ProverRwFull.ExternalTypes :=
+@[reducible] def types (base : ProverRwFull.ExternalTypes) : ProverRwFull.ExternalTypes :=
   {base with op25 := W}
 
-def callback (event : Outcome) (w : W) (kappa : Native) :
+def callback (event : Result Outcome) (w : W) (kappa : Native) :
     Result (core.result.Result (alloc.vec.Vec Native) ProverRwFull.verifier.Error) :=
   PV_B2_E_OrdinaryOriginal.mapResult mapRust
-    (PV_B2_F_AllocationTransport.copied event w (fromNative kappa))
-def originalCallback (event : Outcome) (w : W) (kappa : Native) :
+    (PV_B2_F_AllocationEffects.copied event w (fromNative kappa))
+def originalCallback (event : Result Outcome) (w : W) (kappa : Native) :
     Result (core.result.Result (alloc.vec.Vec Native) ProverRwFull.verifier.Error) :=
   PV_B2_E_OrdinaryOriginal.mapResult mapRust
-    (PV_B2_F_AllocationTransport.original event w (fromNative kappa))
+    ((event >>= fun outcome => PV_B2_F_MaterializeFrozen.original outcome w (fromNative kappa)))
 
-def selected (base : ProverRwFull.ExternalTypes) (event : Outcome)
+def selected (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) : @ProverRwFull.ExternalFuns (types base) :=
-  {PV_B2_E_GammaOriginal.selected ops with op251 := callback event}
-def originalDictionary (base : ProverRwFull.ExternalTypes) (event : Outcome)
+  letI : ProverRwFull.ExternalTypes := types base
+  {@PV_B2_E_GammaOriginal.selected (types base) ops with op251 := callback event}
+def originalDictionary (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) : @ProverRwFull.ExternalFuns (types base) :=
-  {PV_B2_E_GammaOriginal.originalDictionary ops with op251 := originalCallback event}
+  letI : ProverRwFull.ExternalTypes := types base
+  {@PV_B2_E_GammaOriginal.originalDictionary (types base) ops with op251 := originalCallback event}
 
-theorem callbacks (event : Outcome) (w : W) (kappa : Native) :
+theorem callbacks (event : Result Outcome) (w : W) (kappa : Native) :
     callback event w kappa = originalCallback event w kappa := by
   unfold callback originalCallback
-  rw [PV_B2_F_AllocationTransport.equal]
+  apply congrArg (PV_B2_E_OrdinaryOriginal.mapResult mapRust)
+  rw [PV_B2_F_AllocationEffects.complete_result]
+  unfold PV_B2_F_AllocationEffects.original
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro outcome _
+  exact PV_B2_F_MaterializeFrozen.originals outcome w (fromNative kappa)
 
-theorem selected_callback (base : ProverRwFull.ExternalTypes) (event : Outcome)
+theorem selected_callback (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :
-    (selected base event ops).op251 w kappa = originalCallback event w kappa :=
+    @ProverRwFull.ExternalFuns.op251 (types base) (selected base event ops) w kappa = originalCallback event w kappa :=
   callbacks event w kappa
 
 theorem nonvacuity (base : ProverRwFull.ExternalTypes)
     (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :
-    ∃ out, (selected base .supplied ops).op251 w kappa = ok (.Ok out) := by
-  obtain ⟨out,ho⟩ := PV_B2_F_AllocationTransport.supplied w (fromNative kappa)
+    ∃ out, @ProverRwFull.ExternalFuns.op251 (types base) (selected base (ok .supplied) ops) w kappa = ok (.Ok out) := by
+  obtain ⟨out,ho⟩ := PV_B2_F_AllocationEffects.supplied w (fromNative kappa)
   exact ⟨toVec out,by change PV_B2_E_OrdinaryOriginal.mapResult mapRust _ = _; rw [ho]; rfl⟩
 
 theorem allocation_error (base : ProverRwFull.ExternalTypes)
     (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :
-    (selected base .denied ops).op251 w kappa = ok (.Err ProverRwFull.verifier.Error.Allocation) := rfl
+    @ProverRwFull.ExternalFuns.op251 (types base) (selected base (ok .denied) ops) w kappa = ok (.Err ProverRwFull.verifier.Error.Allocation) := rfl
 
-theorem dictionaries (base : ProverRwFull.ExternalTypes) (event : Outcome)
+theorem dictionaries (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
     selected base event ops = originalDictionary base event ops := by
   have hc : callback event = originalCallback event := by
     funext w kappa
     exact callbacks event w kappa
   unfold selected originalDictionary
-  rw [PV_B2_E_GammaOriginal.dictionaries,hc]
+  rw [@PV_B2_E_GammaOriginal.dictionaries (types base) ops,hc]
 
 theorem observations {O : Sort _} (observe : @ProverRwFull.ExternalFuns (types base) → O)
-    (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
     observe (selected base event ops)=observe (originalDictionary base event ops) :=
   congrArg observe (dictionaries base event ops)
@@ -89,10 +97,10 @@ theorem observations {O : Sort _} (observe : @ProverRwFull.ExternalFuns (types b
 s=s.replace('theorem observations {O : Sort _} (observe : @ProverRwFull.ExternalFuns (types base) → O)\n    (base : ProverRwFull.ExternalTypes)', 'theorem observations {O : Sort _} (base : ProverRwFull.ExternalTypes)\n    (observe : @ProverRwFull.ExternalFuns (types base) → O)')
 for n in range(262):
  if n in [249,250,251]:continue
- s+=f'''theorem preserved_{n} (base : ProverRwFull.ExternalTypes) (event : Outcome)
+ s+=f'''theorem preserved_{n} (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op{n} _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op{n} _ ops := PV_B2_E_GammaOriginal.preserved_{n} ops
+    @ProverRwFull.ExternalFuns.op{n} (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op{n} (types base) ops := @PV_B2_E_GammaOriginal.preserved_{n} (types base) ops
 '''
 for name in ['roundtrip','roundtrip_native','callbacks','selected_callback','nonvacuity','allocation_error','dictionaries','observations']+[f'preserved_{n}' for n in range(262) if n not in [249,250,251]]:s+='#print axioms '+name+'\n'
 s+='end PV_B2_F_MaterializeNative\n'

@@ -1,0 +1,69 @@
+{
+  "row": "V258",
+  "operation": 251,
+  "status": "CLOSED_SELECTED_ALLOCATION_CONTEXT_SOURCE_CALLBACK",
+  "closing_theorems": [
+    "PV_B2_F_MaterializeRequest.complete_result",
+    "PV_B2_F_251Bridge.source",
+    "PV_B2_F_251Closure.three_rows"
+  ],
+  "statements": [
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_MaterializeRequest.lean",
+      "statement": "theorem after_eq_before (request : Result Outcome) (w : host_weights.Weights) (kappa : E) :\n    (request >>= fun event => PV_B2_F_MaterializeFrozen.original event w kappa) =\n      original request w kappa"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_MaterializeRequest.lean",
+      "statement": "theorem complete_result (request : Result Outcome) (w : host_weights.Weights) (kappa : E) :\n    PV_B2_F_AllocationEffects.copied request w kappa = original request w kappa"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem source (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base request ops) w kappa =\n      PV_B2_E_OrdinaryOriginal.mapResult mapRust\n        (PV_B2_F_MaterializeRequest.original request w (fromNative kappa))"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem nonvacuity (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    \u2203 out, @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base (ok .supplied) ops) w kappa = ok (.Ok out)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem allocation_error (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base (ok .denied) ops) w kappa = ok (.Err ProverRwFull.verifier.Error.Allocation)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem failure (base : ProverRwFull.ExternalTypes) (e : Error)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base (fail e) ops) w kappa = fail e"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem divergence (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base div ops) w kappa = div"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem gamma_preserved (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base)) :\n    @ProverRwFull.ExternalFuns.op249 (types base) (selected base request ops) =\n      @ProverRwFull.ExternalFuns.op249 (types base)\n        (@PV_B2_E_GammaOriginal.selected (types base) ops)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Bridge.lean",
+      "statement": "theorem ordinary_preserved (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base)) :\n    @ProverRwFull.ExternalFuns.op250 (types base) (selected base request ops) =\n      @ProverRwFull.ExternalFuns.op250 (types base)\n        (@PV_B2_E_GammaOriginal.selected (types base) ops)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_251Closure.lean",
+      "statement": "theorem three_rows (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base))\n    (b : PV_B2_E_OrdinaryOriginal.Bytes) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op249 (types base) (selected base request ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_GammaOriginal.originalGamma b) \u2227\n    @ProverRwFull.ExternalFuns.op250 (types base) (selected base request ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_OrdinaryOriginal.original b) \u2227\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base request ops) w kappa =\n      PV_B2_E_OrdinaryOriginal.mapResult mapRust\n        (PV_B2_F_MaterializeRequest.original request w (fromNative kappa))"
+    }
+  ],
+  "ambient_context": "Every base ExternalTypes; op25 instantiated to the exact four-field weights structure. Every request : Result Outcome, ops in that carrier, weight and native kappa. No success/canonicality/source-equality premise.",
+  "nonvacuity": "All weights/kappas succeed for ok supplied. ok denied yields exactly native Error::Allocation; fail e and div are preserved. Source kernel success is unconditional. This does not assert every native allocation succeeds.",
+  "native_link_evidence_class": "Reviewed structural source/caller argument plus universal Lean Result equality for every allocation-request context and exact selected native-carrier installation; not fresh Aeneas extraction of the original mutable iterator and not a native execution/OS proof",
+  "native_limits": "Selected candidate source/callback row only; the request is universally quantified, not a new trust item or success premise. Actual native RunJoin installation, OS-failure witness independence and L1/L2/L3 remain P obligations.",
+  "binding": "MATERIALIZE-STRUCTURAL-BINDING.json",
+  "receipt": {
+    "attempt": 40837,
+    "module": "R1Z/PV_B2_F_251Closure",
+    "source_revision": "b98d7dbb865d966437731b7a770b81913e30c206",
+    "source_sha256": "42f9dd91bcf43ce1e1d0efe799cdcb731f99b5d1bd1f23ffa202d58fec0ec1fc",
+    "exit_status": 0,
+    "wall_seconds": 4.158,
+    "peak_rss_kib": 3857264,
+    "swaps": 0,
+    "accepted_axioms": true
+  },
+  "print_axioms": "40837-stdout.log"
+}

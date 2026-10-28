@@ -1,4 +1,5 @@
-import R1Z.PV_B2_F_AllocationTransport
+import R1Z.PV_B2_F_AllocationEffects
+import R1Z.PV_B2_F_MaterializeFrozen
 import R1Z.PV_B2_E_GammaOriginal
 set_option autoImplicit false
 noncomputable section
@@ -37,1095 +38,1102 @@ def mapRust : PV_B2_F_AllocationTransport.RustResult →
   | .Ok out => .Ok (toVec out)
   | .Err e => .Err (toError e)
 
-def types (base : ProverRwFull.ExternalTypes) : ProverRwFull.ExternalTypes :=
+@[reducible] def types (base : ProverRwFull.ExternalTypes) : ProverRwFull.ExternalTypes :=
   {base with op25 := W}
 
-def callback (event : Outcome) (w : W) (kappa : Native) :
+def callback (event : Result Outcome) (w : W) (kappa : Native) :
     Result (core.result.Result (alloc.vec.Vec Native) ProverRwFull.verifier.Error) :=
   PV_B2_E_OrdinaryOriginal.mapResult mapRust
-    (PV_B2_F_AllocationTransport.copied event w (fromNative kappa))
-def originalCallback (event : Outcome) (w : W) (kappa : Native) :
+    (PV_B2_F_AllocationEffects.copied event w (fromNative kappa))
+def originalCallback (event : Result Outcome) (w : W) (kappa : Native) :
     Result (core.result.Result (alloc.vec.Vec Native) ProverRwFull.verifier.Error) :=
   PV_B2_E_OrdinaryOriginal.mapResult mapRust
-    (PV_B2_F_AllocationTransport.original event w (fromNative kappa))
+    ((event >>= fun outcome => PV_B2_F_MaterializeFrozen.original outcome w (fromNative kappa)))
 
-def selected (base : ProverRwFull.ExternalTypes) (event : Outcome)
+def selected (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) : @ProverRwFull.ExternalFuns (types base) :=
-  {PV_B2_E_GammaOriginal.selected ops with op251 := callback event}
-def originalDictionary (base : ProverRwFull.ExternalTypes) (event : Outcome)
+  letI : ProverRwFull.ExternalTypes := types base
+  {@PV_B2_E_GammaOriginal.selected (types base) ops with op251 := callback event}
+def originalDictionary (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) : @ProverRwFull.ExternalFuns (types base) :=
-  {PV_B2_E_GammaOriginal.originalDictionary ops with op251 := originalCallback event}
+  letI : ProverRwFull.ExternalTypes := types base
+  {@PV_B2_E_GammaOriginal.originalDictionary (types base) ops with op251 := originalCallback event}
 
-theorem callbacks (event : Outcome) (w : W) (kappa : Native) :
+theorem callbacks (event : Result Outcome) (w : W) (kappa : Native) :
     callback event w kappa = originalCallback event w kappa := by
   unfold callback originalCallback
-  rw [PV_B2_F_AllocationTransport.equal]
+  apply congrArg (PV_B2_E_OrdinaryOriginal.mapResult mapRust)
+  rw [PV_B2_F_AllocationEffects.complete_result]
+  unfold PV_B2_F_AllocationEffects.original
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro outcome _
+  exact PV_B2_F_MaterializeFrozen.originals outcome w (fromNative kappa)
 
-theorem selected_callback (base : ProverRwFull.ExternalTypes) (event : Outcome)
+theorem selected_callback (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :
-    (selected base event ops).op251 w kappa = originalCallback event w kappa :=
+    @ProverRwFull.ExternalFuns.op251 (types base) (selected base event ops) w kappa = originalCallback event w kappa :=
   callbacks event w kappa
 
 theorem nonvacuity (base : ProverRwFull.ExternalTypes)
     (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :
-    ∃ out, (selected base .supplied ops).op251 w kappa = ok (.Ok out) := by
-  obtain ⟨out,ho⟩ := PV_B2_F_AllocationTransport.supplied w (fromNative kappa)
+    ∃ out, @ProverRwFull.ExternalFuns.op251 (types base) (selected base (ok .supplied) ops) w kappa = ok (.Ok out) := by
+  obtain ⟨out,ho⟩ := PV_B2_F_AllocationEffects.supplied w (fromNative kappa)
   exact ⟨toVec out,by change PV_B2_E_OrdinaryOriginal.mapResult mapRust _ = _; rw [ho]; rfl⟩
 
 theorem allocation_error (base : ProverRwFull.ExternalTypes)
     (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :
-    (selected base .denied ops).op251 w kappa = ok (.Err ProverRwFull.verifier.Error.Allocation) := rfl
+    @ProverRwFull.ExternalFuns.op251 (types base) (selected base (ok .denied) ops) w kappa = ok (.Err ProverRwFull.verifier.Error.Allocation) := rfl
 
-theorem dictionaries (base : ProverRwFull.ExternalTypes) (event : Outcome)
+theorem dictionaries (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
     selected base event ops = originalDictionary base event ops := by
   have hc : callback event = originalCallback event := by
     funext w kappa
     exact callbacks event w kappa
   unfold selected originalDictionary
-  rw [PV_B2_E_GammaOriginal.dictionaries,hc]
+  rw [@PV_B2_E_GammaOriginal.dictionaries (types base) ops,hc]
 
 theorem observations {O : Sort _} (base : ProverRwFull.ExternalTypes)
-    (observe : @ProverRwFull.ExternalFuns (types base) → O) (event : Outcome)
+    (observe : @ProverRwFull.ExternalFuns (types base) → O) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
     observe (selected base event ops)=observe (originalDictionary base event ops) :=
   congrArg observe (dictionaries base event ops)
-theorem preserved_0 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op0 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op0 _ ops := PV_B2_E_GammaOriginal.preserved_0 ops
-theorem preserved_1 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op1 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op1 _ ops := PV_B2_E_GammaOriginal.preserved_1 ops
-theorem preserved_2 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op2 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op2 _ ops := PV_B2_E_GammaOriginal.preserved_2 ops
-theorem preserved_3 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op3 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op3 _ ops := PV_B2_E_GammaOriginal.preserved_3 ops
-theorem preserved_4 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op4 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op4 _ ops := PV_B2_E_GammaOriginal.preserved_4 ops
-theorem preserved_5 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op5 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op5 _ ops := PV_B2_E_GammaOriginal.preserved_5 ops
-theorem preserved_6 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op6 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op6 _ ops := PV_B2_E_GammaOriginal.preserved_6 ops
-theorem preserved_7 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op7 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op7 _ ops := PV_B2_E_GammaOriginal.preserved_7 ops
-theorem preserved_8 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op8 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op8 _ ops := PV_B2_E_GammaOriginal.preserved_8 ops
-theorem preserved_9 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op9 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op9 _ ops := PV_B2_E_GammaOriginal.preserved_9 ops
-theorem preserved_10 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op10 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op10 _ ops := PV_B2_E_GammaOriginal.preserved_10 ops
-theorem preserved_11 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op11 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op11 _ ops := PV_B2_E_GammaOriginal.preserved_11 ops
-theorem preserved_12 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op12 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op12 _ ops := PV_B2_E_GammaOriginal.preserved_12 ops
-theorem preserved_13 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op13 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op13 _ ops := PV_B2_E_GammaOriginal.preserved_13 ops
-theorem preserved_14 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op14 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op14 _ ops := PV_B2_E_GammaOriginal.preserved_14 ops
-theorem preserved_15 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op15 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op15 _ ops := PV_B2_E_GammaOriginal.preserved_15 ops
-theorem preserved_16 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op16 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op16 _ ops := PV_B2_E_GammaOriginal.preserved_16 ops
-theorem preserved_17 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op17 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op17 _ ops := PV_B2_E_GammaOriginal.preserved_17 ops
-theorem preserved_18 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op18 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op18 _ ops := PV_B2_E_GammaOriginal.preserved_18 ops
-theorem preserved_19 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op19 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op19 _ ops := PV_B2_E_GammaOriginal.preserved_19 ops
-theorem preserved_20 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op20 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op20 _ ops := PV_B2_E_GammaOriginal.preserved_20 ops
-theorem preserved_21 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op21 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op21 _ ops := PV_B2_E_GammaOriginal.preserved_21 ops
-theorem preserved_22 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op22 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op22 _ ops := PV_B2_E_GammaOriginal.preserved_22 ops
-theorem preserved_23 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op23 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op23 _ ops := PV_B2_E_GammaOriginal.preserved_23 ops
-theorem preserved_24 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op24 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op24 _ ops := PV_B2_E_GammaOriginal.preserved_24 ops
-theorem preserved_25 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op25 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op25 _ ops := PV_B2_E_GammaOriginal.preserved_25 ops
-theorem preserved_26 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op26 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op26 _ ops := PV_B2_E_GammaOriginal.preserved_26 ops
-theorem preserved_27 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op27 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op27 _ ops := PV_B2_E_GammaOriginal.preserved_27 ops
-theorem preserved_28 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op28 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op28 _ ops := PV_B2_E_GammaOriginal.preserved_28 ops
-theorem preserved_29 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op29 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op29 _ ops := PV_B2_E_GammaOriginal.preserved_29 ops
-theorem preserved_30 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op30 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op30 _ ops := PV_B2_E_GammaOriginal.preserved_30 ops
-theorem preserved_31 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op31 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op31 _ ops := PV_B2_E_GammaOriginal.preserved_31 ops
-theorem preserved_32 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op32 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op32 _ ops := PV_B2_E_GammaOriginal.preserved_32 ops
-theorem preserved_33 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op33 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op33 _ ops := PV_B2_E_GammaOriginal.preserved_33 ops
-theorem preserved_34 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op34 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op34 _ ops := PV_B2_E_GammaOriginal.preserved_34 ops
-theorem preserved_35 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op35 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op35 _ ops := PV_B2_E_GammaOriginal.preserved_35 ops
-theorem preserved_36 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op36 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op36 _ ops := PV_B2_E_GammaOriginal.preserved_36 ops
-theorem preserved_37 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op37 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op37 _ ops := PV_B2_E_GammaOriginal.preserved_37 ops
-theorem preserved_38 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op38 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op38 _ ops := PV_B2_E_GammaOriginal.preserved_38 ops
-theorem preserved_39 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op39 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op39 _ ops := PV_B2_E_GammaOriginal.preserved_39 ops
-theorem preserved_40 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op40 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op40 _ ops := PV_B2_E_GammaOriginal.preserved_40 ops
-theorem preserved_41 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op41 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op41 _ ops := PV_B2_E_GammaOriginal.preserved_41 ops
-theorem preserved_42 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op42 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op42 _ ops := PV_B2_E_GammaOriginal.preserved_42 ops
-theorem preserved_43 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op43 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op43 _ ops := PV_B2_E_GammaOriginal.preserved_43 ops
-theorem preserved_44 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op44 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op44 _ ops := PV_B2_E_GammaOriginal.preserved_44 ops
-theorem preserved_45 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op45 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op45 _ ops := PV_B2_E_GammaOriginal.preserved_45 ops
-theorem preserved_46 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op46 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op46 _ ops := PV_B2_E_GammaOriginal.preserved_46 ops
-theorem preserved_47 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op47 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op47 _ ops := PV_B2_E_GammaOriginal.preserved_47 ops
-theorem preserved_48 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op48 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op48 _ ops := PV_B2_E_GammaOriginal.preserved_48 ops
-theorem preserved_49 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op49 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op49 _ ops := PV_B2_E_GammaOriginal.preserved_49 ops
-theorem preserved_50 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op50 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op50 _ ops := PV_B2_E_GammaOriginal.preserved_50 ops
-theorem preserved_51 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op51 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op51 _ ops := PV_B2_E_GammaOriginal.preserved_51 ops
-theorem preserved_52 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op52 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op52 _ ops := PV_B2_E_GammaOriginal.preserved_52 ops
-theorem preserved_53 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op53 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op53 _ ops := PV_B2_E_GammaOriginal.preserved_53 ops
-theorem preserved_54 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op54 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op54 _ ops := PV_B2_E_GammaOriginal.preserved_54 ops
-theorem preserved_55 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op55 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op55 _ ops := PV_B2_E_GammaOriginal.preserved_55 ops
-theorem preserved_56 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op56 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op56 _ ops := PV_B2_E_GammaOriginal.preserved_56 ops
-theorem preserved_57 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op57 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op57 _ ops := PV_B2_E_GammaOriginal.preserved_57 ops
-theorem preserved_58 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op58 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op58 _ ops := PV_B2_E_GammaOriginal.preserved_58 ops
-theorem preserved_59 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op59 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op59 _ ops := PV_B2_E_GammaOriginal.preserved_59 ops
-theorem preserved_60 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op60 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op60 _ ops := PV_B2_E_GammaOriginal.preserved_60 ops
-theorem preserved_61 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op61 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op61 _ ops := PV_B2_E_GammaOriginal.preserved_61 ops
-theorem preserved_62 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op62 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op62 _ ops := PV_B2_E_GammaOriginal.preserved_62 ops
-theorem preserved_63 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op63 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op63 _ ops := PV_B2_E_GammaOriginal.preserved_63 ops
-theorem preserved_64 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op64 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op64 _ ops := PV_B2_E_GammaOriginal.preserved_64 ops
-theorem preserved_65 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op65 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op65 _ ops := PV_B2_E_GammaOriginal.preserved_65 ops
-theorem preserved_66 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op66 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op66 _ ops := PV_B2_E_GammaOriginal.preserved_66 ops
-theorem preserved_67 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op67 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op67 _ ops := PV_B2_E_GammaOriginal.preserved_67 ops
-theorem preserved_68 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op68 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op68 _ ops := PV_B2_E_GammaOriginal.preserved_68 ops
-theorem preserved_69 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op69 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op69 _ ops := PV_B2_E_GammaOriginal.preserved_69 ops
-theorem preserved_70 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op70 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op70 _ ops := PV_B2_E_GammaOriginal.preserved_70 ops
-theorem preserved_71 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op71 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op71 _ ops := PV_B2_E_GammaOriginal.preserved_71 ops
-theorem preserved_72 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op72 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op72 _ ops := PV_B2_E_GammaOriginal.preserved_72 ops
-theorem preserved_73 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op73 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op73 _ ops := PV_B2_E_GammaOriginal.preserved_73 ops
-theorem preserved_74 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op74 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op74 _ ops := PV_B2_E_GammaOriginal.preserved_74 ops
-theorem preserved_75 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op75 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op75 _ ops := PV_B2_E_GammaOriginal.preserved_75 ops
-theorem preserved_76 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op76 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op76 _ ops := PV_B2_E_GammaOriginal.preserved_76 ops
-theorem preserved_77 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op77 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op77 _ ops := PV_B2_E_GammaOriginal.preserved_77 ops
-theorem preserved_78 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op78 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op78 _ ops := PV_B2_E_GammaOriginal.preserved_78 ops
-theorem preserved_79 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op79 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op79 _ ops := PV_B2_E_GammaOriginal.preserved_79 ops
-theorem preserved_80 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op80 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op80 _ ops := PV_B2_E_GammaOriginal.preserved_80 ops
-theorem preserved_81 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op81 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op81 _ ops := PV_B2_E_GammaOriginal.preserved_81 ops
-theorem preserved_82 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op82 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op82 _ ops := PV_B2_E_GammaOriginal.preserved_82 ops
-theorem preserved_83 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op83 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op83 _ ops := PV_B2_E_GammaOriginal.preserved_83 ops
-theorem preserved_84 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op84 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op84 _ ops := PV_B2_E_GammaOriginal.preserved_84 ops
-theorem preserved_85 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op85 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op85 _ ops := PV_B2_E_GammaOriginal.preserved_85 ops
-theorem preserved_86 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op86 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op86 _ ops := PV_B2_E_GammaOriginal.preserved_86 ops
-theorem preserved_87 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op87 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op87 _ ops := PV_B2_E_GammaOriginal.preserved_87 ops
-theorem preserved_88 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op88 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op88 _ ops := PV_B2_E_GammaOriginal.preserved_88 ops
-theorem preserved_89 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op89 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op89 _ ops := PV_B2_E_GammaOriginal.preserved_89 ops
-theorem preserved_90 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op90 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op90 _ ops := PV_B2_E_GammaOriginal.preserved_90 ops
-theorem preserved_91 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op91 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op91 _ ops := PV_B2_E_GammaOriginal.preserved_91 ops
-theorem preserved_92 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op92 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op92 _ ops := PV_B2_E_GammaOriginal.preserved_92 ops
-theorem preserved_93 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op93 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op93 _ ops := PV_B2_E_GammaOriginal.preserved_93 ops
-theorem preserved_94 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op94 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op94 _ ops := PV_B2_E_GammaOriginal.preserved_94 ops
-theorem preserved_95 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op95 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op95 _ ops := PV_B2_E_GammaOriginal.preserved_95 ops
-theorem preserved_96 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op96 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op96 _ ops := PV_B2_E_GammaOriginal.preserved_96 ops
-theorem preserved_97 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op97 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op97 _ ops := PV_B2_E_GammaOriginal.preserved_97 ops
-theorem preserved_98 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op98 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op98 _ ops := PV_B2_E_GammaOriginal.preserved_98 ops
-theorem preserved_99 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op99 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op99 _ ops := PV_B2_E_GammaOriginal.preserved_99 ops
-theorem preserved_100 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op100 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op100 _ ops := PV_B2_E_GammaOriginal.preserved_100 ops
-theorem preserved_101 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op101 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op101 _ ops := PV_B2_E_GammaOriginal.preserved_101 ops
-theorem preserved_102 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op102 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op102 _ ops := PV_B2_E_GammaOriginal.preserved_102 ops
-theorem preserved_103 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op103 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op103 _ ops := PV_B2_E_GammaOriginal.preserved_103 ops
-theorem preserved_104 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op104 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op104 _ ops := PV_B2_E_GammaOriginal.preserved_104 ops
-theorem preserved_105 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op105 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op105 _ ops := PV_B2_E_GammaOriginal.preserved_105 ops
-theorem preserved_106 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op106 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op106 _ ops := PV_B2_E_GammaOriginal.preserved_106 ops
-theorem preserved_107 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op107 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op107 _ ops := PV_B2_E_GammaOriginal.preserved_107 ops
-theorem preserved_108 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op108 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op108 _ ops := PV_B2_E_GammaOriginal.preserved_108 ops
-theorem preserved_109 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op109 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op109 _ ops := PV_B2_E_GammaOriginal.preserved_109 ops
-theorem preserved_110 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op110 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op110 _ ops := PV_B2_E_GammaOriginal.preserved_110 ops
-theorem preserved_111 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op111 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op111 _ ops := PV_B2_E_GammaOriginal.preserved_111 ops
-theorem preserved_112 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op112 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op112 _ ops := PV_B2_E_GammaOriginal.preserved_112 ops
-theorem preserved_113 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op113 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op113 _ ops := PV_B2_E_GammaOriginal.preserved_113 ops
-theorem preserved_114 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op114 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op114 _ ops := PV_B2_E_GammaOriginal.preserved_114 ops
-theorem preserved_115 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op115 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op115 _ ops := PV_B2_E_GammaOriginal.preserved_115 ops
-theorem preserved_116 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op116 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op116 _ ops := PV_B2_E_GammaOriginal.preserved_116 ops
-theorem preserved_117 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op117 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op117 _ ops := PV_B2_E_GammaOriginal.preserved_117 ops
-theorem preserved_118 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op118 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op118 _ ops := PV_B2_E_GammaOriginal.preserved_118 ops
-theorem preserved_119 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op119 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op119 _ ops := PV_B2_E_GammaOriginal.preserved_119 ops
-theorem preserved_120 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op120 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op120 _ ops := PV_B2_E_GammaOriginal.preserved_120 ops
-theorem preserved_121 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op121 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op121 _ ops := PV_B2_E_GammaOriginal.preserved_121 ops
-theorem preserved_122 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op122 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op122 _ ops := PV_B2_E_GammaOriginal.preserved_122 ops
-theorem preserved_123 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op123 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op123 _ ops := PV_B2_E_GammaOriginal.preserved_123 ops
-theorem preserved_124 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op124 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op124 _ ops := PV_B2_E_GammaOriginal.preserved_124 ops
-theorem preserved_125 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op125 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op125 _ ops := PV_B2_E_GammaOriginal.preserved_125 ops
-theorem preserved_126 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op126 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op126 _ ops := PV_B2_E_GammaOriginal.preserved_126 ops
-theorem preserved_127 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op127 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op127 _ ops := PV_B2_E_GammaOriginal.preserved_127 ops
-theorem preserved_128 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op128 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op128 _ ops := PV_B2_E_GammaOriginal.preserved_128 ops
-theorem preserved_129 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op129 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op129 _ ops := PV_B2_E_GammaOriginal.preserved_129 ops
-theorem preserved_130 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op130 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op130 _ ops := PV_B2_E_GammaOriginal.preserved_130 ops
-theorem preserved_131 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op131 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op131 _ ops := PV_B2_E_GammaOriginal.preserved_131 ops
-theorem preserved_132 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op132 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op132 _ ops := PV_B2_E_GammaOriginal.preserved_132 ops
-theorem preserved_133 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op133 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op133 _ ops := PV_B2_E_GammaOriginal.preserved_133 ops
-theorem preserved_134 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op134 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op134 _ ops := PV_B2_E_GammaOriginal.preserved_134 ops
-theorem preserved_135 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op135 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op135 _ ops := PV_B2_E_GammaOriginal.preserved_135 ops
-theorem preserved_136 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op136 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op136 _ ops := PV_B2_E_GammaOriginal.preserved_136 ops
-theorem preserved_137 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op137 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op137 _ ops := PV_B2_E_GammaOriginal.preserved_137 ops
-theorem preserved_138 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op138 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op138 _ ops := PV_B2_E_GammaOriginal.preserved_138 ops
-theorem preserved_139 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op139 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op139 _ ops := PV_B2_E_GammaOriginal.preserved_139 ops
-theorem preserved_140 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op140 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op140 _ ops := PV_B2_E_GammaOriginal.preserved_140 ops
-theorem preserved_141 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op141 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op141 _ ops := PV_B2_E_GammaOriginal.preserved_141 ops
-theorem preserved_142 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op142 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op142 _ ops := PV_B2_E_GammaOriginal.preserved_142 ops
-theorem preserved_143 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op143 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op143 _ ops := PV_B2_E_GammaOriginal.preserved_143 ops
-theorem preserved_144 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op144 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op144 _ ops := PV_B2_E_GammaOriginal.preserved_144 ops
-theorem preserved_145 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op145 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op145 _ ops := PV_B2_E_GammaOriginal.preserved_145 ops
-theorem preserved_146 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op146 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op146 _ ops := PV_B2_E_GammaOriginal.preserved_146 ops
-theorem preserved_147 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op147 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op147 _ ops := PV_B2_E_GammaOriginal.preserved_147 ops
-theorem preserved_148 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op148 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op148 _ ops := PV_B2_E_GammaOriginal.preserved_148 ops
-theorem preserved_149 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op149 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op149 _ ops := PV_B2_E_GammaOriginal.preserved_149 ops
-theorem preserved_150 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op150 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op150 _ ops := PV_B2_E_GammaOriginal.preserved_150 ops
-theorem preserved_151 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op151 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op151 _ ops := PV_B2_E_GammaOriginal.preserved_151 ops
-theorem preserved_152 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op152 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op152 _ ops := PV_B2_E_GammaOriginal.preserved_152 ops
-theorem preserved_153 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op153 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op153 _ ops := PV_B2_E_GammaOriginal.preserved_153 ops
-theorem preserved_154 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op154 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op154 _ ops := PV_B2_E_GammaOriginal.preserved_154 ops
-theorem preserved_155 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op155 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op155 _ ops := PV_B2_E_GammaOriginal.preserved_155 ops
-theorem preserved_156 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op156 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op156 _ ops := PV_B2_E_GammaOriginal.preserved_156 ops
-theorem preserved_157 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op157 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op157 _ ops := PV_B2_E_GammaOriginal.preserved_157 ops
-theorem preserved_158 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op158 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op158 _ ops := PV_B2_E_GammaOriginal.preserved_158 ops
-theorem preserved_159 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op159 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op159 _ ops := PV_B2_E_GammaOriginal.preserved_159 ops
-theorem preserved_160 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op160 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op160 _ ops := PV_B2_E_GammaOriginal.preserved_160 ops
-theorem preserved_161 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op161 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op161 _ ops := PV_B2_E_GammaOriginal.preserved_161 ops
-theorem preserved_162 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op162 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op162 _ ops := PV_B2_E_GammaOriginal.preserved_162 ops
-theorem preserved_163 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op163 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op163 _ ops := PV_B2_E_GammaOriginal.preserved_163 ops
-theorem preserved_164 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op164 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op164 _ ops := PV_B2_E_GammaOriginal.preserved_164 ops
-theorem preserved_165 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op165 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op165 _ ops := PV_B2_E_GammaOriginal.preserved_165 ops
-theorem preserved_166 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op166 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op166 _ ops := PV_B2_E_GammaOriginal.preserved_166 ops
-theorem preserved_167 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op167 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op167 _ ops := PV_B2_E_GammaOriginal.preserved_167 ops
-theorem preserved_168 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op168 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op168 _ ops := PV_B2_E_GammaOriginal.preserved_168 ops
-theorem preserved_169 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op169 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op169 _ ops := PV_B2_E_GammaOriginal.preserved_169 ops
-theorem preserved_170 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op170 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op170 _ ops := PV_B2_E_GammaOriginal.preserved_170 ops
-theorem preserved_171 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op171 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op171 _ ops := PV_B2_E_GammaOriginal.preserved_171 ops
-theorem preserved_172 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op172 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op172 _ ops := PV_B2_E_GammaOriginal.preserved_172 ops
-theorem preserved_173 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op173 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op173 _ ops := PV_B2_E_GammaOriginal.preserved_173 ops
-theorem preserved_174 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op174 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op174 _ ops := PV_B2_E_GammaOriginal.preserved_174 ops
-theorem preserved_175 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op175 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op175 _ ops := PV_B2_E_GammaOriginal.preserved_175 ops
-theorem preserved_176 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op176 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op176 _ ops := PV_B2_E_GammaOriginal.preserved_176 ops
-theorem preserved_177 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op177 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op177 _ ops := PV_B2_E_GammaOriginal.preserved_177 ops
-theorem preserved_178 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op178 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op178 _ ops := PV_B2_E_GammaOriginal.preserved_178 ops
-theorem preserved_179 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op179 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op179 _ ops := PV_B2_E_GammaOriginal.preserved_179 ops
-theorem preserved_180 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op180 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op180 _ ops := PV_B2_E_GammaOriginal.preserved_180 ops
-theorem preserved_181 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op181 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op181 _ ops := PV_B2_E_GammaOriginal.preserved_181 ops
-theorem preserved_182 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op182 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op182 _ ops := PV_B2_E_GammaOriginal.preserved_182 ops
-theorem preserved_183 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op183 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op183 _ ops := PV_B2_E_GammaOriginal.preserved_183 ops
-theorem preserved_184 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op184 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op184 _ ops := PV_B2_E_GammaOriginal.preserved_184 ops
-theorem preserved_185 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op185 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op185 _ ops := PV_B2_E_GammaOriginal.preserved_185 ops
-theorem preserved_186 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op186 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op186 _ ops := PV_B2_E_GammaOriginal.preserved_186 ops
-theorem preserved_187 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op187 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op187 _ ops := PV_B2_E_GammaOriginal.preserved_187 ops
-theorem preserved_188 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op188 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op188 _ ops := PV_B2_E_GammaOriginal.preserved_188 ops
-theorem preserved_189 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op189 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op189 _ ops := PV_B2_E_GammaOriginal.preserved_189 ops
-theorem preserved_190 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op190 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op190 _ ops := PV_B2_E_GammaOriginal.preserved_190 ops
-theorem preserved_191 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op191 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op191 _ ops := PV_B2_E_GammaOriginal.preserved_191 ops
-theorem preserved_192 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op192 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op192 _ ops := PV_B2_E_GammaOriginal.preserved_192 ops
-theorem preserved_193 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op193 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op193 _ ops := PV_B2_E_GammaOriginal.preserved_193 ops
-theorem preserved_194 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op194 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op194 _ ops := PV_B2_E_GammaOriginal.preserved_194 ops
-theorem preserved_195 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op195 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op195 _ ops := PV_B2_E_GammaOriginal.preserved_195 ops
-theorem preserved_196 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op196 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op196 _ ops := PV_B2_E_GammaOriginal.preserved_196 ops
-theorem preserved_197 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op197 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op197 _ ops := PV_B2_E_GammaOriginal.preserved_197 ops
-theorem preserved_198 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op198 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op198 _ ops := PV_B2_E_GammaOriginal.preserved_198 ops
-theorem preserved_199 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op199 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op199 _ ops := PV_B2_E_GammaOriginal.preserved_199 ops
-theorem preserved_200 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op200 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op200 _ ops := PV_B2_E_GammaOriginal.preserved_200 ops
-theorem preserved_201 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op201 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op201 _ ops := PV_B2_E_GammaOriginal.preserved_201 ops
-theorem preserved_202 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op202 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op202 _ ops := PV_B2_E_GammaOriginal.preserved_202 ops
-theorem preserved_203 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op203 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op203 _ ops := PV_B2_E_GammaOriginal.preserved_203 ops
-theorem preserved_204 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op204 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op204 _ ops := PV_B2_E_GammaOriginal.preserved_204 ops
-theorem preserved_205 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op205 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op205 _ ops := PV_B2_E_GammaOriginal.preserved_205 ops
-theorem preserved_206 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op206 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op206 _ ops := PV_B2_E_GammaOriginal.preserved_206 ops
-theorem preserved_207 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op207 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op207 _ ops := PV_B2_E_GammaOriginal.preserved_207 ops
-theorem preserved_208 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op208 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op208 _ ops := PV_B2_E_GammaOriginal.preserved_208 ops
-theorem preserved_209 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op209 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op209 _ ops := PV_B2_E_GammaOriginal.preserved_209 ops
-theorem preserved_210 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op210 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op210 _ ops := PV_B2_E_GammaOriginal.preserved_210 ops
-theorem preserved_211 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op211 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op211 _ ops := PV_B2_E_GammaOriginal.preserved_211 ops
-theorem preserved_212 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op212 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op212 _ ops := PV_B2_E_GammaOriginal.preserved_212 ops
-theorem preserved_213 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op213 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op213 _ ops := PV_B2_E_GammaOriginal.preserved_213 ops
-theorem preserved_214 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op214 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op214 _ ops := PV_B2_E_GammaOriginal.preserved_214 ops
-theorem preserved_215 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op215 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op215 _ ops := PV_B2_E_GammaOriginal.preserved_215 ops
-theorem preserved_216 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op216 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op216 _ ops := PV_B2_E_GammaOriginal.preserved_216 ops
-theorem preserved_217 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op217 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op217 _ ops := PV_B2_E_GammaOriginal.preserved_217 ops
-theorem preserved_218 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op218 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op218 _ ops := PV_B2_E_GammaOriginal.preserved_218 ops
-theorem preserved_219 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op219 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op219 _ ops := PV_B2_E_GammaOriginal.preserved_219 ops
-theorem preserved_220 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op220 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op220 _ ops := PV_B2_E_GammaOriginal.preserved_220 ops
-theorem preserved_221 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op221 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op221 _ ops := PV_B2_E_GammaOriginal.preserved_221 ops
-theorem preserved_222 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op222 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op222 _ ops := PV_B2_E_GammaOriginal.preserved_222 ops
-theorem preserved_223 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op223 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op223 _ ops := PV_B2_E_GammaOriginal.preserved_223 ops
-theorem preserved_224 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op224 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op224 _ ops := PV_B2_E_GammaOriginal.preserved_224 ops
-theorem preserved_225 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op225 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op225 _ ops := PV_B2_E_GammaOriginal.preserved_225 ops
-theorem preserved_226 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op226 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op226 _ ops := PV_B2_E_GammaOriginal.preserved_226 ops
-theorem preserved_227 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op227 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op227 _ ops := PV_B2_E_GammaOriginal.preserved_227 ops
-theorem preserved_228 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op228 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op228 _ ops := PV_B2_E_GammaOriginal.preserved_228 ops
-theorem preserved_229 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op229 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op229 _ ops := PV_B2_E_GammaOriginal.preserved_229 ops
-theorem preserved_230 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op230 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op230 _ ops := PV_B2_E_GammaOriginal.preserved_230 ops
-theorem preserved_231 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op231 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op231 _ ops := PV_B2_E_GammaOriginal.preserved_231 ops
-theorem preserved_232 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op232 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op232 _ ops := PV_B2_E_GammaOriginal.preserved_232 ops
-theorem preserved_233 (base : ProverRwFull.ExternalTypes) (event : Outcome)
-    (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op233 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op233 _ ops := PV_B2_E_GammaOriginal.preserved_233 ops
-theorem preserved_234 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+theorem preserved_0 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op0 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op0 (types base) ops := @PV_B2_E_GammaOriginal.preserved_0 (types base) ops
+theorem preserved_1 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op1 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op1 (types base) ops := @PV_B2_E_GammaOriginal.preserved_1 (types base) ops
+theorem preserved_2 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op2 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op2 (types base) ops := @PV_B2_E_GammaOriginal.preserved_2 (types base) ops
+theorem preserved_3 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op3 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op3 (types base) ops := @PV_B2_E_GammaOriginal.preserved_3 (types base) ops
+theorem preserved_4 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op4 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op4 (types base) ops := @PV_B2_E_GammaOriginal.preserved_4 (types base) ops
+theorem preserved_5 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op5 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op5 (types base) ops := @PV_B2_E_GammaOriginal.preserved_5 (types base) ops
+theorem preserved_6 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op6 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op6 (types base) ops := @PV_B2_E_GammaOriginal.preserved_6 (types base) ops
+theorem preserved_7 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op7 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op7 (types base) ops := @PV_B2_E_GammaOriginal.preserved_7 (types base) ops
+theorem preserved_8 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op8 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op8 (types base) ops := @PV_B2_E_GammaOriginal.preserved_8 (types base) ops
+theorem preserved_9 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op9 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op9 (types base) ops := @PV_B2_E_GammaOriginal.preserved_9 (types base) ops
+theorem preserved_10 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op10 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op10 (types base) ops := @PV_B2_E_GammaOriginal.preserved_10 (types base) ops
+theorem preserved_11 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op11 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op11 (types base) ops := @PV_B2_E_GammaOriginal.preserved_11 (types base) ops
+theorem preserved_12 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op12 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op12 (types base) ops := @PV_B2_E_GammaOriginal.preserved_12 (types base) ops
+theorem preserved_13 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op13 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op13 (types base) ops := @PV_B2_E_GammaOriginal.preserved_13 (types base) ops
+theorem preserved_14 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op14 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op14 (types base) ops := @PV_B2_E_GammaOriginal.preserved_14 (types base) ops
+theorem preserved_15 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op15 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op15 (types base) ops := @PV_B2_E_GammaOriginal.preserved_15 (types base) ops
+theorem preserved_16 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op16 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op16 (types base) ops := @PV_B2_E_GammaOriginal.preserved_16 (types base) ops
+theorem preserved_17 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op17 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op17 (types base) ops := @PV_B2_E_GammaOriginal.preserved_17 (types base) ops
+theorem preserved_18 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op18 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op18 (types base) ops := @PV_B2_E_GammaOriginal.preserved_18 (types base) ops
+theorem preserved_19 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op19 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op19 (types base) ops := @PV_B2_E_GammaOriginal.preserved_19 (types base) ops
+theorem preserved_20 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op20 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op20 (types base) ops := @PV_B2_E_GammaOriginal.preserved_20 (types base) ops
+theorem preserved_21 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op21 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op21 (types base) ops := @PV_B2_E_GammaOriginal.preserved_21 (types base) ops
+theorem preserved_22 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op22 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op22 (types base) ops := @PV_B2_E_GammaOriginal.preserved_22 (types base) ops
+theorem preserved_23 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op23 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op23 (types base) ops := @PV_B2_E_GammaOriginal.preserved_23 (types base) ops
+theorem preserved_24 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op24 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op24 (types base) ops := @PV_B2_E_GammaOriginal.preserved_24 (types base) ops
+theorem preserved_25 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op25 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op25 (types base) ops := @PV_B2_E_GammaOriginal.preserved_25 (types base) ops
+theorem preserved_26 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op26 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op26 (types base) ops := @PV_B2_E_GammaOriginal.preserved_26 (types base) ops
+theorem preserved_27 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op27 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op27 (types base) ops := @PV_B2_E_GammaOriginal.preserved_27 (types base) ops
+theorem preserved_28 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op28 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op28 (types base) ops := @PV_B2_E_GammaOriginal.preserved_28 (types base) ops
+theorem preserved_29 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op29 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op29 (types base) ops := @PV_B2_E_GammaOriginal.preserved_29 (types base) ops
+theorem preserved_30 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op30 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op30 (types base) ops := @PV_B2_E_GammaOriginal.preserved_30 (types base) ops
+theorem preserved_31 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op31 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op31 (types base) ops := @PV_B2_E_GammaOriginal.preserved_31 (types base) ops
+theorem preserved_32 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op32 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op32 (types base) ops := @PV_B2_E_GammaOriginal.preserved_32 (types base) ops
+theorem preserved_33 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op33 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op33 (types base) ops := @PV_B2_E_GammaOriginal.preserved_33 (types base) ops
+theorem preserved_34 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op34 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op34 (types base) ops := @PV_B2_E_GammaOriginal.preserved_34 (types base) ops
+theorem preserved_35 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op35 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op35 (types base) ops := @PV_B2_E_GammaOriginal.preserved_35 (types base) ops
+theorem preserved_36 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op36 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op36 (types base) ops := @PV_B2_E_GammaOriginal.preserved_36 (types base) ops
+theorem preserved_37 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op37 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op37 (types base) ops := @PV_B2_E_GammaOriginal.preserved_37 (types base) ops
+theorem preserved_38 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op38 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op38 (types base) ops := @PV_B2_E_GammaOriginal.preserved_38 (types base) ops
+theorem preserved_39 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op39 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op39 (types base) ops := @PV_B2_E_GammaOriginal.preserved_39 (types base) ops
+theorem preserved_40 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op40 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op40 (types base) ops := @PV_B2_E_GammaOriginal.preserved_40 (types base) ops
+theorem preserved_41 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op41 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op41 (types base) ops := @PV_B2_E_GammaOriginal.preserved_41 (types base) ops
+theorem preserved_42 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op42 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op42 (types base) ops := @PV_B2_E_GammaOriginal.preserved_42 (types base) ops
+theorem preserved_43 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op43 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op43 (types base) ops := @PV_B2_E_GammaOriginal.preserved_43 (types base) ops
+theorem preserved_44 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op44 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op44 (types base) ops := @PV_B2_E_GammaOriginal.preserved_44 (types base) ops
+theorem preserved_45 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op45 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op45 (types base) ops := @PV_B2_E_GammaOriginal.preserved_45 (types base) ops
+theorem preserved_46 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op46 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op46 (types base) ops := @PV_B2_E_GammaOriginal.preserved_46 (types base) ops
+theorem preserved_47 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op47 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op47 (types base) ops := @PV_B2_E_GammaOriginal.preserved_47 (types base) ops
+theorem preserved_48 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op48 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op48 (types base) ops := @PV_B2_E_GammaOriginal.preserved_48 (types base) ops
+theorem preserved_49 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op49 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op49 (types base) ops := @PV_B2_E_GammaOriginal.preserved_49 (types base) ops
+theorem preserved_50 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op50 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op50 (types base) ops := @PV_B2_E_GammaOriginal.preserved_50 (types base) ops
+theorem preserved_51 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op51 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op51 (types base) ops := @PV_B2_E_GammaOriginal.preserved_51 (types base) ops
+theorem preserved_52 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op52 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op52 (types base) ops := @PV_B2_E_GammaOriginal.preserved_52 (types base) ops
+theorem preserved_53 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op53 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op53 (types base) ops := @PV_B2_E_GammaOriginal.preserved_53 (types base) ops
+theorem preserved_54 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op54 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op54 (types base) ops := @PV_B2_E_GammaOriginal.preserved_54 (types base) ops
+theorem preserved_55 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op55 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op55 (types base) ops := @PV_B2_E_GammaOriginal.preserved_55 (types base) ops
+theorem preserved_56 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op56 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op56 (types base) ops := @PV_B2_E_GammaOriginal.preserved_56 (types base) ops
+theorem preserved_57 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op57 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op57 (types base) ops := @PV_B2_E_GammaOriginal.preserved_57 (types base) ops
+theorem preserved_58 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op58 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op58 (types base) ops := @PV_B2_E_GammaOriginal.preserved_58 (types base) ops
+theorem preserved_59 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op59 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op59 (types base) ops := @PV_B2_E_GammaOriginal.preserved_59 (types base) ops
+theorem preserved_60 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op60 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op60 (types base) ops := @PV_B2_E_GammaOriginal.preserved_60 (types base) ops
+theorem preserved_61 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op61 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op61 (types base) ops := @PV_B2_E_GammaOriginal.preserved_61 (types base) ops
+theorem preserved_62 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op62 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op62 (types base) ops := @PV_B2_E_GammaOriginal.preserved_62 (types base) ops
+theorem preserved_63 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op63 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op63 (types base) ops := @PV_B2_E_GammaOriginal.preserved_63 (types base) ops
+theorem preserved_64 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op64 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op64 (types base) ops := @PV_B2_E_GammaOriginal.preserved_64 (types base) ops
+theorem preserved_65 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op65 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op65 (types base) ops := @PV_B2_E_GammaOriginal.preserved_65 (types base) ops
+theorem preserved_66 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op66 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op66 (types base) ops := @PV_B2_E_GammaOriginal.preserved_66 (types base) ops
+theorem preserved_67 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op67 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op67 (types base) ops := @PV_B2_E_GammaOriginal.preserved_67 (types base) ops
+theorem preserved_68 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op68 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op68 (types base) ops := @PV_B2_E_GammaOriginal.preserved_68 (types base) ops
+theorem preserved_69 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op69 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op69 (types base) ops := @PV_B2_E_GammaOriginal.preserved_69 (types base) ops
+theorem preserved_70 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op70 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op70 (types base) ops := @PV_B2_E_GammaOriginal.preserved_70 (types base) ops
+theorem preserved_71 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op71 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op71 (types base) ops := @PV_B2_E_GammaOriginal.preserved_71 (types base) ops
+theorem preserved_72 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op72 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op72 (types base) ops := @PV_B2_E_GammaOriginal.preserved_72 (types base) ops
+theorem preserved_73 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op73 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op73 (types base) ops := @PV_B2_E_GammaOriginal.preserved_73 (types base) ops
+theorem preserved_74 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op74 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op74 (types base) ops := @PV_B2_E_GammaOriginal.preserved_74 (types base) ops
+theorem preserved_75 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op75 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op75 (types base) ops := @PV_B2_E_GammaOriginal.preserved_75 (types base) ops
+theorem preserved_76 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op76 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op76 (types base) ops := @PV_B2_E_GammaOriginal.preserved_76 (types base) ops
+theorem preserved_77 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op77 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op77 (types base) ops := @PV_B2_E_GammaOriginal.preserved_77 (types base) ops
+theorem preserved_78 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op78 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op78 (types base) ops := @PV_B2_E_GammaOriginal.preserved_78 (types base) ops
+theorem preserved_79 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op79 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op79 (types base) ops := @PV_B2_E_GammaOriginal.preserved_79 (types base) ops
+theorem preserved_80 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op80 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op80 (types base) ops := @PV_B2_E_GammaOriginal.preserved_80 (types base) ops
+theorem preserved_81 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op81 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op81 (types base) ops := @PV_B2_E_GammaOriginal.preserved_81 (types base) ops
+theorem preserved_82 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op82 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op82 (types base) ops := @PV_B2_E_GammaOriginal.preserved_82 (types base) ops
+theorem preserved_83 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op83 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op83 (types base) ops := @PV_B2_E_GammaOriginal.preserved_83 (types base) ops
+theorem preserved_84 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op84 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op84 (types base) ops := @PV_B2_E_GammaOriginal.preserved_84 (types base) ops
+theorem preserved_85 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op85 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op85 (types base) ops := @PV_B2_E_GammaOriginal.preserved_85 (types base) ops
+theorem preserved_86 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op86 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op86 (types base) ops := @PV_B2_E_GammaOriginal.preserved_86 (types base) ops
+theorem preserved_87 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op87 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op87 (types base) ops := @PV_B2_E_GammaOriginal.preserved_87 (types base) ops
+theorem preserved_88 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op88 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op88 (types base) ops := @PV_B2_E_GammaOriginal.preserved_88 (types base) ops
+theorem preserved_89 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op89 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op89 (types base) ops := @PV_B2_E_GammaOriginal.preserved_89 (types base) ops
+theorem preserved_90 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op90 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op90 (types base) ops := @PV_B2_E_GammaOriginal.preserved_90 (types base) ops
+theorem preserved_91 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op91 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op91 (types base) ops := @PV_B2_E_GammaOriginal.preserved_91 (types base) ops
+theorem preserved_92 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op92 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op92 (types base) ops := @PV_B2_E_GammaOriginal.preserved_92 (types base) ops
+theorem preserved_93 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op93 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op93 (types base) ops := @PV_B2_E_GammaOriginal.preserved_93 (types base) ops
+theorem preserved_94 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op94 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op94 (types base) ops := @PV_B2_E_GammaOriginal.preserved_94 (types base) ops
+theorem preserved_95 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op95 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op95 (types base) ops := @PV_B2_E_GammaOriginal.preserved_95 (types base) ops
+theorem preserved_96 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op96 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op96 (types base) ops := @PV_B2_E_GammaOriginal.preserved_96 (types base) ops
+theorem preserved_97 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op97 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op97 (types base) ops := @PV_B2_E_GammaOriginal.preserved_97 (types base) ops
+theorem preserved_98 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op98 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op98 (types base) ops := @PV_B2_E_GammaOriginal.preserved_98 (types base) ops
+theorem preserved_99 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op99 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op99 (types base) ops := @PV_B2_E_GammaOriginal.preserved_99 (types base) ops
+theorem preserved_100 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op100 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op100 (types base) ops := @PV_B2_E_GammaOriginal.preserved_100 (types base) ops
+theorem preserved_101 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op101 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op101 (types base) ops := @PV_B2_E_GammaOriginal.preserved_101 (types base) ops
+theorem preserved_102 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op102 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op102 (types base) ops := @PV_B2_E_GammaOriginal.preserved_102 (types base) ops
+theorem preserved_103 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op103 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op103 (types base) ops := @PV_B2_E_GammaOriginal.preserved_103 (types base) ops
+theorem preserved_104 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op104 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op104 (types base) ops := @PV_B2_E_GammaOriginal.preserved_104 (types base) ops
+theorem preserved_105 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op105 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op105 (types base) ops := @PV_B2_E_GammaOriginal.preserved_105 (types base) ops
+theorem preserved_106 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op106 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op106 (types base) ops := @PV_B2_E_GammaOriginal.preserved_106 (types base) ops
+theorem preserved_107 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op107 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op107 (types base) ops := @PV_B2_E_GammaOriginal.preserved_107 (types base) ops
+theorem preserved_108 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op108 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op108 (types base) ops := @PV_B2_E_GammaOriginal.preserved_108 (types base) ops
+theorem preserved_109 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op109 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op109 (types base) ops := @PV_B2_E_GammaOriginal.preserved_109 (types base) ops
+theorem preserved_110 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op110 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op110 (types base) ops := @PV_B2_E_GammaOriginal.preserved_110 (types base) ops
+theorem preserved_111 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op111 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op111 (types base) ops := @PV_B2_E_GammaOriginal.preserved_111 (types base) ops
+theorem preserved_112 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op112 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op112 (types base) ops := @PV_B2_E_GammaOriginal.preserved_112 (types base) ops
+theorem preserved_113 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op113 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op113 (types base) ops := @PV_B2_E_GammaOriginal.preserved_113 (types base) ops
+theorem preserved_114 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op114 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op114 (types base) ops := @PV_B2_E_GammaOriginal.preserved_114 (types base) ops
+theorem preserved_115 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op115 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op115 (types base) ops := @PV_B2_E_GammaOriginal.preserved_115 (types base) ops
+theorem preserved_116 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op116 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op116 (types base) ops := @PV_B2_E_GammaOriginal.preserved_116 (types base) ops
+theorem preserved_117 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op117 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op117 (types base) ops := @PV_B2_E_GammaOriginal.preserved_117 (types base) ops
+theorem preserved_118 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op118 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op118 (types base) ops := @PV_B2_E_GammaOriginal.preserved_118 (types base) ops
+theorem preserved_119 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op119 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op119 (types base) ops := @PV_B2_E_GammaOriginal.preserved_119 (types base) ops
+theorem preserved_120 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op120 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op120 (types base) ops := @PV_B2_E_GammaOriginal.preserved_120 (types base) ops
+theorem preserved_121 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op121 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op121 (types base) ops := @PV_B2_E_GammaOriginal.preserved_121 (types base) ops
+theorem preserved_122 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op122 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op122 (types base) ops := @PV_B2_E_GammaOriginal.preserved_122 (types base) ops
+theorem preserved_123 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op123 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op123 (types base) ops := @PV_B2_E_GammaOriginal.preserved_123 (types base) ops
+theorem preserved_124 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op124 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op124 (types base) ops := @PV_B2_E_GammaOriginal.preserved_124 (types base) ops
+theorem preserved_125 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op125 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op125 (types base) ops := @PV_B2_E_GammaOriginal.preserved_125 (types base) ops
+theorem preserved_126 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op126 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op126 (types base) ops := @PV_B2_E_GammaOriginal.preserved_126 (types base) ops
+theorem preserved_127 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op127 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op127 (types base) ops := @PV_B2_E_GammaOriginal.preserved_127 (types base) ops
+theorem preserved_128 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op128 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op128 (types base) ops := @PV_B2_E_GammaOriginal.preserved_128 (types base) ops
+theorem preserved_129 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op129 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op129 (types base) ops := @PV_B2_E_GammaOriginal.preserved_129 (types base) ops
+theorem preserved_130 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op130 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op130 (types base) ops := @PV_B2_E_GammaOriginal.preserved_130 (types base) ops
+theorem preserved_131 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op131 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op131 (types base) ops := @PV_B2_E_GammaOriginal.preserved_131 (types base) ops
+theorem preserved_132 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op132 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op132 (types base) ops := @PV_B2_E_GammaOriginal.preserved_132 (types base) ops
+theorem preserved_133 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op133 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op133 (types base) ops := @PV_B2_E_GammaOriginal.preserved_133 (types base) ops
+theorem preserved_134 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op134 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op134 (types base) ops := @PV_B2_E_GammaOriginal.preserved_134 (types base) ops
+theorem preserved_135 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op135 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op135 (types base) ops := @PV_B2_E_GammaOriginal.preserved_135 (types base) ops
+theorem preserved_136 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op136 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op136 (types base) ops := @PV_B2_E_GammaOriginal.preserved_136 (types base) ops
+theorem preserved_137 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op137 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op137 (types base) ops := @PV_B2_E_GammaOriginal.preserved_137 (types base) ops
+theorem preserved_138 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op138 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op138 (types base) ops := @PV_B2_E_GammaOriginal.preserved_138 (types base) ops
+theorem preserved_139 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op139 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op139 (types base) ops := @PV_B2_E_GammaOriginal.preserved_139 (types base) ops
+theorem preserved_140 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op140 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op140 (types base) ops := @PV_B2_E_GammaOriginal.preserved_140 (types base) ops
+theorem preserved_141 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op141 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op141 (types base) ops := @PV_B2_E_GammaOriginal.preserved_141 (types base) ops
+theorem preserved_142 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op142 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op142 (types base) ops := @PV_B2_E_GammaOriginal.preserved_142 (types base) ops
+theorem preserved_143 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op143 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op143 (types base) ops := @PV_B2_E_GammaOriginal.preserved_143 (types base) ops
+theorem preserved_144 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op144 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op144 (types base) ops := @PV_B2_E_GammaOriginal.preserved_144 (types base) ops
+theorem preserved_145 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op145 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op145 (types base) ops := @PV_B2_E_GammaOriginal.preserved_145 (types base) ops
+theorem preserved_146 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op146 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op146 (types base) ops := @PV_B2_E_GammaOriginal.preserved_146 (types base) ops
+theorem preserved_147 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op147 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op147 (types base) ops := @PV_B2_E_GammaOriginal.preserved_147 (types base) ops
+theorem preserved_148 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op148 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op148 (types base) ops := @PV_B2_E_GammaOriginal.preserved_148 (types base) ops
+theorem preserved_149 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op149 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op149 (types base) ops := @PV_B2_E_GammaOriginal.preserved_149 (types base) ops
+theorem preserved_150 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op150 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op150 (types base) ops := @PV_B2_E_GammaOriginal.preserved_150 (types base) ops
+theorem preserved_151 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op151 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op151 (types base) ops := @PV_B2_E_GammaOriginal.preserved_151 (types base) ops
+theorem preserved_152 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op152 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op152 (types base) ops := @PV_B2_E_GammaOriginal.preserved_152 (types base) ops
+theorem preserved_153 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op153 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op153 (types base) ops := @PV_B2_E_GammaOriginal.preserved_153 (types base) ops
+theorem preserved_154 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op154 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op154 (types base) ops := @PV_B2_E_GammaOriginal.preserved_154 (types base) ops
+theorem preserved_155 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op155 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op155 (types base) ops := @PV_B2_E_GammaOriginal.preserved_155 (types base) ops
+theorem preserved_156 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op156 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op156 (types base) ops := @PV_B2_E_GammaOriginal.preserved_156 (types base) ops
+theorem preserved_157 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op157 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op157 (types base) ops := @PV_B2_E_GammaOriginal.preserved_157 (types base) ops
+theorem preserved_158 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op158 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op158 (types base) ops := @PV_B2_E_GammaOriginal.preserved_158 (types base) ops
+theorem preserved_159 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op159 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op159 (types base) ops := @PV_B2_E_GammaOriginal.preserved_159 (types base) ops
+theorem preserved_160 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op160 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op160 (types base) ops := @PV_B2_E_GammaOriginal.preserved_160 (types base) ops
+theorem preserved_161 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op161 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op161 (types base) ops := @PV_B2_E_GammaOriginal.preserved_161 (types base) ops
+theorem preserved_162 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op162 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op162 (types base) ops := @PV_B2_E_GammaOriginal.preserved_162 (types base) ops
+theorem preserved_163 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op163 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op163 (types base) ops := @PV_B2_E_GammaOriginal.preserved_163 (types base) ops
+theorem preserved_164 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op164 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op164 (types base) ops := @PV_B2_E_GammaOriginal.preserved_164 (types base) ops
+theorem preserved_165 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op165 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op165 (types base) ops := @PV_B2_E_GammaOriginal.preserved_165 (types base) ops
+theorem preserved_166 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op166 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op166 (types base) ops := @PV_B2_E_GammaOriginal.preserved_166 (types base) ops
+theorem preserved_167 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op167 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op167 (types base) ops := @PV_B2_E_GammaOriginal.preserved_167 (types base) ops
+theorem preserved_168 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op168 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op168 (types base) ops := @PV_B2_E_GammaOriginal.preserved_168 (types base) ops
+theorem preserved_169 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op169 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op169 (types base) ops := @PV_B2_E_GammaOriginal.preserved_169 (types base) ops
+theorem preserved_170 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op170 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op170 (types base) ops := @PV_B2_E_GammaOriginal.preserved_170 (types base) ops
+theorem preserved_171 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op171 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op171 (types base) ops := @PV_B2_E_GammaOriginal.preserved_171 (types base) ops
+theorem preserved_172 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op172 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op172 (types base) ops := @PV_B2_E_GammaOriginal.preserved_172 (types base) ops
+theorem preserved_173 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op173 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op173 (types base) ops := @PV_B2_E_GammaOriginal.preserved_173 (types base) ops
+theorem preserved_174 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op174 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op174 (types base) ops := @PV_B2_E_GammaOriginal.preserved_174 (types base) ops
+theorem preserved_175 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op175 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op175 (types base) ops := @PV_B2_E_GammaOriginal.preserved_175 (types base) ops
+theorem preserved_176 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op176 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op176 (types base) ops := @PV_B2_E_GammaOriginal.preserved_176 (types base) ops
+theorem preserved_177 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op177 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op177 (types base) ops := @PV_B2_E_GammaOriginal.preserved_177 (types base) ops
+theorem preserved_178 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op178 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op178 (types base) ops := @PV_B2_E_GammaOriginal.preserved_178 (types base) ops
+theorem preserved_179 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op179 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op179 (types base) ops := @PV_B2_E_GammaOriginal.preserved_179 (types base) ops
+theorem preserved_180 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op180 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op180 (types base) ops := @PV_B2_E_GammaOriginal.preserved_180 (types base) ops
+theorem preserved_181 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op181 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op181 (types base) ops := @PV_B2_E_GammaOriginal.preserved_181 (types base) ops
+theorem preserved_182 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op182 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op182 (types base) ops := @PV_B2_E_GammaOriginal.preserved_182 (types base) ops
+theorem preserved_183 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op183 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op183 (types base) ops := @PV_B2_E_GammaOriginal.preserved_183 (types base) ops
+theorem preserved_184 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op184 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op184 (types base) ops := @PV_B2_E_GammaOriginal.preserved_184 (types base) ops
+theorem preserved_185 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op185 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op185 (types base) ops := @PV_B2_E_GammaOriginal.preserved_185 (types base) ops
+theorem preserved_186 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op186 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op186 (types base) ops := @PV_B2_E_GammaOriginal.preserved_186 (types base) ops
+theorem preserved_187 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op187 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op187 (types base) ops := @PV_B2_E_GammaOriginal.preserved_187 (types base) ops
+theorem preserved_188 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op188 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op188 (types base) ops := @PV_B2_E_GammaOriginal.preserved_188 (types base) ops
+theorem preserved_189 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op189 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op189 (types base) ops := @PV_B2_E_GammaOriginal.preserved_189 (types base) ops
+theorem preserved_190 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op190 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op190 (types base) ops := @PV_B2_E_GammaOriginal.preserved_190 (types base) ops
+theorem preserved_191 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op191 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op191 (types base) ops := @PV_B2_E_GammaOriginal.preserved_191 (types base) ops
+theorem preserved_192 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op192 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op192 (types base) ops := @PV_B2_E_GammaOriginal.preserved_192 (types base) ops
+theorem preserved_193 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op193 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op193 (types base) ops := @PV_B2_E_GammaOriginal.preserved_193 (types base) ops
+theorem preserved_194 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op194 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op194 (types base) ops := @PV_B2_E_GammaOriginal.preserved_194 (types base) ops
+theorem preserved_195 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op195 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op195 (types base) ops := @PV_B2_E_GammaOriginal.preserved_195 (types base) ops
+theorem preserved_196 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op196 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op196 (types base) ops := @PV_B2_E_GammaOriginal.preserved_196 (types base) ops
+theorem preserved_197 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op197 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op197 (types base) ops := @PV_B2_E_GammaOriginal.preserved_197 (types base) ops
+theorem preserved_198 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op198 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op198 (types base) ops := @PV_B2_E_GammaOriginal.preserved_198 (types base) ops
+theorem preserved_199 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op199 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op199 (types base) ops := @PV_B2_E_GammaOriginal.preserved_199 (types base) ops
+theorem preserved_200 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op200 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op200 (types base) ops := @PV_B2_E_GammaOriginal.preserved_200 (types base) ops
+theorem preserved_201 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op201 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op201 (types base) ops := @PV_B2_E_GammaOriginal.preserved_201 (types base) ops
+theorem preserved_202 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op202 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op202 (types base) ops := @PV_B2_E_GammaOriginal.preserved_202 (types base) ops
+theorem preserved_203 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op203 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op203 (types base) ops := @PV_B2_E_GammaOriginal.preserved_203 (types base) ops
+theorem preserved_204 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op204 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op204 (types base) ops := @PV_B2_E_GammaOriginal.preserved_204 (types base) ops
+theorem preserved_205 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op205 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op205 (types base) ops := @PV_B2_E_GammaOriginal.preserved_205 (types base) ops
+theorem preserved_206 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op206 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op206 (types base) ops := @PV_B2_E_GammaOriginal.preserved_206 (types base) ops
+theorem preserved_207 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op207 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op207 (types base) ops := @PV_B2_E_GammaOriginal.preserved_207 (types base) ops
+theorem preserved_208 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op208 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op208 (types base) ops := @PV_B2_E_GammaOriginal.preserved_208 (types base) ops
+theorem preserved_209 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op209 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op209 (types base) ops := @PV_B2_E_GammaOriginal.preserved_209 (types base) ops
+theorem preserved_210 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op210 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op210 (types base) ops := @PV_B2_E_GammaOriginal.preserved_210 (types base) ops
+theorem preserved_211 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op211 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op211 (types base) ops := @PV_B2_E_GammaOriginal.preserved_211 (types base) ops
+theorem preserved_212 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op212 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op212 (types base) ops := @PV_B2_E_GammaOriginal.preserved_212 (types base) ops
+theorem preserved_213 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op213 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op213 (types base) ops := @PV_B2_E_GammaOriginal.preserved_213 (types base) ops
+theorem preserved_214 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op214 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op214 (types base) ops := @PV_B2_E_GammaOriginal.preserved_214 (types base) ops
+theorem preserved_215 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op215 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op215 (types base) ops := @PV_B2_E_GammaOriginal.preserved_215 (types base) ops
+theorem preserved_216 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op216 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op216 (types base) ops := @PV_B2_E_GammaOriginal.preserved_216 (types base) ops
+theorem preserved_217 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op217 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op217 (types base) ops := @PV_B2_E_GammaOriginal.preserved_217 (types base) ops
+theorem preserved_218 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op218 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op218 (types base) ops := @PV_B2_E_GammaOriginal.preserved_218 (types base) ops
+theorem preserved_219 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op219 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op219 (types base) ops := @PV_B2_E_GammaOriginal.preserved_219 (types base) ops
+theorem preserved_220 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op220 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op220 (types base) ops := @PV_B2_E_GammaOriginal.preserved_220 (types base) ops
+theorem preserved_221 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op221 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op221 (types base) ops := @PV_B2_E_GammaOriginal.preserved_221 (types base) ops
+theorem preserved_222 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op222 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op222 (types base) ops := @PV_B2_E_GammaOriginal.preserved_222 (types base) ops
+theorem preserved_223 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op223 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op223 (types base) ops := @PV_B2_E_GammaOriginal.preserved_223 (types base) ops
+theorem preserved_224 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op224 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op224 (types base) ops := @PV_B2_E_GammaOriginal.preserved_224 (types base) ops
+theorem preserved_225 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op225 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op225 (types base) ops := @PV_B2_E_GammaOriginal.preserved_225 (types base) ops
+theorem preserved_226 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op226 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op226 (types base) ops := @PV_B2_E_GammaOriginal.preserved_226 (types base) ops
+theorem preserved_227 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op227 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op227 (types base) ops := @PV_B2_E_GammaOriginal.preserved_227 (types base) ops
+theorem preserved_228 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op228 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op228 (types base) ops := @PV_B2_E_GammaOriginal.preserved_228 (types base) ops
+theorem preserved_229 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op229 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op229 (types base) ops := @PV_B2_E_GammaOriginal.preserved_229 (types base) ops
+theorem preserved_230 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op230 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op230 (types base) ops := @PV_B2_E_GammaOriginal.preserved_230 (types base) ops
+theorem preserved_231 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op231 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op231 (types base) ops := @PV_B2_E_GammaOriginal.preserved_231 (types base) ops
+theorem preserved_232 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op232 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op232 (types base) ops := @PV_B2_E_GammaOriginal.preserved_232 (types base) ops
+theorem preserved_233 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
+    (ops : @ProverRwFull.ExternalFuns (types base)) :
+    @ProverRwFull.ExternalFuns.op233 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op233 (types base) ops := @PV_B2_E_GammaOriginal.preserved_233 (types base) ops
+theorem preserved_234 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op234 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op234 _ ops := PV_B2_E_GammaOriginal.preserved_234 ops
-theorem preserved_235 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op234 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op234 (types base) ops := @PV_B2_E_GammaOriginal.preserved_234 (types base) ops
+theorem preserved_235 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op235 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op235 _ ops := PV_B2_E_GammaOriginal.preserved_235 ops
-theorem preserved_236 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op235 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op235 (types base) ops := @PV_B2_E_GammaOriginal.preserved_235 (types base) ops
+theorem preserved_236 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op236 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op236 _ ops := PV_B2_E_GammaOriginal.preserved_236 ops
-theorem preserved_237 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op236 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op236 (types base) ops := @PV_B2_E_GammaOriginal.preserved_236 (types base) ops
+theorem preserved_237 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op237 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op237 _ ops := PV_B2_E_GammaOriginal.preserved_237 ops
-theorem preserved_238 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op237 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op237 (types base) ops := @PV_B2_E_GammaOriginal.preserved_237 (types base) ops
+theorem preserved_238 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op238 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op238 _ ops := PV_B2_E_GammaOriginal.preserved_238 ops
-theorem preserved_239 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op238 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op238 (types base) ops := @PV_B2_E_GammaOriginal.preserved_238 (types base) ops
+theorem preserved_239 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op239 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op239 _ ops := PV_B2_E_GammaOriginal.preserved_239 ops
-theorem preserved_240 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op239 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op239 (types base) ops := @PV_B2_E_GammaOriginal.preserved_239 (types base) ops
+theorem preserved_240 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op240 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op240 _ ops := PV_B2_E_GammaOriginal.preserved_240 ops
-theorem preserved_241 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op240 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op240 (types base) ops := @PV_B2_E_GammaOriginal.preserved_240 (types base) ops
+theorem preserved_241 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op241 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op241 _ ops := PV_B2_E_GammaOriginal.preserved_241 ops
-theorem preserved_242 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op241 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op241 (types base) ops := @PV_B2_E_GammaOriginal.preserved_241 (types base) ops
+theorem preserved_242 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op242 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op242 _ ops := PV_B2_E_GammaOriginal.preserved_242 ops
-theorem preserved_243 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op242 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op242 (types base) ops := @PV_B2_E_GammaOriginal.preserved_242 (types base) ops
+theorem preserved_243 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op243 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op243 _ ops := PV_B2_E_GammaOriginal.preserved_243 ops
-theorem preserved_244 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op243 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op243 (types base) ops := @PV_B2_E_GammaOriginal.preserved_243 (types base) ops
+theorem preserved_244 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op244 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op244 _ ops := PV_B2_E_GammaOriginal.preserved_244 ops
-theorem preserved_245 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op244 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op244 (types base) ops := @PV_B2_E_GammaOriginal.preserved_244 (types base) ops
+theorem preserved_245 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op245 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op245 _ ops := PV_B2_E_GammaOriginal.preserved_245 ops
-theorem preserved_246 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op245 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op245 (types base) ops := @PV_B2_E_GammaOriginal.preserved_245 (types base) ops
+theorem preserved_246 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op246 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op246 _ ops := PV_B2_E_GammaOriginal.preserved_246 ops
-theorem preserved_247 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op246 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op246 (types base) ops := @PV_B2_E_GammaOriginal.preserved_246 (types base) ops
+theorem preserved_247 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op247 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op247 _ ops := PV_B2_E_GammaOriginal.preserved_247 ops
-theorem preserved_248 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op247 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op247 (types base) ops := @PV_B2_E_GammaOriginal.preserved_247 (types base) ops
+theorem preserved_248 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op248 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op248 _ ops := PV_B2_E_GammaOriginal.preserved_248 ops
-theorem preserved_252 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op248 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op248 (types base) ops := @PV_B2_E_GammaOriginal.preserved_248 (types base) ops
+theorem preserved_252 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op252 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op252 _ ops := PV_B2_E_GammaOriginal.preserved_252 ops
-theorem preserved_253 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op252 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op252 (types base) ops := @PV_B2_E_GammaOriginal.preserved_252 (types base) ops
+theorem preserved_253 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op253 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op253 _ ops := PV_B2_E_GammaOriginal.preserved_253 ops
-theorem preserved_254 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op253 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op253 (types base) ops := @PV_B2_E_GammaOriginal.preserved_253 (types base) ops
+theorem preserved_254 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op254 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op254 _ ops := PV_B2_E_GammaOriginal.preserved_254 ops
-theorem preserved_255 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op254 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op254 (types base) ops := @PV_B2_E_GammaOriginal.preserved_254 (types base) ops
+theorem preserved_255 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op255 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op255 _ ops := PV_B2_E_GammaOriginal.preserved_255 ops
-theorem preserved_256 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op255 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op255 (types base) ops := @PV_B2_E_GammaOriginal.preserved_255 (types base) ops
+theorem preserved_256 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op256 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op256 _ ops := PV_B2_E_GammaOriginal.preserved_256 ops
-theorem preserved_257 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op256 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op256 (types base) ops := @PV_B2_E_GammaOriginal.preserved_256 (types base) ops
+theorem preserved_257 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op257 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op257 _ ops := PV_B2_E_GammaOriginal.preserved_257 ops
-theorem preserved_258 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op257 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op257 (types base) ops := @PV_B2_E_GammaOriginal.preserved_257 (types base) ops
+theorem preserved_258 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op258 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op258 _ ops := PV_B2_E_GammaOriginal.preserved_258 ops
-theorem preserved_259 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op258 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op258 (types base) ops := @PV_B2_E_GammaOriginal.preserved_258 (types base) ops
+theorem preserved_259 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op259 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op259 _ ops := PV_B2_E_GammaOriginal.preserved_259 ops
-theorem preserved_260 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op259 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op259 (types base) ops := @PV_B2_E_GammaOriginal.preserved_259 (types base) ops
+theorem preserved_260 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op260 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op260 _ ops := PV_B2_E_GammaOriginal.preserved_260 ops
-theorem preserved_261 (base : ProverRwFull.ExternalTypes) (event : Outcome)
+    @ProverRwFull.ExternalFuns.op260 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op260 (types base) ops := @PV_B2_E_GammaOriginal.preserved_260 (types base) ops
+theorem preserved_261 (base : ProverRwFull.ExternalTypes) (event : Result Outcome)
     (ops : @ProverRwFull.ExternalFuns (types base)) :
-    @ProverRwFull.ExternalFuns.op261 _ (selected base event ops) =
-      @ProverRwFull.ExternalFuns.op261 _ ops := PV_B2_E_GammaOriginal.preserved_261 ops
+    @ProverRwFull.ExternalFuns.op261 (types base) (selected base event ops) =
+      @ProverRwFull.ExternalFuns.op261 (types base) ops := @PV_B2_E_GammaOriginal.preserved_261 (types base) ops
 #print axioms roundtrip
 #print axioms roundtrip_native
 #print axioms callbacks

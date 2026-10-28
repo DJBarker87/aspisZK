@@ -42,7 +42,7 @@ theorem loop (w : host_weights.Weights) (k : Powers) (out : Out) (j : Usize)
           cases Result.ok.inj hi
           exact hv
       exact Option.some.inj (hread.symm.trans hslot)
-    subst initial
+    rw [hzero] at hi
     simp only [remaining,PV_B2_F_MutationModel.remaining,hi,bind_tc_ok,
       PV_B2_F_CellAccumulate.zero]
     obtain ⟨x,hx⟩ := PV_B2_D_MaterializeTotal.cell w k j hj

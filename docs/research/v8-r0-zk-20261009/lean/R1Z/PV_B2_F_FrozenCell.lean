@@ -1,4 +1,4 @@
-import R1Z.PV_B2_F_RawOriginal
+import R1Z.PV_B2_F_RawGuard
 import R1Z.PV_B2_F_CellAccumulate
 set_option autoImplicit false
 namespace PV_B2_F_FrozenCell
@@ -9,13 +9,13 @@ def original (w : host_weights.Weights) (k : Powers) (j : Usize) (initial : E) :
   [(k0,0#usize),(k1,1#usize),(k2,2#usize),(k3,3#usize),
    (k4,4#usize),(k5,5#usize),(k6,6#usize)].foldlM
     (fun (acc : E) (term : E × Usize) => do
-      let q ← PV_B2_F_RawOriginal.original w term.2 j
+      let q ← PV_B2_F_RawGuard.original w term.2 j
       let product ← host_weights.mul_qm31 term.1 q
       aspis_core.field.wide_exact.WideExact.add acc product) initial
 
 theorem source (w : host_weights.Weights) (k : Powers) (j : Usize) (initial : E) :
     PV_B2_F_CellAccumulate.original w k j initial = original w k j initial := by
   unfold PV_B2_F_CellAccumulate.original original
-  simp only [PV_B2_F_RawOriginal.source]
+  simp only [PV_B2_F_RawGuard.source]
 #print axioms source
 end PV_B2_F_FrozenCell
