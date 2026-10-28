@@ -2,7 +2,7 @@ import R1Z.PV_RDB2D_SparseShape
 namespace R1Z.PV_RDB2D_SparseAddress
 set_option autoImplicit false
 
-def row (prefix trailing suffix : Nat) : Nat := prefix*2^trailing+suffix
+def row (pref trailing suffix : Nat) : Nat := pref*2^trailing+suffix
 
 theorem bound (width trailing suffix pref : Nat) (split : width+trailing=10)
     (hs : suffix<2^trailing) (hp : pref<2^width) : row pref trailing suffix<1024 := by

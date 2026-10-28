@@ -8,21 +8,27 @@ association to raw QM31 equality is separate; no canonicality is assumed here. -
 def trailing {K : Type} (isBoolean : K → Bool) (point : List K) : Nat :=
   (point.reverse.takeWhile isBoolean).length
 
-def prefix {K : Type} (isBoolean : K → Bool) (point : List K) : Nat :=
+def prefixLen {K : Type} (isBoolean : K → Bool) (point : List K) : Nat :=
   point.length-trailing isBoolean point
 
 def capacity {K : Type} (isBoolean : K → Bool) (point : List K) : Nat :=
-  2^prefix isBoolean point
+  2^prefixLen isBoolean point
 
 theorem trailing_bound {K : Type} (isBoolean : K → Bool) (point : List K) :
     trailing isBoolean point≤point.length := by
   unfold trailing
-  exact (List.length_takeWhile_le _ _).trans_eq (List.length_reverse _)
+  have bound : ∀ xs : List K, (xs.takeWhile isBoolean).length≤xs.length := by
+    intro xs
+    induction xs with
+    | nil => simp
+    | cons x xs ih =>
+      cases h : isBoolean x <;> simp [List.takeWhile,h] <;> omega
+  exact (bound point.reverse).trans_eq (List.length_reverse _)
 
 theorem split_length {K : Type} (isBoolean : K → Bool) (point : List K) :
-    prefix isBoolean point+trailing isBoolean point=point.length := by
+    prefixLen isBoolean point+trailing isBoolean point=point.length := by
   have h := trailing_bound isBoolean point
-  unfold prefix
+  unfold prefixLen
   omega
 
 theorem capacity_positive {K : Type} (isBoolean : K → Bool) (point : List K) :
@@ -30,7 +36,7 @@ theorem capacity_positive {K : Type} (isBoolean : K → Bool) (point : List K) :
 
 theorem capacity_bound {K : Type} (isBoolean : K → Bool) (point : List K)
     (length : point.length=10) : capacity isBoolean point≤1024 := by
-  have hp : prefix isBoolean point≤10 := by unfold prefix;omega
+  have hp : prefixLen isBoolean point≤10 := by unfold prefixLen;omega
   exact Nat.pow_le_pow_right (by omega) hp
 
 theorem same_public_point {K H : Type} (isBoolean : K → Bool) (point : List K) (left right : H) :
