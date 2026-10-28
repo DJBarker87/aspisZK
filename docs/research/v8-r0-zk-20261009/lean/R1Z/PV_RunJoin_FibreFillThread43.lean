@@ -48,7 +48,7 @@ theorem one_step (c : host_commitment.Commitment) (u : aspis_core.r0.domain.Fibr
       let next ← step c u values j
       host_commitment.fill_opening_values c u next (Usize.wrapping_add j 1#usize)) := by
   rw [host_commitment.fill_opening_values]
-  simp only [more,↓reduceIte,step,bind_assoc_eq,bind_tc_ok,lift]
+  simp only [more,↓reduceIte,step,Aeneas.Std.uncurry,bind_assoc_eq,bind_tc_ok,lift]
 
 theorem thread (n : Nat) (c : host_commitment.Commitment)
     (u : aspis_core.r0.domain.FibreIndex) (values : Matrix) (j : Usize)
