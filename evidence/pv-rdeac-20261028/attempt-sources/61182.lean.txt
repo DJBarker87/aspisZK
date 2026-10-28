@@ -1,0 +1,95 @@
+import R1Z.PV_RDEAC_JoinSimulation
+open Aeneas Aeneas.Std Result ProverRwFull
+namespace R1Z.PV_RDEAC_EndpointInstance
+open PV_RDB1_V183_ReserveWorld PV_CBL_StringBytesAdapter PV_CBL_CallbackBundle
+open PV_RDEAC_NameText PV_RDEAC_PublishedTail PV_RDEAC_JoinValue
+
+noncomputable def endpoint {S F R : Type} (base : ExternalTypes)
+    (self : @PV_RDEA_ActualReservationTail.Store (AppendTypes base)) (digest : Array U8 32#usize)
+    (step : Request → S → Option Nat × S) (free : Nat → Nat → Nat → S → S)
+    (shape : Shape) (nameAddress joinAddress : Nat) (w : World S F)
+    (oom : core.alloc.layout.Layout → World S F → R) (panic : World S F → R)
+    (next : List U8 → World S F → R) : R :=
+  let nameRun := PV_RDEA_ReservationExecution.run step shape nameAddress
+    (digest.val.map PV_RDEAC_NibbleModel.byte) w
+  match nameRun.1 with
+  | .error (.allocError layout) => oom layout nameRun.2
+  | .error .capacityOverflow => panic nameRun.2
+  | .ok owned => PV_RDEAC_JoinHandlers.consume free owned
+      (PV_RDEAC_FullJoin.join step shape joinAddress false
+        (needsSeparator (encodeList (directory base self)))
+        (encodeList (directory base self)) owned.values nameRun.2) oom panic next
+
+/-- The raw physical tail takes the actual owned name buffer, rather than a
+reconstructed value with a fresh header. Representation equality is supplied
+by the concrete constructor/name simulation in `complete` below. -/
+theorem owned {S F R : Type} (base : ExternalTypes) (ops : @ExternalFuns (AppendTypes base))
+    (self : @PV_RDEA_ActualReservationTail.Store (AppendTypes base)) (digest : Array U8 32#usize)
+    (step : Request → S → Option Nat × S) (free : Nat → Nat → Nat → S → S)
+    (nameBuffer : Buffer U8) (shape : Shape) (width : shape.width=1) (joinAddress : Nat)
+    (w : World S F) (abi : 9223372036854775808≤Usize.max)
+    (repr : nameBuffer.values=encodeList (basenameText digest.val))
+    (oom : core.alloc.layout.Layout → World S F → R) (panic : World S F → R)
+    (next : List U8 → World S F → R) :
+    letI : ExternalTypes := AppendTypes base
+    letI : ExternalFuns := selectedJoin base ops
+    let e := PV_RDEAC_FullJoin.join step shape joinAddress false
+      (needsSeparator (encodeList (directory base self))) (encodeList (directory base self)) nameBuffer.values w
+    PV_RDEAC_JoinHandlers.consume free nameBuffer e oom panic next=
+      (match e.returned with
+       | .error (.allocError layout) => oom layout e.world
+       | .error .capacityOverflow => panic (PV_RDEAC_OwnedCleanup.release free nameBuffer (PV_RDEAC_OwnedCleanup.release free e.buffer e.world))
+       | .ok () => next (encodeList (PV_RDEAC_JoinString.joinedText (directory base self) (basenameText digest.val)))
+          (PV_RDEAC_OwnedCleanup.release free nameBuffer e.world)) ∧
+    (e.returned=.ok () → PV_RDEA_ActualEndpointConsumer.afterCapacity self digest ""=
+      ok (PV_RDEAC_JoinString.joinedText (directory base self) (basenameText digest.val))) ∧
+    PV_RDEA_PrefixWords.Prefix (PV_RDEA_CapacityEndpoint.sizes (PV_RDEAC_JoinHandlers.finalWorld free nameBuffer e).history)
+      (PV_RDEA_CapacityEndpoint.sizes w.history++PV_RDEA_PathSchedule.joinWord
+        (encodeList (directory base self)).length nameBuffer.values.length false
+        (needsSeparator (encodeList (directory base self)))) := by
+  rw [repr]
+  exact PV_RDEAC_JoinSimulation.consumed base ops self digest step free nameBuffer shape width joinAddress w abi oom panic next
+
+theorem complete {S F R : Type} (base : ExternalTypes) (ops : @ExternalFuns (AppendTypes base))
+    (self : @PV_RDEA_ActualReservationTail.Store (AppendTypes base)) (digest : Array U8 32#usize)
+    (step : Request → S → Option Nat × S) (free : Nat → Nat → Nat → S → S)
+    (shape : Shape) (width : shape.width=1) (nameAddress joinAddress : Nat) (w : World S F)
+    (oom : core.alloc.layout.Layout → World S F → R) (panic : World S F → R)
+    (next : List U8 → World S F → R) :
+    let e := PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w
+    let nameRun := PV_RDEA_ReservationExecution.run step shape nameAddress (digest.val.map PV_RDEAC_NibbleModel.byte) w
+    (match e.returned with
+     | .error (.allocError layout) => endpoint base self digest step free shape nameAddress joinAddress w oom panic next=oom layout e.world
+     | .error .capacityOverflow => endpoint base self digest step free shape nameAddress joinAddress w oom panic next=panic e.world
+     | .ok () => ∃ nameBuffer after,
+       nameRun=(.ok nameBuffer,after) ∧ nameBuffer.values=encodeList (basenameText digest.val) ∧ nameBuffer.capacity=69 ∧
+       after.frame=e.world.frame ∧ after.history=e.world.history ∧
+       endpoint base self digest step free shape nameAddress joinAddress w oom panic next=
+         PV_RDEAC_JoinHandlers.consume free nameBuffer
+          (PV_RDEAC_FullJoin.join step shape joinAddress false
+            (needsSeparator (encodeList (directory base self))) (encodeList (directory base self)) nameBuffer.values after) oom panic next) ∧
+    PV_RDEA_CapacityEndpoint.sizes nameRun.2.history=PV_RDEA_CapacityEndpoint.sizes w.history++[(0,69,1)] := by
+  let e := PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w
+  obtain ⟨history,stage⟩ := @PV_RDEAC_ConstructorSimulation.simulation (AppendTypes base) S F
+    (selectedJoin base ops) step shape width nameAddress self digest w
+  rw [PV_RDEAC_PublishedTail.append_idempotent] at stage
+  change (match e.returned with | .error err => _ | .ok () => _) at stage
+  dsimp only
+  refine ⟨?_,history⟩
+  change (match e.returned with | .error (.allocError layout) => _ | .error .capacityOverflow => _ | .ok () => _)
+  cases h : e.returned with
+  | error err =>
+    simp only [h] at stage
+    unfold endpoint
+    rw [stage]
+    cases err <;> rfl
+  | ok unit =>
+    simp only [h] at stage
+    obtain ⟨nameBuffer,after,run,_,repr,cap,_,_,hhist,hframe⟩ := stage
+    refine ⟨nameBuffer,after,run,repr,cap,hframe,hhist,?_⟩
+    unfold endpoint
+    rw [run]
+
+#print axioms owned
+#print axioms complete
+end R1Z.PV_RDEAC_EndpointInstance

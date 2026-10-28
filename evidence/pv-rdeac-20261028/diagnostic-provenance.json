@@ -1,0 +1,2151 @@
+{
+  "binary_sha256": "fa888460b2c37bee087afd6289cd55219fe2732ea1e1c75011147ed15c260348",
+  "entries": [
+    {
+      "kind": "MIR",
+      "id": 0,
+      "function": "fn render(_1: &str, _2: &dyn Debug, _3: &dyn Debug) -> Error {",
+      "classification": "DYNAMIC_DIAGNOSTIC",
+      "argument_header": "msg.len()+2+Debug(lhs).len()+4+Debug(rhs).len()+1",
+      "guard_provenance": "formatted operands and comparison-failure guard require source caller provenance",
+      "status": "UNRESOLVED",
+      "source_sites": [
+        {
+          "line": 3186,
+          "text": "                        scope 59 (inlined String::with_capacity) { // at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/ensure.rs:90:30: 90:56",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/ensure.rs",
+          "source_line": 90,
+          "source_sha256": "709524741c8f9365e01cb36fc2349a8724513de02cf9e253809a93af8d6a7b6e",
+          "argument_source_excerpt": [
+            "            let lhs_str = lhs_buf.as_str();",
+            "            let rhs_str = rhs_buf.as_str();",
+            "            // \"{msg} ({lhs} vs {rhs})\"",
+            "            let len = msg.len() + 2 + lhs_str.len() + 4 + rhs_str.len() + 1;",
+            "            let mut string = String::with_capacity(len);",
+            "            string.push_str(msg);",
+            "            string.push_str(\" (\");",
+            "            string.push_str(lhs_str);",
+            "            string.push_str(\" vs \");",
+            "            string.push_str(rhs_str);"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "MIR",
+      "id": 1,
+      "function": "fn hex(_1: &[u8]) -> String {",
+      "classification": "POW_HEX",
+      "argument_header": "2*bytes.len()",
+      "guard_provenance": "native monomorphization/caller exclusion and bytes length origin remain to be certified",
+      "status": "UNRESOLVED",
+      "source_sites": [
+        {
+          "line": 37556,
+          "text": "    scope 4 (inlined String::with_capacity) { // at /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/pow.rs:26:22: 26:60",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/pow.rs",
+          "source_line": 26,
+          "source_sha256": "6b0a966344fa68e8af227838be0747647f91b46dc6377812d5c16f50104c8616",
+          "argument_source_excerpt": [
+            "const CPU_PROGRESS_INTERVAL: Duration = Duration::from_secs(5);",
+            "",
+            "fn hex(bytes: &[u8]) -> String {",
+            "    const DIGITS: &[u8; 16] = b\"0123456789abcdef\";",
+            "    let mut output = String::with_capacity(bytes.len() * 2);",
+            "    for byte in bytes {",
+            "        output.push(DIGITS[(byte >> 4) as usize] as char);",
+            "        output.push(DIGITS[(byte & 15) as usize] as char);",
+            "    }",
+            "    output"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "MIR",
+      "id": 2,
+      "function": "fn state_only_entropy::<impl at /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs:934:1: 934:36>::reservation_path(_1: &DurableStateOnlyMaskNonceStore, _2: &[u8; 32]) -> PathBuf {",
+      "classification": "RESERVATION",
+      "argument_header": "69; join basename69, relative",
+      "guard_provenance": "capacity and basename shape derived from fixed array32 and literals; directory is a public caller parameter",
+      "status": "SOURCE_SHAPE_PROVED",
+      "source_sites": [
+        {
+          "line": 86070,
+          "text": "            scope 15 (inlined String::with_capacity) { // at /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs:961:44: 961:69",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs",
+          "source_line": 961,
+          "source_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+          "argument_source_excerpt": [
+            "        let mut hasher = Sha256::new();",
+            "        hasher.update(ATTEMPT_RESERVATION_DOMAIN);",
+            "        hasher.update(mask_nonce);",
+            "        let digest: [u8; 32] = hasher.finalize().into();",
+            "        let name = reservation_name(digest,String::with_capacity(69),0);",
+            "        self.directory.join(name)",
+            "    }",
+            "",
+            "    pub fn reserve_fallible(",
+            "        &mut self,"
+          ]
+        },
+        {
+          "line": 86201,
+          "text": "        _0 = Path::join::<String>(move _13, move _11) -> [return: bb4, unwind continue]; // scope 3 at /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs:962:9: 962:34",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs",
+          "source_line": 962,
+          "source_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+          "argument_source_excerpt": [
+            "        hasher.update(ATTEMPT_RESERVATION_DOMAIN);",
+            "        hasher.update(mask_nonce);",
+            "        let digest: [u8; 32] = hasher.finalize().into();",
+            "        let name = reservation_name(digest,String::with_capacity(69),0);",
+            "        self.directory.join(name)",
+            "    }",
+            "",
+            "    pub fn reserve_fallible(",
+            "        &mut self,",
+            "        statement_digest: [u8; 32],"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "MIR",
+      "id": 17,
+      "function": "fn plan::prove(_1: &Value, _2: Pubkey, _3: Pubkey, _4: &[Pubkey], _5: Pubkey, _6: Pubkey, _7: Pubkey, _8: Pubkey, _9: Pubkey, _10: Pubkey) -> Result<Value, anyhow::Error> {",
+      "classification": "CLIENT_LITERAL_JOINS",
+      "argument_header": "note-recovery.json; mask-nonce-ledger; proof.bin; statement.bin",
+      "guard_provenance": "literal path bytes and directory input are public; entry guards include proof completion and need an endpoint provenance certificate",
+      "status": "SHAPES_PUBLIC_GUARDS_UNRESOLVED",
+      "source_sites": [
+        {
+          "line": 27452,
+          "text": "        _372 = Path::join::<&str>(copy _243, const \"note-recovery.json\") -> [return: bb153, unwind: bb334]; // scope 91 at src/bin/devnet_spend/plan.rs:113:142: 113:172",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+          "source_line": 113,
+          "source_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+          "argument_source_excerpt": [
+            " {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir)?;}",
+            " // Retain note recovery data on the host, alongside the durable nonce store.",
+            " // This is excluded from evidence export even though these are public fixtures.",
+            " let recovery=json!({\"input_nullifier_key\":super::hex(&encode_digest_canonical(&k)),\"input_salt\":super::hex(&encode_digest_canonical(&salt)),\"input_value\":1000,\"asset_id\":77,\"output_lane\":output_lane,\"output_pair_index\":lane.tree.next_leaf_index,\"change\":{\"nullifier_key\":super::hex(&encode_digest_canonical(&digest(500+n))),\"salt\":super::hex(&encode_digest_canonical(&change.salt)),\"value\":change.value,\"selected_second\":!withdrawal},\"recipient\":if withdrawal{Value::Null}else{json!({\"nullifier_key\":super::hex(&encode_digest_canonical(&digest(300))),\"salt\":super::hex(&encode_digest_canonical(&recipient.salt)),\"value\":recipient.value,\"selected_second\":false})}});",
+            " {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join(\"note-recovery.json\"))?;file.write_all(serde_json::to_string_pretty(&recovery)?.as_bytes())?;file.sync_all()?;}",
+            " let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;",
+            " let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?;",
+            " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+            " let (attempt_index,proof_account)=accounts.selected(result.attempts)?;",
+            " let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);"
+          ]
+        },
+        {
+          "line": 32261,
+          "text": "        _399 = Path::join::<&str>(copy _243, const \"mask-nonce-ledger\") -> [return: bb159, unwind: bb334]; // scope 128 at src/bin/devnet_spend/plan.rs:115:53: 115:82",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+          "source_line": 115,
+          "source_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+          "argument_source_excerpt": [
+            " // This is excluded from evidence export even though these are public fixtures.",
+            " let recovery=json!({\"input_nullifier_key\":super::hex(&encode_digest_canonical(&k)),\"input_salt\":super::hex(&encode_digest_canonical(&salt)),\"input_value\":1000,\"asset_id\":77,\"output_lane\":output_lane,\"output_pair_index\":lane.tree.next_leaf_index,\"change\":{\"nullifier_key\":super::hex(&encode_digest_canonical(&digest(500+n))),\"salt\":super::hex(&encode_digest_canonical(&change.salt)),\"value\":change.value,\"selected_second\":!withdrawal},\"recipient\":if withdrawal{Value::Null}else{json!({\"nullifier_key\":super::hex(&encode_digest_canonical(&digest(300))),\"salt\":super::hex(&encode_digest_canonical(&recipient.salt)),\"value\":recipient.value,\"selected_second\":false})}});",
+            " {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join(\"note-recovery.json\"))?;file.write_all(serde_json::to_string_pretty(&recovery)?.as_bytes())?;file.sync_all()?;}",
+            " let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;",
+            " let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?;",
+            " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+            " let (attempt_index,proof_account)=accounts.selected(result.attempts)?;",
+            " let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);",
+            " fs::write(dir.join(\"proof.bin\"),&proof)?;fs::write(dir.join(\"statement.bin\"),public)?;",
+            " let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};"
+          ]
+        },
+        {
+          "line": 32698,
+          "text": "        _433 = Path::join::<&str>(copy _243, const \"proof.bin\") -> [return: bb164, unwind: bb329]; // scope 148 at src/bin/devnet_spend/plan.rs:119:12: 119:33",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+          "source_line": 119,
+          "source_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+          "argument_source_excerpt": [
+            " let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?;",
+            " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+            " let (attempt_index,proof_account)=accounts.selected(result.attempts)?;",
+            " let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);",
+            " fs::write(dir.join(\"proof.bin\"),&proof)?;fs::write(dir.join(\"statement.bin\"),public)?;",
+            " let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};",
+            " let hints=pool_v1_pair_forest_terminal_bump_hints_v1(&pool,&master,&lanes[output_lane as usize],lane.tree.next_leaf_index,withdrawal);",
+            " let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);",
+            " let page=pool_v1_root_page_address(&pool,&lanes[output_lane as usize],0).0;",
+            " let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf))?.0;"
+          ]
+        },
+        {
+          "line": 32734,
+          "text": "        _438 = Path::join::<&str>(move _243, const \"statement.bin\") -> [return: bb166, unwind: bb329]; // scope 148 at src/bin/devnet_spend/plan.rs:119:53: 119:78",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+          "source_line": 119,
+          "source_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+          "argument_source_excerpt": [
+            " let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?;",
+            " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+            " let (attempt_index,proof_account)=accounts.selected(result.attempts)?;",
+            " let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);",
+            " fs::write(dir.join(\"proof.bin\"),&proof)?;fs::write(dir.join(\"statement.bin\"),public)?;",
+            " let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};",
+            " let hints=pool_v1_pair_forest_terminal_bump_hints_v1(&pool,&master,&lanes[output_lane as usize],lane.tree.next_leaf_index,withdrawal);",
+            " let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);",
+            " let page=pool_v1_root_page_address(&pool,&lanes[output_lane as usize],0).0;",
+            " let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf))?.0;"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "MIR",
+      "id": 19,
+      "function": "fn Itertools::join(_1: &mut Self, _2: &str) -> String {",
+      "classification": "ITERTOOLS_JOIN",
+      "argument_header": "sep.len()*iterator.lower_size_hint",
+      "guard_provenance": "no linked generic instantiation was established; retaining as a source candidate rather than claiming absence from nm proves exclusion",
+      "status": "UNRESOLVED",
+      "source_sites": [
+        {
+          "line": 150563,
+          "text": "            scope 23 (inlined String::with_capacity) { // at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/itertools-0.14.0/src/lib.rs:2433:34: 2433:74",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/itertools-0.14.0/src/lib.rs",
+          "source_line": 2433,
+          "source_sha256": "e7f144351cca5018dc12270b4c33f0562afddb92452acfa85153cb276aebd6e9",
+          "argument_source_excerpt": [
+            "            None => String::new(),",
+            "            Some(first_elt) => {",
+            "                // estimate lower bound of capacity needed",
+            "                let (lower, _) = self.size_hint();",
+            "                let mut result = String::with_capacity(sep.len() * lower);",
+            "                write!(&mut result, \"{}\", first_elt).unwrap();",
+            "                self.for_each(|elt| {",
+            "                    result.push_str(sep);",
+            "                    write!(&mut result, \"{}\", elt).unwrap();",
+            "                });"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "MIR",
+      "id": 20,
+      "function": "fn Itertools::join(_1: &mut Self, _2: &str) -> String {",
+      "classification": "ITERTOOLS_JOIN",
+      "argument_header": "sep.len()*iterator.lower_size_hint",
+      "guard_provenance": "same generic/inline exclusion obligation",
+      "status": "UNRESOLVED",
+      "source_sites": [
+        {
+          "line": 156936,
+          "text": "            scope 23 (inlined String::with_capacity) { // at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/itertools-0.15.0/src/lib.rs:2777:34: 2777:74",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/itertools-0.15.0/src/lib.rs",
+          "source_line": 2777,
+          "source_sha256": "cac2e34f5b83156078fbbb0137e173c1b4aa63528259f82100e16d7501692ee8",
+          "argument_source_excerpt": [
+            "            None => String::new(),",
+            "            Some(first_elt) => {",
+            "                // estimate lower bound of capacity needed",
+            "                let (lower, _) = self.size_hint();",
+            "                let mut result = String::with_capacity(sep.len() * lower);",
+            "                write!(&mut result, \"{first_elt}\").unwrap();",
+            "                self.for_each(|elt| {",
+            "                    result.push_str(sep);",
+            "                    write!(&mut result, \"{elt}\").unwrap();",
+            "                });"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "MIR",
+      "id": 21,
+      "function": "fn linux::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs:179:1: 179:12>::translate(_1: MountInfo, _2: Subsys) -> Option<Cgroup> {",
+      "classification": "CPU_ENV_PATH",
+      "argument_header": "mount_point + relative cgroup path",
+      "guard_provenance": "arguments and path predicates derive from public /proc and mount metadata; exact runtime candidate binding remains",
+      "status": "PUBLIC_ENV_SOURCE_RUNTIME_BINDING_PENDING",
+      "source_sites": [
+        {
+          "line": 2178,
+          "text": "        _12 = PathBuf::push::<&Path>(move _13, move _8) -> [return: bb3, unwind: bb9]; // scope 9 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs:197:9: 197:33",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs",
+          "source_line": 197,
+          "source_sha256": "378ea174d00d560e16fda4b09fb523dda5f4c6f420e46af7d317393a39d88dd1",
+          "argument_source_excerpt": [
+            "        debug!(\"rel_from_root: {:?}\", rel_from_root);",
+            "",
+            "        // join(mp.MountPoint, relPath)",
+            "        let mut path = PathBuf::from(mntinfo.mount_point);",
+            "        path.push(rel_from_root);",
+            "        Some(Cgroup::new(mntinfo.version, path))",
+            "    }",
+            "",
+            "    fn cpu_quota(&self) -> Option<usize> {",
+            "        let (quota_us, period_us) = match self.version {"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "MIR",
+      "id": 22,
+      "function": "fn linux::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs:179:1: 179:12>::raw_param(_1: &Cgroup, _2: &str) -> Option<String> {",
+      "classification": "CPU_ENV_PARAM",
+      "argument_header": "base.join(param)",
+      "guard_provenance": "public cgroup file name and public mount base; exact runtime candidate binding remains",
+      "status": "PUBLIC_ENV_SOURCE_RUNTIME_BINDING_PENDING",
+      "source_sites": [
+        {
+          "line": 3759,
+          "text": "        _6 = Path::join::<&str>(move _7, move _2) -> [return: bb1, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs:243:41: 243:62",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs",
+          "source_line": 243,
+          "source_sha256": "378ea174d00d560e16fda4b09fb523dda5f4c6f420e46af7d317393a39d88dd1",
+          "argument_source_excerpt": [
+            "        buf.trim().parse().ok()",
+            "    }",
+            "",
+            "    fn raw_param(&self, param: &str) -> Option<String> {",
+            "        let mut file = some!(File::open(self.base.join(param)).ok());",
+            "",
+            "        let mut buf = String::new();",
+            "        some!(file.read_to_string(&mut buf).ok());",
+            "",
+            "        Some(buf)"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 0,
+      "function": "alloc::fmt::format::format_inner",
+      "source_origin": {
+        "file": "library/alloc/src/fmt.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 647,
+        "column": 26,
+        "scope": 1385,
+        "program_name": "format_inner",
+        "linkage": "_ZN5alloc3fmt6format12format_inner17h655a6aa2517b043fE"
+      },
+      "argument_header": "Arguments::estimated_capacity: decoded literal template only; operand lengths are excluded from this initial request",
+      "guard_provenance": "all formatting call sites and their invocation guards must be related to public source data",
+      "status": "HEADER_SOURCE_PUBLIC_GUARD_UNRESOLVED",
+      "site": {
+        "module": "alloc.ll.xz",
+        "function": "_ZN5alloc3fmt6format12format_inner17h655a6aa2517b043fE",
+        "demangled": "alloc::fmt::format::format_inner",
+        "function_address": "000000000020d7e0",
+        "target": "V181/String::with_capacity",
+        "callsite": {
+          "file": "library/alloc/src/fmt.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 647,
+          "column": 26,
+          "scope": 1385,
+          "program_name": "format_inner",
+          "linkage": "_ZN5alloc3fmt6format12format_inner17h655a6aa2517b043fE"
+        },
+        "source_origin": {
+          "file": "library/alloc/src/fmt.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 647,
+          "column": 26,
+          "scope": 1385,
+          "program_name": "format_inner",
+          "linkage": "_ZN5alloc3fmt6format12format_inner17h655a6aa2517b043fE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/alloc/src/fmt.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 647,
+            "column": 26,
+            "scope": 1385,
+            "program_name": "format_inner",
+            "linkage": "_ZN5alloc3fmt6format12format_inner17h655a6aa2517b043fE"
+          }
+        ],
+        "instruction": "br label %82, !dbg !1411",
+        "ir_line": 1120,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/fmt.rs",
+        "source_sha256": "1c4e8c95da13bb474845fb1e122f7cd3147db94b5225c56b93a922f7da9a6119",
+        "argument_source_excerpt": [
+          "#[inline]",
+          "pub fn format(args: Arguments<'_>) -> string::String {",
+          "    fn format_inner(args: Arguments<'_>) -> string::String {",
+          "        let capacity = args.estimated_capacity();",
+          "        let mut output = string::String::with_capacity(capacity);",
+          "        output",
+          "            .write_fmt(args)",
+          "            .expect(\"a formatting trait implementation returned an error when the underlying stream did not\");",
+          "        output",
+          "    }"
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 1,
+      "function": "alloc::string::String::from_utf8_lossy",
+      "source_origin": {
+        "file": "library/alloc/src/string.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 633,
+        "column": 23,
+        "scope": 6550,
+        "program_name": "from_utf8_lossy",
+        "linkage": "_ZN5alloc6string6String15from_utf8_lossy17hd0f7b55b89a3b97eE"
+      },
+      "argument_header": "input byte slice length, after the first invalid-UTF8 chunk",
+      "guard_provenance": "invalid-UTF8 guard and input origin: strerror(error code), addr2line file path; proving the selected error/frame is witness-independent remains",
+      "status": "INPUT_AND_GUARD_UNRESOLVED",
+      "site": {
+        "module": "alloc.ll.xz",
+        "function": "_ZN5alloc6string6String15from_utf8_lossy17hd0f7b55b89a3b97eE",
+        "demangled": "alloc::string::String::from_utf8_lossy",
+        "function_address": "000000000020dad0",
+        "target": "V181/String::with_capacity",
+        "callsite": {
+          "file": "library/alloc/src/string.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 633,
+          "column": 23,
+          "scope": 6550,
+          "program_name": "from_utf8_lossy",
+          "linkage": "_ZN5alloc6string6String15from_utf8_lossy17hd0f7b55b89a3b97eE"
+        },
+        "source_origin": {
+          "file": "library/alloc/src/string.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 633,
+          "column": 23,
+          "scope": 6550,
+          "program_name": "from_utf8_lossy",
+          "linkage": "_ZN5alloc6string6String15from_utf8_lossy17hd0f7b55b89a3b97eE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/alloc/src/string.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 633,
+            "column": 23,
+            "scope": 6550,
+            "program_name": "from_utf8_lossy",
+            "linkage": "_ZN5alloc6string6String15from_utf8_lossy17hd0f7b55b89a3b97eE"
+          }
+        ],
+        "instruction": "%23 = icmp eq i64 %2, 0, !dbg !6570",
+        "ir_line": 6359,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/string.rs",
+        "source_sha256": "4436d55804bbac0c1691a251042ff82e30b5eab0d4d0bebc20b016b60a0c07a7",
+        "argument_source_excerpt": [
+          "        }",
+          "",
+          "        const REPLACEMENT: &str = \"\\u{FFFD}\";",
+          "",
+          "        let mut res = String::with_capacity(v.len());",
+          "        res.push_str(first_valid);",
+          "        res.push_str(REPLACEMENT);",
+          "",
+          "        for chunk in iter {",
+          "            res.push_str(chunk.valid());"
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 2,
+      "function": "std::backtrace_rs::symbolize::gimli::elf::locate_build_id",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 438,
+        "column": 9,
+        "scope": 3202,
+        "program_name": "locate_build_id",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf15locate_build_id17hb0fd2b41933e45d5E"
+      },
+      "argument_header": "23+6+2*build_id.len()+1; build-id bytes belong to public ELF metadata",
+      "guard_provenance": "cache miss, selected module from captured PC, and file availability checks; PC/frame selection provenance remains",
+      "status": "METADATA_HEADER_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli3elf15locate_build_id17hb0fd2b41933e45d5E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::elf::locate_build_id",
+        "function_address": "00000000001cf310",
+        "target": "V181/String::with_capacity",
+        "callsite": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 438,
+          "column": 9,
+          "scope": 3202,
+          "program_name": "locate_build_id",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf15locate_build_id17hb0fd2b41933e45d5E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 438,
+          "column": 9,
+          "scope": 3202,
+          "program_name": "locate_build_id",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf15locate_build_id17hb0fd2b41933e45d5E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 438,
+            "column": 9,
+            "scope": 3202,
+            "program_name": "locate_build_id",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf15locate_build_id17hb0fd2b41933e45d5E"
+          }
+        ],
+        "instruction": "br i1 %20, label %29, label %21, !dbg !3231, !prof !1857",
+        "ir_line": 4020,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "        return None;",
+          "    }",
+          "",
+          "    let mut path =",
+          "        String::with_capacity(BUILD_ID_PATH.len() + BUILD_ID_SUFFIX.len() + build_id.len() * 2 + 1);",
+          "    path.push_str(BUILD_ID_PATH);",
+          "    path.push(char::from_digit((build_id[0] >> 4) as u32, 16)?);",
+          "    path.push(char::from_digit((build_id[0] & 0xf) as u32, 16)?);",
+          "    path.push('/');",
+          "    for byte in &build_id[1..] {"
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 3,
+      "function": "std::backtrace_rs::symbolize::gimli::elf::<impl std::backtrace_rs::symbolize::gimli::Mapping>::new_debug",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 521,
+        "column": 11,
+        "scope": 4647,
+        "program_name": "locate_debugaltlink",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf19locate_debugaltlink17h7389829839006ef4E"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$9new_debug17hb7ee6f6cc578a079E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::elf::<impl std::backtrace_rs::symbolize::gimli::Mapping>::new_debug",
+        "function_address": "00000000001cfa00",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 521,
+          "column": 11,
+          "scope": 4647,
+          "program_name": "locate_debugaltlink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf19locate_debugaltlink17h7389829839006ef4E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 521,
+            "column": 11,
+            "scope": 4647,
+            "program_name": "locate_debugaltlink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf19locate_debugaltlink17h7389829839006ef4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 337,
+            "column": 24,
+            "scope": 4420,
+            "program_name": "gnu_debugaltlink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object21gnu_debugaltlink_path17h9eb9d860687552b5E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 105,
+            "column": 60,
+            "scope": 4366,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$9new_debug28_$u7b$$u7b$closure$u7d$$u7d$17hf3865a0139c49a82E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 85,
+            "column": 22,
+            "scope": 4355,
+            "program_name": "{closure#0}<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new_debug::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping2mk28_$u7b$$u7b$closure$u7d$$u7d$17h906ede964bdbef57E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 4346,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::{impl#0}::mk::{closure_env#0}<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new_debug::{closure_env#0}>>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17h528fdd8ff06734b2E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 84,
+            "column": 9,
+            "scope": 4342,
+            "program_name": "mk<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new_debug::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping2mk17h63546a21ed0db366E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 96,
+            "column": 9,
+            "scope": 4293,
+            "program_name": "new_debug",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$9new_debug17hb7ee6f6cc578a079E"
+          }
+        ],
+        "instruction": "br label %259, !dbg !4912",
+        "ir_line": 5050,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    } else {",
+          "        let path = fs::canonicalize(path).ok()?;",
+          "        let parent = path.parent()?;",
+          "        let mut f = PathBuf::from(parent);",
+          "        f.push(filename);",
+          "        if f.is_file() {",
+          "            return Some(f);",
+          "        }",
+          "    }",
+          ""
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 4,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 470,
+        "column": 7,
+        "scope": 9056,
+        "program_name": "locate_debuglink",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 470,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 470,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "call void @llvm.experimental.noalias.scope.decl(metadata !9318), !dbg !9321",
+        "ir_line": 8548,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "        PathBuf::with_capacity(DEBUG_PATH.len() + parent.as_os_str().len() + filename.len() + 2);",
+          "    let filename = Path::new(filename);",
+          "",
+          "    // Try \"/parent/filename\" if it differs from \"path\"",
+          "    f.push(parent);",
+          "    f.push(filename);",
+          "    if f != path && f.is_file() {",
+          "        return Some(f);",
+          "    }",
+          ""
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 5,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 471,
+        "column": 7,
+        "scope": 9056,
+        "program_name": "locate_debuglink",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 471,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 471,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%961 = icmp eq i64 %960, 0, !dbg !9408",
+        "ir_line": 8590,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    let filename = Path::new(filename);",
+          "",
+          "    // Try \"/parent/filename\" if it differs from \"path\"",
+          "    f.push(parent);",
+          "    f.push(filename);",
+          "    if f != path && f.is_file() {",
+          "        return Some(f);",
+          "    }",
+          "",
+          "    // Try \"/parent/.debug/filename\""
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 6,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 478,
+        "column": 7,
+        "scope": 9056,
+        "program_name": "locate_debuglink",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 478,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 478,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1030 = load i64, ptr %47, align 8, !dbg !9611, !range !265, !alias.scope !9625, !noalias !9638",
+        "ir_line": 8731,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    }",
+          "",
+          "    // Try \"/parent/.debug/filename\"",
+          "    f.clear();",
+          "    f.push(parent);",
+          "    f.push(\".debug\");",
+          "    f.push(filename);",
+          "    if f.is_file() {",
+          "        return Some(f);",
+          "    }"
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 7,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 479,
+        "column": 7,
+        "scope": 9056,
+        "program_name": "locate_debuglink",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 9691,
+          "program_name": "push<&str>",
+          "linkage": "_ZN3std4path7PathBuf4push17hd8ba50715958ac20E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 479,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 9691,
+            "program_name": "push<&str>",
+            "linkage": "_ZN3std4path7PathBuf4push17hd8ba50715958ac20E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 479,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1048 = icmp eq i64 %1047, 0, !dbg !9693",
+        "ir_line": 8773,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "",
+          "    // Try \"/parent/.debug/filename\"",
+          "    f.clear();",
+          "    f.push(parent);",
+          "    f.push(\".debug\");",
+          "    f.push(filename);",
+          "    if f.is_file() {",
+          "        return Some(f);",
+          "    }",
+          ""
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 8,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 480,
+        "column": 7,
+        "scope": 9056,
+        "program_name": "locate_debuglink",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 480,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 480,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1087 = load ptr, ptr %942, align 8, !dbg !9816, !alias.scope !9826, !noalias !9827, !nonnull !12, !noundef !12",
+        "ir_line": 8850,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    // Try \"/parent/.debug/filename\"",
+          "    f.clear();",
+          "    f.push(parent);",
+          "    f.push(\".debug\");",
+          "    f.push(filename);",
+          "    if f.is_file() {",
+          "        return Some(f);",
+          "    }",
+          "",
+          "    if debug_path_exists() {"
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 9,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 488,
+        "column": 11,
+        "scope": 9056,
+        "program_name": "locate_debuglink",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 9691,
+          "program_name": "push<&str>",
+          "linkage": "_ZN3std4path7PathBuf4push17hd8ba50715958ac20E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 488,
+          "column": 11,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 9691,
+            "program_name": "push<&str>",
+            "linkage": "_ZN3std4path7PathBuf4push17hd8ba50715958ac20E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 488,
+            "column": 11,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "store i64 0, ptr %943, align 8, !dbg !10013, !alias.scope !10015, !noalias !10016",
+        "ir_line": 8973,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "",
+          "    if debug_path_exists() {",
+          "        // Try \"/usr/lib/debug/parent/filename\"",
+          "        f.clear();",
+          "        f.push(DEBUG_PATH);",
+          "        f.push(parent.strip_prefix(\"/\").unwrap());",
+          "        f.push(filename);",
+          "        if f.is_file() {",
+          "            return Some(f);",
+          "        }"
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 10,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 489,
+        "column": 11,
+        "scope": 9056,
+        "program_name": "locate_debuglink",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 489,
+          "column": 11,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 489,
+            "column": 11,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1168 = getelementptr i8, ptr %1157, i64 %1159, !dbg !10086",
+        "ir_line": 9020,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    if debug_path_exists() {",
+          "        // Try \"/usr/lib/debug/parent/filename\"",
+          "        f.clear();",
+          "        f.push(DEBUG_PATH);",
+          "        f.push(parent.strip_prefix(\"/\").unwrap());",
+          "        f.push(filename);",
+          "        if f.is_file() {",
+          "            return Some(f);",
+          "        }",
+          "    }"
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 11,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 490,
+        "column": 11,
+        "scope": 9056,
+        "program_name": "locate_debuglink",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 490,
+          "column": 11,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 490,
+            "column": 11,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1210 = icmp eq i64 %1209, 0, !dbg !10229",
+        "ir_line": 9102,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "        // Try \"/usr/lib/debug/parent/filename\"",
+          "        f.clear();",
+          "        f.push(DEBUG_PATH);",
+          "        f.push(parent.strip_prefix(\"/\").unwrap());",
+          "        f.push(filename);",
+          "        if f.is_file() {",
+          "            return Some(f);",
+          "        }",
+          "    }",
+          ""
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 12,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 543,
+        "column": 14,
+        "scope": 10815,
+        "program_name": "handle_split_dwarf",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 11428,
+          "program_name": "push<&std::ffi::os_str::OsStr>",
+          "linkage": "_ZN3std4path7PathBuf4push17ha014af4301601410E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 543,
+          "column": 14,
+          "scope": 10815,
+          "program_name": "handle_split_dwarf",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 11428,
+            "program_name": "push<&std::ffi::os_str::OsStr>",
+            "linkage": "_ZN3std4path7PathBuf4push17ha014af4301601410E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 543,
+            "column": 14,
+            "scope": 10815,
+            "program_name": "handle_split_dwarf",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 187,
+            "column": 37,
+            "scope": 10557,
+            "program_name": "find_frames",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Context11find_frames17h87cb1e0e1013bf11E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 466,
+            "column": 40,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%2287 = icmp eq i64 %2286, 0, !dbg !11430",
+        "ir_line": 10685,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    }",
+          "",
+          "    let mut path = PathBuf::new();",
+          "    if let Some(p) = load.comp_dir.as_ref() {",
+          "        path.push(OsStr::from_bytes(&p));",
+          "    }",
+          "",
+          "    path.push(OsStr::from_bytes(&load.path.as_ref()?));",
+          "",
+          "    if let Some(map_dwo) = super::mmap(&path) {"
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 13,
+      "function": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+      "source_origin": {
+        "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 546,
+        "column": 10,
+        "scope": 10815,
+        "program_name": "handle_split_dwarf",
+        "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+      },
+      "argument_header": "base path header plus debuglink/debugaltlink/DWARF directory/file payload from public artifact metadata",
+      "guard_provenance": "cache state, captured PC/module/unit choice, metadata presence and filesystem results; complete per-invocation header and guard derivation remains",
+      "status": "METADATA_ARGUMENT_PUBLIC_SELECTION_UNRESOLVED",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 11428,
+          "program_name": "push<&std::ffi::os_str::OsStr>",
+          "linkage": "_ZN3std4path7PathBuf4push17ha014af4301601410E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 546,
+          "column": 10,
+          "scope": 10815,
+          "program_name": "handle_split_dwarf",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 11428,
+            "program_name": "push<&std::ffi::os_str::OsStr>",
+            "linkage": "_ZN3std4path7PathBuf4push17ha014af4301601410E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 546,
+            "column": 10,
+            "scope": 10815,
+            "program_name": "handle_split_dwarf",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 187,
+            "column": 37,
+            "scope": 10557,
+            "program_name": "find_frames",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Context11find_frames17h87cb1e0e1013bf11E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 466,
+            "column": 40,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "br label %2324, !dbg !11485",
+        "ir_line": 10723,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    if let Some(p) = load.comp_dir.as_ref() {",
+          "        path.push(OsStr::from_bytes(&p));",
+          "    }",
+          "",
+          "    path.push(OsStr::from_bytes(&load.path.as_ref()?));",
+          "",
+          "    if let Some(map_dwo) = super::mmap(&path) {",
+          "        let map_dwo = stash.cache_mmap(map_dwo);",
+          "        if let Some(dwo) = Object::parse(map_dwo) {",
+          "            return gimli::Dwarf::load(|id| -> Result<_, ()> {"
+        ]
+      }
+    },
+    {
+      "kind": "STDLIB_INLINE",
+      "id": 14,
+      "function": "std::path::Path::_join",
+      "source_origin": {
+        "file": "library/std/src/path.rs",
+        "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+        "line": 3002,
+        "column": 13,
+        "scope": 56430,
+        "program_name": "_join",
+        "linkage": "_ZN3std4path4Path5_join17h772e9499befd4fe9E"
+      },
+      "argument_header": "clone base live length; optional separator; path length; owned cleanup69 at the reservation caller",
+      "guard_provenance": "five linked callers have explicit source inventory; actual reservation tail simulation and error cleanup are proved in RDEAC",
+      "status": "LOCAL_CONSUMER_PROVED_GLOBAL_CALLER_PROVENANCE_PENDING",
+      "site": {
+        "module": "std.ll.xz",
+        "function": "_ZN3std4path4Path5_join17h772e9499befd4fe9E",
+        "demangled": "std::path::Path::_join",
+        "function_address": "00000000001e0de0",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 3002,
+          "column": 13,
+          "scope": 56430,
+          "program_name": "_join",
+          "linkage": "_ZN3std4path4Path5_join17h772e9499befd4fe9E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 3002,
+            "column": 13,
+            "scope": 56430,
+            "program_name": "_join",
+            "linkage": "_ZN3std4path4Path5_join17h772e9499befd4fe9E"
+          }
+        ],
+        "instruction": "br label %22, !dbg !56451",
+        "ir_line": 54410,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/path.rs",
+        "source_sha256": "82494a72a204e7e60d2511300d3eb0ef8ce10ff73b14b570d9949088c48eda9a",
+        "argument_source_excerpt": [
+          "    }",
+          "",
+          "    fn _join(&self, path: &Path) -> PathBuf {",
+          "        let mut buf = self.to_path_buf();",
+          "        buf.push(path);",
+          "        buf",
+          "    }",
+          "",
+          "    /// Creates an owned [`PathBuf`] like `self` but with the given file name.",
+          "    ///"
+        ]
+      }
+    }
+  ],
+  "source_site_completeness": false,
+  "witness_dependent_findings": [],
+  "reason": "Source-dependent or unclassified is not synonymous with witness-dependent. No pair of admitted same-public witnesses exhibiting a differing diagnostic guard/header was checked. All unresolved selections are retained as blockers, not public assumptions."
+}

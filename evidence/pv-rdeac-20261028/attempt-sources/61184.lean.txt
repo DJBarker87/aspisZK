@@ -1,0 +1,84 @@
+import R1Z.PV_RDEAC_JoinHandlers
+open Aeneas Aeneas.Std
+namespace R1Z.PV_RDEAC_Frames
+open PV_RDB1_V183_ReserveWorld
+
+theorem constructor {S F : Type} (step : Request → S → Option Nat × S)
+    (shape : Shape) (address n : Nat) (w : World S F) :
+    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address n w).world.frame=w.frame := by
+  unfold PV_RDB1_V181.deployed
+  split <;> try rfl
+  split <;> try rfl
+  split <;> try rfl
+  unfold finish
+  dsimp only
+  cases hs : step ⟨address,0,n,shape⟩ w.allocator with
+  | mk p s => cases p <;> simp only [PV_RDB1_V181.empty,List.length_nil,Nat.zero_add,hs,attempted,succeeded]
+
+theorem reserve {S F : Type} (step : Request → S → Option Nat × S)
+    (shape : Shape) (b : Buffer U8) (tail : List U8) (w : World S F) :
+    (PV_RDB1_Append.reserve step 18446744073709551615 9223372036854775807 shape b tail.length w).world.frame=w.frame := by
+  unfold PV_RDB1_Append.reserve
+  split <;> try rfl
+  split <;> try rfl
+  split <;> try rfl
+  unfold PV_RDB1_Append.finishAt
+  dsimp only
+  cases hs : step ⟨b.address,b.capacity,PV_RDB1_Append.growthCapacity b.values.length b.capacity tail.length,shape⟩ w.allocator with
+  | mk p s => cases p <;> rfl
+
+theorem append {S F : Type} (step : Request → S → Option Nat × S)
+    (shape : Shape) (b : Buffer U8) (tail : List U8) (w : World S F) :
+    (PV_RDEAC_FullAppend.append step shape b tail w).world.frame=w.frame := by
+  unfold PV_RDEAC_FullAppend.append
+  dsimp only
+  split <;> exact reserve step shape b tail w
+
+theorem clone {S F : Type} (step : Request → S → Option Nat × S)
+    (shape : Shape) (address : Nat) (base : List U8) (w : World S F) :
+    (PV_RDEAC_FullClone.clone step shape address base w).world.frame=w.frame := by
+  unfold PV_RDEAC_FullClone.clone
+  dsimp only
+  split <;> exact constructor step shape address base.length w
+
+theorem advance {S F : Type} (e : Execution U8 S F)
+    (next : Buffer U8 → World S F → Execution U8 S F)
+    (more : ∀ b w, (next b w).world.frame=w.frame) :
+    (PV_RDEAC_FullJoin.advance e next).world.frame=e.world.frame := by
+  cases e with
+  | mk returned b w => cases returned with
+    | error _ => rfl
+    | ok _ => exact more b w
+
+theorem push {S F : Type} (step : Request → S → Option Nat × S) (shape : Shape)
+    (absolute needSep : Bool) (b : Buffer U8) (path : List U8) (w : World S F) :
+    (PV_RDEAC_FullJoin.push step shape absolute needSep b path w).world.frame=w.frame := by
+  unfold PV_RDEAC_FullJoin.push
+  rw [advance]
+  · cases absolute <;> simp only [Bool.false_eq_true,if_false,if_true,
+      PV_RDEAC_FullJoin.clear,PV_RDEAC_FullJoin.returning,PV_RDB1_V178.byte_drops]
+  · intro b w
+    rw [advance]
+    · split
+      · exact append step shape b [47#u8] w
+      · rfl
+    · intro b w
+      exact append step shape b path w
+
+theorem join {S F : Type} (step : Request → S → Option Nat × S) (shape : Shape)
+    (address : Nat) (absolute needSep : Bool) (base path : List U8) (w : World S F) :
+    (PV_RDEAC_FullJoin.join step shape address absolute needSep base path w).world.frame=w.frame := by
+  unfold PV_RDEAC_FullJoin.join
+  rw [advance]
+  · exact clone step shape address base w
+  · intro b w
+    exact push step shape absolute needSep b path w
+
+#print axioms constructor
+#print axioms reserve
+#print axioms append
+#print axioms clone
+#print axioms advance
+#print axioms push
+#print axioms join
+end R1Z.PV_RDEAC_Frames

@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FullAppend.lean:26:93: error: unsolved goals
+case h_1
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+b : Buffer U8
+tail : List U8
+w : World S F
+a✝ : PV_RDB1_V183_ReserveWorld.Error
+h : (reserve step 18446744073709551615 9223372036854775807 shape b tail.length w).returned = Except.error a✝
+err✝ : PV_RDB1_V183_ReserveWorld.Error
+h2 : (reserve step 18446744073709551615 9223372036854775807 shape b tail.length w).returned = Except.error err✝
+⊢ (Except.error a✝, (reserve step 18446744073709551615 9223372036854775807 shape b tail.length w).world) =
+    (Except.error err✝, (reserve step 18446744073709551615 9223372036854775807 shape b tail.length w).world)
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FullAppend.lean:48:13: error: unsolved goals
+case h_1.isFalse.isFalse.isFalse.mk.some
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+b : Buffer U8
+tail : List U8
+w : World S F
+err a✝ : PV_RDB1_V183_ReserveWorld.Error
+h : (reserve step 18446744073709551615 9223372036854775807 shape b tail.length w).returned = Except.error err
+h✝² : ¬tail.length ≤ b.capacity - b.values.length
+h✝¹ : ¬b.values.length + tail.length > 18446744073709551615
+h✝ : ¬growthCapacity b.values.length b.capacity tail.length * shape.width > 9223372036854775807
+s : S
+val✝ : ℕ
+hs :
+  step
+      { address := b.address, oldCapacity := b.capacity,
+        newCapacity := growthCapacity b.values.length b.capacity tail.length, shape := shape }
+      w.allocator =
+    (some val✝, s)
+hr :
+  (if tail.length ≤ b.capacity - b.values.length then { returned := Except.ok (), buffer := b, world := w }
+      else
+        if 18446744073709551615 < b.values.length + tail.length then
+          { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+        else
+          if 9223372036854775807 < growthCapacity b.values.length b.capacity tail.length * shape.width then
+            { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+          else
+            { returned := Except.ok (),
+              buffer :=
+                { address := val✝, capacity := growthCapacity b.values.length b.capacity tail.length,
+                  values := b.values, fits := ⋯ },
+              world :=
+                succeeded
+                  { address := b.address, oldCapacity := b.capacity,
+                    newCapacity := growthCapacity b.values.length b.capacity tail.length, shape := shape }
+                  val✝
+                  (attempted
+                    { address := b.address, oldCapacity := b.capacity,
+                      newCapacity := growthCapacity b.values.length b.capacity tail.length, shape := shape }
+                    (some val✝) s w) }).returned =
+    Except.error a✝
+⊢ { address := val✝, capacity := growthCapacity b.values.length b.capacity tail.length, values := b.values,
+      fits := ⋯ } =
+    b
+'R1Z.PV_RDEAC_FullAppend.projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_FullAppend.failed_header' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

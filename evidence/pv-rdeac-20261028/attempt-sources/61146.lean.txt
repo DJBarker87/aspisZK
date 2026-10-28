@@ -1,0 +1,52 @@
+import R1Z.PV_RDEAC_OwnedCleanup
+open Aeneas Aeneas.Std
+namespace R1Z.PV_RDEAC_FullAppend
+open PV_RDB1_V183_ReserveWorld PV_RDEA_StatefulPath PV_RDB1_Append
+
+def erase {S F : Type} (e : Execution U8 S F) : Outcome (Buffer U8) S F :=
+  match e.returned with
+  | .error err => (.error err,e.world)
+  | .ok () => (.ok e.buffer,e.world)
+
+/-- Keep the partially built allocation on error so that native unwinding
+can destroy it. The older Outcome projection erased this header. -/
+def append {S F : Type} (step : Request → S → Option Nat × S)
+    (shape : Shape) (b : Buffer U8) (tail : List U8) (w : World S F) : Execution U8 S F :=
+  let e := reserve step 18446744073709551615 9223372036854775807 shape b tail.length w
+  match h : e.returned with
+  | .error _ => e
+  | .ok () =>
+    let b' : Buffer U8 := ⟨e.buffer.address,e.buffer.capacity,e.buffer.values++tail,by
+      rw [List.length_append,reserve_values]
+      exact reserve_capacity step _ _ shape b tail.length w h⟩
+    ⟨.ok (),b',{e.world with memory:=writeTail e.buffer.address e.buffer.values.length tail e.world.memory}⟩
+
+theorem projection {S F : Type} (step : Request → S → Option Nat × S)
+    (shape : Shape) (b : Buffer U8) (tail : List U8) (w : World S F) :
+    erase (append step shape b tail w)=PV_RDEA_AppendExecution.append step shape b tail w := by
+  unfold append PV_RDEA_AppendExecution.append
+  dsimp only
+  split <;> rename_i h
+  · simp only [erase,h]
+  · rfl
+
+theorem failed_header {S F : Type} (step : Request → S → Option Nat × S)
+    (shape : Shape) (b : Buffer U8) (tail : List U8) (w : World S F)
+    (err : PV_RDB1_V183_ReserveWorld.Error) (h : (append step shape b tail w).returned=.error err) :
+    (append step shape b tail w).buffer=b := by
+  unfold append at h ⊢
+  dsimp only at h ⊢
+  split at h <;> rename_i hr
+  · simp only [hr]
+    unfold reserve finishAt at hr ⊢
+    split <;> try rfl
+    split <;> try rfl
+    split <;> try rfl
+    dsimp only at hr ⊢
+    cases hs : step ⟨b.address,b.capacity,growthCapacity b.values.length b.capacity tail.length,shape⟩ w.allocator with
+    | mk p s => cases p <;> simp [hs] at hr ⊢
+  · cases h
+
+#print axioms projection
+#print axioms failed_header
+end R1Z.PV_RDEAC_FullAppend

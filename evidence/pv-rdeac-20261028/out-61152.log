@@ -1,0 +1,194 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FullJoin.lean:39:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (append ?step ?shape ?b ?tail ?w)
+in the target expression
+  (match
+      (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+          advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            append step shape b path w).returned with
+    | Except.error err =>
+      (Except.error err,
+        (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w => append step shape b path w).world)
+    | Except.ok PUnit.unit =>
+      (Except.ok
+          (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+                append step shape b path w).buffer,
+        (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              append step shape b path w).world)) =
+    PV_RDEA_AppendExecution.append step shape b path w
+
+case false.false
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+b : Buffer U8
+path : List U8
+w : World S F
+⊢ (match
+      (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+          advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            append step shape b path w).returned with
+    | Except.error err =>
+      (Except.error err,
+        (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w => append step shape b path w).world)
+    | Except.ok PUnit.unit =>
+      (Except.ok
+          (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+                append step shape b path w).buffer,
+        (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              append step shape b path w).world)) =
+    PV_RDEA_AppendExecution.append step shape b path w
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FullJoin.lean:39:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (append ?step ?shape ?b ?tail ?w)
+in the target expression
+  (match
+      (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+          advance (append step shape b [47#u8] w) fun b w => append step shape b path w).returned with
+    | Except.error err =>
+      (Except.error err,
+        (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            advance (append step shape b [47#u8] w) fun b w => append step shape b path w).world)
+    | Except.ok PUnit.unit =>
+      (Except.ok
+          (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              advance (append step shape b [47#u8] w) fun b w => append step shape b path w).buffer,
+        (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            advance (append step shape b [47#u8] w) fun b w => append step shape b path w).world)) =
+    match (PV_RDEA_AppendExecution.append step shape b [47#u8] w).1 with
+    | Except.error e => (Except.error e, (PV_RDEA_AppendExecution.append step shape b [47#u8] w).2)
+    | Except.ok v =>
+      PV_RDEA_AppendExecution.append step shape v path (PV_RDEA_AppendExecution.append step shape b [47#u8] w).2
+
+case false.true
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+b : Buffer U8
+path : List U8
+w : World S F
+⊢ (match
+      (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+          advance (append step shape b [47#u8] w) fun b w => append step shape b path w).returned with
+    | Except.error err =>
+      (Except.error err,
+        (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            advance (append step shape b [47#u8] w) fun b w => append step shape b path w).world)
+    | Except.ok PUnit.unit =>
+      (Except.ok
+          (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              advance (append step shape b [47#u8] w) fun b w => append step shape b path w).buffer,
+        (advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            advance (append step shape b [47#u8] w) fun b w => append step shape b path w).world)) =
+    match (PV_RDEA_AppendExecution.append step shape b [47#u8] w).1 with
+    | Except.error e => (Except.error e, (PV_RDEA_AppendExecution.append step shape b [47#u8] w).2)
+    | Except.ok v =>
+      PV_RDEA_AppendExecution.append step shape v path (PV_RDEA_AppendExecution.append step shape b [47#u8] w).2
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FullJoin.lean:39:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (append ?step ?shape ?b ?tail ?w)
+in the target expression
+  (match
+      (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+          advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            append step shape b path w).returned with
+    | Except.error err =>
+      (Except.error err,
+        (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w => append step shape b path w).world)
+    | Except.ok PUnit.unit =>
+      (Except.ok
+          (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+              advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+                append step shape b path w).buffer,
+        (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              append step shape b path w).world)) =
+    PV_RDEA_AppendExecution.append step shape (PV_RDB1_V178.cleared b) path w
+
+case true.false
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+b : Buffer U8
+path : List U8
+w : World S F
+⊢ (match
+      (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+          advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            append step shape b path w).returned with
+    | Except.error err =>
+      (Except.error err,
+        (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w => append step shape b path w).world)
+    | Except.ok PUnit.unit =>
+      (Except.ok
+          (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+              advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+                append step shape b path w).buffer,
+        (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              append step shape b path w).world)) =
+    PV_RDEA_AppendExecution.append step shape (PV_RDB1_V178.cleared b) path w
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FullJoin.lean:39:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (append ?step ?shape ?b ?tail ?w)
+in the target expression
+  (match
+      (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+          advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            append step shape b path w).returned with
+    | Except.error err =>
+      (Except.error err,
+        (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w => append step shape b path w).world)
+    | Except.ok PUnit.unit =>
+      (Except.ok
+          (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+              advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+                append step shape b path w).buffer,
+        (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              append step shape b path w).world)) =
+    PV_RDEA_AppendExecution.append step shape (PV_RDB1_V178.cleared b) path w
+
+case true.true
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+b : Buffer U8
+path : List U8
+w : World S F
+⊢ (match
+      (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+          advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+            append step shape b path w).returned with
+    | Except.error err =>
+      (Except.error err,
+        (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w => append step shape b path w).world)
+    | Except.ok PUnit.unit =>
+      (Except.ok
+          (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+              advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+                append step shape b path w).buffer,
+        (advance { returned := Except.ok (), buffer := PV_RDB1_V178.cleared b, world := w } fun b w =>
+            advance { returned := Except.ok (), buffer := b, world := w } fun b w =>
+              append step shape b path w).world)) =
+    PV_RDEA_AppendExecution.append step shape (PV_RDB1_V178.cleared b) path w
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FullJoin.lean:36:56: warning: This simp argument is unused:
+  erase_advance
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵u̵s̵h̵,̵s̵o̵u̵r̵c̵e̵P̵u̵s̵h̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵a̵n̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵e̵r̵a̵s̵e̵_̵a̵d̵v̵a̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵r̵e̵t̵u̵r̵n̵i̵n̵g̵,̵c̵l̵e̵a̵r̵,̵e̵r̵a̵s̵e̵,̵P̵V̵_̵R̵D̵E̵A̵_̵S̵t̵a̵t̵e̵f̵u̵l̵P̵a̵t̵h̵.̵c̵l̵e̵a̵r̵,̵P̵V̵_̵R̵D̵E̵A̵_̵S̵t̵a̵t̵e̵f̵u̵l̵P̵a̵t̵h̵.̵b̵i̵n̵d̵,̵[̲p̲u̲s̲h̲,̲ ̲s̲o̲u̲r̲c̲e̲P̲u̲s̲h̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲a̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲r̲e̲t̲u̲r̲n̲i̲n̲g̲,̲ ̲c̲l̲e̲a̲r̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲P̲V̲_̲R̲D̲E̲A̲_̲S̲t̲a̲t̲e̲f̲u̲l̲P̲a̲t̲h̲.̲c̲l̲e̲a̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲R̲D̲E̲A̲_̲S̲t̲a̲t̲e̲f̲u̲l̲P̲a̲t̲h̲.̲b̲i̲n̲d̲,̲ PV_RDB1_V178.byte_drops]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDEAC_FullJoin.erase_advance' does not depend on any axioms
+'R1Z.PV_RDEAC_FullJoin.push_projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_FullJoin.projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
