@@ -16,6 +16,7 @@ theorem powers (ops : ExternalFuns) (g : Raw) (hg : canonical g) :
   obtain ⟨p',hp',hcp',hdp'⟩ := PV_RunJoin_GammaPowers44.gamma ops g hg
   have same : array 29#usize p' = array 29#usize p := by
     apply Subtype.ext
+    dsimp only [array,ProverCommitArray49.array]
     apply congrArg List.ofFn
     funext i
     have he : p' i.val = p i.val := PV_RunJoin_WideUnique44.unique _ _ (hcp' _ i.isLt) (hcp _ i.isLt)
@@ -35,8 +36,7 @@ theorem complete (ops : ExternalFuns) (c : Nat → Nat → Raw) (g : Raw)
     (PV_RunJoin_GammaPowers44.inputs ops) c p hc hcp
   refine ⟨z,out,?_,?_,himage,hcz⟩
   · unfold prover.opening_batch
-    rw [hcur]
-    simp only [bind_tc_ok]
+    simp only [weights.powers,hcur,bind_tc_ok]
     exact hout
   · simp only [ProverCommitGammaOutput53.run,hp,bind_tc_ok,hz]
 #print axioms powers

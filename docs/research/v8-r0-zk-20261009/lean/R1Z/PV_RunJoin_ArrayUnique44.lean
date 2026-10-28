@@ -11,6 +11,7 @@ theorem pointwise (n : Usize) (xs ys : Nat → Raw)
     (h : ∀ k, k < n.val → value (xs k) = value (ys k)) :
     PV_RunJoin_FoldCell44.array n xs = PV_RunJoin_FoldCell44.array n ys := by
   apply Subtype.ext
+  dsimp only [PV_RunJoin_FoldCell44.array,ProverCommitArray49.array]
   apply congrArg List.ofFn
   funext k
   rw [PV_RunJoin_WideUnique44.unique (xs k.val) (ys k.val) (hx _ k.isLt) (hy _ k.isLt) (h _ k.isLt)]
