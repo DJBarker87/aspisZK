@@ -122,3 +122,25 @@ OutputPairMeaning31,38 RecipientLift31,39 SemanticRecipient31 (adjust IDs only
 for actual failed candidates/new source). All remaining candidate modules listed
 above are already committed. Compiler/root/frame results all standard axioms,
 zero swap. No unconditional honesty/owner-coverage/V038/V045 claim yet.
+
+LateAppendCarry31 passed44630, then44632 SemanticAppendRoot31 was scheduled.
+Current single driver resume-check.py44632 is ACTIVE. Four prelaunch SSH failures
+at this point; transport retry loop waits60s up to10 consecutive failures under(p).
+No compiler for32 has yet been launched; recover original if it later launches.
+Budget69charged (41accepted,28rejected),31remaining. All append-source results
+through30 are committed at a1383ac2f3. Semantic root/carry and all recipient,
+sentinel, unconditional honesty and coverage remain candidates. Next after32
+passes:33 SemanticAppendCarry31; then37 OutputPairMeaning31,38 RecipientLift31,
+39 SemanticRecipient31,40 AppendBinding31,41 TwoOutputSentinel31,42
+CompilerSentinel31,43 SemanticSentinel31,44 HonestPackage31,45 CanonicalHonest31.
+Adjust only for changed failed candidates. Keep97-99 for audits.
+
+Transport recovery44633: initial SSH submission exited255 and fetch found no out.
+Read-only host inspection after60s found no out/time/object/scope/journal/process.
+The remote command redirects out before systemd-run, so this is a confirmed
+UNDISPATCHED intent, not a compiler launch. Exact original submission/intent and
+inspection are preserved in recovery/attempt-44633-*.json. check.py now ignores
+only records explicitly marked confirmed_not_launched (historical record stays).
+The same33 has been rescheduled under(m-prime), single driver active; do not
+launch another scope. No source rerun or extra charge; budget remains70/100.
+SemanticAppendRoot31 passed32; SemanticAppendCarry31 still uncompiled pending33.
