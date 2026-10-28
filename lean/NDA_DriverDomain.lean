@@ -3,6 +3,8 @@ import SAP_OpeningCuts
 import SAP_OpeningShape
 import SAP_SemanticCanonical
 import SAP_AlphaTransport
+import NDA_QueryCanonical
+import NDA_CircleCanonical
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NDA_DriverDomain
@@ -91,6 +93,130 @@ theorem query_distinct (c : Configuration F C)
   rw [←outEq,output]
   exact coordinates
 
+open CheckpointBytesBody CheckpointBytesBlocks CheckpointBytes5Writer
+
+/-- The original writer inventory on the same Prepared/Accumulator. This is
+only a value definition; it contains no new proposition or success premise. -/
+def inventory (c : Configuration F C)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8)
+    (cut : NCU_DriverDomain.Prefix (currentInstalled c) (currentDigest c) semantic pub proof ()) :=
+  fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed)
+    (NCU_DriverDomain.control c semantic pub proof cut).1
+    (preparation c semantic pub proof cut).2.1
+
+/-- Exact before/after premise audit. Six of nine groups disappear by proof;
+only the four coordinates, rhs and power remain, on the unchanged inventory. -/
+theorem remaining_iff (c : Configuration F C)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8)
+    (cut : NCU_DriverDomain.Prefix (currentInstalled c) (currentDigest c) semantic pub proof ()) :
+    NCT_DriverDomain.NonWeightCanonical (inventory c semantic pub proof cut) ↔
+      (∀ j, OraclePortCkptAbi4Decode.Canonical ((inventory c semantic pub proof cut).coordinates j)) ∧
+      OraclePortCkptAbi4Decode.CanonicalWide (inventory c semantic pub proof cut).rhs ∧
+      OraclePortCkptAbi4Decode.Canonical (inventory c semantic pub proof cut).power := by
+  rcases preparation c semantic pub proof cut with
+    ⟨variant,qb,gamma,kappa,alpha,rho,semanticAlpha,claim⟩
+  constructor
+  · intro h; exact ⟨h.coordinates,h.rhs,h.power⟩
+  · rintro ⟨coordinates,rhs,power⟩
+    refine ⟨gamma,kappa,?_,rho,?_,coordinates,claim,rhs,power⟩
+    · exact alpha
+    · exact semanticAlpha
+
+/-- Complete writer domain with only the exact residual field premises. -/
+theorem domain (c : Configuration F C)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8)
+    (cut : NCU_DriverDomain.Prefix (currentInstalled c) (currentDigest c) semantic pub proof ())
+    (coordinates : ∀ j, OraclePortCkptAbi4Decode.Canonical ((inventory c semantic pub proof cut).coordinates j))
+    (rhs : OraclePortCkptAbi4Decode.CanonicalWide (inventory c semantic pub proof cut).rhs)
+    (power : OraclePortCkptAbi4Decode.Canonical (inventory c semantic pub proof cut).power) :
+    KNE_Caller.WriterDomain (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) := by
+  apply NCU_DriverDomain.domain c semantic pub proof cut (preparation c semantic pub proof cut).1
+    (preparation c semantic pub proof cut).2.1
+  exact (remaining_iff c semantic pub proof cut).mpr ⟨coordinates,rhs,power⟩
+
+/-- Primitive laws suffice for every residual field. They are NOT proved for
+arbitrary Configuration. No output domain is assumed in this composition. -/
+theorem canonical_of_primitives (c : Configuration F C)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8)
+    (cut : NCU_DriverDomain.Prefix (currentInstalled c) (currentDigest c) semantic pub proof ())
+    (circle : NDA_CircleCanonical.Law c.boundaries)
+    (query : NDA_QueryCanonical.Laws c.query) :
+    NCT_DriverDomain.NonWeightCanonical (inventory c semantic pub proof cut) := by
+  apply (remaining_iff c semantic pub proof cut).mpr
+  have prep := preparation c semantic pub proof cut
+  have coordinates := NDA_CircleCanonical.on_prefix c semantic pub proof cut circle
+  have rho : Port3_FlushInstall.Canonical (Tx1Q_Carriers.prepared cut.prepared).rho :=
+    prep.2.2.2.2.2.1
+  have mutable := NDA_QueryCanonical.on_prefix c semantic pub proof cut query rho
+  refine ⟨?_,mutable.1,mutable.2⟩
+  intro j
+  have hc := coordinates j
+  fin_cases j <;>
+    simpa only [inventory,fields,writerPrepared,CheckpointBytes3Namespaces.toPrepared,
+      CheckpointBytes3Namespaces.mapArray,CheckpointBytes3Namespaces.toPoint,List.getElem_map]
+      using hc
+
+/-- All caller field gates follow from the two actual-primitive domains. -/
+theorem domain_of_primitives (c : Configuration F C)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8)
+    (cut : NCU_DriverDomain.Prefix (currentInstalled c) (currentDigest c) semantic pub proof ())
+    (circle : NDA_CircleCanonical.Law c.boundaries)
+    (query : NDA_QueryCanonical.Laws c.query) :
+    KNE_Caller.WriterDomain (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) :=
+  NCU_DriverDomain.domain c semantic pub proof cut (preparation c semantic pub proof cut).1
+    (preparation c semantic pub proof cut).2.1
+    (canonical_of_primitives c semantic pub proof cut circle query)
+
+section Leaf
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open CheckpointBytes5Effect CheckpointBytes5Inputs CheckpointBytesDigest MultiproofConeCanonical
+open KNE_Model KNE_Composition
+open AspisR1Stage2.WireTx2 (singletonParts checksumParts)
+/-- The original checkpoint leaf with S2, 22 bounds and six canonical groups
+discharged. The ONLY residual caller fields are coordinates, rhs and power. -/
+theorem leaf
+(c : Configuration F C)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pub proof : Slice U8) (cut : NCU_DriverDomain.Prefix (currentInstalled c) (currentDigest c) semantic pub proof ())
+    (coordinates : ∀ j, OraclePortCkptAbi4Decode.Canonical ((inventory c semantic pub proof cut).coordinates j))
+    (rhs : OraclePortCkptAbi4Decode.CanonicalWide (inventory c semantic pub proof cut).rhs)
+    (power : OraclePortCkptAbi4Decode.Canonical (inventory c semantic pub proof cut).power)
+
+    (H : Bytes → State) (oracle : Oracle (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))) () H)
+    (native : Bytes → Bytes → Bytes → Prop)
+    (valid : LocalCorrect native KND_Schedule.schedule)
+    (hp hu hc : Digest) (body out : Slice U8) (before : Log)
+    (tr : Trace native (bodyEmissions (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (domain c semantic pub proof cut coordinates rhs power).size (domain c semantic pub proof cut coordinates rhs power).queriesBound)
+      (stateOf hp) (stateOf hu)) [] (bytesOf body.val))
+    (checksumWrite : native (bytesOf body.val) (bytesOf hc.val) (bytesOf out.val))
+    (proofCall : (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))).digest () (singletonParts proof) = ok hp)
+    (publicCall : (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))).digest () (singletonParts pub) = ok hu)
+    (checksumCall : (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))).digest () (checksumParts body) = ok hc) :
+    out.val.length = 1768 ∧
+    out = LPm_CheckpointProgram.returned (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (domain c semantic pub proof cut coordinates rhs power).size (domain c semantic pub proof cut coordinates rhs power).queriesBound
+      (domain c semantic pub proof cut coordinates rhs power).canonical (domain c semantic pub proof cut coordinates rhs power).next hp hu hc ∧
+    run (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))) () (writer (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) proof pub) before =
+      ok (out,((before ++ [(singletonParts proof,hp)]) ++
+        [(singletonParts pub,hu)]) ++ [(checksumParts body,hc)]) ∧
+    bytesOf out.val = OraclePortCheckpointAbiC5.encode H (bytesOf proof.val) (bytesOf pub.val)
+      (CheckpointBytesBlocks.prepared (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (domain c semantic pub proof cut coordinates rhs power).size (domain c semantic pub proof cut coordinates rhs power).queriesBound) (domain c semantic pub proof cut coordinates rhs power).canonical)
+      (CheckpointBytesBlocks.accumulator (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (domain c semantic pub proof cut coordinates rhs power).size (domain c semantic pub proof cut coordinates rhs power).queriesBound) (domain c semantic pub proof cut coordinates rhs power).canonical) := by
+  exact NCU_DriverDomain.leaf c semantic pub proof cut (preparation c semantic pub proof cut).1
+    (preparation c semantic pub proof cut).2.1
+    ((remaining_iff c semantic pub proof cut).mpr ⟨coordinates,rhs,power⟩)
+    H oracle native valid hp hu hc body out before tr checksumWrite proofCall publicCall checksumCall
+end Leaf
+#print axioms leaf
+
+#print axioms domain_of_primitives
+#print axioms remaining_iff
+#print axioms domain
+#print axioms canonical_of_primitives
 #print axioms preparation
 #print axioms query_distinct
 end AspisR1.NDA_DriverDomain

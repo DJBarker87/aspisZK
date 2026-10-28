@@ -52,3 +52,28 @@ files) in NDA_AENEAS_PINS.json. All direct imports are re-pinned per attempt.
 The cache already existed, so no seed was copied or modified beyond NDA objects.
 Budget used 7/50 Lean, 0 Kani. Remaining: exact reduced domain/leaf export,
 and determine whether the arbitrary primitive-slot laws are derivable.
+
+# Stage 3 — reduced leaf and exact residual equivalence
+
+Before: NCU.leaf needs S2, 22 bounds, and all nine NonWeightCanonical groups.
+After: NDA_DriverDomain.leaf needs ONLY canonical four coordinates, rhs and
+power on the SAME inventory. No quantifier/carrier/failure event or output
+conclusion is changed. It retains Prefix (not writer success), the local append
+correctness, chronological digest calls and the existing oracle law. Conclusion:
+length1768, exact returned bytes, chronological writer log, same pm/am encoding.
+It imports and applies NCU.leaf; NCU itself is never changed or reproved.
+`remaining_iff` proves the original nine-group premise is EQUIVALENT, on this
+prefix, to exactly those three groups. This is actual premise discharge, not a
+structure bundling all the old assumptions. No minimality among arbitrary
+logically equivalent formulas is claimed.
+
+`canonical_of_primitives` and `domain_of_primitives` derive the entire domain
+from Law c.boundaries and Laws c.query. These are primitive-input/result laws,
+not a parent output hypothesis; their concrete instances are still OPEN.
+L008 rejected Fin index draft; L009 complete reduced-domain proof passed.
+L010 rejected missing namespace opening; L011 complete reduced leaf passes:
+exit0,3.859626489s,peakRSS5364948KiB,swap0,source revision34f421ee83 plus
+exact dirty-source SHA in receipt. Seven roots standard axioms only.
+Budget used11/50 Lean,0 Kani. Next: audit the remaining slots against the
+requested arithmetic lane results and retain explicit counterexamples to any
+universal primitive closure claim before final handoff.
