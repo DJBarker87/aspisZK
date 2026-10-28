@@ -42,15 +42,21 @@ Pinned cargo-build-sbf SHA256 `46e50d5d1bcc70abfd74f0b6281071ef91576031330d1d892
 
 Verifier files are1,563,728bytes; Pool605,704bytes. The original scopes used MemoryHigh6G, MemoryMax8G, MemorySwapMax0, TasksMax64. Their `#print axioms` status is N/A, no Lean compilation. Resource numbers are **historical reused measurements**, not measurements from this audit. time-v child-process RSS and cgroup peak are distinct metrics.
 
-## Fresh reproduction attempt and stop
+## Fresh reproduction and retained failed attempt
 
-The historical recipe was quick enough to consider reuse. This worker first requested one read-only capped host inspection to check the pinned workspace/cache and SDK inputs before any rebuild. NCR_I001 admission returned `allowed:true` with exit0, bounded reservation8GiB. The scope then failed **before the inspection payload**:
+NCR_I001 was admitted (`allowed:true`, exit0) but its inspection payload did not start: this worker passed a stale historical `.../codex-cx-pin-20261020/harness/capped.py` path and Python reported Errno2. The wrapper then reported a missing receipt. This was an **own input error**, corrected under local rule11 using existing system `systemd-run` and `/usr/bin/time`, without repairing shared infrastructure. The earlier stage-3 text saying host work stopped under rule5 is superseded here. Original logs and null unmeasured fields remain in NCR_ATTEMPTS; no failed payload was silently counted as successful.
 
-```
-/usr/bin/python3: can't open file '/home/dombarker/project-offloads/codex-cx-pin-20261020/harness/capped.py': [Errno 2] No such file or directory
-```
+NCR_I002 then inspected the existing pinned Low2 source/cache in an admitted capped scope, exit0, peak RSS12,144KiB, swap0. Its actual cgroup limits were read back as6G/8G/Swap0/Tasks64. NCR_B003 copied **only the existing compiled target cache** (635MiB), reused the source workspace read-only and ran the pinned default recipe in a private target/out/diagnostic directory. No second source corpus was created and no foreign source/cache was edited. Before and after compilation,156 selected source/configuration hashes matched; pinned compiler and cargo-build-sbf executable hashes matched.
 
-[NCR_I001-launch.log](NCR_I001-launch.log), reservation and barrier log preserve the error. The local wrapper raised `AssertionError: missing submitted receipt`; this is not a missing successful build receipt. The chosen shared historical runner path was absent; local-lean rule5 prohibits repairing launcher infrastructure and requires stop/report. No further host action or unchanged resubmission occurred. No source/cache copy, optimized compilation, Kani or Lean payload started. **No fresh ELF reproduction is claimed.** Scope wall/RSS/swap/inner status were not produced; those fields remain null in [NCR_ATTEMPTS.jsonl](NCR_ATTEMPTS.jsonl), not fabricated from an older receipt. A failed launch consumes1/6 available host scopes conservatively;5 remain unused. No infrastructure change was made.
+**Fresh default reproduction PASS:** SHA256 `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`,1,563,728bytes, build exit0, build wall26.321091037s, full scoped time-v wall27.04s, peak process RSS684,392KiB, cgroup memory peak2,438,955,008bytes, swap0. The compiler log explicitly records optimized release compilation (25.99s), including the selected core/program crates. It reports a jobserver-FD warning and ordinary unused/dead-code warnings; compilation completed and the full artifact hash matched. No tool/configuration change was made to silence warnings.
+
+Exact command, source baseline/workspace revision, before/after hash checks and effective environment are retained in [NCR_B003-stdout.log](NCR_B003-stdout.log), [stderr](NCR_B003-stderr.log), [receipt](NCR_B003-receipt.json), [time](NCR_B003-time.log), reservation/barrier logs and script. Rust baseline is frozen4bb3b3f; reused source workspace revision is8953c28138c7e3bc31a9109e84ab3a9864090057, with byte association checked explicitly, not inferred from commit names. The task script is pinned by hash in the attempts ledger. `#print axioms`: N/A, no Lean.
+
+NCR_I004 collected own compiler-command snapshots and removed only the own copied `NCR_target` cache after the build was terminal. The rebuilt ELF, diagnostics and any generated keypair remain at `/home/dombarker/project-offloads/codex-cx-native-elfscope-20261028/NCR_B003/`; no key cleanup occurred. The default reproduction is fresh; devnet and Pool remain **historically reused**. No live-cluster readback occurred.
+
+NCR_I005 retained the generated key at mode0600 without reading its contents or changing any funds/authority.
+
+Host budget5/6 scopes conservatively includes the failed pre-payload launch, three successful inspection/retention scopes and one optimized build; Kani0, Lean0. All successful scopes require admission allowed:true AND exit0 and use6G/8G/Swap0/Tasks64, sequentially. No cap increase, memory kill, unchanged solver rerun, compiler bootstrap or full proof manifest replay occurred.
 
 ## Precise retained trust rows
 

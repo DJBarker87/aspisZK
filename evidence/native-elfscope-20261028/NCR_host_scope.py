@@ -27,16 +27,19 @@ print(p.read_text());sys.exit(r.returncode)
 else:raise SystemExit('admission exhausted')
 u=ssh('python3 -c '+shlex.quote(f'from pathlib import Path;Path({(H+"/"+label+".py")!r}).write_text({code!r})'))
 assert u.returncode==0,u.stderr
-cmd=['systemd-run','--user','--scope','--quiet','--unit='+label,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3','/home/dombarker/project-offloads/codex-cx-pin-20261020/harness/capped.py',H+'/'+label,'Pinned source and SDK inspection or optimized SBF release compilation; no Kani or Lean','--','timeout','240','python3',H+'/'+label+'.py']
-r=ssh(shlex.join(cmd));(E/(label+'-launch.log')).write_text(r.stdout+r.stderr)
-# Never resubmit after submission. Recover existing receipts only.
-for retry in range(11):
- q=ssh('python3 -c '+shlex.quote(f'import pathlib,json;h=pathlib.Path({(H+"/"+label)!r});print(json.dumps({{n:(h/n).read_text() for n in ["receipt.json","stdout.log","stderr.log","time.log"] if (h/n).exists()}}))'))
- if q.returncode==0:break
- if q.returncode!=255 or retry==10:raise SystemExit('recovery failed')
- time.sleep(60)
-out=json.loads(q.stdout);assert 'receipt.json' in out,'missing submitted receipt'
-for n,s in out.items():(E/(label+'-'+n)).write_text(s)
-j=json.loads(out['receipt.json']);j.update(attempt=label,actual_task_revision=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),scope_command=cmd)
+cmd=['systemd-run','--user','--scope','--quiet','--unit='+label,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+'/'+label+'-time.log','timeout','240','python3',H+'/'+label+'.py']
+t0=time.monotonic();r=ssh(shlex.join(cmd));elapsed=time.monotonic()-t0
+(E/(label+'-launch.log')).write_text(r.stdout+r.stderr)
+assert r.returncode!=255,'Submitted transport lost: recover read-only; never resubmit'
+q=ssh('cat '+shlex.quote(H+'/'+label+'-time.log'));assert q.returncode==0,q.stderr
+(E/(label+'-time.log')).write_text(q.stdout)
+(E/(label+'-stdout.log')).write_text(r.stdout)
+(E/(label+'-stderr.log')).write_text(r.stderr)
+import re
+rss=re.search(r'Maximum resident set size \(kbytes\): (\d+)',q.stdout)
+swaps=re.search(r'Swaps: (\d+)',q.stdout)
+j=dict(attempt=label,exit_status=r.returncode,wall_seconds_transport_included=elapsed,peak_rss_kib=int(rss[1]) if rss else None,swaps=int(swaps[1]) if swaps else None,scope_command=cmd,actual_task_revision=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),print_axioms='N/A: no Lean',admission_allowed=True,admission_exit=0)
+(E/(label+'-receipt.json')).write_text(json.dumps(j,indent=2)+'\n')
 with (E/'NCR_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(j)+'\n')
+out={'stdout.log':r.stdout,'stderr.log':r.stderr}
 print(json.dumps(j,indent=2));print(out.get('stdout.log',''));print(out.get('stderr.log',''))
