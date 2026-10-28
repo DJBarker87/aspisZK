@@ -14,7 +14,7 @@ theorem independent (ops : ExternalFuns) {Z : Type} (d : zeroize.Zeroize Z)
     (v : zeroize.Zeroizing Z) :
     let left := PV_RDCD_ZeroSelected.selected {ops with op130 := fun _ z => .ok z}
     let right := PV_RDCD_ZeroSelected.selected {ops with op130 := fun _ _ => .div}
-    left.op122 = right.op122 ∧ left.op123 = right.op123 ∧ left.op130 d v ≠ right.op130 d v := by
+    (@ExternalFuns.op122 _ left) = (@ExternalFuns.op122 _ right) ∧ (@ExternalFuns.op123 _ left) = (@ExternalFuns.op123 _ right) ∧ left.op130 d v ≠ right.op130 d v := by
   exact ⟨rfl,rfl,by intro h; cases h⟩
 #print axioms unchanged
 #print axioms independent
