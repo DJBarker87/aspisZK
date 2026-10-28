@@ -21,6 +21,7 @@ theorem scalar_canonical (fuel : Nat) (xs : List word) (v : word) (rest : List w
     | nil => simp [scan] at h
     | cons w ws =>
       unfold scan at h
+      dsimp only at h
       split at h
       · rename_i hc
         have he := congrArg Prod.fst (Option.some.inj h)
@@ -38,12 +39,19 @@ theorem tuple_canonical (a b c d : word)
   fin_cases i <;> simp [tuple,ha,hb,hc,hd]
 #print axioms tuple_canonical
 
-def sampleQ (fuel : Nat) (xs : List word) : Option (Q × List word) := do
- let (a,xs1) ← scan fuel xs
- let (b,xs2) ← scan fuel xs1
- let (c,xs3) ← scan fuel xs2
- let (d,xs4) ← scan fuel xs3
- some (tuple a b c d,xs4)
+def sampleQ (fuel : Nat) (xs : List word) : Option (Q × List word) :=
+ match scan fuel xs with
+ | none => none
+ | some (a,xs1) =>
+   match scan fuel xs1 with
+   | none => none
+   | some (b,xs2) =>
+     match scan fuel xs2 with
+     | none => none
+     | some (c,xs3) =>
+       match scan fuel xs3 with
+       | none => none
+       | some (d,xs4) => some (tuple a b c d,xs4)
 
 theorem secure_canonical (fuel : Nat) (xs : List word) (q : Q) (rest : List word)
     (h : sampleQ fuel xs=some (q,rest)) : Canonical q := by
