@@ -1,0 +1,72 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:39:4: error: unsolved goals
+case pos.refine_1
+N : Usize
+weights : Std.Array aspis_core.field.QM31 N
+prepared : host_terminal_field.PreparedQm31Multiplier
+index : Usize
+hi : 2 * ↑index ≤ ↑N
+w : Std.Array aspis_core.field.QM31 N
+i : Usize
+hbound : 2 * ↑i ≤ ↑N
+hp : 0 < ↑i
+hb : i > 0#usize
+j : Usize := i.wrapping_sub 1#usize
+hj : ↑j = ↑i - 1
+hN : ↑N < UScalar.size UScalarTy.Usize
+k : Usize := Usize.wrapping_mul 2#usize j
+hk : ↑k = 2 * ↑j
+k1 : Usize := k.wrapping_add 1#usize
+hk1 : ↑k1 = ↑k + 1
+parent : aspis_core.field.QM31
+hparent : w.index_usize (i.wrapping_sub 1#usize) = Result.ok parent
+right : aspis_core.field.QM31
+hright : prepared.mul parent = Result.ok right
+left : aspis_core.field.QM31
+hleft : parent.sub right = Result.ok left
+w1 : Std.Array aspis_core.field.QM31 N
+hw1 : w.update (Usize.wrapping_mul 2#usize (i.wrapping_sub 1#usize)) left = Result.ok w1
+w2 : Std.Array aspis_core.field.QM31 N
+hw2 : w1.update ((Usize.wrapping_mul 2#usize (i.wrapping_sub 1#usize)).wrapping_add 1#usize) right = Result.ok w2
+⊢ Result.ok (ControlFlow.cont (w2, i.wrapping_sub 1#usize)) = Result.ok (ControlFlow.cont (w2, j))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:41:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - 2*b ≥ 0
+  a - 2*c ≥ 2
+  a - d ≤ -1
+  a - 2*e ≤ -1
+where
+ a := ↑↑N
+ b := ↑↑index
+ c := ↑(↑i - 1)
+ d := ↑(UScalar.size UScalarTy.Usize)
+ e := ↑↑(w2, j).2
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:42:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - 2*b ≥ 0
+  a - 2*c ≥ 2
+  a - d ≤ -1
+where
+ a := ↑↑N
+ b := ↑↑index
+ c := ↑(↑i - 1)
+ d := ↑(UScalar.size UScalarTy.Usize)
+ e := ↑↑(w2, j).2
+ f := ↑↑(w, i).2
+'PV_B3P_Success227.usize_mul_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Success227.expand_inner_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
