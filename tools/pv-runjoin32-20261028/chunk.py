@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess,json,shlex,sys,time,datetime,re,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin32-20261028';H='/home/dombarker/project-offloads/codex-pv-runjoin-20261026';P=H+'/runjoin32-lean';host='dombarker@100.108.41.90'
 a=int(sys.argv[1]);idx=int(sys.argv[2]);assert 51300<=a<=51499
-plan=json.loads((E/'build-plan.json').read_text());mods=plan['chunks'][idx]
+plan=json.loads((E/'build-plan.json').read_text());mods=sys.argv[3:] or plan['chunks'][idx]
 assert len(list(E.glob('receipt-*.json')))<100
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
 def transport(cmd,**kw):
@@ -33,7 +33,7 @@ if r.returncode!=0 or not admission.get('allowed'):
  print('REFUSED uncharged same ID after cooldown',admission,flush=True);sys.exit(78)
 transport(['scp','-q',host+':'+P+f'/evidence/reservation-{a}.json',str(E/f'reservation-{a}.json')],check=True)
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=pv32-lean-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',P+f'/evidence/time-{a}.log','python3',P+'/chunk-host.py',P,str(a),json.dumps(mods)]
-intent=dict(attempt=a,chunk=idx,modules=mods,source_revision=plan['source_revision'],wrapper_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),command=cmd,reservation=admission,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),old_objects_written=False)
+intent=dict(attempt=a,chunk=idx,modules=mods,source_revision=plan['source_revision'],wrapper_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),command=cmd,reservation=admission,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),old_objects_written=False,external_ir_companions_sha256=hashlib.sha256((E/'external-ir-companions.json').read_bytes()).hexdigest() if (E/'external-ir-companions.json').exists() else None)
 (E/f'submission-{a}.json').write_text(json.dumps(intent,indent=2)+'\n')
 print('LAUNCH',a,'chunk',idx,len(mods),'modules',flush=True)
 # Never retry this SSH call; a lost connection requires original-log recovery.
