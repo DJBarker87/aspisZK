@@ -6,8 +6,8 @@ set_option autoImplicit false
 
 theorem zero_array {T : Type} (a b : Array T 0#usize) : a=b := by
   apply Subtype.ext
-  have ha : a.val=[] := List.length_eq_zero.mp a.property
-  have hb : b.val=[] := List.length_eq_zero.mp b.property
+  have ha : a.val=[] := List.length_eq_zero_iff.mp a.property
+  have hb : b.val=[] := List.length_eq_zero_iff.mp b.property
   rw [ha,hb]
 
 theorem left_half {T : Type} (k : Nat) (a b : Storage T k) :
@@ -22,10 +22,10 @@ theorem injective {T : Type} (k : Nat) (a b : Storage T k)
     (h : flatten k a=flatten k b) : a=b := by
   induction k with
   | zero =>
-    have ha1 : a.parent1.val=[] := List.length_eq_zero.mp a.parent1.property
-    have ha2 : a.parent2.val=[] := List.length_eq_zero.mp a.parent2.property
-    have hb1 : b.parent1.val=[] := List.length_eq_zero.mp b.parent1.property
-    have hb2 : b.parent2.val=[] := List.length_eq_zero.mp b.parent2.property
+    have ha1 : a.parent1.val=[] := List.length_eq_zero_iff.mp a.parent1.property
+    have ha2 : a.parent2.val=[] := List.length_eq_zero_iff.mp a.parent2.property
+    have hb1 : b.parent1.val=[] := List.length_eq_zero_iff.mp b.parent1.property
+    have hb2 : b.parent2.val=[] := List.length_eq_zero_iff.mp b.parent2.property
     simp only [flatten,PV_CBL_GenericArrayFlatten.odd,ha1,ha2,hb1,hb2,
       List.nil_append,List.singleton_inj] at h
     have h1 := zero_array a.parent1 b.parent1
