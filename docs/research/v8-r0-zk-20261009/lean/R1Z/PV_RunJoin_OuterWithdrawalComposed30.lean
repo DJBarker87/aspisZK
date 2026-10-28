@@ -112,6 +112,7 @@ theorem success_iff
   rw [R1Z.PV_RunJoin_OuterWithdrawalDomain30.success_iff]
   unfold R1Z.PV_RunJoin_OuterWithdrawalDomain30.Path Path
   simp only [R1Z.PV_RunJoin_OuterInnerPath30.inner_wp]
+  rfl
 #print axioms success_iff
 
 def ErrorPath
@@ -219,5 +220,6 @@ theorem error_iff
   rw [R1Z.PV_RunJoin_OuterWithdrawalErrors30.error_iff]
   unfold R1Z.PV_RunJoin_OuterWithdrawalErrors30.Path ErrorPath
   simp only [R1Z.PV_RunJoin_OuterInnerPath30.error_wp]
+  rfl
 #print axioms error_iff
 end R1Z.PV_RunJoin_OuterWithdrawalComposed30

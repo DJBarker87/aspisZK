@@ -26,6 +26,7 @@ variable [LaneRoot] [R1Z.BuilderForestAdmissionPort.ExternalLinear] [R1Z.Builder
   rw [R1Z.{name}.{lemma}]
   unfold R1Z.{name}.Path {path}
   simp only [R1Z.PV_RunJoin_OuterInnerPath30.{rewrite}]
+  rfl
 #print axioms {lemma}
 '''
  text+='end '+ns+'\n';p=L/('PV_RunJoin_Outer'+kind+'Composed30.lean')
