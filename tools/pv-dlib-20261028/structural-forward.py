@@ -58,4 +58,6 @@ out=dict(row=row,evidence_class='structural (K-1 substitute)',rulings=['r',"k'"]
  finite_validation='digest-forward-native-finite-resume/receipt.json; required before credit; finite validation only',
  compression='forwarding preserves original core callback parameters; no compression evaluation law or backend equality assumed',
  v232_untouched=True,kani=False)
+if row=='V234':out['differences']=out['differences'][:2]
+else:out['differences']=out['differences'][2:]
 (E/row/'structural-binding.json').write_text(json.dumps(out,indent=2)+'\n');print(row,'three complete forwarding source bodies, native dispatch and private-prefix checks passed')
