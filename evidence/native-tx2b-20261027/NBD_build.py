@@ -3,7 +3,7 @@ Batches transfer/recovery to avoid repeated flaky connections. No backend edits.
 """
 from pathlib import Path
 import subprocess,sys,json,time,shlex,hashlib
-E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-tx2b-20261027';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X='/home/dombarker/project-offloads/codex-cx-assoc-a2-cache-20261027/XRw_objects'
+E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-tx2b-20261027';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 a,local,module=sys.argv[1:];local=Path(local);src='NBD_generated/'+module.replace('.','/')+'.lean';obj='/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027/'+module.replace('.','/')+'.olean'
 if (E/'NBD_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NBD_L*/receipt.json')))<100
@@ -35,7 +35,7 @@ print(p.read_text(),end='');sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('admission refused; wait180s',flush=True);time.sleep(180);continue
  raise SystemExit('STOP admission error')
 else:raise SystemExit('STOP admission exhausted')
-cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NBD_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027:'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'Private prefix modules; XRy persistent cache and coherent SInt2; Aeneas objects pinned in NBD_LIBRARY_PIN.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
+cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NBD_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027:'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'Private prefix modules; persistent leaf cache and coherent SInt2; Aeneas objects pinned in NBD_LIBRARY_PIN.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 q=E/a/'sources'/src;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(local.read_bytes())
 payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loads((E/'NBD_LAUNCHER_INPUTS.json').read_text()))
