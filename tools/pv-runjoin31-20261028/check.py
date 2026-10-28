@@ -107,6 +107,12 @@ out=(E/f'out-{A}.log').read_text();tim=(E/f'time-{A}.log').read_text();print(out
 m=re.search(r'Exit status: (\d+)',tim);record['exit']=int(m[1]) if m else None
 m=re.search(r'Maximum resident set size \(kbytes\): (\d+)',tim);record['peak_rss_bytes']=int(m[1])*1024 if m else None
 m=re.search(r'Swaps: (\d+)',tim);record['swaps']=int(m[1]) if m else None
+elapsed=re.search(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): ([0-9:.]+)',tim)
+if elapsed:
+ host_wall=0
+ for component in elapsed[1].split(':'):host_wall=host_wall*60+float(component)
+ record['host_wall_seconds']=host_wall
+record['wall_seconds_note']='wall_seconds is submission/transport elapsed; host_wall_seconds is GNU time elapsed for the capped command'
 record['axioms']=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",out)
 record['accepted']=r.returncode==0 and record['exit']==0 and 'error:' not in out and 'sorryAx' not in out
 (E/f'receipt-{A}.json').write_text(json.dumps(record,indent=2)+'\n');print('RECEIPT',json.dumps({k:record.get(k) for k in ['attempt','exit','wall_seconds','peak_rss_bytes','swaps','accepted']}),flush=True)

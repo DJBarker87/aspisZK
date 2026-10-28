@@ -12,7 +12,7 @@ for p in E.glob('*reservation*.log'):
  for line in p.read_text().splitlines():
   try:add(json.loads(line),p)
   except ValueError:pass
-for p in list(E.glob('*refusal*.json'))+list(E.glob('barrier-race-*.json')):
+for p in list(E.glob('*refusal*.json'))+list(E.glob('barrier-race-*.json'))+list(E.glob('admission-history-*.json')):
  add(json.loads(p.read_text()),p)
 ordered=sorted(events.values(),key=lambda r:r['utc']);intervals=[]
 for first,next_event in zip(ordered,ordered[1:]):
