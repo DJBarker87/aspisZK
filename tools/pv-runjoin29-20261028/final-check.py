@@ -37,7 +37,23 @@ if '--final' in sys.argv:
  res=json.loads((E/'focused-resolution.json').read_text());assert not res['unpinned'] and not any(m.startswith('XR') or m.split('.')[-1].startswith('XR') for m in res['resolved'])
  cache=json.loads((E/'focused-project-cache-check.json').read_text());assert all(r.get('source_match') or r.get('retained_own_cache_source_match') for r in cache)
  assert json.loads((E/'replay-cache-h6-check.json').read_text())['all_match']
-summary=dict(charged=charged,accepted=sum(r['accepted'] for r in rows),rejected=sum(not r['accepted'] for r in rows),remaining=64-charged,kani=0,refusals=len(list(E.glob('refusal-*.json'))),source_status=status,peak_rss_bytes=max(r['peak_rss_bytes'] for r in rows),all_swaps_zero=all(r['swaps']==0 for r in rows),endpoint_premises_removed=0,endpoint_premises_added=0,endpoint_premises_weakened=0,target_established=False)
+# Refused IDs are retired; only fresh IDs after the mandatory 180-second wait.
+used=sorted([json.loads(p.read_text()) for p in E.glob('used-*.json')],key=lambda r:r['utc'])
+intervals=[]
+for p in E.glob('refusal-[0-9]*.json'):
+ f=json.loads(p.read_text());stamp=datetime.datetime.fromisoformat(f['utc'])
+ later=[u for u in used if datetime.datetime.fromisoformat(u['utc'])>stamp]
+ if later:
+  u=later[0];delta=(datetime.datetime.fromisoformat(u['utc'])-stamp).total_seconds()
+  assert delta>=180,(p.name,delta)
+  intervals.append(dict(refusal=p.name,next_attempt=u['attempt'],seconds=delta))
+(E/'admission-intervals.json').write_text(json.dumps(intervals,indent=2)+'\n')
+for p in E.glob('id-audit-*.json'):
+ a=json.loads(p.read_text());assert not a['other_receipt_hits'] and not a['sent_hits'],p.name
+seen=set()
+for r in rows:
+ key=(r['source_sha256'],r['deps_fingerprint']);assert key not in seen,key;seen.add(key)
+summary=dict(charged=charged,accepted=sum(r['accepted'] for r in rows),rejected=sum(not r['accepted'] for r in rows),remaining=64-charged,kani=0,refusals=len(list(E.glob('refusal-[0-9]*.json'))),source_status=status,peak_rss_bytes=max(r['peak_rss_bytes'] for r in rows),all_swaps_zero=all(r['swaps']==0 for r in rows),endpoint_premises_removed=0,endpoint_premises_added=0,endpoint_premises_weakened=0,target_established=False)
 (E/'tally.json').write_text(json.dumps(summary,indent=2)+'\n')
 (E/'receipt-index.tsv').write_text('attempt\ttarget\texit\thost_wall\tssh_wall_s\tpeak_rss_bytes\tswap\tsource_revision\taccepted\n'+''.join('\t'.join(str(r.get(k,'')) for k in ['attempt','target','exit','host_wall','wall_seconds','peak_rss_bytes','swaps','source_revision','accepted'])+'\n' for r in rows))
 print(json.dumps({k:v for k,v in summary.items() if k!='source_status'},indent=2))

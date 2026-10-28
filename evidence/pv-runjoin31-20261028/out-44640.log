@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SemanticRecipient31.lean:36:6: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  Option.map (fun d i => ι (d i)) (some (digK p.recipient_commitment)) = some (digK p.recipient_commitment)
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.47} {β : α → Sort ?u.46} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+inst✝ : CharP K 2147483647
+i : Input
+success : run i = ok (core.result.Result.Ok i.compiled)
+checked : PV_Src_RecordReference.Checked i
+frontier : ∀ (l : Fin 20), Canon8 (↑i.snapshot.frontier)[↑l]!
+hv : (statement i).variant = R0P.Variant.privateTransfer
+p : BuilderPublicProjection.Transfer
+recipient : BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1
+hreq : i.request = Request.transfer p recipient
+r : BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords
+hr :
+  BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords.new i.witness (outputValue i.request)
+      (PV_Src_NativeInput.recipient i.request) i.change i.snapshot (forestPublic i.request).asset =
+    ok r
+hrec : r.recipient = ok p.recipient_commitment
+hrecords : newRecords i = ok r
+hw : WitnessOk (PV_Src_Forest_PrimitiveArguments.wordWitness r.w)
+hp : PubCorr (PV_Src_Forest_PrimitiveArguments.wordPublic r.p) (mapPub (PV_Src_Public.canonicalPublic (publicInput i)))
+⊢ Option.map (fun d i => ι (d i)) (some (digK p.recipient_commitment)) = some (digK p.recipient_commitment)
+'R1Z.PV_RunJoin_SemanticRecipient31.recipient' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

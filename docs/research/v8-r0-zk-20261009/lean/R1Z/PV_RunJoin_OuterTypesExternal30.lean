@@ -1,0 +1,12 @@
+import R1Z.BuilderForestAdmissionPort
+set_option autoImplicit false
+namespace PV_RunJoin_Outer30
+abbrev pool_v1.incremental_merkle.PoolV1TreeError :=
+  R1Z.BuilderForestAdmissionPort.pool_v1.incremental_merkle.PoolV1TreeError
+abbrev pool_v1.pair_forest_trace.PoolV1PairForestTraceV1 :=
+  R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.PoolV1PairForestTraceV1
+abbrev state_only_trace.StateOnlyTraceFoundation :=
+  R1Z.BuilderForestAdmissionPort.state_only_trace.StateOnlyTraceFoundation
+abbrev pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 :=
+  R1Z.BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1
+end PV_RunJoin_Outer30

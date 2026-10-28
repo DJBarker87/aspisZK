@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SemanticResidual30.lean:30:2: error: Tactic `tauto` failed
+
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+inst✝ : CharP K 2147483647
+i : Input
+shape : AspisR1.PublicOptionShape.canonical (statement i)
+balance : ↑(witness i).inputValue = ↑(witness i).outputValue + ↑(witness i).changeValue
+change : (statement i).change = AspisR1.SpendRelation.changeCommitment (statement i) (witness i)
+⊢ (AspisR1.InputWitnessCore.Relation (statement i) (↑(↑(witness i).outputValue + ↑(witness i).changeValue))
+          (witness i).sk (witness i).salt (witness i).path (witness i).pair ∧
+        AspisR1.SpendRelation.variantOutput (statement i) (witness i) ∧
+          AspisR1.SpendRelation.AppendBinding (statement i)) ∧
+      ((mapPub (PV_Src_Public.canonicalPublic (publicInput i))).variant = R0P.Variant.privateTransfer →
+        (mapPub (PV_Src_Public.canonicalPublic (publicInput i))).change 7 ≠ 0) ↔
+    AspisR1.InputWitnessCore.Relation (statement i) (↑(↑(witness i).outputValue + ↑(witness i).changeValue))
+        (witness i).sk (witness i).salt (witness i).path (witness i).pair ∧
+      AspisR1.SpendRelation.variantOutput (statement i) (witness i) ∧
+        AspisR1.SpendRelation.AppendBinding (statement i) ∧
+          ((statement i).variant = R0P.Variant.privateTransfer →
+            AspisR1.SpendRelation.changeCommitment (statement i) (witness i) 7 ≠ 0)
+'R1Z.PV_RunJoin_SemanticResidual30.admission_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
