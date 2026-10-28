@@ -5,7 +5,13 @@ R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdb2-20261028'
 def git(key):return subprocess.check_output(['git','show',key],cwd=R)
 head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
 inv=json.loads(git('research:evidence/envj-rebuild-20261026/EJR_final-inventory.json'))
-ejr={r['module'].replace('/','.'):r for r in inv['selected'] if r.get('resolution')}
+replay=json.loads(git('research:evidence/pv-replay-20261027/replay-plan.json'))['nodes']
+ejr={}
+for r in inv['selected']:
+ if not r.get('resolution'):continue
+ m=r['module'].replace('/','.')
+ key=r['module'].replace('.','/')
+ if m not in ejr or (key in replay and r['sha256']==replay[key]['source_sha256']):ejr[m]=r
 ext={r['module'].replace('/','.'):r for r in json.loads(git('research:evidence/pv-replay-20261027/receipts/external-object-manifest.json'))}
 freeze=json.loads(git('research:docs/research/100bit-spend-path-20261013/evidence/prover-commit47-20261022/final-source-freeze.json'))
 fz={r['module']:r for r in freeze['sources']}
