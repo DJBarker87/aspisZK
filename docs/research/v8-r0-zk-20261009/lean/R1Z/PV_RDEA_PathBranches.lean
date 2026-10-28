@@ -7,7 +7,7 @@ theorem absolute_push {S F : Type}
     (append : Buffer U8 → List U8 → World S F → Outcome (Buffer U8) S F)
     (needSep : Bool) (b : Buffer U8) (path : List U8) (w : World S F) :
     sourcePush append true needSep b path w = append (PV_RDB1_V178.cleared b) path w := by
-  simp [sourcePush,bind,clear,PV_RDB1_V178.byte_drops]
+  simp [sourcePush,PV_RDEA_StatefulPath.bind,clear,PV_RDB1_V178.byte_drops]
 
 theorem relative_no_sep {S F : Type}
     (append : Buffer U8 → List U8 → World S F → Outcome (Buffer U8) S F)
@@ -18,7 +18,7 @@ theorem relative_sep {S F : Type}
     (append : Buffer U8 → List U8 → World S F → Outcome (Buffer U8) S F)
     (b : Buffer U8) (path : List U8) (w : World S F) :
     sourcePush append false true b path w=
-      bind (append b [47#u8] w) (fun b w => append b path w) := rfl
+      PV_RDEA_StatefulPath.bind (append b [47#u8] w) (fun b w => append b path w) := rfl
 
 def pushWord (h : PV_RDEA_PathSchedule.Header) (pathLen : Nat) (absolute needSep : Bool) :
     List (Nat × Nat × Nat) :=

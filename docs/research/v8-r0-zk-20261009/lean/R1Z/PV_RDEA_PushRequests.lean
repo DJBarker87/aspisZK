@@ -34,13 +34,13 @@ theorem sep_requests_prefix {S F : Type} (step : Request → S → Option Nat ×
     dsimp only at hist
     cases answer with
     | error err =>
-      simp only [bind]
+      simp only [PV_RDEA_StatefulPath.bind]
       rw [hist]
       change Prefix (sizes w.history ++ PV_RDEA_PathSchedule.appendWord
         ⟨b.values.length,b.capacity⟩ 1) _
       exact right _ _ _ (refl _)
     | ok next =>
-      simp only [bind]
+      simp only [PV_RDEA_StatefulPath.bind]
       have hh := PV_RDEA_ExecutionHeaders.append_header step shape b [47#u8] w next
         (congrArg Prod.fst hs)
       rw [PV_RDEA_AppendExecution.append_sizes step shape width,hist]

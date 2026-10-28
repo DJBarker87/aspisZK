@@ -24,14 +24,14 @@ theorem join_requests_prefix {S F : Type} (step : Request → S → Option Nat �
   | mk response after =>
     cases response with
     | error err =>
-      simp only [bind]
+      simp only [PV_RDEA_StatefulPath.bind]
       have hp := PV_RDEA_ClonePrefix.clone_requests_prefix step shape width address base w
       rw [hc] at hp
       dsimp only at hp
       simpa only [List.append_assoc] using right _ _
         (pushWord ⟨base.length,base.length⟩ path.length absolute needSep) hp
     | ok b =>
-      simp only [bind]
+      simp only [PV_RDEA_StatefulPath.bind]
       have hb := PV_RDEA_ExecutionHeaders.clone_header step shape address base w b (congrArg Prod.fst hc)
       have hist := PV_RDEA_CloneSuccessWord.clone_word_success step shape width address base w b (congrArg Prod.fst hc)
       rw [hc] at hist
