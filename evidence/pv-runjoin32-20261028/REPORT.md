@@ -17,7 +17,15 @@ The initial missing-IR own-input error and isolated successful replacement
 are recorded in INPUT-CORRECTIONS.md. The ordinary first failure is charged,
 retained and not treated as a mathematical counterexample or stop. Three
 public-import dependencies omitted by the inherited resolver were added
-before their affected chunks. No selected source bytes changed.
+before their affected chunks.
+
+Fresh attempt51322 exposed a missing explicit RootHelper import in the h5
+source WithdrawalIdentification16. Its23 completed predecessors are retained.
+Commit364a4b6fb8 adds only that import, with the theorem/proof unchanged; the
+original failure and source are retained. SOURCE-RESOLUTION-ADDENDUM.md records
+the exact source-pin amendment. The remaining queue excludes all accepted
+objects and checks the corrected module alone after its helper prerequisites.
+No EJR/freeze source or source variant was replaced.
 
 Live accounting is in tally.json, receipt-index.tsv and receipt-*.json. Each
 chunk has one authorized ID and one scope (6G high/8G max/swap0/tasks64,
