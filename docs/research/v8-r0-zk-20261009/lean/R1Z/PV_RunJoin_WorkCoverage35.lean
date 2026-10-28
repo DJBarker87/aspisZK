@@ -20,7 +20,10 @@ theorem initial_ranges (n k : Nat) : indices n k=List.range' 0 (start n k) := by
 
 theorem complete (n : Nat) : indices n 16=List.range n := by
   rw [initial_ranges,end_all]
-  rfl
+  apply List.ext_getElem
+  · simp only [List.length_range',List.length_range]
+  · intro i hi hj
+    simp only [List.getElem_range',List.getElem_range,Nat.one_mul,Nat.zero_add]
 
 theorem count (n : Nat) : (indices n 16).length=n := by rw [complete,List.length_range]
 
