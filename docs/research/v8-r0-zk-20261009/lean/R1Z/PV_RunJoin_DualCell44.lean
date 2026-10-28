@@ -26,8 +26,8 @@ theorem cell (ops : ProverRwFull.ExternalFuns) (q : Nat → Raw) (hq : ∀ j, j<
   obtain ⟨h,hh,hch,hdh⟩ := add_exact (q 0) m3 (hq 0 (by decide)) hcm3
   obtain ⟨hz,hcz,hdz⟩ := ProverCommitWideScalar48.source_exact h 536870912#u32
   refine ⟨ProverCommitWideScalar48.product h 536870912#u32,?_,hcz,?_⟩
-  · rw [ProverRwFull.prover.fold_cell]
-    simp only [↓reduceIte]
+  · unfold ProverRwFull.prover.fold_cell
+    simp only [↓reduceIte,PV_RunJoin_FoldCell44.array]
     rw [ProverCommitArray49.index _ _ 0#usize (by decide),
       ProverCommitArray49.index _ _ 3#usize (by decide),
       ProverCommitArray49.index _ _ 2#usize (by decide),
