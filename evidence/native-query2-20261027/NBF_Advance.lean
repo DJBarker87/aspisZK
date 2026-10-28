@@ -31,10 +31,14 @@ theorem accepted (ops : Ops) (p : verifier.Prepared) (a out : verifier.Accumulat
    rw [terms,sync]
  refine ⟨rfl,next,counter,?_⟩
  apply NBF_RowShape.progress
- · rfl
+ · exact congrArg UScalar.val counter
  · exact len
  · intro j row get
    have actual := phase j row get
-   simpa only [next,←sync] using actual
+   change NBB_Sweep.Bound (Usize.wrapping_add a.next 1#usize).val row
+   rw [next]
+   have same : b.terms.val=a.next.val := congrArg UScalar.val sync
+   rw [same] at actual
+   exact actual
 #print axioms accepted
 end NBF_Advance

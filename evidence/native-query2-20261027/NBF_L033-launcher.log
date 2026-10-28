@@ -1,0 +1,54 @@
+{"attempt": "NBF_L033", "exit_status": 1, "wall_seconds": 4.562338650983293, "peak_rss_kib": "4400504", "swaps": "0", "print_axioms": ["'NBF_Advance.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBF_generated/NBF_Advance.lean:34:3: error: Tactic `rfl` failed: The left-hand side
+  ↑{ raw := mid.raw, terms := mid.terms.wrapping_add 1#usize }.terms
+is not definitionally equal to the right-hand side
+  ↑{ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize }.next
+
+case refl.terms
+ops : Ops
+p : verifier.Prepared
+a : verifier.Accumulator
+node : U32
+value : Stage2E
+b : verifier.BatchedWeights
+size : (↑a.weights).length = 64
+nextBound : ↑a.next < 10
+sync : b.terms = a.next
+progress : S7JoinRowsTrace.Progress (↑b.terms) 0 (Port3_RowsInstall.toBW b)
+hq : ∀ (k : Fin 4), ↑(S7Kani2OwnedRowRefinement.powerLimb (Port3_RowsInstall.toK a.power) k) < 2 ^ 31 - 1
+basis 
+...
+umulate.install ops).op15 11#u16 a.next rhs
+      let power ← ops.op9 a.power p.rho
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+            { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })) =
+    ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+run✝ :
+  (do
+      let power ← ops.op9 a.power p.rho
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+            { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })) =
+    ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+run :
+  ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize }) =
+    ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+next : ↑(a.next.wrapping_add 1#usize) = ↑a.next + 1
+counter : mid.terms.wrapping_add 1#usize = a.next.wrapping_add 1#usize
+⊢ ↑{ raw := mid.raw, terms := mid.terms.wrapping_add 1#usize }.terms =
+    ↑{ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize }.next
+NBF_generated/NBF_Advance.lean:38:3: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'NBF_Advance.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4a4ca502bb89406abe199611566e1887.scope; invocation ID: 0b81c295eb044c2898556b0488be1d07

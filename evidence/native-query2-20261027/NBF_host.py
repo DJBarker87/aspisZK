@@ -53,5 +53,6 @@ print(json.dumps({{n:(b/n).read_text() for n in ['receipt.json','stdout.log','ti
  for n,s in out.items():p=E/cfg['attempt']/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
  if 'receipt.json' not in out:raise SystemExit('STOP missing receipt after submission; do not resubmit')
  rc=json.loads(out['receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True);
- if cfg['kind']!='metadata':print(out['stdout.log'][-6000:],flush=True)
+ if cfg['kind']!='metadata':
+  log=out['stdout.log'];pos=log.rfind('Checking harness');print(log[pos:] if pos>=0 else log[-1800:],flush=True)
  return rc
