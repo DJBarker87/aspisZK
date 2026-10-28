@@ -13768,3 +13768,30 @@ worktree, as are the reachability, file-effects, world and level-2 guard lines, 
 runjoin line's whole-body comparison and native associations. Recount 8 follows pv-fscan's feature
 audit so that its verdicts are included. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D381 (Stream B) 2026-10-28 16:46 UTC: deployed-configuration body audit: 41 of 66 candidate closures suspended; cause classification launched
+
+pv-fscan (67 of 150 capped native scopes; no Kani; no Lean; no source change; all 517 mirrored runtime
+source files match) audited the native evidence behind 66 scoped candidate closures against the
+deployed configurations it resolved exactly: devnet_spend (r1p-check, aspis-r1-cost-probe/
+ct-host-prover; release; assertions and overflow checks off; rustc 1.94.1) and the default, devnet and
+Pool SBF programs. Result: 25 STAND; 41 SUSPENDED, of which 34 show normalized or concrete MIR
+differences in reached bodies (V164, V169, V170, V178, V181-V184, V186, V187, V195, V198, V201, V216,
+V219-V222, V229-V231, V233, V236, V238-V240, V242, V247, V256-V260, V265) and 7 have unresolved call
+graphs (V197, V212, V213, V217, V218, V237, V246). These are body-transfer findings, not demonstrated
+value or privacy failures; no Lean, model or source law is refuted.
+
+Causes, from the audit: deployed features are NOT the cause (toggling them changed no credited body);
+the differences come from (A) compiler lowering, since the extraction cohort and native fixtures ran
+on rustc 1.98 nightly while the client ships on 1.94.1 (for example a no_retag copy in
+Public::transition, StorageLive placement in context_eq); (B) standard-library bodies that differ
+between the nightly and 1.94.1 std/alloc; and (C) dependency drift, notably zeroize 1.8.1 in historical
+evidence versus 1.9.0 in the shipped client. (B) and (C) are real source differences: evidence about a
+different std or dependency body is not about the shipped one, and must be re-checked. (A) leaves the
+source identical and rests on compiler correctness for both compilers, which bears on row V370 (L3
+compiler preservation) and on the trust boundary, so it goes to the owner.
+
+pv-fscan2 (IDs 54100-54199; no Kani) classifies every suspended row by cause at source level, re-runs
+the structural gates and native differentials of class-(B) and class-(C) rows against the deployed
+std and dependency sources (a disagreement is a stop), and records class-(A) rows without re-crediting
+them. Recount 8 waits for it. Rows removed outright: 0. Privacy target not yet established.

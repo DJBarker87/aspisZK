@@ -241,3 +241,17 @@ code and its gates, or (B) restrict the privacy claim's honest domain to canonic
 recommendation will follow the trace.
 
 **Resolved (LOG D375, 2026-10-28): the noncanonical-limb finding is outside the shipped client's honest route.** The trace (codex/pv-l2c-20261028, evidence/pv-l2c-20261028/resume-d371/REPORT.md) found no unchecked path by which a noncanonical limb reaches the compiler through the shipped JSON request planner; decoder and generator bounds and canonical compiler columns are proved, and guard N3 composes on that canonical domain. No owner decision is needed for privacy. Residual, for information: the Rust library API accepts raw noncanonical limbs from direct callers that bypass the client's decoders, which makes such a spend fail (availability only).
+
+## Pending decision (LOG D381, 2026-10-28): extraction compiler cohort versus the shipped compiler
+
+The extraction toolchain (Charon/Aeneas) and the native fixtures behind most candidate closures ran on
+Rust 1.98 nightly (nightly-2026-06-01); the shipped client is built with the owner-pinned rustc
+1.94.1. A body audit (codex/pv-fscan-20261028, evidence/pv-fscan-20261028/SCAN.md) suspended 41 of 66
+candidate closures because reached bodies differ between the two configurations. Where the Rust source
+is identical and only compiler lowering differs (class A, being classified now), the native link
+holds if both compilers preserve source semantics. **Question:** may class-A rows be credited under
+the existing compiler-preservation obligation (row V370), with the compiler cohort recorded as a named
+boundary, or must every native link be re-established on the 1.94.1 toolchain itself (which the
+extraction tool may not support)? Rows whose std or dependency SOURCE differs (classes B and C) are
+being re-checked against the deployed sources regardless. The lead's recommendation will follow the
+classification.
