@@ -36,7 +36,7 @@ print(p.read_text(),end='');sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('admission refused; wait180s',flush=True);time.sleep(180);continue
  raise SystemExit('STOP admission error')
 else:raise SystemExit('STOP admission exhausted')
-cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NCD_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-tx2mid-cache-20261028:'+X+':'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'NBS prefix; persistent leaf cache and coherent SInt2; resolved Aeneas pins in NCD_LIBRARY_START.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
+cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NCD_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-tx2mid-cache-20261028:'+X+':'+C+':'+C+'/objects:'+':'.join('/home/dombarker/project-offloads/codex-cx-replay-dry-20261026/'+n for n in ['RPx_overlay','RPv_overlay','RPu_overlay','RPt_overlay','RPz8_overlay','RPz7_overlay','RPz4_trusted','RPz_trusted'])+':/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'NCD retarget; persistent cache and coherent SInt2, explicit RPx-selected renamed modules; NCD_LIBRARY_PIN.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 q=E/a/'sources'/src;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(local.read_bytes())
 payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loads((E/'NCD_LAUNCHER_INPUTS.json').read_text()))
@@ -62,7 +62,7 @@ cmd='cd '+shlex.quote(B)+' && python3 -c '+shlex.quote(setup)+' && systemd-run -
 r=ssh(cmd,submitted=True);(E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 recover=f'''from pathlib import Path
 import json
-b=Path({B!r});names=[{(a+'/receipt.json')!r},{(a+'/stdout.log')!r},{(a+'/time.log')!r},'NCD_LIBRARY_PIN.json']
+b=Path({B!r});names=[{(a+'/receipt.json')!r},{(a+'/stdout.log')!r},{(a+'/time.log')!r}]+([] if {(E/'NCD_LIBRARY_PIN.json').exists()!r} else ['NCD_LIBRARY_PIN.json'])
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))
 '''
 r=ssh('python3 -c '+shlex.quote(recover));assert r.returncode==0,r.stderr

@@ -1,0 +1,176 @@
+[
+  {
+    "original": "JFr_TX2_Tails",
+    "module": "NCD_R_JFr_TX2_Tails",
+    "path": "lean/NCD_R_JFr_TX2_Tails.lean",
+    "imports": [
+      "RPu_JFr_TX2_TailRead"
+    ],
+    "scope": "generic start/offset/stop definitions only; fixture source theorem excluded"
+  },
+  {
+    "original": "JFs_TX2_TailStages",
+    "module": "NCD_R_JFs_TX2_TailStages",
+    "path": "lean/NCD_R_JFs_TX2_TailStages.lean",
+    "imports": [
+      "RPu_JFs_TX2_DotSuffix",
+      "NCD_R_JFr_TX2_Tails"
+    ]
+  },
+  {
+    "original": "JFs_TX2_WideAdd",
+    "module": "NCD_R_JFs_TX2_WideAdd",
+    "path": "lean/NCD_R_JFs_TX2_WideAdd.lean",
+    "imports": [
+      "RPt_FIo_WideValues"
+    ]
+  },
+  {
+    "original": "NBS_DotTerm",
+    "module": "NCD_R_NBS_DotTerm",
+    "path": "lean/NCD_R_NBS_DotTerm.lean",
+    "imports": [
+      "RPt_JFs_TX2_ArrayRead",
+      "RPt_FIo_ArrayCanon",
+      "NBQ_RawCell"
+    ]
+  },
+  {
+    "original": "NBS_DotInner",
+    "module": "NCD_R_NBS_DotInner",
+    "path": "lean/NCD_R_NBS_DotInner.lean",
+    "imports": [
+      "NCD_R_NBS_DotTerm"
+    ]
+  },
+  {
+    "original": "NBS_DotOuterActive",
+    "module": "NCD_R_NBS_DotOuterActive",
+    "path": "lean/NCD_R_NBS_DotOuterActive.lean",
+    "imports": [
+      "NCD_R_NBS_DotInner",
+      "RPt_JFs_TX2_OuterStep",
+      "RPt_JFs_TX2_BatchWindow"
+    ]
+  },
+  {
+    "original": "NBS_DotOuter",
+    "module": "NCD_R_NBS_DotOuter",
+    "path": "lean/NCD_R_NBS_DotOuter.lean",
+    "imports": [
+      "NCD_R_NBS_DotOuterActive"
+    ]
+  },
+  {
+    "original": "NBS_DotTail",
+    "module": "NCD_R_NBS_DotTail",
+    "path": "lean/NCD_R_NBS_DotTail.lean",
+    "imports": [
+      "NCD_R_NBS_DotTerm",
+      "NBQ_TailDomain",
+      "NCD_R_JFs_TX2_TailStages",
+      "RPu_JFs_TX2_TailQM"
+    ]
+  },
+  {
+    "original": "NBS_DotWhole",
+    "module": "NCD_R_NBS_DotWhole",
+    "path": "lean/NCD_R_NBS_DotWhole.lean",
+    "imports": [
+      "NCD_R_NBS_DotOuter",
+      "NCD_R_NBS_DotTail",
+      "RPu_JFs_TX2_ScalarFinish",
+      "NCD_R_JFs_TX2_WideAdd"
+    ]
+  },
+  {
+    "original": "NBS_PowersCanon",
+    "module": "NCD_R_NBS_PowersCanon",
+    "path": "lean/NCD_R_NBS_PowersCanon.lean",
+    "imports": [
+      "NBQ_Powers29",
+      "RPt_FIo_ArrayCanon"
+    ]
+  },
+  {
+    "original": "NBS_Four",
+    "module": "NCD_R_NBS_Four",
+    "path": "lean/NCD_R_NBS_Four.lean",
+    "imports": [
+      "NCD_R_NBS_DotWhole",
+      "NCD_R_NBS_PowersCanon"
+    ]
+  },
+  {
+    "original": "NBS_NativeEight",
+    "module": "NCD_R_NBS_NativeEight",
+    "path": "lean/NCD_R_NBS_NativeEight.lean",
+    "imports": [
+      "NCD_R_NBS_DotTerm"
+    ]
+  },
+  {
+    "original": "NCB_CoefficientDomains",
+    "module": "NCD_R_NCB_CoefficientDomains",
+    "path": "lean/NCD_R_NCB_CoefficientDomains.lean",
+    "imports": [
+      "NCD_R_NBS_PowersCanon"
+    ]
+  },
+  {
+    "original": "NCB_DotNativeStep",
+    "module": "NCD_R_NCB_DotNativeStep",
+    "path": "lean/NCD_R_NCB_DotNativeStep.lean",
+    "imports": [
+      "NCD_R_NBS_NativeEight"
+    ]
+  },
+  {
+    "original": "NCB_ScalarDomains",
+    "module": "NCD_R_NCB_ScalarDomains",
+    "path": "lean/NCD_R_NCB_ScalarDomains.lean",
+    "imports": [
+      "NCD_R_NBS_DotTerm",
+      "RPu_FJl_SlotReads",
+      "RPu_FJl_SliceCopy",
+      "RPt_JFr_TX2_ScalarCanon"
+    ]
+  },
+  {
+    "original": "NCB_TailOffsets",
+    "module": "NCD_R_NCB_TailOffsets",
+    "path": "lean/NCD_R_NCB_TailOffsets.lean",
+    "imports": [
+      "NCD_R_NBS_DotTail",
+      "RPu_FJi_TailInputs"
+    ]
+  },
+  {
+    "original": "NCB_TailDomains",
+    "module": "NCD_R_NCB_TailDomains",
+    "path": "lean/NCD_R_NCB_TailDomains.lean",
+    "imports": [
+      "NCD_R_NCB_TailOffsets",
+      "RPu_FJl_SlotReads"
+    ]
+  },
+  {
+    "original": "NCB_FourDomains",
+    "module": "NCD_R_NCB_FourDomains",
+    "path": "lean/NCD_R_NCB_FourDomains.lean",
+    "imports": [
+      "NCD_R_NCB_ScalarDomains",
+      "NCD_R_NCB_TailDomains",
+      "RPu_FJo_FourCalls"
+    ]
+  },
+  {
+    "original": "NCB_TailFinal",
+    "module": "NCD_R_NCB_TailFinal",
+    "path": "lean/NCD_R_NCB_TailFinal.lean",
+    "imports": [
+      "NCD_R_JFs_TX2_WideAdd",
+      "NBQ_U06"
+    ]
+  }
+]
