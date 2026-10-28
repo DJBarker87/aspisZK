@@ -1,0 +1,9 @@
+# Derived schedule and caller domain
+
+KNE_Model.bodyEmissions_payload refines the adopted CheckpointBytesBlocks.body into the actual source-ordered individual byte writes. KNE_Model.bodyEmissions_shape computes widths from those payloads using symbolic serializer length lemmas. It does not postulate a second list of sizes. KNE_Schedule.derived_schedule proves its annotated trace equals KND_Schedule.schedule exactly: no difference. returned_decomposition also identifies the flattened payload with LPm_CheckpointProgram.returned, including checksum bytes. Focused accepted receipts: L004 (generic/model), L005 (caller), L009 (schedule/returned bridge). Earlier local theorem errors are retained and excluded; no timeout or memory failure.
+
+Unit34's inventory explicitly calls itself a proposed domain/bridge and does not discharge the driver. The ONE named driver hypothesis is AspisR1.KNE_Caller.DriverEstablishedDomain Reached: every SAME reached p,a has S1S7S8StateProvenance with its SAME pm,am. every_reached_call derives WriterDomain (S2, weights64, query bound, canonical fields, next10). caller_final_len proves the frozen source transport arithmetic yields64 for S2. No claim that an executable driver proof has merged is made.
+
+The adopted LPm model is a byte-model writer; the new emission refinement proves its bytes and exact fixed shape. Physical Rust execution/source/library association and exact KMX copy meaning remain the retained interpretation boundary, to be supplied by the per-transition evidence and composition. No extraction of the native allocator is claimed.
+
+All accepted new top axioms are subsets of propext, Classical.choice, Quot.sound. Host scopes have6G/8G/swap0/tasks64, Lean-M7000, one own scope. The local Kani queue is paused between attempts (at K017 admission; no own Kani scope remains) during these focused proofs.
