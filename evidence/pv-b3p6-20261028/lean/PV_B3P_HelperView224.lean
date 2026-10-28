@@ -11,7 +11,7 @@ def columns (xs : Array (alloc.vec.Vec U32) 16#usize) : Array (Array (Option U32
   ⟨List.ofFn (fun i : Fin 16 => probe (xs.val[i.val]'(by have h := xs.property; scalar_tac)).val),
     by simp only [List.length_ofFn]; rfl⟩
 
-def fromTrace (trace : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestTraceV1) :
+def fromTrace [ProverRwFull.ExternalTypes] (trace : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestTraceV1) :
     PV_B3P_224Prefix.prefix224.View :=
   { stable := columns trace.stable.c1
     late := columns trace.late
@@ -32,7 +32,7 @@ theorem column_value (xs : Array (alloc.vec.Vec U32) 16#usize) (c : Nat) (hc : c
 -- malformed short vectors with field zero or strengthen the callback domain.
 theorem short_vector {α : Type} (xs : List α) (r : Nat) (hr : r < 1024) (hshort : xs.length ≤ r) :
     (probe xs).val[r]'(by have h := (probe xs).property; scalar_tac) = none := by
-  rw [probe_value]
+  rw [probe_value xs r hr]
   exact List.getElem?_eq_none hshort
 
 #print axioms probe_value

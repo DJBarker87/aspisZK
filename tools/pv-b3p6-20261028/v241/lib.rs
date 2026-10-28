@@ -77,3 +77,26 @@ fn finite224_owned_prefix() {
     }
     println!("finite validation: {checks} complete owned-prefix row arrays / native; same registry, both projected fixtures, append extremes and lambda0");
 }
+#[test]
+fn fidelity224_prefix_side() {
+    use aspis_core::field::{M31,QM31};
+    use aspis_statement::logup::CopyLogUpRow;
+    use aspis_statement::pool_v1::pair_trace::{PoolV1PairCopyTupleV1,PoolV1PairTupleLimbV1};
+    let row=CopyLogUpRow{producer_values:[QM31::ZERO;2],producer_weights:[M31::ZERO;2],consumer_values:[QM31::ZERO;2],consumer_weights:[M31::ZERO;2]};
+    let mut rows=[row;1024];
+    let view=prefix224::View{stable:[[None;1024];16],late:[[None;1024];16],withdrawal:false};
+    let tuple=PoolV1PairCopyTupleV1{row:1023,limbs:[PoolV1PairTupleLimbV1::Zero;16]};
+    let words=|r:CopyLogUpRow| {
+        let mut xs=Vec::new();
+        for v in r.producer_values.into_iter().chain(r.consumer_values) {
+            xs.extend([v.c0.a.0,v.c0.b.0,v.c1.a.0,v.c1.b.0]);
+        }
+        xs.extend(r.producer_weights.map(|w|w.0));xs.extend(r.consumer_weights.map(|w|w.0));xs
+    };
+    let mut cases=Vec::new();
+    for (tag,weight,consumer) in [(7,1,false),(11,0,false),(13,0,false),(17,1,true)] {
+        rows=prefix224::side(rows,view,tuple,M31(tag),M31(weight),QM31::ZERO,consumer).unwrap();
+        cases.push(words(rows[1023]));
+    }
+    println!("D188-prefix224-cases={cases:?}");
+}
