@@ -33,7 +33,7 @@ theorem complete_result (rows : Array aspis_statement.logup.CopyLogUpRow 1024#us
   rw [observe_root,complete_loop rows chi 1024 seed 0#usize (by simp)]
   simp only [show (0#usize).val = 0 from rfl]
   have hlen : seed.val.length = 1024 := seed.property
-  rw [← hlen,PV_B3P_HelperList224.whole]
+  simpa only [hlen] using (PV_B3P_HelperList224.whole (PV_B3P_HelperEval224.eval rows chi) seed.val)
 
 theorem success_values (rows : Array aspis_statement.logup.CopyLogUpRow 1024#usize)
     (chi : aspis_core.field.QM31) (out : Output)
