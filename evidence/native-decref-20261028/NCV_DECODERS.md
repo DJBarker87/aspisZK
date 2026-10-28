@@ -1,14 +1,14 @@
 # NCV decoder bodies
 
-Status: work in progress; op48, op49, op50 OPEN. No security closure claimed.
+Status: budget exhausted; all three complete native bridges OPEN. Concrete model bodies are delivered; no security closure claimed.
 Frozen Rust: 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387.
 Headline: AspisR1.RPx_Deployed.deployed. No source adoption or trust change.
 
 | Slot | Reference | Extraction | Native equality/control | Installation | Fixture |
 |---|---|---|---|---|---|
-|48 master|NCV_reference.rs|E008; L002/L003 PASS|pending|pending|pending|
-|49 checkpoint|NCV_reference.rs|E008; L002/L003 PASS|pending|pending|pending|
-|50 lane|NCV_reference.rs|E008; L002/L003 PASS|pending|pending|pending|
+|48 master|decode_master_ref|E008; L002/L003 PASS|Wrong-length pairs; full bridge OPEN|NCV_Install.op48; sdk_master|Sequence/counter fields proved; full observation OPEN|
+|49 checkpoint|decode_checkpoint_ref|E008; L002/L003 PASS|Wrong-length pairs; full bridge OPEN|NCV_Install.op49; sdk_checkpoint|Root/sequence/counter fields proved; full observation OPEN|
+|50 lane|decode_lane_ref|E008; L002/L003 PASS|Wrong-length pairs; full bridge OPEN|NCV_Install.op50; sdk_lane|Root/20 digest fields/index proved; full observation OPEN|
 
 Budget: 60 Lean / 60 Kani under the job-specific final allocation. One scope at a time.
 Only NCV modules and this evidence directory may change. Scratch source is outside
@@ -111,3 +111,20 @@ assembly, and sequence-capacity/zero scans. Exact successful target receipts
 and audits are in the journal. L045 evaluates all eight master and checkpoint
 sequence rows on the actual fixture bytes by row laws, not buffer reduction.
 The three complete decoder observations remain OPEN.
+
+## Final disposition
+
+NCV_L060 is the final focused audit:exit0,wall2.203949165996164s,
+peakRSS5607200KiB,swap0. It audits all accepted top statements and all six
+reference decoder definitions; only standard axioms occur. Budgets60/60 each.
+NCV_InstallationSupport proves the selected bodies survive the actual SDK
+configuration projection and reuses NCC_/NCF_/NBX_ representability support.
+NCV_CopyFrame supplies the KMX value-law window/disjointness composition.
+
+The complete frontier-run draft failed elaboration and is excluded. No complete
+JHj decoder observation, full native wrapper equality or new P6 instance is
+claimed. The exact member-by-member remaining native AND Lean obligations,
+variant/extraction pins, resource evidence and retained host cache are in
+NCV_HANDOFF.md. NCV_VALIDATION.json passes source, feature, lock, receipt, axiom
+and delivery-hash checks. No release ELF or headline/security-target closure
+is claimed.

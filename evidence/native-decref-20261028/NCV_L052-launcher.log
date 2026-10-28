@@ -1,0 +1,49 @@
+{"attempt": "NCV_L052", "exit_status": 1, "wall_seconds": 1.249061890062876, "peak_rss_kib": "2641684", "swaps": "0", "print_axioms": ["'NCV_FrontierStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NCV_FrontierStep.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NCV_generated/NCV_FrontierStep.lean:23:7: error: unexpected token 'mut'; expected '(', ':=', '|' or term
+NCV_generated/NCV_FrontierStep.lean:23:7: error: Missing cases:
+NCV_generated/NCV_FrontierStep.lean:14:96: error: unsolved goals
+tree : Slice U8
+next : U64
+a : Std.Array (Std.Array U32 8#usize) 20#usize
+i : Usize
+row : Std.Array U32 8#usize
+tag : U64
+index : ↑i < 20
+read : ∀ (addr : Usize), ↑addr = 48 + 32 * ↑i → NCV_CastRef.digest tree addr = ok (core.result.Result.Ok row)
+shift : next >>> i = ok tag
+empty : tag &&& 1#u64 = 0#u64 → row = NCV_ArrayFrame.coord NCV_CastRef.EMPTY ↑i
+sm : 32#usize * i ⦃ x => ↑x = 32 * ↑i ⦄
+offset : UScalar UScalarTy.Usize
+mul : 32#usize * i = ok offset
+offval
+...
+NCV_generated/NCV_FrontierStep.lean:23:7: error: unexpected token 'mut'; expected '(', ':=', '|' or term
+NCV_generated/NCV_FrontierStep.lean:23:7: error: Missing cases:
+NCV_generated/NCV_FrontierStep.lean:14:96: error: unsolved goals
+tree : Slice U8
+next : U64
+a : Std.Array (Std.Array U32 8#usize) 20#usize
+i : Usize
+row : Std.Array U32 8#usize
+tag : U64
+index : ↑i < 20
+read : ∀ (addr : Usize), ↑addr = 48 + 32 * ↑i → NCV_CastRef.digest tree addr = ok (core.result.Result.Ok row)
+shift : next >>> i = ok tag
+empty : tag &&& 1#u64 = 0#u64 → row = NCV_ArrayFrame.coord NCV_CastRef.EMPTY ↑i
+sm : 32#usize * i ⦃ x => ↑x = 32 * ↑i ⦄
+offset : UScalar UScalarTy.Usize
+mul : 32#usize * i = ok offset
+offval : ↑offset = 32 * ↑i
+sa : 48#usize + offset ⦃ x => ↑x = 48 + ↑offset ⦄
+addr : UScalar UScalarTy.Usize
+add : 48#usize + offset = ok addr
+addrval : ↑addr = 48 + ↑offset
+digest : NCV_CastRef.digest tree addr = ok (core.result.Result.Ok row)
+rd : a.index_usize i = ok (NCV_ArrayFrame.coord a ↑i)
+⊢ ∃ successor,
+    ↑successor = ↑i + 1 ∧
+      NCV_CastRef.decode_frontier_loop.body tree next a i = ok (ControlFlow.cont (a.set i row, successor))
+'NCV_FrontierStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCV_FrontierStep.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0c228183e691475f8d559b5bdb264040.scope; invocation ID: a5953f708e3b44a6ae331e0a51481916

@@ -3,6 +3,10 @@ import subprocess,difflib,json,os,re
 E=Path(__file__).resolve().parent
 REV='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 orig=lambda p:subprocess.check_output(['git','show',REV+':'+p],text=True)
+def harness_text(name):
+ p=E/name
+ if not p.exists():p=E/'NCV_K060/sources/NCV_src/programs/r1-cost-probe/src'/name
+ return re.sub(r'NCV_INVERSE:bool=(true|false);','NCV_INVERSE:bool=false;',p.read_text())
 def files():
  d={}
  p='programs/r1-cost-probe/src/lib.rs';s=orig(p);s=s.replace('use aspis_r1_cost_probe::verifier', '#![cfg_attr(kani, feature(allocator_api))]\n#[cfg(kani)] extern crate alloc;\nuse aspis_r1_cost_probe::verifier',1)
@@ -19,9 +23,9 @@ def files():
 '''
   s=s.replace('fn '+fun+'(',attrs+'fn '+fun+'(',1)
  s+='\n#[cfg(kani)] #[path="NCV_native.rs"] mod NCV_native;\n';d[p]=s
- d['programs/r1-cost-probe/src/NCV_native.rs']=(E/'NCV_native.rs').read_text()
- d['programs/r1-cost-probe/src/NCV_fragments.rs']=(E/'NCV_fragments.rs').read_text().replace('pub const NCV_INVERSE:bool=false;','pub const NCV_INVERSE:bool='+('true' if os.environ.get('NCV_NEGATIVE') else 'false')+';')
- d['programs/r1-cost-probe/src/NCV_box.rs']=(E/'NCV_box.rs').read_text().replace('const NCV_INVERSE:bool=false;','const NCV_INVERSE:bool='+('true' if os.environ.get('NCV_NEGATIVE') else 'false')+';')
+ d['programs/r1-cost-probe/src/NCV_native.rs']=harness_text('NCV_native.rs')
+ d['programs/r1-cost-probe/src/NCV_fragments.rs']=harness_text('NCV_fragments.rs').replace('pub const NCV_INVERSE:bool=false;','pub const NCV_INVERSE:bool='+('true' if os.environ.get('NCV_NEGATIVE') else 'false')+';')
+ d['programs/r1-cost-probe/src/NCV_box.rs']=harness_text('NCV_box.rs').replace('const NCV_INVERSE:bool=false;','const NCV_INVERSE:bool='+('true' if os.environ.get('NCV_NEGATIVE') else 'false')+';')
  case=os.environ.get('NCV_CASE')
  if case:
   assert case in ['short','long','empty','version','lanes','encoding','depth']
