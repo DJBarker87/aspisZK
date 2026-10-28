@@ -16,7 +16,7 @@ theorem exact_transfer {T : Type} (xs : List T) :
     drain xs.length xs=ok (xs,[]) := by
   induction xs with
   | nil => rfl
-  | cons x xs ih => simp only [List.length_cons,drain,ih,bind_tc_ok]
+  | cons x xs ih => simp only [List.length_cons,drain,ih,bind_tc_ok,Aeneas.Std.uncurry]
 
 theorem zero_live_drops {T : Type} (backing : List T) : backing.take 0=[] := rfl
 

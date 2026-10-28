@@ -20,7 +20,7 @@ theorem source_reference {T : Type} (N : Usize) (v : alloc.vec.Vec T) :
   by_cases h : v.val.length=N.val
   · simp only [reference,if_pos h]
     rw [← h,PV_DL_ArrayTransfer.exact_transfer]
-    simp only [bind_tc_ok,PV_DL_ArrayOwnership.value,dif_pos h]
+    simp only [bind_tc_ok,Aeneas.Std.uncurry,PV_DL_ArrayOwnership.value,dif_pos h]
   · simp only [reference,if_neg h,PV_DL_ArrayOwnership.value,dif_neg h]
 
 @[reducible] def selected [types : ExternalTypes] (ops : ExternalFuns) : ExternalFuns :=
@@ -35,7 +35,7 @@ theorem selected_native [types : ExternalTypes] (ops : ExternalFuns) {T : Type}
 theorem nonvacuous :
     ∃ v : alloc.vec.Vec Unit, ∃ a : Array Unit 0#usize,
       reference 0#usize v=ok (.Ok a) := by
-  let v : alloc.vec.Vec Unit := ⟨[],by simp⟩
+  let v : alloc.vec.Vec Unit := alloc.vec.Vec.new Unit
   exact ⟨v,⟨[],rfl⟩,by rw [source_reference];rfl⟩
 
 #print axioms reference
