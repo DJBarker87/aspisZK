@@ -1,0 +1,47 @@
+{"attempt": "NCO_L054", "exit_status": 1, "wall_seconds": 1.2203411550726742, "peak_rss_kib": "2651868", "swaps": "0", "print_axioms": ["'NCO_ValidateModel.bad' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NCO_ValidateModel.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+= (final, none)
+          match pending_return with
+          | none => ok (core.result.Result.Err (NCO_ParserRef.RefError.NonCanonical row i))
+          | some r => ok r
+      ok (result r)) =
+    match some k with
+    | none => ok (core.result.Result.Ok ())
+    | some i =>
+      if h : i ≤ UScalar.cMax UScalarTy.Usize then
+        ok (core.result.Result.Err (LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+      else fail Error.panic
+
+case some
+row : U8
+payload : Slice U8
+cap : (↑payload).length ≤ 3712
+final : Usize
+zero : ↑0#usize = 0
+sameBad :
+  NCO_OuterRun.bad payload = fun i => !LPl_Kit_Bytes.validChunk 8 true (List.take 32 (List.drop (32 * i) ↑payload))
+k : ℕ
+found :
+  List.find? (fun i => !LPl_Kit_Bytes.validChunk 8 true (List.take 32 (List.drop (32 * i) ↑payload)))
+      (List.range ((↑payload).length / 32)) =
+    some k
+value : ↑final = k
+call : NCO_ParserRef.validate_ref_loop0 payload 0#usize = ok (final, none)
+member : k ∈ List.range ((↑payload).length / 32)
+bound : k < (↑payload).length / 32
+small : k < 116
+representable : k ≤ UScalar.cMax UScalarTy.Usize
+⊢ (do
+      let r ←
+        let (i, pending_return) := (final, none)
+          match pending_return with
+          | none => ok (core.result.Result.Err (NCO_ParserRef.RefError.NonCanonical row i))
+          | some r => ok r
+      ok (result r)) =
+    match some k with
+    | none => ok (core.result.Result.Ok ())
+    | some i =>
+      if h : i ≤ UScalar.cMax UScalarTy.Usize then
+        ok (core.result.Result.Err (LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+      else fail Error.panic
+'NCO_ValidateModel.bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCO_ValidateModel.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

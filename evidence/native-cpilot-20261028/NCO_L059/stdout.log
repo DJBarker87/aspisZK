@@ -1,0 +1,308 @@
+NCO_generated/NCO_AtCompose.lean:21:14: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case fail
+bytes : Slice U8
+row tag : U8
+offset size len end1 : Usize
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok len
+add : offset + len = ok end1
+callee :
+  ∀ (framed : Slice U8),
+    (do
+        let r ← NCO_ParserRef.parse_record_ref row framed
+        ok (NCO_Framing.result r)) =
+      AspisR1PrefixAggregateParser.r1_wire.parse_record row framed
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+e : Error
+getCall :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := end1 } = fail e
+⊢ ∀ (v : Option (Slice U8)),
+    fail e = ok v →
+      (do
+          let x ← NCO_ParserRef.core.option.Option.ok_or v (NCO_ParserRef.RefError.Length row)
+          let x ← core.result.Result.Insts.CoreOpsTry.branch x
+          let r ←
+            match x with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r1 ← NCO_ParserRef.parse_record_ref row val
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (Slice U8 × Usize) (core.convert.FromSame NCO_ParserRef.RefError) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame NCO_ParserRef.RefError) residual
+          ok (NCO_Framing.result r)) =
+        do
+        let r ←
+          AspisR1PrefixAggregateParser.core.option.Option.ok_or v
+              (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NCO_generated/NCO_AtCompose.lean:22:11: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case div
+bytes : Slice U8
+row tag : U8
+offset size len end1 : Usize
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok len
+add : offset + len = ok end1
+callee :
+  ∀ (framed : Slice U8),
+    (do
+        let r ← NCO_ParserRef.parse_record_ref row framed
+        ok (NCO_Framing.result r)) =
+      AspisR1PrefixAggregateParser.r1_wire.parse_record row framed
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+getCall :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := end1 } = div
+⊢ ∀ (v : Option (Slice U8)),
+    div = ok v →
+      (do
+          let x ← NCO_ParserRef.core.option.Option.ok_or v (NCO_ParserRef.RefError.Length row)
+          let x ← core.result.Result.Insts.CoreOpsTry.branch x
+          let r ←
+            match x with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r1 ← NCO_ParserRef.parse_record_ref row val
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (Slice U8 × Usize) (core.convert.FromSame NCO_ParserRef.RefError) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame NCO_ParserRef.RefError) residual
+          ok (NCO_Framing.result r)) =
+        do
+        let r ←
+          AspisR1PrefixAggregateParser.core.option.Option.ok_or v
+              (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NCO_generated/NCO_AtCompose.lean:25:14: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case ok.none
+bytes : Slice U8
+row tag : U8
+offset size len end1 : Usize
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok len
+add : offset + len = ok end1
+callee :
+  ∀ (framed : Slice U8),
+    (do
+        let r ← NCO_ParserRef.parse_record_ref row framed
+        ok (NCO_Framing.result r)) =
+      AspisR1PrefixAggregateParser.r1_wire.parse_record row framed
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+getCall :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := end1 } =
+    ok none
+⊢ ∀ (v : Option (Slice U8)),
+    ok none = ok v →
+      (do
+          let x ← NCO_ParserRef.core.option.Option.ok_or v (NCO_ParserRef.RefError.Length row)
+          let x ← core.result.Result.Insts.CoreOpsTry.branch x
+          let r ←
+            match x with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r1 ← NCO_ParserRef.parse_record_ref row val
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (Slice U8 × Usize) (core.convert.FromSame NCO_ParserRef.RefError) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame NCO_ParserRef.RefError) residual
+          ok (NCO_Framing.result r)) =
+        do
+        let r ←
+          AspisR1PrefixAggregateParser.core.option.Option.ok_or v
+              (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NCO_generated/NCO_AtCompose.lean:30:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1PrefixAggregateParser.r1_wire.parse_record row framed
+in the target expression
+  ∀ (v : Option (Slice U8)),
+    ok (some framed) = ok v →
+      (do
+          let x ←
+            match v with
+              | none => ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+              | some v => ok (core.result.Result.Ok v)
+          let x ←
+            match x with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          let r ←
+            match x with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r1 ← NCO_ParserRef.parse_record_ref row val
+                let cf1 ←
+                  match r1 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (Slice U8 × Usize) (core.convert.FromSame NCO_ParserRef.RefError) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame NCO_ParserRef.RefError) residual
+          ok (NCO_Framing.result r)) =
+        do
+        let r ←
+          match v with
+            | none => ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+            | some v => ok (core.result.Result.Ok v)
+        let cf ←
+          match r with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+            let cf1 ←
+              match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+
+case ok.some
+bytes : Slice U8
+row tag : U8
+offset size len end1 : Usize
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok len
+add : offset + len = ok end1
+callee :
+  ∀ (framed : Slice U8),
+    (do
+        let r ← NCO_ParserRef.parse_record_ref row framed
+        ok (NCO_Framing.result r)) =
+      AspisR1PrefixAggregateParser.r1_wire.parse_record row framed
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+framed : Slice U8
+getCall :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := end1 } =
+    ok (some framed)
+⊢ ∀ (v : Option (Slice U8)),
+    ok (some framed) = ok v →
+      (do
+          let x ←
+            match v with
+              | none => ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+              | some v => ok (core.result.Result.Ok v)
+          let x ←
+            match x with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          let r ←
+            match x with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r1 ← NCO_ParserRef.parse_record_ref row val
+                let cf1 ←
+                  match r1 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (Slice U8 × Usize) (core.convert.FromSame NCO_ParserRef.RefError) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame NCO_ParserRef.RefError) residual
+          ok (NCO_Framing.result r)) =
+        do
+        let r ←
+          match v with
+            | none => ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+            | some v => ok (core.result.Result.Ok v)
+        let cf ←
+          match r with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+            let cf1 ←
+              match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NCO_generated/NCO_AtCompose.lean:29:51: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NCO_ParserRef.core.option.Option.ok_or,
+          AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+          core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCO_AtCompose.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

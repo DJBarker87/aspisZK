@@ -1,0 +1,28 @@
+{"attempt": "NCO_L059", "exit_status": 1, "wall_seconds": 1.5509864250198007, "peak_rss_kib": "2623500", "swaps": "0", "print_axioms": ["'NCO_AtCompose.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+e.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+            let cf1 ←
+              match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, end1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+              (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NCO_generated/NCO_AtCompose.lean:29:51: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NCO_ParserRef.core.option.Option.ok_or,
+          AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+          core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCO_AtCompose.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

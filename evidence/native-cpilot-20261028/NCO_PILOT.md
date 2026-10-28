@@ -72,3 +72,33 @@ no required external template. This removes that extraction gap without
 adding an axiom or editing an existing module. The parser reference/model
 equalities remain separate Lean obligations; no extraction success is called
 a native bridge.
+
+## Final Lean-side results before the audit
+
+E006's Types/Funs compile in L011/L012; no unresolved external axiom is
+imported. NCO_ParserShape L014 also connects row_shape to the exact
+PrefixAggregate cohort used by the selected parser chain, not merely the
+compact model. Rejection bridges L015/L019 and range rejection L024 preserve
+nominal error mapping and input bytes within their printed hypotheses.
+
+NCO_ValidateModel.reference (L058) proves the FULL extracted validate_ref
+against LPl's actual kernel leaf (root r1_wire.validate_record_fields), every
+payload length0..3712, all malformed bytes/tails, same first error row/index.
+The proof uses checked addresses, a symbolic four-byte little-endian lemma,
+one reference word step and two loop inductions, not116 concrete reductions.
+NCO_CallerDomain.validator (L050) derives its cap from row_shape/framing and
+the exact drop5 slice. This is model-to-model closure only; K060 did not prove
+the frozen body contract. The distinct PrefixAggregate validator transport,
+accepted parser cases and complete parse_at equality are still OPEN.
+
+The general parse_at model composition draft remains failed (L059); its text
+is excluded from accepted modules. It assumes a named lower reference equality
+and never discharged it. It must not be treated as a native bridge.
+
+Recommendation: **do not switch all lanes**. Retain the working pure-value
+contract packets. Before a wider switch, obtain a checked borrowed/Vec return
+mechanism with all per-shape controls, a full loop-leaf contract method under
+the one-iteration rule, and enforce callee proof/control/domain closure in the
+runner. Then repeat one complete vertical slice. Do not use raw-byte output
+adapters, Option<fn> renaming, or a successful caller run under an unproved
+contract as a substitute.

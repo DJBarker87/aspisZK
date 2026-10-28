@@ -58,3 +58,18 @@ Top-level raw scratch harness sources were initially retained in the evidence
 directory. They are now represented only by NCO_harness.patch; receipt source
 snapshots are preserved. Own setup/runner scripts decode that patch directly.
 No repository crates/ or programs/ source was changed at any time.
+
+K062/K063 use inverted/weak postconditions on the same32-byte body layout
+following K060's timeout. They were distinct fidelity queries, but did not
+isolate the expensive body shape further; under the stricter no-repeat-shape
+reading they should have been skipped/split. Both timed out and carry no credit.
+No cap, timeout, function name or verifier verdict was changed to obtain a pass.
+
+L042 attempted an importer before its NCO_Outer dependency was green. It
+failed immediately; NCO_Search was made independent (Aeneas only), and the
+actual dependency compiled L043. Failed-source introspection and draft errors
+are retained, excluded from accepted source/axioms. L059 is the final failed
+composition draft and was moved to NCO_AtCompose.failed.lean.txt.
+
+Auxiliary *summary.log trailing blank lines were normalized for diff hygiene.
+Canonical stdout.log/time.log/receipt.json files are unchanged.

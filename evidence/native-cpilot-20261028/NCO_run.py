@@ -45,7 +45,12 @@ env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CA
 if os.environ.get('NCO_EXTRACT_PARSER'):env['NCO_EXTRACT_PARSER']=os.environ['NCO_EXTRACT_PARSER']
 if os.environ.get('NCO_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NCO_RUST_CFG']
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'source_pinset':'NCO_SOURCE.json','library_pinset':'NCO_SOURCE.json:library'},expected_time='optimized compile then one contract/shape proof; no field multiplication',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
-if kind=='lean':cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NCO_SOURCE.json').read_text())['library'].items()}
+if kind=='lean':
+ cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NCO_SOURCE.json').read_text())['library'].items()}
+ if target=='NCO_Audit':
+  cfg['deps_fingerprint']['selected_objects']=json.loads((E/'NCO_AUDIT_PINS.json').read_text())['selected_objects']
+  files['NCO_AUDIT_PINS.json']=(E/'NCO_AUDIT_PINS.json').read_text()
+  sources.append('NCO_AUDIT_PINS.json')
 files[a+'.json']=json.dumps(cfg,indent=2)
 # Upload after admission; snapshots permit exact local reconstruction.
 for n,s in files.items():

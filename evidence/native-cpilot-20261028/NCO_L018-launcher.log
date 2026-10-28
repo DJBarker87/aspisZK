@@ -1,0 +1,48 @@
+{"attempt": "NCO_L018", "exit_status": 1, "wall_seconds": 1.3540515679633245, "peak_rss_kib": "2634272", "swaps": "0", "print_axioms": ["'NCO_Framing.reference_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NCO_Framing.source_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NCO_Framing.length_bridge' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NCO_Framing.invalid_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NCO_generated/NCO_Framing.lean:9:71: error: unsolved goals
+row tag : U8
+size total : Usize
+bs : Slice U8
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok total
+different : bs.len ≠ total
+⊢ (↑bs).length = ↑total →
+    (do
+        let i2 ← bs.index_usize 0#usize
+        if ↑i2 = ↑tag then do
+            let i3 ← bs.index_usize 1#usize
+            let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+            let i5 ← bs.index_usize 2#usize
+            let i6 ← lift (UScalar.cast UScalarTy.Usize i5)
+            let i7 ← i6 <<< 8#i32
+            let i8 ← lift (i4 ||| i7)
+            let i9 ← bs.index_usize 3#usize
+            let i10 ← lift (UScalar.cast USc
+...
+sult.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                  else ok (core.result.Result.Ok payload)
+              else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+          else ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))) =
+      ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+NCO_generated/NCO_Framing.lean:19:53: warning: This simp argument is unused:
+  different
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1PrefixAggregateParser.r1_wire.parse_record, shape,
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+      core.result.Result.Insts.CoreOpsTry.branch, sum,̵ ̵d̵i̵f̵f̵e̵r̵e̵n̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCO_Framing.reference_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCO_Framing.source_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCO_Framing.length_bridge' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCO_Framing.invalid_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6aacaaf8b7ef46a288f73140339cb23e.scope; invocation ID: fd6e0efa57054bcbae099035e984e00c
