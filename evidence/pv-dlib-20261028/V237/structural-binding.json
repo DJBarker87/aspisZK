@@ -1,0 +1,53 @@
+{
+  "evidence_class": "structural (K-1 substitute)",
+  "rulings": [
+    "r",
+    "k'"
+  ],
+  "sources": {
+    "digest-0.10.7/src/core_api/wrapper.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/core_api/wrapper.rs",
+      "sha256": "033777bed7d140b158e15d50fda8a6e06557ce89bd0738fcca692be2c39e8b8a"
+    },
+    "block-buffer-0.10.4/src/lib.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs",
+      "sha256": "b437252d389042d894b1ef17859b043e827d2bd2a1bca4b5311c67dff565274d"
+    },
+    "generic-array-0.14.7/src/impls.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/impls.rs",
+      "sha256": "18b285821421eea0cdbbcfcc896eef67bd55d72f8d85b5827cca6687e9c0fc27"
+    }
+  },
+  "wrapper_fields": "core:T then buffer:Buffer<T>; native derives Default in declaration order",
+  "native_buffer_default": "{\n        if BlockSize::USIZE == 0 {\n            panic!(\"Block size can not be equal to zero\");\n        }\n        Self {\n            buffer: Default::default(),\n            pos: 0,\n            _pd: PhantomData,\n        }\n    }",
+  "owned_reference": {
+    "path": "tools/pv-dlib-20261028/default-forward-helper.rs",
+    "sha256": "20e8983ed8f1db4231ecb9568850193d4e80ba77358c1ea7e5b52a90941f25f0",
+    "body": "{\n        Self {core:Default::default(),buffer:Default::default()}\n    }",
+    "tokens_checked": true
+  },
+  "differences": [
+    {
+      "native": "derived CoreWrapper Default",
+      "reference": "explicit same two field-default calls in declaration order",
+      "proofs": [
+        "PV_DL_DefaultLaw.source",
+        "PV_DL_WrapLaw.source_reference"
+      ]
+    },
+    {
+      "native": "BlockBuffer default checks size0 then byte-array Default,pos0,PhantomData",
+      "reference": "native64-byte storage constructor",
+      "proofs": [
+        "PV_DL_DefaultNative.native_callback",
+        "PV_DL_DefaultNative.consumed",
+        "PV_DL_DefaultBuffer.nonvacuous"
+      ]
+    }
+  ],
+  "native_size": "64, discharged by PV_AL_SplitNativeShape.native_size; core Default is an original complete-Result parameter; kind/size Default trait arguments are not executed by these fields",
+  "finite_validation": "default-native-finite-resume/receipt.json required before credit; native finite validation only",
+  "old_kani_credit": "suspended; not used",
+  "v232_untouched": true,
+  "kani": false
+}
