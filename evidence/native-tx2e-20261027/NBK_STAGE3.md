@@ -1,0 +1,7 @@
+# Stage 3: complete emitted live Result and ASF8 early rejection
+
+NBK_LiveResult.source gives the actual emitted live-snapshot encoder's full Result and byte value for every typed snapshot and every output length. WrongLength and validator errors retain the exact original output; success is the exact zero-fill, fixed prefix and 20-row fold on the SAME snapshot. NBH_LiveValidator.source is imported, not assumed. No canonicality, validator-success or independent encoded-byte premise is added.
+
+NBK_Fill proves library fill by symbolic induction over a list, replacing the L029 failed concrete-buffer simplification; no recursion-limit increase or large reduction is used. L031/L033/L034 drafts failed; L036 passes all three fill roots. L038 NBK_LiveFrame.byte gives every byte of the live row store and its full outside frame. L040 live Result and L041 NBK_StatementPrefix zero-binding/lane rejection pass with standard axioms. The native ASF8 prefix gate is prepared but not yet run; its good-prefix continuation still needs payment/lane/late child bridges.
+
+These are emitted/model and fragment associations. They do not close whole U03 codecs without the lower native DigestEncode bridge and the remaining native prefix/child composition. U04 callbacks retain their same free adapter selections as proved in stage 2; selection alone is no source association. No headline premise removed, no shipped Rust or ELF change.
