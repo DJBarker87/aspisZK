@@ -20,7 +20,7 @@ theorem encode (ops : ExternalFuns) (p : Nat → Q) :
       change 0+32*28≤Usize.max
       scalar_tac)
   refine ⟨bytes,hbytes,?_,?_⟩
-  · simpa only [alloc.vec.Vec.with_capacity,List.nil_append] using hval
+  · simpa only [alloc.vec.Vec.with_capacity,List.nil_append,show (0#usize).val=0 from rfl] using hval
   · rw [hval]
     change ([] ++ payload p 0 28).length=896
     rw [List.nil_append,payload_length]
