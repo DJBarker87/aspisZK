@@ -101,3 +101,10 @@ new theorem name `partial` is reserved Lean syntax; rename it `pending`.
 The update reference is strengthened to retain callback batch boundaries and
 all 64 buffer bytes. The earlier byte-at-a-time reference remains as a
 blockwise model candidate, not a general arbitrary-batch callback law.
+
+Kani update-03 ten-minute resource review: the active optimized harness is
+control/indexing/batch grouping only; no SHA compression or field chain is
+reachable from its target. Keep the unchanged 6G/8G/no-swap caps and existing
+900-second timeout; do not extend it. A distinct follow-up candidate uses
+symbolic event/byte coordinates and unwind 70 (same input bounds), avoiding
+whole-array comparison formulas. It is not launched in parallel.
