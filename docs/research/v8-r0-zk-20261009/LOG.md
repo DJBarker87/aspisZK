@@ -12987,3 +12987,23 @@ two rows are not credited until they pass. V258-V260 and the fixture-byte gate r
 (60 attempts; IDs 40800-40899) runs the V256/V257 audit and replay first, then op251's transport and
 V258, then V259 and V260 by the structural route, then the fixture-byte gate and a final combined
 audit. Rows removed outright: 0. Privacy target not yet established.
+
+## D341 (Stream B) 2026-10-28 00:35 UTC: pv-reach11 result; the reachability line is parked until the native associations land; pv-dlib takes the unowned bucket-(d) library rows
+
+pv-reach11 (100 attempts: 83 accepted, 17 failures retained; audits pass; 7,332 cache checks with no
+mismatch; no XR imports) built the 152 native-boundary prerequisites as a dependency build and added
+conditional client source bridges through reservation and material to op132 and op231. Complete
+invocation certificates and native whole-client success and non-vacuity remain; V404/V405 stay
+OPEN. Branch pushed (ee0f9fb93c).
+
+Lead decision: after eleven rounds the remaining reachability step depends on the native
+association types (public deployment, external, record) that the runjoin line is now proving toward
+RustRealRefinement. Running both in parallel duplicates that dependency, so the reachability line is
+parked with its worktree, branch and private cache retained, and resumes when the runjoin line
+delivers those associations.
+
+New job pv-dlib (IDs 42200-42299) takes the recount-6 bucket-(d) rows no job owns: V187 (op36 Array
+TryFrom<Vec>), V201 (op79 eval_message), and the six digest-wrapper rows V231, V234, V235, V236, V237,
+V238. The wrapper rows are proved with the block compression function as a parameter, so they hold
+for both the soft backend and SHA-NI and leave the SHA-NI decision (V232) with the owner. Rows
+removed outright: 0. Privacy target not yet established.
