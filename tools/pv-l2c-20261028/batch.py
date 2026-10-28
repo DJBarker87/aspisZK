@@ -6,7 +6,8 @@ from pathlib import Path
 import json,subprocess,hashlib,shlex,sys,re,datetime
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l2c-20261028';H='/home/dombarker/project-offloads/codex-pv-l2c-20261028';host='dombarker@100.108.41.90'
 audit='--audit' in sys.argv
-args=[x for x in sys.argv[1:] if x!='--audit']
+native_after='--native-after' in sys.argv
+args=[x for x in sys.argv[1:] if x not in ['--audit','--native-after']]
 start=int(args[0]);names=args[1:]
 assert (42697<=start<=42699 if audit else 42600<=start<42697) and names
 if audit:assert all(m in ['PV_L2C_CombinedAudit','PV_L2C_FixtureAudit','PV_L2C_FocusedReplay'] for m in names)
@@ -48,6 +49,18 @@ res=f'{H}/evidence/batch-{start}-reservation'
 p=ssh(f'python3 /home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservation-existing.py {res}.json > {res}.log 2>&1\ns=$?\ncat {res}.log\nexit $s');(D/'preflight.log').write_text(p.stdout+p.stderr);gate=json.loads(p.stdout.strip().splitlines()[-1]);(D/'reservation.json').write_text(json.dumps(gate,indent=2)+'\n')
 if p.returncode!=0 or not gate['allowed']:
  (E/f'refusal-{start}.json').write_text(json.dumps(gate,indent=2)+'\n');print('REFUSED',gate);sys.exit(78)
+if native_after:
+ assert not audit
+ assert subprocess.run(['python3',str(R/'tools/pv-l2c-20261028/generate-balance-cut.py'),'--check']).returncode==0
+ assert ssh(f'mkdir -p {H}/differential').returncode==0
+ subprocess.run(['scp','-q',str(R/'tools/pv-l2c-20261028/native-receipt.py'),f'{host}:{H}/native-receipt.py'],check=True)
+ for fn in ['Cargo.toml','main.rs','balance_cut.rs']:
+  subprocess.run(['scp','-q',str(R/'tools/pv-l2c-20261028/differential'/fn),f'{host}:{H}/differential/{fn}'],check=True)
+ p0=subprocess.run(['python3',str(R/'tools/pv-l2c-20261028/native-preflight.py')],capture_output=True,text=True)
+ (D/'native-preflight.log').write_text(p0.stdout+p0.stderr);assert p0.returncode==0,p0.stdout+p0.stderr
+ assert ssh(f'cp /home/dombarker/project-offloads/codex-pv-integ4-20261027/source/Cargo.lock {H}/differential/Cargo.lock').returncode==0
+ native_cmd=['env','PV8_SOURCE_DIR='+H+'/differential','PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_TARGET_DIR='+H+'/differential-target','CARGO_BUILD_JOBS=4','CARGO_NET_OFFLINE=true','PV_L2C_PIN_FILES=Cargo.toml:Cargo.lock:main.rs:balance_cut.rs','PV_L2C_EXPECTED_TIME=Optimized compilation then 128 same-input native balancing differential cases','PV_L2C_EVIDENCE_CLASS=N/A: finite native validation, not universal proof','python3',H+'/native-receipt.py',H+'/evidence/native-after-'+str(start),'timeout','180','taskset','--cpu-list','0-3','cargo','run','--release','--offline','-j','4']
+ (D/'native-invocation.json').write_text(json.dumps(dict(command=native_cmd,source_revision=rev,source_sha256={fn:hashlib.sha256((R/'tools/pv-l2c-20261028/differential'/fn).read_bytes()).hexdigest() for fn in ['Cargo.toml','main.rs','balance_cut.rs']},evidence_class='finite native differential',cgroup_peak_note='scope cumulative; aggregate RSS and wall time are native-stage measurements'),indent=2)+'\n')
 (D/'manifest.json').write_text(json.dumps(spec)+'\n');subprocess.run(['scp','-q',str(D/'manifest.json'),f'{host}:{H}/batch-{start}.json'],check=True)
 remote=r'''import json,pathlib,subprocess,hashlib,re,sys,time
 H=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]
@@ -69,6 +82,8 @@ for x in json.load(open(H/('batch-'+start+'.json'))):
  print(a,m,p.returncode,flush=True)
  if p.returncode:break
 '''
+if native_after:
+ remote+='\nnative_exit=subprocess.run('+repr(native_cmd)+').returncode\nprint(\"NATIVE EXIT\",native_exit,flush=True)\n'
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=l2c-batch-{start}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3','-u','-c',remote,H,str(start)]
 (D/'command.json').write_text(json.dumps(cmd,indent=2)+'\n');print('LAUNCH BATCH',start,len(spec),'serial modules',flush=True)
 p=ssh(shlex.join(cmd));(D/'scope.log').write_text(p.stdout+p.stderr);print(p.stdout+p.stderr,flush=True)
