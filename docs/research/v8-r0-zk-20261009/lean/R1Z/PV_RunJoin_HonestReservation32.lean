@@ -1,5 +1,4 @@
 import R1Z.PV_RunJoin_PublicAgreement32
-import R1Z.PV_RunJoin_NativePublicReservation
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_HonestReservation32
@@ -20,19 +19,17 @@ theorem public : PV_Src_NativeInput.publicInput a.val=PV_Src_NativeInput.publicI
   simpa only [PV_RunJoin_NativePublicInverse32.from_input_roundtrip] using h
 #print axioms public
 
-/-- The COMPLETE reservation prefix Result agrees on the common nonce,
-including failure and divergence. No entropy success or compiler-trace equality
-is required; this does not assert equality of the remaining prover body. -/
-theorem prefix (ops : @ExternalFuns (PDict_CodecDictionary.native base))
-    (hash : Slice (Slice U8) → Result (Array U8 32#usize))
-    (address : PV_RunJoin_LedgerWorld.Address) (nonce : Array U8 32#usize) :
+/-- Complete native public-byte encoding Result, including errors and divergence,
+ agrees under the derived full public equality. -/
+theorem public_bytes (ops : @ExternalFuns (PDict_CodecDictionary.native base)) :
     letI : ExternalTypes := PDict_CodecDictionary.native base
     letI : ExternalFuns := PDict_CodecDictionary.selected base ops
-    PV_RunJoin_PublicReservation.entry address (PV_RunJoin_NominalPublicData.fromInput base a.val) .S2 hash nonce =
-    PV_RunJoin_PublicReservation.entry address (PV_RunJoin_NominalPublicData.fromInput base b.val) .S2 hash nonce := by
+    aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+      (PV_RunJoin_NominalPublicData.fromInput base a.val) =
+    aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+      (PV_RunJoin_NominalPublicData.fromInput base b.val) := by
   letI : ExternalTypes := PDict_CodecDictionary.native base
   letI : ExternalFuns := PDict_CodecDictionary.selected base ops
-  exact PV_RunJoin_PublicReservation.common address _ _ .S2 hash hash nonce nonce
-    (PV_RunJoin_PublicAgreement32.honest base a b same header pool domain) rfl rfl
-#print axioms prefix
+  rw [PV_RunJoin_PublicAgreement32.honest base a b same header pool domain]
+#print axioms public_bytes
 end R1Z.PV_RunJoin_HonestReservation32

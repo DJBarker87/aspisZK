@@ -4,6 +4,7 @@ import subprocess,json,shlex,sys,time,datetime,re,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin32-20261028';H='/home/dombarker/project-offloads/codex-pv-runjoin-20261026';P=H+'/runjoin32-lean';host='dombarker@100.108.41.90'
 a=int(sys.argv[1]);idx=int(sys.argv[2]);assert 51300<=a<=51499
 plan=json.loads((E/'build-plan.json').read_text());mods=sys.argv[3:] or plan['chunks'][idx]
+assert all(m in plan['modules'] for m in mods),'stage every target before admission'
 assert len(list(E.glob('receipt-*.json')))<100
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
 def transport(cmd,**kw):
