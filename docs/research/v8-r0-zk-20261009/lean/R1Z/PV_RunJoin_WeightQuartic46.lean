@@ -12,8 +12,7 @@ theorem add_value (a b : Q) :
     ⟨PV_RunJoin_WeightComplex46.toC a.c0,PV_RunJoin_WeightComplex46.toC a.c1⟩
     ⟨PV_RunJoin_WeightComplex46.toC b.c0,PV_RunJoin_WeightComplex46.toC b.c1⟩=_
   simp only [AspisR1ProducerRelease47.field.QM31.add,
-    PV_B2_C_251FieldValue.aspis_core.field.QM31.add,PV_RunJoin_WeightComplex46.add,bind_tc_ok]
-  rfl
+    PV_B2_C_251FieldValue.aspis_core.field.QM31.add,PV_RunJoin_WeightComplex46.add,bind_tc_ok] <;> rfl
 
 theorem add (a b : Q) :
     AspisR1ProducerRelease47.field.QM31.add (toQ a) (toQ b)=
@@ -30,8 +29,7 @@ theorem sub_value (a b : Q) :
     ⟨PV_RunJoin_WeightComplex46.toC a.c0,PV_RunJoin_WeightComplex46.toC a.c1⟩
     ⟨PV_RunJoin_WeightComplex46.toC b.c0,PV_RunJoin_WeightComplex46.toC b.c1⟩=_
   simp only [AspisR1ProducerRelease47.field.QM31.sub,
-    PV_B2_C_251FieldValue.aspis_core.field.QM31.sub,PV_RunJoin_WeightComplex46.sub,bind_tc_ok]
-  rfl
+    PV_B2_C_251FieldValue.aspis_core.field.QM31.sub,PV_RunJoin_WeightComplex46.sub,bind_tc_ok] <;> rfl
 
 theorem sub (a b : Q) :
     AspisR1ProducerRelease47.field.QM31.sub (toQ a) (toQ b)=
@@ -48,8 +46,7 @@ theorem mul_value (a b : Q) :
     ⟨PV_RunJoin_WeightComplex46.toC a.c0,PV_RunJoin_WeightComplex46.toC a.c1⟩
     ⟨PV_RunJoin_WeightComplex46.toC b.c0,PV_RunJoin_WeightComplex46.toC b.c1⟩=_
   simp only [AspisR1ProducerRelease47.field.QM31.mul,
-    PV_B2_C_251FieldValue.aspis_core.field.QM31.mul,PV_RunJoin_WeightComplex46.mul,PV_RunJoin_WeightComplex46.add,PV_RunJoin_WeightComplex46.sub,PV_RunJoin_WeightComplex46.r_mul,bind_tc_ok]
-  rfl
+    PV_B2_C_251FieldValue.aspis_core.field.QM31.mul,PV_RunJoin_WeightComplex46.mul,PV_RunJoin_WeightComplex46.add,PV_RunJoin_WeightComplex46.sub,PV_RunJoin_WeightComplex46.r_mul,bind_tc_ok] <;> rfl
 
 theorem mul (a b : Q) :
     AspisR1ProducerRelease47.field.QM31.mul (toQ a) (toQ b)=
