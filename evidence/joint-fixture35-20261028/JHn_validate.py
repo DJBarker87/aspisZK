@@ -30,7 +30,8 @@ for script in ['JHn_generate.py','JHn_restore_sources.py']:
  result=subprocess.run(['python3',str(P/script),'--check'],capture_output=True,text=True)
  checks.append(dict(command=script+' --check',exit=result.returncode,stdout=result.stdout,stderr=result.stderr))
  if result.returncode:issues.append([script,result.stderr])
-x=subprocess.run(['git','diff','--check'],cwd=R,capture_output=True,text=True);checks.append(dict(command='git diff --check',exit=x.returncode,stdout=x.stdout,stderr=x.stderr))
+base=json.loads((P/'JHn_PREFLIGHT.json').read_text())['initial_revision']
+x=subprocess.run(['git','diff','--check',base],cwd=R,capture_output=True,text=True);checks.append(dict(command='git diff --check '+base,exit=x.returncode,stdout=x.stdout,stderr=x.stderr))
 if x.returncode:issues.append(['diff check',x.stdout,x.stderr])
 (P/'JHn_ACTIVE_SOURCES.json').write_text(json.dumps(active,indent=2)+'\n')
 summary=dict(attempts=len(rows),settled=len(rows),success=sum(r['exit_status']==0 for r in rows),failed=sum(r['exit_status']!=0 for r in rows),active_sources=len(active),issues=issues,checks=checks)

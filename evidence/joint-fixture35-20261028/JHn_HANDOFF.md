@@ -170,5 +170,9 @@ large. Join the actual same-SDK TX2 witness from its native bridge lane,
 retaining all D188/native/source-to-ELF qualifications. Budget exhausted here;
 no additional Lean or Kani run is authorized for this job.
 
-Stage commits and complete base log are JHn_TASK_COMMITS.txt and
-JHn_GIT_LOG.txt. No push. The100-bit deployed target remains not established.
+Source-stage commits and the base log snapshot are JHn_TASK_COMMITS.txt and
+JHn_GIT_LOG.txt; final validation/evidence commits follow that snapshot.
+Trailing spaces introduced by launcher excerpt clipping were trimmed in12
+presentation excerpts (JHn_EXCERPT_FORMATTING.json records original/formatted
+hashes). Complete stdout/time/receipt and headline comparison bytes are
+untouched. The final whitespace check covers the whole task diff. No push. The100-bit deployed target remains not established.
