@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding/sources/PV_L2D_ScalarPort.lean:54:4: error: unsolved goals
+case neg
+S W : Type
+next : S → Draw S W
+n : ℕ
+ih :
+  ∀ (retry : ℕ) (s : S),
+    ((sample next n retry s).consumed, (sample next n retry s).value) = PV_L2B_SourceWords.source n (stream next n s)
+retry : ℕ
+s : S
+h : ¬PV_L2B_SourceWords.candidate (next s).word < 2147483647
+he :
+  ((sample next n (retry + 1) (next s).after).consumed, (sample next n (retry + 1) (next s).after).value) =
+    PV_L2B_SourceWords.source n (stream next n (next s).after)
+hc :
+  ((sample next n (retry + 1) (next s).after).consumed, (sample next n (retry + 1) (next s).after).value).1 =
+    (PV_L2B_SourceWords.source n (stream next n (next s).after)).1
+hv :
+  ((sample next n (retry + 1) (next s).after).consumed, (sample next n (retry + 1) (next s).after).value).2 =
+    (PV_L2B_SourceWords.source n (stream next n (next s).after)).2
+⊢ (sample next n (retry + 1) (next s).after).consumed = (PV_L2B_SourceWords.source n (stream next n (next s).after)).1 ∧
+    (sample next n (retry + 1) (next s).after).value = (PV_L2B_SourceWords.source n (stream next n (next s).after)).2
+/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding/sources/PV_L2D_ScalarPort.lean:57:54: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp [sample, ̲stream, ̲PV_L2B_SourceWords.source, ̲h, ̲hc̵,̵h̵v]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding/sources/PV_L2D_ScalarPort.lean:57:57: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  simp [sample, ̲stream, ̲PV_L2B_SourceWords.source, ̲h, ̲hc,̵h̵v̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2D_ScalarPort.complete_source' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding/sources/PV_L2D_ScalarPort.lean:63:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((sample next n retry s).consumed, (sample next n retry s).value).1
+in the target expression
+  (sample next n retry s).consumed ≤ n
+
+S W : Type
+next : S → Draw S W
+n retry : ℕ
+s : S
+h :
+  ((sample next n retry s).consumed, (sample next n retry s).value).1 =
+    (PV_L2B_SourceWords.source n (stream next n s)).1
+⊢ (sample next n retry s).consumed ≤ n
+'PV_L2D_ScalarPort.consumed_bound' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_L2D_ScalarPort.after_exact' depends on axioms: [propext, Quot.sound]
+'PV_L2D_ScalarPort.failure_keeps_trace' depends on axioms: [propext, Quot.sound]
+'PV_L2D_ScalarPort.stream_length' depends on axioms: [propext]
