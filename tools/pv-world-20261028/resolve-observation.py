@@ -18,6 +18,23 @@ for p in git('ls-files','*.lean').decode().splitlines():
 # The frozen extraction module associations are recorded in this job's h5 audit.
 for x in json.loads((E/'extraction-dependencies.json').read_text()):tracked[x['module']]=[x['path']]
 for m,x in json.loads((R/'evidence/pv-cbmid-20261027/LEAN-IMPORT-PROVENANCE.json').read_text()).items():tracked['R1Z.'+m]=[x['local_source']]
+# Explicit h5 module associations of git-tracked source roots (no name-hit substitution).
+tracked['ProverRwSampler.Funs']=['docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwSampler/Funs.lean']
+for stem in ['RawCircleSampleActualPolicyUnconditionalV1','RawCircleSampleActualFallbackCoordinatesV1']:
+ tracked['AspisR1CircleSampleWrapper.'+stem]=['docs/research/100bit-spend-path-20261013/lean-candidates/current-circle-wrapper-20261019/'+stem+'.lean']
+def uncomment(s):
+ # Preserve newlines while deleting nested block and line comments.
+ out=[];i=0;depth=0
+ while i<len(s):
+  if s[i:i+2]=='/-':depth+=1;i+=2;continue
+  if depth and s[i:i+2]=='-/':depth-=1;i+=2;continue
+  if depth:
+   if s[i]=='\n':out.append('\n')
+   i+=1;continue
+  if s[i:i+2]=='--':
+   end=s.find('\n',i);i=len(s) if end<0 else end;continue
+  out.append(s[i]);i+=1
+ return ''.join(out)
 rows={};order=[];errors=[]
 def visit(m):
  if m in rows or m in external:return
@@ -30,7 +47,7 @@ def visit(m):
   ps=tracked.get(m,[])
   if len(ps)!=1:errors.append(dict(module=m,issue='unresolved h5 association',paths=ps));rows[m]={};return
   p=ps[0];r=rev;b=git('show','HEAD:'+p);assert b==(R/p).read_bytes();a='h5';blob=git('rev-parse','HEAD:'+p).decode().strip()
- deps=re.findall(r'^import\s+(\S+)',b.decode(),re.M)
+ deps=re.findall(r'^import\s+(\S+)',uncomment(b.decode()),re.M)
  rows[m]=dict(authority=a,revision=r,path=p,blob=blob,sha256=sha(b),imports=deps,tracked_alternatives=[dict(path=p,sha256=sha(git('show','HEAD:'+p))) for p in tracked.get(m,[])])
  for d in deps:visit(d)
  order.append(m)

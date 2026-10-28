@@ -5,6 +5,7 @@ noncomputable section
 namespace R1Z.PV_W_SourceSyntax
 open PV_W_Syntax PV_W_Threading
 open ProverRwFull
+open Aeneas.Std
 variable [ExternalTypes]
 
 /-- A call thunk retains its arguments before evaluation. The world
