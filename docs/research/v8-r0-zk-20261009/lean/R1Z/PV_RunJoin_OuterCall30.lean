@@ -41,11 +41,19 @@ theorem inner_success_iff
     R1Z.PV_RunJoin_CompilerDomain28.Path (inputToForest input) out
       (recipient.map noteToForest) (noteToForest change) (publicToForest public1)
       anchor (snapshotToForest snapshot) := by
-  change (∃ c, mapped compilationFromForest errorFromForest
-    (R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.compile_forest_from_copies
-      (inputToForest input) out (recipient.map noteToForest) (noteToForest change)
-      (publicToForest public1) anchor (snapshotToForest snapshot)) = ok (.Ok c)) ↔ _
-  rw [mapped_success_iff,PV_RunJoin_CompilerDomainProof28.success_iff]
+  constructor
+  · rintro ⟨c,h⟩
+    unfold pool_v1.pair_forest_trace.compile_forest_from_copies at h
+    pv_peel h with r hr
+    cases r with
+    | Ok original => exact (PV_RunJoin_CompilerDomainProof28.success_iff _ _ _ _ _ _ _).mp ⟨original,hr⟩
+    | Err e => cases h
+  · intro h
+    obtain ⟨c,hc⟩ := (PV_RunJoin_CompilerDomainProof28.success_iff _ _ _ _ _ _ _).mpr h
+    refine ⟨compilationFromForest c,?_⟩
+    unfold pool_v1.pair_forest_trace.compile_forest_from_copies
+    rw [hc]
+    rfl
 #print axioms inner_success_iff
 
 theorem inner_return
@@ -78,10 +86,18 @@ theorem runtime_success_iff
       input context = ok (.Ok u)) ↔
     PV_RunJoin_RuntimeDomain30.Path pool domain seq anchor nullifier asset
       (pairToAdmission input) (contextToAdmission context) := by
-  change (∃ u, mapped id errorFromAdmission
-    (AspisBuilderAdmissionSource.pool_v1.pair_trace.validate_common
-      pool domain seq anchor nullifier asset (pairToAdmission input)
-      (contextToAdmission context)) = ok (.Ok u)) ↔ _
-  rw [mapped_success_iff,PV_RunJoin_RuntimeDomain30.success_iff]
+  constructor
+  · rintro ⟨u,h⟩
+    unfold pool_v1.pair_trace.validate_common at h
+    pv_peel h with r hr
+    cases r with
+    | Ok original => exact (PV_RunJoin_RuntimeDomain30.success_iff _ _ _ _ _ _ _ _).mp ⟨original,hr⟩
+    | Err e => cases h
+  · intro h
+    obtain ⟨u,hu⟩ := (PV_RunJoin_RuntimeDomain30.success_iff _ _ _ _ _ _ _ _).mpr h
+    refine ⟨u,?_⟩
+    unfold pool_v1.pair_trace.validate_common
+    rw [hu]
+    rfl
 #print axioms runtime_success_iff
 end R1Z.PV_RunJoin_OuterCall30
