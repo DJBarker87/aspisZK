@@ -46,7 +46,7 @@ theorem add_canonical (x y : word) (hx : canonical x) (hy : canonical y) :
     canonical (add x y) := by
   unfold canonical
   rw [add_nat x y hx hy]
-  unfold canonical p at hx hy
+  unfold canonical at hx hy
   split <;> omega
 #print axioms add_canonical
 
@@ -70,13 +70,16 @@ theorem subtractP_decode (x : word) : decode (subtractP x)=decode x := by
 
 theorem sub_input_nat (x y : word) (hx : canonical x) (hy : canonical y) :
     (x + BitVec.ofNat 32 p - y).toNat=x.toNat+p-y.toNat := by
+  unfold p at *
   have hs : (x + BitVec.ofNat 32 p).toNat=x.toNat+p := by
     rw [BitVec.toNat_add]
     simp only [BitVec.toNat_ofNat]
     unfold canonical p at hx
+    change (x.toNat+2147483647)%4294967296=x.toNat+2147483647
     omega
   rw [BitVec.toNat_sub,hs]
   unfold canonical p at hx hy
+  change (4294967296-y.toNat+(x.toNat+2147483647))%4294967296=x.toNat+2147483647-y.toNat
   omega
 #print axioms sub_input_nat
 
