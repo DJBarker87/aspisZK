@@ -1,0 +1,1 @@
+Own runner fixes: frozen graph read through git show because sparse checkout omits LPm file. G001 metadata already completed and is reused read-only; no Kani launch occurred before the fix. Validation still compares all package identities and dependency edges.

@@ -1,0 +1,53 @@
+{"attempt": "NCP_K003", "exit_status": 0, "wall_seconds": 5.520951187936589, "peak_rss_kib": "623612", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+t x:u8=kani::any();let v=NCP_vec_weak(x).unwrap();assert!(v.len()==1 && v[0]==x);}
+    |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_real`
+
+warning: function `NCP_vec_stub` should have a snake case name
+   --> crates/aspis-statement/src/NCP_controls.rs:112:4
+    |
+112 | fn NCP_vec_stub(){let x:u8=kani::any();let v=NCP_vec_weak(x).unwrap();assert!(v.len()==1 && v[0]==x);}
+    |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_stub`
+
+warning: function `NCP_vec_frame_check` should have a snake case name
+   --> crates/aspis-statement/src/NCP_controls.rs:121:4
+    |
+121 | fn NCP_vec_frame_check(){let mut a=[0u8];let mut b=[0u8];let _=NCP_vec_frame(&mut a,&mut b);}
+    |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_frame_check`
+
+warning: function `NCP_vec_frame_real` should have a snake case name
+   --> crates/aspis-statement/src/NCP_controls.rs:130:4
+    |
+130 | fn NCP_vec_frame_real(){let mut a=[0u8];let mut b=[0u8];let v=NCP_vec_frame(&mut a,&mut b).unwrap();assert!(a[0]==1 && b[0]==2 && v...
+    |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_frame_real`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 4.27s
+Checking harness NCP_controls::NCP_slice_real...
+
+VERIFICATION RESULT:
+ ** 0 of 78 failed (1 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.17904982s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r773dee8eeb3d436ea92e4e08c4040425.scope; invocation ID: 132f4f7f4f3c410c872f387bc318cc65
