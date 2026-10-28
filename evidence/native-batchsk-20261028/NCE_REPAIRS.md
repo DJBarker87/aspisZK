@@ -37,3 +37,34 @@ retained as a proposed Rust requirement. No native fact has passed.
 L007's two domain-preservation failures were unreduced record projections in
 omega. Expose the scalar goal with `change` before arithmetic. The finite
 domain and theorem statements are unchanged; failed recovery axioms excluded.
+
+L011: the opening continuation retained a reducible tuple `let` after the
+successful read. Reduce that tuple explicitly before rewriting the induction
+hypothesis. This changes no statement, address, domain or carrier. The failed
+module's recovery axioms are excluded; read_byte itself audited standard-only.
+
+L012: SSH exit255 after submission. The existing wrapper immediately tried
+read-only recovery and found no receipt. Waited60 seconds, then recovered
+read-only again: config exists, attempt directory and receipt do not, and no
+actual attempt runner was found (the process collector matches only itself).
+Source input is retained separately in NCE_L012_SUBMITTED.lean.txt. Outcome is
+UNRESOLVED; conservatively counts one Lean slot. No resubmission or unchanged
+compile rerun is authorized or performed. Continue independent modules only.
+
+Own budget guard tightened: Lean usage is the union of terminal receipts and
+ledger submissions, so L012's unresolved slot counts against60 even without
+a terminal receipt. No limit increased; no host/shared launcher changed.
+
+L013: the new count commit's multiline record syntax failed parsing, leaving
+its derived proofs with recovery terms. Keep the fields on one record line.
+The inactive-row proof now closes the small false-control branch directly.
+No count specification/domain/source invariant changed; L013 is excluded.
+The same layout fix was applied to the unlaunched key-fill module.
+
+After L012's unresolved submission, isolated the already-audited read_byte
+interface and shared actual carrier into NEW target NCE_OpeningRead. It has no
+read-window recurrence. The remaining continuation target now imports that
+smaller module; key-fill imports only the byte/carrier module it actually needs.
+This is source/dependency isolation, not a resubmission of L012 or a claimed
+recovery pass. The original submitted source remains immutable in evidence.
+No old module, host launcher or shared workspace object is rewritten.

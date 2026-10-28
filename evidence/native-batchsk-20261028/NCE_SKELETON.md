@@ -152,3 +152,30 @@ with b<2, covering TX1 b=0 and TX2 b=1. These model results do not instantiate
 native keys/count/padding, actual control lowering, Prepared provenance or U00.
 L010 passes; all three roots standard-only. The requested native skeleton
 still needs those bindings, so Stage 1 is NOT complete.
+
+### Typed post-scan count commit and row association (L014)
+
+`NCE_CountRowCuts.NCE_Native_CountCommit` is one post-scan accumulator/index
+store, quantified over arbitrary key coordinates and caller frame. Its exact
+poststate is key[w]=key[i]/2, unchanged other keys/n/frame, i=j, w=w+1 and
+count=count+(2-(j-i)). Domain: n<=16,w<=i<j<=n,j-i<=2,count+2<2^64,
+all live keys<262144. `commit_eq` reconstructs that single source write from
+its coordinate/scalar laws. `rows_port` consumes this cut plus the separately
+named scan cut on each actual predecessor. NBI supplies the endpoint/width;
+NBY supplies the overflow domain and next spent bound. It derives the NBJ row
+result and unchanged caller frame, with no final-row/count premise.
+Native initialization, outer count/height control, admission and concrete
+same-caller Frame instantiation remain open; this is not the full item1 gate.
+L013 failed/excluded; L014 passes, both roots standard-only.
+
+### Shared actual carrier and byte reader (L015)
+
+`NCE_OpeningRead` defines `NCE_OpeningCuts.Carrier`: the actual VTop Prepared,
+proof Slice, reference scratch and chronological log. `NCE_Native_Opening`
+requires ONE selected byte/reborrow at10055+832*i+32*w+c to return that same
+proof backing's byte and unchanged full carrier, on i<22,w<26,c<32 and frozen
+proof length57607. `read_byte` derives every linear opening offset via the
+existing window coordinate arithmetic. Native harness: one selected load on
+actual proof/reborrow pointer, arbitrary symbolic selected indices and
+arbitrary exterior coordinate; no whole-proof equality or zero surroundings.
+L015 passes. The complete opening continuation remains a separate target.

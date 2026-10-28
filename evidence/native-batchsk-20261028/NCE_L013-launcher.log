@@ -1,0 +1,58 @@
+{"attempt": "NCE_L013", "exit_status": 1, "wall_seconds": 1.9071341120288707, "peak_rss_kib": "4425364", "swaps": "0", "print_axioms": ["'AspisR1.NCE_CountRowCuts.commit_eq' depends on axioms: [sorryAx, Quot.sound]", "'AspisR1.NCE_CountRowCuts.rows_port' depends on axioms: [propext, sorryAx]"]}
+NCE_sources/NCE_CountRowCuts.lean:25:57: error: unexpected identifier; expected '}'
+NCE_sources/NCE_CountRowCuts.lean:57:6: error: Tactic `rfl` failed: The left-hand side
+  { key := write sk si sw, n := sn, i := j, w := sw + 1, count := sc + (2 - (j - si)), frame := sf }
+is not definitionally equal to the right-hand side
+  commit { key := sk, n := sn, i := si, w := sw, count := sc, frame := sf } j
+
+case mk.mk.refl.refl.refl.refl.refl.refl
+Frame : Type
+native : RowState Frame → ℕ → RowState Frame
+cut : NCE_Native_CountCommit native
+j : ℕ
+sk : ℕ → ℕ
+sn si sw sc : ℕ
+sf : Frame
+domain : CommitDomain { key := sk, n := sn, i := si, w := sw, count := sc, frame := sf } j
+keys :
+  ∀ (k : ℕ),
+    (nat
+...
+ := si, w := sw, count := sc, frame := sf } j =
+    { key := write sk si sw, n := sn, i := j, w := sw + 1, count := sc + (2 - (j - si)), frame := sf }
+⊢ { key := write sk si sw, n := sn, i := j, w := sw + 1, count := sc + (2 - (j - si)), frame := sf } =
+    commit { key := sk, n := sn, i := si, w := sw, count := sc, frame := sf } j
+NCE_sources/NCE_CountRowCuts.lean:122:39: error: Application type mismatch: The argument
+  nextSpent
+has type
+  s.count + (2 - (j - s.i)) ≤ 16 * depth + j
+but is expected to have type
+  (commit s j).count ≤ 16 * depth + (commit s j).i
+in the application
+  ih (commit s j) small ?m.392 bounds.right.left nextOrder nextRange nextSpent
+NCE_sources/NCE_CountRowCuts.lean:127:6: error: Type mismatch
+  tail
+has type
+  let out := rows scan store fuel (commit s j);
+  (cells out.key 0 out.w, out.count) =
+      NBJ_CountRows.nativeRows fuel (commit s j).key (commit s j).n (commit s j).i (commit s j).w (commit s j).count ∧
+    out.frame = (commit s j).frame
+but is expected to have type
+  (cells (rows scan store fuel (commit s j)).key 0 (rows scan store fuel (commit s j)).w,
+        (rows scan store fuel (commit s j)).count) =
+      NBJ_CountRows.nativeRows fuel (write s.key s.i s.w) s.n
+        (NBI_CountScan.scan s.key (s.key s.i / 2) s.n (s.n - s.i) s.i) (s.w + 1)
+        (s.count + (2 - (NBI_CountScan.scan s.key (s.key s.i / 2) s.n (s.n - s.i) s.i - s.i))) ∧
+    (rows scan store fuel (commit s j)).frame = s.frame
+NCE_sources/NCE_CountRowCuts.lean:129:13: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.436 = ?m.436
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+'AspisR1.NCE_CountRowCuts.commit_eq' depends on axioms: [sorryAx, Quot.sound]
+'AspisR1.NCE_CountRowCuts.rows_port' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r7d1f6c35b2324b318407f2db18452792.scope; invocation ID: c549d1ffda7344d1bc206c7486998d8a
