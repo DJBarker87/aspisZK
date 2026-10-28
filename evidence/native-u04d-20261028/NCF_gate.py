@@ -21,7 +21,10 @@ expected=(B/'NCF_frozen_graph.sha256').read_text().strip()
 actual=hashlib.sha256(json.dumps(graph,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 x=dict(graph_matches_frozen=actual==expected,metadata_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),lock_before_sha256=before,offline=True,KMX_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 (B/(a+'-graph.json')).write_text(json.dumps(x,indent=2));assert actual==expected,'STOP graph drift'
-cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',str(S/'crates/aspis-statement/Cargo.toml'),'--lib','-j','1','-Z','unstable-options','-Z','stubbing','-Z','function-contracts','--harness-timeout','90s','--exact','--harness',h,'--output-format','terse']
+program=h.startswith('r1_pool_adapter::')
+manifest=S/('programs/r1-cost-probe/Cargo.toml' if program else 'crates/aspis-statement/Cargo.toml')
+cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',str(manifest),'--lib','-j','1','-Z','unstable-options','-Z','stubbing','-Z','function-contracts','--harness-timeout','90s','--exact','--harness',h,'--output-format','terse']
+if program:cmd+=['--features','pool-adapter,private-leaf-salts,no-entrypoint']
 print(json.dumps(dict(kani_command=cmd)),flush=True)
 r=subprocess.run(cmd)
 after=hashlib.sha256(lock.read_bytes()).hexdigest();x.update(lock_after_sha256=after,lock_unchanged=after==before,kani_exit=r.returncode)

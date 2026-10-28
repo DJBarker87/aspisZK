@@ -1,0 +1,96 @@
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_sdk_reject(){
+ let n:usize=kani::any();kani::assume(n!=384 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=decode_master_box(input);
+ assert!(matches!(result,Err(ProgramError::InvalidAccountData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_sdk_reject_negative(){
+ let n:usize=kani::any();kani::assume(n!=384 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=decode_master_box(input);
+ assert!(!matches!(result,Err(ProgramError::InvalidAccountData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_sdk_reject(){
+ let n:usize=kani::any();kani::assume(n!=192 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=decode_checkpoint_box(input);
+ assert!(matches!(result,Err(ProgramError::InvalidAccountData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_sdk_reject_negative(){
+ let n:usize=kani::any();kani::assume(n!=192 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=decode_checkpoint_box(input);
+ assert!(!matches!(result,Err(ProgramError::InvalidAccountData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op23_sdk_reject(){
+ let n:usize=kani::any();kani::assume(n!=320 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=validate_asq8(&Pubkey::new_from_array([9;32]), &[],input);
+ assert!(matches!(result,Err(ProgramError::InvalidInstructionData)));
+ alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op23_sdk_reject_negative(){
+ let n:usize=kani::any();kani::assume(n!=320 && n<=isize::MAX as usize);
+ unsafe{let count=if n==0{1}else{n};let layout=core::alloc::Layout::array::<u8>(count).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ if n>0{let j:usize=kani::any();kani::assume(j<n);*p.add(j)=kani::any();}
+ let input=core::slice::from_raw_parts(p,n);let result=validate_asq8(&Pubkey::new_from_array([9;32]), &[],input);
+ assert!(!matches!(result,Err(ProgramError::InvalidInstructionData)));
+ alloc::alloc::dealloc(p,layout);}
+}

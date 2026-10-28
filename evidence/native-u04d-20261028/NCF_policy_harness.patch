@@ -1,0 +1,135 @@
+--- a/crates/aspis-statement/src/pool_v1/format.rs
++++ b/crates/aspis-statement/src/pool_v1/format.rs
+@@ -165,6 +165,8 @@
+     })
+ }
+ 
++#[cfg_attr(kani, kani::requires(core::ptr::eq(policy, unsafe { crate::NCF_policy::NCF_EXPECTED })))]
++#[cfg_attr(kani, kani::ensures(|result: &Result<(),PoolV1FormatError>| *result == crate::NCF_policy::NCF_spec(policy)))]
+ pub fn validate_verifier_policy_v1(policy: &VerifierPolicyV1) -> Result<(), PoolV1FormatError> {
+     if policy.flags & !POOL_V1_VERIFIER_POLICY_FLAGS_MASK != 0 {
+         return Err(PoolV1FormatError::UnsupportedFlags);
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -211,3 +211,6 @@
+ 
+ #[cfg(kani)]
+ pub mod KMX_stubs;
++
++#[cfg(kani)]
++pub mod NCF_policy;
+--- /dev/null
++++ b/crates/aspis-statement/src/NCF_policy.rs
+@@ -0,0 +1,28 @@
++#![allow(non_snake_case,unused_variables)]
++use crate::pool_v1::{VerifierPolicyV1,PoolV1FormatError,validate_verifier_policy_v1};
++pub static mut NCF_EXPECTED:*const VerifierPolicyV1=core::ptr::null();
++pub unsafe fn NCF_expect(p:*const VerifierPolicyV1){NCF_EXPECTED=p;}
++pub fn NCF_spec(p:&VerifierPolicyV1)->Result<(),PoolV1FormatError>{
++ if p.flags & !3 != 0 {Err(PoolV1FormatError::UnsupportedFlags)}
++ else if p.registry_program==[0;32] || p.policy_binding==[0;32] {Err(PoolV1FormatError::ZeroRequiredBinding)}
++ else if (p.flags & 2 != 0 && p.flags & 1 == 0) || ((p.flags & 1 != 0) != (p.registry_authority==[0;32])) {Err(PoolV1FormatError::InvalidAuthorityMode)}
++ else {Ok(())}
++}
++fn NCF_any_policy()->VerifierPolicyV1 {VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()}}
++#[kani::proof_for_contract(validate_verifier_policy_v1)]
++#[kani::unwind(33)]
++fn NCF_op15_contract(){let p=NCF_any_policy();unsafe{NCF_expect(&p);}validate_verifier_policy_v1(&p);}
++#[kani::requires(true)]
++#[kani::ensures(|r:&Result<(),PoolV1FormatError>| *r != NCF_spec(p))]
++fn NCF_inverse(p:&VerifierPolicyV1)->Result<(),PoolV1FormatError>{validate_verifier_policy_v1(p)}
++#[kani::proof_for_contract(NCF_inverse)]
++#[kani::unwind(33)]
++fn NCF_op15_contract_negative(){let p=NCF_any_policy();NCF_inverse(&p);}
++#[kani::proof]
++#[kani::stub_verified(validate_verifier_policy_v1)]
++#[kani::unwind(33)]
++fn NCF_op15_contract_use(){let p=NCF_any_policy();unsafe{NCF_expect(&p);}let got=validate_verifier_policy_v1(&p);assert_eq!(got,NCF_spec(&p));}
++#[kani::proof]
++#[kani::stub_verified(validate_verifier_policy_v1)]
++#[kani::unwind(33)]
++fn NCF_op15_contract_use_negative(){let p=NCF_any_policy();unsafe{NCF_expect(&p);}let got=validate_verifier_policy_v1(&p);assert_ne!(got,NCF_spec(&p));}
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -168,3 +168,7 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)]
++#[path = "../../../KMX_stubs.rs"]
++mod NCF_KMX;
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+@@ -971,3 +971,7 @@
+ #[cfg(all(test, feature = "private-leaf-salts"))]
+ #[path = "adapter_rw_tests.rs"]
+ mod rw_tests;
++
++#[cfg(kani)]
++#[path = "NCF_sdk.rs"]
++mod NCF_sdk;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NCF_sdk.rs
+@@ -0,0 +1,61 @@
++#![allow(non_snake_case,unused_variables)]
++use super::*;
++use aspis_statement::pool_v1::{PoolIdentityV1,VerifierPolicyV1};
++fn NCF_master()->PoolV1PairForestMasterV1{PoolV1PairForestMasterV1{
++ bump:kani::any(),identity:PoolIdentityV1{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:aspis_core::field::M31(kani::any()),deployment_domain:kani::any()},
++ verifier_policy:VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()},
++ initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()}}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
++#[kani::stub_verified(aspis_statement::pool_v1::validate_verifier_policy_v1)]
++#[kani::unwind(33)]
++fn NCF_op15_sdk_point(){let mut master=NCF_master();master.verifier_policy=VerifierPolicyV1{flags:kani::any(),registry_program:registry_program_id(),registry_authority:[0;32],policy_binding:AUDIT_POLICY_BINDING};
++ kani::assume(master.verifier_policy.flags & 1 != 0);
++ let verifier=Pubkey::new_from_array(kani::any());let pool=Pubkey::new_from_array(pool_program_id());
++ let key=Pubkey::new_from_array([1;32]);let owner=Pubkey::new_from_array([2;32]);let mut lamports=0;let mut bytes=[];
++ let account=AccountInfo::new(&key,false,true,&mut lamports,&mut bytes,&owner,false,0);
++ let wrong=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};
++unsafe{aspis_statement::NCF_policy::NCF_expect(&master.verifier_policy);}
++let result=authenticate_invariant_release_registry(&verifier,&pool,&account,&master,&account,&account,kani::any());
++assert_eq!(result,Err(ProgramError::InvalidAccountData));}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
++#[kani::stub_verified(aspis_statement::pool_v1::validate_verifier_policy_v1)]
++#[kani::unwind(33)]
++fn NCF_op15_sdk_pointer_negative(){let mut master=NCF_master();master.verifier_policy=VerifierPolicyV1{flags:kani::any(),registry_program:registry_program_id(),registry_authority:[0;32],policy_binding:AUDIT_POLICY_BINDING};
++ kani::assume(master.verifier_policy.flags & 1 != 0);
++ let verifier=Pubkey::new_from_array(kani::any());let pool=Pubkey::new_from_array(pool_program_id());
++ let key=Pubkey::new_from_array([1;32]);let owner=Pubkey::new_from_array([2;32]);let mut lamports=0;let mut bytes=[];
++ let account=AccountInfo::new(&key,false,true,&mut lamports,&mut bytes,&owner,false,0);
++ let wrong=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};
++unsafe{aspis_statement::NCF_policy::NCF_expect(&wrong);}
++let result=authenticate_invariant_release_registry(&verifier,&pool,&account,&master,&account,&account,kani::any());
++assert_eq!(result,Err(ProgramError::InvalidAccountData));}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCF_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCF_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCF_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCF_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCF_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCF_KMX::KMX_realloc)]
++#[kani::stub_verified(aspis_statement::pool_v1::validate_verifier_policy_v1)]
++#[kani::unwind(33)]
++fn NCF_op15_sdk_result_negative(){let mut master=NCF_master();master.verifier_policy=VerifierPolicyV1{flags:kani::any(),registry_program:registry_program_id(),registry_authority:[0;32],policy_binding:AUDIT_POLICY_BINDING};
++ kani::assume(master.verifier_policy.flags & 1 != 0);
++ let verifier=Pubkey::new_from_array(kani::any());let pool=Pubkey::new_from_array(pool_program_id());
++ let key=Pubkey::new_from_array([1;32]);let owner=Pubkey::new_from_array([2;32]);let mut lamports=0;let mut bytes=[];
++ let account=AccountInfo::new(&key,false,true,&mut lamports,&mut bytes,&owner,false,0);
++ let wrong=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};
++unsafe{aspis_statement::NCF_policy::NCF_expect(&master.verifier_policy);}
++let result=authenticate_invariant_release_registry(&verifier,&pool,&account,&master,&account,&account,kani::any());
++assert_eq!(result,Ok(()));}

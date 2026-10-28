@@ -1,0 +1,28 @@
+import NCC_ReuseAudit
+set_option autoImplicit false
+noncomputable section
+namespace NCF_EntryContract
+open Aeneas Aeneas.Std Result
+open AspisR1.AdapterRw.aspis_statement.pool_v1.verifier_registry
+
+/-- Exact typed cohort value paired with NCF's native op29 contract.
+This does not identify the enclosing SDK execution or its extraction field. -/
+theorem op29_exact (r : VerifierRegistryEntryV2) (slot : U64) :
+    NBX_SlotValues.op29 r slot = ok
+      (decide (r.status = .Active) && decide (r.activation_slot ≤ slot) &&
+       (decide (r.retirement_slot = 18446744073709551615#u64) ||
+        decide (slot < r.retirement_slot))) := by
+  cases r.status <;> rfl
+
+/-- Exact typed cohort value paired with NCF's native op30 contract. -/
+theorem op30_exact (r : VerifierRegistryEntryV1) (slot : U64) :
+    NBX_SlotValues.op30 r slot = ok
+      (decide (r.status = .Active) && decide (r.activation_slot ≤ slot) &&
+       (decide (r.retirement_slot = 18446744073709551615#u64) ||
+        decide (slot < r.retirement_slot))) := by
+  cases r.status <;> rfl
+
+#print axioms op29_exact
+#print axioms op30_exact
+end NCF_EntryContract
+end
