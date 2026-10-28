@@ -28,7 +28,8 @@ theorem frame (ops : ExternalFuns) (row tag : U8) (size : Usize) (payload : Slic
     rfl
   let word := core.num.U32.to_le_bytes (UScalar.cast .U32 size)
   have lw : (Array.to_slice word).length=4 := by
-    simpa only [show (4#usize).val=4 from rfl] using word.property
+    rw [Array.length_to_slice]
+    rfl
   obtain ⟨head,hh,vh⟩ := PV_RunJoin_ByteAppend38.append one (Array.to_slice word) (by
     rw [lw,l1];omega)
   have lh : head.length=5 := by
@@ -44,14 +45,11 @@ theorem frame (ops : ExternalFuns) (row tag : U8) (size : Usize) (payload : Slic
   have ho : core.option.Option.ok_or (some (tag,size)) r1_wire.Error.InvalidRow=
       .ok (.Ok (tag,size)) := rfl
   simp only [host_wire.record,shape,ho,core.result.Result.Insts.CoreOpsTry.branch,
-    bind_tc_ok,lenword,bne_self_eq_false,Bool.false_eq_true,↓reduceIte,lift,h1,hh,hf]
-  split
-  · trivial
-  · simp only [h1,hh,hf,bind_tc_ok]
-    apply PV_RunJoin_ResultPost41.bind
-    intro result
-    cases result with
-    | Ok value => rfl
-    | Err error => trivial
+    bind_tc_ok,Aeneas.Std.uncurry,lenword,bne_self_eq_false,Bool.false_eq_true,↓reduceIte,lift,h1,hh,hf]
+  apply PV_RunJoin_ResultPost41.bind
+  intro result
+  cases result with
+  | Ok value => rfl
+  | Err error => trivial
 #print axioms frame
 end R1Z.PV_RunJoin_RecordFrame41
