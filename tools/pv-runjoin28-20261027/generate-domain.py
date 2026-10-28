@@ -12,8 +12,8 @@ while i<len(body):
   while j<len(body) and (not body[j].strip() or len(body[j])-len(body[j].lstrip())>n):j+=1
   es=([expr] if expr else [])+[x.strip() for x in body[i+1:j]]
   expression='\n'.join(pad+'  '+x for x in es)
-  if binder=='(b6, _)': variables='(b6 : Bool) unused';value='(b6, unused)'
-  elif binder=='(b7, _)':variables='(b7 : Bool) unused';value='(b7, unused)'
+  if binder=='(b6, _)': variables='(b6 : Bool), ∃ unused';value='(b6, unused)'
+  elif binder=='(b7, _)':variables='(b7 : Bool), ∃ unused';value='(b7, unused)'
   else:variables=binder;value=binder
   out += [pad+'∃ '+variables+', (',expression,pad+') = ok '+value+' ∧']
   stages.append(dict(variable=binder,operation=' '.join(es)))
