@@ -1,0 +1,88 @@
+NCK_generated/NCK_SnapshotRead.lean:26:26: error: Tactic `rfl` failed: The left-hand side
+  ↑bytes✝.deref
+is not definitionally equal to the right-hand side
+  ↑(e.buffers (e.handles a).1)
+
+ops : AdapterRw.Ops
+e : Entry
+a l₁ l₂ : ℕ
+out : Slice U8
+x✝ : core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError
+bytes✝ : alloc.vec.Vec U8
+heq✝ :
+  (have bytes := e.buffers (e.handles a).1;
+      have __src := (e.records (e.handles a).1).owned;
+      { key := __src.key, owner := __src.owner, is_signer := __src.is_signer, is_writable := __src.is_writable,
+        executable := __src.executable, length := core.result.Result.Ok bytes.len,
+        bytes :=
+          if (↑bytes).length = l₁ ∨ (↑bytes).length = l₂ then core.result.Result.Ok bytes
+          else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData }).bytes =
+    core.result.Result.Ok bytes✝
+read :
+  (have s := bytes✝.deref;
+    ok (core.result.Result.Ok s)) =
+    ok (core.result.Result.Ok out)
+same : bytes✝.deref = out
+⊢ ↑bytes✝.deref = ↑(e.buffers (e.handles a).1)
+NCK_generated/NCK_SnapshotRead.lean:26:33: error: Tactic `assumption` failed
+
+ops : AdapterRw.Ops
+e : Entry
+a l₁ l₂ : ℕ
+out : Slice U8
+x✝ : core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError
+bytes✝ : alloc.vec.Vec U8
+heq✝ :
+  (have bytes := e.buffers (e.handles a).1;
+      have __src := (e.records (e.handles a).1).owned;
+      { key := __src.key, owner := __src.owner, is_signer := __src.is_signer, is_writable := __src.is_writable,
+        executable := __src.executable, length := core.result.Result.Ok bytes.len,
+        bytes :=
+          if (↑bytes).length = l₁ ∨ (↑bytes).length = l₂ then core.result.Result.Ok bytes
+          else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData }).bytes =
+    core.result.Result.Ok bytes✝
+read :
+  (have s := bytes✝.deref;
+    ok (core.result.Result.Ok s)) =
+    ok (core.result.Result.Ok out)
+same : bytes✝.deref = out
+⊢ (↑(e.buffers (e.handles a).1)).length = l₁ ∨ (↑(e.buffers (e.handles a).1)).length = l₂
+NCK_generated/NCK_SnapshotRead.lean:28:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑out
+NCK_generated/NCK_SnapshotRead.lean:28:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑out
+NCK_generated/NCK_SnapshotRead.lean:28:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑out
+'AspisR1.NCK_SnapshotRead.proof_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCK_SnapshotRead.checkpoint_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCK_SnapshotRead.original_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

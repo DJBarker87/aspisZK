@@ -1,0 +1,27 @@
+{"attempt": "NCK_K017", "exit_status": 1, "wall_seconds": 1.2924283040920272, "peak_rss_kib": "230668", "swaps": "0"}
+  --> /home/dombarker/project-offloads/codex-cx-native-tx2top-20261028/NCK_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.73s
+Checking harness r1_pool_adapter::owned::NCK_owned::key_wrong...
+
+VERIFICATION RESULT:
+ ** 1 of 93 failed (2 unreachable)
+Failed Checks: assertion failed: !core::ptr::eq(a.key(),&a.key)
+ File: "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs", line 492, in r1_pool_adapter::owned::NCK_owned::key_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 0.11076389s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::owned::NCK_owned::key_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

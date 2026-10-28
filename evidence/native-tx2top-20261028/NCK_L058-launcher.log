@@ -1,0 +1,46 @@
+{"attempt": "NCK_L058", "exit_status": 1, "wall_seconds": 3.5065982199739665, "peak_rss_kib": "4410576", "swaps": "0", "print_axioms": ["'AspisR1.NCK_AuthenticationCuts.guards' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCK_generated/NCK_AuthenticationCuts.lean:43:94: error: unsolved goals
+ops : AdapterRw.Ops
+program pool : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+lane : U8
+slot : U64
+authenticated : AdapterRw.r1_pool_adapter.AuthenticatedAsq8Accounts
+success :
+  (if accounts.len = 7#usize then do
+      let proof_account ← accounts.index_usize 0#usize
+      let master_account ← accounts.index_usize 1#usize
+      let checkpoint_account ← accounts.index_usize 2#usize
+      let lane_account ← accounts.index_usize 3#usize
+      let registry_account ← accounts.index_usize 4#usize
+      let entry_account ← accounts.index_usize 5#usize
+      let verifier_checkpoint ← accounts.index_usize 6#usize
+   
+...
+  (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+    else
+      have i1 := accounts.len;
+      if i1 < 7#usize then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.NotEnoughAccountKeys)
+      else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument)) =
+    ok (core.result.Result.Ok authenticated)
+⊢ ∃ proof master poolCheckpoint laneAccount registry entry checkpoint,
+    accounts.len = 7#usize ∧
+      accounts.index_usize 0#usize = ok proof ∧
+        accounts.index_usize 1#usize = ok master ∧
+          accounts.index_usize 2#usize = ok poolCheckpoint ∧
+            accounts.index_usize 3#usize = ok laneAccount ∧
+              accounts.index_usize 4#usize = ok registry ∧
+                accounts.index_usize 5#usize = ok entry ∧
+                  accounts.index_usize 6#usize = ok checkpoint ∧
+                    require_readonly_buffer proof = ok (core.result.Result.Ok ()) ∧
+                      require_verifier_checkpoint ops checkpoint program false = ok (core.result.Result.Ok ()) ∧
+                        require_readonly_account ops master pool = ok (core.result.Result.Ok ()) ∧
+                          require_readonly_account ops poolCheckpoint pool = ok (core.result.Result.Ok ()) ∧
+                            require_readonly_account ops laneAccount pool = ok (core.result.Result.Ok ()) ∧
+                              require_distinct_accounts ops
+                                  (Array.make 7#usize
+                                    [proof, master, poolCheckpoint, laneAccount, registry, entry, checkpoint] ⋯) =
+                                ok (core.result.Result.Ok ())
+'AspisR1.NCK_AuthenticationCuts.guards' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2d9365d1b27e4ba3a98dbc6bc1a42621.scope; invocation ID: 1b5d53f4a84d494dbd0203fda4b38bd4

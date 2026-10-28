@@ -1,0 +1,60 @@
+NCK_generated/NCK_Stage2Cuts.lean:44:66: error: unsolved goals
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+slot : core.result.Result U64 PE
+validated : ValidatedAsqa
+pa ca : Account
+raw cp selected magic : Slice U8
+headPart : Option (Slice U8)
+pub : Std.Array U8 1880#usize
+finish : Usize
+count : accounts.len = 7#usize
+getPrefix :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok headPart
+getMagic :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok magic
+sameMagic :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      headPart (some magic) =
+    ok false
+auth : validate_asq8 ops program accounts data slot = ok (core.result.Result.Ok validated)
+proofAccount : accounts.index_usize 0#usize = ok pa
+checkpointAccount : accounts.index_usize 6#usize = ok ca
+proofData : OwnedAccount.data ops pa = ok (core.result.Result.Ok raw)
+checkpointData : OwnedAccount.data ops ca = ok (core.result.Result.Ok cp)
+extent : Usize.checked_add 688#usize validated.proof_length = some finish
+rawLength : raw.len = finish
+statementSize :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops =
+    ok 1880#usize
+encode : ops.op22 validated.statement = ok (core.result.Result.Ok pub)
+selection :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) raw
+      { start := 688#usize, «end» := finish } =
+    ok selected
+tx2 :
+  ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub.to_slice selected cp () none =
+    ok (core.result.Result.Ok ())
+emit : ops.op53 validated.statement = ok (core.result.Result.Ok ())
+⊢ Usize.ofNatCore 1880 ⋯ = 1880#usize
+NCK_generated/NCK_Stage2Cuts.lean:54:4: warning: This simp argument is unused:
+  _root_.AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+
+Hint: Omit it from the simp argument list.
+  simp only [stage2_owned, count, bne_self_eq_false, Bool.false_eq_true, ↓reduceIte, getPrefix,
+  ̲  ̲ ̲ ̲getMagic, sameMagic, bind_tc_ok, auth, core.result.Result.Insts.CoreOpsTry.branch, proofAccount,
+  ̲  ̲ ̲ ̲proofData, checkpointAccount, checkpointData,
+      AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
+      extent, _root_.AdapterRw.core.option.Option.ok_or, lift, statementSize, pubLength, rawLength,
+  ̲  ̲ ̲ ̲encode, _root_.AdapterRw.core.result.Result.map_err, _̵r̵o̵o̵t̵_̵.̵A̵d̵a̵p̵t̵e̵r̵R̵w̵.̵r̵1̵_̵p̵o̵o̵l̵_̵a̵d̵a̵p̵t̵e̵r̵.̵o̵w̵n̵e̵d̵.̵s̵t̵a̵g̵e̵2̵_̵o̵w̵n̵e̵d̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵P̵o̵o̵l̵V̵1̵P̵a̵i̵r̵F̵o̵r̵e̵s̵t̵T̵e̵r̵m̵i̵n̵a̵l̵F̵o̵r̵m̵a̵t̵E̵r̵r̵o̵r̵V̵1̵P̵r̵o̵g̵r̵a̵m̵E̵r̵r̵o̵r̵,̵selection, _root_.AdapterRw.observer, tx2,
+  ̲  ̲ ̲ ̲emit]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCK_Stage2Cuts.compose' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

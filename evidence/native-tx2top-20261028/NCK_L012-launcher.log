@@ -1,0 +1,46 @@
+{"attempt": "NCK_L012", "exit_status": 0, "wall_seconds": 1.7267838569823653, "peak_rss_kib": "4384696", "swaps": "0", "print_axioms": []}
+AdapterRw.r1_pool_adapter.owned.stage2_owned (ops : AdapterRw.Ops) (program_id : AdapterRw.solana_pubkey.Pubkey)
+  (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount) (data : Slice U8)
+  (current_slot : core.result.Result U64 AdapterRw.solana_program_error.ProgramError) :
+  Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+AdapterRw.r1_pool_adapter.owned.validate_asq8 (ops : AdapterRw.Ops) (verifier_program : AdapterRw.solana_pubkey.Pubkey)
+  (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount) (instruction_data : Slice U8)
+  (current_slot : core.result.Result U64 AdapterRw.solana_program_error.ProgramError) :
+  Result (core.result.Result Ada
+...
+r.readonly_buffer_meta_ok : Bool →
+  Bool → Bool → Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError) :=
+fun is_signer is_writable executable =>
+  if is_signer = true then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+  else
+    if is_writable = true then
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+    else
+      if executable = true then
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else ok (core.result.Result.Ok ())
+def AdapterRw.r1_pool_adapter.owned.OwnedAccount.data : AdapterRw.Ops →
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+    Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError) :=
+fun ops self =>
+  match self.bytes with
+  | core.result.Result.Ok bytes =>
+    have s := bytes.deref;
+    ok (core.result.Result.Ok s)
+  | core.result.Result.Err error1 => do
+    let pe ← ops.op35 error1
+    ok (core.result.Result.Err pe)
+def AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len : AdapterRw.Ops →
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+    Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError) :=
+fun ops self =>
+  AdapterRw.core.result.Result.Insts.CoreCloneClone.clone core.clone.CloneUsize
+    (AdapterRw.solana_program_error.ProgramError.Insts.CoreCloneClone ops) self.length
+def AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.key : AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+  Result AdapterRw.solana_pubkey.Pubkey :=
+fun self => ok self.key
+def AdapterRw.r1_pool_adapter.owned.OwnedAccount.impl.owner : AdapterRw.r1_pool_adapter.owned.OwnedAccount →
+  Result AdapterRw.solana_pubkey.Pubkey :=
+fun self => ok self.owner
+
+Running as unit: run-rc7c59125dd4145708e4961f7f53539a6.scope; invocation ID: 78314202415a4eb390213a33db0128bf
