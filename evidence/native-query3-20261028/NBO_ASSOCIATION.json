@@ -1,0 +1,11 @@
+{
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+  "prefix_frozen": "    let i = a.next;\n    let u = p.queries[i] as usize;\n    let q = opening(proof, i);\n    let dots = crate::fast_dots::four_dots(q, g);\n    crate::trace::value(9, 4 * i, dots[0]);\n    crate::trace::value(9, 4 * i + 1, dots[1]);\n    crate::trace::value(9, 4 * i + 2, dots[2]);\n    crate::trace::value(9, 4 * i + 3, dots[3]);\n    let inverse = *geometry.for_query(i);\n    let folded = circle_fold_with_inverses(p.alpha[0], dots, &inverse);\n    crate::trace::value(10, 2 * i, folded);\n    let values = core::array::from_fn(|s| field(&q[672..800], s));\n    if folded != values[u % 4] {\n        return Err(Error::Query);\n    }\n",
+  "prefix_factored": "    let i = next;\n    let u = p.queries[i] as usize;\n    let q = opening(proof, i);\n    let dots = crate::fast_dots::four_dots(q, g);\n    crate::trace::value(9, 4 * i, dots[0]);\n    crate::trace::value(9, 4 * i + 1, dots[1]);\n    crate::trace::value(9, 4 * i + 2, dots[2]);\n    crate::trace::value(9, 4 * i + 3, dots[3]);\n    let inverse = *geometry.for_query(i);\n    let folded = circle_fold_with_inverses(p.alpha[0], dots, &inverse);\n    crate::trace::value(10, 2 * i, folded);\n    let values = core::array::from_fn(|s| field(&q[672..800], s));\n    if folded != values[u % 4] {\n        return Err(Error::Query);\n    }\n",
+  "changes": [
+    "a.next supplied as next",
+    "success returns the exact reached folded/values/inverse cut"
+  ],
+  "credit": "native prefix routing only; callee bridges remain separate; g pointee contents are unobserved by routing stub"
+}

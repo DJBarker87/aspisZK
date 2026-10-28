@@ -1,0 +1,11 @@
+# Stage 2 — prefix fission and arbitrary-cursor finish
+
+NBO_Enumerate.from_cursor composes the inherited actual Enumerate step/back laws and valueAt_success for the SAME raw carrier. Its destination supplies the ordinal capacity bound; no selected values, nextBack closure, finish success or complete prefix is assumed. L003 passed, standard axioms. L002 was rejected due to missing lexical whitespace; no recovery sorryAx output is credited.
+
+NBO_QueryFactor.association is a total Result equality factoring the actual direct-cohort query into its exact prefix and accepted continuation. It preserves rejected prefixes, failure and divergence. L005 passed, standard axioms; L004 rejected the reserved identifier prefix. No source semantic or native full-query equality is assumed or discharged by this fission alone.
+
+NBO_K002 checks the literal frozen native prefix, with only a.next projected to next, on arbitrary canonical alpha/dots/fold/values/g, arbitrary opening bytes and arbitrary inverse words. All callback carriers and original g/geometry/proof pointers are checked at their SAME reached calls; a selected arbitrary coordinate checks the full fixed-size field carriers. Both compare branches and all four decoder ordinals are covered; copied byte extent is below unwind1024. Graph equals frozen lock, offline; lock unchanged. Exit0,47.195722734s,3523788KiB,swap0. The first prefix K001 passes but has the disclosed resource-overlap qualification, and is not the compliant acceptance receipt. K002 broadens g to all canonical29-row arrays (rather than repeating unchanged input scope).
+
+Routing stubs are not semantic passes for opening/dots/geometry/folds/decoder. No field multiplication stub is introduced. Remaining callee semantic associations and every-caller producer domains stay explicit; no composite or headline closure is claimed.
+
+Own wrapper serial locking is now enforced. Host timestamps confirm K001 [1793153216.2727735,1793153253.9334462], L002 [1793153240.2980504,1793153242.3002622]; overlap retained in NBO_SERIAL_NOTE.md. No caps or timeout increased. Native scratch reuses the terminal NBF scratch via symlink, without another corpus/cache. Only own NBO registration/module are added; all committed harness source is patch-form, with per-run source hashes. No shipped change or ELF rebuild. Budget: Lean5/100,Kani2/40.

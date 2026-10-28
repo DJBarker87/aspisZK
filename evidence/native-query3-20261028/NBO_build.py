@@ -1,3 +1,8 @@
+# Own wrapper serialization; holds through admission, submission and recovery.
+import fcntl
+from pathlib import Path
+_nbo_serial = (Path(__file__).resolve().parent / 'NBO_SERIAL.lock').open('a')
+fcntl.flock(_nbo_serial, fcntl.LOCK_EX)
 """Own serial transport wrapper; invokes byte-identical S2H/S2W backends.
 Batches transfer/recovery to avoid repeated flaky connections. No backend edits.
 """
