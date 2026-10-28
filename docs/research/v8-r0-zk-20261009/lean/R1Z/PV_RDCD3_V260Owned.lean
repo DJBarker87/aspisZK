@@ -3,9 +3,12 @@ set_option autoImplicit false
 namespace R1Z.PV_RDCD3_V260Owned
 open Aeneas Aeneas.Std Result PV_B2_253c1
 abbrev K := aspis_core.field.QM31
-local instance : DecidableEq transport.Variant := fun v w => by
-  cases v <;> cases w
-  all_goals first | exact isTrue rfl | exact isFalse (by intro h; cases h)
+/-- Direct finite-tag comparison, without adding a library dictionary. -/
+def isD : transport.Variant → Bool
+  | .D => true
+  | .S1 => false
+  | .S2 => false
+
 
 
 def inactive (w : host_weights.Weights) (j : Usize) : Result K := do
@@ -42,13 +45,13 @@ read and arithmetic helper. Ordered folds preserve all factors and errors. -/
 def original (w : host_weights.Weights) (kind j : Usize) : Result K :=
   if kind=0#usize then inactive w j
   else if kind=4#usize then extra w j
-  else if kind≥1#usize ∧ kind≤3#usize ∧ w.variant=transport.Variant.D then point w kind j
+  else if kind≥1#usize ∧ kind≤3#usize ∧ isD w.variant=true then point w kind j
   else tensor w kind j
 
 theorem variant_eq (v : transport.Variant) :
-    transport.Variant.Insts.CoreCmpPartialEqVariant.eq v .D = ok (decide (v=.D)) := by
+    transport.Variant.Insts.CoreCmpPartialEqVariant.eq v .D = ok (isD v) := by
   cases v <;> simp [transport.Variant.Insts.CoreCmpPartialEqVariant.eq,
-    transport.Variant.read_discriminant] <;> scalar_tac
+    transport.Variant.read_discriminant,isD] <;> scalar_tac
 #print axioms variant_eq
 
 theorem source (w : host_weights.Weights) (kind j : Usize) :
@@ -60,9 +63,9 @@ theorem source (w : host_weights.Weights) (kind j : Usize) :
     simp only [host_weights.raw_value,original,
       show ¬ (4#usize=0#usize) from by decide,if_false,if_true,extra,lift,bind_tc_ok]
   by_cases h1 : kind≥1#usize <;> by_cases h3 : kind≤3#usize <;>
-    by_cases hv : w.variant=transport.Variant.D <;>
+    by_cases hv : isD w.variant=true <;>
     simp only [host_weights.raw_value,original,h0,h4,h1,h3,hv,if_true,if_false,
-      variant_eq,decide_true,decide_false,lift,bind_tc_ok,tensor,point,
+      variant_eq,lift,bind_tc_ok,tensor,point,
       and_true,and_false,true_and,false_and,Bool.false_eq_true,
       PV_RDCD3_V260Folds.tensor_loop,PV_RDCD3_V260Folds.point_loop] <;> rfl
 #print axioms source

@@ -70,6 +70,7 @@ theorem point_read_order (read : Result K) (r : Usize) (shift : U32) :
     (do let q ← read; host_weights.point_factor q r shift) := by
   by_cases h : (r &&& Usize.wrapping_shl 1#usize shift)=0#usize <;>
     simp only [host_weights.point_factor,lift,bind_tc_ok,h,if_true,if_false,bind_pure]
+  cases read <;> rfl
 #print axioms point_read_order
 
 #print axioms tensor_loop

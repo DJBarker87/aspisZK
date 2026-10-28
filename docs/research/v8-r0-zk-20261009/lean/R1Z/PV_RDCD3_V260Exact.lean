@@ -59,7 +59,7 @@ theorem inactive_refactor (w : host_weights.Weights) (j : Usize) :
 def original (w : host_weights.Weights) (kind j : Usize) : Result K :=
   if kind=0#usize then inactive w j
   else if kind=4#usize then PV_RDCD3_V260Owned.extra w j
-  else if kind≥1#usize ∧ kind≤3#usize ∧ w.variant=transport.Variant.D then point w kind j
+  else if kind≥1#usize ∧ kind≤3#usize ∧ PV_RDCD3_V260Owned.isD w.variant=true then point w kind j
   else tensor w kind j
 
 theorem refactor (w : host_weights.Weights) (kind j : Usize) :
