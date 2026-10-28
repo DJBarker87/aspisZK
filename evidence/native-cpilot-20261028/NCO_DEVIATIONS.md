@@ -29,3 +29,32 @@ Those domains are diagnostic restrictions and do not cover every real caller.
 L004/L006 default-heartbeat failures are excluded. No limits were increased;
 L009 replaces broad simplification with the existing checked constant laws
 and the reference's matching pattern structure.
+
+K042 compiled no target: the OWN upload batch included the expansion harness
+before its contract annotations had been installed in scratch compact.rs.
+Installed both sets of scratch annotations before the next launch.
+K043 (header≤5 full result/pointer relation) and K045 (header status only)
+time out. Neither shape is replayed. K046 isolates the disjoint exact row2,
+length37 branch and gives unreachable loops a checked unwind bound2; it is
+not a rerun of the unrestricted/header shape. No caps/timeouts increased.
+No credit is inferred from any restricted parser contract for general callers.
+
+Read-only host inspection used extra SSH sessions while an earlier proof
+transport was open. This was a transport-rule deviation, with no second build
+scope, mutation or resubmission; subsequent host work is serial through the
+lane wrapper. Sources, evidence and caps are unaffected.
+
+K046 compiled no target because the exact KMX include and NCO's own Vec
+import duplicated a name. Removed NCO's redundant import, preserving KMX.
+K047 corrected exact-row2 split still TIMEOUT; it is not replayed.
+
+Final scalar receipts K048–K055 use a stricter archived source pinset and
+include compact.rs itself (earlier compact receipts did not snapshot that
+file individually). Earlier receipts remain evidence toward the final packet,
+not substituted for the complete final source pins. Wrapper sources and the
+current complete pinset are archived from K047 onward.
+
+Top-level raw scratch harness sources were initially retained in the evidence
+directory. They are now represented only by NCO_harness.patch; receipt source
+snapshots are preserved. Own setup/runner scripts decode that patch directly.
+No repository crates/ or programs/ source was changed at any time.

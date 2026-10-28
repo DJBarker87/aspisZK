@@ -11,7 +11,7 @@ parser=os.environ.get('NCO_EXTRACT_PARSER')=='1'
 roots=['crate::validate_ref','crate::parse_record_ref','crate::parse_at_ref'] if parser else ['crate::row_shape_ref','crate::compact_row_ref']
 namespace='NCO_ParserRef' if parser else 'NCO_Reference'
 dest=B/('NCO_parser_extracted' if parser else 'NCO_extracted')
-cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result']
+cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]
 cmd+=['--dest-file',str(B/'NCO_reference.llbc'),'--','--manifest-path',str(S/'Cargo.toml'),'--offline','--release','--lib','--jobs','1']
 

@@ -9,7 +9,7 @@ active=E/'NCO_ACTIVE.json';assert not active.exists(),active
 active.write_text(json.dumps(dict(attempt=a)))
 def ssh(code,stdin=None,submitted=False):
  for retry in range(11):
-  r=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code],input=stdin,capture_output=True,text=True)
+  r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code],input=stdin,capture_output=True,text=True)
   with (E/'NCO_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,retry=retry,exit=r.returncode,submitted=submitted,stderr=r.stderr))+'\n')
   if r.returncode!=255 or submitted:return r
   if retry<10:time.sleep(60)
@@ -31,8 +31,9 @@ print(p.read_text());sys.exit(r.returncode)
  raise SystemExit('STOP infrastructure admission')
 files={'NCO_gate.py':(E/'NCO_gate.py').read_text()}
 if kind=='kani':
- for p in E.glob('NCO_*.rs'):files['NCO_src/crates/aspis-r1-cost-probe/src/'+p.name]=p.read_text()
- sources=list(n for n in files if n.endswith('.rs'))+['NCO_src/Cargo.lock','NCO_src/Cargo.toml','NCO_src/crates/aspis-r1-cost-probe/src/r1_wire.rs','NCO_src/crates/aspis-r1-cost-probe/src/lib.rs']
+ from NCO_patch import files as patch_files
+ for n,s in patch_files().items():files['NCO_src/'+n]=s
+ sources=['NCO_gate.py','NCO_SOURCE_PINS.json']+list(n for n in files if n.endswith('.rs'))+['NCO_src/Cargo.lock','NCO_src/Cargo.toml','NCO_src/crates/aspis-r1-cost-probe/src/r1_wire.rs','NCO_src/crates/aspis-r1-cost-probe/src/compact.rs','NCO_src/crates/aspis-r1-cost-probe/src/lib.rs']
  native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NCO_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NCO_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  command=['python3','NCO_gate.py',a+'.json']
 elif kind=='extract':

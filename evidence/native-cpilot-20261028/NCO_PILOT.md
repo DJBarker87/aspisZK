@@ -1,4 +1,8 @@
-PILOT RESULT: pending.
+PILOT RESULT: partly. The end-to-end parser slice is NOT established.
+
+Do not switch all lanes yet: the pinned Kani cannot substitute borrowed-slice
+or Vec returns; complete loop-leaf contracts are also missing. Scalar contracts
+and one-window expansion are useful partial results, not parser closure.
 
 Selected slice: parser, starting with row_shape → parse_record → parse_record_at.
 The additional Prefix accessors are independent small interface probes. Validator
@@ -40,3 +44,31 @@ heartbeat limit and were changed/split, never rerun unchanged or given
 higher limits. E004 changes the reference's if tree to a matching Rust match;
 K040 rechecks the native contract on that new reference. Its call-site and
 negative-control rechecks remain required before final scalar credit.
+
+Stage 4 native disposition: 70/70 configured Kani invocations complete.
+24 PASS, 23 check failures,16 compiler failures,7 timeouts; these are
+execution classifications, never closure counts. NCO_RESULTS.json and the
+JSONL give every target/time/RSS/exit/revision. K048–K055 re-establish the
+scalar contract/call-site/control packets with the complete pinset archived
+by the stricter wrapper. K058 one-window expand contract PASS (64.38 s);
+K059 inverted ensures FAIL (78.62 s), exact KMX source files checked.
+K056 positive copy PASS and K057 wrong-copy FAIL in the same KMX configuration.
+
+K060 full Result one-chunk validator TIMEOUT; K061 substituted caller PASS
+has NO CREDIT because its callee contract was not proved. K062 inverted
+validator and K063 weak validator TIMEOUT; K064 unimplied caller FAIL is
+also only a diagnostic (no proved weak callee). No validator contract closes.
+Generic Result<u8,u8> fidelity controls do pass, but they are not promoted to
+an admitted arbitrary Error/slice/Vec contract family.
+
+Borrowed result and Vec failures are compile-time missing Arbitrary support,
+not desired assertion counterexamples. Result<&slice,u8> inverted and frame
+controls K065/K067 fail and real-body K066 passes. Vec K068 wrong ensures /
+K070 frame fail and K069 real-body passes, with exact KMX replacements;
+Vec stub generation K016 fails. Neither family is admitted.
+
+E006 includes the actual core::option::_::ok_or body. Unlike E005 it emits
+no required external template. This removes that extraction gap without
+adding an axiom or editing an existing module. The parser reference/model
+equalities remain separate Lean obligations; no extraction success is called
+a native bridge.

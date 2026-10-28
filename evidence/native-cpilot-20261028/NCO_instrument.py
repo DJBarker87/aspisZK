@@ -6,7 +6,7 @@ s=subprocess.check_output(['git','show',rev+':'+n],text=True)
 s=s.replace('pub const fn row_shape', '#[cfg_attr(kani, kani::ensures(|r| (*r == NCO_wire::reference::row_shape_ref(row)) != cfg!(NCO_invert_shape)))]\npub const fn row_shape',1)
 s+='\n#[cfg(kani)]\n#[path="NCO_wire.rs"]\nmod NCO_wire;\n'
 # Child reference visible to its parent only inside cfg(kani).
-assert 'pub(super) mod reference;' in (E/'NCO_wire.rs').read_text()
+assert 'pub(super) mod reference;' in __import__('NCO_patch').files()['crates/aspis-r1-cost-probe/src/NCO_wire.rs']
 files={n:s}
 code=f'''from pathlib import Path
 import json,hashlib
