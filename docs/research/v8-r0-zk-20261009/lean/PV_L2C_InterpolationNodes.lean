@@ -10,8 +10,8 @@ def node (i : Nat) : ZMod p := i
 theorem distinct (i j : Nat) (hi : i < 28) (hj : j < 28) (he : i ≠ j) : node i ≠ node j := by
   intro h
   have hv := congrArg ZMod.val h
-  simp only [node,ZMod.val_natCast,Nat.mod_eq_of_lt (by omega : i < p),
-    Nat.mod_eq_of_lt (by omega : j < p)] at hv
+  simp only [node,ZMod.val_natCast,Nat.mod_eq_of_lt (by change i < 2147483647;omega : i < p),
+    Nat.mod_eq_of_lt (by change j < 2147483647;omega : j < p)] at hv
   exact he hv
 #print axioms distinct
 
