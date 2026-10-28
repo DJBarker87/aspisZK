@@ -13151,3 +13151,20 @@ error text of the deployed verifier on every reached path. If it does, add the e
 it does not, record it as a coverage gap between the model and D159: an observer-model matter that
 cannot be closed by proof inside the current statement and goes to the owner. Rows removed outright:
 0. Privacy target not yet established.
+
+## D349 (Stream B) 2026-10-28 03:22 UTC: pv-dlib result; structural route permitted as a K-1 substitute (ruling (k')); dlib2 launched
+
+pv-dlib (85 charged Lean attempts; 15 admission refusals consumed IDs; all 100 IDs and 6 Kani runs
+spent; combined audit 42298 and focused replay 42299 pass with standard axioms) proved supporting
+model and reference theorems for all eight bucket-(d) rows (V187, V201, V231, V234-V238) but no
+accepted native link, so all eight stay OPEN. Its copy-dependent Kani results are suspended under
+ruling (r).
+
+Ruling (k') widens (k) while finding K-1 stands: where a native link would otherwise be a bounded
+Kani gate whose property depends on a reached copy builtin, the structural route (script-checked
+binding between the shipped body and the owned reference, the reference's complete-Result Lean law,
+and a native differential labelled as finite validation) is permitted, recorded as "structural (K-1
+substitute)" so that recounts distinguish it, and re-verified by Kani once Stream A's validated copy
+stub exists. dlib2 (100 attempts; no Kani; IDs 43400-43499) supplies the native links in the order
+V201, V187, then the six digest wrappers with the compression function as a parameter. Rows removed
+outright: 0. Privacy target not yet established.
