@@ -1,0 +1,58 @@
+{"attempt": "KNC_G001", "exit_status": 0, "wall_seconds": 0.20250809600111097, "peak_rss_kib": "100960", "swaps": "0"}
+{"attempt": "KNC_K001", "exit_status": 1, "wall_seconds": 17.24971803900553, "peak_rss_kib": "534292", "swaps": "0"}
+:NBZ_return_carriers
+
+Check 54: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 55: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 56: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 57: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 58: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+
+SUMMARY:
+ ** 1 of 58 failed (1 unreachable)
+Failed Checks: assertion failed: obs.is_some()
+ File: "crates/aspis-r1-cost-probe/src/NBZ_native.rs", line 5, in verifier::candidate::NBZ_native::NBZ_mark_none
+
+VERIFICATION:- FAILED
+Verification Time: 0.87870276s
+
+Concrete playback unit test for `verifier::candidate::NBZ_native::NBZ_return_carriers`:
+```
+/// Test generated for harness `verifier::candidate::NBZ_native::NBZ_return_carriers` 
+///
+/// Check for `assertion`: "assertion failed: obs.is_some()"
+
+#[test]
+fn kani_concrete_playback_NBZ_return_carriers_5400760440963513519() {
+    let concrete_vals: Vec<Vec<u8>> = vec![
+        // 0ul
+        vec![0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    kani::concrete_playback_run(concrete_vals, NBZ_return_carriers);
+}
+```
+INFO: To automatically add the concrete playback unit test(s) to the src code, run Kani with `--concrete-playback=inplace`.
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBZ_native::NBZ_return_carriers
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+

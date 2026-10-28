@@ -1,0 +1,58 @@
+{"attempt": "KNC_G004", "exit_status": 0, "wall_seconds": 0.17425485397689044, "peak_rss_kib": "100620", "swaps": "0"}
+{"attempt": "KNC_K004", "exit_status": 1, "wall_seconds": 9.194723444990814, "peak_rss_kib": "490456", "swaps": "0"}
+:Option::<fn(verifier::Phase)>::is_some
+
+Check 54: core::option::Option::<fn(verifier::Phase)>::is_some.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+Check 55: core::option::Option::<fn(verifier::Phase)>::is_some.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+Check 56: core::option::Option::<fn(verifier::Phase)>::is_some.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+Check 57: core::option::Option::<fn(verifier::Phase)>::is_some.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+Check 58: core::option::Option::<fn(verifier::Phase)>::is_some.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+
+SUMMARY:
+ ** 1 of 58 failed (1 unreachable)
+Failed Checks: assertion failed: obs.is_none()
+ File: "crates/aspis-r1-cost-probe/src/NBZ_native.rs", line 5, in verifier::candidate::NBZ_native::NBZ_mark_none
+
+VERIFICATION:- FAILED
+Verification Time: 0.8632735s
+
+Concrete playback unit test for `verifier::candidate::NBZ_native::NBZ_return_carriers`:
+```
+/// Test generated for harness `verifier::candidate::NBZ_native::NBZ_return_carriers` 
+///
+/// Check for `assertion`: "assertion failed: obs.is_none()"
+
+#[test]
+fn kani_concrete_playback_NBZ_return_carriers_1159042547442012873() {
+    let concrete_vals: Vec<Vec<u8>> = vec![
+        // 1ul
+        vec![1, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    kani::concrete_playback_run(concrete_vals, NBZ_return_carriers);
+}
+```
+INFO: To automatically add the concrete playback unit test(s) to the src code, run Kani with `--concrete-playback=inplace`.
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBZ_native::NBZ_return_carriers
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
