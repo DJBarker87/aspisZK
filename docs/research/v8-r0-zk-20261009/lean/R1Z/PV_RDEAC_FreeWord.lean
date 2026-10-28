@@ -22,17 +22,19 @@ theorem release_count {S F : Type} (free : Nat → Nat → Nat → S → S)
 theorem final_count {S F : Type} (free : Nat → Nat → Nat → S → S)
     (owned : Buffer U8) (e : Execution U8 S F) :
     (PV_RDEAC_JoinHandlers.finalWorld free owned e).deallocCalls=e.world.deallocCalls+(word owned e).length := by
-  unfold PV_RDEAC_JoinHandlers.finalWorld word
-  split
-  · rfl
-  · rw [release_count,release_count,List.length_append,Nat.add_assoc]
-  · exact release_count free owned e.world
+  cases e with
+  | mk returned b w =>
+    cases returned with
+    | error err =>
+      cases err <;> simp only [PV_RDEAC_JoinHandlers.finalWorld,word,release_count,
+        List.length_nil,List.length_append,Nat.add_zero,Nat.add_assoc]
+    | ok unit => exact release_count free owned w
 
 theorem owned_word (cap : Nat) (h : cap=69) : releaseWord cap=[69] := by
   subst cap
   rfl
 
-/-- Every possible partial-buffer cleanup header is determined by the public
+/-- Every possible partialCap-buffer cleanup header is determined by the public
 base length and the source's separator-growth formula. Abort and success arms
 are explicit; the failure-selected prefix belongs to primitive adequacy. -/
 theorem source_headers {S F : Type} (step : Request → S → Option Nat × S)
@@ -40,8 +42,8 @@ theorem source_headers {S F : Type} (step : Request → S → Option Nat × S)
     (w : World S F) (owned : Buffer U8) (cap : owned.capacity=69) :
     let e := PV_RDEAC_FullJoin.join step shape address false needSep base path w
     word owned e=[] ∨ word owned e=[69] ∨
-      ∃ partial, (partial=0 ∨ partial=base.length ∨ partial=PV_RDEA_AppendRequests.nextCapacity base.length base.length 1) ∧
-        word owned e=releaseWord partial++[69] := by
+      ∃ partialCap, (partialCap=0 ∨ partialCap=base.length ∨ partialCap=PV_RDEA_AppendRequests.nextCapacity base.length base.length 1) ∧
+        word owned e=releaseWord partialCap++[69] := by
   dsimp only
   let e := PV_RDEAC_FullJoin.join step shape address false needSep base path w
   change word owned e=[] ∨ word owned e=[69] ∨ _
@@ -51,7 +53,8 @@ theorem source_headers {S F : Type} (step : Request → S → Option Nat × S)
     | allocError layout => exact Or.inl (by simp only [word,h])
     | capacityOverflow =>
       have headers := PV_RDEAC_PartialHeaders.join_error step shape address needSep base path w .capacityOverflow h
-      exact Or.inr (Or.inr ⟨e.buffer.capacity,headers,by simp only [word,h,owned_word _ cap]⟩)
+      have hw : word owned e=releaseWord e.buffer.capacity++[69] := by simp only [word,h,owned_word _ cap]
+      exact Or.inr (Or.inr ⟨e.buffer.capacity,headers,hw⟩)
   | ok unit => exact Or.inr (Or.inl (by simp only [word,h,owned_word _ cap]))
 
 #print axioms release_count

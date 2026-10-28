@@ -6,7 +6,7 @@ namespace R1Z.PV_RDEAC_ABI
 existing source/native carrier ABI boundary, not a witness restriction and not
 an additional field of the capped privacy trust list. -/
 theorem word_room (target : System.Platform.numBits=64) : 9223372036854775808≤Usize.max := by
-  rw [Usize.max,Usize.numBits,target]
+  rw [Usize.max,Usize.numBits,UScalarTy.Usize_numBits_eq,target]
   norm_num
 
 #print axioms word_room
