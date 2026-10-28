@@ -3,6 +3,14 @@ from pathlib import Path
 import sys,hashlib,json
 kind=sys.argv[1]
 P=H/'source/tools/pv-b3p6-20261028'
+if kind in ('kani133','kmxcontrols'):
+ patch=H/'source/evidence/pv-b3p6-20261028/KMX_copy_stubs.patch'
+ stubs=P/'kmx/KMX_stubs.rs'
+ patch_sha=hashlib.sha256(patch.read_bytes()).hexdigest()
+ stubs_sha=hashlib.sha256(stubs.read_bytes()).hexdigest()
+ assert patch_sha=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
+ assert stubs_sha=='ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138'
+ (H/('copy-patch-preflight-'+kind+'.json')).write_text(json.dumps(dict(patch_sha256=patch_sha,stubs_sha256=stubs_sha,source_revision=(H/'revision').read_text().strip(),business_function_stubs=False),indent=2)+'\n')
 if kind=='kani133':
  (H/'tmp').mkdir(exist_ok=True)
  bounds=json.loads((H/'bounds133.json').read_text())
