@@ -46,6 +46,10 @@ theorem complete {N : Usize} (x p : E) (out : Array E N) (n : Nat)
         AspisR1ProducerRelease47.power_fill]
       simp only [if_neg hzero,if_neg hone,Array.index_mut_usize,hread,bind_tc_ok,
         PV_RunJoin_WeightWide46.mul_value,lift]
+      change AspisR1ProducerRelease47.power_fill
+        (Aeneas.Std.Array.set (amap toWide out) i (toWide p)) (toWide x)
+        (toWide (PV_B2_C_251WideValue.aspis_core.field.wide_exact.WideExact.mul p x))
+        (Usize.wrapping_add i 1#usize) (U8.wrapping_sub left 1#u8)=_
       rw [←PV_RunJoin_WeightBorrow46.restore]
       exact ih _ _ _ _ hd (by rw [hv];omega)
 #print axioms complete
