@@ -7,7 +7,7 @@ theorem path_right_bound (lane : Usize) (hl : lane.val<8) :
     (Usize.wrapping_add (Usize.wrapping_add 1#usize aspis_statement.poseidon2.DIGEST_ELEMS) lane).val<17 := by
   unfold aspis_statement.poseidon2.DIGEST_ELEMS
   rw [Usize.wrapping_add_val_eq,Usize.wrapping_add_val_eq]
-  change ((1+8) % UScalar.size .Usize+lane.val) % UScalar.size .Usize < 17
+  change (9 % UScalar.size .Usize+lane.val) % UScalar.size .Usize < 17
   have hm := Nat.mod_le 9 (UScalar.size .Usize)
   have ha := Nat.mod_le (9 % UScalar.size .Usize+lane.val) (UScalar.size .Usize)
   omega
@@ -701,17 +701,17 @@ theorem total_reference_terminal_add_value_lanes (packed : Array aspis_core.fiel
     Success (reference_terminal.add_value_lanes packed openings selectors) := by
   apply lift_total
   apply bind
-  · apply row_total; first | (apply row_left_mul_bound; simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac) | (apply row_left_address_bound <;> (simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac))
+  · apply row_total; first | (apply row_left_mul_bound; simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac) | (apply row_left_address_bound <;> (first | scalar_tac | (simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac)))
   intro q
   apply lift_total
   apply lift_total
   apply bind
-  · apply row_total; first | (apply row_left_mul_bound; simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac) | (apply row_left_address_bound <;> (simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac))
+  · apply row_total; first | (apply row_left_mul_bound; simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac) | (apply row_left_address_bound <;> (first | scalar_tac | (simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac)))
   intro q1
   apply lift_total
   apply lift_total
   apply bind
-  · apply row_total; first | (apply row_left_mul_bound; simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac) | (apply row_left_address_bound <;> (simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac))
+  · apply row_total; first | (apply row_left_mul_bound; simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac) | (apply row_left_address_bound <;> (first | scalar_tac | (simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac)))
   intro q2
   apply bind
   · apply index; first | scalar_tac | (apply wrap_add_bound; first | scalar_tac | (simp only [aspis_statement.poseidon2.RATE]; scalar_tac))
@@ -1458,7 +1458,7 @@ theorem total_reference_terminal_add_value_lanes (packed : Array aspis_core.fiel
   apply lift_total
   apply lift_total
   apply bind
-  · apply row_total; first | (apply row_left_mul_bound; simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac) | (apply row_left_address_bound <;> (simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac))
+  · apply row_total; first | (apply row_left_mul_bound; simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac) | (apply row_left_address_bound <;> (first | scalar_tac | (simp only [reference_terminal.VALUE_AUXILIARY_BLOCK]; scalar_tac)))
   intro conservation_selector
   apply bind
   · apply index; first | scalar_tac | (apply wrap_add_bound; first | scalar_tac | (simp only [aspis_statement.poseidon2.RATE]; scalar_tac))
