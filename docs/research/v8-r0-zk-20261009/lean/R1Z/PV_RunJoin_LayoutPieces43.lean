@@ -30,7 +30,9 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
     rw [ml] at h
     have bound : (171+901*k+5)+896≤rounded.length := by rw [rl];omega
     have hfinal := PV_RunJoin_CanonicalRecord43.preserve ct bound h
-    convert hfinal using 1 <;> omega
+    have off : 176+901*k=171+901*k+5 := by omega
+    rw [off]
+    exact hfinal
   have hc := PV_RunJoin_CanonicalRecord43.slot claim et
   rw [rl] at hc
   have he := PV_RunJoin_CanonicalRecord43.slot endpoint
