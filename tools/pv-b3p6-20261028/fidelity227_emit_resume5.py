@@ -2,7 +2,7 @@
 from pathlib import Path
 D=Path('evidence/pv-b3p6-20261028/lean');p=2147483647
 q=lambda n:'{ c0 := { a := '+str(n%p)+'#u32, b := '+str((n*17)%p)+'#u32 }, c1 := { a := '+str((n*31)%p)+'#u32, b := '+str((n*47)%p)+'#u32 } }'
-def arr(values):return '(Array.make '+str(len(values))+'#usize ['+',\n'.join(values)+'] (by rfl))'
+def arr(values):return '(Array.make '+str(len(values))+'#usize ['+', '.join(values)+'] (by rfl))'
 out=['import PV_B3P_P227_06\nnamespace PV_B3P_Fidelity227\nopen Aeneas Aeneas.Std PV_B3P_227\nset_option autoImplicit false\n-- Executable finite validation only; none of these evaluations is a theorem.\ndef report {n : Usize} (r : Result (Array aspis_core.field.QM31 n)) : String :=\n match r with\n | .ok xs => reprStr (xs.val.flatMap (fun q => [q.c0.a.val,q.c0.b.val,q.c1.a.val,q.c1.b.val]))\n | .fail _ => "FAIL"\n | .div => "DIV"\n']
 for seed in (0,1,7,19):
  out.append(f'def state{seed} : Array aspis_core.field.QM31 16#usize := '+arr([q((seed+1)*131+i)for i in range(16)]))
