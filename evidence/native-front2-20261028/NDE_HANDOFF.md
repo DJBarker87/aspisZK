@@ -148,3 +148,12 @@ unlinked. All commits are local; no push was performed. Stage mutation scripts
 are historical one-shot receipt builders, not idempotent replay commands.
 Use the validator read-only for ledger consistency; do not resubmit exhausted
 or timed-out jobs from this packet.
+
+## Final ledger validation
+
+`NDE_VALIDATION8.log` exits 0 against committed closure snapshot `b549ca928a`.
+The unmodified NCZ validation algorithm pins 8,193 artifacts and reports a
+critical frontier of 121 representatives; its four unresolved historical
+pointers remain explicit. Those global counts are not a deployed soundness
+proof. This validation launched no Kani or Lean job. The lane totals remain
+80/80 Kani, 80/80 Lean and 20/20 extraction attempts.
