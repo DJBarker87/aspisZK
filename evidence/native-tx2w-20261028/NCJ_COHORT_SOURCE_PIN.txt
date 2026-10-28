@@ -1,0 +1,39 @@
+{"module": "FIo_NativeFuns", "sha256": "452f489eaea213143ea94ee39f9891df2300e9b12190661ef2a5f147295c9e2f", "imports": ["import FIo_StringBounds", "import Aeneas", "import FIo_NativeTypes", "import FIo_NativeExternal"]}
+def _root_.FIo_Native.weights.shared_two_point_guard
+  (w : _root_.FIo_Native.weights.Weights) (folds : Std.Usize) : Result Bool := do
+  let b ←
+    transport.Variant.Insts.CoreCmpPartialEqVariant.eq w.variant
+      transport.Variant.S2
+  if b
+  then
+    if folds = 2#usize
+    then
+      let a ← Array.index_usize w.factors 0#usize
+      let a1 ← Array.index_usize a 2#usize
+      let a2 ← Array.index_usize w.factors 2#usize
+      let a3 ← Array.index_usize a2 2#usize
+      let b1 ←
+        core.array.equality.PartialEqArray.eq
+          aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 a1 a3
+      if b1
+      then
+        let a4 ← Array.index_usize a 3#usize
+        let a5 ← Array.index_usize a2 3#usize
+        core.array.equality.PartialEqArray.eq
+          aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 a4 a5
+      else ok false
+    else ok false
+  else ok false
+
+/-- [aspis_r1_cost_probe::weights::push_byte_products]: loop body 0:
+    Source: 'crates/aspis-r1-cost-probe/src/weights.rs', lines 140:2-142:2 -/
+@[rust_loop_body]
+def _root_.FIo_Native.weights.push_byte_products_loop.body
+  (f : Slice Std.U8) (scratch : Slice aspis_core.field.QM31)
+  (iter : core.ops.range.Range Std.Usize) (pair : fast_pairing.EbyKDot) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) ×
+    fast_pairing.EbyKDot) ((core.result.Result Unit verifier.Error) ×
+    fast_pairing.EbyKDot))
+  := do
+ 
+{"module": "FIn_WeightsFuns", "sha256": "a4f866e701e34574a8ea5787078ac6239da6b953c0a20c24081d5b6bf4814047", "imports": ["import Aeneas", "import FIn_WeightsTypes"]}

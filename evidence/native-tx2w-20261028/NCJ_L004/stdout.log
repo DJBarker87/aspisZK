@@ -1,0 +1,68 @@
+NCJ_generated/NCJ_QEquality.lean:37:85: error: unexpected identifier; expected ')', ',' or ':'
+NCJ_generated/NCJ_QEquality.lean:37:18: error: invalid `do` notation, expected type is not a monad application
+  Sort ?u.60
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+NCJ_generated/NCJ_QEquality.lean:33:16: error: unsolved goals
+case eqv
+x : Q
+xs : List Q
+ih :
+  ∀ (ys : List Q),
+    xs.length = ys.length →
+      List.allM
+          (fun x =>
+            match x with
+            | (x, y) => do
+              let b ← aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.ne x y
+              ok (decide ¬b = true))
+          (xs.zip ys) =
+        ok (decide (xs = ys))
+y : Q
+ys : List Q
+hlen : (x :: xs).length = (y :: ys).length
+tail : xs.length = ys.length
+⊢ sorry
+
+case cons.cons
+x : Q
+xs : List Q
+ih :
+  ∀ (ys : List Q),
+    xs.length = ys.length →
+      List.allM
+          (fun x =>
+            match x with
+            | (x, y) => do
+              let b ← aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.ne x y
+              ok (decide ¬b = true))
+          (xs.zip ys) =
+        ok (decide (xs = ys))
+y : Q
+ys : List Q
+hlen : (x :: xs).length = (y :: ys).length
+tail : xs.length = ys.length
+eqv : sorry
+⊢ (do
+      let __do_lift ←
+        do
+          let b ←
+            do
+              let __do_lift ← aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq x y
+              ok !__do_lift
+          ok (decide ¬b = true)
+      match __do_lift with
+        | true =>
+          List.allM
+            (fun x => do
+              let b ←
+                do
+                  let __do_lift ← aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq x.1 x.2
+                  ok !__do_lift
+              ok (decide ¬b = true))
+            (xs.zip ys)
+        | false => pure false) =
+    ok (decide (x :: xs = y :: ys))
+'NCJ_QEquality.cm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCJ_QEquality.qm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCJ_QEquality.lists' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCJ_QEquality.arrays' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

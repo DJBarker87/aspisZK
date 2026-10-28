@@ -1,0 +1,57 @@
+--- a/crates/aspis-r1-cost-probe/src/NCJ_weights.rs
++++ b/crates/aspis-r1-cost-probe/src/NCJ_weights.rs
+@@ -411,3 +411,54 @@
+ #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+ fn NCJ_box_2_negative(){box_window_gate(2,true);}
++
++// One native factored-Libra term after its power/point read cuts.
++fn libra_term_gate(bad:bool){
++ let ap1=[ce(),ce(),ce(),ce()];let high=[K::ONE,cq(),cq(),cq()];let t:usize=kani::any();kani::assume(t<4);reset();
++ let term=ap1[PERM[t]].mul_qm31(high[t]).mul_m31(QUARTER);
++ unsafe{assert_eq!(NCJ_EN,2);assert_eq!(NCJ_EL[0].0,ap1[PERM[t]]);assert_eq!(NCJ_EL[0].1,E::from_qm31(high[t]));assert_eq!(NCJ_EL[0].3,1);assert_eq!(NCJ_EL[1].0,NCJ_EL[0].2);assert_eq!(NCJ_EL[1].1,E::from_m31(QUARTER));assert_eq!(NCJ_EL[1].3,2);assert_eq!(term,if bad{NCJ_EL[1].2.add(E::ONE)}else{NCJ_EL[1].2});}
++}
++// One side's exact store/linear-combination fragment after term/scale cuts.
++fn libra_side_gate(bad:bool){
++ let terms=[ce(),ce(),ce(),ce()];let low=ce();let ap13=ce();let q4=cq();let q16=cq();let side:usize=kani::any();kani::assume(side<2);
++ let mut weights=[ce(),ce(),ce(),ce()];let old=weights;reset();
++ let first2=terms[0].add(terms[1]);let first3=first2.add(terms[2]);let all=first3.add(terms[3]);
++ if side==0{weights[0]=low.mul(all);weights[1]=low.mul(first3).mul_qm31(q16);}else{
++ weights[1]=weights[1].add(low.mul(ap13.mul_m31(QUARTER)));weights[2]=low.mul(all).mul_qm31(q4);weights[3]=low.mul(first2).mul_qm31(q16.mul(q4));}
++ unsafe{
++ if side==0{assert_eq!(NCJ_EN,3);assert_eq!(NCJ_QN,0);assert_eq!(NCJ_EL[0].0,low);assert_eq!(NCJ_EL[0].1,all);assert_eq!(NCJ_EL[1].0,low);assert_eq!(NCJ_EL[1].1,first3);assert_eq!(NCJ_EL[2].0,NCJ_EL[1].2);assert_eq!(NCJ_EL[2].1,E::from_qm31(q16));assert_eq!(weights[0],if bad{NCJ_EL[0].2.add(E::ONE)}else{NCJ_EL[0].2});assert_eq!(weights[1],NCJ_EL[2].2);assert_eq!(weights[2],old[2]);assert_eq!(weights[3],old[3]);}
++ else{assert_eq!(NCJ_EN,6);assert_eq!(NCJ_QN,1);assert_eq!(NCJ_EL[0].0,ap13);assert_eq!(NCJ_EL[0].1,E::from_m31(QUARTER));assert_eq!(NCJ_EL[1].0,low);assert_eq!(NCJ_EL[1].1,NCJ_EL[0].2);assert_eq!(NCJ_EL[2].0,low);assert_eq!(NCJ_EL[2].1,all);assert_eq!(NCJ_EL[3].0,NCJ_EL[2].2);assert_eq!(NCJ_EL[3].1,E::from_qm31(q4));assert_eq!(NCJ_EL[4].0,low);assert_eq!(NCJ_EL[4].1,first2);assert_eq!(NCJ_QL[0].0,q16);assert_eq!(NCJ_QL[0].1,q4);assert_eq!(NCJ_EL[5].0,NCJ_EL[4].2);assert_eq!(NCJ_EL[5].1,E::from_qm31(NCJ_QL[0].2));assert_eq!(weights[0],old[0]);assert_eq!(weights[1],if bad{old[1].add(NCJ_EL[1].2).add(E::ONE)}else{old[1].add(NCJ_EL[1].2)});assert_eq!(weights[2],NCJ_EL[3].2);assert_eq!(weights[3],NCJ_EL[5].2);}
++ }
++}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_libra_term_positive(){libra_term_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_libra_term_negative(){libra_term_gate(true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_libra_side_positive(){libra_side_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_libra_side_negative(){libra_side_gate(true);}

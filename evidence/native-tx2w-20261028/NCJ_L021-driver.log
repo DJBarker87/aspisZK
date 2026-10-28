@@ -1,0 +1,84 @@
+{"attempt": "NCJ_L021", "exit_status": 0, "wall_seconds": 2.034334148047492, "peak_rss_kib": "3832212", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+def Aeneas.Std.Slice.update.{u} : {α : Type u} → Slice α → Usize → α → Result (Slice α) :=
+fun {α} v i x =>
+  match (↑v)[↑i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some val => Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some val => Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => Result.fail Error.panic
+        | some n => Result.ok (some range', { start := n, «end» := range.end })
+    else Result.ok (none, range)
+def Aeneas.Std.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next : {I Item : Type} →
+  core.iter.traits.double_ended.DoubleEndedIterator I Item →
+    core.iter.adapters.rev.Rev I → Result (Option Item × core.iter.adapters.rev.Rev I) :=
+fun {I Item} DEInst self => do
+  let __x ← DEInst.next_back self.iter
+  match __x with
+    | (o, it) => Result.ok (o, { iter := it })
+def FIo_Native.weights.Weights.tensor_loop0_loop0.body : FIo_Native.weights.Weights →
+  Usize →
+    Usize →
+      Usize →
+        core.iter.adapters.rev.Rev (core.ops.range.Range Usize) →
+          Slice FIo_Native.aspis_core.field.QM31 →
+            Result
+              (ControlFlow
+                (core.iter.adapters.rev.Rev (core.ops.range.Range Usize) × Slice FIo_Native.aspis_core.field.QM31)
+                (FIo_Native.weights.Weights × Slice FIo_Native.aspis_core.field.QM31)) :=
+fun self k n d iter output => do
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+        (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter
+  match o with
+    | none => Result.ok (ControlFlow.done (self, output))
+    | some j => do
+      let x ← output.index_usize j
+      let a ← self.factors.index_usize k
+      let a1 ← a.index_usize d
+      let q ← a1.index_usize 0#usize
+      let q1 ← x.mul q
+      let i ← lift (Usize.wrapping_mul 0#usize n)
+      let i1 ← lift (Usize.wrapping_add j i)
+      let output1 ← output.update i1 q1
+      let a2 ← a.index_usize d
+      let q2 ← a2.index_usize 1#usize
+      let q3 ← x.mul q2
+      let i2 ← lift (Usize.wrapping_mul 1#usize n)
+      let i3 ← lift (Usize.wrapping_add j i2)
+      let output2 ← output1.update i3 q3
+      let a3 ← a.index_usize d
+      let q4 ← a3.index_usize 2#usize
+      let q5 ← x.mul q4
+      let i4 ← lift (Usize.wrapping_mul 2#usize n)
+      let i5 ← lift (Usize.wrapping_add j i4)
+      let output3 ← output2.update i5 q5
+      let a4 ← a.index_usize d
+      let q6 ← a4.index_usize 3#usize
+      let q7 ← x.mul q6
+      let i6 ← lift (Usize.wrapping_mul 3#usize n)
+      let i7 ← lift (Usize.wrapping_add j i6)
+      let s ← output3.update i7 q7
+      Result.ok (ControlFlow.cont (iter1, s))
+

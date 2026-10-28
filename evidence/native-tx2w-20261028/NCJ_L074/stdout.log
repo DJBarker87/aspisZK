@@ -1,0 +1,64 @@
+NCJ_generated/NCJ_TensorOuterTotal.lean:31:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.weights.Weights.tensor_loop0.body k cursor self arr width
+in the target expression
+  body k cursor self arr width ⦃ r =>
+    match r with
+    | ControlFlow.done y => post y
+    | cont x' => inv x' ∧ 5 - ↑x'.1.start < 5 - ↑cursor.start ⦄
+
+case pos
+w : W
+k n : Usize
+hk : ↑k < 5
+hf : Factors w
+iter : Iter
+he : ↑iter.end = 5
+stage : Stage ↑iter.start ↑n
+input : Slice NQ
+len : (↑input).length = 64
+ca : NCJ_CellCanon.slice input
+inv : Iter × W × Slice NQ × Usize → Prop :=
+  fun s => ↑s.1.end = 5 ∧ s.2.1 = w ∧ Stage ↑s.1.start ↑s.2.2.2 ∧ NCJ_CellCanon.slice s.2.2.1 ∧ (↑s.2.2.1).length = 64
+post : Slice NQ → Prop := fun s => NCJ_CellCanon.slice s ∧ (↑s).length = 64
+cursor : Iter
+self : W
+arr : Slice NQ
+width : Usize
+end5✝ : ↑cursor.end = 5
+same : self = w
+st✝ : Stage ↑cursor.start ↑width
+canon : NCJ_CellCanon.slice arr
+size : (↑arr).length = 64
+more : ↑cursor.start < 5
+rest : core.ops.range.Range Usize
+out : Slice FIo_Native.aspis_core.field.QM31
+next : Usize
+run : body k cursor w arr width = ok (cont (rest, w, out, next))
+inc : ↑rest.start = ↑cursor.start + 1
+end5 : ↑rest.end = 5
+st : Stage ↑rest.start ↑next
+co : NCJ_CellCanon.slice out
+lo : (↑out).length = 64
+original : FIo_Native.weights.Weights.tensor_loop0.body k cursor self arr width = ok (cont (rest, w, out, next))
+⊢ body k cursor self arr width ⦃ r =>
+    match r with
+    | ControlFlow.done y => post y
+    | cont x' => inv x' ∧ 5 - ↑x'.1.start < 5 - ↑cursor.start ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun r =>
+      match r with
+      | ControlFlow.done y => post y
+      | cont x' => inv x' ∧ 5 - ↑x'.1.start < 5 - ↑cursor.start
+  has type
+    ControlFlow (Iter × W × Slice NQ × Usize) (Slice NQ) → Prop
+  but is expected to have type
+    WP.Post (ControlFlow (Iter × W × Slice NQ × Usize) (Slice NQ))
+  in the application
+    body k cursor self arr width ⦃ r =>
+      match r with
+      | ControlFlow.done y => post y
+      | cont x' => inv x' ∧ 5 - ↑x'.1.start < 5 - ↑cursor.start ⦄
+'NCJ_TensorOuterTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

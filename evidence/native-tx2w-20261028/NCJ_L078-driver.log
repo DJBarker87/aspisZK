@@ -1,0 +1,51 @@
+{"attempt": "NCJ_L078", "exit_status": 1, "wall_seconds": 1.6306487249676138, "peak_rss_kib": "3854036", "swaps": "0", "print_axioms": ["'NCJ_ScalarFactorTotal.fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NCJ_ScalarFactorTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCJ_generated/NCJ_ScalarFactorTotal.lean:31:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.core.iter.traits.iterator.Iterator.fold.default_loop.body iterator fnmut cursor closure value
+in the target expression
+  WP.theta (body cursor closure value) fun r =>
+    match r with
+    | ControlFlow.done y => canonE y
+    | cont x' => inv x' ∧ 4 - ↑x'.1.start < 4 - ↑cursor.start
+
+case pos
+p : Std.Array NE 4#usize
+f : Std.Array NQ 4#usize
+hp : ∀ x ∈ ↑p, canonE x
+v : NE
+hv✝ : canonE v
+iter : Iter
+end4✝ : ↑iter.end = 4
+bound : ↑iter.start ≤ 4
+inv : Iter × Closure × NE → Prop := fun s => ↑s.1.end = 4 ∧ ↑s.1.start ≤ 4 ∧ s.2.1 = (p, f) ∧ canonE s.2.2
+cursor : Iter
+closure : Closure
+value : NE
+he : ↑cursor.end = 4
+hb : ↑cursor.start ≤ 4
+hc : closure = (p, f)
+hv : canonE value
+more : ↑cursor.start < ↑cursor.end
+rest : core.ops.range.Range (UScalar UScalarTy.Usize)
+out : FIo_Native.aspis_core.field.wide_exact.WideExact
+run : body cursor (p, f) value = ok (cont (rest, (p, f), out))
+inc : ↑rest.start = ↑cursor.start + 1
+end4 : ↑rest.end = 4
+co : canonE out
+original :
+  FIo_Native.core.iter.traits.iterator.Iterator.fold.default_loop.body iterator fnmut cursor closure value =
+    ok (cont (rest, (p, f), out))
+⊢ WP.theta (body cursor closure value) fun r =>
+    match r with
+    | ControlFlow.done y => canonE y
+    | cont x' => inv x' ∧ 4 - ↑x'.1.start < 4 - ↑cursor.start
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  function expected
+    WP.theta (body cursor closure value) fun r =>
+      match r with
+      | ControlFlow.done y => canonE y
+      | cont x' => inv x' ∧ 4 - ↑x'.1.start < 4 - ↑cursor.start
+'NCJ_ScalarFactorTotal.fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCJ_ScalarFactorTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

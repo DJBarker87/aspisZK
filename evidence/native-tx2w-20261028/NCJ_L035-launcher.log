@@ -1,0 +1,66 @@
+{"attempt": "NCJ_L035", "exit_status": 1, "wall_seconds": 1.9112411219393834, "peak_rss_kib": "4431472", "swaps": "0", "print_axioms": ["'NCJ_DotInduction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NCJ_DotInduction.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCJ_generated/NCJ_DotInduction.lean:34:4: error: unsolved goals
+case cons.refine_1
+xs : List Pair
+ih :
+  ∀ (s : State),
+    NBQ_PublicInvariant.Inv s →
+      ↑s.count + xs.length ≤ 64 →
+        (∀ p ∈ xs, canonE p.1 ∧ canonQ p.2) →
+          ∃ out,
+            go xs s = ok (core.result.Result.Ok (), out) ∧
+              NBQ_PublicInvariant.Inv out ∧ ↑out.count = ↑s.count + xs.length
+s : State
+invariant : NBQ_PublicInvariant.Inv s
+v : NE
+q : NQ
+cap : ↑s.count + ((v, q) :: xs).length ≤ 64
+canonical : ∀ p ∈ (v, q) :: xs, canonE p.1 ∧ canonQ p.2
+hc : canonE (v, q).1 ∧ canonQ (v, q).2
+below : ↑s.count < 4096
+next : FIo_Native.fast_pairing.EbyKDot
+step : FIo_Native.fast_pairing.EbyKDot.push s v q 
+...
+NCJ_generated/NCJ_DotInduction.lean:34:4: error: unsolved goals
+case cons.refine_1
+xs : List Pair
+ih :
+  ∀ (s : State),
+    NBQ_PublicInvariant.Inv s →
+      ↑s.count + xs.length ≤ 64 →
+        (∀ p ∈ xs, canonE p.1 ∧ canonQ p.2) →
+          ∃ out,
+            go xs s = ok (core.result.Result.Ok (), out) ∧
+              NBQ_PublicInvariant.Inv out ∧ ↑out.count = ↑s.count + xs.length
+s : State
+invariant : NBQ_PublicInvariant.Inv s
+v : NE
+q : NQ
+cap : ↑s.count + ((v, q) :: xs).length ≤ 64
+canonical : ∀ p ∈ (v, q) :: xs, canonE p.1 ∧ canonQ p.2
+hc : canonE (v, q).1 ∧ canonQ (v, q).2
+below : ↑s.count < 4096
+next : FIo_Native.fast_pairing.EbyKDot
+step : FIo_Native.fast_pairing.EbyKDot.push s v q = ok (core.result.Result.Ok (), next)
+inv : NBQ_PublicInvariant.Inv next
+count : ↑next.count = ↑s.count + 1
+out : State
+run : go xs next = ok (core.result.Result.Ok (), out)
+io : NBQ_PublicInvariant.Inv out
+co : ↑out.count = ↑next.count + xs.length
+⊢ (let (r, next) := (core.result.Result.Ok (), next)
+    match r with
+    | core.result.Result.Ok PUnit.unit => go xs next
+    | core.result.Result.Err PUnit.unit => ok (core.result.Result.Err FIo_Native.verifier.Error.Parse, next)) =
+    ok (core.result.Result.Ok (), out)
+NCJ_generated/NCJ_DotInduction.lean:34:36: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [go, ̲step, ̲bind_tc_ok,̵r̵u̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCJ_DotInduction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCJ_DotInduction.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r04ff9f455acf4a28bc3a1655b26fd0e5.scope; invocation ID: 5cd85fb7815040358abe2e544e1a7af4

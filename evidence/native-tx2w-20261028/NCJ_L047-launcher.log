@@ -1,0 +1,78 @@
+{"attempt": "NCJ_L047", "exit_status": 1, "wall_seconds": 1.5667377229547128, "peak_rss_kib": "3855148", "swaps": "0", "print_axioms": ["'NCJ_TensorInnerTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCJ_generated/NCJ_TensorInnerTotal.lean:37:73: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (iter, arr).1
+in the target expression
+  next iter = ok (some j, NCJ_Reverse.cursor j)
+
+w : FIo_Native.weights.Weights
+k d n : Usize
+hk : ↑k < 5
+hd : ↑d < 5
+hn : NCJ_TensorDomains.Stage ↑n
+digitCanon : NCJ_CellCanon.array (NCJ_GuardExact.pick (NCJ_GuardExact.pick w.factors (↑k) hk) (↑d) hd)
+e : Usize
+he : ↑e ≤ ↑n
+input : Slice NQ
+len : (↑input).length = 64
+canonical : NCJ_CellCanon.slice input
+inv : Rev × Slice NQ → Prop :=
+  fun s => s.1 = NCJ_Reverse.cursor s.1.iter.end ∧ ↑s.1.iter.end ≤ ↑n ∧ NCJ_CellCanon.slice s.2 ∧ (↑s.2).length = 64
+post : FIo_Native.weights.Weight
+...
+ -1
+  0 ≤ b ≤ 4
+  0 ≤ a ≤ 4
+where
+ a := ↑↑k
+ b := ↑↑d
+ c := ↑↑n
+ f := ↑↑e
+ g := ↑↑(iter, arr).1.iter.end
+ h := ↑↑iter.iter.end
+NCJ_generated/NCJ_TensorInnerTotal.lean:43:23: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 1
+  g ≥ 0
+  f ≥ 0
+  c ≥ 0
+  c - f ≥ 0
+  c - g ≥ 0
+  c - h ≤ -2
+  0 ≤ b ≤ 4
+  0 ≤ a ≤ 4
+where
+ a := ↑↑k
+ b := ↑↑d
+ c := ↑↑n
+ f := ↑↑e
+ g := ↑↑(iter, arr).1.iter.end
+ h := ↑↑iter.iter.end
+NCJ_generated/NCJ_TensorInnerTotal.lean:46:2: error: Tactic `subst` failed: did not find equation for eliminating 'self'
+
+w : FIo_Native.weights.Weights
+k d n : Usize
+hk : ↑k < 5
+hd : ↑d < 5
+hn : NCJ_TensorDomains.Stage ↑n
+digitCanon : NCJ_CellCanon.array (NCJ_GuardExact.pick (NCJ_GuardExact.pick w.factors (↑k) hk) (↑d) hd)
+e : Usize
+he : ↑e ≤ ↑n
+input : Slice NQ
+len : (↑input).length = 64
+canonical : NCJ_CellCanon.slice input
+inv : Rev × Slice NQ → Prop :=
+  fun s => s.1 = NCJ_Reverse.cursor s.1.iter.end ∧ ↑s.1.iter.end ≤ ↑n ∧ NCJ_CellCanon.slice s.2 ∧ (↑s.2).length = 64
+post : FIo_Native.weights.Weights × Slice NQ → Prop := fun s => s.1 = w ∧ NCJ_CellCanon.slice s.2 ∧ (↑s.2).length = 64
+spec : FIo_Native.weights.Weights.tensor_loop0_loop0 (NCJ_Reverse.cursor e) w k input n d ⦃ post ⦄
+self : FIo_Native.weights.Weights
+out : Slice FIo_Native.aspis_core.field.QM31
+run : FIo_Native.weights.Weights.tensor_loop0_loop0 (NCJ_Reverse.cursor e) w k input n d = ok (self, out)
+same : (self, out).1 = w
+co : NCJ_CellCanon.slice (self, out).2
+lo : (↑(self, out).2).length = 64
+⊢ ∃ out,
+    FIo_Native.weights.Weights.tensor_loop0_loop0 (NCJ_Reverse.cursor e) w k input n d = ok (w, out) ∧
+      NCJ_CellCanon.slice out ∧ (↑out).length = 64
+'NCJ_TensorInnerTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r35b2a5f9ba32499c866dd504722ddad7.scope; invocation ID: b3ada34210294dd886c4b7bf9a42c54e
