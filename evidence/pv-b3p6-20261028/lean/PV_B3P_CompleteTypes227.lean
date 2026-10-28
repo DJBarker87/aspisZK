@@ -137,7 +137,6 @@ structure host_terminal_field.PreparedQm31Multiplier where
 /-- [pv_b3p6_reference227::reference_copy_terminal::PoolV1PairForestCompiledVariantV1]
     Source: 'reference_copy_terminal.rs', lines 81:0-84:1
     Visibility: public -/
-@[discriminant isize]
 inductive reference_copy_terminal.PoolV1PairForestCompiledVariantV1 where
 | PrivateTransfer : reference_copy_terminal.PoolV1PairForestCompiledVariantV1
 | Withdrawal : reference_copy_terminal.PoolV1PairForestCompiledVariantV1
@@ -171,7 +170,6 @@ structure reference_field.PreparedQm31Multiplier where
 /-- [pv_b3p6_reference227::reference_terminal::PoolV1PairForestSemanticTerminalErrorV1]
     Source: 'reference_terminal.rs', lines 123:0-126:1
     Visibility: public -/
-@[discriminant isize]
 inductive reference_terminal.PoolV1PairForestSemanticTerminalErrorV1 where
 | InvalidPublicAmount :
   reference_terminal.PoolV1PairForestSemanticTerminalErrorV1
@@ -180,7 +178,6 @@ inductive reference_terminal.PoolV1PairForestSemanticTerminalErrorV1 where
 
 /-- [pv_b3p6_reference227::reference_terminal::CompiledVariant]
     Source: 'reference_terminal.rs', lines 129:0-132:1 -/
-@[discriminant isize]
 inductive reference_terminal.CompiledVariant where
 | PrivateTransfer : reference_terminal.CompiledVariant
 | Withdrawal : reference_terminal.CompiledVariant

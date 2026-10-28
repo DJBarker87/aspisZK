@@ -25,7 +25,7 @@ for kind in ['Types','Funs']:
  p=''.join(out).replace('import Aeneas\n','import Aeneas.Std\nimport Aeneas.Tactic.RustAttributes\n')
  if kind=='Types':p=p.replace('import Aeneas.Std\n','import Aeneas.Std\nimport PV_B3P_SelectEmission227\n',1)
  else:p=p.replace('import PVB3P227ProjectedcolumnResume5.Types','import PV_B3P_CompleteTypes227')
- p=p.replace('discriminant isize, ','')
+ p=p.replace('discriminant isize, ','').replace('@[discriminant isize]\n','')
  numeric=[]
  for val in ['31','4']:
   n=p.count(val+'#i32')
