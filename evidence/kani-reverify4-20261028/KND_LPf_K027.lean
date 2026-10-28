@@ -1,0 +1,45 @@
+import KND_Composition
+import KNA_Frame
+import KMZ_LPf_K027
+set_option autoImplicit false
+namespace KND_LPf_K027
+open KMX_CopyMeaning KMY_WindowComposition
+theorem result (initial garbage answer : Nat → Nat) (j : Nat) (bound : j<1768) :
+ 2+1=3 ∧ 1736+32=1768 ∧
+ window answer (loop initial garbage 0 (min 1736 3472)) 1736 32 j =
+ if j<1736 then initial j else answer (j-1736) := by
+ refine ⟨by omega,by omega,?_⟩
+ exact KMZ_LPf_K027.result initial garbage answer j bound
+theorem conditional_writer (step : KND_Schedule.Step → KND_Composition.State → KND_Composition.State → KND_Composition.State)
+ (value : String → KND_Composition.State) (before : KND_Composition.State)
+ (valid : ∀ s ∈ KND_Schedule.schedule, ∀ b v, step s b v = KND_Composition.model s b v) :
+ KND_Composition.execute step value KND_Schedule.schedule before =
+ KND_Composition.execute KND_Composition.model value KND_Schedule.schedule before :=
+ KND_Composition.schedule_composition step value before valid
+#print axioms result
+#print axioms conditional_writer
+end KND_LPf_K027
+
+set_option autoImplicit false
+namespace KND_LPe_K017
+open KMX_CopyMeaning KMY_WindowComposition
+theorem result (roots : Nat → Nat → Nat) (query before : Nat → Nat)
+ (j : Nat) (bound : j<152) :
+ 2*32+22*4=152 ∧
+ KMY_RootComposition.rootsQueries (fun b => roots (b/32) (b%32))
+  (fun b => (query (b/4) / 2^(8*(b%4))) % 256) before j =
+ if j<64 then roots (j/32) (j%32)
+ else (query ((j-64)/4) / 2^(8*((j-64)%4))) % 256 := by
+ constructor
+ · exact KMY_RootComposition.roots_queries_length
+ · exact KMY_RootComposition.roots_queries_bytes roots
+     (fun i b => (query i / 2^(8*b)) % 256) before j bound
+theorem conditional_writer (step : KND_Schedule.Step → KND_Composition.State → KND_Composition.State → KND_Composition.State)
+ (value : String → KND_Composition.State) (before : KND_Composition.State)
+ (valid : ∀ s ∈ KND_Schedule.schedule, ∀ b v, step s b v = KND_Composition.model s b v) :
+ KND_Composition.execute step value KND_Schedule.schedule before =
+ KND_Composition.execute KND_Composition.model value KND_Schedule.schedule before :=
+ KND_Composition.schedule_composition step value before valid
+#print axioms result
+#print axioms conditional_writer
+end KND_LPe_K017

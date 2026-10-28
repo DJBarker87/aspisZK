@@ -1,0 +1,29 @@
+import KND_Composition
+import KNA_Frame
+import KMY_CheckpointComposition
+set_option autoImplicit false
+namespace KND_LPi_K012
+open KMX_CopyMeaning KMY_WindowComposition
+theorem result (before garbage : Nat → Nat) (limb : Nat → Nat) (len cap next j : Nat) (limit : len≤1720)
+ (live : len≤cap) (growth : cap≤next) (bound : j<len+16) :
+ len+16≤1736 ∧ window (fun b => (limb (b/4) / 2^(8*(b%4))) % 256) (loop before garbage 0 (min cap next)) len 16 j =
+ (if j<len then before j else (limb ((j-len)/4) / 2^(8*((j-len)%4))) % 256) := by
+ constructor
+ · omega
+ · exact KMZ_Growth.append_after_growth before garbage (fun b => (limb (b/4) / 2^(8*(b%4))) % 256) len cap next 16 j live growth bound
+theorem conditional_writer (step : KND_Schedule.Step → KND_Composition.State → KND_Composition.State → KND_Composition.State)
+ (value : String → KND_Composition.State) (before : KND_Composition.State)
+ (valid : ∀ s ∈ KND_Schedule.schedule, ∀ b v, step s b v = KND_Composition.model s b v) :
+ KND_Composition.execute step value KND_Schedule.schedule before =
+ KND_Composition.execute KND_Composition.model value KND_Schedule.schedule before :=
+ KND_Composition.schedule_composition step value before valid
+#print axioms result
+#print axioms conditional_writer
+def applicable : List KND_Schedule.Step := KND_Schedule.schedule.filter (fun s => s.size == 16)
+theorem reachable (s : KND_Schedule.Step) (h : s ∈ applicable) : s ∈ KND_Schedule.schedule := by
+ exact (List.mem_filter.mp h).1
+theorem no_growth (s : KND_Schedule.Step) (h : s ∈ applicable) : s.len+s.size≤s.cap :=
+ KND_Schedule.no_growth s (reachable s h)
+#print axioms reachable
+#print axioms no_growth
+end KND_LPi_K012

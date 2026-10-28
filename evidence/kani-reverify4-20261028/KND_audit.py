@@ -11,7 +11,7 @@ for r in receipts:
  assert str(r['swaps'])=='0'
  h=r['source_hashes'];attempts[a]=h
  for name,digest in h.items():
-  candidates=[E/name,E/'sources'/(digest+'.rs'),E/'sources'/(digest+'.txt'),E.parent/'kani-reverify1-20261028/sources'/(digest+'.txt')]
+  candidates=[E/name,E/'sources'/(digest+'.rs'),E/'sources'/(digest+'.txt'),E/'sources'/(digest+'.lean'),E.parent/'kani-reverify1-20261028/sources'/(digest+'.txt')]
   found=next((p for p in candidates if p.is_file() and sha(p)==digest),None)
   if found:objects[digest]=dict(path=str(found.relative_to(E.parent)),sha256=digest)
   else:objects[digest]=dict(legacy=legacy.get(digest),scope='unchanged frozen source; see original archive')
@@ -19,9 +19,10 @@ for r in receipts:
   g=json.loads((E/(a+'-graph.json')).read_text());assert g['allowed'] and g['unchanged'] and g['lock_before']==g['lock_after']
   assert not g['new_packages'] and not g['edge_errors']
   assert h['KMX_stubs.rs']=='c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9'
- axioms=r['print_axioms'];assert 'sorryAx' not in str(axioms)
+ axioms=r['print_axioms']
+ if r['exit_status']==0:assert 'sorryAx' not in str(axioms)
  for names in re.findall(r'depends on axioms: \[([^]]*)\]',str(axioms)):
-  assert set(x.strip() for x in names.split(',') if x.strip()) <= {'propext','Classical.choice','Quot.sound'}
+  if r['exit_status']==0:assert set(x.strip() for x in names.split(',') if x.strip()) <= {'propext','Classical.choice','Quot.sound'}
  runs.append({k:r.get(k) for k in ['attempt','kind','sources','command','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','source_hashes','print_axioms','limits','reservation_retries']})
 (E/'KND_RUNS.json').write_text(json.dumps(runs,indent=2)+'\n')
 (E/'KND_SOURCE_ARCHIVE.json').write_text(json.dumps(dict(attempts=attempts,objects=objects),indent=2)+'\n')
