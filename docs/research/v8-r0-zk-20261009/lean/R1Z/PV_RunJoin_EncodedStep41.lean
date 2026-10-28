@@ -8,11 +8,11 @@ variable [ExternalTypes]
 abbrev W := aspis_core.field.wide_exact.WideExact
 
 def zero : W := ⟨⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩,⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩⟩
-def at (values : Slice W) (i : Nat) : W := values.val[i]?.getD zero
+def entry (values : Slice W) (i : Nat) : W := values.val[i]?.getD zero
 
 theorem read (values : Slice W) (i : Usize) (hi : i.val<values.length) :
-    Slice.index_usize values i=.ok (at values i.val) := by
-  simp only [Slice.index_usize,Slice.getElem?_Usize_eq,List.getElem?_eq_getElem hi,at]
+    Slice.index_usize values i=.ok (entry values i.val) := by
+  simp only [Slice.index_usize,Slice.getElem?_Usize_eq,List.getElem?_eq_getElem hi,entry]
   rw [List.getElem?_eq_getElem hi]
   rfl
 
@@ -27,8 +27,8 @@ theorem step (ops : ExternalFuns) (values : Slice W) (out : alloc.vec.Vec U8)
     (i : Usize) (hi : i.val<values.length) (room : out.length+32≤Usize.max) :
     ∃ next, @prover.encoded_slice_loop.body _ (ProverRwP6BodyCandidate.selected ops)
       values out i=.ok (.cont (next,Usize.wrapping_add i 1#usize)) ∧
-      next.val=out.val ++ (PV_RunJoin_FlatBytes35.wire (at values i.val)).val := by
-  let w := at values i.val
+      next.val=out.val ++ (PV_RunJoin_FlatBytes35.wire (entry values i.val)).val := by
+  let w := entry values i.val
   obtain ⟨next,hn,hv⟩ := PV_RunJoin_ByteAppend38.append out
     (Array.to_slice (PV_RunJoin_FlatBytes35.wire w)) room
   refine ⟨next,?_,hv⟩

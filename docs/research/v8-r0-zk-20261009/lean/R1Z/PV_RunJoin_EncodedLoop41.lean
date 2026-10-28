@@ -7,7 +7,7 @@ variable [ExternalTypes]
 
 def payload (values : Slice W) (start : Nat) : Nat → List U8
   | 0 => []
-  | n+1 => (PV_RunJoin_FlatBytes35.wire (at values start)).val ++ payload values (start+1) n
+  | n+1 => (PV_RunJoin_FlatBytes35.wire (entry values start)).val ++ payload values (start+1) n
 
 theorem length (values : Slice W) (start n : Nat) :
     (payload values start n).length=32*n := by
