@@ -21,7 +21,10 @@ check('alloc/src/vec/mod.rs',vec,'Default for Vec<T>','{fn default() -> Vec<T> {
 bundle=json.loads((F/'structural-inputs.json').read_text())
 # The owned reference used by the original extraction is tracked in this branch.
 ref=(D/'op35-reference.rs').read_text()
-check('tools/pv-cblib-20261027/kani-lib.rs',ref,'fn default_reference<T>()','{Vec::new()}')
+check('tools/pv-cblib-20261027/lib.rs',ref,'fn default_reference<T>()','{Vec::new()}')
+emission=(D/'op35-reference.lean.txt').read_text()
+assert 'def default_reference (T : Type) : Result (alloc.vec.Vec T) := do\n  ok (alloc.vec.Vec.new T)' in emission
+checks.append(dict(path='docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CBL_Op35Reference.lean',sha256=hashlib.sha256(emission.encode()).hexdigest(),body='ok (alloc.vec.Vec.new T)',source_reference_sha256=hashlib.sha256(ref.encode()).hexdigest()))
 # Both calls resolve to the same deployed core/alloc/std, not two modeled copies.
 check('alloc/src/vec/mod.rs',vec,'pub const fn new()','{Vec {buf: RawVec::new(),len: 0}}')
 check('alloc/src/raw_vec/mod.rs',raw,'pub(crate) const fn new()','{Self::new_in(Global)}')

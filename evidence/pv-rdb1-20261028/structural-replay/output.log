@@ -1,0 +1,150 @@
+V170 SOURCE GATE DISAGREEMENT
+pub fn try_reserve_exact( {
+        self.buf.try_reserve_exact(self.len, additional)
+    }
+pub(crate) fn try_reserve_exact( {
+        
+        unsafe { self.inner.try_reserve_exact(len, additional, T::LAYOUT) }
+    }
+unsafe fn try_reserve_exact( {
+        if self.needs_to_grow(len, additional, elem_layout) {
+            
+            unsafe {
+                self.grow_exact(len, additional, elem_layout)?;
+            }
+        }
+        unsafe {
+            
+            hint::assert_unchecked(!self.needs_to_grow(len, additional, elem_layout));
+        }
+        Ok(())
+    }
+unsafe fn grow_exact( {
+        if elem_layout.size() == 0 {
+            
+            
+            return Err(CapacityOverflow.into());
+        }
+
+        let cap = len.checked_add(additional).ok_or(CapacityOverflow)?;
+
+        
+        let ptr = unsafe { self.finish_grow(cap, elem_layout)? };
+
+        
+        unsafe { self.set_ptr_and_cap(ptr, cap) };
+        Ok(())
+    }
+fn needs_to_grow( {
+        additional > self.capacity(elem_layout.size()).wrapping_sub(len)
+    }
+fn finish_grow( {
+        let new_layout = layout_array(cap, elem_layout)?;
+
+        let memory = if let Some((ptr, old_layout)) = unsafe { self.current_memory(elem_layout) } {
+            
+            debug_assert!(old_layout.align() == new_layout.align());
+            unsafe {
+                
+                hint::assert_unchecked(old_layout.align() == new_layout.align());
+                self.alloc.grow(ptr, old_layout, new_layout)
+            }
+        } else {
+            self.alloc.allocate(new_layout)
+        };
+
+        
+        match memory {
+            Ok(memory) => Ok(memory),
+            Err(_) => Err(AllocError { layout: new_layout, non_exhaustive: () }.into()),
+        }
+    }
+unsafe fn set_ptr_and_cap( {
+        
+        
+        
+        self.ptr = Unique::from(ptr.cast());
+        self.cap = unsafe { Cap::new_unchecked(cap) };
+    }
+fn alloc_impl_runtime( {
+        match layout.size() {
+            0 => Ok(NonNull::slice_from_raw_parts(layout.dangling(), 0)),
+            
+            size => unsafe {
+                let raw_ptr = if zeroed { alloc_zeroed(layout) } else { alloc(layout) };
+                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;
+                Ok(NonNull::slice_from_raw_parts(ptr, size))
+            },
+        }
+    }
+fn grow_impl_runtime( {
+        debug_assert!(
+            new_layout.size() >= old_layout.size(),
+            "`new_layout.size()` must be greater than or equal to `old_layout.size()`"
+        );
+
+        match old_layout.size() {
+            0 => self.alloc_impl(new_layout, zeroed),
+
+            
+            
+            old_size if old_layout.align() == new_layout.align() => unsafe {
+                let new_size = new_layout.size();
+
+                
+                hint::assert_unchecked(new_size >= old_layout.size());
+
+                let raw_ptr = realloc(ptr.as_ptr(), old_layout, new_size);
+                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;
+                if zeroed {
+                    raw_ptr.add(old_size).write_bytes(0, new_size - old_size);
+                }
+                Ok(NonNull::slice_from_raw_parts(ptr, new_size))
+            },
+
+            
+            
+            
+            
+            
+            old_size => unsafe {
+                let new_ptr = self.alloc_impl(new_layout, zeroed)?;
+                ptr::copy_nonoverlapping(ptr.as_ptr(), new_ptr.as_mut_ptr(), old_size);
+                self.deallocate(ptr, old_layout);
+                Ok(new_ptr)
+            },
+        }
+    }
+fn layout_array( {
+    
+    match elem_layout.repeat(cap) {
+        Ok((layout, _pad)) => Ok(layout),
+        Err(_) => Err(CapacityOverflow.into()),
+    }
+}
+pub const fn repeat_packed( {
+        if let Some(size) = self.size.checked_mul(n) {
+            
+            Layout::from_size_alignment(size, self.align)
+        } else {
+            Err(LayoutError)
+        }
+    }
+const fn from_size_alignment( {
+        if size > Self::max_size_for_align(align) {
+            return Err(LayoutError);
+        }
+
+        
+        Ok(Layout { size, align })
+    }
+V183 SOURCE GATE DISAGREEMENT
+PASS: complete pop/remove/try_remove source shapes; no allocator/destructor call
+V184 PASS
+generic native/owned complete bodies pinned; explicit ownership differences recorded
+V187 PASS
+V178 SOURCE GATE DISAGREEMENT
+V182 complete-body structural checks PASS
+V182 PASS
+V195 complete-body structural checks PASS
+V195 PASS
