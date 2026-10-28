@@ -28,7 +28,15 @@ theorem ordered (trailing suffix a b : Nat) (h : a<b) :
 
 theorem quotient (trailing suffix pref : Nat) (hs : suffix<2^trailing) :
     row pref trailing suffix/2^trailing=pref := by
-  simp only [row,Nat.add_div,Nat.mul_div_left _ (Nat.two_pow_pos _),Nat.div_eq_of_lt hs,Nat.add_zero]
+  unfold row
+  have hm : (pref*2^trailing+suffix)%2^trailing=suffix := by
+    simp [Nat.add_mod,Nat.mod_eq_of_lt hs]
+  have hd := Nat.mod_add_div (pref*2^trailing+suffix) (2^trailing)
+  rw [hm] at hd
+  have eq : pref*2^trailing=2^trailing*((pref*2^trailing+suffix)/2^trailing) := by omega
+  rw [Nat.mul_comm (2^trailing)] at eq
+  exact (Nat.eq_of_mul_eq_mul_right (Nat.two_pow_pos trailing) eq).symm
+
 
 #print axioms bound
 #print axioms injective
