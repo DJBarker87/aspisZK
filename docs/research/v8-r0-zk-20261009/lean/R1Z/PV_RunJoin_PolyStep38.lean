@@ -31,7 +31,7 @@ theorem step (ops : ExternalFuns) (p : Nat → Q)
   refine ⟨next,?_,hval⟩
   unfold host_sumcheck.encode_polynomial_loop.body
   simp only [show i<28#usize from hi,↓reduceIte]
-  rw [ProverCommitArray49.index _ p i hi]
+  rw [ProverCommitArray49.index 28#usize p i hi]
   simp only [bind_tc_ok]
   rw [show @aspis_core.field.wide_exact.WideExact.from_qm31 _
       (ProverRwP6BodyCandidate.selected ops) (p i.val)=.ok (wide (p i.val)) from embed ops _]
