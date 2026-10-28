@@ -1,0 +1,56 @@
+{"attempt": "NDE_L046", "exit_status": 0, "wall_seconds": 1.069508631946519, "peak_rss_kib": "2621404", "swaps": "0", "print_axioms": []}
+
+{"attempt": "NDE_L047", "exit_status": 0, "wall_seconds": 1.1343558470252901, "peak_rss_kib": "2631860", "swaps": "0", "print_axioms": []}
+
+{"attempt": "NDE_L048", "exit_status": 1, "wall_seconds": 2.5426510039251298, "peak_rss_kib": "5384768", "swaps": "0", "print_axioms": ["'NDE_RowBridge.read_total' depends on axioms: [propext]", "'NDE_RowBridge.source_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDE_RowBridge.row_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDE_generated/NDE_RowBridge.lean:24:4: error(lean.unknownIdentifier): Unknown constant `FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row`
+NDE_generated/NDE_RowBridge.lean:26:4: error(lean.unknownIdentifier): Unknown constant `FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row`
+NDE_generated/NDE_RowBridge.lean:24:72: error: unsolved goals
+copy : core.marker.Copy Q
+s : Selectors
+row : Usize
+⊢ (do
+      let x ← row >>> 4#i32
+      let x ← s.high.index_usize x
+      let x_1 ← lift (row &&& 15#usize)
+      let x_2 ← s.low.index_usize x_1
+      FIq_Native.field.QM31.mul x x_2) =
+    sorry
+NDE_generated/NDE_RowBridge.lean:37:6: error(lean.unknownIdentifier): Unknown constant `FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row`
+'NDE_RowBridge.read_total' depends on axioms: [propext]
+'NDE_RowBridge.source_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDE_RowBridge.row_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"attempt": "NDE_L049", "exit_status": 0, "wall_seconds": 1.2390829309588298, "peak_rss_kib": "2629588", "swaps": "0", "print_axioms": []}
+
+{"attempt": "NDE_L050", "exit_status": 0, "wall_seconds": 1.2470895911101252, "peak_rss_kib": "2632596", "swaps": "0", "print_axioms": []}
+
+{"attempt": "NDE_L051", "exit_status": 1, "wall_seconds": 1.7192734340205789, "peak_rss_kib": "3022328", "swaps": "0", "print_axioms": ["'NDE_LinearSteps.map_comp' does not depend on any axioms", "'NDE_LinearSteps.bind_map' does not depend on any axioms", "'NDE_LinearSteps.add_port' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDE_LinearSteps.add_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDE_LinearSteps.sum_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDE_LinearSteps.reconstruct_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDE_generated/NDE_LinearSteps.lean:31:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Result FIq_Native.field.QM31)
+    (NDE_LiftBridge.mapResult (fun x => NDE_VariantBridge.toNative (toOld x)) (NDE_Reference10.add_ref a b))
+    ((NDE_VariantBridge.toNative (toOld a)).add (NDE_VariantBridge.toNative (toOld b)))
+but is expected to have type
+  @Eq (Result FIq_Native.field.QM31) (NDE_LiftBridge.mapResult toNative (NDE_Reference10.add_ref a b))
+    ((toNative a).add (toNative b))
+NDE_generated/NDE_LinearSteps.lean:47:65: error: Type mismatch
+  Eq.symm (bind_map ?m.22 ?m.23 ?m.24)
+has type
+  (@Bind.bind Result instBindResult ?m.19 ?m.21 ?m.23 fun x => ?m.24 (?m.22 x)) = do
+    let x ← NDE_LiftBridge.mapResult ?m.22 ?m.23
+    ?m.24 x
+but is expected to have type
+  (@Bind.bind Result instBindResult NDE_Reference10.Q FIq_Native.field.QM31 (NDE_Reference10.add_ref a a) fun doubled =>
+      (toNative doubled).add (toNative bit)) =
+    do
+    let doubled ← NDE_LiftBridge.mapResult toNative (NDE_Reference10.add_ref a a)
+    doubled.add (toNative bit)
+'NDE_LinearSteps.map_comp' does not depend on any axioms
+'NDE_LinearSteps.bind_map' does not depend on any axioms
+'NDE_LinearSteps.add_port' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDE_LinearSteps.add_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDE_LinearSteps.sum_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDE_LinearSteps.reconstruct_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

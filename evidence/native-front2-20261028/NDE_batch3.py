@@ -1,15 +1,17 @@
 from pathlib import Path
 import json
+from NDE_verdicts import pair
 E=Path(__file__).resolve().parent
 jobs=[
 ('pool_v1/pair_forest_copy_terminal.rs::link_weight',19,20,[41],5,'NDE_LinkBridge.link_weight','weight_kind <= 4 and (weight_kind < 3 or weight_level < 64); all unused link fields unrestricted'),
 ('pool_v1/pair_forest_semantic_terminal.rs::selected_claim',21,22,[32,42],4,'NDE_ClaimResult.selected_claim','point < 3, column < 28; all 84 four-word claims unrestricted'),
 ('pool_v1/pair_forest_semantic_terminal.rs::bounded_append_carry',35,36,[24,36],7,'NDE_CarryInduction.carry_reference','every u64 index, caller starts carry=0; arbitrary one-step carry; induction invariant carry.val + fuel = 20'),
-('pool_v1/pair_forest_semantic_terminal.rs::empty_root',33,34,[34,37],4,'NDE_EmptyBridge.empty_root','level < 21; arbitrary result limb < 8, full fixed-array equality by bounded extensionality'),
+('pool_v1/pair_forest_semantic_terminal.rs::empty_root',33,40,[34,37],4,'NDE_EmptyBridge.empty_root','level < 21; arbitrary result limb < 8, full fixed-array equality by bounded extensionality'),
 ('pool_v1/pair_forest_semantic_terminal.rs::private_public',29,30,[27,34,35,43,44],8,'NDE_PublicBridge.private_public','every typed payment and transition record; arbitrary observation byte j<32 and limb j&7; exact scalar fields, option tags, values, and transition reference identity'),
 ('pool_v1/pair_forest_semantic_terminal.rs::withdrawal_public',31,32,[27,34,35,43,44],8,'NDE_PublicBridge.withdrawal_public','every typed payment and transition record; arbitrary observation byte j<32 and limb j&7; exact scalar fields, option tags, values, and transition reference identity')]
 d=json.loads((E/'NDE_LEDGER_DELTA.json').read_text());s=json.loads((E/'NDE_SUPPLEMENTAL.json').read_text());p=E/'NDE_FRONTIER_BRIDGES.md';text=p.read_text()
 for suffix,pos,neg,ls,extract,theorem,domain in jobs:
+ pair(E,pos,neg)
  f='crates/aspis-statement/src/'+suffix
  row=next(r for r in d['rows'] if r['function']==f)
  row.clear();row.update(dict(function=f,status='CLOSED',scope='local on the stated domain; enclosing caller, physical interpretation and release ABI remain OPEN',domain=domain,reference=f'NDE_E{extract:03} source snapshot and extracted reference',extraction=f'NDE_E{extract:03}',lean=theorem,lean_attempts=ls,positive=pos,negative=neg,copy_fidelity=[8,9],stubs='exact KMX only; no arithmetic stubs in this member; no stub_verified uses',callee_domain='Actual non-library callees execute. Field products are not reached. Carry uses an actual single native iteration with ghost prestate/exit instrumentation; exact body erasure and Lean finite induction, not a whole-buffer run. Library map of a fixed eight-element root is checked at one arbitrary output limb and paired with the existing map identity induction.'))

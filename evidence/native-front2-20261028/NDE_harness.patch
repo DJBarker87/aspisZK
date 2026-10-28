@@ -25,7 +25,33 @@
      }
      carry
  }
-@@ -187,6 +192,8 @@
+@@ -170,9 +175,13 @@
+ #[inline(always)]
+ fn sum_high(selectors: &Selectors, ranges: &[core::ops::Range<usize>]) -> QM31 {
+     let mut sum = QM31::ZERO;
++    #[cfg(all(kani,NDE_sum_step))]
++    let mut sum=unsafe{NDE_native::NDE_SUM_PRE};
+     for range in ranges {
+         for block in range.clone() {
+             sum = sum.add(selectors.high[block]);
++            #[cfg(all(kani,NDE_sum_step))]
++            {unsafe{NDE_native::NDE_SUM_STEPPED=true;}return sum;}
+         }
+     }
+     sum
+@@ -183,10 +192,19 @@
+     view[..9]
+         .iter()
+         .rev()
+-        .fold(view[9], |acc, bit| acc.add(acc).add(*bit))
++        .fold(view[9], |acc, bit| {
++            #[cfg(all(kani,NDE_reconstruct_step))]
++            if unsafe{NDE_native::NDE_RECON_DONE}{return acc;}
++            let out=acc.add(acc).add(*bit);
++            #[cfg(all(kani,NDE_reconstruct_step))]
++            unsafe{NDE_native::NDE_RECON_DONE=true;}
++            out
++        })
  }
  
  #[inline(always)]
@@ -34,7 +60,7 @@
  fn empty_root(level: usize) -> Digest {
      constants::POOL_V1_PAIR_EMPTY_ROOTS_V1[level].map(M31)
  }
-@@ -230,6 +237,8 @@
+@@ -230,6 +248,8 @@
  }
  
  #[inline(never)]
@@ -43,7 +69,7 @@
  fn initial_variant_selectors(
      variant: CompiledVariant,
      high27: QM31,
-@@ -1133,6 +1142,8 @@
+@@ -1133,6 +1153,8 @@
  }
  
  #[inline(never)]
@@ -52,7 +78,7 @@
  fn scalar_lanes(
      variant: CompiledVariant,
      withdrawal_amount_present: bool,
-@@ -1196,6 +1207,8 @@
+@@ -1196,6 +1218,8 @@
      packed
  }
  
@@ -61,7 +87,7 @@
  fn selected_claim(
      claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
      point: usize,
-@@ -1205,6 +1218,8 @@
+@@ -1205,6 +1229,8 @@
  }
  
  #[inline(never)]
@@ -70,7 +96,7 @@
  fn copy_variant(variant: CompiledVariant) -> PoolV1PairForestCompiledVariantV1 {
      match variant {
          CompiledVariant::PrivateTransfer => PoolV1PairForestCompiledVariantV1::PrivateTransfer,
-@@ -1324,6 +1339,8 @@
+@@ -1324,6 +1350,8 @@
      Ok((original, c1, mask_only, g))
  }
  
@@ -79,7 +105,7 @@
  fn private_public<'a>(
      public: &PoolV1PrivateTransferPublicV1,
      transition: &'a PoolV1PairLatePublicStatementV1,
-@@ -1342,6 +1359,8 @@
+@@ -1342,6 +1370,8 @@
      }
  }
  
@@ -88,7 +114,7 @@
  fn withdrawal_public<'a>(
      public: &PoolV1WithdrawalPublicV1,
      transition: &'a PoolV1PairLatePublicStatementV1,
-@@ -2328,3 +2347,7 @@
+@@ -2328,3 +2358,7 @@
          }
      }
  }
@@ -105,7 +131,7 @@
 +pub fn claim_ref(claims:&[Q;84],point:usize,column:usize)->Q{claims[point*28+column]}
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NDE_semantic.rs
-@@ -0,0 +1,91 @@
+@@ -0,0 +1,129 @@
 +use super::*;
 +#[path="NDE_reference.rs"] pub(super) mod reference;
 +pub(super) fn to_ref(v:QM31)->reference::Q { reference::Q { c0:reference::C{a:v.c0.a.0,b:v.c0.b.0},c1:reference::C{a:v.c1.a.0,b:v.c1.b.0} } }
@@ -195,11 +221,49 @@
 +#[kani::proof_for_contract(super::empty_root)]
 +fn NDE_empty_root(){
 + let level:usize=kani::any();let j:usize=kani::any();kani::assume(level<21&&j<8);
++ if cfg!(NDE_invert){kani::assume(level==0&&j==0);}
 + unsafe{NDE_ROOT_INDEX=j;}let _=super::empty_root(level);
++}
++// Different negative property from the timed-out inverted contract: a concrete
++// wrong word on the real body. Not a renamed harness or a new positive claim.
++#[kani::proof]
++#[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_root_bad_value(){let value=super::empty_root(0);assert!(value[0].0==0,"NDE wrong root word");}
++pub(super) static mut NDE_SUM_PRE:QM31=QM31::ZERO;
++pub(super) static mut NDE_SUM_STEPPED:bool=false;
++pub(super) static mut NDE_RECON_DONE:bool=false;
++#[cfg(NDE_sum_step)]
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_sum_step(){
++ let raw:[[u32;4];64]=kani::any();let high=raw.map(|a|to_native(reference::Q{c0:reference::C{a:a[0],b:a[1]},c1:reference::C{a:a[2],b:a[3]}}));
++ let raw_low:[[u32;4];16]=kani::any();let low=raw_low.map(|a|to_native(reference::Q{c0:reference::C{a:a[0],b:a[1]},c1:reference::C{a:a[2],b:a[3]}}));
++ let selectors=Selectors{high,low};
++ let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=end&&end<=64);
++ let pre=anyq();kani::assume(canonical(pre));
++ let expected=if start<end{let q=selectors.high[start];kani::assume(canonical(q));to_native(reference::sum_step_ref(to_ref(pre),to_ref(q)))}else{pre};
++ unsafe{NDE_SUM_PRE=pre;NDE_SUM_STEPPED=false;}
++ let out=super::sum_high(&selectors,&[start..end]);
++ let stepped=unsafe{NDE_SUM_STEPPED};
++ assert!((out==expected&&stepped==(start<end)) != cfg!(NDE_invert));
++}
++#[cfg(NDE_reconstruct_step)]
++#[kani::proof]
++#[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn NDE_reconstruct_step(){
++ let raw:[[u32;4];16]=kani::any();let view=raw.map(|a|to_native(reference::Q{c0:reference::C{a:a[0],b:a[1]},c1:reference::C{a:a[2],b:a[3]}}));
++ kani::assume(canonical(view[9])&&canonical(view[8]));
++ unsafe{NDE_RECON_DONE=false;}
++ let expected=to_native(reference::reconstruct_step_ref(to_ref(view[9]),to_ref(view[8])));
++ let out=super::reconstruct_10(&view);
++ assert!((out==expected&&unsafe{NDE_RECON_DONE}) != cfg!(NDE_invert));
 +}
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NDE_reference.rs
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,73 @@
 +#[derive(Clone, Copy, PartialEq, Eq)]
 +pub struct C { pub a: u32, pub b: u32 }
 +#[derive(Clone, Copy, PartialEq, Eq)]
@@ -271,6 +335,8 @@
 +pub fn private_public_ref<P,D,A,T>(p:PrivateInput<P,D,A>,t:&T)->PublicRef<'_,P,D,A,T>{PublicRef{withdraw:false,pool:p.pool,domain:p.domain,anchor:p.anchor,nullifier:p.nullifier,asset:p.asset,recipient:Some(p.recipient),change:p.change,amount:None,transition:t}}
 +pub fn withdrawal_public_ref<P,D,A,T>(p:WithdrawalInput<P,D,A>,t:&T)->PublicRef<'_,P,D,A,T>{PublicRef{withdraw:true,pool:p.pool,domain:p.domain,anchor:p.anchor,nullifier:p.nullifier,asset:p.asset,recipient:None,change:p.change,amount:Some(p.amount),transition:t}}
 +pub fn row_operands_ref<T:Copy>(high:&[T;64],low:&[T;16],row:usize)->(T,T){(high[row>>4],low[row&15])}
++pub fn sum_step_ref(acc:Q,next:Q)->Q{add_ref(acc,next)}
++pub fn reconstruct_step_ref(acc:Q,bit:Q)->Q{add_ref(add_ref(acc,acc),bit)}
 --- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
 +++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
 @@ -111,6 +111,7 @@
@@ -368,7 +434,7 @@
 +fn NDE_raw_contract(){let v:[u64;4]=kani::any();kani::assume(v[0]<(1u64<<62)&&v[1]<(1u64<<62)&&v[2]<(1u64<<62)&&v[3]<(1u64<<62));let _=super::extension_from_raw_limbs(v); }
 --- /dev/null
 +++ b/crates/aspis-statement/src/NDE_reference.rs
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,73 @@
 +#[derive(Clone, Copy, PartialEq, Eq)]
 +pub struct C { pub a: u32, pub b: u32 }
 +#[derive(Clone, Copy, PartialEq, Eq)]
@@ -440,6 +506,8 @@
 +pub fn private_public_ref<P,D,A,T>(p:PrivateInput<P,D,A>,t:&T)->PublicRef<'_,P,D,A,T>{PublicRef{withdraw:false,pool:p.pool,domain:p.domain,anchor:p.anchor,nullifier:p.nullifier,asset:p.asset,recipient:Some(p.recipient),change:p.change,amount:None,transition:t}}
 +pub fn withdrawal_public_ref<P,D,A,T>(p:WithdrawalInput<P,D,A>,t:&T)->PublicRef<'_,P,D,A,T>{PublicRef{withdraw:true,pool:p.pool,domain:p.domain,anchor:p.anchor,nullifier:p.nullifier,asset:p.asset,recipient:None,change:p.change,amount:Some(p.amount),transition:t}}
 +pub fn row_operands_ref<T:Copy>(high:&[T;64],low:&[T;16],row:usize)->(T,T){(high[row>>4],low[row&15])}
++pub fn sum_step_ref(acc:Q,next:Q)->Q{add_ref(acc,next)}
++pub fn reconstruct_step_ref(acc:Q,bit:Q)->Q{add_ref(add_ref(acc,acc),bit)}
 --- a/crates/aspis-statement/src/lib.rs
 +++ b/crates/aspis-statement/src/lib.rs
 @@ -1,3 +1,4 @@
@@ -463,9 +531,9 @@
 @@ -0,0 +1,30 @@
 +use aspis_core::field::{M31,CM31,QM31};
 +const MOD:u64=2147483647;
-+fn m(a:u32,b:u32)->u32{((u64::from(a)*u64::from(b))%MOD)as u32}
-+fn a(x:u32,y:u32)->u32{((u64::from(x)+u64::from(y))%MOD)as u32}
-+fn d(x:u32,y:u32)->u32{((u64::from(x)+MOD-u64::from(y))%MOD)as u32}
++fn m(a:u32,b:u32)->u32{((u64::from(a).wrapping_mul(u64::from(b)))%MOD)as u32}
++fn a(x:u32,y:u32)->u32{((u64::from(x).wrapping_add(u64::from(y)))%MOD)as u32}
++fn d(x:u32,y:u32)->u32{((u64::from(x).wrapping_add(MOD).wrapping_sub(u64::from(y)))%MOD)as u32}
 +fn cw(x:CM31)->[u32;2]{[x.a.0,x.b.0]}
 +fn qw(x:QM31)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
 +fn c(x:[u32;2])->CM31{CM31{a:M31(x[0]),b:M31(x[1])}}
@@ -473,7 +541,7 @@
 +fn ca(x:[u32;2],y:[u32;2])->[u32;2]{[a(x[0],y[0]),a(x[1],y[1])]}
 +fn cd(x:[u32;2],y:[u32;2])->[u32;2]{[d(x[0],y[0]),d(x[1],y[1])]}
 +fn cm(x:[u32;2],y:[u32;2])->[u32;2]{let t=m(x[0],y[0]);let u=m(x[1],y[1]);
-+ let cross=(((u64::from(x[0])+u64::from(x[1]))*(u64::from(y[0])+u64::from(y[1])))%MOD)as u32;
++ let cross=((u64::from(x[0]).wrapping_add(u64::from(x[1])).wrapping_mul(u64::from(y[0]).wrapping_add(u64::from(y[1]))))%MOD)as u32;
 + [d(t,u),d(d(cross,t),u)]}
 +fn cr(x:[u32;2])->[u32;2]{[d(a(x[0],x[0]),x[1]),a(x[0],a(x[1],x[1]))]}
 +fn qa(x:[u32;4],y:[u32;4])->[u32;4]{core::array::from_fn(|i|a(x[i],y[i]))}

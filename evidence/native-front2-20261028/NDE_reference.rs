@@ -69,3 +69,5 @@ pub struct PublicRef<'a,P,D,A,T>{pub withdraw:bool,pub pool:P,pub domain:P,pub a
 pub fn private_public_ref<P,D,A,T>(p:PrivateInput<P,D,A>,t:&T)->PublicRef<'_,P,D,A,T>{PublicRef{withdraw:false,pool:p.pool,domain:p.domain,anchor:p.anchor,nullifier:p.nullifier,asset:p.asset,recipient:Some(p.recipient),change:p.change,amount:None,transition:t}}
 pub fn withdrawal_public_ref<P,D,A,T>(p:WithdrawalInput<P,D,A>,t:&T)->PublicRef<'_,P,D,A,T>{PublicRef{withdraw:true,pool:p.pool,domain:p.domain,anchor:p.anchor,nullifier:p.nullifier,asset:p.asset,recipient:None,change:p.change,amount:Some(p.amount),transition:t}}
 pub fn row_operands_ref<T:Copy>(high:&[T;64],low:&[T;16],row:usize)->(T,T){(high[row>>4],low[row&15])}
+pub fn sum_step_ref(acc:Q,next:Q)->Q{add_ref(acc,next)}
+pub fn reconstruct_step_ref(acc:Q,bit:Q)->Q{add_ref(add_ref(acc,acc),bit)}

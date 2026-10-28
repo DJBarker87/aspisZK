@@ -42,6 +42,16 @@ def files():
   if prefix=='semantic':
    attrs='#[cfg_attr(kani,kani::requires(level<21&&unsafe{NDE_native::NDE_ROOT_INDEX<8}))]\n#[cfg_attr(kani,kani::ensures(|r|(r[unsafe{NDE_native::NDE_ROOT_INDEX}].0==NDE_native::reference::empty_root_ref(level)[unsafe{NDE_native::NDE_ROOT_INDEX}]) != cfg!(NDE_invert)))]\n'
    s=s.replace('fn empty_root(',attrs+'fn empty_root(',1)
+  if prefix=='semantic':
+   begin='fn sum_high(selectors: &Selectors, ranges: &[core::ops::Range<usize>]) -> QM31 {\n    let mut sum = QM31::ZERO;'
+   assert begin in s
+   s=s.replace(begin,begin+'\n    #[cfg(all(kani,NDE_sum_step))]\n    let mut sum=unsafe{NDE_native::NDE_SUM_PRE};',1)
+   point='            sum = sum.add(selectors.high[block]);'
+   assert point in s
+   s=s.replace(point,point+'\n            #[cfg(all(kani,NDE_sum_step))]\n            {unsafe{NDE_native::NDE_SUM_STEPPED=true;}return sum;}',1)
+   point='.fold(view[9], |acc, bit| acc.add(acc).add(*bit))'
+   assert point in s
+   s=s.replace(point,".fold(view[9], |acc, bit| {\n            #[cfg(all(kani,NDE_reconstruct_step))]\n            if unsafe{NDE_native::NDE_RECON_DONE}{return acc;}\n            let out=acc.add(acc).add(*bit);\n            #[cfg(all(kani,NDE_reconstruct_step))]\n            unsafe{NDE_native::NDE_RECON_DONE=true;}\n            out\n        })",1)
   module='NDE_'+prefix
   s+='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod NDE_native;\n'
   out[n]=s
@@ -58,7 +68,7 @@ pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31
   if prefix=='poseidon':
    harness+='#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::extension_from_raw_limbs)]\nfn NDE_raw_contract(){let v:[u64;4]=kani::any();kani::assume(v[0]<(1u64<<62)&&v[1]<(1u64<<62)&&v[2]<(1u64<<62)&&v[3]<(1u64<<62));let _=super::extension_from_raw_limbs(v); }\n'
   if prefix=='semantic':
-   harness+=(E/'NDE_semantic_extra.rs').read_text()+(E/'NDE_semantic_index.rs').read_text()+(E/'NDE_carry_native.rs').read_text()+(E/'NDE_public_native.rs').read_text()+(E/'NDE_root_native.rs').read_text()
+   harness+=(E/'NDE_semantic_extra.rs').read_text()+(E/'NDE_semantic_index.rs').read_text()+(E/'NDE_carry_native.rs').read_text()+(E/'NDE_public_native.rs').read_text()+(E/'NDE_root_native.rs').read_text()+(E/'NDE_linear_native.rs').read_text()
    out['crates/aspis-statement/src/pool_v1/NDE_claim_reference.rs']=(E/'NDE_claim_reference.rs').read_text()
   if prefix=='copy':
    harness+=(E/'NDE_row_native.rs').read_text()
@@ -71,6 +81,9 @@ pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31
  s+='\n#[cfg(kani)]\nmod NDE_field;\n'
  out[n]=s
  out['crates/aspis-statement/src/NDE_field.rs']=(E/'NDE_field.rs').read_text()
+ n='crates/aspis-core/src/lib.rs';s=subprocess.check_output(['git','show',REV+':'+n],text=True)
+ out[n]=s+'\n#[cfg(kani)]\nmod NDE_arbitrary;\n'
+ out['crates/aspis-core/src/NDE_arbitrary.rs']=(E/'NDE_arbitrary.rs').read_text()
  patch=''
  for n,s in out.items():
   old=subprocess.run(['git','show',REV+':'+n],capture_output=True,text=True)
