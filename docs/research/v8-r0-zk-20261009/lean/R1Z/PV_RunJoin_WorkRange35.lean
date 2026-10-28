@@ -25,7 +25,7 @@ theorem end_all (n : Nat) : start n 16=n := by
 
 theorem monotone (n : Nat) {a b : Nat} (h : a≤b) : start n a≤start n b := by
   unfold start
-  exact Nat.add_le_add (Nat.mul_le_mul_left _ h) (Nat.min_le_min_right _ h)
+  exact Nat.add_le_add (Nat.mul_le_mul_left _ h) (by omega)
 
 theorem bounded (n k : Nat) (hk : k<16) :
     start n k≤start n k+width n k ∧ start n k+width n k≤n := by
