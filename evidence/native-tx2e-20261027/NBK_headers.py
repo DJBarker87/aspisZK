@@ -3,7 +3,7 @@ import subprocess,json,difflib,hashlib
 E=Path(__file__).resolve().parent;REV='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387';root='crates/aspis-statement/src/pool_v1/'
 def frozen(name):return subprocess.check_output(['git','show',REV+':'+root+name],text=True)
 s=frozen('pair_terminal.rs');a=s.index('    let mut output = [0u8;',s.index('pub fn encode_pool_v1_pair_verified_afterstate_v1'));b=s.index('    for (level,',a)
-action=s[a:b].replace('&encode_digest_canonical(&afterstate.next_root)','&root').replace('afterstate.next_pair_index','index')
+action=s[a:b].replace('super::POOL_','crate::pool_v1::POOL_').replace('&encode_digest_canonical(&afterstate.next_root)','&root').replace('afterstate.next_pair_index','index')
 code='''use super::*;
 use crate::pool_v1::pair_tree_profile::*;
 fn NBK_after_prefix(index:u64,root:[u8;32])->[u8;688]{
