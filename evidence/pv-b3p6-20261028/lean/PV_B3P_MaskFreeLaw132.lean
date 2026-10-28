@@ -15,7 +15,7 @@ theorem free_eq (r c : Usize) :
   by_cases hr : r.val < 912
   · have h : r < 912#usize := by scalar_tac
     simp only [h,↓reduceIte,PV_B3P_MaskModel132.free,hr]
-    congr 1
+    apply congrArg Result.ok
     apply Bool.eq_iff_iff.mpr
     simp only [decide_eq_true_eq]
     scalar_tac
@@ -24,16 +24,18 @@ theorem free_eq (r c : Usize) :
     by_cases hr' : r.val < 1008
     · have h' : r < 1008#usize := by scalar_tac
       simp only [h',hr',↓reduceIte]
-      congr 1
+      apply congrArg Result.ok
       apply Bool.eq_iff_iff.mpr
-      simp [PV_B3P_MaskShape132.localUsed]
-      scalar_tac
+      simp only [decide_eq_true_eq, Bool.not_eq_true, ite_eq_iff]
+      simp [PV_B3P_MaskModel132.free,hr,hr',PV_B3P_MaskShape132.localUsed] at *
+      scalar_tac <;> split <;> scalar_tac
     · have h' : ¬ r < 1008#usize := by scalar_tac
       have hsub := PV_B3P_Offset226V3.sub_value r 1008#usize (by scalar_tac)
       simp only [h',hr',↓reduceIte]
-      congr 1
+      apply congrArg Result.ok
       apply Bool.eq_iff_iff.mpr
-      simp [PV_B3P_MaskModel132.valueUsed]
-      scalar_tac
+      simp only [decide_eq_true_eq, Bool.not_eq_true, ite_eq_iff]
+      simp [PV_B3P_MaskModel132.free,hr,hr',PV_B3P_MaskModel132.valueUsed] at *
+      scalar_tac <;> split <;> scalar_tac
 #print axioms free_eq
 end PV_B3P_MaskFreeLaw132
