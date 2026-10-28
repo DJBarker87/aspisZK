@@ -14,7 +14,7 @@ theorem length (values : Slice W) (start n : Nat) :
   induction n generalizing start with
   | zero => rfl
   | succ n ih =>
-    rw [payload,List.length_append,(PV_RunJoin_FlatBytes35.wire _).property,ih]
+    rw [payload,List.length_append,(PV_RunJoin_FlatBytes35.wire _).property,show (32#usize).val=32 from rfl,ih]
     omega
 
 /-- Complete source encoded_slice loop, retaining every byte of every wide
@@ -29,15 +29,16 @@ theorem complete (ops : ExternalFuns) (values : Slice W) (n : Nat)
     refine ⟨out,?_,by simp only [payload,List.append_nil]⟩
     unfold prover.encoded_slice_loop
     rw [ProverRw19LoopBind.loop_bind]
-    simp only [PV_RunJoin_EncodedStep41.stop ops _ out i (by omega),bind_tc_ok]
+    simp only [PV_RunJoin_EncodedStep41.stop ops values out i (by omega),bind_tc_ok]
   | succ n ih =>
     have hi : i.val<values.length := by omega
-    have cap := values.property
-    have inc := PV_RunJoin_MergeLoop35.increment i (by omega)
+    have cap : values.length≤Usize.max := values.property
+    have inc := PV_RunJoin_CompactStep39.offset i 1#usize (by change i.val+1≤Usize.max;omega)
     obtain ⟨mid,hm,hv⟩ := PV_RunJoin_EncodedStep41.step ops values out i hi (by omega)
     have ml : mid.length=out.length+32 := by
       change mid.val.length=out.val.length+32
       rw [hv,List.length_append,(PV_RunJoin_FlatBytes35.wire _).property]
+      rfl
     obtain ⟨next,hn,hnext⟩ := ih (Usize.wrapping_add i 1#usize) mid
       (by rw [inc];omega) (by rw [ml];omega)
     refine ⟨next,?_,?_⟩

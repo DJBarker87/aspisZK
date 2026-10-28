@@ -18,6 +18,7 @@ theorem accepts (out nodes : Bytes) (cap : Usize) (fits : nodes.val.length≤cap
     ∃ result, finish out nodes cap=ok result ∧
       result.val=out.val++nodes.val++List.replicate (cap.val-nodes.val.length) 0#u8 := by
   obtain ⟨after,ha,hv⟩ := PV_RunJoin_ByteAppend38.append out (alloc.vec.Vec.deref nodes) (by exact (show out.val.length+nodes.val.length≤Usize.max from (by omega)))
+  change after.val=out.val++nodes.val at hv
   have len : after.val.length=out.val.length+nodes.val.length := by
     rw [hv,List.length_append]
   have hfits : alloc.vec.Vec.len nodes ≤ cap := by scalar_tac
