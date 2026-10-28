@@ -10,10 +10,16 @@ No implementation source change, Lean or Kani. All native workloads use serial c
 
 This is finite artifact, functional and timing validation. Premises before/after unchanged: removed0, added0, weakened0, changed0. T remains entropy_law, entropy_kernel, observation. Source-to-model/deployed endpoint closure, E1/E2, real RunJoin, entropy/kernel bridge, OS-failure independence, inversion boundary, client proof-account adoption and L1/L2/L3 retain their substantive proof and deployment obligations. Target not yet established.
 
-## Stage A interim results
+## Stage A results: PASS
 
 All three freshly rebuilt ELF pins match. Default47.223s/684472KiB RSS, devnet33.067s/687096KiB, Pool55.832s/676608KiB, all exit0/swap0. Client build140.266s/640276KiB, rustc1.94.1(e408947bfd200af42db322daf0fadfe7e26d3bd1), LLVM21.1.8. Client SHA256 `0d9dbd91d4eb9b4add14e164f8ffa14196ca7978c506a021eef057c5cefaa544`,2882024bytes. Exact recommended features and rustc-vV are retained in build-client/.
 
 Coin0 transfer/withdrawal PASS against retained SHA-verified37e5e133f8 control outputs: proof,public,ledger and canonical result bytes all identical. Raw records differ in seconds only. Fresh candidate generation30.434s/668612KiB RSS,exit0/swap0. Harness build57.447s/570808KiB. Initial proof-generation admission refused before execution; retry after180s succeeded. No unchanged proof run repeated.
 
-Initial upload was refused on the55GiB aggregate reservation; first180s retry also refused; second succeeded. Every exported candidate input matches exact Git bytes(7496files). Shipped-control source identity is independently verified in control-source-identity.json. New differential cohort remains pending.
+Initial upload was refused on the55GiB aggregate reservation; first180s retry also refused; second succeeded. Every exported candidate input matches exact Git bytes(7496files). Shipped-control source identity is independently verified in control-source-identity.json. The new differential cohort is complete (details below).
+
+## Differential completion
+
+Fresh seeds 6000–6999: 1,000/1,000 pairs PASS against shipped `c57a344726`, using pv-integ4’s unchanged harness/comparator and three-process pipeline. This includes 600 complete proof pairs, 100 rejected-prefix pairs and four oracle-logged pairs. Canonical result records and ledger files match for all 1,000 pairs; proof/public bytes match wherever produced. Elapsed seconds alone are excluded. No discrepancy found. Full coverage, source, resource and byte-comparison receipts are under `combined/`; `stage-a-validation.json` checks the collected evidence.
+
+Recovery after capacity error reused the still-running differential scope, without resubmission. Before recovery eight native scopes had completed and one differential scope was active; Lean/Kani attempts remain zero. No numeric native-attempt budget was specified. Refusals and cooldowns are retained; refusals started no compiler.
