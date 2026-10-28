@@ -56,11 +56,11 @@ theorem lengths (n : Nat) (input : List U8) (bound : 64*n≤input.length)
 theorem native_bulk (input : List U8) :
     (views (input.length/64) input).flatMap id=(PV_DL_BatchPlan.bulk input).1 := by
   rw [joined]
-  rfl
+  simp only [PV_DL_BatchPlan.bulk,Nat.mul_comm]
 
 theorem native_block_lengths (input : List U8) (block : List U8)
     (h : block∈views (input.length/64) input) : block.length=64 :=
-  lengths _ input (Nat.div_mul_le_self input.length 64) block h
+  lengths _ input (by simpa only [Nat.mul_comm] using Nat.div_mul_le_self input.length 64) block h
 
 #print axioms views
 #print axioms count
