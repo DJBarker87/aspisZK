@@ -1,0 +1,28 @@
+from pathlib import Path
+import json,hashlib,subprocess,re,sys
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-kstub-20261028';errors=[]
+def check(b,msg):
+ if not b:errors.append(msg)
+check(subprocess.check_output(['git','branch','--show-current'],cwd=R,text=True).strip()=='codex/pv-kstub-20261028','branch')
+check(str(R)=='/Users/dominic/ZK/.worktrees/pv-relink','worktree')
+paths=subprocess.check_output(['git','diff','--name-only','6d4350e42c','HEAD'],cwd=R,text=True).splitlines();check(all(p.startswith(('tools/pv-kstub-20261028/','evidence/pv-kstub-20261028/')) for p in paths),'path-limited commits')
+check(hashlib.sha256((E/'KMX_copy_stubs.patch').read_bytes()).hexdigest()=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67','exact patch')
+check(all(x.get('original_body_equal',True) for x in json.loads((E/'original-body-bindings.json').read_text())),'historical bodies')
+check(all(x['ok'] for x in json.loads((E/'lean-external-preflight.json').read_text())),'external objects')
+for n in ['44700','44701']:
+ r=json.loads((E/n/'receipt.json').read_text());check(r['exit']==0,'Lean '+n);check(r['swap']=='0','Lean swap '+n)
+ log=(E/n/'output.log').read_text();check('sorryAx' not in log and 'axioms:' in log or 'does not depend on any axioms' in log,'axioms '+n)
+receipts=list(E.glob('K[0-9][0-9]/receipt.json'));check(len(receipts)<=30,'Kani budget')
+for f in receipts:
+ name=f.parent.name;r=json.loads(f.read_text());target=r['target'];limits=r['limits'];check(limits==dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),'caps '+name)
+ if name=='K01':continue
+ check('--exact' in target,'exact selector '+name);check('--unwinding-assertions' in target,'unwinding '+name);check('0-3' in target,'CPU '+name)
+ log=(f.parent/'output.log').read_text();check(len(re.findall(r'Checking harness ',log))==1,'one root '+name)
+for row in json.loads((E/'table.json').read_text())['rows']:
+ for h in row['harnesses']:
+  if h['confirmed']:
+   neg=h['negative_control'];log=(R/neg['receipt']).parent.joinpath('output.log').read_text()
+   check('assertion failed: left != right' in log,'intended negative assertion '+h['harness'])
+ check(row['status']!='pending','unfinished '+row['row'])
+result=dict(ok=not errors,errors=errors,kani_runs=len(receipts),lean_attempts=2,paths=paths)
+(E/'validation.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2));sys.exit(bool(errors))
