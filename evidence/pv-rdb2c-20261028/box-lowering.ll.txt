@@ -1,0 +1,28 @@
+define internal fastcc noalias noundef nonnull align 4 ptr @_RNvMNtCseasPKedc9h3_19aspis_r1_cost_probe7weightsNtB2_7Weights14box_from_parts(i8 noundef range(i8 0, 3) %variant, ptr dead_on_return noalias noundef nonnull readonly align 4 captures(none) dereferenceable(1600) %factors, ptr dead_on_return noalias noundef nonnull readonly align 4 captures(none) dereferenceable(480) %points, ptr dead_on_return noalias noundef nonnull readonly align 4 captures(none) dereferenceable(32) %extra) unnamed_addr #2 personality ptr @rust_eh_personality {
+start:
+  %_5.sroa.0 = alloca [2112 x i8], align 4
+  call void @llvm.lifetime.start.p0(i64 2112, ptr nonnull %_5.sroa.0)
+  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 4 dereferenceable(1600) %_5.sroa.0, ptr noundef nonnull align 4 dereferenceable(1600) %factors, i64 1600, i1 false)
+  %_5.sroa.0.1600.sroa_idx = getelementptr inbounds nuw i8, ptr %_5.sroa.0, i64 1600
+  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 4 dereferenceable(480) %_5.sroa.0.1600.sroa_idx, ptr noundef nonnull align 4 dereferenceable(480) %points, i64 480, i1 false)
+  %_5.sroa.0.2080.sroa_idx = getelementptr inbounds nuw i8, ptr %_5.sroa.0, i64 2080
+  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 4 dereferenceable(32) %_5.sroa.0.2080.sroa_idx, ptr noundef nonnull align 4 dereferenceable(32) %extra, i64 32, i1 false)
+; call __rustc::__rust_no_alloc_shim_is_unstable_v2
+  tail call void @_RNvCs1Y7DaGC1cwg_7___rustc35___rust_no_alloc_shim_is_unstable_v2() #58, !noalias !3976
+; call __rustc::__rust_alloc
+  %0 = tail call noundef align 4 dereferenceable_or_null(2116) ptr @_RNvCs1Y7DaGC1cwg_7___rustc12___rust_alloc(i64 noundef 2116, i64 noundef range(i64 1, -9223372036854775807) 4) #58, !noalias !3976
+  %1 = icmp eq ptr %0, null
+  br i1 %1, label %bb2.i, label %_ZN5alloc5alloc15exchange_malloc17h6d8270e0470dde16E.exit, !prof !69
+
+bb2.i:                                            ; preds = %start
+; call alloc::alloc::handle_alloc_error
+  tail call void @_ZN5alloc5alloc18handle_alloc_error17h9898627cde6f100aE(i64 noundef 4, i64 noundef 2116) #60, !noalias !3976
+  unreachable
+
+_ZN5alloc5alloc15exchange_malloc17h6d8270e0470dde16E.exit: ; preds = %start
+  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 4 dereferenceable(2112) %0, ptr noundef nonnull align 4 dereferenceable(2112) %_5.sroa.0, i64 2112, i1 false)
+  %_5.sroa.6.0..sroa_idx = getelementptr inbounds nuw i8, ptr %0, i64 2112
+  store i8 %variant, ptr %_5.sroa.6.0..sroa_idx, align 4
+  call void @llvm.lifetime.end.p0(i64 2112, ptr nonnull %_5.sroa.0)
+  ret ptr %0
+}

@@ -3,12 +3,12 @@ import re,json
 R=Path(__file__).resolve().parents[2];P=R/'docs/research/v8-r0-zk-20261009/lean/R1Z';E=R/'evidence/pv-rdb2c-20261028'
 # Include only exact-source successful modules, plus the final adapters when
 # scheduled. Never turn a failed elaboration into an admitted audit premise.
-modules=[]
+modules=[];source_paths={}
 for p in E.glob('lean-*/receipt.json'):
  j=json.loads(p.read_text())
  if j['exit']==0 and j.get('module') and int(j['attempt'])<60597:
   module=j['module'];src=R/j['source_path']
-  if __import__('hashlib').sha256(src.read_bytes()).hexdigest()==j['source_sha256']:modules.append(module)
+  if __import__('hashlib').sha256(src.read_bytes()).hexdigest()==j['source_sha256']:modules.append(module);source_paths[module]=src
 modules=sorted(set(modules));names=[]
 def uncomment(s):
  out=[];i=0;d=0
@@ -21,7 +21,7 @@ def uncomment(s):
   else:out.append(s[i]);i+=1
  return ''.join(out)
 for module in modules:
- s=uncomment((R/'docs/research/v8-r0-zk-20261009/lean'/(module+'.lean')).read_text());stack=[]
+ s=uncomment(source_paths[module].read_text());stack=[]
  for line in s.splitlines():
   line=line.strip()
   m=re.match(r'namespace\s+(\S+)',line)
