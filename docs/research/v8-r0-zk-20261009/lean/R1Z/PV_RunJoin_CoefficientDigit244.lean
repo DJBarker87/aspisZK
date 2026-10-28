@@ -29,13 +29,20 @@ theorem body (j out : Usize) :
     have he : z = 4#usize := by scalar_tac
     exact hz.trans (congrArg Result.ok he)
   have tau : Array.index_usize transport.TAU 2#usize = .ok 2#usize := by rfl
+  have cast_lo : UScalar.cast .U32 4#usize = 4#u32 := by
+    apply UScalar.eq_of_val_eq
+    rw [PV_CB3_WeightsMachine.cast_count 4#usize (by decide)]
+    rfl
+  have cast_hi : UScalar.cast .U32 4#usize = 4#u32 := by
+    apply UScalar.eq_of_val_eq
+    rw [PV_CB3_WeightsMachine.cast_count 4#usize (by decide)]
+    rfl
   unfold transport.Variant.row_loop.body
   rw [hn]
   simp only [bind_tc_ok,Aeneas.Std.uncurry,lo]
   rw [PV_RunJoin_CheckedShift44.right j 4#usize (by decide)]
   simp only [bind_tc_ok,lift,tau,hi]
   rw [PV_RunJoin_CheckedShift44.left _ 4#usize (by decide)]
-  simp only [bind_tc_ok,lift,digit]
-  rfl
+  simp only [bind_tc_ok,lift,digit,cast_lo,cast_hi]
 #print axioms body
 end R1Z.PV_RunJoin_CoefficientDigit244
