@@ -22,8 +22,8 @@ theorem array_ne_self {T : Type} {n : Usize} (cmp : core.cmp.PartialEq T T)
     (hn : ∀ x, cmp.ne x x = .ok false) (a : Array T n) :
     core.array.equality.PartialEqArray.ne cmp a a = .ok false := by
   rw [core.array.equality.PartialEqArray.ne,core.array.equality.PartialEqArray.eq]
-  simp only [bool_not]
-  rw [if_pos rfl,list_self cmp hn a.val]
+  simp only [bool_not,↓reduceIte]
+  rw [list_self cmp hn a.val]
   rfl
 
 theorem byte_ne_self (x : U8) : core.cmp.PartialEqU8.ne x x = .ok false := by
