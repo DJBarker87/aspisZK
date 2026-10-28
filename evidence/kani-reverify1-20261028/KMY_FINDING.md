@@ -29,3 +29,9 @@ KMY_L006 compiles the exact local byte formulas for append32, query-word append,
 KMY_K013/K014: full 1768-byte parent windows16/32 TIMEOUT; KMY_K015: window4 PASS. KMY_K016 failed only the destination initializer's unwind assertion (66 elements with bound65), leaving all value checks undetermined. A corrected actual-QM31 window is KMY_K028. This is a setup-bound failure, not an original-property counterexample. KMY_K017 actual arbitrary-bit QM31 serializer window16 PASS. KMY_K018 local arbitrary-source window32 PASS.
 
 The first three full-array invalid-limb view cases also timed out (K020–K022); K023–K027 were deferred before admission after identifying the shared full-array graph. Replacement splits are local parse acceptance and constant-data pointer metadata (K030/K031).
+
+## Stage 6: concrete six-wide append closure
+
+KMY_K040–KMY_K045 all PASS. These are six distinct constant-position heap steps, with arbitrary pre-existing prefix bytes and an arbitrary canonical eight-limb value, at (length,capacity)=(0,0),(32,32),(64,64),(96,128),(128,128),(160,256). Each checks output length, every prefix byte and every appended serializer byte. This replaces KMY_K029's timed-out symbolic stage; no unchanged rerun. KMY_L003's wide_six and KMY_L007's six_lengths compose those steps into exactly the original 192-byte assertion for LPb_K016 and LPe_K005. Their earlier selected-property credit is restored under the validated-stub scope.
+
+KMY_L007 also compiles to_vec value identity, generic retained-prefix growth and the original prefix bounds. KMY_K034–KMY_K037 confirm the source-cut oracle chronology/metadata, including physical 57607/1880 inputs; they do not by themselves close the large initial-body/growth bridge. KMY_K038 proves the local arbitrary-bad-limb rejection. KMY_K032 and KMY_K033 timed out after splitting the typed copy and iterator continuation; typed-weight credit remains open.

@@ -1,0 +1,46 @@
+{"attempt": "KMY_K035", "exit_status": 0, "wall_seconds": 2.960897452023346, "peak_rss_kib": "174852", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows.rs", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "KMY_checksum_oracle", "--output-format", "regular", "--cbmc-args", "--unwinding-assertions"]}
+Kani Rust Verifier 0.67.0 (standalone)
+warning: unexpected `cfg` condition name: `feature`
+  
+...
+ in function <Checksum<'_> as Digest32>::digest
+
+Check 120: <Checksum<'_> as Digest32>::digest.pointer_dereference.80
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KMY_windows.rs:201:314 in function <Checksum<'_> as Digest32>::digest
+
+Check 121: <Checksum<'_> as Digest32>::digest.pointer_dereference.81
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KMY_windows.rs:201:314 in function <Checksum<'_> as Digest32>::digest
+
+Check 122: <Checksum<'_> as Digest32>::digest.pointer_dereference.82
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KMY_windows.rs:201:314 in function <Checksum<'_> as Digest32>::digest
+
+Check 123: <Checksum<'_> as Digest32>::digest.pointer_dereference.83
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KMY_windows.rs:201:314 in function <Checksum<'_> as Digest32>::digest
+
+Check 124: <Checksum<'_> as Digest32>::digest.pointer_dereference.84
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KMY_windows.rs:201:314 in function <Checksum<'_> as Digest32>::digest
+
+
+SUMMARY:
+ ** 0 of 124 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.741889s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 0}
+
+Running as unit: run-re7fb2921cbf24e05a0460ee908168305.scope; invocation ID: 808db9ba1bbc4be597560de427d11555

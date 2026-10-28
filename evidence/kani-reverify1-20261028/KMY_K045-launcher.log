@@ -1,0 +1,36 @@
+{"attempt": "KMY_K045", "exit_status": 0, "wall_seconds": 27.739317508006934, "peak_rss_kib": "595760", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows.rs", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "KMY_wide_stage5", "--output-format", "regular", "--cbmc-args", "--unwinding-assertions"]}
+Kani Rust Verifier 0.67.0 (standalone)
+warning: unexpected `cfg` condition name: `feature`
+  --> 
+...
+own-linux-gnu/lib/rustlib/src/rust/library/alloc/src/collections/mod.rs:93:10 in function <std::collections::TryReserveErrorKind as std::clone::Clone>::clone
+
+Check 507: std::alloc::Global::alloc_impl.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs:191:27 in function std::alloc::Global::alloc_impl
+
+Check 508: alloc::raw_vec::RawVecInner::try_allocate_in.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:459:34 in function alloc::raw_vec::RawVecInner::try_allocate_in
+
+Check 509: alloc::raw_vec::RawVecInner::try_allocate_in.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:472:25 in function alloc::raw_vec::RawVecInner::try_allocate_in
+
+
+SUMMARY:
+ ** 0 of 509 failed (7 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 22.839487s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 0}
+
+Running as unit: run-rb47cf6a4b5ab4ba1a6fd4ff26eabde67.scope; invocation ID: 717a539b67f64192b91b95ee56c57225

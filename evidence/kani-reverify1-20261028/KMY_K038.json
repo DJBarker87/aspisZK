@@ -1,0 +1,33 @@
+{
+  "attempt": "KMY_K038",
+  "kind": "kani",
+  "sources": [
+    "KMY_windows.rs",
+    "KMX_stubs.rs",
+    "KMY_src/Cargo.lock",
+    "KMY_gate.py",
+    "KMY_field.rs",
+    "KMY_wide_exact.rs"
+  ],
+  "command": [
+    "python3",
+    "KMY_gate.py",
+    "KMY_K038",
+    "KMY_local_parse_reject"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.kani/kani-0.67.0/bin:/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "-C opt-level=3 --edition=2021",
+    "CARGO_BUILD_JOBS": "1"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "KMY_K001-graph.json"
+  },
+  "expected_time": "optimized codegen then bounded single-window CBMC",
+  "reservation_retries": 0,
+  "source_revision": "4bbe59e9f5275597d0dd3906903eb28668f58ff1",
+  "source_tree_dirty": true
+}
