@@ -180,3 +180,12 @@ op133 property only if the intended assertion is again the sole failure.
 This tests the identified array expansion bottleneck; source, assertions,
 auxiliary domain and native bounds stay fixed. Two runs would leave one of
 12 Kani slots. Lean work continues regardless of Kani exhaustion.
+
+Serializer v3 replaces the owned reference's numeric projection loops with
+direct owned M31 array fields (the emitted M31 type is U32), and decomposes
+the64-read chunk into eight8-read chunks. This removes every mutable-borrow
+projection write and reduces nested Result depth. The old raw/ported source
+and timeout remain retained. New extraction and finite validation are pending;
+no old model is silently re-associated to v3. No shipped source changes.
+The running op133 gate uses its frozen earlier host source; v3 will be uploaded
+only after that scope completes.
