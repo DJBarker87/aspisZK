@@ -14,7 +14,7 @@ theorem list_restore {A : Type} (xs : List A) (i : Nat) (x : A)
     | zero => simp only [List.getElem?_cons_zero,Option.some.injEq] at h;subst a;rfl
     | succ i =>
       simp only [List.getElem?_cons_succ] at h
-      simp only [List.set_succ,ih i h]
+      simp only [List.set,ih i h]
 #print axioms list_restore
 
 theorem read_value {A : Type} {N : Usize} (a : Array A N) (i : Usize) (x : A)
