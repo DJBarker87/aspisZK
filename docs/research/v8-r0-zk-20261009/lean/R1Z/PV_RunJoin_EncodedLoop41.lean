@@ -35,6 +35,7 @@ theorem complete (ops : ExternalFuns) (values : Slice W) (n : Nat)
     have hi : i.val<values.length := by omega
     have cap : values.length≤Usize.max := values.property
     have inc := PV_RunJoin_CompactStep39.offset i 1#usize (by change i.val+1≤Usize.max;omega)
+    rw [show (1#usize).val=1 from rfl] at inc
     obtain ⟨mid,hm,hv⟩ := PV_RunJoin_EncodedStep41.step ops values out i hi (by omega)
     have ml : mid.length=out.length+32 := by
       change mid.val.length=out.val.length+32

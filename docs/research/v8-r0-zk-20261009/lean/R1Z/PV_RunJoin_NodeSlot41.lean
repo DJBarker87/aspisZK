@@ -53,5 +53,6 @@ theorem source (out : alloc.vec.Vec U8) (cc1 cc2 : host_commitment.Commitment)
       run out cc1 cc2 tree queries batch t := by
   unfold prover.append_node_slot run PV_RunJoin_NodeTail41.finish
   simp only [bind_assoc_eq,bind_tc_ok,lift]
+  rfl
 #print axioms source
 end R1Z.PV_RunJoin_NodeSlot41
