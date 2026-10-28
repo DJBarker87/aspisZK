@@ -35,7 +35,10 @@ def pool_v1.pair_forest_trace.compile_forest_from_copies
     (out : U32) (recipient : Option pool_v1.payment_relation.PoolV1OutputNoteWitnessV1)
     (change : pool_v1.payment_relation.PoolV1OutputNoteWitnessV1)
     (public1 : pool_v1.pair_forest_trace.ForestPublic) (anchor : Array U32 8#usize)
-    (snapshot : pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) := do
+    (snapshot : pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) :
+    Result (Aeneas.Std.core.result.Result
+      pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+      pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1) := do
   let r ← R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.compile_forest_from_copies
     (inputToForest input) out (recipient.map noteToForest) (noteToForest change)
     (publicToForest public1) anchor (snapshotToForest snapshot)
@@ -46,7 +49,8 @@ def pool_v1.pair_forest_trace.compile_forest_from_copies
 def pool_v1.pair_trace.validate_common
     (pool domain : Array U8 32#usize) (seq : U64) (anchor nullifier : Array U32 8#usize)
     (asset : U32) (input : pool_v1.pair_trace.PoolV1PairInputNoteWitnessV1)
-    (context : pool_v1.payment_relation.PoolV1PaymentRelationContextV1) := do
+    (context : pool_v1.payment_relation.PoolV1PaymentRelationContextV1) :
+    Result (Aeneas.Std.core.result.Result Unit pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1) := do
   let r ← AspisBuilderAdmissionSource.pool_v1.pair_trace.validate_common
     pool domain seq anchor nullifier asset (pairToAdmission input) (contextToAdmission context)
   ok (match r with
