@@ -1,0 +1,34 @@
+{"attempt": "KMZ_K023", "exit_status": 1, "wall_seconds": 26.44509327900596, "peak_rss_kib": "506352", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMZ_windows.rs", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "KMZ_scalar_stage10_selected", "--output-format", "regular", "--cbmc-args", "--unwinding-assertions"]}
+Kani Rust Verifier 0.67.0 (standalone)
+warning: unexpected `cfg` condition name: `fea
+...
+rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs:361:31 in function std::alloc::Layout::repeat
+
+Check 370: std::alloc::Layout::repeat.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs:364:13 in function std::alloc::Layout::repeat
+
+Check 371: std::option::Option::<usize>::ok_or::<std::collections::TryReserveErrorKind>.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1339:24 in function std::option::Option::<usize>::ok_or::<std::collections::TryReserveErrorKind>
+
+
+SUMMARY:
+ ** 1 of 371 failed (7 unreachable)
+Failed Checks: assertion failed: out[j] ^ 1u8 ==
+if j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}
+ File: "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMZ_windows.rs", line 336, in scalar_append_stage::<160, 256>
+
+VERIFICATION:- FAILED
+Verification Time: 21.179098s
+
+Manual Harness Summary:
+Verification failed for - KMZ_scalar_stage10_selected
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r2536031b40bd4a8a8826ceddd7582cd0.scope; invocation ID: 0f92133f713241e6bed7946ef8619adc

@@ -1,0 +1,62 @@
+{
+  "attempt": "KMZ_K031",
+  "kind": "kani",
+  "sources": [
+    "KMZ_windows.rs",
+    "KMX_stubs.rs",
+    "KMY_src/Cargo.lock",
+    "KMZ_gate.py",
+    "KMY_field.rs",
+    "KMY_wide_exact.rs"
+  ],
+  "command": [
+    "python3",
+    "KMZ_gate.py",
+    "KMZ_K031",
+    "KMZ_wide_stage4_selected"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.kani/kani-0.67.0/bin:/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "-C opt-level=3 --edition=2021",
+    "CARGO_BUILD_JOBS": "1"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "KMY_K001-graph.json"
+  },
+  "expected_time": "optimized codegen then bounded single-window CBMC",
+  "reservation_retries": 0,
+  "source_revision": "6157072eac52f096287c260f6e8e5a702d4030c9",
+  "source_tree_dirty": true,
+  "negative_control": true,
+  "parent_gate": "KMY_K044",
+  "parent_harness": "KMY_wide_stage4",
+  "split": "appended",
+  "replaces_timeout": "KMZ_K011",
+  "note": "Changed the selected-byte domain to the prefix/appended window; the two windows partition the original assertion. Reporting flags do not change proof semantics.",
+  "kmx_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "kmx_stub_file_sha256": "c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9",
+  "exit_status": 1,
+  "wall_seconds": 36.6740302570397,
+  "peak_rss_kib": "933680",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r23047058cf7e4e04875fc8d5da7860ac.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1621737472",
+  "source_hashes": {
+    "KMZ_windows.rs": "fba94b9cf24ee7d938f027daed65d6a374148aaf21c7cafad100b48353faad19",
+    "KMX_stubs.rs": "c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9",
+    "KMY_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "KMZ_gate.py": "578015840a19c13c170f44157ebd762135355149aaeae769797b1ca9620671a2",
+    "KMY_field.rs": "7c3116213fdd58507a52c300deece7526e8d7e04b1b31cc9f7e9a53719a4d5a0",
+    "KMY_wide_exact.rs": "7a778b6afbf38c770402e5c1a4e84e5e91374a8bc0aa53dd4b1152109c53cd80"
+  },
+  "print_axioms": "N/A: kani"
+}

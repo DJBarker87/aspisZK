@@ -1,0 +1,598 @@
+[
+  {
+    "attempt": "KMZ_K001",
+    "kind": "kani",
+    "result": "ERROR",
+    "negative_control": true,
+    "parent": "KMY_K006",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 0.6092306640348397,
+    "peak_rss_kib": "126400",
+    "swaps": "0",
+    "failures": [],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K001/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K002",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K006",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 3.690777080017142,
+    "peak_rss_kib": "254380",
+    "swaps": "0",
+    "failures": [
+      "16: KMZ_expand_copy_window_selected.assertion.7\n\t - Status: FAILURE\n\t - Description: \"assertion failed: dst[j] ^ 1u8 == if at<=j && j<at+16 {source[j-at]} else {old}\"\n\t - Location: KMZ_windows.rs:12:2 in function KMZ_expand_copy_window_selected\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K002/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K003",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K018",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 6.614048313000239,
+    "peak_rss_kib": "282216",
+    "swaps": "0",
+    "failures": [
+      "17: KMZ_local_window32_selected.assertion.7\n\t - Status: FAILURE\n\t - Description: \"assertion failed: dst[j] ^ 1u8 == if pos<=j && j<pos+32{src[j-pos]}else{old}\"\n\t - Location: KMZ_windows.rs:136:2 in function KMZ_local_window32_selected\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K003/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K004",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K011",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 7.953856939973775,
+    "peak_rss_kib": "292964",
+    "swaps": "0",
+    "failures": [
+      "32: KMZ_wide_one_window_selected.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: dst[j] ^ 1u8 ==\nif pos<=j && j<pos+32{let b=j-pos;raw[b/4].to_le_bytes()[b%4]}else{old}\"\n\t - Location: KMZ_windows.rs:42:2 in function KMZ_wide_one_window_selected\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K004/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K005",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K012",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 4.261246145993937,
+    "peak_rss_kib": "280632",
+    "swaps": "0",
+    "failures": [
+      "19: KMZ_limb_window_selected.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: dst[j] ^ 1u8 == if pos<=j && j<pos+4{(raw>>(8*(j-pos)))as u8}else{old}\"\n\t - Location: KMZ_windows.rs:49:2 in function KMZ_limb_window_selected\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K005/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K006",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K017",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 4.868520174990408,
+    "peak_rss_kib": "282764",
+    "swaps": "0",
+    "failures": [
+      "10: KMZ_scalar_one_window_selected.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: dst[j] ^ 1u8 ==\nif pos<=j && j<pos+16{let b=j-pos;raw[b/4].to_le_bytes()[b%4]}else{old}\"\n\t - Location: KMZ_windows.rs:128:2 in function KMZ_scalar_one_window_selected\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K006/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K007",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K040",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 13.081394721986726,
+    "peak_rss_kib": "328508",
+    "swaps": "0",
+    "failures": [
+      "130: wide_append_stage::<0, 0>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:282:2 in function wide_append_stage::<0, 0>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K007/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K008",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K041",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 17.52897473599296,
+    "peak_rss_kib": "462000",
+    "swaps": "0",
+    "failures": [
+      "18: wide_append_stage::<32, 32>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:282:2 in function wide_append_stage::<32, 32>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K008/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K009",
+    "kind": "kani",
+    "result": "ERROR",
+    "negative_control": true,
+    "parent": "KMY_K042",
+    "split": null,
+    "exit_status": 2,
+    "wall_seconds": 0.7862452900153585,
+    "peak_rss_kib": "100828",
+    "swaps": "0",
+    "failures": [],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K009/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K010",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K043",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 67.61297667596955,
+    "peak_rss_kib": "2800160",
+    "swaps": "0",
+    "failures": [
+      "87: wide_append_stage::<96, 128>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:282:2 in function wide_append_stage::<96, 128>\n"
+    ],
+    "solver_concrete_playback": true,
+    "receipt": "KMZ_K010/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K011",
+    "kind": "kani",
+    "result": "TIMEOUT",
+    "negative_control": true,
+    "parent": "KMY_K044",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 96.29744744603522,
+    "peak_rss_kib": "1690704",
+    "swaps": "0",
+    "failures": [],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K011/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K012",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K045",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 86.55057067895541,
+    "peak_rss_kib": "3681568",
+    "swaps": "0",
+    "failures": [
+      "74: wide_append_stage::<160, 256>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:282:2 in function wide_append_stage::<160, 256>\n"
+    ],
+    "solver_concrete_playback": true,
+    "receipt": "KMZ_K012/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K013",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K050",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 7.3449368650326505,
+    "peak_rss_kib": "316424",
+    "swaps": "0",
+    "failures": [
+      "77: scalar_append_stage::<0, 0>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<0, 0>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K013/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K014",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K051",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 12.353977082995698,
+    "peak_rss_kib": "316164",
+    "swaps": "0",
+    "failures": [
+      "93: scalar_append_stage::<16, 16>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<16, 16>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K014/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K015",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K052",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 13.749600526003633,
+    "peak_rss_kib": "316100",
+    "swaps": "0",
+    "failures": [
+      "50: scalar_append_stage::<32, 32>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<32, 32>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K015/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K016",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K053",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 10.45115092099877,
+    "peak_rss_kib": "316424",
+    "swaps": "0",
+    "failures": [
+      "53: scalar_append_stage::<48, 64>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<48, 64>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K016/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K017",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K054",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 21.36754834803287,
+    "peak_rss_kib": "480480",
+    "swaps": "0",
+    "failures": [
+      "54: scalar_append_stage::<64, 64>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<64, 64>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K017/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K018",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K055",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 12.44639089104021,
+    "peak_rss_kib": "316440",
+    "swaps": "0",
+    "failures": [
+      "91: scalar_append_stage::<80, 128>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<80, 128>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K018/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K019",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K056",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 18.180511411977932,
+    "peak_rss_kib": "339680",
+    "swaps": "0",
+    "failures": [
+      "84: scalar_append_stage::<96, 128>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<96, 128>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K019/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K020",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K057",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 16.089513934974093,
+    "peak_rss_kib": "380688",
+    "swaps": "0",
+    "failures": [
+      "29: scalar_append_stage::<112, 128>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<112, 128>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K020/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K021",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K058",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 32.00054647697834,
+    "peak_rss_kib": "859056",
+    "swaps": "0",
+    "failures": [
+      "39: scalar_append_stage::<128, 128>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<128, 128>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K021/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K022",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K059",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 23.882569049019367,
+    "peak_rss_kib": "465168",
+    "swaps": "0",
+    "failures": [
+      "62: scalar_append_stage::<144, 256>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<144, 256>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K022/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K023",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K051",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 26.44509327900596,
+    "peak_rss_kib": "506352",
+    "swaps": "0",
+    "failures": [
+      "69: scalar_append_stage::<160, 256>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<160, 256>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K023/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K024",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K051",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 29.66607210302027,
+    "peak_rss_kib": "547536",
+    "swaps": "0",
+    "failures": [
+      "85: scalar_append_stage::<176, 256>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<176, 256>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K024/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K025",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K051",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 24.28278951201355,
+    "peak_rss_kib": "588544",
+    "swaps": "0",
+    "failures": [
+      "56: scalar_append_stage::<192, 256>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<192, 256>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K025/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K026",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K051",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 27.540379814978223,
+    "peak_rss_kib": "630080",
+    "swaps": "0",
+    "failures": [
+      "90: scalar_append_stage::<208, 256>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:336:2 in function scalar_append_stage::<208, 256>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K026/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K027",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K074",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 7.275644115987234,
+    "peak_rss_kib": "259936",
+    "swaps": "0",
+    "failures": [
+      "38: KMZ_capacity32.assertion.5\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out.capacity() == expected[i]\"\n\t - Location: KMZ_windows.rs:473:98 in function KMZ_capacity32\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K027/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K028",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K074",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 41.63273415301228,
+    "peak_rss_kib": "859232",
+    "swaps": "0",
+    "failures": [
+      "83: KMZ_capacity16.assertion.5\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out.capacity() == expected[i]\"\n\t - Location: KMZ_windows.rs:481:99 in function KMZ_capacity16\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K028/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K029",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K042",
+    "split": null,
+    "exit_status": 1,
+    "wall_seconds": 93.86891410400858,
+    "peak_rss_kib": "3943984",
+    "swaps": "0",
+    "failures": [
+      "33: wide_append_stage::<64, 64>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:282:2 in function wide_append_stage::<64, 64>\n"
+    ],
+    "solver_concrete_playback": true,
+    "receipt": "KMZ_K029/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K030",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K044",
+    "split": "prefix",
+    "exit_status": 1,
+    "wall_seconds": 34.49635951599339,
+    "peak_rss_kib": "741664",
+    "swaps": "0",
+    "failures": [
+      "94: wide_append_stage::<128, 128>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:283:2 in function wide_append_stage::<128, 128>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K030/receipt.json"
+  },
+  {
+    "attempt": "KMZ_K031",
+    "kind": "kani",
+    "result": "COUNTEREXAMPLE",
+    "negative_control": true,
+    "parent": "KMY_K044",
+    "split": "appended",
+    "exit_status": 1,
+    "wall_seconds": 36.6740302570397,
+    "peak_rss_kib": "933680",
+    "swaps": "0",
+    "failures": [
+      "48: wide_append_stage::<128, 128>.assertion.8\n\t - Status: FAILURE\n\t - Description: \"assertion failed: out[j] ^ 1u8 ==\nif j<LEN{initial[j]}else{let b=j-LEN;raw[b/4].to_le_bytes()[b%4]}\"\n\t - Location: KMZ_windows.rs:283:2 in function wide_append_stage::<128, 128>\n"
+    ],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_K031/receipt.json"
+  },
+  {
+    "attempt": "KMZ_R001",
+    "kind": "rust",
+    "result": "PASS",
+    "negative_control": false,
+    "parent": null,
+    "split": null,
+    "exit_status": 0,
+    "wall_seconds": 1.5734741890337318,
+    "peak_rss_kib": "149992",
+    "swaps": "0",
+    "failures": [],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_R001/receipt.json"
+  },
+  {
+    "attempt": "KMZ_R002",
+    "kind": "rust",
+    "result": "PASS",
+    "negative_control": false,
+    "parent": null,
+    "split": null,
+    "exit_status": 0,
+    "wall_seconds": 1.419615808990784,
+    "peak_rss_kib": "149664",
+    "swaps": "0",
+    "failures": [],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_R002/receipt.json"
+  },
+  {
+    "attempt": "KMZ_R003",
+    "kind": "rust",
+    "result": "PASS",
+    "negative_control": false,
+    "parent": null,
+    "split": null,
+    "exit_status": 0,
+    "wall_seconds": 1.7075228119501844,
+    "peak_rss_kib": "151168",
+    "swaps": "0",
+    "failures": [],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_R003/receipt.json"
+  },
+  {
+    "attempt": "KMZ_R004",
+    "kind": "rust",
+    "result": "PASS",
+    "negative_control": false,
+    "parent": null,
+    "split": null,
+    "exit_status": 0,
+    "wall_seconds": 1.1547477910062298,
+    "peak_rss_kib": "149616",
+    "swaps": "0",
+    "failures": [],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_R004/receipt.json"
+  },
+  {
+    "attempt": "KMZ_R005",
+    "kind": "rust",
+    "result": "PASS",
+    "negative_control": false,
+    "parent": null,
+    "split": null,
+    "exit_status": 0,
+    "wall_seconds": 1.3217056449502707,
+    "peak_rss_kib": "149196",
+    "swaps": "0",
+    "failures": [],
+    "solver_concrete_playback": false,
+    "receipt": "KMZ_R005/receipt.json"
+  }
+]

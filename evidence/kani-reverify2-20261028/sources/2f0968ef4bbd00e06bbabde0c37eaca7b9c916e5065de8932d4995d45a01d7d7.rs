@@ -1,0 +1,21 @@
+#![feature(allocator_api)]
+extern crate alloc;
+mod KMX_stubs;
+#[kani::proof]
+#[kani::unwind(17)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+fn KMZ_expand_copy_window() {
+ let source:[u8;16]=kani::any();let mut dst:[u8;96]=kani::any();
+ let at:usize=kani::any();kani::assume(at<=80);
+ let j:usize=kani::any();kani::assume(j<96);let old=dst[j];
+ KMX_stubs::KMX_copy_from_slice(&mut dst[at..at+16],&source);
+ assert_eq!(dst[j] ^ 1u8,if at<=j && j<at+16 {source[j-at]} else {old});
+}
+#[kani::proof]
+#[kani::unwind(17)]
+fn KMZ_expand_zero_window() {
+ let mut dst:[u8;96]=kani::any();let at:usize=kani::any();kani::assume(at<=80);
+ let j:usize=kani::any();kani::assume(j<96);let old=dst[j];
+ dst[at..at+16].fill(0);
+ assert_eq!(dst[j],if at<=j && j<at+16 {0} else {old});
+}
