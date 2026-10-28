@@ -3,6 +3,15 @@ set_option autoImplicit false
 namespace R1Z.PV_FXM_ReserveWorld
 open Aeneas Aeneas.Std
 
+/-- Total encoding; on admitted target-size layouts this is exact. -/
+def usize (n : Nat) : Usize :=
+  Usize.ofNatCore (n % (Usize.max+1))
+    (Nat.le_of_lt_succ (Nat.mod_lt n (Nat.zero_lt_succ Usize.max)))
+
+theorem usize_exact (n : Nat) (h : n≤Usize.max) : (usize n).val=n := by
+  change n % (Usize.max+1)=n
+  exact Nat.mod_eq_of_lt (Nat.lt_succ_of_le h)
+
 inductive Error where
   | capacityOverflow
   | allocError (layout : core.alloc.layout.Layout)
@@ -74,7 +83,7 @@ def finish {T S F : Type} (step : Request → S → Option Nat × S)
   let (p,s) := step req w.allocator
   let w' := attempted req p s w
   match p with
-  | none => ⟨.error (.allocError ⟨Usize.ofNat (cap*shape.width),shape.align⟩),b,w'⟩
+  | none => ⟨.error (.allocError ⟨usize (cap*shape.width),shape.align⟩),b,w'⟩
   | some address => ⟨.ok (),⟨address,cap,b.values,Nat.le_add_right _ _⟩,succeeded req address w'⟩
 
 /-- RawVec grow_exact: the guards precede the allocator call. `wordMax` and
@@ -142,13 +151,12 @@ theorem allocation_error {T S F : Type} (step : Request → S → Option Nat × 
     (shape : Shape) (b : Buffer T) (additional : Nat) (w : World S F)
     (s : S) (h : step ⟨b.address,b.capacity,b.values.length+additional,shape⟩ w.allocator=(none,s)) :
     (finish step shape b additional w).returned =
-        .error (.allocError ⟨Usize.ofNat ((b.values.length+additional)*shape.width),shape.align⟩) ∧
+        .error (.allocError ⟨usize ((b.values.length+additional)*shape.width),shape.align⟩) ∧
     (finish step shape b additional w).buffer=b ∧
     (finish step shape b additional w).world.allocator=s ∧
     (finish step shape b additional w).world.memory=w.memory ∧
     (finish step shape b additional w).world.live=w.live := by
-  simp only [finish,h,attempted]
-  exact ⟨rfl,rfl,rfl,rfl,rfl⟩
+  simp [finish,h,attempted]
 
 theorem success_capacity {T S F : Type} (step : Request → S → Option Nat × S)
     (shape : Shape) (b : Buffer T) (additional : Nat) (w : World S F)
@@ -157,8 +165,7 @@ theorem success_capacity {T S F : Type} (step : Request → S → Option Nat × 
     (finish step shape b additional w).returned=.ok () ∧
     (finish step shape b additional w).buffer.capacity=b.values.length+additional ∧
     (finish step shape b additional w).buffer.address=p := by
-  simp only [finish,h]
-  exact ⟨rfl,rfl,rfl⟩
+  simp [finish,h]
 
 theorem caller_composition {T S F A : Type} (step : Request → S → Option Nat × S)
     (wordMax byteMax : Nat) (shape : Shape) (b : Buffer T)
@@ -167,6 +174,7 @@ theorem caller_composition {T S F A : Type} (step : Request → S → Option Nat
       caller (reference step wordMax byteMax shape b additional w) :=
   congrArg caller (source_reference step wordMax byteMax shape b additional w)
 
+#print axioms usize_exact
 #print axioms source_reference
 #print axioms values_preserved
 #print axioms no_growth
