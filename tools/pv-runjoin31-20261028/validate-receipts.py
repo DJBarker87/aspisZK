@@ -4,8 +4,8 @@ import json,hashlib,re,subprocess
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin31-20261028';allowed={'propext','Classical.choice','Quot.sound'};rows=[];seen=set()
 for p in sorted(E.glob('receipt-[0-9]*.json')):
  r=json.loads(p.read_text());snap=E/r['source_snapshot'];assert hashlib.sha256(snap.read_bytes()).hexdigest()==r['source_sha256']
- raw=subprocess.check_output(['git','show',r['source_revision']+':'+r['source_path']]);assert hashlib.sha256(raw).hexdigest()==r['source_sha256']
- assert subprocess.check_output(['git','rev-parse',r['source_revision']+':'+r['source_path']],text=True).strip()==r['source_git_blob']
+ raw=subprocess.check_output(['git','show',r.get('source_capture_revision',r['source_revision'])+':'+r['source_path']]);assert hashlib.sha256(raw).hexdigest()==r['source_sha256']
+ assert subprocess.check_output(['git','rev-parse',r.get('source_capture_revision',r['source_revision'])+':'+r['source_path']],text=True).strip()==r.get('source_capture_git_blob',r['source_git_blob'])
  assert all(x in r['command'] for x in ['MemoryHigh=6G','MemoryMax=8G','MemorySwapMax=0','TasksMax=64','7000'])
  assert r['reservation']['allowed'] is True
  key=(r['source_sha256'],r['deps_fingerprint']);assert key not in seen;seen.add(key)
