@@ -22,11 +22,11 @@ for line in records.splitlines():
  info,name=line.split('\t');mode,kind,sha=info.split()
  if name not in available:continue
  files[name]=sha
- if available[name]!=sha or name in ['Cargo.lock','crates/aspis-r1-cost-probe/src/verifier.rs','crates/aspis-r1-cost-probe/src/candidate.rs']:
+ if available[name]!=sha or name in ['Cargo.lock','crates/aspis-r1-cost-probe/src/verifier.rs','crates/aspis-r1-cost-probe/src/candidate.rs','crates/aspis-core/src/r0_transcript.rs']:
   replacements[name]=base64.b64encode(subprocess.check_output(['git','cat-file','blob',sha])).decode()
 for name in ['Cargo.toml','Cargo.lock','.cargo/config.toml','crates/aspis-r1-cost-probe/src/verifier.rs']:
  assert name in files,name
-payload={'files':files,'private':replacements,'harness':(E/'NBA_verifier.rs').read_text()}
+payload={'files':files,'private':replacements,'harness':__import__('NBA_harness').source(),'core':__import__('NBA_harness').source('crates/aspis-core/src/NBA_query_core.rs')}
 code=f'''from pathlib import Path
 import json,base64,hashlib,difflib
 b=Path({B!r});s=Path({S!r});dst=b/'NBA_src';x=json.loads({json.dumps(json.dumps(payload))})
@@ -34,7 +34,7 @@ dst.mkdir(exist_ok=True)
 for rel,sha in x['files'].items():
  p=dst/rel;p.parent.mkdir(parents=True,exist_ok=True)
  if rel in x['private']:
-  assert not p.is_symlink()
+  if p.is_symlink():p.unlink()
   p.write_bytes(base64.b64decode(x['private'][rel]))
  elif not p.exists():p.symlink_to(s/rel)
  data=p.read_bytes();assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\\0'+data).hexdigest()==sha,rel
@@ -43,6 +43,10 @@ original=p.read_text();p.write_text(original+'\\n#[cfg(kani)] mod NBA_verifier {
 h=dst/'crates/aspis-r1-cost-probe/src/NBA_verifier.rs';h.write_text(x['harness'])
 patch=''.join(difflib.unified_diff(original.splitlines(True),p.read_text().splitlines(True),fromfile='a/crates/aspis-r1-cost-probe/src/verifier.rs',tofile='b/crates/aspis-r1-cost-probe/src/verifier.rs'))
 patch+=''.join(difflib.unified_diff([],h.read_text().splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-r1-cost-probe/src/NBA_verifier.rs'))
+p=dst/'crates/aspis-core/src/r0_transcript.rs';old=p.read_text();p.write_text(old+'\\n#[cfg(kani)] mod NBA_query {{ include!("NBA_query_core.rs"); }}\\n')
+h=dst/'crates/aspis-core/src/NBA_query_core.rs';h.write_text(x['core'])
+patch+=''.join(difflib.unified_diff(old.splitlines(True),p.read_text().splitlines(True),fromfile='a/crates/aspis-core/src/r0_transcript.rs',tofile='b/crates/aspis-core/src/r0_transcript.rs'))
+patch+=''.join(difflib.unified_diff([],h.read_text().splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-core/src/NBA_query_core.rs'))
 (b/'NBA_harness.patch').write_text(patch)
 print(json.dumps(dict(files=len(x['files']),private=len(x['private']),patch=patch,source_sha256={{rel:hashlib.sha256((dst/rel).read_bytes()).hexdigest() for rel in x['files']}})))
 '''

@@ -1,0 +1,55 @@
+{"attempt": "NBA_K012", "exit_status": 0, "wall_seconds": 22.253865731996484, "peak_rss_kib": "426132", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-prepare1-20261027/NBA_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`,
+...
+context::<0>()}
+    |                                       ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_record_challenges`
+
+warning: function `NBA_record_tail` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:199:39
+    |
+199 | #[kani::proof] #[kani::unwind(33)] fn NBA_record_tail(){NBA_record_context::<1>()}
+    |                                       ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_record_tail`
+
+warning: function `NBA_record_semantic` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:200:39
+    |
+200 | #[kani::proof] #[kani::unwind(33)] fn NBA_record_semantic(){NBA_record_context::<2>()}
+    |                                       ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_record_semantic`
+
+warning: function `NBA_claim_call` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:204:4
+    |
+204 | fn NBA_claim_call(){context::<11>()}
+    |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_claim_call`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 7.50s
+Checking harness verifier::NBA_verifier::NBA_record_challenges...
+
+VERIFICATION RESULT:
+ ** 0 of 310 failed (33 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 11.639878s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r33b7d67b017045619249b600f84d898a.scope; invocation ID: 5c8b771f92704da6b9439358ffc621ea

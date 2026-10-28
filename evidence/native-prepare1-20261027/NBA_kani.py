@@ -4,7 +4,12 @@ Batches transfer/recovery to avoid repeated flaky connections. No backend edits.
 from pathlib import Path
 import subprocess,sys,json,time,shlex,hashlib
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-prepare1-20261027';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X='/home/dombarker/project-offloads/codex-cx-assoc-a2-cache-20261027/XRw_objects'
-a,module=sys.argv[1:];src='NBA_src/crates/aspis-r1-cost-probe/src/NBA_verifier.rs';local=E/'NBA_verifier.rs';obj='/dev/null'
+a,module=sys.argv[1:]
+core=module.startswith('r0_transcript::NBA_query::')
+package='aspis-core' if core else 'aspis-r1-cost-probe'
+rel='crates/'+package+'/src/'+('NBA_query_core.rs' if core else 'NBA_verifier.rs')
+src='NBA_src/'+rel;local=__import__('NBA_harness').path(rel);obj='/dev/null'
+
 if (E/'NBA_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NBA_K*/receipt.json')))<30
 assert not (E/a/'receipt.json').exists()
@@ -36,10 +41,11 @@ print(p.read_text(),end='');sys.exit(r.returncode)
  raise SystemExit('STOP admission error')
 else:raise SystemExit('STOP admission exhausted')
 import NBA_graph
-NBA_graph.check(a)
+NBA_graph.check(a,package)
 (E/(a+'-harness.patch')).write_bytes((E/'NBA_harness.patch').read_bytes())
 (E/(a+'-source-pin.json')).write_bytes((E/'NBA_SOURCE.json').read_bytes())
-cfg=dict(attempt=a,kind='kani',module=module,sources=[src,'NBA_src/crates/aspis-r1-cost-probe/src/verifier.rs','NBA_src/Cargo.toml','NBA_src/Cargo.lock'],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NBA_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NBA_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',module,'--output-format','terse'],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/NBA_tmp'},deps_fingerprint={'scope':'frozen native source selected by NBA_SOURCE.json; graph audit before every run; arbitrary callee return overapproximations'},expected_time='optimized Kani compilation then native call routing; no arithmetic elimination',reservation_retries=retry)
+cfg=dict(attempt=a,kind='kani',module=module,sources=[src,'NBA_src/crates/aspis-r1-cost-probe/src/verifier.rs','NBA_src/crates/aspis-core/src/r0_transcript.rs','NBA_src/crates/aspis-core/src/NBA_query_core.rs','NBA_src/Cargo.toml','NBA_src/Cargo.lock'],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NBA_src/crates/'+package+'/Cargo.toml','--target-dir',B+'/NBA_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',module,'--output-format','terse'],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/NBA_tmp'},deps_fingerprint={'scope':'frozen native source selected by NBA_SOURCE.json; graph audit before every run; arbitrary callee return overapproximations'},expected_time='optimized Kani compilation then native call routing; no arithmetic elimination',reservation_retries=retry)
+if core:cfg['command']+=['--features','r0']
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 q=E/a/'sources'/src;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(local.read_bytes())
 payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loads((E/'NBA_LAUNCHER_INPUTS.json').read_text()))
@@ -73,4 +79,4 @@ r=ssh('python3 -c '+shlex.quote(recover));assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 if a+'/receipt.json' not in out:raise SystemExit('STOP no prover receipt; inspect setup/launcher, do not resubmit blindly')
-rc=json.loads(out[a+'/receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-16000:])
+rc=json.loads(out[a+'/receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-2000:])
