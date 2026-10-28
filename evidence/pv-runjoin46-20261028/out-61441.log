@@ -1,0 +1,80 @@
+START 61441 R1Z.PV_RunJoin_WeightTensor46
+DONE 61441 R1Z.PV_RunJoin_WeightTensor46 exit 1 wall 1.86 RSS 4238061568
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightTensor46.lean:13:49: error: unsolved goals
+rows : Std.Array (Std.Array Q 4#usize) 5#usize
+j : Usize
+⊢ (do
+      let a ← rows.index_usize 0#usize
+      let q ← a.index_usize (j.wrapping_shr 0#u32 &&& 3#usize)
+      let v ← PV_B2_251c1.aspis_core.field.QM31.ONE.mul q
+      let a1 ← rows.index_usize 1#usize
+      let q1 ← a1.index_usize (j.wrapping_shr 2#u32 &&& 3#usize)
+      let v1 ← v.mul q1
+      let a2 ← rows.index_usize 2#usize
+      let q2 ← a2.index_usize (j.wrapping_shr 4#u32 &&& 3#usize)
+      let v2 ← v1.mul q2
+      let a3 ← rows.index_usize 3#usize
+      let q3 ← a3.index_usize (j.wrapping_shr 6#u32 &&& 3#usize)
+      let v3 ← v2.mul q3
+      let a4 ← rows.index_usize 4#usize
+      let q4 ← a4.index_usize (j.wrapping_shr 8#u32 &&& 3#usize)
+      v3.mul q4) =
+    do
+    let row ← rows.index_usize 0#usize
+    let q ←
+      row.index_usize (j.wrapping_shr (UScalar.cast UScalarTy.U32 (Usize.wrapping_mul 2#usize 0#usize)) &&& 3#usize)
+    let next ← PV_B2_251c1.aspis_core.field.QM31.ONE.mul q
+    let row ← rows.index_usize (Usize.wrapping_add 0#usize 1#usize)
+    let q ←
+      row.index_usize
+          (j.wrapping_shr
+              (UScalar.cast UScalarTy.U32 (Usize.wrapping_mul 2#usize (Usize.wrapping_add 0#usize 1#usize))) &&&
+            3#usize)
+    let next ← next.mul q
+    let row ← rows.index_usize ((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize)
+    let q ←
+      row.index_usize
+          (j.wrapping_shr
+              (UScalar.cast UScalarTy.U32
+                (Usize.wrapping_mul 2#usize ((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize))) &&&
+            3#usize)
+    let next ← next.mul q
+    let row ← rows.index_usize (((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize).wrapping_add 1#usize)
+    let q ←
+      row.index_usize
+          (j.wrapping_shr
+              (UScalar.cast UScalarTy.U32
+                (Usize.wrapping_mul 2#usize
+                  (((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize).wrapping_add 1#usize))) &&&
+            3#usize)
+    let next ← next.mul q
+    let row ←
+      rows.index_usize
+          ((((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize).wrapping_add 1#usize).wrapping_add 1#usize)
+    let q ←
+      row.index_usize
+          (j.wrapping_shr
+              (UScalar.cast UScalarTy.U32
+                (Usize.wrapping_mul 2#usize
+                  ((((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize).wrapping_add 1#usize).wrapping_add
+                    1#usize))) &&&
+            3#usize)
+    let next ← next.mul q
+    ok next
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightTensor46.lean:15:64: warning: This simp argument is unused:
+  bind_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_WeightProduct46.product, ̲lift, ̲bind_tc_ok, ̲bind_a̵s̵s̵o̵c̵,̵b̵i̵n̵d̵_̵pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightTensor46.lean:15:75: warning: This simp argument is unused:
+  bind_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_WeightProduct46.product, ̲lift, ̲bind_tc_ok, ̲bind_assoc,̵b̵i̵n̵d̵_̵p̵u̵r̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_WeightTensor46.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_WeightTensor46.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

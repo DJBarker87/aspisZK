@@ -1,0 +1,37 @@
+START 61457 R1Z.PV_RunJoin_WeightRaw146
+DONE 61457 R1Z.PV_RunJoin_WeightRaw146 exit 1 wall 1.76 RSS 4238745600
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightRaw146.lean:21:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (amap ?f ?a).index_usize ?j
+in the target expression
+  (fun idx => do
+        let rows ← (amap (amap (amap toQ)) w.factors).index_usize idx
+        AspisR1ProducerRelease47.stored.product rows j 0#usize 5#u8 AspisR1ProducerRelease47.field.QM31.ONE)
+      idx =
+    mapResult toQ do
+      let rows ← w.factors.index_usize idx
+      PV_B2_251c1.host_weights.tensor_raw rows j
+
+w : W
+hs : w.variant = PV_B2_251c1.transport.Variant.S2
+j idx : Usize
+a✝ : ok (Usize.wrapping_sub 1#usize 1#usize) = ok idx
+⊢ (fun idx => do
+        let rows ← (amap (amap (amap toQ)) w.factors).index_usize idx
+        AspisR1ProducerRelease47.stored.product rows j 0#usize 5#u8 AspisR1ProducerRelease47.field.QM31.ONE)
+      idx =
+    mapResult toQ do
+      let rows ← w.factors.index_usize idx
+      PV_B2_251c1.host_weights.tensor_raw rows j
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_WeightRaw146.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

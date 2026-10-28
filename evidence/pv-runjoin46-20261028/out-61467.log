@@ -1,0 +1,85 @@
+START 61467 R1Z.PV_RunJoin_WeightBorrow46
+DONE 61467 R1Z.PV_RunJoin_WeightBorrow46 exit 1 wall 2.54 RSS 4429836288
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:11:46: error: could not synthesize default value for parameter 'h' using tactics
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:11:46: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+A B : Type
+n : Usize
+a : Std.Array A n
+i : Usize
+k : A → (A → Std.Array A n) → Result B
+x : A
+v✝ : ?m.35
+⊢ ↑i < Array.size ?m.36
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:11:45: error: Application type mismatch: The argument
+  fun v => Array.set ?m.36 (↑i) v ⋯
+has type
+  ?m.35 → _root_.Array ?m.35
+but is expected to have type
+  A → Std.Array A n
+in the application
+  k x fun v => Array.set ?m.36 (↑i) v ⋯
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:11:65: error: unsolved goals
+A B : Type
+n : Usize
+a : Std.Array A n
+i : Usize
+k : A → (A → Std.Array A n) → Result B
+⊢ (do
+      let x ← a.index_usize i
+      k x (a.set i)) =
+    sorry
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:17:11: error: Application type mismatch: The argument
+  Array.set ?m.5 (↑i) x ?m.6
+has type
+  _root_.Array A
+but is expected to have type
+  Std.Array A ?m.3
+in the application
+  amap f (Array.set ?m.5 (↑i) x ?m.6)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:17:29: error: Type mismatch
+  Array.set ?m.11 (↑i) (f x) ?m.12
+has type
+  _root_.Array B
+but is expected to have type
+  Std.Array B ?m.3
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:17:12: error: could not synthesize default value for parameter 'h' using tactics
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:17:12: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+A B : Type
+n : Usize
+f : A → B
+a : Std.Array A n
+i : Usize
+x : A
+⊢ ↑i < Array.size ?m.5
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:17:29: error: could not synthesize default value for parameter 'h' using tactics
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:17:29: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+A B : Type
+n : Usize
+f : A → B
+a : Std.Array A n
+i : Usize
+x : A
+⊢ ↑i < Array.size ?m.11
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:17:39: error: Application type mismatch: The argument
+  amap f a
+has type
+  Std.Array B n
+but is expected to have type
+  _root_.Array B
+in the application
+  @Array.set B (amap f a)
+'R1Z.PV_RunJoin_WeightBorrow46.complete' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightBorrow46.lean:21:14: error(lean.unknownIdentifier): Unknown constant `restore`
+

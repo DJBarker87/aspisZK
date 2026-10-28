@@ -1,0 +1,67 @@
+START 61424 R1Z.PV_RunJoin_WeightMap46
+DONE 61424 R1Z.PV_RunJoin_WeightMap46 exit 1 wall 2.15 RSS 4243660800
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightMap46.lean:21:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array B n
+  but is expected to have type
+    { l // l.length = ↑n }
+  in the application
+    ↑a
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightMap46.lean:29:4: error: Tactic `rfl` failed: The left-hand side
+  fail Error.arrayOutOfBounds
+is not definitionally equal to the right-hand side
+  mapResult (amap f)
+    (match a[j]? with
+    | none => fail Error.arrayOutOfBounds
+    | some val => ok ⟨(↑a).set (↑j) x, ⋯⟩)
+
+case h_1
+A B : Type
+n : Usize
+f : A → B
+a : Std.Array A n
+j : Usize
+x : A
+x✝ : Option B
+heq✝ : (amap f a)[j]? = none
+⊢ fail Error.arrayOutOfBounds =
+    mapResult (amap f)
+      (match a[j]? with
+      | none => fail Error.arrayOutOfBounds
+      | some val => ok ⟨(↑a).set (↑j) x, ⋯⟩)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightMap46.lean:30:4: error: Tactic `apply` failed: could not unify the conclusion of `congrArg ok`
+  ok ?m.55 = ok ?m.56
+with the goal
+  ok ⟨(↑(amap f a)).set (↑j) (f x), ⋯⟩ =
+    mapResult (amap f)
+      (match a[j]? with
+      | none => fail Error.arrayOutOfBounds
+      | some val => ok ⟨(↑a).set (↑j) x, ⋯⟩)
+
+Note: The full type of `congrArg ok` is
+  ?m.55 = ?m.56 → ok ?m.55 = ok ?m.56
+
+case h_2
+A B : Type
+n : Usize
+f : A → B
+a : Std.Array A n
+j : Usize
+x : A
+x✝¹ : Option B
+x✝ : B
+heq✝ : (amap f a)[j]? = some x✝
+⊢ ok ⟨(↑(amap f a)).set (↑j) (f x), ⋯⟩ =
+    mapResult (amap f)
+      (match a[j]? with
+      | none => fail Error.arrayOutOfBounds
+      | some val => ok ⟨(↑a).set (↑j) x, ⋯⟩)
+'R1Z.PV_RunJoin_WeightMap46.map_bind' does not depend on any axioms
+'R1Z.PV_RunJoin_WeightMap46.index' depends on axioms: [propext, sorryAx]
+'R1Z.PV_RunJoin_WeightMap46.update' depends on axioms: [propext, sorryAx]
+
