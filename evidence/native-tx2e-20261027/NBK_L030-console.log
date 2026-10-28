@@ -1,0 +1,13 @@
+{"attempt": "NBK_L030", "exit_status": 0, "wall_seconds": 5.392201952985488, "peak_rss_kib": "5382400", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.Slice.fill : {T : Type} →
+  Aeneas.Std.core.clone.Clone T → Aeneas.Std.Slice T → T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} cloneInst s v =>
+  match h : List.mapM (fun x => cloneInst.clone v) ↑s with
+  | Aeneas.Std.Result.ok val => Aeneas.Std.Result.ok ⟨val, ⋯⟩
+  | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+  | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : Aeneas.Std.core.clone.Clone Aeneas.Std.U8 :=
+{ clone := Aeneas.Std.liftFun1 Aeneas.Std.core.clone.impls.CloneU8.clone }
+def Aeneas.Std.Slice.setSlice!.{u} : {α : Type u} → Aeneas.Std.Slice α → ℕ → List α → Aeneas.Std.Slice α :=
+fun {α} s i s' => ⟨(↑s).setSlice! i s', ⋯⟩
+

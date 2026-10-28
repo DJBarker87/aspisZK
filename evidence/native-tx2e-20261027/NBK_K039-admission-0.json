@@ -1,0 +1,63 @@
+{
+  "exit": 0,
+  "log": "{\"allowed\": true, \"bounded_reserved_bytes\": 25769803776, \"requested_bytes\": 8589934592}\n",
+  "reservation": {
+    "requested_bytes": 8589934592,
+    "allowed": true,
+    "utc": 1793151700.9162445,
+    "populated_scopes": [
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r643a16d505694032b942ed445244cb71.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/combined-differential-001/admission-barrier.json python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/capped.py /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/combined-differential-001/receipt combined-differential-001 -- python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus.py",
+          "python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/capped.py /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/combined-differential-001/receipt combined-differential-001 -- python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus.py",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/combined-differential-001/receipt/time.log python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus.py",
+          "python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus.py",
+          "/home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/candidate/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus-6000/6951-candidate 6951 1 0",
+          "/home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/baseline/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus-6000/6952-baseline 6952 1 0",
+          "/home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/candidate/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus-6000/6952-candidate 6952 1 0"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 1200275456
+      },
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r3b810210f903414d8be6ff735a34b360.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 S2W_run_host.py NBL_K002.json",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_K002/time.log timeout 180 python3 NBL_gate.py NBL_K002.json",
+          "timeout 180 python3 NBL_gate.py NBL_K002.json",
+          "python3 NBL_gate.py NBL_K002.json",
+          "/home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target --lib -j 1 -Z unstable-options -Z function-contracts -Z stubbing --harness-timeout 90s --exact --harness verifier::candidate::NBL_candidate::NBL_prepare_allocation_error --output-format terse",
+          "cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target --lib -j 1 -Z unstable-options -Z function-contracts -Z stubbing --harness-timeout 90s --exact --harness verifier::candidate::NBL_candidate::NBL_prepare_allocation_error --output-format terse",
+          "/home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo rustc --manifest-path /home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_src/crates/aspis-r1-cost-probe/Cargo.toml --target x86_64-unknown-linux-gnu -Zhost-config -Ztarget-applies-to-host --config=host.rustflags=[\"--cfg=kani_host\"] --target-dir /home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target/kani --message-format json-diagnostic-rendered-ansi -p path+file:///home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_src/crates/aspis-r1-cost-probe#0.1.0 --lib -- -Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --enable-stubbing --harness verifier::candidate::NBL_candidate::NBL_prepare_allocation_error --exact -Z unstable-options -Z function-contracts -Z stubbing",
+          "/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name aspis_statement --edition=2021 crates/aspis-statement/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debug-assertions=on --cfg feature=\"pool-v1-kernel\" --cfg feature=\"r0\" --check-cfg cfg(docsrs,test) --check-cfg cfg(feature, values(\"insecure-test-logup-compression\", \"pool-v1-kernel\", \"pool-v1-pair-forest-active-mask-basis-audit\", \"pool-v1-pair-forest-binary-copy-weights-audit\", \"pool-v1-pair-forest-copy-finish-dot-basis-audit\", \"pool-v1-pair-forest-copy-pattern-basis-audit\", \"pool-v1-pair-forest-copy-selector-tensor-basis-audit\", \"pool-v1-pair-forest-copy-tag-dot-basis-audit\", \"pool-v1-pair-forest-endpoint-selector-cache-audit\", \"pool-v1-pair-forest-packed-digest-audit\", \"pool-v1-pair-forest-packed-digest-selector-tensor-audit\", \"pool-v1-pair-forest-packed-range-audit\", \"pool-v1-pair-forest-pattern-window-audit\", \"pool-v1-pair-forest-semantic-factor-audit\", \"pool-v1-pair-forest-writer-reference\", \"r0\", \"r0-e4-reference\", \"r0-hoist-reference\", \"r0-r91-audit\", \"spend-dynamic-rate512\")) -C metadata=bc64b4e502bb6ddb -C extra-filename=-819af74962c7279c --out-dir /home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C incremental=/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target/kani/x86_64-unknown-linux-gnu/debug/incremental -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target/kani/debug/deps --extern aspis_core=/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_core-243cad49f7d55dbe.rmeta --extern aspis_r0_block_writer_copies=/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_r0_block_writer_copies-2e52c4ce6b1fbcca.rmeta --extern aspis_r0_poseidon_copy=/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_r0_poseidon_copy-e659e964d739cbe8.rmeta --extern aspis_r0_writer_copies=/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_r0_writer_copies-7de2b1b06a1a6d36.rmeta -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 334704640
+      },
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rfd98b9eb09454f2c9da44c9e1990608f.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/batch2f-box-native-001/admission-barrier.json python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/capped.py /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/batch2f-box-native-001/receipt optimized Rust test compilation followed by finite frozen-row/copy comparison; no elimination -- python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/rowcheck-batch2c.py --box-boundary 001",
+          "python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/capped.py /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/batch2f-box-native-001/receipt optimized Rust test compilation followed by finite frozen-row/copy comparison; no elimination -- python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/rowcheck-batch2c.py --box-boundary 001",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/batch2f-box-native-001/receipt/time.log python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/rowcheck-batch2c.py --box-boundary 001",
+          "python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/rowcheck-batch2c.py --box-boundary 001",
+          "/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/cargo test --release --offline --locked -j 4 -p aspis-r1-cost-probe --features optimized-terminal,r1p-check,ct-host-prover --lib -- pv_b2_box_boundary --test-threads=1 --nocapture",
+          "/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc --crate-name aspis_core --edition=2021 crates/aspis-core/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no --cfg feature=\"ct-host-prover\" --cfg feature=\"r0\" --check-cfg cfg(docsrs,test) --check-cfg cfg(feature, values(\"ct-host-prover\", \"formal-verification\", \"insecure-test-framing\", \"insecure-test-ordering\", \"r0\", \"r0-e4-reference\", \"r0-hoist-reference\", \"r0-op-count\", \"r0-r91-audit\", \"v7-fixed-canonical-audit\", \"v7-fixed-canonical-exact-once-audit\", \"v7-gamma-four-slot-block-audit\")) -C metadata=6fb5c5fa8afa01bf -C extra-filename=-ed597fefb435d008 --out-dir /home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps -C link-arg=-Wl,--threads=4"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 427851776
+      }
+    ],
+    "bounded_reserved_bytes": 25769803776,
+    "all_populated_scopes_bounded": true,
+    "safe_limit_bytes": 59055800320,
+    "print_axioms": "N/A: read-only resource preflight"
+  }
+}
