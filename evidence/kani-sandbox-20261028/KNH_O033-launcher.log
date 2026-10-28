@@ -1,0 +1,59 @@
+{"attempt": "KNH_O033", "exit_status": 1, "wall_seconds": 0.5085297779878601, "peak_rss_kib": "249468", "swaps": "0", "print_axioms": "N/A: kani"}
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.67.0 (standalone)
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KNH_borrowed_positive --exact -Z unstable-options -Z stubbing -Z loop-contracts --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0
+...
+  ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_borrowed_negative`
+
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.022466028s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.07765572s
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+====== Reachability Analysis Result =======
+Total # items: 514
+Total # statements: 7184
+Total # expressions: 1959
+
+Reachable Items:
+  - static item: 1
+  - function: 513
+
+Statements:
+  - Goto: 408
+  - Call: 917
+  - Assign: 1959
+  - Ignored: 2942
+  - SwitchInt: 276
+  - Assert: 124
+  - Return: 489
+  - Unreachable: 44
+  - Intrinsic: 3
+  - Drop: 22
+
+Expressions:
+  - Aggregate: 246
+  - Cast: 247
+  - Use: 760
+  - CheckedBinaryOp: 76
+  - Discriminant: 77
+  - UnaryOp: 75
+  - BinaryOp: 287
+  - Ref: 151
+  - AddressOf: 30
+  - Repeat: 5
+  - NullaryOp: 5
+
+-------------------------------------------
+warning: 7 warnings emitted
+
+Finished /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler in 0.2592751s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_old/KNH_probe__RNvCs5ilCFO4bgRj_9KNH_probe21KNH_borrowed_positive.symtab.out /home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_old/KNH_probe__RNvCs5ilCFO4bgRj_9KNH_probe21KNH_borrowed_positive.out`
+Finished goto-cc in 0.000142901s
+error: Failed to invoke goto-cc: No such file or directory (os error 2)
+
+Running as unit: run-r05fa72df2bdf4bb6a494a923f6b15097.scope; invocation ID: 02b3afc394604aafada1cf3023bb94f1

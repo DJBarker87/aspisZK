@@ -1,0 +1,39 @@
+{"attempt": "KNH_O031", "exit_status": 1, "wall_seconds": 0.30275145801715553, "peak_rss_kib": "116680", "swaps": "0", "print_axioms": "N/A: kani"}
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.67.0 (standalone)
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KNH_for_positive --exact -Z unstable-options -Z stubbing -Z loop-contracts --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/
+...
+NH_for_negative` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:9:4
+  |
+9 | fn KNH_for_negative(){let a:[u8;4]=kani::any();let mut count:usize=0;
+  |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_for_negative`
+
+warning: function `KNH_borrowed_positive` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:16:4
+   |
+16 | fn KNH_borrowed_positive(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&byte...
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_borrowed_positive`
+
+warning: function `KNH_borrowed_negative` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:22:4
+   |
+22 | fn KNH_borrowed_negative(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&byte...
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_borrowed_negative`
+
+
+thread 'rustc' (2220906) panicked at kani-compiler/src/kani_middle/transform/loop_contracts.rs:394:44:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+Kani unexpectedly panicked during compilation.
+Please file an issue here: https://github.com/model-checking/kani/issues/new?labels=bug&template=bug_report.md
+
+[Kani] no current codegen item.
+[Kani] no current codegen location.
+warning: 6 warnings emitted
+
+Finished /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler in 0.046741076s
+error: /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler exited with status exit status: 101
+
+Running as unit: run-r478dde6237bc456789ba7cc56117161e.scope; invocation ID: bcb92a22e92c4f6186c3efa7f933432f

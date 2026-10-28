@@ -1,0 +1,73 @@
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.67.0 (standalone)
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness verifier::candidate::KNC_native::NBZ_return_carriers --exact -Z unstable-options -Z stubbing --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib -C opt-level=1 -C overflow-checks=on -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs --out-dir /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_old --crate-name KNH_probe --crate-type lib`
+warning: multiple variants are never constructed
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:3:18
+  |
+3 | ...um Phase { Parsed,Semantic,SemanticPart(u8),Prepare,CheckpointRead,Merkle(usize),Query(usize),QueryPart(usize,u8),CheckpointWrite,Relation,Final }
+  |       -----   ^^^^^^ ^^^^^^^^ ^^^^^^^^^^^^     ^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^                     ^^^^^^^^^           ^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^
+  |       |
+  |       variants in this enum
+  |
+  = note: `Phase` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: crate `KNH_probe` should have a snake case name
+  |
+  = help: convert the identifier to snake case: `knh_probe`
+  = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `KNC_native` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:6:18
+  |
+6 | #[cfg(kani)] mod KNC_native {
+  |                  ^^^^^^^^^^ help: convert the identifier to snake case: `knc_native`
+
+warning: function `NBZ_mark_none` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:10:4
+   |
+10 | fn NBZ_mark_none(obs:Observer,phase:Phase) {
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbz_mark_none`
+
+warning: function `NBZ_return_carriers` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:18:4
+   |
+18 | fn NBZ_return_carriers() {
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbz_return_carriers`
+
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.000325966s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.006483181s
+====== Reachability Analysis Result =======
+Total # items: 16
+Total # statements: 75
+Total # expressions: 20
+
+Reachable Items:
+  - function: 14
+  - static item: 2
+
+Statements:
+  - Return: 11
+  - Assign: 20
+  - SwitchInt: 1
+  - Ignored: 24
+  - Assert: 1
+  - Goto: 4
+  - Call: 14
+
+Expressions:
+  - Use: 9
+  - CheckedBinaryOp: 1
+  - UnaryOp: 1
+  - Discriminant: 2
+  - Aggregate: 1
+  - Ref: 2
+  - BinaryOp: 4
+
+-------------------------------------------
+warning: 5 warnings emitted
+
+Finished /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler in 0.051179606s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_old/KNH_probe__RNvNtNtNtCs5ilCFO4bgRj_9KNH_probe8verifier9candidate10KNC_native19NBZ_return_carriers.symtab.out /home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_old/KNH_probe__RNvNtNtNtCs5ilCFO4bgRj_9KNH_probe8verifier9candidate10KNC_native19NBZ_return_carriers.out`
+Finished goto-cc in 0.000152971s
+error: Failed to invoke goto-cc: No such file or directory (os error 2)

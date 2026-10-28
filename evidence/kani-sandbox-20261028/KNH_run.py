@@ -9,9 +9,9 @@ if version=='new' and index in [33,34]:
  shape='slice' if index==33 else 'result_slice'
  item=dict(group='shape',harness='KNH_'+shape+'_weak',extra_harnesses=['KNH_'+shape+'_inverted','KNH_'+shape+'_frame'],source='KNH_'+shape+'.rs.txt',expected='per harness; replacement at optimized level1 of level3 compiler panic')
 if item['group']=='copy':
- table=json.loads(Path('evidence/kani-mitig-20261028/KMX_CONFIGURATION_MAP.json').read_text())
- names=[row[k]['harness'].split('::')[-1] for row in table for k in ['expected','negative']]
- item.update(harness=names[0],extra_harnesses=names[1:],exact=True,configurations=55)
+ table=json.loads((E/'KNH_SPLIT_MAP.json').read_text())
+ names=[row['harnesses'][k] for row in table for k in ['correct','wrong']]
+ item.update(harness=names[0],extra_harnesses=names[1:],exact=True,configurations=55,source='KNH_copy_split_'+('mitigated' if version=='new' else 'builtin')+'.rs.txt',scope='large cases replaced by logical one-cell windows; frame OPEN')
 a=f'KNH_{"N" if version=="new" else "O"}{index:03d}'
 assert not (E/(a+'.json')).exists(),'Never resubmit a submitted attempt'
 if version=='new':assert len(list(E.glob('KNH_N[0-9][0-9][0-9].json')))<40
@@ -31,7 +31,9 @@ opt_level='1' if (version=='old' or index>=13) else '3'
 env={'TMPDIR':B+'/KNH_tmp','CARGO_NET_OFFLINE':'true','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','RUSTFLAGS':'-C opt-level='+opt_level+' -C overflow-checks=on -C link-arg=-Wl,--threads=1','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin'}
 if version=='new':
  install=json.loads((E/'KNH_INSTALL.json').read_text());env.update(install['env']);driver=install['driver']
-else:driver='/home/dombarker/.kani/kani-0.67.0/bin/kani-driver'
+else:
+ driver='/home/dombarker/.kani/kani-0.67.0/bin/kani-driver'
+ env['PATH']='/home/dombarker/.kani/kani-0.67.0/bin:'+env['PATH']
 cmd=[driver,scratch+'/KNH_probe.rs','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--output-format','regular','--harness',item['harness']]
 for h in item.get('extra_harnesses',[]):cmd+=['--harness',h]
 if item.get('exact',True):cmd+=['--exact']
