@@ -13999,3 +13999,12 @@ or missing deployed standard-library laws, each with its own commit and exact bl
 rebuild missing structural checkers from their committed sources by hash chain, prove the 1.94.1
 library laws (V212's Option and wrapping-macro binding first), and re-run the gates. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D394 (Stream B) 2026-10-28 18:39 UTC: runjoin40 result; runjoin41 launched
+
+runjoin40 (100 attempts: 91 accepted, 9 rejected; no Kani; three audits with standard axioms; IDs
+60000-60099) proves source compact_values completely: success, exact payload, order and length,
+high-byte rejection and the full-receipt projection. Both native ROMView decoder laws, the helper-effect
+associations, complete commitments, openings and serialization, and the RustRealRefinement composition
+remain; the op227 bridge stays conditional. Branch pushed (62414c5784). runjoin41 (IDs 60100-60199)
+continues in that order. Rows removed outright: 0. Privacy target not yet established.
