@@ -1,8 +1,12 @@
-import R1Z.PV_W_Callbacks
+import R1Z.PV_W_StructuredBinds
 import R1Z.PV_W_RecursiveLaws
+import R1Z.PV_W_R_ApplyMaterial
+import R1Z.PV_W_R_AuditMasks
+import R1Z.PV_W_R_FixedColumn
 import R1Z.PV_W_R_FromSemantics
 import R1Z.PV_W_R_PrivateSalts
 import R1Z.PV_W_R_ReserveBuild
+import R1Z.PV_W_R_ZeroFactor
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_W_R_MaskedWithAttempt
@@ -46,12 +50,8 @@ def program
         let aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst := sourceStore ops aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
         aspis_statement.state_only_trace.StateOnlyTraceFoundation.Insts.CoreCloneClone.clone
         compiled.semantic_c1)
-    let (r2, noised_c11) ← invoke "aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_mask_material_v1" (fun ops =>
-        letI : ExternalFuns := ops
-        let hash := sourceHash ops hash
-        let aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst := sourceStore ops aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
-        aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_mask_material_v1
-        noised_c1 material)
+    let (r2, noised_c11) ← PV_W_R_ApplyMaterial.program
+      noised_c1 material
     let r3 ← invoke "core.result.Result.map_err" (fun ops =>
         letI : ExternalFuns := ops
         let hash := sourceHash ops hash
@@ -85,12 +85,8 @@ def program
           core.result.Result.Insts.CoreOpsTry.branch r5)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue val2 =>
-        let r6 ← invoke "aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.derive_pool_v1_pair_forest_zero_factor_d" (fun ops =>
-            letI : ExternalFuns := ops
-            let hash := sourceHash ops hash
-            let aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst := sourceStore ops aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
-            aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.derive_pool_v1_pair_forest_zero_factor_d
-            reserved hash context)
+        let r6 ← PV_W_R_ZeroFactor.program
+          reserved hash context
         let r7 ← invoke "core.result.Result.map_err" (fun ops =>
             letI : ExternalFuns := ops
             let hash := sourceHash ops hash
@@ -135,28 +131,16 @@ def program
                   nonce_store1)
               else
                 let s := alloc.vec.Vec.deref val1.g
-                let g ← invoke "prover.fixed_k_column" (fun ops =>
-                    letI : ExternalFuns := ops
-                    let hash := sourceHash ops hash
-                    let aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst := sourceStore ops aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
-                    prover.fixed_k_column s)
+                let g ← PV_W_R_FixedColumn.program s
                 let s1 := alloc.vec.Vec.deref val1.h1_padding
-                let h1_padding ← invoke "prover.fixed_k_column" (fun ops =>
-                    letI : ExternalFuns := ops
-                    let hash := sourceHash ops hash
-                    let aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst := sourceStore ops aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
-                    prover.fixed_k_column s1)
+                let h1_padding ← PV_W_R_FixedColumn.program s1
                 let s2 ← invoke "Aeneas.Std.lift" (fun ops =>
                     letI : ExternalFuns := ops
                     let hash := sourceHash ops hash
                     let aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst := sourceStore ops aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
                     Aeneas.Std.lift (Array.to_slice noised_c11.c1))
-                let audit ← invoke "prover.audit_masks" (fun ops =>
-                    letI : ExternalFuns := ops
-                    let hash := sourceHash ops hash
-                    let aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst := sourceStore ops aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
-                    prover.audit_masks s2 val1.mask_only_c1 val4 g h1_padding
-                    val2)
+                let audit ← PV_W_R_AuditMasks.program s2 val1.mask_only_c1 val4 g h1_padding
+                  val2
                 if audit.c1_columns_inactive_balanced != 16#usize then
                   pure (core.result.Result.Err verifier.Error.Semantic,
                     nonce_store1)
@@ -461,7 +445,7 @@ theorem erase_program (ops : ExternalFuns)
             rw [erase_bind]
             apply PV_W_RecursiveLaws.bind_congr
             ·
-              exact erase_invoke ops _ _
+              rw [PV_W_R_ApplyMaterial.erase_program]
             · rintro ⟨r2, noised_c11⟩
               try dsimp only
               rw [erase_bind]
@@ -503,7 +487,7 @@ theorem erase_program (ops : ExternalFuns)
                             rw [erase_bind]
                             apply PV_W_RecursiveLaws.bind_congr
                             ·
-                              exact erase_invoke ops _ _
+                              rw [PV_W_R_ZeroFactor.erase_program]
                             · intro r6
                               try dsimp only
                               rw [erase_bind]
@@ -558,14 +542,14 @@ theorem erase_program (ops : ExternalFuns)
                                                 rw [erase_bind]
                                                 apply PV_W_RecursiveLaws.bind_congr
                                                 ·
-                                                  exact erase_invoke ops _ _
+                                                  rw [PV_W_R_FixedColumn.erase_program]
                                                 · intro g
                                                   try dsimp only
                                                   try dsimp only
                                                   rw [erase_bind]
                                                   apply PV_W_RecursiveLaws.bind_congr
                                                   ·
-                                                    exact erase_invoke ops _ _
+                                                    rw [PV_W_R_FixedColumn.erase_program]
                                                   · intro h1_padding
                                                     try dsimp only
                                                     rw [erase_bind]
@@ -577,7 +561,7 @@ theorem erase_program (ops : ExternalFuns)
                                                       rw [erase_bind]
                                                       apply PV_W_RecursiveLaws.bind_congr
                                                       ·
-                                                        exact erase_invoke ops _ _
+                                                        rw [PV_W_R_AuditMasks.erase_program]
                                                       · intro audit
                                                         try dsimp only
                                                         apply PV_W_Callbacks.erase_if_congr

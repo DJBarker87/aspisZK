@@ -1,6 +1,9 @@
-import R1Z.PV_W_Callbacks
+import R1Z.PV_W_StructuredBinds
 import R1Z.PV_W_RecursiveLaws
+import R1Z.PV_W_R_FinishOpening
+import R1Z.PV_W_R_PrepareOpening
 import R1Z.PV_W_R_PrivateSalts
+import R1Z.PV_W_R_PublishCompact
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_W_R_FromSemantics
@@ -17,10 +20,7 @@ def program
   aspis_core.state_only_hiding.StateOnlyHidingContext)) :
   P (core.result.Result (alloc.vec.Vec Std.U8) verifier.Error) := do
   let (reserved, context) := salts
-  let r ← invoke "prover.prepare_opening" (fun ops =>
-      letI : ExternalFuns := ops
-      let hash := sourceHash ops hash
-      prover.prepare_opening variant hash backend sem)
+  let r ← PV_W_R_PrepareOpening.program variant hash backend sem
   let cf ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
       letI : ExternalFuns := ops
       let hash := sourceHash ops hash
@@ -34,20 +34,14 @@ def program
         core.result.Result.Insts.CoreOpsTry.branch r1)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val1 =>
-      let r2 ← invoke "prover.finish_opening" (fun ops =>
-          letI : ExternalFuns := ops
-          let hash := sourceHash ops hash
-          prover.finish_opening variant hash val val1)
+      let r2 ← PV_W_R_FinishOpening.program variant hash val val1
       let cf2 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
           letI : ExternalFuns := ops
           let hash := sourceHash ops hash
           core.result.Result.Insts.CoreOpsTry.branch r2)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue val2 =>
-        invoke "prover.publish_compact" (fun ops =>
-          letI : ExternalFuns := ops
-          let hash := sourceHash ops hash
-          prover.publish_compact variant val2)
+        PV_W_R_PublishCompact.program variant val2
       | core.ops.control_flow.ControlFlow.Break residual =>
         invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
           letI : ExternalFuns := ops
@@ -84,7 +78,7 @@ theorem erase_program (ops : ExternalFuns)
   rw [erase_bind]
   apply PV_W_RecursiveLaws.bind_congr
   ·
-    exact erase_invoke ops _ _
+    rw [PV_W_R_PrepareOpening.erase_program]
   · intro r
     try dsimp only
     rw [erase_bind]
@@ -114,7 +108,7 @@ theorem erase_program (ops : ExternalFuns)
               rw [erase_bind]
               apply PV_W_RecursiveLaws.bind_congr
               ·
-                exact erase_invoke ops _ _
+                rw [PV_W_R_FinishOpening.erase_program]
               · intro r2
                 try dsimp only
                 rw [erase_bind]
@@ -125,7 +119,7 @@ theorem erase_program (ops : ExternalFuns)
                   try dsimp only
                   cases cf2 with
                   | Continue val2 =>
-                    exact erase_invoke ops _ _
+                    rw [PV_W_R_PublishCompact.erase_program]
                   | Break residual =>
                     exact erase_invoke ops _ _
             | Break residual =>

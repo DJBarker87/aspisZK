@@ -52,7 +52,8 @@ theorem drop_slot_once {S : Type} (glue : Token → S → S) (slot : Nat) (s : S
       (dropSlot glue slot (dropSlot glue slot s w).1 (dropSlot glue slot s w).2).2=glue t w := by
   have one : (dropSlot glue slot s w).2=glue t w := by simp only [dropSlot,take,h]
   refine ⟨one,?_⟩
-  rw [drop_slot_empty glue slot _ _ (take_empty slot s),one]
+  exact (drop_slot_empty glue slot (dropSlot glue slot s w).1
+    (dropSlot glue slot s w).2 (take_empty slot s)).trans one
 
 theorem drop_slot_unique {S : Type} (glue : Token → S → S) (slot : Nat) (s : Slots)
     (w : S) (h : Unique s) : Unique (dropSlot glue slot s w).1 := take_unique slot s h

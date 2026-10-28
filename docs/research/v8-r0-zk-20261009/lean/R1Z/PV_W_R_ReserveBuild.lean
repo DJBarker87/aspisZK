@@ -1,5 +1,7 @@
-import R1Z.PV_W_Callbacks
+import R1Z.PV_W_StructuredBinds
 import R1Z.PV_W_RecursiveLaws
+import R1Z.PV_W_R_MaskMaterial
+import R1Z.PV_W_R_PreReservedReserve
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_W_R_ReserveBuild
@@ -58,18 +60,14 @@ def program
               zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
               (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket
               U8.Insts.ZeroizeDefaultIsZeroes)) self.field_mask_entropy)
-          let (r, pre_reserved) ← invoke "aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref" (fun ops =>
-              letI : ExternalFuns := ops
-              let hash := sourceHash ops hash
-              let state_only_hidingStateOnlyMaskNonceStoreInst := sourceStore ops state_only_hidingStateOnlyMaskNonceStoreInst
-              aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
-              aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
-              hash precommit_binding context a
-              {
-              statement_digest := context.statement_digest,
-              mask_nonce := context.mask_nonce,
-              consumed := false
-              })
+          let (r, pre_reserved) ← PV_W_R_MaskMaterial.program
+            PV_W_R_PreReservedReserve.store
+            hash precommit_binding context a
+            {
+            statement_digest := context.statement_digest,
+            mask_nonce := context.mask_nonce,
+            consumed := false
+            }
           let cf ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
               letI : ExternalFuns := ops
               let hash := sourceHash ops hash
@@ -216,7 +214,7 @@ theorem erase_program (ops : ExternalFuns)
                     rw [erase_bind]
                     apply PV_W_RecursiveLaws.bind_congr
                     ·
-                      exact erase_invoke ops _ _
+                      rw [PV_W_R_MaskMaterial.erase_program,PV_W_R_PreReservedReserve.store_source]
                     · rintro ⟨r, pre_reserved⟩
                       try dsimp only
                       rw [erase_bind]
