@@ -26,7 +26,7 @@ def round (digest : Array U8 32#usize) (name1 : String) (i : Usize) : Result Str
           ]) i4
     let name2 ← alloc.string.String.push_str name1 high
     let name3 ← alloc.string.String.push_str name2 low
-    pure name3
+    ok name3
 
 def finite (digest : Array U8 32#usize) : Nat → String → Usize → Result String
   | 0,acc,_ => ExternalFuns.op31 acc PV_RDEA_ActualReservation.suffixText
