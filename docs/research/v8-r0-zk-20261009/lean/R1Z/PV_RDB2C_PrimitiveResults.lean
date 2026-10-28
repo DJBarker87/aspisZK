@@ -28,15 +28,23 @@ def boxed {S : Type} (allocate : Request → S → Result (Option Nat × S))
     (v : PV_B2_C_WeightsNative.transport.Variant)
     (alpha : Array PV_B2_C_ConstructorRows.K 10#usize)
     (z : Array PV_B2_C_ConstructorRows.Point 2#usize) (world : PV_RDB2C_V259.World S) := do
-  let decision ← allocate PV_RDB2C_V259.request world.allocator
-  PV_RDB2C_V259.copied (fun _ _ => decision) v alpha z world
+  let r ← PV_B2_C_WeightsNative.host_weights.Weights.new v alpha z
+  match r with
+  | .Err e => ok (PV_RDB2C_V259.finish (fun _ _ => (none,world.allocator)) (.Err e) world)
+  | .Ok value => do
+    let decision ← allocate PV_RDB2C_V259.request world.allocator
+    ok (PV_RDB2C_V259.finish (fun _ _ => decision) (.Ok value) world)
 
 def boxedReference {S : Type} (allocate : Request → S → Result (Option Nat × S))
     (v : PV_B2_C_WeightsNative.transport.Variant)
     (alpha : Array PV_B2_C_ConstructorRows.K 10#usize)
     (z : Array PV_B2_C_ConstructorRows.Point 2#usize) (world : PV_RDB2C_V259.World S) := do
-  let decision ← allocate PV_RDB2C_V259.request world.allocator
-  PV_RDB2C_V259.original (fun _ _ => decision) v alpha z world
+  let r ← PV_B2_C_ConstructorSuccess.staged v alpha z
+  match r with
+  | .Err e => ok (PV_RDB2C_V259.finish (fun _ _ => (none,world.allocator)) (.Err e) world)
+  | .Ok value => do
+    let decision ← allocate PV_RDB2C_V259.request world.allocator
+    ok (PV_RDB2C_V259.finish (fun _ _ => decision) (.Ok value) world)
 
 theorem boxed_complete {S : Type} (allocate : Request → S → Result (Option Nat × S))
     (v : PV_B2_C_WeightsNative.transport.Variant)
@@ -44,9 +52,7 @@ theorem boxed_complete {S : Type} (allocate : Request → S → Result (Option N
     (z : Array PV_B2_C_ConstructorRows.Point 2#usize) (world : PV_RDB2C_V259.World S) :
     boxed allocate v alpha z world=boxedReference allocate v alpha z world := by
   unfold boxed boxedReference
-  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
-  intro decision _
-  exact PV_RDB2C_V259.complete (fun _ _ => decision) v alpha z world
+  rw [PV_B2_C_ConstructorSuccess.new_eq_staged]
 
 theorem materialize_primitive_failure {S : Type}
     (allocate : Request → S → Result (Option Nat × S)) (e : Error)
