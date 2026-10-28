@@ -88,3 +88,14 @@ shared-source writes, cap increase, shipped crates/programs edits, key action,
 push or merge occurred. The private compiled cache is retained for dependent
 work under resource rule6. No unchanged full regression or frozen release
 manifest replay was repeated; this is focused proof/audit evidence.
+
+Final lane-audit correction: explicitly importing LaneDenotation31 exposed
+additional source-cache discrepancies (recovery/lane-audit-cache-mismatches.json),
+including the same PublicPreparation cohort mismatch. No compiler was launched
+on that closure. The owned-reference/structural checks and earlier compile
+receipts remain evidence, but their complete native source-law closure is
+unconfirmed pending coherent dependency provenance/build. FinalAudit31 therefore
+audits canonical semantic honesty/coverage and snapshot agreement only; it does
+not import LaneDenotation31. Native-lane structural evidence is not promoted to
+a coherent release source law. The main canonical theorems use the explicitly
+fixed native lane dictionary and do not import that reference-denotation proof.

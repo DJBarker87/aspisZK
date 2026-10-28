@@ -29,3 +29,14 @@ claimed. Existing historical endpoint audits are retained unchanged. V038/V045
 and RustRealRefinement remain open. The next adapter step requires privately
 building a source-coherent dependency closure (with new authorized IDs), or
 establishing admissible h6 provenance for each identical retained object.
+
+Final lane-audit correction: explicitly importing LaneDenotation31 exposed
+additional source-cache discrepancies (recovery/lane-audit-cache-mismatches.json),
+including the same PublicPreparation cohort mismatch. No compiler was launched
+on that closure. The owned-reference/structural checks and earlier compile
+receipts remain evidence, but their complete native source-law closure is
+unconfirmed pending coherent dependency provenance/build. FinalAudit31 therefore
+audits canonical semantic honesty/coverage and snapshot agreement only; it does
+not import LaneDenotation31. Native-lane structural evidence is not promoted to
+a coherent release source law. The main canonical theorems use the explicitly
+fixed native lane dictionary and do not import that reference-denotation proof.
