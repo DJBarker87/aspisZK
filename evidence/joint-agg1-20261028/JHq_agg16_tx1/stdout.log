@@ -1,0 +1,30 @@
+theorem AspisR1.JHn_TX1Frontier.of_byte_identity : ∀ [trees : JHe_SHARealization] (base : AdapterRw.Ops)
+  (stage : VTop_Stages.Ops),
+  JHn_TX1Frontier.ByteIdentity →
+    ∃ saved,
+      S2W_D189Wrappers.first (JHe_Natives.first base stage) CPH_FixtureData.copy CPH_FixtureData.allocator JHb_World.e1
+            CPH_Program.verifier JHe_Natives.data1 () =
+          ok (core.result.Result.Ok (saved, JHe_WrapperReady.post saved, ())) ∧
+        ↑saved = ↑JFx_NativeBytes.checkpoint ∧ (↑saved).length = 1768 :=
+fun [JHe_SHARealization] base stage identify =>
+  let ⟨saved, h✝⟩ := JHn_TX1Frontier.witness base stage
+  let ⟨returned, right✝⟩ := h✝
+  let ⟨child, length⟩ := right✝
+  Exists.intro saved
+    ⟨JHe_WrapperReady.source base stage saved length (JHe_SdkParent.source base stage saved length child),
+      ⟨identify saved returned, length⟩⟩
+theorem AspisR1.JHn_ExactReturned.source : ∀ (saved : alloc.vec.Vec U8),
+  verifier.candidate.tx1 installed digest (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.publicInput
+        JFx_NativeBytes.proof 10#usize () none =
+      ok (core.result.Result.Ok saved) →
+    ↑saved = ↑JFx_NativeBytes.checkpoint :=
+fun saved returned => JHn_LiteReturnedIdentity.source saved returned
+'AspisR1.JHq_TX1.accepted1_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHq_TX1.accepted1_saved : ∀ [trees : JHe_SHARealization] (base : AdapterRw.Ops)
+  (stage : VTop_Stages.Ops),
+  ∃ saved,
+    S2W_D189Wrappers.first (JHe_Natives.first base stage) CPH_FixtureData.copy CPH_FixtureData.allocator JHb_World.e1
+          CPH_Program.verifier JHe_Natives.data1 () =
+        ok (core.result.Result.Ok (saved, JHe_WrapperReady.post saved, ())) ∧
+      ↑saved = ↑JFx_NativeBytes.checkpoint ∧ (↑saved).length = 1768 :=
+fun [JHe_SHARealization] base stage => JHn_TX1Frontier.of_byte_identity base stage JHn_ExactReturned.source

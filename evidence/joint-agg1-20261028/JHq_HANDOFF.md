@@ -1,92 +1,156 @@
-# Joint aggregation handoff
+# TX1 aggregation handoff — 2026-10-28
 
-Status: BLOCKED before admission, upload, or Lean compilation. No new theorem
-has been checked. Prepared source: lean/JHq_TX1.lean, namespace
-AspisR1.JHq_TX1, commit cf8faa7208. No push.
+Status: **CHECKED, conditional only on JHe_SHARealization.**
+`AspisR1.JHq_TX1.accepted1_saved` in `lean/JHq_TX1.lean` applies exactly
+`JHn_TX1Frontier.of_byte_identity base stage JHn_ExactReturned.source`.
+No existing proved module or shared infrastructure was edited. No push.
 
-## Exact infrastructure blocker
+## Before and after
 
-The existing fixture lane launcher delegates to
-/home/dombarker/project-offloads/codex-cx-fixture-cache-20261027/S2W_run_host.py.
-That shared runner asserts exactly:
+Before: the checked `JHn_TX1Frontier.of_byte_identity` required
+`identify : JHn_TX1Frontier.ByteIdentity`, in addition to
+`[trees : JHe_SHARealization]`, with universally quantified `base` and `stage`.
+The independently checked `JHn_ExactReturned.source` proves that byte identity
+unconditionally. Their final application was previously unchecked: predecessor
+attempt JHn35_090 failed during import at -M7000, exit 134, peak RSS
+7,272,464 KiB, swap 0. The earlier worker stopped before compilation because
+the shared runner asserted 6G/8G; that historical inspection remains in
+JHq_INFRASTRUCTURE.json.
 
+After: the final application is kernel-checked. The complete statement is:
+
+```lean
+variable [trees : JHe_SHARealization]
+theorem accepted1_saved (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+    ∃ saved : alloc.vec.Vec U8,
+      S2W_D189Wrappers.first (JHe_Natives.first base stage)
+        CPH_FixtureData.copy CPH_FixtureData.allocator JHb_World.e1
+        CPH_Program.verifier JHe_Natives.data1 ()=
+          ok (.Ok (saved,JHe_WrapperReady.post saved,())) ∧
+      saved.val=JFx_NativeBytes.checkpoint.val ∧ saved.val.length=1768
 ```
-{'memory.high':'6442450944','memory.max':'8589934592',
- 'memory.swap.max':'0','pids.max':'64'}
+
+JHq_STATEMENT_COMPARE.json confirms that the statement text following the
+name is byte-identical to the predecessor draft's accepted1_saved statement.
+No carrier, heap, quantifier, event, or conclusion changed. The existing
+ByteIdentity interface premise was discharged; no premise was added.
+In particular no byte-SHA, acceptance, writer identity, or TX2 premise is
+required by this theorem. `base : AdapterRw.Ops` and `stage : VTop_Stages.Ops`
+remain universal parameters.
+
+The sole retained propositional assumption, JHe_SHARealization, comprises
+453 concrete SHA tree equations: 157 for tree0, 157 for tree1, and 139 for
+tree2. This job did not prove those equations. The theorem is an actual
+retained-fixture TX1 wrapper acceptance/byte identity result, not a deployed
+security theorem or an arbitrary-adversary soundness result.
+
+## Verified launchers and preflight
+
+Lead-owned SHA256 values were verified first, before admission or uploads:
+
+| File | SHA256 |
+| --- | --- |
+| reservation_agg16.py | d6d40da5e7cad196b15974eb96526f28073d20b2c24855303d69bc605ebcac0f |
+| S2W_lean_host_agg16.py | 9b325ab05e4aea7c8a2c3499ccef5de11898fdcba38cb803fc6a85111ca3f1dd |
+| S2W_run_host_agg16.py | 8165ccff93f7d9b6043f55bf641c30c95c5af0f86d28b6e1b1ffef3aa5ea7ff6 |
+
+JHq_RUNNER_HASHES.json records the initial verification. The recursive
+JHq_CLOSURE_PREFLIGHT.json matched all 95 JHn_/JHe_ objects (73/22) selected
+by the inherited joint-fixture35 LEAN_PATH against historical manifests or
+consumer receipts. No missing dependency was found or rebuilt. None of the
+285 checked .olean.server/.olean.private/.ir companions was present
+(JHq_COMPANIONS.json). Objects and compiled dependency evidence were reused;
+there was no cold build, package replay, or full manifest regression.
+
+Three separate normal-cap preflights used unchanged S2W_lean_host.py with
+MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, Lean -M7000:
+
+| Target | Exit | Wall seconds | Peak RSS KiB | Swaps |
+| --- | ---: | ---: | ---: | ---: |
+| JHq_PreflightFrontier | 0 | 3.290675 | 7127820 | 0 |
+| JHq_PreflightIdentity | 0 | 3.109145 | 6745112 | 0 |
+| JHq_PreflightJoint | 0 | 3.336260 | 7128100 | 0 |
+
+Their stdout logs print the exact frontier and identity lemmas, the SHA
+realization class, and the expanded joint statement. JHq_RESULTS.json and
+each attempt's receipt retain exact commands, source revisions, timings,
+limits, and statement/axioms output. The print-only modules introduce no
+new theorem, so their axioms lists are empty.
+
+## Single approved aggregation attempt
+
+The first reservation_agg16.py request admitted: allowed=true AND exit 0,
+requested_bytes=17179869184, bounded_reserved_bytes=17179869184; projected
+reservation 32 GiB <= 55 GiB. Host stdout/stderr and JSON were saved before
+any upload. No contention, quiet-window bypass, transport retry, or repeated
+compile occurred.
+
+Exact launch (from the shared fixture-cache directory):
+
+```sh
+systemd-run --user --scope -p MemoryHigh=14G -p MemoryMax=16G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host_agg16.py JHq_agg16_tx1.json
 ```
 
-The owner-approved scope instead requires memory.high=15032385536 and
-memory.max=17179869184. It would fail this assertion before invoking Lean.
-Local-lean rule 5 says: "Do NOT build or repair build/launcher/monitoring
-infrastructure. If the launcher or host misbehaves, stop and report the exact
-error in one paragraph; the lead fixes infrastructure." No launcher was
-executed with incompatible caps; this is source inspection, not an observed
-compile failure. No shared infrastructure was edited.
+The configured command was:
 
-The fixture reservation.py also hard-codes 8 GiB, but an existing alternative,
-codex-cx-sound-int2-20261025/JFz_reservation.py, supports --requested-bytes.
-It does not implement the quiet-window check; any authorized future use must
-also respect QUIET_WINDOW.json. No admission was requested, so there is no
-allowed:true receipt and no authorization to launch was inferred.
-
-JHq_INFRASTRUCTURE.json retains complete inspected script text and SHA256
-hashes, with read-only SSH exit 0. No transport failure or retry occurred.
-A broad initial read-only filename inventory was too noisy and was replaced
-by a bounded Python-script inventory; neither operation launched a build.
-
-## Before and proposed after
-
-Before (checked predecessor):
-JHn_TX1Frontier.of_byte_identity takes base, stage, JHe_SHARealization and
-ByteIdentity, and concludes existence of one saved output with actual wrapper
-acceptance, saved.val=JFx_NativeBytes.checkpoint.val, and length=1768.
-JHn_ExactReturned.source separately proves ByteIdentity without hypotheses.
-The predecessor draft JHn_TX1.accepted1_saved failed during import at -M7000
-(attempt 090, exit 134, peak RSS 7272464 KiB, swap 0).
-
-Proposed after (UNCHECKED): JHq_TX1.accepted1_saved applies exactly
-JHn_TX1Frontier.of_byte_identity base stage JHn_ExactReturned.source.
-Its complete conclusion is copied from the draft without alteration; only the
-namespace and proof body change. The only propositional hypothesis is
-[JHe_SHARealization]; base : AdapterRw.Ops and stage : VTop_Stages.Ops remain
-universally quantified parameters. No ByteIdentity or byte-SHA premise is
-added. The source contains #print for both applied lemmas and #print axioms
-for the proposed theorem, but none has been executed in this job.
-
-The exact source-level statements are retained in the three *.lean.txt
-snapshots here. These are copied source, not fresh Lean statement output.
-No quantifier, carrier, event, or conclusion change is proposed. No checked
-premise-removal credit is claimed.
-
-## Joint input still required
-
-JHn_Joint.assembleJoint takes ByteIdentity and returns JointStatement, whose
-full statement still quantifies trees, base, stage, data2 : Slice U8,
-slot : S2W_ExtractionBoundary.Slot, and the explicit premise:
-
+```sh
+/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake env lean -j1 -M15000 -DElab.async=false -o JHq_TX1.olean JHq_TX1.lean
 ```
+
+Target: AspisR1.JHq_TX1.accepted1_saved.
+Source revision: d2465903547e0c87714c3af2c79607de4215cad5 (clean source tree
+at configuration). Source SHA256:
+87425e2f50dd3b9cd2dc01ef74a3ee2584ba4f0b9c49b213373795a71f635ba3.
+Exit 0; wall 4.118656793027185 s; peak RSS 7,528,024 KiB; swaps 0.
+The runner separately records cgroup memory.peak=823947264 bytes and verifies
+memory.high=15032385536, memory.max=17179869184,
+memory.swap.max=0, pids.max=64. These are distinct recorded metrics.
+
+The complete audit output is:
+
+```text
+'AspisR1.JHq_TX1.accepted1_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+Primary evidence: JHq_agg16_tx1/receipt.json, stdout.log, time.log, and its
+sources/JHq_TX1.lean snapshot; JHq_agg16_tx1-admission.json,
+JHq_agg16_tx1-barrier-0.log, and JHq_agg16_tx1-command.txt.
+The compiled object is retained in the pinned fixture lane, not copied
+locally; JHq_FINAL_ARTIFACTS.json records its path/hash and final runner hashes.
+
+## Exact remaining joint input
+
+The normal-cap print confirms that assembleJoint takes ByteIdentity and
+returns JointStatement, whose expansion explicitly retains, for the SAME
+base/stage SDK and corrected joint world, data2 : Slice U8,
+slot : S2W_ExtractionBoundary.Slot, and:
+
+```lean
 accepted2 : S2W_D189Wrappers.second (JHe_Natives.second base stage)
   CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier data2 slot () =
   ok (.Ok (JHg_World.e2.heap,()))
 ```
 
-A TX1 theorem alone does not discharge that same-SDK TX2 accepted2 input.
-No JHq_JointTX1 module or second compile was attempted.
+That accepted2 input is not provided by the new TX1 theorem. Also,
+assembleJoint consumes ByteIdentity, not an accepted1_saved proof, and
+its TX1 conjunct uses JHg_World.e1/JHk_WorldFirst.post rather than the
+retained target's JHb_World.e1/JHe_WrapperReady.post. Therefore no
+JHq_JointTX1 module or second large compile was attempted under the task's
+TX2-input alternative. The existing conditional joint assembly is not
+claimed as a closed same-SDK joint execution.
 
-## Validation and next deliverable
+Next deliverable: supply the native same-SDK TX2 witness with precisely the
+accepted2 type above, retaining the D188/native/source-to-ELF qualifications;
+then compose using the corrected TX1 interface and the proved byte identity.
+JHe_SHARealization remains open. The deployed 100-bit target is not yet
+established; no headline security credit is claimed.
 
-Budget used: 0/6 preflight Lean compiles, 0/2 large-scope compiles. Dependency
-presence/hash preflight was not completed after the infrastructure stop;
-no missing dependency was rebuilt. No new #print axioms result exists.
-JHq_STATUS.json records the source revision and null compile metrics, rather
-than inventing exit/RSS/wall/swap values for a process never started.
+Budget used: 3/6 preflight Lean compiles, 1/2 large-scope compiles. No new
+recurrence, generic proof, Rust/Kani/SBF/runtime gate, wallet, key, or shared
+infrastructure modification occurred. Changes are confined to JHq_ modules and
+this evidence directory. Stage commits: a88963e3f6 (runners/preparation),
+d246590354 (preflight); the final evidence commit follows this handoff.
 
-Next: the lead must provide an existing compatible runner for the authorized
-14G/16G scope. Then complete dependency hash preflight and small statement
-prints under normal caps, obtain explicit 16 GiB admission, and compile the
-prepared JHq_TX1 exactly once at -M15000. Do not treat this source commit as
-a successful aggregation. A memory failure must stop without rerun.
-
-No runtime, Kani, Rust, SBF, full manifest, key, or wallet action occurred.
-The deployed 100-bit target remains not established; headline ledger delta
-is zero. Only new JHq_ source and the assigned evidence directory were changed.
+The launcher's display excerpt had a whitespace-only truncated line; it was
+trimmed for the evidence diff. JHq_EXCERPT_FORMATTING.json records both hashes.
+The complete stdout.log/time.log/receipt.json bytes are untouched.
