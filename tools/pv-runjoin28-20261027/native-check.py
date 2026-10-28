@@ -32,7 +32,9 @@ r=ssh(f'python3 {H}/reservation-existing.py {H}/evidence/{name}-reservation.json
 if r.returncode != 0 or not a['allowed']:
  (E/(name+'-refusal.json')).write_text(json.dumps(a,indent=2)+'\n');print(a);sys.exit(78)
 transport(['scp','-q',f'{host}:{H}/evidence/{name}-reservation.json',str(E)],check=True)
-prefix='tools/pv-runjoin28-20261027/frontier-probe'
+probe=sys.argv[2] if len(sys.argv)>2 else 'frontier-probe'
+assert probe in ['frontier-probe','zero-recipient']
+prefix='tools/pv-runjoin28-20261027/'+probe
 r=ssh('mkdir -p '+H+'/runjoin27-native-source/'+prefix);assert r.returncode==0
 paths=[prefix+'/'+n for n in ['Cargo.toml','main.rs']]
 for p in paths:transport(['scp','-q',str(R/p),f'{host}:{H}/runjoin27-native-source/{p}'],check=True)
