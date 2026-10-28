@@ -36,7 +36,7 @@ projection over every external frame. Adding allocation/memory observations
 cannot repair this Result mismatch. -/
 theorem no_uniform_projection (callback : Unit → Outcome) :
     ¬ (∀ flag : Bool, callback () = observed flag) :=
-  no_world_free_callback () .returned .panicked result_distinct callback
+  no_world_free_callback () Outcome.returned Outcome.panicked result_distinct callback
 
 /-- This does not reject a state-indexed interpreter. It shows precisely the
 necessary interface change: provide the world before executing the callback. -/
