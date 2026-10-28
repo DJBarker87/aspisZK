@@ -48,7 +48,8 @@ theorem count_value_normalized (q : ℚ) (r : Nat) :
     (∑ _a : F, geom q r/(Fintype.card F : ℚ))=geom q r := by
   letI : Nonempty F := ⟨0⟩
   have hn : (Fintype.card F : ℚ)≠0 := by exact_mod_cast Fintype.card_ne_zero
-  simp [div_eq_mul_inv,hn]
+  simp only [Finset.sum_const,Finset.card_univ,nsmul_eq_mul]
+  field_simp
 #print axioms count_value_normalized
 
 theorem complete_mass (q : ℚ) (n : Nat) :
