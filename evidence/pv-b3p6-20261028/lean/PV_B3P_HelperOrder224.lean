@@ -13,7 +13,9 @@ theorem four_endpoints {F W E : Type} (ops : Operations F W E) (chi : F)
   rw [row,two_slots,bindR_assoc]
   congr 1
   funext v
-  rw [two_slots,bindR_assoc]
+  congr 1
+  funext v1
+  exact two_slots ops true chi v1 c0 c1
 
 -- These laws cover all Result channels without assuming arithmetic totality.
 theorem denominator_failure {F W E : Type} (ops : Operations F W E) (consumer : Bool)
