@@ -2,7 +2,7 @@ import R1Z.SideChannelL1AttemptRecord
 set_option autoImplicit false
 namespace PV_L1_NativeProducer
 open R1Z R1Z.SideChannelL1AttemptRecord
-open ProverCommitRetry34
+open ProverCommitRetry34 (Step)
 
 /-- The native retry owner has two distinct Result boundaries. The callback
 error escapes `?`; only an error from the prover enters the retry match.
