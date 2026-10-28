@@ -3,7 +3,7 @@ from pathlib import Path
 import json,datetime,subprocess,shlex,time,re,hashlib,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l2c-20261028';H='/home/dombarker/project-offloads/codex-pv-l2c-20261028';host='dombarker@100.108.41.90'
 harness=sys.argv[1] if len(sys.argv)>1 else 'native_active_rows_match_masks'
-assert harness in ['native_active_rows_match_masks','packed_masks_match_schedule','native_qm31_parser_roundtrip']
+assert harness in ['native_active_rows_match_masks','packed_masks_match_schedule','native_qm31_parser_roundtrip','packed_lane_insert']
 old=[json.loads(p.read_text()) for p in E.glob('refusal-*.json')]
 if old:
  last=max(datetime.datetime.fromisoformat(x['utc']) for x in old)

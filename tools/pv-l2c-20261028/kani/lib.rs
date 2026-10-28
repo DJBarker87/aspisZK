@@ -62,3 +62,18 @@ fn native_qm31_parser_roundtrip() {
     q.write_le_bytes(&mut bytes);
     assert!(QM31::from_le_bytes(&bytes) == Some(q));
 }
+
+// Scalar lane identity for the native packed-mask insertion statement.
+// No array/slice/value aggregate is created or copied by this harness.
+#[cfg(kani)]
+#[kani::proof]
+fn packed_lane_insert() {
+    let old: u16 = kani::any();
+    let p: usize = kani::any();
+    let q: usize = kani::any();
+    kani::assume(p < 16 && q < 16);
+    let mut lane = old;
+    lane |= 1u16 << (p as u32);
+    assert_eq!(lane & (1u16 << q) != 0,
+               old & (1u16 << q) != 0 || p == q);
+}
