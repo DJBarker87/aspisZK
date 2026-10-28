@@ -46,7 +46,10 @@ for path,context,marker,expected,law in checks:
  p=root/path;s=p.read_text();actual=span(s,context,marker)
  assert tokens(actual)==tokens(expected),(path,marker,actual)
  # A changed constant or operation must be rejected by the same equality check.
- mutated=expected.replace('1)', '2)',1) if '1)' in expected else expected+' altered'
+ mutated=expected
+ for old,new in [('1)', '2)'),('self.spec_next()', 'self.spec_next_back()'),('unchecked_add','unchecked_sub'),('self.next()', 'self.next_back()')]:
+  if old in mutated:
+   mutated=mutated.replace(old,new,1);break
  assert tokens(actual)!=tokens(mutated),'negative structural control unexpectedly accepted'
  out.append(dict(path=str(p),file_sha256=sha(p.read_bytes()),context=context,source_body=actual,source_token_sha256=sha('\0'.join(tokens(actual)).encode()),owned_rust_body=expected,law=law,matched_negative_control='rejected'))
 result=dict(toolchain='1.94.1',records=out,profile=dict(release=True,debug_assertions=False,overflow_checks=False),scope='Four source records only; not a complete V260 cone and not a full native-body equivalence checker',feature_argument='Selected core records have no cfg/cfg! in their bodies; concrete usize instantiation is independent of client crate features',composition_trust='Structural source-to-owned-reference reclassification within existing Rust/Lean/compiler tool trust; no endpoint premise removed')
