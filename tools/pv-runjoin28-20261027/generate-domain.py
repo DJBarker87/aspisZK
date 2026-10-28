@@ -1,5 +1,5 @@
 from pathlib import Path
-import hashlib,json
+import hashlib,json,sys
 R=Path(__file__).resolve().parents[2]
 source=R/'docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderForestAdmissionPort.lean'
 s=source.read_text(); start=s.index('def pool_v1.pair_forest_trace.compile_forest_from_copies\n'); end=s.index('\n#print axioms',start)
@@ -42,5 +42,10 @@ def Path [ExternalLinear] [Records]
     (public1 : pair_forest_trace.ForestPublic) (lane_anchor : Array U32 8#usize)
     (snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1) : Prop :=
 '''+ '\n'.join(out)+'\nend R1Z.PV_RunJoin_CompilerDomain28\n'
-p=R/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_CompilerDomain28.lean';p.write_text(text)
-(R/'evidence/pv-runjoin28-20261027/domain-generation.json').write_text(json.dumps(dict(source=str(source.relative_to(R)),source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),target=str(p.relative_to(R)),stages=stages),indent=2)+'\n')
+p=R/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_CompilerDomain28.lean';
+if '--check' in sys.argv:
+ assert p.read_text()==text, 'generated Path differs'
+ print('Path source agrees with frozen compiler body and generator')
+else:
+ p.write_text(text)
+if '--check' not in sys.argv: (R/'evidence/pv-runjoin28-20261027/domain-generation.json').write_text(json.dumps(dict(source=str(source.relative_to(R)),source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),target=str(p.relative_to(R)),stages=stages),indent=2)+'\n')
