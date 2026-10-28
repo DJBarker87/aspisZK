@@ -16,7 +16,16 @@ def run(root,label,args):
 roots={'control':D/'combined/baseline','candidate':D}
 pins={}
 for w,root in roots.items():
- out=run(root,'build-timing',['cargo','build','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--example','prover_rw_gate','--features','optimized-terminal,r1p-check,ct-host-prover'])
+ if w=='candidate':
+  # D356 recovery: this exact optimized build already completed. Reuse its
+  # retained binary after checking the original receipt and pin; never rerun.
+  out=root/'build-fixture'
+  receipt=json.loads((out/'receipt/receipt.json').read_text())
+  pin=json.loads((out/'binary-pins.json').read_text())['prover_rw_gate']
+  assert receipt['exit_status']==0 and receipt['source_revision']==(root/'source-revision.txt').read_text().strip()
+  b=root/'bin/prover_rw_gate';assert hashlib.sha256(b.read_bytes()).hexdigest()==pin['sha256'] and b.stat().st_size==pin['bytes']
+ else:
+  out=run(root,'build-timing',['cargo','build','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--example','prover_rw_gate','--features','optimized-terminal,r1p-check,ct-host-prover'])
  b=root/'bin/prover_rw_gate';pins[w]=dict(sha256=hashlib.sha256(b.read_bytes()).hexdigest(),bytes=b.stat().st_size,source_revision=(root/'source-revision.txt').read_text().strip(),build_receipt=str(out/'receipt/receipt.json'))
 (D/'timing-binary-pins.json').write_text(json.dumps(pins,indent=2)+'\n')
 for w,root in roots.items():run(root,'preflight-99',[str(root/'bin/prover_rw_gate'),str(D/'preflight'/w),'99','1'])
