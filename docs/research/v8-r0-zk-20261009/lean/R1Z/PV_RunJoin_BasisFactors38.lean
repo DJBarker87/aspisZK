@@ -7,6 +7,8 @@ namespace R1Z.PV_RunJoin_BasisFactors38
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RunJoin_BasisCell38 ProverCommitInterpolationSchedule48
 variable [ExternalTypes]
+attribute [local irreducible] host_sumcheck.interpolation_basis_steps
+  AspisR1ProducerRelease47.basis_factors
 
 /-- Complete source basis-factor recurrence, including the omitted node and
 all descending writes. The degree invariant discharges every counter bound. -/
