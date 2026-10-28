@@ -1,0 +1,475 @@
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -12,8 +12,10 @@
+ //! Stage 1 work and no soundness figure may be quoted from this code alone.
+ 
+ #![no_std]
++#![cfg_attr(kani, feature(allocator_api))]
+ 
+ extern crate alloc;
++#[cfg(kani)] mod NBS_copy;
+ 
+ pub mod circle;
+ pub mod circle_fri;
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -37,6 +37,22 @@
+   let v=filled(1,x).unwrap();assert!(v.len()==1);assert!(v.capacity()>=1);
+   assert!(v[0].c0.a.0==a);assert!(v[0].c0.b.0==b);assert!(v[0].c1.a.0==c);assert!(v[0].c1.b.0==d);
+  }
++
++#[kani::proof] #[kani::unwind(512)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_26() {
++  use crate::field::{M31,CM31,QM31};
++  let a:u32=kani::any();let b:u32=kani::any();let c:u32=kani::any();let d:u32=kani::any();
++  let x=QM31{c0:CM31{a:M31(a),b:M31(b)},c1:CM31{a:M31(c),b:M31(d)}};
++  let v=filled(1,x).unwrap();assert!(v.len()==1);assert!(v.capacity()>=1);
++  assert!(v[0].c0.a.0==a);assert!(v[0].c0.b.0==b);assert!(v[0].c1.a.0==c);assert!(v[0].c1.b.0==d);
++ }
++
+ }
+ 
+ #[cfg(kani)] mod NBS_buffer {
+@@ -60,4 +76,18 @@
+   let n:usize=kani::any();let value:u32=kani::any();unsafe{EXPECT=n;CALLS=0;}
+   assert!(matches!(filled(n,value),Err(super::Error::Allocation)));unsafe{assert!(CALLS==1);}
+  }
++
++#[kani::proof] #[kani::unwind(512)]
++ #[kani::stub(Vec::<u32>::try_reserve_exact,denied)] #[kani::stub(Vec::<u32>::resize,forbidden_resize)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_25(){
++  let n:usize=kani::any();let value:u32=kani::any();unsafe{EXPECT=n;CALLS=0;}
++  assert!(matches!(filled(n,value),Err(super::Error::Allocation)));unsafe{assert!(CALLS==1);}
++ }
++
+ }
+--- a/crates/aspis-r1-cost-probe/src/fast_domain.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_domain.rs
+@@ -343,6 +343,22 @@
+   let p=fibre_point(FibreIndex::new(u).unwrap());
+   unsafe{assert!(CALLS==1);assert!(p.x.0==A);assert!(p.y.0==B);}
+  }
++
++#[kani::proof] #[kani::unwind(8192)]
++ #[kani::stub(CM31::mul,cm_mul)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_30() {
++  let u:usize=kani::any();kani::assume(u<262144);
++  unsafe{EXPECT=u;CALLS=0;}
++  let p=fibre_point(FibreIndex::new(u).unwrap());
++  unsafe{assert!(CALLS==1);assert!(p.x.0==A);assert!(p.y.0==B);}
++ }
++
+  static mut SQUARE:u32=0;static mut MCALLS:u8=0;
+  fn base_mul(x:M31,y:M31)->M31 {
+   unsafe{assert!(MCALLS==0);MCALLS=1;assert!(x.0==A);assert!(y.0==A);}
+@@ -364,4 +380,23 @@
+   }
+  }
+ 
++#[kani::proof] #[kani::unwind(8192)]
++ #[kani::stub(CM31::mul,cm_mul)] #[kani::stub(M31::mul,base_mul)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_31() {
++  let u:usize=kani::any();kani::assume(u<262144);
++  unsafe{EXPECT=u;CALLS=0;MCALLS=0;}
++  let result=line_node(FibreIndex::new(u).unwrap());
++  unsafe{
++   assert!(CALLS==1&&MCALLS==1);
++   assert!(u64::from(result.0)==(2*u64::from(SQUARE)+2147483647-1)%2147483647);
++  }
++ }
++
++
+ }
+--- a/crates/aspis-r1-cost-probe/src/fast_dots.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_dots.rs
+@@ -283,6 +283,43 @@
+  assert!(sums[6]==before[6]+p[6]);assert!(sums[6]<18446744073709551615);
+  assert!(sums[7]==before[7]+p[7]);assert!(sums[7]<18446744073709551615);
+ }
++
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_27(){
++ let mut sums:[u64;8]=kani::any();let p:[u64;8]=kani::any();let before=sums;
++ let n:u64=kani::any();kani::assume(n<4);
++ kani::assume(sums[0]<=n*4611686009837453316&&p[0]<=4611686009837453316);
++ kani::assume(sums[1]<=n*4611686009837453316&&p[1]<=4611686009837453316);
++ kani::assume(sums[2]<=n*4611686009837453316&&p[2]<=4611686009837453316);
++ kani::assume(sums[3]<=n*4611686009837453316&&p[3]<=4611686009837453316);
++ kani::assume(sums[4]<=n*4611686009837453316&&p[4]<=4611686009837453316);
++ kani::assume(sums[5]<=n*4611686009837453316&&p[5]<=4611686009837453316);
++ kani::assume(sums[6]<=n*4611686009837453316&&p[6]<=4611686009837453316);
++ kani::assume(sums[7]<=n*4611686009837453316&&p[7]<=4611686009837453316);
++ sums[0]+=p[0];
++ sums[1]+=p[1];
++ sums[2]+=p[2];
++ sums[3]+=p[3];
++ sums[4]+=p[4];
++ sums[5]+=p[5];
++ sums[6]+=p[6];
++ sums[7]+=p[7];
++ assert!(sums[0]==before[0]+p[0]);assert!(sums[0]<18446744073709551615);
++ assert!(sums[1]==before[1]+p[1]);assert!(sums[1]<18446744073709551615);
++ assert!(sums[2]==before[2]+p[2]);assert!(sums[2]<18446744073709551615);
++ assert!(sums[3]==before[3]+p[3]);assert!(sums[3]<18446744073709551615);
++ assert!(sums[4]==before[4]+p[4]);assert!(sums[4]<18446744073709551615);
++ assert!(sums[5]==before[5]+p[5]);assert!(sums[5]<18446744073709551615);
++ assert!(sums[6]==before[6]+p[6]);assert!(sums[6]<18446744073709551615);
++ assert!(sums[7]==before[7]+p[7]);assert!(sums[7]<18446744073709551615);
++}
++
+ // ONE source folded group, all eight words on the SAME pre-state.
+ #[kani::proof] #[kani::unwind(64)]
+ fn eight_folds(){
+@@ -313,6 +350,43 @@
+  assert!(limbs[6]==before[6]+(sums[6]%2147483648)+(sums[6]/2147483648));assert!(limbs[6]<=75161927666);
+  assert!(limbs[7]==before[7]+(sums[7]%2147483648)+(sums[7]/2147483648));assert!(limbs[7]<=75161927666);
+ }
++
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_28(){
++ let sums:[u64;8]=kani::any();let mut limbs:[u64;8]=kani::any();let before=limbs;
++ let n:u64=kani::any();kani::assume(n<7);
++ kani::assume(limbs[0]<=n*10737418238);
++ kani::assume(limbs[1]<=n*10737418238);
++ kani::assume(limbs[2]<=n*10737418238);
++ kani::assume(limbs[3]<=n*10737418238);
++ kani::assume(limbs[4]<=n*10737418238);
++ kani::assume(limbs[5]<=n*10737418238);
++ kani::assume(limbs[6]<=n*10737418238);
++ kani::assume(limbs[7]<=n*10737418238);
++ limbs[0]+=(sums[0]&0x7fff_ffff)+(sums[0]>>31);
++ limbs[1]+=(sums[1]&0x7fff_ffff)+(sums[1]>>31);
++ limbs[2]+=(sums[2]&0x7fff_ffff)+(sums[2]>>31);
++ limbs[3]+=(sums[3]&0x7fff_ffff)+(sums[3]>>31);
++ limbs[4]+=(sums[4]&0x7fff_ffff)+(sums[4]>>31);
++ limbs[5]+=(sums[5]&0x7fff_ffff)+(sums[5]>>31);
++ limbs[6]+=(sums[6]&0x7fff_ffff)+(sums[6]>>31);
++ limbs[7]+=(sums[7]&0x7fff_ffff)+(sums[7]>>31);
++ assert!(limbs[0]==before[0]+(sums[0]%2147483648)+(sums[0]/2147483648));assert!(limbs[0]<=75161927666);
++ assert!(limbs[1]==before[1]+(sums[1]%2147483648)+(sums[1]/2147483648));assert!(limbs[1]<=75161927666);
++ assert!(limbs[2]==before[2]+(sums[2]%2147483648)+(sums[2]/2147483648));assert!(limbs[2]<=75161927666);
++ assert!(limbs[3]==before[3]+(sums[3]%2147483648)+(sums[3]/2147483648));assert!(limbs[3]<=75161927666);
++ assert!(limbs[4]==before[4]+(sums[4]%2147483648)+(sums[4]/2147483648));assert!(limbs[4]<=75161927666);
++ assert!(limbs[5]==before[5]+(sums[5]%2147483648)+(sums[5]/2147483648));assert!(limbs[5]<=75161927666);
++ assert!(limbs[6]==before[6]+(sums[6]%2147483648)+(sums[6]/2147483648));assert!(limbs[6]<=75161927666);
++ assert!(limbs[7]==before[7]+(sums[7]%2147483648)+(sums[7]/2147483648));assert!(limbs[7]<=75161927666);
++}
++
+ }
+ 
+ #[cfg(kani)] mod NBS_tail {
+@@ -357,4 +431,24 @@
+   let out=source(&q,&g,slot,value).to_limbs();let j:usize=kani::any();kani::assume(j<8);
+   unsafe{assert!(CALLS==3);assert!(u64::from(out[j])==(u64::from(raw[j])+u64::from(OUTPUT[j]))%2147483647);}
+  }
+-}
++
++#[kani::proof] #[kani::unwind(2048)]
++ #[kani::stub(EbyKDot::push,push)] #[kani::stub(EbyKDot::finish,finish)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_29(){
++  let q:[u8;608]=kani::any();let slot:usize=kani::any();kani::assume(slot<4);
++  for c in 0..3{let at=if c==0{slot*120+104}else{480+slot*32+(c-1)*16};for j in 0..4{kani::assume(word(&q,at+4*j)<2147483647);}}
++  let mut g=[WideExact::ZERO;29];
++  for i in 26..29{let raw:[u32;8]=kani::any();for j in 0..8{kani::assume(raw[j]<2147483647);}g[i]=WideExact::from_limbs(raw).unwrap();}
++  let raw:[u32;8]=kani::any();for j in 0..8{kani::assume(raw[j]<2147483647);}let value=WideExact::from_limbs(raw).unwrap();
++  unsafe{CALLS=0;DPTR=core::ptr::null_mut();GPTR=g.as_ptr();QPTR=q.as_ptr();SLOT=slot;}
++  let out=source(&q,&g,slot,value).to_limbs();let j:usize=kani::any();kani::assume(j<8);
++  unsafe{assert!(CALLS==3);assert!(u64::from(out[j])==(u64::from(raw[j])+u64::from(OUTPUT[j]))%2147483647);}
++ }
++
++}
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,6 +1,8 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![cfg_attr(kani, feature(allocator_api))]
+ extern crate alloc;
++#[cfg(kani)] mod NBS_copy;
+ pub mod sampler;
+ pub mod semantic_wire;
+ pub mod semantic;
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -578,22 +578,77 @@
+   let group:[M31;5]=core::array::from_fn(|j|flat_inverse[5*i+j]);
+   let j:usize=kani::any();kani::assume(j<5);assert!(group[j].0==raw[5*i+j]);
+  }
++
++#[kani::proof] #[kani::unwind(512)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_34(){
++  let raw:[u32;110]=kani::any();let flat_inverse:Vec<M31>=raw.map(M31).into();
++  let i:usize=kani::any();kani::assume(i<22);
++  let group:[M31;5]=core::array::from_fn(|j|flat_inverse[5*i+j]);
++  let j:usize=kani::any();kani::assume(j<5);assert!(group[j].0==raw[5*i+j]);
++ }
++
+  #[kani::proof] #[kani::unwind(6)]
+  fn nonzero_guard(){
+   let raw:[u32;5]=kani::any();let values=raw.map(M31);
+   let rejects=values.iter().any(|x|*x==M31::ZERO);
+   assert!(rejects==(raw[0]==0||raw[1]==0||raw[2]==0||raw[3]==0||raw[4]==0));
+  }
++
++#[kani::proof] #[kani::unwind(512)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_36(){
++  let raw:[u32;5]=kani::any();let values=raw.map(M31);
++  let rejects=values.iter().any(|x|*x==M31::ZERO);
++  assert!(rejects==(raw[0]==0||raw[1]==0||raw[2]==0||raw[3]==0||raw[4]==0));
++ }
++
+  #[kani::proof] #[kani::unwind(4)] #[kani::stub(M31::mul,no_mul)] #[kani::stub(domain::FibreIndex::new,no_fibre)]
+  fn invalid_range(){
+   let queries:[u32;22]=kani::any();let start:usize=kani::any();let end:usize=kani::any();kani::assume(start>end||end>22);
+   assert!(matches!(QueryGeometry::for_range(&queries,start,end),Err(Error::Query)));
+  }
++
++#[kani::proof] #[kani::unwind(512)] #[kani::stub(M31::mul,no_mul)] #[kani::stub(domain::FibreIndex::new,no_fibre)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_38(){
++  let queries:[u32;22]=kani::any();let start:usize=kani::any();let end:usize=kani::any();kani::assume(start>end||end>22);
++  assert!(matches!(QueryGeometry::for_range(&queries,start,end),Err(Error::Query)));
++ }
++
+  #[kani::proof] #[kani::unwind(4)] #[kani::stub(M31::mul,no_mul)] #[kani::stub(domain::FibreIndex::new,no_fibre)]
+  fn empty_range(){
+   let queries:[u32;22]=kani::any();let start:usize=kani::any();kani::assume(start<=22);
+   let out=QueryGeometry::for_range(&queries,start,start).unwrap();assert!(out.start==start);assert!(out.inverses.len()==0&&out.line_z.len()==0);
+  }
++
++#[kani::proof] #[kani::unwind(512)] #[kani::stub(M31::mul,no_mul)] #[kani::stub(domain::FibreIndex::new,no_fibre)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_37(){
++  let queries:[u32;22]=kani::any();let start:usize=kani::any();kani::assume(start<=22);
++  let out=QueryGeometry::for_range(&queries,start,start).unwrap();assert!(out.start==start);assert!(out.inverses.len()==0&&out.line_z.len()==0);
++ }
++
+  #[kani::proof] #[kani::unwind(16)]
+  fn query_accessor(){
+   let a:[u32;5]=kani::any();let b:[u32;5]=kani::any();
+@@ -602,8 +657,34 @@
+   let out=geo.for_query(index);let j:usize=kani::any();kani::assume(j<5);
+   assert!(core::ptr::eq(out,&geo.inverses[index-geo.start]));assert!(out[j].0==if index==geo.start{a[j]}else{b[j]});
+  }
++
++#[kani::proof] #[kani::unwind(512)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_35(){
++  let a:[u32;5]=kani::any();let b:[u32;5]=kani::any();
++  let geo=QueryGeometry{start:kani::any(),inverses:alloc::vec![a.map(M31),b.map(M31)],line_z:Vec::new()};
++  let index:usize=kani::any();kani::assume(index>=geo.start&&index-geo.start<2);
++  let out=geo.for_query(index);let j:usize=kani::any();kani::assume(j<5);
++  assert!(core::ptr::eq(out,&geo.inverses[index-geo.start]));assert!(out[j].0==if index==geo.start{a[j]}else{b[j]});
++ }
++
+  #[kani::proof] #[kani::unwind(3)]
+  fn reverse_first(){let n:usize=kani::any();kani::assume(n>0&&n<=110);let mut it=(0..n).rev();assert!(it.next()==Some(n-1));}
++
++#[kani::proof] #[kani::unwind(512)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_39(){let n:usize=kani::any();kani::assume(n>0&&n<=110);let mut it=(0..n).rev();assert!(it.next()==Some(n-1));}
++
+  #[kani::proof] #[kani::unwind(3)]
+  fn reverse_last(){let mut it=(0usize..1).rev();assert!(it.next()==Some(0));assert!(it.next()==None);}
+ }
+@@ -618,6 +699,22 @@
+   assert!(prefixes.len()==index+1&&prefixes.as_ptr()==ptr);
+   let j:usize=kani::any();kani::assume(j<=index);assert!(prefixes[j].0==if j==index{product.0}else{old[j]});
+  }
++
++#[kani::proof] #[kani::unwind(512)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_32(){
++  let old:[u32;110]=kani::any();let mut prefixes:Vec<M31>=old.map(M31).into();let index:usize=kani::any();kani::assume(index<110);
++  prefixes.truncate(index);let ptr=prefixes.as_ptr();let product=M31(kani::any());
++  prefixes.push(product);
++  assert!(prefixes.len()==index+1&&prefixes.as_ptr()==ptr);
++  let j:usize=kani::any();kani::assume(j<=index);assert!(prefixes[j].0==if j==index{product.0}else{old[j]});
++ }
++
+  #[kani::proof] #[kani::unwind(112)]
+  fn backward_write(){
+   let flat:[u32;110]=kani::any();let prefixes:[u32;110]=kani::any();let old:[u32;110]=kani::any();
+@@ -633,6 +730,29 @@
+   assert!(first_left==suffix&&first_right==prefixes[i]);assert!(second_left==suffix&&second_right==flat[i]);
+   assert!(flat_inverse[j].0==if j==i{r0.0}else{old[j]});assert!(suffix_inverse==r1);assert!(flat_inverse.len()==110);
+  }
++
++#[kani::proof] #[kani::unwind(512)]
++ #[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn NBS_recheck_33(){
++  let flat:[u32;110]=kani::any();let prefixes:[u32;110]=kani::any();let old:[u32;110]=kani::any();
++  let mut flat_inverse:Vec<M31>=old.map(M31).into();let i:usize=kani::any();kani::assume(i<110);
++  let mut suffix_inverse=M31(kani::any());let suffix=suffix_inverse.0;
++  // Two field-call cuts, paired to LPf_BaseMultiply.source and the SAME
++  // source operands; no multiplication is executed in Kani.
++  let first_left=suffix_inverse.0;let first_right=prefixes[i];let r0=M31(kani::any());
++  flat_inverse[i]=r0;
++  let second_left=suffix_inverse.0;let second_right=flat[i];let r1=M31(kani::any());
++  suffix_inverse=r1;
++  let j:usize=kani::any();kani::assume(j<110);
++  assert!(first_left==suffix&&first_right==prefixes[i]);assert!(second_left==suffix&&second_right==flat[i]);
++  assert!(flat_inverse[j].0==if j==i{r0.0}else{old[j]});assert!(suffix_inverse==r1);assert!(flat_inverse.len()==110);
++ }
++
+  #[kani::proof] #[kani::unwind(3)]
+  fn prefix_after_product(){
+   let mut index:usize=kani::any();kani::assume(index<110);let before=index;
+--- /dev/null
++++ b/crates/aspis-core/src/NBS_copy.rs
+@@ -0,0 +1,34 @@
++use alloc::vec::Vec;
++// Scratch-only replacements. T: Copy excludes Clone side effects.
++#[inline(never)]
++pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
++    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}
++}
++#[inline(never)]
++pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
++    assert_eq!(dst.len(),src.len());let mut i=0;while i<src.len(){dst[i]=src[i];i+=1;}
++}
++#[inline(never)]
++pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
++#[inline(never)]
++pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
++    dst.reserve(src.len());let mut i=0;while i<src.len(){dst.push(src[i]);i+=1;}
++}
++#[inline(never)]
++pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
++    let mut dst=Vec::with_capacity(src.len());KMX_extend_from_slice(&mut dst,src);dst
++}
++// Match the successful-reallocation byte law, preserving the old allocation on failure.
++// MaybeUninit permits copying spare-capacity bytes without reading them as values.
++pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
++ let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
++ let out=unsafe{alloc::alloc::alloc(new_layout)};
++ if !out.is_null(){
++  let mut i=0;while i<core::cmp::min(layout.size(),new_size){
++   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};
++   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;
++  }
++  unsafe{alloc::alloc::dealloc(ptr,layout)};
++ }
++ out
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBS_copy.rs
+@@ -0,0 +1,34 @@
++use alloc::vec::Vec;
++// Scratch-only replacements. T: Copy excludes Clone side effects.
++#[inline(never)]
++pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
++    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}
++}
++#[inline(never)]
++pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
++    assert_eq!(dst.len(),src.len());let mut i=0;while i<src.len(){dst[i]=src[i];i+=1;}
++}
++#[inline(never)]
++pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
++#[inline(never)]
++pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
++    dst.reserve(src.len());let mut i=0;while i<src.len(){dst.push(src[i]);i+=1;}
++}
++#[inline(never)]
++pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
++    let mut dst=Vec::with_capacity(src.len());KMX_extend_from_slice(&mut dst,src);dst
++}
++// Match the successful-reallocation byte law, preserving the old allocation on failure.
++// MaybeUninit permits copying spare-capacity bytes without reading them as values.
++pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
++ let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
++ let out=unsafe{alloc::alloc::alloc(new_layout)};
++ if !out.is_null(){
++  let mut i=0;while i<core::cmp::min(layout.size(),new_size){
++   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};
++   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;
++  }
++  unsafe{alloc::alloc::dealloc(ptr,layout)};
++ }
++ out
++}
