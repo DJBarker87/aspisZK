@@ -13,3 +13,13 @@ allowed=false. No compiler started and neither 36052 nor subsequent queued
 
 These are resource contention, not proof errors, admissions or charged
 compiler attempts. No scope was started while refused; no barrier was edited.
+
+36052 retry 2: the pre-scope reservation passed, but the in-scope barrier
+refused at 11:37:09.099374 UTC, exit 78 / allowed=false. No compiler began.
+The second refusal is retained under refusal-36052-2-*. Same-ID retry is
+permitted only after 11:40:09.099374 UTC.
+
+The optional fxmem2 citation was not used. At 11:35 UTC the previously named
+fxmem branch ref was no longer available locally; the original witness's
+committed SHA pins remain retained, and no new reached-destructor proof is
+asserted from an unavailable/in-progress source.
