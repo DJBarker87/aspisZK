@@ -1,6 +1,6 @@
 # Ledger refresh scope
 
-Pinned research head `19ff97723e70aa877b2f459cd5dacd38104c62fb`; previous NCZ snapshot `1d7752908191642fc8383c99bbadfb46fab8850c`.
+Pinned research head `898a8b0da7703af67b676b18b575236940830283`; previous NCZ snapshot `1d7752908191642fc8383c99bbadfb46fab8850c`.
 
 Stage 1: inventory merged evidence and retention/feature rules. Stage 2: independently reconstruct the current ledger, add reviewed local associations, recompute coverage/frontier. Stage 3: run inherited and extended mutation checks and ordinary validation; record exact handoff and receipts. Commit each stage, never push. No Lean or Kani launches.
 
