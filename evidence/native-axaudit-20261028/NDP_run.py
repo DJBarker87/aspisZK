@@ -22,9 +22,9 @@ def get(n):
  assert r.returncode==0,r.stderr
 assert not (E/(a+'.json')).exists(),'attempt already exists'
 if mode=='agg16':
- prior=json.loads((E/'NDP_R005/receipt.json').read_text())
+ prior=json.loads((E/'NDP_R006/receipt.json').read_text())
  assert module=='NDP_Joint' and prior['exit_status']!=0
- assert 'NDP_POST_IMPORT' not in (E/'NDP_R005/stdout.log').read_text()
+ assert 'NDP_POST_IMPORT' not in (E/'NDP_R006/stdout.log').read_text()
  expected=json.loads((R/'evidence/native-l188-20261028/NDJ_AGG16_RUNNER_HASHES.json').read_text())
  r=ssh('sha256sum '+' '.join(B+'/'+n for n in expected));assert r.returncode==0,r.stderr
  actual={l.split()[1].split('/')[-1]:l.split()[0] for l in r.stdout.splitlines()}
@@ -58,7 +58,7 @@ r=transport(['scp','-q','-o','ControlMaster=no',str(E/(a+'.json')),str(E/(module
 hi,ma,runner=('6G','8G','S2W_run_host.py') if normal else ('14G','16G','S2W_lean_host_agg16.py')
 r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh={hi} -p MemoryMax={ma} -p MemorySwapMax=0 -p TasksMax=64 python3 {runner} {a}.json',submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
-for n in ['receipt.json','stdout.log','time.log']:get(a+'/'+n)
+for n in ['receipt.json','stdout.log','time.log','sources/'+module+'.lean']:get(a+'/'+n)
 d=json.loads((E/a/'receipt.json').read_text())
 record(kind='compile',**{k:d[k] for k in ['attempt','module','command','exit_status','wall_seconds','peak_rss_kib','swaps','limits','source_revision','source_hashes','print_axioms']})
 print(json.dumps({k:d[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
