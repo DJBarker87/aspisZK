@@ -1,0 +1,329 @@
+[
+  {
+    "id": "NCO::row_shape",
+    "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::row_shape",
+    "packet": "native-cpilot-20261028",
+    "medium": "Kani contract with controls",
+    "reference_medium": "reference extraction plus Lean equality",
+    "domain": "Every u8, including exact None or Some(tag,size). NCO_ScalarBridge.row_shape and NCO_ParserShape connect the E004/E006 references to the compact and parser cohort definitions.",
+    "positive": [
+      48,
+      49
+    ],
+    "negative": [
+      50,
+      51
+    ],
+    "shape_positive": [
+      33,
+      34
+    ],
+    "shape_negative": [
+      35,
+      36,
+      37
+    ],
+    "lean": [
+      9,
+      14,
+      60
+    ],
+    "reports": [
+      "NCO_HANDOFF.md",
+      "NCO_SLICE_BRIDGE.md",
+      "NCO_PILOT.md",
+      "NCO_AUDIT_PINS.json",
+      "NCO_FROZEN_SOURCE_AUDIT.json"
+    ],
+    "feature_status": "DEPLOYED graph in NCO_K048-graph-check.json; inherited target/ABI boundary",
+    "admit": true
+  },
+  {
+    "id": "NCO::compact_row",
+    "function": "crates/aspis-r1-cost-probe/src/compact.rs::compact_row",
+    "packet": "native-cpilot-20261028",
+    "medium": "Kani contract with controls",
+    "reference_medium": "reference extraction plus Lean equality",
+    "domain": "Every u8; exact Bool. NCO_ScalarBridge.compact_row identifies the actually extracted E004 reference and compact cohort predicate. Pure Bool controls inherited from NCC; this does not establish a parent parser.",
+    "positive": [
+      52,
+      53
+    ],
+    "negative": [
+      54,
+      55
+    ],
+    "shape_positive": [],
+    "shape_negative": [],
+    "lean": [
+      9,
+      60
+    ],
+    "reports": [
+      "NCO_HANDOFF.md",
+      "NCO_SLICE_BRIDGE.md",
+      "NCO_PILOT.md",
+      "NCO_AUDIT_PINS.json",
+      "NCO_FROZEN_SOURCE_AUDIT.json"
+    ],
+    "feature_status": "DEPLOYED graph in NCO_K052-graph-check.json; inherited target/ABI boundary",
+    "admit": true,
+    "additional_receipts": [
+      "evidence/native-u04c-20261028/NCC_K035/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K036/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K037/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K038/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K039/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K040/receipt.json"
+    ]
+  },
+  {
+    "id": "NCP::DigestDecode",
+    "function": "crates/aspis-statement/src/atomic_statement.rs::decode_digest_canonical",
+    "packet": "native-cpilot2-20261028",
+    "medium": "Kani contract with controls",
+    "reference_medium": "reference extraction plus Lean equality",
+    "domain": "Every exact32-byte input; full Ok/Err decoded digest and seven-variant error conversion. X002 and NCP_DecodeReference.reference_source L048. Full Result/digest shape controls K018-K023. Does not fill U03 caller contracts.",
+    "positive": [
+      38,
+      40
+    ],
+    "negative": [
+      39,
+      41
+    ],
+    "shape_positive": [
+      19,
+      20,
+      23
+    ],
+    "shape_negative": [
+      18,
+      21,
+      22
+    ],
+    "lean": [
+      48,
+      57
+    ],
+    "reports": [
+      "NCP_HANDOFF.md",
+      "NCP_SLICE_BRIDGE.md",
+      "NCP_PILOT.md",
+      "NCP_VALIDATION.json"
+    ],
+    "feature_status": "UNDETERMINED exact per-crate deployed graph for this pilot; NCS cfg-body parity remains separately available",
+    "admit": false
+  },
+  {
+    "id": "NCP::DigestCanonicality",
+    "function": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs::digest_is_canonical",
+    "packet": "native-cpilot2-20261028",
+    "medium": "Kani contract with controls",
+    "reference_medium": "reference extraction plus Lean equality",
+    "domain": "Every raw digest, exact Bool; X003 and NCP_CanonReference.source L056 with decreasing NBD induction. No native full afterstate validator contract.",
+    "positive": [
+      42,
+      44
+    ],
+    "negative": [
+      43,
+      45
+    ],
+    "shape_positive": [],
+    "shape_negative": [],
+    "lean": [
+      56,
+      57
+    ],
+    "reports": [
+      "NCP_HANDOFF.md",
+      "NCP_SLICE_BRIDGE.md",
+      "NCP_PILOT.md",
+      "NCP_VALIDATION.json"
+    ],
+    "feature_status": "UNDETERMINED exact per-crate deployed graph for this pilot; independent NCS-qualified P6 claim remains usable",
+    "admit": false
+  },
+  {
+    "id": "NCP::exact8_exact32",
+    "function": "crates/aspis-statement/src/pool_v1/pair_terminal.rs::exact",
+    "packet": "native-cpilot2-20261028",
+    "medium": "Kani contract with controls",
+    "reference_medium": "reference extraction plus Lean equality",
+    "domain": "ONLY const width8 or32 and bytes.len<=33. Full Result/errors via fifteen-variant conversion, X003 and NCP_ExactReference.source L054; model afterstate ranges proved by NCP_CallerDomains. Earlier K046-K053 omitted the bound and are superseded. Never width4 or unbounded slices.",
+    "positive": [
+      58,
+      60,
+      62,
+      64
+    ],
+    "negative": [
+      59,
+      61,
+      63,
+      65
+    ],
+    "shape_positive": [],
+    "shape_negative": [],
+    "lean": [
+      49,
+      54,
+      57
+    ],
+    "reports": [
+      "NCP_HANDOFF.md",
+      "NCP_SLICE_BRIDGE.md",
+      "NCP_PILOT.md",
+      "NCP_VALIDATION.json"
+    ],
+    "feature_status": "UNDETERMINED exact per-crate deployed graph for this pilot; independent NCS/KNG-qualified P6 claim remains usable",
+    "admit": false
+  },
+  {
+    "id": "NCC_NCF::registry_getters",
+    "functions": [
+      "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_paused",
+      "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_immutable",
+      "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_paused",
+      "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_immutable"
+    ],
+    "packet": "native-u04d-20261028",
+    "medium": "Kani contract with controls",
+    "domain": "Requires true on the full valid typed V1/V2 registry. NCC K055-K058 body proofs; NCF K046-K057 individual inversions and local use/control pairs. Existing NBX model getter selections remain; actual SDK op25-op28 caller association is OPEN.",
+    "positive": [
+      47,
+      50,
+      53,
+      56
+    ],
+    "negative": [
+      46,
+      48,
+      49,
+      51,
+      52,
+      54,
+      55,
+      57
+    ],
+    "shape_positive": [],
+    "shape_negative": [],
+    "lean": [
+      3
+    ],
+    "reports": [
+      "NCF_HANDOFF.md",
+      "NCF_U04_BRIDGE.md",
+      "NCF_AUDIT.json"
+    ],
+    "feature_status": "UNDETERMINED exact per-crate deployed graph for this pilot; source freeze and source/body helper identity must be associated explicitly",
+    "admit": false,
+    "additional_receipts": [
+      "evidence/native-u04c-20261028/NCC_K035/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K036/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K037/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K038/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K039/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K040/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K055/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K056/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K057/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K058/receipt.json"
+    ]
+  },
+  {
+    "id": "NCF::entry_active",
+    "functions": [
+      "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::is_active_at",
+      "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::is_active_at"
+    ],
+    "packet": "native-u04d-20261028",
+    "medium": "Kani contract with controls",
+    "domain": "Requires true; every valid typed V2/V1 entry and every u64 slot, exact activation/retirement Bool and readonly frame. NCF_EntryContract.op29_exact/op30_exact L003 identify existing cohort predicates. Local harness use is not actual SDK authentication.",
+    "positive": [
+      2,
+      4,
+      6,
+      8
+    ],
+    "negative": [
+      3,
+      5,
+      7,
+      9
+    ],
+    "shape_positive": [],
+    "shape_negative": [],
+    "lean": [
+      3
+    ],
+    "reports": [
+      "NCF_HANDOFF.md",
+      "NCF_CONTRACTS.md",
+      "NCF_STAGE1_AUDIT.json",
+      "NCF_AUDIT.json"
+    ],
+    "feature_status": "UNDETERMINED exact per-crate deployed graph for this pilot; source freeze and source/body helper identity must be associated explicitly",
+    "admit": false,
+    "additional_receipts": [
+      "evidence/native-u04c-20261028/NCC_K035/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K036/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K037/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K038/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K039/receipt.json",
+      "evidence/native-u04c-20261028/NCC_K040/receipt.json"
+    ]
+  },
+  {
+    "id": "NCV::identity",
+    "function": "crates/aspis-statement/src/pool_v1/format.rs::decode_pool_identity_v1",
+    "packet": "native-decref-20261028",
+    "medium": "P6 hybrid",
+    "domain": "Every144-byte input; actual frozen body equals safe reference with error variants collapsed to Unit. No enclosing master-wrapper/callee prestate association. Native local body comparison, not a verified call-site contract or complete cohort bridge.",
+    "positive": [
+      45
+    ],
+    "negative": [
+      46
+    ],
+    "shape_positive": [],
+    "shape_negative": [],
+    "lean": [
+      60
+    ],
+    "reports": [
+      "NCV_HANDOFF.md",
+      "NCV_DECODERS.md",
+      "NCV_VALIDATION.json",
+      "NCV_EXTRACTION_PINS.json"
+    ],
+    "feature_status": "Deployed program-helper compile per packet; no complete reference-to-adopted-cohort association for this helper",
+    "admit": false
+  },
+  {
+    "id": "NCV::policy_valid",
+    "function": "crates/aspis-statement/src/pool_v1/format.rs::validate_verifier_policy_v1",
+    "packet": "native-decref-20261028",
+    "medium": "P6 hybrid",
+    "domain": "Every full typed policy; success/rejection equals valid_policy, individual errors not identified. Ordinary body comparison and intended inversion, not NCF's invalid ghost-pointer contract or enclosing caller bridge.",
+    "positive": [
+      47
+    ],
+    "negative": [
+      48
+    ],
+    "shape_positive": [],
+    "shape_negative": [],
+    "lean": [
+      60
+    ],
+    "reports": [
+      "NCV_HANDOFF.md",
+      "NCV_DECODERS.md",
+      "NCV_VALIDATION.json"
+    ],
+    "feature_status": "Deployed program-helper compile per packet; full error/cohort/caller association remains OPEN",
+    "admit": false
+  }
+]
