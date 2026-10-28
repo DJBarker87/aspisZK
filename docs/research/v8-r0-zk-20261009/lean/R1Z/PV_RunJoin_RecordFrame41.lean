@@ -27,13 +27,15 @@ theorem frame (ops : ExternalFuns) (row tag : U8) (size : Usize) (payload : Slic
     rw [v1,List.length_append]
     rfl
   let word := core.num.U32.to_le_bytes (UScalar.cast .U32 size)
+  have lw : (Array.to_slice word).length=4 := by
+    simpa only [show (4#usize).val=4 from rfl] using word.property
   obtain ⟨head,hh,vh⟩ := PV_RunJoin_ByteAppend38.append one (Array.to_slice word) (by
-    change one.length+4≤Usize.max;rw [l1];omega)
+    rw [lw,l1];omega)
   have lh : head.length=5 := by
     change head.val.length=5
     rw [vh,List.length_append]
-    change one.length+4=5
-    omega
+    change one.length+(Array.to_slice word).length=5
+    rw [lw,l1]
   obtain ⟨framed,hf,vf⟩ := PV_RunJoin_ByteAppend38.append head payload (by rw [lh,length];exact room)
   refine ⟨head.val,framed,lh,vf,?_⟩
   have lenword : Slice.len payload=size := by
@@ -43,12 +45,13 @@ theorem frame (ops : ExternalFuns) (row tag : U8) (size : Usize) (payload : Slic
       .ok (.Ok (tag,size)) := rfl
   simp only [host_wire.record,shape,ho,core.result.Result.Insts.CoreOpsTry.branch,
     bind_tc_ok,lenword,bne_self_eq_false,Bool.false_eq_true,↓reduceIte,lift,h1,hh,hf]
-  dsimp only
-  simp only [bne_self_eq_false,Bool.false_eq_true,↓reduceIte,h1,hh,hf,bind_tc_ok]
-  apply PV_RunJoin_ResultPost41.bind
-  intro result
-  cases result with
-  | Ok value => rfl
-  | Err error => trivial
+  split
+  · trivial
+  · simp only [h1,hh,hf,bind_tc_ok]
+    apply PV_RunJoin_ResultPost41.bind
+    intro result
+    cases result with
+    | Ok value => rfl
+    | Err error => trivial
 #print axioms frame
 end R1Z.PV_RunJoin_RecordFrame41
