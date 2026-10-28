@@ -3,7 +3,7 @@ set_option autoImplicit false
 namespace R1Z.PV_RunJoin_WeightProduct46
 open Aeneas Aeneas.Std Result PV_RunJoin_WeightCarrier46
 open PV_B2_F_ConstructorCarrier (amap)
-open PV_RunJoin_WeightMap46 (mapResult)
+open PV_RunJoin_WeightMap46 (mapResult map_bind)
 
 def product (rows : Array (Array Q 4#usize) 5#usize) (j : Usize) :
     Nat → Usize → Q → Result Q
@@ -33,21 +33,18 @@ theorem complete (rows : Array (Array Q 4#usize) 5#usize) (j : Usize)
       have hb := left.hBounds
       change left.val<256 at hb
       omega
-    rw [AspisR1ProducerRelease47.stored.product]
-    simp only [if_neg hn,lift,bind_tc_ok,PV_RunJoin_WeightMap46.index,product]
-    cases hr : Array.index_usize rows d with
-    | fail e => simp only [hr,mapResult,bind_tc_fail]
-    | div => simp only [hr,mapResult,bind_tc_div]
-    | ok row =>
-      simp only [hr,mapResult,bind_tc_ok]
-      rw [PV_RunJoin_WeightMap46.index]
-      cases hq : Array.index_usize row
-          (Usize.wrapping_shr j (UScalar.cast .U32 (Usize.wrapping_mul 2#usize d)) &&& 3#usize) with
-      | fail e => simp only [hq,mapResult,bind_tc_fail]
-      | div => simp only [hq,mapResult,bind_tc_div]
-      | ok q =>
-        simp only [hq,mapResult,bind_tc_ok,PV_RunJoin_WeightQuartic46.mul_value,
-          PV_B2_C_251FieldTotal.QM31_mul]
-        exact ih _ _ hdec _
+    rw [AspisR1ProducerRelease47.stored.product,product]
+    simp only [if_neg hn,lift,bind_tc_ok]
+    rw [PV_RunJoin_WeightMap46.index]
+    symm
+    apply map_bind (amap toQ) toQ
+    intro row
+    rw [PV_RunJoin_WeightMap46.index]
+    apply map_bind toQ toQ
+    intro q
+    rw [PV_RunJoin_WeightQuartic46.mul]
+    apply map_bind toQ toQ
+    intro next
+    exact (ih _ _ hdec next).symm
 #print axioms complete
 end R1Z.PV_RunJoin_WeightProduct46
