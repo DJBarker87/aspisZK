@@ -12,7 +12,7 @@ def program
   P (core.result.Result pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) := do
   let r ← R1Z.PV_RJDec_ParserR19.program bytes
   invoke "core.result.Result.map_err" (fun ops =>
-    letI : ExternalFuns := ops
+    letI : ProverRwFull.ExternalFuns := ops
     core.result.Result.map_err (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) r (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransitionConstructor))
 
 theorem source (ops : ProverRwFull.ExternalFuns)

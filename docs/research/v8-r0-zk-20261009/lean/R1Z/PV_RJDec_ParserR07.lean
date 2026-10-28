@@ -12,17 +12,17 @@ def program
   P (core.result.Result pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) := do
   let r ← R1Z.PV_RJDec_ParserR12.program bytes
   let r1 ← invoke "core.result.Result.map_err" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.map_err (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) r (pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.SnapshotConstructor))
   let cf ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTry.branch r1)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
     pure (core.result.Result.Ok val)
   | core.ops.control_flow.ControlFlow.Break residual =>
     invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) residual)
 
 theorem source (ops : ProverRwFull.ExternalFuns)

@@ -12,17 +12,17 @@ def program
   P (core.result.Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) := do
   let r ← R1Z.PV_RJDec_ParserR10.program payment
   let r1 ← invoke "core.result.Result.map_err" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.map_err (BuiltinFnOnce pool_v1.payment_relation.PoolV1PaymentStatementFormatError pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) r (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.PaymentConstructor))
   let cf ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTry.branch r1)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
     pure (core.result.Result.Ok (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal common val))
   | core.ops.control_flow.ControlFlow.Break residual =>
     invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual)
 
 theorem source (ops : ProverRwFull.ExternalFuns)

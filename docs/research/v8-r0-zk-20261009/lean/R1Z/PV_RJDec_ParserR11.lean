@@ -11,11 +11,11 @@ def program
   (public1 : pool_v1.payment_relation.PoolV1WithdrawalPublicV1) :
   P (core.result.Result Unit pool_v1.payment_relation.PoolV1PaymentStatementFormatError) := do
   let cpv ← invoke "pool_v1.payment_relation.withdrawal_common" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       pool_v1.payment_relation.withdrawal_common public1)
   let r ← R1Z.PV_RJDec_Parser04.program cpv
   let cf ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue _ =>
@@ -23,20 +23,20 @@ def program
       pure (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount)
     else
       let i ← invoke "spend.VALUE_LIMIT" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           spend.VALUE_LIMIT)
       if public1.amount >= i then
         pure (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount)
       else
         let a := Array.repeat 32#usize 0#u8
         let b ← invoke "core.array.equality.PartialEqArray.eq" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 public1.destination_token_account a)
         if b then
           pure (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidDestination)
         else
           let b1 ← invoke "pool_v1.payment_relation.digest_is_canonical" (fun ops =>
-              letI : ExternalFuns := ops
+              letI : ProverRwFull.ExternalFuns := ops
               pool_v1.payment_relation.digest_is_canonical public1.change_commitment)
           if b1 then
             pure (core.result.Result.Ok ())
@@ -44,7 +44,7 @@ def program
             pure (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)
   | core.ops.control_flow.ControlFlow.Break residual =>
     invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual)
 
 theorem source (ops : ProverRwFull.ExternalFuns)

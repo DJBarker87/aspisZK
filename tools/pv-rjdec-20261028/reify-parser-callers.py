@@ -28,10 +28,13 @@ def proof(node,n=2):
 ns['emit']=emit;ns['proof']=proof
 out=[]
 for name in order:
- v=mods[name];mod=active[name];short=mod.split('.')[-1];header,result,body,args,explicit=ns['get'](name);node=ns['parse'](ns['normalize'](body));calls=[]
+ v=mods[name];mod=active[name]
+ if mod in ['R1Z.PV_RJDec_ParserR12','R1Z.PV_RJDec_ParserR15']:
+  out.append(dict(module=mod,source_function=name,chunked=True));continue
+ short=mod.split('.')[-1];header,result,body,args,explicit=ns['get'](name);node=ns['parse'](ns['normalize'](body));calls=[]
  imports=['AspisR1TerminalDecoder.Funs','R1Z.PV_W_IfLaws']+[active[c] for c in graph[name]]
  text=''.join('import '+m+'\n' for m in imports)+'set_option autoImplicit false\nnoncomputable section\nnamespace '+mod+'\nopen Aeneas Aeneas.Std AspisR1TerminalDecoder PV_W_TypedEffects PV_W_RecursiveLaws\nvariable [ProverRwFull.ExternalTypes]\n\n'
- text+='def program\n  '+header+' :\n  P '+result+' := do\n'+emit(node,calls=calls)+'\n\n'
+ text+='def program\n  '+header+' :\n  P '+result+' := do\n'+emit(node,calls=calls).replace('letI : ExternalFuns := ops','letI : ProverRwFull.ExternalFuns := ops')+'\n\n'
  text+='theorem source (ops : ProverRwFull.ExternalFuns)\n  '+header+' :\n  erase ops (program '+' '.join(explicit)+') =\n    '+name+' '+' '.join(args)+' := by\n  unfold program '+name+'\n'+proof(node)+'\n\n#print axioms source\nend '+mod+'\n'
  (D/(short+'.lean')).write_text(text);out.append(dict(module=mod,source_function=name,spliced=graph[name],calls=calls))
 (E/'recursive-parsers.json').write_text(json.dumps(dict(modules=out,order=[v['module'] for v in out]),indent=2)+'\n');print(len(out),'dependent source parsers')
