@@ -68,6 +68,19 @@ theorem materialize_primitive_divergence {S : Type}
     (h : allocate PV_RDB2C_V258.request world.allocator=div) :
     materialize allocate w kappa world=div := by simp only [materialize,h,bind_tc_div]
 
+/-- Apply the same actual abort/error handler to the entire returned state.
+The handler can fail, diverge or change runtime state; no success is assumed. -/
+theorem boxed_with_handlers {S R : Type}
+    (allocate : Request → S → Result (Option Nat × S))
+    (v : PV_B2_C_WeightsNative.transport.Variant)
+    (alpha : Array PV_B2_C_ConstructorRows.K 10#usize)
+    (z : Array PV_B2_C_ConstructorRows.Point 2#usize) (world : PV_RDB2C_V259.World S)
+    (handler : PV_RDB2C_V259.Returned × PV_RDB2C_V259.World S → Result R) :
+    (boxed allocate v alpha z world >>= handler) =
+      (boxedReference allocate v alpha z world >>= handler) :=
+  congrArg (fun r => r >>= handler) (boxed_complete allocate v alpha z world)
+
+#print axioms boxed_with_handlers
 #print axioms materialize_complete
 #print axioms boxed_complete
 #print axioms materialize_primitive_failure
