@@ -21,7 +21,9 @@ theorem source (value operand : aspis_core.field.QM31) (weight : aspis_core.fiel
   simp only [reference224.endpoint,aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,bind_tc_ok,
     endpoint,operations]
   by_cases h : weight = aspis_core.field.M31.ZERO <;> simp [h]
-  all_goals cases consumer <;> rfl
+  all_goals
+    intros
+    cases consumer <;> rfl
 
 #print axioms source
 end PV_B3P_HelperEndpoint224
