@@ -8,9 +8,10 @@ def gamma (block : Array U8 32#usize) : Result aspis_core.field.wide_exact.WideE
   let (ds,q) ← low block
   let n ← lift (U32.wrapping_add q 1#u32)
   let (wrapped,ds1) ← carry ds n
-  let ds2 ← if wrapped then do
-    let (_,ds2) ← carry ds1 1#u32
-    ok ds2
+  let ds2 ←
+    if wrapped then do
+      let (_,ds2) ← carry ds1 1#u32
+      ok ds2
     else ok ds1
   host_sampler.decode8 ds2
 
