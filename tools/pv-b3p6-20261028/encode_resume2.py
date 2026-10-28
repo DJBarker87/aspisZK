@@ -16,17 +16,17 @@ s+='  '*24+'.ok (.Ok (Array.make 23#usize ['+','.join(f'v{k}' for k in range(23)
 s+='''set_option backward.isDefEq.respectTransparency false in
 theorem complete_result (p : reference226.OwnedPublic) :
     reference226.encode_owned p = spec p := by
-  have hinit : (if p.withdrawal then Result.ok (true,1427#usize) else Result.ok (false,1455#usize)) =
-      Result.ok (p.withdrawal,if p.withdrawal then 1427#usize else 1455#usize) := by
-    cases p.withdrawal <;> rfl
-  have heta : { p with withdrawal := p.withdrawal } = p := by cases p; rfl
   unfold reference226.encode_owned spec
-  rw [hinit]
-  simp only [bind_tc_ok,heta]
+  cases hw : p.withdrawal
+  all_goals
+    have hu : { p with withdrawal := p.withdrawal } = p := by cases p; rfl
+    simp only [hw] at hu
+    simp only [hw,Bool.false_eq_true,↓reduceIte,bind_tc_ok] 
+    rw [hu]
 '''
 for k in range(23):
- indent='  '+' '*4*k
+ indent='    '+' '*4*k
  s+=indent+f'generalize h{k} : reference226.chunk p {64*k}#usize = r{k}\n'
  s+=indent+f'cases r{k} with\n'+indent+'| fail e => rfl\n'+indent+'| div => rfl\n'+indent+'| ok v =>\n'+indent+'  cases v with\n'+indent+'  | Err e => rfl\n'+indent+f'  | Ok v{k} =>\n'
-s+='  '+' '*92+'rfl\n#print axioms complete_result\nend '+ns+'\n'
+s+='    '+' '*92+'rfl\n#print axioms complete_result\nend '+ns+'\n'
 (D/(ns+'.lean')).write_text(s)
