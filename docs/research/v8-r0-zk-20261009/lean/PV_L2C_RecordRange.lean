@@ -25,7 +25,7 @@ theorem optional_owner (rec : Option BuilderRecordsReference.Note)
   cases rec with
   | none =>
     intro j hj
-    exact PV_L2C_BlockRange.zeros 8#usize j (by simpa using hj)
+    with_unfolding_all exact PV_L2C_BlockRange.zeros 8#usize j (by simpa using hj)
   | some r => exact hc r rfl
 #print axioms optional_owner
 
@@ -35,7 +35,7 @@ theorem optional_salt (rec : Option BuilderRecordsReference.Note)
   cases rec with
   | none =>
     intro j hj
-    exact PV_L2C_BlockRange.zeros 8#usize j (by simpa using hj)
+    with_unfolding_all exact PV_L2C_BlockRange.zeros 8#usize j (by simpa using hj)
   | some r => exact hc r rfl
 #print axioms optional_salt
 
