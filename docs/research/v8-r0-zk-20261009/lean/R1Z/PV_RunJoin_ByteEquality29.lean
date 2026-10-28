@@ -13,6 +13,7 @@ def compare : U8 × U8 → Result Bool
 
 theorem compare_result (a b : U8) : compare (a,b) = ok (decide (a=b)) := by
   simp [compare,core.cmp.PartialEqU8,core.cmp.impls.PartialEqU8.ne,liftFun2]
+  exact ⟨UScalar.eq_of_val_eq,fun h => congrArg (fun x : U8 => x.val) h⟩
 #print axioms compare_result
 
 theorem list_result (xs ys : List U8) (hl : xs.length=ys.length) :
@@ -39,6 +40,9 @@ theorem array_result {n : Usize} (a b : Array U8 n) :
   change List.allM compare (a.val.zip b.val) = _
   rw [list_result a.val b.val (by rw [a.property,b.property])]
   have he : a.val=b.val ↔ a=b := ⟨Subtype.ext,fun h => congrArg (fun x => x.val) h⟩
-  rw [propext he]
+  by_cases h : a=b
+  · subst b; simp
+  · have hv : ¬a.val=b.val := fun hv => h (he.mp hv)
+    simp only [decide_eq_false hv,decide_eq_false h]
 #print axioms array_result
 end R1Z.PV_RunJoin_ByteEquality29
