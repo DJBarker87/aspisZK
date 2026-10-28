@@ -1,0 +1,18 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -36,6 +36,7 @@
+ }
+ 
+ /// P1 tag and exact payload length, including the message-free rows.
++#[cfg_attr(kani, kani::ensures(|r| (*r == NCO_wire::reference::row_shape_ref(row)) != cfg!(NCO_invert_shape)))]
+ pub const fn row_shape(row: u8) -> Option<(u8, usize)> {
+     match row {
+         0 | 1 | 3..=13 => Some((0, 0)),
+@@ -848,3 +849,7 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)]
++#[path="NCO_wire.rs"]
++mod NCO_wire;

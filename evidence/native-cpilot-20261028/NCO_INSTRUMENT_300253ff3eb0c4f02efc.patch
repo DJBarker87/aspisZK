@@ -1,0 +1,67 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -20,6 +20,7 @@
+ pub const C2_LANES: [usize; 2] = [26, 27];
+ pub type PointClaims = [[WideExact; LANES]; POINTS];
+ 
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+ pub enum Error {
+     Allocation,
+@@ -36,6 +37,7 @@
+ }
+ 
+ /// P1 tag and exact payload length, including the message-free rows.
++#[cfg_attr(kani, kani::ensures(|r| (*r == NCO_wire::reference::row_shape_ref(row)) != cfg!(NCO_invert_shape)))]
+ pub const fn row_shape(row: u8) -> Option<(u8, usize)> {
+     match row {
+         0 | 1 | 3..=13 => Some((0, 0)),
+@@ -48,6 +50,8 @@
+     }
+ }
+ 
++#[cfg_attr(kani, kani::requires(payload.len()==32))]
++#[cfg_attr(kani, kani::ensures(|r| (if cfg!(NCO_weak_validate) {r.is_ok() == NCO_wire::reference::validate_ref(row,payload).is_ok()} else {NCO_wire::validate_matches(r,&NCO_wire::reference::validate_ref(row,payload))}) != cfg!(NCO_invert_validate)))]
+ fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
+     for (value, bytes) in payload.chunks_exact(32).enumerate() {
+         let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
+@@ -60,6 +64,8 @@
+ 
+ /// Reject malformed framing and every noncanonical E limb before hashing.
+ /// UNPROVED P2 subset: reject any nonzero E high component at parse.
++#[cfg_attr(kani, kani::requires(row<14 && record.len()<=37 && (!cfg!(NCO_header) || record.len()<=5) && (!cfg!(NCO_payload) || (row==2 && record.len()==37))))]
++#[cfg_attr(kani, kani::ensures(|r| NCO_wire::matches_ref(r,&NCO_wire::reference::parse_record_ref(row,record)) != cfg!(NCO_invert_parse)))]
+ pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {
+     let (tag, size) = row_shape(row).ok_or(Error::InvalidRow)?;
+     if record.len() != 5 + size {
+@@ -275,6 +281,8 @@
+     records: [&'a [u8]; 27],
+ }
+ 
++#[cfg_attr(kani, kani::requires(row<14 && offset<=5 && bytes.len()==42))]
++#[cfg_attr(kani, kani::ensures(|r| r.is_ok() == NCO_wire::reference::parse_at_ref(bytes,row,offset).is_ok()))]
+ fn parse_record_at<'a>(
+     bytes: &'a [u8],
+     row: u8,
+@@ -848,3 +856,7 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)]
++#[path="NCO_wire.rs"]
++mod NCO_wire;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+@@ -44,3 +45,6 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)]
++mod NCO_controls;

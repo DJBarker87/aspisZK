@@ -1,0 +1,65 @@
+NCO_generated/NCO_ValidateModel.lean:29:30: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [NCO_OuterRun.bad, ̲no,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCO_generated/NCO_ValidateModel.lean:32:31: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [NCO_OuterRun.bad, ̲yes,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCO_generated/NCO_ValidateModel.lean:64:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  dite (k ≤ UScalar.cMax UScalarTy.Usize) ?m.332 ?m.333
+in the target expression
+  (do
+      let r ←
+        let (i, pending_return) := (final, none)
+          match pending_return with
+          | none => ok (core.result.Result.Err (NCO_ParserRef.RefError.NonCanonical row i))
+          | some r => ok r
+      ok (result r)) =
+    match some k with
+    | none => ok (core.result.Result.Ok ())
+    | some i =>
+      if h : i ≤ UScalar.cMax UScalarTy.Usize then
+        ok (core.result.Result.Err (LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+      else fail Error.panic
+
+case some
+row : U8
+payload : Slice U8
+cap : (↑payload).length ≤ 3712
+final : Usize
+zero : ↑0#usize = 0
+sameBad :
+  NCO_OuterRun.bad payload = fun i => !LPl_Kit_Bytes.validChunk 8 true (List.take 32 (List.drop (32 * i) ↑payload))
+k : ℕ
+found :
+  List.find? (fun i => !LPl_Kit_Bytes.validChunk 8 true (List.take 32 (List.drop (32 * i) ↑payload)))
+      (List.range ((↑payload).length / 32)) =
+    some k
+value : ↑final = k
+call : NCO_ParserRef.validate_ref_loop0 payload 0#usize = ok (final, none)
+member : k ∈ List.range ((↑payload).length / 32)
+bound : k < (↑payload).length / 32
+small : k < 116
+representable : k ≤ UScalar.cMax UScalarTy.Usize
+⊢ (do
+      let r ←
+        let (i, pending_return) := (final, none)
+          match pending_return with
+          | none => ok (core.result.Result.Err (NCO_ParserRef.RefError.NonCanonical row i))
+          | some r => ok r
+      ok (result r)) =
+    match some k with
+    | none => ok (core.result.Result.Ok ())
+    | some i =>
+      if h : i ≤ UScalar.cMax UScalarTy.Usize then
+        ok (core.result.Result.Err (LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+      else fail Error.panic
+'NCO_ValidateModel.bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCO_ValidateModel.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

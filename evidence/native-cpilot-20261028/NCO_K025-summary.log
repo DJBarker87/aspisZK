@@ -1,0 +1,50 @@
+{"attempt": "NCO_K025", "exit_status": 0, "wall_seconds": 2.098133585997857, "peak_rss_kib": "216840", "swaps": "0", "print_axioms": "N/A: kani"}
++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:10:22
+   |
+10 | fn result_negative(){result_invert(kani::any());}
+   |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+10 | fn result_negative(){let _ = result_invert(kani::any());}
+   |                      +++++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:14:24
+   |
+14 | fn result_weak_proof(){result_weak(kani::any());}
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+14 | fn result_weak_proof(){let _ = result_weak(kani::any());}
+   |                        +++++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:22:48
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();result_badframe(&mut x);}
+   |                                                ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();let _ = result_badframe(&mut x);}
+   |                                                +++++++
+
+    Finished `dev` profile [optimized] target(s) in 0.70s
+Checking harness r1_wire::NCO_wire::shape_contract...
+
+VERIFICATION RESULT:
+ ** 0 of 98 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.08360711s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

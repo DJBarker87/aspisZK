@@ -1,0 +1,37 @@
+{"attempt": "NCO_K042", "exit_status": 1, "wall_seconds": 1.851112010073848, "peak_rss_kib": "190264", "swaps": "0", "print_axioms": "N/A: kani"}
+}
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+14 | fn result_weak_proof(){let _ = result_weak(kani::any());}
+   |                        +++++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:22:48
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();result_badframe(&mut x);}
+   |                                                ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();let _ = result_badframe(&mut x);}
+   |                                                +++++++
+
+error: Target function in stub_verified, `expand_values`, has no contract.
+   --> crates/aspis-r1-cost-probe/src/NCO_compact.rs:18:36
+    |
+ 18 | #[kani::proof] #[kani::unwind(35)] #[kani::stub_verified(expand_values)]
+    |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: Try adding a contract to this function or use the unsound `stub` attribute instead.
+   --> crates/aspis-r1-cost-probe/src/compact.rs:128:1
+    |
+128 | pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: this error originates in the attribute macro `kani::stub_verified` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `aspis-r1-cost-probe` (lib) due to 1 previous error; 63 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.

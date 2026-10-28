@@ -1,0 +1,36 @@
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -68,6 +68,7 @@
+ const _: () = assert!(SEMANTIC_COMPACT_VALUES == 426 && COMPACT_SEMANTIC == 7015);
+ const _: () = assert!(FIXED == 28_359 && MAX_PROOF == 57_607);
+ 
++#[cfg_attr(kani, derive(kani::Arbitrary))]
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+ pub enum CodecError {
+     Length,
+@@ -77,6 +78,7 @@
+ 
+ /// Is a semantic row's payload made of implied-zero-high values?
+ #[inline(always)]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NCO_compact::reference::compact_row_ref(row)) != cfg!(NCO_invert_compact)))]
+ fn compact_row(row: u8) -> bool {
+     row >= 14
+ }
+@@ -124,6 +126,9 @@
+ /// stored `y1` values in its strict scan and the rebuilt semantic records in
+ /// the shipped `Prefix::parse` (one check per value, as in the shipped path).
+ #[inline(always)]
++#[cfg_attr(kani, kani::requires(compact.len()==16 && out.len()==32))]
++#[cfg_attr(kani, kani::modifies(out))]
++#[cfg_attr(kani, kani::ensures(|r| (r.is_ok() && NCO_compact::expanded_one(compact,out)) != cfg!(NCO_invert_expand)))]
+ pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+     if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {
+         return Err(CodecError::Length);
+@@ -199,3 +204,7 @@
+         assert_eq!(check_values(&bad), Err(CodecError::NonCanonical));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NCO_compact.rs"]
++mod NCO_compact;

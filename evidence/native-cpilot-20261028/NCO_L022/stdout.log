@@ -1,0 +1,82 @@
+NCO_generated/NCO_ParserAt.lean:24:4: error(lean.unknownIdentifier): Unknown identifier `AspisR1PrefixAggregateParser.core.option.Option.unwrap`
+NCO_generated/NCO_ParserAt.lean:22:103: error: unsolved goals
+bytes : Slice U8
+row tag : U8
+offset size len end1 : Usize
+shape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+sum : 5#usize + size = ok len
+add : offset + len = ok end1
+get :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := end1 } =
+    ok none
+⊢ (do
+      let (_, i) ← core.option.Option.unwrap (some (tag, size))
+      let length ← 5#usize + i
+      let i1 ← offset + length
+      let o1 ←
+        core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := i1 }
+      let r ←
+        match o1 with
+          | none => ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+          | some v => ok (core.result.Result.Ok v)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← AspisR1PrefixAggregateParser.r1_wire.parse_record row val
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (val, i1))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x => Result (core.result.Result (Slice U8 × Usize) AspisR1PrefixAggregateParser.r1_wire.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x => Result (core.result.Result (Slice U8 × Usize) AspisR1PrefixAggregateParser.r1_wire.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+NCO_generated/NCO_ParserAt.lean:23:69: warning: This simp argument is unused:
+  sum
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1PrefixAggregateParser.r1_wire.parse_record_at, shape, s̵u̵m̵,̵ ̵add, get,
+      AspisR1PrefixAggregateParser.core.option.Option.unwrap,
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCO_generated/NCO_ParserAt.lean:23:74: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1PrefixAggregateParser.r1_wire.parse_record_at, shape, sum, a̵d̵d̵,̵ ̵get,
+      AspisR1PrefixAggregateParser.core.option.Option.unwrap,
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCO_generated/NCO_ParserAt.lean:23:79: warning: This simp argument is unused:
+  get
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1PrefixAggregateParser.r1_wire.parse_record_at, shape, sum, add, ̵g̵e̵t̵,̵
+      AspisR1PrefixAggregateParser.core.option.Option.unwrap,
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCO_ParserAt.reference_short' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCO_ParserAt.source_short' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

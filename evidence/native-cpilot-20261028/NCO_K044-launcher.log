@@ -1,0 +1,48 @@
+{"attempt": "NCO_K044", "exit_status": 1, "wall_seconds": 2.14981098100543, "peak_rss_kib": "234040", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rte
+...
+ +++++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:14:24
+   |
+14 | fn result_weak_proof(){result_weak(kani::any());}
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+14 | fn result_weak_proof(){let _ = result_weak(kani::any());}
+   |                        +++++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:22:48
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();result_badframe(&mut x);}
+   |                                                ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();let _ = result_badframe(&mut x);}
+   |                                                +++++++
+
+error: `core::result::Result<&[u8], r1_wire::Error>` doesn't implement `kani::Arbitrary`.Please, check `parse_record_at` contract.
+ --> /home/runner/work/kani/kani/library/kani/src/lib.rs:57:0
+  |
+  = help: All objects in the modifies clause must implement the Arbitrary. The return type must also implement the Arbitrary trait if you are checking recursion or using verified stub.
+  = note: this error originates in the macro `kani_core::kani_intrinsics` which comes from the expansion of the macro `kani_core::kani_lib` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `aspis-r1-cost-probe` (lib) due to 1 previous error; 92 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r417f74922eaa4bc1985d9deb374e8564.scope; invocation ID: e2157ba9188747928ffa582190a057d2

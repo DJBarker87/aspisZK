@@ -1,0 +1,76 @@
+{"attempt": "NCO_L003", "exit_status": 1, "wall_seconds": 1.4150153569644317, "peak_rss_kib": "2630992", "swaps": "0", "print_axioms": ["'NCO_ScalarBridge.compact_row' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NCO_ScalarBridge.row_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCO_generated/NCO_ScalarBridge.lean:22:15: error: Tactic `rfl` failed: The left-hand side
+  NCO_Reference.row_shape_ref 25#u8
+is not definitionally equal to the right-hand side
+  AspisS1NativeCompact.r1_wire.row_shape 25#u8
+
+case pos
+h0 : ¬25#u8 = 0#u8
+h1 : ¬25#u8 = 1#u8
+h2 : ¬25#u8 = 2#u8
+h14 : ¬25#u8 = 14#u8
+⊢ NCO_Reference.row_shape_ref 25#u8 = AspisS1NativeCompact.r1_wire.row_shape 25#u8
+NCO_generated/NCO_ScalarBridge.lean:24:15: error: Tactic `rfl` failed: The left-hand side
+  NCO_Reference.row_shape_ref 26#u8
+is not definitionally equal to the right-hand side
+  AspisS1NativeCompact.r1_wire.row_shape 26#u8
+
+case pos
+h0 : ¬26#u8 = 0#u8
+h1 : ¬26#u8 = 1#u8
+h2 : ¬26#u8 = 2#u8
+h14 : ¬26#u8 =
+...
+6#u8 = 0#u8
+h1 : ¬26#u8 = 1#u8
+h2 : ¬26#u8 = 2#u8
+h14 : ¬26#u8 = 14#u8
+h25 : ¬26#u8 = 25#u8
+⊢ NCO_Reference.row_shape_ref 26#u8 = AspisS1NativeCompact.r1_wire.row_shape 26#u8
+NCO_generated/NCO_ScalarBridge.lean:12:84: error: unsolved goals
+case neg
+row : U8
+h0 : ¬row = 0#u8
+h1 : ¬row = 1#u8
+h2 : ¬row = 2#u8
+h14 : ¬row = 14#u8
+h25 : ¬row = 25#u8
+h26 : ¬row = 26#u8
+⊢ (if 3 ≤ ↑row then
+      if ↑row ≤ 13 then ok (some (0#u8, 0#usize))
+      else if 15 ≤ ↑row then if ↑row ≤ 24 then ok (some (2#u8, 896#usize)) else ok none else ok none
+    else if 15 ≤ ↑row then if ↑row ≤ 24 then ok (some (2#u8, 896#usize)) else ok none else ok none) =
+    match row with
+    | 0#8#uscalar => ok (some (0#u8, 0#usize))
+    | 1#8#uscalar => ok (some (0#u8, 0#usize))
+    | 2#8#uscalar => ok (some (1#u8, 32#usize))
+    | 14#8#uscalar => ok (some (3#u8, 32#usize))
+    | 25#8#uscalar => do
+      let i ← AspisS1NativeCompact.r1_wire.CLAIMS
+      let i1 ← i + AspisS1NativeCompact.r1_wire.LANES
+      let i2 ← i1 * 32#usize
+      ok (some (4#u8, i2))
+    | 26#8#uscalar => do
+      let i ← AspisS1NativeCompact.r1_wire.LANES * 32#usize
+      ok (some (5#u8, i))
+    | x =>
+      if 3 ≤ ↑row then
+        if ↑row ≤ 13 then ok (some (0#u8, 0#usize))
+        else
+          if 15 ≤ ↑row then
+            if ↑row ≤ 24 then do
+              let i ← 28#usize * 32#usize
+              ok (some (2#u8, i))
+            else ok none
+          else ok none
+      else
+        if 15 ≤ ↑row then
+          if ↑row ≤ 24 then do
+            let i ← 28#usize * 32#usize
+            ok (some (2#u8, i))
+          else ok none
+        else ok none
+'NCO_ScalarBridge.compact_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCO_ScalarBridge.row_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r79b7a36760f642409af5ae6e7f11b948.scope; invocation ID: 7bb1219013e44cd7ab3ef5b822229000
