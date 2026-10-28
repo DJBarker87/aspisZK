@@ -2,6 +2,17 @@
 from pathlib import Path
 import json,hashlib,re,subprocess
 E=Path(__file__).resolve().parent;R=E.parents[1]
+def lean_code(t):
+ out=[];i=0;depth=0
+ while i<len(t):
+  if t.startswith('/-',i):depth+=1;i+=2;continue
+  if depth and t.startswith('-/',i):depth-=1;i+=2;continue
+  if depth:i+=1;continue
+  if t.startswith('--',i):
+   j=t.find('\n',i);i=len(t) if j<0 else j;continue
+  out.append(t[i]);i+=1
+ assert depth==0,'unterminated Lean comment'
+ return ''.join(out)
 receipts=[json.loads(p.read_text()) for p in sorted(E.glob('NCK_[KL][0-9][0-9][0-9]/receipt.json'))]
 leans=[r for r in receipts if r['kind']=='lean'];kanis=[r for r in receipts if r['kind']=='kani']
 assert len(leans)<=80 and len(kanis)<=50
@@ -17,7 +28,7 @@ for p in sorted((R/'lean').glob('NCK_*.lean')):
   if 'depends on axioms:' in line:
    a=line.split('depends on axioms:')[1].strip().strip('[]')
    assert set(a.split(', '))<={'propext','Classical.choice','Quot.sound'},line
- assert not re.search(r'\b(sorry|axiom|admit|native_decide)\b|set_option (maxRecDepth|maxHeartbeats)',p.read_text()),p
+ assert not re.search(r'\b(sorry|axiom|admit|native_decide)\b|set_option (maxRecDepth|maxHeartbeats)',lean_code(p.read_text())),p
  sources[p.name]=dict(sha256=h,attempt=r['attempt'],axioms=axioms)
 for r in receipts:
  assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'},r['attempt']

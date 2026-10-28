@@ -78,6 +78,4 @@ No native loop-step association is claimed: it still needs Kani.
 
 `NCK_Owners.readonly/checkpoint` derive exact owner equality as well as the
 privilege and checkpoint-length domains, from actual accepted model guards.
-Comparison and checkpoint-size primitive laws remain explicit. Authentication
-caller cut/domain modules are being prepared; no credit is assigned before a
-passing receipt. The host transport currently prevents their submission.
+Comparison and checkpoint-size primitive laws remain explicit. NCK_AuthenticationCuts.guards and NCK_AuthenticationDomains.source now pass. NCK_ValidatedAuthCall.source and NCK_OwnedAuthentication.source couple their child to the SAME accepted parent and slot. No independent guard success is an input; comparison/size laws remain explicit. Final co-import L064 passes.
