@@ -1,0 +1,100 @@
+START 61221 R1Z.PV_RunJoin_CoefficientsVector45
+DONE 61221 R1Z.PV_RunJoin_CoefficientsVector45 exit 1 wall 2.16 RSS 4406677504
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:22:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_CoefficientsVector45.payload_length`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:60:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy transport.Variant.S2
+    (ProverCommitArray49.array 1024#usize (p ↑lane))
+in the target expression
+  (do
+      let cf ←
+        do
+          let column ←
+            transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                transport.Variant.S2 (ProverCommitArray49.array 1024#usize (p ↑lane))
+          let coefficients1 ← out.push column
+          ok (ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize))
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              if x.2 < (messages p).len then do
+                let a ← (messages p).index_usize x.2
+                let column ←
+                  transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                      transport.Variant.S2 a
+                let coefficients1 ← x.1.push column
+                ok (ControlFlow.cont (coefficients1, x.2.wrapping_add 1#usize))
+              else ok (ControlFlow.done x.1))
+            next
+        | ControlFlow.done out => ok out) =
+    ok next
+
+case succ.refine_1
+inst✝ : ExternalTypes
+ops : ExternalFuns
+p : ℕ → ℕ → W
+n : ℕ
+ih :
+  ∀ (out : alloc.vec.Vec Column) (lane : Usize),
+    ↑lane + n = 29 →
+      out.length + n ≤ Usize.max →
+        ∃ next,
+          prover.opening_coefficients_loop transport.Variant.S2 (messages p) out lane = ok next ∧
+            ↑next = ↑out ++ payload p (↑lane) n
+out : alloc.vec.Vec Column
+lane : Usize
+bound : ↑lane + (n + 1) = 29
+room : out.length + (n + 1) ≤ Usize.max
+hi : ↑lane < 29
+read : (messages p).index_usize lane = ok (ProverCommitArray49.array 1024#usize (p ↑lane))
+mid : alloc.vec.Vec Column
+hm : out.push (column (p ↑lane)) = ok mid
+hmv : ↑mid = ↑out ++ [column (p ↑lane)]
+ml : mid.length = out.length + 1
+inc : ↑(lane.wrapping_add 1#usize) = ↑lane + 1
+next : alloc.vec.Vec (Std.Array aspis_core.field.wide_exact.WideExact 1024#usize)
+hn : prover.opening_coefficients_loop transport.Variant.S2 (messages p) mid (lane.wrapping_add 1#usize) = ok next
+hnv : ↑next = ↑mid ++ payload p (↑(lane.wrapping_add 1#usize)) n
+⊢ (do
+      let cf ←
+        do
+          let column ←
+            transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                transport.Variant.S2 (ProverCommitArray49.array 1024#usize (p ↑lane))
+          let coefficients1 ← out.push column
+          ok (ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize))
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              if x.2 < (messages p).len then do
+                let a ← (messages p).index_usize x.2
+                let column ←
+                  transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                      transport.Variant.S2 a
+                let coefficients1 ← x.1.push column
+                ok (ControlFlow.cont (coefficients1, x.2.wrapping_add 1#usize))
+              else ok (ControlFlow.done x.1))
+            next
+        | ControlFlow.done out => ok out) =
+    ok next
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1024 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_CoefficientsVector45.payload_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientsVector45.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientsVector45.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

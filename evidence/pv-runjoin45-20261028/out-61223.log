@@ -1,0 +1,149 @@
+START 61223 R1Z.PV_RunJoin_CoefficientsVector45
+DONE 61223 R1Z.PV_RunJoin_CoefficientsVector45 exit 1 wall 1.98 RSS 4418031616
+n32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:22:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_CoefficientsVector45.payload_length`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:67:6: error: Tactic `apply` failed: could not unify the conclusion of `Eq.trans cell`
+  (do
+      let c ←
+        transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy transport.Variant.S2
+            (ProverCommitArray49.array 1024#usize (p ↑lane))
+      let coefficients1 ← out.push c
+      let cf :
+        ControlFlow (alloc.vec.Vec Column × Usize)
+          (alloc.vec.Vec (Std.Array aspis_core.field.wide_exact.WideExact 1024#usize)) :=
+        ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize)
+      match cf with
+        | ControlFlow.cont next => prover.opening_coefficients_loop transport.Variant.S2 (messages p) next.1 next.2
+        | ControlFlow.done out => ok out) =
+    ?m.284
+with the goal
+  (do
+      let cf ←
+        do
+          let column ←
+            transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                transport.Variant.S2 (ProverCommitArray49.array 1024#usize (p ↑lane))
+          let coefficients1 ← out.push column
+          ok (ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize))
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              if x.2 < (messages p).len then do
+                let a ← (messages p).index_usize x.2
+                let column ←
+                  transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                      transport.Variant.S2 a
+                let coefficients1 ← x.1.push column
+                ok (ControlFlow.cont (coefficients1, x.2.wrapping_add 1#usize))
+              else ok (ControlFlow.done x.1))
+            next
+        | ControlFlow.done out => ok out) =
+    ok next
+
+Note: The full type of `Eq.trans cell` is
+  (do
+        let c ← ok (column (p ↑lane))
+        let coefficients1 ← out.push c
+        let cf :
+          ControlFlow (alloc.vec.Vec Column × Usize)
+            (alloc.vec.Vec (Std.Array aspis_core.field.wide_exact.WideExact 1024#usize)) :=
+          ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize)
+        match cf with
+          | ControlFlow.cont next => prover.opening_coefficients_loop transport.Variant.S2 (messages p) next.1 next.2
+          | ControlFlow.done out => ok out) =
+      ?m.284 →
+    (do
+        let c ←
+          transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy transport.Variant.S2
+              (ProverCommitArray49.array 1024#usize (p ↑lane))
+        let coefficients1 ← out.push c
+        let cf :
+          ControlFlow (alloc.vec.Vec Column × Usize)
+            (alloc.vec.Vec (Std.Array aspis_core.field.wide_exact.WideExact 1024#usize)) :=
+          ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize)
+        match cf with
+          | ControlFlow.cont next => prover.opening_coefficients_loop transport.Variant.S2 (messages p) next.1 next.2
+          | ControlFlow.done out => ok out) =
+      ?m.284
+
+case succ.refine_1
+inst✝ : ExternalTypes
+ops : ExternalFuns
+p : ℕ → ℕ → W
+n : ℕ
+ih :
+  ∀ (out : alloc.vec.Vec Column) (lane : Usize),
+    ↑lane + n = 29 →
+      out.length + n ≤ Usize.max →
+        ∃ next,
+          prover.opening_coefficients_loop transport.Variant.S2 (messages p) out lane = ok next ∧
+            ↑next = ↑out ++ payload p (↑lane) n
+out : alloc.vec.Vec Column
+lane : Usize
+bound : ↑lane + (n + 1) = 29
+room : out.length + (n + 1) ≤ Usize.max
+hi : ↑lane < 29
+read : (messages p).index_usize lane = ok (ProverCommitArray49.array 1024#usize (p ↑lane))
+mid : alloc.vec.Vec Column
+hm : out.push (column (p ↑lane)) = ok mid
+hmv : ↑mid = ↑out ++ [column (p ↑lane)]
+ml : mid.length = out.length + 1
+inc : ↑(lane.wrapping_add 1#usize) = ↑lane + 1
+next : alloc.vec.Vec (Std.Array aspis_core.field.wide_exact.WideExact 1024#usize)
+hn : prover.opening_coefficients_loop transport.Variant.S2 (messages p) mid (lane.wrapping_add 1#usize) = ok next
+hnv : ↑next = ↑mid ++ payload p (↑(lane.wrapping_add 1#usize)) n
+cell :
+  (do
+      let c ←
+        transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy transport.Variant.S2
+            (ProverCommitArray49.array 1024#usize (p ↑lane))
+      let coefficients1 ← out.push c
+      let cf :
+        ControlFlow (alloc.vec.Vec Column × Usize)
+          (alloc.vec.Vec (Std.Array aspis_core.field.wide_exact.WideExact 1024#usize)) :=
+        ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize)
+      match cf with
+        | ControlFlow.cont next => prover.opening_coefficients_loop transport.Variant.S2 (messages p) next.1 next.2
+        | ControlFlow.done out => ok out) =
+    do
+    let c ← ok (column (p ↑lane))
+    let coefficients1 ← out.push c
+    let cf :
+      ControlFlow (alloc.vec.Vec Column × Usize)
+        (alloc.vec.Vec (Std.Array aspis_core.field.wide_exact.WideExact 1024#usize)) :=
+      ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize)
+    match cf with
+      | ControlFlow.cont next => prover.opening_coefficients_loop transport.Variant.S2 (messages p) next.1 next.2
+      | ControlFlow.done out => ok out
+⊢ (do
+      let cf ←
+        do
+          let column ←
+            transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                transport.Variant.S2 (ProverCommitArray49.array 1024#usize (p ↑lane))
+          let coefficients1 ← out.push column
+          ok (ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize))
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              if x.2 < (messages p).len then do
+                let a ← (messages p).index_usize x.2
+                let column ←
+                  transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                      transport.Variant.S2 a
+                let coefficients1 ← x.1.push column
+                ok (ControlFlow.cont (coefficients1, x.2.wrapping_add 1#usize))
+              else ok (ControlFlow.done x.1))
+            next
+        | ControlFlow.done out => ok out) =
+    ok next
+'R1Z.PV_RunJoin_CoefficientsVector45.payload_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientsVector45.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientsVector45.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

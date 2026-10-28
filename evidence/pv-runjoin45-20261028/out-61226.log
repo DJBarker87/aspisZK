@@ -1,0 +1,75 @@
+START 61226 R1Z.PV_RunJoin_CoefficientsVector45
+DONE 61226 R1Z.PV_RunJoin_CoefficientsVector45 exit 1 wall 1.96 RSS 4416753664
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:22:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_CoefficientsVector45.payload_length`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:49:4: error: unsolved goals
+case succ.refine_1
+inst✝ : ExternalTypes
+ops : ExternalFuns
+p : ℕ → ℕ → W
+n : ℕ
+ih :
+  ∀ (out : alloc.vec.Vec Column) (lane : Usize),
+    ↑lane + n = 29 →
+      out.length + n ≤ Usize.max →
+        ∃ next,
+          PV_RunJoin_CoefficientsThread45.phase transport.Variant.S2 (messages p) n out lane = ok next ∧
+            ↑next = ↑out ++ payload p (↑lane) n
+out : alloc.vec.Vec Column
+lane : Usize
+bound : ↑lane + (n + 1) = 29
+room : out.length + (n + 1) ≤ Usize.max
+hi : ↑lane < 29
+read : (messages p).index_usize lane = ok (ProverCommitArray49.array 1024#usize (p ↑lane))
+mid : alloc.vec.Vec Column
+hm : out.push (column (p ↑lane)) = ok mid
+hmv : ↑mid = ↑out ++ [column (p ↑lane)]
+ml : mid.length = out.length + 1
+inc : ↑(lane.wrapping_add 1#usize) = ↑lane + 1
+next : alloc.vec.Vec PV_RunJoin_CoefficientsThread45.Column
+hn : PV_RunJoin_CoefficientsThread45.phase transport.Variant.S2 (messages p) n mid (lane.wrapping_add 1#usize) = ok next
+hnv : ↑next = ↑mid ++ payload p (↑(lane.wrapping_add 1#usize)) n
+⊢ (do
+      let next ←
+        do
+          let column ←
+            transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                transport.Variant.S2 (ProverCommitArray49.array 1024#usize (p ↑lane))
+          out.push column
+      PV_RunJoin_CoefficientsThread45.phase transport.Variant.S2 (messages p) n next (lane.wrapping_add 1#usize)) =
+    ok next
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:50:13: warning: This simp argument is unused:
+  installed ops (p lane.val)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵R̵u̵n̵J̵o̵i̵n̵_̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵T̵h̵r̵e̵a̵d̵4̵5̵.̵p̵h̵a̵s̵e̵,̵P̵V̵_̵R̵u̵n̵J̵o̵i̵n̵_̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵T̵h̵r̵e̵a̵d̵4̵5̵.̵s̵t̵e̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵r̵e̵a̵d̵,̵i̵n̵s̵t̵a̵l̵l̵e̵d̵ ̵o̵p̵s̵ ̵(̵p̵ ̵l̵a̵n̵e̵.̵v̵a̵l̵)̵,̵h̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵n̵]̵[̲P̲V̲_̲R̲u̲n̲J̲o̲i̲n̲_̲C̲o̲e̲f̲f̲i̲c̲i̲e̲n̲t̲s̲T̲h̲r̲e̲a̲d̲4̲5̲.̲p̲h̲a̲s̲e̲,̲ ̲P̲V̲_̲R̲u̲n̲J̲o̲i̲n̲_̲C̲o̲e̲f̲f̲i̲c̲i̲e̲n̲t̲s̲T̲h̲r̲e̲a̲d̲4̲5̲.̲s̲t̲e̲p̲,̲ ̲r̲e̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲m̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:50:40: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_CoefficientsThread45.phase, ̲PV_RunJoin_CoefficientsThread45.step,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵read,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲installed ops (p lane.val),h̵m̵,̵ ̲bind_tc_ok, ̲hn]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:50:54: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_CoefficientsThread45.phase, ̲PV_RunJoin_CoefficientsThread45.step,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵read,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲installed ops (p lane.val), ̲hm, ̲bind_tc_ok,̵h̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CoefficientsVector45.payload_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientsVector45.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientsVector45.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

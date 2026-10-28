@@ -1,0 +1,63 @@
+START 61220 R1Z.PV_RunJoin_CoefficientsVector45
+DONE 61220 R1Z.PV_RunJoin_CoefficientsVector45 exit 1 wall 2.16 RSS 4406251520
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:22:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_CoefficientsVector45.payload_length`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:60:6: error: Type mismatch
+  hn
+has type
+  prover.opening_coefficients_loop transport.Variant.S2 (messages p) mid (lane.wrapping_add 1#usize) = ok next
+but is expected to have type
+  (do
+      let cf ←
+        do
+          let column ←
+            transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                transport.Variant.S2 (ProverCommitArray49.array 1024#usize (p ↑lane))
+          let coefficients1 ← out.push column
+          ok (ControlFlow.cont (coefficients1, lane.wrapping_add 1#usize))
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              if x.2 < (messages p).len then do
+                let a ← (messages p).index_usize x.2
+                let column ←
+                  transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                      transport.Variant.S2 a
+                let coefficients1 ← x.1.push column
+                ok (ControlFlow.cont (coefficients1, x.2.wrapping_add 1#usize))
+              else ok (ControlFlow.done x.1))
+            next
+        | ControlFlow.done out => ok out) =
+    ok next
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:59:8: warning: This simp argument is unused:
+  installed ops (p lane.val)
+
+Hint: Omit it from the simp argument list.
+  simp only [prover.opening_coefficients_loop.body,
+          show lane < Slice.len (messages p) from
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲(by change lane.val < (messages p̵)̵.̵l̵e̵n̵g̵t̵h̵;̵r̵w̵ ̵[̵m̵e̵s̵s̵a̵g̵e̵s̵,̵A̵r̵r̵a̵y̵.̵l̵e̵n̵g̵t̵h̵_̵t̵o̵_̵s̵l̵i̵c̵e̵]̵;̵e̵x̵a̵c̵t̵ ̵h̵i̵)̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵r̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵n̵s̵t̵a̵l̵l̵e̵d̵ ̵o̵p̵s̵ ̵(̵p̵ ̵l̵a̵n̵e̵.̵v̵a̵l̵)̵,̵h̵m̵,̵l̵i̵f̵t̵]̵p̲)̲.̲l̲e̲n̲g̲t̲h̲;̲ ̲r̲w̲ ̲[̲m̲e̲s̲s̲a̲g̲e̲s̲,̲ ̲A̲r̲r̲a̲y̲.̲l̲e̲n̲g̲t̲h̲_̲t̲o̲_̲s̲l̲i̲c̲e̲]̲;̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲x̲a̲c̲t̲ ̲h̲i̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲r̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲m̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientsVector45.lean:59:35: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [prover.opening_coefficients_loop.body,
+          show lane < Slice.len (messages p) from
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲(by change lane.val < (messages p̵)̵.̵l̵e̵n̵g̵t̵h̵;̵r̵w̵ ̵[̵m̵e̵s̵s̵a̵g̵e̵s̵,̵A̵r̵r̵a̵y̵.̵l̵e̵n̵g̵t̵h̵_̵t̵o̵_̵s̵l̵i̵c̵e̵]̵;̵e̵x̵a̵c̵t̵ ̵h̵i̵)̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵r̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̲)̲.̲l̲e̲n̲g̲t̲h̲;̲ ̲r̲w̲ ̲[̲m̲e̲s̲s̲a̲g̲e̲s̲,̲ ̲A̲r̲r̲a̲y̲.̲l̲e̲n̲g̲t̲h̲_̲t̲o̲_̲s̲l̲i̲c̲e̲]̲;̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲x̲a̲c̲t̲ ̲h̲i̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲r̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ installed ops (p l̵a̵n̵e̵.̵v̵a̵l̵)̵,̵h̵m̵,̵l̵i̵f̵t̵]̵l̲a̲n̲e̲.̲v̲a̲l̲)̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CoefficientsVector45.payload_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientsVector45.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientsVector45.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

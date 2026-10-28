@@ -2,7 +2,8 @@
 
 Worktree `/Users/dominic/ZK/.worktrees/pv-runjoin`, branch
 `codex/pv-runjoin-20261026`, entry `a9044ce8cd26aeee6cbc1f80d5ade7684c52b882`,
-resume LOG D411. Assigned IDs **61200–61299**, audit IDs **61297–61299**.
+resume LOG D411. Source revision at final validation
+`7c4a3d6de275f204551a26654abdf08a147a62be`. Assigned IDs **61200–61299**, audit IDs **61297–61299**.
 
 **Target not yet established. Whole ledger rows removed: 0.**
 
@@ -52,8 +53,11 @@ the private cache. `weight-source-resolution.json`, `weight-source-staging.json`
 and `weight-focused-preflight.json` record hashes and topological dependencies.
 The other job's cached objects were not loaded: its LEAN_PATH prefix differs
 from the required coherent cache (`weight-object-reuse-decision.json`).
-Focused prerequisite compilation is in progress; final counts follow below.
-Prerequisite validation does not prove the weight/opening association.
+Exactly **64** of those prerequisites compiled once in topological order.
+**22 remain uncompiled**, beginning with `PV_B2_F_MutationModel`; their exact
+order is in `pending-weight-prerequisites.json`. This prerequisite validation
+does not prove the weight/opening association. No unchanged accepted module
+was rebuilt.
 
 **Step (2) remains incomplete.** Both actual opening constructors, their stored
 weight/materialization and claim evaluations, all intervening transcript and
@@ -89,8 +93,8 @@ remains empty; historical artifact evidence keeps only that unchanged scope.
 Before the first compile, the own wrapper was changed for ruling (t): admission
 runs in the **same shell command** as the scope, with `&&` requiring exit 0 and
 a second explicit check of allowed:true. Full refusal cooldown is checked before
-submission. Every accepted launch must satisfy that chain; final admission
-accounting follows below. No shared launcher or host infrastructure was edited.
+submission. All **100** launches satisfy that chain in `admission-launch-audit.json`: zero
+refusals, zero cooldown violations, zero void launches. No shared launcher or host infrastructure was edited.
 
 ## Validation
 
@@ -99,5 +103,44 @@ external objects and 5438 IR companions; all match. Every compiler runs one
 module in one scope with MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
 TasksMax=64 and Lean -M7000. Exact targets, source revisions/blobs/hashes,
 dependency fingerprints, commands, exit, wall time, RSS, swap and original
-axiom output are recorded per attempt. Final audits, budget accounting and
-integrity preflight will be added after the focused prerequisite sequence.
+axiom output are recorded per attempt. The **100-attempt Lean budget is exhausted**, IDs 61200–61299, with **86
+accepted / 14 rejected**, **0 Kani**. Accepted modules comprise 19 new source
+proofs, 64 pinned prerequisites and three focused audits. All printed accepted
+axiom sets are subsets of propext, Classical.choice and Quot.sound. The 14
+rejected sources are hash-verified retained Git blobs. No memory kill, timeout
+or unchanged failed-source rerun occurred.
+
+| ID | Focused audit target | Exit | Scope wall s | Peak RSS bytes | Swap |
+| --- | --- | --- | --- | --- | --- |
+| 61297 | R1Z.PV_RunJoin_CoefficientAudit45 | 0 | 1.88 | 4405800960 | 0 |
+| 61298 | R1Z.PV_RunJoin_WeightPrerequisiteAudit45 | 0 | 1.78 | 3951669248 | 0 |
+| 61299 | R1Z.PV_RunJoin_SourceAudit45 | 0 | 2.20 | 4447981568 | 0 |
+
+Peak scope RSS was **4447981568 bytes**, with zero swaps throughout. Scope
+intervals are disjoint. `original-module-logs.json.xz` hash-verifies all 100
+original output/time pairs. `receipt-*.json` and `modules-*.json` retain exact
+source and dependency fingerprints, metrics and printed axioms. These are
+focused checks, not a complete frozen-manifest or endpoint release replay.
+
+Final read-only preflight verifies **2850 project pairs, 6008 direct import
+fingerprints, 5673 external objects and 5438 IR companions**, all matching.
+Initial and final full preflights are compressed with uncompressed SHA-256
+sidecars. The private runjoin32-lean workspace remains pinned and reusable;
+Lean is 4.32.0 at commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35. The final
+inventory confirms zero own running scopes. One premature read-only inventory
+correctly detected the then-running 61297 audit; it was deferred until all
+audits completed, without any compiler rerun or infrastructure edit. This
+own scheduling correction is recorded in `local-input-corrections.json`.
+
+Stopped on the **100-attempt budget**, not on a checked counterexample. The
+next concrete deliverable is to compile the 22 remaining pinned weight
+prerequisites, beginning at `PV_B2_F_MutationModel`, then prove the association
+of the exact installed stored object and its raw/materialization Results with
+the retained weight model. Compose that with the completed coefficient caller
+and both actual opening constructors into `ProverCommitOpeningModel53.exact_result`,
+retaining all transcript/Result branches, before the query/node append,
+publication indices and complete ordered proof-byte equation.
+
+`commits.txt` records commits since entry; a final evidence-only freeze commit
+follows its generation. No privacy target or whole ledger row is claimed
+established.

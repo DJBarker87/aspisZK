@@ -1,0 +1,124 @@
+{
+  "projections": [
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientSampler45",
+      "sha256": "f085abf8d5c0496189493bb9fd96da585a29b640e4e441e2b90f0425908830a0",
+      "field": "op255",
+      "single_installation": "ProverRwFullSampler.install",
+      "predecessor": "ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientBinding45",
+      "sha256": "7279a1281568adcf99a7d284dcc6cf3e783276fdf8669e8081297c840c29b4c5",
+      "field": "op255",
+      "single_installation": "ProverRwCallerBinding.install",
+      "predecessor": "ProverRwFullSampler.install ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientContext45",
+      "sha256": "287ce5ceb0703fe3ec35926738d4fa7d89dc632252d7fbdfc981d679935c8d96",
+      "field": "op255",
+      "single_installation": "ProverRwOuterContext.install",
+      "predecessor": "ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientTagInstall45",
+      "sha256": "a11d12faacd486c783bdead1f0a5645be68305206457f164230a69f1316aefed",
+      "field": "op255",
+      "single_installation": "ProverRwOuterTag.install",
+      "predecessor": "ProverRwOuterContext.install ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientTagSelected45",
+      "sha256": "79b4b73321a3ea72d9e51a3c9abf6174a5e36627b1b763ef11c8730f7b1cfbb4",
+      "field": "op255",
+      "single_installation": "ProverRwOuterTag.selected",
+      "predecessor": "ProverRwCallerBinding.install (ProverRwOuterTag.install ops)",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientGuards45",
+      "sha256": "5df87edd645a31aa92456b8f4da321443fe8c906bce6e69f7dbad34dfc26f4f0",
+      "field": "op255",
+      "single_installation": "ProverRwOuterGuardLeaves.selected",
+      "predecessor": "ProverRwOuterTag.selected {ops with op112 := ProverRwOuterGuardLeaves.mask, op113 := ProverRwOuterGuardLeaves.factor}",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientHeap45",
+      "sha256": "ac035638c2acb9db9a216f2d5fb0900e9a79a01f4a0cb14fbd804bef48e76e6b",
+      "field": "op255",
+      "single_installation": "ProverRwSuccessHeapInstall.selected",
+      "predecessor": "ProverRwSuccessBodyInterpretation.selected ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientError45",
+      "sha256": "0422057120c66372782ab9e639118fc92cfa09c345bb5e9507facf54beac758a",
+      "field": "op255",
+      "single_installation": "ProverRwSuccessErrorInstall.selected",
+      "predecessor": "ProverRwSuccessHeapInstall.selected ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientNeg45",
+      "sha256": "41d12c7634d4039bd4b6d7fc102563f2918457787f7b059890709b5179c37ea4",
+      "field": "op255",
+      "single_installation": "ProverRwSuccessNativeNegInstall.selected",
+      "predecessor": "ProverRwSuccessErrorInstall.selected ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientWide45",
+      "sha256": "d8991b4bf8819a0d54d35c98458cce1239c9869eddb7839070b5a19b779ddaf4",
+      "field": "op255",
+      "single_installation": "ProverRwSuccessNativeWideInstall.selected",
+      "predecessor": "ProverRwSuccessNativeNegInstall.selected ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientBody45",
+      "sha256": "f33fe879da8a0a3f590f224277a41124bb10fc5c52f6c1338b369eba41d563de",
+      "field": "op255",
+      "single_installation": "ProverRwBodyNativeWideInstall.selected",
+      "predecessor": "ProverRwOuterGuardLeaves.selected (ProverRwSuccessNativeWideInstall.selected ops)",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientTransition45",
+      "sha256": "b8abb43e02c57e833b73c524a54525a0b29b6d9670b4df22d4a71a1dffeb76b5",
+      "field": "op255",
+      "single_installation": "ProverRwP6TransitionInstall.selected",
+      "predecessor": "ProverRwBodyNativeWideInstall.selected ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientFlat45",
+      "sha256": "e6a4caf6bc3ab34142b368efe5bf5ed7973fcb39e9f2caa667d82a7a5af8febc",
+      "field": "op255",
+      "single_installation": "ProverRwP6FlatInstall.selected",
+      "predecessor": "ProverRwP6TransitionInstall.selected ops",
+      "local_irreducible": true
+    },
+    {
+      "module": "R1Z.PV_RunJoin_CoefficientBoundary45",
+      "sha256": "04ff407d3105863a6d65bc339c6033c1c9db49930254dcabf0e30d2816bd8e05",
+      "field": "op255",
+      "single_installation": "ProverRwP6BoundaryInstall.selected",
+      "predecessor": "ProverRwP6FlatInstall.selected ops",
+      "local_irreducible": true
+    }
+  ],
+  "column_aggregation": "PV_RunJoin_CoefficientsVector45.complete: induction on remaining columns",
+  "isolated_cell": "PV_RunJoin_CoefficientsCell45.step",
+  "selected_Copy_explicit": true,
+  "prior_rejected_attempts_not_recompiled": [
+    60795,
+    60796
+  ],
+  "resource_limits_raised": false
+}
