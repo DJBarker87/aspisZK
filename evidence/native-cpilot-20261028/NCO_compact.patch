@@ -1,0 +1,18 @@
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -77,6 +77,7 @@
+ 
+ /// Is a semantic row's payload made of implied-zero-high values?
+ #[inline(always)]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NCO_compact::reference::compact_row_ref(row)) != cfg!(NCO_invert_compact)))]
+ fn compact_row(row: u8) -> bool {
+     row >= 14
+ }
+@@ -199,3 +200,7 @@
+         assert_eq!(check_values(&bad), Err(CodecError::NonCanonical));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NCO_compact.rs"]
++mod NCO_compact;

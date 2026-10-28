@@ -4,9 +4,9 @@ E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-n
 n='crates/aspis-r1-cost-probe/src/r1_wire.rs'
 s=subprocess.check_output(['git','show',rev+':'+n],text=True)
 s=s.replace('pub const fn row_shape', '#[cfg_attr(kani, kani::ensures(|r| (*r == NCO_wire::reference::row_shape_ref(row)) != cfg!(NCO_invert_shape)))]\npub const fn row_shape',1)
-s+='\n#[cfg(kani)]\nmod NCO_wire;\n'
+s+='\n#[cfg(kani)]\n#[path="NCO_wire.rs"]\nmod NCO_wire;\n'
 # Child reference visible to its parent only inside cfg(kani).
-p=E/'NCO_wire.rs';p.write_text(p.read_text().replace('mod reference;','pub(super) mod reference;'))
+assert 'pub(super) mod reference;' in (E/'NCO_wire.rs').read_text()
 files={n:s}
 code=f'''from pathlib import Path
 import json,hashlib

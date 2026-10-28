@@ -1,0 +1,61 @@
+{"attempt": "NCO_K029", "exit_status": 0, "wall_seconds": 1.9181054519722238, "peak_rss_kib": "216840", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ing: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:10:22
+   |
+10 | fn result_negative(){result_invert(kani::any());}
+   |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+10 | fn result_negative(){let _ = result_invert(kani::any());}
+   |                      +++++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:14:24
+   |
+14 | fn result_weak_proof(){result_weak(kani::any());}
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+14 | fn result_weak_proof(){let _ = result_weak(kani::any());}
+   |                        +++++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:22:48
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();result_badframe(&mut x);}
+   |                                                ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();let _ = result_badframe(&mut x);}
+   |                                                +++++++
+
+    Finished `dev` profile [optimized] target(s) in 0.70s
+Checking harness compact::NCO_compact::compact_row_contract...
+
+VERIFICATION RESULT:
+ ** 0 of 49 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.04840164s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r70168e2464dc4d59ad7f2f1d8d476f06.scope; invocation ID: 131420bd07e042fd993f792cba5c8bdc

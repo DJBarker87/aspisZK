@@ -1,13 +1,13 @@
 from pathlib import Path
 import subprocess,json,hashlib,os
 B=Path(__file__).resolve().parent
-C=Path('/home/dombarker/project-offloads/codex-cx-extraction-eval1-20261027/XRh_bin/charon')
+C=Path('/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon')
 A=Path('/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended')
 S=B/'NCO_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 (S/'Cargo.toml').write_text('[package]\nname="nco_reference"\nversion="0.1.0"\nedition="2021"\n[workspace]\n')
 (S/'src/lib.rs').write_bytes((B/'NCO_src/crates/aspis-r1-cost-probe/src/NCO_reference.rs').read_bytes())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--start-from','crate::row_shape_ref','--start-from','crate::compact_row_ref','--start-from','crate::slot_offset_ref','--dest-file',str(B/'NCO_reference.llbc'),'--','--manifest-path',str(S/'Cargo.toml'),'--offline','--release','--lib','--jobs','1']
+cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--start-from','crate::row_shape_ref','--start-from','crate::compact_row_ref','--dest-file',str(B/'NCO_reference.llbc'),'--','--manifest-path',str(S/'Cargo.toml'),'--offline','--release','--lib','--jobs','1']
 env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(B/'NCO_ref_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
 pins=dict(charon_sha256=sha(C),aeneas_sha256=sha(A),rust_reference_sha256=sha(S/'src/lib.rs'),charon_command=cmd,toolchain='nightly-2026-09-17',aeneas_origin='b59d5188 extended binary; imported read-only, no tool patches by NCO')
 (B/'NCO_EXTRACTION_PINS.json').write_text(json.dumps(pins,indent=2))

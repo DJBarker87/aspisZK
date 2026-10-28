@@ -1,0 +1,64 @@
+{
+  "attempt": "NCO_K035",
+  "kind": "kani",
+  "module": "NCO_controls::option_unimplied",
+  "sources": [
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_controls.rs",
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_reference.rs",
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_wire.rs",
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_compact.rs",
+    "NCO_src/Cargo.lock",
+    "NCO_src/Cargo.toml",
+    "NCO_src/crates/aspis-r1-cost-probe/src/r1_wire.rs",
+    "NCO_src/crates/aspis-r1-cost-probe/src/lib.rs"
+  ],
+  "command": [
+    "python3",
+    "NCO_gate.py",
+    "NCO_K035.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-cpilot-20261028/NCO_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-cpilot-20261028/NCO_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NCO_controls::option_unimplied",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-cpilot-20261028/NCO_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-cx-native-cpilot-20261028/NCO_objects:/home/dombarker/project-offloads/codex-cx-cpilot-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects"
+  },
+  "timeout": 180,
+  "source_revision": "32fabfcbbd6c940ecb8ccdb311411cc6669bf51a",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "source_pinset": "NCO_SOURCE.json",
+    "library_pinset": "NCO_SOURCE.json:library"
+  },
+  "expected_time": "optimized compile then one contract/shape proof; no field multiplication",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+}

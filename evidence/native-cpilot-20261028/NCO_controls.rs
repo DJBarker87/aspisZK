@@ -54,3 +54,19 @@ fn vec_weak(x:u8)->Vec<u8>{let mut v=Vec::with_capacity(1);v.push(x);v}
 fn vec_positive(){let _=vec_weak(kani::any());}
 #[kani::proof] #[kani::stub_verified(vec_weak)]
 fn vec_unimplied(){let x:u8=kani::any();assert_eq!(vec_weak(x)[0],x);}
+#[kani::ensures(|r| r.is_some())]
+fn option_record_weak(x:u8)->Option<(u8,usize)>{Some((x,0))}
+#[kani::proof_for_contract(option_record_weak)]
+fn option_positive(){let _=option_record_weak(kani::any());}
+#[kani::proof]
+fn option_real(){let x:u8=kani::any();assert_eq!(option_record_weak(x),Some((x,0)));}
+#[kani::proof] #[kani::stub_verified(option_record_weak)]
+fn option_unimplied(){let x:u8=kani::any();assert_eq!(option_record_weak(x),Some((x,0)));}
+#[kani::ensures(|r| r.is_none())]
+fn option_record_invert(x:u8)->Option<(u8,usize)>{Some((x,0))}
+#[kani::proof_for_contract(option_record_invert)]
+fn option_negative(){let _=option_record_invert(kani::any());}
+#[kani::modifies(&mut x[0])] #[kani::ensures(|r| r.is_some())]
+fn option_badframe(x:&mut [u8;2])->Option<(u8,usize)>{x[1]=x[1].wrapping_add(1);Some((x[0],0))}
+#[kani::proof_for_contract(option_badframe)]
+fn option_frame(){let mut x:[u8;2]=kani::any();option_badframe(&mut x);}

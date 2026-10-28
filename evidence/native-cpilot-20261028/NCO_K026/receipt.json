@@ -1,0 +1,85 @@
+{
+  "attempt": "NCO_K026",
+  "kind": "kani",
+  "module": "r1_wire::NCO_wire::shape_caller",
+  "sources": [
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_controls.rs",
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_reference.rs",
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_wire.rs",
+    "NCO_src/Cargo.lock",
+    "NCO_src/Cargo.toml",
+    "NCO_src/crates/aspis-r1-cost-probe/src/r1_wire.rs",
+    "NCO_src/crates/aspis-r1-cost-probe/src/lib.rs"
+  ],
+  "command": [
+    "python3",
+    "NCO_gate.py",
+    "NCO_K026.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-cpilot-20261028/NCO_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-cpilot-20261028/NCO_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r1_wire::NCO_wire::shape_caller",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-cpilot-20261028/NCO_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-cx-native-cpilot-20261028/NCO_objects:/home/dombarker/project-offloads/codex-cx-cpilot-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects"
+  },
+  "timeout": 180,
+  "source_revision": "32fabfcbbd6c940ecb8ccdb311411cc6669bf51a",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "source_pinset": "NCO_SOURCE.json",
+    "library_pinset": "NCO_SOURCE.json:library"
+  },
+  "expected_time": "optimized compile then one contract/shape proof; no field multiplication",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "exit_status": 0,
+  "wall_seconds": 3.08021760196425,
+  "peak_rss_kib": "343548",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r5e41873045e94ac5821d1694b0808469.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "325513216",
+  "source_hashes": {
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_controls.rs": "e4951ec5bb9268265495dd1cfc1c6dde922301c683fa0119b3a12dc058abe011",
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_reference.rs": "1189032d9f4215947d6ab39bce686a5ef29a1e4ffbb89b822cf4bd30e448b1fd",
+    "NCO_src/crates/aspis-r1-cost-probe/src/NCO_wire.rs": "ffee3a4dcc4aae26559f35d447c62cd36b91c782e7d283f15df61e8fd341f609",
+    "NCO_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NCO_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "NCO_src/crates/aspis-r1-cost-probe/src/r1_wire.rs": "0c9e1eb3bab2e827d16dbb78e8fa8fcf741f7a96987a8a6031f2393e8e6925d6",
+    "NCO_src/crates/aspis-r1-cost-probe/src/lib.rs": "1a1ad83a7631ee914a6189e7096d2780e52dfd079575b19d70ca5068b206b0d2"
+  },
+  "print_axioms": "N/A: kani"
+}

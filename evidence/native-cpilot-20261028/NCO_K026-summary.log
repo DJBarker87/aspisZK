@@ -1,0 +1,50 @@
+{"attempt": "NCO_K026", "exit_status": 0, "wall_seconds": 3.08021760196425, "peak_rss_kib": "343548", "swaps": "0", "print_axioms": "N/A: kani"}
+led
+help: use `let _ = ...` to ignore the resulting value
+   |
+10 | fn result_negative(){let _ = result_invert(kani::any());}
+   |                      +++++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:14:24
+   |
+14 | fn result_weak_proof(){result_weak(kani::any());}
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+14 | fn result_weak_proof(){let _ = result_weak(kani::any());}
+   |                        +++++++
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NCO_controls.rs:22:48
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();result_badframe(&mut x);}
+   |                                                ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+22 | fn result_frame(){let mut x:[u8;2]=kani::any();let _ = result_badframe(&mut x);}
+   |                                                +++++++
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.99s
+Checking harness r1_wire::NCO_wire::shape_caller...
+
+VERIFICATION RESULT:
+ ** 0 of 68 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.17552854s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

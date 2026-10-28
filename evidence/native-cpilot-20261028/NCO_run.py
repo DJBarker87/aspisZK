@@ -43,6 +43,7 @@ else:
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NCO_tmp',LEAN_PATH=B+'/NCO_objects:/home/dombarker/project-offloads/codex-cx-cpilot-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects')
 if os.environ.get('NCO_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NCO_RUST_CFG']
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'source_pinset':'NCO_SOURCE.json','library_pinset':'NCO_SOURCE.json:library'},expected_time='optimized compile then one contract/shape proof; no field multiplication',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
+if kind=='lean':cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NCO_SOURCE.json').read_text())['library'].items()}
 files[a+'.json']=json.dumps(cfg,indent=2)
 # Upload after admission; snapshots permit exact local reconstruction.
 for n,s in files.items():
@@ -50,8 +51,10 @@ for n,s in files.items():
 payload=json.dumps(files)
 code=f'''from pathlib import Path
 import json,hashlib
-b=Path({B!r});files=json.loads({payload!r})
-for n,s in files.items():(b/n).write_text(s)
+b=Path({B!r});files=json.loads({payload!r});xkind={kind!r};xtarget={target!r}
+for n,s in files.items():
+ p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
+if xkind=='lean':(b/'NCO_objects'/xtarget).parent.mkdir(parents=True,exist_ok=True)
 pins=json.loads((b/'NCO_SOURCE_PINS.json').read_text())
 for n in files:
  if n.startswith('NCO_src/'):pins[n[len('NCO_src/'):]]=hashlib.sha256((b/n).read_bytes()).hexdigest()
