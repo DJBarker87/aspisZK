@@ -1,4 +1,9 @@
 from pathlib import Path
+import sys
+def emit(p,s):
+ if "--check" in sys.argv:
+  assert p.read_text()==s,str(p)
+ else:p.write_text(s)
 P=Path(__file__).resolve().parent; R=P.parents[1]
 groups=[('Query','JHk_PreparedRemaining',320,4,22,lambda i:f'JFq_QueryWords.b{i}.val',lambda i:f'JFq_QueryWords.select{i}'),('Semantic','JHl_SemanticBytes',408,16,10,lambda i:f'JFq_Sem{i:02}.bytes',lambda i:f'JFq_Sem{i:02}.selected'),('Z','JHl_ZBytes',568,16,4,lambda i:f'JFq_Z{i}.bytes',lambda i:f'JFq_Z{i}.selected')]
 for name,imp,off,n,count,term,law in groups:
@@ -16,4 +21,4 @@ theorem source : {expr} =
 #print axioms source
 end AspisR1.JHn_{name}Ranges
 '''
- (R/'lean'/f'JHn_{name}Ranges.lean').write_text(src)
+ emit(R/'lean'/f'JHn_{name}Ranges.lean',src)

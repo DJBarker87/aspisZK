@@ -1,4 +1,5 @@
 import JHn_BodyIdentity
+import JHn_ClaimBytes
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JHn_PreparedBody
@@ -24,7 +25,7 @@ theorem source (p : verifier.Prepared)
         JFx_NativeBytes.checkpoint.val.take 1736 :=
   JHn_BodyIdentity.source p {out with weights:=⟨flushed.val,flushed.property⟩}
     _ _ (JHl_KnownFields.source p input scratch initial out pending after g flushed
-      prepare init pend geo query flush) (JHm_JointSkeleton.claim_bytes p input scratch prepare)
+      prepare init pend geo query flush) (JHn_ClaimBytes.source p input scratch prepare)
     rfl rfl variant next
 #print axioms source
 end AspisR1.JHn_PreparedBody

@@ -3,7 +3,6 @@ import JHn_AuthRanges
 import JHn_ContentRanges
 import JHn_BodyHeader
 import JHl_KnownFields
-import JHm_JointSkeleton
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JHn_BodyIdentity
