@@ -54,7 +54,7 @@ theorem append (ops : ExternalFuns) {H : Type} (hash : aspis_core.digest.Digest3
     cases result with
     | Err e => trivial
     | Ok q =>
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,hn,Post]
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,hn,Post,Aeneas.Std.uncurry]
       rw [hv]
       change out.val ++ framed.val=out.val ++ header ++ payload.val
       rw [hbytes,List.append_assoc]
