@@ -1,0 +1,82 @@
+theorem AspisR1.CheckpointBytes3Reader.read_k_c5 : ∀ (r : AspisR1Stage2.verifier.Reader),
+  ↑r.at + 16 ≤ (↑r.bytes).length →
+    ∃ b out,
+      ↑b = List.take 16 (List.drop ↑r.at ↑r.bytes) ∧
+        ↑out.at = ↑r.at + 16 ∧
+          out.bytes = r.bytes ∧
+            AspisR1.CheckpointBytes3Reader.readK r =
+              Aeneas.Std.Result.ok
+                (AspisR1.CheckpointBytes3Reader.optionK
+                    (Option.map AspisR1.CheckpointBytes3KDecode.rawK
+                      (AspisR1.ExactLeafFieldCodec.decodeQM31 (AspisR1.MultiproofConeCanonical.bytesOf ↑b))),
+                  out) :=
+fun r bound =>
+  let ⟨b, h✝⟩ :=
+    AspisR1.OraclePortCkptAbi2Unwrap.raw_panic_unreachable r 16#usize
+      (fun x => Aeneas.Std.Result.fail Aeneas.Std.Error.panic) bound
+  let ⟨out, h✝¹⟩ := h✝
+  let ⟨run, right✝⟩ := h✝¹
+  let ⟨contents, right✝¹⟩ := right✝
+  let ⟨cursor, backing⟩ := right✝¹
+  Exists.intro b
+    (Exists.intro out
+      ⟨contents,
+        ⟨cursor,
+          ⟨backing,
+            id
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let (b, out) ← _a
+                            let q ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+                            Aeneas.Std.Result.ok (AspisR1.CheckpointBytes3Reader.optionK q, out)) =
+                          Aeneas.Std.Result.ok
+                            (AspisR1.CheckpointBytes3Reader.optionK
+                                (Option.map AspisR1.CheckpointBytes3KDecode.rawK
+                                  (AspisR1.ExactLeafFieldCodec.decodeQM31
+                                    (AspisR1.MultiproofConeCanonical.bytesOf ↑b))),
+                              out))
+                      run))
+                  (Eq.mpr
+                    (id
+                      (congrFun'
+                        (congrArg Eq
+                          (Aeneas.Std.bind_tc_ok (b, out)
+                            (Aeneas.Std.uncurry fun b out => do
+                              let q ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+                              Aeneas.Std.Result.ok (AspisR1.CheckpointBytes3Reader.optionK q, out))))
+                        (Aeneas.Std.Result.ok
+                          (AspisR1.CheckpointBytes3Reader.optionK
+                              (Option.map AspisR1.CheckpointBytes3KDecode.rawK
+                                (AspisR1.ExactLeafFieldCodec.decodeQM31 (AspisR1.MultiproofConeCanonical.bytesOf ↑b))),
+                            out))))
+                    (id
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              (do
+                                  let q ← _a
+                                  Aeneas.Std.Result.ok (AspisR1.CheckpointBytes3Reader.optionK q, out)) =
+                                Aeneas.Std.Result.ok
+                                  (AspisR1.CheckpointBytes3Reader.optionK
+                                      (Option.map AspisR1.CheckpointBytes3KDecode.rawK
+                                        (AspisR1.ExactLeafFieldCodec.decodeQM31
+                                          (AspisR1.MultiproofConeCanonical.bytesOf ↑b))),
+                                    out))
+                            (AspisR1.CheckpointBytes3KDecode.decode_k_identification b.to_slice b.property)))
+                        (Eq.refl do
+                          let q ←
+                            Aeneas.Std.Result.ok
+                                (Option.map AspisR1.CheckpointBytes3KDecode.rawK
+                                  (AspisR1.ExactLeafFieldCodec.decodeQM31
+                                    (AspisR1.MultiproofConeCanonical.bytesOf ↑b.to_slice)))
+                          Aeneas.Std.Result.ok (AspisR1.CheckpointBytes3Reader.optionK q, out)))))))⟩⟩⟩)
+def AspisR1.CheckpointBytes4Ops.queryLoop : List Aeneas.Std.U32 →
+  List Aeneas.Std.U32 → Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error :=
+fun seen x =>
+  List.brecOn (motive := fun x => List Aeneas.Std.U32 → Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)
+    x AspisR1.CheckpointBytes4Ops.queryLoop._f seen
