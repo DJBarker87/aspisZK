@@ -42,7 +42,7 @@ theorem value_formula (c : Nat) :
   simp only [PV_B3P_MaskModel132.valueUsed]
   norm_num only
   simp
-  omega
+  by_cases h : 10 < c <;> simp [h] <;> omega
 
 theorem value_block (c : Nat) :
     number pick c 1008 16 =
