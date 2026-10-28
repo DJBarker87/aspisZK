@@ -9,8 +9,8 @@ theorem index_value {α : Type} {n : Usize} (a : Array α n) (i : Usize)
   have hi : i.val < a.val.length := by simpa [a.property] using h
   unfold Array.index_usize
   change (match a.val[i.val]? with
-    | none => .fail .arrayOutOfBounds
-    | some x => .ok x) = .ok (a.val[i.val]'hi)
+    | none => Result.fail Error.arrayOutOfBounds
+    | some x => Result.ok x) = Result.ok (a.val[i.val]'hi)
   rw [List.getElem?_eq_getElem hi]
 
 theorem repeat_index {α : Type} (n : Usize) (x : α) (i : Usize)
@@ -38,7 +38,7 @@ theorem repeat_update {α : Type} (n : Usize) (x : α) (i : Usize)
 
 theorem repeat_borrow {α : Type} (n : Usize) (x : α) (i : Usize)
     (h : i.val < n.val) : Array.index_mut_usize (Array.repeat n x) i =
-      .ok (x, Array.set (Array.repeat n x) i) := by
+      .ok (x, Aeneas.Std.Array.set (Array.repeat n x) i) := by
   simp only [Array.index_mut_usize, repeat_index n x i h, bind_tc_ok]
 
 #print axioms index_value
