@@ -1,4 +1,4 @@
-import R1Z.PV_W_Callbacks
+import R1Z.PV_W_StructuredBinds
 import R1Z.PV_W_RecursiveLaws
 import R1Z.PV_W_R_ReservationPath
 import R1Z.PV_W_R_SyncDirectory
@@ -113,12 +113,12 @@ def program
         letI : ExternalFuns := ops
         core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq ek
         core.io.error.ErrorKind.AlreadyExists)
-    let r1 ← do
+    PV_W_StructuredBinds.join (do
       if b then
         pure (core.result.Result.Ok false)
       else
-        pure (core.result.Result.Err error)
-    pure (r1, { self with last_error := none })
+        pure (core.result.Result.Err error)) (fun r1 => do
+      pure (r1, { self with last_error := none }))
 
 theorem erase_program (ops : ExternalFuns)
   (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
@@ -322,7 +322,7 @@ theorem erase_program (ops : ExternalFuns)
                   ·
                     exact erase_invoke ops _ _
                   · intro b
-                    rw [erase_bind]
+                    rw [PV_W_StructuredBinds.erase_join]
                     apply PV_W_RecursiveLaws.bind_congr
                     ·
                       try dsimp only

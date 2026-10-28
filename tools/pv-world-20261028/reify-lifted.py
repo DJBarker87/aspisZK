@@ -13,7 +13,17 @@ CONFIG=[
  ('aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve','DurableReserve'),
  ('aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve','PreReservedReserve'),
  ('aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1','ReserveBuild'),
+ ('aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref','MaskMaterial'),
+ ('aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_mask_material_v1','ApplyMaterial'),
+ ('aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.derive_pool_v1_pair_forest_zero_factor_d','ZeroFactor'),
+ ('prover.fixed_k_column','FixedColumn'),
+ ('prover.audit_masks','AuditMasks'),
+ ('prover.derive_private_salt_step','PrivateSaltStep'),
  ('prover.derive_private_salts','PrivateSalts'),
+ ('prover.prepare_opening','PrepareOpening'),
+ ('prover.finish_opening','FinishOpening'),
+ ('prover.publish_compact','PublishCompact'),
+ ('host_semantic.build_with_material','HostBuild'),
  ('prover.prove_from_semantics','FromSemantics'),
  ('prover.prove_masked_with_attempt','MaskedWithAttempt'),
  ('prover.prove_masked_attempt','Entry'),
@@ -36,7 +46,9 @@ def emit(node,n=2):
  if k=='let':return spaces('\n'.join(x.strip() for x in node.text.splitlines()),n)+'\n'+emit(node.next,n)
  if k=='bind':
   exp=emit(node.expr,n+2);structured=node.expr.kind not in ['call','pure']
-  return pad+'let '+node.var+' ← '+('do\n'+exp if structured else exp.lstrip())+'\n'+emit(node.next,n)
+  if structured:
+   return pad+'PV_W_StructuredBinds.join (do\n'+exp+') (fun '+node.var+' => do\n'+emit(node.next,n+2)+')'
+  return pad+'let '+node.var+' ← '+exp.lstrip()+'\n'+emit(node.next,n)
  if k=='if':return pad+'if '+node.cond+' then\n'+emit(node.yes,n+2)+'\n'+pad+'else\n'+emit(node.no,n+2)
  if k=='match':return pad+'match '+node.discr+' with\n'+'\n'.join(pad+'| '+p+' =>\n'+emit(c,n+2) for p,c in node.branches)
  if k=='pure':return pad+'pure '+node.expr.replace('\n','\n'+pad+'  ')
@@ -73,7 +85,7 @@ def proof(node,n=2):
  if k=='let':return pad+'try dsimp only\n'+proof(node.next,n)
  if k=='bind':
   var=node.var;intro=('rintro ⟨'+var[1:-1]+'⟩') if var.startswith('(') else 'intro '+var
-  return (pad+'try dsimp only\n' if node.expr.kind in ['call','pure'] else '')+pad+'rw [erase_bind]\n'+pad+'apply PV_W_RecursiveLaws.bind_congr\n'+pad+'·\n'+proof(node.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(node.next,n+2)
+  return (pad+'try dsimp only\n' if node.expr.kind in ['call','pure'] else '')+pad+('rw [erase_bind]' if node.expr.kind in ['call','pure'] else 'rw [PV_W_StructuredBinds.erase_join]')+'\n'+pad+'apply PV_W_RecursiveLaws.bind_congr\n'+pad+'·\n'+proof(node.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(node.next,n+2)
  if k=='if':return pad+'try dsimp only\n'+pad+'apply PV_W_Callbacks.erase_if_congr\n'+pad+'·\n'+proof(node.yes,n+2)+'\n'+pad+'·\n'+proof(node.no,n+2)
  if k=='match':
   out=pad+'try dsimp only\n'+pad+'cases '+node.discr+' with\n'
@@ -104,7 +116,7 @@ for name,short in CONFIG:
  for a in aa:
   kind=next((t for n,t in callbacks if n==a),None)
   actualargs.append('(source'+kind+' ops '+a+')' if kind else a)
- pre='import R1Z.PV_W_Callbacks\nimport R1Z.PV_W_RecursiveLaws\n'+''.join('import R1Z.PV_W_R_'+x+'\n' for x in sorted(imports))
+ pre='import R1Z.PV_W_StructuredBinds\nimport R1Z.PV_W_RecursiveLaws\n'+''.join('import R1Z.PV_W_R_'+x+'\n' for x in sorted(imports))
  out=pre+'set_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_W_R_'+short+'\nopen Aeneas Aeneas.Std ProverRwFull PV_W_ReachedEffects PV_W_Callbacks\nvariable [ExternalTypes]\n\n'
  out+='def program\n  '+h+' :\n  P '+result+' := do\n'+translated+'\n\n'
  out+='theorem erase_program (ops : ExternalFuns)\n  '+h+' :\n  erase ops (program '+' '.join(explicit)+') =\n    @'+name+' _ ops '+' '.join(actualargs)+' := by\n  unfold program '+name+'\n'+pr+'\n\n#print axioms erase_program\n'
