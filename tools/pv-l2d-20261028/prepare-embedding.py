@@ -22,7 +22,7 @@ for v in x['external']:
  row=dict(module=m,path=str(q),expected=v['object_sha256'],actual=sha,match=sha==v['object_sha256']);checks.append(row)
  if not row['match']:continue
  dest=p/'external'/(m.replace('.','/')+'.olean');dest.parent.mkdir(parents=True,exist_ok=True);dest.symlink_to(q)
- for suffix in ['.olean.private','.olean.server','.ilean','.so']:
+ for suffix in ['.olean.private','.olean.server','.ilean','.so','.ir']:
   c=q.with_suffix(suffix)
   if c.is_file():
    dest.with_suffix(suffix).symlink_to(c)
