@@ -50,6 +50,11 @@ theorem erase_bind {A B : Type} (ops : ExternalFuns)
     erase ops (p >>= k) = Aeneas.Std.bind (erase ops p) (fun a => erase ops (k a)) :=
   erase_thenDo ops p k
 
+theorem source_bind_congr {A B : Type} (m : Aeneas.Std.Result A)
+    (left right : A → Aeneas.Std.Result B) (h : ∀ a, left a = right a) :
+    Aeneas.Std.bind m left = Aeneas.Std.bind m right :=
+  congrArg (Aeneas.Std.bind m) (funext h)
+
 theorem erase_pure {A : Type} (ops : ExternalFuns) (a : A) :
     erase ops (Program.pure a : P A) = .ok a := rfl
 
@@ -95,6 +100,7 @@ theorem source_value {A : Type} (ops : ExternalFuns) (p : P A) :
 #print axioms erase_invoke
 #print axioms erase_thenDo
 #print axioms erase_bind
+#print axioms source_bind_congr
 #print axioms erase_pure
 #print axioms erase_coreResult
 #print axioms erase_controlFlow
