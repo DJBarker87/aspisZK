@@ -8,7 +8,7 @@ abbrev Limit (base : ExternalTypes) := (@typenum.uint.UInt (Types base) (@typenu
 
 theorem callback (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     {T K N O : Type} (dc : core.default.Default T)
-    (bk : digest.core_api.BufferKindUser T K N (Storage U8 6))
+    (bk : @digest.core_api.BufferKindUser (Types base) T K N (Storage U8 6))
     (less : typenum.type_operators.IsLess N (Limit base) O)
     (nz : typenum.marker_traits.NonZero O)
     (dn : core.default.Default N) (dk : core.default.Default K)

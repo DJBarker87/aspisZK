@@ -77,3 +77,8 @@ the changed source with the next fresh ID before dependent targets.
 failed because its explicit `@ExternalFuns.op217` application omitted the five
 implicit Type arguments. Correct those arguments; no theorem statement is
 credited from the failed attempt. 42224 is the next fresh focused ID.
+
+42224 correctly exposed a carrier mismatch in the draft statement:
+BufferKindUser captured `base` rather than `Types base`. Make that instance
+argument explicit in the callback and native constructor statements. This is
+a typed-carrier correction, not a source-law premise or a weakened success guard.
