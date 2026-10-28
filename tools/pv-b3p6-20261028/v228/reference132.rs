@@ -20,18 +20,20 @@ pub fn free(row: usize, column: usize) -> bool {
     !used
 }
 
-pub fn cells() -> Vec<Cell> {
-    let mut out = Vec::new();
+pub fn cells() -> ([Cell;3803],usize) {
+    let mut out = [Cell { row: 0, column: 0 };3803];
+    let mut count = 0usize;
     let mut column = 0usize;
     while column < 16 {
         let mut row = 0usize;
         while row < 1024 {
             if free(row,column) {
-                out.push(Cell { row: row as u16, column: column as u8 });
+                out[count] = Cell { row: row as u16, column: column as u8 };
+                count += 1;
             }
             row += 1;
         }
         column += 1;
     }
-    out
+    (out,count)
 }

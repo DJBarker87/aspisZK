@@ -11,7 +11,7 @@ fn native132_finite() {
     let reference=reference132::cells();
     assert_eq!(native,owned);
     let pairs=|v: Vec<aspis_statement::trace_v4::TraceCell>| v.into_iter().map(|x|(x.row,x.column)).collect::<Vec<_>>();
-    assert_eq!(pairs(native),reference.into_iter().map(|x|(x.row,x.column)).collect::<Vec<_>>());
-    assert_eq!(reference132::cells().len(),3803);
+    assert_eq!(pairs(native),reference.0.into_iter().map(|x|(x.row,x.column)).collect::<Vec<_>>());
+    assert_eq!(reference132::cells().1,3803);
     println!("original/owned/reference same-unit complete output; 3803 ordered cells; finite validation");
 }
