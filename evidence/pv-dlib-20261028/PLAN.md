@@ -72,3 +72,8 @@ No raw-state/native equivalence is claimed from active-prefix equality alone.
 dictionary (unexpected identifier); its failed elaboration reports sorryAx.
 That failed object is not imported or credited. Fix the layout and compile
 the changed source with the next fresh ID before dependent targets.
+
+42222 selected default compiled with standard axioms. 42223 callback statement
+failed because its explicit `@ExternalFuns.op217` application omitted the five
+implicit Type arguments. Correct those arguments; no theorem statement is
+credited from the failed attempt. 42224 is the next fresh focused ID.

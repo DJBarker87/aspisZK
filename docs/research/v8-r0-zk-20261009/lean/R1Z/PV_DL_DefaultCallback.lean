@@ -14,7 +14,7 @@ theorem callback (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     (dn : core.default.Default N) (dk : core.default.Default K)
     (hs : bk.crypto_commonBlockSizeUserInst.generic_arrayArrayLengthSelf_BlockSizeU8Self_Clause0_ArrayTypeInst.typenummarker_traitsUnsignedInst.USIZE=ok 64#usize) :
     letI : ExternalTypes := Types base
-    @ExternalFuns.op217 (Types base) (selected base ops) dc bk less nz dn dk =
+    @ExternalFuns.op217 (Types base) (selected base ops) T K N (Storage U8 6) O dc bk less nz dn dk =
       PV_DL_DefaultBuffer.model dc.default := by
   change dispatch _ _ _=PV_DL_DefaultBuffer.model dc.default
   exact dispatch_source _ _ _ hs
