@@ -21,10 +21,13 @@ theorem loop (i : PV_L2C_ChunkStep.Iter) (hs : i.iter.size = 8)
   | h n ih =>
     by_cases empty : i.iter.remaining.val = []
     · refine ⟨s,?_,hc⟩
-      rw [poseidon2.hash_fields_with_trace_loop0.eq_1,PV_L2C_ChunkShape.done i empty]
+      have hn := PV_L2C_ChunkShape.done i empty
+      unfold PV_L2C_ChunkStep.next at hn
+      rw [poseidon2.hash_fields_with_trace_loop0.eq_1,hn]
       rfl
     · have count : i.count.val < 24 := by omega
       have next := PV_L2C_ChunkShape.step i hs empty count
+      unfold PV_L2C_ChunkStep.next at next
       obtain ⟨absorbed,ha,hca⟩ := PV_L2C_AbsorbRange.entry
         (PV_L2C_ChunkShape.head i.iter.remaining) (PV_L2C_ChunkShape.head_length _)
         (PV_L2C_ChunkShape.head_canonical _ hx) s hc
