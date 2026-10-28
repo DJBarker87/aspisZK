@@ -42,7 +42,7 @@ def directShr {ty : UScalarTy} (x : UScalar ty) (rhs : U32) : UScalar ty :=
   (x.bv.ushiftRight rhs.val)#uscalar
 
 def directShl {ty : UScalarTy} (x : UScalar ty) (rhs : U32) : UScalar ty :=
-  (x.bv <<< rhs.val)#uscalar
+  (x.bv.shiftLeft rhs.val)#uscalar
 
 theorem boundedShr {ty : UScalarTy} (x : UScalar ty) (rhs : U32)
     (bound : rhs.val < ty.numBits) :
