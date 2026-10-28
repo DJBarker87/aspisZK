@@ -19,7 +19,9 @@ theorem mapM_length {A B : Type} (f : A → Result B) (xs : List A) (ys : List B
       | fail e => simp only [List.mapM_cons,hx,ht,bind_tc_ok,bind_tc_fail,reduceCtorEq] at h
       | div => simp only [List.mapM_cons,hx,ht,bind_tc_ok,bind_tc_div,reduceCtorEq] at h
       | ok tail =>
-        have he : y::tail=ys := by simpa only [List.mapM_cons,hx,ht,bind_tc_ok] using h
+        have he0 : (ok (y::tail) : Result (List B))=ok ys := by
+          simpa only [List.mapM_cons,hx,ht,bind_tc_ok] using h
+        have he : y::tail=ys := Result.ok.inj he0
         subst ys
         simp only [List.length_cons,ih tail ht]
 
