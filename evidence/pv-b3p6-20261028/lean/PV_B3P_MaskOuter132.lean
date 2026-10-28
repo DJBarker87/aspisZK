@@ -27,6 +27,8 @@ theorem outer (p : Nat → Nat → Bool)
       simp only [columns,List.length_append] at hcap
       omega
     obtain ⟨o,k,hloop,hcount,hprefix⟩ := inner p hp 1024 out count c 0#usize (by simp) hcol hinner
+    change k.val = count.val + (rows p c.val 0 1024).length at hcount
+    change written o k.val = written out count.val ++ rows p c.val 0 1024 at hprefix
     have hcap' : k.val + (columns p (Usize.wrapping_add c 1#usize).val n).length ≤ 3803 := by
       simp only [columns,List.length_append] at hcap
       rw [hcount,hnext]
