@@ -1,4 +1,5 @@
 import R1Z.ProverCommitBalanceRecursion
+import R1Z.ProverCommitArrayIndex25
 set_option autoImplicit false
 namespace PV_L2C_VecRead
 open Aeneas Aeneas.Std Result
@@ -25,11 +26,8 @@ def active {n : Usize} (f : Fin n.val → Bool) : Aeneas.Std.Array Bool n :=
 
 theorem read_active {n : Usize} (f : Fin n.val → Bool) (r : Usize) (hr : r.val<n.val) :
     Aeneas.Std.Array.index_usize (active f) r=ok (f ⟨r.val,hr⟩) := by
-  unfold Aeneas.Std.Array.index_usize
-  change (match (List.ofFn f)[r.val]? with
-    | none => fail .arrayOutOfBounds
-    | some x => ok x)=ok (f ⟨r.val,hr⟩)
-  simp [hr]
+  rw [R1Z.ProverCommitArrayIndex25.array_index_usize_ok _ _ hr]
+  simp only [active,List.getElem_ofFn]
 #print axioms read_active
 
 #print core.slice.index.SliceIndexUsizeSlice
