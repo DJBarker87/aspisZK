@@ -34,7 +34,7 @@ theorem add (ops : ExternalFuns) (a b : Q) (ha : canonical a) (hb : canonical b)
   · change ProverRwDictionaryTower.mapResult ProverRwDictionaryTower.fromQ _ = _
     rw [hz]
     rfl
-  · simpa only [value_source,value] using hd
+  · simpa only [value,old_source] using hd
 
 theorem mul (ops : ExternalFuns) (a b : Q) (ha : canonical a) (hb : canonical b) :
     ∃ c, @aspis_core.field.QM31.mul _ (ProverRwDictionaryTower.selected ops) a b = .ok c ∧
@@ -45,7 +45,7 @@ theorem mul (ops : ExternalFuns) (a b : Q) (ha : canonical a) (hb : canonical b)
   · change ProverRwDictionaryTower.mapResult ProverRwDictionaryTower.fromQ _ = _
     rw [hz]
     rfl
-  · simpa only [value_source,value] using hd
+  · simpa only [value,old_source] using hd
 
 theorem sub (ops : ExternalFuns) (a b : Q) (ha : canonical a) (hb : canonical b) :
     ∃ c, @aspis_core.field.QM31.sub _ (ProverRwDictionaryTower.selected ops) a b = .ok c ∧
@@ -56,7 +56,7 @@ theorem sub (ops : ExternalFuns) (a b : Q) (ha : canonical a) (hb : canonical b)
   · change ProverRwDictionaryTower.mapResult ProverRwDictionaryTower.fromQ _ = _
     rw [hz]
     rfl
-  · simpa only [value_source,value] using hd
+  · simpa only [value,old_source] using hd
 
 #print axioms old_source
 #print axioms source_old
