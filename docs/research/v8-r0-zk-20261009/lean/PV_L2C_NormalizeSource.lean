@@ -39,6 +39,10 @@ theorem sub_input (x y : U32) :
 theorem sub_cut (x y : U32) :
     aspis_core.field.M31.sub x y=
       normalize (U32.wrapping_sub (U32.wrapping_add x aspis_core.field.P) y) := by
+  unfold aspis_core.field.M31.sub
+  generalize U32.wrapping_add x aspis_core.field.P = a
+  simp only [lift,bind_tc_ok]
+  generalize U32.wrapping_sub a y = b
   rfl
 #print axioms sub_cut
 end PV_L2C_NormalizeSource
