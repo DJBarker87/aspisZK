@@ -1,0 +1,66 @@
+{"attempt": "NBH_L011", "exit_status": 1, "wall_seconds": 1.8734115500119515, "peak_rss_kib": "2640856", "swaps": "0", "print_axioms": ["'NBH_ArrayEq.list_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NBH_ArrayEq.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBH_generated/NBH_ArrayEq.lean:28:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.allM
+    (fun x =>
+      match x with
+      | (x, y) => do
+        let b ← core.cmp.PartialEqU8.ne x y
+        ok (decide ¬b = true))
+    (xs.zip ys)
+in the target expression
+  List.allM (fun x => ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true)) (xs.zip ys) =
+    ok (decide (y :: xs = y :: ys))
+
+case pos
+x : U8
+xs : List U8
+ih :
+  ∀ (ys : List U8),
+    xs.length = ys.length →
+      List.allM
+          (fun x =>
+            match x with
+            | (x, y) => do
+              let b ← core.cmp.PartialEqU8.ne x y
+              ok (decide ¬b = true))
+          (xs.zip
+...
+2 = true)) (xs.zip ys) =
+    ok (decide (y :: xs = y :: ys))
+NBH_generated/NBH_ArrayEq.lean:13:34: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp_all [L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBH_generated/NBH_ArrayEq.lean:22:14: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵.̵n̵e̵]̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲.̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBH_generated/NBH_ArrayEq.lean:27:47: warning: This simp argument is unused:
+  if_pos
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵p̵o̵s̵]̵[̲s̲a̲m̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBH_generated/NBH_ArrayEq.lean:37:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array U8 n
+  but is expected to have type
+    { l // l.length = ↑n }
+  in the application
+    ↑a
+'NBH_ArrayEq.list_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBH_ArrayEq.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r43a5355b29964efa938c529c0240d9b6.scope; invocation ID: 690b609a5fbb4c128f37fd2f60f7c45c

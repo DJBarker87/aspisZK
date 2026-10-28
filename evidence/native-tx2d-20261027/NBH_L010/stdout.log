@@ -1,0 +1,61 @@
+NBH_generated/NBH_ArrayEq.lean:11:8: error: unsolved goals
+case nil.nil
+⊢ pure true = ok true
+NBH_generated/NBH_ArrayEq.lean:18:8: error(lean.unknownIdentifier): Unknown identifier `core.cmp.liftFun2`
+NBH_generated/NBH_ArrayEq.lean:15:16: error: unsolved goals
+case cons.cons
+x : U8
+xs : List U8
+ih :
+  ∀ (ys : List U8),
+    xs.length = ys.length →
+      List.allM
+          (fun x =>
+            match x with
+            | (x, y) => do
+              let b ← core.cmp.PartialEqU8.ne x y
+              ok (decide ¬b = true))
+          (xs.zip ys) =
+        ok (decide (xs = ys))
+y : U8
+ys : List U8
+hlen : xs.length = ys.length
+⊢ (if ↑x = ↑y then List.allM (fun x => ok (decide (↑x.1 = ↑x.2))) (xs.zip ys) else pure false) =
+    ok (decide (x = y) && decide (xs = ys))
+NBH_generated/NBH_ArrayEq.lean:11:34: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp_all ̵[̵L̵i̵s̵t̵.̵a̵l̵l̵M̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBH_generated/NBH_ArrayEq.lean:17:12: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵.̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵l̵i̵f̵t̵F̵u̵n̵2̵,̵i̵h̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲.̲n̲e̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲l̲i̲f̲t̲F̲u̲n̲2̲,̲ ̲i̲h̲ ys hlen]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBH_generated/NBH_ArrayEq.lean:17:22: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵.̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵l̵i̵f̵t̵F̵u̵n̵2̵,̵i̵h̵[̲L̲i̲s̲t̲.̲a̲l̲l̲M̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲.̲n̲e̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲l̲i̲f̲t̲F̲u̲n̲2̲,̲ ̲i̲h̲ ys hlen]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBH_generated/NBH_ArrayEq.lean:18:26: warning: This simp argument is unused:
+  ih ys hlen
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵.̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵l̵i̵f̵t̵F̵u̵n̵2̵,̵i̵h̵ ̵y̵s̵ ̵h̵l̵e̵n̵]̵[̲L̲i̲s̲t̲.̲a̲l̲l̲M̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲.̲n̲e̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲l̲i̲f̲t̲F̲u̲n̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBH_generated/NBH_ArrayEq.lean:21:73: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (a = b)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+'NBH_ArrayEq.list_eq' depends on axioms: [propext, sorryAx]
+'NBH_ArrayEq.source' depends on axioms: [propext, sorryAx]

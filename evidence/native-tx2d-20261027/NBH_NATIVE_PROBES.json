@@ -1,0 +1,16 @@
+{
+  "after": {
+    "source_loop": "    while level < afterstate.next_frontier.len() {\n        if !super::pair_tree_profile::digest_is_canonical(&afterstate.next_frontier[level]) {\n            return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);\n        }\n        level += 1;\n    }\n",
+    "sha256": "fddc3b45ed13abe2c8ae051669a8af8ce6bb42078ec31090fa669f1d6da045d3",
+    "one_iteration": "    if level < frontier.len() {\n        if !NBH_digest(&frontier[level]) {\n            return (level, Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate));\n        }\n        level += 1;\n    }\n",
+    "transformation": "while to if; return error exposes level; digest call replaced by Lean-discharged all-raw-limb contract; invariant level<=20",
+    "prefix": "\n    if afterstate.next_pair_index == 0 || afterstate.next_pair_index > crate::pool_v1::POOL_V1_PAIR_CAPACITY\n    {\n        return Some(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);\n    }\n    if !NBH_digest(&afterstate.next_root) {\n        return Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);\n    }\n"
+  },
+  "live": {
+    "source_loop": "    while level < snapshot.frontier.len() {\n        if !digest_is_canonical(&snapshot.frontier[level]) {\n            return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);\n        }\n        level += 1;\n    }\n",
+    "sha256": "f14ec49164c40c35a5dc2eeb0f737a3084d061d0326d9cef6099faf1b5d77a11",
+    "one_iteration": "    if level < frontier.len() {\n        if !NBH_digest(&frontier[level]) {\n            return (level, Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest));\n        }\n        level += 1;\n    }\n",
+    "transformation": "while to if; return error exposes level; digest call replaced by Lean-discharged all-raw-limb contract; invariant level<=20",
+    "prefix": "\n    if snapshot.pool == [0u8; 32] || snapshot.deployment_domain == [0u8; 32] {\n        return Some(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding);\n    }\n    if snapshot.sequence != snapshot.next_pair_index {\n        return Some(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch);\n    }\n    if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {\n        return Some(PoolV1PairLiveSnapshotErrorV1::TreeFull);\n    }\n    if !NBH_digest(&snapshot.current_root) {\n        return Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);\n    }\n"
+  }
+}

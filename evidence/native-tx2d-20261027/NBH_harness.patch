@@ -1,0 +1,216 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
+@@ -640,3 +640,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBH_after.rs"]
++mod NBH_after;
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBH_live.rs"]
++mod NBH_live;
+--- a/crates/aspis-statement/src/pool_v1/verifier_registry.rs
++++ b/crates/aspis-statement/src/pool_v1/verifier_registry.rs
+@@ -817,3 +817,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBH_registry.rs"]
++mod NBH_registry;
+--- a/crates/aspis-statement/src/pool_v1/format.rs
++++ b/crates/aspis-statement/src/pool_v1/format.rs
+@@ -354,3 +354,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBH_format.rs"]
++mod NBH_format;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBH_after.rs
+@@ -0,0 +1,46 @@
++use super::*;
++fn NBH_digest(d: &Digest) -> bool {
++ let b: bool = kani::any();
++ kani::assume(b == (d[0].0 < P && d[1].0 < P && d[2].0 < P && d[3].0 < P && d[4].0 < P && d[5].0 < P && d[6].0 < P && d[7].0 < P)); b
++}
++fn NBH_after_iteration(frontier: &[Digest;20], mut level: usize) -> (usize, Option<PoolV1PairVerifierTransportErrorV1>) {
++    if level < frontier.len() {
++        if !NBH_digest(&frontier[level]) {
++            return (level, Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate));
++        }
++        level += 1;
++    }
++
++(level,None)
++}
++#[kani::proof]
++fn NBH_after_step() {
++ let frontier: [Digest;20] = [[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]];
++ let level: usize = kani::any(); kani::assume(level<=20);
++ let got=NBH_after_iteration(&frontier,level);
++ let expected=if level==20 {(level,None)} else if NBH_digest(&frontier[level]) {(level+1,None)} else {(level,Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate))};
++ assert_eq!(got,expected);
++}
++fn NBH_after_prefix(
++    afterstate: &PoolV1PairVerifiedAfterstateV1,
++) -> Option<PoolV1PairVerifierTransportErrorV1> {
++    if afterstate.next_pair_index == 0 || afterstate.next_pair_index > crate::pool_v1::POOL_V1_PAIR_CAPACITY
++    {
++        return Some(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);
++    }
++    if !NBH_digest(&afterstate.next_root) {
++        return Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
++    }
++ None}
++#[kani::proof]
++fn NBH_after_prefix_gate() { let afterstate=PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],next_frontier:[[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]]}; assert_eq!(NBH_after_prefix(&afterstate),if afterstate.next_pair_index==0 || afterstate.next_pair_index>1048576 {Some(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex)} else if !NBH_digest(&afterstate.next_root) {Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)} else {None}); }
++#[kani::proof]
++fn NBH_exact8() { let bytes: [u8;64]=kani::any(); let len: usize=kani::any(); kani::assume(len<=64);
++ let got=exact::<8>(&bytes[..len]);
++ if len==8 { let out=got.unwrap(); let j:usize=kani::any(); kani::assume(j<8); assert_eq!(out[j],bytes[j]); } else {assert_eq!(got,Err(PoolV1PairVerifierTransportErrorV1::WrongLength));}
++}
++#[kani::proof]
++fn NBH_exact32() { let bytes: [u8;64]=kani::any(); let len: usize=kani::any(); kani::assume(len<=64);
++ let got=exact::<32>(&bytes[..len]);
++ if len==32 { let out=got.unwrap(); let j:usize=kani::any(); kani::assume(j<32); assert_eq!(out[j],bytes[j]); } else {assert_eq!(got,Err(PoolV1PairVerifierTransportErrorV1::WrongLength));}
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBH_live.rs
+@@ -0,0 +1,41 @@
++use super::*;
++fn NBH_digest(d: &Digest) -> bool {
++ let b: bool = kani::any();
++ kani::assume(b == (d[0].0 < P && d[1].0 < P && d[2].0 < P && d[3].0 < P && d[4].0 < P && d[5].0 < P && d[6].0 < P && d[7].0 < P)); b
++}
++fn NBH_live_iteration(frontier: &[Digest;20], mut level: usize) -> (usize, Option<PoolV1PairLiveSnapshotErrorV1>) {
++    if level < frontier.len() {
++        if !NBH_digest(&frontier[level]) {
++            return (level, Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest));
++        }
++        level += 1;
++    }
++
++(level,None)
++}
++#[kani::proof]
++fn NBH_live_step() {
++ let frontier: [Digest;20] = [[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]];
++ let level: usize = kani::any(); kani::assume(level<=20);
++ let got=NBH_live_iteration(&frontier,level);
++ let expected=if level==20 {(level,None)} else if NBH_digest(&frontier[level]) {(level+1,None)} else {(level,Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest))};
++ assert_eq!(got,expected);
++}
++fn NBH_live_prefix(
++    snapshot: &PoolV1PairLiveSnapshotV1,
++) -> Option<PoolV1PairLiveSnapshotErrorV1> {
++    if snapshot.pool == [0u8; 32] || snapshot.deployment_domain == [0u8; 32] {
++        return Some(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding);
++    }
++    if snapshot.sequence != snapshot.next_pair_index {
++        return Some(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch);
++    }
++    if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {
++        return Some(PoolV1PairLiveSnapshotErrorV1::TreeFull);
++    }
++    if !NBH_digest(&snapshot.current_root) {
++        return Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
++    }
++ None}
++#[kani::proof]
++fn NBH_live_prefix_gate() { let snapshot=PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],frontier:[[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]]}; assert_eq!(NBH_live_prefix(&snapshot),if snapshot.pool==[0;32] || snapshot.deployment_domain==[0;32] {Some(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding)} else if snapshot.sequence!=snapshot.next_pair_index {Some(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch)} else if snapshot.next_pair_index>=1048576 {Some(PoolV1PairLiveSnapshotErrorV1::TreeFull)} else if !NBH_digest(&snapshot.current_root) {Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)} else {None}); }
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBH_registry.rs
+@@ -0,0 +1,51 @@
++use super::*;
++fn NBH_validate_verifier_registry_v1(r: &VerifierRegistryV1)->Result<(),PoolV1VerifierRegistryFormatError> {if r.flags>3 {Err(PoolV1VerifierRegistryFormatError::UnsupportedFlags)} else if r.pool==[0;32] || r.policy_binding==[0;32] {Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding)} else if ((r.flags/2)%2==1)!=(r.authority==[0;32]) {Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode)} else if r.minimum_activation_delay_slots==0 {Err(PoolV1VerifierRegistryFormatError::InvalidActivationDelay)} else {Ok(())}}
++#[kani::proof]
++fn NBH_validate_verifier_registry_v1_gate() {let r=VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}; assert_eq!(validate_verifier_registry_v1(&r),NBH_validate_verifier_registry_v1(&r));}
++fn NBH_validate_verifier_registry_entry_v1(r: &VerifierRegistryEntryV1)->Result<(),PoolV1VerifierRegistryFormatError> {if r.statement_version==0 {Err(PoolV1VerifierRegistryFormatError::InvalidStatementVersion)} else if r.pool==[0;32] || r.verifier_program==[0;32] || r.profile_binding==[0;32] || r.release_binding==[0;32] || r.policy_binding==[0;32] {Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding)} else if r.retirement_slot!=u64::MAX && r.retirement_slot<=r.activation_slot {Err(PoolV1VerifierRegistryFormatError::InvalidRetirementSlot)} else {Ok(())}}
++#[kani::proof]
++fn NBH_validate_verifier_registry_entry_v1_gate() {let r=VerifierRegistryEntryV1{status:match kani::any::<u8>() % 4 {0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired},statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}; assert_eq!(validate_verifier_registry_entry_v1(&r),NBH_validate_verifier_registry_entry_v1(&r));}
++fn NBH_validate_verifier_registry_v2(r: &VerifierRegistryV2)->Result<(),PoolV1VerifierRegistryFormatError> {if r.flags>3 {Err(PoolV1VerifierRegistryFormatError::UnsupportedFlags)} else if r.pool==[0;32] || r.policy_binding==[0;32] || r.registry_program==[0;32] || r.loader_program==[0;32] || r.programdata_address==[0;32] || r.executable_hash==[0;32] {Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding)} else if ((r.flags/2)%2==1)!=(r.authority==[0;32]) {Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode)} else if r.minimum_activation_delay_slots==0 {Err(PoolV1VerifierRegistryFormatError::InvalidActivationDelay)} else {Ok(())}}
++#[kani::proof]
++fn NBH_validate_verifier_registry_v2_gate() {let r=VerifierRegistryV2{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any()}; assert_eq!(validate_verifier_registry_v2(&r),NBH_validate_verifier_registry_v2(&r));}
++fn NBH_validate_verifier_registry_entry_v2(r: &VerifierRegistryEntryV2)->Result<(),PoolV1VerifierRegistryFormatError> {if r.statement_version==0 {Err(PoolV1VerifierRegistryFormatError::InvalidStatementVersion)} else if r.pool==[0;32] || r.verifier_program==[0;32] || r.profile_binding==[0;32] || r.release_binding==[0;32] || r.loader_program==[0;32] || r.programdata_address==[0;32] || r.executable_hash==[0;32] || r.policy_binding==[0;32] {Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding)} else if r.expected_upgrade_authority!=[0;32] {Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode)} else if r.retirement_slot!=u64::MAX && r.retirement_slot<=r.activation_slot {Err(PoolV1VerifierRegistryFormatError::InvalidRetirementSlot)} else {Ok(())}}
++#[kani::proof]
++fn NBH_validate_verifier_registry_entry_v2_gate() {let r=VerifierRegistryEntryV2{status:match kani::any::<u8>() % 4 {0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired},statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}; assert_eq!(validate_verifier_registry_entry_v2(&r),NBH_validate_verifier_registry_entry_v2(&r));}
++#[kani::proof]
++fn NBH_zero_gate() { let b:[u8;32]=kani::any(); let z=required_binding_is_zero(&b); let j:usize=kani::any(); kani::assume(j<32); if z {assert_eq!(b[j],0);} if b==[0;32] {assert!(z);} }
++fn NBH_decode_verifier_registry_v1(b: &[u8])->Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError> {if b.len()!=128 {return Err(PoolV1VerifierRegistryFormatError::WrongLength);}
++if &b[..4]!=b"ASRG" {return Err(PoolV1VerifierRegistryFormatError::WrongMagic);}
++if b[4]!=2 {return Err(PoolV1VerifierRegistryFormatError::WrongVersion);}
++if b[7]!=0 || b[120..128]!=[0;8] {return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);}
++let r=VerifierRegistryV1{flags:b[5],bump:b[6],pool:b[8..40].try_into().unwrap(),authority:b[40..72].try_into().unwrap(),policy_binding:b[72..104].try_into().unwrap(),generation:u64::from_le_bytes(b[104..112].try_into().unwrap()),minimum_activation_delay_slots:u64::from_le_bytes(b[112..120].try_into().unwrap())};
++NBH_validate_verifier_registry_v1(&r)?; Ok(r)}
++#[kani::proof]
++fn NBH_decode_verifier_registry_v1_gate() {let b:[u8;129]=kani::any(); let len:usize=kani::any(); kani::assume(len<=129); assert_eq!(decode_verifier_registry_v1(&b[..len]),NBH_decode_verifier_registry_v1(&b[..len]));}
++fn NBH_decode_verifier_registry_entry_v1(b: &[u8])->Result<VerifierRegistryEntryV1,PoolV1VerifierRegistryFormatError> {if b.len()!=192 {return Err(PoolV1VerifierRegistryFormatError::WrongLength);}
++if &b[..4]!=b"ASRE" {return Err(PoolV1VerifierRegistryFormatError::WrongMagic);}
++if b[4]!=2 {return Err(PoolV1VerifierRegistryFormatError::WrongVersion);}
++if b[184..192]!=[0;8] {return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);}
++let status=match b[5] {0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,3=>VerifierEntryStatusV1::Retired,_=>return Err(PoolV1VerifierRegistryFormatError::InvalidStatus)};
++let r=VerifierRegistryEntryV1{status:status,statement_version:b[6],bump:b[7],pool:b[8..40].try_into().unwrap(),verifier_program:b[40..72].try_into().unwrap(),profile_binding:b[72..104].try_into().unwrap(),release_binding:b[104..136].try_into().unwrap(),activation_slot:u64::from_le_bytes(b[136..144].try_into().unwrap()),retirement_slot:u64::from_le_bytes(b[144..152].try_into().unwrap()),policy_binding:b[152..184].try_into().unwrap()};
++NBH_validate_verifier_registry_entry_v1(&r)?; Ok(r)}
++#[kani::proof]
++fn NBH_decode_verifier_registry_entry_v1_gate() {let b:[u8;193]=kani::any(); let len:usize=kani::any(); kani::assume(len<=193); assert_eq!(decode_verifier_registry_entry_v1(&b[..len]),NBH_decode_verifier_registry_entry_v1(&b[..len]));}
++fn NBH_decode_verifier_registry_v2(b: &[u8])->Result<VerifierRegistryV2,PoolV1VerifierRegistryFormatError> {if b.len()!=256 {return Err(PoolV1VerifierRegistryFormatError::WrongLength);}
++if &b[..4]!=b"ASR2" {return Err(PoolV1VerifierRegistryFormatError::WrongMagic);}
++if b[4]!=3 {return Err(PoolV1VerifierRegistryFormatError::WrongVersion);}
++if b[6]!=1 {return Err(PoolV1VerifierRegistryFormatError::InvalidDeploymentMode);}
++if b[249..256]!=[0;7] {return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);}
++let r=VerifierRegistryV2{flags:b[5],bump:b[7],pool:b[8..40].try_into().unwrap(),authority:b[40..72].try_into().unwrap(),policy_binding:b[72..104].try_into().unwrap(),generation:u64::from_le_bytes(b[104..112].try_into().unwrap()),minimum_activation_delay_slots:u64::from_le_bytes(b[112..120].try_into().unwrap()),registry_program:b[120..152].try_into().unwrap(),loader_program:b[152..184].try_into().unwrap(),programdata_address:b[184..216].try_into().unwrap(),executable_hash:b[216..248].try_into().unwrap(),programdata_bump:b[248]};
++NBH_validate_verifier_registry_v2(&r)?; Ok(r)}
++#[kani::proof]
++fn NBH_decode_verifier_registry_v2_gate() {let b:[u8;257]=kani::any(); let len:usize=kani::any(); kani::assume(len<=257); assert_eq!(decode_verifier_registry_v2(&b[..len]),NBH_decode_verifier_registry_v2(&b[..len]));}
++fn NBH_decode_verifier_registry_entry_v2(b: &[u8])->Result<VerifierRegistryEntryV2,PoolV1VerifierRegistryFormatError> {if b.len()!=320 {return Err(PoolV1VerifierRegistryFormatError::WrongLength);}
++if &b[..4]!=b"ASE2" {return Err(PoolV1VerifierRegistryFormatError::WrongMagic);}
++if b[4]!=3 {return Err(PoolV1VerifierRegistryFormatError::WrongVersion);}
++if b[7]!=1 {return Err(PoolV1VerifierRegistryFormatError::InvalidDeploymentMode);}
++if b[314..320]!=[0;6] {return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);}
++let status=match b[5] {0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,3=>VerifierEntryStatusV1::Retired,_=>return Err(PoolV1VerifierRegistryFormatError::InvalidStatus)};
++let r=VerifierRegistryEntryV2{status:status,statement_version:b[6],bump:b[312],pool:b[8..40].try_into().unwrap(),verifier_program:b[40..72].try_into().unwrap(),profile_binding:b[72..104].try_into().unwrap(),release_binding:b[104..136].try_into().unwrap(),activation_slot:u64::from_le_bytes(b[264..272].try_into().unwrap()),retirement_slot:u64::from_le_bytes(b[272..280].try_into().unwrap()),policy_binding:b[280..312].try_into().unwrap(),loader_program:b[136..168].try_into().unwrap(),programdata_address:b[168..200].try_into().unwrap(),executable_hash:b[200..232].try_into().unwrap(),expected_upgrade_authority:b[232..264].try_into().unwrap(),programdata_bump:b[313]};
++NBH_validate_verifier_registry_entry_v2(&r)?; Ok(r)}
++#[kani::proof]
++fn NBH_decode_verifier_registry_entry_v2_gate() {let b:[u8;321]=kani::any(); let len:usize=kani::any(); kani::assume(len<=321); assert_eq!(decode_verifier_registry_entry_v2(&b[..len]),NBH_decode_verifier_registry_entry_v2(&b[..len]));}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBH_format.rs
+@@ -0,0 +1,26 @@
++use super::*;
++fn NBH_policy(p: &VerifierPolicyV1)->Result<(),PoolV1FormatError> {
++ let err=if p.flags>3 {Some(PoolV1FormatError::UnsupportedFlags)} else if p.registry_program==[0;32] || p.policy_binding==[0;32] {Some(PoolV1FormatError::ZeroRequiredBinding)} else if ((p.flags/2)%2==1 && p.flags%2==0) || ((p.flags%2==1)!=(p.registry_authority==[0;32])) {Some(PoolV1FormatError::InvalidAuthorityMode)} else {None}; match err {Some(e)=>Err(e),None=>Ok(())}
++}
++#[kani::proof]
++fn NBH_policy_gate() {let p=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};assert_eq!(validate_verifier_policy_v1(&p),NBH_policy(&p));}
++fn NBH_identity(b: &[u8])->Result<PoolIdentityV1,PoolV1FormatError> {
++ if b.len()!=144 {return Err(PoolV1FormatError::WrongLength)}
++ if &b[..4]!=b"ASPI" {return Err(PoolV1FormatError::WrongMagic)}
++ if b[4]!=1 {return Err(PoolV1FormatError::WrongVersion)}
++ if b[5..8]!=[0;3] || b[108..112]!=[0;4] {return Err(PoolV1FormatError::NonZeroReserved)}
++ let asset=u32::from_le_bytes(b[104..108].try_into().unwrap());
++ if asset>=2147483647 {return Err(PoolV1FormatError::NonCanonicalAssetId)}
++ Ok(PoolIdentityV1{pool:b[8..40].try_into().unwrap(),asset_mint:b[40..72].try_into().unwrap(),token_program:b[72..104].try_into().unwrap(),asset_id:M31(asset),deployment_domain:b[112..144].try_into().unwrap()})
++}
++#[kani::proof]
++fn NBH_identity_gate() {let b:[u8;145]=kani::any(); let n:usize=kani::any();kani::assume(n<=145);assert_eq!(decode_pool_identity_v1(&b[..n]),NBH_identity(&b[..n]));}
++fn NBH_policy_decode(b: &[u8])->Result<VerifierPolicyV1,PoolV1FormatError> {
++ if b.len()!=104 {return Err(PoolV1FormatError::WrongLength)}
++ if &b[..4]!=b"ASPP" {return Err(PoolV1FormatError::WrongMagic)}
++ if b[4]!=1 {return Err(PoolV1FormatError::WrongVersion)}
++ if b[6..8]!=[0;2] {return Err(PoolV1FormatError::NonZeroReserved)}
++ let p=VerifierPolicyV1{flags:b[5],registry_program:b[8..40].try_into().unwrap(),registry_authority:b[40..72].try_into().unwrap(),policy_binding:b[72..104].try_into().unwrap()}; NBH_policy(&p)?; Ok(p)
++}
++#[kani::proof]
++fn NBH_policy_decode_gate() {let b:[u8;105]=kani::any(); let n:usize=kani::any();kani::assume(n<=105);assert_eq!(decode_verifier_policy_v1(&b[..n]),NBH_policy_decode(&b[..n]));}
